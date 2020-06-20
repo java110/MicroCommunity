@@ -1,19 +1,24 @@
 package com.java110.front.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.base.controller.BaseController;
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
-import com.java110.core.base.controller.BaseController;
-import com.java110.core.context.IPageData;
-import com.java110.core.context.PageData;
+import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +36,8 @@ import java.util.Map;
 public class CallComponentController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(CallComponentController.class);
-
+    private static final String VERSION = "version";
+    private static final String VERSION_2 = "2.0";
     @Autowired
     private RestTemplate restTemplate;
 
@@ -40,6 +46,7 @@ public class CallComponentController extends BaseController {
      * 前台调用api方法
      * add by wuxw 2020-03-16
      * /callComponent/activities.listActivitiess
+     *
      * @return
      */
 
@@ -91,6 +98,14 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("api调用返回信息为{}", responseEntity);
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                return responseEntity;
+            }
+            String version = request.getParameter(VERSION);
+            //当 接口版本号为2.0时 返回错误处理
+            if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
+                return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
+            }
             return responseEntity;
         }
     }

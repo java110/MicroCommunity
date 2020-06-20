@@ -2,9 +2,10 @@ package com.java110.api.rest;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.vo.ResultVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,8 @@ import java.util.Map;
 public class RestApi extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(RestApi.class);
+    private static final String VERSION = "version";
+    private static final String VERSION_2 = "2.0";
     @Autowired
     private IApiServiceSMO apiServiceSMOImpl;
 
@@ -78,8 +81,9 @@ public class RestApi extends BaseController {
                                               @RequestBody String postInfo,
                                               HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
         try {
-            Map<String, String> headers = new HashMap<String, String>();
+
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
@@ -90,7 +94,13 @@ public class RestApi extends BaseController {
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
-
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            return responseEntity;
+        }
+        //当 接口版本号为2.0时 返回错误处理
+        if (headers.containsKey(VERSION) && VERSION_2.equals(headers.get(VERSION))) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
         return responseEntity;
     }
 
@@ -108,8 +118,8 @@ public class RestApi extends BaseController {
     public ResponseEntity<String> serviceGet(@PathVariable String service,
                                              HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
         try {
-            Map<String, String> headers = new HashMap<String, String>();
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
@@ -120,6 +130,14 @@ public class RestApi extends BaseController {
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            return responseEntity;
+        }
+        //当 接口版本号为2.0时 返回错误处理
+        if (headers.containsKey(VERSION) && VERSION_2.equals(headers.get(VERSION))) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
 
         return responseEntity;
     }
@@ -140,8 +158,9 @@ public class RestApi extends BaseController {
                                              @RequestBody String postInfo,
                                              HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
         try {
-            Map<String, String> headers = new HashMap<String, String>();
+
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_PUT);
@@ -152,6 +171,14 @@ public class RestApi extends BaseController {
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            return responseEntity;
+        }
+        //当 接口版本号为2.0时 返回错误处理
+        if (headers.containsKey(VERSION) && VERSION_2.equals(headers.get(VERSION))) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
+
         return responseEntity;
     }
 
@@ -169,8 +196,9 @@ public class RestApi extends BaseController {
     public ResponseEntity<String> serviceDelete(@PathVariable String service,
                                                 HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
         try {
-            Map<String, String> headers = new HashMap<String, String>();
+
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_DELETE);
@@ -183,6 +211,13 @@ public class RestApi extends BaseController {
         }
 
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            return responseEntity;
+        }
+        //当 接口版本号为2.0时 返回错误处理
+        if (headers.containsKey(VERSION) && VERSION_2.equals(headers.get(VERSION))) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
         return responseEntity;
     }
 
