@@ -109,7 +109,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
      * @Date：2017/11/24
      * @Description：创建流程并部署
      */
-    protected void addFlowDeployment(@RequestBody WorkflowDto workflowDto) {
+    public void addFlowDeployment(@RequestBody WorkflowDto workflowDto) {
 
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 
