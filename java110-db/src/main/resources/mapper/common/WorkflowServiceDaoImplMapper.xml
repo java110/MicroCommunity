@@ -7,9 +7,9 @@
     <!-- 保存工作流信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessWorkflowInfo" parameterType="Map">
         insert into business_workflow(
-        skip_level,operate,describle,b_id,community_id,store_id,flow_id,flow_name,flow_type
+        skip_level,operate,describle,b_id,community_id,store_id,flow_id,flow_name,flow_type,process_definition_key
         ) values (
-        #{skipLevel},#{operate},#{describle},#{bId},#{communityId},#{storeId},#{flowId},#{flowName},#{flowType}
+        #{skipLevel},#{operate},#{describle},#{bId},#{communityId},#{storeId},#{flowId},#{flowName},#{flowType},#{processDefinitionKey}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getBusinessWorkflowInfo" parameterType="Map" resultType="Map">
         select t.skip_level,t.skip_level skipLevel,t.operate,t.describle,t.b_id,t.b_id bId,t.community_id,t.community_id
         communityId,t.store_id,t.store_id storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name
-        flowName,t.flow_type,t.flow_type flowType
+        flowName,t.flow_type,t.flow_type flowType,t.process_definition_key,t.process_definition_key processDefinitionKey
         from business_workflow t
         where 1 =1
         <if test="skipLevel !=null and skipLevel != ''">
@@ -55,8 +55,9 @@
     <!-- 保存工作流信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveWorkflowInfoInstance" parameterType="Map">
         insert into workflow(
-        skip_level,describle,status_cd,b_id,community_id,store_id,flow_id,flow_name,flow_type
-        ) select t.skip_level,t.describle,'0',t.b_id,t.community_id,t.store_id,t.flow_id,t.flow_name,t.flow_type from
+        skip_level,describle,status_cd,b_id,community_id,store_id,flow_id,flow_name,flow_type,process_definition_key
+        ) select t.skip_level,t.describle,'0',t.b_id,t.community_id,t.store_id,t.flow_id,t.flow_name,t.flow_type ,t.process_definition_key
+        from
         business_workflow t where 1=1
         <if test="skipLevel !=null and skipLevel != ''">
             and t.skip_level= #{skipLevel}
@@ -91,7 +92,8 @@
     <select id="getWorkflowInfo" parameterType="Map" resultType="Map">
         select t.skip_level,t.skip_level skipLevel,t.describle,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id
         bId,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId,t.flow_id,t.flow_id
-        flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type flowType,t.create_time createTime,d.name flowTypeName
+        flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type flowType,t.create_time createTime,d.name flowTypeName,
+        t.process_definition_key,t.process_definition_key processDefinitionKey
         from workflow t
         left join t_dict d on t.flow_type = d.status_cd and d.table_name = 'workflow' and d.table_columns = 'flow_type'
         where 1 =1
@@ -153,6 +155,9 @@
         </if>
         <if test="flowType !=null and flowType != ''">
             , t.flow_type= #{flowType}
+        </if>
+        <if test="processDefinitionKey !=null and processDefinitionKey != ''">
+            , t.process_definition_key= #{processDefinitionKey}
         </if>
         where 1=1
         <if test="bId !=null and bId != ''">

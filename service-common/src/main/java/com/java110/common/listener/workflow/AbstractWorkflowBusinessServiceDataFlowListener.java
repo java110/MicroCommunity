@@ -47,6 +47,8 @@ public abstract class AbstractWorkflowBusinessServiceDataFlowListener extends Ab
         businessWorkflowInfo.put("flowType", businessWorkflowInfo.get("flow_type"));
         businessWorkflowInfo.remove("bId");
         businessWorkflowInfo.put("statusCd", statusCd);
+        businessWorkflowInfo.put("processDefinitionKey", businessWorkflowInfo.get("process_definition_key"));
+
     }
 
 
@@ -77,6 +79,7 @@ public abstract class AbstractWorkflowBusinessServiceDataFlowListener extends Ab
         currentWorkflowInfo.put("flowId", currentWorkflowInfo.get("flow_id"));
         currentWorkflowInfo.put("flowName", currentWorkflowInfo.get("flow_name"));
         currentWorkflowInfo.put("flowType", currentWorkflowInfo.get("flow_type"));
+        currentWorkflowInfo.put("processDefinitionKey", currentWorkflowInfo.get("process_definition_key"));
 
 
         currentWorkflowInfo.put("operate", StatusConstant.OPERATE_DEL);

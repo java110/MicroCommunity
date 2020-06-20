@@ -23,10 +23,8 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeWorkflowConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,9 +130,7 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
         workflowPo.setFlowName(reqJson.getString("flowName"));
         workflowPo.setCommunityId(reqJson.getString("communityId"));
         workflowPo.setDescrible(reqJson.getString("describle"));
-        super.update(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_WORKFLOW);
 
-        WorkflowDto workflowDto = BeanConvertUtil.covertBean(workflowPo, WorkflowDto.class);
 
         //保存 工作流程步骤
         JSONArray steps = reqJson.getJSONArray("steps");
@@ -184,15 +180,15 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
             tmpWorkflowStepDtos.add(tmpWorkflowStepDto);
         }
         //提交
-        commit(context);
+        //commit(context);
 
-        if (context.getResponseEntity().getStatusCode() != HttpStatus.OK) {
-            return;
-        }
 
+        WorkflowDto workflowDto = BeanConvertUtil.covertBean(workflowPo, WorkflowDto.class);
+        WorkflowDto tmpWorkflowDto = workflowInnerServiceSMOImpl.addFlowDeployment(workflowDto);
+        workflowPo.setProcessDefinitionKey(tmpWorkflowDto.getProcessDefinitionKey());
+        super.update(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_WORKFLOW);
         workflowDto.setWorkflowSteps(tmpWorkflowStepDtos);
-        workflowInnerServiceSMOImpl.addFlowDeployment(workflowDto);
-        context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK));
+
     }
 
     private void deleteWorkflowStepAndStaff(DataFlowContext context, JSONObject reqJson, WorkflowStepDto workflowStepDto) {

@@ -24,6 +24,8 @@ public class WorkflowDto extends PageDto implements Serializable {
     public static final String FLOW_TYPE_PURCHASE= "30003";
     public static final String DEFAULT_SKIP_LEVEL = "1";
 
+    public static final String DEFAULT_PROCESS = "java110_" ;
+
     private String skipLevel;
     private String describle;
     private String communityId;
@@ -32,6 +34,7 @@ public class WorkflowDto extends PageDto implements Serializable {
     private String flowName;
     private String flowType;
     private String flowTypeName;
+    private String processDefinitionKey;
 
 
     private Date createTime;
@@ -129,5 +132,13 @@ public class WorkflowDto extends PageDto implements Serializable {
 
     public void setWorkflowSteps(List<WorkflowStepDto> workflowSteps) {
         this.workflowSteps = workflowSteps;
+    }
+
+    public String getProcessDefinitionKey() {
+        return processDefinitionKey;
+    }
+
+    public void setProcessDefinitionKey(String processDefinitionKey) {
+        this.processDefinitionKey = processDefinitionKey;
     }
 }

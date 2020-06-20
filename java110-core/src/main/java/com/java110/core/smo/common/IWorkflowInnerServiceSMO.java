@@ -45,5 +45,5 @@ public interface IWorkflowInnerServiceSMO {
      * @Description：创建流程并部署
      */
     @RequestMapping(value = "/addFlowDeployment", method = RequestMethod.POST)
-    void addFlowDeployment(@RequestBody WorkflowDto workflowDto);
+    WorkflowDto addFlowDeployment(@RequestBody WorkflowDto workflowDto);
 }

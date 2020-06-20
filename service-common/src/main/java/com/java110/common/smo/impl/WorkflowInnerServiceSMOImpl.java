@@ -23,7 +23,6 @@ import org.activiti.bpmn.model.StartEvent;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -109,7 +108,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
      * @Date：2017/11/24
      * @Description：创建流程并部署
      */
-    public void addFlowDeployment(@RequestBody WorkflowDto workflowDto) {
+    public WorkflowDto addFlowDeployment(@RequestBody WorkflowDto workflowDto) {
 
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 //
@@ -120,9 +119,10 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         BpmnModel model = new BpmnModel();
         Process process = new Process();
         model.addProcess(process);
-        process.setId("java110_" + workflowDto.getFlowId());
+        process.setId(WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId());
         process.setName(workflowDto.getFlowName());
         process.setDocumentation(workflowDto.getDescrible());
+        workflowDto.setProcessDefinitionKey(process.getId());
         //添加流程
         //开始节点
         process.addFlowElement(createStartEvent());
@@ -234,7 +234,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 //            e.printStackTrace();
 //        }
 
-        System.out.println(".........end...");
+        return workflowDto;
     }
 
 
