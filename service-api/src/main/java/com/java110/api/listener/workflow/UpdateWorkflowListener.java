@@ -155,18 +155,15 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
             WorkflowStepDto tmpWorkflowStepDto = BeanConvertUtil.covertBean(workflowStepPo, WorkflowStepDto.class);
             //正常流程
             List<WorkflowStepStaffDto> workflowStepStaffDtos = new ArrayList<>();
-            if (WorkflowStepDto.TYPE_NORMAL.equals(step.getString("type"))) {
-                workflowStepStaffPo = new WorkflowStepStaffPo();
-                workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
-                workflowStepStaffPo.setCommunityId(workflowPo.getCommunityId());
-                workflowStepStaffPo.setStaffId(step.getString("staffId"));
-                workflowStepStaffPo.setStaffName(step.getString("staffName"));
-                workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
-                super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
-                workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
-                //continue;
-            }
-
+            workflowStepStaffPo = new WorkflowStepStaffPo();
+            workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
+            workflowStepStaffPo.setCommunityId(workflowPo.getCommunityId());
+            workflowStepStaffPo.setStaffId(step.getString("staffId"));
+            workflowStepStaffPo.setStaffName(step.getString("staffName"));
+            workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
+            super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
+            workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
+            //会签流程
             JSONArray subStaffs = step.getJSONArray("subStaff");
             if (subStaffs != null && subStaffs.size() > 0) {
                 for (int subStaffIndex = 0; subStaffIndex < subStaffs.size(); subStaffIndex++) {
