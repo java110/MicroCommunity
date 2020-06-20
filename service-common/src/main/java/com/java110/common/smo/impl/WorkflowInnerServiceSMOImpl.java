@@ -24,10 +24,10 @@ import org.activiti.bpmn.model.StartEvent;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,12 +47,16 @@ import java.util.List;
  **/
 @RestController
 public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWorkflowInnerServiceSMO {
+    private static final Logger logger = LoggerFactory.getLogger(BaseServiceSMO.class);
 
     @Autowired
     private IWorkflowServiceDao workflowServiceDaoImpl;
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private RuntimeService runtimeService;
 
     @Override
     public List<WorkflowDto> queryWorkflows(@RequestBody WorkflowDto workflowDto) {
@@ -111,46 +114,28 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         return userIds.toArray(new String[userIds.size()]);
     }
 
-    public String getWorkflowImage(@RequestBody WorkflowDto workflowDto){
+    public String getWorkflowImage(@RequestBody WorkflowDto workflowDto) {
 
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        List<String> list = processEngine.getRepositoryService()//
+                .getDeploymentResourceNames(workflowDto.getProcessDefinitionKey());
         String image = "";
-        /*ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
-                .processInstanceId(processInstanceId).singleResult();
-        String processDefinitionId = "";
-        if (processInstance == null) {
-            //查询已经结束的流程实例
-            HistoricProcessInstance processInstanceHistory =
-                    historyService.createHistoricProcessInstanceQuery()
-                            .processInstanceId(processInstanceId).singleResult();
-            if (processInstanceHistory == null)
-                return null;
-            else
-                processDefinitionId = processInstanceHistory.getProcessDefinitionId();
-        } else {
-            processDefinitionId = processInstance.getProcessDefinitionId();
+        String resourceName = "";
+        if (list != null && list.size() > 0) {
+            for (String name : list) {
+                if (name.indexOf(".png") >= 0) {
+                    resourceName = name;
+                }
+            }
         }
 
-        //使用宋体
-        String fontName = "宋体";
-        //获取BPMN模型对象
-        BpmnModel model = repositoryService.getBpmnModel(processDefinitionId);
-        //获取流程实例当前的节点，需要高亮显示
-        List<String> currentActs = Collections.EMPTY_LIST;
-        if (processInstance != null)
-            currentActs = runtimeService.getActiveActivityIds(processInstance.getId());
-
-        InputStream is = processEngine.getProcessEngineConfiguration()
-                .getProcessDiagramGenerator()
-                .generateDiagram(model, "png", currentActs, new ArrayList<String>(),
-                        fontName, fontName, fontName, null, 1.0);
-
+        InputStream in = processEngine.getRepositoryService()
+                .getResourceAsStream(workflowDto.getProcessDefinitionKey(), resourceName);
         try {
-            image = Base64Convert.ioToBase64(is);
+            image = Base64Convert.ioToBase64(in);
         } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
+            logger.error("读取图片失败", e);
+        }
         return image;
     }
 
@@ -172,7 +157,6 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         process.setId(WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId());
         process.setName(workflowDto.getFlowName());
         process.setDocumentation(workflowDto.getDescrible());
-        workflowDto.setProcessDefinitionKey(process.getId());
         //添加流程
         //开始节点
         process.addFlowElement(createStartEvent());
@@ -266,7 +250,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 
         // 3. 部署流程
         Deployment deployment = processEngine.getRepositoryService().createDeployment().addBpmnModel(process.getId() + ".bpmn", model).name(process.getId() + "_deployment").deploy();
-
+        workflowDto.setProcessDefinitionKey(deployment.getId());
         //        // 4. 启动一个流程实例
 //        ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey(process.getId());
 //
