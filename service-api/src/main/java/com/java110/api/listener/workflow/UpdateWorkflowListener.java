@@ -165,6 +165,10 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
                 super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
             }
         }
+        //提交
+        commit(context);
+
+
     }
 
     private void deleteWorkflowStepAndStaff(DataFlowContext context, JSONObject reqJson, WorkflowStepDto workflowStepDto) {
