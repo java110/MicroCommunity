@@ -160,10 +160,10 @@ public class DeleteWorkflowStepInfoListener extends AbstractWorkflowStepBusiness
      */
     private void doBusinessWorkflowStep(Business business, JSONObject businessWorkflowStep) {
 
-        Assert.jsonObjectHaveKey(businessWorkflowStep, "flowId", "businessWorkflowStep 节点下没有包含 flowId 节点");
+        Assert.jsonObjectHaveKey(businessWorkflowStep, "stepId", "businessWorkflowStep 节点下没有包含 stepId 节点");
 
-        if (businessWorkflowStep.getString("flowId").startsWith("-")) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "flowId 错误，不能自动生成（必须已经存在的flowId）" + businessWorkflowStep);
+        if (businessWorkflowStep.getString("stepId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "stepId 错误，不能自动生成（必须已经存在的stepId）" + businessWorkflowStep);
         }
         //自动插入DEL
         autoSaveDelBusinessWorkflowStep(business, businessWorkflowStep);
