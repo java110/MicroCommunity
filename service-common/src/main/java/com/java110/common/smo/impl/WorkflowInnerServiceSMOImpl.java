@@ -167,22 +167,22 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
             if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(step.getType())) {
                 //会签
                 //加入并行网关-分支
-                process.addFlowElement(createParallelGateway("parallelGateway-fork" + i, "并行网关-分支" + i));
+                process.addFlowElement(createParallelGateway("parallelGateway-fork" + i, "parallelGateway-fork" + i));
                 //获取角色下所有用户
                 List<WorkflowStepStaffDto> userList = step.getWorkflowStepStaffs();
                 for (int u = 0; u < userList.size(); u++) {
                     //并行网关分支的审核节点
-                    process.addFlowElement(createUserTask("userTask" + i + u, "并行网关分支用户审核节点" + i + u, userList.get(u).getStaffId()));
+                    process.addFlowElement(createUserTask("userTask" + i + u, "userTask" + i + u, userList.get(u).getStaffId()));
                 }
                 //并行网关-汇聚
-                process.addFlowElement(createParallelGateway("parallelGateway-join" + i, "并行网关到-汇聚" + i));
+                process.addFlowElement(createParallelGateway("parallelGateway-join" + i, "parallelGateway-join" + i));
 
             } else {
                 //普通流转
                 //审核节点
-                process.addFlowElement(createGroupTask("task" + i, "组审核节点" + i, step.getWorkflowStepStaffs().get(0).getStaffId()));
+                process.addFlowElement(createGroupTask("task" + i, "task" + i, step.getWorkflowStepStaffs().get(0).getStaffId()));
                 //回退节点
-                process.addFlowElement(createUserTask("repulse" + i, "回退节点" + i, "${startUserId}"));
+                process.addFlowElement(createUserTask("repulse" + i, "repulse" + i, "${startUserId}"));
             }
         }
         //结束节点
@@ -197,51 +197,51 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                 //判断是否第一个节点
                 if (y == 0) {
                     //开始节点和并行网关-分支连线
-                    process.addFlowElement(createSequenceFlow("startEvent", "parallelGateway-fork" + y, "开始节点到并行网关-分支" + y, ""));
+                    process.addFlowElement(createSequenceFlow("startEvent", "parallelGateway-fork" + y, "startEvent-parallelGateway-fork" + y, ""));
                 } else {
                     //审核节点或者并行网关-汇聚到并行网关-分支
                     //判断上一个节点是否是会签
                     if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(workflowStepDtos.get(y - 1).getType())) {
-                        process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "parallelGateway-fork" + y, "并行网关-汇聚到并行网关-分支" + y, ""));
+                        process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "parallelGateway-fork" + y, "parallelGateway-join-parallelGateway-fork-分支" + y, ""));
                     } else {
-                        process.addFlowElement(createSequenceFlow("task" + (y - 1), "parallelGateway-fork" + y, "上一个审核节点到并行网关-分支" + y, ""));
+                        process.addFlowElement(createSequenceFlow("task" + (y - 1), "parallelGateway-fork" + y, "task-parallelGateway-fork" + y, ""));
                     }
                 }
                 //并行网关-分支和会签用户连线，会签用户和并行网关-汇聚连线
                 List<WorkflowStepStaffDto> userList = step.getWorkflowStepStaffs();
                 for (int u = 0; u < userList.size(); u++) {
-                    process.addFlowElement(createSequenceFlow("parallelGateway-fork" + y, "userTask" + y + u, "并行网关-分支到会签用户" + y + u, ""));
-                    process.addFlowElement(createSequenceFlow("userTask" + y + u, "parallelGateway-join" + y, "会签用户到并行网关-汇聚", ""));
+                    process.addFlowElement(createSequenceFlow("parallelGateway-fork" + y, "userTask" + y + u, "parallelGateway-fork-userTask" + y + u, ""));
+                    process.addFlowElement(createSequenceFlow("userTask" + y + u, "parallelGateway-join" + y, "userTask-parallelGateway-join", ""));
                 }
                 //最后一个节点  并行网关-汇聚到结束节点
                 if (y == (userList.size() - 1)) {
-                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "endEvent", "并行网关-汇聚到结束节点", ""));
+                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "endEvent", "parallelGateway-join-endEvent", ""));
                 }
             } else {
                 //普通流转
                 //第一个节点
                 if (y == 0) {
                     //开始节点和审核节点1
-                    process.addFlowElement(createSequenceFlow("startEvent", "task" + y, "开始节点到审核节点" + y, ""));
+                    process.addFlowElement(createSequenceFlow("startEvent", "task" + y, "startEvent-task" + y, ""));
                 } else {
                     //判断上一个节点是否会签
                     if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(workflowStepDtos.get(y - 1).getType())) {
                         //会签
                         //并行网关-汇聚到审核节点
-                        process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "task" + y, "并行网关-汇聚到审核节点" + y, ""));
+                        process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "task" + y, "parallelGateway-join-task" + y, ""));
                     } else {
                         //普通
-                        process.addFlowElement(createSequenceFlow("task" + (y - 1), "task" + y, "审核节点" + (y - 1) + "到审核节点" + y, "${flag=='true'}"));
+                        process.addFlowElement(createSequenceFlow("task" + (y - 1), "task" + y, "task" + (y - 1) + "task" + y, "${flag=='true'}"));
                     }
                 }
                 //是否最后一个节点
                 if (y == (workflowStepDtos.size() - 1)) {
                     //审核节点到结束节点
-                    process.addFlowElement(createSequenceFlow("task" + y, "endEvent", "审核节点" + y + "到结束节点", "${flag=='true'}"));
+                    process.addFlowElement(createSequenceFlow("task" + y, "endEvent", "task" + y + "endEvent", "${flag=='true'}"));
                 }
                 //审核节点到回退节点
-                process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "审核不通过-打回" + y, "${flag=='false'}"));
-                process.addFlowElement(createSequenceFlow("repulse" + y, "task" + y, "回退节点到审核节点" + y, ""));
+                process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
+                process.addFlowElement(createSequenceFlow("repulse" + y, "task" + y, "repulse-task" + y, ""));
             }
         }
 
