@@ -23,6 +23,7 @@ import org.activiti.bpmn.model.StartEvent;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -112,8 +113,8 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 
-//        RepositoryService repositoryService  = processEngine.getRepositoryService();
-//        repositoryService.deleteDeployment("1");
+        RepositoryService repositoryService  = processEngine.getRepositoryService();
+        repositoryService.deleteDeployment("1");
 
         // 1. 建立模型
         BpmnModel model = new BpmnModel();

@@ -26,6 +26,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,20 +164,22 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
                 workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
                 super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
                 workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
-                continue;
+                //continue;
             }
 
             JSONArray subStaffs = step.getJSONArray("subStaff");
-            for (int subStaffIndex = 0; subStaffIndex < subStaffs.size(); subStaffIndex++) {
-                subStaff = subStaffs.getJSONObject(subStaffIndex);
-                workflowStepStaffPo = new WorkflowStepStaffPo();
-                workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
-                workflowStepStaffPo.setCommunityId(workflowPo.getCommunityId());
-                workflowStepStaffPo.setStaffId(subStaff.getString("staffId"));
-                workflowStepStaffPo.setStaffName(subStaff.getString("staffName"));
-                workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
-                super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
-                workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
+            if (subStaffs != null && subStaffs.size() > 0) {
+                for (int subStaffIndex = 0; subStaffIndex < subStaffs.size(); subStaffIndex++) {
+                    subStaff = subStaffs.getJSONObject(subStaffIndex);
+                    workflowStepStaffPo = new WorkflowStepStaffPo();
+                    workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
+                    workflowStepStaffPo.setCommunityId(workflowPo.getCommunityId());
+                    workflowStepStaffPo.setStaffId(subStaff.getString("staffId"));
+                    workflowStepStaffPo.setStaffName(subStaff.getString("staffName"));
+                    workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
+                    super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
+                    workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
+                }
             }
 
             tmpWorkflowStepDto.setWorkflowStepStaffs(workflowStepStaffDtos);
@@ -185,6 +188,10 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
         }
         //提交
         commit(context);
+
+        if (context.getResponseEntity().getStatusCode() != HttpStatus.OK) {
+            return;
+        }
 
         workflowDto.setWorkflowSteps(tmpWorkflowStepDtos);
         workflowInnerServiceSMOImpl.addFlowDeployment(workflowDto);
