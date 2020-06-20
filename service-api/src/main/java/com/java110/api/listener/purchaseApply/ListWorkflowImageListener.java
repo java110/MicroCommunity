@@ -20,7 +20,7 @@ import org.springframework.util.MultiValueMap;
 /**
  * 查询小区侦听类
  */
-@Java110Listener("listWorkflowImageListener")
+//@Java110Listener("listWorkflowImageListener")
 public class ListWorkflowImageListener extends AbstractServiceApiListener {
 
     @Autowired
