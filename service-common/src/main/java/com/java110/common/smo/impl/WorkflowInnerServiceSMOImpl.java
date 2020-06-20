@@ -23,7 +23,6 @@ import org.activiti.bpmn.model.StartEvent;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -120,7 +119,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         BpmnModel model = new BpmnModel();
         Process process = new Process();
         model.addProcess(process);
-        process.setId(workflowDto.getFlowId());
+        process.setId("java110_" + workflowDto.getFlowId());
         process.setName(workflowDto.getFlowName());
         process.setDocumentation(workflowDto.getDescrible());
         //添加流程
