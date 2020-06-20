@@ -40,6 +40,8 @@ public interface IWorkflowInnerServiceSMO {
     @RequestMapping(value = "/queryWorkflowsCount", method = RequestMethod.POST)
     int queryWorkflowsCount(@RequestBody WorkflowDto workflowDto);
 
+    @RequestMapping(value = "/getWorkflowImage", method = RequestMethod.POST)
+    public String getWorkflowImage(@RequestBody WorkflowDto workflowDto);
     /**
      * @Date：2017/11/24
      * @Description：创建流程并部署

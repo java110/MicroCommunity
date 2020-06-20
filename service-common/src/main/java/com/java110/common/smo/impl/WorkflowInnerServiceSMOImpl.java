@@ -10,6 +10,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowStepDto;
 import com.java110.dto.workflow.WorkflowStepStaffDto;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.bpmn.BpmnAutoLayout;
@@ -23,12 +24,18 @@ import org.activiti.bpmn.model.StartEvent;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -102,6 +109,49 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         }
 
         return userIds.toArray(new String[userIds.size()]);
+    }
+
+    public String getWorkflowImage(@RequestBody WorkflowDto workflowDto){
+
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        String image = "";
+        /*ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(processInstanceId).singleResult();
+        String processDefinitionId = "";
+        if (processInstance == null) {
+            //查询已经结束的流程实例
+            HistoricProcessInstance processInstanceHistory =
+                    historyService.createHistoricProcessInstanceQuery()
+                            .processInstanceId(processInstanceId).singleResult();
+            if (processInstanceHistory == null)
+                return null;
+            else
+                processDefinitionId = processInstanceHistory.getProcessDefinitionId();
+        } else {
+            processDefinitionId = processInstance.getProcessDefinitionId();
+        }
+
+        //使用宋体
+        String fontName = "宋体";
+        //获取BPMN模型对象
+        BpmnModel model = repositoryService.getBpmnModel(processDefinitionId);
+        //获取流程实例当前的节点，需要高亮显示
+        List<String> currentActs = Collections.EMPTY_LIST;
+        if (processInstance != null)
+            currentActs = runtimeService.getActiveActivityIds(processInstance.getId());
+
+        InputStream is = processEngine.getProcessEngineConfiguration()
+                .getProcessDiagramGenerator()
+                .generateDiagram(model, "png", currentActs, new ArrayList<String>(),
+                        fontName, fontName, fontName, null, 1.0);
+
+        try {
+            image = Base64Convert.ioToBase64(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        return image;
     }
 
     /**
