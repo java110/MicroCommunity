@@ -182,12 +182,12 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
         //提交
         //commit(context);
 
-
         WorkflowDto workflowDto = BeanConvertUtil.covertBean(workflowPo, WorkflowDto.class);
+        workflowDto.setWorkflowSteps(tmpWorkflowStepDtos);
         WorkflowDto tmpWorkflowDto = workflowInnerServiceSMOImpl.addFlowDeployment(workflowDto);
         workflowPo.setProcessDefinitionKey(tmpWorkflowDto.getProcessDefinitionKey());
         super.update(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_WORKFLOW);
-        workflowDto.setWorkflowSteps(tmpWorkflowStepDtos);
+
 
     }
 
