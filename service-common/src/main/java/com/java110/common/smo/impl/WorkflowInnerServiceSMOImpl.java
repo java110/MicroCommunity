@@ -177,6 +177,8 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                 //并行网关-汇聚
                 process.addFlowElement(createParallelGateway("parallelGateway-join" + i, "parallelGateway-join" + i));
 
+                process.addFlowElement(createUserTask("repulse" + i, "repulse" + i, "${startUserId}"));
+
             } else {
                 //普通流转
                 //审核节点
@@ -204,7 +206,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                     if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(workflowStepDtos.get(y - 1).getType())) {
                         process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "parallelGateway-fork" + y, "parallelGateway-join-parallelGateway-fork-分支" + y, ""));
                     } else {
-                        process.addFlowElement(createSequenceFlow("task" + (y - 1), "parallelGateway-fork" + y, "task-parallelGateway-fork" + y, ""));
+                        process.addFlowElement(createSequenceFlow("task" + (y - 1), "repulse" + y, "task-repulse" + y, ""));
                     }
                 }
                 //并行网关-分支和会签用户连线，会签用户和并行网关-汇聚连线
@@ -212,11 +214,15 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                 for (int u = 0; u < userList.size(); u++) {
                     process.addFlowElement(createSequenceFlow("parallelGateway-fork" + y, "userTask" + y + u, "parallelGateway-fork-userTask" + y + u, ""));
                     process.addFlowElement(createSequenceFlow("userTask" + y + u, "parallelGateway-join" + y, "userTask-parallelGateway-join", ""));
+                    if (u == (userList.size() - 1)) {
+                        process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", "${flag=='false'}"));
+                        process.addFlowElement(createSequenceFlow("repulse" + y, "task" + getNormal(workflowStepDtos, y), "repulse-task" + y, ""));
+                    }
                 }
                 //最后一个节点  并行网关-汇聚到结束节点
-                if (y == (userList.size() - 1)) {
-                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "endEvent", "parallelGateway-join-endEvent", ""));
-                }
+//                if (y == (userList.size() - 1)) {
+//                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "endEvent", "parallelGateway-join-endEvent", ""));
+//                }
             } else {
                 //普通流转
                 //第一个节点
@@ -269,6 +275,16 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 //        }
 
         return workflowDto;
+    }
+
+    private int getNormal(List<WorkflowStepDto> workflowStepDtos, int y) {
+        for (int stepIndex = y; stepIndex > 0; y--) {
+            if (WorkflowStepDto.TYPE_NORMAL.equals(workflowStepDtos.get(stepIndex).getType())) {
+                return stepIndex;
+            }
+        }
+
+        return 0;
     }
 
 
