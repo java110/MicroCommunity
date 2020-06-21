@@ -149,115 +149,115 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 //
 //        RepositoryService repositoryService  = processEngine.getRepositoryService();
 //        repositoryService.deleteDeployment("1");
+        try {
+            // 1. 建立模型
+            BpmnModel model = new BpmnModel();
+            Process process = new Process();
+            model.addProcess(process);
+            process.setId(WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId());
+            process.setName(workflowDto.getFlowName());
+            process.setDocumentation(workflowDto.getDescrible());
+            //添加流程
+            //开始节点
+            process.addFlowElement(createStartEvent());
+            List<WorkflowStepDto> workflowStepDtos = workflowDto.getWorkflowSteps();
+            for (int i = 0; i < workflowStepDtos.size(); i++) {
+                WorkflowStepDto step = workflowStepDtos.get(i);
+                //判断是否会签
+                if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(step.getType())) {
+                    //会签
+                    //加入并行网关-分支
+                    process.addFlowElement(createParallelGateway("parallelGateway-fork" + i, "parallelGateway-fork" + i));
+                    //获取角色下所有用户
+                    List<WorkflowStepStaffDto> userList = step.getWorkflowStepStaffs();
+                    for (int u = 0; u < userList.size(); u++) {
+                        //并行网关分支的审核节点
+                        process.addFlowElement(createUserTask("userTask" + i + u, "userTask" + i + u, userList.get(u).getStaffId()));
+                    }
+                    //并行网关-汇聚
+                    process.addFlowElement(createParallelGateway("parallelGateway-join" + i, "parallelGateway-join" + i));
 
-        // 1. 建立模型
-        BpmnModel model = new BpmnModel();
-        Process process = new Process();
-        model.addProcess(process);
-        process.setId(WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId());
-        process.setName(workflowDto.getFlowName());
-        process.setDocumentation(workflowDto.getDescrible());
-        //添加流程
-        //开始节点
-        process.addFlowElement(createStartEvent());
-        List<WorkflowStepDto> workflowStepDtos = workflowDto.getWorkflowSteps();
-        for (int i = 0; i < workflowStepDtos.size(); i++) {
-            WorkflowStepDto step = workflowStepDtos.get(i);
-            //判断是否会签
-            if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(step.getType())) {
-                //会签
-                //加入并行网关-分支
-                process.addFlowElement(createParallelGateway("parallelGateway-fork" + i, "parallelGateway-fork" + i));
-                //获取角色下所有用户
-                List<WorkflowStepStaffDto> userList = step.getWorkflowStepStaffs();
-                for (int u = 0; u < userList.size(); u++) {
-                    //并行网关分支的审核节点
-                    process.addFlowElement(createUserTask("userTask" + i + u, "userTask" + i + u, userList.get(u).getStaffId()));
-                }
-                //并行网关-汇聚
-                process.addFlowElement(createParallelGateway("parallelGateway-join" + i, "parallelGateway-join" + i));
+                    process.addFlowElement(createUserTask("repulse" + i, "repulse" + i, "${startUserId}"));
 
-                process.addFlowElement(createUserTask("repulse" + i, "repulse" + i, "${startUserId}"));
-
-            } else {
-                //普通流转
-                //审核节点
-                process.addFlowElement(createGroupTask("task" + i, "task" + i, step.getWorkflowStepStaffs().get(0).getStaffId()));
-                //回退节点
-                process.addFlowElement(createUserTask("repulse" + i, "repulse" + i, "${startUserId}"));
-            }
-        }
-        //结束节点
-        process.addFlowElement(createEndEvent());
-
-        //连线
-        for (int y = 0; y < workflowStepDtos.size(); y++) {
-            WorkflowStepDto step = workflowStepDtos.get(y);
-            //是否会签
-            if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(step.getType())) {
-                //会签
-                //判断是否第一个节点
-                if (y == 0) {
-                    //开始节点和并行网关-分支连线
-                    process.addFlowElement(createSequenceFlow("startEvent", "parallelGateway-fork" + y, "startEvent-parallelGateway-fork" + y, ""));
                 } else {
-                    //审核节点或者并行网关-汇聚到并行网关-分支
-                    //判断上一个节点是否是会签
-                    if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(workflowStepDtos.get(y - 1).getType())) {
-                        process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "parallelGateway-fork" + y, "parallelGateway-join-parallelGateway-fork-分支" + y, ""));
+                    //普通流转
+                    //审核节点
+                    process.addFlowElement(createGroupTask("task" + i, "task" + i, step.getWorkflowStepStaffs().get(0).getStaffId()));
+                    //回退节点
+                    process.addFlowElement(createUserTask("repulse" + i, "repulse" + i, "${startUserId}"));
+                }
+            }
+            //结束节点
+            process.addFlowElement(createEndEvent());
+
+            //连线
+            for (int y = 0; y < workflowStepDtos.size(); y++) {
+                WorkflowStepDto step = workflowStepDtos.get(y);
+                //是否会签
+                if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(step.getType())) {
+                    //会签
+                    //判断是否第一个节点
+                    if (y == 0) {
+                        //开始节点和并行网关-分支连线
+                        process.addFlowElement(createSequenceFlow("startEvent", "parallelGateway-fork" + y, "startEvent-parallelGateway-fork" + y, ""));
                     } else {
-                        process.addFlowElement(createSequenceFlow("task" + (y - 1), "repulse" + y, "task-repulse" + y, ""));
+                        //审核节点或者并行网关-汇聚到并行网关-分支
+                        //判断上一个节点是否是会签
+                        if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(workflowStepDtos.get(y - 1).getType())) {
+                            process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "parallelGateway-fork" + y, "parallelGateway-join-parallelGateway-fork-分支" + y, ""));
+                        } else {
+                            process.addFlowElement(createSequenceFlow("task" + (y - 1), "repulse" + y, "task-repulse" + y, ""));
+                        }
                     }
-                }
-                //并行网关-分支和会签用户连线，会签用户和并行网关-汇聚连线
-                List<WorkflowStepStaffDto> userList = step.getWorkflowStepStaffs();
-                for (int u = 0; u < userList.size(); u++) {
-                    process.addFlowElement(createSequenceFlow("parallelGateway-fork" + y, "userTask" + y + u, "parallelGateway-fork-userTask" + y + u, ""));
-                    process.addFlowElement(createSequenceFlow("userTask" + y + u, "parallelGateway-join" + y, "userTask-parallelGateway-join", ""));
-                    if (u == (userList.size() - 1)) {
-                        process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", "${flag=='false'}"));
-                        process.addFlowElement(createSequenceFlow("repulse" + y, "task" + getNormal(workflowStepDtos, y), "repulse-task" + y, ""));
+                    //并行网关-分支和会签用户连线，会签用户和并行网关-汇聚连线
+                    List<WorkflowStepStaffDto> userList = step.getWorkflowStepStaffs();
+                    for (int u = 0; u < userList.size(); u++) {
+                        process.addFlowElement(createSequenceFlow("parallelGateway-fork" + y, "userTask" + y + u, "parallelGateway-fork-userTask" + y + u, ""));
+                        process.addFlowElement(createSequenceFlow("userTask" + y + u, "parallelGateway-join" + y, "userTask-parallelGateway-join", ""));
+                        if (u == (userList.size() - 1)) {
+                            process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", "${flag=='false'}"));
+                            process.addFlowElement(createSequenceFlow("repulse" + y, "task" + getNormal(workflowStepDtos, y), "repulse-task" + y, ""));
+                        }
                     }
-                }
-                //最后一个节点  并行网关-汇聚到结束节点
+                    //最后一个节点  并行网关-汇聚到结束节点
 //                if (y == (userList.size() - 1)) {
 //                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "endEvent", "parallelGateway-join-endEvent", ""));
 //                }
-            } else {
-                //普通流转
-                //第一个节点
-                if (y == 0) {
-                    //开始节点和审核节点1
-                    process.addFlowElement(createSequenceFlow("startEvent", "task" + y, "startEvent-task" + y, ""));
                 } else {
-                    //判断上一个节点是否会签
-                    if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(workflowStepDtos.get(y - 1).getType())) {
-                        //会签
-                        //并行网关-汇聚到审核节点
-                        process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "task" + y, "parallelGateway-join-task" + y, ""));
+                    //普通流转
+                    //第一个节点
+                    if (y == 0) {
+                        //开始节点和审核节点1
+                        process.addFlowElement(createSequenceFlow("startEvent", "task" + y, "startEvent-task" + y, ""));
                     } else {
-                        //普通
-                        process.addFlowElement(createSequenceFlow("task" + (y - 1), "task" + y, "task" + (y - 1) + "task" + y, "${flag=='true'}"));
+                        //判断上一个节点是否会签
+                        if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(workflowStepDtos.get(y - 1).getType())) {
+                            //会签
+                            //并行网关-汇聚到审核节点
+                            process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "task" + y, "parallelGateway-join-task" + y, ""));
+                        } else {
+                            //普通
+                            process.addFlowElement(createSequenceFlow("task" + (y - 1), "task" + y, "task" + (y - 1) + "task" + y, "${flag=='true'}"));
+                        }
                     }
+                    //是否最后一个节点
+                    if (y == (workflowStepDtos.size() - 1)) {
+                        //审核节点到结束节点
+                        process.addFlowElement(createSequenceFlow("task" + y, "endEvent", "task" + y + "endEvent", "${flag=='true'}"));
+                    }
+                    //审核节点到回退节点
+                    process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
+                    process.addFlowElement(createSequenceFlow("repulse" + y, "task" + y, "repulse-task" + y, ""));
                 }
-                //是否最后一个节点
-                if (y == (workflowStepDtos.size() - 1)) {
-                    //审核节点到结束节点
-                    process.addFlowElement(createSequenceFlow("task" + y, "endEvent", "task" + y + "endEvent", "${flag=='true'}"));
-                }
-                //审核节点到回退节点
-                process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
-                process.addFlowElement(createSequenceFlow("repulse" + y, "task" + y, "repulse-task" + y, ""));
             }
-        }
 
-        // 2. 生成的图形信息
-        new BpmnAutoLayout(model).execute();
+            // 2. 生成的图形信息
+            new BpmnAutoLayout(model).execute();
 
-        // 3. 部署流程
-        Deployment deployment = processEngine.getRepositoryService().createDeployment().addBpmnModel(process.getId() + ".bpmn", model).name(process.getId() + "_deployment").deploy();
-        workflowDto.setProcessDefinitionKey(deployment.getId());
-        //        // 4. 启动一个流程实例
+            // 3. 部署流程
+            Deployment deployment = processEngine.getRepositoryService().createDeployment().addBpmnModel(process.getId() + ".bpmn", model).name(process.getId() + "_deployment").deploy();
+            workflowDto.setProcessDefinitionKey(deployment.getId());
+            //        // 4. 启动一个流程实例
 //        ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey(process.getId());
 //
 //        // 5. 获取流程任务
@@ -273,7 +273,11 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
+        } catch (Exception e) {
+            logger.error("部署工作流失败", e);
+        }
 
+        logger.debug("工作流部署完成");
         return workflowDto;
     }
 
