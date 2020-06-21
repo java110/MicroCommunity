@@ -14,14 +14,8 @@ import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.bpmn.BpmnAutoLayout;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.EndEvent;
-import org.activiti.bpmn.model.ExclusiveGateway;
-import org.activiti.bpmn.model.ParallelGateway;
 import org.activiti.bpmn.model.Process;
-import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.bpmn.model.StartEvent;
-import org.activiti.bpmn.model.UserTask;
+import org.activiti.bpmn.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RuntimeService;
@@ -172,19 +166,19 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                     List<WorkflowStepStaffDto> userList = step.getWorkflowStepStaffs();
                     for (int u = 0; u < userList.size(); u++) {
                         //并行网关分支的审核节点
-                        process.addFlowElement(createUserTask("userTask" + i + u, "userTask" + i + u, userList.get(u).getStaffId()));
+                        process.addFlowElement(createUserTask("userTask" + i + u, userList.get(u).getStaffName(), userList.get(u).getStaffId()));
                     }
                     //并行网关-汇聚
                     process.addFlowElement(createParallelGateway("parallelGateway-join" + i, "parallelGateway-join" + i));
 
-                    process.addFlowElement(createUserTask("repulse" + i, "repulse" + i, "${startUserId}"));
+                    process.addFlowElement(createUserTask("repulse" + i, "提交者", "${startUserId}"));
 
                 } else {
                     //普通流转
                     //审核节点
-                    process.addFlowElement(createGroupTask("task" + i, "task" + i, step.getWorkflowStepStaffs().get(0).getStaffId()));
+                    process.addFlowElement(createGroupTask("task" + i, step.getWorkflowStepStaffs().get(0).getStaffName(), step.getWorkflowStepStaffs().get(0).getStaffId()));
                     //回退节点
-                    process.addFlowElement(createUserTask("repulse" + i, "repulse" + i, "${startUserId}"));
+                    process.addFlowElement(createUserTask("repulse" + i, "提交者", "${startUserId}"));
                 }
             }
             //结束节点
@@ -206,7 +200,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                         if (WorkflowStepDto.TYPE_COUNTERSIGN.equals(workflowStepDtos.get(y - 1).getType())) {
                             process.addFlowElement(createSequenceFlow("parallelGateway-join" + (y - 1), "parallelGateway-fork" + y, "parallelGateway-join-parallelGateway-fork-分支" + y, ""));
                         } else {
-                            process.addFlowElement(createSequenceFlow("task" + (y - 1), "repulse" + y, "task-repulse" + y, ""));
+                            process.addFlowElement(createSequenceFlow("task" + (y - 1), "parallelGateway-fork" + y, "task-repulse" + y, ""));
                         }
                     }
                     //并行网关-分支和会签用户连线，会签用户和并行网关-汇聚连线
@@ -220,9 +214,9 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                         }
                     }
                     //最后一个节点  并行网关-汇聚到结束节点
-//                if (y == (userList.size() - 1)) {
-//                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "endEvent", "parallelGateway-join-endEvent", ""));
-//                }
+                    if (y == (workflowStepDtos.size() - 1)) {
+                        process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "parallelGateway-join-endEvent", "${flag=='true'}"));
+                    }
                 } else {
                     //普通流转
                     //第一个节点
@@ -243,10 +237,12 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                     //是否最后一个节点
                     if (y == (workflowStepDtos.size() - 1)) {
                         //审核节点到结束节点
-                        process.addFlowElement(createSequenceFlow("task" + y, "endEvent", "task" + y + "endEvent", "${flag=='true'}"));
+                        process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "task" + y + "endEvent", "${flag=='true'}"));
+                        process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, ""));
+                    } else {
+                        //审核节点到回退节点
+                        process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
                     }
-                    //审核节点到回退节点
-                    process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
                     process.addFlowElement(createSequenceFlow("repulse" + y, "task" + y, "repulse-task" + y, ""));
                 }
             }
@@ -255,7 +251,8 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
             new BpmnAutoLayout(model).execute();
 
             // 3. 部署流程
-            Deployment deployment = processEngine.getRepositoryService().createDeployment().addBpmnModel(process.getId() + ".bpmn", model).name(process.getId() + "_deployment").deploy();
+            Deployment deployment = processEngine.getRepositoryService().createDeployment()
+                    .addBpmnModel(process.getId() + ".bpmn", model).name(process.getId() + "_deployment").deploy();
             workflowDto.setProcessDefinitionKey(deployment.getId());
             //        // 4. 启动一个流程实例
 //        ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey(process.getId());
@@ -282,7 +279,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
     }
 
     private int getNormal(List<WorkflowStepDto> workflowStepDtos, int y) {
-        for (int stepIndex = y; stepIndex > 0; y--) {
+        for (int stepIndex = y; stepIndex > 0; stepIndex--) {
             if (WorkflowStepDto.TYPE_NORMAL.equals(workflowStepDtos.get(stepIndex).getType())) {
                 return stepIndex;
             }

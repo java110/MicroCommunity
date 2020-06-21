@@ -36,7 +36,9 @@ import java.nio.charset.Charset;
         "com.java110.config.properties.code",
         "com.java110.db"},
         exclude = {LiquibaseAutoConfiguration.class,
-                org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
+                org.activiti.spring.boot.SecurityAutoConfiguration.class,
+                org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class}
+        )
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.common.listener"})

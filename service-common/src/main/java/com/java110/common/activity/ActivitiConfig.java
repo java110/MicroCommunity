@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.transaction.PlatformTransactionManager;
-
+import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
 import javax.sql.DataSource;
 import java.io.IOException;
 
@@ -25,7 +25,7 @@ import java.io.IOException;
  * add by wuxw 2019/10/22
  **/
 @Configuration
-public class ActivitiConfig  {
+public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
 
 
     @Autowired
@@ -85,4 +85,10 @@ public class ActivitiConfig  {
         return processEngine().getObject().getHistoryService();
     }
 
+    @Override
+    public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
+        springProcessEngineConfiguration.setActivityFontName("宋体");
+        springProcessEngineConfiguration.setAnnotationFontName("宋体");
+        springProcessEngineConfiguration.setLabelFontName("宋体");
+    }
 }
