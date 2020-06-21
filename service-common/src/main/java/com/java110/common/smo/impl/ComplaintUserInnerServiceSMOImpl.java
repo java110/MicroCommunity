@@ -85,7 +85,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         String deployId = tmpWorkflowDto.getProcessDefinitionKey();
 
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById(deployId, complaintDto.getComplaintId(), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId(), complaintDto.getComplaintId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);

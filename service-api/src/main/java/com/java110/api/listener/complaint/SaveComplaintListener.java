@@ -49,6 +49,7 @@ public class SaveComplaintListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户信息");
         //Assert.hasKeyAndValue(reqJson, "state", "必填，请填写投诉状态");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写投诉内容");
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
 
     }
 
