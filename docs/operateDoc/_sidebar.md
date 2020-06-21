@@ -7,5 +7,6 @@
 * 2.专题
 
   * [2.1 物业入驻平台](propertyEnter.md)
-  * [2.2 收费功能](fee.md)
-  * [2.3 报修功能](repair.md)
+  * [2.2 组织和权限](org.md)
+  * [2.3 收费功能](fee.md)
+  * [2.4 报修功能](repair.md)
