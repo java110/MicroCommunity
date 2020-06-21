@@ -1,6 +1,7 @@
 package com.java110.core.smo.common;
 
 import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.workflow.WorkflowAuditInfoDto;
 import com.java110.dto.workflow.WorkflowDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,6 @@ public interface IWorkflowInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param workflowDto 数据对象分享
      * @return WorkflowDto 对象数据
      */
@@ -41,7 +41,8 @@ public interface IWorkflowInnerServiceSMO {
     int queryWorkflowsCount(@RequestBody WorkflowDto workflowDto);
 
     @RequestMapping(value = "/getWorkflowImage", method = RequestMethod.POST)
-    public String getWorkflowImage(@RequestBody WorkflowDto workflowDto);
+    String getWorkflowImage(@RequestBody WorkflowDto workflowDto);
+
     /**
      * @Date：2017/11/24
      * @Description：创建流程并部署
@@ -50,5 +51,14 @@ public interface IWorkflowInnerServiceSMO {
     WorkflowDto addFlowDeployment(@RequestBody WorkflowDto workflowDto);
 
     @RequestMapping(value = "/getRunWorkflowImage", method = RequestMethod.POST)
-    public String getRunWorkflowImage(@RequestBody String businessKey);
+    String getRunWorkflowImage(@RequestBody String businessKey);
+
+    /**
+     * 查询审核历史
+     *
+     * @param workflowAuditInfoDto
+     * @return
+     */
+    @RequestMapping(value = "/queryWorkflowAuditHistory", method = RequestMethod.POST)
+    List<WorkflowAuditInfoDto> queryWorkflowAuditHistory(@RequestBody WorkflowAuditInfoDto workflowAuditInfoDto);
 }

@@ -7,11 +7,13 @@ import com.java110.core.smo.common.IWorkflowInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
+import com.java110.dto.workflow.WorkflowAuditInfoDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowStepDto;
 import com.java110.dto.workflow.WorkflowStepStaffDto;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.bpmn.BpmnAutoLayout;
 import org.activiti.bpmn.model.BpmnModel;
@@ -28,11 +30,14 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricActivityInstanceQuery;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.task.Comment;
 import org.activiti.image.ProcessDiagramGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +49,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -72,6 +78,9 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 
     @Autowired
     private RepositoryService repositoryService;
+
+    @Autowired
+    private TaskService taskService;
 
     @Override
     public List<WorkflowDto> queryWorkflows(@RequestBody WorkflowDto workflowDto) {
@@ -497,6 +506,64 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
     @Override
     public int queryWorkflowsCount(@RequestBody WorkflowDto workflowDto) {
         return workflowServiceDaoImpl.queryWorkflowsCount(BeanConvertUtil.beanCovertMap(workflowDto));
+    }
+
+    /**
+     * 查询审核历史
+     * @param workflowAuditInfoDto
+     * @return
+     */
+    public List<WorkflowAuditInfoDto> queryWorkflowAuditHistory(@RequestBody WorkflowAuditInfoDto workflowAuditInfoDto) {
+        //List<TaskBo> taskBoList = new ArrayList<TaskBo>();
+        HistoricProcessInstance hisProcessInstance = (HistoricProcessInstance) historyService
+                .createHistoricProcessInstanceQuery()
+                .processInstanceBusinessKey(workflowAuditInfoDto.getBusinessKey()).singleResult();
+        // 该流程实例的所有节点审批记录
+        List<HistoricActivityInstance> hisActInstList = getHisUserTaskActivityInstanceList(hisProcessInstance
+                .getId());
+        List<WorkflowAuditInfoDto> workflowAuditInfoDtos = new ArrayList<>();
+        WorkflowAuditInfoDto tmpWorkflowAuditInfoDto = null;
+        for (Iterator iterator = hisActInstList.iterator(); iterator.hasNext(); ) {
+            // 需要转换成HistoricActivityInstance
+            HistoricActivityInstance activityInstance = (HistoricActivityInstance) iterator
+                    .next();
+            if (activityInstance.getEndTime() == null) {
+                continue;
+            }
+            //如果还没结束则不放里面
+            List<Comment> comments = taskService.getTaskComments(activityInstance.getTaskId());
+            if (comments == null || comments.size() < 1) {
+                continue;
+            }
+            for (Comment comment : comments) {
+                tmpWorkflowAuditInfoDto = new WorkflowAuditInfoDto();
+                tmpWorkflowAuditInfoDto.setAuditName(activityInstance.getActivityName());
+                tmpWorkflowAuditInfoDto.setAuditTime(DateUtil.getFormatTimeString(activityInstance.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+                tmpWorkflowAuditInfoDto.setDuration(activityInstance.getDurationInMillis() + "");
+                tmpWorkflowAuditInfoDto.setUserId(comment.getUserId());
+                tmpWorkflowAuditInfoDto.setMessage(comment.getFullMessage());
+                workflowAuditInfoDtos.add(tmpWorkflowAuditInfoDto);
+            }
+        }
+        return workflowAuditInfoDtos;
+    }
+
+    /**
+     * @param processInstanceId
+     * @return
+     * @CreateUser:xxxx
+     * @ReturnType:List
+     * @CreateDate:2014-6-25下午5:03:13
+     * @UseFor :在 ACT_HI_ACTINST 表中找到对应流程实例的userTask节点 不包括startEvent
+     */
+    private List<HistoricActivityInstance> getHisUserTaskActivityInstanceList(
+            String processInstanceId) {
+        List<HistoricActivityInstance> hisActivityInstanceList = ((HistoricActivityInstanceQuery) historyService
+                .createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId).activityType("userTask")
+                .finished().orderByHistoricActivityInstanceEndTime().desc())
+                .list();
+        return hisActivityInstanceList;
     }
 
     public IWorkflowServiceDao getWorkflowServiceDaoImpl() {

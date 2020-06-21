@@ -38,4 +38,10 @@ public class ServiceCodeWorkflowConstant {
     public static final String LIST_RUN_WORKFLOW_IMAGE = "workflow.listRunWorkflowImage";
 
 
+    /**
+     * 查询 工作流 审批信息
+     */
+    public static final String LIST_WORKFLOW_AUDIT_INFO = "workflow.listWorkflowAuditInfo";
+
+
 }
