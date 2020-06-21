@@ -2,13 +2,15 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.store.IComplaintInnerServiceSMO;
 import com.java110.core.smo.common.IComplaintUserInnerServiceSMO;
+import com.java110.core.smo.common.IWorkflowInnerServiceSMO;
+import com.java110.core.smo.store.IComplaintInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.user.UserDto;
+import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -53,6 +55,9 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
+
 
     /**
      * 启动流程
@@ -62,18 +67,32 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
     public ComplaintDto startProcess(@RequestBody ComplaintDto complaintDto) {
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("complaintDto", complaintDto);
-        variables.put("userId", complaintDto.getCurrentUserId());
+        //variables.put("complaintDto", complaintDto);
+        variables.put("startUserId", complaintDto.getCurrentUserId());
         //开启流程
         //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("complaint", complaintDto.getComplaintId(), variables);
+        WorkflowDto workflowDto = new WorkflowDto();
+        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
+        workflowDto.setCommunityId(complaintDto.getCommunityId());
+        List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
+
+        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条");
+
+        WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
+        if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
+            throw new IllegalArgumentException("流程还未部署");
+        }
+
+        String deployId = tmpWorkflowDto.getProcessDefinitionKey();
+
+        ProcessInstance processInstance = runtimeService.startProcessInstanceById(deployId, complaintDto.getComplaintId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
 
         complaintDto.setProcessInstanceId(processInstanceId);
         //第一个节点自动提交
-        autoFinishFirstTask(complaintDto);
+        //autoFinishFirstTask(complaintDto);
         return complaintDto;
     }
 
