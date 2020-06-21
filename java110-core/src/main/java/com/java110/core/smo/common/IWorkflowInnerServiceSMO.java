@@ -48,4 +48,7 @@ public interface IWorkflowInnerServiceSMO {
      */
     @RequestMapping(value = "/addFlowDeployment", method = RequestMethod.POST)
     WorkflowDto addFlowDeployment(@RequestBody WorkflowDto workflowDto);
+
+    @RequestMapping(value = "/getRunWorkflowImage", method = RequestMethod.POST)
+    public String getRunWorkflowImage(@RequestBody String businessKey);
 }

@@ -32,5 +32,10 @@ public class ServiceCodeWorkflowConstant {
      */
     public static final String LIST_WORKFLOW_IMAGE = "workflow.listWorkflowImage";
 
+    /**
+     * 查询 运行工作流成图
+     */
+    public static final String LIST_RUN_WORKFLOW_IMAGE = "workflow.listRunWorkflowImage";
+
 
 }
