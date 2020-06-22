@@ -6,6 +6,7 @@ import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.WechatFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.user.UserDto;
@@ -75,9 +76,9 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         UserDto userDto = new UserDto();
         userDto.setUserName(loginInfo.getString("username"));
         userDto.setPassword(loginInfo.getString("password"));
-        userDto = super.postForApi(pd,userDto,ServiceCodeConstant.SERVICE_CODE_USER_LOGIN,UserDto.class);
+        userDto = super.postForApi(pd, userDto, ServiceCodeConstant.SERVICE_CODE_USER_LOGIN, UserDto.class);
 
-        if(userDto == null){
+        if (userDto == null) {
             responseEntity = new ResponseEntity<>("用户名或密码错误", HttpStatus.BAD_REQUEST);
             return responseEntity;
         }
@@ -166,7 +167,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
     }
 
     @Override
-    public ResponseEntity<String> getPageAccessToken(IPageData pd) throws SMOException {
+    public ResponseEntity<String> getPageAccessToken(IPageData pd, HttpServletRequest request) throws SMOException {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         String authCode = paramIn.getString("code");
         String state = paramIn.getString("state");
@@ -179,19 +180,22 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         JSONObject param = JSONObject.parseObject(paramStr);
         String redirectUrl = param.getString("redirectUrl");
         String errorUrl = param.getString("errorUrl");
-        SmallWeChatDto smallWeChatDto = getSmallWechat(pd, paramIn);
-
+        String wId = paramIn.getString("wId");
+        SmallWeChatDto smallWeChatDto = null;
+        if (!StringUtil.isEmpty(wId)) {
+            paramIn.put("appId", WechatFactory.getAppId(wId));
+            smallWeChatDto = getSmallWechat(pd, paramIn);
+        }
         if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
             smallWeChatDto = new SmallWeChatDto();
-            smallWeChatDto.setAppId(wechatAuthProperties.getAppId());
-            smallWeChatDto.setAppSecret(wechatAuthProperties.getSecret());
+            smallWeChatDto.setAppId(wechatAuthProperties.getWechatAppId());
+            smallWeChatDto.setAppSecret(wechatAuthProperties.getWechatAppSecret());
             smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
 
-
-        String url = WechatConstant.APP_GET_ACCESS_TOKEN_URL.replace("APPID", wechatAuthProperties.getWechatAppId())
-                .replace("SECRET", wechatAuthProperties.getWechatAppSecret())
+        String url = WechatConstant.APP_GET_ACCESS_TOKEN_URL.replace("APPID", smallWeChatDto.getAppId())
+                .replace("SECRET", smallWeChatDto.getAppSecret())
                 .replace("CODE", authCode);
 
         ResponseEntity<String> paramOut = outRestTemplate.getForEntity(url, String.class);
@@ -209,7 +213,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
 
         int loginFlag = paramIn.getInteger("loginFlag");
         //说明是登录页面，下发code 就可以，不需要下发key 之类
-        if(loginFlag == LOGIN_PAGE){
+        if (loginFlag == LOGIN_PAGE) {
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
@@ -247,7 +251,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         userDto.setUserId(ownerAppUserDtos.get(0).getUserId());
         UserDto tmpUserDto = super.getForApi(pd, userDto, ServiceCodeConstant.QUERY_USER_SECRET, UserDto.class);
 
-        if(StringUtil.isEmpty(tmpUserDto.getKey())){
+        if (StringUtil.isEmpty(tmpUserDto.getKey())) {
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
             return ResultVo.redirectPage(errorUrl + "?code=" + code);
@@ -278,6 +282,20 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         param.put("redirectUrl", redirectUrl);
         param.put("errorUrl", errorUrl);
         CommonCache.setValue(urlCode, param.toJSONString(), expireTime);
+        String wId = request.getHeader("wid");
+        SmallWeChatDto smallWeChatDto = null;
+        if (!StringUtil.isEmpty(wId)) {
+            JSONObject paramIn = new JSONObject();
+            paramIn.put("appId", WechatFactory.getAppId(wId));
+            smallWeChatDto = getSmallWechat(pd, paramIn);
+        }
+        if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
+            smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setAppId(wechatAuthProperties.getWechatAppId());
+            smallWeChatDto.setAppSecret(wechatAuthProperties.getWechatAppSecret());
+            smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
+            smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
+        }
 
         URL url = null;
         String openUrl = "";
@@ -290,14 +308,14 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             }
 
             openUrl = WechatConstant.OPEN_AUTH
-                    .replace("APPID", wechatAuthProperties.getWechatAppId())
+                    .replace("APPID", smallWeChatDto.getAppId())
                     .replace("SCOPE", "snsapi_base")
                     .replace(
                             "REDIRECT_URL",
                             URLEncoder
                                     .encode(
                                             (newUrl
-                                                    + "/app/loginOwnerWechatAuth?appId=992020061452450002&urlCode=" + urlCode+"&loginFlag="+loginFlag),
+                                                    + "/app/loginOwnerWechatAuth?appId=992020061452450002&urlCode=" + urlCode + "&loginFlag=" + loginFlag + "&wId=" + wId),
                                             "UTF-8")).replace("STATE", "1");
 
         } catch (Exception e) {
@@ -379,7 +397,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
-                        + paramIn.getString("appId") + "&page=1&row=1&communityId="+ownerAppUserDtos.get(0).getCommunityId(), HttpMethod.GET);
+                        + paramIn.getString("appId") + "&page=1&row=1&communityId=" + ownerAppUserDtos.get(0).getCommunityId(), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;

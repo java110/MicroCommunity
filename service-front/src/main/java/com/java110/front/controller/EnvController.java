@@ -26,4 +26,6 @@ public class EnvController {
         String env = MappingCache.getValue("HC_ENV");
         return new ResponseEntity<>(env, HttpStatus.OK);
     }
+
+
 }

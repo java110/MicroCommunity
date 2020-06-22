@@ -14,7 +14,7 @@ public class WechatConstant {
     public static final String WECHAT_DOMAIN = "WECHAT";
 
     //微信ID
-    public static final String PAGE_WECHAT_APP_ID = "_wId";//微信id 一般是appId
+    public static final String PAGE_WECHAT_APP_ID = "wId";//微信id 一般是appId
 
     public static final String KEY_PROPERTY_FEE_TEMPLATE_ID = "PROPERTY_FEE_TEMPLATE_ID";
 

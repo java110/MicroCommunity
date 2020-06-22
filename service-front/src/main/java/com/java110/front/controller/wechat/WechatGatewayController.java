@@ -6,6 +6,7 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.WechatFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.front.smo.wechatGateway.IWechatGatewaySMO;
@@ -60,11 +61,11 @@ public class WechatGatewayController extends BaseController {
         String timestamp = request.getParameter("timestamp");
         String nonce = request.getParameter("nonce");
         String echostr = request.getParameter("echostr");
-        String communityId = request.getParameter("communityId");
+        String wId = request.getParameter(WechatConstant.PAGE_WECHAT_APP_ID);
         String java110AppId = request.getParameter("java110AppId");
 
-        if (!StringUtil.isEmpty(communityId)) {
-            token = getToken(java110AppId,communityId);
+        if (!StringUtil.isEmpty(wId)) {
+            token = getToken(java110AppId, wId);
         }
         String responseStr = "";
         logger.debug("token = " + token + "||||" + "signature = " + signature + "|||" + "timestamp = "
@@ -108,10 +109,9 @@ public class WechatGatewayController extends BaseController {
         String openId = request.getParameter("openid");
         String java110AppId = request.getParameter("java110AppId");
         String responseStr = "";
-
-        String communityId = request.getParameter("communityId");
-        if (!StringUtil.isEmpty(communityId)) {
-            token = getToken(java110AppId,communityId);
+        String wId = request.getParameter(WechatConstant.PAGE_WECHAT_APP_ID);
+        if (!StringUtil.isEmpty(wId)) {
+            token = getToken(java110AppId, wId);
         }
         ResponseEntity<String> responseEntity = null;
         logger.debug("token = " + token + "||||" + "signature = " + signature + "|||" + "timestamp = "
@@ -164,13 +164,12 @@ public class WechatGatewayController extends BaseController {
         return responseEntity;
     }
 
-    private SmallWeChatDto getSmallWechat(String java110AppId, String communityId) {
+    private SmallWeChatDto getSmallWechat(String java110AppId, String appId) {
         IPageData pd = PageData.newInstance().builder("-1", "", "", "",
                 "", "", "", "",
                 java110AppId);
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
-        smallWeChatDto.setObjId(communityId);
+        smallWeChatDto.setAppId(appId);
         smallWeChatDto = wechatGatewaySMOImpl.getSmallWechat(pd, smallWeChatDto);
 
         return smallWeChatDto;
@@ -183,8 +182,9 @@ public class WechatGatewayController extends BaseController {
      * @param java110AppId
      * @return
      */
-    private String getToken(String java110AppId, String communityId) {
-        SmallWeChatDto smallWeChatDto = getSmallWechat(java110AppId, communityId);
+    private String getToken(String java110AppId, String wId) {
+        String appId = WechatFactory.getAppId(wId);
+        SmallWeChatDto smallWeChatDto = getSmallWechat(java110AppId, appId);
         String token = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.TOKEN);
         if (smallWeChatDto == null) {
             return token;

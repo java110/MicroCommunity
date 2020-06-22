@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.core.factory.WechatFactory;
 import com.java110.front.smo.ownerLogin.IOwnerAppLoginSMO;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,7 @@ public class LoginOwnerWechatAuthController extends BaseController {
         IPageData pd = PageData.newInstance().builder("", "", "", JSONObject.toJSONString(params),
                 "login", "", "", "", appId
         );
-        ResponseEntity responseEntity = ownerAppLoginSMOImpl.getPageAccessToken(pd);
+        ResponseEntity responseEntity = ownerAppLoginSMOImpl.getPageAccessToken(pd,request);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
         return responseEntity;
     }
@@ -61,6 +63,11 @@ public class LoginOwnerWechatAuthController extends BaseController {
                                HttpServletResponse response) {
         return ownerAppLoginSMOImpl.refreshToken(null, redirectUrl,errorUrl,loginFlag, request, response);
 
+    }
+
+    @RequestMapping(path = "/getWId")
+    public ResponseEntity<String> getWId(@RequestParam String appId){
+        return ResultVo.createResponseEntity(WechatFactory.getWId(appId));
     }
 
 }

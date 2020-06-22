@@ -39,7 +39,7 @@ public interface IOwnerAppLoginSMO {
      * @return
      * @throws SMOException
      */
-    ResponseEntity<String> getPageAccessToken(IPageData pd) throws SMOException;
+    ResponseEntity<String> getPageAccessToken(IPageData pd,HttpServletRequest request) throws SMOException;
 
 
     /**
