@@ -42,7 +42,7 @@ public abstract class AbstractSmallWeChatBusinessServiceDataFlowListener extends
         businessSmallWeChatInfo.put("appId", businessSmallWeChatInfo.get("appId"));
         businessSmallWeChatInfo.put("name", businessSmallWeChatInfo.get("name"));
         businessSmallWeChatInfo.put("appSecret", businessSmallWeChatInfo.get("appSecret"));
-        businessSmallWeChatInfo.put("weChatId", businessSmallWeChatInfo.get("weChat_id"));
+        businessSmallWeChatInfo.put("weChatId", businessSmallWeChatInfo.get("wechat_id"));
         businessSmallWeChatInfo.put("storeId", businessSmallWeChatInfo.get("store_Id"));
         businessSmallWeChatInfo.put("payPassword", businessSmallWeChatInfo.get("pay_password"));
         businessSmallWeChatInfo.put("remarks", businessSmallWeChatInfo.get("remarks"));
@@ -74,7 +74,7 @@ public abstract class AbstractSmallWeChatBusinessServiceDataFlowListener extends
         currentSmallWeChatInfo.put("appId", currentSmallWeChatInfo.get("appId"));
         currentSmallWeChatInfo.put("name", currentSmallWeChatInfo.get("name"));
         currentSmallWeChatInfo.put("appSecret", currentSmallWeChatInfo.get("appSecret"));
-        currentSmallWeChatInfo.put("weChatId", currentSmallWeChatInfo.get("weChat_id"));
+        currentSmallWeChatInfo.put("weChatId", currentSmallWeChatInfo.get("wechat_id"));
         currentSmallWeChatInfo.put("storeId", currentSmallWeChatInfo.get("store_Id"));
         currentSmallWeChatInfo.put("payPassword", currentSmallWeChatInfo.get("pay_password"));
         currentSmallWeChatInfo.put("remarks", currentSmallWeChatInfo.get("remarks"));

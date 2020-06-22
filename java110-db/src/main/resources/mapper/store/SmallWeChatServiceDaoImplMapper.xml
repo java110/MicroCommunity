@@ -8,7 +8,7 @@
     <insert id="saveBusinessSmallWeChatInfo" parameterType="Map">
         insert into
             buiness_small_wechat
-            (operate,appId,name,appSecret,weChat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id,wechat_type)
+            (operate,appId,name,appSecret,wechat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id,wechat_type)
         values
             (#{operate},#{appId},#{name},#{appSecret},#{weChatId},#{bId},#{storeId},#{payPassword},#{remarks},#{objId},#{objType},#{mchId},#{weChatType})
        </insert>
@@ -22,7 +22,7 @@
             t.appId,
             t.name,
             t.appSecret,
-            t.weChat_id,t.weChat_id weChatId,
+            t.wechat_id,t.wechat_id weChatId,
             t.b_id,t.b_id bId,
             t.store_Id,t.store_Id storeId,
             t.pay_password,t.pay_password payPassword,
@@ -53,7 +53,7 @@
             and t.appSecret= #{appSecret}
         </if>
         <if test="weChatId !=null and weChatId != ''">
-            and t.weChat_id= #{weChatId}
+            and t.wechat_id= #{weChatId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -75,10 +75,10 @@
     <insert id="saveSmallWeChatInfoInstance" parameterType="Map">
         insert into
             small_wechat
-                (create_time,appId,name,appSecret,status_cd,weChat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id,wechat_type)
+                (create_time,appId,name,appSecret,status_cd,wechat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id,wechat_type)
                 select
                     t.create_time,t.appId,t.name,t.appSecret,'0',
-                    t.weChat_id,t.b_id,t.store_Id,t.pay_password,t.remarks,t.obj_id,t.obj_type,t.mch_id,t.wechat_type
+                    t.wechat_id,t.b_id,t.store_Id,t.pay_password,t.remarks,t.obj_id,t.obj_type,t.mch_id,t.wechat_type
                 from buiness_small_wechat t where 1=1 and t.operate= 'ADD'
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
@@ -93,7 +93,7 @@
             and t.appSecret= #{appSecret}
         </if>
         <if test="weChatId !=null and weChatId != ''">
-            and t.weChat_id= #{weChatId}
+            and t.wechat_id= #{weChatId}
         </if>
         <if test="weChatType !=null and weChatType != ''">
             and t.wechat_type= #{weChatType}
@@ -122,7 +122,7 @@
             t.name,
             t.appSecret,
             t.status_cd,t.status_cd statusCd,
-            t.weChat_id,t.weChat_id weChatId,
+            t.wechat_id,t.wechat_id weChatId,
             t.b_id,t.b_id bId,
             t.store_Id,t.store_Id storeId,
             t.pay_password,t.pay_password payPassword,
@@ -153,7 +153,7 @@
             and t.wechat_type= #{weChatType}
         </if>
         <if test="weChatId !=null and weChatId != ''">
-            and t.weChat_id= #{weChatId}
+            and t.wechat_id= #{weChatId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -213,7 +213,7 @@
         </if>
         where 1=1
         <if test="weChatId !=null and weChatId != ''">
-            and t.weChat_id= #{weChatId}
+            and t.wechat_id= #{weChatId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -245,7 +245,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="weChatId !=null and weChatId != ''">
-            and t.weChat_id= #{weChatId}
+            and t.wechat_id= #{weChatId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

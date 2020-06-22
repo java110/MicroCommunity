@@ -1,41 +1,41 @@
 {
   "autoMove": true,
-  "id": "wssId",
-  "name": "workflowStepStaff",
-  "desc": "工作流节点",
+  "id": "attrId",
+  "name": "smallWechatAttr",
+  "desc": "微信属性",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "shareName": "common",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_WORKFLOW_STEP_STAFF",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_WORKFLOW_STEP_STAFF",
-  "newBusinessTypeCdValue": "580300030001",
-  "updateBusinessTypeCdValue": "580300040001",
-  "deleteBusinessTypeCdValue": "580300050001",
-  "businessTableName": "business_workflow_step_staff",
-  "tableName": "workflow_step_staff",
+  "shareName": "store",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_SMALL_WECHAT_ATTR",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_SMALL_WECHAT_ATTR",
+  "newBusinessTypeCdValue": "221200030001",
+  "updateBusinessTypeCdValue": "221200040001",
+  "deleteBusinessTypeCdValue": "221200050001",
+  "businessTableName": "business_small_wechat_attr",
+  "tableName": "small_wechat_attr",
   "param": {
-    "wssId": "wss_id",
-    "stepId": "step_id",
+    "attrId": "attr_id",
+    "wechatId": "wechat_id",
     "bId": "b_id",
-    "staffId": "staff_id",
-    "staffName": "staff_name",
+    "specCd": "spec_cd",
+    "value": "value",
     "communityId": "community_id",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "staffId",
-      "msg": "员工不能为空"
+      "code": "specCd",
+      "msg": "规格不能为空"
     },
     {
       "code": "communityId",
       "msg": "小区不能为空"
     },
     {
-      "code": "staffName",
-      "msg": "员工名称不能为空"
+      "code": "value",
+      "msg": "值不能为空"
     }
   ]
 }

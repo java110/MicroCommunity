@@ -32,7 +32,7 @@ public class SmallWeChatBMOImpl extends ApiBaseBMO implements ISmallWeChatBMO {
 
         JSONObject businessSmallWeChat = new JSONObject();
         businessSmallWeChat.putAll(paramInJson);
-        businessSmallWeChat.put("weChatId", "-1");
+        //businessSmallWeChat.put("weChatId", "-1");
         SmallWechatPo smallWechatPo = BeanConvertUtil.covertBean(businessSmallWeChat, SmallWechatPo.class);
         super.insert(dataFlowContext, smallWechatPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WE_CHAT);
     }

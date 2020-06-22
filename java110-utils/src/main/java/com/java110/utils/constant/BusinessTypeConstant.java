@@ -224,7 +224,12 @@ public class BusinessTypeConstant {
     //删除小程序信息
     public static final String BUSINESS_TYPE_DELETE_SMALL_WE_CHAT = "210200080001";
 
-
+    //保存小程序信息
+    public static final String BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR = "221200030001";
+    //修改小程序信息
+    public static final String BUSINESS_TYPE_UPDATE_SMALL_WECHAT_ATTR = "221200040001";
+    //删除小程序信息
+    public static final String BUSINESS_TYPE_DELETE_SMALL_WECHAT_ATTR = "221200050001";
 
 
 

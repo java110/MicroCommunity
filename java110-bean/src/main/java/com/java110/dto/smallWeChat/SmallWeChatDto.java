@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class SmallWeChatDto extends PageDto implements Serializable {
 
+    public static final String WECHAT_TYPE_PUBLIC = "1100"; // 公众号
+
     private Date createTime;
     private String appId;
     private String name;
