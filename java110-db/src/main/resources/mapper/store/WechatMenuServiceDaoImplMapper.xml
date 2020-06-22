@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wechatMenuServiceDaoImpl">
+
+    <!-- 保存公众号菜单信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessWechatMenuInfo" parameterType="Map">
+           insert into business_wechat_menu(
+pagepath,operate,app_id,menu_level,menu_name,menu_type,menu_value,b_id,community_id,wechat_menu_id
+) values (
+#{pagepath},#{operate},#{appId},#{menuLevel},#{menuName},#{menuType},#{menuValue},#{bId},#{communityId},#{wechatMenuId}
+)
+       </insert>
+
+
+       <!-- 查询公众号菜单信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessWechatMenuInfo" parameterType="Map" resultType="Map">
+           select  t.pagepath,t.operate,t.app_id,t.app_id appId,t.menu_level,t.menu_level menuLevel,t.menu_name,t.menu_name menuName,t.menu_type,t.menu_type menuType,t.menu_value,t.menu_value menuValue,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.wechat_menu_id,t.wechat_menu_id wechatMenuId 
+from business_wechat_menu t 
+where 1 =1 
+<if test="pagepath !=null and pagepath != ''">
+   and t.pagepath= #{pagepath}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="appId !=null and appId != ''">
+   and t.app_id= #{appId}
+</if> 
+<if test="menuLevel !=null and menuLevel != ''">
+   and t.menu_level= #{menuLevel}
+</if> 
+<if test="menuName !=null and menuName != ''">
+   and t.menu_name= #{menuName}
+</if> 
+<if test="menuType !=null and menuType != ''">
+   and t.menu_type= #{menuType}
+</if> 
+<if test="menuValue !=null and menuValue != ''">
+   and t.menu_value= #{menuValue}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="wechatMenuId !=null and wechatMenuId != ''">
+   and t.wechat_menu_id= #{wechatMenuId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存公众号菜单信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveWechatMenuInfoInstance" parameterType="Map">
+        insert into wechat_menu(
+pagepath,app_id,menu_level,menu_name,menu_type,menu_value,status_cd,b_id,community_id,wechat_menu_id
+) select t.pagepath,t.app_id,t.menu_level,t.menu_name,t.menu_type,t.menu_value,'0',t.b_id,t.community_id,t.wechat_menu_id from business_wechat_menu t where 1=1
+<if test="pagepath !=null and pagepath != ''">
+   and t.pagepath= #{pagepath}
+</if> 
+   and t.operate= 'ADD'
+<if test="appId !=null and appId != ''">
+   and t.app_id= #{appId}
+</if> 
+<if test="menuLevel !=null and menuLevel != ''">
+   and t.menu_level= #{menuLevel}
+</if> 
+<if test="menuName !=null and menuName != ''">
+   and t.menu_name= #{menuName}
+</if> 
+<if test="menuType !=null and menuType != ''">
+   and t.menu_type= #{menuType}
+</if> 
+<if test="menuValue !=null and menuValue != ''">
+   and t.menu_value= #{menuValue}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="wechatMenuId !=null and wechatMenuId != ''">
+   and t.wechat_menu_id= #{wechatMenuId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询公众号菜单信息 add by wuxw 2018-07-03 -->
+    <select id="getWechatMenuInfo" parameterType="Map" resultType="Map">
+        select  t.pagepath,t.app_id,t.app_id appId,t.menu_level,t.menu_level menuLevel,t.menu_name,t.menu_name menuName,t.menu_type,t.menu_type menuType,t.menu_value,t.menu_value menuValue,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.wechat_menu_id,t.wechat_menu_id wechatMenuId 
+from wechat_menu t 
+where 1 =1 
+<if test="pagepath !=null and pagepath != ''">
+   and t.pagepath= #{pagepath}
+</if> 
+<if test="appId !=null and appId != ''">
+   and t.app_id= #{appId}
+</if> 
+<if test="menuLevel !=null and menuLevel != ''">
+   and t.menu_level= #{menuLevel}
+</if> 
+<if test="menuName !=null and menuName != ''">
+   and t.menu_name= #{menuName}
+</if> 
+<if test="menuType !=null and menuType != ''">
+   and t.menu_type= #{menuType}
+</if> 
+<if test="menuValue !=null and menuValue != ''">
+   and t.menu_value= #{menuValue}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="wechatMenuId !=null and wechatMenuId != ''">
+   and t.wechat_menu_id= #{wechatMenuId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改公众号菜单信息 add by wuxw 2018-07-03 -->
+    <update id="updateWechatMenuInfoInstance" parameterType="Map">
+        update  wechat_menu t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="pagepath !=null and pagepath != ''">
+, t.pagepath= #{pagepath}
+</if> 
+<if test="appId !=null and appId != ''">
+, t.app_id= #{appId}
+</if> 
+<if test="menuLevel !=null and menuLevel != ''">
+, t.menu_level= #{menuLevel}
+</if> 
+<if test="menuName !=null and menuName != ''">
+, t.menu_name= #{menuName}
+</if> 
+<if test="menuType !=null and menuType != ''">
+, t.menu_type= #{menuType}
+</if> 
+<if test="menuValue !=null and menuValue != ''">
+, t.menu_value= #{menuValue}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+<if test="wechatMenuId !=null and wechatMenuId != ''">
+and t.wechat_menu_id= #{wechatMenuId}
+</if> 
+
+    </update>
+
+    <!-- 查询公众号菜单数量 add by wuxw 2018-07-03 -->
+     <select id="queryWechatMenusCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from wechat_menu t 
+where 1 =1 
+<if test="pagepath !=null and pagepath != ''">
+   and t.pagepath= #{pagepath}
+</if> 
+<if test="appId !=null and appId != ''">
+   and t.app_id= #{appId}
+</if> 
+<if test="menuLevel !=null and menuLevel != ''">
+   and t.menu_level= #{menuLevel}
+</if> 
+<if test="menuName !=null and menuName != ''">
+   and t.menu_name= #{menuName}
+</if> 
+<if test="menuType !=null and menuType != ''">
+   and t.menu_type= #{menuType}
+</if> 
+<if test="menuValue !=null and menuValue != ''">
+   and t.menu_value= #{menuValue}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="wechatMenuId !=null and wechatMenuId != ''">
+   and t.wechat_menu_id= #{wechatMenuId}
+</if> 
+
+
+     </select>
+
+</mapper>

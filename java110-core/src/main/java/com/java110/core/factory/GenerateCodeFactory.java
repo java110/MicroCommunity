@@ -1,6 +1,7 @@
 package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.smo.code.ICodeApi;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -9,7 +10,6 @@ import com.java110.utils.exception.ResponseErrorException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
-import com.java110.core.smo.code.ICodeApi;
 import org.springframework.web.client.RestTemplate;
 
 import java.rmi.NoSuchObjectException;
@@ -132,7 +132,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_locationId = "74";
     public static final String CODE_PREFIX_flowId = "75";
     public static final String CODE_PREFIX_wssId = "76";
-
+    public static final String CODE_PREFIX_wechatMenuId = "77";
 
 
     /**
