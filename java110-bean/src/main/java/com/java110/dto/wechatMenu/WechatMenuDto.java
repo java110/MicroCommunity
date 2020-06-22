@@ -1,6 +1,7 @@
 package com.java110.dto.wechatMenu;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,14 +15,18 @@ import java.util.Date;
  **/
 public class WechatMenuDto extends PageDto implements Serializable {
 
+    public static final String MENU_LEVEL_ONE = "101"; //一级菜单
+    public static final String MENU_LEVEL_TWO = "202"; //二级菜单
     private String pagepath;
-private String appId;
-private String menuLevel;
-private String menuName;
-private String menuType;
-private String menuValue;
-private String communityId;
-private String wechatMenuId;
+    private String appId;
+    private String menuLevel;
+    private String menuName;
+    private String menuType;
+    private String menuValue;
+    private String communityId;
+    private String wechatMenuId;
+    private String parentMenuId;
+    private String seq;
 
 
     private Date createTime;
@@ -32,49 +37,64 @@ private String wechatMenuId;
     public String getPagepath() {
         return pagepath;
     }
-public void setPagepath(String pagepath) {
+
+    public void setPagepath(String pagepath) {
         this.pagepath = pagepath;
     }
-public String getAppId() {
+
+    public String getAppId() {
         return appId;
     }
-public void setAppId(String appId) {
+
+    public void setAppId(String appId) {
         this.appId = appId;
     }
-public String getMenuLevel() {
+
+    public String getMenuLevel() {
         return menuLevel;
     }
-public void setMenuLevel(String menuLevel) {
+
+    public void setMenuLevel(String menuLevel) {
         this.menuLevel = menuLevel;
     }
-public String getMenuName() {
+
+    public String getMenuName() {
         return menuName;
     }
-public void setMenuName(String menuName) {
+
+    public void setMenuName(String menuName) {
         this.menuName = menuName;
     }
-public String getMenuType() {
+
+    public String getMenuType() {
         return menuType;
     }
-public void setMenuType(String menuType) {
+
+    public void setMenuType(String menuType) {
         this.menuType = menuType;
     }
-public String getMenuValue() {
+
+    public String getMenuValue() {
         return menuValue;
     }
-public void setMenuValue(String menuValue) {
+
+    public void setMenuValue(String menuValue) {
         this.menuValue = menuValue;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getWechatMenuId() {
+
+    public String getWechatMenuId() {
         return wechatMenuId;
     }
-public void setWechatMenuId(String wechatMenuId) {
+
+    public void setWechatMenuId(String wechatMenuId) {
         this.wechatMenuId = wechatMenuId;
     }
 
@@ -93,5 +113,21 @@ public void setWechatMenuId(String wechatMenuId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getParentMenuId() {
+        return parentMenuId;
+    }
+
+    public void setParentMenuId(String parentMenuId) {
+        this.parentMenuId = parentMenuId;
+    }
+
+    public String getSeq() {
+        return seq;
+    }
+
+    public void setSeq(String seq) {
+        this.seq = seq;
     }
 }

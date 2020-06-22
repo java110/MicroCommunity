@@ -46,6 +46,9 @@ public abstract class AbstractWechatMenuBusinessServiceDataFlowListener extends 
         businessWechatMenuInfo.put("menuValue", businessWechatMenuInfo.get("menu_value"));
         businessWechatMenuInfo.put("communityId", businessWechatMenuInfo.get("community_id"));
         businessWechatMenuInfo.put("wechatMenuId", businessWechatMenuInfo.get("wechat_menu_id"));
+        businessWechatMenuInfo.put("parentMenuId", businessWechatMenuInfo.get("parent_menu_id"));
+        businessWechatMenuInfo.put("seq", businessWechatMenuInfo.get("seq"));
+
         businessWechatMenuInfo.remove("bId");
         businessWechatMenuInfo.put("statusCd", statusCd);
     }
@@ -80,6 +83,8 @@ public abstract class AbstractWechatMenuBusinessServiceDataFlowListener extends 
         currentWechatMenuInfo.put("communityId", currentWechatMenuInfo.get("community_id"));
         currentWechatMenuInfo.put("wechatMenuId", currentWechatMenuInfo.get("wechat_menu_id"));
 
+        currentWechatMenuInfo.put("parentMenuId", currentWechatMenuInfo.get("parent_menu_id"));
+        currentWechatMenuInfo.put("seq", currentWechatMenuInfo.get("seq"));
 
         currentWechatMenuInfo.put("operate", StatusConstant.OPERATE_DEL);
         getWechatMenuServiceDaoImpl().saveBusinessWechatMenuInfo(currentWechatMenuInfo);

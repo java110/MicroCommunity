@@ -1,0 +1,59 @@
+{
+  "templateName":"位置管理",
+  "directories": "property",
+  "templateCode":"location",
+  "templateKey":"locationId",
+  "templateKeyName":"位置ID",
+  "searchCode": "locationName",
+  "searchName": "位置名称",
+  "conditions": [
+    {
+      "name": "位置名称",
+      "inputType": "input",
+      "code": "locationName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "位置编码",
+      "inputType": "input",
+      "code": "locationId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "位置类型",
+      "inputType": "select",
+      "selectValue":"1000,2000,3000",
+      "selectValueName":"小区,单元,房屋",
+      "code": "locationType",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"locationName",
+      "cnCode":"位置名称",
+      "desc":"必填，请填写位置名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"max",
+      "limitParam":"1,100",
+      "limitErrInfo":"位置名称不能超过100位",
+      "show": true
+    },
+    {
+      "code": "locationType",
+      "cnCode":"位置类型",
+      "desc":"必填，请填写位置类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"1000,2000,3000",
+      "selectValueName":"小区,单元,房屋",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"位置类型 格式错误",
+      "show": true
+    }
+  ]
+}
