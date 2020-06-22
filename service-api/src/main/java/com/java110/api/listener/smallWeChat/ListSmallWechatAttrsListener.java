@@ -8,6 +8,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.smallWechatAttr.ISmallWechatAttrInnerServiceSMO;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.utils.constant.ServiceCodeSmallWechatAttrConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,8 @@ public class ListSmallWechatAttrsListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "wechatId", "微信ID");
+        //super.validatePageInfo(reqJson);
     }
 
     @Override
