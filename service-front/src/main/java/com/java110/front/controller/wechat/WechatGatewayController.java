@@ -62,22 +62,9 @@ public class WechatGatewayController extends BaseController {
         String echostr = request.getParameter("echostr");
         String communityId = request.getParameter("communityId");
         String java110AppId = request.getParameter("java110AppId");
-        IPageData pd = PageData.newInstance().builder("-1", "", "", "",
-                "", "", "", "",
-                java110AppId);
-        if(!StringUtil.isEmpty(communityId)){
-            SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-            smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
-            smallWeChatDto.setObjId(communityId);
-            smallWeChatDto = wechatGatewaySMOImpl.getSmallWechat(pd,smallWeChatDto);
 
-            if(smallWeChatDto !=null){
-                List<SmallWechatAttrDto> smallWechatAttrDtos = smallWeChatDto.getSmallWechatAttrs();
-
-                if(smallWechatAttrDtos != null){
-                   // for()
-                }
-            }
+        if (!StringUtil.isEmpty(communityId)) {
+            token = getToken(java110AppId,communityId);
         }
         String responseStr = "";
         logger.debug("token = " + token + "||||" + "signature = " + signature + "|||" + "timestamp = "
@@ -121,6 +108,11 @@ public class WechatGatewayController extends BaseController {
         String openId = request.getParameter("openid");
         String java110AppId = request.getParameter("java110AppId");
         String responseStr = "";
+
+        String communityId = request.getParameter("communityId");
+        if (!StringUtil.isEmpty(communityId)) {
+            token = getToken(java110AppId,communityId);
+        }
         ResponseEntity<String> responseEntity = null;
         logger.debug("token = " + token + "||||" + "signature = " + signature + "|||" + "timestamp = "
                 + timestamp + "|||" + "nonce = " + nonce + "|||| param = " + param + "|||| openId= " + openId);
@@ -170,5 +162,44 @@ public class WechatGatewayController extends BaseController {
         }
 
         return responseEntity;
+    }
+
+    private SmallWeChatDto getSmallWechat(String java110AppId, String communityId) {
+        IPageData pd = PageData.newInstance().builder("-1", "", "", "",
+                "", "", "", "",
+                java110AppId);
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(communityId);
+        smallWeChatDto = wechatGatewaySMOImpl.getSmallWechat(pd, smallWeChatDto);
+
+        return smallWeChatDto;
+
+    }
+
+    /**
+     * 获取token
+     *
+     * @param java110AppId
+     * @return
+     */
+    private String getToken(String java110AppId, String communityId) {
+        SmallWeChatDto smallWeChatDto = getSmallWechat(java110AppId, communityId);
+        String token = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.TOKEN);
+        if (smallWeChatDto == null) {
+            return token;
+        }
+        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWeChatDto.getSmallWechatAttrs();
+
+        if (smallWechatAttrDtos == null) {
+            return token;
+        }
+        for (SmallWechatAttrDto smallWechatAttrDto : smallWechatAttrDtos) {
+            if (SmallWechatAttrDto.SPEC_CD_TOKEN.equals(smallWechatAttrDto.getSpecCd())) {
+                token = smallWechatAttrDto.getValue();
+            }
+        }
+
+        return token;
     }
 }
