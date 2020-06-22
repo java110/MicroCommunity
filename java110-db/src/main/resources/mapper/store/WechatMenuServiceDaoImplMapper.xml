@@ -101,7 +101,7 @@
         select t.pagepath,t.app_id,t.app_id appId,t.menu_level,t.menu_level menuLevel,t.menu_name,t.menu_name
         menuName,t.menu_type,t.menu_type menuType,t.menu_value,t.menu_value menuValue,t.status_cd,t.status_cd
         statusCd,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.wechat_menu_id,t.wechat_menu_id
-        wechatMenuId,t.seq
+        wechatMenuId,t.parent_menu_id,t.parent_menu_id parentMenuId,t.seq
         from wechat_menu t
         where 1 =1
         <if test="pagepath !=null and pagepath != ''">
