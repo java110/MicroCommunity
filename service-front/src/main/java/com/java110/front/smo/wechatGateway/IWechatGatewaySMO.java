@@ -1,6 +1,7 @@
 package com.java110.front.smo.wechatGateway;
 
 import com.java110.core.context.IPageData;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.exception.SMOException;
 import org.springframework.http.ResponseEntity;
 
@@ -19,4 +20,12 @@ public interface IWechatGatewaySMO {
      * @throws SMOException 业务代码层
      */
     ResponseEntity<String> gateway(IPageData pd) throws Exception;
+
+    /**
+     * 查询微信信息
+     *
+     * @param smallWeChatDto
+     * @return
+     */
+    SmallWeChatDto getSmallWechat(IPageData pd, SmallWeChatDto smallWeChatDto);
 }

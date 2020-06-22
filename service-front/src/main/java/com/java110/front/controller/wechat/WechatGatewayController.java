@@ -6,6 +6,8 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.front.smo.wechatGateway.IWechatGatewaySMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @ClassName WechatController
@@ -57,6 +60,25 @@ public class WechatGatewayController extends BaseController {
         String timestamp = request.getParameter("timestamp");
         String nonce = request.getParameter("nonce");
         String echostr = request.getParameter("echostr");
+        String communityId = request.getParameter("communityId");
+        String java110AppId = request.getParameter("java110AppId");
+        IPageData pd = PageData.newInstance().builder("-1", "", "", "",
+                "", "", "", "",
+                java110AppId);
+        if(!StringUtil.isEmpty(communityId)){
+            SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+            smallWeChatDto.setObjId(communityId);
+            smallWeChatDto = wechatGatewaySMOImpl.getSmallWechat(pd,smallWeChatDto);
+
+            if(smallWeChatDto !=null){
+                List<SmallWechatAttrDto> smallWechatAttrDtos = smallWeChatDto.getSmallWechatAttrs();
+
+                if(smallWechatAttrDtos != null){
+                   // for()
+                }
+            }
+        }
         String responseStr = "";
         logger.debug("token = " + token + "||||" + "signature = " + signature + "|||" + "timestamp = "
                 + timestamp + "|||" + "nonce = " + nonce + "|||" + "echostr = " + echostr);

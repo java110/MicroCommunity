@@ -5,10 +5,13 @@ import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.wechatGateway.IWechatGatewaySMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -72,6 +75,23 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
             responseStr = eventResponseHandler(fromUserName, toUserName, keyword, event, eventKey);
         }
         return new ResponseEntity<>(responseStr, HttpStatus.OK);
+    }
+
+    @Override
+    public SmallWeChatDto getSmallWechat(IPageData pd, SmallWeChatDto smallWeChatDto) {
+
+        List<SmallWeChatDto> smallWeChatDtos = super.getForApis(pd, smallWeChatDto, ServiceCodeSmallWeChatConstant.LIST_SMALL_WE_CHATS, SmallWeChatDto.class);
+        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
+            return null;
+        }
+        smallWeChatDto = smallWeChatDtos.get(0);
+        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
+        smallWechatAttrDto.setCommunityId(smallWeChatDto.getObjId());
+        smallWechatAttrDto.setWechatId(smallWeChatDto.getWeChatId());
+        List<SmallWechatAttrDto> smallWechatAttrs = super.getForApis(pd, smallWechatAttrDto, ServiceCodeSmallWeChatConstant.LIST_SMALL_WE_CHATS, SmallWechatAttrDto.class);
+
+        smallWeChatDto.setSmallWechatAttrs(smallWechatAttrs);
+        return smallWeChatDto;
     }
 
 

@@ -1,9 +1,11 @@
 package com.java110.dto.smallWeChat;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -33,6 +35,8 @@ public class SmallWeChatDto extends PageDto implements Serializable {
     private String mchId;
     private String objTypeName;
     private String weChatType;
+
+    private List<SmallWechatAttrDto> smallWechatAttrs;
 
 
     public Date getCreateTime() {
@@ -145,5 +149,13 @@ public class SmallWeChatDto extends PageDto implements Serializable {
 
     public void setWeChatType(String weChatType) {
         this.weChatType = weChatType;
+    }
+
+    public List<SmallWechatAttrDto> getSmallWechatAttrs() {
+        return smallWechatAttrs;
+    }
+
+    public void setSmallWechatAttrs(List<SmallWechatAttrDto> smallWechatAttrs) {
+        this.smallWechatAttrs = smallWechatAttrs;
     }
 }

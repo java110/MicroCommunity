@@ -368,7 +368,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
-                        + paramIn.getString("appId") + "&page=1&row=1", HttpMethod.GET);
+                        + paramIn.getString("appId") + "&page=1&row=1&communityId="+ownerAppUserDtos.get(0).getCommunityId(), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
