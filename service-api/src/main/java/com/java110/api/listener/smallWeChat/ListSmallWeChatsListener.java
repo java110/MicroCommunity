@@ -61,7 +61,7 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
+        //Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
     }
 
     @Override
