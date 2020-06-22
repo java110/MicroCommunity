@@ -27,6 +27,7 @@ public class WechatMenuDto extends PageDto implements Serializable {
     private String wechatMenuId;
     private String parentMenuId;
     private String seq;
+    private String menuTypeName;
 
 
     private Date createTime;
@@ -129,5 +130,13 @@ public class WechatMenuDto extends PageDto implements Serializable {
 
     public void setSeq(String seq) {
         this.seq = seq;
+    }
+
+    public String getMenuTypeName() {
+        return menuTypeName;
+    }
+
+    public void setMenuTypeName(String menuTypeName) {
+        this.menuTypeName = menuTypeName;
     }
 }
