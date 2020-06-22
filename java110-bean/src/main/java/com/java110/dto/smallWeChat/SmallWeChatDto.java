@@ -17,6 +17,8 @@ public class SmallWeChatDto extends PageDto implements Serializable {
 
     public static final String WECHAT_TYPE_PUBLIC = "1100"; // 公众号
 
+    public static final String OBJ_TYPE_COMMUNITY = "1000";// 当前小区
+
     private Date createTime;
     private String appId;
     private String name;

@@ -74,7 +74,7 @@ public class ListSmallWechatAttrsListener extends AbstractServiceApiListener {
             smallWechatAttrDtos = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, smallWechatAttrDtos);
+        ResultVo resultVo = new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK, smallWechatAttrDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

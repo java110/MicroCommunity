@@ -8,6 +8,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.smallWeChat.ApiSmallWeChatDataVo;
@@ -60,15 +61,18 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         String appId = event.getDataFlowContext().getRequestHeaders().get("app-id");
-        if(StringUtil.isEmpty(appId)){
+        if (StringUtil.isEmpty(appId)) {
             appId = event.getDataFlowContext().getRequestHeaders().get("app_id");
         }
         SmallWeChatDto smallWeChatDto = BeanConvertUtil.covertBean(reqJson, SmallWeChatDto.class);
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(reqJson.getString("communityId"));
         int count = smallWeChatInnerServiceSMOImpl.querySmallWeChatsCount(smallWeChatDto);
         List<ApiSmallWeChatDataVo> smallWeChats = null;
         if (count > 0) {
