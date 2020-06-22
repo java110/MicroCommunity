@@ -82,14 +82,14 @@ public class ListWorkflowsListener extends AbstractServiceApiPlusListener {
         workflowPo.setStoreId(reqJson.getString("storeId"));
         super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
 
-        workflowPo = new WorkflowPo();
-        workflowPo.setCommunityId(reqJson.getString("communityId"));
-        workflowPo.setFlowId("-2");
-        workflowPo.setFlowName("报修流程");
-        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_REPAIR);
-        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-        workflowPo.setStoreId(reqJson.getString("storeId"));
-        super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+//        workflowPo = new WorkflowPo();
+//        workflowPo.setCommunityId(reqJson.getString("communityId"));
+//        workflowPo.setFlowId("-2");
+//        workflowPo.setFlowName("报修流程");
+//        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_REPAIR);
+//        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+//        workflowPo.setStoreId(reqJson.getString("storeId"));
+//        super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
 
         workflowPo = new WorkflowPo();
         workflowPo.setCommunityId(reqJson.getString("communityId"));
