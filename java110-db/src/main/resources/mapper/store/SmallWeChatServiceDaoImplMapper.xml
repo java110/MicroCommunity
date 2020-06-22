@@ -167,6 +167,12 @@
         <if test="remarks !=null and remarks != ''">
             and t.remarks= #{remarks}
         </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -258,6 +264,12 @@
         </if>
         <if test="remarks !=null and remarks != ''">
             and t.remarks= #{remarks}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
         </if>
 
 
