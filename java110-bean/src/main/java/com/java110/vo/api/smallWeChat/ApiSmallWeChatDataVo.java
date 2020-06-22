@@ -20,6 +20,7 @@ public class ApiSmallWeChatDataVo implements Serializable {
     private String objType;
     private String mchId;
     private String objTypeName;
+    private String wId;
 
     public String getOperate() {
         return operate;
@@ -150,5 +151,13 @@ public class ApiSmallWeChatDataVo implements Serializable {
 
     public void setPayPassword(String payPassword) {
         this.payPassword = payPassword;
+    }
+
+    public String getwId() {
+        return wId;
+    }
+
+    public void setwId(String wId) {
+        this.wId = wId;
     }
 }

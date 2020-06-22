@@ -9,6 +9,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.java110.core.context.ApiDataFlow;
+import com.java110.core.context.DataFlow;
 import com.java110.utils.cache.JWTCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
@@ -16,19 +18,29 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.NoAuthorityException;
 import com.java110.utils.util.StringUtil;
-
-import com.java110.core.context.ApiDataFlow;
-import com.java110.core.context.DataFlow;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.*;
+import java.security.InvalidParameterException;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * 鉴权工厂类
@@ -37,6 +49,92 @@ import java.util.*;
 public class AuthenticationFactory {
 
     private final static String PASSWD_SALT = "hc@java110";
+    /**
+     * 偏移变量，固定占8位字节
+     */
+    private final static String IV_PARAMETER = "12345678";
+    /**
+     * 密钥算法
+     */
+    private static final String ALGORITHM = "DES";
+    /**
+     * 加密/解密算法-工作模式-填充模式
+     */
+    private static final String CIPHER_ALGORITHM = "DES/CBC/PKCS5Padding";
+    /**
+     * 默认编码
+     */
+    private static final String CHARSET = "utf-8";
+
+
+    /**
+     * 生成key
+     *
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    private static Key generateKey(String password) throws Exception {
+        DESKeySpec dks = new DESKeySpec(password.getBytes(CHARSET));
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
+        return keyFactory.generateSecret(dks);
+    }
+
+
+    /**
+     * DES加密字符串
+     *
+     * @param password 加密密码，长度不能够小于8位
+     * @param data     待加密字符串
+     * @return 加密后内容
+     */
+    public static String encrypt(String password, String data) {
+        if (password == null || password.length() < 8) {
+            throw new RuntimeException("加密失败，key不能小于8位");
+        }
+        if (data == null)
+            return null;
+        try {
+            Key secretKey = generateKey(password);
+            Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+            IvParameterSpec iv = new IvParameterSpec(IV_PARAMETER.getBytes(CHARSET));
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
+            byte[] bytes = cipher.doFinal(data.getBytes(CHARSET));
+
+            //JDK1.8及以上可直接使用Base64，JDK1.7及以下可以使用BASE64Encoder
+            //Android平台可以使用android.util.Base64
+            return new String(Base64.getEncoder().encode(bytes));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return data;
+        }
+    }
+
+    /**
+     * DES解密字符串
+     *
+     * @param password 解密密码，长度不能够小于8位
+     * @param data     待解密字符串
+     * @return 解密后内容
+     */
+    public static String decrypt(String password, String data) {
+        if (password == null || password.length() < 8) {
+            throw new RuntimeException("加密失败，key不能小于8位");
+        }
+        if (data == null)
+            return null;
+        try {
+            Key secretKey = generateKey(password);
+            Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+            IvParameterSpec iv = new IvParameterSpec(IV_PARAMETER.getBytes(CHARSET));
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(data.getBytes(CHARSET))), CHARSET);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return data;
+        }
+    }
 
     /**
      * 用户密码 md5签名
@@ -79,8 +177,7 @@ public class AuthenticationFactory {
         return md5(reqInfo);
     }
 
-    public static String SHA1Encode(String sourceString)
-    {
+    public static String SHA1Encode(String sourceString) {
         String resultString = null;
         try {
             resultString = new String(sourceString);
@@ -92,8 +189,7 @@ public class AuthenticationFactory {
     }
 
 
-    public static final String byte2hexString(byte[] bytes)
-    {
+    public static final String byte2hexString(byte[] bytes) {
         StringBuffer buf = new StringBuffer(bytes.length * 2);
         for (int i = 0; i < bytes.length; i++) {
             if ((bytes[i] & 0xFF) < 16) {
@@ -117,7 +213,7 @@ public class AuthenticationFactory {
         String reqInfo = dataFlow.getTransactionId() + dataFlow.getRequestTime() + dataFlow.getAppId();
         String url = dataFlow.getRequestHeaders().get("REQUEST_URL");
         String param = "";
-        if(url.indexOf("?") > 0){
+        if (url.indexOf("?") > 0) {
             param = url.substring(url.indexOf("?"));
         }
         //,DELETE
@@ -443,6 +539,8 @@ public class AuthenticationFactory {
         System.out.printf("passwdMd5 " + passwdMd5("wuxw2015"));
 
     }
+
+
 }
 
 

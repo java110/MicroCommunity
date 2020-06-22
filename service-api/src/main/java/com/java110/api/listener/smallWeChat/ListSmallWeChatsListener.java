@@ -5,6 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
@@ -90,11 +91,15 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
     }
 
     private void freshSecure(List<ApiSmallWeChatDataVo> smallWeChats, String appId) {
-        if (OWNER_APP.equals(appId)) {
-            return;
-        }
+//        if (OWNER_APP.equals(appId)) {
+//            return;
+//        }
 
         for (ApiSmallWeChatDataVo apiSmallWeChatDataVo : smallWeChats) {
+            apiSmallWeChatDataVo.setwId(WechatFactory.getWId(apiSmallWeChatDataVo.getAppId()));
+            if(OWNER_APP.equals(appId)){
+                continue;
+            }
             apiSmallWeChatDataVo.setAppSecret("");
             apiSmallWeChatDataVo.setPayPassword("");
         }

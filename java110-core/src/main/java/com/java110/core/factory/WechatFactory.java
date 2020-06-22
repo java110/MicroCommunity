@@ -23,6 +23,8 @@ public class WechatFactory {
 
     private static Logger logger = LoggerFactory.getLogger(WechatFactory.class);
 
+    private static final String password = "you are bad boy!";
+
 
     private static final String WECHAT = "WECHAT";
 
@@ -53,7 +55,8 @@ public class WechatFactory {
 
     /**
      * 刷新 access_token
-     * @param appId 应用ID
+     *
+     * @param appId     应用ID
      * @param appSecure 应用秘钥
      * @return
      */
@@ -75,4 +78,25 @@ public class WechatFactory {
         }
         return "";
     }
+
+    /**
+     * 获取微信页面ID
+     *
+     * @param appId
+     * @return
+     */
+    public static String getWId(String appId) {
+        return AuthenticationFactory.encrypt(password,appId);
+    }
+
+    /**
+     * 获取微信AppId
+     *
+     * @param wId
+     * @return
+     */
+    public static String getAppId(String wId) {
+        return AuthenticationFactory.decrypt(password,wId);
+    }
+
 }
