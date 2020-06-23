@@ -27,5 +27,10 @@ public class ServiceCodeWechatMenuConstant {
      */
     public static final String LIST_WECHATMENUS = "smallWeChat.listWechatMenus";
 
+    /**
+     * 发布公众号菜单
+     */
+    public static final String PUBLIC_WECHATMENU = "smallWeChat.publicWechatMenu";
+
 
 }

@@ -17,6 +17,10 @@ public class WechatMenuDto extends PageDto implements Serializable {
 
     public static final String MENU_LEVEL_ONE = "101"; //一级菜单
     public static final String MENU_LEVEL_TWO = "202"; //二级菜单
+
+    public static final String MENU_TYPE_VIEW = "view"; // 连接
+
+    public static final String MENU_TYPE_MINIPROGRAM = "miniprogram";// 小程序
     private String pagepath;
     private String appId;
     private String menuLevel;

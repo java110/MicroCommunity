@@ -3,20 +3,19 @@ package com.java110.job.task.wechat;
 import com.alibaba.fastjson.JSON;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
+import com.java110.core.smo.smallWechatAttr.ISmallWechatAttrInnerServiceSMO;
 import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.WechatConstant;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +47,9 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
     @Autowired
+    private ISmallWechatAttrInnerServiceSMO smallWechatAttrInnerServiceSMOImpl;
+
+    @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
 
     @Autowired
@@ -61,24 +63,55 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
 
 
     @Override
-    protected void process(TaskDto taskDto) throws Exception {
+    protected void process(TaskDto taskDto) {
         logger.debug("开始执行微信模板信息推送" + taskDto.toString());
 
-        String templateId = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.KEY_PROPERTY_FEE_TEMPLATE_ID);
+        // 获取小区
+        List<CommunityDto> communityDtos = getAllCommunity();
 
-        templateId = StringUtil.isEmpty(templateId) ? DEFAULT_TEMPLATE_ID : templateId;
+        for (CommunityDto communityDto : communityDtos) {
+            try {
+                publishMsg(taskDto, communityDto);
+            } catch (Exception e) {
+                logger.error("推送消息失败", e);
+            }
+        }
+    }
+
+    private void publishMsg(TaskDto taskDto, CommunityDto communityDto) throws Exception {
+
+//
+//        String templateId = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.KEY_PROPERTY_FEE_TEMPLATE_ID);
+//
+//        templateId = StringUtil.isEmpty(templateId) ? DEFAULT_TEMPLATE_ID : templateId;
 
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(communityDto.getCommunityId());
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
 
-        if (smallWeChatDtos.size() <= 0 || smallWeChatDto == null) {
+        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
             logger.info("未配置微信公众号信息,定时任务执行结束");
             return;
         }
-
         SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
+
+
+        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
+        smallWechatAttrDto.setCommunityId(communityDto.getCommunityId());
+        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
+        smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_OWE_FEE_TEMPLATE);
+        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
+
+        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
+            logger.info("未配置微信公众号消息模板");
+            return;
+        }
+
+        String templateId = smallWechatAttrDtos.get(0).getValue();
+
         String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
 
         if (accessToken == null || accessToken == "") {
