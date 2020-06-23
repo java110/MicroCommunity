@@ -43,6 +43,7 @@ public class RedisConfiguration extends CachingConfigurerSupport  {
         config.setMaxTotal(maxTotal);
         config.setMaxIdle(maxIdle);
         config.setMaxWaitMillis(maxWaitMillis);
+
         return config;
     }
 

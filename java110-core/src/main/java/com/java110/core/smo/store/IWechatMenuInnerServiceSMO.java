@@ -1,4 +1,4 @@
-package com.java110.core.smo.wechatMenu;
+package com.java110.core.smo.store;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.wechatMenu.WechatMenuDto;

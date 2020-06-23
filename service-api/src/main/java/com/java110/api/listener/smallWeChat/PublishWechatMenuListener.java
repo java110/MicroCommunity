@@ -9,7 +9,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
-import com.java110.core.smo.wechatMenu.IWechatMenuInnerServiceSMO;
+import com.java110.core.smo.store.IWechatMenuInnerServiceSMO;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.wechatMenu.WechatMenuDto;
 import com.java110.utils.constant.ServiceCodeWechatMenuConstant;

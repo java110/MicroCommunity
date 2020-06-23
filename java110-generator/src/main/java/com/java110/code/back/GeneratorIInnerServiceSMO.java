@@ -20,12 +20,12 @@ public class GeneratorIInnerServiceSMO extends BaseGenerator {
                 .replace("@@shareName@@",data.getShareName())
                 .replace("商户", data.getDesc());
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/back/core/smo/" + data.getName() + "/I" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMO.java";
+                + "out/back/core/smo/" + data.getShareName() + "/I" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMO.java";
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "java110-core\\src\\main\\java\\com\\java110\\core\\smo\\" + data.getName() + "/I" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMO.java");
+            FileUtilBase.copyfile(writePath, "java110-core\\src\\main\\java\\com\\java110\\core\\smo\\" + data.getShareName() + "/I" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMO.java");
         }
     }
 }

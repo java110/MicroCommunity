@@ -1,4 +1,4 @@
-package com.java110.core.smo.userAttr;
+package com.java110.core.smo.user;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.user.UserAttrDto;

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.smallWeChat.ISmallWechatAttrBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.smallWechatAttr.ISmallWechatAttrInnerServiceSMO;
+import com.java110.core.smo.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.po.smallWechatAttr.SmallWechatAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
