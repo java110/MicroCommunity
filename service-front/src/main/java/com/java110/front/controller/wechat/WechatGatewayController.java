@@ -63,7 +63,7 @@ public class WechatGatewayController extends BaseController {
         String echostr = request.getParameter("echostr");
         String wId = request.getParameter(WechatConstant.PAGE_WECHAT_APP_ID);
         String java110AppId = request.getParameter("java110AppId");
-
+        logger.debug("请求参数" + request.getParameterMap().toString());
         if (!StringUtil.isEmpty(wId)) {
             token = getToken(java110AppId, wId);
         }
@@ -110,6 +110,7 @@ public class WechatGatewayController extends BaseController {
         String java110AppId = request.getParameter("java110AppId");
         String responseStr = "";
         String wId = request.getParameter(WechatConstant.PAGE_WECHAT_APP_ID);
+        logger.debug("请求参数" + request.getParameterMap().toString());
         if (!StringUtil.isEmpty(wId)) {
             token = getToken(java110AppId, wId);
         }
