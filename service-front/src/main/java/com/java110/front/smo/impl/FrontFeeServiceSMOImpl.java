@@ -2,14 +2,14 @@ package com.java110.front.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.component.BaseComponentSMO;
+import com.java110.core.context.IPageData;
+import com.java110.front.smo.IFeeServiceSMO;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
-import com.java110.core.context.IPageData;
-import com.java110.core.component.BaseComponentSMO;
-import com.java110.front.smo.IFeeServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,15 +62,15 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
         }
         JSONArray feeConfigs = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("feeConfigs");
 
-        if (feeConfigs != null && feeConfigs.size() > 1) {
-            responseEntity = new ResponseEntity<String>("数据异常，请检查配置数据", HttpStatus.BAD_REQUEST);
-            return responseEntity;
-        }
+//        if (feeConfigs != null && feeConfigs.size() > 1) {
+//            responseEntity = new ResponseEntity<String>("数据异常，请检查配置数据", HttpStatus.BAD_REQUEST);
+//            return responseEntity;
+//        }
 
         if (feeConfigs != null && feeConfigs.size() > 0) {
-            responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(feeConfigs.get(0)), HttpStatus.OK);
+            responseEntity = new ResponseEntity<String>(JSONArray.toJSONString(feeConfigs), HttpStatus.OK);
         } else {
-            responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
+            responseEntity = new ResponseEntity<String>("[]", HttpStatus.OK);
 
         }
 
