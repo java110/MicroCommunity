@@ -105,7 +105,7 @@ public class PublishWechatMenuListener extends AbstractServiceApiPlusListener {
             List<WechatMenuDto> tmpWechatMenuDtos = wechatMenuInnerServiceSMOImpl.queryWechatMenus(wechatMenuDto);
             JSONObject menuButton = new JSONObject();
             menuButton.put("name", tmpWechatMenuDto.getMenuName());
-            if (tmpWechatMenuDtos != null && tmpWechatMenuDtos.size() > 1) {
+            if (tmpWechatMenuDtos != null && tmpWechatMenuDtos.size() > 0) {
                 addSubMenu(menuButton, tmpWechatMenuDtos);
                 button.add(menuButton);
                 continue;

@@ -39,12 +39,13 @@ public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         String wechatId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_weChatId);
-        reqJson.put("weChatId",wechatId);
+        reqJson.put("weChatId", wechatId);
+        reqJson.put("objType", SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         smallWeChatBMOImpl.addSmallWeChat(reqJson, context);
 
         //判断是否为公众号
 
-        if(SmallWeChatDto.WECHAT_TYPE_PUBLIC.equals(reqJson.getString("weChatType"))){
+        if (SmallWeChatDto.WECHAT_TYPE_PUBLIC.equals(reqJson.getString("weChatType"))) {
             //添加 微信对接token
             SmallWechatAttrPo smallWechatAttrPo = new SmallWechatAttrPo();
             smallWechatAttrPo.setAttrId("-1");
@@ -52,7 +53,7 @@ public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
             smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_TOKEN);
             smallWechatAttrPo.setValue("java110");
             smallWechatAttrPo.setWechatId(wechatId);
-            super.insert(context,smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
 
             //模板ID
             smallWechatAttrPo = new SmallWechatAttrPo();
@@ -61,7 +62,7 @@ public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
             smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_OWE_FEE_TEMPLATE);
             smallWechatAttrPo.setValue("test");
             smallWechatAttrPo.setWechatId(wechatId);
-            super.insert(context,smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
 
         }
     }
