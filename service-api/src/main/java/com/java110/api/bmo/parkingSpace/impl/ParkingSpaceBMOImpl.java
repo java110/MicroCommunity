@@ -340,8 +340,7 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
 
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setIsDefault("T");
+        feeConfigDto.setConfigId(paramInJson.getString("configId"));
         feeConfigDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
@@ -350,29 +349,29 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
 
         feeConfigDto = feeConfigDtos.get(0);
 
-        double receivableAmount = isHireParkingSpace(paramInJson) ? Double.parseDouble(feeConfigDto.getAdditionalAmount())
-                * Double.parseDouble(paramInJson.getString("cycles")) : Double.parseDouble(feeConfigDto.getAdditionalAmount());
+        double receivableAmount = Double.parseDouble(feeConfigDto.getAdditionalAmount())
+                * Double.parseDouble(paramInJson.getString("cycles"));
 
         paramInJson.put("receivableAmount", receivableAmount);
         paramInJson.put("configId", feeConfigDto.getConfigId());
 
         //计算 amount
-        String amount = isHireParkingSpace(paramInJson) ? "-1.00" : String.valueOf(receivableAmount);
+        String amount = "-1.00";
         paramInJson.put("amount", amount);
 
         //计算 cycles
-        String cycles = isHireParkingSpace(paramInJson) ? paramInJson.getString("cycles") : "1";
+        String cycles = paramInJson.getString("cycles");
         paramInJson.put("cycles", cycles);
 
         //计算结束时间
-        String endTime = "2038-01-01 00:00:00";
-        if (isHireParkingSpace(paramInJson)) {
-            Date et = DateUtil.getCurrentDate();
-            Calendar endCalender = Calendar.getInstance();
-            endCalender.setTime(et);
-            endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
-            endTime = DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A);
-        }
+        String endTime = "";
+
+        Date et = DateUtil.getCurrentDate();
+        Calendar endCalender = Calendar.getInstance();
+        endCalender.setTime(et);
+        endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+        endTime = DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A);
+
 
         paramInJson.put("endTime", endTime);
 
