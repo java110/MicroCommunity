@@ -57,7 +57,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
     private RestTemplate restTemplate;
 
     @Autowired
-    private RestTemplate restTemplateNoLoadBalanced;
+    private RestTemplate outRestTemplate;
 
 
     /**
@@ -372,12 +372,4 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         this.restTemplate = restTemplate;
     }
 
-
-    public RestTemplate getRestTemplateNoLoadBalanced() {
-        return restTemplateNoLoadBalanced;
-    }
-
-    public void setRestTemplateNoLoadBalanced(RestTemplate restTemplateNoLoadBalanced) {
-        this.restTemplateNoLoadBalanced = restTemplateNoLoadBalanced;
-    }
 }

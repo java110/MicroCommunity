@@ -1,15 +1,18 @@
 package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.*;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowListener;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowListener;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.CommunityMemberTypeConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +43,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
     private RestTemplate restTemplate;
 
     @Autowired
-    private RestTemplate restTemplateNoLoadBalanced;
-
+    private RestTemplate outRestTemplate;
 
 
     /**
@@ -55,7 +57,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
 
         ResponseEntity responseEntity = null;
         //配置c_service 时请注意 如果是以out 开头的调用外部的地址
-        RestTemplate tmpRestTemplate = service.getServiceCode().startsWith("out.") ? restTemplateNoLoadBalanced : restTemplate;
+        RestTemplate tmpRestTemplate = service.getServiceCode().startsWith("out.") ? outRestTemplate : restTemplate;
 
         try {
             if (CommonConstant.HTTP_METHOD_GET.equals(service.getMethod())) {
@@ -86,7 +88,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
                 responseEntity = tmpRestTemplate.exchange(service.getUrl(), HttpMethod.POST, httpEntity, String.class);
             }
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>( e.getResponseBodyAsString(), e.getStatusCode());
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         logger.debug("API 服务调用下游服务请求：{}，返回为：{}", httpEntity, responseEntity);
@@ -208,11 +210,4 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
         this.restTemplate = restTemplate;
     }
 
-    public RestTemplate getRestTemplateNoLoadBalanced() {
-        return restTemplateNoLoadBalanced;
-    }
-
-    public void setRestTemplateNoLoadBalanced(RestTemplate restTemplateNoLoadBalanced) {
-        this.restTemplateNoLoadBalanced = restTemplateNoLoadBalanced;
-    }
 }

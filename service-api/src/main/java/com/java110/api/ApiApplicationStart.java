@@ -77,7 +77,7 @@ public class ApiApplicationStart {
      * @return restTemplate
      */
     @Bean
-    public RestTemplate restTemplateNoLoadBalanced() {
+    public RestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;

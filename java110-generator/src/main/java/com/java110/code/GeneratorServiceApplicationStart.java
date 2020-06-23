@@ -68,7 +68,7 @@ public class GeneratorServiceApplicationStart {
      * @return restTemplate
      */
     @Bean
-    public com.java110.core.client.RestTemplate restTemplateNoLoadBalanced() {
+    public com.java110.core.client.RestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         com.java110.core.client.RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(com.java110.core.client.RestTemplate.class);
         return restTemplate;

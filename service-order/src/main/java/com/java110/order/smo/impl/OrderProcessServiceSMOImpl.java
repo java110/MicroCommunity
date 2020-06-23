@@ -395,11 +395,5 @@ public class OrderProcessServiceSMOImpl extends AbstractOrderServiceSMOImpl impl
         this.queryServiceSMOImpl = queryServiceSMOImpl;
     }
 
-    public RestTemplate getRestTemplateNoLoadBalanced() {
-        return restTemplateNoLoadBalanced;
-    }
 
-    public void setRestTemplateNoLoadBalanced(RestTemplate restTemplateNoLoadBalanced) {
-        this.restTemplateNoLoadBalanced = restTemplateNoLoadBalanced;
-    }
 }

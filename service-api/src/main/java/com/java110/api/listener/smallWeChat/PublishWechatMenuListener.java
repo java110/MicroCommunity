@@ -35,7 +35,7 @@ public class PublishWechatMenuListener extends AbstractServiceApiPlusListener {
     private IWechatMenuBMO wechatMenuBMOImpl;
 
     @Autowired
-    private RestTemplate restTemplateNoLoadBalanced;
+    private RestTemplate outRestTemplate;
 
     @Autowired
     private IWechatMenuInnerServiceSMO wechatMenuInnerServiceSMOImpl;
@@ -132,7 +132,7 @@ public class PublishWechatMenuListener extends AbstractServiceApiPlusListener {
         }
         String token = WechatFactory.getAccessToken(smallWeChatDtos.get(0).getAppId(), smallWeChatDtos.get(0).getAppSecret());
         String url = WechatConstant.CREATE_MENU.replace("ACCESS_TOKEN", token);
-        ResponseEntity<String> responseEntity = restTemplateNoLoadBalanced.postForEntity(url, wechatMenuObj.toJSONString(), String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, wechatMenuObj.toJSONString(), String.class);
 
         JSONObject wechatOutObj = JSONObject.parseObject(responseEntity.getBody());
         context.setResponseEntity(ResultVo.createResponseEntity(wechatOutObj.getInteger("errcode"), wechatOutObj.getString("errmsg")));

@@ -38,7 +38,7 @@ public abstract class AbstractOrderServiceSMOImpl {
     protected RestTemplate restTemplate;
 
     @Autowired
-    protected RestTemplate restTemplateNoLoadBalanced;
+    protected RestTemplate outRestTemplate;
 
     /**
      * 4.0规则校验
@@ -323,7 +323,7 @@ public abstract class AbstractOrderServiceSMOImpl {
             responseMessage = restTemplate.postForObject(httpUrl, requestBusinessJson.toJSONString(), String.class);
         } else if (ServiceBusinessConstant.INVOKE_TYPE_OUT_HTTP_POST.equals(serviceBusiness.getInvokeType())) {
             httpUrl = MappingCache.getValue(serviceBusiness.getUrl());
-            responseMessage = restTemplateNoLoadBalanced.postForObject(httpUrl, requestBusinessJson.toJSONString(), String.class);
+            responseMessage = outRestTemplate.postForObject(httpUrl, requestBusinessJson.toJSONString(), String.class);
         } else {//post方式
             throw new ConfigDataException(ResponseConstant.RESULT_CODE_CONFIG_ERROR, "配置错误：c_service_business配置url字段错误,当前无法识别" + serviceBusiness.getBusinessTypeCd());
         }

@@ -159,7 +159,7 @@ public class DataQuery {
         if(innerService){
             restTemplate = ApplicationContextFactory.getBean("restTemplate",RestTemplate.class);
         }else{
-            restTemplate = ApplicationContextFactory.getBean("restTemplateNoLoadBalanced",RestTemplate.class);
+            restTemplate = ApplicationContextFactory.getBean("outRestTemplate",RestTemplate.class);
         }
         return restTemplate.exchange(requestEntity,String.class);
     }

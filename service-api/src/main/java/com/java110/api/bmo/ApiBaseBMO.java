@@ -27,7 +27,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
     private RestTemplate restTemplate;
 
     @Autowired
-    private RestTemplate restTemplateNoLoadBalanced;
+    private RestTemplate outRestTemplate;
 
     /**
      * 调用下游服务
@@ -97,7 +97,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
         }
 
 
-        RestTemplate tmpRestTemplate = appService.getServiceCode().startsWith("out.") ? restTemplateNoLoadBalanced : restTemplate;
+        RestTemplate tmpRestTemplate = appService.getServiceCode().startsWith("out.") ? outRestTemplate : restTemplate;
 
         String serviceUrl = appService.getUrl();
         HttpEntity<String> httpEntity = null;

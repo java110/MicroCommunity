@@ -68,7 +68,7 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
-    private RestTemplate restTemplateNoLoadBalanced;
+    private RestTemplate outRestTemplate;
 
     @Autowired
     private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;

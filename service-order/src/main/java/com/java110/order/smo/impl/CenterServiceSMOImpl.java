@@ -51,7 +51,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
     private RestTemplate restTemplate;
 
     @Autowired
-    private RestTemplate restTemplateNoLoadBalanced;
+    private RestTemplate outRestTemplate;
 
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
@@ -1206,7 +1206,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 header.add(key,dataFlow.getRequestCurrentHeaders().get(key));
             }
             HttpEntity<String> httpEntity = new HttpEntity<String>(reqData, header);
-            responseMessage = restTemplateNoLoadBalanced.postForObject(service.getUrl(),httpEntity,String.class);
+            responseMessage = outRestTemplate.postForObject(service.getUrl(),httpEntity,String.class);
         }else{//webservice方式
             responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getMethod(),
                     new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
@@ -1383,11 +1383,4 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         this.queryServiceSMOImpl = queryServiceSMOImpl;
     }
 
-    public RestTemplate getRestTemplateNoLoadBalanced() {
-        return restTemplateNoLoadBalanced;
-    }
-
-    public void setRestTemplateNoLoadBalanced(RestTemplate restTemplateNoLoadBalanced) {
-        this.restTemplateNoLoadBalanced = restTemplateNoLoadBalanced;
-    }
 }
