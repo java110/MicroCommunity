@@ -1,5 +1,6 @@
 package com.java110.front.smo.wechatGateway.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
 import com.java110.core.context.IPageData;
@@ -11,13 +12,16 @@ import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.wechatGateway.IWechatGatewaySMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
+import com.java110.utils.constant.ServiceCodeSmallWechatAttrConstant;
+import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -80,15 +84,26 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
     @Override
     public SmallWeChatDto getSmallWechat(IPageData pd, SmallWeChatDto smallWeChatDto) {
 
-        List<SmallWeChatDto> smallWeChatDtos = super.getForApis(pd, smallWeChatDto, ServiceCodeSmallWeChatConstant.LIST_SMALL_WE_CHATS, SmallWeChatDto.class);
-        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
+        //List<SmallWeChatDto> smallWeChatDtos = super.getForApis(pd, smallWeChatDto, ServiceCodeSmallWeChatConstant.LIST_SMALL_WE_CHATS, SmallWeChatDto.class);
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                        + smallWeChatDto.getAppId() + "&page=1&row=1", HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return null;
         }
-        smallWeChatDto = smallWeChatDtos.get(0);
+        JSONObject smallWechatObj = JSONObject.parseObject(responseEntity.getBody().toString());
+        JSONArray smallWeChats = smallWechatObj.getJSONArray("smallWeChats");
+
+
+        if (smallWeChats == null || smallWeChats.size() < 1) {
+            return null;
+        }
+        smallWeChatDto = BeanConvertUtil.covertBean(smallWeChats.get(0), SmallWeChatDto.class);
         SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
         smallWechatAttrDto.setCommunityId(smallWeChatDto.getObjId());
         smallWechatAttrDto.setWechatId(smallWeChatDto.getWeChatId());
-        List<SmallWechatAttrDto> smallWechatAttrs = super.getForApis(pd, smallWechatAttrDto, ServiceCodeSmallWeChatConstant.LIST_SMALL_WE_CHATS, SmallWechatAttrDto.class);
+        List<SmallWechatAttrDto> smallWechatAttrs = super.getForApis(pd, smallWechatAttrDto, ServiceCodeSmallWechatAttrConstant.LIST_SMALLWECHATATTRS, SmallWechatAttrDto.class);
 
         smallWeChatDto.setSmallWechatAttrs(smallWechatAttrs);
         return smallWeChatDto;
