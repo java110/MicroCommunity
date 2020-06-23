@@ -259,11 +259,41 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
+    public void addFeeConfigParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
+        JSONObject businessFeeConfig = new JSONObject();
+        businessFeeConfig.putAll(paramInJson);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_CAR);
+        businessFeeConfig.put("feeName", "停车费[系统默认]");
+        businessFeeConfig.put("feeFlag", "2006012");
+        businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
+        businessFeeConfig.put("computingFormula", "2002");
+        businessFeeConfig.put("squarePrice", "0.00");
+        businessFeeConfig.put("additionalAmount", "0.00");
+        businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
+        businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "003");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
+        businessFeeConfig.put("isDefault", "T");
+        PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+
+        super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
     public void addFeeConfigParkingSpaceUpSell(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
-        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_CAR);
         businessFeeConfig.put("feeName", "地上出售车位费[系统默认]");
         businessFeeConfig.put("feeFlag", "2006012");
         businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -293,7 +323,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
-        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_CAR);
         businessFeeConfig.put("feeName", "地下出售车位费[系统默认]");
         businessFeeConfig.put("feeFlag", "2006012");
         businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -323,7 +353,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
-        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_CAR);
         businessFeeConfig.put("feeName", "地上出租车位费[系统默认]");
         businessFeeConfig.put("feeFlag", "1003006");
         businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -353,7 +383,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
-        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_CAR);
         businessFeeConfig.put("feeName", "地下出租车位费[系统默认]");
         businessFeeConfig.put("feeFlag", "1003006");
         businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));

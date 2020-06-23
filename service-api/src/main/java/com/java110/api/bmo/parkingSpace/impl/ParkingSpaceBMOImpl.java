@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
-import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -326,14 +326,14 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
 
         // 计算feeTypeCd
 
-        String feeTypeCd = "1001".equals(parkingSpaceDto.getTypeCd())
-                ? (this.isHireParkingSpace(paramInJson)
-                ? FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE
-                : FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE)
-                : (this.isHireParkingSpace(paramInJson)
-                ? FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE
-                : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE);
-
+//        String feeTypeCd = "1001".equals(parkingSpaceDto.getTypeCd())
+//                ? (this.isHireParkingSpace(paramInJson)
+//                ? FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE
+//                : FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE)
+//                : (this.isHireParkingSpace(paramInJson)
+//                ? FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE
+//                : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE);
+        String feeTypeCd = FeeTypeConstant.FEE_TYPE_CAR;
         paramInJson.put("feeTypeCd", feeTypeCd);
 
         //计算 receivableAmount
