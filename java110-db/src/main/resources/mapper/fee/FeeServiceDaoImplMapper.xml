@@ -360,12 +360,15 @@
         t.bill_id billId,
         t.bill_name billName,
         t.receivable,
+        t.cur_receivable curReceivable,
         t.receipts,
         t.bill_time billTime,
         t.community_id communityId,
         t.config_id configId,
-        t.cur_bill curBill
+        t.cur_bill curBill,
+        c.fee_name feeName
         from bill t
+        left join  pay_fee_config c on t.config_id = c.config_id and c.community_id = t.community_id and c.status_cd = '0'
         where 1 =1
         <if test="billId !=null and billId != ''">
             and t.bill_id= #{billId}
@@ -404,6 +407,7 @@
     <select id="queryBillCount" parameterType="Map" resultType="Map">
         select count(1) count
         from bill t
+        left join  pay_fee_config c on t.config_id = c.config_id and c.community_id = t.community_id and c.status_cd = '0'
         where 1 =1
         <if test="billId !=null and billId != ''">
             and t.bill_id= #{billId}
