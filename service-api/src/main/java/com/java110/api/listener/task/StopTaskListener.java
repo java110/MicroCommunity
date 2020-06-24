@@ -51,9 +51,9 @@ public class StopTaskListener extends AbstractServiceApiPlusListener {
         int state = taskInnerServiceSMOImpl.stopTask(taskDtos.get(0));
 
         if(state >0){
-            resultVo = new ResultVo(ResultVo.CODE_OK, "启动成功");
+            resultVo = new ResultVo(ResultVo.CODE_OK, "停止成功");
         }else{
-            resultVo = new ResultVo(ResultVo.ORDER_ERROR, "启动失败");
+            resultVo = new ResultVo(ResultVo.ORDER_ERROR, "停止失败");
         }
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
