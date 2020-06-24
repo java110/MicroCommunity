@@ -191,6 +191,9 @@
         <if test="paymentCycle !=null and paymentCycle != ''">
             and t.payment_cycle= #{paymentCycle}
         </if>
+        <if test="billType !=null and billType != ''">
+            and t.bill_type= #{billType}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -312,6 +315,9 @@
         </if>
         <if test="paymentCycle !=null and paymentCycle != ''">
             and t.payment_cycle= #{paymentCycle}
+        </if>
+        <if test="billType !=null and billType != ''">
+            and t.bill_type= #{billType}
         </if>
 
 

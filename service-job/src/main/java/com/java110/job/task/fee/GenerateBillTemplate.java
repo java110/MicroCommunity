@@ -99,6 +99,10 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(communityDto.getCommunityId());
         feeConfigDto.setBillType(getCurTaskAttr(taskDto, TASK_ATTR_BILL_TYPE).getValue());
+
+        if(StringUtil.isEmpty(feeConfigDto.getBillType())){
+            throw new IllegalArgumentException("配置错误 未拿到属性值");
+        }
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
         for (FeeConfigDto tmpFeeConfigDto : feeConfigDtos) {
