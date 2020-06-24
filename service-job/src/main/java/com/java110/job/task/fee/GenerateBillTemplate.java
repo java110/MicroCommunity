@@ -74,6 +74,8 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
 
+
+
     @Override
     protected void process(TaskDto taskDto) throws Exception {
 
@@ -163,7 +165,11 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         billDto.setReceipts("0");
         billDto.setCurReceivable("0");
         for (FeeDto tmpFeeDto : feeDtos) {
-            generateFee(startTime, tmpFeeDto, billDto);
+            try {
+                generateFee(startTime, tmpFeeDto, billDto);
+            } catch (Exception e) {
+                logger.error("生成费用失败", e);
+            }
         }
 
 
@@ -291,7 +297,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
         if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
             //车位可能被删除了
-            billOweFeeDto.setOweId("1");
+            billOweFeeDto.setOwnerId("1");
             billOweFeeDto.setOwnerName("未知");
             billOweFeeDto.setOwnerTel("19999999999");
             billOweFeeDto.setPayerObjName("未知");
@@ -311,13 +317,13 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
 
         if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
             //房屋可能被删除了
-            billOweFeeDto.setOweId("1");
+            billOweFeeDto.setOwnerId("1");
             billOweFeeDto.setOwnerName("未知");
             billOweFeeDto.setOwnerTel("19999999999");
             return;
         }
 
-        billOweFeeDto.setOweId(ownerCarDtos.get(0).getOwnerId());
+        billOweFeeDto.setOwnerId(ownerCarDtos.get(0).getOwnerId());
         billOweFeeDto.setOwnerName(ownerCarDtos.get(0).getOwnerName());
         billOweFeeDto.setOwnerTel(ownerCarDtos.get(0).getLink());
     }
@@ -360,7 +366,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
             return;
         }
 
-        billOweFeeDto.setOweId(ownerRoomRelDtos.get(0).getOwnerId());
+        billOweFeeDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
         billOweFeeDto.setOwnerName(ownerRoomRelDtos.get(0).getOwnerName());
         billOweFeeDto.setOwnerTel(ownerRoomRelDtos.get(0).getLink());
 
@@ -423,6 +429,10 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         }
 
         feeDto.setFeePrice(feePrice);
+
+        //查询业主信息
+
+
     }
 
     /**
