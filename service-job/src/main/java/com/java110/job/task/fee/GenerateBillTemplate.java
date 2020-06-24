@@ -10,11 +10,7 @@ import com.java110.core.smo.user.IOwnerCarInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.fee.BillDto;
-import com.java110.dto.fee.BillOweFeeDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDetailDto;
-import com.java110.dto.fee.FeeDto;
+import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
@@ -28,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -74,8 +71,6 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
 
-
-
     @Override
     protected void process(TaskDto taskDto) throws Exception {
 
@@ -100,7 +95,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         feeConfigDto.setCommunityId(communityDto.getCommunityId());
         feeConfigDto.setBillType(getCurTaskAttr(taskDto, TASK_ATTR_BILL_TYPE).getValue());
 
-        if(StringUtil.isEmpty(feeConfigDto.getBillType())){
+        if (StringUtil.isEmpty(feeConfigDto.getBillType())) {
             throw new IllegalArgumentException("配置错误 未拿到属性值");
         }
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
@@ -134,8 +129,8 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         List<BillDto> billDtos = feeInnerServiceSMOImpl.queryBills(tmpBillDto);
 
         //Assert.listOnlyOne(billDtos, "当前存在多个有效账单" + feeConfigDto.getConfigId());
-        if (billDtos != null && billDtos.size() > 1) {
-            throw new TaskTemplateException(ResponseConstant.RESULT_CODE_ERROR, "当前存在多个有效账单");
+        if (billDtos != null && billDtos.size() > 0) {
+            throw new TaskTemplateException(ResponseConstant.RESULT_CODE_ERROR, "已经出过账了");
         }
 
         String billId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_billId);
@@ -170,7 +165,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         billDto.setCurReceivable("0");
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
-                generateFee(startTime, tmpFeeDto, billDto);
+                generateFee(startTime, tmpFeeDto, billDto, feeConfigDto);
             } catch (Exception e) {
                 logger.error("生成费用失败", e);
             }
@@ -190,7 +185,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
      *
      * @param feeDto
      */
-    private void generateFee(Date startTime, FeeDto feeDto, BillDto billDto) {
+    private void generateFee(Date startTime, FeeDto feeDto, BillDto billDto, FeeConfigDto feeConfigDto) {
         Date billEndTime = DateUtil.getCurrentDate();
         if ("2009001".equals(feeDto.getState())) { //判断是否缴费结束
             FeeDetailDto feeDetailDto = new FeeDetailDto();
@@ -231,11 +226,15 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         billOweFeeDto.setFeeId(feeDto.getFeeId());
         billOweFeeDto.setBillId(billDto.getBillId());
 
-        int month = dayCompare(startTime, billEndTime);
+        double month = monthCompare(startTime, billEndTime);
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(month));
         billOweFeeDto.setAmountOwed(curFeePrice.doubleValue() + "");
-        month = dayCompare(feeDto.getEndTime(), billEndTime);
+        if (TASK_ATTR_VALUE_DAY.equals(feeConfigDto.getBillType())) {
+            month = dayCompare(feeDto.getEndTime(), billEndTime);
+        } else {
+            month = monthCompare(feeDto.getEndTime(), billEndTime);
+        }
         BigDecimal feePrice = new BigDecimal(feeDto.getFeePrice());
         feePrice = feePrice.multiply(new BigDecimal(month));
         billOweFeeDto.setBillAmountOwed(feePrice.doubleValue() + "");
@@ -482,7 +481,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
      * @param toDate
      * @return
      */
-    public static int dayCompare(Date fromDate, Date toDate) {
+    public static int monthCompare(Date fromDate, Date toDate) {
         Calendar from = Calendar.getInstance();
         from.setTime(fromDate);
         Calendar to = Calendar.getInstance();
@@ -494,5 +493,32 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         int toMonth = to.get(Calendar.MONTH);
         int month = toYear * 12 + toMonth - (fromYear * 12 + fromMonth);
         return month;
+    }
+
+    /**
+     * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
+     * 比如：2011-02-02 到  2017-03-02
+     * 以年为单位相差为：6年
+     * 以月为单位相差为：73个月
+     * 以日为单位相差为：2220天
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    public static double dayCompare(Date fromDate, Date toDate) {
+        Calendar from = Calendar.getInstance();
+        from.setTime(fromDate);
+        Calendar to = Calendar.getInstance();
+        to.setTime(toDate);
+
+        long t1 = from.getTimeInMillis();
+        long t2 = to.getTimeInMillis();
+        long days = (t2 - t1) / (24 * 60 * 60 * 1000);
+
+        BigDecimal tmpDays = new BigDecimal(days);
+        BigDecimal monthDay = new BigDecimal(30);
+
+        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
     }
 }
