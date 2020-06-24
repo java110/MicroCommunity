@@ -159,7 +159,9 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         if (feeDto == null || feeDtos.size() < 1) {
             return;
         }
-
+        billDto.setReceivable("0");
+        billDto.setReceipts("0");
+        billDto.setCurReceivable("0");
         for (FeeDto tmpFeeDto : feeDtos) {
             generateFee(startTime, tmpFeeDto, billDto);
         }
