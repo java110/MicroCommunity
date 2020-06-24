@@ -176,6 +176,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
         return feeServiceDaoImpl.insertBill(BeanConvertUtil.beanCovertMap(billDto));
     }
 
+
     public IFeeServiceDao getFeeServiceDaoImpl() {
         return feeServiceDaoImpl;
     }

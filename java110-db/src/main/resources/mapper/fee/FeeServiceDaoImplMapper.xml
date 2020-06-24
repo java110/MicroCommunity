@@ -382,6 +382,9 @@
         <if test="billTime !=null">
             and t.bill_time= #{billTime}
         </if>
+        <if test="curBillTime !=null">
+            and t.bill_time &gt; #{curBillTime}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>

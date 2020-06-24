@@ -47,6 +47,7 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
+        order by unitNum asc
 
     </select>
 
@@ -128,6 +129,7 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
+        order by unitNum asc
        <!-- <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>limit 10;-->
@@ -244,6 +246,7 @@
         <if test="page != -1 and page != null">
             limit #{page}, #{row}
         </if>
+        order by unitNum asc
     </select>
 
     <select id="getFloorAndUnitInfo" parameterType="Map" resultType="Map">
