@@ -316,7 +316,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                 } else {
                     //普通流转
                     //审核节点
-                    process.addFlowElement(createGroupTask("task" + i, step.getWorkflowStepStaffs().get(0).getStaffName(), step.getWorkflowStepStaffs().get(0).getStaffId()));
+                    process.addFlowElement(createUserTask("task" + i, step.getWorkflowStepStaffs().get(0).getStaffName(), step.getWorkflowStepStaffs().get(0).getStaffId()));
                     //回退节点
                     process.addFlowElement(createUserTask("repulse" + i, "提交者", "${startUserId}"));
                 }
