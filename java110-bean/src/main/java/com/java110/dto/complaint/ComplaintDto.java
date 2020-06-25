@@ -14,6 +14,9 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class ComplaintDto extends PageDto implements Serializable {
+
+    public static final String STATE_AGREE = "";
+
     //工作流实例ID
     private String processInstanceId;
 
@@ -37,6 +40,8 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String currentUserId;
     private String currentUserName;
     private String currentUserTel;
+
+    private String startUserId;
 
     //
     private String auditCode;
@@ -240,5 +245,13 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setCurrentUserTel(String currentUserTel) {
         this.currentUserTel = currentUserTel;
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
     }
 }

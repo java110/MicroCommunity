@@ -7,9 +7,10 @@
     <!-- 保存投诉建议信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessComplaintInfo" parameterType="Map">
         insert into business_complaint(
-        operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room_id,community_id
+        operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room_id,community_id,start_user_id
         ) values (
-        #{operate},#{complaintId},#{typeCd},#{context},#{complaintName},#{tel},#{state},#{storeId},#{bId},#{roomId},#{communityId}
+        #{operate},#{complaintId},#{typeCd},#{context},#{complaintName},#{tel},#{state},#{storeId},#{bId},#{roomId},#{communityId},
+        #{startUserId}
         )
     </insert>
 
@@ -18,7 +19,8 @@
     <select id="getBusinessComplaintInfo" parameterType="Map" resultType="Map">
         select t.operate,t.complaint_id,t.complaint_id complaintId,t.type_cd,t.type_cd
         typeCd,t.context,t.complaint_name,t.complaint_name complaintName,t.tel,t.state,t.store_id,t.store_id
-        storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId,t.community_id,t.community_id communityId
+        storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId,t.community_id,t.community_id communityId,
+        t.start_user_id,t.start_user_id startUserId
         from business_complaint t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -61,8 +63,10 @@
     <!-- 保存投诉建议信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveComplaintInfoInstance" parameterType="Map">
         insert into complaint(
-        complaint_id,type_cd,context,complaint_name,tel,status_cd,state,store_id,b_id,room_id,community_id
-        ) select t.complaint_id,t.type_cd,t.context,t.complaint_name,t.tel,'0',t.state,t.store_id,t.b_id,t.room_id,t.community_id
+        complaint_id,type_cd,context,complaint_name,tel,status_cd,state,store_id,b_id,room_id,community_id,
+        start_user_id
+        ) select t.complaint_id,t.type_cd,t.context,t.complaint_name,t.tel,'0',t.state,t.store_id,t.b_id,t.room_id,
+        t.community_id,t.start_user_id
         from
         business_complaint t where 1=1
         and t.operate= 'ADD'
@@ -103,7 +107,8 @@
         typeCd,td2.name typeCdName,t.context,t.complaint_name,t.complaint_name
         complaintName,t.tel,t.status_cd,t.status_cd
         statusCd,t.state,td.name stateName,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.room_id,t.room_id
-        roomId,t.create_time createTime,t.community_id,t.community_id communityId
+        roomId,t.create_time createTime,t.community_id,t.community_id communityId,
+        t.start_user_id,t.start_user_id startUserId
         from complaint t,t_dict td,t_dict td2
         where 1 =1
         and t.state = td.status_cd
@@ -150,6 +155,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
         </if>
 
         order by t.create_time desc
@@ -249,6 +257,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
         </if>
 
 

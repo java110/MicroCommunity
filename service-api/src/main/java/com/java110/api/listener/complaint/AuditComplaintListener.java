@@ -5,16 +5,18 @@ import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.store.IComplaintInnerServiceSMO;
-import com.java110.core.smo.common.IComplaintUserInnerServiceSMO;
-import com.java110.dto.complaint.ComplaintDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.smo.common.IComplaintUserInnerServiceSMO;
+import com.java110.core.smo.store.IComplaintInnerServiceSMO;
+import com.java110.dto.complaint.ComplaintDto;
 import com.java110.utils.constant.ServiceCodeComplaintConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 
 /**
@@ -74,6 +76,13 @@ public class AuditComplaintListener extends AbstractServiceApiPlusListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         ComplaintDto complaintDto = new ComplaintDto();
+        complaintDto.setComplaintId(reqJson.getString("complaintId"));
+        complaintDto.setCommunityId(reqJson.getString("communityId"));
+
+        List<ComplaintDto> complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
+        Assert.listOnlyOne(complaintDtos, "未存在或存在多条投诉单");
+
+        complaintDto = complaintDtos.get(0);
         complaintDto.setTaskId(reqJson.getString("taskId"));
         complaintDto.setCommunityId(reqJson.getString("communityId"));
         complaintDto.setStoreId(reqJson.getString("storeId"));

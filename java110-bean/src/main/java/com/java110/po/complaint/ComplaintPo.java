@@ -21,6 +21,7 @@ public class ComplaintPo implements Serializable {
     private String context;
     private String state;
     private String communityId;
+    private String startUserId;
 
     public String getComplaintId() {
         return complaintId;
@@ -92,5 +93,13 @@ public class ComplaintPo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
     }
 }

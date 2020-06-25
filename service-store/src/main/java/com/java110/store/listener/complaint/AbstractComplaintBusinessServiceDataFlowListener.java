@@ -47,6 +47,7 @@ public abstract class AbstractComplaintBusinessServiceDataFlowListener extends A
         businessComplaintInfo.put("storeId", businessComplaintInfo.get("store_id"));
         businessComplaintInfo.put("roomId", businessComplaintInfo.get("room_id"));
         businessComplaintInfo.put("communityId", businessComplaintInfo.get("community_id"));
+        businessComplaintInfo.put("startUserId", businessComplaintInfo.get("start_user_id"));
         businessComplaintInfo.remove("bId");
         businessComplaintInfo.put("statusCd", statusCd);
     }
@@ -81,6 +82,7 @@ public abstract class AbstractComplaintBusinessServiceDataFlowListener extends A
         currentComplaintInfo.put("storeId", currentComplaintInfo.get("store_id"));
         currentComplaintInfo.put("roomId", currentComplaintInfo.get("room_id"));
         currentComplaintInfo.put("communityId", currentComplaintInfo.get("community_id"));
+        currentComplaintInfo.put("startUserId", currentComplaintInfo.get("start_user_id"));
 
 
         currentComplaintInfo.put("operate", StatusConstant.OPERATE_DEL);
