@@ -41,20 +41,14 @@
 
 [参考视频](https://www.bilibili.com/video/BV1N7411E7rf/)
 
+### 操作文档
 
-### 系统简介（introduction）
-1. 开发工具：
-
-java1.8 + idea/eclipse + mysql + redis
-
-2. 官方网站
-   http://www.homecommunity.cn
-   
-   技术业务交流群QQ: 827669685
-
-3. 文档
-[技术文档](http://www.homecommunity.cn/document)
 [操作文档](http://www.homecommunity.cn/operateDoc)
+
+### 技术文档
+
+[技术文档](http://www.homecommunity.cn/document)
+
     
 ### 产品
 
