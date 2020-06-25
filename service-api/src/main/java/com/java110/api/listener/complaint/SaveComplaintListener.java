@@ -56,7 +56,7 @@ public class SaveComplaintListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        reqJson.put("startUserId", reqJson.getString("startUserId"));
+        reqJson.put("startUserId", reqJson.getString("userId"));
         complaintBMOImpl.addComplaint(reqJson, context);
 
         if (reqJson.containsKey("photos") && reqJson.getJSONArray("photos").size() > 0) {
