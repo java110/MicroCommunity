@@ -1,6 +1,6 @@
 ﻿## 2.1.1 说明
 
-## 2.1.2 添加小区
+## 2.1.2 代理商添加小区
 
 #### 1、 打开地址https://hc.demo.winqi.cn/ ，输入代理商账号（dails）、密码（admin）和验证码登录。
 
@@ -18,9 +18,9 @@
 
 ![image](img/shzt.png)
 
-## 2.1.3 审核小区
+## 2.1.3 运营者审核小区
 
-#### 1、 打开地址https://hc.demo.winqi.cn/ ，输入管理员账号（admin）、密码（admin）和验证码登录。
+#### 1、 打开地址https://hc.demo.winqi.cn/ ，输入运营者账号（admin）、密码（admin）和验证码登录。
 
 ![image](img/glydl.png)
 
@@ -72,7 +72,7 @@
 
 ![image](img/rzsh.png)
 
-## 2.1.7 入驻审核
+## 2.1.7 代理商入驻审核
 
 #### 1、 打开地址https://hc.demo.winqi.cn/ ，输入代理商账号（dails）、密码（admin）和验证码登录。
 
@@ -90,7 +90,7 @@
 
 ![image](img/rzcg.png)
 
-## 2.1.8 资产导入
+## 2.1.8 物业资产导入
 
 #### 1、登陆物业账号，在左侧菜单栏依次点击“系统管理”、“资产导入导入”。
 
