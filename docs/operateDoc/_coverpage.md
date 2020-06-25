@@ -7,4 +7,4 @@
 * QQ:928255095
 
 [GitHub](https://github.com/java110/MicroCommunity)
-[学习文档](#介绍)
+[开始操作](#理念)
