@@ -304,28 +304,33 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
     public ComplaintDto getTaskCurrentUser(@RequestBody ComplaintDto complaintDto) {
 
         TaskService taskService = processEngine.getTaskService();
-        Task task = taskService.createTaskQuery().processInstanceBusinessKey(complaintDto.getComplaintId()).singleResult();
+        List<Task> tasks = taskService.createTaskQuery().processInstanceBusinessKey(complaintDto.getComplaintId()).list();
 
-        if (task == null) {
+        if (tasks == null || tasks.size() == 0) {
             complaintDto.setCurrentUserId("");
             complaintDto.setCurrentUserName("");
             complaintDto.setCurrentUserTel("");
             return complaintDto;
         }
-
-        String userId = task.getAssignee();
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
-
-        if (users == null || users.size() == 0) {
-            complaintDto.setCurrentUserId("");
-            complaintDto.setCurrentUserName("");
-            complaintDto.setCurrentUserTel("");
-            return complaintDto;
+        String userIds = "";
+        String userNames = "";
+        String userTels = "";
+        for (Task task : tasks) {
+            String userId = task.getAssignee();
+            List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
+            if (users == null || users.size() == 0) {
+                continue;
+            }
+            userIds += (userId + "/");
+            userNames += (users.get(0).getName() + "/");
+            userTels += (users.get(0).getTel() + "/");
         }
-
-        complaintDto.setCurrentUserId(userId);
-        complaintDto.setCurrentUserName(users.get(0).getName());
-        complaintDto.setCurrentUserTel(users.get(0).getTel());
+        userIds = userIds.endsWith("/") ? userIds.substring(0, userIds.length() - 2) : userIds;
+        userNames = userNames.endsWith("/") ? userNames.substring(0, userNames.length() - 2) : userNames;
+        userTels = userTels.endsWith("/") ? userTels.substring(0, userTels.length() - 2) : userTels;
+        complaintDto.setCurrentUserId(userIds);
+        complaintDto.setCurrentUserName(userNames);
+        complaintDto.setCurrentUserTel(userTels);
         return complaintDto;
 
     }
