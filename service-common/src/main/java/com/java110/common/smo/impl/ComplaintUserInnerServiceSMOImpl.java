@@ -69,23 +69,8 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         Map<String, Object> variables = new HashMap<String, Object>();
         //variables.put("complaintDto", complaintDto);
         variables.put("startUserId", complaintDto.getCurrentUserId());
-        //开启流程
-        //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
-        WorkflowDto workflowDto = new WorkflowDto();
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
-        workflowDto.setCommunityId(complaintDto.getCommunityId());
-        List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
 
-        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条");
-
-        WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
-        if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
-            throw new IllegalArgumentException("流程还未部署");
-        }
-
-        String deployId = tmpWorkflowDto.getProcessDefinitionKey();
-
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId(), complaintDto.getComplaintId(), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(complaintDto.getCommunityId()), complaintDto.getComplaintId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
@@ -94,6 +79,23 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         //第一个节点自动提交
         //autoFinishFirstTask(complaintDto);
         return complaintDto;
+    }
+
+    private String getWorkflowDto(String communityId) {
+        //开启流程
+        //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
+        WorkflowDto workflowDto = new WorkflowDto();
+        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
+        workflowDto.setCommunityId(communityId);
+        List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
+
+        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条");
+
+        WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
+        if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
+            throw new IllegalArgumentException("流程还未部署");
+        }
+        return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
     }
 
     /**
@@ -125,7 +127,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("complaint");
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getCommunityId()));
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -137,7 +139,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
      */
     public List<ComplaintDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("complaint");
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getCommunityId()));
         ;
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
@@ -191,7 +193,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 //                .taskAssignee(user.getUserId());
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey("complaint")
+                .processDefinitionKey(getWorkflowDto(user.getCommunityId()))
                 .taskAssignee(user.getUserId());
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaint");
@@ -212,7 +214,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         HistoryService historyService = processEngine.getHistoryService();
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey("complaint")
+                .processDefinitionKey(getWorkflowDto(user.getCommunityId()))
                 .taskAssignee(user.getUserId());
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaint");
