@@ -52,27 +52,14 @@ java1.8 + idea/eclipse + mysql + redis
    
    技术业务交流群QQ: 827669685
 
-3. 硬件要求:
+3. 文档
+[技术文档](http://www.homecommunity.cn/document)
+[操作文档](http://www.homecommunity.cn/operateDoc)
+    
+### 产品
 
-   测试环境基本要求：4个CPU 、16G内存和80G硬盘
-   
-4. 软件要求:
+   ![image](docs/operateDoc/img/hc.png)
 
-    需要自行安装 mysql5.6、zookeeper、Redis和kafka
-    
-    需要启动的服务，可以查看 reBuildAll.sh,目前基本为：eureka、Api、OrderService、CommunityService、StoreService、UserService
-    FrontService、FeeService和CommonService
-    
-    推荐用docker部署管理，需要安装docker、docker-compose （如果夸主机部署请用docker swarm 自行创建java110-net network），
-    如果是单机推荐直接运行 reBuildAll.sh
-    
-### 业主小程序
-
-   ![image](docs/images/hcOwner.png)
-    
-   github: [https://github.com/java110/WechatOwnerService](https://github.com/java110/WechatOwnerService)
-   
-   gitee: [https://gitee.com/java110/WechatOwnerService](https://gitee.com/java110/WechatOwnerService)
     
 ### 系统功能（function） 
 
