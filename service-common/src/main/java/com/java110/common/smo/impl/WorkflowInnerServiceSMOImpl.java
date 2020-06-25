@@ -448,7 +448,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         userTask.setName(name);
         userTask.setId(id);
         userTask.setAssignee(userPkno);
-        userTask.setCandidateUsers(candidateUsers);
+        //userTask.setCandidateUsers(candidateUsers);
         return userTask;
     }
 
