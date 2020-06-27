@@ -379,7 +379,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                         //审核节点到回退节点
                         process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
                     }*/
-                    process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "task" + y + "endEvent", "${flag=='false'}"));
+                    process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "repulse" + y + "endEvent", "${flag=='false'}"));
                     process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
                     process.addFlowElement(createSequenceFlow("repulse" + y, "task" + y, "repulse-task" + y, "${flag=='true'}"));
                 }
