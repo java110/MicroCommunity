@@ -3,7 +3,6 @@ package com.java110.vo.api.complaint;
 import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 public class ApiComplaintDataVo implements Serializable {
@@ -38,6 +37,7 @@ public class ApiComplaintDataVo implements Serializable {
     private String currentUserId;
     private String currentUserName;
     private String currentUserTel;
+    private String startUserId;
 
 
     public String getComplaintId() {
@@ -222,5 +222,13 @@ public class ApiComplaintDataVo implements Serializable {
 
     public void setPhotos(List<PhotoVo> photos) {
         this.photos = photos;
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
     }
 }

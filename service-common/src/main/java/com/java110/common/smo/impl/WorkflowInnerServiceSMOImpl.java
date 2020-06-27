@@ -354,9 +354,9 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                         }
                     }
                     //最后一个节点  并行网关-汇聚到结束节点
-                    if (y == (workflowStepDtos.size() - 1)) {
+                    //if (y == (workflowStepDtos.size() - 1)) {
                         process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "parallelGateway-join-endEvent", "${flag=='false'}"));
-                    }
+                   // }
                 } else {
                     //普通流转
                     //第一个节点
@@ -375,14 +375,16 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                         }
                     }
                     //是否最后一个节点
-                    if (y == (workflowStepDtos.size() - 1)) {
+                  /*  if (y == (workflowStepDtos.size() - 1)) {
                         //审核节点到结束节点
                         process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "task" + y + "endEvent", "${flag=='false'}"));
                         process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
                     } else {
                         //审核节点到回退节点
                         process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
-                    }
+                    }*/
+                    process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "task" + y + "endEvent", "${flag=='false'}"));
+                    process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
                     process.addFlowElement(createSequenceFlow("repulse" + y, "task" + y, "repulse-task" + y, "${flag=='true'}"));
                 }
             }
