@@ -25,7 +25,7 @@ import java.io.IOException;
  * add by wuxw 2019/10/22
  **/
 @Configuration
-public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
+public class ActivitiConfig  {
 
 
     @Autowired
@@ -46,6 +46,9 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
         spec.setDataSource(dataSource);
         spec.setTransactionManager(platformTransactionManager);
         spec.setDatabaseSchemaUpdate("true");
+        spec.setActivityFontName("宋体");
+        spec.setAnnotationFontName("宋体");
+        spec.setLabelFontName("宋体");
         Resource[] resources = null;
         // 启动自动部署流程
         try {
@@ -85,10 +88,4 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
         return processEngine().getObject().getHistoryService();
     }
 
-    @Override
-    public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
-        springProcessEngineConfiguration.setActivityFontName("宋体");
-        springProcessEngineConfiguration.setAnnotationFontName("宋体");
-        springProcessEngineConfiguration.setLabelFontName("宋体");
-    }
 }

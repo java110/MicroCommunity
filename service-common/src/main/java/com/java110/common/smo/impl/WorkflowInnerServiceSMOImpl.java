@@ -16,29 +16,19 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.bpmn.BpmnAutoLayout;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.EndEvent;
-import org.activiti.bpmn.model.ExclusiveGateway;
-import org.activiti.bpmn.model.FlowNode;
-import org.activiti.bpmn.model.ParallelGateway;
 import org.activiti.bpmn.model.Process;
-import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.bpmn.model.StartEvent;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.bpmn.model.*;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricActivityInstanceQuery;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.image.ProcessDiagramGenerator;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -180,7 +171,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                 // 获取流程图图像字符流
                 ProcessDiagramGenerator pec = processEngine.getProcessEngineConfiguration().getProcessDiagramGenerator();
                 //配置字体
-                InputStream imageStream = pec.generateDiagram(bpmnModel, "png", executedActivityIdList, flowIds, "宋体", "微软雅黑", "黑体", null, 2.0);
+                InputStream imageStream = pec.generateDiagram(bpmnModel, "png", executedActivityIdList, flowIds, "宋体", "宋体", "宋体", null, 2.0);
 
 
                 image = Base64Convert.ioToBase64(imageStream);
@@ -251,9 +242,10 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
     public String getWorkflowImage(@RequestBody WorkflowDto workflowDto) {
 
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        String image = "";
         List<String> list = processEngine.getRepositoryService()//
                 .getDeploymentResourceNames(workflowDto.getProcessDefinitionKey());
-        String image = "";
+
         String resourceName = "";
         if (list != null && list.size() > 0) {
             for (String name : list) {
@@ -265,6 +257,9 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 
         InputStream in = processEngine.getRepositoryService()
                 .getResourceAsStream(workflowDto.getProcessDefinitionKey(), resourceName);
+
+
+
         try {
             image = Base64Convert.ioToBase64(in);
         } catch (IOException e) {
@@ -272,6 +267,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         }
         return image;
     }
+
 
     /**
      * @Date：2017/11/24
