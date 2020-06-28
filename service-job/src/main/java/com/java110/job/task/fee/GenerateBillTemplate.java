@@ -225,8 +225,12 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         billOweFeeDto.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId));
         billOweFeeDto.setFeeId(feeDto.getFeeId());
         billOweFeeDto.setBillId(billDto.getBillId());
-
-        double month = monthCompare(startTime, billEndTime);
+        double month = 0.0;
+        if (TASK_ATTR_VALUE_DAY.equals(feeConfigDto.getBillType())) {
+            month = dayCompare(feeDto.getEndTime(), billEndTime);
+        } else {
+            month = monthCompare(feeDto.getEndTime(), billEndTime);
+        }
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(month));
         billOweFeeDto.setAmountOwed(curFeePrice.doubleValue() + "");
@@ -237,6 +241,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         }
         BigDecimal feePrice = new BigDecimal(feeDto.getFeePrice());
         feePrice = feePrice.multiply(new BigDecimal(month));
+
         billOweFeeDto.setBillAmountOwed(feePrice.doubleValue() + "");
         billOweFeeDto.setFeeEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         billOweFeeDto.setCommunityId(feeDto.getCommunityId());
@@ -251,7 +256,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
 
         feeInnerServiceSMOImpl.insertBillOweFees(billOweFeeDto);
 
-        double recFee = StringUtil.isEmpty(billDto.getReceipts()) ? 0.0 : Double.parseDouble(billDto.getReceipts());
+        double recFee = StringUtil.isEmpty(billDto.getReceivable()) ? 0.0 : Double.parseDouble(billDto.getReceivable());
 
         BigDecimal recFeeBig = new BigDecimal(recFee);
         BigDecimal newRecFee = recFeeBig.add(feePrice);

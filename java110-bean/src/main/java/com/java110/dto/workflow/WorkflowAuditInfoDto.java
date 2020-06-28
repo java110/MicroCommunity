@@ -12,6 +12,9 @@ import java.io.Serializable;
  **/
 public class WorkflowAuditInfoDto implements Serializable {
 
+    public static final String STATE_FINISH = "1001";//审核完成
+    public static final String STATE_NO = "2002";//未完成
+
     private String businessKey;
 
     private String auditName;
@@ -23,6 +26,10 @@ public class WorkflowAuditInfoDto implements Serializable {
     private String userId;
 
     private String message;
+
+    private String stateName;
+
+    private String state;
 
 
     public String getBusinessKey() {
@@ -71,5 +78,21 @@ public class WorkflowAuditInfoDto implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

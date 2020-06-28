@@ -44,6 +44,14 @@ spring:
       min-idle: 0
       timeout: 0
 
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 10000
+        read-timeout: 20000
+
+
 #============== kafka ===================
 kafka:
   consumer:

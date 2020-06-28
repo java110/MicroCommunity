@@ -25,10 +25,8 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.image.ProcessDiagramGenerator;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -259,7 +257,6 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                 .getResourceAsStream(workflowDto.getProcessDefinitionKey(), resourceName);
 
 
-
         try {
             image = Base64Convert.ioToBase64(in);
         } catch (IOException e) {
@@ -351,8 +348,8 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                     }
                     //最后一个节点  并行网关-汇聚到结束节点
                     //if (y == (workflowStepDtos.size() - 1)) {
-                        process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "parallelGateway-join-endEvent", "${flag=='false'}"));
-                   // }
+                    process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "parallelGateway-join-endEvent", "${flag=='false'}"));
+                    // }
                 } else {
                     //普通流转
                     //第一个节点
@@ -508,6 +505,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 
     /**
      * 查询审核历史
+     *
      * @param workflowAuditInfoDto
      * @return
      */
@@ -525,23 +523,36 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
             // 需要转换成HistoricActivityInstance
             HistoricActivityInstance activityInstance = (HistoricActivityInstance) iterator
                     .next();
-            if (activityInstance.getEndTime() == null) {
-                continue;
+//            if (activityInstance.getEndTime() == null) {
+//                continue;
+//            }
+
+            tmpWorkflowAuditInfoDto = new WorkflowAuditInfoDto();
+            tmpWorkflowAuditInfoDto.setAuditName(activityInstance.getActivityName());
+            if (activityInstance.getEndTime() != null) {
+                tmpWorkflowAuditInfoDto.setAuditTime(DateUtil.getFormatTimeString(activityInstance.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+                tmpWorkflowAuditInfoDto.setStateName("完成");
+                tmpWorkflowAuditInfoDto.setState(WorkflowAuditInfoDto.STATE_FINISH);
+            } else {
+                tmpWorkflowAuditInfoDto.setStateName("正在处理");
+                tmpWorkflowAuditInfoDto.setState(WorkflowAuditInfoDto.STATE_NO);
             }
+            Long time = activityInstance.getDurationInMillis() == null ? new Date().getTime() - activityInstance.getStartTime().getTime()
+                    : activityInstance.getDurationInMillis();
+            tmpWorkflowAuditInfoDto.setDuration(getCostTime(time));
+
             //如果还没结束则不放里面
             List<Comment> comments = taskService.getTaskComments(activityInstance.getTaskId());
-            if (comments == null || comments.size() < 1) {
-                continue;
+            String msg = "";
+            if (comments != null && comments.size() > 0) {
+                for (Comment comment : comments) {
+                    msg += (comment.getFullMessage() + "/");
+                }
             }
-            for (Comment comment : comments) {
-                tmpWorkflowAuditInfoDto = new WorkflowAuditInfoDto();
-                tmpWorkflowAuditInfoDto.setAuditName(activityInstance.getActivityName());
-                tmpWorkflowAuditInfoDto.setAuditTime(DateUtil.getFormatTimeString(activityInstance.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-                tmpWorkflowAuditInfoDto.setDuration(activityInstance.getDurationInMillis() + "");
-                tmpWorkflowAuditInfoDto.setUserId(comment.getUserId());
-                tmpWorkflowAuditInfoDto.setMessage(comment.getFullMessage());
-                workflowAuditInfoDtos.add(tmpWorkflowAuditInfoDto);
-            }
+            msg = msg.endsWith("/") ? msg.substring(0, msg.length() - 2) : msg;
+            tmpWorkflowAuditInfoDto.setUserId(activityInstance.getAssignee());
+            tmpWorkflowAuditInfoDto.setMessage(msg);
+            workflowAuditInfoDtos.add(tmpWorkflowAuditInfoDto);
         }
         return workflowAuditInfoDtos;
     }
@@ -553,13 +564,15 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
      * @ReturnType:List
      * @CreateDate:2014-6-25下午5:03:13
      * @UseFor :在 ACT_HI_ACTINST 表中找到对应流程实例的userTask节点 不包括startEvent
+     * <p>
+     * .finished()
      */
     private List<HistoricActivityInstance> getHisUserTaskActivityInstanceList(
             String processInstanceId) {
         List<HistoricActivityInstance> hisActivityInstanceList = ((HistoricActivityInstanceQuery) historyService
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstanceId).activityType("userTask")
-                .finished().orderByHistoricActivityInstanceEndTime().desc())
+                .orderByHistoricActivityInstanceStartTime().asc())
                 .list();
         return hisActivityInstanceList;
     }
@@ -578,5 +591,20 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 
     public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
         this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
+    }
+
+    public String getCostTime(Long time) {
+        if (time == null) {
+            return "00:00";
+        }
+        long hours = time / (1000 * 60 * 60);
+        long minutes = (time - hours * (1000 * 60 * 60)) / (1000 * 60);
+        String diffTime = "";
+        if (minutes < 10) {
+            diffTime = hours + ":0" + minutes;
+        } else {
+            diffTime = hours + ":" + minutes;
+        }
+        return diffTime;
     }
 }
