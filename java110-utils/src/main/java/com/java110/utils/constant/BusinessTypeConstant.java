@@ -514,6 +514,23 @@ public class BusinessTypeConstant {
 
 
     /**
+     * 保存水电费
+     */
+    public static final String BUSINESS_TYPE_SAVE_METER_WATER = "631100030001";
+    /**
+     * 修改水电费
+     */
+    public static final String BUSINESS_TYPE_UPDATE_METER_WATER = "631100040001";
+    /**
+     * 删除水电费
+     */
+    public static final String BUSINESS_TYPE_DELETE_METER_WATER = "631100050001";
+
+
+
+
+
+    /**
      * 保存代理商信息
      */
     public static final String BUSINESS_TYPE_SAVE_AGENT_INFO = "700100030001";
