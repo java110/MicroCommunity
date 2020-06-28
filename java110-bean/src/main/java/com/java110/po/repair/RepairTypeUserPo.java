@@ -8,9 +8,9 @@ public class RepairTypeUserPo implements Serializable {
     private String repairType;
     private String remark;
     private String state;
-    private String userName;
+    private String staffName;
     private String communityId;
-    private String userId;
+    private String staffId;
 
     public String getTypeUserId() {
         return typeUserId;
@@ -44,13 +44,6 @@ public class RepairTypeUserPo implements Serializable {
         this.state = state;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public String getCommunityId() {
         return communityId;
@@ -60,13 +53,19 @@ public class RepairTypeUserPo implements Serializable {
         this.communityId = communityId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getStaffName() {
+        return staffName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
     }
 
+    public String getStaffId() {
+        return staffId;
+    }
 
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
 }

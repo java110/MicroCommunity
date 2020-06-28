@@ -42,9 +42,9 @@ public abstract class AbstractRepairTypeUserBusinessServiceDataFlowListener exte
         businessRepairTypeUserInfo.put("repairType", businessRepairTypeUserInfo.get("repair_type"));
         businessRepairTypeUserInfo.put("remark", businessRepairTypeUserInfo.get("remark"));
         businessRepairTypeUserInfo.put("state", businessRepairTypeUserInfo.get("state"));
-        businessRepairTypeUserInfo.put("userName", businessRepairTypeUserInfo.get("user_name"));
+        businessRepairTypeUserInfo.put("staffName", businessRepairTypeUserInfo.get("staff_name"));
         businessRepairTypeUserInfo.put("communityId", businessRepairTypeUserInfo.get("community_id"));
-        businessRepairTypeUserInfo.put("userId", businessRepairTypeUserInfo.get("user_id"));
+        businessRepairTypeUserInfo.put("staffId", businessRepairTypeUserInfo.get("staff_id"));
         businessRepairTypeUserInfo.remove("bId");
         businessRepairTypeUserInfo.put("statusCd", statusCd);
     }
@@ -74,9 +74,9 @@ public abstract class AbstractRepairTypeUserBusinessServiceDataFlowListener exte
         currentRepairTypeUserInfo.put("repairType", currentRepairTypeUserInfo.get("repair_type"));
         currentRepairTypeUserInfo.put("remark", currentRepairTypeUserInfo.get("remark"));
         currentRepairTypeUserInfo.put("state", currentRepairTypeUserInfo.get("state"));
-        currentRepairTypeUserInfo.put("userName", currentRepairTypeUserInfo.get("user_name"));
+        currentRepairTypeUserInfo.put("staffName", currentRepairTypeUserInfo.get("staff_name"));
         currentRepairTypeUserInfo.put("communityId", currentRepairTypeUserInfo.get("community_id"));
-        currentRepairTypeUserInfo.put("userId", currentRepairTypeUserInfo.get("user_id"));
+        currentRepairTypeUserInfo.put("staffId", currentRepairTypeUserInfo.get("staff_id"));
 
 
         currentRepairTypeUserInfo.put("operate", StatusConstant.OPERATE_DEL);

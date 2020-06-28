@@ -22,9 +22,9 @@ public class RepairTypeUserDto extends PageDto implements Serializable {
     private String remark;
     private String state;
     private String stateName;
-    private String userName;
+    private String staffName;
     private String communityId;
-    private String userId;
+    private String staffId;
 
 
     private Date createTime;
@@ -64,28 +64,12 @@ public class RepairTypeUserDto extends PageDto implements Serializable {
         this.state = state;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public String getCommunityId() {
         return communityId;
     }
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
 
@@ -111,5 +95,21 @@ public class RepairTypeUserDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 }

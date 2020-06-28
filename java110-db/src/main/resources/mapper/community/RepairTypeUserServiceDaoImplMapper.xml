@@ -7,9 +7,9 @@
     <!-- 保存报修设置信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRepairTypeUserInfo" parameterType="Map">
         insert into business_repair_type_user(
-        operate,type_user_id,repair_type,remark,state,user_name,b_id,community_id,user_id
+        operate,type_user_id,repair_type,remark,state,staff_name,b_id,community_id,staff_id
         ) values (
-        #{operate},#{typeUserId},#{repairType},#{remark},#{state},#{userName},#{bId},#{communityId},#{userId}
+        #{operate},#{typeUserId},#{repairType},#{remark},#{state},#{staffName},#{bId},#{communityId},#{staffId}
         )
     </insert>
 
@@ -17,8 +17,8 @@
     <!-- 查询报修设置信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessRepairTypeUserInfo" parameterType="Map" resultType="Map">
         select t.operate,t.type_user_id,t.type_user_id typeUserId,t.repair_type,t.repair_type
-        repairType,t.remark,t.state,t.user_name,t.user_name userName,t.b_id,t.b_id bId,t.community_id,t.community_id
-        communityId,t.user_id,t.user_id userId
+        repairType,t.remark,t.state,t.staff_name,t.staff_name staffName,t.b_id,t.b_id bId,t.community_id,t.community_id
+        communityId,t.staff_id,t.staff_id staffId
         from business_repair_type_user t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -36,8 +36,8 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -45,8 +45,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
         </if>
 
     </select>
@@ -55,8 +55,8 @@
     <!-- 保存报修设置信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRepairTypeUserInfoInstance" parameterType="Map">
         insert into r_repair_type_user(
-        type_user_id,repair_type,remark,status_cd,state,user_name,b_id,community_id,user_id
-        ) select t.type_user_id,t.repair_type,t.remark,'0',t.state,t.user_name,t.b_id,t.community_id,t.user_id from
+        type_user_id,repair_type,remark,status_cd,state,staff_name,b_id,community_id,staff_id
+        ) select t.type_user_id,t.repair_type,t.remark,'0',t.state,t.staff_name,t.b_id,t.community_id,t.staff_id from
         business_repair_type_user t where 1=1
         and t.operate= 'ADD'
         <if test="typeUserId !=null and typeUserId != ''">
@@ -71,8 +71,8 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -80,8 +80,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
         </if>
 
     </insert>
@@ -90,8 +90,8 @@
     <!-- 查询报修设置信息 add by wuxw 2018-07-03 -->
     <select id="getRepairTypeUserInfo" parameterType="Map" resultType="Map">
         select t.type_user_id,t.type_user_id typeUserId,t.repair_type,t.repair_type
-        repairType,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.user_name,t.user_name userName,t.b_id,t.b_id
-        bId,t.community_id,t.community_id communityId,t.user_id,t.user_id userId,d.name stateName
+        repairType,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.staff_name,t.staff_name staffName,t.b_id,t.b_id
+        bId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId,d.name stateName
         from r_repair_type_user t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_type_user' and d.table_columns = 'state'
         where 1 =1
@@ -110,8 +110,8 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -119,8 +119,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -145,14 +145,14 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="userName !=null and userName != ''">
-            , t.user_name= #{userName}
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-        <if test="userId !=null and userId != ''">
-            , t.user_id= #{userId}
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
         </if>
         where 1=1
         <if test="typeUserId !=null and typeUserId != ''">
@@ -185,8 +185,8 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -194,8 +194,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
         </if>
 
 

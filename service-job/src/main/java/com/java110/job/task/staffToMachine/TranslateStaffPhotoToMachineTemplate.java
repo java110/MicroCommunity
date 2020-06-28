@@ -38,7 +38,7 @@ import java.util.Map;
  * add by wuxw 2020/6/3
  **/
 @Component
-public class TranslateStaffPhotoToMachineTemplate extends TaskSystemQuartz {
+    public class TranslateStaffPhotoToMachineTemplate extends TaskSystemQuartz {
 
     private static Logger logger = LoggerFactory.getLogger(TranslateStaffPhotoToMachineTemplate.class);
 
