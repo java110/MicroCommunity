@@ -45,7 +45,7 @@
                                 var _@@templateCode@@ManageInfo=JSON.parse(json);
                                 vc.component.@@templateCode@@ManageInfo.total = _@@templateCode@@ManageInfo.total;
                                 vc.component.@@templateCode@@ManageInfo.records = _@@templateCode@@ManageInfo.records;
-                                vc.component.@@templateCode@@ManageInfo.@@templateCode@@s = _@@templateCode@@ManageInfo.@@templateCode@@s;
+                                vc.component.@@templateCode@@ManageInfo.@@templateCode@@s = _@@templateCode@@ManageInfo.data;
                                 vc.emit('pagination','init',{
                                      total:vc.component.@@templateCode@@ManageInfo.records,
                                      currentPage:_page

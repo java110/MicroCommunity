@@ -164,6 +164,14 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                return responseEntity;
+            }
+            String version = request.getParameter(VERSION);
+            //当 接口版本号为2.0时 返回错误处理
+            if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
+                return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
+            }
             return responseEntity;
         }
     }
@@ -227,6 +235,14 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                return responseEntity;
+            }
+            String version = request.getParameter(VERSION);
+            //当 接口版本号为2.0时 返回错误处理
+            if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
+                return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
+            }
             return responseEntity;
         }
     }

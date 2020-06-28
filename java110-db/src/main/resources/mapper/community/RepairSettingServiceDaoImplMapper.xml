@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repairSettingServiceDaoImpl">
+
+    <!-- 保存报修设置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessRepairSettingInfo" parameterType="Map">
+        insert into business_repair_setting(
+        operate,repair_type_name,repair_type,remark,b_id,community_id,repair_way,setting_id
+        ) values (
+        #{operate},#{repairTypeName},#{repairType},#{remark},#{bId},#{communityId},#{repairWay},#{settingId}
+        )
+    </insert>
+
+
+    <!-- 查询报修设置信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessRepairSettingInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.repair_type_name,t.repair_type_name repairTypeName,t.repair_type,t.repair_type
+        repairType,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.repair_way,t.repair_way
+        repairWay,t.setting_id,t.setting_id settingId
+        from business_repair_setting t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="repairTypeName !=null and repairTypeName != ''">
+            and t.repair_type_name= #{repairTypeName}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="repairWay !=null and repairWay != ''">
+            and t.repair_way= #{repairWay}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存报修设置信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveRepairSettingInfoInstance" parameterType="Map">
+        insert into r_repair_setting(
+        repair_type_name,repair_type,remark,status_cd,b_id,community_id,repair_way,setting_id
+        ) select t.repair_type_name,t.repair_type,t.remark,'0',t.b_id,t.community_id,t.repair_way,t.setting_id from
+        business_repair_setting t where 1=1
+        and t.operate= 'ADD'
+        <if test="repairTypeName !=null and repairTypeName != ''">
+            and t.repair_type_name= #{repairTypeName}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="repairWay !=null and repairWay != ''">
+            and t.repair_way= #{repairWay}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询报修设置信息 add by wuxw 2018-07-03 -->
+    <select id="getRepairSettingInfo" parameterType="Map" resultType="Map">
+        select t.repair_type_name,t.repair_type_name repairTypeName,t.repair_type,t.repair_type
+        repairType,t.remark,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.community_id,t.community_id
+        communityId,t.repair_way,t.repair_way repairWay,t.setting_id,t.setting_id settingId,t.create_time createTime,d.name repairWayName
+        from r_repair_setting t
+        left join t_dict d on t.repair_way = d.status_cd and d.table_name = 'r_repair_setting' and d.table_columns = 'repair_way'
+        where 1 =1
+        <if test="repairTypeName !=null and repairTypeName != ''">
+            and t.repair_type_name= #{repairTypeName}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="repairWay !=null and repairWay != ''">
+            and t.repair_way= #{repairWay}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报修设置信息 add by wuxw 2018-07-03 -->
+    <update id="updateRepairSettingInfoInstance" parameterType="Map">
+        update r_repair_setting t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="repairTypeName !=null and repairTypeName != ''">
+            , t.repair_type_name= #{repairTypeName}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            , t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="repairWay !=null and repairWay != ''">
+            , t.repair_way= #{repairWay}
+        </if>
+        where 1=1
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+
+    </update>
+
+    <!-- 查询报修设置数量 add by wuxw 2018-07-03 -->
+    <select id="queryRepairSettingsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from r_repair_setting t
+        left join t_dict d on t.repair_way = d.status_cd and d.table_name = 'r_repair_setting' and d.table_columns = 'repair_way'
+        where 1 =1
+        <if test="repairTypeName !=null and repairTypeName != ''">
+            and t.repair_type_name= #{repairTypeName}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="repairWay !=null and repairWay != ''">
+            and t.repair_way= #{repairWay}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repairTypeUserServiceDaoImpl">
+
+    <!-- 保存报修设置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessRepairTypeUserInfo" parameterType="Map">
+        insert into business_repair_type_user(
+        operate,type_user_id,repair_type,remark,state,user_name,b_id,community_id,user_id
+        ) values (
+        #{operate},#{typeUserId},#{repairType},#{remark},#{state},#{userName},#{bId},#{communityId},#{userId}
+        )
+    </insert>
+
+
+    <!-- 查询报修设置信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessRepairTypeUserInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.type_user_id,t.type_user_id typeUserId,t.repair_type,t.repair_type
+        repairType,t.remark,t.state,t.user_name,t.user_name userName,t.b_id,t.b_id bId,t.community_id,t.community_id
+        communityId,t.user_id,t.user_id userId
+        from business_repair_type_user t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="typeUserId !=null and typeUserId != ''">
+            and t.type_user_id= #{typeUserId}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存报修设置信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveRepairTypeUserInfoInstance" parameterType="Map">
+        insert into r_repair_type_user(
+        type_user_id,repair_type,remark,status_cd,state,user_name,b_id,community_id,user_id
+        ) select t.type_user_id,t.repair_type,t.remark,'0',t.state,t.user_name,t.b_id,t.community_id,t.user_id from
+        business_repair_type_user t where 1=1
+        and t.operate= 'ADD'
+        <if test="typeUserId !=null and typeUserId != ''">
+            and t.type_user_id= #{typeUserId}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询报修设置信息 add by wuxw 2018-07-03 -->
+    <select id="getRepairTypeUserInfo" parameterType="Map" resultType="Map">
+        select t.type_user_id,t.type_user_id typeUserId,t.repair_type,t.repair_type
+        repairType,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.user_name,t.user_name userName,t.b_id,t.b_id
+        bId,t.community_id,t.community_id communityId,t.user_id,t.user_id userId,d.name stateName
+        from r_repair_type_user t
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_type_user' and d.table_columns = 'state'
+        where 1 =1
+        <if test="typeUserId !=null and typeUserId != ''">
+            and t.type_user_id= #{typeUserId}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报修设置信息 add by wuxw 2018-07-03 -->
+    <update id="updateRepairTypeUserInfoInstance" parameterType="Map">
+        update r_repair_type_user t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            , t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        where 1=1
+        <if test="typeUserId !=null and typeUserId != ''">
+            and t.type_user_id= #{typeUserId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询报修设置数量 add by wuxw 2018-07-03 -->
+    <select id="queryRepairTypeUsersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from r_repair_type_user t
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_type_user' and d.table_columns = 'state'
+        where 1 =1
+        <if test="typeUserId !=null and typeUserId != ''">
+            and t.type_user_id= #{typeUserId}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -53,7 +53,8 @@
                      },
                      function(json,res){
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
-                        if(res.status == 200){
+                        let _json = JSON.parse(json);
+                        if (_json.code == 0) {
                             //关闭model
                             $('#add@@TemplateCode@@Model').modal('hide');
                             vc.component.clearAdd@@TemplateCode@@Info();
@@ -61,7 +62,7 @@
 
                             return ;
                         }
-                        vc.message(json);
+                        vc.message(_json.msg);
 
                      },
                      function(errInfo,error){

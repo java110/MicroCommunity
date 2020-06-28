@@ -1,0 +1,43 @@
+{
+  "autoMove": true,
+  "id": "settingId",
+  "name": "repairSetting",
+  "desc": "报修设置",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_REPAIR_SETTING",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_REPAIR_SETTING",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_REPAIR_SETTING",
+  "newBusinessTypeCdValue": "131100030001",
+  "updateBusinessTypeCdValue": "131100040001",
+  "deleteBusinessTypeCdValue": "131100050001",
+  "businessTableName": "business_repair_setting",
+  "tableName": "r_repair_setting",
+  "param": {
+    "settingId": "setting_id",
+    "repairType": "repair_type",
+    "repairTypeName": "repair_type_name",
+    "bId": "b_id",
+    "repairWay": "repair_way",
+    "remark": "remark",
+    "communityId": "community_id",
+    "statusCd": "status_cd",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "repairTypeName",
+      "msg": "报修类型不能为空"
+    },
+    {
+      "code": "repairWay",
+      "msg": "派单方式不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    }
+  ]
+}
+

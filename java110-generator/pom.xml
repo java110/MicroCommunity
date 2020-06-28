@@ -77,7 +77,7 @@
 
     <build>
         <finalName>service-simple</finalName>
-        <plugins>
+        <!--<plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -184,6 +184,6 @@
                     <mainClass>com.java110.code.GeneratorServiceApplicationStart</mainClass>
                 </configuration>
             </plugin>
-        </plugins>
+        </plugins>-->
     </build>
 </project>

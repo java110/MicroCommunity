@@ -1,0 +1,112 @@
+{
+  "templateName":"公众号菜单",
+  "directories": "property",
+  "templateCode":"wechatMenu",
+  "templateKey":"wechatMenuId",
+  "templateKeyName":"菜单ID",
+  "searchCode": "wechatMenuId",
+  "searchName": "菜单ID",
+  "conditions": [
+    {
+      "name": "菜单名称",
+      "inputType": "input",
+      "code": "menuName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "菜单级别",
+      "inputType": "select",
+      "selectValue":"101,202",
+      "selectValueName":"一级菜单,二级菜单",
+      "code": "menuLevel",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "菜单类别",
+      "inputType": "select",
+      "selectValue":"view",
+      "selectValueName":"链接",
+      "code": "menuType",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"menuName",
+      "cnCode":"菜单名称",
+      "desc":"必填，请填写菜单名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"max",
+      "limitParam":"1,7",
+      "limitErrInfo":"菜单名称不能超过7位",
+      "show": true
+    },
+    {
+      "code": "menuType",
+      "cnCode":"菜单类型",
+      "desc":"必填，请填写菜单类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"view",
+      "selectValueName":"链接",
+      "limit":"maxLength",
+      "limitParam":"10",
+      "limitErrInfo":"菜单类型格式错误",
+      "show": true
+    },
+    {
+      "code": "menuLevel",
+      "cnCode":"菜单级别",
+      "desc":"必填，请填写菜单级别",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"101,202",
+      "selectValueName":"一级菜单,二级菜单",
+      "limit":"maxLength",
+      "limitParam":"10",
+      "limitErrInfo":"菜单级别格式错误",
+      "show": true
+    },
+    {
+      "code":"menuValue",
+      "cnCode":"值",
+      "desc":"必填，请填写值",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"50",
+      "limitErrInfo":"值不能超过50位",
+      "show": true
+    },
+
+    {
+      "code":"appId",
+      "cnCode":"AppId",
+      "desc":"必填，请填写小程序AppId",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"AppId不能超过64位",
+      "show": true
+    },
+    {
+      "code":"pagepath",
+      "cnCode":"小程序地址",
+      "desc":"必填，请填写小程序运行地址",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"小程序地址不能超过200位",
+      "show": true
+    }
+  ]
+}

@@ -133,6 +133,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_flowId = "75";
     public static final String CODE_PREFIX_wssId = "76";
     public static final String CODE_PREFIX_wechatMenuId = "77";
+    public static final String CODE_PREFIX_settingId = "78";
+    public static final String CODE_PREFIX_typeUserId = "79";
 
 
     /**

@@ -28,13 +28,14 @@
                      },
                      function(json,res){
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
-                        if(res.status == 200){
+                        let _json = JSON.parse(json);
+                        if (_json.code == 0) {
                             //关闭model
                             $('#delete@@TemplateCode@@Model').modal('hide');
                             vc.emit('@@templateCode@@Manage','list@@TemplateCode@@',{});
                             return ;
                         }
-                        vc.message(json);
+                        vc.message(_json.msg);
                      },
                      function(errInfo,error){
                         console.log('请求失败处理');

@@ -1,0 +1,53 @@
+
+{
+  "autoMove": true,
+  "id": "wechatMenuId",
+  "name": "wechatMenu",
+  "desc": "公众号菜单",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "store",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_WECHAT_MENU",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_WECHAT_MENU",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_WECHAT_MENU",
+  "newBusinessTypeCdValue": "221300030001",
+  "updateBusinessTypeCdValue": "221300040001",
+  "deleteBusinessTypeCdValue": "221300050001",
+  "businessTableName": "business_wechat_menu",
+  "tableName": "wechat_menu",
+  "param": {
+    "wechatMenuId": "wechat_menu_id",
+    "menuName": "menu_name",
+    "bId": "b_id",
+    "menuType": "menu_type",
+    "menuValue": "menu_value",
+    "menuLevel": "menu_level",
+    "appId": "app_id",
+    "pagepath": "pagepath",
+    "communityId": "community_id",
+    "statusCd": "status_cd",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "menuName",
+      "msg": "菜单名称不能为空"
+    },
+    {
+      "code": "menuType",
+      "msg": "菜单类型不能为空"
+    },
+    {
+      "code": "menuLevel",
+      "msg": "菜单级别不能为空"
+    },
+    {
+      "code": "menuValue",
+      "msg": "菜单值不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    }
+  ]
+}
