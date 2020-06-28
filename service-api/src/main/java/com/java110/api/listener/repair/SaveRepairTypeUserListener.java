@@ -26,8 +26,8 @@ public class SaveRepairTypeUserListener extends AbstractServiceApiPlusListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
-        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
-        Assert.hasKeyAndValue(reqJson, "userName", "请求报文中未包含userName");
+        Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
+        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
         Assert.hasKeyAndValue(reqJson, "repairType", "请求报文中未包含repairType");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
