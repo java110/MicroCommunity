@@ -1863,5 +1863,38 @@ $ npm install
 $ npm start
 ```
 
+## 配置短信验证码
 
+目前HC小区管理系统支持阿里云短信和腾讯云短信，其他短信平台需要自主二次开发
 
+#### 1.0 登录 开发者账户 dev/您修改后的密码
+
+![image](../images/api/005.png)
+
+#### 打开映射管理 下 编码映射菜单
+
+![image](../images/api/006.png)
+
+点击修改 域为 SMS_DOMAIN 键为 SMS_COMPANY 的值，阿里为 ALI 腾讯为TENCENT
+
+![image](../images/api/007.png)
+
+#### 阿里云短信配置
+
+修改域为ALI_SMS 的记录
+
+![image](../images/api/008.png)
+
+#### 腾讯云短信配置
+
+修改域为TENCENT_SMS 的记录
+
+![image](../images/api/009.png)
+
+secretId 和 secretKey 如下图获取
+
+![image](../images/api/010.png)
+
+![image](../images/api/011.png)
+
+![image](../images/api/012.png)
