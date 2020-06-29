@@ -1875,6 +1875,10 @@ $ npm start
 
 ![image](../images/api/006.png)
 
+开启验证码功能，搜索键为SMS_SEND_SWITCH的记录将值OFF改为ON
+
+![image](../images/api/013.png)
+
 点击修改 域为 SMS_DOMAIN 键为 SMS_COMPANY 的值，阿里为 ALI 腾讯为TENCENT
 
 ![image](../images/api/007.png)
