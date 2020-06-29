@@ -125,7 +125,8 @@ public class RegisterServiceSMOImpl extends BaseComponentSMO implements IRegiste
                 //开始发送验证码
                 //AliSendMessageFactory.sendMessage(telInfo.getString("tel"), verifyCode);
 
-                TencentSendMessageFactory.sendMessage(telInfo.getString("tel"), verifyCode);
+                //TencentSendMessageFactory.sendMessage(telInfo.getString("tel"), verifyCode);
+                SendSmsFactory.sendSms(telInfo.getString("tel"), verifyCode);
 
                 verifyStr = "验证码已下发至您的手机!";
             }
