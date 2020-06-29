@@ -15,6 +15,11 @@ import java.util.Date;
  **/
 public class RepairUserDto extends PageDto implements Serializable {
 
+    //开始用户
+    public static final String REPAIR_EVENT_START_USER = "startUser";
+    //审核用户
+    public static final String REPAIR_EVENT_AUDIT_USER = "auditUser";
+
     private String context;
     private String repairId;
     private String[] repairIds;
@@ -23,6 +28,14 @@ public class RepairUserDto extends PageDto implements Serializable {
     private String communityId;
     private String userId;
     private String userName;
+
+    private String staffId;
+    private String staffName;
+    private String preStaffId;
+    private String preStaffName;
+    private Date startTime;
+    private Date endTime;
+    private String repairEvent;
 
 
     private Date createTime;
@@ -109,5 +122,61 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getPreStaffId() {
+        return preStaffId;
+    }
+
+    public void setPreStaffId(String preStaffId) {
+        this.preStaffId = preStaffId;
+    }
+
+    public String getPreStaffName() {
+        return preStaffName;
+    }
+
+    public void setPreStaffName(String preStaffName) {
+        this.preStaffName = preStaffName;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getRepairEvent() {
+        return repairEvent;
+    }
+
+    public void setRepairEvent(String repairEvent) {
+        this.repairEvent = repairEvent;
     }
 }

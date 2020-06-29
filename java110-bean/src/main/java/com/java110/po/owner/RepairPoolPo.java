@@ -23,6 +23,8 @@ public class RepairPoolPo implements Serializable {
 
     private String state;
 
+
+
     public String getRepairId() {
         return repairId;
     }
@@ -94,4 +96,6 @@ public class RepairPoolPo implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
+
 }

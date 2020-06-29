@@ -27,6 +27,7 @@ public class DeleteRepairTypeUserListener extends AbstractServiceApiPlusListener
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "typeUserId", "typeUserId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
     }
 

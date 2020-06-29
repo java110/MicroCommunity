@@ -21,6 +21,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,10 +64,13 @@ public class QueryRoomsListener extends AbstractServiceApiDataFlowListener {
         //查询总记录数
         int total = roomInnerServiceSMOImpl.queryRoomsCount(BeanConvertUtil.covertBean(reqJson, RoomDto.class));
         apiRoomVo.setTotal(total);
+        List<RoomDto> roomDtoList = null;
         if (total > 0) {
-            List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
+            roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        }else{
+            roomDtoList = new ArrayList<>();
         }
+        apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         int row = reqJson.getInteger("row");
         apiRoomVo.setRecords((int) Math.ceil((double) total / (double) row));
 

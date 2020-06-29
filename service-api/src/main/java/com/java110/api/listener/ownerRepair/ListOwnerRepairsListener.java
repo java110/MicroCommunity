@@ -4,19 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.community.IRepairInnerServiceSMO;
 import com.java110.core.smo.community.IRepairUserInnerServiceSMO;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.api.ownerRepair.ApiOwnerRepairDataVo;
-import com.java110.vo.api.ownerRepair.ApiOwnerRepairVo;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
@@ -79,32 +77,27 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
 
         int count = repairInnerServiceSMOImpl.queryRepairsCount(ownerRepairDto);
 
-        List<ApiOwnerRepairDataVo> ownerRepairs = null;
 
+        List<RepairDto> ownerRepairs = null;
         if (count > 0) {
-            ownerRepairs = BeanConvertUtil.covertBeanList(repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto), ApiOwnerRepairDataVo.class);
+            ownerRepairs = repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto);
 
             refreshStaffName(ownerRepairs);
         } else {
             ownerRepairs = new ArrayList<>();
         }
 
-        ApiOwnerRepairVo apiOwnerRepairVo = new ApiOwnerRepairVo();
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(count, (int) Math.ceil((double) count / (double) reqJson.getInteger("row")), ownerRepairs);
 
-        apiOwnerRepairVo.setTotal(count);
-        apiOwnerRepairVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        apiOwnerRepairVo.setOwnerRepairs(ownerRepairs);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerRepairVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
 
     }
 
-    private void refreshStaffName(List<ApiOwnerRepairDataVo> ownerRepairs) {
+    private void refreshStaffName(List<RepairDto> ownerRepairs) {
 
         List<String> repairIds = new ArrayList<>();
-        for (ApiOwnerRepairDataVo apiOwnerRepairDataVo : ownerRepairs) {
+        for (RepairDto apiOwnerRepairDataVo : ownerRepairs) {
             repairIds.add(apiOwnerRepairDataVo.getRepairId());
         }
 
@@ -115,11 +108,11 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
         repairUserDto.setRepairIds(repairIds.toArray(new String[repairIds.size()]));
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
 
-        for(RepairUserDto tmpRepairUserDto : repairUserDtos){
-            for(ApiOwnerRepairDataVo apiOwnerRepairDataVo : ownerRepairs){
-                if(tmpRepairUserDto.getRepairId().equals(apiOwnerRepairDataVo.getRepairId())){
-                    apiOwnerRepairDataVo.setUserId(tmpRepairUserDto.getUserId());
-                    apiOwnerRepairDataVo.setUserName(tmpRepairUserDto.getUserName());
+        for (RepairUserDto tmpRepairUserDto : repairUserDtos) {
+            for (RepairDto apiOwnerRepairDataVo : ownerRepairs) {
+                if (tmpRepairUserDto.getRepairId().equals(apiOwnerRepairDataVo.getRepairId())) {
+                    apiOwnerRepairDataVo.setStaffId(tmpRepairUserDto.getUserId());
+                    //apiOwnerRepairDataVo.setStatmpRepairUserDto.getUserName());
                 }
             }
         }

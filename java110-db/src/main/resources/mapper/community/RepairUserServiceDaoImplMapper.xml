@@ -7,9 +7,11 @@
     <!-- 保存报修派单信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRepairUserInfo" parameterType="Map">
         insert into business_repair_user(
-        operate,context,repair_id,ru_id,state,community_id,b_id,user_id
+        operate,context,repair_id,ru_id,state,community_id,b_id,staff_id,staff_name,pre_staff_id,
+        pre_staff_name,repair_event
         ) values (
-        #{operate},#{context},#{repairId},#{ruId},#{state},#{communityId},#{bId},#{userId}
+        #{operate},#{context},#{repairId},#{ruId},#{state},#{communityId},#{bId},#{staffId},
+        #{staffName},#{preStaffId},#{preStaffName},#{repairEvent}
         )
     </insert>
 
@@ -17,7 +19,11 @@
     <!-- 查询报修派单信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessRepairUserInfo" parameterType="Map" resultType="Map">
         select t.operate,t.context,t.repair_id,t.repair_id repairId,t.ru_id,t.ru_id
-        ruId,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        ruId,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
+        t.staff_id,t.staff_id staffId,t.staff_name,t.staff_name staffName,
+        t.pre_staff_id,t.pre_staff_id preStaffId,t.pre_staff_name,t.pre_staff_name preStaffName,
+        t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.repair_event,
+        t.repair_event repairEvent
         from business_repair_user t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -41,9 +47,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
 
     </select>
 
@@ -51,8 +54,11 @@
     <!-- 保存报修派单信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRepairUserInfoInstance" parameterType="Map">
         insert into r_repair_user(
-        context,repair_id,status_cd,ru_id,state,community_id,b_id,user_id
-        ) select t.context,t.repair_id,'0',t.ru_id,t.state,t.community_id,t.b_id,t.user_id from business_repair_user t
+        context,repair_id,status_cd,ru_id,state,community_id,b_id,staff_id,staff_name,pre_staff_id,
+        pre_staff_name,repair_event,start_time,end_time,repair_event
+        ) select t.context,t.repair_id,'0',t.ru_id,t.state,t.community_id,t.b_id,t.staff_id,t.staff_name,
+        t.pre_staff_id,t.pre_staff_name,t.repair_event,t.start_time,t.end_time,t.repair_event
+        from business_repair_user t
         where 1=1
         and t.operate= 'ADD'
         <if test="context !=null and context != ''">
@@ -82,9 +88,14 @@
 
     <!-- 查询报修派单信息 add by wuxw 2018-07-03 -->
     <select id="getRepairUserInfo" parameterType="Map" resultType="Map">
-        select t.context,t.repair_id,t.repair_id repairId,t.status_cd,t.status_cd statusCd,t.ru_id,t.ru_id
-        ruId,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        select t.context,t.repair_id,t.repair_id repairId,t.status_cd,t.status_cd statusCd,
+        t.ru_id,t.ru_id ruId,t.state,t.community_id,t.community_id communityId,t.b_id,
+        t.b_id bId,t.staff_id,t.staff_id staffId,t.staff_name,t.staff_name staffName,
+        t.pre_staff_id,t.pre_staff_id preStaffId,t.pre_staff_name,t.pre_staff_name preStaffName,
+        t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,d.name stateName,
+        t.repair_event,t.repair_event repairEvent
         from r_repair_user t
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_user' and d.table_columns = 'state'
         where 1 =1
         <if test="context !=null and context != ''">
             and t.context= #{context}
@@ -113,8 +124,14 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="repairEvent !=null and repairEvent != ''">
+            and t.repair_event= #{repairEvent}
+        </if>
+        <if test="preStaffId !=null and preStaffId != ''">
+            and t.pre_staff_id= #{preStaffId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -142,9 +159,13 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-        <if test="userId !=null and userId != ''">
-            , t.user_id= #{userId}
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
         </if>
+        <if test="end_time !=null ">
+            , t.end_time= #{end_time}
+        </if>
+
         where 1=1
         <if test="ruId !=null and ruId != ''">
             and t.ru_id= #{ruId}
@@ -160,11 +181,19 @@
         select count(1) count
         from r_repair_user t
         where 1 =1
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_user' and d.table_columns = 'state'
+        where 1 =1
         <if test="context !=null and context != ''">
             and t.context= #{context}
         </if>
         <if test="repairId !=null and repairId != ''">
             and t.repair_id= #{repairId}
+        </if>
+        <if test="repairIds !=null">
+            and t.repair_id in
+            <foreach collection="repairIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -181,8 +210,14 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="repairEvent !=null and repairEvent != ''">
+            and t.repair_event= #{repairEvent}
+        </if>
+        <if test="preStaffId !=null and preStaffId != ''">
+            and t.pre_staff_id= #{preStaffId}
         </if>
 
 
