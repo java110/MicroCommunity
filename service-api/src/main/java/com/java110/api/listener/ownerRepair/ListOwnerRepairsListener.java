@@ -87,7 +87,7 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
             ownerRepairs = new ArrayList<>();
         }
 
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(count, (int) Math.ceil((double) count / (double) reqJson.getInteger("row")), ownerRepairs);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerRepairs);
 
 
         context.setResponseEntity(responseEntity);

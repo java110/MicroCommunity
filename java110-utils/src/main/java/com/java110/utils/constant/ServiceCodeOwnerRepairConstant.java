@@ -28,4 +28,10 @@ public class ServiceCodeOwnerRepairConstant {
     public static final String LIST_OWNERREPAIRS = "ownerRepair.listOwnerRepairs";
 
 
+    /**
+     * 查询 报修处理员工
+     */
+    public static final String LIST_REPAIR_STAFFS = "ownerRepair.listRepairStaffs";
+
+
 }

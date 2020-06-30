@@ -33,6 +33,7 @@ public class RepairUserDto extends PageDto implements Serializable {
     private String[] repairIds;
     private String ruId;
     private String state;
+    private String stateName;
     private String communityId;
     private String userId;
     private String userName;
@@ -44,6 +45,7 @@ public class RepairUserDto extends PageDto implements Serializable {
     private Date startTime;
     private Date endTime;
     private String repairEvent;
+    private String duration;
 
 
     private Date createTime;
@@ -186,5 +188,21 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setRepairEvent(String repairEvent) {
         this.repairEvent = repairEvent;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

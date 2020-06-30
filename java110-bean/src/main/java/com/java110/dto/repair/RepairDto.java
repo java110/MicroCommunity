@@ -51,6 +51,7 @@ public class RepairDto extends PageDto implements Serializable {
     private String roomId;
     private String[] roomIds;
     private String repairTypeName;
+    private String repairWay;
 
     private String staffId;
 
@@ -209,4 +210,11 @@ public class RepairDto extends PageDto implements Serializable {
         this.roomIds = roomIds;
     }
 
+    public String getRepairWay() {
+        return repairWay;
+    }
+
+    public void setRepairWay(String repairWay) {
+        this.repairWay = repairWay;
+    }
 }
