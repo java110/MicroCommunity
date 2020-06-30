@@ -20,6 +20,14 @@ public class RepairUserDto extends PageDto implements Serializable {
     //审核用户
     public static final String REPAIR_EVENT_AUDIT_USER = "auditUser";
 
+    public  static final String STATE_DOING = "10001";// 处理中
+    public  static final String STATE_CLOSE = "10002";// 结单
+    public  static final String STATE_BACK = "10003";// 退单
+    public  static final String STATE_TRANSFER = "10004";// 转单
+    public  static final String STATE_SUBMIT = "10005";// 提交
+
+
+
     private String context;
     private String repairId;
     private String[] repairIds;

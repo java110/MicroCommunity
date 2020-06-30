@@ -6,8 +6,16 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.repair.RepairDto;
+import com.java110.dto.repair.RepairUserDto;
+import com.java110.po.owner.RepairPoolPo;
+import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
@@ -31,13 +39,36 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "roomId", "必填，请填写房屋ID");
         Assert.hasKeyAndValue(reqJson, "appointmentTime", "必填，请填写预约时间");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写报修内容");
+        Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写提交用户ID");
+        Assert.hasKeyAndValue(reqJson, "userName", "必填，请填写提交用户名称");
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
 
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        ownerRepairBMOImpl.addOwnerRepair(reqJson, context);
+        JSONObject businessOwnerRepair = new JSONObject();
+        businessOwnerRepair.putAll(reqJson);
+        businessOwnerRepair.put("repairId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_repairId));
+        businessOwnerRepair.put("state", RepairDto.STATE_WAIT);
+        RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
+        super.insert(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR);
+
+        RepairUserPo repairUserPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
+        repairUserPo.setContext("订单提交");
+        repairUserPo.setPreStaffId("-1");
+        repairUserPo.setPreStaffName("-1");
+        repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
+        repairUserPo.setStaffId(reqJson.getString("userId"));
+        repairUserPo.setStaffName(reqJson.getString("userName"));
+        repairUserPo.setRepairId(businessOwnerRepair.getString("repairId"));
+        repairUserPo.setState(RepairUserDto.STATE_SUBMIT);
+        repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        repairUserPo.setRuId("-1");
+        super.insert(context,repairUserPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+
+
     }
 
     @Override

@@ -22,8 +22,8 @@ import org.springframework.context.ApplicationContext;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.log",
-"com.java110.feign.code","com.java110.core","com.java110.config.properties.code"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.log",
+        "com.java110.core", "com.java110.config.properties.code"})
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"com.java110.core.smo"})
 public class LogServiceApplicationStart {
@@ -31,12 +31,12 @@ public class LogServiceApplicationStart {
 
 
     public static void main(String[] args) throws Exception {
-        try{
-            ApplicationContext context =  SpringApplication.run(LogServiceApplicationStart.class, args);
+        try {
+            ApplicationContext context = SpringApplication.run(LogServiceApplicationStart.class, args);
 
             ServiceStartInit.initSystemConfig(context);
-        }catch (Throwable e){
-            logger.error("系统启动失败",e);
+        } catch (Throwable e) {
+            logger.error("系统启动失败", e);
         }
 
     }
