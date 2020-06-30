@@ -18,6 +18,14 @@ public class RepairUserPo implements Serializable {
     private String state;
     private String context;
 
+    private String staffId;
+    private String staffName;
+    private String preStaffId;
+    private String preStaffName;
+    private String startTime;
+    private String endTime;
+    private String repairEvent;
+
     public String getRuId() {
         return ruId;
     }
@@ -64,5 +72,61 @@ public class RepairUserPo implements Serializable {
 
     public void setContext(String context) {
         this.context = context;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getPreStaffId() {
+        return preStaffId;
+    }
+
+    public void setPreStaffId(String preStaffId) {
+        this.preStaffId = preStaffId;
+    }
+
+    public String getPreStaffName() {
+        return preStaffName;
+    }
+
+    public void setPreStaffName(String preStaffName) {
+        this.preStaffName = preStaffName;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getRepairEvent() {
+        return repairEvent;
+    }
+
+    public void setRepairEvent(String repairEvent) {
+        this.repairEvent = repairEvent;
     }
 }

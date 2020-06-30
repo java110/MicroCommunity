@@ -208,9 +208,9 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
             return;
         }
 
-        if ("3333".equals(feeDto.getPayerObjType())) {
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
             computeFeePriceByRoom(feeDto);
-        } else if ("6666".equals(feeDto.getPayerObjType())) {
+        } else if (FeeDto.PAYER_OBJ_TYPE_PARKING_SPACE.equals(feeDto.getPayerObjType())) {
             computeFeePriceByParkingSpace(feeDto);
         } else {
             return;//这个没有欠费可算

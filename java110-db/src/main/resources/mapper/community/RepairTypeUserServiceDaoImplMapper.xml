@@ -9,7 +9,8 @@
         insert into business_repair_type_user(
         operate,type_user_id,repair_type,remark,state,staff_name,b_id,community_id,staff_id
         ) values (
-        #{operate},#{typeUserId},#{repairType},#{remark},#{state},#{staffName},#{bId},#{communityId},#{staffId}
+        #{operate},#{typeUserId},#{repairType},#{remark},#{state},#{staffName},#{bId},#{communityId},
+        #{staffId}
         )
     </insert>
 
@@ -91,9 +92,11 @@
     <select id="getRepairTypeUserInfo" parameterType="Map" resultType="Map">
         select t.type_user_id,t.type_user_id typeUserId,t.repair_type,t.repair_type
         repairType,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.staff_name,t.staff_name staffName,t.b_id,t.b_id
-        bId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId,d.name stateName
+        bId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId,d.name stateName,rrs.repair_type_name repairTypeName,
+        t.create_time createTime
         from r_repair_type_user t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_type_user' and d.table_columns = 'state'
+        left join r_repair_setting rrs on t.repair_type = rrs.repair_type and rrs.status_cd = '0'
         where 1 =1
         <if test="typeUserId !=null and typeUserId != ''">
             and t.type_user_id= #{typeUserId}
@@ -169,6 +172,7 @@
         select count(1) count
         from r_repair_type_user t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_type_user' and d.table_columns = 'state'
+        left join r_repair_setting rrs on t.repair_type = rrs.repair_type and rrs.status_cd = '0'
         where 1 =1
         <if test="typeUserId !=null and typeUserId != ''">
             and t.type_user_id= #{typeUserId}

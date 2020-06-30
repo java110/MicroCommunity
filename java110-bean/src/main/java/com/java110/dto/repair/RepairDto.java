@@ -15,6 +15,30 @@ import java.util.Date;
  **/
 public class RepairDto extends PageDto implements Serializable {
 
+    //待处理
+    public static final String STATE_WAIT = "1000";
+    //接单
+    public static final String STATE_TAKING = "1100";
+    //退单
+    public static final String STATE_BACK = "1200";
+    //转单
+    public static final String STATE_TRANSFER = "1300";
+
+    //申请支付
+    public static final String STATE_PAY = "1400";
+    //支付失败
+    public static final String STATE_PAY_ERROR = "1500";
+    //待评价
+    public static final String STATE_APPRAISE = "1700";
+    //待回访
+    public static final String STATE_RETURN_VISIT = "1800";
+    //办理完成
+    public static final String STATE_COMPLATE = "1900";
+    //未处理主动结单
+    public static final String STATE_UNPROCESSED = "2000";
+
+
+
     private String repairName;
     private String appointmentTime;
     private String repairType;
@@ -27,6 +51,7 @@ public class RepairDto extends PageDto implements Serializable {
     private String roomId;
     private String[] roomIds;
     private String repairTypeName;
+    private String repairWay;
 
     private String staffId;
 
@@ -183,5 +208,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRoomIds(String[] roomIds) {
         this.roomIds = roomIds;
+    }
+
+    public String getRepairWay() {
+        return repairWay;
+    }
+
+    public void setRepairWay(String repairWay) {
+        this.repairWay = repairWay;
     }
 }

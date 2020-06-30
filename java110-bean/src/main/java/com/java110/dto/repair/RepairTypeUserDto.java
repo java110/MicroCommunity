@@ -19,6 +19,7 @@ public class RepairTypeUserDto extends PageDto implements Serializable {
 
     private String typeUserId;
     private String repairType;
+    private String repairTypeName;
     private String remark;
     private String state;
     private String stateName;
@@ -111,5 +112,13 @@ public class RepairTypeUserDto extends PageDto implements Serializable {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public String getRepairTypeName() {
+        return repairTypeName;
+    }
+
+    public void setRepairTypeName(String repairTypeName) {
+        this.repairTypeName = repairTypeName;
     }
 }

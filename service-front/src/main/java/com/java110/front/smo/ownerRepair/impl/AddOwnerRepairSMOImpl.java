@@ -1,16 +1,17 @@
 package com.java110.front.smo.ownerRepair.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.component.AbstractComponentSMO;
+import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
+import com.java110.front.smo.ownerRepair.IAddOwnerRepairSMO;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
-import com.java110.core.context.IPageData;
-import com.java110.core.component.AbstractComponentSMO;
-import com.java110.front.smo.ownerRepair.IAddOwnerRepairSMO;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -45,8 +46,11 @@ public class AddOwnerRepairSMOImpl extends AbstractComponentSMO implements IAddO
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ResponseEntity<String> responseEntity = null;
-        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        ComponentValidateResult commonValidateResult = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
+        paramIn.put("userId", commonValidateResult.getUserId());
+        paramIn.put("userName", commonValidateResult.getUserName());
+        paramIn.put("storeId", commonValidateResult.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.saveOwnerRepair",
                 HttpMethod.POST);

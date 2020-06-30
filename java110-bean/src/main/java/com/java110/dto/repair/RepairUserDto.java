@@ -15,14 +15,37 @@ import java.util.Date;
  **/
 public class RepairUserDto extends PageDto implements Serializable {
 
+    //开始用户
+    public static final String REPAIR_EVENT_START_USER = "startUser";
+    //审核用户
+    public static final String REPAIR_EVENT_AUDIT_USER = "auditUser";
+
+    public  static final String STATE_DOING = "10001";// 处理中
+    public  static final String STATE_CLOSE = "10002";// 结单
+    public  static final String STATE_BACK = "10003";// 退单
+    public  static final String STATE_TRANSFER = "10004";// 转单
+    public  static final String STATE_SUBMIT = "10005";// 提交
+
+
+
     private String context;
     private String repairId;
     private String[] repairIds;
     private String ruId;
     private String state;
+    private String stateName;
     private String communityId;
     private String userId;
     private String userName;
+
+    private String staffId;
+    private String staffName;
+    private String preStaffId;
+    private String preStaffName;
+    private Date startTime;
+    private Date endTime;
+    private String repairEvent;
+    private String duration;
 
 
     private Date createTime;
@@ -109,5 +132,77 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getPreStaffId() {
+        return preStaffId;
+    }
+
+    public void setPreStaffId(String preStaffId) {
+        this.preStaffId = preStaffId;
+    }
+
+    public String getPreStaffName() {
+        return preStaffName;
+    }
+
+    public void setPreStaffName(String preStaffName) {
+        this.preStaffName = preStaffName;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getRepairEvent() {
+        return repairEvent;
+    }
+
+    public void setRepairEvent(String repairEvent) {
+        this.repairEvent = repairEvent;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

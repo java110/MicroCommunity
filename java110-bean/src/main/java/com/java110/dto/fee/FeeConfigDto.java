@@ -15,6 +15,13 @@ import java.util.Date;
  **/
 public class FeeConfigDto extends PageDto implements Serializable {
 
+    public static final String BILL_TYPE_YEAR = "001";// 按年出账
+    public static final String BILL_TYPE_MONTH = "002";// 每月1日
+    public static final String BILL_TYPE_DAY = "003";// 每日
+    public static final String BILL_TYPE_EVERY = "004";// 实时
+    public static final String BILL_TYPE_ONCE_MONTH = "005";// 一次性按月
+
+
     private String feeTypeCd;
     private String computingFormula;
     private String additionalAmount;

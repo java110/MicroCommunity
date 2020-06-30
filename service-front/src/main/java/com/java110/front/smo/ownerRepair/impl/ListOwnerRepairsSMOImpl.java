@@ -1,6 +1,7 @@
 package com.java110.front.smo.ownerRepair.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
@@ -52,6 +53,7 @@ public class ListOwnerRepairsSMOImpl extends AbstractComponentSMO implements ILi
         if(paramIn.containsKey("pageFlag") && "myRepairDispatch".equals(paramIn.getString("pageFlag"))){
             paramIn.put("staffId", result.getUserId());
         }
+
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.listOwnerRepairs" + mapToUrlParam(paramIn);
 

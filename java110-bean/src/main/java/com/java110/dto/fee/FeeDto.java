@@ -17,6 +17,9 @@ public class FeeDto extends PageDto implements Serializable {
 
     public static final String STATE_FINISH = "2009001"; // 收费结束
 
+    public static final String PAYER_OBJ_TYPE_ROOM = "3333"; //房屋 6666 是车位
+    public static final String PAYER_OBJ_TYPE_PARKING_SPACE = "6666";//是车位
+
     private String amount;
     private String incomeObjId;
     private String feeTypeCd;
@@ -26,6 +29,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String feeId;
     private String userId;
     private String payerObjId;
+    private String payerObjName;
     private String[] payerObjIds;
     private String[] feeTypeCds;
     private String configId;
@@ -46,6 +50,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String payerObjType;
     private String computingFormula;
     private String isDefault;
+    private double oweFee; // 欠费金额
 
     private String paymentCd;
 
@@ -322,5 +327,21 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setPaymentCycle(String paymentCycle) {
         this.paymentCycle = paymentCycle;
+    }
+
+    public double getOweFee() {
+        return oweFee;
+    }
+
+    public void setOweFee(double oweFee) {
+        this.oweFee = oweFee;
+    }
+
+    public String getPayerObjName() {
+        return payerObjName;
+    }
+
+    public void setPayerObjName(String payerObjName) {
+        this.payerObjName = payerObjName;
     }
 }

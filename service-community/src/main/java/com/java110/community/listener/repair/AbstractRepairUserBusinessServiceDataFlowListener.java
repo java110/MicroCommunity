@@ -2,8 +2,8 @@ package com.java110.community.listener.repair;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IRepairUserServiceDao;
-import com.java110.entity.center.Business;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -43,7 +43,14 @@ public abstract class AbstractRepairUserBusinessServiceDataFlowListener extends 
         businessRepairUserInfo.put("ruId", businessRepairUserInfo.get("ru_id"));
         businessRepairUserInfo.put("state", businessRepairUserInfo.get("state"));
         businessRepairUserInfo.put("communityId", businessRepairUserInfo.get("community_id"));
-        businessRepairUserInfo.put("userId", businessRepairUserInfo.get("user_id"));
+        businessRepairUserInfo.put("staffId", businessRepairUserInfo.get("staff_id"));
+        businessRepairUserInfo.put("staffName", businessRepairUserInfo.get("staff_name"));
+        businessRepairUserInfo.put("preStaffId", businessRepairUserInfo.get("pre_staff_id"));
+        businessRepairUserInfo.put("preStaffName", businessRepairUserInfo.get("pre_staff_name"));
+        businessRepairUserInfo.put("startTime", businessRepairUserInfo.get("start_time"));
+        businessRepairUserInfo.put("endTime", businessRepairUserInfo.get("end_time"));
+        businessRepairUserInfo.put("repairEvent", businessRepairUserInfo.get("repair_event"));
+
         businessRepairUserInfo.remove("bId");
         businessRepairUserInfo.put("statusCd", statusCd);
     }
@@ -74,7 +81,13 @@ public abstract class AbstractRepairUserBusinessServiceDataFlowListener extends 
         currentRepairUserInfo.put("ruId", currentRepairUserInfo.get("ru_id"));
         currentRepairUserInfo.put("state", currentRepairUserInfo.get("state"));
         currentRepairUserInfo.put("communityId", currentRepairUserInfo.get("community_id"));
-        currentRepairUserInfo.put("userId", currentRepairUserInfo.get("user_id"));
+        currentRepairUserInfo.put("staffId", currentRepairUserInfo.get("staff_id"));
+        currentRepairUserInfo.put("staffName", currentRepairUserInfo.get("staff_name"));
+        currentRepairUserInfo.put("preStaffId", currentRepairUserInfo.get("pre_staff_id"));
+        currentRepairUserInfo.put("preStaffName", currentRepairUserInfo.get("pre_staff_name"));
+        currentRepairUserInfo.put("startTime", currentRepairUserInfo.get("start_time"));
+        currentRepairUserInfo.put("endTime", currentRepairUserInfo.get("end_time"));
+        currentRepairUserInfo.put("repairEvent", currentRepairUserInfo.get("repair_event"));
 
 
         currentRepairUserInfo.put("operate", StatusConstant.OPERATE_DEL);

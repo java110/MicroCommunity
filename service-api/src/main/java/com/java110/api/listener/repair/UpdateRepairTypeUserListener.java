@@ -25,8 +25,7 @@ public class UpdateRepairTypeUserListener extends AbstractServiceApiPlusListener
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "typeUserId", "typeUserId不能为空");
-        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
-        Assert.hasKeyAndValue(reqJson, "userName", "请求报文中未包含userName");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含状态");
         Assert.hasKeyAndValue(reqJson, "repairType", "请求报文中未包含repairType");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
