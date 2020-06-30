@@ -27,7 +27,7 @@ public interface IOwnerRepairBMO extends IApiBaseBMO {
      */
     public void deleteOwnerRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
     public void addBusinessRepairUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
-    public void modifyBusinessRepairDispatch(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void modifyBusinessRepairDispatch(JSONObject paramInJson, DataFlowContext dataFlowContext,String state);
     /**
      * 添加小区信息
      *

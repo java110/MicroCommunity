@@ -101,7 +101,7 @@ public class OwnerRepairBMOImpl extends ApiBaseBMO implements IOwnerRepairBMO {
         super.insert(dataFlowContext, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
     }
 
-    public void modifyBusinessRepairDispatch(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void modifyBusinessRepairDispatch(JSONObject paramInJson, DataFlowContext dataFlowContext,String state) {
         //查询报修单
         RepairDto repairDto = new RepairDto();
         repairDto.setRepairId(paramInJson.getString("repairId"));
@@ -115,7 +115,7 @@ public class OwnerRepairBMOImpl extends ApiBaseBMO implements IOwnerRepairBMO {
 
         JSONObject businessOwnerRepair = new JSONObject();
         businessOwnerRepair.putAll(BeanConvertUtil.beanCovertMap(repairDtos.get(0)));
-        businessOwnerRepair.put("state", StateConstant.REPAIR_DISPATCHING);
+        businessOwnerRepair.put("state", state);
         //计算 应收金额
         RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
         super.update(dataFlowContext, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
