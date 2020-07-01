@@ -8,8 +8,14 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.community.IRepairInnerServiceSMO;
 import com.java110.core.smo.community.IRepairUserInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeAttrInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeInnerServiceSMO;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.po.fee.FeeAttrPo;
+import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
@@ -55,6 +61,12 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -94,6 +106,47 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
     }
 
     private void backRepair(DataFlowContext context, JSONObject reqJson) {
+
+        //查询订单状态
+        RepairDto repairDto = new RepairDto();
+        repairDto.setRepairId(reqJson.getString("repairId"));
+        repairDto.setCommunityId(reqJson.getString("communityId"));
+        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
+        Assert.listOnlyOne(repairDtos, "当前用户没有需要处理订单或存在多条");
+
+        //待评价
+        if (RepairDto.STATE_APPRAISE.equals(repairDtos.get(0).getState())) {
+            FeeAttrDto feeAttrDto = new FeeAttrDto();
+            feeAttrDto.setCommunityId(reqJson.getString("communityId"));
+            feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
+            feeAttrDto.setValue(reqJson.getString("repairId"));
+            List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+            if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
+                FeeDto feeDto = new FeeDto();
+                feeDto.setCommunityId(reqJson.getString("communityId"));
+                feeDto.setFeeId(feeAttrDtos.get(0).getFeeId());
+                List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+                //收费结束
+                if (FeeDto.STATE_FINISH.equals(feeDtos.get(0).getState())) {
+                    throw new IllegalArgumentException("收费结束，不能退单");
+                }
+
+                PayFeePo payFeePo = new PayFeePo();
+                payFeePo.setCommunityId(feeDtos.get(0).getCommunityId());
+                payFeePo.setFeeId(feeDtos.get(0).getFeeId());
+                //删除费用
+                super.delete(context,payFeePo,BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
+
+                //删除费用属性
+                FeeAttrPo feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setAttrId(feeAttrDtos.get(0).getAttrId());
+                feeAttrPo.setCommunityId(feeAttrDtos.get(0).getCommunityId());
+                super.delete(context,feeAttrPo,BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
+
+            }
+        }
+
+
         String userId = reqJson.getString("userId");
         String userName = reqJson.getString("userName");
 
