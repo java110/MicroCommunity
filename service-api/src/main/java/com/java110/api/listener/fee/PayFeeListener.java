@@ -16,14 +16,11 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
-import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +28,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName PayFeeListener
@@ -116,7 +110,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
             repairPoolPo.setCommunityId(paramObj.getString("communityId"));
             repairPoolPo.setState(RepairDto.STATE_APPRAISE);
-            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), JSONObject.toJSONString(repairPoolPo));
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(), JSONObject.toJSONString(repairPoolPo));
             businesses.add(business);
         }
 

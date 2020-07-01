@@ -128,7 +128,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         feePo.setAmount(reqJson.getString("amount"));
         feePo.setCommunityId(reqJson.getString("communityId"));
         feePo.setConfigId(feeConfigDtos.get(0).getConfigId());
-        feePo.setEndTime(DateUtil.getLastTime());
+        feePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         feePo.setFeeFlag(feeConfigDtos.get(0).getFeeFlag());
         feePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         feePo.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_REPAIR);
