@@ -59,6 +59,7 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         repairUserPo.setContext("订单提交");
         repairUserPo.setPreStaffId("-1");
         repairUserPo.setPreStaffName("-1");
+        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
         repairUserPo.setStaffId(reqJson.getString("userId"));
         repairUserPo.setStaffName(reqJson.getString("userName"));
@@ -66,7 +67,7 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         repairUserPo.setState(RepairUserDto.STATE_SUBMIT);
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setRuId("-1");
-        super.insert(context,repairUserPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+        super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
 
 
     }

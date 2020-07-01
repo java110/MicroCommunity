@@ -14,6 +14,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StateConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,7 @@ public class OwnerRepairBMOImpl extends ApiBaseBMO implements IOwnerRepairBMO {
         businessObj.put("state", StateConstant.STAFF_NO_FINISH_ORDER);
         businessObj.put("ruId", "-1");
         RepairUserPo repairUserPo = BeanConvertUtil.covertBean(businessObj, RepairUserPo.class);
+        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         super.insert(dataFlowContext, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
     }
 

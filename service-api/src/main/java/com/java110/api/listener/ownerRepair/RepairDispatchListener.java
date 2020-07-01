@@ -123,6 +123,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserDto.setRepairId(reqJson.getString("repairId"));
         repairUserDto.setStaffId(reqJson.getString("staffId"));
         repairUserDto.setCommunityId(reqJson.getString("communityId"));
+        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserDto.setState(RepairUserDto.STATE_TRANSFER);
         repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
 
@@ -172,6 +173,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserPo.setStaffId(reqJson.getString("staffId"));
         repairUserPo.setStaffName(reqJson.getString("staffName"));
         repairUserPo.setPreStaffId(userId);
+        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setPreStaffName(userName);
         repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
         repairUserPo.setContext("");

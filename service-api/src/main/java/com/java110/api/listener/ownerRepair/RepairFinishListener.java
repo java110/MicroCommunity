@@ -96,6 +96,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         Assert.listOnlyOne(repairUserDtos, "数据错误 该订单没有发起人");
         repairUserPo = new RepairUserPo();
         repairUserPo.setRuId("-1");
+        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setState(RepairUserDto.STATE_DOING);
         repairUserPo.setRepairId(reqJson.getString("repairId"));
         repairUserPo.setStaffId(repairUserDtos.get(0).getStaffId());
