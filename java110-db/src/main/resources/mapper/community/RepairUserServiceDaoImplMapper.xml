@@ -8,10 +8,10 @@
     <insert id="saveBusinessRepairUserInfo" parameterType="Map">
         insert into business_repair_user(
         operate,context,repair_id,ru_id,state,community_id,b_id,staff_id,staff_name,pre_staff_id,
-        pre_staff_name,repair_event,end_time
+        pre_staff_name,repair_event,end_time,start_time
         ) values (
         #{operate},#{context},#{repairId},#{ruId},#{state},#{communityId},#{bId},#{staffId},
-        #{staffName},#{preStaffId},#{preStaffName},#{repairEvent},#{endTime}
+        #{staffName},#{preStaffId},#{preStaffName},#{repairEvent},#{endTime},#{startTime}
         )
     </insert>
 
@@ -133,7 +133,7 @@
         <if test="preStaffId !=null and preStaffId != ''">
             and t.pre_staff_id= #{preStaffId}
         </if>
-        order by t.create_time
+        order by t.start_time
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

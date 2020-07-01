@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -192,6 +194,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         // 自己的单子状态修改为转单
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId("-1");
+        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setState(RepairUserDto.STATE_TRANSFER);
         repairUserPo.setRepairId(reqJson.getString("repairId"));
@@ -205,6 +208,10 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         //处理人信息
         repairUserPo = new RepairUserPo();
         repairUserPo.setRuId("-2");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.SECOND, 30);
+        repairUserPo.setStartTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setState(RepairUserDto.STATE_DOING);
         repairUserPo.setRepairId(reqJson.getString("repairId"));
         repairUserPo.setStaffId(reqJson.getString("staffId"));

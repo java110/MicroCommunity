@@ -148,7 +148,7 @@ public class DateUtil {
         return getFormatTimeString(new Date(), pattern);
     }
 
-    public static String getLastTime(){
+    public static String getLastTime() {
         return LAST_TIME;
     }
 
