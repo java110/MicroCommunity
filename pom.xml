@@ -56,7 +56,7 @@
         <tomcat.servlet.version>6.0.37</tomcat.servlet.version>
         <druid.version>1.1.10</druid.version>
         <mybatis-spring.version>1.3.1</mybatis-spring.version>
-        <mysql.version>5.1.39</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
         <commons-pool2.version>2.2</commons-pool2.version>
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-fileupload.version>1.3.3</commons-fileupload.version>
