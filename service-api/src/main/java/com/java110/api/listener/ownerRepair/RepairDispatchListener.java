@@ -26,7 +26,7 @@ import java.util.List;
  * 保存小区侦听
  * add by wuxw 2019-06-30
  */
-@Java110Listener("repairDispatchStepListener")
+@Java110Listener("repairDispatchListener")
 public class RepairDispatchListener extends AbstractServiceApiPlusListener {
 
     private static Logger logger = LoggerFactory.getLogger(RepairDispatchListener.class);
