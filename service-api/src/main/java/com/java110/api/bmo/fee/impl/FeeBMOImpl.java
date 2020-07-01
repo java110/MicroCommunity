@@ -5,11 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
-import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.common.ICarInoutInnerServiceSMO;
 import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
 import com.java110.core.smo.community.IRoomInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -151,6 +151,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
                 feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("4004".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -174,6 +176,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
                 feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("4004".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
