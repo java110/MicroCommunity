@@ -21,6 +21,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +111,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
             repairPoolPo.setCommunityId(paramObj.getString("communityId"));
             repairPoolPo.setState(RepairDto.STATE_APPRAISE);
-            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(), JSONObject.toJSONString(repairPoolPo));
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(),  BeanConvertUtil.beanCovertMap(repairPoolPo));
             businesses.add(business);
         }
 
