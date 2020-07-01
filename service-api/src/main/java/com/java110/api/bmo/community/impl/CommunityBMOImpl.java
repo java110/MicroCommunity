@@ -259,22 +259,22 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public void addFeeConfigParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addFeeConfigRepair(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
-        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_CAR);
-        businessFeeConfig.put("feeName", "停车费[系统默认]");
-        businessFeeConfig.put("feeFlag", "2006012");
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_REPAIR);
+        businessFeeConfig.put("feeName", "报修费[系统默认]");
+        businessFeeConfig.put("feeFlag", "2006012"); //一次性费用
         businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
-        businessFeeConfig.put("computingFormula", "2002");
+        businessFeeConfig.put("computingFormula", "4004");
         businessFeeConfig.put("squarePrice", "0.00");
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "003");//按天出账
-        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCd", "2100");
         businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);

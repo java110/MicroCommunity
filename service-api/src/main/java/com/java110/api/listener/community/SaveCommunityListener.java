@@ -39,7 +39,7 @@ public class SaveCommunityListener extends AbstractServiceApiPlusListener {
         communityBMOImpl.addCommunityMembers(reqJson, context);
         //产生物业费配置信息
         communityBMOImpl.addFeeConfigProperty(reqJson, context);
-//        communityBMOImpl.addFeeConfigParkingSpace(reqJson, context); // 地上出售
+        communityBMOImpl.addFeeConfigRepair(reqJson, context); // 报修费用
 //       communityBMOImpl.addFeeConfigParkingSpaceUpSell(reqJson, context); // 地上出售
 //        communityBMOImpl.addFeeConfigParkingSpaceDownSell(reqJson, context); // 地下出售
 //        communityBMOImpl.addFeeConfigParkingSpaceUpHire(reqJson, context);//地上出租

@@ -133,7 +133,7 @@
         <if test="preStaffId !=null and preStaffId != ''">
             and t.pre_staff_id= #{preStaffId}
         </if>
-        order by t.create_time desc
+        order by t.create_time
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

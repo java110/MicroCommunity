@@ -15,11 +15,13 @@ import java.util.Date;
  **/
 public class FeeAttrDto extends PageDto implements Serializable {
 
+    public static final String SPEC_CD_REPAIR = "390001"; // 报修单ID
+
     private String attrId;
-private String specCd;
-private String communityId;
-private String feeId;
-private String value;
+    private String specCd;
+    private String communityId;
+    private String feeId;
+    private String value;
 
 
     private Date createTime;
@@ -30,31 +32,40 @@ private String value;
     public String getAttrId() {
         return attrId;
     }
-public void setAttrId(String attrId) {
+
+    public void setAttrId(String attrId) {
         this.attrId = attrId;
     }
-public String getSpecCd() {
+
+    public String getSpecCd() {
         return specCd;
     }
-public void setSpecCd(String specCd) {
+
+    public void setSpecCd(String specCd) {
         this.specCd = specCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
 

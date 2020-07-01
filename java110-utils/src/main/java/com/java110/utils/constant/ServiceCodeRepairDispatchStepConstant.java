@@ -23,5 +23,16 @@ public class ServiceCodeRepairDispatchStepConstant {
     public static final String CLOSE_REPAIR_DISPATCH = "ownerRepair.closeRepairDispatch";
 
 
+    /**
+     * 添加 报修结单
+     */
+    public static final String BINDING_REPAIR_FINISH = "ownerRepair.repairFinish";
+
+    /**
+     * 评价
+     */
+    public static final String BINDING_APPRAISE_REPAIR = "ownerRepair.appraiseRepair";
+
+
 
 }

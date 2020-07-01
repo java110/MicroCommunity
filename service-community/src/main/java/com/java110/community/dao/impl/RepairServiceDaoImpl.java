@@ -125,5 +125,44 @@ public class RepairServiceDaoImpl extends BaseServiceDao implements IRepairServi
         return Integer.parseInt(businessRepairInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> getStaffRepairInfo(Map info) throws DAOException {
+        logger.debug("查询报修信息信息 入参 info : {}",info);
 
+        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getStaffRepairInfo",info);
+
+        return businessRepairInfos;
+    }
+
+    @Override
+    public int queryStaffRepairsCount(Map info) {
+        logger.debug("查询报修信息数据 入参 info : {}",info);
+
+        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.queryStaffRepairsCount", info);
+        if (businessRepairInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessRepairInfos.get(0).get("count").toString());    }
+
+
+    @Override
+    public List<Map> getStaffFinishRepairInfo(Map info) throws DAOException {
+        logger.debug("查询报修信息信息 入参 info : {}",info);
+
+        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getStaffFinishRepairInfo",info);
+
+        return businessRepairInfos;
+    }
+
+    @Override
+    public int queryStaffFinishRepairsCount(Map info) {
+        logger.debug("查询报修信息数据 入参 info : {}",info);
+
+        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.queryStaffFinishRepairsCount", info);
+        if (businessRepairInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessRepairInfos.get(0).get("count").toString());    }
 }

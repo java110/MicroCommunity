@@ -274,4 +274,236 @@
 
     </select>
 
+    <!-- 查询报修信息信息 add by wuxw 2018-07-03 -->
+    <select id="getStaffRepairInfo" parameterType="Map" resultType="Map">
+        select distinct t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
+        appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
+        repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
+        bId,t.room_id,t.room_id roomId,ru.pre_staff_id preStaffId,ru.pre_staff_name preStaffName,
+        d.name stateName,
+        rs.repair_type_name repairTypeName,rs.repair_way repairWay
+        from r_repair_pool t
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
+        left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
+        left join r_repair_user ru on t.repair_id = ru.repair_id and t.status_cd = 0
+        where 1 =1
+        and ru.end_time is null
+        and ru.state = '10001'
+        and ru.staff_id = #{staffId}
+        <if test="repairName !=null and repairName != ''">
+            and t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null ">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomIds !=null ">
+            and t.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+    <!-- 查询报修信息数量 add by wuxw 2018-07-03 -->
+    <select id="queryStaffRepairsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from r_repair_pool t
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
+        left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
+        left join r_repair_user ru on t.repair_id = ru.repair_id and t.status_cd = 0
+        where 1 =1
+        and ru.end_time is null
+        and ru.state = '10001'
+        and ru.staff_id = #{staffId}
+        <if test="repairName !=null and repairName != ''">
+            and t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null ">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomIds !=null ">
+            and t.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+
+    </select>
+
+
+
+    <!-- 查询报修信息信息 add by wuxw 2018-07-03 -->
+    <select id="getStaffFinishRepairInfo" parameterType="Map" resultType="Map">
+        select t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
+        appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
+        repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
+        bId,t.room_id,t.room_id roomId,
+        d.name stateName,
+        rs.repair_type_name repairTypeName,rs.repair_way repairWay
+        from r_repair_pool t
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
+        left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
+        left join r_repair_user ru on t.repair_id = ru.repair_id and t.status_cd = 0
+        where 1 =1
+        and ru.state in ('10002','10003','10004','10005')
+        and ru.staff_id = #{staffId}
+        <if test="repairName !=null and repairName != ''">
+            and t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null ">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomIds !=null ">
+            and t.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+    <!-- 查询报修信息数量 add by wuxw 2018-07-03 -->
+    <select id="queryStaffFinishRepairsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from r_repair_pool t
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
+        left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
+        left join r_repair_user ru on t.repair_id = ru.repair_id and t.status_cd = 0
+        where 1 =1
+        and ru.state in ('10002','10003','10004','10005')
+        and ru.staff_id = #{staffId}
+        <if test="repairName !=null and repairName != ''">
+            and t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null ">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomIds !=null ">
+            and t.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+
+    </select>
+
 </mapper>

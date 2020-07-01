@@ -59,6 +59,9 @@ public class RepairDto extends PageDto implements Serializable {
     private String repairDispatchContext;
     private String repairDispatchStateName;
 
+    private String preStaffId;
+    private String preStaffName;
+
     private Date createTime;
 
     private String statusCd = "0";
@@ -216,5 +219,21 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRepairWay(String repairWay) {
         this.repairWay = repairWay;
+    }
+
+    public String getPreStaffId() {
+        return preStaffId;
+    }
+
+    public void setPreStaffId(String preStaffId) {
+        this.preStaffId = preStaffId;
+    }
+
+    public String getPreStaffName() {
+        return preStaffName;
+    }
+
+    public void setPreStaffName(String preStaffName) {
+        this.preStaffName = preStaffName;
     }
 }

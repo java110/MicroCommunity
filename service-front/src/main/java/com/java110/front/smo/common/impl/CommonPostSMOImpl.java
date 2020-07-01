@@ -52,6 +52,7 @@ public class CommonPostSMOImpl extends AbstractComponentSMO implements ICommonPo
         ResponseEntity<String> responseEntity = null;
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("userId",result.getUserId());
+        paramIn.put("userName",result.getUserName());
         paramIn.put("storeId",result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + pd.getApiUrl(),

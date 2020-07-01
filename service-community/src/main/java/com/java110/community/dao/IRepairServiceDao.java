@@ -78,4 +78,41 @@ public interface IRepairServiceDao {
      */
     int queryRepairsCount(Map info);
 
+
+    /**
+     * 查询报修信息信息（instance过程）
+     * 根据bId 查询报修信息信息
+     * @param info bId 信息
+     * @return 报修信息信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getStaffRepairInfo(Map info) throws DAOException;
+
+    /**
+     * 查询报修信息总数
+     *
+     * @param info 报修信息信息
+     * @return 报修信息数量
+     */
+    int queryStaffRepairsCount(Map info);
+
+
+    /**
+     * 查询报修信息信息（instance过程）
+     * 根据bId 查询报修信息信息
+     * @param info bId 信息
+     * @return 报修信息信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getStaffFinishRepairInfo(Map info) throws DAOException;
+
+    /**
+     * 查询报修信息总数
+     *
+     * @param info 报修信息信息
+     * @return 报修信息数量
+     */
+    int queryStaffFinishRepairsCount(Map info);
+
+
 }

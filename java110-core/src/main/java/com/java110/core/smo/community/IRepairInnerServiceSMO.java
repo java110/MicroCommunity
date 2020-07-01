@@ -39,4 +39,46 @@ public interface IRepairInnerServiceSMO {
      */
     @RequestMapping(value = "/queryRepairsCount", method = RequestMethod.POST)
     int queryRepairsCount(@RequestBody RepairDto repairDto);
+
+
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param repairDto 数据对象分享
+     * @return RepairDto 对象数据
+     */
+    @RequestMapping(value = "/queryStaffRepairs", method = RequestMethod.POST)
+    List<RepairDto> queryStaffRepairs(@RequestBody RepairDto repairDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param repairDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryStaffRepairsCount", method = RequestMethod.POST)
+    int queryStaffRepairsCount(@RequestBody RepairDto repairDto);
+
+
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param repairDto 数据对象分享
+     * @return RepairDto 对象数据
+     */
+    @RequestMapping(value = "/queryStaffFinishRepairs", method = RequestMethod.POST)
+    List<RepairDto> queryStaffFinishRepairs(@RequestBody RepairDto repairDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param repairDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryStaffFinishRepairsCount", method = RequestMethod.POST)
+    int queryStaffFinishRepairsCount(@RequestBody RepairDto repairDto);
 }

@@ -79,7 +79,7 @@ public class ListStoresListener extends AbstractServiceApiListener {
             List<StoreAttrDto> storeAttrs = new ArrayList<StoreAttrDto>();
             for (StoreAttrDto tmpStoreAttrDto : storeAttrDtos) {
 
-                if(storeDataVo.getStoreId().equals(storeDataVo.getStoreId())){
+                if(storeDataVo.getStoreId().equals(tmpStoreAttrDto.getStoreId())){
                     storeAttrs.add(tmpStoreAttrDto);
                 }
 

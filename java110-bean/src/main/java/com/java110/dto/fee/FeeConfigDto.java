@@ -21,6 +21,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
     public static final String BILL_TYPE_EVERY = "004";// 实时
     public static final String BILL_TYPE_ONCE_MONTH = "005";// 一次性按月
 
+    public static final String DEFAULT_FEE_CONFIG = "T";
+
 
     private String feeTypeCd;
     private String computingFormula;
