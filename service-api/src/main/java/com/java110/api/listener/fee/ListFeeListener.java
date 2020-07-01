@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
-import com.java110.core.smo.fee.IFeeInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
 import com.java110.core.smo.community.IRoomInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -141,6 +141,8 @@ public class ListFeeListener extends AbstractServiceApiListener {
 
             BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        } else if ("4004".equals(computingFormula)) {
+            feePrice = Double.parseDouble(feeDto.getAmount());
         } else {
             feePrice = -1.00;
         }
@@ -175,6 +177,8 @@ public class ListFeeListener extends AbstractServiceApiListener {
         } else if ("2002".equals(computingFormula)) { // 固定费用
             BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        } else if ("4004".equals(computingFormula)) {
+            feePrice = Double.parseDouble(feeDto.getAmount());
         } else {
             feePrice = -1.00;
         }
