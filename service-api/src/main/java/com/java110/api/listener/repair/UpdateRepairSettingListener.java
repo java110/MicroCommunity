@@ -24,11 +24,13 @@ public class UpdateRepairSettingListener extends AbstractServiceApiPlusListener 
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "settingId", "settingId不能为空");
         Assert.hasKeyAndValue(reqJson, "repairTypeName", "请求报文中未包含repairTypeName");
         Assert.hasKeyAndValue(reqJson, "repairWay", "请求报文中未包含repairWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "publicArea", "请求报文中未包含公共区域");
+        Assert.hasKeyAndValue(reqJson, "payFeeFlag", "请求报文中未包含收费情况");
+        Assert.hasKeyAndValue(reqJson, "returnVisitFlag", "请求报文中未包含回访设置");
 
     }
 

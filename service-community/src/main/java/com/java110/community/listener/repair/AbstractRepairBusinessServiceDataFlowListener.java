@@ -2,8 +2,8 @@ package com.java110.community.listener.repair;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IRepairServiceDao;
-import com.java110.entity.center.Business;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -46,7 +46,9 @@ public abstract class AbstractRepairBusinessServiceDataFlowListener extends Abst
         businessRepairInfo.put("tel", businessRepairInfo.get("tel"));
         businessRepairInfo.put("state", businessRepairInfo.get("state"));
         businessRepairInfo.put("communityId", businessRepairInfo.get("community_id"));
-        businessRepairInfo.put("roomId", businessRepairInfo.get("room_id"));
+        businessRepairInfo.put("repairObjType", businessRepairInfo.get("repair_obj_type"));
+        businessRepairInfo.put("repairObjId", businessRepairInfo.get("repair_obj_id"));
+        businessRepairInfo.put("repairObjName", businessRepairInfo.get("repair_obj_name"));
         businessRepairInfo.remove("bId");
         businessRepairInfo.put("statusCd", statusCd);
     }
@@ -80,7 +82,9 @@ public abstract class AbstractRepairBusinessServiceDataFlowListener extends Abst
         currentRepairInfo.put("tel", currentRepairInfo.get("tel"));
         currentRepairInfo.put("state", currentRepairInfo.get("state"));
         currentRepairInfo.put("communityId", currentRepairInfo.get("community_id"));
-        currentRepairInfo.put("roomId", currentRepairInfo.get("room_id"));
+        currentRepairInfo.put("repairObjType", currentRepairInfo.get("repair_obj_type"));
+        currentRepairInfo.put("repairObjId", currentRepairInfo.get("repair_obj_id"));
+        currentRepairInfo.put("repairObjName", currentRepairInfo.get("repair_obj_name"));
 
 
         currentRepairInfo.put("operate", StatusConstant.OPERATE_DEL);

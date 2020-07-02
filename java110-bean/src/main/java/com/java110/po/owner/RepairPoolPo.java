@@ -23,6 +23,9 @@ public class RepairPoolPo implements Serializable {
 
     private String state;
 
+    private String repairObjType;
+    private String repairObjId;
+    private String repairObjName;
 
 
     public String getRepairId() {
@@ -97,5 +100,27 @@ public class RepairPoolPo implements Serializable {
         this.state = state;
     }
 
+    public String getRepairObjType() {
+        return repairObjType;
+    }
 
+    public void setRepairObjType(String repairObjType) {
+        this.repairObjType = repairObjType;
+    }
+
+    public String getRepairObjId() {
+        return repairObjId;
+    }
+
+    public void setRepairObjId(String repairObjId) {
+        this.repairObjId = repairObjId;
+    }
+
+    public String getRepairObjName() {
+        return repairObjName;
+    }
+
+    public void setRepairObjName(String repairObjName) {
+        this.repairObjName = repairObjName;
+    }
 }

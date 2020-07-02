@@ -1,6 +1,7 @@
 package com.java110.core.factory;
 
 import com.java110.utils.cache.MappingCache;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public class SendSmsFactory {
 
         String smsCompany = MappingCache.getValue(SMS_DOMAIN, SMS_COMPANY);
 
-        if (SMS_COMPANY_ALI.equals(smsCompany)) {
+        if (!StringUtils.isEmpty(smsCompany) && SMS_COMPANY_ALI.equals(smsCompany.trim())) {
             AliSendMessageFactory.sendMessage(tel, code);
         } else {
             TencentSendMessageFactory.sendMessage(tel, code);

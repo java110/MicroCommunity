@@ -97,6 +97,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
             case ACTION_BACK:
                 backRepair(context, reqJson);
                 break;
+
         }
 
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
@@ -135,13 +136,13 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
                 payFeePo.setCommunityId(feeDtos.get(0).getCommunityId());
                 payFeePo.setFeeId(feeDtos.get(0).getFeeId());
                 //删除费用
-                super.delete(context,payFeePo,BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
+                super.delete(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
 
                 //删除费用属性
                 FeeAttrPo feeAttrPo = new FeeAttrPo();
                 feeAttrPo.setAttrId(feeAttrDtos.get(0).getAttrId());
                 feeAttrPo.setCommunityId(feeAttrDtos.get(0).getCommunityId());
-                super.delete(context,feeAttrPo,BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
+                super.delete(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
 
             }
         }
@@ -181,7 +182,14 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
 
         if (repairUserDtos == null || repairUserDtos.size() < 1) {
-            throw new IllegalArgumentException("未找到上级处理人");
+            if (RepairDto.REPAIR_WAY_GRABBING.equals(repairDtos.get(0).getRepairWay())
+                    || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())
+            ) {
+                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_WAIT);
+                return ;
+            } else {
+                throw new IllegalArgumentException("未找到上级处理人");
+            }
         }
 
         repairUserPo.setPreStaffId(repairUserDtos.get(0).getPreStaffId());

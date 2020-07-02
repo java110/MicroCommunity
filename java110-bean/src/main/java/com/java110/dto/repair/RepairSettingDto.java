@@ -23,6 +23,12 @@ public class RepairSettingDto extends PageDto implements Serializable {
     private String repairWayName;
     private String settingId;
 
+    private String publicArea;
+    private String payFeeFlag;
+    private String priceScope;
+    private String returnVisitFlag;
+    private String returnVisitFlagName;
+
 
     private Date createTime;
 
@@ -100,5 +106,45 @@ public class RepairSettingDto extends PageDto implements Serializable {
 
     public void setRepairWayName(String repairWayName) {
         this.repairWayName = repairWayName;
+    }
+
+    public String getPublicArea() {
+        return publicArea;
+    }
+
+    public void setPublicArea(String publicArea) {
+        this.publicArea = publicArea;
+    }
+
+    public String getPayFeeFlag() {
+        return payFeeFlag;
+    }
+
+    public void setPayFeeFlag(String payFeeFlag) {
+        this.payFeeFlag = payFeeFlag;
+    }
+
+    public String getPriceScope() {
+        return priceScope;
+    }
+
+    public void setPriceScope(String priceScope) {
+        this.priceScope = priceScope;
+    }
+
+    public String getReturnVisitFlag() {
+        return returnVisitFlag;
+    }
+
+    public void setReturnVisitFlag(String returnVisitFlag) {
+        this.returnVisitFlag = returnVisitFlag;
+    }
+
+    public String getReturnVisitFlagName() {
+        return returnVisitFlagName;
+    }
+
+    public void setReturnVisitFlagName(String returnVisitFlagName) {
+        this.returnVisitFlagName = returnVisitFlagName;
     }
 }

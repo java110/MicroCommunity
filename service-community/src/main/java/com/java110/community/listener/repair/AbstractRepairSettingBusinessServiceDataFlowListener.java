@@ -44,6 +44,11 @@ public abstract class AbstractRepairSettingBusinessServiceDataFlowListener exten
         businessRepairSettingInfo.put("communityId", businessRepairSettingInfo.get("community_id"));
         businessRepairSettingInfo.put("repairWay", businessRepairSettingInfo.get("repair_way"));
         businessRepairSettingInfo.put("settingId", businessRepairSettingInfo.get("setting_id"));
+        businessRepairSettingInfo.put("publicArea", businessRepairSettingInfo.get("public_area"));
+        businessRepairSettingInfo.put("payFeeFlag", businessRepairSettingInfo.get("pay_fee_flag"));
+        businessRepairSettingInfo.put("priceScope", businessRepairSettingInfo.get("price_scope"));
+        businessRepairSettingInfo.put("returnVisitFlag", businessRepairSettingInfo.get("return_visit_flag"));
+
         businessRepairSettingInfo.remove("bId");
         businessRepairSettingInfo.put("statusCd", statusCd);
     }
@@ -75,7 +80,10 @@ public abstract class AbstractRepairSettingBusinessServiceDataFlowListener exten
         currentRepairSettingInfo.put("communityId", currentRepairSettingInfo.get("community_id"));
         currentRepairSettingInfo.put("repairWay", currentRepairSettingInfo.get("repair_way"));
         currentRepairSettingInfo.put("settingId", currentRepairSettingInfo.get("setting_id"));
-
+        currentRepairSettingInfo.put("publicArea", currentRepairSettingInfo.get("public_area"));
+        currentRepairSettingInfo.put("payFeeFlag", currentRepairSettingInfo.get("pay_fee_flag"));
+        currentRepairSettingInfo.put("priceScope", currentRepairSettingInfo.get("price_scope"));
+        currentRepairSettingInfo.put("returnVisitFlag", currentRepairSettingInfo.get("return_visit_flag"));
 
         currentRepairSettingInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRepairSettingServiceDaoImpl().saveBusinessRepairSettingInfo(currentRepairSettingInfo);

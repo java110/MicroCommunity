@@ -49,7 +49,6 @@ public class RepairUserDto extends PageDto implements Serializable {
     private String repairEvent;
     private String duration;
 
-
     private Date createTime;
 
     private String statusCd = "0";

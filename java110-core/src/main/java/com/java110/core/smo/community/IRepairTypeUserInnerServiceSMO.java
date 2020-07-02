@@ -1,4 +1,4 @@
-package com.java110.core.smo.repairTypeUser;
+package com.java110.core.smo.community;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.repair.RepairTypeUserDto;

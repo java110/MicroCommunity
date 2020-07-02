@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.repair.IRepairTypeUserBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.repairTypeUser.IRepairTypeUserInnerServiceSMO;
+import com.java110.core.smo.community.IRepairTypeUserInnerServiceSMO;
 import com.java110.po.repair.RepairTypeUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;

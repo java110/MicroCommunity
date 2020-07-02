@@ -34,7 +34,6 @@ public class AddOwnerRepairSMOImpl extends AbstractComponentSMO implements IAddO
         Assert.hasKeyAndValue(paramIn, "repairType", "必填，请选择报修类型");
         Assert.hasKeyAndValue(paramIn, "repairName", "必填，请填写报修人名称");
         Assert.hasKeyAndValue(paramIn, "tel", "必填，请填写报修人手机号");
-        Assert.hasKeyAndValue(paramIn, "roomId", "必填，请填写房屋ID");
         Assert.hasKeyAndValue(paramIn, "appointmentTime", "必填，请填写预约时间");
         Assert.hasKeyAndValue(paramIn, "context", "必填，请填写报修内容");
 

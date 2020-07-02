@@ -7,9 +7,9 @@
     <!-- 保存报修设置信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRepairSettingInfo" parameterType="Map">
         insert into business_repair_setting(
-        operate,repair_type_name,repair_type,remark,b_id,community_id,repair_way,setting_id
+        operate,repair_type_name,repair_type,remark,b_id,community_id,repair_way,setting_id,public_area,pay_fee_flag,price_scope,return_visit_flag
         ) values (
-        #{operate},#{repairTypeName},#{repairType},#{remark},#{bId},#{communityId},#{repairWay},#{settingId}
+        #{operate},#{repairTypeName},#{repairType},#{remark},#{bId},#{communityId},#{repairWay},#{settingId},#{publicArea},#{payFeeFlag},#{priceScope},#{returnVisitFlag}
         )
     </insert>
 
@@ -18,7 +18,8 @@
     <select id="getBusinessRepairSettingInfo" parameterType="Map" resultType="Map">
         select t.operate,t.repair_type_name,t.repair_type_name repairTypeName,t.repair_type,t.repair_type
         repairType,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.repair_way,t.repair_way
-        repairWay,t.setting_id,t.setting_id settingId
+        repairWay,t.setting_id,t.setting_id settingId,t.public_area,t.public_area publicArea,t.pay_fee_flag,t.pay_fee_flag payFeeFlag
+        ,t.price_scope,t.price_scope priceScope,t.return_visit_flag,t.return_visit_flag returnVisitFlag
         from business_repair_setting t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -52,8 +53,9 @@
     <!-- 保存报修设置信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRepairSettingInfoInstance" parameterType="Map">
         insert into r_repair_setting(
-        repair_type_name,repair_type,remark,status_cd,b_id,community_id,repair_way,setting_id
-        ) select t.repair_type_name,t.repair_type,t.remark,'0',t.b_id,t.community_id,t.repair_way,t.setting_id from
+        repair_type_name,repair_type,remark,status_cd,b_id,community_id,repair_way,setting_id,public_area,pay_fee_flag,price_scope,return_visit_flag
+        ) select t.repair_type_name,t.repair_type,t.remark,'0',t.b_id,t.community_id,t.repair_way,t.setting_id ,t.public_area,t.pay_fee_flag,t.price_scope,t.return_visit_flag
+        from
         business_repair_setting t where 1=1
         and t.operate= 'ADD'
         <if test="repairTypeName !=null and repairTypeName != ''">
@@ -85,9 +87,12 @@
     <select id="getRepairSettingInfo" parameterType="Map" resultType="Map">
         select t.repair_type_name,t.repair_type_name repairTypeName,t.repair_type,t.repair_type
         repairType,t.remark,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.community_id,t.community_id
-        communityId,t.repair_way,t.repair_way repairWay,t.setting_id,t.setting_id settingId,t.create_time createTime,d.name repairWayName
+        communityId,t.repair_way,t.repair_way repairWay,t.setting_id,t.setting_id settingId,t.create_time createTime,d.name repairWayName,
+        t.public_area,t.public_area publicArea,t.pay_fee_flag,t.pay_fee_flag payFeeFlag
+        ,t.price_scope,t.price_scope priceScope,t.return_visit_flag,t.return_visit_flag returnVisitFlag,d1.name returnVisitFlagName
         from r_repair_setting t
         left join t_dict d on t.repair_way = d.status_cd and d.table_name = 'r_repair_setting' and d.table_columns = 'repair_way'
+        left join t_dict d1 on t.return_visit_flag = d1.status_cd and d1.table_name = 'r_repair_setting' and d1.table_columns = 'return_visit_flag'
         where 1 =1
         <if test="repairTypeName !=null and repairTypeName != ''">
             and t.repair_type_name= #{repairTypeName}
@@ -112,6 +117,15 @@
         </if>
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
+        </if>
+        <if test="publicArea !=null and publicArea != ''">
+            and t.public_area= #{publicArea}
+        </if>
+        <if test="payFeeFlag !=null and payFeeFlag != ''">
+            and t.pay_fee_flag= #{payFeeFlag}
+        </if>
+        <if test="returnVisitFlag !=null and returnVisitFlag != ''">
+            and t.return_visit_flag= #{returnVisitFlag}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -141,6 +155,18 @@
         </if>
         <if test="repairWay !=null and repairWay != ''">
             , t.repair_way= #{repairWay}
+        </if>
+        <if test="publicArea !=null and publicArea != ''">
+            , t.public_area= #{publicArea}
+        </if>
+        <if test="payFeeFlag !=null and payFeeFlag != ''">
+            , t.pay_fee_flag= #{payFeeFlag}
+        </if>
+        <if test="returnVisitFlag !=null and returnVisitFlag != ''">
+            , t.return_visit_flag= #{returnVisitFlag}
+        </if>
+        <if test="priceScope !=null and priceScope != ''">
+            , t.price_scope= #{priceScope}
         </if>
         where 1=1
         <if test="bId !=null and bId != ''">
@@ -181,6 +207,16 @@
         </if>
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
+        </if>
+
+        <if test="publicArea !=null and publicArea != ''">
+            and t.public_area= #{publicArea}
+        </if>
+        <if test="payFeeFlag !=null and payFeeFlag != ''">
+            and t.pay_fee_flag= #{payFeeFlag}
+        </if>
+        <if test="returnVisitFlag !=null and returnVisitFlag != ''">
+            and t.return_visit_flag= #{returnVisitFlag}
         </if>
 
 

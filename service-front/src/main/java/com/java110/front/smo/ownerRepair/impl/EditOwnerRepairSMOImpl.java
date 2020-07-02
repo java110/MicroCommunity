@@ -33,7 +33,6 @@ public class EditOwnerRepairSMOImpl extends AbstractComponentSMO implements IEdi
         Assert.hasKeyAndValue(paramIn, "repairType", "必填，请选择报修类型");
         Assert.hasKeyAndValue(paramIn, "repairName", "必填，请填写报修人名称");
         Assert.hasKeyAndValue(paramIn, "tel", "必填，请填写报修人手机号");
-        Assert.hasKeyAndValue(paramIn, "roomId", "必填，请填写房屋ID");
         Assert.hasKeyAndValue(paramIn, "appointmentTime", "必填，请填写预约时间");
         Assert.hasKeyAndValue(paramIn, "context", "必填，请填写报修内容");
 
@@ -63,7 +62,7 @@ public class EditOwnerRepairSMOImpl extends AbstractComponentSMO implements IEdi
             return responseEntity;
         }
         JSONObject outRepairInfo = JSONObject.parseObject(responseEntity.getBody());
-        JSONObject repairObj = outRepairInfo.getJSONArray("ownerRepairs").getJSONObject(0);
+        JSONObject repairObj = outRepairInfo.getJSONArray("data").getJSONObject(0);
         paramIn.put("state", repairObj.getString("state"));
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.updateOwnerRepair",

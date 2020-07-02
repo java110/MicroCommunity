@@ -7,9 +7,10 @@
     <!-- 保存报修信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRepairInfo" parameterType="Map">
         insert into business_repair_pool(
-        operate,repair_name,appointment_time,repair_type,context,repair_id,tel,state,community_id,b_id,room_id
+        operate,repair_name,appointment_time,repair_type,context,repair_id,tel,state,community_id,b_id,repair_obj_type,repair_obj_id,repair_obj_name
         ) values (
-        #{operate},#{repairName},#{appointmentTime},#{repairType},#{context},#{repairId},#{tel},#{state},#{communityId},#{bId},#{roomId}
+        #{operate},#{repairName},#{appointmentTime},#{repairType},#{context},#{repairId},#{tel},#{state},#{communityId},#{bId},
+        #{repairObjType},#{repairObjId},#{repairObjName}
         )
     </insert>
 
@@ -18,7 +19,8 @@
     <select id="getBusinessRepairInfo" parameterType="Map" resultType="Map">
         select t.operate,t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
-        repairId,t.tel,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId
+        repairId,t.tel,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
+        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,t.repair_obj_name repairObjName
         from business_repair_pool t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -51,9 +53,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            and t.room_id= #{roomId}
-        </if>
+
 
     </select>
 
@@ -61,9 +61,11 @@
     <!-- 保存报修信息信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRepairInfoInstance" parameterType="Map">
         insert into r_repair_pool(
-        repair_name,appointment_time,repair_type,context,repair_id,tel,status_cd,state,community_id,b_id,room_id
+        repair_name,appointment_time,repair_type,context,repair_id,tel,status_cd,state,community_id,b_id,
+        repair_obj_type,repair_obj_id,repair_obj_name
         ) select
-        t.repair_name,t.appointment_time,t.repair_type,t.context,t.repair_id,t.tel,'0',t.state,t.community_id,t.b_id,t.room_id
+        t.repair_name,t.appointment_time,t.repair_type,t.context,t.repair_id,t.tel,'0',t.state,t.community_id,t.b_id,
+        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name
         from business_repair_pool t where 1=1
         and t.operate= 'ADD'
         <if test="repairName !=null and repairName != ''">
@@ -93,9 +95,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            and t.room_id= #{roomId}
-        </if>
+
 
     </insert>
 
@@ -105,9 +105,10 @@
         select t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
         repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,t.room_id,t.room_id roomId,
+        bId,
         d.name stateName,
-        rs.repair_type_name repairTypeName,rs.repair_way repairWay
+        rs.repair_type_name repairTypeName,rs.repair_way repairWay,
+        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,t.repair_obj_name repairObjName
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
@@ -126,6 +127,9 @@
             and td.`table_name` = 'r_repair_user'
             AND td.`table_columns` = 'state'
             AND td.`status_cd` = rru.state
+        </if>
+        <if test="repairWay !=null and repairWay != ''">
+            and rs.repair_way= #{repairWay}
         </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
@@ -157,15 +161,13 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            and t.room_id= #{roomId}
+        <if test="repairObjType !=null and repairObjType != ''">
+            and t.repair_obj_type= #{repairObjType}
         </if>
-        <if test="roomIds !=null ">
-            and t.room_id in
-            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test="repairObjId !=null and repairObjId != ''">
+            and t.repair_obj_id= #{repairObjId}
         </if>
+
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -201,8 +203,14 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            , t.room_id= #{roomId}
+        <if test="repairObjType !=null and repairObjType != ''">
+            , t.repair_obj_type= #{repairObjType}
+        </if>
+        <if test="repairObjId !=null and repairObjId != ''">
+            , t.repair_obj_id= #{repairObjId}
+        </if>
+        <if test="repairObjName !=null and repairObjName != ''">
+            , t.repair_obj_name= #{repairObjName}
         </if>
         where 1=1
         <if test="repairId !=null and repairId != ''">
@@ -261,14 +269,14 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            and t.room_id= #{roomId}
+        <if test="repairObjType !=null and repairObjType != ''">
+            and t.repair_obj_type= #{repairObjType}
         </if>
-        <if test="roomIds !=null ">
-            and t.room_id in
-            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test="repairWay !=null and repairWay != ''">
+            and rs.repair_way= #{repairWay}
+        </if>
+        <if test="repairObjId !=null and repairObjId != ''">
+            and t.repair_obj_id= #{repairObjId}
         </if>
 
 
@@ -279,9 +287,10 @@
         select distinct t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
         repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,t.room_id,t.room_id roomId,ru.pre_staff_id preStaffId,ru.pre_staff_name preStaffName,
+        bId,ru.pre_staff_id preStaffId,ru.pre_staff_name preStaffName,
         d.name stateName,
-        rs.repair_type_name repairTypeName,rs.repair_way repairWay
+        rs.repair_type_name repairTypeName,rs.repair_way repairWay,
+        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,t.repair_obj_name repairObjName
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
@@ -320,14 +329,11 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            and t.room_id= #{roomId}
+        <if test="repairObjType !=null and repairObjType != ''">
+            and t.repair_obj_type= #{repairObjType}
         </if>
-        <if test="roomIds !=null ">
-            and t.room_id in
-            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test="repairObjId !=null and repairObjId != ''">
+            and t.repair_obj_id= #{repairObjId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -377,14 +383,11 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            and t.room_id= #{roomId}
+        <if test="repairObjType !=null and repairObjType != ''">
+            and t.repair_obj_type= #{repairObjType}
         </if>
-        <if test="roomIds !=null ">
-            and t.room_id in
-            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test="repairObjId !=null and repairObjId != ''">
+            and t.repair_obj_id= #{repairObjId}
         </if>
 
 
@@ -394,12 +397,13 @@
 
     <!-- 查询报修信息信息 add by wuxw 2018-07-03 -->
     <select id="getStaffFinishRepairInfo" parameterType="Map" resultType="Map">
-        select t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
+        select distinct t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
         repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,t.room_id,t.room_id roomId,
+        bId,
         d.name stateName,
-        rs.repair_type_name repairTypeName,rs.repair_way repairWay
+        rs.repair_type_name repairTypeName,rs.repair_way repairWay,
+        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,t.repair_obj_name repairObjName
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
@@ -437,14 +441,11 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            and t.room_id= #{roomId}
+        <if test="repairObjType !=null and repairObjType != ''">
+            and t.repair_obj_type= #{repairObjType}
         </if>
-        <if test="roomIds !=null ">
-            and t.room_id in
-            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test="repairObjId !=null and repairObjId != ''">
+            and t.repair_obj_id= #{repairObjId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -493,15 +494,14 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="roomId !=null and roomId != ''">
-            and t.room_id= #{roomId}
+
+        <if test="repairObjType !=null and repairObjType != ''">
+            and t.repair_obj_type= #{repairObjType}
         </if>
-        <if test="roomIds !=null ">
-            and t.room_id in
-            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test="repairObjId !=null and repairObjId != ''">
+            and t.repair_obj_id= #{repairObjId}
         </if>
+        group by ru.staff_id
 
 
     </select>

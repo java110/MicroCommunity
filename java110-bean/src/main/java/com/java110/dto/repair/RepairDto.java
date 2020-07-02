@@ -37,6 +37,10 @@ public class RepairDto extends PageDto implements Serializable {
     //未处理主动结单
     public static final String STATE_UNPROCESSED = "2000";
 
+    public static final String REPAIR_WAY_GRABBING = "100"; //抢单模式
+    public static final String REPAIR_WAY_TRAINING = "300"; //抢单模式
+
+
 
 
     private String repairName;
@@ -65,6 +69,10 @@ public class RepairDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String repairObjType;
+    private String repairObjId;
+    private String repairObjName;
 
 
     public String getRepairName() {
@@ -235,5 +243,29 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setPreStaffName(String preStaffName) {
         this.preStaffName = preStaffName;
+    }
+
+    public String getRepairObjType() {
+        return repairObjType;
+    }
+
+    public void setRepairObjType(String repairObjType) {
+        this.repairObjType = repairObjType;
+    }
+
+    public String getRepairObjId() {
+        return repairObjId;
+    }
+
+    public void setRepairObjId(String repairObjId) {
+        this.repairObjId = repairObjId;
+    }
+
+    public String getRepairObjName() {
+        return repairObjName;
+    }
+
+    public void setRepairObjName(String repairObjName) {
+        this.repairObjName = repairObjName;
     }
 }

@@ -2,7 +2,7 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IRepairTypeUserServiceDao;
-import com.java110.core.smo.repairTypeUser.IRepairTypeUserInnerServiceSMO;
+import com.java110.core.smo.community.IRepairTypeUserInnerServiceSMO;
 import com.java110.dto.repair.RepairTypeUserDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
