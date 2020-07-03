@@ -1995,6 +1995,11 @@ secretId 和 secretKey 如下图获取
 
 #### 5、再HBuildX 打包为H5 上传服务器 用NGINX代理 到跟目录就可以
 
+在HBuildx 发行菜单下选择 网站H5手机版 并填写域名和网站名称信息，点击发行，打包成功后会在命令行中显示地址
+
+![image](images/014.png)
+
+
 如果是二级域名和HC的设置的域名不一致请在NGINX代理时 加如下配置
 
 >location /callComponent
