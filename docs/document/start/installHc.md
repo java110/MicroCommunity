@@ -1905,11 +1905,11 @@ secretId 和 secretKey 如下图获取
 
 ## 业主版小程序安装
 
-#### 需要工具
+#### 1、需要工具
 
 小程序安装使用 需要准备 HBuildX和微信开发者工具，请到相应网站下载
 
-#### HBuildX 设置
+#### 2、HBuildX 设置
 
 由于小程序时通过uni-app 开发而成，编译时需要sass 和 less 请在HBulidX 工具 --> 插件安装安装 less 和 sass
 
@@ -1917,7 +1917,7 @@ secretId 和 secretKey 如下图获取
 ![image](images/002.png)
 ![image](images/003.png)
 
-#### 微信开发者工具设置
+#### 3、微信开发者工具设置
 
 进入微信开发者工具后 可能项目中的appId 为官方测试appId 需要再详情 点击修改为自己的小程序appId
 
@@ -1927,7 +1927,7 @@ secretId 和 secretKey 如下图获取
 
 ![image](images/005.png)
 
-#### 业主版代码相关设置
+#### 4、业主版代码相关设置
 
 打开constant--> UrlConstant.js 中修改 
 
@@ -1943,8 +1943,76 @@ secretId 和 secretKey 如下图获取
 
 ![image](images/007.png)
 
-#### HC后台设置小程序信息
+#### 5、HC后台设置小程序信息
 
 打开自己部署的HC项目 登录 并且打开 系统管理下小程序配置 新增或修改一条记录
 
 ![image](images/008.png)
+
+
+## 业主版公众号安装
+
+#### 说明
+
+公众号代码和小程序代码为一个代码 是uni-app 项目
+[https://gitee.com/java110/WechatOwnerService.git](https://gitee.com/java110/WechatOwnerService.git)
+
+#### 1、需要工具
+
+公众号安装使用 需要准备 HBuildX工具，请到相应网站下载
+
+#### 2、HBuildX 设置
+
+由于小程序时通过uni-app 开发而成，编译时需要sass 和 less 请在HBulidX 工具 --> 插件安装安装 less 和 sass
+
+![image](images/001.png)
+![image](images/002.png)
+![image](images/003.png)
+
+#### 3、业主版代码相关设置
+
+打开constant--> UrlConstant.js 中修改 
+
+> const baseUrl = '/';
+
+这里修改为 / 部署时 会放到NGINX目录下 不然会夸域
+
+#### 4、打开 HC小区管理系统-->系统管理下-->公众号 菜单
+
+![image](images/009.png)
+
+添加或修改公众号，以下为必填信息
+
+![image](images/010.png)
+
+添加成功后会有服务端url和token 需要配置在微信后台
+
+![image](images/011.png)
+
+再微信公众号后台 开发--> 基本配置 修改服务器配置，启用就可以
+
+![image](images/012.png)
+
+#### 5、再HBuildX 打包为H5 上传服务器 用NGINX代理 到跟目录就可以
+
+如果是二级域名和HC的设置的域名不一致请在NGINX代理时 加如下配置
+
+>location /callComponent
+ {  
+   add_header 'Access-Control-Allow-Origin' '*';  
+   proxy_pass   http://您的私网IP:8012;
+ }
+> location /app
+> {  
+   add_header 'Access-Control-Allow-Origin' '*';  
+   proxy_pass   http://您的私网IP:8012;
+> }
+
+#### 6、配置微信菜单
+
+菜单配置完全按照微信要求配置，这里配置完发布时会同步微信，同步时的报错也是微信反馈信息，目前只支持 url方式和小程序方式
+其他请自行二次开发扩展
+
+![image](images/013.png)
+
+
