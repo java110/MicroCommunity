@@ -1902,3 +1902,49 @@ secretId 和 secretKey 如下图获取
 ![image](../images/api/011.png)
 
 ![image](../images/api/012.png)
+
+## 业主版小程序安装
+
+#### 需要工具
+
+小程序安装使用 需要准备 HBuildX和微信开发者工具，请到相应网站下载
+
+#### HBuildX 设置
+
+由于小程序时通过uni-app 开发而成，编译时需要sass 和 less 请在HBulidX 工具 --> 插件安装安装 less 和 sass
+
+![image](images/001.png)
+![image](images/002.png)
+![image](images/003.png)
+
+#### 微信开发者工具设置
+
+进入微信开发者工具后 可能项目中的appId 为官方测试appId 需要再详情 点击修改为自己的小程序appId
+
+![image](images/004.png)
+
+再设置-->通用设置 下安全选项中开启服务端口
+
+![image](images/005.png)
+
+#### 业主版代码相关设置
+
+打开constant--> UrlConstant.js 中修改 
+
+> const baseUrl = 'https://app.demo.winqi.cn/';
+
+这里地址修改为自己后端的地址 这个地址需要HTTPS 域名备案才行
+
+在运行--> 运行到小程序模拟器
+
+![image](images/006.png)
+
+此时在小程序开发者工具上已经运行出来了，点击 上传 发布
+
+![image](images/007.png)
+
+#### HC后台设置小程序信息
+
+打开自己部署的HC项目 登录 并且打开 系统管理下小程序配置 新增或修改一条记录
+
+![image](images/008.png)
