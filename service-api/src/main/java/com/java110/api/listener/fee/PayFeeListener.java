@@ -13,6 +13,7 @@ import com.java110.core.smo.fee.IFeeAttrInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
@@ -22,6 +23,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -111,7 +114,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
             repairPoolPo.setCommunityId(paramObj.getString("communityId"));
             repairPoolPo.setState(RepairDto.STATE_APPRAISE);
-            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(),  BeanConvertUtil.beanCovertMap(repairPoolPo));
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairPoolPo));
             businesses.add(business);
         }
 
@@ -154,6 +157,29 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
             throw new IllegalArgumentException("收费已经结束，不能再缴费");
         }
+
+        Date endTime = feeDto.getEndTime();
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(feeDto.getConfigId());
+        feeConfigDto.setCommunityId(paramInObj.getString("communityId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        if (feeConfigDtos != null && feeConfigDtos.size() == 1) {
+            try {
+                Date configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
+
+                Date newDate = DateUtil.stepMonth(endTime, paramInObj.getInteger("cycles") - 1);
+
+                if (newDate.getTime() > configEndTime.getTime()){
+                    throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+                }
+
+            } catch (Exception e) {
+                logger.error("比较费用日期失败", e);
+            }
+        }
+
 
     }
 
