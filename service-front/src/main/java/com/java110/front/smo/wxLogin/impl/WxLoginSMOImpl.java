@@ -1,26 +1,28 @@
 package com.java110.front.smo.wxLogin.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.IPageData;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.CallApiServiceFactory;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.wxLogin.IWxLoginSMO;
-import com.java110.core.context.IPageData;
-import com.java110.core.factory.AuthenticationFactory;
-import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.*;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,64 +84,21 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         String openId = responseObj.getString("openid");
         String sessionKey = responseObj.getString("session_key");
 
-        responseEntity = super.getUserInfoByOpenId(pd, restTemplate, openId);
-
-        logger.debug("查询用户信息返回报文：" + responseEntity);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId + ", " + responseEntity.getBody());
-        }
-
-        JSONObject userResult = JSONObject.parseObject(responseEntity.getBody());
-        int total = userResult.getIntValue("total");
+        //responseEntity = super.getUserInfoByOpenId(pd, restTemplate, openId);
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setOpenId(openId);
+        List<OwnerAppUserDto> ownerAppUserDtos = CallApiServiceFactory.getForApis(pd, ownerAppUserDto, ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS, OwnerAppUserDto.class);
         JSONObject paramOut = new JSONObject();
-        JSONObject userInfo = paramIn.getJSONObject("userInfo");
-
-        if (total == 0) {
-            //保存用户信息
-            /*JSONObject registerInfo = new JSONObject();
-
-            //设置默认密码
-            String userDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
-            Assert.hasLength(userDefaultPassword, "映射表中未设置员工默认密码，请检查" + MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
-            userDefaultPassword = AuthenticationFactory.passwdMd5(userDefaultPassword);
-
-            registerInfo.put("userId", "-1");
-            registerInfo.put("email", "");
-            registerInfo.put("address", userInfo.getString("country") + userInfo.getString("province") + userInfo.getString("city"));
-            registerInfo.put("locationCd", "001");
-            registerInfo.put("age", "1");
-            registerInfo.put("sex", "2".equals(userInfo.getString("gender")) ? "1" : "0");
-            registerInfo.put("tel", "-1");
-            registerInfo.put("level_cd", "1");
-            registerInfo.put("name", userInfo.getString("nickName"));
-            registerInfo.put("password", userDefaultPassword);
-            JSONArray userAttr = new JSONArray();
-            JSONObject userAttrObj = new JSONObject();
-            userAttrObj.put("attrId", "-1");
-            userAttrObj.put("specCd", "100201911001");
-            userAttrObj.put("value", openId);
-            userAttr.add(userAttrObj);
-            registerInfo.put("businessUserAttr", userAttr);
-            responseEntity = this.callCenterService(restTemplate, pd, registerInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/user.service.register", HttpMethod.POST);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                throw new IllegalArgumentException("保存用户信息失败");
-            }
-            responseEntity = super.getUserInfoByOpenId(pd, restTemplate, openId);
-
-            logger.debug("查询用户信息返回报文：" + responseEntity);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId);
-            }
-            userResult = JSONObject.parseObject(responseEntity.getBody());*/
+        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+            //将openId放到redis 缓存，给前段下发临时票据
             paramOut.put("openId", openId);
             paramOut.put("msg", "还没有注册请先注册");
             responseEntity = new ResponseEntity<String>(paramOut.toJSONString(), HttpStatus.UNAUTHORIZED);
 
             return responseEntity;
         }
-
-        JSONObject realUserInfo = userResult.getJSONArray("users").getJSONObject(0);
-        userInfo.putAll(realUserInfo);
+        JSONObject userInfo = paramIn.getJSONObject("userInfo");
+        userInfo.putAll(BeanConvertUtil.beanCovertMap(ownerAppUserDtos.get(0)));
         userInfo.put("password", "");
 
         try {
