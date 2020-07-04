@@ -166,7 +166,7 @@
             and t.is_instance= #{isInstance}
         </if>
         <if test="name !=null and name != ''">
-            and t.name concat('%',#{name},'%')
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="serviceName !=null and serviceName != ''">
             and t.name like concat('%',#{serviceName},'%')
@@ -279,7 +279,7 @@
             and t.is_instance= #{isInstance}
         </if>
         <if test="name !=null and name != ''">
-            and t.name concat('%',#{name},'%')
+            and t.name  like concat('%',#{name},'%')
         </if>
         <if test="serviceName !=null and serviceName != ''">
             and t.name like concat('%',#{serviceName},'%')
