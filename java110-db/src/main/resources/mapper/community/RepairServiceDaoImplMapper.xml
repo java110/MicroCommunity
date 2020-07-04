@@ -435,6 +435,9 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="states !=null and states != ''">
+            and t.state in (#{states})
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -487,6 +490,9 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="states !=null and states != ''">
+            and t.state in (#{states})
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
