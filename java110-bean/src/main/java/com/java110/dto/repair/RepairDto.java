@@ -1,9 +1,11 @@
 package com.java110.dto.repair;
 
 import com.java110.dto.PageDto;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -73,6 +75,7 @@ public class RepairDto extends PageDto implements Serializable {
     private String repairObjType;
     private String repairObjId;
     private String repairObjName;
+    private List<PhotoVo> photos;
 
 
     public String getRepairName() {
@@ -267,5 +270,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRepairObjName(String repairObjName) {
         this.repairObjName = repairObjName;
+    }
+
+    public List<PhotoVo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoVo> photos) {
+        this.photos = photos;
     }
 }

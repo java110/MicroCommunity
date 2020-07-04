@@ -1,6 +1,7 @@
 package com.java110.dto.communityLocation;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,10 @@ import java.util.Date;
 public class CommunityLocationDto extends PageDto implements Serializable {
 
     private String locationName;
-private String locationId;
-private String locationType;
-private String communityId;
+    private String locationId;
+    private String locationType;
+    private String communityId;
+    private String locationTypeName;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String communityId;
     public String getLocationName() {
         return locationName;
     }
-public void setLocationName(String locationName) {
+
+    public void setLocationName(String locationName) {
         this.locationName = locationName;
     }
-public String getLocationId() {
+
+    public String getLocationId() {
         return locationId;
     }
-public void setLocationId(String locationId) {
+
+    public void setLocationId(String locationId) {
         this.locationId = locationId;
     }
-public String getLocationType() {
+
+    public String getLocationType() {
         return locationType;
     }
-public void setLocationType(String locationType) {
+
+    public void setLocationType(String locationType) {
         this.locationType = locationType;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -65,5 +74,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getLocationTypeName() {
+        return locationTypeName;
+    }
+
+    public void setLocationTypeName(String locationTypeName) {
+        this.locationTypeName = locationTypeName;
     }
 }

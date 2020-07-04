@@ -73,8 +73,9 @@
     <select id="getCommunityLocationInfo" parameterType="Map" resultType="Map">
         select t.location_name,t.location_name locationName,t.location_id,t.location_id
         locationId,t.location_type,t.location_type locationType,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id
-        bId,t.community_id,t.community_id communityId
+        bId,t.community_id,t.community_id communityId,d.name locationTypeName
         from community_location t
+        left join t_dict d on t.flow_type = d.status_cd and d.table_name = 'community_location' and d.table_columns = 'location_type'
         where 1 =1
         <if test="locationName !=null and locationName != ''">
             and t.location_name= #{locationName}

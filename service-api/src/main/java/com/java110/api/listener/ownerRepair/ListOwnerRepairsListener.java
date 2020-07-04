@@ -5,14 +5,18 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.smo.common.IFileRelInnerServiceSMO;
 import com.java110.core.smo.community.IRepairInnerServiceSMO;
 import com.java110.core.smo.community.IRepairUserInnerServiceSMO;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import com.java110.vo.api.junkRequirement.ApiJunkRequirementDataVo;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +37,9 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -82,7 +89,7 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
         if (count > 0) {
             ownerRepairs = repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto);
 
-            refreshStaffName(ownerRepairs);
+            refreshRepair(ownerRepairs);
         } else {
             ownerRepairs = new ArrayList<>();
         }
@@ -94,7 +101,7 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
 
     }
 
-    private void refreshStaffName(List<RepairDto> ownerRepairs) {
+    private void refreshRepair(List<RepairDto> ownerRepairs) {
 
         List<String> repairIds = new ArrayList<>();
         for (RepairDto apiOwnerRepairDataVo : ownerRepairs) {
@@ -115,6 +122,23 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
                     //apiOwnerRepairDataVo.setStatmpRepairUserDto.getUserName());
                 }
             }
+        }
+
+        //刷入图片信息
+        List<PhotoVo> photoVos = null;
+        PhotoVo photoVo = null;
+        for (RepairDto repairDto : ownerRepairs) {
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(repairDto.getRepairId());
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            photoVos = new ArrayList<>();
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                photoVo = new PhotoVo();
+                photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                photoVos.add(photoVo);
+            }
+
+            repairDto.setPhotos(photoVos);
         }
 
     }
