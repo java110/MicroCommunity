@@ -74,8 +74,8 @@ public class ListStaffFinishRepairsListener extends AbstractServiceApiListener {
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
         ownerRepairDto.setStaffId(reqJson.getString("userId"));
 
-        if(reqJson.containsKey("states")){
-            String[] states = reqJson.getString("states").split(",");
+        if(reqJson.containsKey("repairStates")){
+            String[] states = reqJson.getString("repairStates").split(",");
             ownerRepairDto.setStates(Arrays.asList(states));
         }
 
