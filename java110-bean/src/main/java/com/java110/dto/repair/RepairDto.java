@@ -43,8 +43,6 @@ public class RepairDto extends PageDto implements Serializable {
     public static final String REPAIR_WAY_TRAINING = "300"; //抢单模式
 
 
-
-
     private String repairName;
     private String appointmentTime;
     private String repairType;
@@ -52,7 +50,7 @@ public class RepairDto extends PageDto implements Serializable {
     private String repairId;
     private String tel;
     private String state;
-    private String states;
+    private List<String> states;
     private String stateName;
     private String communityId;
     private String roomId;
@@ -281,11 +279,11 @@ public class RepairDto extends PageDto implements Serializable {
         this.photos = photos;
     }
 
-    public String getStates() {
+    public List<String> getStates() {
         return states;
     }
 
-    public void setStates(String states) {
+    public void setStates(List<String> states) {
         this.states = states;
     }
 }

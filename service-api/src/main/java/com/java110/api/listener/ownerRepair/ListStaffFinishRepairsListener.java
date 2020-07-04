@@ -18,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -72,6 +73,11 @@ public class ListStaffFinishRepairsListener extends AbstractServiceApiListener {
 
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
         ownerRepairDto.setStaffId(reqJson.getString("userId"));
+
+        if(reqJson.containsKey("states")){
+            String[] states = reqJson.getString("states").split(",");
+            ownerRepairDto.setStates(Arrays.asList(states));
+        }
 
         int count = repairInnerServiceSMOImpl.queryStaffFinishRepairsCount(ownerRepairDto);
 
