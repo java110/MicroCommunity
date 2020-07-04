@@ -1,5 +1,6 @@
 package com.java110.api.listener.ownerRepair;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ownerRepair.IOwnerRepairBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
@@ -7,8 +8,12 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.common.IFileInnerServiceSMO;
+import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -16,6 +21,7 @@ import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
@@ -28,6 +34,9 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IOwnerRepairBMO ownerRepairBMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -70,6 +79,32 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setRuId("-1");
         super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+
+
+        if (reqJson.containsKey("photos") && !StringUtils.isEmpty(reqJson.getString("photos"))) {
+            JSONArray photos = reqJson.getJSONArray("photos");
+            for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
+                FileDto fileDto = new FileDto();
+                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                fileDto.setFileName(fileDto.getFileId());
+                fileDto.setContext(photos.getJSONObject(_photoIndex).getString("photo"));
+                fileDto.setSuffix("jpeg");
+                fileDto.setCommunityId(reqJson.getString("communityId"));
+                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+                reqJson.put("ownerPhotoId", fileDto.getFileId());
+                reqJson.put("fileSaveName", fileName);
+
+                JSONObject businessUnit = new JSONObject();
+                businessUnit.put("fileRelId", "-" + (_photoIndex + 1));
+                businessUnit.put("relTypeCd", FileRelDto.REL_TYPE_CD_REPAIR);
+                businessUnit.put("saveWay", "ftp");
+                businessUnit.put("objId", businessOwnerRepair.getString("repairId"));
+                businessUnit.put("fileRealName", fileName);
+                businessUnit.put("fileSaveName", fileName);
+                FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            }
+        }
 
 
     }

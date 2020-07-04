@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class FileRelDto extends PageDto implements Serializable {
 
+
+    public static final String REL_TYPE_CD_REPAIR = "14000";//报修图片
+
     private String relTypeCd;
     private String[] relTypeCds;
     private String saveWay;
