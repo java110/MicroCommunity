@@ -82,7 +82,7 @@ public class ToNotifySMOImpl implements IToNotifySMO {
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         ResponseEntity<String> responseEntity = null;
         for (String key : map.keySet()) {
-            if("wId".equals(wId)){
+            if("wId".equals(key)){
                 continue;
             }
             paramMap.put(key, map.get(key).toString());
