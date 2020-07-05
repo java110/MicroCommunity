@@ -140,7 +140,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
         Assert.listOnlyOne(repairDtos, "维修单有多条或不存在");
 
-        feePo.setPayerObjId(repairDtos.get(0).getRoomId());
+        feePo.setPayerObjId(repairDtos.get(0).getRepairObjId());
         feePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         feePo.setState(FeeDto.STATE_DOING);
         feePo.setUserId(userId);
