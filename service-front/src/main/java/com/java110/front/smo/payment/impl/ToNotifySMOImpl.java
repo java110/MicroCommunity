@@ -1,6 +1,9 @@
 package com.java110.front.smo.payment.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.WechatFactory;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.payment.IToNotifySMO;
@@ -8,6 +11,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import org.slf4j.Logger;
@@ -46,12 +50,10 @@ public class ToNotifySMOImpl implements IToNotifySMO {
             if ("SUCCESS".equalsIgnoreCase(returnCode)) {
                 String returnmsg = (String) map.get("result_code");
                 if ("SUCCESS".equals(returnmsg)) {
-//更新数据
-
-                    int result = confirmPayFee(map);
-
+                    //更新数据
+                    int result = confirmPayFee(map, request.getParameter("wId"));
                     if (result > 0) {
-//支付成功
+                        //支付成功
                         resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
                                 + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml>";
                     }
@@ -75,13 +77,24 @@ public class ToNotifySMOImpl implements IToNotifySMO {
         return new ResponseEntity<String>(resXml, HttpStatus.OK);
     }
 
-    public int confirmPayFee(Map<String, Object> map) {
+    public int confirmPayFee(Map<String, Object> map, String wId) {
+        wId = wId.replace(" ", "+");
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         ResponseEntity<String> responseEntity = null;
         for (String key : map.keySet()) {
             paramMap.put(key, map.get(key).toString());
         }
-        String sign = PayUtil.createSign(paramMap, wechatAuthProperties.getKey());
+        String appId = WechatFactory.getAppId(wId);
+        SmallWeChatDto smallWeChatDto = getSmallWechat(appId);
+
+        if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
+            smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setAppId(wechatAuthProperties.getAppId());
+            smallWeChatDto.setAppSecret(wechatAuthProperties.getSecret());
+            smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
+            smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
+        }
+        String sign = PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword());
 
         if (!sign.equals(map.get("sign"))) {
             throw new IllegalArgumentException("鉴权失败");
@@ -164,6 +177,28 @@ public class ToNotifySMOImpl implements IToNotifySMO {
             return responseEntity;
         }
 
+    }
+
+
+    private SmallWeChatDto getSmallWechat(String appId) {
+
+        ResponseEntity responseEntity = null;
+
+        responseEntity = this.callCenterService(restTemplate, "-1", "",
+                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                        + appId + "&page=1&row=1", HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return null;
+        }
+        JSONObject smallWechatObj = JSONObject.parseObject(responseEntity.getBody().toString());
+        JSONArray smallWeChats = smallWechatObj.getJSONArray("smallWeChats");
+
+        if (smallWeChats == null || smallWeChats.size() < 1) {
+            return null;
+        }
+
+        return BeanConvertUtil.covertBean(smallWeChats.get(0), SmallWeChatDto.class);
     }
 
 }
