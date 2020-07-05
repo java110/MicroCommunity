@@ -98,7 +98,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
             }
         }
 
-        if (dataFlowContext.getResponseEntity() == null) {
+        if (dataFlowContext.getResponseEntity() == null || responseEntity.getStatusCode() != HttpStatus.OK) {
             responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
             dataFlowContext.setResponseEntity(responseEntity);
         }
