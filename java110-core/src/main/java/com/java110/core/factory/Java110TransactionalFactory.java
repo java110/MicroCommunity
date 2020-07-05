@@ -1,5 +1,7 @@
 package com.java110.core.factory;
 
+import com.java110.utils.util.StringUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +45,16 @@ public class Java110TransactionalFactory {
     }
 
     public static String getOrCreateTId(){
+        String tId = get(T_ID);
+
+        if(StringUtil.isEmpty(tId)){
+
+        }
         return "";
+    }
+
+    private void createTId(){
+
     }
 
 }

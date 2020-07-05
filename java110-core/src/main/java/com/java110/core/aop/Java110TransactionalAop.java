@@ -1,5 +1,6 @@
 package com.java110.core.aop;
 
+import com.java110.core.factory.Java110TransactionalFactory;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -45,6 +46,9 @@ public class Java110TransactionalAop {
     public void deBefore(JoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
         logger.debug("方法调用前执行deBefore（）");
+
+        //全局事务ID申请
+        Java110TransactionalFactory.getOrCreateTId();
 
     }
 
