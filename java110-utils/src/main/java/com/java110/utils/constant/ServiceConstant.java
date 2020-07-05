@@ -11,5 +11,10 @@ public class ServiceConstant {
      */
     public static final  String SERVICE_API_URL = "http://api-service";
 
+    /**
+     * API中心服务
+     */
+    public static final  String SERVICE_ORDER_URL = "http://order-service";
+
     //public  static final String SERVICE_API_URL = "http://api.java110.com:8008";
 }

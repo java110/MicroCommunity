@@ -35,6 +35,14 @@ public class ApplicationContextFactory {
         return null;
     }
 
+    /**
+     * 获取应用名称
+     * @return
+     */
+    public static String getApplicationName(){
+        return applicationContext.getEnvironment().getProperty("spring.application.name");
+    }
+
 
     // 国际化使用
     public static String getMessage(String key) {

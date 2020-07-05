@@ -11,6 +11,23 @@ import java.util.Map;
  */
 public interface ICenterServiceDAO {
 
+
+    /**
+     * 查询订单
+     * @param order
+     * @return
+     * @throws DAOException
+     */
+    public Map getOrder(Map order) throws DAOException;
+
+    /**
+     * 查询订单项
+     * @param orderItem
+     * @return
+     * @throws DAOException
+     */
+    public List<Map> getOrderItems(Map orderItem) throws DAOException;
+
     /**
      * 保存订单信息
      *

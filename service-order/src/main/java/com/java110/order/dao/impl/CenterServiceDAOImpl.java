@@ -25,6 +25,22 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     protected final static Logger logger = LoggerFactory.getLogger(CenterServiceDAOImpl.class);
 
+    @Override
+    public Map getOrder(Map order) throws DAOException {
+        List<Map> orders = sqlSessionTemplate.selectList("centerServiceDAOImpl.getOrder", order);
+        if (orders != null && orders.size() > 0) {
+            return orders.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map> getOrderItems(Map orderItem) throws DAOException {
+        List<Map> orderItems = sqlSessionTemplate.selectList("centerServiceDAOImpl.getOrderItems", orderItem);
+
+        return orderItems;
+    }
+
     /**
      * 保存订单信息
      *

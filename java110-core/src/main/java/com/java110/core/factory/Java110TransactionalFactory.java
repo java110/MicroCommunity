@@ -1,6 +1,20 @@
 package com.java110.core.factory;
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.order.OrderDto;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +29,27 @@ import java.util.Map;
  **/
 public class Java110TransactionalFactory {
 
+    private static Logger logger = LoggerFactory.getLogger(Java110TransactionalFactory.class);
+
+    //订单服务
+    private static final String URL_API = ServiceConstant.SERVICE_ORDER_URL + "/order/oIdApi";
+
+    /**
+     * 创建事务ID
+     */
+    private static final String CREATE_O_ID = URL_API + "/createOId";
+
+    /**
+     * 回退事务ID
+     */
+    private static final String FALLBACK_O_ID = URL_API + "/fallBackOId";
+
+
     //全局事务ID
-    public static final String T_ID = "t-id";
+    public static final String O_ID = "O-ID";
 
     //当前服务ID
-    public static final String SERVICE_ID = "service-id";
+    public static final String SERVICE_ID = "SERVICE-ID";
 
     private static ThreadLocal<Map<String, String>> threadLocal = new ThreadLocal<Map<String, String>>() {
         @Override
@@ -44,17 +74,92 @@ public class Java110TransactionalFactory {
         return threadLocal.get();
     }
 
-    public static String getOrCreateTId(){
-        String tId = get(T_ID);
-
-        if(StringUtil.isEmpty(tId)){
-
+    public static String getOrCreateOId(OrderDto orderDto) {
+        //全局事务开启者
+        if (StringUtils.isEmpty(orderDto.getoId())) {
+            createOId(orderDto);
         }
-        return "";
+        String oId = get(O_ID);
+        return oId;
     }
 
-    private void createTId(){
-
+    /**
+     * 获取事务ID
+     *
+     * @return
+     */
+    public static String getOId() {
+        String oId = get(O_ID);
+        return oId;
     }
 
+    /**
+     * 创建事务
+     *
+     * @param orderDto
+     */
+    private static void createOId(OrderDto orderDto) {
+        RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        HttpHeaders header = new HttpHeaders();
+        HttpEntity<String> httpEntity = new HttpEntity<String>(JSONObject.toJSONString(orderDto), header);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(CREATE_O_ID, HttpMethod.POST, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("请求地址为,{} 请求订单服务信息，{},订单服务返回信息，{}", CREATE_O_ID, httpEntity, responseEntity);
+        }
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("创建事务失败" + responseEntity.getBody());
+        }
+        JSONObject order = JSONObject.parseObject(responseEntity.getBody());
+
+        if (!order.containsKey("oId") || StringUtils.isEmpty(order.getString("oId"))) {
+            throw new IllegalArgumentException("创建事务失败" + responseEntity.getBody());
+        }
+        orderDto.setoId(order.getString("oId"));
+        //将事务ID 存放起来
+        put(O_ID, orderDto.getoId());
+    }
+
+    /**
+     * 处理失败，回退事务
+     */
+    public static void fallbackOId() {
+        String oId = getOId();
+        if (StringUtil.isEmpty(oId)) {
+            //当前没有开启事务无需回退
+            logger.debug("当前没有开启事务无需回退");
+            return;
+        }
+        OrderDto orderDto = new OrderDto();
+        orderDto.setoId(oId);
+        RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        HttpHeaders header = new HttpHeaders();
+        HttpEntity<String> httpEntity = new HttpEntity<String>(JSONObject.toJSONString(orderDto), header);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(FALLBACK_O_ID, HttpMethod.POST, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("回退事务 请求地址为,{} 请求订单服务信息，{},订单服务返回信息，{}", FALLBACK_O_ID, httpEntity, responseEntity);
+        }
+
+        if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            //当前没有开启事务无需回退
+            logger.debug("当前没有开启事务无需回退");
+            return;
+        }
+
+        if (responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            throw new IllegalArgumentException("回退事务失败" + responseEntity.getBody());
+        }
+
+    }
 }

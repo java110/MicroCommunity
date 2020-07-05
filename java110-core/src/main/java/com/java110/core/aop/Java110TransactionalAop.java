@@ -1,6 +1,7 @@
 package com.java110.core.aop;
 
 import com.java110.core.factory.Java110TransactionalFactory;
+import com.java110.dto.order.OrderDto;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -15,8 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Enumeration;
 
 /**
  * @ClassName Java110TransactionalAop
@@ -45,11 +50,29 @@ public class Java110TransactionalAop {
     @Before("dataProcess()")
     public void deBefore(JoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
-        logger.debug("方法调用前执行deBefore（）");
-
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        OrderDto orderDto = new OrderDto();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+            if (OrderDto.APP_ID.equals(key.toUpperCase())) {
+                orderDto.setAppId(value);
+            }
+            if (OrderDto.TRANSACTION_ID.equals(key.toUpperCase())) {
+                orderDto.setExtTransactionId(value);
+            }
+            if (OrderDto.REQUEST_TIME.equals(key.toUpperCase())) {
+                orderDto.setRequestTime(value);
+            }
+            if (OrderDto.O_ID.equals(key.toUpperCase())) {
+                orderDto.setoId(value);
+            }
+        }
+        orderDto.setOrderTypeCd(OrderDto.ORDER_TYPE_DEAL);
         //全局事务ID申请
-        Java110TransactionalFactory.getOrCreateTId();
-
+        Java110TransactionalFactory.getOrCreateOId(orderDto);
     }
 
     @AfterReturning(returning = "ret", pointcut = "dataProcess()")
@@ -63,6 +86,8 @@ public class Java110TransactionalAop {
     public void throwException(JoinPoint jp) {
         logger.debug("方法调用异常执行throwException（）");
 
+        //回退事务
+        Java110TransactionalFactory.fallbackOId();
     }
 
     //后置最终通知,final增强，不管是抛出异常或者正常退出都会执行

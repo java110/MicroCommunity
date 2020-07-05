@@ -4,6 +4,40 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="centerServiceDAOImpl">
 
+
+    <!-- 查询订单信息 -->
+    <select id="getOrder" resultType="Map" parameterType="Map">
+        SELECT `o_id` oId, `app_id` appId, `ext_transaction_id` extTransactionId, `user_id` userId, `request_time`
+        requestTime,
+        `create_time` createTime,`order_type_cd` orderTypeCd, `finish_time` finishTime, `remark`
+        from c_orders t
+        where t.status_cd = '0'
+        <if test="oId != null and oId != ''">
+            and t.o_id = #{oId}
+        </if>
+        <if test="extTransactionId != null and extTransactionId != ''">
+            and t.ext_transaction_id = #{extTransactionId}
+        </if>
+        <if test="appId != null and appId != ''">
+            and t.app_id = #{appId}
+        </if>
+    </select>
+
+    <!-- 查询订单项信息 -->
+    <select id="getOrderItems" resultType="Map" parameterType="Map">
+        select t.b_id bId,t.o_id oId,t.create_time createTime,t.action,t.action_obj actionObj,
+        t.finish_time finishTime,t.remark,ul.service_name serviceName,ul.log_text logText
+        from c_order_item t
+        LEFT JOIN unitem_log ul on t.b_id = ul.b_id and t.o_id = ul.o_id and ul.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="oId != null and oId != ''">
+            and t.o_id = #{oId}
+        </if>
+        <if test="bId != null and bId != ''">
+            and t.b_id = #{bId}
+        </if>
+    </select>
+
     <!--保存订单信息 c_orders 中 -->
     <insert id="saveOrder" parameterType="Map">
         <![CDATA[

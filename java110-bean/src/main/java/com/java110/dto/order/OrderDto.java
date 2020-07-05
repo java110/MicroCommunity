@@ -5,6 +5,25 @@ import com.java110.dto.PageDto;
 import java.io.Serializable;
 
 public class OrderDto extends PageDto implements Serializable {
+
+    public static final String APP_ID = "APP-ID";
+    public static final String TRANSACTION_ID = "TRANSACTION-ID";
+    public static final String REQUEST_TIME = "REQUEST-TIME";
+
+    public static final String O_ID = "O-ID";
+
+    //受理单
+    public static final String ORDER_TYPE_DEAL = "D";
+
+
+    private String appId;
+    private String extTransactionId;
+    private String userId;
+    private String requestTime;
+    private String orderTypeCd;
+    private String finishTime;
+    private String remark;
+
     private String oId;
 
     private String bId;
@@ -44,5 +63,61 @@ public class OrderDto extends PageDto implements Serializable {
 
     public void setBusinessTypeCds(String[] businessTypeCds) {
         this.businessTypeCds = businessTypeCds;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getExtTransactionId() {
+        return extTransactionId;
+    }
+
+    public void setExtTransactionId(String extTransactionId) {
+        this.extTransactionId = extTransactionId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getRequestTime() {
+        return requestTime;
+    }
+
+    public void setRequestTime(String requestTime) {
+        this.requestTime = requestTime;
+    }
+
+    public String getOrderTypeCd() {
+        return orderTypeCd;
+    }
+
+    public void setOrderTypeCd(String orderTypeCd) {
+        this.orderTypeCd = orderTypeCd;
+    }
+
+    public String getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
