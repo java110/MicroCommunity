@@ -51,7 +51,7 @@ public class ToNotifySMOImpl implements IToNotifySMO {
                 String returnmsg = (String) map.get("result_code");
                 if ("SUCCESS".equals(returnmsg)) {
                     //更新数据
-                    int result = confirmPayFee(map, request.getParameter("wId"));
+                    int result = confirmPayFee(map);
                     if (result > 0) {
                         //支付成功
                         resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
@@ -77,8 +77,8 @@ public class ToNotifySMOImpl implements IToNotifySMO {
         return new ResponseEntity<String>(resXml, HttpStatus.OK);
     }
 
-    public int confirmPayFee(Map<String, Object> map, String wId) {
-        wId = wId.replace(" ", "+");
+    public int confirmPayFee(Map<String, Object> map) {
+        String wId = map.get("wId").toString();
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         ResponseEntity<String> responseEntity = null;
         for (String key : map.keySet()) {
