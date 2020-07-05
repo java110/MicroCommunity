@@ -173,12 +173,12 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserPo.setRepairId(reqJson.getString("repairId"));
         repairUserPo.setStaffId(reqJson.getString("staffId"));
         repairUserPo.setStaffName(reqJson.getString("staffName"));
+        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(reqJson.getString("repairId"));
         repairUserDto.setStaffId(reqJson.getString("staffId"));
         repairUserDto.setCommunityId(reqJson.getString("communityId"));
-        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserDto.setState(RepairUserDto.STATE_TRANSFER);
+        repairUserDto.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE});
         repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
 
         if (repairUserDtos == null || repairUserDtos.size() < 1) {
@@ -186,7 +186,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
                     || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())
             ) {
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_WAIT);
-                return ;
+                return;
             } else {
                 throw new IllegalArgumentException("未找到上级处理人");
             }
