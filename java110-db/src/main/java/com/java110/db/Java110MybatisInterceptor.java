@@ -1,23 +1,23 @@
 package com.java110.db;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.ibatis.executor.statement.StatementHandler;
-import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.SystemMetaObject;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import java.beans.Statement;
-import java.lang.reflect.Proxy;
-import java.util.*;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 
 @Intercepts({
-        @Signature(type = StatementHandler.class, method = "update", args = {Statement.class}),
-        @Signature(type = StatementHandler.class, method = "query", args = {Statement.class}),
-        @Signature(type = StatementHandler.class, method = "batch", args = {Statement.class})
+        @Signature(type = Executor.class, method = "update", args = {MappedStatement.class,
+                Object.class})
 })
 
 public class Java110MybatisInterceptor implements Interceptor {
@@ -25,58 +25,68 @@ public class Java110MybatisInterceptor implements Interceptor {
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        Statement statement;
-        //获取方法参数
-        Object firstArg = invocation.getArgs()[0];
-        if (Proxy.isProxyClass(firstArg.getClass())) {
-            statement = (Statement) SystemMetaObject.forObject(firstArg).getValue("h.statement");
-        } else {
-            statement = (Statement) firstArg;
+        MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
+        SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
+        Object parameter = null;
+        if (invocation.getArgs().length > 1) {
+            parameter = invocation.getArgs()[1];
         }
-        MetaObject stmtMetaObj = SystemMetaObject.forObject(statement);
-        //获取Statement对象（sql语法已经构建完毕）
-        statement = (Statement) stmtMetaObj.getValue("stmt.statement");
+
+        BoundSql boundSql = mappedStatement.getBoundSql(parameter);
+        Configuration configuration = mappedStatement.getConfiguration();
         //获取sql语句
-        String originalSql = statement.toString();
+        String sql = showSql(configuration, boundSql);
 
-        //将原始sql中的空白字符（\s包括换行符，制表符，空格符）替换为" "
-        originalSql = originalSql.replaceAll("[\\s]+", " ");
-
-        //只获取sql的select/update/insert/delete开头的sql
-        int index = indexOfSqlStart(originalSql);
-        if (index > 0) {
-            originalSql = originalSql.substring(index);
+        switch (sqlCommandType) {
+            case INSERT:
+                dealInsertSql(mappedStatement, parameter,sql);
+                break;
+            case UPDATE:
+                dealUpdateSql(mappedStatement, parameter,sql);
+                break;
+            case DELETE:
+                dealDeleteSql(mappedStatement, parameter,sql);
+                break;
         }
+        return invocation.proceed();
+    }
 
-        // 计算执行 SQL 耗时
-        long start = System.currentTimeMillis();
-        Object result = invocation.proceed();
-        long timing = System.currentTimeMillis() - start;
+    /**
+     * 处理删除sql
+     *
+     * @param mappedStatement
+     * @param parameter
+     */
+    private void dealDeleteSql(MappedStatement mappedStatement, Object parameter,String sql) {
+    }
 
-        //获取MapperStatement对象，获取到sql的详细信息
-        Object realTarget = realTarget(invocation.getTarget());
-        //获取metaObject对象
-        MetaObject metaObject = SystemMetaObject.forObject(realTarget);
-        //获取MappedStatement对象
-        MappedStatement ms = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
-        StringBuilder formatSql = new StringBuilder()
-                .append(" Time：").append(timing)
-                //获取Mapper信息和方法信息
-                .append(" ms - ID：").append(ms.getId())
-                .append("Execute SQL：")
-                .append(originalSql);
-        //打印sql信息
-        logger.debug(formatSql.toString());
-        return result;
+    /**
+     * 处理修改 sql
+     *
+     * @param mappedStatement
+     * @param parameter
+     */
+    private void dealUpdateSql(MappedStatement mappedStatement, Object parameter,String sql) {
+    }
+
+    /**
+     * 处理insert 语句
+     *
+     * @param mappedStatement
+     * @param parameter
+     */
+    private void dealInsertSql(MappedStatement mappedStatement, Object parameter,String sql) {
+        String deleteSql = "delete from ";
+
+
+
     }
 
     @Override
     public Object plugin(Object target) {
-        if (target instanceof StatementHandler) {
 
-            return Plugin.wrap(target, this);
-        }
-        return target;
+        return Plugin.wrap(target, this);
+
     }
 
     @Override
@@ -84,39 +94,48 @@ public class Java110MybatisInterceptor implements Interceptor {
 
     }
 
-    /**
-     * 获取sql语句开头部分
-     *
-     * @param sql
-     * @return
-     */
-    private int indexOfSqlStart(String sql) {
-        String upperCaseSql = sql.toUpperCase();
-        Set<Integer> set = new HashSet<>();
-        set.add(upperCaseSql.indexOf("SELECT "));
-        set.add(upperCaseSql.indexOf("UPDATE "));
-        set.add(upperCaseSql.indexOf("INSERT "));
-        set.add(upperCaseSql.indexOf("DELETE "));
-        set.remove(-1);
-        if (CollectionUtils.isEmpty(set)) {
-            return -1;
+    public String showSql(Configuration configuration, BoundSql boundSql) {
+        Object parameterObject = boundSql.getParameterObject();
+        List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
+        String sql = boundSql.getSql().replaceAll("[\\s]+", " ");
+        if (parameterMappings.size() > 0 && parameterObject != null) {
+            TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+            if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
+                sql = sql.replaceFirst("\\?", getParameterValue(parameterObject));
+
+            } else {
+                MetaObject metaObject = configuration.newMetaObject(parameterObject);
+                for (ParameterMapping parameterMapping : parameterMappings) {
+                    String propertyName = parameterMapping.getProperty();
+                    if (metaObject.hasGetter(propertyName)) {
+                        Object obj = metaObject.getValue(propertyName);
+                        sql = sql.replaceFirst("\\?", getParameterValue(obj));
+                    } else if (boundSql.hasAdditionalParameter(propertyName)) {
+                        Object obj = boundSql.getAdditionalParameter(propertyName);
+                        sql = sql.replaceFirst("\\?", getParameterValue(obj));
+                    }
+                }
+            }
         }
-        List<Integer> list = new ArrayList<>(set);
-        list.sort(Comparator.naturalOrder());
-        return list.get(0);
+        return sql;
     }
 
-    /**
-     * <p>
-     * 获得真正的处理对象,可能多层代理.
-     * </p>
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T realTarget(Object target) {
-        if (Proxy.isProxyClass(target.getClass())) {
-            MetaObject metaObject = SystemMetaObject.forObject(target);
-            return realTarget(metaObject.getValue("h.target"));
+    private String getParameterValue(Object obj) {
+        String value = null;
+        if (obj instanceof String) {
+            value = "'" + obj.toString() + "'";
+        } else if (obj instanceof Date) {
+            DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.CHINA);
+            value = "'" + formatter.format(obj) + "'";
+//	            System.out.println(value);
+        } else {
+            if (obj != null) {
+                value = obj.toString();
+            } else {
+                value = "";
+            }
+
         }
-        return (T) target;
+        return value;
     }
 }
