@@ -1,8 +1,7 @@
 package com.java110.core.smo.community;
 
-import com.java110.core.feign.FeignConfiguration;
+import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fastuser.FastuserDto;
-import com.java110.vo.api.fastuser.ApiFastuserDataVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

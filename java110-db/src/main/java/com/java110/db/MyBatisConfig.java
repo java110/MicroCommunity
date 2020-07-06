@@ -1,6 +1,7 @@
 package com.java110.db;
 
 import com.java110.config.properties.code.Java110Properties;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -49,14 +50,15 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setTypeAliasesPackage("tk.mybatis.springboot.model");
+        bean.setPlugins(new Interceptor[]{new Java110MybatisInterceptor()});
 
         //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
-           // bean.setMapperLocations(resolver.getResources("classpath:mapper/*/*.xml"));
+            // bean.setMapperLocations(resolver.getResources("classpath:mapper/*/*.xml"));
             Resource[] resources = null;
             List<Resource> resourceList = new ArrayList<Resource>();
-            for(String path : java110Properties.getMappingPath().split(",")) {
+            for (String path : java110Properties.getMappingPath().split(",")) {
                 resources = resolver.getResources(path);
                 resourceList.addAll(Arrays.asList(resources));
             }
@@ -78,6 +80,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new DataSourceTransactionManager(dataSource);
     }
+
 
     public Java110Properties getJava110Properties() {
         return java110Properties;

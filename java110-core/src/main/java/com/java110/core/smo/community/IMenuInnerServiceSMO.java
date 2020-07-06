@@ -1,6 +1,6 @@
 package com.java110.core.smo.community;
 
-import com.java110.core.feign.FeignConfiguration;
+import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;

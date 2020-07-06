@@ -10,14 +10,11 @@ import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.order.smo.IOIdServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -108,5 +105,34 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         } else {
             return new ResponseEntity<String>("", HttpStatus.OK);
         }
+    }
+
+    @Override
+    public ResponseEntity<String> createOrderItem(OrderItemDto orderItemDto) {
+
+        if (StringUtil.isEmpty(orderItemDto.getoId())) {
+            return new ResponseEntity<String>("请求报文中未包含事务ID", HttpStatus.NOT_FOUND);
+        }
+
+        if (StringUtil.isEmpty(orderItemDto.getAction())) {
+            return new ResponseEntity<String>("请求报文中未包含动作", HttpStatus.NOT_FOUND);
+        }
+
+        if (StringUtil.isEmpty(orderItemDto.getActionObj())) {
+            return new ResponseEntity<String>("请求报文中未包含动作对象", HttpStatus.NOT_FOUND);
+        }
+
+        if (StringUtil.isEmpty(orderItemDto.getServiceName())) {
+            return new ResponseEntity<String>("请求报文中未包含服务", HttpStatus.NOT_FOUND);
+        }
+        if (StringUtil.isEmpty(orderItemDto.getLogText())) {
+            return new ResponseEntity<String>("请求报文中未包含回滚日志", HttpStatus.NOT_FOUND);
+        }
+        if (StringUtil.isEmpty(orderItemDto.getbId()) || orderItemDto.getbId().startsWith("-")) {
+            orderItemDto.setbId(GenerateCodeFactory.getBId());
+        }
+        centerServiceDAOImpl.saveOrderItem(BeanConvertUtil.beanCovertMap(orderItemDto));
+
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 }

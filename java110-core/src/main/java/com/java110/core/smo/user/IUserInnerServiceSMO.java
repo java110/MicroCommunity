@@ -1,6 +1,6 @@
 package com.java110.core.smo.user;
 
-import com.java110.core.feign.FeignConfiguration;
+import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;

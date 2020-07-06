@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>java110-bean</module>
-        <module>java110-config</module>
+        <module>java110-interface</module>
         <module>java110-utils</module>
         <module>java110-core</module>
         <module>java110-service</module>
@@ -23,7 +23,6 @@
         <module>service-store</module>
         <module>service-rule</module>
         <module>service-order</module>
-        <module>service-comment</module>
         <module>service-api</module>
         <module>service-community</module>
         <module>service-job</module>
@@ -153,7 +152,7 @@
             </dependency>
             <dependency>
                 <groupId>com.java110</groupId>
-                <artifactId>java110-config</artifactId>
+                <artifactId>java110-interface</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 

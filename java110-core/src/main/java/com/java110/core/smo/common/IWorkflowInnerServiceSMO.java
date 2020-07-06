@@ -1,6 +1,6 @@
 package com.java110.core.smo.common;
 
-import com.java110.core.feign.FeignConfiguration;
+import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.workflow.WorkflowAuditInfoDto;
 import com.java110.dto.workflow.WorkflowDto;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -1,6 +1,6 @@
 package com.java110.core.smo.order;
 
-import com.java110.core.feign.FeignConfiguration;
+import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.order.BusinessDto;
 import com.java110.dto.order.OrderDto;
 import org.springframework.cloud.openfeign.FeignClient;

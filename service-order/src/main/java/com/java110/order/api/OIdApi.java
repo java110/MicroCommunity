@@ -2,6 +2,7 @@ package com.java110.order.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.order.OrderDto;
+import com.java110.dto.order.OrderItemDto;
 import com.java110.order.smo.IOIdServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +40,27 @@ public class OIdApi {
 
     /**
      * 回退事务
+     *
      * @param order
      * @return
      */
     @RequestMapping(path = "/fallBackOId", method = RequestMethod.POST)
-    public ResponseEntity<String> fallBackOId(@RequestBody String order){
+    public ResponseEntity<String> fallBackOId(@RequestBody String order) {
         JSONObject orderObj = JSONObject.parseObject(order);
         OrderDto orderDto = BeanConvertUtil.covertBean(orderObj, OrderDto.class);
         return tServiceSMOImpl.fallBackOId(orderDto);
+    }
+
+    /**
+     * 上报Item
+     *
+     * @param orderItem
+     * @return
+     */
+    @RequestMapping(path = "/createOrderItem", method = RequestMethod.POST)
+    public ResponseEntity<String> createOrderItem(@RequestBody String orderItem) {
+        JSONObject orderItemObj = JSONObject.parseObject(orderItem);
+        OrderItemDto orderItemDto = BeanConvertUtil.covertBean(orderItemObj, OrderItemDto.class);
+        return tServiceSMOImpl.createOrderItem(orderItemDto);
     }
 }

@@ -1,7 +1,7 @@
 package com.java110.core.smo.community;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.feign.FeignConfiguration;
+import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.inspectionTask.InspectionTaskDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

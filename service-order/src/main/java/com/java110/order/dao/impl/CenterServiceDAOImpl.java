@@ -6,6 +6,7 @@ import com.java110.entity.mapping.Mapping;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,28 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         List<Map> orderItems = sqlSessionTemplate.selectList("centerServiceDAOImpl.getOrderItems", orderItem);
 
         return orderItems;
+    }
+
+    @Override
+    public void saveOrderItem(Map orderItem) throws DAOException {
+        logger.debug("----【CenterServiceDAOImpl.saveOrderItem】保存数据入参 : " + JSONObject.toJSONString(orderItem));
+
+        int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveOrderItem", orderItem);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单项信息失败：" + JSONObject.toJSONString(orderItem));
+        }
+
+        if (!orderItem.containsKey("logText") || StringUtil.isEmpty(orderItem.get("logText") + "")) {
+            return;
+        }
+
+        saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveUnItemLog", orderItem);
+
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存回滚日志失败：" + JSONObject.toJSONString(orderItem));
+        }
+
+
     }
 
     /**

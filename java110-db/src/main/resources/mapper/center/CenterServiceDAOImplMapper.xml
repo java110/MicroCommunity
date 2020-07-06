@@ -38,6 +38,7 @@
         </if>
     </select>
 
+
     <!--保存订单信息 c_orders 中 -->
     <insert id="saveOrder" parameterType="Map">
         <![CDATA[
@@ -50,12 +51,23 @@
     <!-- 保存属性信息c_orders_attrs 中-->
     <insert id="saveOrderAttrs" parameterType="Map">
         <![CDATA[
-
-                    insert into c_orders_attrs(o_id,attr_id,spec_cd,value)
-                    values(#{oId},#{attrId},#{specCd},#{value})
-
+            insert into c_orders_attrs(o_id,attr_id,spec_cd,value)
+            values(#{oId},#{attrId},#{specCd},#{value})
         ]]>
     </insert>
+
+    <!--保存订单信息 c_order_item 中 -->
+    <insert id="saveOrderItem" parameterType="Map">
+        INSERT INTO `c_order_item` (`b_id`, `o_id`, `action`, `action_obj`, `finish_time`, `remark`)
+        VALUES (#{bId}, #{oId}, #{action}, #{actionObj}, #{finishTime}, #{remark})
+    </insert>
+
+    <!--保存订单信息 unitem_log 中 -->
+    <insert id="saveUnItemLog" parameterType="Map">
+        INSERT INTO `unitem_log` (`b_id`, `o_id`, `service_name`, `log_text`)
+        VALUES (#{bId}, #{oId}, #{serviceName}, #{logText})
+    </insert>
+
     <!-- 保存订单项信息 c_business -->
     <insert id="saveBusiness" parameterType="Map">
         <![CDATA[

@@ -28,7 +28,7 @@
 
         <dependency>
             <groupId>com.java110</groupId>
-            <artifactId>java110-config</artifactId>
+            <artifactId>java110-interface</artifactId>
         </dependency>
         <!--
         <dependency>

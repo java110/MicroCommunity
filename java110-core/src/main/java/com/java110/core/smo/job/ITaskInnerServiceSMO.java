@@ -1,6 +1,6 @@
 package com.java110.core.smo.job;
 
-import com.java110.core.feign.FeignConfiguration;
+import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.task.TaskDto;
 import com.java110.dto.task.TaskTemplateDto;
 import com.java110.dto.task.TaskTemplateSpecDto;

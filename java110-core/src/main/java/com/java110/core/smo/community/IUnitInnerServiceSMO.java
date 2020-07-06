@@ -1,6 +1,6 @@
 package com.java110.core.smo.community;
 
-import com.java110.core.feign.FeignConfiguration;
+import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.UnitDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.utils.exception.DAOException;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName IFloorInnerServiceSMO

@@ -31,7 +31,7 @@
 
         <dependency>
             <groupId>com.java110</groupId>
-            <artifactId>java110-config</artifactId>
+            <artifactId>java110-interface</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -61,7 +61,7 @@
                                 <artifactItems>
                                     <artifactItem>
                                         <groupId>com.java110</groupId>
-                                        <artifactId>java110-config</artifactId>
+                                        <artifactId>java110-interface</artifactId>
                                         <version>${microcommunity.version}</version>
                                         <type>jar</type>
                                         <overWrite>true</overWrite>

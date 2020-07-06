@@ -83,6 +83,17 @@ public class Assert extends org.springframework.util.Assert {
         hasLength(info.get(key) == null ? "" : info.get(key).toString(), message);
     }
 
+    /**
+     * 判断 jsonObject 是否为空
+     *
+     * @param info
+     * @param key
+     * @param message
+     */
+    public static void hasKeyAndValue(Object info, String key, String message) {
+        hasKeyAndValue(BeanConvertUtil.beanCovertMap(info), key, message);
+    }
+
 
     /**
      * 判断json是否为空

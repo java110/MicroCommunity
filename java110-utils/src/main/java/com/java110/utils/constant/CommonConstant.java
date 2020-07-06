@@ -138,6 +138,9 @@ public class CommonConstant {
 
     public final static String HTTP_SERVICE_API = "API";
     public final static String HTTP_SERVICE = "SERVICE";
+    public final static String HTTP_SUB_SERVICE = "SUB_SERVICE"; //微服务
+    public final static String HTTP_ACTION = "ACTION";
+    public final static String HTTP_RESOURCE = "RESOURCE";
     public final static String HTTP_METHOD = "METHOD";
     public final static String HTTP_APP_ID = "app_id";
     public final static String HTTP_TRANSACTION_ID = "transaction_id";

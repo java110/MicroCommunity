@@ -31,6 +31,14 @@ public interface ICenterServiceDAO {
     /**
      * 保存订单信息
      *
+     * @param orderItem 订单信息
+     * @return
+     */
+    public void saveOrderItem(Map orderItem) throws DAOException;
+
+    /**
+     * 保存订单信息
+     *
      * @param order 订单信息
      * @return
      */

@@ -3,33 +3,24 @@ package com.java110.api.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
-import com.java110.utils.cache.AppRouteCache;
-import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.KafkaConstant;
-import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.exception.BusinessException;
-import com.java110.utils.exception.DecryptException;
-import com.java110.utils.exception.InitConfigDataException;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.exception.NoAuthorityException;
-import com.java110.utils.exception.SMOException;
-import com.java110.utils.kafka.KafkaFactory;
-import com.java110.utils.log.LoggerEngine;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
+import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.AppService;
 import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
+import com.java110.utils.cache.AppRouteCache;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.*;
+import com.java110.utils.exception.*;
+import com.java110.utils.kafka.KafkaFactory;
+import com.java110.utils.log.LoggerEngine;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -244,7 +235,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         if (!StringUtil.isNullOrNone(dataFlow.getAppRoutes().get(0).getSecurityCode())) {
             String sign = AuthenticationFactory.apiDataFlowMd5(dataFlow);
             if (!sign.equals(dataFlow.getReqSign().toLowerCase())) {
-                throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "签名失败"+sign);
+                throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "签名失败" + sign);
             }
         }
 
@@ -309,6 +300,14 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                         "服务【" + appService.getServiceCode() + "】调用方式不对请检查,当前请求方式为：" + httpMethod);
             }
             dataFlow.setApiCurrentService(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER);
+        } else if ("T".equals(appService.getIsInstance())) {
+            //如果是透传类 请求方式必须与接口提供方调用方式一致
+            String httpMethod = dataFlow.getRequestCurrentHeaders().get(CommonConstant.HTTP_METHOD);
+            if (!appService.getMethod().equals(httpMethod)) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
+                        "服务【" + appService.getServiceCode() + "】调用方式不对请检查,当前请求方式为：" + httpMethod);
+            }
+            dataFlow.setApiCurrentService(ServiceCodeConstant.SERVICE_CODE_SYSTEM_TRANSFER);
         } else {
             dataFlow.setApiCurrentService(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));
         }
