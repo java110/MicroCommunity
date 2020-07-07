@@ -8,22 +8,37 @@ import com.java110.db.dao.IQueryServiceDAO;
 import com.java110.dto.order.OrderItemDto;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.plugin.*;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
+import org.apache.ibatis.plugin.Invocation;
+import org.apache.ibatis.plugin.Plugin;
+import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 @Intercepts({
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class,
@@ -86,6 +101,7 @@ public class Java110MybatisInterceptor implements Interceptor {
 
         if (deleteDatas != null && deleteDatas.size() > 0) {
             for (Map<String, Object> map : deleteDatas) {
+                dealReturnMap(map);
                 preValues.add(map);
             }
         }
@@ -157,6 +173,7 @@ public class Java110MybatisInterceptor implements Interceptor {
 
         if (deleteDatas != null && deleteDatas.size() > 0) {
             for (Map<String, Object> map : deleteDatas) {
+                dealReturnMap(map);
                 preValues.add(map);
                 afterVaule = new JSONObject();
                 afterVaule.putAll(map);
@@ -184,6 +201,22 @@ public class Java110MybatisInterceptor implements Interceptor {
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("注册事务回滚日志失败" + responseEntity);
+        }
+    }
+
+    private void dealReturnMap(Map<String, Object> map) {
+        for (String key : map.keySet()) {
+            Object value = map.get(key);
+            if (value instanceof String) {
+                map.put(key, "'" + map.get(key) + "'");
+            } else if (value instanceof Date) {
+                String tmpValue = DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
+                map.put(key, "'" + tmpValue + "'");
+            } else if (value instanceof Timestamp) {
+                Date date = new Date(((Timestamp) value).getTime());
+                String tmpValue = DateUtil.getFormatTimeString(date, DateUtil.DATE_FORMATE_STRING_A);
+                map.put(key, "'" + tmpValue + "'");
+            }
         }
     }
 
