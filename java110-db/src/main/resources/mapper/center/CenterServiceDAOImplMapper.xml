@@ -9,7 +9,7 @@
     <select id="getOrder" resultType="Map" parameterType="Map">
         SELECT `o_id` oId, `app_id` appId, `ext_transaction_id` extTransactionId, `user_id` userId, `request_time`
         requestTime,
-        `create_time` createTime,`order_type_cd` orderTypeCd, `finish_time` finishTime, `remark`
+        `create_time` createTime,`order_type_cd` orderTypeCd, `finish_time` finishTime, `remark`,t.status_cd statusCd
         from c_orders t
         where 1=1
         <if test="oId != null and oId != ''">
@@ -73,11 +73,17 @@
         set t.finish_time = #{finishTime},
              t.status_cd = #{statusCd}
         where t.o_id = #{oId}
+        <if test="bId !=null and bId != ''">
+            and t.b_id = #{bId}
+        </if>
     </update>
 
     <!-- 删除事务日志 -->
     <update id="deleteUnItemLog" parameterType="Map">
         delete from unitem_log where o_id = #{oId}
+        <if test="bId !=null and bId != ''">
+            and t.b_id = #{bId}
+        </if>
     </update>
 
 

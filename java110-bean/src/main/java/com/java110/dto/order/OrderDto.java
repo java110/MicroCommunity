@@ -28,6 +28,7 @@ public class OrderDto extends PageDto implements Serializable {
     private String oId;
 
     private String bId;
+    private String statusCd;
 
     private String businessTypeCd;
 
@@ -120,5 +121,13 @@ public class OrderDto extends PageDto implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

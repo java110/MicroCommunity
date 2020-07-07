@@ -101,24 +101,26 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
                 JSONArray params = generateParam(orderItemDto);
                 httpEntity = new HttpEntity<String>(params.toJSONString(), header);
                 restTemplate.exchange(FALLBACK_URL.replace(SERVICE_NAME, orderItemDto.getServiceName()), HttpMethod.POST, httpEntity, String.class);
+
+                //标记为订单项失败
+                Map info = new HashMap();
+                info.put("finishTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                info.put("statusCd", "E");
+                info.put("bId", orderItemDto.getbId());
+                info.put("oId", orderDto.getoId());
+                centerServiceDAOImpl.updateOrderItem(info);
+
+                //删除 事务日志
+                //centerServiceDAOImpl.deleteUnItemLog(info);
             } catch (Exception e) {
                 logger.error("回退事务失败", e);
                 errorOrderItemDtos.add(orderItemDto);
             }
         }
 
-        //标记为订单项失败
-        Map info = new HashMap();
-        info.put("finishTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        info.put("statusCd", "E");
-        info.put("oId", orderDto.getoId());
-        centerServiceDAOImpl.updateOrderItem(info);
-
-        //删除 事务日志
-        centerServiceDAOImpl.deleteUnItemLog(info);
 
         //标记为订单失败
-        info = new HashMap();
+        Map info = new HashMap();
         info.put("finishTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         info.put("statusCd", "E");
         info.put("oId", orderDto.getoId());
@@ -237,11 +239,11 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         String logText = orderItemDto.getLogText();
 
         JSONObject logTextObj = JSONObject.parseObject(logText);
-        JSONArray preValues = logTextObj.getJSONArray("preValue");
-        for (int preValueIndex = 0; preValueIndex < preValues.size(); preValueIndex++) {
+        JSONArray afterValues = logTextObj.getJSONArray("afterValue");
+        for (int preValueIndex = 0; preValueIndex < afterValues.size(); preValueIndex++) {
             sql = "delete from " + orderItemDto.getActionObj() + " where 1=1 ";
             param = new JSONObject();
-            JSONObject keyValue = preValues.getJSONObject(preValueIndex);
+            JSONObject keyValue = afterValues.getJSONObject(preValueIndex);
             for (String key : keyValue.keySet()) {
                 sql += (" and " + key + "=" + keyValue.getString(key));
             }
@@ -276,6 +278,12 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         if (StringUtil.isEmpty(orderItemDto.getbId()) || orderItemDto.getbId().startsWith("-")) {
             orderItemDto.setbId(GenerateCodeFactory.getBId());
         }
+        //判断OID是否存在
+        OrderDto orderDto = BeanConvertUtil.covertBean(centerServiceDAOImpl.getOrder(BeanConvertUtil.beanCovertMap(orderItemDto)), OrderDto.class);
+
+        if (orderDto == null || "E".equals(orderDto.getStatusCd())) {
+            return new ResponseEntity<String>("当前没有事务或者事务已经回滚", HttpStatus.NOT_FOUND);
+        }
         centerServiceDAOImpl.saveOrderItem(BeanConvertUtil.beanCovertMap(orderItemDto));
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
@@ -301,7 +309,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         centerServiceDAOImpl.updateOrderItem(info);
 
         //删除 事务日志
-        centerServiceDAOImpl.deleteUnItemLog(info);
+        //centerServiceDAOImpl.deleteUnItemLog(info);
 
         //完成订单
         info = new HashMap();

@@ -40,7 +40,7 @@ public class SaveAppraiseServiceImpl implements ISaveAppraiseService {
     @Java110Transactional
     public AppraiseDto saveAppraise(@RequestBody AppraiseDto appraiseDto) {
         validate(appraiseDto);
-        if (appraiseDto.getAppraiseId().startsWith("-")) {
+        if (StringUtil.isEmpty(appraiseDto.getAppraiseId())|| appraiseDto.getAppraiseId().startsWith("-")) {
             appraiseDto.setAppraiseId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appraiseId));
         }
 
