@@ -1,5 +1,6 @@
 package com.java110.dto.order;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
@@ -87,5 +88,10 @@ public class OrderItemDto extends PageDto implements Serializable {
 
     public void setLogText(String logText) {
         this.logText = logText;
+    }
+
+    @Override
+    public String toString() {
+        return JSONObject.toJSONString(this);
     }
 }

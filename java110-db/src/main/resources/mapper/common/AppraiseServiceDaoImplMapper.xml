@@ -7,10 +7,10 @@
     <!-- 保存评价信息 add by wuxw 2018-07-03 -->
     <insert id="saveAppraise" parameterType="Map">
         INSERT INTO appraise (`appraise_id`, `appraise_score`, `appraise_type`, `context`, `parent_appraise_id`,
-        `appraise_user_id`, `appraise_user_name`, `obj_type`, `obj_id`)
+        `appraise_user_id`, `appraise_user_name`, `obj_type`, `obj_id`,status_cd)
         VALUES (#{appraiseId}, #{appraiseScore}, #{appraiseType}, #{context}, #{parentAppraiseId}, #{appraiseUserId},
         #{appraiseUserName},
-        #{objType}, #{objId});
+        #{objType}, #{objId},'0');
     </insert>
 
 </mapper>

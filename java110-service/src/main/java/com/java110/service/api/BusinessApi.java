@@ -1,13 +1,13 @@
 package com.java110.service.api;
 
+import com.java110.core.base.controller.BaseController;
+import com.java110.core.factory.DataTransactionFactory;
+import com.java110.service.context.DataQuery;
+import com.java110.service.context.DataQueryFactory;
+import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.util.Assert;
-import com.java110.service.context.DataQueryFactory;
-import com.java110.core.factory.DataTransactionFactory;
-import com.java110.core.base.controller.BaseController;
-import com.java110.service.context.DataQuery;
-import com.java110.service.smo.IQueryServiceSMO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -163,6 +163,17 @@ public class BusinessApi extends BaseController {
         } catch (Exception e) {
             logger.error("加载头信息失败", e);
             throw e;
+        }
+    }
+
+
+    @RequestMapping(path = "/businessApi/fallBack", method = RequestMethod.POST)
+    public ResponseEntity<String> fallBack(@RequestBody String fallBackInfo) {
+        try {
+            return queryServiceSMOImpl.fallBack(fallBackInfo);
+        } catch (Exception e) {
+            logger.error("请求订单异常", e);
+            return new ResponseEntity<String>("处理异常", HttpStatus.BAD_REQUEST);
         }
     }
 

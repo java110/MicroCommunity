@@ -9,6 +9,7 @@ public class OrderDto extends PageDto implements Serializable {
     public static final String APP_ID = "APP-ID";
     public static final String TRANSACTION_ID = "TRANSACTION-ID";
     public static final String REQUEST_TIME = "REQUEST-TIME";
+    public static final String USER_ID = "USER-ID";
 
     public static final String O_ID = "O-ID";
 

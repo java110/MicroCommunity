@@ -34,4 +34,12 @@ public interface IOIdServiceSMO {
      * @return
      */
     ResponseEntity<String> createOrderItem(OrderItemDto orderItemDto);
+
+
+    /**
+     * 完成事务
+     *
+     * @return
+     */
+    ResponseEntity<String> finishOrder(OrderDto orderDto);
 }

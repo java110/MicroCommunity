@@ -64,6 +64,23 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     }
 
+    @Override
+    public void updateOrderItem(Map orderItem) throws DAOException {
+        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateOrderItem", orderItem);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "修改订单项失败：" + JSONObject.toJSONString(orderItem));
+        }
+    }
+
+    @Override
+    public void deleteUnItemLog(Map unItemLog) throws DAOException {
+        int saveFlag = sqlSessionTemplate.delete("centerServiceDAOImpl.deleteUnItemLog", unItemLog);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "删除事务日志失败：" + JSONObject.toJSONString(unItemLog));
+        }
+    }
+
+
     /**
      * 保存订单信息
      *

@@ -63,4 +63,16 @@ public class OIdApi {
         OrderItemDto orderItemDto = BeanConvertUtil.covertBean(orderItemObj, OrderItemDto.class);
         return tServiceSMOImpl.createOrderItem(orderItemDto);
     }
+
+    /**
+     * 完成事务
+     *
+     * @return
+     */
+    @RequestMapping(path = "/finishOId", method = RequestMethod.POST)
+    public ResponseEntity<String> finishOId(@RequestBody String order) {
+        JSONObject orderObj = JSONObject.parseObject(order);
+        OrderDto orderDto = BeanConvertUtil.covertBean(orderObj, OrderDto.class);
+        return tServiceSMOImpl.finishOrder(orderDto);
+    }
 }

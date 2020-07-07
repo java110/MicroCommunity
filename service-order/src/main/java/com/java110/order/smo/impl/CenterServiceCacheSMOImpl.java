@@ -17,7 +17,7 @@ import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
 import com.java110.service.context.DataQuery;
 import com.java110.entity.service.ServiceSql;
-import com.java110.service.dao.IQueryServiceDAO;
+import com.java110.db.dao.IQueryServiceDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

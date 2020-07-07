@@ -8,6 +8,11 @@ import java.util.Date;
  */
 public class AppraiseDto implements Serializable {
 
+    //评价单
+    public static final String OBJ_TYPE_REPAIR = "10001";
+
+    public static final String APPRAISE_TYPE_PUBLIC = "10000"; // 评价类型 普通类型
+
 
     private String appraiseId;
     private int appraiseScore;
@@ -19,6 +24,7 @@ public class AppraiseDto implements Serializable {
     private String appraiseUserName;
     private String objType;
     private String objId;
+    private String statusCd;
 
 
     public String getAppraiseId() {
@@ -99,5 +105,13 @@ public class AppraiseDto implements Serializable {
 
     public void setObjId(String objId) {
         this.objId = objId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

@@ -7,6 +7,7 @@ import com.java110.dto.appraise.AppraiseDto;
 import com.java110.intf.common.appraise.ISaveAppraiseService;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +42,10 @@ public class SaveAppraiseServiceImpl implements ISaveAppraiseService {
         validate(appraiseDto);
         if (appraiseDto.getAppraiseId().startsWith("-")) {
             appraiseDto.setAppraiseId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appraiseId));
+        }
+
+        if (StringUtil.isEmpty(appraiseDto.getParentAppraiseId())) {
+            appraiseDto.setParentAppraiseId("-1");
         }
         int saveFlag = appraiseServiceDaoImpl.saveAppraise(BeanConvertUtil.beanCovertMap(appraiseDto));
         if (saveFlag > 0) {

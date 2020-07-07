@@ -4,13 +4,7 @@ import com.java110.core.factory.Java110TransactionalFactory;
 import com.java110.dto.order.OrderDto;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -69,6 +63,9 @@ public class Java110TransactionalAop {
             if (OrderDto.O_ID.equals(key.toUpperCase())) {
                 orderDto.setoId(value);
             }
+            if (OrderDto.USER_ID.equals(key.toUpperCase())) {
+                orderDto.setUserId(value);
+            }
         }
         orderDto.setOrderTypeCd(OrderDto.ORDER_TYPE_DEAL);
         //全局事务ID申请
@@ -86,8 +83,7 @@ public class Java110TransactionalAop {
     public void throwException(JoinPoint jp) {
         logger.debug("方法调用异常执行throwException（）");
 
-        //回退事务
-        Java110TransactionalFactory.fallbackOId();
+
     }
 
     //后置最终通知,final增强，不管是抛出异常或者正常退出都会执行
@@ -95,8 +91,6 @@ public class Java110TransactionalAop {
     public void after(JoinPoint jp) throws IOException {
         // 接收到请求，记录请求内容
         logger.debug("方法调用后执行after（）");
-
-
     }
 
     //环绕通知,环绕增强，相当于MethodInterceptor
@@ -104,9 +98,17 @@ public class Java110TransactionalAop {
     public Object around(ProceedingJoinPoint pjp) {
         try {
             Object o = pjp.proceed();
+            //观察者不做处理
+            if (Java110TransactionalFactory.ROLE_OBSERVER.equals(Java110TransactionalFactory.getServiceRole())) {
+                return o;
+            }
+            //完成事务
+            Java110TransactionalFactory.finishOId();
             return o;
         } catch (Throwable e) {
             logger.error("执行方法异常", e);
+            //回退事务
+            Java110TransactionalFactory.fallbackOId();
             return new ResponseEntity("内部异常" + e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }

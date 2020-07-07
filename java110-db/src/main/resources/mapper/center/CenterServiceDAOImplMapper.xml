@@ -11,7 +11,7 @@
         requestTime,
         `create_time` createTime,`order_type_cd` orderTypeCd, `finish_time` finishTime, `remark`
         from c_orders t
-        where t.status_cd = '0'
+        where 1=1
         <if test="oId != null and oId != ''">
             and t.o_id = #{oId}
         </if>
@@ -29,7 +29,7 @@
         t.finish_time finishTime,t.remark,ul.service_name serviceName,ul.log_text logText
         from c_order_item t
         LEFT JOIN unitem_log ul on t.b_id = ul.b_id and t.o_id = ul.o_id and ul.status_cd = '0'
-        where t.status_cd = '0'
+        where 1=1
         <if test="oId != null and oId != ''">
             and t.o_id = #{oId}
         </if>
@@ -44,7 +44,7 @@
         <![CDATA[
 
                     insert into c_orders(o_id,app_id,ext_transaction_id,user_id,request_time,order_type_cd,remark,status_cd)
-                    values(#{oId},#{appId},#{extTransactionId},#{userId},#{requestTime},#{orderTypeCd},#{remark},#{statusCd})
+                    values(#{oId},#{appId},#{extTransactionId},#{userId},#{requestTime},#{orderTypeCd},#{remark},'S')
 
         ]]>
     </insert>
@@ -58,15 +58,29 @@
 
     <!--保存订单信息 c_order_item 中 -->
     <insert id="saveOrderItem" parameterType="Map">
-        INSERT INTO `c_order_item` (`b_id`, `o_id`, `action`, `action_obj`, `finish_time`, `remark`)
-        VALUES (#{bId}, #{oId}, #{action}, #{actionObj}, #{finishTime}, #{remark})
+        INSERT INTO `c_order_item` (`b_id`, `o_id`, `action`, `action_obj`, `finish_time`, `remark`,status_cd)
+        VALUES (#{bId}, #{oId}, #{action}, #{actionObj}, #{finishTime}, #{remark},'S')
     </insert>
 
     <!--保存订单信息 unitem_log 中 -->
     <insert id="saveUnItemLog" parameterType="Map">
-        INSERT INTO `unitem_log` (`b_id`, `o_id`, `service_name`, `log_text`)
-        VALUES (#{bId}, #{oId}, #{serviceName}, #{logText})
+        INSERT INTO `unitem_log` (`b_id`, `o_id`, `service_name`, `log_text`,status_cd)
+        VALUES (#{bId}, #{oId}, #{serviceName}, #{logText},'0')
     </insert>
+    <!-- 修改订单项信息 -->
+    <update id="updateOrderItem" parameterType="Map">
+        update c_order_item t
+        set t.finish_time = #{finishTime},
+             t.status_cd = #{statusCd}
+        where t.o_id = #{oId}
+    </update>
+
+    <!-- 删除事务日志 -->
+    <update id="deleteUnItemLog" parameterType="Map">
+        delete from unitem_log where o_id = #{oId}
+    </update>
+
+
 
     <!-- 保存订单项信息 c_business -->
     <insert id="saveBusiness" parameterType="Map">

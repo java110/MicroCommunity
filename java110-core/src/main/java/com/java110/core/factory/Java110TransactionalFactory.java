@@ -8,11 +8,7 @@ import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -44,12 +40,25 @@ public class Java110TransactionalFactory {
      */
     private static final String FALLBACK_O_ID = URL_API + "/fallBackOId";
 
+    /**
+     * 回退事务ID
+     */
+    private static final String FINISH_O_ID = URL_API + "/finishOId";
+
 
     //全局事务ID
     public static final String O_ID = "O-ID";
 
     //当前服务ID
     public static final String SERVICE_ID = "SERVICE-ID";
+
+    //服务角色 创建事务者 还是 观察者
+    public static final String SERVICE_ROLE = "SERVICE-ROLE";
+
+    //创建者
+    public static final String ROLE_CREATE = "creator";
+
+    public static final String ROLE_OBSERVER = "observer";
 
     private static ThreadLocal<Map<String, String>> threadLocal = new ThreadLocal<Map<String, String>>() {
         @Override
@@ -78,9 +87,13 @@ public class Java110TransactionalFactory {
         //全局事务开启者
         if (StringUtils.isEmpty(orderDto.getoId())) {
             createOId(orderDto);
+            put(SERVICE_ROLE, ROLE_CREATE);
+        } else {
+            put(SERVICE_ROLE, ROLE_OBSERVER);//观察者
         }
-        String oId = get(O_ID);
-        return oId;
+        //将事务ID 存放起来
+        put(O_ID, orderDto.getoId());
+        return orderDto.getoId();
     }
 
     /**
@@ -90,6 +103,17 @@ public class Java110TransactionalFactory {
      */
     public static String getOId() {
         String oId = get(O_ID);
+        return oId;
+    }
+
+
+    /**
+     * 获取事务ID
+     *
+     * @return
+     */
+    public static String getServiceRole() {
+        String oId = get(SERVICE_ROLE);
         return oId;
     }
 
@@ -130,7 +154,7 @@ public class Java110TransactionalFactory {
      */
     public static void fallbackOId() {
         String oId = getOId();
-        if (StringUtil.isEmpty(oId)) {
+        if (StringUtil.isEmpty(oId) || ROLE_OBSERVER.equals(getServiceRole())) {
             //当前没有开启事务无需回退
             logger.debug("当前没有开启事务无需回退");
             return;
@@ -159,6 +183,44 @@ public class Java110TransactionalFactory {
 
         if (responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new IllegalArgumentException("回退事务失败" + responseEntity.getBody());
+        }
+
+    }
+
+    /**
+     * 处理失败，回退事务
+     */
+    public static void finishOId() {
+        String oId = getOId();
+        if (StringUtil.isEmpty(oId) || ROLE_OBSERVER.equals(getServiceRole())) {
+            //当前没有开启事务无需回退
+            logger.debug("当前没有开启事务无需回退");
+            return;
+        }
+        OrderDto orderDto = new OrderDto();
+        orderDto.setoId(oId);
+        RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        HttpHeaders header = new HttpHeaders();
+        HttpEntity<String> httpEntity = new HttpEntity<String>(JSONObject.toJSONString(orderDto), header);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(FINISH_O_ID, HttpMethod.POST, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("完成事务 请求地址为,{} 请求订单服务信息，{},订单服务返回信息，{}", FINISH_O_ID, httpEntity, responseEntity);
+        }
+
+        if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            //当前没有开启事务无需回退
+            logger.debug("当前没有开启事务无需处理");
+            return;
+        }
+
+        if (responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            throw new IllegalArgumentException("完成事务失败" + responseEntity.getBody());
         }
 
     }

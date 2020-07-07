@@ -1,10 +1,10 @@
-package com.java110.service.dao.impl;
+package com.java110.db.dao.impl;
 
 import com.java110.utils.util.StringUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.order.ServiceBusiness;
 import com.java110.entity.service.ServiceSql;
-import com.java110.service.dao.IQueryServiceDAO;
+import com.java110.db.dao.IQueryServiceDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
