@@ -50,6 +50,7 @@ public class Java110TransactionalAop {
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = request.getHeader(key);
+            key = key.toLowerCase();
             if (CommonConstant.APP_ID.equals(key)) {
                 orderDto.setAppId(value);
             }

@@ -8,7 +8,7 @@ public class OrderDto extends PageDto implements Serializable {
 
 
 
-    public static final String O_ID = "O-ID";
+    public static final String O_ID = "o-id";
 
     //受理单
     public static final String ORDER_TYPE_DEAL = "D";
