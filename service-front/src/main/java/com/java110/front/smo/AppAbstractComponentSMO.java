@@ -129,7 +129,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
     private Map<String, String> java110UnifieldOrder(RestTemplate outRestTemplate, String feeName, String orderNum,
                                                      String tradeType, double payAmount, String openid,
                                                      SmallWeChatDto smallWeChatDto) throws Exception {
-//封装参数
+
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         paramMap.put("appid", smallWeChatDto.getAppId());
         paramMap.put("mch_id", smallWeChatDto.getMchId());
