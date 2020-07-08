@@ -1,14 +1,14 @@
 package com.java110.core.aop;
 
 import com.java110.core.factory.Java110TransactionalFactory;
+import com.java110.dto.BusinessDto;
 import com.java110.dto.order.OrderDto;
+import com.java110.utils.constant.CommonConstant;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -51,19 +51,19 @@ public class Java110TransactionalAop {
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = request.getHeader(key);
-            if (OrderDto.APP_ID.equals(key.toUpperCase())) {
+            if (CommonConstant.APP_ID.equals(key)) {
                 orderDto.setAppId(value);
             }
-            if (OrderDto.TRANSACTION_ID.equals(key.toUpperCase())) {
+            if (CommonConstant.TRANSACTION_ID.equals(key)) {
                 orderDto.setExtTransactionId(value);
             }
-            if (OrderDto.REQUEST_TIME.equals(key.toUpperCase())) {
+            if (CommonConstant.REQUEST_TIME.equals(key)) {
                 orderDto.setRequestTime(value);
             }
-            if (OrderDto.O_ID.equals(key.toUpperCase())) {
+            if (OrderDto.O_ID.equals(key)) {
                 orderDto.setoId(value);
             }
-            if (OrderDto.USER_ID.equals(key.toUpperCase())) {
+            if (CommonConstant.USER_ID.equals(key)) {
                 orderDto.setUserId(value);
             }
         }
@@ -95,9 +95,10 @@ public class Java110TransactionalAop {
 
     //环绕通知,环绕增强，相当于MethodInterceptor
     @Around("dataProcess()")
-    public Object around(ProceedingJoinPoint pjp) {
+    public Object around(ProceedingJoinPoint pjp) throws Throwable {
+        Object o = null;
         try {
-            Object o = pjp.proceed();
+            o = pjp.proceed();
             //观察者不做处理
             if (Java110TransactionalFactory.ROLE_OBSERVER.equals(Java110TransactionalFactory.getServiceRole())) {
                 return o;
@@ -109,7 +110,8 @@ public class Java110TransactionalAop {
             logger.error("执行方法异常", e);
             //回退事务
             Java110TransactionalFactory.fallbackOId();
-            return new ResponseEntity("内部异常" + e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+            //return new BusinessDto(BusinessDto.CODE_ERROR, "内部异常" + e.getLocalizedMessage());
+            throw e;
         }
     }
 }

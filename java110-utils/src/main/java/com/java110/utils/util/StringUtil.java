@@ -453,6 +453,21 @@ public class StringUtil {
     }
 
     /**
+     * 校验是否为JSON
+     *
+     * @param msg
+     * @return
+     */
+    public static Boolean isJsonObject(String msg) {
+        try {
+            JSONObject.parseObject(msg);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 获取指定长度(按字节长度获取)的字符串，中文算2个字节长度，兼容oracle的 varchar2长度计算方式
      *
      * @param src    源字符串

@@ -1,6 +1,7 @@
 package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.order.OrderDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.entity.center.AppRoute;
 import org.springframework.http.ResponseEntity;
@@ -130,6 +131,19 @@ public class ApiDataFlow extends AbstractDataFlowContext {
             this.setReqSign(headerAll.get(CommonConstant.HTTP_SIGN));
             this.setRequestTime(headerAll.get(CommonConstant.HTTP_REQ_TIME));
             this.setUserId(headerAll.get(CommonConstant.HTTP_USER_ID));
+
+            if (headerAll.containsKey(CommonConstant.APP_ID)) {
+                this.setAppId(headerAll.get(CommonConstant.APP_ID));
+            }
+            if (headerAll.containsKey(CommonConstant.TRANSACTION_ID)) {
+                this.setTransactionId(headerAll.get(CommonConstant.TRANSACTION_ID));
+            }
+            if (headerAll.containsKey(CommonConstant.REQUEST_TIME)) {
+                this.setRequestTime(headerAll.get(CommonConstant.REQUEST_TIME));
+            }
+            if (headerAll.containsKey(CommonConstant.USER_ID)) {
+                this.setUserId(headerAll.get(CommonConstant.USER_ID));
+            }
 
             if (headerAll != null){
                 this.requestHeaders.putAll(headerAll);

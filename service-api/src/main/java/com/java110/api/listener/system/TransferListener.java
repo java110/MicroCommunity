@@ -57,14 +57,23 @@ public class TransferListener extends AbstractServiceApiListener {
             if (CommonConstant.HTTP_METHOD_GET.equals(service.getMethod())) {
                 responseEntity = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
             } else if (CommonConstant.HTTP_METHOD_PUT.equals(service.getMethod())) {
-                responseEntity = restTemplate.exchange(service.getUrl(), HttpMethod.PUT, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.PUT, httpEntity, String.class);
             } else if (CommonConstant.HTTP_METHOD_DELETE.equals(service.getMethod())) {
                 responseEntity = restTemplate.exchange(requestUrl, HttpMethod.DELETE, httpEntity, String.class);
             } else {
-                responseEntity = restTemplate.exchange(service.getUrl(), HttpMethod.POST, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
             }
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+            logger.error("请求下游服务【" + requestUrl + "】异常，参数为" + httpEntity + e.getResponseBodyAsString(), e);
+            String body = e.getResponseBodyAsString();
+
+            if(StringUtil.isJsonObject(body)){
+                JSONObject bodyObj = JSONObject.parseObject(body);
+                if(bodyObj.containsKey("message") && !StringUtil.isEmpty(bodyObj.getString("message"))){
+                    body = bodyObj.getString("message");
+                }
+            }
+            responseEntity = new ResponseEntity<String>(body, e.getStatusCode());
         }
 
         logger.debug("API 服务调用下游服务请求：{}，返回为：{}", httpEntity, responseEntity);

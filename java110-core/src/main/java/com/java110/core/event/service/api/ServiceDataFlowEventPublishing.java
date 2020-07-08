@@ -88,6 +88,11 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
                     && ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER.equals(serviceCode)) {
                 dataFlowListeners.add(listener);
             }
+            //特殊处理 透传类接口
+            if (ServiceCodeConstant.SERVICE_CODE_SYSTEM_TRANSFER.equals(listener.getServiceCode())
+                    && ServiceCodeConstant.SERVICE_CODE_SYSTEM_TRANSFER.equals(serviceCode)) {
+                dataFlowListeners.add(listener);
+            }
         }
 
         //这里排序
