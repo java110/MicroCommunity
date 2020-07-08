@@ -29,11 +29,21 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.UUID;
 
 public class PayUtil {
 
-    static Logger log = LogManager.getLogger(PayUtil.class.getName());
+    static Logger logger = LogManager.getLogger(PayUtil.class.getName());
 
     /**
      * 获取当前机器的ip
@@ -118,6 +128,7 @@ public class PayUtil {
             }
         }
         sb.append("key=" + key);
+        logger.debug("加密前串：" + sb.toString());
         String sign = md5(sb.toString()).toUpperCase();
         return sign;
     }
