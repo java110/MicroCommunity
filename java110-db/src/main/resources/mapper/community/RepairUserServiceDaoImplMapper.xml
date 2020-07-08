@@ -157,18 +157,14 @@
         <if test="context !=null and context != ''">
             , t.context= #{context}
         </if>
-        <if test="repairId !=null and repairId != ''">
-            , t.repair_id= #{repairId}
-        </if>
+
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-        <if test="staffId !=null and staffId != ''">
-            , t.staff_id= #{staffId}
-        </if>
+
         <if test="end_time !=null ">
             , t.end_time= #{end_time}
         </if>
@@ -179,6 +175,15 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
         </if>
 
     </update>
