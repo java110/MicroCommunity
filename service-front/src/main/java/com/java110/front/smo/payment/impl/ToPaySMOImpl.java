@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.dto.app.AppDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
@@ -81,8 +83,17 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         String orderId = orderInfo.getString("oId");
         double money = Double.parseDouble(orderInfo.getString("receivableAmount"));
+        String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
+        if (AppDto.WECHAT_OWNER_APP_ID.equals(pd.getAppId())) {
+            appType = OwnerAppUserDto.APP_TYPE_WECHAT;
+        }else if(AppDto.WECHAT_MINA_OWNER_APP_ID.equals(pd.getAppId())){
+            appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
+        }else{
+            appType = OwnerAppUserDto.APP_TYPE_APP;
+        }
         Map tmpParamIn = new HashMap();
         tmpParamIn.put("userId", pd.getUserId());
+        tmpParamIn.put("appType", appType);
         responseEntity = super.getOwnerAppUser(pd, restTemplate, tmpParamIn);
         logger.debug("查询用户信息返回报文：" + responseEntity);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

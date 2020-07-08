@@ -7,6 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
+import com.java110.dto.app.AppDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -97,7 +98,7 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
 
         for (ApiSmallWeChatDataVo apiSmallWeChatDataVo : smallWeChats) {
             apiSmallWeChatDataVo.setwId(WechatFactory.getWId(apiSmallWeChatDataVo.getAppId()));
-            if (OWNER_APP.equals(appId) || OWNER_WECHAT_APP.equals(appId)) {
+            if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId) || AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {
                 continue;
             }
             apiSmallWeChatDataVo.setAppSecret("");
