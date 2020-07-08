@@ -9,7 +9,6 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.smallWeChat.ApiSmallWeChatDataVo;
@@ -30,6 +29,7 @@ import java.util.List;
 public class ListSmallWeChatsListener extends AbstractServiceApiListener {
 
     private static String OWNER_APP = "992019111758490006";
+    private static String OWNER_WECHAT_APP = "992020061452450002";
 
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
@@ -97,7 +97,7 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
 
         for (ApiSmallWeChatDataVo apiSmallWeChatDataVo : smallWeChats) {
             apiSmallWeChatDataVo.setwId(WechatFactory.getWId(apiSmallWeChatDataVo.getAppId()));
-            if(OWNER_APP.equals(appId)){
+            if (OWNER_APP.equals(appId) || OWNER_WECHAT_APP.equals(appId)) {
                 continue;
             }
             apiSmallWeChatDataVo.setAppSecret("");
