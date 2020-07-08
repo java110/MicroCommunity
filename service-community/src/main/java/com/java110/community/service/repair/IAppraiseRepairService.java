@@ -1,4 +1,4 @@
-package com.java110.intf.community.repair;
+package com.java110.community.service.repair;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.appraise.AppraiseDto;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 保存评价接口类
  */
-@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/repair")
 public interface IAppraiseRepairService {
 
     /**
@@ -20,6 +18,5 @@ public interface IAppraiseRepairService {
      * @param appraiseDto
      * @return
      */
-    @RequestMapping(value = "/appraiseRepair", method = RequestMethod.POST)
-    public AppraiseDto appraiseRepair(@RequestBody AppraiseDto appraiseDto);
+    public AppraiseDto appraiseRepair(AppraiseDto appraiseDto);
 }

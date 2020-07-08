@@ -1,4 +1,4 @@
-package com.java110.intf.common.appraise;
+package com.java110.common.service.appraise;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.appraise.AppraiseDto;
@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * 保存评价接口类
  */
-@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/appraise")
+
 public interface ISaveAppraiseService {
 
     /**
@@ -19,6 +18,5 @@ public interface ISaveAppraiseService {
      * @param appraiseDto
      * @return
      */
-    @RequestMapping(value = "/saveAppraise", method = RequestMethod.POST)
-    public AppraiseDto saveAppraise(@RequestBody AppraiseDto appraiseDto);
+    public AppraiseDto saveAppraise(AppraiseDto appraiseDto);
 }

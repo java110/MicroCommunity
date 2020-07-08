@@ -153,8 +153,10 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
                 break;
             case TYPE_APPLICATION_KEY:
                 machineUserResultDto = applicationKeyMachineTranslateBMOImpl.getPhotoInfo(reqJson);
+                break;
             case TYPE_VISIT:
                 machineUserResultDto = visitMachineTranslateBMOImpl.getPhotoInfo(reqJson);
+                break;
             case TYPE_STAFF:
                 machineUserResultDto = staffMachineTranslateBMOImpl.getPhotoInfo(reqJson);
             default:
