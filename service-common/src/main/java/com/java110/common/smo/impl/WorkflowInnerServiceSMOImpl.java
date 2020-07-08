@@ -317,6 +317,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
             //结束节点
             process.addFlowElement(createEndEvent());
 
+
             //连线
             for (int y = 0; y < workflowStepDtos.size(); y++) {
                 WorkflowStepDto step = workflowStepDtos.get(y);
@@ -342,14 +343,18 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                         process.addFlowElement(createSequenceFlow("parallelGateway-fork" + y, "userTask" + y + u, "parallelGateway-fork-userTask" + y + u, ""));
                         process.addFlowElement(createSequenceFlow("userTask" + y + u, "parallelGateway-join" + y, "userTask-parallelGateway-join", ""));
                         if (u == (userList.size() - 1)) {
-                            process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", "${flag=='false'}"));
+                            if (y == (workflowStepDtos.size() - 1)) {
+                                process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", ""));
+                            } else {
+                                process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", "${flag=='false'}"));
+                            }
                             process.addFlowElement(createSequenceFlow("repulse" + y, "task" + getNormal(workflowStepDtos, y), "repulse-task" + y, "${flag=='true'}"));
                         }
                     }
-                    //最后一个节点  并行网关-汇聚到结束节点
-                    //if (y == (workflowStepDtos.size() - 1)) {
+
+
                     process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "parallelGateway-join-endEvent", "${flag=='false'}"));
-                    // }
+
                 } else {
                     //普通流转
                     //第一个节点
@@ -377,7 +382,12 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                         process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
                     }*/
                     process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "repulse" + y + "endEvent", "${flag=='false'}"));
-                    process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
+                    if (y == (workflowStepDtos.size() - 1)) {
+                        process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, ""));
+                    } else {
+                        process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
+                    }
+
                     process.addFlowElement(createSequenceFlow("repulse" + y, "task" + y, "repulse-task" + y, "${flag=='true'}"));
                 }
             }
