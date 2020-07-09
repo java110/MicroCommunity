@@ -20,7 +20,7 @@
 * 3.开发
 
   * [3.1 前段开发](develop/front.md)
-  * [3.2 后端代码生成](develop/api.md)
+  * [3.2 后端开发](develop/api.md)
   * [3.3 硬件对接](develop/machine.md)
 
 * 4.技术支持
