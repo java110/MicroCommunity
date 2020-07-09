@@ -3,7 +3,7 @@
 
 ## 创建表
 
-HC小区管理系统对表结构太多的要求，但是我们官方建议 表中 至少包含 create_time 创建时间，status_cd 数据是否失效状态
+HC小区管理系统没有对表结构太多的要求，但是我们官方建议 表中 至少包含 create_time 创建时间，status_cd 数据是否失效状态
 如果需要数据状态时统一使用 state 字段来说明，表中字段如果有多种值时 建议在t_dict 表中记录 方便查询理解
 如果数据需要分片时请定义分片字段，如下小区ID作为分片字段
 
@@ -37,7 +37,7 @@ CREATE TABLE `r_repair_pool` (
 
 ## 接口定位
 
-1、再接口开发前先定位该接口属于 哪一个微服务范畴，比如报修功能，官方定位为资产服务范畴（service-community）
+1、在接口开发前先定位该接口属于 哪一个微服务范畴，比如报修功能，官方定位为资产服务范畴（service-community）
 现在我们以报修评价功能为例说明如何开发
 
 ## 对外开放地址
@@ -122,7 +122,7 @@ public class AppraiseApi implements IAppraiseApi {
 
 ```
 
-该类为对外提供评价接口功能，我们建议 再api 只是做接口的定义和必要的入参数据校验，具体业务有下面的Service类实现
+该类为对外提供评价接口功能，我们建议 在api 只是做接口的定义和必要的入参数据校验，具体业务有下面的Service类实现
 如SaveAppraiseServiceImpl.java 类
 
 ```java
@@ -257,7 +257,7 @@ public class AppraiseRepairServiceImpl implements IAppraiseRepairService {
 ```
 
 appraiseApi.saveAppraise(appraiseDto) 这个就是去调用了评价服务，appraiseRepair 方法用@Java110Transactional
-标记 表明在一个事务中 评价服务的失败时会回退前两部 
+标记 表明在一个事务中 评价服务的失败时会回退前两步
 
 ```java
         repairUserServiceDaoImpl.updateRepairUserInfoInstance(info);
@@ -269,7 +269,7 @@ appraiseApi.saveAppraise(appraiseDto) 这个就是去调用了评价服务，app
 
 ## 接口注册
 
-接口注册是通过开发这账户注册，登录开发者账户dev/自行修改，打开服务管理--> 服务注册页面，点击服务绑定，如下图
+接口注册是通过开发这账户注册，登录开发者账户dev/密码自行修改，打开服务管理--> 服务注册页面，点击服务绑定，如下图
 
 ![image](images/016.png)
 
