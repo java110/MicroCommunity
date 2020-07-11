@@ -282,11 +282,11 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         param.put("redirectUrl", redirectUrl);
         param.put("errorUrl", errorUrl);
         CommonCache.setValue(urlCode, param.toJSONString(), expireTime);
-        String wId = request.getHeader("wid");
+        String wAppId = request.getHeader("w-app-id");
         SmallWeChatDto smallWeChatDto = null;
-        if (!StringUtil.isEmpty(wId)) {
+        if (!StringUtil.isEmpty(wAppId)) {
             JSONObject paramIn = new JSONObject();
-            paramIn.put("appId", WechatFactory.getAppId(wId));
+            paramIn.put("appId", wAppId);
             smallWeChatDto = getSmallWechat(pd, paramIn);
         }
         if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
@@ -315,7 +315,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
                             URLEncoder
                                     .encode(
                                             (newUrl
-                                                    + "/app/loginOwnerWechatAuth?appId=992020061452450002&urlCode=" + urlCode + "&loginFlag=" + loginFlag + "&wId=" + wId),
+                                                    + "/app/loginOwnerWechatAuth?appId=992020061452450002&urlCode=" +
+                                                    urlCode + "&loginFlag=" + loginFlag + "&wId=" + WechatFactory.getWId(wAppId)),
                                             "UTF-8")).replace("STATE", "1");
 
         } catch (Exception e) {
