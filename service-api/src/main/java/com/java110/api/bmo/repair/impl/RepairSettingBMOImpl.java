@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.repair.IRepairSettingBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.repairSetting.IRepairSettingInnerServiceSMO;
+import com.java110.intf.community.IRepairSettingInnerServiceSMO;
 import com.java110.po.repair.RepairSettingPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;

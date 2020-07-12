@@ -3,8 +3,8 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IMachineRecordServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.common.IMachineRecordInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.common.IMachineRecordInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.utils.util.BeanConvertUtil;

@@ -1,8 +1,8 @@
 package com.java110.job.task.repair;
 
 import com.java110.core.factory.CallApiServiceFactory;
-import com.java110.core.smo.community.IRepairInnerServiceSMO;
-import com.java110.core.smo.community.IRepairTypeUserInnerServiceSMO;
+import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRepairTypeUserInnerServiceSMO;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.repair.RepairDto;

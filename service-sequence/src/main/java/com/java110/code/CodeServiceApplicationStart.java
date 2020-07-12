@@ -39,7 +39,7 @@ import java.util.List;
         "com.java110.config.properties.code", "com.java110.db"})
 //@SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.code","com.java110.config.properties.code"})
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = {"com.java110.core.smo"})
+@EnableFeignClients(basePackages = {"com.java110.intf"})
 public class CodeServiceApplicationStart {
     protected final static Logger logger = LoggerFactory.getLogger(CodeServiceApplicationStart.class);
 

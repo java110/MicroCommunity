@@ -10,7 +10,7 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.CodeDataFlow;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.DataTransactionFactory;
-import com.java110.core.smo.code.ICodeApi;
+import com.java110.intf.code.ICodeApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

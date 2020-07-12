@@ -6,7 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.AuthenticationFactory;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.po.userAttr.UserAttrPo;

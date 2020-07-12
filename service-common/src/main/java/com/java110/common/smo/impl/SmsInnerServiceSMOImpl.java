@@ -4,24 +4,18 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IMsgServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.SendSmsFactory;
-import com.java110.core.smo.common.IMsgInnerServiceSMO;
-import com.java110.core.smo.common.ISmsInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
-import com.java110.dto.PageDto;
-import com.java110.dto.msg.MsgDto;
+import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.msg.SmsDto;
 import com.java110.utils.cache.CommonCache;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl

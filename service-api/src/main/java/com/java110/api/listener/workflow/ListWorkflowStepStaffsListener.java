@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.smo.common.IWorkflowStepStaffInnerServiceSMO;
+import com.java110.intf.common.IWorkflowStepStaffInnerServiceSMO;
 import com.java110.dto.workflow.WorkflowStepStaffDto;
 import com.java110.utils.constant.ServiceCodeWorkflowStepStaffConstant;
 import com.java110.utils.util.BeanConvertUtil;

@@ -1,0 +1,41 @@
+package com.java110.dto.@@templateCode@@;
+
+import com.java110.dto.PageDto;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @ClassName FloorDto
+ * @Description 商户数据层封装
+ * @Author wuxw
+ * @Date 2019/4/24 8:52
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+public class StoreDto extends PageDto implements Serializable {
+
+    $beanVariable$
+
+    private Date createTime;
+
+    private String statusCd = "0";
+
+
+    $beanVariableGetSet$
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+}

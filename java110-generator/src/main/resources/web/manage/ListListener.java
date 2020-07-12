@@ -5,7 +5,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.@@templateCode@@.I@@TemplateCode@@InnerServiceSMO;
+import com.java110.intf.@@templateCode@@.I@@TemplateCode@@InnerServiceSMO;
 import com.java110.dto.@@templateCode@@.@@TemplateCode@@Dto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.@@templateCode@@.Api@@TemplateCode@@DataVo;

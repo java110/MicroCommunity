@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.common.ICarBlackWhiteInnerServiceSMO;
+import com.java110.intf.common.ICarBlackWhiteInnerServiceSMO;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeCarBlackWhiteConstant;

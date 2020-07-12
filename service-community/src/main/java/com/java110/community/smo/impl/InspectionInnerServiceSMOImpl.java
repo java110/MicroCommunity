@@ -2,11 +2,11 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IInspectionServiceDao;
-import com.java110.core.smo.community.IInspectionInnerServiceSMO;
+import com.java110.intf.community.IInspectionInnerServiceSMO;
 import com.java110.dto.inspectionPoint.InspectionDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

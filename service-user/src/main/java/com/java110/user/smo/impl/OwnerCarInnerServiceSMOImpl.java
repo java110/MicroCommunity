@@ -3,8 +3,8 @@ package com.java110.user.smo.impl;
 
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.user.IOwnerCarInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;

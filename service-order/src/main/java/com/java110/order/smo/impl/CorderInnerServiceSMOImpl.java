@@ -2,8 +2,8 @@ package com.java110.order.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.order.ICordersInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.order.ICordersInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.corder.CorderDto;
 import com.java110.dto.user.UserDto;

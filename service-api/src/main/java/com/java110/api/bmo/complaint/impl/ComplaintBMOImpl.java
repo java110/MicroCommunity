@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.store.IComplaintInnerServiceSMO;
+import com.java110.intf.store.IComplaintInnerServiceSMO;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.po.complaint.ComplaintPo;
 import com.java110.utils.constant.BusinessTypeConstant;

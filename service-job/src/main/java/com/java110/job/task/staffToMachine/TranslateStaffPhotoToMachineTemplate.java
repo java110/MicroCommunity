@@ -2,13 +2,13 @@ package com.java110.job.task.staffToMachine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.common.IMachineInnerServiceSMO;
-import com.java110.core.smo.common.IMachineTranslateInnerServiceSMO;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.core.smo.community.IRoomInnerServiceSMO;
-import com.java110.core.smo.order.IOrderInnerServiceSMO;
-import com.java110.core.smo.user.IOrgCommunityInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.order.IOrderInnerServiceSMO;
+import com.java110.intf.user.IOrgCommunityInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineTranslateDto;
@@ -25,9 +25,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName TransalateOwnerPhotoToMachine

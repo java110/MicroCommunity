@@ -22,7 +22,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication(scanBasePackages = "com.java110.service,com.java110.rule")
 @EnableDiscoveryClient
 @EnableConfigurationProperties(EventProperties.class)
-@EnableFeignClients(basePackages = {"com.java110.core.smo"})
+@EnableFeignClients(basePackages = {"com.java110.intf"})
 public class AppSpringBootApplication {
 
     private final static Logger logger = LoggerFactory.getLogger(AppSpringBootApplication.class);

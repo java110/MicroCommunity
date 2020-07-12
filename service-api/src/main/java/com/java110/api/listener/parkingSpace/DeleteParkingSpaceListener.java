@@ -5,7 +5,7 @@ import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;

@@ -9,7 +9,7 @@ import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.community.IFloorInnerServiceSMO;
+import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.dto.FloorDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;

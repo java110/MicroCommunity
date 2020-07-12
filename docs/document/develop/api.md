@@ -101,7 +101,7 @@ public interface IAppraiseApi {
 AppraiseApi入口类
 
 ```java
-import com.java110.common.service.appraise.ISaveAppraiseService;
+import com.java110.common.bmo.appraise.ISaveAppraiseService;
 import com.java110.dto.appraise.AppraiseDto;
 import com.java110.intf.common.appraise.IAppraiseApi;
 import com.java110.intf.community.repair.IRepairApi;

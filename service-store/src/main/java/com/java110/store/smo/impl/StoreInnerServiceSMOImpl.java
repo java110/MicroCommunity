@@ -3,14 +3,12 @@ package com.java110.store.smo.impl;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.store.IStoreInnerServiceSMO;
+import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.store.dao.IStoreServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

@@ -2,13 +2,13 @@ package com.java110.api.listener.community;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.smo.common.IAreaInnerServiceSMO;
+import com.java110.intf.common.IAreaInnerServiceSMO;
 import com.java110.dto.area.AreaDto;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.community.ApiCommunityDataVo;

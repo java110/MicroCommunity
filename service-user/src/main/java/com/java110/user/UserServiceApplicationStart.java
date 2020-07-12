@@ -30,12 +30,12 @@ import java.nio.charset.Charset;
  */
 @SpringBootApplication(
         scanBasePackages = {"com.java110.service", "com.java110.user", "com.java110.core", "com.java110.config.properties.code", "com.java110.db"},
-        excludeName = {"com.java110.core.smo.user"}
+        excludeName = {"com.java110.intf.user"}
 )
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.user.listener"})
-@EnableFeignClients(basePackages = {"com.java110.core.smo.community"})
+@EnableFeignClients(basePackages = {"com.java110.intf.community"})
 public class UserServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceApplicationStart.class);

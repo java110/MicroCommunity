@@ -6,7 +6,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.task.ITaskBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.job.ITaskInnerServiceSMO;
+import com.java110.intf.job.ITaskInnerServiceSMO;
 import com.java110.po.task.TaskPo;
 import com.java110.po.taskAttr.TaskAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;

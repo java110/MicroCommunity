@@ -1,7 +1,7 @@
 package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IDictDao;
-import com.java110.core.smo.community.DictInnerServiceSMO;
+import com.java110.intf.community.DictInnerServiceSMO;
 import com.java110.dto.Dict.DictDto;
 import com.java110.dto.Dict.DictQueryDto;
 import com.java110.utils.util.BeanConvertUtil;

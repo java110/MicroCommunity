@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存商户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreInfo" parameterType="Map">
+        $saveInfo$
+    </insert>
+
+
+
+    <!-- 查询商户信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreInfo" parameterType="Map" resultType="Map">
+        $getInfo$
+    </select>
+
+
+
+
+    <!-- 修改商户信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreInfo" parameterType="Map">
+        $updateInfoInstance$
+    </update>
+
+    <!-- 查询商户数量 add by wuxw 2018-07-03 -->
+     <select id="queryStoresCount" parameterType="Map" resultType="Map">
+        $queryCount$
+
+     </select>
+
+</mapper>

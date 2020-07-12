@@ -6,7 +6,7 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.smo.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.dto.repair.RepairDto;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
 import com.java110.utils.util.Assert;

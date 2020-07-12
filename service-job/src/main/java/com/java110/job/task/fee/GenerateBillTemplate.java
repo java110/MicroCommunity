@@ -1,13 +1,13 @@
 package com.java110.job.task.fee;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
-import com.java110.core.smo.community.IRoomInnerServiceSMO;
-import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
-import com.java110.core.smo.fee.IFeeDetailInnerServiceSMO;
-import com.java110.core.smo.fee.IFeeInnerServiceSMO;
-import com.java110.core.smo.user.IOwnerCarInnerServiceSMO;
-import com.java110.core.smo.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.*;

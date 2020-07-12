@@ -5,7 +5,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.code.ICodeApi;
+import com.java110.intf.code.ICodeApi;
 import com.java110.log.dao.LogServiceDao;
 import com.java110.log.smo.ILogServiceSMO;
 import org.slf4j.Logger;

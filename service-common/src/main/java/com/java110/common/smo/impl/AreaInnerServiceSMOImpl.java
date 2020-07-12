@@ -2,7 +2,7 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IAreaServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.common.IAreaInnerServiceSMO;
+import com.java110.intf.common.IAreaInnerServiceSMO;
 import com.java110.dto.area.AreaDto;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package com.java110.api.listener.complaint;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.smo.store.IComplaintInnerServiceSMO;
+import com.java110.intf.store.IComplaintInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;

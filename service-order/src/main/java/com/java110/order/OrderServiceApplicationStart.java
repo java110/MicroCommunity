@@ -39,11 +39,11 @@ import java.nio.charset.Charset;
 @Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,
         basePackages = {"com.java110.order.listener"})
 @EnableFeignClients(basePackages = {
-        "com.java110.core.smo.code",
-        "com.java110.core.smo.user",
-        "com.java110.core.smo.common",
-        "com.java110.core.smo.community",
-        "com.java110.core.smo.fee"
+        "com.java110.intf.code",
+        "com.java110.intf.user",
+        "com.java110.intf.common",
+        "com.java110.intf.community",
+        "com.java110.intf.fee"
 })
 public class OrderServiceApplicationStart {
 

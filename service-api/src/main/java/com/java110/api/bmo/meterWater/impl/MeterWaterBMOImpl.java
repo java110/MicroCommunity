@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.meterWater.IMeterWaterBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.fee.IMeterWaterInnerServiceSMO;
+import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
 import com.java110.po.meterWater.MeterWaterPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;

@@ -8,7 +8,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.demo.IDemoInnerServiceSMO;
+import com.java110.intf.demo.IDemoInnerServiceSMO;
 import com.java110.dto.demo.DemoDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -34,9 +34,9 @@ import java.nio.charset.Charset;
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.store.listener"})
 @EnableFeignClients(basePackages = {
-        "com.java110.core.smo.community",
-        "com.java110.core.smo.fee",
-        "com.java110.core.smo.user"
+        "com.java110.intf.community",
+        "com.java110.intf.fee",
+        "com.java110.intf.user"
 })
 public class StoreServiceApplicationStart {
 

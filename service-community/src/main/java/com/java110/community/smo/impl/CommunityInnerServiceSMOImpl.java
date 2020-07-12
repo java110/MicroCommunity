@@ -5,7 +5,7 @@ import com.java110.dto.community.CommunityAttrDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunityDto;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

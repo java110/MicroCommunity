@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.po.advert.AdvertItemPo;
 import com.java110.po.advert.AdvertPo;

@@ -6,7 +6,7 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.smo.community.IActivitiesInnerServiceSMO;
+import com.java110.intf.community.IActivitiesInnerServiceSMO;
 import com.java110.po.activities.ActivitiesPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeActivitiesConstant;

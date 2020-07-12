@@ -1,25 +1,13 @@
 package com.java110.api.rest;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
 import com.java110.api.smo.ITestServiceSMO;
 import com.java110.core.base.controller.BaseController;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.vo.ResultVo;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * rest api

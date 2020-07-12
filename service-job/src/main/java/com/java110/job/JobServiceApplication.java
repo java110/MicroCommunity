@@ -26,18 +26,18 @@ import java.nio.charset.Charset;
                 "com.java110.core",
                 "com.java110.config.properties.code",
                 "com.java110.db"},
-        excludeName = {"com.java110.core.smo.jobservice"}
+        excludeName = {"com.java110.intf.jobservice"}
 )
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.job.listener"})
 @EnableFeignClients(basePackages = {
-        "com.java110.core.smo.community",
-        "com.java110.core.smo.common",
-        "com.java110.core.smo.fee",
-        "com.java110.core.smo.user",
-        "com.java110.core.smo.order",
-        "com.java110.core.smo.store",
+        "com.java110.intf.community",
+        "com.java110.intf.common",
+        "com.java110.intf.fee",
+        "com.java110.intf.user",
+        "com.java110.intf.order",
+        "com.java110.intf.store",
 })
 @EnableScheduling
 public class JobServiceApplication {

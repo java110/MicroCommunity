@@ -2,10 +2,10 @@ package com.java110.api.listener.inspectionPoint;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.core.smo.community.IInspectionInnerServiceSMO;
-import com.java110.core.smo.community.IRoomInnerServiceSMO;
-import com.java110.core.smo.community.IUnitInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IInspectionInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.inspectionPoint.InspectionDto;

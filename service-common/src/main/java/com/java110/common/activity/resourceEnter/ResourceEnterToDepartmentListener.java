@@ -1,6 +1,6 @@
 package com.java110.common.activity.resourceEnter;
 
-import com.java110.core.smo.common.IAuditUserInnerServiceSMO;
+import com.java110.intf.common.IAuditUserInnerServiceSMO;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.ExecutionListener;

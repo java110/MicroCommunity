@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.community.IMenuInnerServiceSMO;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;

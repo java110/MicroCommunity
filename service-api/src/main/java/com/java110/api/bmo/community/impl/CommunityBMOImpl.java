@@ -6,7 +6,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.po.community.CommunityMemberPo;

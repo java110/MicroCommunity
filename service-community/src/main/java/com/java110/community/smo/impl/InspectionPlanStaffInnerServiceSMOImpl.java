@@ -3,8 +3,8 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IInspectionPlanStaffServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.community.IInspectionPlanStaffInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.community.IInspectionPlanStaffInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.inspectionPlanStaff.InspectionPlanStaffDto;
 import com.java110.utils.util.BeanConvertUtil;

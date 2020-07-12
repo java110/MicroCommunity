@@ -3,8 +3,8 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IMsgReadServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.common.IMsgReadInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.common.IMsgReadInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.msg.MsgReadDto;
 import com.java110.utils.util.BeanConvertUtil;

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.workflow.IWorkflowStepBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.common.IWorkflowStepInnerServiceSMO;
+import com.java110.intf.common.IWorkflowStepInnerServiceSMO;
 import com.java110.po.workflow.WorkflowStepPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;

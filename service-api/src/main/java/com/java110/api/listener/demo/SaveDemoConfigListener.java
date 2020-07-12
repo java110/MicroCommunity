@@ -10,7 +10,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.demo.IDemoInnerServiceSMO;
+import com.java110.intf.demo.IDemoInnerServiceSMO;
 import com.java110.entity.center.AppService;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;

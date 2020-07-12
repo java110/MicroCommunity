@@ -4,7 +4,7 @@ import com.java110.common.dao.IFileServiceDao;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.client.JSchFtpUploadTemplate;
-import com.java110.core.smo.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.core.client.FtpUploadTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

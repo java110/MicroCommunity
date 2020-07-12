@@ -2,23 +2,14 @@ package com.java110.core.base.smo;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.ProtocolUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.core.base.AppBase;
 import com.java110.core.context.AppContext;
-import com.java110.core.context.IPageData;
-import com.java110.core.smo.code.IPrimaryKeyInnerServiceSMO;
+import com.java110.intf.code.IPrimaryKeyInnerServiceSMO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 

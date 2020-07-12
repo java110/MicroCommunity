@@ -2,10 +2,10 @@ package com.java110.job.task.wechat;
 
 import com.alibaba.fastjson.JSON;
 import com.java110.core.factory.WechatFactory;
-import com.java110.core.smo.fee.IFeeInnerServiceSMO;
-import com.java110.core.smo.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
-import com.java110.core.smo.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.owner.OwnerAppUserDto;

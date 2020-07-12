@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.communityLocation.ICommunityLocationBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.community.ICommunityLocationInnerServiceSMO;
+import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
 import com.java110.po.community.CommunityLocationPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;

@@ -52,7 +52,7 @@ import java.nio.charset.Charset;
         basePackages = {"com.java110.api.listener"})
 @EnableSwagger2
 //@EnableConfigurationProperties(EventProperties.class)
-@EnableFeignClients(basePackages = {"com.java110.core.smo"})
+@EnableFeignClients(basePackages = {"com.java110.intf"})
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class ApiApplicationStart {
 

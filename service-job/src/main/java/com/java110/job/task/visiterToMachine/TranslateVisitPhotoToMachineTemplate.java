@@ -2,11 +2,11 @@ package com.java110.job.task.visiterToMachine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.common.IMachineInnerServiceSMO;
-import com.java110.core.smo.common.IMachineTranslateInnerServiceSMO;
-import com.java110.core.smo.order.IOrderInnerServiceSMO;
-import com.java110.core.smo.community.IRoomInnerServiceSMO;
-import com.java110.core.smo.community.IVisitInnerServiceSMO;
+import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
+import com.java110.intf.order.IOrderInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IVisitInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineTranslateDto;

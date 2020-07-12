@@ -3,8 +3,8 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IActivitiesServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.community.IActivitiesInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.community.IActivitiesInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.activities.ActivitiesDto;
 import com.java110.dto.user.UserDto;

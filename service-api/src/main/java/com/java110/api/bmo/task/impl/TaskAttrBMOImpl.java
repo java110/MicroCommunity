@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.task.ITaskAttrBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.job.ITaskAttrInnerServiceSMO;
+import com.java110.intf.job.ITaskAttrInnerServiceSMO;
 import com.java110.dto.taskAttr.TaskAttrDto;
 import com.java110.po.taskAttr.TaskAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;

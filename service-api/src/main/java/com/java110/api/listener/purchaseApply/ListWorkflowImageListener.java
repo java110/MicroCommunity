@@ -2,9 +2,8 @@ package com.java110.api.listener.purchaseApply;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.common.IActivitiWorkflowImageInnerServiceSMO;
+import com.java110.intf.common.IActivitiWorkflowImageInnerServiceSMO;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
 import com.java110.utils.util.Assert;

@@ -1,0 +1,49 @@
+{
+  "autoMove": true,
+  "id": "appraiseId",
+  "name": "appraise",
+  "desc": "评价",
+  "shareParam": "objId",
+  "shareColumn": "obj_id",
+  "shareName": "common",
+  "tableName": "appraise",
+  "param": {
+    "appraiseId": "appraise_id",
+    "appraiseScore": "appraise_score",
+    "appraiseType": "appraise_type",
+    "context": "context",
+    "parentAppraiseId": "parent_appraise_id",
+    "appraiseUserId": "appraise_user_id",
+    "appraiseUserName": "appraise_user_name",
+    "objType": "obj_type",
+    "objId": "obj_id",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "appraiseScore",
+      "msg": "评分不能为空"
+    },
+    {
+      "code": "context",
+      "msg": "内容不能为空"
+    },
+    {
+      "code": "appraiseUserId",
+      "msg": "评价人不能为空"
+    },
+    {
+      "code": "appraiseUserName",
+      "msg": "评价人名称不能为空"
+    },
+    {
+      "code": "objType",
+      "msg": "评价对象不能为空"
+    },
+    {
+      "code": "objId",
+      "msg": "评价对象者不能为空"
+    }
+  ]
+}
+

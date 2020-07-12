@@ -2,13 +2,13 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IRepairSettingServiceDao;
-import com.java110.core.smo.repairSetting.IRepairSettingInnerServiceSMO;
-import com.java110.dto.repair.RepairSettingDto;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.repair.RepairSettingDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.community.IRepairSettingInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +34,7 @@ public class RepairSettingInnerServiceSMOImpl extends BaseServiceSMO implements 
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<RepairSettingDto> queryRepairSettings(@RequestBody  RepairSettingDto repairSettingDto) {
+    public List<RepairSettingDto> queryRepairSettings(@RequestBody RepairSettingDto repairSettingDto) {
 
         //校验是否传了 分页信息
 
@@ -64,7 +64,7 @@ public class RepairSettingInnerServiceSMOImpl extends BaseServiceSMO implements 
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
      * @param repairSetting 小区报修设置信息
-     * @param users 用户列表
+     * @param users         用户列表
      */
     private void refreshRepairSetting(RepairSettingDto repairSetting, List<UserDto> users) {
         for (UserDto user : users) {
@@ -80,7 +80,7 @@ public class RepairSettingInnerServiceSMOImpl extends BaseServiceSMO implements 
      * @param repairSettings 小区楼信息
      * @return 批量userIds 信息
      */
-     private String[] getUserIds(List<RepairSettingDto> repairSettings) {
+    private String[] getUserIds(List<RepairSettingDto> repairSettings) {
         List<String> userIds = new ArrayList<String>();
         for (RepairSettingDto repairSetting : repairSettings) {
             userIds.add(repairSetting.getSettingId());
@@ -91,7 +91,8 @@ public class RepairSettingInnerServiceSMOImpl extends BaseServiceSMO implements 
 
     @Override
     public int queryRepairSettingsCount(@RequestBody RepairSettingDto repairSettingDto) {
-        return repairSettingServiceDaoImpl.queryRepairSettingsCount(BeanConvertUtil.beanCovertMap(repairSettingDto));    }
+        return repairSettingServiceDaoImpl.queryRepairSettingsCount(BeanConvertUtil.beanCovertMap(repairSettingDto));
+    }
 
     public IRepairSettingServiceDao getRepairSettingServiceDaoImpl() {
         return repairSettingServiceDaoImpl;

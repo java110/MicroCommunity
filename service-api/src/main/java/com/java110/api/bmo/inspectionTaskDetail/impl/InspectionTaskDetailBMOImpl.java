@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.inspectionTaskDetail.IInspectionTaskDetailBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.community.IInspectionTaskDetailInnerServiceSMO;
+import com.java110.intf.community.IInspectionTaskDetailInnerServiceSMO;
 import com.java110.dto.inspectionTaskDetail.InspectionTaskDetailDto;
 import com.java110.po.inspection.InspectionTaskDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;

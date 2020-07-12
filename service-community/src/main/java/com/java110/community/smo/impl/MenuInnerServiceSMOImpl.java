@@ -4,7 +4,7 @@ package com.java110.community.smo.impl;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IMenuServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.community.IMenuInnerServiceSMO;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.menu.MenuDto;

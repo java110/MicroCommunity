@@ -1,7 +1,7 @@
 package com.java110.common.thread;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.smo.common.IApplicationKeyInnerServiceSMO;
+import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
 import com.java110.dto.machine.ApplicationKeyDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceConstant;

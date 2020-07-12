@@ -5,8 +5,8 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IVisitServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 
-import com.java110.core.smo.user.IUserInnerServiceSMO;
-import com.java110.core.smo.community.IVisitInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.intf.community.IVisitInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.visit.VisitDto;

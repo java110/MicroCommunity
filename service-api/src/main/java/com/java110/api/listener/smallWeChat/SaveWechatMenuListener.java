@@ -6,7 +6,7 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.smo.store.IWechatMenuInnerServiceSMO;
+import com.java110.intf.store.IWechatMenuInnerServiceSMO;
 import com.java110.dto.wechatMenu.WechatMenuDto;
 import com.java110.utils.constant.ServiceCodeWechatMenuConstant;
 import com.java110.utils.util.Assert;

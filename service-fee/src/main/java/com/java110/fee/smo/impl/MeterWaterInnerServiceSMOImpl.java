@@ -2,8 +2,8 @@ package com.java110.fee.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.fee.IMeterWaterInnerServiceSMO;
-import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.meterWater.MeterWaterDto;
 import com.java110.dto.user.UserDto;

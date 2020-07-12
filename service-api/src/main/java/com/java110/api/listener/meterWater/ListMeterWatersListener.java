@@ -3,7 +3,7 @@ package com.java110.api.listener.meterWater;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.smo.fee.IMeterWaterInnerServiceSMO;
+import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
 import com.java110.dto.meterWater.MeterWaterDto;
 import com.java110.utils.constant.ServiceCodeMeterWaterConstant;
 import com.java110.utils.util.BeanConvertUtil;

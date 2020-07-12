@@ -8,7 +8,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.entity.center.AppService;
 import com.java110.po.file.FileRelPo;

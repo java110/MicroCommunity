@@ -5,7 +5,7 @@ import com.java110.api.bmo.purchaseApply.IPurchaseApplyBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.store.IPurchaseApplyInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.po.purchase.PurchaseApplyDetailPo;

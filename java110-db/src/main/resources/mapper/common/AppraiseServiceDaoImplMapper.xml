@@ -4,13 +4,138 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="appraiseServiceDaoImpl">
 
+
     <!-- 保存评价信息 add by wuxw 2018-07-03 -->
-    <insert id="saveAppraise" parameterType="Map">
-        INSERT INTO appraise (`appraise_id`, `appraise_score`, `appraise_type`, `context`, `parent_appraise_id`,
-        `appraise_user_id`, `appraise_user_name`, `obj_type`, `obj_id`,status_cd)
-        VALUES (#{appraiseId}, #{appraiseScore}, #{appraiseType}, #{context}, #{parentAppraiseId}, #{appraiseUserId},
-        #{appraiseUserName},
-        #{objType}, #{objId},'0');
+    <insert id="saveAppraiseInfo" parameterType="Map">
+        insert into appraise(
+        parent_appraise_id,appraise_user_name,appraise_id,appraise_score,appraise_type,context,obj_id,obj_type,appraise_user_id
+        ) values (
+        #{parentAppraiseId},#{appraiseUserName},#{appraiseId},#{appraiseScore},#{appraiseType},#{context},#{objId},#{objType},#{appraiseUserId}
+        )
     </insert>
+
+
+    <!-- 查询评价信息 add by wuxw 2018-07-03 -->
+    <select id="getAppraiseInfo" parameterType="Map" resultType="Map">
+        select t.parent_appraise_id,t.parent_appraise_id parentAppraiseId,t.appraise_user_name,t.appraise_user_name
+        appraiseUserName,t.appraise_id,t.appraise_id appraiseId,t.appraise_score,t.appraise_score
+        appraiseScore,t.appraise_type,t.appraise_type appraiseType,t.context,t.obj_id,t.obj_id
+        objId,t.status_cd,t.status_cd statusCd,t.obj_type,t.obj_type objType,t.appraise_user_id,t.appraise_user_id
+        appraiseUserId
+        from appraise t
+        where 1 =1
+        <if test="parentAppraiseId !=null and parentAppraiseId != ''">
+            and t.parent_appraise_id= #{parentAppraiseId}
+        </if>
+        <if test="appraiseUserName !=null and appraiseUserName != ''">
+            and t.appraise_user_name= #{appraiseUserName}
+        </if>
+        <if test="appraiseId !=null and appraiseId != ''">
+            and t.appraise_id= #{appraiseId}
+        </if>
+        <if test="appraiseScore !=null and appraiseScore != ''">
+            and t.appraise_score= #{appraiseScore}
+        </if>
+        <if test="appraiseType !=null and appraiseType != ''">
+            and t.appraise_type= #{appraiseType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="appraiseUserId !=null and appraiseUserId != ''">
+            and t.appraise_user_id= #{appraiseUserId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改评价信息 add by wuxw 2018-07-03 -->
+    <update id="updateAppraiseInfo" parameterType="Map">
+        update appraise t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="parentAppraiseId !=null and parentAppraiseId != ''">
+            , t.parent_appraise_id= #{parentAppraiseId}
+        </if>
+        <if test="appraiseUserName !=null and appraiseUserName != ''">
+            , t.appraise_user_name= #{appraiseUserName}
+        </if>
+        <if test="appraiseScore !=null and appraiseScore != ''">
+            , t.appraise_score= #{appraiseScore}
+        </if>
+        <if test="appraiseType !=null and appraiseType != ''">
+            , t.appraise_type= #{appraiseType}
+        </if>
+        <if test="context !=null and context != ''">
+            , t.context= #{context}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        <if test="appraiseUserId !=null and appraiseUserId != ''">
+            , t.appraise_user_id= #{appraiseUserId}
+        </if>
+        where 1=1
+        <if test="appraiseId !=null and appraiseId != ''">
+            and t.appraise_id= #{appraiseId}
+        </if>
+
+    </update>
+
+    <!-- 查询评价数量 add by wuxw 2018-07-03 -->
+    <select id="queryAppraisesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from appraise t
+        where 1 =1
+        <if test="parentAppraiseId !=null and parentAppraiseId != ''">
+            and t.parent_appraise_id= #{parentAppraiseId}
+        </if>
+        <if test="appraiseUserName !=null and appraiseUserName != ''">
+            and t.appraise_user_name= #{appraiseUserName}
+        </if>
+        <if test="appraiseId !=null and appraiseId != ''">
+            and t.appraise_id= #{appraiseId}
+        </if>
+        <if test="appraiseScore !=null and appraiseScore != ''">
+            and t.appraise_score= #{appraiseScore}
+        </if>
+        <if test="appraiseType !=null and appraiseType != ''">
+            and t.appraise_type= #{appraiseType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="appraiseUserId !=null and appraiseUserId != ''">
+            and t.appraise_user_id= #{appraiseUserId}
+        </if>
+
+
+    </select>
 
 </mapper>
