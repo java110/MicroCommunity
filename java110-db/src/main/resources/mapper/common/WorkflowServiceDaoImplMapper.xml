@@ -110,7 +110,7 @@
             and t.b_id= #{bId}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+            and t.community_id in (#{communityId},'9999')
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
@@ -187,7 +187,7 @@
             and t.b_id= #{bId}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+            and t.community_id in (#{communityId},'9999')
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}

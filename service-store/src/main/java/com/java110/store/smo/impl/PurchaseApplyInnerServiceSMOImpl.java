@@ -2,12 +2,15 @@ package com.java110.store.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDetailDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
+import com.java110.po.purchase.PurchaseApplyPo;
+import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +38,27 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<PurchaseApplyDto> queryPurchaseApplys(@RequestBody  PurchaseApplyDto purchaseApplyDto) {
+    public int savePurchaseApply(@RequestBody PurchaseApplyPo purchaseApplyPo) {
+
+        List<PurchaseApplyDetailPo> purchaseApplyDetailPos = purchaseApplyPo.getPurchaseApplyDetailPos();
+
+        for (PurchaseApplyDetailPo purchaseApplyDetailPo : purchaseApplyDetailPos) {
+            purchaseApplyDetailPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
+        }
+
+        int saveFlag = purchaseApplyServiceDaoImpl.savePurchaseApply(BeanConvertUtil.beanCovertMap(purchaseApplyPo));
+
+        if (saveFlag < 1) {
+            return saveFlag;
+        }
+
+        //保存订单明细
+        saveFlag = purchaseApplyServiceDaoImpl.savePurchaseApplyDetailInfo(purchaseApplyDetailPos);
+        return saveFlag;
+    }
+
+    @Override
+    public List<PurchaseApplyDto> queryPurchaseApplys(@RequestBody PurchaseApplyDto purchaseApplyDto) {
 
         //校验是否传了 分页信息
 
@@ -62,7 +85,7 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
     }
 
     @Override
-    public List<PurchaseApplyDto> queryPurchaseApplyAndDetails(@RequestBody  PurchaseApplyDto purchaseApplyDto) {
+    public List<PurchaseApplyDto> queryPurchaseApplyAndDetails(@RequestBody PurchaseApplyDto purchaseApplyDto) {
 
         //校验是否传了 分页信息
 
@@ -93,7 +116,7 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
      * @param purchaseApply 小区采购申请信息
-     * @param users 用户列表
+     * @param users         用户列表
      */
     private void refreshPurchaseApply(PurchaseApplyDto purchaseApply, List<UserDto> users) {
         for (UserDto user : users) {
@@ -129,7 +152,6 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
         List<PurchaseApplyDetailDto> purchaseApplyDetails = BeanConvertUtil.covertBeanList(purchaseApplyServiceDaoImpl.getPurchaseApplyDetailInfo(BeanConvertUtil.beanCovertMap(purchaseApplyDetailDto)), PurchaseApplyDetailDto.class);
         return purchaseApplyDetails;
     }
-
 
 
     public IPurchaseApplyServiceDao getPurchaseApplyServiceDaoImpl() {

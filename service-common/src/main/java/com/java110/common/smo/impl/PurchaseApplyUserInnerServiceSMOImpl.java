@@ -2,22 +2,20 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.common.IAuditUserInnerServiceSMO;
-import com.java110.intf.store.IComplaintInnerServiceSMO;
-import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
+import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
+import com.java110.intf.common.IAuditUserInnerServiceSMO;
+import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.store.IComplaintInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
@@ -65,6 +63,10 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
     @Autowired
     private IAuditUserInnerServiceSMO auditUserInnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
+
+
     /**
      * 启动流程
      *
@@ -74,17 +76,35 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("purchaseApplyDto", purchaseApplyDto);
-        variables.put("nextAuditStaffId",purchaseApplyDto.getStaffId());
+        variables.put("nextAuditStaffId", purchaseApplyDto.getStaffId());
         variables.put("userId", purchaseApplyDto.getCurrentUserId());
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("resourceEntry", purchaseApplyDto.getApplyOrderId(), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(purchaseApplyDto.getStoreId()), purchaseApplyDto.getApplyOrderId(), variables);
 //        //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
 //        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
 //
         purchaseApplyDto.setProcessInstanceId(processInstanceId);
-        autoFinishFirstTask(purchaseApplyDto);
+        //autoFinishFirstTask(purchaseApplyDto);
         return purchaseApplyDto;
+    }
+
+
+    private String getWorkflowDto(String storeId) {
+        //开启流程
+        //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
+        WorkflowDto workflowDto = new WorkflowDto();
+        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
+        workflowDto.setStoreId(storeId);
+        List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
+
+        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条");
+
+        WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
+        if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
+            throw new IllegalArgumentException("流程还未部署");
+        }
+        return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
     }
 
     /**
@@ -253,7 +273,8 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("auditCode", purchaseApplyDto.getAuditCode());
         variables.put("currentUserId", purchaseApplyDto.getCurrentUserId());
-        variables.put("nextAuditStaffId",purchaseApplyDto.getStaffId());
+        variables.put("flag", "1200".equals(purchaseApplyDto.getAuditCode()) ? "false" : "true");
+        variables.put("startUserId", purchaseApplyDto.getStartUserId());
         //taskService.setAssignee(complaintDto.getTaskId(),complaintDto.getCurrentUserId());
         //taskService.addCandidateUser(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         //taskService.claim(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
@@ -322,7 +343,6 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         return purchaseApplyDto;
 
     }
-
 
 
     public ProcessEngine getProcessEngine() {

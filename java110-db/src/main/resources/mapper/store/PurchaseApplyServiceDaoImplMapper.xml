@@ -70,9 +70,9 @@
             #{item.resId},
             #{item.quantity},
             #{item.remark},
-            #{item.bId},
-            #{item.operate},
-            #{item.statusCd}
+            '-1',
+            'ADD',
+            '0'
             )
         </foreach>
     </insert>
@@ -386,5 +386,14 @@
         </if>
 
     </select>
+
+
+    <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
+    <insert id="savePurchaseApply" parameterType="Map">
+        insert into purchase_apply
+        (status_cd,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel)
+        values
+        ('0',#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},'-1',#{endUserName},#{endUserTel})
+    </insert>
 
 </mapper>

@@ -449,7 +449,7 @@ public class StringUtil {
      * @return
      */
     public static boolean isEmpty(String str) {
-        return str == null || "".equals(str);
+        return str == null || "".equals(str.trim());
     }
 
     /**

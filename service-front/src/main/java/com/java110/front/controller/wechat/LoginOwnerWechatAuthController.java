@@ -61,7 +61,10 @@ public class LoginOwnerWechatAuthController extends BaseController {
                                @RequestParam String loginFlag,
                                HttpServletRequest request,
                                HttpServletResponse response) {
-        return ownerAppLoginSMOImpl.refreshToken(null, redirectUrl,errorUrl,loginFlag, request, response);
+        IPageData pd = PageData.newInstance().builder("", "", "", "",
+                "login", "", "", "", request.getHeader("app-id")
+        );
+        return ownerAppLoginSMOImpl.refreshToken(pd, redirectUrl,errorUrl,loginFlag, request, response);
 
     }
 

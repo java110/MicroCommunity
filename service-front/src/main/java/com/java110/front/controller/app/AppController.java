@@ -1,10 +1,9 @@
-package com.java110.front.rest;
+package com.java110.front.controller.app;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.front.smo.api.IApiSMO;
 import com.java110.core.base.controller.BaseController;
+import com.java110.front.smo.api.IApiSMO;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.vo.ResultVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -29,17 +28,17 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(path = "/app")
-public class RestFrontApi extends BaseController {
-    private final static Logger logger = LoggerFactory.getLogger(RestFrontApi.class);
+public class AppController extends BaseController {
+    private final static Logger logger = LoggerFactory.getLogger(AppController.class);
 
     @Autowired
     private IApiSMO apiSMOImpl;
 
     /**
      * 资源请求 post方式
-     *
+     * <p>
      * /app/user.listUser
-     *
+     * <p>
      * /api/user.listUser
      *
      * @param service  请求接口方式
@@ -61,7 +60,7 @@ public class RestFrontApi extends BaseController {
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
-            responseEntity = apiSMOImpl.doApi(postInfo, headers);
+            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -91,7 +90,7 @@ public class RestFrontApi extends BaseController {
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
-            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + service + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -124,7 +123,7 @@ public class RestFrontApi extends BaseController {
             headers.put(CommonConstant.HTTP_ACTION, action);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
-            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + action + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -159,7 +158,7 @@ public class RestFrontApi extends BaseController {
             headers.put(CommonConstant.HTTP_ACTION, action);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", action, postInfo, headers);
-            responseEntity = apiSMOImpl.doApi(postInfo, headers);
+            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + action + "]失败：" + postInfo, e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -191,7 +190,7 @@ public class RestFrontApi extends BaseController {
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_PUT);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
-            responseEntity = apiSMOImpl.doApi(postInfo, headers);
+            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
         } catch (Throwable e) {
             logger.error("请求put 方法[" + service + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -221,7 +220,7 @@ public class RestFrontApi extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_DELETE);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, "", headers);
 
-            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
         } catch (Throwable e) {
             logger.error("请求delete 方法[" + service + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -261,7 +260,7 @@ public class RestFrontApi extends BaseController {
 
         for (String key : claims.keySet()) {
 
-            if("userId".equals(key)){
+            if ("userId".equals(key)) {
                 headers.put("user_id", claims.get(key));
             }
             headers.put(key, claims.get(key));

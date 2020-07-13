@@ -3,6 +3,7 @@ package com.java110.intf.store;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.purchaseApply.PurchaseApplyDetailDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.po.purchase.PurchaseApplyPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,17 @@ import java.util.List;
 @FeignClient(name = "store-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/purchaseApplyApi")
 public interface IPurchaseApplyInnerServiceSMO {
+
+
+    /**
+     * <p>保存 采购申请</p>
+     *
+     *
+     * @param purchaseApplyPo 数据对象分享
+     * @return PurchaseApplyDto 对象数据
+     */
+    @RequestMapping(value = "/savePurchaseApply", method = RequestMethod.POST)
+    int savePurchaseApply(@RequestBody PurchaseApplyPo purchaseApplyPo);
 
     /**
      * <p>查询小区楼信息</p>

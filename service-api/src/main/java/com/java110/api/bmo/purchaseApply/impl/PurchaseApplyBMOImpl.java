@@ -1,5 +1,6 @@
 package com.java110.api.bmo.purchaseApply.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.purchaseApply.IPurchaseApplyBMO;
@@ -55,6 +56,8 @@ public class PurchaseApplyBMOImpl extends ApiBaseBMO implements IPurchaseApplyBM
      * @return 订单服务能够接受的报文
      */
     public void addPurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        JSONArray resourceStores = paramInJson.getJSONArray("resourceStores");
 
         PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyPo.class);
         super.insert(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY);

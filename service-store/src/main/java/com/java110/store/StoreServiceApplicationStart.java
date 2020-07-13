@@ -1,6 +1,7 @@
 package com.java110.store;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 
@@ -36,7 +36,8 @@ import java.nio.charset.Charset;
 @EnableFeignClients(basePackages = {
         "com.java110.intf.community",
         "com.java110.intf.fee",
-        "com.java110.intf.user"
+        "com.java110.intf.user",
+        "com.java110.intf.common"
 })
 public class StoreServiceApplicationStart {
 
@@ -54,7 +55,7 @@ public class StoreServiceApplicationStart {
     @LoadBalanced
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
     }
 

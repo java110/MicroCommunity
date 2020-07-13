@@ -5,8 +5,8 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.dto.workflow.WorkflowDto;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeWorkflowConstant;
@@ -82,23 +82,20 @@ public class ListWorkflowsListener extends AbstractServiceApiPlusListener {
         workflowPo.setStoreId(reqJson.getString("storeId"));
         super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
 
-//        workflowPo = new WorkflowPo();
-//        workflowPo.setCommunityId(reqJson.getString("communityId"));
-//        workflowPo.setFlowId("-2");
-//        workflowPo.setFlowName("报修流程");
-//        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_REPAIR);
-//        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-//        workflowPo.setStoreId(reqJson.getString("storeId"));
-//        super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
-
-        workflowPo = new WorkflowPo();
-        workflowPo.setCommunityId(reqJson.getString("communityId"));
-        workflowPo.setFlowId("-3");
-        workflowPo.setFlowName("采购流程");
-        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
-        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-        workflowPo.setStoreId(reqJson.getString("storeId"));
-        super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+        workflowDto = new WorkflowDto();
+        workflowDto.setStoreId(reqJson.getString("storeId"));
+        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
+        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
+        if (count < 1) {
+            workflowPo = new WorkflowPo();
+            workflowPo.setCommunityId("9999"); //所有小区
+            workflowPo.setFlowId("-3");
+            workflowPo.setFlowName("采购流程");
+            workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
+            workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+            workflowPo.setStoreId(reqJson.getString("storeId"));
+            super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+        }
 
 
         commit(context);

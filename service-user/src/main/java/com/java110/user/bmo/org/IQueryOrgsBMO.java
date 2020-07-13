@@ -1,4 +1,4 @@
-package com.java110.user.service.org;
+package com.java110.user.bmo.org;
 
 import com.java110.dto.org.OrgDto;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2020/7/12
  **/
-public interface IQueryOrgsService {
+public interface IQueryOrgsBMO {
 
     /**
      * 查询组织信息

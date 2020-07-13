@@ -50,7 +50,7 @@ public class TransferListener extends AbstractServiceApiListener {
 
         ResponseEntity responseEntity = null;
         if (!StringUtil.isNullOrNone(orgRequestUrl)) {
-            String param = orgRequestUrl.contains("?") ? orgRequestUrl.substring(requestUrl.indexOf("?") + 1, orgRequestUrl.length()) : "";
+            String param = orgRequestUrl.contains("?") ? orgRequestUrl.substring(orgRequestUrl.indexOf("?") + 1, orgRequestUrl.length()) : "";
             requestUrl += ("?" + param);
         }
         try {

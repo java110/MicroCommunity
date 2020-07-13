@@ -1,6 +1,7 @@
 package com.java110.po.purchase;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @ClassName PurchaseApply
@@ -25,6 +26,8 @@ public class PurchaseApplyPo implements Serializable {
     private String endUserTel;
 
     private ResourceStorePo[] resourceStores;
+
+    List<PurchaseApplyDetailPo> purchaseApplyDetailPos;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -104,5 +107,13 @@ public class PurchaseApplyPo implements Serializable {
 
     public void setResourceStores(ResourceStorePo[] resourceStores) {
         this.resourceStores = resourceStores;
+    }
+
+    public List<PurchaseApplyDetailPo> getPurchaseApplyDetailPos() {
+        return purchaseApplyDetailPos;
+    }
+
+    public void setPurchaseApplyDetailPos(List<PurchaseApplyDetailPo> purchaseApplyDetailPos) {
+        this.purchaseApplyDetailPos = purchaseApplyDetailPos;
     }
 }

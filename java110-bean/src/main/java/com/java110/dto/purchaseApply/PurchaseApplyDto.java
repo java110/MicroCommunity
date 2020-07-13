@@ -17,6 +17,11 @@ import java.util.List;
  **/
 public class PurchaseApplyDto extends PageDto implements Serializable {
 
+    public static final String RES_ORDER_TYPE_ENTER = "10000"; //采购入库
+    public static final String RES_ORDER_TYPE_OUT = "20000"; //出库
+
+    public static final String STATE_WAIT_DEAL = "1000"; // 等待处理
+
     private String resOrderType;
     private String description;
     private String applyOrderId;
@@ -43,6 +48,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String staffId;
     private String staffName;
     private String staffTel;
+    private String startUserId;
 
 
 
@@ -231,5 +237,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setApplyOrderIds(String[] applyOrderIds) {
         this.applyOrderIds = applyOrderIds;
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
     }
 }
