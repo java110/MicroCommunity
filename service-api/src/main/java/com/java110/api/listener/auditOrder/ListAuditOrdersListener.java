@@ -73,6 +73,7 @@ public class ListAuditOrdersListener extends AbstractServiceApiListener {
         auditUser.setUserId(reqJson.getString("userId"));
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
+        auditUser.setStoreId(reqJson.getString("storeId"));
 
         long count = resourceEntryStoreInnerServiceSMOImpl.getUserTaskCount(auditUser);
 

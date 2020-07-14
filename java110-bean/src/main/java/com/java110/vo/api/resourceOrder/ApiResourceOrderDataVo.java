@@ -1,7 +1,6 @@
 package com.java110.vo.api.resourceOrder;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ApiResourceOrderDataVo implements Serializable {
 
@@ -9,6 +8,9 @@ public class ApiResourceOrderDataVo implements Serializable {
     private String processInstanceId;
 
     private String taskId;
+
+    private String userId;
+    private String userName;
 
 
     //订单ID
@@ -117,5 +119,21 @@ public class ApiResourceOrderDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

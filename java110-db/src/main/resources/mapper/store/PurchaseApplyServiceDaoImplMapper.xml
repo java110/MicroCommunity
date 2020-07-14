@@ -191,7 +191,8 @@
             t.end_user_name,
             t.end_user_tel,
             t.end_user_name endUserName,
-            t.end_user_tel endUserTel
+            t.end_user_tel endUserTel,
+            t.description
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 =1
@@ -203,6 +204,14 @@
         </if>
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
+        </if>
+
+        <if test="applyOrderIds !=null ">
+            and t.apply_order_id in
+            <foreach open="(" close=")"
+                     separator="," collection="applyOrderIds" item="item">
+                #{item}
+            </foreach>
         </if>
         <if test="userName !=null and userName != ''">
             and t.user_name like concat('%',#{userName},'%')
@@ -292,8 +301,9 @@
             r.res_name resName,r.res_code resCode,
             r.price,r.stock
         from
-            purchase_apply_detail p inner join resource_store r on p.res_id = r.res_id
+            purchase_apply_detail p inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
         where 1=1
+        and p.status_cd = '0'
         <if test="applyOrderIds !=null">
             and p.apply_order_id in
             <foreach collection="applyOrderIds" item="item" open="(" close=")" separator=",">

@@ -78,6 +78,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("purchaseApplyDto", purchaseApplyDto);
         variables.put("nextAuditStaffId", purchaseApplyDto.getStaffId());
         variables.put("userId", purchaseApplyDto.getCurrentUserId());
+        variables.put("startUserId", purchaseApplyDto.getCurrentUserId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(purchaseApplyDto.getStoreId()), purchaseApplyDto.getApplyOrderId(), variables);
 //        //将得到的实例流程id值赋给之前设置的变量
@@ -137,7 +138,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("resourceEnter");
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -149,7 +150,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
      */
     public List<PurchaseApplyDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("resourceEnter");
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
         ;
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
@@ -206,7 +207,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 //                .taskAssignee(user.getUserId());
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey("resourceEnter")
+                .processDefinitionKey(getWorkflowDto(user.getStoreId()))
                 .taskAssignee(user.getUserId());
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("resourceEnter");
@@ -275,11 +276,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("currentUserId", purchaseApplyDto.getCurrentUserId());
         variables.put("flag", "1200".equals(purchaseApplyDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", purchaseApplyDto.getStartUserId());
-        //taskService.setAssignee(complaintDto.getTaskId(),complaintDto.getCurrentUserId());
-        //taskService.addCandidateUser(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
-        //taskService.claim(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         taskService.complete(purchaseApplyDto.getTaskId(), variables);
-        //taskService.setVariable(purchaseApplyDto.getTaskId(), "purchaseApplyDto", purchaseApplyDto);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {

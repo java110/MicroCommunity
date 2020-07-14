@@ -5,11 +5,10 @@ import com.java110.api.bmo.auditApplyOrder.IApplyOrderBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
-import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
-import com.java110.dto.complaint.ComplaintDto;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
@@ -74,6 +73,13 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
         purchaseApplyDto.setAuditMessage(reqJson.getString("remark"));
         purchaseApplyDto.setCurrentUserId(reqJson.getString("userId"));
 
+        PurchaseApplyDto tmpPurchaseApplyDto = new PurchaseApplyDto();
+        tmpPurchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
+        tmpPurchaseApplyDto.setStoreId(reqJson.getString("storeId"));
+        List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(tmpPurchaseApplyDto);
+        Assert.listOnlyOne(purchaseApplyDtos, "采购申请单存在多条");
+        purchaseApplyDto.setStartUserId(purchaseApplyDtos.get(0).getUserId());
+
         boolean isLastTask = purchaseApplyUserInnerServiceSMOImpl.completeTask(purchaseApplyDto);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         if (isLastTask) {
@@ -90,14 +96,13 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
      */
     private void updatePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        ComplaintDto complaintDto = new ComplaintDto();
-        complaintDto.setStoreId(paramInJson.getString("storeId"));
-        complaintDto.setCommunityId(paramInJson.getString("communityId"));
-        complaintDto.setComplaintId(paramInJson.getString("complaintId"));
         PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
+        purchaseApplyDto.setStoreId(paramInJson.getString("storeId"));
+        purchaseApplyDto.setApplyOrderId(paramInJson.getString("applyOrderId"));
+
         List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
 
-        Assert.listOnlyOne(purchaseApplyDtos, "存在多条记录，或不存在数据" + complaintDto.getComplaintId());
+        Assert.listOnlyOne(purchaseApplyDtos, "存在多条记录，或不存在数据" + purchaseApplyDto.getApplyOrderId());
 
         JSONObject businessComplaint = new JSONObject();
         businessComplaint.putAll(BeanConvertUtil.beanCovertMap(purchaseApplyDtos.get(0)));

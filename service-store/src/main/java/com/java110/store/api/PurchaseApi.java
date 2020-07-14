@@ -54,7 +54,7 @@ public class PurchaseApi {
         purchaseApplyPo.setEndUserTel(reqJson.getString("endUserTel"));
         purchaseApplyPo.setStoreId(storeId);
         purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
-        purchaseApplyPo.setState(PurchaseApplyDto.STATE_WAIT_DEAL);
+        purchaseApplyPo.setState(PurchaseApplyDto.STATE_DEALING);
 
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
 

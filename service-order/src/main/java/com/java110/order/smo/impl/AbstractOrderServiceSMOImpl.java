@@ -361,7 +361,7 @@ public abstract class AbstractOrderServiceSMOImpl {
         centerServiceDaoImpl.updateOrder(OrderDataFlowContextFactory.getNeedInvalidOrder(dataFlow));
 
         //作废订单项
-        centerServiceDaoImpl.updateBusiness(OrderDataFlowContextFactory.getNeedDeleteBusiness(dataFlow,deleteBusinesses));
+        centerServiceDaoImpl.updateBusinessByBId(OrderDataFlowContextFactory.getNeedDeleteBusiness(dataFlow,deleteBusinesses));
 
         //加入撤单记录
         //doAddDeleteOrderBusinessData(dataFlow);

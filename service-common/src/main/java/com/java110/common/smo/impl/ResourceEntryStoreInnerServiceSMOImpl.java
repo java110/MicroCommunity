@@ -2,12 +2,16 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IResourceEntryStoreInnerServiceSMO;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceOrderDto;
 import com.java110.entity.audit.AuditUser;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -39,6 +43,9 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
+
 
     /**
      * 启动流程
@@ -49,8 +56,9 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("resourceOrderDto", resourceOrderDto);
+
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("resourceEntry", variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(resourceOrderDto.getStoreId()), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
@@ -68,7 +76,7 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("resourceEntry");
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -80,7 +88,7 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
      */
     public List<PurchaseApplyDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("resourceEntry");
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
@@ -159,8 +167,28 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
         TaskService taskService = processEngine.getTaskService();
 
         taskService.complete(resourceOrderDto.getTaskId());
+
+
         return true;
     }
 
+
+
+    private String getWorkflowDto(String storeId) {
+        //开启流程
+        //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
+        WorkflowDto workflowDto = new WorkflowDto();
+        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
+        workflowDto.setStoreId(storeId);
+        List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
+
+        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条");
+
+        WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
+        if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
+            throw new IllegalArgumentException("流程还未部署");
+        }
+        return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
+    }
 
 }

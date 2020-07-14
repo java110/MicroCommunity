@@ -21,6 +21,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     public static final String RES_ORDER_TYPE_OUT = "20000"; //出库
 
     public static final String STATE_WAIT_DEAL = "1000"; // 等待处理
+    public static final String STATE_DEALING = "1001"; // 审核中
 
     private String resOrderType;
     private String description;

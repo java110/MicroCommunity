@@ -71,7 +71,7 @@
     <update id="updateOrderItem" parameterType="Map">
         update c_order_item t
         set t.finish_time = #{finishTime},
-             t.status_cd = #{statusCd}
+        t.status_cd = #{statusCd}
         where t.o_id = #{oId}
         <if test="bId !=null and bId != ''">
             and t.b_id = #{bId}
@@ -85,7 +85,6 @@
             and t.b_id = #{bId}
         </if>
     </update>
-
 
 
     <!-- 保存订单项信息 c_business -->
@@ -119,14 +118,11 @@
     </update>
     <!-- 更新订单项信息（一般就更新订单项状态）-->
     <update id="updateBusiness" parameterType="Map">
-        <![CDATA[
 
-                    update c_business cb set
-                    cb.status_cd=#{statusCd},
-                    cb.finish_time=#{finishTime}
-                    where cb.o_id=#{oId}
-
-        ]]>
+        update c_business cb set
+        cb.status_cd=#{statusCd},
+        cb.finish_time=#{finishTime}
+        where cb.o_id=#{oId}
     </update>
     <!--根据bId 修改业务项信息-->
     <update id="updateBusinessByBId" parameterType="Map">

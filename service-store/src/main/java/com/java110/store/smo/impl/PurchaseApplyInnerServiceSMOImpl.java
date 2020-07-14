@@ -10,15 +10,17 @@ import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
-import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -95,11 +97,14 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
             purchaseApplyDto.setPage((page - 1) * purchaseApplyDto.getRow());
         }
 
-        List<PurchaseApplyDto> purchaseApplys = purchaseApplyServiceDaoImpl.getPurchaseApplyInfo2(BeanConvertUtil.beanCovertMap(purchaseApplyDto));
+        List<PurchaseApplyDto> purchaseApplys = BeanConvertUtil.covertBeanList(
+                purchaseApplyServiceDaoImpl.getPurchaseApplyInfo(BeanConvertUtil.beanCovertMap(purchaseApplyDto)), PurchaseApplyDto.class);
 
         if (purchaseApplys == null || purchaseApplys.size() == 0) {
             return purchaseApplys;
         }
+
+        freshPurchaseApplyDetail(purchaseApplys);
 
         String[] userIds = getUserIds(purchaseApplys);
         //根据 userId 查询用户信息
@@ -109,6 +114,38 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
             refreshPurchaseApply(purchaseApply, users);
         }
         return purchaseApplys;
+    }
+
+    private void freshPurchaseApplyDetail(List<PurchaseApplyDto> purchaseApplys) {
+
+        List<String> applyOrderIds = new ArrayList<String>();
+        for (PurchaseApplyDto purchaseApplyDto : purchaseApplys) {
+            applyOrderIds.add(purchaseApplyDto.getApplyOrderId());
+        }
+
+        if (applyOrderIds.size() < 1) {
+            return;
+        }
+
+        String[] tmpApplyOrderIds = applyOrderIds.toArray(new String[applyOrderIds.size()]);
+
+        Map info = new HashMap<>();
+        info.put("applyOrderIds", tmpApplyOrderIds);
+        List<Map> details = purchaseApplyServiceDaoImpl.getPurchaseApplyDetailInfo(info);
+
+        List<PurchaseApplyDetailDto> purchaseApplyDetailDtos = BeanConvertUtil.covertBeanList(details, PurchaseApplyDetailDto.class);
+
+        List<PurchaseApplyDetailDto> purchaseApplyDetailDtoList = null;
+        for (PurchaseApplyDto purchaseApplyDto : purchaseApplys) {
+            purchaseApplyDetailDtoList = new ArrayList<>();
+            for (PurchaseApplyDetailDto purchaseApplyDetailDto : purchaseApplyDetailDtos) {
+                if (purchaseApplyDto.getApplyOrderId().equals(purchaseApplyDetailDto.getApplyOrderId())) {
+                    purchaseApplyDetailDtoList.add(purchaseApplyDetailDto);
+                }
+            }
+            purchaseApplyDto.setPurchaseApplyDetailVo(BeanConvertUtil.covertBeanList(purchaseApplyDetailDtoList, PurchaseApplyDetailVo.class));
+        }
+
     }
 
 

@@ -245,7 +245,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
             param = new JSONObject();
             JSONObject keyValue = afterValues.getJSONObject(preValueIndex);
             for (String key : keyValue.keySet()) {
-                if (StringUtil.isEmpty(keyValue.getString(key))) {
+                if (!StringUtil.isEmpty(keyValue.getString(key))) {
                     sql += (" and " + key + "=" + keyValue.getString(key));
                 }
             }
