@@ -2,19 +2,24 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.workflow.WorkflowDto;
-import com.java110.intf.common.IResourceEntryStoreInnerServiceSMO;
-import com.java110.intf.common.IWorkflowInnerServiceSMO;
-import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceOrderDto;
+import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
+import com.java110.intf.common.IResourceEntryStoreInnerServiceSMO;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.engine.query.Query;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -92,12 +97,12 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
-        if(user.getPage()  >=1){
-            user.setPage(user.getPage()-1);
+        if (user.getPage() >= 1) {
+            user.setPage(user.getPage() - 1);
         }
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
             list = query.listPage(user.getPage(), user.getRow());
-        }else{
+        } else {
             list = query.list();
         }
 
@@ -173,7 +178,6 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
     }
 
 
-
     private String getWorkflowDto(String storeId) {
         //开启流程
         //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
@@ -181,14 +185,89 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
         workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
         workflowDto.setStoreId(storeId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
-
-        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条");
+        Assert.listOnlyOne(workflowDtos, "未找到 采购流程或找到多条");
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
             throw new IllegalArgumentException("流程还未部署");
         }
         return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
+    }
+
+    /**
+     * 查询用户任务数
+     *
+     * @param user
+     * @return
+     */
+    public long getUserHistoryTaskCount(@RequestBody AuditUser user) {
+        HistoryService historyService = processEngine.getHistoryService();
+//        Query query = historyService.createHistoricTaskInstanceQuery()
+//                .processDefinitionKey("complaint")
+//                .taskAssignee(user.getUserId());
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+                .processDefinitionKey(getWorkflowDto(user.getStoreId()))
+                .taskAssignee(user.getUserId());
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaint");
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaitDealUser");
+        }
+
+        Query query = historicTaskInstanceQuery;
+        return query.count();
+    }
+
+    /**
+     * 获取用户审批的任务
+     *
+     * @param user 用户信息
+     */
+    public List<PurchaseApplyDto> getUserHistoryTasks(@RequestBody AuditUser user) {
+        HistoryService historyService = processEngine.getHistoryService();
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+                .processDefinitionKey(getWorkflowDto(user.getStoreId()))
+                .taskAssignee(user.getUserId());
+//        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
+//            historicTaskInstanceQuery.taskName("complaint");
+//        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
+//            historicTaskInstanceQuery.taskName("complaitDealUser");
+//        }
+
+        Query query = historicTaskInstanceQuery.orderByHistoricTaskInstanceStartTime().desc();
+
+        List<HistoricTaskInstance> list = null;
+        if (user.getPage() != PageDto.DEFAULT_PAGE) {
+            list = query.listPage((user.getPage() - 1) * user.getRow(), user.getRow());
+        } else {
+            list = query.list();
+        }
+
+        List<String> applyOrderIds = new ArrayList<>();
+        Map<String, String> taskBusinessKeyMap = new HashMap<>();
+
+        for (HistoricTaskInstance task : list) {
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            HistoricProcessInstance pi = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            //4.使用流程实例对象获取BusinessKey
+            String business_key = pi.getBusinessKey();
+            applyOrderIds.add(business_key);
+            taskBusinessKeyMap.put(business_key, task.getId());
+        }
+
+        //查询 投诉信息
+        PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
+        purchaseApplyDto.setStoreId(user.getStoreId());
+        purchaseApplyDto.setApplyOrderIds(applyOrderIds.toArray(new String[applyOrderIds.size()]));
+        List<PurchaseApplyDto> tmpPurchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
+
+        for (PurchaseApplyDto tmpPurchaseApplyDto : tmpPurchaseApplyDtos) {
+            tmpPurchaseApplyDto.setTaskId(taskBusinessKeyMap.get(tmpPurchaseApplyDto.getApplyOrderId()));
+        }
+        return tmpPurchaseApplyDtos;
     }
 
 }

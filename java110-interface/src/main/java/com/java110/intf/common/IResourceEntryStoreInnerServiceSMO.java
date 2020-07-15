@@ -64,4 +64,21 @@ public interface IResourceEntryStoreInnerServiceSMO {
      */
     @RequestMapping(value = "/complete", method = RequestMethod.GET)
     public boolean complete(@RequestBody ResourceOrderDto resourceOrderDto);
+
+    /**
+     * 查询用户任务数
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/getUserHistoryTaskCount", method = RequestMethod.POST)
+    public long getUserHistoryTaskCount(@RequestBody AuditUser user);
+
+    /**
+     * 获取用户审批的任务
+     *
+     * @param user 用户信息
+     */
+    @RequestMapping(value = "/getUserHistoryTasks", method = RequestMethod.POST)
+    public List<PurchaseApplyDto> getUserHistoryTasks(@RequestBody AuditUser user);
 }

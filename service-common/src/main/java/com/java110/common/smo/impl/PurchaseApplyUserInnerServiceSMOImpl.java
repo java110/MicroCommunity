@@ -99,7 +99,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         workflowDto.setStoreId(storeId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
 
-        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条");
+        Assert.listOnlyOne(workflowDtos, "未找到 采购流程或找到多条");
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
