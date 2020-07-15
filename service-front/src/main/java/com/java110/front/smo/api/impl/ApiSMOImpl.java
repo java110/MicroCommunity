@@ -46,6 +46,11 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
             return new ComponentValidateResult("", "", "", pd.getUserId(), pd.getUserName());
         }
 
+        JSONObject storeInfo = JSONObject.parseObject(responseEntity.getBody().toString());
+        if(!storeInfo.containsKey("storeId")){
+            return new ComponentValidateResult("", "", "", pd.getUserId(), pd.getUserName());
+        }
+
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
 
