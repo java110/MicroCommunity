@@ -32,8 +32,8 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
     @Override
     protected ResponseEntity<String> getStoreInfo(IPageData pd, RestTemplate restTemplate) {
 
-        if(StringUtil.isEmpty(pd.getUserId())){
-            return new ResponseEntity<>("未包含用户信息",HttpStatus.BAD_REQUEST);
+        if (StringUtil.isEmpty(pd.getUserId())) {
+            return new ResponseEntity<>("未包含用户信息", HttpStatus.BAD_REQUEST);
         }
         return super.getStoreInfo(pd, restTemplate);
     }
@@ -68,8 +68,10 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
-        header.add("user-id", result.getUserId());
-        header.add("user-name", result.getUserName());
+        if (!StringUtil.isEmpty(result.getUserId())) {
+            header.add("user-id", result.getUserId());
+            header.add("user-name", result.getUserName());
+        }
         header.add("store-id", result.getStoreId());
         logger.debug("api请求头" + headers + ";请求内容：" + body);
         HttpMethod method = null;
