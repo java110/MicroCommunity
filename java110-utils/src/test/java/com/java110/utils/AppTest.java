@@ -33,6 +33,9 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+
+        String a = "1";
+        System.out.printf("a=" + Integer.parseInt(a));
+
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 //采购明细表
 public class PurchaseApplyDetailVo {
+    private String id;
     private String applyOrderId;
     private String resId;
     private String quantity;
@@ -121,6 +122,14 @@ public class PurchaseApplyDetailVo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 

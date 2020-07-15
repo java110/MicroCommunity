@@ -2,17 +2,22 @@ package com.java110.store.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.store.IResourceStoreInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.intf.store.IResourceStoreInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IResourceStoreServiceDao;
+import com.java110.utils.lock.DistributedLock;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -52,6 +57,31 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
     public int queryResourceStoresCount(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
         return resourceResourceStoreServiceDaoImpl.queryResourceStoresCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto));
     }
+
+    @Override
+    public int updateResourceStore(@RequestBody ResourceStorePo resourceStorePo) {
+        //查询
+        //开始锁代码
+        String requestId = DistributedLock.getLockUUID();
+        String key = this.getClass().getSimpleName() + resourceStorePo.getResId();
+        try {
+            DistributedLock.waitGetDistributedLock(key, requestId);
+            Map info = new HashMap<>();
+            info.put("resId", resourceStorePo.getResId());
+            info.put("storeId", resourceStorePo.getStoreId());
+            List<Map> stores = resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(info);
+
+            Assert.listOnlyOne(stores, "不存在该物品");
+            int stock = Integer.parseInt(stores.get(0).get("stock").toString());
+            int newStock = Integer.parseInt(resourceStorePo.getStock());
+            resourceStorePo.setStock((stock + newStock) + "");
+            resourceStorePo.setStatusCd("0");
+            return resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance(BeanConvertUtil.beanCovertMap(resourceStorePo));
+        } finally {
+            DistributedLock.releaseDistributedLock(requestId, key);
+        }
+    }
+
 
     public IResourceStoreServiceDao getResourceStoreServiceDaoImpl() {
         return resourceResourceStoreServiceDaoImpl;

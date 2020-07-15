@@ -2,6 +2,7 @@ package com.java110.store.smo.impl;
 
 
 import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.store.dao.IPurchaseApplyDetailServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -90,6 +91,11 @@ public class PurchaseApplyDetailInnerServiceSMOImpl extends BaseServiceSMO imple
     @Override
     public int queryPurchaseApplyDetailsCount(@RequestBody PurchaseApplyDetailDto purchaseApplyDetailDto) {
         return purchaseApplyDetailServiceDaoImpl.queryPurchaseApplyDetailsCount(BeanConvertUtil.beanCovertMap(purchaseApplyDetailDto));    }
+
+    @Override
+    public int updatePurchaseApplyDetail(@RequestBody PurchaseApplyDetailPo purchaseApplyDetailPo) {
+        return purchaseApplyDetailServiceDaoImpl.updatePurchaseApplyDetailInfoInstance(BeanConvertUtil.beanCovertMap(purchaseApplyDetailPo));
+    }
 
     public IPurchaseApplyDetailServiceDao getPurchaseApplyDetailServiceDaoImpl() {
         return purchaseApplyDetailServiceDaoImpl;

@@ -67,7 +67,7 @@ public interface IResourceStoreServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    void updateResourceStoreInfoInstance(Map info) throws DAOException;
+    int updateResourceStoreInfoInstance(Map info) throws DAOException;
 
 
     /**

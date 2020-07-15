@@ -62,7 +62,7 @@ public interface IPurchaseApplyDetailServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    void updatePurchaseApplyDetailInfoInstance(Map info) throws DAOException;
+    int updatePurchaseApplyDetailInfoInstance(Map info) throws DAOException;
 
 
     /**

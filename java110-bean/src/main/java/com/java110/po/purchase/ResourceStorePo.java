@@ -19,6 +19,7 @@ public class ResourceStorePo implements Serializable {
     private String description;
     private String price;
     private String stock;
+    private String statusCd;
 
     public String getResId() {
         return resId;
@@ -74,5 +75,13 @@ public class ResourceStorePo implements Serializable {
 
     public void setStock(String stock) {
         this.stock = stock;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

@@ -7,8 +7,8 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
-import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.bmo.purchase.IPurchaseApplyBMO;
+import com.java110.store.bmo.purchase.IResourceEnterBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,9 @@ public class PurchaseApi {
 
     @Autowired
     private IPurchaseApplyBMO purchaseApplyBMOImpl;
+
+    @Autowired
+    private IResourceEnterBMO resourceEnterBMOImpl;
 
     /**
      * 采购申请
@@ -63,10 +66,34 @@ public class PurchaseApi {
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
+            purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
 
         return purchaseApplyBMOImpl.apply(purchaseApplyPo);
+    }
+
+    @RequestMapping(value = "/resourceEnter", method = RequestMethod.POST)
+    public ResponseEntity<String> resourceEnter(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单ID为空");
+
+        JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
+
+        List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
+        for (int detailIndex = 0; detailIndex < purchaseApplyDetails.size(); detailIndex++) {
+            JSONObject purchaseApplyDetail = purchaseApplyDetails.getJSONObject(detailIndex);
+            Assert.hasKeyAndValue(purchaseApplyDetail, "purchaseQuantity", "采购数量未填写");
+            Assert.hasKeyAndValue(purchaseApplyDetail, "price", "采购单价未填写");
+            Assert.hasKeyAndValue(purchaseApplyDetail, "id", "明细ID为空");
+            PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(purchaseApplyDetail, PurchaseApplyDetailPo.class);
+            purchaseApplyDetailPos.add(purchaseApplyDetailPo);
+
+        }
+
+        PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
+        purchaseApplyPo.setApplyOrderId(reqJson.getString("applyOrderId"));
+        purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
+        return resourceEnterBMOImpl.enter(purchaseApplyPo);
     }
 }

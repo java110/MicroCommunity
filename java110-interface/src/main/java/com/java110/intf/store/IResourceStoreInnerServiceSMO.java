@@ -2,6 +2,7 @@ package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.po.purchase.ResourceStorePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,4 +39,7 @@ public interface IResourceStoreInnerServiceSMO {
      */
     @RequestMapping(value = "/queryResourceStoresCount", method = RequestMethod.POST)
     int queryResourceStoresCount(@RequestBody ResourceStoreDto resourceResourceStoreDto);
+
+    @RequestMapping(value = "/updateResourceStore", method = RequestMethod.POST)
+    int updateResourceStore(@RequestBody ResourceStorePo resourceStorePo);
 }

@@ -10,12 +10,12 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.common.IWorkflowInnerServiceSMO;
-import com.java110.intf.common.IWorkflowStepInnerServiceSMO;
-import com.java110.intf.common.IWorkflowStepStaffInnerServiceSMO;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowStepDto;
 import com.java110.dto.workflow.WorkflowStepStaffDto;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.common.IWorkflowStepInnerServiceSMO;
+import com.java110.intf.common.IWorkflowStepStaffInnerServiceSMO;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.po.workflow.WorkflowStepPo;
 import com.java110.po.workflow.WorkflowStepStaffPo;
@@ -23,6 +23,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeWorkflowConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
@@ -157,6 +158,7 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
             workflowStepStaffPo.setStaffId(step.getString("staffId"));
             workflowStepStaffPo.setStaffName(step.getString("staffName"));
             workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
+            workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(step.getString("staffRole")) ? "1001" : step.getString("staffRole"));
             super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
             workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
             //会签流程
@@ -170,6 +172,8 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
                     workflowStepStaffPo.setStaffId(subStaff.getString("staffId"));
                     workflowStepStaffPo.setStaffName(subStaff.getString("staffName"));
                     workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
+                    workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(subStaff.getString("staffRole")) ? "1001" : subStaff.getString("staffRole"));
+
                     super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
                     workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
                 }

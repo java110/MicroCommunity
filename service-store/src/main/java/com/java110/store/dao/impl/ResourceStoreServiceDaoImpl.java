@@ -102,14 +102,12 @@ public class ResourceStoreServiceDaoImpl extends BaseServiceDao implements IReso
      * @throws DAOException DAO异常
      */
     @Override
-    public void updateResourceStoreInfoInstance(Map info) throws DAOException {
+    public int updateResourceStoreInfoInstance(Map info) throws DAOException {
         logger.debug("修改资源信息Instance 入参 info : {}", info);
 
         int saveFlag = sqlSessionTemplate.update("resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance", info);
 
-        if (saveFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改资源信息Instance数据失败：" + JSONObject.toJSONString(info));
-        }
+        return saveFlag;
     }
 
     /**

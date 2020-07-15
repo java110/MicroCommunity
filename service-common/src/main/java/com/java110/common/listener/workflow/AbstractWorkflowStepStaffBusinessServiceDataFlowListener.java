@@ -43,6 +43,7 @@ public abstract class AbstractWorkflowStepStaffBusinessServiceDataFlowListener e
         businessWorkflowStepStaffInfo.put("staffName", businessWorkflowStepStaffInfo.get("staff_name"));
         businessWorkflowStepStaffInfo.put("communityId", businessWorkflowStepStaffInfo.get("community_id"));
         businessWorkflowStepStaffInfo.put("staffId", businessWorkflowStepStaffInfo.get("staff_id"));
+        businessWorkflowStepStaffInfo.put("staffRole", businessWorkflowStepStaffInfo.get("staff_role"));
         businessWorkflowStepStaffInfo.remove("bId");
         businessWorkflowStepStaffInfo.put("statusCd", statusCd);
     }
@@ -73,6 +74,7 @@ public abstract class AbstractWorkflowStepStaffBusinessServiceDataFlowListener e
         currentWorkflowStepStaffInfo.put("staffName", currentWorkflowStepStaffInfo.get("staff_name"));
         currentWorkflowStepStaffInfo.put("communityId", currentWorkflowStepStaffInfo.get("community_id"));
         currentWorkflowStepStaffInfo.put("staffId", currentWorkflowStepStaffInfo.get("staff_id"));
+        currentWorkflowStepStaffInfo.put("staffRole", currentWorkflowStepStaffInfo.get("staff_role"));
 
 
         currentWorkflowStepStaffInfo.put("operate", StatusConstant.OPERATE_DEL);

@@ -216,6 +216,14 @@ public class Java110MybatisInterceptor implements Interceptor {
                 Date date = new Date(((Timestamp) value).getTime());
                 String tmpValue = DateUtil.getFormatTimeString(date, DateUtil.DATE_FORMATE_STRING_A);
                 map.put(key, "'" + tmpValue + "'");
+            } else if(value instanceof Double){
+                map.put(key, "'" + map.get(key) + "'");
+            }else {
+                if (value != null) {
+                    map.put(key, "'" + value.toString() + "'");
+                } else {
+                    map.put(key, "''");
+                }
             }
         }
     }

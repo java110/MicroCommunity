@@ -106,7 +106,7 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
 
         JSONObject businessComplaint = new JSONObject();
         businessComplaint.putAll(BeanConvertUtil.beanCovertMap(purchaseApplyDtos.get(0)));
-        businessComplaint.put("state", "10002");
+        businessComplaint.put("state", "1002");
         PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(businessComplaint, PurchaseApplyPo.class);
 
         super.update(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);

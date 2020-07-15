@@ -2,6 +2,7 @@ package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,4 +41,13 @@ public interface IPurchaseApplyDetailInnerServiceSMO {
      */
     @RequestMapping(value = "/queryPurchaseApplyDetailsCount", method = RequestMethod.POST)
     int queryPurchaseApplyDetailsCount(@RequestBody PurchaseApplyDetailDto purchaseApplyDetailDto);
+
+    /**
+     * 修改采购申请明细
+     *
+     * @param purchaseApplyDetailPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/updatePurchaseApplyDetail", method = RequestMethod.POST)
+    int updatePurchaseApplyDetail(@RequestBody PurchaseApplyDetailPo purchaseApplyDetailPo);
 }

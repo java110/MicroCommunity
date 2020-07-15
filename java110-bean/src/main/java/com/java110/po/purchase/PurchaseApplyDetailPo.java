@@ -16,6 +16,12 @@ public class PurchaseApplyDetailPo implements Serializable {
     private String resId;
     private String quantity;
     private String remark;
+    private String price;
+    private String id;
+
+    private String purchaseQuantity;
+
+    private String purchaseRemark;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -47,5 +53,37 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getPurchaseQuantity() {
+        return purchaseQuantity;
+    }
+
+    public void setPurchaseQuantity(String purchaseQuantity) {
+        this.purchaseQuantity = purchaseQuantity;
+    }
+
+    public String getPurchaseRemark() {
+        return purchaseRemark;
+    }
+
+    public void setPurchaseRemark(String purchaseRemark) {
+        this.purchaseRemark = purchaseRemark;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

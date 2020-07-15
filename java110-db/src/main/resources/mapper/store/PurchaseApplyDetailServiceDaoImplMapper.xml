@@ -6,17 +6,17 @@
 
     <!-- 保存订单明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessPurchaseApplyDetailInfo" parameterType="Map">
-           insert into business_purchase_apply_detail
-                (operate,apply_order_id,b_id,res_id,quantity,remark,status_cd) values
-           (#{operate},#{applyOrderId},#{bId},#{resId},#{quantity},#{remark},#{statusCd})
-       </insert>
+        insert into business_purchase_apply_detail
+        (operate,apply_order_id,b_id,res_id,quantity,remark,status_cd) values
+        (#{operate},#{applyOrderId},#{bId},#{resId},#{quantity},#{remark},#{statusCd})
+    </insert>
 
 
     <!-- 查询订单明细信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
         select
-            t.operate,t.apply_order_id,t.apply_order_id applyOrderId,
-            t.b_id,t.b_id bId,t.res_id,t.res_id resId
+        t.operate,t.apply_order_id,t.apply_order_id applyOrderId,
+        t.b_id,t.b_id bId,t.res_id,t.res_id resId
         from business_purchase_apply_detail t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -92,16 +92,27 @@
 
     <!-- 修改订单明细信息 add by wuxw 2018-07-03 -->
     <update id="updatePurchaseApplyDetailInfoInstance" parameterType="Map">
-        update purchase_apply_detail t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
-        <if test="applyOrderId !=null and applyOrderId != ''">
-            , t.apply_order_id= #{applyOrderId}
-        </if>
-        <if test="resId !=null and resId != ''">
-            , t.res_id= #{resId}
-        </if>
+        update purchase_apply_detail t
+        <set>
+            <if test="statusCd != null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
+            <if test="newBId != null and newBId != ''">
+                t.b_id = #{newBId},
+            </if>
+            <if test="resId !=null and resId != ''">
+                t.res_id= #{resId},
+            </if>
+            <if test="price !=null and price != ''">
+                t.price= #{price},
+            </if>
+            <if test="purchaseQuantity !=null and purchaseQuantity != ''">
+                t.purchase_quantity= #{purchaseQuantity},
+            </if>
+            <if test="purchaseRemark !=null and purchaseRemark != ''">
+                t.purchase_remark= #{purchaseRemark},
+            </if>
+        </set>
         where 1=1
         <if test="id !=null and id != ''">
             and t.id= #{id}

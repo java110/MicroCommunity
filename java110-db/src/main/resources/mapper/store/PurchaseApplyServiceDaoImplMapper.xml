@@ -6,21 +6,22 @@
 
 
     <resultMap type="com.java110.dto.purchaseApply.PurchaseApplyDto" id="applyMap">
-        <id column="applyOrderId"  property="applyOrderId"/>
-        <result column="description"  property="description"/>
-        <result column="resOrderType"  property="resOrderType"/>
-        <result column="statusCd"  property="statusCd"/>
-        <result column="state"  property="state"/>
-        <result column="storeId"  property="storeId"/>
-        <result column="userName"  property="userName"/>
-        <result column="bId"  property="bId"/>
+        <id column="applyOrderId" property="applyOrderId"/>
+        <result column="description" property="description"/>
+        <result column="resOrderType" property="resOrderType"/>
+        <result column="statusCd" property="statusCd"/>
+        <result column="state" property="state"/>
+        <result column="storeId" property="storeId"/>
+        <result column="userName" property="userName"/>
+        <result column="bId" property="bId"/>
         <result column="userId" property="userId"/>
         <result column="createTime" property="createTime"/>
         <result column="stateName" property="stateName"/>
         <result column="endUserName" property="endUserName"/>
         <result column="endUserTel" property="endUserTel"/>
         <!-- 一对多关系 -->
-        <collection property="purchaseApplyDetailVo" ofType="com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo"  javaType="java.util.ArrayList">
+        <collection property="purchaseApplyDetailVo" ofType="com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo"
+                    javaType="java.util.ArrayList">
             <id property="id" column="id"/>
             <result property="applyOrderId" column="applyOrderId"/>
             <result property="resId" column="resId"/>
@@ -36,10 +37,10 @@
 
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessPurchaseApplyInfo" parameterType="Map">
-           insert into business_purchase_apply
-                (operate,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel)
-           values
-                (#{operate},#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},#{bId},#{endUserName},#{endUserTel})
+        insert into business_purchase_apply
+        (operate,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel)
+        values
+        (#{operate},#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},#{bId},#{endUserName},#{endUserTel})
     </insert>
 
     <!-- 保存采购明细表备份表 -->
@@ -47,7 +48,7 @@
         insert into business_purchase_apply_detail (apply_order_id,res_id,quantity,remark,b_id,operate,status_cd)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-        (
+            (
             #{item.applyOrderId},
             #{item.resId},
             #{item.quantity},
@@ -55,17 +56,18 @@
             #{item.bId},
             #{item.operate},
             #{item.statusCd}
-        )
+            )
         </foreach>
     </insert>
 
 
     <!-- 保存采购明细表-->
     <insert id="savePurchaseApplyDetailInfo" parameterType="List">
-        insert into purchase_apply_detail (apply_order_id,res_id,quantity,remark,b_id,operate,status_cd)
+        insert into purchase_apply_detail (id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
+            #{item.id},
             #{item.applyOrderId},
             #{item.resId},
             #{item.quantity},
@@ -78,15 +80,23 @@
     </insert>
 
 
-
     <!-- 查询采购申请信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPurchaseApplyInfo" parameterType="Map" resultType="Map">
         select
-            t.operate,t.res_order_type resOrderType,
+            t.operate,
+            t.res_order_type,
+            t.res_order_type resOrderType,
             t.description,
-            t.apply_order_id applyOrderId,t.state,
+            t.apply_order_id,
+            t.apply_order_id applyOrderId,
+            t.state,
+            t.store_id,
             t.store_id storeId,
-            t.user_name userName,t.b_id bId,t.user_id userId,
+            t.user_name userName,
+            t.b_id bId,
+            t.b_id,
+            t.user_id,
+            t.user_id userId,
             t.status_cd statusCd,
             t.end_user_name,
             t.end_user_tel,
@@ -184,15 +194,15 @@
     <!-- 查询采购申请信息 add by wuxw 2018-07-03 -->
     <select id="getPurchaseApplyInfo" parameterType="Map" resultType="Map">
         select
-            t.res_order_type resOrderType,t.description,
-            t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
-            t.store_id storeId,t.user_name userName,
-            t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
-            t.end_user_name,
-            t.end_user_tel,
-            t.end_user_name endUserName,
-            t.end_user_tel endUserTel,
-            t.description
+        t.res_order_type resOrderType,t.description,
+        t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
+        t.store_id storeId,t.user_name userName,
+        t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
+        t.end_user_name,
+        t.end_user_tel,
+        t.end_user_name endUserName,
+        t.end_user_tel endUserTel,
+        t.description
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 =1
@@ -243,14 +253,14 @@
     </select>
 
 
-
     <select id="getPurchaseApplyInfo2" parameterType="Map" resultMap="applyMap">
         select
         t.res_order_type resOrderType,t.description,
         t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
         t.store_id storeId,t.user_name userName,
         t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
-        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,rs.res_name resName,rs.price,rs.stock,rs.res_code resCode,rs.description,
+        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,rs.res_name
+        resName,rs.price,rs.stock,rs.res_code resCode,rs.description,
         t.end_user_name,
         t.end_user_tel,
         t.end_user_name endUserName,
@@ -296,12 +306,13 @@
     <!-- 查询采购明细 -->
     <select id="getPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
         select
-            p.apply_order_id applyOrderId,
-            p.res_id resId,p.quantity,p.remark,
-            r.res_name resName,r.res_code resCode,
-            r.price,r.stock
+        p.id,
+        p.apply_order_id applyOrderId,
+        p.res_id resId,p.quantity,p.remark,
+        r.res_name resName,r.res_code resCode,
+        r.price,r.stock
         from
-            purchase_apply_detail p inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
+        purchase_apply_detail p inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
         where 1=1
         and p.status_cd = '0'
         <if test="applyOrderIds !=null">
