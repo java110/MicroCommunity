@@ -30,6 +30,15 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
     private RestTemplate restTemplate;
 
     @Override
+    protected ResponseEntity<String> getStoreInfo(IPageData pd, RestTemplate restTemplate) {
+
+        if(StringUtil.isEmpty(pd.getUserId())){
+            return new ResponseEntity<>("未包含用户信息",HttpStatus.BAD_REQUEST);
+        }
+        return super.getStoreInfo(pd, restTemplate);
+    }
+
+    @Override
     protected ComponentValidateResult validateStoreStaffCommunityRelationship(IPageData pd, RestTemplate restTemplate) {
         // 校验 员工和商户是否有关系
         ResponseEntity responseEntity = getStoreInfo(pd, restTemplate);
