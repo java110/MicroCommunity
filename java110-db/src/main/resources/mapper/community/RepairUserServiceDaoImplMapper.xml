@@ -176,9 +176,9 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="state !=null and state != ''">
-            and t.state= #{state}
-        </if>
+<!--        <if test="state !=null and state != ''">-->
+<!--            and t.state= #{state}-->
+<!--        </if>-->
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>

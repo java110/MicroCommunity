@@ -74,7 +74,12 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             Assert.listOnlyOne(stores, "不存在该物品");
             int stock = Integer.parseInt(stores.get(0).get("stock").toString());
             int newStock = Integer.parseInt(resourceStorePo.getStock());
-            resourceStorePo.setStock((stock + newStock) + "");
+            int totalStock = stock + newStock;
+
+            if (totalStock < 0) {
+                throw new IllegalArgumentException("库存不足，参数有误");
+            }
+            resourceStorePo.setStock(totalStock + "");
             resourceStorePo.setStatusCd("0");
             return resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance(BeanConvertUtil.beanCovertMap(resourceStorePo));
         } finally {
