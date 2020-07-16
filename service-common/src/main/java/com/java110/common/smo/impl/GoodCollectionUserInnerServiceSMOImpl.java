@@ -224,9 +224,9 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
                 .processDefinitionKey(getWorkflowDto(user.getStoreId()))
                 .taskAssignee(user.getUserId());
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
-            historicTaskInstanceQuery.taskName("resourceEnter");
+            historicTaskInstanceQuery.taskName("complaint");
         } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
-            historicTaskInstanceQuery.taskName("resourceEnterDealUser");
+            historicTaskInstanceQuery.taskName("complaitDealUser");
         }
 
         Query query = historicTaskInstanceQuery;
@@ -242,13 +242,13 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
         HistoryService historyService = processEngine.getHistoryService();
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey("resourceEnter")
+                .processDefinitionKey(getWorkflowDto(user.getStoreId()))
                 .taskAssignee(user.getUserId());
-        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
-            historicTaskInstanceQuery.taskName("resourceEnter");
-        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
-            historicTaskInstanceQuery.taskName("resourceEnterDealUser");
-        }
+//        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
+//            historicTaskInstanceQuery.taskName("complaint");
+//        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
+//            historicTaskInstanceQuery.taskName("complaitDealUser");
+//        }
 
         Query query = historicTaskInstanceQuery.orderByHistoricTaskInstanceStartTime().desc();
 
@@ -259,23 +259,29 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
             list = query.list();
         }
 
-        List<String> complaintIds = new ArrayList<>();
+        List<String> applyOrderIds = new ArrayList<>();
+        Map<String, String> taskBusinessKeyMap = new HashMap<>();
+
         for (HistoricTaskInstance task : list) {
             String processInstanceId = task.getProcessInstanceId();
             //3.使用流程实例，查询
             HistoricProcessInstance pi = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
-            complaintIds.add(business_key);
+            applyOrderIds.add(business_key);
+            taskBusinessKeyMap.put(business_key, task.getId());
         }
 
         //查询 投诉信息
-//        ComplaintDto complaintDto = new ComplaintDto();
-//        complaintDto.setStoreId(user.getStoreId());
-//        complaintDto.setCommunityId(user.getCommunityId());
-//        complaintDto.setComplaintIds(complaintIds.toArray(new String[complaintIds.size()]));
-//        List<ComplaintDto> tmpComplaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
-        return null;
+        PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
+        purchaseApplyDto.setStoreId(user.getStoreId());
+        purchaseApplyDto.setApplyOrderIds(applyOrderIds.toArray(new String[applyOrderIds.size()]));
+        List<PurchaseApplyDto> tmpPurchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
+
+        for (PurchaseApplyDto tmpPurchaseApplyDto : tmpPurchaseApplyDtos) {
+            tmpPurchaseApplyDto.setTaskId(taskBusinessKeyMap.get(tmpPurchaseApplyDto.getApplyOrderId()));
+        }
+        return tmpPurchaseApplyDtos;
     }
 
 
