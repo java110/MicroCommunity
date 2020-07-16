@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
+import com.java110.front.smo.feeConfig.IListRoomsWhereFeeSetSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.front.smo.feeConfig.IListRoomsWhereFeeSetSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +44,7 @@ public class ListRoomsWhereFeeSetSMOImpl extends AbstractComponentSMO implements
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
+        paramMap.put("userId", "");
         paramIn.putAll(paramMap);
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.listRoomsWhereFeeSet" + mapToUrlParam(paramIn);
