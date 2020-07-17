@@ -156,6 +156,8 @@
     <select id="queryInspectionsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from inspection_point t
+        left join machine m on t.machine_id = m.machine_id and m.status_cd = 0
+        left join t_dict d on d.status_cd = m.location_type_cd
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
             left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
             and c.status_cd = '0'
@@ -165,8 +167,8 @@
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
-        <if test="machineId !=null and machineId != ''">
-            and t.machine_id= #{machineId}
+        <if test="machineCode !=null and machineCode != ''">
+            and m.machine_code= #{machineCode}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -175,7 +177,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="inspectionName !=null and inspectionName != ''">
-            and t.inspection_name= #{inspectionName}
+            and t.inspection_name like concat('%',#{inspectionName},'%')
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
