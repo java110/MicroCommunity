@@ -84,8 +84,8 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         String urlString = "?appid={appId}&secret={secret}&js_code={code}&grant_type={grantType}";
         String response = outRestTemplate.getForObject(
                 wechatAuthProperties.getSessionHost() + urlString, String.class,
-                wechatAuthProperties.getAppId(),
-                wechatAuthProperties.getSecret(),
+                smallWeChatDto.getAppId(),
+                smallWeChatDto.getAppSecret(),
                 code,
                 wechatAuthProperties.getGrantType());
 
