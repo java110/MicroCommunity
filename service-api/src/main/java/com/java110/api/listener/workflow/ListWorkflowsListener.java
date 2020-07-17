@@ -99,12 +99,12 @@ public class ListWorkflowsListener extends AbstractServiceApiPlusListener {
 
         workflowDto = new WorkflowDto();
         workflowDto.setStoreId(reqJson.getString("storeId"));
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
+        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
         count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
         if (count < 1) {
             workflowPo = new WorkflowPo();
             workflowPo.setCommunityId("9999"); //所有小区
-            workflowPo.setFlowId("-3");
+            workflowPo.setFlowId("-4");
             workflowPo.setFlowName("物品领用");
             workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
             workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
