@@ -1,58 +1,58 @@
 {
-  "templateName":"报修设置",
+  "templateName":"微信模板",
   "directories": "property",
-  "templateCode":"repairSetting",
-  "templateKey":"settingId",
-  "templateKeyName":"设置",
-  "searchCode": "settingId",
-  "searchName": "设置",
+  "templateCode":"wechatSmsTemplate",
+  "templateKey":"templateId",
+  "templateKeyName":"ID",
+  "searchCode": "templateId",
+  "searchName": "ID",
   "conditions": [
     {
-      "name": "类型名称",
+      "name": "微信模板ID",
       "inputType": "input",
-      "code": "repairTypeName",
+      "code": "smsTemplateId",
       "whereCondition": "equal"
     },
     {
-      "name": "派单方式",
+      "name": "模板类型",
       "inputType": "select",
-      "selectValue":"100,200,300",
-      "selectValueName":"抢单,指派,轮训",
-      "code": "repairWay",
+      "selectValue":"10001,10002,10003",
+      "selectValueName":"欠费催缴,停电通知,停水通知",
+      "code": "templateType",
       "whereCondition": "equal"
     },
     {
-      "name": "派单类型",
+      "name": "模板编码",
       "inputType": "input",
-      "code": "repairType",
+      "code": "templateId",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code":"repairTypeName",
-      "cnCode":"类型名称",
-      "desc":"必填，请填写类型名称",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"max",
-      "limitParam":"1,200",
-      "limitErrInfo":"类型名称不能超过200位",
-      "show": true
-    },
-    {
-      "code": "repairWay",
-      "cnCode":"派单方式",
-      "desc":"必填，请填写派单方式",
+      "code":"templateType",
+      "cnCode":"模板类型",
+      "desc":"必填，请填写模板类型",
       "required":true,
       "hasDefaultValue":false,
       "inputType": "select",
-      "selectValue":"100,200,300",
-      "selectValueName":"抢单,指派,轮训",
+      "selectValue":"10001,10002,10003",
+      "selectValueName":"欠费催缴,停电通知,停水通知",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"模板格式错误",
+      "show": true
+    },
+    {
+      "code": "smsTemplateId",
+      "cnCode":"微信模板ID",
+      "desc":"必填，请填写微信模板ID",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
       "limit":"maxLength",
-      "limitParam":"12",
-      "limitErrInfo":"派单方式格式错误",
+      "limitParam":"64",
+      "limitErrInfo":"微信模板ID太长",
       "show": true
     },
     {

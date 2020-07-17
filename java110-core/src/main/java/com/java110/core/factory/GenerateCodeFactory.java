@@ -138,6 +138,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_appraiseId = "80";
 
 
+
     public static final String CODE_PREFIX_waterId = "78";
 
 

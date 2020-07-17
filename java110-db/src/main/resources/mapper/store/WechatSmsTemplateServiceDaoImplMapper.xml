@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wechatSmsTemplateServiceDaoImpl">
+
+
+    <!-- 保存微信消息模板信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWechatSmsTemplateInfo" parameterType="Map">
+        insert into wechat_sms_template(
+        template_type,wechat_id,sms_template_id,template_id,community_id,remarks
+        ) values (
+        #{templateType},#{wechatId},#{smsTemplateId},#{templateId},#{communityId},#{remarks}
+        )
+    </insert>
+
+
+    <!-- 查询微信消息模板信息 add by wuxw 2018-07-03 -->
+    <select id="getWechatSmsTemplateInfo" parameterType="Map" resultType="Map">
+        select t.template_type,t.template_type templateType,t.wechat_id,t.wechat_id
+        wechatId,t.sms_template_id,t.sms_template_id smsTemplateId,t.status_cd,t.status_cd
+        statusCd,t.template_id,t.template_id templateId,t.community_id,t.community_id communityId,t.remarks
+        from wechat_sms_template t
+        where 1 =1
+        <if test="templateType !=null and templateType != ''">
+            and t.template_type= #{templateType}
+        </if>
+        <if test="wechatId !=null and wechatId != ''">
+            and t.wechat_id= #{wechatId}
+        </if>
+        <if test="smsTemplateId !=null and smsTemplateId != ''">
+            and t.sms_template_id= #{smsTemplateId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="remarks !=null and remarks != ''">
+            and t.remarks= #{remarks}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改微信消息模板信息 add by wuxw 2018-07-03 -->
+    <update id="updateWechatSmsTemplateInfo" parameterType="Map">
+        update wechat_sms_template t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="templateType !=null and templateType != ''">
+            , t.template_type= #{templateType}
+        </if>
+        <if test="wechatId !=null and wechatId != ''">
+            , t.wechat_id= #{wechatId}
+        </if>
+        <if test="smsTemplateId !=null and smsTemplateId != ''">
+            , t.sms_template_id= #{smsTemplateId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="remarks !=null and remarks != ''">
+            , t.remarks= #{remarks}
+        </if>
+        where 1=1
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+
+    </update>
+
+    <!-- 查询微信消息模板数量 add by wuxw 2018-07-03 -->
+    <select id="queryWechatSmsTemplatesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from wechat_sms_template t
+        where 1 =1
+        <if test="templateType !=null and templateType != ''">
+            and t.template_type= #{templateType}
+        </if>
+        <if test="wechatId !=null and wechatId != ''">
+            and t.wechat_id= #{wechatId}
+        </if>
+        <if test="smsTemplateId !=null and smsTemplateId != ''">
+            and t.sms_template_id= #{smsTemplateId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="remarks !=null and remarks != ''">
+            and t.remarks= #{remarks}
+        </if>
+
+
+    </select>
+
+</mapper>

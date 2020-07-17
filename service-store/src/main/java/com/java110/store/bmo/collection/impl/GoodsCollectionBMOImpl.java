@@ -1,12 +1,11 @@
-package com.java110.store.bmo.purchase.impl;
+package com.java110.store.bmo.collection.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.intf.common.IGoodCollectionUserInnerServiceSMO;
-import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyPo;
-import com.java110.store.bmo.purchase.IGoodsCollectionBMO;
+import com.java110.store.bmo.collection.IGoodsCollectionBMO;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

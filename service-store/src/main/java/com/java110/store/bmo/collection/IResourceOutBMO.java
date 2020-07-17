@@ -1,4 +1,4 @@
-package com.java110.store.bmo.purchase;
+package com.java110.store.bmo.collection;
 
 import com.java110.po.purchase.PurchaseApplyPo;
 import org.springframework.http.ResponseEntity;

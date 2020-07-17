@@ -2,7 +2,7 @@ package com.java110.@@shareName@@.smo.impl;
 
 
 import com.java110.@@shareName@@.dao.IStoreServiceDao;
-import com.java110.core.smo.store.IStoreInnerServiceSMO;
+import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.dto.store.StoreDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -79,13 +79,5 @@ public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreIn
 
     public void setStoreServiceDaoImpl(IStoreServiceDao storeServiceDaoImpl) {
         this.storeServiceDaoImpl = storeServiceDaoImpl;
-    }
-
-    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
-        return userInnerServiceSMOImpl;
-    }
-
-    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
-        this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
     }
 }

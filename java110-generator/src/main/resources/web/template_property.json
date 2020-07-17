@@ -1,0 +1,71 @@
+{
+  "templateName":"报修设置",
+  "directories": "property",
+  "templateCode":"repairSetting",
+  "templateKey":"settingId",
+  "templateKeyName":"设置",
+  "searchCode": "settingId",
+  "searchName": "设置",
+  "conditions": [
+    {
+      "name": "类型名称",
+      "inputType": "input",
+      "code": "repairTypeName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "派单方式",
+      "inputType": "select",
+      "selectValue":"100,200,300",
+      "selectValueName":"抢单,指派,轮训",
+      "code": "repairWay",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "派单类型",
+      "inputType": "input",
+      "code": "repairType",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"repairTypeName",
+      "cnCode":"类型名称",
+      "desc":"必填，请填写类型名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"max",
+      "limitParam":"1,200",
+      "limitErrInfo":"类型名称不能超过200位",
+      "show": true
+    },
+    {
+      "code": "repairWay",
+      "cnCode":"派单方式",
+      "desc":"必填，请填写派单方式",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"100,200,300",
+      "selectValueName":"抢单,指派,轮训",
+      "limit":"maxLength",
+      "limitParam":"12",
+      "limitErrInfo":"派单方式格式错误",
+      "show": true
+    },
+    {
+      "code": "remark",
+      "cnCode":"说明",
+      "desc":"选填，请填写说明",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"500",
+      "limitErrInfo":"说明不能超过500位",
+      "show": false
+    }
+  ]
+}

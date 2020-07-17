@@ -1,48 +1,37 @@
 {
   "autoMove": true,
-  "id": "appraiseId",
-  "name": "appraise",
-  "desc": "评价",
-  "shareParam": "objId",
-  "shareColumn": "obj_id",
-  "shareName": "common",
-  "tableName": "appraise",
+  "id": "templateId",
+  "name": "wechatSmsTemplate",
+  "desc": "微信消息模板",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "store",
+  "tableName": "wechat_sms_template",
   "param": {
-    "appraiseId": "appraise_id",
-    "appraiseScore": "appraise_score",
-    "appraiseType": "appraise_type",
-    "context": "context",
-    "parentAppraiseId": "parent_appraise_id",
-    "appraiseUserId": "appraise_user_id",
-    "appraiseUserName": "appraise_user_name",
-    "objType": "obj_type",
-    "objId": "obj_id",
+    "templateId": "template_id",
+    "wechatId": "wechat_id",
+    "smsTemplateId": "sms_template_id",
+    "templateType": "template_type",
+    "communityId": "community_id",
+    "remarks": "remarks",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "appraiseScore",
-      "msg": "评分不能为空"
+      "code": "wechatId",
+      "msg": "微信ID不能为空"
     },
     {
-      "code": "context",
-      "msg": "内容不能为空"
+      "code": "smsTemplateId",
+      "msg": "模板ID不能为空"
     },
     {
-      "code": "appraiseUserId",
-      "msg": "评价人不能为空"
+      "code": "templateType",
+      "msg": "模板类型不能为空"
     },
     {
-      "code": "appraiseUserName",
-      "msg": "评价人名称不能为空"
-    },
-    {
-      "code": "objType",
-      "msg": "评价对象不能为空"
-    },
-    {
-      "code": "objId",
-      "msg": "评价对象者不能为空"
+      "code": "communityId",
+      "msg": "小区ID不能为空"
     }
   ]
 }
