@@ -1,21 +1,27 @@
 package com.java110.front.smo.wxLogin.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.wxLogin.IWxLoginSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -60,6 +66,19 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
 
         logger.debug("doLogin入参：" + paramIn.toJSONString());
+
+        SmallWeChatDto smallWeChatDto = null;
+        if (paramIn.containsKey("appId") && !StringUtils.isEmpty(paramIn.getString("appId"))) {
+            smallWeChatDto = getSmallWechat(pd, paramIn);
+        }
+
+        if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
+            smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setAppId(wechatAuthProperties.getAppId());
+            smallWeChatDto.setAppSecret(wechatAuthProperties.getSecret());
+            smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
+            smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
+        }
         ResponseEntity<String> responseEntity;
         String code = paramIn.getString("code");
         String urlString = "?appid={appId}&secret={secret}&js_code={code}&grant_type={grantType}";
@@ -119,6 +138,30 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         }
         //根据openId 查询用户信息，是否存在用户
         return responseEntity;
+    }
+
+    private SmallWeChatDto getSmallWechat(IPageData pd, JSONObject paramIn) {
+
+        ResponseEntity responseEntity = null;
+
+        pd = PageData.newInstance().builder(pd.getUserId(), "", "", pd.getReqData(),
+                "", "", "", "",
+                pd.getAppId());
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                        + paramIn.getString("appId") + "&page=1&row=1", HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return null;
+        }
+        JSONObject smallWechatObj = JSONObject.parseObject(responseEntity.getBody().toString());
+        JSONArray smallWeChats = smallWechatObj.getJSONArray("smallWeChats");
+
+        if (smallWeChats == null || smallWeChats.size() < 1) {
+            return null;
+        }
+
+        return BeanConvertUtil.covertBean(smallWeChats.get(0), SmallWeChatDto.class);
     }
 
     public RestTemplate getRestTemplate() {
