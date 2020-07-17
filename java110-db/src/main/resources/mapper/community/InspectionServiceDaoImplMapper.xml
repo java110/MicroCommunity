@@ -86,8 +86,8 @@
         locationObjId,m.machine_id machineId,
         d.name locationTypeName
         from inspection_point t
-        inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
-        inner join t_dict d on d.status_cd = m.location_type_cd
+        left join machine m on t.machine_id = m.machine_id and m.status_cd = 0
+        left join t_dict d on d.status_cd = m.location_type_cd
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
             left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
             and c.status_cd = '0'
