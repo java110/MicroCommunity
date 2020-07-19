@@ -1,0 +1,40 @@
+{
+  "autoMove": false,
+  "id": "userId",
+  "name": "user",
+  "desc": "用户",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "user",
+  "tableName": "mall_user",
+  "param": {
+    "userId": "user_id",
+    "name": "name",
+    "email": "email",
+    "address": "address",
+    "password": "password",
+    "age": "age",
+    "sex": "sex",
+    "tel": "tel",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "name",
+      "msg": "用户名称不能为空"
+    },
+    {
+      "code": "password",
+      "msg": "密码不能为空"
+    },
+    {
+      "code": "tel",
+      "msg": "手机号不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "小区ID不能为空"
+    }
+  ]
+}
+

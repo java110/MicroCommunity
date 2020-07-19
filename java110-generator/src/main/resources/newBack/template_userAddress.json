@@ -1,0 +1,55 @@
+{
+  "autoMove": false,
+  "id": "userId",
+  "name": "userAddress",
+  "desc": "用户地址",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "cust",
+  "tableName": "mall_user_address",
+  "param": {
+    "addressId": "address_id",
+    "name": "name",
+    "phone": "phone",
+    "address": "address",
+    "provinceId": "province_id",
+    "cityId": "city_id",
+    "regionId": "region_id",
+    "detail": "detail",
+    "userId": "user_id",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "name",
+      "msg": "用户名称不能为空"
+    },
+    {
+      "code": "phone",
+      "msg": "手机号不能为空"
+    },
+    {
+      "code": "address",
+      "msg": "地址不能为空"
+    },
+    {
+      "code": "provinceId",
+      "msg": "省份不能为空"
+    },
+    {
+      "code": "cityId",
+      "msg": "城市不能为空"
+    }
+    ,
+    {
+      "code": "regionId",
+      "msg": "区域不能为空"
+    }
+    ,
+    {
+      "code": "userId",
+      "msg": "用户不能为空"
+    }
+  ]
+}
+

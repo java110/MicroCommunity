@@ -1,0 +1,54 @@
+{
+  "autoMove": false,
+  "id": "storeId",
+  "name": "storeAttr",
+  "desc": "商户ID",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "tableName": "mall_store",
+  "param": {
+    "storeId": "store_id",
+    "staffId": "staff_id",
+    "name": "name",
+    "address": "address",
+    "tel": "tel",
+    "storeTypeCd": "store_type_cd",
+    "nearbyLandmarks": "nearby_landmarks",
+    "mapX": "map_x",
+    "mapY": "map_y",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "staffId",
+      "msg": "员工不能为空"
+    },
+    {
+      "code": "name",
+      "msg": "商户名称不能为空"
+    },
+    {
+      "code": "address",
+      "msg": "地址不能为空"
+    },
+    {
+      "code": "tel",
+      "msg": "电话不能为空"
+    },
+    {
+      "code": "storeTypeCd",
+      "msg": "商户类型不能为空"
+    }
+    ,
+    {
+      "code": "mapX",
+      "msg": "精度不能为空"
+    } ,
+    {
+      "code": "mapY",
+      "msg": "维度不能为空"
+    }
+  ]
+}
+
