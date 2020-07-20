@@ -60,7 +60,7 @@ spring:
     minEvictableIdleTimeMillis: 300000
     timeBetweenEvictionRunsMillis: 60000
     testOnReturn: false
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
     maxActive: 20
     username: TT
   activiti:

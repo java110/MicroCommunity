@@ -10,7 +10,7 @@ spring:
 #        driver-class-name: com.mysql.jdbc.Driver
 #        username: root
       ds_master_0:
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
         jdbc-url: jdbc:mysql://dev.db.java110.com:3306/hc_community?useUnicode=true&characterEncoding=utf-8
         username: hc_community
@@ -22,7 +22,7 @@ spring:
         filters: stat,wall,log4j
         poolPreparedStatements: true
       ds_master_1:
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
         jdbc-url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8
         username: TT
