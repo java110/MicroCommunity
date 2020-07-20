@@ -105,15 +105,9 @@ service-store、service-user、service-front、service-fee、service-common和se
 
 ## 生产环境安装教程
 
-链接：https://pan.baidu.com/s/1sIPrxnwipF6ey_8k4rncWA 提取码：2e47  获取安装脚本
+> yum install -y wget && wget https://owner.demo.winqi.cn/hcInstall.sh && sh hcInstall.sh 您的私网IP
 
-如果下载不下来，请加群827669685在群文件中【HC系统部署文档】中获取hcAutoInstall.tar 自动部署shell脚本部署
-
-tar -xvf hcAutoInstall.tar
-
-修改env.sh 中的相应IP和密码
-
-sh install.sh
+您的私网IP 可以通过 ifconfig 命名查看 如果是云主机可以在后台查看
 
 
 ## 网友抒写安装部署（前后端分离）
