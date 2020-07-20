@@ -13,6 +13,8 @@ public class ApiNoticeDataVo implements Serializable {
     private String endTime;
     private String createTime;
     private String noticeTypeCdName;
+    private String state;
+    private String stateName;
 
     public String getNoticeId() {
         return noticeId;
@@ -76,5 +78,21 @@ public class ApiNoticeDataVo implements Serializable {
 
     public void setNoticeTypeCdName(String noticeTypeCdName) {
         this.noticeTypeCdName = noticeTypeCdName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

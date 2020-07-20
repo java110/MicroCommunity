@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.notice.INoticeBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.notice.NoticeDto;
 import com.java110.po.notice.NoticePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -46,6 +47,9 @@ public class NoticeBMOImpl extends ApiBaseBMO implements INoticeBMO {
         JSONObject businessNotice = new JSONObject();
         businessNotice.putAll(paramInJson);
         businessNotice.put("noticeId", "-1");
+        if (!paramInJson.containsKey("state")) {
+            businessNotice.put("state", NoticeDto.STATE_FINISH);
+        }
         NoticePo noticePo = BeanConvertUtil.covertBean(businessNotice, NoticePo.class);
         super.insert(dataFlowContext, noticePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_NOTICE);
     }

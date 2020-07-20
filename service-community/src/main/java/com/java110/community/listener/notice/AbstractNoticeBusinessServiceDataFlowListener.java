@@ -46,6 +46,8 @@ public abstract class AbstractNoticeBusinessServiceDataFlowListener extends Abst
         businessNoticeInfo.put("title", businessNoticeInfo.get("title"));
         businessNoticeInfo.put("userId", businessNoticeInfo.get("user_id"));
         businessNoticeInfo.put("noticeId", businessNoticeInfo.get("notice_id"));
+        businessNoticeInfo.put("objType", businessNoticeInfo.get("obj_type"));
+        businessNoticeInfo.put("objId", businessNoticeInfo.get("obj_id"));
         businessNoticeInfo.remove("bId");
         businessNoticeInfo.put("statusCd", statusCd);
     }
@@ -79,7 +81,8 @@ public abstract class AbstractNoticeBusinessServiceDataFlowListener extends Abst
         currentNoticeInfo.put("title", currentNoticeInfo.get("title"));
         currentNoticeInfo.put("userId", currentNoticeInfo.get("user_id"));
         currentNoticeInfo.put("noticeId", currentNoticeInfo.get("notice_id"));
-
+        currentNoticeInfo.put("objType", currentNoticeInfo.get("obj_type"));
+        currentNoticeInfo.put("objId", currentNoticeInfo.get("obj_id"));
 
         currentNoticeInfo.put("operate", StatusConstant.OPERATE_DEL);
         getNoticeServiceDaoImpl().saveBusinessNoticeInfo(currentNoticeInfo);

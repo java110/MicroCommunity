@@ -21,6 +21,11 @@ public class NoticePo implements Serializable {
     private String startTime;
 
     private String endTime;
+    private String objType;
+    private String objId;
+
+    private String state;
+    private String stateName;
 
 
     public String getNoticeId() {
@@ -85,5 +90,37 @@ public class NoticePo implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
+    }
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

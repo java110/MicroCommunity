@@ -7,9 +7,10 @@
     <!-- 保存通知信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessNoticeInfo" parameterType="Map">
         insert into business_notice(
-        operate,notice_type_cd,context,start_time,end_time,community_id,title,b_id,user_id,notice_id
+        operate,notice_type_cd,context,start_time,end_time,community_id,title,b_id,user_id,notice_id,obj_type,obj_id,state
         ) values (
-        #{operate},#{noticeTypeCd},#{context},#{startTime},#{endTime},#{communityId},#{title},#{bId},#{userId},#{noticeId}
+        #{operate},#{noticeTypeCd},#{context},#{startTime},#{endTime},#{communityId},#{title},#{bId},#{userId},#{noticeId},
+        #{objType},#{objId},#{state}
         )
     </insert>
 
@@ -18,7 +19,7 @@
     <select id="getBusinessNoticeInfo" parameterType="Map" resultType="Map">
         select t.operate,t.notice_type_cd,t.notice_type_cd noticeTypeCd,t.context,t.start_time,t.end_time,t.start_time
         startTime,t.end_time endTime,t.community_id,t.community_id communityId,t.title,t.b_id,t.b_id bId,t.user_id,t.user_id
-        userId,t.notice_id,t.notice_id noticeId
+        userId,t.notice_id,t.notice_id noticeId,t.obj_type,t.obj_id,t.obj_type objType,t.obj_id objId,t.state
         from business_notice t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -52,14 +53,17 @@
             and t.notice_id= #{noticeId}
         </if>
 
+
     </select>
 
 
     <!-- 保存通知信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveNoticeInfoInstance" parameterType="Map">
         insert into n_notice(
-        notice_type_cd,context,start_time,end_time,status_cd,community_id,title,b_id,user_id,notice_id
-        ) select t.notice_type_cd,t.context,t.start_time,t.end_time,'0',t.community_id,t.title,t.b_id,t.user_id,t.notice_id from
+        notice_type_cd,context,start_time,end_time,status_cd,community_id,title,b_id,user_id,notice_id,obj_type,obj_id,state
+        ) select t.notice_type_cd,t.context,t.start_time,t.end_time,'0',t.community_id,t.title,t.b_id,t.user_id,t.notice_id,
+        t.obj_type,t.obj_id,t.state
+        from
         business_notice t where 1=1
         and t.operate= 'ADD'
         <if test="noticeTypeCd !=null and noticeTypeCd != ''">
@@ -98,15 +102,11 @@
         select t.notice_type_cd,t.notice_type_cd noticeTypeCd,t.context,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.title,t.b_id,t.b_id
         bId,t.user_id,t.user_id userId,t.notice_id,t.notice_id noticeId,t.create_time,t.create_time createTime,
-        (CASE
-        WHEN t.`notice_type_cd` = '1000'
-        THEN '业主通知'
-        WHEN t.notice_type_cd = '1001'
-        THEN '员工通知'
-        ELSE
-        '小区通知'
-        END) noticeTypeCdName
+        d.`name` noticeTypeCdName,
+        t.obj_type,t.obj_id,t.obj_type objType,t.obj_id objId,t.state,d1.name stateName
         from n_notice t
+        left join t_dict d on d.table_name = 'n_notice' and d.table_columns = 'notice_type_cd' and t.notice_type_cd = d.status_cd
+        left join t_dict d1 on d1.table_name = 'n_notice' and d1.table_columns = 'state' and t.state = d1.status_cd
         where 1 =1
         <if test="noticeTypeCd !=null and noticeTypeCd != ''">
             and t.notice_type_cd= #{noticeTypeCd}
@@ -170,8 +170,8 @@
         <if test="title !=null and title != ''">
             , t.title= #{title}
         </if>
-        <if test="userId !=null and userId != ''">
-            , t.user_id= #{userId}
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
         </if>
         where 1=1
         <if test="bId !=null and bId != ''">
@@ -218,8 +218,6 @@
         <if test="noticeId !=null and noticeId != ''">
             and t.notice_id= #{noticeId}
         </if>
-
-
     </select>
 
 </mapper>
