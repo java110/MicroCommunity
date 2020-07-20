@@ -39,4 +39,7 @@ public interface INoticeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryNoticesCount", method = RequestMethod.POST)
     int queryNoticesCount(@RequestBody NoticeDto noticeDto);
+
+    @RequestMapping(value = "/updateNotice", method = RequestMethod.POST)
+    int updateNotice(@RequestBody NoticeDto noticeDto);
 }

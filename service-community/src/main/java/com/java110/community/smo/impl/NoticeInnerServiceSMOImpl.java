@@ -1,14 +1,14 @@
 package com.java110.community.smo.impl;
 
 
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.INoticeServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
+import com.java110.dto.notice.NoticeDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.INoticeInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.PageDto;
-import com.java110.dto.user.UserDto;
-import com.java110.dto.notice.NoticeDto;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +34,7 @@ public class NoticeInnerServiceSMOImpl extends BaseServiceSMO implements INotice
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<NoticeDto> queryNotices(@RequestBody  NoticeDto noticeDto) {
+    public List<NoticeDto> queryNotices(@RequestBody NoticeDto noticeDto) {
 
         //校验是否传了 分页信息
 
@@ -64,7 +64,7 @@ public class NoticeInnerServiceSMOImpl extends BaseServiceSMO implements INotice
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
      * @param notice 小区通知信息
-     * @param users 用户列表
+     * @param users  用户列表
      */
     private void refreshNotice(NoticeDto notice, List<UserDto> users) {
         for (UserDto user : users) {
@@ -91,7 +91,15 @@ public class NoticeInnerServiceSMOImpl extends BaseServiceSMO implements INotice
 
     @Override
     public int queryNoticesCount(@RequestBody NoticeDto noticeDto) {
-        return noticeServiceDaoImpl.queryNoticesCount(BeanConvertUtil.beanCovertMap(noticeDto));    }
+        return noticeServiceDaoImpl.queryNoticesCount(BeanConvertUtil.beanCovertMap(noticeDto));
+    }
+
+    @Override
+    public int updateNotice(@RequestBody NoticeDto noticeDto) {
+        int flag = 1;
+        noticeServiceDaoImpl.updateNoticeInfoInstance(BeanConvertUtil.beanCovertMap(noticeDto));
+        return flag;
+    }
 
     public INoticeServiceDao getNoticeServiceDaoImpl() {
         return noticeServiceDaoImpl;

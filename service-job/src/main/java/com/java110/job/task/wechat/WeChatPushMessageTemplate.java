@@ -21,6 +21,7 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -132,12 +134,23 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         }
 
         for (NoticeDto tmpNotice : noticeDtos) {
-            doSentWechat(tmpNotice, templateId, accessToken);
+            try {
+                doSentWechat(tmpNotice, templateId, accessToken);
+            } catch (Exception e) {
+                logger.error("通知异常", e);
+            }
         }
 
     }
 
-    private void doSentWechat(NoticeDto noticeDto, String templateId, String accessToken) {
+    private void doSentWechat(NoticeDto noticeDto, String templateId, String accessToken) throws Exception {
+
+        Date startTime = DateUtil.getDateFromString(noticeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A);
+        Date nowTime = DateUtil.getCurrentDate();
+        if (startTime.getTime() > nowTime.getTime()) { //还没有到时间
+            return;
+        }
+
 
         String objType = noticeDto.getObjType();
 
@@ -155,6 +168,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 sendRoomOwner(noticeDto, templateId, accessToken);
                 break;
         }
+
+        NoticeDto tmpNoticeDto = new NoticeDto();
+        tmpNoticeDto.setNoticeId(noticeDto.getNoticeId());
+        tmpNoticeDto.setState(NoticeDto.STATE_FINISH);
+        noticeInnerServiceSMOImpl.updateNotice(tmpNoticeDto);
 
     }
 
