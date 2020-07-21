@@ -24,7 +24,9 @@
 
 方案一、centos7.6一键式自动安装
 
-> yum install -y wget && wget https://owner.demo.winqi.cn/hcInstall.sh && sh hcInstall.sh
+> yum install -y wget && wget https://owner.demo.winqi.cn/hcInstall.sh && sh hcInstall.sh 您的私网IP
+
+注意：您的私网IP为服务器内网ip 如果服务器只有一个私网ip时可以省略不填写，如果有多个时需要指定
 
 [参考视频](https://www.bilibili.com/video/BV1Dk4y19728/)
 
