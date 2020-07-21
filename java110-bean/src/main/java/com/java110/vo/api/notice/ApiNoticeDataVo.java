@@ -15,6 +15,10 @@ public class ApiNoticeDataVo implements Serializable {
     private String noticeTypeCdName;
     private String state;
     private String stateName;
+    private String objId;
+    private String objType;
+    private String objName;
+    private String communityId;
 
     public String getNoticeId() {
         return noticeId;
@@ -94,5 +98,37 @@ public class ApiNoticeDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
+    }
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

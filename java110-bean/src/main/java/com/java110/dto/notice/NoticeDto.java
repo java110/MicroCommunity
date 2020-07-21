@@ -36,6 +36,7 @@ public class NoticeDto extends PageDto implements Serializable {
     private String noticeId;
     private String objType;
     private String objId;
+    private String objName;
     private String state;
     private String stateName;
 
@@ -166,5 +167,13 @@ public class NoticeDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
     }
 }
