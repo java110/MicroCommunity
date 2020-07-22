@@ -105,7 +105,7 @@ service-store、service-user、service-front、service-fee、service-common和se
 
 ## 生产环境安装教程
 
-> yum install -y wget && wget https://owner.demo.winqi.cn/hcInstall.sh && sh hcInstall.sh 您的私网IP
+> yum install -y wget && wget https://dl.winqi.cn/hc/hcInstall.sh && sh hcInstall.sh 您的私网IP
 
 您的私网IP 可以通过 ifconfig 命名查看 如果是云主机可以在后台查看
 
