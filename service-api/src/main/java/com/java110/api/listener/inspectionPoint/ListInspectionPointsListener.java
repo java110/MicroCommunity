@@ -1,21 +1,22 @@
 package com.java110.api.listener.inspectionPoint;
 
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.utils.StringUtils;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.community.IInspectionInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.inspectionPoint.InspectionDto;
 import com.java110.dto.unit.FloorAndUnitDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IInspectionInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeInspectionPointConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.inspectionPoint.ApiInspectionPointDataVo;
 import com.java110.vo.api.inspectionPoint.ApiInspectionPointVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,16 +80,17 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        if(reqJson.containsKey("relationship")){
-            queryRelationship(event,context,reqJson);
-        }else{
-            queryCommon(event,context,reqJson);
+        if (reqJson.containsKey("relationship")) {
+            queryRelationship(event, context, reqJson);
+        } else {
+            queryCommon(event, context, reqJson);
         }
 
     }
 
     /**
      * 关系查询
+     *
      * @param event
      * @param context
      * @param reqJson
@@ -121,6 +123,7 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
 
     /**
      * 普通查询
+     *
      * @param event
      * @param context
      * @param reqJson
@@ -171,6 +174,9 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
         for (ApiInspectionPointDataVo inspectionPoint : inspectionPoints) {
 
             if (!"2000".equals(inspectionPoint.getLocationTypeCd()) && !"3000".equals(inspectionPoint.getLocationTypeCd())) {
+                if (StringUtils.isEmpty(inspectionPoint.getLocationObjId())) {
+                    continue;
+                }
                 communityIds.add(inspectionPoint.getLocationObjId());
                 inspectionPointDataVo.add(inspectionPoint);
             }
