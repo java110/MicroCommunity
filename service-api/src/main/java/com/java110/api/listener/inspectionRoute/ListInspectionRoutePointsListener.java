@@ -88,8 +88,7 @@ public class ListInspectionRoutePointsListener extends AbstractServiceApiListene
 
         if (count > 0) {
             inspectionPoints = BeanConvertUtil.covertBeanList(inspectionRoutePointRelInnerServiceSMOImpl.queryInspectionRoutePointRels(inspectionRoutePointRelDto), ApiInspectionPointDataVo.class);
-            // 刷新 位置信息
-            refreshMachines(inspectionPoints);
+
         } else {
             inspectionPoints = new ArrayList<>();
         }

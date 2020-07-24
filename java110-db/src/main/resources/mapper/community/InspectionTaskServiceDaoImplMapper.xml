@@ -171,6 +171,10 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="scopeTime !=null ">
+            and t.create_time &lt; #{scopeTime}
+            and t.create_time &gt; #{createTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -318,10 +322,10 @@
     <!-- 保存活动信息 add by wuxw 2018-07-03 -->
     <insert id="insertInspectionTask" parameterType="Map">
         insert into inspection_task(
-        plan_user_id,plan_ins_time,sign_type,inspection_plan_id,plan_user_name,community_id,b_id,task_id,state
+        plan_user_id,plan_ins_time,sign_type,inspection_plan_id,plan_user_name,community_id,b_id,task_id,state,ip_staff_id
         )
         <foreach collection="tasks" item="task" separator=",">
-            (#{task.planUserId},#{task.planInsTime},#{task.signType},#{task.inspectionPlanId},#{task.planUserName},#{task.communityId},'-1',#{task.taskId},'20200405')
+            (#{task.planUserId},#{task.planInsTime},#{task.signType},#{task.inspectionPlanId},#{task.planUserName},#{task.communityId},'-1',#{task.taskId},'20200405',#{task.ipStaffId})
         </foreach>
     </insert>
 

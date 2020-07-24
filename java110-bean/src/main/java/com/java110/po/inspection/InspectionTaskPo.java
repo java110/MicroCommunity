@@ -22,6 +22,7 @@ public class InspectionTaskPo implements Serializable {
     private String actUserId;
     private String actUserName;
     private String signType;
+    private String ipStaffId;
 
     private String state;
 
@@ -111,5 +112,13 @@ public class InspectionTaskPo implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getIpStaffId() {
+        return ipStaffId;
+    }
+
+    public void setIpStaffId(String ipStaffId) {
+        this.ipStaffId = ipStaffId;
     }
 }

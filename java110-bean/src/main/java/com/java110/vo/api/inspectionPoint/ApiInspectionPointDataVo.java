@@ -20,6 +20,7 @@ public class ApiInspectionPointDataVo implements Serializable {
     private String machineId;
     private String communityId;
 
+
     public String getInspectionId() {
         return inspectionId;
     }

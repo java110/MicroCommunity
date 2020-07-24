@@ -30,7 +30,9 @@ public class AddInspectionPointSMOImpl extends AbstractComponentSMO implements I
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "inspectionName", "必填，请填写巡检点名称");
-        Assert.hasKeyAndValue(paramIn, "machineId", "必填，请填写设备信息");
+        Assert.hasKeyAndValue(paramIn, "pointObjId", "必填，请填写位置信息");
+        Assert.hasKeyAndValue(paramIn, "pointObjType", "必填，请填写巡检类型");
+        Assert.hasKeyAndValue(paramIn, "pointObjName", "必填，请填写位置信息");
 
 
 

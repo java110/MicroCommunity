@@ -3,6 +3,8 @@ package com.java110.intf.community;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.inspectionTask.InspectionTaskDto;
+import com.java110.po.inspection.InspectionTaskDetailPo;
+import com.java110.po.inspection.InspectionTaskPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,4 +50,10 @@ public interface IInspectionTaskInnerServiceSMO {
      */
     @RequestMapping(value = "/generateInspectionTask", method = RequestMethod.POST)
     JSONObject generateInspectionTask(@RequestBody JSONObject param);
+
+    @RequestMapping(value = "/saveInspectionTask", method = RequestMethod.POST)
+    int saveInspectionTask(@RequestBody List<InspectionTaskPo> inspectionTaskPos);
+
+    @RequestMapping(value = "/saveInspectionTaskDetail", method = RequestMethod.POST)
+    int saveInspectionTaskDetail(@RequestBody List<InspectionTaskDetailPo> inspectionTaskDetailPos);
 }

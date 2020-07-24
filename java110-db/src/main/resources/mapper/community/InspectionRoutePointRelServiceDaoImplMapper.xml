@@ -74,17 +74,12 @@
         select t.inspection_id,t.inspection_id inspectionId,t.inspection_route_id,t.inspection_route_id
         inspectionRouteId,t.irp_rel_id,t.irp_rel_id irpRelId,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
-        ip.inspection_id inspectionId,ip.machine_id machineId,ip.remark,
-        ip.inspection_name inspectionName,m.location_type_cd locationTypeCd,m.location_obj_id locationObjId,
-        m.machine_code machineCode,m.machine_name machineName,d.name locationTypeName
-        from inspection_route_point_rel t,inspection_point ip,machine m,t_dict d
+        ip.inspection_id inspectionId,ip.remark,
+        ip.inspection_name inspectionName,ip.point_obj_type,ip.point_obj_id,ip.point_obj_name,
+        ip.point_obj_type pointObjType,ip.point_obj_id pointObjId,ip.point_obj_name pointObjName
+        from inspection_route_point_rel t,inspection_point ip
         where 1 =1
         and t.inspection_id = ip.inspection_id
-        and ip.machine_id = m.machine_id
-        and d.status_cd = m.location_type_cd
-        and d.table_name = 'machine'
-        and d.table_columns = 'location_type_cd'
-        and m.status_cd = '0'
         and ip.status_cd = '0'
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
@@ -141,14 +136,9 @@
     <!-- 查询巡检路线巡检点关系数量 add by wuxw 2018-07-03 -->
     <select id="queryInspectionRoutePointRelsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from inspection_route_point_rel t,inspection_point ip,machine m,t_dict d
+        from inspection_route_point_rel t,inspection_point ip
         where 1 =1
         and t.inspection_id = ip.inspection_id
-        and ip.machine_id = m.machine_id
-        and d.status_cd = m.location_type_cd
-        and d.table_name = 'machine'
-        and d.table_columns = 'location_type_cd'
-        and m.status_cd = '0'
         and ip.status_cd = '0'
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}

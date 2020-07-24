@@ -196,7 +196,6 @@
         t.community_id communityId,t.b_id,t.b_id bId,
         t.point_obj_type,t.point_obj_id,t.point_obj_name,
         t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName
-        d.name locationTypeName
         from inspection_point t
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and c.inspection_route_id = #{inspectionRouteId}
         where 1 =1

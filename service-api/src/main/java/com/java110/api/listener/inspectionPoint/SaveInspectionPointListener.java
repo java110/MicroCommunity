@@ -22,14 +22,16 @@ public class SaveInspectionPointListener extends AbstractServiceApiPlusListener 
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "machineId", "必填，请填写设备ID");
         Assert.hasKeyAndValue(reqJson, "inspectionName", "必填，请填写巡检点名称");
+        Assert.hasKeyAndValue(reqJson, "pointObjId", "必填，请填写位置信息");
+        Assert.hasKeyAndValue(reqJson, "pointObjType", "必填，请填写巡检类型");
+        Assert.hasKeyAndValue(reqJson, "pointObjName", "必填，请填写位置信息");
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-       inspectionBMOImpl.addInspectionPoint(reqJson, context);
+        inspectionBMOImpl.addInspectionPoint(reqJson, context);
     }
 
     @Override

@@ -30,7 +30,7 @@ public class EditInspectionPointSMOImpl extends AbstractComponentSMO implements 
 
         Assert.hasKeyAndValue(paramIn, "inspectionId", "巡检点ID不能为空");
         Assert.hasKeyAndValue(paramIn, "inspectionName", "必填，请填写巡检点名称");
-        Assert.hasKeyAndValue(paramIn, "machineId", "必填，请填写设备信息");
+
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_INSPECTION_POINT);

@@ -5,23 +5,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IInspectionTaskServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.community.IInspectionInnerServiceSMO;
-import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.inspectionPoint.InspectionDto;
 import com.java110.dto.inspectionTask.InspectionTaskDto;
+import com.java110.intf.community.IInspectionInnerServiceSMO;
+import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.inspection.InspectionTaskDetailPo;
+import com.java110.po.inspection.InspectionTaskPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -163,6 +161,29 @@ public class InspectionTaskInnerServiceSMOImpl extends BaseServiceSMO implements
         return param;
 
 
+    }
+
+    @Override
+    public int saveInspectionTask(@RequestBody List<InspectionTaskPo> inspectionTaskPos) {
+        Map task = new HashMap();
+        List<Map> list = new ArrayList<>();
+        for (InspectionTaskPo inspectionTaskpo : inspectionTaskPos) {
+            list.add(BeanConvertUtil.beanCovertMap(inspectionTaskpo));
+        }
+        task.put("tasks", list);
+        return inspectionTaskServiceDaoImpl.insertInspectionTask(task);
+    }
+
+    @Override
+    public int saveInspectionTaskDetail(@RequestBody List<InspectionTaskDetailPo> inspectionTaskDetailPos) {
+        Map task = new HashMap();
+
+        List<Map> list = new ArrayList<>();
+        for (InspectionTaskDetailPo inspectionTaskpo : inspectionTaskDetailPos) {
+            list.add(BeanConvertUtil.beanCovertMap(inspectionTaskpo));
+        }
+        task.put("tasks", list);
+        return inspectionTaskServiceDaoImpl.insertInspectionTaskDetail(task);
     }
 
     public IInspectionTaskServiceDao getInspectionTaskServiceDaoImpl() {

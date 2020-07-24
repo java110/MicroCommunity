@@ -17,6 +17,13 @@ import java.util.Date;
  **/
 public class InspectionPlanDto extends PageDto implements Serializable {
 
+    public static final String STATE_STOP = "2020026";
+    public static final String STATE_RUN = "2020025";
+
+    public static final String INSPECTION_PLAN_PERIOD_DAY = "2020022"; // 连续每天
+    public static final String INSPECTION_PLAN_PERIOD_WEEK = "2020023"; // 连续每周
+    public static final String INSPECTION_PLAN_PERIOD_NEXT_DAY = "2020024"; // 连续隔天
+
     private String inspectionPlanName;
     private String inspectionRouteId;
     private String inspectionRouteName;
