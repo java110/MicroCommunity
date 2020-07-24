@@ -30,6 +30,10 @@ public class InspectionDto extends PageDto implements Serializable {
     private String relationship; //1 查询关联的巡检点 0 还未关联巡检点
     private String inspectionPlanId;
 
+    private String pointObjType;
+    private String pointObjId;
+    private String pointObjName;
+
 
     private Date createTime;
 
@@ -164,5 +168,29 @@ public class InspectionDto extends PageDto implements Serializable {
 
     public void setInspectionPlanId(String inspectionPlanId) {
         this.inspectionPlanId = inspectionPlanId;
+    }
+
+    public String getPointObjType() {
+        return pointObjType;
+    }
+
+    public void setPointObjType(String pointObjType) {
+        this.pointObjType = pointObjType;
+    }
+
+    public String getPointObjId() {
+        return pointObjId;
+    }
+
+    public void setPointObjId(String pointObjId) {
+        this.pointObjId = pointObjId;
+    }
+
+    public String getPointObjName() {
+        return pointObjName;
+    }
+
+    public void setPointObjName(String pointObjName) {
+        this.pointObjName = pointObjName;
     }
 }

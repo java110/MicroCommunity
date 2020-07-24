@@ -14,8 +14,10 @@ public class InspectionPointPo implements Serializable {
 
     private String inspectionId;
     private String inspectionName;
-    private String machineId;
     private String communityId;
+    private String pointObjType;
+    private String pointObjId;
+    private String pointObjName;
     private String remark;
 
     public String getInspectionId() {
@@ -34,13 +36,6 @@ public class InspectionPointPo implements Serializable {
         this.inspectionName = inspectionName;
     }
 
-    public String getMachineId() {
-        return machineId;
-    }
-
-    public void setMachineId(String machineId) {
-        this.machineId = machineId;
-    }
 
     public String getCommunityId() {
         return communityId;
@@ -56,5 +51,30 @@ public class InspectionPointPo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+
+    public String getPointObjType() {
+        return pointObjType;
+    }
+
+    public void setPointObjType(String pointObjType) {
+        this.pointObjType = pointObjType;
+    }
+
+    public String getPointObjId() {
+        return pointObjId;
+    }
+
+    public void setPointObjId(String pointObjId) {
+        this.pointObjId = pointObjId;
+    }
+
+    public String getPointObjName() {
+        return pointObjName;
+    }
+
+    public void setPointObjName(String pointObjName) {
+        this.pointObjName = pointObjName;
     }
 }

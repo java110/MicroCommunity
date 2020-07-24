@@ -105,7 +105,7 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
         if (count > 0) {
             inspectionPoints = BeanConvertUtil.covertBeanList(inspectionPointInnerServiceSMOImpl.getInspectionRelationShip(inspectionPointDto), ApiInspectionPointDataVo.class);
             // 刷新 位置信息
-            refreshMachines(inspectionPoints);
+            //refreshMachines(inspectionPoints);
         } else {
             inspectionPoints = new ArrayList<>();
         }

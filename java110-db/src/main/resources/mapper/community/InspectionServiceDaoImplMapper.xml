@@ -4,27 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="inspectionServiceDaoImpl">
 
-    <!-- 保存巡检点信息 add by wuxw 2018-07-03 -->
+    <!-- 保存巡检点信息 add by wuxw 2018-07-03
+
+    -->
     <insert id="saveBusinessInspectionInfo" parameterType="Map">
         insert into business_inspection_point
-        (inspection_id,machine_id,operate,remark,inspection_name,community_id,b_id)
+        (inspection_id,operate,remark,inspection_name,community_id,b_id,point_obj_type,point_obj_id,point_obj_name)
         values
-        (#{inspectionId},#{machineId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId})
+        (#{inspectionId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId},#{pointObjType},#{pointObjId},#{pointObjName})
     </insert>
 
 
     <!-- 查询巡检点信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessInspectionInfo" parameterType="Map" resultType="Map">
-        select t.inspection_id,t.inspection_id inspectionId,t.machine_id,t.machine_id
-        machineId,t.operate,t.remark,t.inspection_name,t.inspection_name inspectionName,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId
+        select t.inspection_id,t.inspection_id inspectionId,t.operate,t.remark,t.inspection_name,t.inspection_name inspectionName,
+        t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.point_obj_type,t.point_obj_id,t.point_obj_name,
+        t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName
         from business_inspection_point t
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
-        </if>
-        <if test="machineId !=null and machineId != ''">
-            and t.machine_id= #{machineId}
         </if>
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
@@ -49,14 +48,14 @@
     <insert id="saveInspectionInfoInstance" parameterType="Map">
         insert into
         inspection_point(
-        inspection_id,machine_id,remark,status_cd,inspection_name,community_id,b_id
-        ) select t.inspection_id,t.machine_id,t.remark,'0',t.inspection_name,t.community_id,t.b_id from
+        inspection_id,remark,status_cd,inspection_name,community_id,b_id,
+        point_obj_type,point_obj_id,point_obj_name
+        ) select t.inspection_id,t.remark,'0',t.inspection_name,t.community_id,t.b_id,
+        t.point_obj_type,t.point_obj_id,t.point_obj_name
+        from
         business_inspection_point t where 1=1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
-        </if>
-        <if test="machineId !=null and machineId != ''">
-            and t.machine_id= #{machineId}
         </if>
         and t.operate= 'ADD'
         <if test="remark !=null and remark != ''">
@@ -78,16 +77,12 @@
     <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionInfo" parameterType="Map" resultType="Map">
         select
-        t.inspection_id,t.inspection_id inspectionId,t.machine_id,
-        t.machine_id machineId,t.remark,t.status_cd,t.status_cd statusCd,
+        t.inspection_id,t.inspection_id inspectionId,t.remark,t.status_cd,t.status_cd statusCd,
         t.inspection_name,t.inspection_name inspectionName,t.community_id,
         t.community_id communityId,t.b_id,t.b_id bId,
-        m.machine_code machineCode,m.machine_name machineName,location_type_cd locationTypeCd,location_obj_id
-        locationObjId,m.machine_id machineId,
-        d.name locationTypeName
+        t.point_obj_type,t.point_obj_id,t.point_obj_name,
+        t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName
         from inspection_point t
-        left join machine m on t.machine_id = m.machine_id and m.status_cd = 0
-        left join t_dict d on d.status_cd = m.location_type_cd
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
             left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
             and c.status_cd = '0'
@@ -97,8 +92,8 @@
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
-        <if test="machineCode !=null and machineCode != ''">
-            and m.machine_code= #{machineCode}
+        <if test="pointObjType !=null and pointObjType != ''">
+            and t.point_obj_type= #{pointObjType}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -130,8 +125,14 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="machineId !=null and machineId != ''">
-            , t.machine_id= #{machineId}
+        <if test="pointObjType !=null and pointObjType != ''">
+            , t.point_obj_type= #{pointObjType}
+        </if>
+        <if test="pointObjId !=null and pointObjId != ''">
+            , t.point_obj_id= #{pointObjId}
+        </if>
+        <if test="pointObjName !=null and pointObjName != ''">
+            , t.point_obj_name= #{pointObjName}
         </if>
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
@@ -149,15 +150,12 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询巡检点数量 add by wuxw 2018-07-03 -->
     <select id="queryInspectionsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from inspection_point t
-        left join machine m on t.machine_id = m.machine_id and m.status_cd = 0
-        left join t_dict d on d.status_cd = m.location_type_cd
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
             left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
             and c.status_cd = '0'
@@ -167,8 +165,8 @@
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
-        <if test="machineCode !=null and machineCode != ''">
-            and m.machine_code= #{machineCode}
+        <if test="pointObjType !=null and pointObjType != ''">
+            and t.point_obj_type= #{pointObjType}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -193,16 +191,13 @@
     <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionRelationShipInfo" parameterType="Map" resultType="Map">
         select
-        t.inspection_id,t.inspection_id inspectionId,t.machine_id,
-        t.machine_id machineId,t.remark,t.status_cd,t.status_cd statusCd,
+        t.inspection_id,t.inspection_id inspectionId,t.remark,t.status_cd,t.status_cd statusCd,
         t.inspection_name,t.inspection_name inspectionName,t.community_id,
         t.community_id communityId,t.b_id,t.b_id bId,
-        m.machine_code machineCode,m.machine_name machineName,location_type_cd locationTypeCd,location_obj_id
-        locationObjId,m.machine_id machineId,
+        t.point_obj_type,t.point_obj_id,t.point_obj_name,
+        t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName
         d.name locationTypeName
         from inspection_point t
-        inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
-        INNER JOIN t_dict d ON d.status_cd = m.location_type_cd and d.table_name = 'machine' and d.table_columns = 'location_type_cd'
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and c.inspection_route_id = #{inspectionRouteId}
         where 1 =1
 
@@ -215,8 +210,8 @@
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
-        <if test="machineCode !=null and machineCode != ''">
-            and m.machine_code= #{machineCode}
+        <if test="pointObjType !=null and pointObjType != ''">
+            and t.point_obj_type= #{pointObjType}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -243,12 +238,9 @@
     <select id="queryInspectionsRelationShipCount" parameterType="Map" resultType="Map">
         select count(1) count
         from inspection_point t
-        inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
-        INNER JOIN t_dict d ON d.status_cd = m.location_type_cd and d.table_name = 'machine' and d.table_columns = 'location_type_cd'
-        left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
-        and c.status_cd = '0'
-        and c.inspection_route_id = #{inspectionRouteId}
+        left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and c.inspection_route_id = #{inspectionRouteId}
         where 1 =1
+
         <if test="relationship != null  and  relationship == 1">
             and c.inspection_id is not null
         </if>
@@ -258,8 +250,8 @@
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
-        <if test="machineId !=null and machineId != ''">
-            and t.machine_id= #{machineId}
+        <if test="pointObjType !=null and pointObjType != ''">
+            and t.point_obj_type= #{pointObjType}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -268,7 +260,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="inspectionName !=null and inspectionName != ''">
-            and t.inspection_name= #{inspectionName}
+            and t.inspection_name like concat('%',#{inspectionName},'%')
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

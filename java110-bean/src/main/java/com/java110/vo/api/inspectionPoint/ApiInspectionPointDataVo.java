@@ -1,7 +1,6 @@
 package com.java110.vo.api.inspectionPoint;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ApiInspectionPointDataVo implements Serializable {
 
@@ -15,6 +14,9 @@ public class ApiInspectionPointDataVo implements Serializable {
     private String locationTypeName;
     private String locationObjId;
     private String locationObjName;
+    private String pointObjType;
+    private String pointObjId;
+    private String pointObjName;
     private String machineId;
     private String communityId;
 
@@ -112,5 +114,29 @@ public class ApiInspectionPointDataVo implements Serializable {
 
     public void setInspectionRouteId(String inspectionRouteId) {
         this.inspectionRouteId = inspectionRouteId;
+    }
+
+    public String getPointObjType() {
+        return pointObjType;
+    }
+
+    public void setPointObjType(String pointObjType) {
+        this.pointObjType = pointObjType;
+    }
+
+    public String getPointObjId() {
+        return pointObjId;
+    }
+
+    public void setPointObjId(String pointObjId) {
+        this.pointObjId = pointObjId;
+    }
+
+    public String getPointObjName() {
+        return pointObjName;
+    }
+
+    public void setPointObjName(String pointObjName) {
+        this.pointObjName = pointObjName;
     }
 }

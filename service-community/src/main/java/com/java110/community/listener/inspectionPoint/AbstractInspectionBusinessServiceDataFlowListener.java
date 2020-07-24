@@ -2,11 +2,11 @@ package com.java110.community.listener.inspectionPoint;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IInspectionServiceDao;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
-import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,11 +38,13 @@ public abstract class AbstractInspectionBusinessServiceDataFlowListener extends 
     protected void flushBusinessInspectionInfo(Map businessInspectionInfo, String statusCd) {
         businessInspectionInfo.put("newBId", businessInspectionInfo.get("b_id"));
         businessInspectionInfo.put("inspectionId", businessInspectionInfo.get("inspection_id"));
-        businessInspectionInfo.put("machineId", businessInspectionInfo.get("machine_id"));
         businessInspectionInfo.put("operate", businessInspectionInfo.get("operate"));
         businessInspectionInfo.put("remark", businessInspectionInfo.get("remark"));
         businessInspectionInfo.put("inspectionName", businessInspectionInfo.get("inspection_name"));
         businessInspectionInfo.put("communityId", businessInspectionInfo.get("community_id"));
+        businessInspectionInfo.put("pointObjType", businessInspectionInfo.get("point_obj_type"));
+        businessInspectionInfo.put("pointObjId", businessInspectionInfo.get("point_obj_id"));
+        businessInspectionInfo.put("pointObjName", businessInspectionInfo.get("point_obj_name"));
         businessInspectionInfo.remove("bId");
         businessInspectionInfo.put("statusCd", statusCd);
     }
@@ -65,12 +67,14 @@ public abstract class AbstractInspectionBusinessServiceDataFlowListener extends 
         Map currentInspectionInfo = currentInspectionInfos.get(0);
         currentInspectionInfo.put("bId", business.getbId());
         currentInspectionInfo.put("inspectionId", currentInspectionInfo.get("inspection_id"));
-        currentInspectionInfo.put("machineId", currentInspectionInfo.get("machine_id"));
         currentInspectionInfo.put("operate", currentInspectionInfo.get("operate"));
         currentInspectionInfo.put("remark", currentInspectionInfo.get("remark"));
         currentInspectionInfo.put("inspectionName", currentInspectionInfo.get("inspection_name"));
         currentInspectionInfo.put("communityId", currentInspectionInfo.get("community_id"));
         currentInspectionInfo.put("operate", StatusConstant.OPERATE_DEL);
+        currentInspectionInfo.put("pointObjType", currentInspectionInfo.get("point_obj_type"));
+        currentInspectionInfo.put("pointObjId", currentInspectionInfo.get("point_obj_id"));
+        currentInspectionInfo.put("pointObjName", currentInspectionInfo.get("point_obj_name"));
         getInspectionServiceDaoImpl().saveBusinessInspectionInfo(currentInspectionInfo);
 
         for (Object key : currentInspectionInfo.keySet()) {
