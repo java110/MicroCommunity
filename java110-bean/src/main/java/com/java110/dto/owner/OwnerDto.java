@@ -15,6 +15,10 @@ import java.util.Date;
  **/
 public class OwnerDto extends PageDto implements Serializable {
 
+    // 业主本人 1002 家庭成员
+    public static final String OWNER_TYPE_CD_OWNER = "1001"; //业主
+    public static final String OWNER_TYPE_CD_MEMBER = "1002"; //家庭成员
+
 
     private String communityId;
 
