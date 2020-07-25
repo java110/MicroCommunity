@@ -33,6 +33,7 @@ public class InspectionPlanDto extends PageDto implements Serializable {
     private String staffName;
     private String signType;
     private String startTime;
+    private String curTime;
     private String createUserId;
     private String createUserName;
     private String inspectionPlanId;
@@ -215,5 +216,13 @@ public class InspectionPlanDto extends PageDto implements Serializable {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public String getCurTime() {
+        return curTime;
+    }
+
+    public void setCurTime(String curTime) {
+        this.curTime = curTime;
     }
 }

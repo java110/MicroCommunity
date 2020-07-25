@@ -65,6 +65,7 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
         InspectionPlanDto inspectionPlanDto = new InspectionPlanDto();
         inspectionPlanDto.setCommunityId(communityDto.getCommunityId());
         inspectionPlanDto.setState(InspectionPlanDto.STATE_RUN);
+        inspectionPlanDto.setCurTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         List<InspectionPlanDto> inspectionPlanDtos = inspectionPlanInnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto);
 
         for (InspectionPlanDto tmpInspectionPlanDto : inspectionPlanDtos) {
@@ -166,7 +167,7 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
         inspectionTaskPo.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
         inspectionTaskPo.setCommunityId(tmpInspectionPlanDto.getCommunityId());
         inspectionTaskPo.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
-        inspectionTaskPo.setPlanInsTime(nowTime + tmpInspectionPlanDto + ":00");
+        inspectionTaskPo.setPlanInsTime(nowTime + tmpInspectionPlanStaffDto.getStartTime() + ":00");
         inspectionTaskPo.setPlanUserId(tmpInspectionPlanStaffDto.getStaffId());
         inspectionTaskPo.setPlanUserName(tmpInspectionPlanStaffDto.getStaffName());
         inspectionTaskPo.setSignType(tmpInspectionPlanDto.getSignType());
