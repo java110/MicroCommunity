@@ -31,6 +31,7 @@ public class InspectionTaskDto extends PageDto implements Serializable {
     private String stateName;
     private Date scopeTime;
     private String ipStaffId;
+    private String[] states;
 
 
     private Date createTime;
@@ -180,5 +181,13 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     public void setIpStaffId(String ipStaffId) {
         this.ipStaffId = ipStaffId;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }

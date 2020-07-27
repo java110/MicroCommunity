@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
-import com.java110.dto.inspectionTask.InspectionTaskDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.inspectionTask.InspectionTaskDto;
+import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeInspectionTaskConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -65,6 +65,10 @@ public class ListInspectionTasksListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         InspectionTaskDto inspectionTaskDto = BeanConvertUtil.covertBean(reqJson, InspectionTaskDto.class);
+
+        if (reqJson.containsKey("moreState") && reqJson.getString("moreState").contains(",")) {
+            inspectionTaskDto.setStates(reqJson.getString("moreState").split(","));
+        }
 
         int count = inspectionTaskInnerServiceSMOImpl.queryInspectionTasksCount(inspectionTaskDto);
 
