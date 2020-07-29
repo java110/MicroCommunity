@@ -122,6 +122,7 @@ public class ListWorkflowsListener extends AbstractServiceApiPlusListener {
 
         commit(context);
 
+        workflowDto = BeanConvertUtil.covertBean(reqJson, WorkflowDto.class);
         count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
 
         workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
