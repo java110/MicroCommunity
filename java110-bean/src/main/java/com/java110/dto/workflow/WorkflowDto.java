@@ -38,6 +38,8 @@ public class WorkflowDto extends PageDto implements Serializable {
     private String flowTypeName;
     private String processDefinitionKey;
 
+    private String[] flowTypes;
+
 
     private Date createTime;
 
@@ -142,5 +144,13 @@ public class WorkflowDto extends PageDto implements Serializable {
 
     public void setProcessDefinitionKey(String processDefinitionKey) {
         this.processDefinitionKey = processDefinitionKey;
+    }
+
+    public String[] getFlowTypes() {
+        return flowTypes;
+    }
+
+    public void setFlowTypes(String[] flowTypes) {
+        this.flowTypes = flowTypes;
     }
 }

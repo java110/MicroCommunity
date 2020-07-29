@@ -124,6 +124,12 @@
         <if test="flowType !=null and flowType != ''">
             and t.flow_type= #{flowType}
         </if>
+        <if test="flowTypes !=null">
+            and t.flow_type in
+            <foreach collection="flowTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -200,6 +206,13 @@
         </if>
         <if test="flowType !=null and flowType != ''">
             and t.flow_type= #{flowType}
+        </if>
+
+        <if test="flowTypes !=null">
+            and t.flow_type in
+            <foreach collection="flowTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
 
