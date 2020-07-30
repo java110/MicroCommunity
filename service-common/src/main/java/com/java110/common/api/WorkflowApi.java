@@ -4,10 +4,7 @@ import com.java110.common.bmo.workflow.IQueryWorkFlowFirstStaffBMO;
 import com.java110.dto.workflow.WorkflowDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/workflow")
@@ -19,7 +16,7 @@ public class WorkflowApi {
     @RequestMapping(value = "/getFirstStaff", method = RequestMethod.GET)
     public ResponseEntity<String> getFirstStaff(@RequestParam(name = "flowType") String flowType,
                                                 @RequestParam(name = "communityId") String communityId,
-                                                @RequestParam(name = "storeId") String storeId) {
+                                                @RequestHeader(value = "store-id") String storeId) {
         WorkflowDto workflowDto = new WorkflowDto();
         workflowDto.setCommunityId(communityId);
         workflowDto.setFlowType(flowType);
