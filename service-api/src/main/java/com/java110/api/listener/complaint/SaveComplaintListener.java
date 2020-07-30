@@ -8,10 +8,10 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.common.IComplaintUserInnerServiceSMO;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.file.FileDto;
+import com.java110.intf.common.IComplaintUserInnerServiceSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeComplaintConstant;
@@ -19,7 +19,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 
 /**
  * 保存小区侦听
@@ -86,13 +85,11 @@ public class SaveComplaintListener extends AbstractServiceApiPlusListener {
             }
         }
 
-        commit(context);
+        //commit(context);
+        ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
+        complaintDto.setCurrentUserId(reqJson.getString("userId"));
+        complaintUserInnerServiceSMOImpl.startProcess(complaintDto);
 
-        if (HttpStatus.OK == context.getResponseEntity().getStatusCode()) {
-            ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
-            complaintDto.setCurrentUserId(reqJson.getString("userId"));
-            complaintUserInnerServiceSMOImpl.startProcess(complaintDto);
-        }
     }
 
     @Override
