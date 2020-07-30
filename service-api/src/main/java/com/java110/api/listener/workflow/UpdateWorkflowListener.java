@@ -118,7 +118,7 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
         if (reqJson.containsKey("flowType")) {
             String flowType = reqJson.getString("flowType");
             if (WorkflowDto.FLOW_TYPE_PURCHASE.equals(flowType) || WorkflowDto.FLOW_TYPE_COLLECTION.equals(flowType)) {
-                reqJson.put("communityId", reqJson.getString("communityId"));
+                reqJson.put("communityId", "9999");
             }
         }
 
