@@ -115,6 +115,13 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
+        if (reqJson.containsKey("flowType")) {
+            String flowType = reqJson.getString("flowType");
+            if (WorkflowDto.FLOW_TYPE_PURCHASE.equals(flowType) || WorkflowDto.FLOW_TYPE_COLLECTION.equals(flowType)) {
+                reqJson.put("communityId", reqJson.getString("communityId"));
+            }
+        }
+
         WorkflowStepDto workflowStepDto = new WorkflowStepDto();
         workflowStepDto.setFlowId(reqJson.getString("flowId"));
         workflowStepDto.setCommunityId(reqJson.getString("communityId"));
