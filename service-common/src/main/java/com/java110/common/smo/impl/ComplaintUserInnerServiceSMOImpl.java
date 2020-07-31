@@ -325,9 +325,9 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
             userNames += (users.get(0).getName() + "/");
             userTels += (users.get(0).getTel() + "/");
         }
-        userIds = userIds.endsWith("/") ? userIds.substring(0, userIds.length() - 2) : userIds;
-        userNames = userNames.endsWith("/") ? userNames.substring(0, userNames.length() - 2) : userNames;
-        userTels = userTels.endsWith("/") ? userTels.substring(0, userTels.length() - 2) : userTels;
+        userIds = userIds.endsWith("/") ? userIds.substring(0, userIds.length() - 1) : userIds;
+        userNames = userNames.endsWith("/") ? userNames.substring(0, userNames.length() - 1) : userNames;
+        userTels = userTels.endsWith("/") ? userTels.substring(0, userTels.length() - 1) : userTels;
         complaintDto.setCurrentUserId(userIds);
         complaintDto.setCurrentUserName(userNames);
         complaintDto.setCurrentUserTel(userTels);
