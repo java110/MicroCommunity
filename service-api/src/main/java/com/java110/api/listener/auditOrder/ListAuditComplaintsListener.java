@@ -75,6 +75,7 @@ public class ListAuditComplaintsListener extends AbstractServiceApiListener {
         auditUser.setCommunityId(reqJson.getString("communityId"));
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
+        
 
         long count = complaintUserInnerServiceSMOImpl.getUserTaskCount(auditUser);
 
