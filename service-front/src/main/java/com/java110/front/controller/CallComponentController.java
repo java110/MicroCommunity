@@ -64,7 +64,7 @@ public class CallComponentController extends BaseController {
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             pd.setApiUrl("/api/" + api);
             //权限校验
-            hasPrivilege(restTemplate, pd, "/" + api);
+            hasPrivilege(restTemplate, pd, "/callComponent/" + api);
 
             Object componentInstance = ApplicationContextFactory.getBean(componentCode);
 
@@ -130,7 +130,7 @@ public class CallComponentController extends BaseController {
 
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             //权限校验
-            hasPrivilege(restTemplate, pd, "/" + componentCode + "/" + componentMethod);
+            hasPrivilege(restTemplate, pd, "/callComponent/" + componentCode + "/" + componentMethod);
 
             Object componentInstance = ApplicationContextFactory.getBean(componentCode);
 
@@ -201,7 +201,7 @@ public class CallComponentController extends BaseController {
 
             pd = freshPageDate(request);
             //权限校验
-            hasPrivilege(restTemplate, pd, "/" + componentCode + "/" + componentMethod);
+            hasPrivilege(restTemplate, pd, "/callComponent/" + componentCode + "/" + componentMethod);
 
             Object componentInstance = ApplicationContextFactory.getBean(componentCode);
 
@@ -268,7 +268,7 @@ public class CallComponentController extends BaseController {
             Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
             pd = freshPageDate(request);
 
-            hasPrivilege(restTemplate, pd, "/" + componentCode + "/" + componentMethod);
+            hasPrivilege(restTemplate, pd, "/callComponent/download/" + componentCode + "/" + componentMethod);
 
 
             Object componentInstance = ApplicationContextFactory.getBean(componentCode);

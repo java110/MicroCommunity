@@ -48,6 +48,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         param.put("flowId", tmpWorkflowDto.getFlowId());
         param.put("seq", "1");
         param.put("communityId", tmpWorkflowDto.getCommunityId());
+        param.put("storeId", tmpWorkflowDto.getStoreId());
         //查询步骤
         List<Map> workflowSteps = workflowStepServiceDaoImpl.getWorkflowStepInfo(param);
 
@@ -59,7 +60,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         param.put("statusCd", "0");
         param.put("communityId", tmpWorkflowDto.getCommunityId());
         param.put("stepId", workflowSteps.get(0).get("stepId"));
-
+        param.put("storeId", tmpWorkflowDto.getStoreId());
 
         List<Map> workflowStepStaffs = workflowStepStaffServiceDaoImpl.getWorkflowStepStaffInfo(param);
 

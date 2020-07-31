@@ -1,7 +1,7 @@
 dataSources:
   ds0: !!com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://dev.db.java110.com:3306/hc_community?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://dev.db.java110.com:3306/hc_community?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: hc_community
     password: hc_community@12345678
     minIdle: 5

@@ -33,6 +33,7 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String stateName;
     private String storeId;
     private String roomId;
+    private String[] roomIds;
     private String roomNum;
     private String unitNum;
     private String floorNum;
@@ -253,5 +254,13 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setStartUserId(String startUserId) {
         this.startUserId = startUserId;
+    }
+
+    public String[] getRoomIds() {
+        return roomIds;
+    }
+
+    public void setRoomIds(String[] roomIds) {
+        this.roomIds = roomIds;
     }
 }

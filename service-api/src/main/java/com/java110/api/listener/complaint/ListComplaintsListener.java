@@ -5,12 +5,12 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.complaint.ComplaintDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.store.IComplaintInnerServiceSMO;
-import com.java110.dto.complaint.ComplaintDto;
-import com.java110.dto.file.FileRelDto;
 import com.java110.utils.constant.ServiceCodeComplaintConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -77,6 +77,10 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
+        if (reqJson.containsKey("roomIds")) {
+            String[] roomIds = reqJson.getString("roomIds").split(",");
+            reqJson.put("roomIds",roomIds);
+        }
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
 
         int count = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);

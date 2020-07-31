@@ -11,6 +11,7 @@ import com.java110.po.inspection.InspectionTaskPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,10 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
         businessInspectionTask.putAll(BeanConvertUtil.beanCovertMap(inspectionTaskDtos.get(0)));
 
         InspectionTaskPo inspectionTaskPo = BeanConvertUtil.covertBean(businessInspectionTask, InspectionTaskPo.class);
+        inspectionTaskPo.setActInsTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        inspectionTaskPo.setActUserId(paramInJson.getString("userId"));
+        inspectionTaskPo.setActUserName(paramInJson.getString("userName"));
+        inspectionTaskPo.setState(paramInJson.getString("state"));
 
         super.update(dataFlowContext, inspectionTaskPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_TASK);
     }

@@ -20,6 +20,8 @@ public class WechatConstant {
 
     public static final String TOKEN = "TOKEN";
     public static final String WELCOME = "WELCOME";
+    public static final String NO_BIND_OWNER = "NO_BIND_OWNER"; // 未绑定业主
+
     public static final String DEFAULT_WELCOME = "HC小区物业管理系统是由java110团队于2017年4月份发起的前后端分离、分布式架构开源项目，目前我们的代码开源在github 和gitee上，开源项目由HC小区管理系统后端，HC小区管理系统前端，HC小区管理系统业主手机版和HC小区管理系统物业手机版，业务技术交流群：827669685";
 
     public static final String NO_BIND_OWNER_RESPONSE_MESSAGE = "亲，您还没有绑定业主请先<a href=\"https://owner.demo.winqi.cn/#/pages/login/login\">绑定</a>";

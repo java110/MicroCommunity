@@ -93,22 +93,22 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiPlusLi
             reqJson.put("state", "20200406");
             inspectionTaskBMOImpl.updateInspectionTask(reqJson, context);
         }
-        ResponseEntity<String> responseEntity = inspectionTaskDetailBMOImpl.callService(context, service.getServiceCode(), businesses);
-        context.setResponseEntity(responseEntity);
+        super.commit(context);
+        ResponseEntity<String> responseEntity = context.getResponseEntity();
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return;
         }
 
 
         //判断 巡检点是否都有巡检完
-        if (inspectionTaskDtos == null || inspectionTaskDtos.size() == 0) {
-            return;
-        }
+//        if (inspectionTaskDtos == null || inspectionTaskDtos.size() == 0) {
+//            return;
+//        }
 
         InspectionTaskDetailDto inspectionTaskDetailDto = new InspectionTaskDetailDto();
         inspectionTaskDetailDto.setCommunityId(reqJson.getString("communityId"));
         inspectionTaskDetailDto.setTaskId(reqJson.getString("taskId"));
-        inspectionTaskDetailDto.setState("20200407");
+        inspectionTaskDetailDto.setState("20200405");
         int count = inspectionTaskDetailInnerServiceSMOImpl.queryInspectionTaskDetailsCount(inspectionTaskDetailDto);
 
         if (count > 0) {//说明还没有巡检完
@@ -117,8 +117,7 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiPlusLi
         businesses = new JSONArray();
         reqJson.put("state", "20200407");//巡检完成
         inspectionTaskBMOImpl.updateInspectionTask(reqJson, context);
-        responseEntity = inspectionTaskDetailBMOImpl.callService(context, service.getServiceCode(), businesses);
-        context.setResponseEntity(responseEntity);
+
     }
 
 

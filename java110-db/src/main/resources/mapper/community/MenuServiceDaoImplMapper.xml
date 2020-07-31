@@ -122,9 +122,9 @@
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveBasePrivilegeInfo" parameterType="Map">
         insert into p_privilege(
-        p_id,name,resource,domain,description
+        p_id,name,resource,domain,description,m_id
         ) values (
-        #{pId},#{name},#{resource},#{domain},#{description}
+        #{pId},#{name},#{resource},#{domain},#{description},#{mId}
         )
 
     </insert>
@@ -146,6 +146,9 @@
         </if>
         <if test="domain !=null and domain != ''">
             and t.domain= #{domain}
+        </if>
+        <if test="mId !=null and mId != ''">
+            and t.m_id= #{mId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -214,6 +217,9 @@
         <if test="domain !=null and domain != ''">
             and t.domain= #{domain}
         </if>
+        <if test="mId !=null and mId != ''">
+            and t.m_id= #{mId}
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -226,7 +232,7 @@
         insert into m_menu(
            m_id,name,g_id,url,seq,p_id,description,is_show
         ) values (
-            #{mId},#{name},#{gId},#{url},#{seq},#{pId},#{description},#{isShow}
+            #{mId},#{name},#{gId},#{url},#{seq},'-1',#{description},#{isShow}
         )
     </insert>
 
@@ -239,7 +245,7 @@
         from m_menu t,p_privilege p
         where t.status_cd= '0'
         and p.status_cd= '0'
-        and t.p_id = p.p_id
+        and t.m_id = p.m_id
         <if test="gId !=null and gId != ''">
             and t.g_id= #{gId}
         </if>
@@ -249,9 +255,7 @@
         <if test="mName !=null and mName != ''">
             and t.name like concat('%',#{mName},'%')
         </if>
-        <if test="pId !=null and pId != ''">
-            and t.p_id= #{pId}
-        </if>
+
         <if test="domain !=null and domain != ''">
             and p.domain= #{domain}
         </if>
@@ -262,7 +266,7 @@
             and t.m_id= #{mId}
         </if>
         <if test="pId !=null and pId != ''">
-            and t.p_id= #{pId}
+            and p.p_id= #{pId}
         </if>
         <if test="isShow !=null and isShow != ''">
             and t.is_show= #{isShow}
@@ -346,7 +350,7 @@
         from m_menu t,p_privilege p
         where t.status_cd= '0'
         and p.status_cd= '0'
-        and t.p_id = p.p_id
+        and t.m_id = p.m_id
         <if test="gId !=null and gId != ''">
             and t.g_id= #{gId}
         </if>
@@ -366,7 +370,7 @@
             and p.name like concat('%',#{pName},'%')
         </if>
         <if test="mId !=null and mId != ''">
-            and t.m_id= #{mId}
+            and p.m_id= #{mId}
         </if>
         <if test="pId !=null and pId != ''">
             and t.p_id= #{pId}
