@@ -2,30 +2,28 @@ package com.java110.api.listener.configMenu;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.utils.util.Assert;
+import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceCodeConfigMenuConstant;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.utils.constant.ServiceCodeConfigMenuConstant;
-
-
-import com.java110.core.annotation.Java110Listener;
 
 import java.util.Map;
 
@@ -71,8 +69,12 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
         JSONObject viewMenuGroupInfo = getObj(infos, "viewMenuGroupInfo");
         JSONObject addMenuView = getObj(infos, "addMenuView");
         JSONObject addPrivilegeView = getObj(infos, "addPrivilegeView");
-        addPrivilegeView.put("mId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU));
-        addMenuView.put("mId", addPrivilegeView.getString("mId"));
+        if (!hasKey(addMenuView, "mId")) {
+            addPrivilegeView.put("mId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU));
+        } else {
+            addPrivilegeView.put("mId", addMenuView.getString("mId"));
+        }
+
         if (!hasKey(viewMenuGroupInfo, "gId")) {
             saveMenuGroup(viewMenuGroupInfo, context);
         }
@@ -80,8 +82,8 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
         if (!hasKey(addPrivilegeView, "pId")) {
             saveMenuPrivilege(addPrivilegeView, context);
         }
-
         if (!hasKey(addMenuView, "mId")) {
+            addMenuView.put("mId", addPrivilegeView.getString("mId"));
             addMenuView.put("gId", viewMenuGroupInfo.getString("gId"));
             addMenuView.put("pId", addPrivilegeView.getString("pId"));
             saveMenu(addMenuView, context);
