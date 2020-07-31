@@ -77,11 +77,11 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
         if (reqJson.containsKey("roomIds")) {
             String[] roomIds = reqJson.getString("roomIds").split(",");
-            complaintDto.setRoomIds(roomIds);
+            reqJson.put("roomIds",roomIds);
         }
+        ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
 
         int count = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);
 
