@@ -36,6 +36,7 @@ public class SaveBasePrivilegeListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "name", "必填，请填写权限名称");
         Assert.hasKeyAndValue(reqJson, "domain", "必填，请选择商户类型");
         Assert.hasKeyAndValue(reqJson, "resource", "必填，请选择资源路径");
+        Assert.hasKeyAndValue(reqJson, "mId", "必填，菜单为空");
 
     }
 

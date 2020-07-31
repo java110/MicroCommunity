@@ -71,6 +71,8 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
         JSONObject viewMenuGroupInfo = getObj(infos, "viewMenuGroupInfo");
         JSONObject addMenuView = getObj(infos, "addMenuView");
         JSONObject addPrivilegeView = getObj(infos, "addPrivilegeView");
+        addPrivilegeView.put("mId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU));
+        addMenuView.put("mId", addPrivilegeView.getString("mId"));
         if (!hasKey(viewMenuGroupInfo, "gId")) {
             saveMenuGroup(viewMenuGroupInfo, context);
         }
@@ -107,7 +109,7 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
     }
 
     private void saveMenu(Map info, DataFlowContext context) {
-        info.put("mId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU));
+        //info.put("mId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU));
         info.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         MenuDto menuDto = BeanConvertUtil.covertBean(info, MenuDto.class);
         if (menuInnerServiceSMOImpl.saveMenu(menuDto) < 1) {

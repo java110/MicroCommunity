@@ -2,6 +2,7 @@ package com.java110.front.controller.app;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
+import com.java110.core.context.IPageData;
 import com.java110.front.smo.api.IApiSMO;
 import com.java110.utils.constant.CommonConstant;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -33,6 +35,9 @@ public class AppController extends BaseController {
 
     @Autowired
     private IApiSMO apiSMOImpl;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * 资源请求 post方式
@@ -60,6 +65,8 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            hasPrivilege(restTemplate, pd, "/app/" + service);
             responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
@@ -90,6 +97,8 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            hasPrivilege(restTemplate, pd, "/app/" + service);
             responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + service + "]失败：", e);
@@ -123,6 +132,8 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_ACTION, action);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
             responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + action + "]失败：", e);
@@ -158,6 +169,8 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_ACTION, action);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", action, postInfo, headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
             responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + action + "]失败：" + postInfo, e);
@@ -190,6 +203,8 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_PUT);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            hasPrivilege(restTemplate, pd, "/app/" + service );
             responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
         } catch (Throwable e) {
             logger.error("请求put 方法[" + service + "]失败：", e);
@@ -219,7 +234,8 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_DELETE);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, "", headers);
-
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            hasPrivilege(restTemplate, pd, "/app/" + service );
             responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
         } catch (Throwable e) {
             logger.error("请求delete 方法[" + service + "]失败：", e);
