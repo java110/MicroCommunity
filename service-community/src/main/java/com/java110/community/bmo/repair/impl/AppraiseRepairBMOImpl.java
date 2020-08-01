@@ -61,6 +61,7 @@ public class AppraiseRepairBMOImpl implements IAppraiseRepairBMO {
         appraisePo.setParentAppraiseId("-1");
         appraisePo.setObjType(AppraiseDto.OBJ_TYPE_REPAIR);
         appraisePo.setAppraiseType(AppraiseDto.APPRAISE_TYPE_PUBLIC);
+
         appraiseInnerServiceSMOImpl.saveAppraise(appraisePo);
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);

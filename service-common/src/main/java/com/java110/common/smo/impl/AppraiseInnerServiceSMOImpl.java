@@ -3,12 +3,14 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IAppraiseServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.appraise.AppraiseDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IAppraiseInnerServiceSMO;
 import com.java110.po.appraise.AppraisePo;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +36,9 @@ public class AppraiseInnerServiceSMOImpl extends BaseServiceSMO implements IAppr
     @Override
     public int saveAppraise(@RequestBody AppraisePo appraisePo) {
         int saveFlag = 1;
+        if (StringUtil.isEmpty(appraisePo.getAppraiseId()) || appraisePo.getAppraiseId().startsWith("-")) {
+            appraisePo.setAppraiseId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appraiseId));
+        }
         appraiseServiceDaoImpl.saveAppraiseInfo(BeanConvertUtil.beanCovertMap(appraisePo));
         return saveFlag;
     }
