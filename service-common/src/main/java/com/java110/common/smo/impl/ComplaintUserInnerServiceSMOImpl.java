@@ -315,8 +315,10 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         String userIds = "";
         String userNames = "";
         String userTels = "";
+        String taskIds = "";
         for (Task task : tasks) {
             String userId = task.getAssignee();
+            taskIds += (task.getId() + "/");
             List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
             if (users == null || users.size() == 0) {
                 continue;
@@ -325,12 +327,14 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
             userNames += (users.get(0).getName() + "/");
             userTels += (users.get(0).getTel() + "/");
         }
-        userIds = userIds.endsWith("/") ? userIds.substring(0, userIds.length() - 2) : userIds;
-        userNames = userNames.endsWith("/") ? userNames.substring(0, userNames.length() - 2) : userNames;
-        userTels = userTels.endsWith("/") ? userTels.substring(0, userTels.length() - 2) : userTels;
+        userIds = userIds.endsWith("/") ? userIds.substring(0, userIds.length() - 1) : userIds;
+        userNames = userNames.endsWith("/") ? userNames.substring(0, userNames.length() - 1) : userNames;
+        userTels = userTels.endsWith("/") ? userTels.substring(0, userTels.length() - 1) : userTels;
+        taskIds = taskIds.endsWith("/") ? taskIds.substring(0, taskIds.length() - 1) : taskIds;
         complaintDto.setCurrentUserId(userIds);
         complaintDto.setCurrentUserName(userNames);
         complaintDto.setCurrentUserTel(userTels);
+        complaintDto.setTaskId(taskIds);
         return complaintDto;
 
     }

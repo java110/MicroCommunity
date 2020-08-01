@@ -559,7 +559,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                     msg += (comment.getFullMessage() + "/");
                 }
             }
-            msg = msg.endsWith("/") ? msg.substring(0, msg.length() - 2) : msg;
+            msg = msg.endsWith("/") ? msg.substring(0, msg.length() - 1) : msg;
             tmpWorkflowAuditInfoDto.setUserId(activityInstance.getAssignee());
             tmpWorkflowAuditInfoDto.setMessage(msg);
             workflowAuditInfoDtos.add(tmpWorkflowAuditInfoDto);

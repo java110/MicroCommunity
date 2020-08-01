@@ -25,7 +25,6 @@ import java.util.Map;
  * Created by wuxw on 2018/5/18.
  */
 @Java110Listener("saveComplaintInfoListener")
-@Transactional
 public class SaveComplaintInfoListener extends AbstractComplaintBusinessServiceDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(SaveComplaintInfoListener.class);
