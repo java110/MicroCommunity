@@ -8,7 +8,11 @@ import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -97,6 +101,21 @@ public class Java110TransactionalFactory {
     }
 
     /**
+     * 清理事务
+     */
+    public static void clearOId() {
+        //清理事务
+        if(!StringUtil.isEmpty(getOId())) {
+            remove(O_ID);
+        }
+        //清理角色
+        if(!StringUtil.isEmpty(getServiceRole())) {
+            remove(SERVICE_ROLE);
+        }
+
+    }
+
+    /**
      * 获取事务ID
      *
      * @return
@@ -153,6 +172,7 @@ public class Java110TransactionalFactory {
      * 处理失败，回退事务
      */
     public static void fallbackOId() {
+
         String oId = getOId();
         if (StringUtil.isEmpty(oId) || ROLE_OBSERVER.equals(getServiceRole())) {
             //当前没有开启事务无需回退

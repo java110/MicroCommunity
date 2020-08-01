@@ -114,6 +114,9 @@ public class Java110TransactionalAop {
             Java110TransactionalFactory.fallbackOId();
             //return new BusinessDto(BusinessDto.CODE_ERROR, "内部异常" + e.getLocalizedMessage());
             throw e;
+        }finally {
+            //清理事务信息
+            Java110TransactionalFactory.clearOId();
         }
     }
 }
