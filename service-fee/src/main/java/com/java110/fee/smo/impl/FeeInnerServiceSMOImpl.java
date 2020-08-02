@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -61,6 +62,15 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
             refreshFee(fee, users);
         }
         return fees;
+    }
+
+    @Override
+    public List<FeeDto> queryBusinessFees(FeeDto feeDto) {
+
+        List<Map> fees = feeServiceDaoImpl.getBusinessFeeInfo(BeanConvertUtil.beanCovertMap(feeDto));
+
+        return BeanConvertUtil.covertBeanList(fees,FeeDto.class);
+
     }
 
     /**

@@ -8,10 +8,16 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.order.BusinessDto;
+import com.java110.dto.order.OrderDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
+import com.java110.entity.order.Business;
 import com.java110.entity.order.Orders;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -47,6 +53,12 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IOrderInnerServiceSMO orderInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -84,11 +96,33 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
             return;
         }
 
+        //根据oId 查询 bId;
+        BusinessDto businessDto = new BusinessDto();
+        businessDto.setoId(paramObj.getString("oId"));
+        businessDto.setBusinessTypeCd("600100040001");
+        List<BusinessDto> businessDtos = orderInnerServiceSMOImpl.querySameOrderBusiness(businessDto);
+
+        if(businessDtos == null ||  businessDtos.size() < 1){
+            dataFlowContext.setResponseEntity(responseEntity);
+            return;
+        }
+
+        FeeDto feeDto = new FeeDto();
+        feeDto.setbId(businessDtos.get(0).getbId());
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryBusinessFees(feeDto);
+
+        if(feeDtos == null ||  feeDtos.size() < 1){
+            dataFlowContext.setResponseEntity(responseEntity);
+            return;
+        }
+
+
+
         businesses = new JSONArray();
         //判断是否有派单属性ID
         FeeAttrDto feeAttrDto = new FeeAttrDto();
-        feeAttrDto.setCommunityId(paramObj.getString("communityId"));
-        feeAttrDto.setFeeId(paramObj.getString("feeId"));
+        feeAttrDto.setCommunityId(feeDtos.get(0).getCommunityId());
+        feeAttrDto.setFeeId(feeDtos.get(0).getFeeId());
         feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
         List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
         //修改 派单状态

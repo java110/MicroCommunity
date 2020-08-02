@@ -33,6 +33,15 @@ public interface IFeeInnerServiceSMO {
     @RequestMapping(value = "/queryFees", method = RequestMethod.POST)
     List<FeeDto> queryFees(@RequestBody FeeDto feeDto);
 
+    /**
+     * <p>从Business中查询</p>
+     *
+     * @param feeDto 数据对象分享
+     * @return FeeDto 对象数据
+     */
+    @RequestMapping(value = "/queryBusinessFees", method = RequestMethod.POST)
+    List<FeeDto> queryBusinessFees(@RequestBody FeeDto feeDto);
+
 
 
     /**
