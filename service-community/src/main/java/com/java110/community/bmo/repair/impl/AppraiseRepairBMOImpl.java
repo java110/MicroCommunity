@@ -43,7 +43,7 @@ public class AppraiseRepairBMOImpl implements IAppraiseRepairBMO {
         Map info = new HashMap();
         info.put("repairId", appraiseDto.getObjId());
         info.put("staffId", appraiseDto.getAppraiseUserId());
-        info.put("state", RepairUserDto.STATE_DOING);
+        info.put("state", RepairUserDto.STATE_CLOSE);
         info.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         info.put("context", "评价完成");
         info.put("statusCd", "0");
