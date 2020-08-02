@@ -640,7 +640,7 @@
 
 
     <!-- 查询费用信息 add by wuxw 2018-07-03 -->
-    <select id="getFeeInfo" parameterType="Map" resultType="Map">
+    <select id="queryFeeByAttr" parameterType="Map" resultType="Map">
         select t.amount,t.income_obj_id,t.income_obj_id incomeObjId,t.fee_type_cd,t.fee_type_cd
         feeTypeCd,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id
