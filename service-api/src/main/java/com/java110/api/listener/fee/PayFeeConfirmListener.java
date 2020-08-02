@@ -10,10 +10,8 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.order.BusinessDto;
-import com.java110.dto.order.OrderDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
-import com.java110.entity.order.Business;
 import com.java110.entity.order.Orders;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -102,7 +100,7 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
         businessDto.setBusinessTypeCd("600100040001");
         List<BusinessDto> businessDtos = orderInnerServiceSMOImpl.querySameOrderBusiness(businessDto);
 
-        if(businessDtos == null ||  businessDtos.size() < 1){
+        if (businessDtos == null || businessDtos.size() < 1) {
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }
@@ -112,11 +110,10 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
 
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryBusinessFees(feeDto);
 
-        if(feeDtos == null ||  feeDtos.size() < 1){
+        if (feeDtos == null || feeDtos.size() < 1) {
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }
-
 
 
         businesses = new JSONArray();
@@ -138,6 +135,8 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
             repairPoolPo.setState(RepairDto.STATE_APPRAISE);
             business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairPoolPo));
             businesses.add(business);
+            dataFlowContext.getRequestCurrentHeaders().remove(CommonConstant.ORDER_PROCESS);
+            dataFlowContext.getRequestCurrentHeaders().remove(CommonConstant.O_ID);
             feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
         }
 
