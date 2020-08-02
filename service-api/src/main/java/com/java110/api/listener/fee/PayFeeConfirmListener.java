@@ -6,18 +6,27 @@ import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.*;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.po.owner.RepairPoolPo;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +44,9 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IFeeBMO feeBMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -64,10 +76,38 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.O_ID, paramObj.getString("oId"));
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS,Orders.ORDER_PROCESS_ORDER_CONFIRM_SUBMIT);
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS, Orders.ORDER_PROCESS_ORDER_CONFIRM_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            dataFlowContext.setResponseEntity(responseEntity);
+            return;
+        }
+
+        businesses = new JSONArray();
+        //判断是否有派单属性ID
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setCommunityId(paramObj.getString("communityId"));
+        feeAttrDto.setFeeId(paramObj.getString("feeId"));
+        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+        //修改 派单状态
+        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
+            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
+            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairPoolPo repairPoolPo = new RepairPoolPo();
+            repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
+            repairPoolPo.setCommunityId(paramObj.getString("communityId"));
+            repairPoolPo.setState(RepairDto.STATE_APPRAISE);
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairPoolPo));
+            businesses.add(business);
+            feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
+        }
+
         dataFlowContext.setResponseEntity(responseEntity);
+
 
     }
 

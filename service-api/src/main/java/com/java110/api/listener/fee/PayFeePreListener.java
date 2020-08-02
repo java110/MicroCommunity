@@ -94,8 +94,6 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
-
-
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
     }
