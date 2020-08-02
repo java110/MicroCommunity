@@ -109,6 +109,7 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
 
         FeeDto feeDto = new FeeDto();
         feeDto.setbId(businessDtos.get(0).getbId());
+
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryBusinessFees(feeDto);
 
         if(feeDtos == null ||  feeDtos.size() < 1){

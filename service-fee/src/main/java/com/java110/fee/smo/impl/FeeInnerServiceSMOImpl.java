@@ -65,7 +65,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     }
 
     @Override
-    public List<FeeDto> queryBusinessFees(FeeDto feeDto) {
+    public List<FeeDto> queryBusinessFees(@RequestBody FeeDto feeDto) {
 
         List<Map> fees = feeServiceDaoImpl.getBusinessFeeInfo(BeanConvertUtil.beanCovertMap(feeDto));
 
