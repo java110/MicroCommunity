@@ -95,18 +95,6 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
 
-//        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-//        //smallWeChatDto.setObjId((String) paramObj.get("communityId"));
-//        smallWeChatDto.setAppId((String) paramObj.get("appId"));
-//        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-//        if(smallWeChatDtos.size() <= 0){
-//            throw new IllegalArgumentException("支付失败,小区未配置小程序信息");
-//        }
-//        //指定支付小区
-//        if("1000".equals(smallWeChatDtos.get(0).getObjType())){
-//            paramOut.put("payAppId",smallWeChatDtos.get(0).getAppId());
-//            paramOut.put("payMchId",smallWeChatDtos.get(0).getMchId());
-//        }
 
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
