@@ -3,6 +3,7 @@ package com.java110.intf.fee;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +33,8 @@ public interface IFeeInnerServiceSMO {
     @RequestMapping(value = "/queryFees", method = RequestMethod.POST)
     List<FeeDto> queryFees(@RequestBody FeeDto feeDto);
 
+
+
     /**
      * 查询<p>小区楼</p>总记录数
      *
@@ -40,6 +43,26 @@ public interface IFeeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeesCount", method = RequestMethod.POST)
     int queryFeesCount(@RequestBody FeeDto feeDto);
+
+
+    /**
+     * <p>查询费用信息</p>
+     *
+     * @param feeAttrDto 数据对象分享
+     * @return FeeDto 对象数据
+     */
+    @RequestMapping(value = "/queryFeeByAttr", method = RequestMethod.POST)
+    List<FeeDto> queryFeeByAttr(@RequestBody FeeAttrDto feeAttrDto);
+
+
+    /**
+     * 查询<p>费用</p>总记录数
+     *
+     * @param feeAttrDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryFeeByAttrCount", method = RequestMethod.POST)
+    int queryFeeByAttrCount(@RequestBody FeeAttrDto feeAttrDto);
 
 
     /**

@@ -73,6 +73,26 @@ public interface IFeeServiceDao {
      */
     int queryFeesCount(Map info);
 
+
+    /**
+     * 查询费用总数
+     *
+     * @param info 费用信息
+     * @return 费用数量
+     */
+    int queryFeeByAttrCount(Map info);
+
+
+    /**
+     * 查询费用信息（instance过程）
+     * 根据bId 查询费用信息
+     *
+     * @param info bId 信息
+     * @return 费用信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> queryFeeByAttr(Map info) throws DAOException;
+
     /**
      * 查询费用账期
      *

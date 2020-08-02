@@ -130,6 +130,26 @@ public class FeeServiceDaoImpl extends BaseServiceDao implements IFeeServiceDao 
         return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int queryFeeByAttrCount(Map info) {
+        logger.debug("查询费用数据 入参 info : {}", info);
+
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.queryFeeByAttrCount", info);
+        if (businessFeeInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());    }
+
+    @Override
+    public List<Map> queryFeeByAttr(Map info) throws DAOException {
+        logger.debug("查询费用信息 入参 info : {}", info);
+
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.queryFeeByAttr", info);
+
+        return businessFeeInfos;
+    }
+
     /**
      * 查询费用账期
      *

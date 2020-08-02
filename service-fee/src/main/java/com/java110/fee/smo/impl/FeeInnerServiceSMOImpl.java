@@ -3,6 +3,7 @@ package com.java110.fee.smo.impl;
 
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.fee.dao.IFeeServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -94,6 +95,26 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     @Override
     public int queryFeesCount(@RequestBody FeeDto feeDto) {
         return feeServiceDaoImpl.queryFeesCount(BeanConvertUtil.beanCovertMap(feeDto));
+    }
+
+    @Override
+    public List<FeeDto> queryFeeByAttr(FeeAttrDto feeAttrDto) {
+        //校验是否传了 分页信息
+
+        int page = feeAttrDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeAttrDto.setPage((page - 1) * feeAttrDto.getRow());
+        }
+
+        List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.queryFeeByAttr(BeanConvertUtil.beanCovertMap(feeAttrDto)), FeeDto.class);
+
+        return fees;
+    }
+
+    @Override
+    public int queryFeeByAttrCount(FeeAttrDto feeAttrDto) {
+        return feeServiceDaoImpl.queryFeeByAttrCount(BeanConvertUtil.beanCovertMap(feeAttrDto));
     }
 
 

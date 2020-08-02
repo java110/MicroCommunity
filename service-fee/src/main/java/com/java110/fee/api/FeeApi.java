@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataTransactionFactory;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.fee.bmo.IQueryFeeByAttr;
 import com.java110.fee.bmo.IQueryParkspaceFee;
 import com.java110.fee.smo.IFeeServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
@@ -14,10 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -34,6 +33,9 @@ public class FeeApi extends BaseController {
 
     @Autowired
     IFeeServiceSMO feeServiceSMOImpl;
+
+    @Autowired
+    private IQueryFeeByAttr queryFeeByAttrImpl;
 
     @Autowired
     private IQueryParkspaceFee queryParkspaceFeeImpl;
@@ -123,5 +125,31 @@ public class FeeApi extends BaseController {
     public ResponseEntity<String> parkSpaceFee(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "code", "未包含小区编码");
         return queryParkspaceFeeImpl.query(reqJson);
+    }
+
+    /**
+     * 根据属性查询费用
+     *
+     * @param communityId
+     * @return
+     * @path /app/feeApi/listFeeByAttr
+     */
+    @RequestMapping(value = "/listFeeByAttr", method = RequestMethod.GET)
+    public ResponseEntity<String> listFeeByAttr(@RequestParam(value = "communityId") String communityId,
+                                                @RequestParam(value = "feeId", required = false) String feeId,
+                                                @RequestParam(value = "specCd") String specCd,
+                                                @RequestParam(value = "value") String value,
+                                                @RequestParam(value = "row") int row,
+                                                @RequestParam(value = "page") int page) {
+
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setCommunityId(communityId);
+        feeAttrDto.setSpecCd(specCd);
+        feeAttrDto.setValue(value);
+        feeAttrDto.setFeeId(feeId);
+        feeAttrDto.setRow(row);
+        feeAttrDto.setPage(page);
+        return queryFeeByAttrImpl.query(feeAttrDto);
+
     }
 }
