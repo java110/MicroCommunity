@@ -50,7 +50,7 @@ public class QueryTenantsImpl implements IQueryTenants {
         }
 
 
-        return ResultVo.createResponseEntity(data);
+        return ResultVo.createResponseEntity(1,data.size(),data);
     }
 
     /**

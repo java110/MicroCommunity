@@ -25,6 +25,6 @@ public class QueryParkSpaceImpl implements IQueryParkSpace {
         JSONObject data = new JSONObject();
         data.put("total", total);
         data.put("last", freeTotal);
-        return ResultVo.createResponseEntity(data);
+        return ResultVo.createResponseEntity(1, 1, data);
     }
 }

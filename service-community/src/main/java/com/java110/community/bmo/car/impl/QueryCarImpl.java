@@ -43,7 +43,7 @@ public class QueryCarImpl implements IQueryCar {
         for (OwnerCarDto tmpOwnerCar : ownerCarDtos) {
             dealOwnerCar(reqJson, tmpOwnerCar, data);
         }
-        return ResultVo.createResponseEntity(data);
+        return ResultVo.createResponseEntity(1,data.size(),data);
     }
 
     /**

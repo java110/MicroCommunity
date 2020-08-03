@@ -39,7 +39,7 @@ public class QueryParkspaceFeeImpl implements IQueryParkspaceFee {
         for (OwnerCarDto carDto : cars) {
             dealOwnerCar(reqJson, carDto, data);
         }
-        return ResultVo.createResponseEntity(data);
+        return ResultVo.createResponseEntity(1, data.size(), data);
     }
 
     /**

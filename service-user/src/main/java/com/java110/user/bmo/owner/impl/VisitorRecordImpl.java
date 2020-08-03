@@ -43,7 +43,7 @@ public class VisitorRecordImpl implements IVisitorRecord {
         for (VisitDto tmpVisitDto : visitDtos) {
             dealVisit(reqJson, tmpVisitDto, data);
         }
-        return ResultVo.createResponseEntity(data);
+        return ResultVo.createResponseEntity(1,data.size(),data);
     }
 
     private void dealVisit(JSONObject reqJson, VisitDto tmpVisitDto, JSONArray data) {
