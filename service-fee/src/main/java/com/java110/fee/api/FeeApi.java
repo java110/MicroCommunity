@@ -5,7 +5,9 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.fee.bmo.IQueryFeeByAttr;
+import com.java110.fee.bmo.IQueryOweFee;
 import com.java110.fee.bmo.IQueryParkspaceFee;
 import com.java110.fee.smo.IFeeServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
@@ -39,6 +41,9 @@ public class FeeApi extends BaseController {
 
     @Autowired
     private IQueryParkspaceFee queryParkspaceFeeImpl;
+
+    @Autowired
+    private IQueryOweFee queryOweFeeImpl;
 
     @RequestMapping(path = "/service", method = RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
@@ -150,6 +155,24 @@ public class FeeApi extends BaseController {
         feeAttrDto.setRow(row);
         feeAttrDto.setPage(page);
         return queryFeeByAttrImpl.query(feeAttrDto);
+    }
 
+    /**
+     * 查询欠费费用
+     * @path /app/feeApi/listOweFees
+     * @param payObjId    付费方ID
+     * @param communityId 小区ID
+     * @return
+     */
+    @RequestMapping(value = "/listOweFees", method = RequestMethod.GET)
+    public ResponseEntity<String> listOweFees(
+            @RequestParam(value = "payObjId") String payObjId,
+            @RequestParam(value = "payObjType") String payObjType,
+            @RequestParam(value = "communityId") String communityId) {
+        FeeDto feeDto = new FeeDto();
+        feeDto.setPayerObjId(payObjId);
+        feeDto.setPayerObjType(payObjType);
+        feeDto.setCommunityId(communityId);
+        return queryOweFeeImpl.query(feeDto);
     }
 }

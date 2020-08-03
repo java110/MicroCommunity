@@ -107,5 +107,6 @@ public class VisitorRecordImpl implements IVisitorRecord {
         dataObj.put("floor", floor);
         dataObj.put("building", building);
         dataObj.put("houses", houses);
+        data.add(dataObj);
     }
 }

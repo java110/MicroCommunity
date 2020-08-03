@@ -54,6 +54,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String computingFormula;
     private String isDefault;
     private double oweFee; // 欠费金额
+    private String billType;
 
     private String paymentCd;
 
@@ -356,5 +357,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getBillType() {
+        return billType;
+    }
+
+    public void setBillType(String billType) {
+        this.billType = billType;
     }
 }
