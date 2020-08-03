@@ -771,7 +771,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importRoom.setSection(os[4].toString());
             importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
 
-            if (!StringUtil.isEmpty(os[6].toString())) {
+            if (!StringUtil.isNullOrNone(os[6])) {
                 importRoom.setRoomFeeId(os[7].toString());
                 importRoom.setFeeEndDate(os[8].toString());
             }
