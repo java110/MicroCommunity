@@ -65,6 +65,6 @@ service-store、service-user、service-front、service-fee、service-common和se
 
 ## 联系我们
 
-HC小区管理系统交流群 827669685
+HC小区管理系统交流群 827669685(已满)，799748606（群二）
 
 作者：928255095
