@@ -10,6 +10,7 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,19 +40,27 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     @Override
     public ResponseEntity<String> query(FeeDto feeDto) {
 
-        //查询费用信息
+        //查询费用信息arrearsEndTime
+        feeDto.setArrearsEndTime(DateUtil.getCurrentDate());
+        feeDto.setState(FeeDto.STATE_DOING);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
             feeDtos = new ArrayList<>();
             return ResultVo.createResponseEntity(feeDtos);
         }
-
+        List<FeeDto> tmpFeeDtos = new ArrayList<>();
         for (FeeDto tmpFeeDto : feeDtos) {
             computeOweFee(tmpFeeDto);//计算欠费金额
+
+            //如果金额为0 就排除
+            if (tmpFeeDto.getFeePrice() > 0) {
+                tmpFeeDtos.add(tmpFeeDto);
+            }
         }
 
-        return ResultVo.createResponseEntity(feeDtos);
+
+        return ResultVo.createResponseEntity(tmpFeeDtos);
     }
 
     /**
