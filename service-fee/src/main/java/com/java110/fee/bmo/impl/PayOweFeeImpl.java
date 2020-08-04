@@ -260,6 +260,7 @@ public class PayOweFeeImpl implements IPayOweFee {
         payFeeDetailPo.setCycles(cycles.doubleValue() + "");
         payFeeDetailPo.setReceivableAmount(receivedAmount.doubleValue() + "");
         payFeeDetailPo.setReceivedAmount(receivedAmount.doubleValue() + "");
+        payFeeDetailPo.setFeeId(feeDto.getFeeId());
 
         int saveFeeDetail = feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
 

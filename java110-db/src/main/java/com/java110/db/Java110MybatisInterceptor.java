@@ -334,10 +334,22 @@ public class Java110MybatisInterceptor implements Interceptor {
             if (obj != null) {
                 value = obj.toString();
             } else {
-                value = "";
+                value = "''";
             }
 
         }
         return value;
+    }
+
+
+    public static void main(String[] args) {
+        String tmpKey = " prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state";
+        String tmpValue = "'1.00','912020080411040001','1500.0','1.0',,'0','1500.0','7020181217000001','-1',,";
+        String[] tmpKeys = tmpKey.split(",");
+        String[] tmpValues = tmpValue.split(",");
+
+        if (tmpKeys.length != tmpValues.length) {
+            throw new IllegalArgumentException("sql 错误 key 和value 个数不等");
+        }
     }
 }
