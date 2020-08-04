@@ -257,6 +257,9 @@ public class Java110MybatisInterceptor implements Interceptor {
             throw new IllegalArgumentException("sql 错误 未找到key" + sql);
         }
         for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
+            if("''".equals(tmpValues[keyIndex])){
+                continue;
+            }
             afterValue.put(tmpKeys[keyIndex], tmpValues[keyIndex]);
         }
         afterValues.add(afterValue);
