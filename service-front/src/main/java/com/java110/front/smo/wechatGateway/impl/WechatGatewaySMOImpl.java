@@ -68,7 +68,7 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
         boolean bindFlag = judgeBindOwner(pd, fromUserName);
         if (!bindFlag) {
 
-            String noBindOwnerResponseMessage = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.NO_BIND_OWNER);
+            String noBindOwnerResponseMessage = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, WechatConstant.NO_BIND_OWNER);
 
             if (StringUtil.isEmpty(noBindOwnerResponseMessage)) {
 
