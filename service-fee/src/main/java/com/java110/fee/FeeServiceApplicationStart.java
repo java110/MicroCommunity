@@ -1,6 +1,7 @@
 package com.java110.fee;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 
@@ -29,11 +29,11 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.fee",
-        "com.java110.core",  "com.java110.config.properties.code","com.java110.db"})
+        "com.java110.core", "com.java110.config.properties.code", "com.java110.db"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.fee.listener"})
-@EnableFeignClients(basePackages = {"com.java110.intf.user","com.java110.intf.order","com.java110.intf.community"})
+@EnableFeignClients(basePackages = {"com.java110.intf.user", "com.java110.intf.order", "com.java110.intf.community"})
 public class FeeServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(FeeServiceApplicationStart.class);
@@ -48,16 +48,16 @@ public class FeeServiceApplicationStart {
     @LoadBalanced
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
     }
 
     public static void main(String[] args) throws Exception {
-        try{
+        try {
             ApplicationContext context = SpringApplication.run(FeeServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
-        }catch (Throwable e){
-            logger.error("系统启动失败",e);
+        } catch (Throwable e) {
+            logger.error("系统启动失败", e);
         }
     }
 }
