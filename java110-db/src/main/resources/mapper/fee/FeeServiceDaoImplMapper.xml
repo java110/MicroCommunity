@@ -154,8 +154,8 @@
         and td3.table_name = 'pay_fee'
         and td3.table_columns = 'fee_flag'
         and pfc.bill_type = td4.status_cd
-        and td4.table_name = 'bill_type'
-        and td4.table_columns = 'pay_fee_config'
+        and td4.table_name = 'pay_fee_config'
+        and td4.table_columns = 'bill_type'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
@@ -289,8 +289,8 @@
         and td3.table_name = 'pay_fee'
         and td3.table_columns = 'fee_flag'
         and pfc.bill_type = td4.status_cd
-        and td4.table_name = 'bill_type'
-        and td4.table_columns = 'pay_fee_config'
+        and td4.table_name = 'pay_fee_config'
+        and td4.table_columns = 'bill_type'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
