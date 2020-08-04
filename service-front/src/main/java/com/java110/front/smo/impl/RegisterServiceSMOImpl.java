@@ -113,13 +113,21 @@ public class RegisterServiceSMOImpl extends BaseComponentSMO implements IRegiste
     public ResponseEntity<String> sendTelMessageCode(IPageData pd) {
 
         Assert.jsonObjectHaveKey(pd.getReqData(), "tel", "请求报文格式错误或未包含手机号信息");
-
-
         JSONObject telInfo = JSONObject.parseObject(pd.getReqData());
 
-        String verifyCode = AliSendMessageFactory.generateMessageCode();
+        String oldCode = CommonCache.getValue(telInfo.getString("tel") + "_validateTel_resend");
         ResponseEntity<String> sendMessageResult = null;
-        String verifyStr = "演示环境验证码:" + verifyCode;
+        String verifyStr = "";
+        if(!StringUtil.isNullOrNone(oldCode)){
+            verifyStr = "请稍后重试";
+            sendMessageResult = new ResponseEntity<>(verifyStr, HttpStatus.OK);
+            return sendMessageResult;
+        }
+
+
+        String verifyCode = AliSendMessageFactory.generateMessageCode();
+
+        verifyStr = "演示环境验证码:" + verifyCode;
         try {
             if ("ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
                 //开始发送验证码
@@ -132,6 +140,8 @@ public class RegisterServiceSMOImpl extends BaseComponentSMO implements IRegiste
             }
             //将验证码存入Redis中
             CommonCache.setValue(telInfo.getString("tel") + "_validateTel", verifyCode.toLowerCase(), CommonCache.defaultExpireTime);
+            //将验证码存入Redis中
+            CommonCache.setValue(telInfo.getString("tel") + "_validateTel_resend", verifyCode.toLowerCase(), CommonCache.RESEND_DEFAULT_EXPIRETIME);
 
             sendMessageResult = new ResponseEntity<>(verifyStr, HttpStatus.OK);
 
