@@ -547,6 +547,10 @@
         #{ownerTel}, #{payerObjName}, #{payerObjType}, #{communityId}, #{state})
     </insert>
 
+    <update id="updateBillOweFees" parameterType="Map">
+        update bill_owe_fee t set t.state = #{state} where t.fee_id = #{feeId} and t.community_id=#{communityId}
+    </update>
+
     <insert id="insertBill" parameterType="Map">
         INSERT INTO bill (`bill_id`, `bill_name`, `receivable`, `receipts`, `bill_time`, `community_id`, `config_id`,
        `remark`, `cur_bill`, `cur_receivable`)

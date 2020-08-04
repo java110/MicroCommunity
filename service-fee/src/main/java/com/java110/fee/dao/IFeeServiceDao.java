@@ -136,6 +136,16 @@ public interface IFeeServiceDao {
      */
     int insertBillOweFees(Map info) throws DAOException;
 
+
+    /**
+     * 修改账单欠费
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    int updateBillOweFees(Map info) throws DAOException;
+
     /**
      *  保存账单
      *

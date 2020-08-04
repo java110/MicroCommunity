@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -111,6 +112,9 @@ public class PayOweFeeImpl implements IPayOweFee {
 
             modifyFee(feeObj);
 
+            //将有账单下的 状态改为已经缴费
+            modifyFeeBill(feeObj);
+
             //判断是否有派单属性ID
             FeeAttrDto feeAttrDto = new FeeAttrDto();
             feeAttrDto.setCommunityId(feeObj.getString("communityId"));
@@ -139,6 +143,26 @@ public class PayOweFeeImpl implements IPayOweFee {
     /**
      * @param feeObj
      */
+    private void modifyFeeBill(JSONObject feeObj) {
+
+        if (FeeConfigDto.BILL_TYPE_EVERY.equals(feeObj.getString("billType"))) {
+            return;
+        }
+
+        BillOweFeeDto billOweFeeDto = new BillOweFeeDto();
+        billOweFeeDto.setCommunityId(feeObj.getString("communityId"));
+        billOweFeeDto.setFeeId(feeObj.getString("feeId"));
+        billOweFeeDto.setState(BillOweFeeDto.STATE_FINISH_FEE);
+        int updateFlag = feeInnerServiceSMOImpl.updateBillOweFees(billOweFeeDto);
+
+        if (updateFlag < 1) {
+            throw new IllegalArgumentException("修改账单失败");
+        }
+    }
+
+    /**
+     * @param feeObj
+     */
     private void modifyFee(JSONObject feeObj) throws ParseException {
 
         PayFeePo payFeePo = new PayFeePo();
@@ -156,6 +180,7 @@ public class PayOweFeeImpl implements IPayOweFee {
 
         Assert.listOnlyOne(feeConfigDtos, "未找到费用配置");
         payFeePo.setEndTime(DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+        feeObj.put("billType", feeConfigDtos.get(0).getBillType());
         // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
         if (FeeFlagTypeConstant.ONETIME.equals(feeConfigDtos.get(0).getFeeFlag())) {
             payFeePo.setState(FeeStateConstant.END);

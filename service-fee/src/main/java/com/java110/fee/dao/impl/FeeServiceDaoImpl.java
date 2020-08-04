@@ -246,6 +246,22 @@ public class FeeServiceDaoImpl extends BaseServiceDao implements IFeeServiceDao 
      * @throws DAOException DAO异常
      */
     @Override
+    public int updateBillOweFees(Map info) throws DAOException {
+        logger.debug("保存欠费费用信息 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.insert("feeServiceDaoImpl.updateBillOweFees", info);
+
+        return saveFlag;
+    }
+
+    /**
+     * 保存欠费
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
     public int insertBill(Map info) throws DAOException {
         logger.debug("保存欠费费用信息 入参 info : {}", info);
 

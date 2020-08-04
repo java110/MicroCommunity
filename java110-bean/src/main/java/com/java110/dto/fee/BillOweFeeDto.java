@@ -14,6 +14,8 @@ import java.io.Serializable;
  **/
 public class BillOweFeeDto extends PageDto implements Serializable {
 
+    public static final String STATE_FINISH_FEE = "2000";//已缴费
+
     private String oweId;
     private String billId;
     private String feeId;

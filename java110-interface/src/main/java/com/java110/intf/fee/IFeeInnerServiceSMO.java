@@ -119,6 +119,15 @@ public interface IFeeInnerServiceSMO {
      */
     @RequestMapping(value = "/insertBillOweFees", method = RequestMethod.POST)
     public int insertBillOweFees(@RequestBody BillOweFeeDto billDto) ;
+
+    /**
+     * 保存欠费
+     *
+     * @param billDto
+     * @return
+     */
+    @RequestMapping(value = "/updateBillOweFees", method = RequestMethod.POST)
+    public int updateBillOweFees(@RequestBody BillOweFeeDto billDto) ;
     /**
      * 保存账单
      *
