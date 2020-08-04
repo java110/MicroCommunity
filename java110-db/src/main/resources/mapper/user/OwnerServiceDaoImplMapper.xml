@@ -494,20 +494,15 @@
     </select>
     <!-- 查询未入驻业主 总数 -->
     <select id="queryNoEnterRoomOwnerCount" parameterType="Map" resultType="Map">
-        SELECT
-        COUNT(1) count
-        FROM
-        building_owner_room_rel a,
-        building_owner o,
-        s_community_member m
-        WHERE a.`state` IN ('2001', '2003')
-        AND a.`owner_id` = o.`owner_id`
-        AND o.`owner_id` = m.`member_id`
-        AND m.`member_type_cd` = '390001200005'
-        AND m.`community_id` = #{communityId}
-        AND a.`status_cd` = '0'
-        AND o.`status_cd` = '0'
-        AND m.`status_cd` = '0'
+        select
+            COUNT(1) count
+        from
+        building_owner o
+        left join building_owner_room_rel orr on o.owner_id = orr.owner_id and orr.status_cd = '0'
+        where o.status_cd = '0'
+        and o.owner_type_cd = '1001'
+        and o.community_id = #{communityId}
+        and orr.rel_id is null or orr.state in ('2001','2003')
     </select>
 
     <!-- queryOwnersByRoom -->
