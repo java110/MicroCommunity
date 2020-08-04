@@ -192,7 +192,7 @@ public class PayOweFeeImpl implements IPayOweFee {
 
         BigDecimal feePrice = new BigDecimal("0.00");
 
-        BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+        BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("feePrice")));
         BigDecimal cycles = receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_EVEN);
         paramInJson.put("tmpCycles", cycles);
         payFeeDetailPo.setCommunityId(paramInJson.getString("communityId"));
