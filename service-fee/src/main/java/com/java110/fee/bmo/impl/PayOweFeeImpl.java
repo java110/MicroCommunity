@@ -171,6 +171,7 @@ public class PayOweFeeImpl implements IPayOweFee {
         payFeePo.setFeeId(feeObj.getString("feeId"));
         payFeePo.setEndTime(DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         payFeePo.setCommunityId(feeObj.getString("communityId"));
+        payFeePo.setStatusCd("0");
         int saveFlag = feeInnerServiceSMOImpl.updateFee(payFeePo);
         if (saveFlag < 1) {
             throw new IllegalArgumentException("缴费失败" + payFeePo.toString());
