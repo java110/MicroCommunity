@@ -505,7 +505,12 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("ownerTypeCd", "1001");
             paramIn.put("idCard", owner.getIdCard());
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                if(body.containsKey("code") && body.getIntValue("code") != 0){
+                    throw new IllegalArgumentException(body.getString("msg"));
+                }
                 savedOwnerInfo = getExistsOwner(pd, result, owner);
                 owner.setOwnerId(savedOwnerInfo.getString("ownerId"));
             }
@@ -771,7 +776,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importRoom.setSection(os[4].toString());
             importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
 
-            if (!StringUtil.isEmpty(os[6].toString())) {
+            if (!StringUtil.isNullOrNone(os[6])) {
                 importRoom.setRoomFeeId(os[7].toString());
                 importRoom.setFeeEndDate(os[8].toString());
             }

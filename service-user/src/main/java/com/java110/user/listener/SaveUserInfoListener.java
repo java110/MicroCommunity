@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
-import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.po.user.UserPo;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -57,7 +57,7 @@ public class SaveUserInfoListener extends AbstractBusinessServiceDataFlowListene
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
-        Assert.jsonObjectHaveKey(data, UserPo.class.getSimpleName(), "datas 节点下没有包含 businessUser 节点");
+        Assert.jsonObjectHaveKey(data, UserPo.class.getSimpleName(), "datas 节点下没有包含 businessUser 节点" + data);
 
         //这里先支持 jsonObject 后期再改造
         JSONObject businessUser = data.getJSONArray(UserPo.class.getSimpleName()).getJSONObject(0);
