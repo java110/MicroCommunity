@@ -5,6 +5,7 @@ import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.po.fee.PayFeePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -126,4 +127,8 @@ public interface IFeeInnerServiceSMO {
      */
     @RequestMapping(value = "/insertBill", method = RequestMethod.POST)
     public int insertBill(@RequestBody BillDto billDto);
+
+
+    @RequestMapping(value = "/updateFee", method = RequestMethod.POST)
+    public int updateFee(@RequestBody PayFeePo payFeePo);
 }

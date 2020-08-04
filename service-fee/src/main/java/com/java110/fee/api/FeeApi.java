@@ -6,6 +6,7 @@ import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.fee.bmo.IPayOweFee;
 import com.java110.fee.bmo.IQueryFeeByAttr;
 import com.java110.fee.bmo.IQueryOweFee;
 import com.java110.fee.bmo.IQueryParkspaceFee;
@@ -44,6 +45,9 @@ public class FeeApi extends BaseController {
 
     @Autowired
     private IQueryOweFee queryOweFeeImpl;
+
+    @Autowired
+    private IPayOweFee payOweFeeImpl;
 
     @RequestMapping(path = "/service", method = RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
@@ -159,10 +163,11 @@ public class FeeApi extends BaseController {
 
     /**
      * 查询欠费费用
-     * @path /app/feeApi/listOweFees
+     *
      * @param payObjId    付费方ID
      * @param communityId 小区ID
      * @return
+     * @path /app/feeApi/listOweFees
      */
     @RequestMapping(value = "/listOweFees", method = RequestMethod.GET)
     public ResponseEntity<String> listOweFees(
@@ -175,4 +180,31 @@ public class FeeApi extends BaseController {
         feeDto.setCommunityId(communityId);
         return queryOweFeeImpl.query(feeDto);
     }
+
+    /**
+     * 欠费批量缴费
+     *
+     * @param reqJson {
+     *                "communityId":"",
+     *                "fees":[
+     *                {
+     *                "feeId":"123123",
+     *                "feePrice":10.00,
+     *                <p>
+     *                }
+     *                <p>
+     *                ]
+     *                }
+     * @return
+     * @path /app/feeApi/payOweFee
+     */
+    @RequestMapping(value = "/payOweFee", method = RequestMethod.POST)
+    public ResponseEntity<String> payOweFee(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
+
+        Assert.hasKey(reqJson, "fees", "未包含缴费项目");
+
+        return payOweFeeImpl.pay(reqJson);
+    }
+
 }

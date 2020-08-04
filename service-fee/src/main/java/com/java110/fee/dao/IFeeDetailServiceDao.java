@@ -74,4 +74,11 @@ public interface IFeeDetailServiceDao {
      */
     int queryFeeDetailsCount(Map info);
 
+    /**
+     * 保存 费用明细信息
+     * @param feeDetail 费用明细信息 封装
+     * @throws DAOException 操作数据库异常
+     */
+    void saveFeeDetail(Map feeDetail) throws DAOException;
+
 }

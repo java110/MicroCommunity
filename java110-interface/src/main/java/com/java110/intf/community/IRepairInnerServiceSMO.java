@@ -2,6 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.repair.RepairDto;
+import com.java110.po.owner.RepairPoolPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,4 +82,7 @@ public interface IRepairInnerServiceSMO {
      */
     @RequestMapping(value = "/queryStaffFinishRepairsCount", method = RequestMethod.POST)
     int queryStaffFinishRepairsCount(@RequestBody RepairDto repairDto);
+
+    @RequestMapping(value = "/updateRepair", method = RequestMethod.POST)
+    int updateRepair(@RequestBody RepairPoolPo repairPoolPo);
 }

@@ -125,5 +125,16 @@ public class FeeDetailServiceDaoImpl extends BaseServiceDao implements IFeeDetai
         return Integer.parseInt(businessFeeDetailInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public void saveFeeDetail(Map feeDetail) throws DAOException {
+        logger.debug("保存明细 入参 info : {}",feeDetail);
+
+        int saveFlag = sqlSessionTemplate.update("feeDetailServiceDaoImpl.saveFeeDetail",feeDetail);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存明细 数据失败："+ JSONObject.toJSONString(feeDetail));
+        }
+    }
+
 
 }

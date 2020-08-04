@@ -1,6 +1,7 @@
 package com.java110.fee.smo.impl;
 
 
+import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.fee.dao.IFeeDetailServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -51,6 +52,11 @@ public class FeeDetailInnerServiceSMOImpl extends BaseServiceSMO implements IFee
     @Override
     public int queryFeeDetailsCount(@RequestBody FeeDetailDto feeDetailDto) {
         return feeDetailServiceDaoImpl.queryFeeDetailsCount(BeanConvertUtil.beanCovertMap(feeDetailDto));    }
+
+    @Override
+    public int saveFeeDetail(@RequestBody PayFeeDetailPo payFeeDetailPo) {
+        return 0;
+    }
 
     public IFeeDetailServiceDao getFeeDetailServiceDaoImpl() {
         return feeDetailServiceDaoImpl;

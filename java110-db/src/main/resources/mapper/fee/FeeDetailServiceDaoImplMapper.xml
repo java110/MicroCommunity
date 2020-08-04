@@ -242,4 +242,13 @@
 
     </select>
 
+    <!-- 保存费用明细信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeDetail" parameterType="Map">
+        insert into
+        pay_fee_detail(
+        prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state)
+        values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},'0',#{receivedAmount},#{communityId},'-1',#{feeId},#{state})
+
+    </insert>
+
 </mapper>

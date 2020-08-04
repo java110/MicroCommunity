@@ -3,10 +3,11 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IRepairServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.repair.RepairDto;
+import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,6 +94,12 @@ public class RepairInnerServiceSMOImpl extends BaseServiceSMO implements IRepair
     @Override
     public int queryStaffFinishRepairsCount(@RequestBody RepairDto repairDto) {
         return repairServiceDaoImpl.queryStaffFinishRepairsCount(BeanConvertUtil.beanCovertMap(repairDto));
+    }
+
+    @Override
+    public int updateRepair(@RequestBody RepairPoolPo repairPoolPo) {
+        repairServiceDaoImpl.updateRepairInfoInstance(BeanConvertUtil.beanCovertMap(repairPoolPo));
+        return 1;
     }
 
     public IRepairServiceDao getRepairServiceDaoImpl() {

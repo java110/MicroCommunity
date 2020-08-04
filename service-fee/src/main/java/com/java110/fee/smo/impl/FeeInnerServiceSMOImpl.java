@@ -1,17 +1,18 @@
 package com.java110.fee.smo.impl;
 
 
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.user.UserDto;
 import com.java110.fee.dao.IFeeServiceDao;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.fee.FeeDto;
-import com.java110.dto.PageDto;
-import com.java110.dto.user.UserDto;
+import com.java110.po.fee.PayFeePo;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,7 +70,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         List<Map> fees = feeServiceDaoImpl.getBusinessFeeInfo(BeanConvertUtil.beanCovertMap(feeDto));
 
-        return BeanConvertUtil.covertBeanList(fees,FeeDto.class);
+        return BeanConvertUtil.covertBeanList(fees, FeeDto.class);
 
     }
 
@@ -205,6 +206,12 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     @Override
     public int insertBill(@RequestBody BillDto billDto) {
         return feeServiceDaoImpl.insertBill(BeanConvertUtil.beanCovertMap(billDto));
+    }
+
+    @Override
+    public int updateFee(@RequestBody PayFeePo payFeePo) {
+        feeServiceDaoImpl.updateFeeInfoInstance(BeanConvertUtil.beanCovertMap(payFeePo));
+        return 1;
     }
 
 
