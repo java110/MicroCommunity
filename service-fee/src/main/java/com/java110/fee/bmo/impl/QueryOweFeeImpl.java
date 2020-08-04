@@ -1,6 +1,7 @@
 package com.java110.fee.bmo.impl;
 
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -75,10 +76,20 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             computeFeePrice(tmpFeeDto);
             return;
         }
+        BillDto billDto = new BillDto();
+        billDto.setCommunityId(tmpFeeDto.getCommunityId());
+        billDto.setConfigId(tmpFeeDto.getConfigId());
+        billDto.setCurBill("T");
+        List<BillDto> billDtos = feeInnerServiceSMOImpl.queryBills(billDto);
+        if (billDtos == null || billDtos.size() < 1) {
+            tmpFeeDto.setFeePrice(0.00);
+            return;
+        }
         BillOweFeeDto billOweFeeDto = new BillOweFeeDto();
         billOweFeeDto.setCommunityId(tmpFeeDto.getCommunityId());
         billOweFeeDto.setFeeId(tmpFeeDto.getFeeId());
-        billOweFeeDto.setState("T");
+        billOweFeeDto.setState(BillOweFeeDto.STATE_WILL_FEE);
+        billOweFeeDto.setBillId(billDtos.get(0).getBillId());
         List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
         if (billOweFeeDtos == null || billOweFeeDtos.size() < 1) {
             tmpFeeDto.setFeePrice(0.00);
