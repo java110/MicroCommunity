@@ -138,8 +138,8 @@
         additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
         pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula computingFormula,
         pfc.bill_type billType,t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
-        configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle
-        from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3
+        configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name billTypeName
+        from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3,t_dict td4
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
         and t.config_id = pfc.config_id
@@ -153,6 +153,9 @@
         and t.fee_flag = td3.status_cd
         and td3.table_name = 'pay_fee'
         and td3.table_columns = 'fee_flag'
+        and pfc.bill_type = td4.status_cd
+        and td4.table_name = 'bill_type'
+        and td4.table_columns = 'pay_fee_config'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
@@ -271,7 +274,7 @@
     <!-- 查询费用数量 add by wuxw 2018-07-03 -->
     <select id="queryFeesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3
+        from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3,t_dict td4
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
         and t.config_id = pfc.config_id
@@ -285,6 +288,9 @@
         and t.fee_flag = td3.status_cd
         and td3.table_name = 'pay_fee'
         and td3.table_columns = 'fee_flag'
+        and pfc.bill_type = td4.status_cd
+        and td4.table_name = 'bill_type'
+        and td4.table_columns = 'pay_fee_config'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
@@ -549,6 +555,7 @@
 
     <update id="updateBillOweFees" parameterType="Map">
         update bill_owe_fee t set t.state = #{state} where t.fee_id = #{feeId} and t.community_id=#{communityId}
+        and t.bill_id=#{billId}
     </update>
 
     <insert id="insertBill" parameterType="Map">

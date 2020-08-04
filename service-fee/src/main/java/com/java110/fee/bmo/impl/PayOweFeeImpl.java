@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
@@ -148,16 +149,21 @@ public class PayOweFeeImpl implements IPayOweFee {
         if (FeeConfigDto.BILL_TYPE_EVERY.equals(feeObj.getString("billType"))) {
             return;
         }
-
+        BillDto billDto = new BillDto();
+        billDto.setCommunityId(feeObj.getString("communityId"));
+        billDto.setConfigId(feeObj.getString("configId"));
+        billDto.setCurBill("T");
+        List<BillDto> billDtos = feeInnerServiceSMOImpl.queryBills(billDto);
+        if (billDtos == null || billDtos.size() < 1) {
+            return;
+        }
         BillOweFeeDto billOweFeeDto = new BillOweFeeDto();
         billOweFeeDto.setCommunityId(feeObj.getString("communityId"));
         billOweFeeDto.setFeeId(feeObj.getString("feeId"));
         billOweFeeDto.setState(BillOweFeeDto.STATE_FINISH_FEE);
-        int updateFlag = feeInnerServiceSMOImpl.updateBillOweFees(billOweFeeDto);
+        billOweFeeDto.setBillId(billDtos.get(0).getBillId());
+        feeInnerServiceSMOImpl.updateBillOweFees(billOweFeeDto);
 
-        if (updateFlag < 1) {
-            throw new IllegalArgumentException("修改账单失败");
-        }
     }
 
     /**
@@ -181,7 +187,8 @@ public class PayOweFeeImpl implements IPayOweFee {
         Assert.listOnlyOne(feeConfigDtos, "未找到费用配置");
         payFeePo.setEndTime(DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeObj.put("billType", feeConfigDtos.get(0).getBillType());
-        // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
+        feeObj.put("configId", feeConfigDtos.get(0).getConfigId());
+        // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用 项终止日期
         if (FeeFlagTypeConstant.ONETIME.equals(feeConfigDtos.get(0).getFeeFlag())) {
             payFeePo.setState(FeeStateConstant.END);
             payFeePo.setEndTime(feeConfigDtos.get(0).getEndTime());
