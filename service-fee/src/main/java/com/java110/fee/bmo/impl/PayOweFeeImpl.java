@@ -94,7 +94,7 @@ public class PayOweFeeImpl implements IPayOweFee {
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObj = fees.getJSONObject(feeIndex);
             Assert.hasKeyAndValue(feeObj, "feeId", "未包含费用项ID");
-            Assert.hasKeyAndValue(feeObj, "feeId", "未包含费用项ID");
+            Assert.hasKeyAndValue(feeObj, "feePrice", "未包含缴费金额");
 
             feeObj.put("communityId", communityId);
             doPayOweFee(feeObj);
@@ -201,7 +201,7 @@ public class PayOweFeeImpl implements IPayOweFee {
             }
         }
         payFeePo.setFeeId(feeObj.getString("feeId"));
-        payFeePo.setEndTime(DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        //payFeePo.setEndTime(DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         payFeePo.setCommunityId(feeObj.getString("communityId"));
         payFeePo.setStatusCd("0");
         int saveFlag = feeInnerServiceSMOImpl.updateFee(payFeePo);
