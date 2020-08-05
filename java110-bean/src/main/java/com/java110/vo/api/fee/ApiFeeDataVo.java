@@ -30,6 +30,9 @@ public class ApiFeeDataVo implements Serializable {
     private String feeTypeCdName;
     private String feeFlagName;
 
+    private String squarePrice;
+    private String additionalAmount;
+
     private String feePrice;
     private String isDefault;
 
@@ -194,5 +197,21 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setPaymentCycle(String paymentCycle) {
         this.paymentCycle = paymentCycle;
+    }
+
+    public String getSquarePrice() {
+        return squarePrice;
+    }
+
+    public void setSquarePrice(String squarePrice) {
+        this.squarePrice = squarePrice;
+    }
+
+    public String getAdditionalAmount() {
+        return additionalAmount;
+    }
+
+    public void setAdditionalAmount(String additionalAmount) {
+        this.additionalAmount = additionalAmount;
     }
 }
