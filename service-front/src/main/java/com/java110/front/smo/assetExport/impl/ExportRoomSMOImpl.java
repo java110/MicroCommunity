@@ -10,9 +10,8 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +58,7 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultiValueMap headers = new HttpHeaders();
         headers.add("content-type", "application/octet-stream;charset=UTF-8");
-        headers.add("Content-Disposition", "attachment;filename=" + DateUtil.getyyyyMMddhhmmssDateString() + ".xls");
+        headers.add("Content-Disposition", "attachment;filename=feeImport_" + DateUtil.getyyyyMMddhhmmssDateString() + ".xls");
         headers.add("Pargam", "no-cache");
         headers.add("Cache-Control", "no-cache");
         //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
@@ -127,27 +126,6 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
         return savedFloorInfoResults;
     }
 
-    private JSONArray getExistsFloor(IPageData pd, ComponentValidateResult result) {
-        String apiUrl = "";
-        ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?page=1&row=100&communityId=" + result.getCommunityId();
-
-        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
-
-        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
-            return null;
-        }
-
-        JSONObject savedFloorInfoResult = JSONObject.parseObject(responseEntity.getBody());
-
-        if (!savedFloorInfoResult.containsKey("apiFloorDataVoList")) {
-            return null;
-        }
-
-        return savedFloorInfoResult.getJSONArray("apiFloorDataVoList");
-
-    }
-
 
     /**
      * 获取 房屋信息
@@ -156,8 +134,17 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
      * @param workbook
      */
     private void getRooms(IPageData pd, ComponentValidateResult componentValidateResult, Workbook workbook) {
-        Sheet sheet = workbook.createSheet("房屋信息");
+        Sheet sheet = workbook.createSheet("房屋费用信息");
         Row row = sheet.createRow(0);
+        Cell cell0 = row.createCell(0);
+        cell0.setCellValue("费用名称: 请填写系统中费用类型，如物业费，押金等 ；\n开始时间: " +
+                "收费开始时间，格式为YYYY-MM-DD；\n结束时间: 费用结束时间，格式为YYYY-MM-DD； \n收费金额: 本次收取金额 单位元； " +
+                "\n注意：所有单元格式为文本");
+        CellStyle cs = workbook.createCellStyle();
+        cs.setWrapText(true);  //关键
+        cell0.setCellStyle(cs);
+        row.setHeight((short) (200 * 10));
+        row = sheet.createRow(1);
         row.createCell(0).setCellValue("楼栋编号");
         row.createCell(1).setCellValue("单元编号");
         row.createCell(2).setCellValue("房屋编码");
@@ -169,10 +156,12 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
         //查询楼栋信息
         JSONArray rooms = this.getExistsRoom(pd, componentValidateResult);
         if (rooms == null) {
+            CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+            sheet.addMergedRegion(region);
             return;
         }
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex + 1);
+            row = sheet.createRow(roomIndex + 2);
             row.createCell(0).setCellValue(rooms.getJSONObject(roomIndex).getString("floorNum"));
             row.createCell(1).setCellValue(rooms.getJSONObject(roomIndex).getString("unitNum"));
             row.createCell(2).setCellValue(rooms.getJSONObject(roomIndex).getString("roomNum"));
@@ -181,40 +170,9 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
             row.createCell(5).setCellValue("");
             row.createCell(6).setCellValue("");
         }
-    }
 
-
-    /**
-     * 获取小区
-     *
-     * @param workbook
-     */
-    private void getFloors(IPageData pd, ComponentValidateResult componentValidateResult, Workbook workbook) {
-        Sheet sheet = workbook.createSheet("楼栋单元");
-        Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("楼栋号");
-        row.createCell(1).setCellValue("单元编号");
-        row.createCell(2).setCellValue("总层数");
-        row.createCell(3).setCellValue("是否有电梯");
-
-        //查询楼栋信息
-        JSONArray floors = this.getExistsFloor(pd, componentValidateResult);
-
-        if (floors == null) {
-            return;
-        }
-        for (int floorIndex = 0; floorIndex < floors.size(); floorIndex++) {
-            JSONArray units = this.getExistsUnit(pd, componentValidateResult, floors.getJSONObject(floorIndex).getString("floorId"));
-            for (int unitIndex = 0; unitIndex < units.size(); unitIndex++) {
-                row = sheet.createRow(floorIndex + 1);
-                row.createCell(0).setCellValue(floors.getJSONObject(floorIndex).getString("floorNum"));
-                row.createCell(1).setCellValue(units.getJSONObject(unitIndex).getString("unitNum"));
-                row.createCell(2).setCellValue(units.getJSONObject(unitIndex).getString("layerCount"));
-                row.createCell(3).setCellValue("1010".equals(units.getJSONObject(unitIndex).getString("lift")) ? "有" : "无");
-            }
-        }
-
-
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+        sheet.addMergedRegion(region);
     }
 
     public RestTemplate getRestTemplate() {
