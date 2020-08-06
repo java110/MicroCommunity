@@ -3,6 +3,7 @@ package com.java110.front.components.assetImport;
 import com.java110.core.context.IPageData;
 import com.java110.front.controller.CallComponentController;
 import com.java110.front.smo.assetExport.IAssetExportSMO;
+import com.java110.front.smo.assetExport.IExportRoomSMO;
 import com.java110.front.smo.assetImport.IImportRoomFeeSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class ImportRoomFeeComponent {
     private IImportRoomFeeSMO importRoomFeeSMOImpl;
 
     @Autowired
-    private IAssetExportSMO assetExportSMOImpl;
+    private IExportRoomSMO exportRoomSMOImpl;
 
     /**
      * 添加应用数据
@@ -45,26 +46,8 @@ public class ImportRoomFeeComponent {
      */
     public ResponseEntity<Object> exportData(IPageData pd) throws Exception {
 
-        return assetExportSMOImpl.exportExcelData(pd);
-    }
-
-    /**
-     * 资产导出
-     *
-     * @param pd
-     * @return
-     * @throws Exception
-     */
-    public ResponseEntity<Object> exitCommunityData(IPageData pd) throws Exception {
-        return assetExportSMOImpl.exportExcelData(pd);
+        return exportRoomSMOImpl.exportExcelData(pd);
     }
 
 
-    public IAssetExportSMO getAssetExportSMOImpl() {
-        return assetExportSMOImpl;
-    }
-
-    public void setAssetExportSMOImpl(IAssetExportSMO assetExportSMOImpl) {
-        this.assetExportSMOImpl = assetExportSMOImpl;
-    }
 }

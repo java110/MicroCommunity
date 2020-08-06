@@ -16,6 +16,13 @@ import java.util.regex.Pattern;
  */
 public class Assert extends org.springframework.util.Assert {
 
+
+    public static void hasValue(Object value,String msg){
+        Assert.notNull(value, msg);
+        Assert.hasLength(value.toString(), msg);
+
+    }
+
     /**
      * 判断 jsonObject 是否为空
      *

@@ -527,6 +527,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        and t.owner_type_cd = '1001'
         AND r.`status_cd` = '0'
         AND orr.`status_cd` = '0'
         AND t.`status_cd` = '0'
