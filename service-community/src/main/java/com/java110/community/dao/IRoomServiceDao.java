@@ -136,4 +136,7 @@ public interface IRoomServiceDao {
      */
     List<Map> getRoomInfoWithSellByCommunityId(Map info);
 
+
+    public List<Map> getRoomInfos(Map info);
+
 }

@@ -2,6 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.RoomDto;
+import com.java110.entity.assetImport.ImportRoomFee;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,4 +89,14 @@ public interface IRoomInnerServiceSMO {
      */
     @RequestMapping(value = "/queryRoomsByOwner", method = RequestMethod.POST)
     List<RoomDto> queryRoomsByOwner(@RequestBody RoomDto roomDto);
+
+
+    /**
+     * <p>根据业主查询房屋信息</p>
+     *
+     *
+     * @param importRoomFees 数据对象分享
+     */
+    @RequestMapping(value = "/freshRoomIds", method = RequestMethod.POST)
+    List<ImportRoomFee> freshRoomIds(@RequestBody List<ImportRoomFee> importRoomFees);
 }

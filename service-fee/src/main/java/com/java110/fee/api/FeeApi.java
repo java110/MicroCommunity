@@ -6,6 +6,7 @@ import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.fee.bmo.IImportRoomFee;
 import com.java110.fee.bmo.IPayOweFee;
 import com.java110.fee.bmo.IQueryFeeByAttr;
 import com.java110.fee.bmo.IQueryOweFee;
@@ -19,7 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -48,6 +53,9 @@ public class FeeApi extends BaseController {
 
     @Autowired
     private IPayOweFee payOweFeeImpl;
+
+    @Autowired
+    private IImportRoomFee importRoomFeeImpl;
 
     @RequestMapping(path = "/service", method = RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
@@ -215,7 +223,10 @@ public class FeeApi extends BaseController {
      */
     @RequestMapping(value = "/importRoomFees", method = RequestMethod.POST)
     public ResponseEntity<String> importRoomFees(@RequestBody JSONObject reqJson) {
-        return null;
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
+        Assert.hasKeyAndValue(reqJson, "feeTypeCd", "未包含费用类型");
+
+        return importRoomFeeImpl.importFee(reqJson);
     }
 
 }

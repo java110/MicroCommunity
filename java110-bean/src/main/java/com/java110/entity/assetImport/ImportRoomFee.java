@@ -19,6 +19,8 @@ public class ImportRoomFee {
 
     private String amount;
 
+    private String roomId;
+
 
     public String getFloorNum() {
         return floorNum;
@@ -74,5 +76,13 @@ public class ImportRoomFee {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 }

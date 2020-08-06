@@ -8,6 +8,7 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.fee.*;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
+import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.IImportRoomFee;
 import com.java110.fee.bmo.IPayOweFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
@@ -86,6 +87,10 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
 
 
         JSONArray importRoomFees = reqJson.getJSONArray("importRoomFees");
+
+        List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
+
+        tmpImportRoomFees = roomInnerServiceSMOImpl.freshRoomIds(tmpImportRoomFees);
 
         JSONObject feeObj = null;
 
