@@ -207,4 +207,15 @@ public class FeeApi extends BaseController {
         return payOweFeeImpl.pay(reqJson);
     }
 
+    /**
+     * 费用导入
+     *
+     * @param reqJson
+     * @return
+     */
+    @RequestMapping(value = "/importRoomFees", method = RequestMethod.POST)
+    public ResponseEntity<String> importRoomFees(@RequestBody JSONObject reqJson) {
+        return null;
+    }
+
 }
