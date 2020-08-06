@@ -173,9 +173,9 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
         }
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
-            row.createCell(0).setCellValue(rooms.getJSONObject(roomIndex).getString("roomNum"));
-            row.createCell(1).setCellValue(rooms.getJSONObject(roomIndex).getString("floorNum"));
-            row.createCell(2).setCellValue(rooms.getJSONObject(roomIndex).getString("unitNum"));
+            row.createCell(0).setCellValue(rooms.getJSONObject(roomIndex).getString("floorNum"));
+            row.createCell(1).setCellValue(rooms.getJSONObject(roomIndex).getString("unitNum"));
+            row.createCell(2).setCellValue(rooms.getJSONObject(roomIndex).getString("roomNum"));
             row.createCell(3).setCellValue("");
             row.createCell(4).setCellValue("");
             row.createCell(5).setCellValue("");
