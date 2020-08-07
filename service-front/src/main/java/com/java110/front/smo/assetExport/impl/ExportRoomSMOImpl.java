@@ -58,7 +58,7 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultiValueMap headers = new HttpHeaders();
         headers.add("content-type", "application/octet-stream;charset=UTF-8");
-        headers.add("Content-Disposition", "attachment;filename=feeImport_" + DateUtil.getyyyyMMddhhmmssDateString() + ".xls");
+        headers.add("Content-Disposition", "attachment;filename=feeImport_" + DateUtil.getyyyyMMddhhmmssDateString() + ".xlsx");
         headers.add("Pargam", "no-cache");
         headers.add("Cache-Control", "no-cache");
         //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));

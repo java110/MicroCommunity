@@ -53,19 +53,19 @@ public class Java110TransactionalAop {
             logger.debug("请求头信息 key= " + key+",value = "+value);
 
             key = key.toLowerCase();
-            if (CommonConstant.APP_ID.equals(key)) {
+            if (CommonConstant.APP_ID.equals(key) || CommonConstant.HTTP_APP_ID.equals(key)) {
                 orderDto.setAppId(value);
             }
-            if (CommonConstant.TRANSACTION_ID.equals(key)) {
+            if (CommonConstant.TRANSACTION_ID.equals(key)|| CommonConstant.HTTP_TRANSACTION_ID.equals(key)) {
                 orderDto.setExtTransactionId(value);
             }
-            if (CommonConstant.REQUEST_TIME.equals(key)) {
+            if (CommonConstant.REQUEST_TIME.equals(key)|| CommonConstant.HTTP_REQ_TIME.equals(key)) {
                 orderDto.setRequestTime(value);
             }
             if (OrderDto.O_ID.equals(key)) {
                 orderDto.setoId(value);
             }
-            if (CommonConstant.USER_ID.equals(key)) {
+            if (CommonConstant.USER_ID.equals(key)|| CommonConstant.HTTP_USER_ID.equals(key)) {
                 orderDto.setUserId(value);
             }
         }

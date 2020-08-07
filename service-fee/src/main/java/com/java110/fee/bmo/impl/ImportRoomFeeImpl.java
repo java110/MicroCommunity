@@ -184,6 +184,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         payFeeConfigPo.setPaymentCd("2100");
         payFeeConfigPo.setFeeName(IMPORT_FEE_NAME);
         payFeeConfigPo.setSquarePrice("0");
+        payFeeConfigPo.setPaymentCycle("1");
         payFeeConfigPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         int saveFlag = feeConfigInnerServiceSMOImpl.saveFeeConfig(payFeeConfigPo);
 
