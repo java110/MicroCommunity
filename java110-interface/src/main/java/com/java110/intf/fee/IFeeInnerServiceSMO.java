@@ -140,4 +140,7 @@ public interface IFeeInnerServiceSMO {
 
     @RequestMapping(value = "/updateFee", method = RequestMethod.POST)
     public int updateFee(@RequestBody PayFeePo payFeePo);
+
+    @RequestMapping(value = "/saveFee", method = RequestMethod.POST)
+    int saveFee(@RequestBody List<PayFeePo> payFeePos);
 }

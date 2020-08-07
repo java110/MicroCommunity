@@ -2,6 +2,7 @@ package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.po.fee.FeeAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,4 +40,12 @@ public interface IFeeAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeeAttrsCount", method = RequestMethod.POST)
     int queryFeeAttrsCount(@RequestBody FeeAttrDto feeAttrDto);
+
+    /**
+     * 保存费用属性
+     * @param feeAttrPos
+     * @return
+     */
+    @RequestMapping(value = "/saveFeeAttrs", method = RequestMethod.POST)
+    int saveFeeAttrs(@RequestBody List<FeeAttrPo> feeAttrPos);
 }

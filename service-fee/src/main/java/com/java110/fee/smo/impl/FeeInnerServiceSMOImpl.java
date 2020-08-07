@@ -11,6 +11,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.fee.dao.IFeeServiceDao;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -217,6 +219,18 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     public int updateFee(@RequestBody PayFeePo payFeePo) {
         feeServiceDaoImpl.updateFeeInfoInstance(BeanConvertUtil.beanCovertMap(payFeePo));
         return 1;
+    }
+
+    @Override
+    public int saveFee(@RequestBody List<PayFeePo> payFeePos) {
+        List<Map> fees = new ArrayList<>();
+        for (PayFeePo payFeePo : payFeePos) {
+            fees.add(BeanConvertUtil.beanCovertMap(payFeePo));
+        }
+
+        Map info = new HashMap();
+        info.put("payFeePos", fees);
+        return feeServiceDaoImpl.insertFees(info);
     }
 
 

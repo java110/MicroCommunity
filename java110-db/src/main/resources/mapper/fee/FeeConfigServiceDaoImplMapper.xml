@@ -323,4 +323,18 @@
 
     </select>
 
+
+
+
+    <!-- 保存费用配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeConfig" parameterType="Map">
+        insert into pay_fee_config(
+        fee_type_cd,computing_formula,additional_amount,status_cd,square_price,is_default,config_id,fee_flag,fee_name,
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle
+        ) values (
+        #{feeTypeCd},#{computingFormula},#{additionalAmount},'0',#{squarePrice},#{isDefault},#{configId},
+        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},'-1',#{billType},#{paymentCd},#{paymentCycle}
+        )
+    </insert>
+
 </mapper>

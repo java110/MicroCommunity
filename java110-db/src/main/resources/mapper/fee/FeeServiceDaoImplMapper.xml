@@ -136,9 +136,11 @@
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
         additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
-        pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula computingFormula,
+        pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula
+        computingFormula,
         pfc.bill_type billType,t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
-        configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name billTypeName
+        configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name
+        billTypeName
         from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3,t_dict td4
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
@@ -373,7 +375,8 @@
         t.cur_bill curBill,
         c.fee_name feeName
         from bill t
-        left join  pay_fee_config c on t.config_id = c.config_id and c.community_id = t.community_id and c.status_cd = '0'
+        left join pay_fee_config c on t.config_id = c.config_id and c.community_id = t.community_id and c.status_cd =
+        '0'
         where 1 =1
         <if test="billId !=null and billId != ''">
             and t.bill_id= #{billId}
@@ -412,7 +415,8 @@
     <select id="queryBillCount" parameterType="Map" resultType="Map">
         select count(1) count
         from bill t
-        left join  pay_fee_config c on t.config_id = c.config_id and c.community_id = t.community_id and c.status_cd = '0'
+        left join pay_fee_config c on t.config_id = c.config_id and c.community_id = t.community_id and c.status_cd =
+        '0'
         where 1 =1
         <if test="billId !=null and billId != ''">
             and t.bill_id= #{billId}
@@ -487,7 +491,7 @@
         <if test="ownerIds !=null">
             and t.owner_id in
             <foreach collection="ownerIds" open="(" close=")"
-                     separator=","  item="item">
+                     separator="," item="item">
                 #{item}
             </foreach>
         </if>
@@ -560,7 +564,7 @@
 
     <insert id="insertBill" parameterType="Map">
         INSERT INTO bill (`bill_id`, `bill_name`, `receivable`, `receipts`, `bill_time`, `community_id`, `config_id`,
-       `remark`, `cur_bill`, `cur_receivable`)
+        `remark`, `cur_bill`, `cur_receivable`)
         VALUES (#{billId}, #{billName}, #{receivable}, #{receipts}, #{billTime}, #{communityId}, #{configId},
         #{remark}, #{curBill}, #{curReceivable})
     </insert>
@@ -574,10 +578,13 @@
     <select id="queryFeeByAttrCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee t
-        left join pay_fee_config pfc on t.fee_type_cd = pfc.fee_type_cd and t.config_id = pfc.config_id and pfc.status_cd = '0'
-        left join t_dict td1 on pfc.fee_type_cd = td1.status_cd and td1.table_columns = 'fee_type_cd' and td1.table_name = 'pay_fee_config'
+        left join pay_fee_config pfc on t.fee_type_cd = pfc.fee_type_cd and t.config_id = pfc.config_id and
+        pfc.status_cd = '0'
+        left join t_dict td1 on pfc.fee_type_cd = td1.status_cd and td1.table_columns = 'fee_type_cd' and td1.table_name
+        = 'pay_fee_config'
         left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'pay_fee' and td2.table_columns = 'state'
-        left join t_dict td3 on t.fee_flag = td3.status_cd and td3.table_name = 'pay_fee' and td3.table_columns = 'fee_flag'
+        left join t_dict td3 on t.fee_flag = td3.status_cd and td3.table_name = 'pay_fee' and td3.table_columns =
+        'fee_flag'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.status_cd='0'
         where pfa.spec_cd = #{specCd}
         and pfa.value = #{value}
@@ -661,10 +668,13 @@
         t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle
         from pay_fee t
-        left join pay_fee_config pfc on t.fee_type_cd = pfc.fee_type_cd and t.config_id = pfc.config_id and pfc.status_cd = '0'
-        left join t_dict td1 on pfc.fee_type_cd = td1.status_cd and td1.table_columns = 'fee_type_cd' and td1.table_name = 'pay_fee_config'
+        left join pay_fee_config pfc on t.fee_type_cd = pfc.fee_type_cd and t.config_id = pfc.config_id and
+        pfc.status_cd = '0'
+        left join t_dict td1 on pfc.fee_type_cd = td1.status_cd and td1.table_columns = 'fee_type_cd' and td1.table_name
+        = 'pay_fee_config'
         left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'pay_fee' and td2.table_columns = 'state'
-        left join t_dict td3 on t.fee_flag = td3.status_cd and td3.table_name = 'pay_fee' and td3.table_columns = 'fee_flag'
+        left join t_dict td3 on t.fee_flag = td3.status_cd and td3.table_name = 'pay_fee' and td3.table_columns =
+        'fee_flag'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.status_cd='0'
         where pfa.spec_cd = #{specCd}
         and pfa.value = #{value}
@@ -736,5 +746,15 @@
 
     </select>
 
+    <!-- 批量插入费用 -->
+    <insert id="insertFees" parameterType="Map">
+        insert into pay_fee (amount,status_cd,income_obj_id,fee_type_cd,start_time,end_time,community_id,b_id,fee_id,
+        user_id,payer_obj_id,fee_flag,state,config_id,payer_obj_type)
+        VALUES
+        <foreach collection="payFeePos" item="item" separator=",">
+            (#{item.amount},'0',#{item.incomeObjId},#{item.feeTypeCd},#{item.startTime},#{item.endTime},#{item.communityId},
+            '-1',#{item.feeId},#{item.userId},#{item.payerObjId},#{item.feeFlag},#{item.state},#{item.configId},#{item.payerObjType})
+        </foreach>
+    </insert>
 
 </mapper>

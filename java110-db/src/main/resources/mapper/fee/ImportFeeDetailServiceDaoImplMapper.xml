@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="importFeeDetailServiceDaoImpl">
+
+
+    <!-- 保存费用导入明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveImportFeeDetailInfo" parameterType="Map">
+        insert into import_fee_detail(
+        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,end_time,state,community_id
+        ) values (
+        #{amount},#{unitNum},#{feeId},#{floorNum},#{roomId},#{roomNum},#{ifdId},#{feeName},#{startTime},#{endTime},#{state},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询费用导入明细信息 add by wuxw 2018-07-03 -->
+    <select id="getImportFeeDetailInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.unit_num,t.unit_num unitNum,t.status_cd,t.status_cd statusCd,t.fee_id,t.fee_id
+        feeId,t.floor_num,t.floor_num floorNum,t.room_id,t.room_id roomId,t.room_num,t.room_num
+        roomNum,t.ifd_id,t.ifd_id ifdId,t.fee_name,t.fee_name feeName,t.start_time,t.start_time
+        startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId
+        from import_fee_detail t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and t.unit_num= #{unitNum}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and t.floor_num= #{floorNum}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and t.room_num= #{roomNum}
+        </if>
+        <if test="ifdId !=null and ifdId != ''">
+            and t.ifd_id= #{ifdId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改费用导入明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateImportFeeDetailInfo" parameterType="Map">
+        update import_fee_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            , t.unit_num= #{unitNum}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            , t.floor_num= #{floorNum}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            , t.room_num= #{roomNum}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="ifdId !=null and ifdId != ''">
+            and t.ifd_id= #{ifdId}
+        </if>
+
+    </update>
+
+    <!-- 查询费用导入明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryImportFeeDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from import_fee_detail t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and t.unit_num= #{unitNum}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and t.floor_num= #{floorNum}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and t.room_num= #{roomNum}
+        </if>
+        <if test="ifdId !=null and ifdId != ''">
+            and t.ifd_id= #{ifdId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+
+
+    <!-- 批量插入费用 -->
+    <insert id="saveImportFeeDetails" parameterType="Map">
+        insert into import_fee_detail(
+        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,end_time,state,community_id
+        ) values
+        <foreach collection="importFeeDetailPos" item="item" separator=",">
+          (#{amount},#{unitNum},#{feeId},#{floorNum},#{roomId},#{roomNum},#{ifdId},#{feeName},#{startTime},#{endTime},#{state},#{communityId})
+        </foreach>
+    </insert>
+
+</mapper>

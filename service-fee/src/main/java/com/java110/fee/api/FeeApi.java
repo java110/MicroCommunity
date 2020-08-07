@@ -225,6 +225,8 @@ public class FeeApi extends BaseController {
     public ResponseEntity<String> importRoomFees(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "feeTypeCd", "未包含费用类型");
+        Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户信息");
+        Assert.hasKeyAndValue(reqJson, "userId", "未包含用户信息");
 
         return importRoomFeeImpl.importFee(reqJson);
     }

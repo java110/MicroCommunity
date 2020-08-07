@@ -1,6 +1,7 @@
 package com.java110.fee.dao;
 
 
+import com.java110.po.fee.PayFeePo;
 import com.java110.utils.exception.DAOException;
 
 
@@ -154,6 +155,13 @@ public interface IFeeServiceDao {
      * @throws DAOException DAO异常
      */
     int insertBill(Map info) throws DAOException;
+
+    /**
+     * 保存费用
+     * @param info
+     * @return
+     */
+    int insertFees(Map info);
 
 
 

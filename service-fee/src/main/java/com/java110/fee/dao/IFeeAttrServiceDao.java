@@ -1,6 +1,7 @@
 package com.java110.fee.dao;
 
 
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.utils.exception.DAOException;
 
 
@@ -73,5 +74,13 @@ public interface IFeeAttrServiceDao {
      * @return 费用属性数量
      */
     int queryFeeAttrsCount(Map info);
+
+
+    /**
+     * 保存费用属性
+     * @param info
+     * @return
+     */
+    int saveFeeAttrs(Map info);
 
 }

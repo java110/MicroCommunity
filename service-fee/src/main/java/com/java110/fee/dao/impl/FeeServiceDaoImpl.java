@@ -3,6 +3,7 @@ package com.java110.fee.dao.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.fee.dao.IFeeServiceDao;
+import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
@@ -139,7 +140,8 @@ public class FeeServiceDaoImpl extends BaseServiceDao implements IFeeServiceDao 
             return 0;
         }
 
-        return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());    }
+        return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());
+    }
 
     @Override
     public List<Map> queryFeeByAttr(Map info) throws DAOException {
@@ -268,6 +270,20 @@ public class FeeServiceDaoImpl extends BaseServiceDao implements IFeeServiceDao 
         sqlSessionTemplate.update("feeServiceDaoImpl.updateBill", info);
 
         int saveFlag = sqlSessionTemplate.insert("feeServiceDaoImpl.insertBill", info);
+
+        return saveFlag;
+    }
+
+    /**
+     * 批量保存费用
+     *
+     * @param info
+     * @return
+     */
+    @Override
+    public int insertFees(Map info) {
+
+        int saveFlag = sqlSessionTemplate.insert("feeServiceDaoImpl.insertFees", info);
 
         return saveFlag;
     }
