@@ -50,7 +50,7 @@
     
 ### 系统功能（function） 
 
-   ![image](docs/images/hc_function.png)
+   ![image](docs/operateDoc/img/func.png)
    
    主要系统功能请查看
      
