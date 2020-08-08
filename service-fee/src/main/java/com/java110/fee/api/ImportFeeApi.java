@@ -1,7 +1,9 @@
 package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.importFee.ImportFeeDto;
 import com.java110.dto.importFeeDetail.ImportFeeDetailDto;
+import com.java110.fee.bmo.importFee.IGetImportFeeBMO;
 import com.java110.fee.bmo.importFeeDetail.IDeleteImportFeeDetailBMO;
 import com.java110.fee.bmo.importFeeDetail.IGetImportFeeDetailBMO;
 import com.java110.fee.bmo.importFeeDetail.ISaveImportFeeDetailBMO;
@@ -14,8 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/importFeeDetail")
-public class ImportFeeDetailApi {
+@RequestMapping(value = "/importFee")
+public class ImportFeeApi {
 
     @Autowired
     private ISaveImportFeeDetailBMO saveImportFeeDetailBMOImpl;
@@ -26,6 +28,10 @@ public class ImportFeeDetailApi {
 
     @Autowired
     private IGetImportFeeDetailBMO getImportFeeDetailBMOImpl;
+
+
+    @Autowired
+    private IGetImportFeeBMO getImportFeeBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -100,5 +106,25 @@ public class ImportFeeDetailApi {
         importFeeDetailDto.setRow(row);
         importFeeDetailDto.setCommunityId(communityId);
         return getImportFeeDetailBMOImpl.get(importFeeDetailDto);
+    }
+
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /importFeeDetail/queryImportFeeDetail
+     * @path /app/importFee/queryImportFee
+     */
+    @RequestMapping(value = "/queryImportFee", method = RequestMethod.GET)
+    public ResponseEntity<String> queryImportFee(@RequestParam(value = "communityId") String communityId,
+                                                       @RequestParam(value = "page") int page,
+                                                       @RequestParam(value = "row") int row) {
+        ImportFeeDto importFeeDto = new ImportFeeDto();
+        importFeeDto.setPage(page);
+        importFeeDto.setRow(row);
+        importFeeDto.setCommunityId(communityId);
+        return getImportFeeBMOImpl.get(importFeeDto);
     }
 }
