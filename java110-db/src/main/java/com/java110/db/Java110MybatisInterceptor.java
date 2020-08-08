@@ -15,30 +15,17 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Plugin;
-import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 @Intercepts({
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class,
@@ -216,9 +203,9 @@ public class Java110MybatisInterceptor implements Interceptor {
                 Date date = new Date(((Timestamp) value).getTime());
                 String tmpValue = DateUtil.getFormatTimeString(date, DateUtil.DATE_FORMATE_STRING_A);
                 map.put(key, "'" + tmpValue + "'");
-            } else if(value instanceof Double){
+            } else if (value instanceof Double) {
                 map.put(key, "'" + map.get(key) + "'");
-            }else {
+            } else {
                 if (value != null) {
                     map.put(key, "'" + value.toString() + "'");
                 } else {
@@ -242,27 +229,42 @@ public class Java110MybatisInterceptor implements Interceptor {
         JSONArray preValues = new JSONArray();
 
         JSONArray afterValues = new JSONArray();
-        JSONObject afterValue = new JSONObject();
+
         String tmpTable = sql.substring(sql.toLowerCase().indexOf("into") + 4, sql.indexOf("("));
         String tmpKey = sql.substring(sql.indexOf("(") + 1, sql.indexOf(")"));
-        String tmpValue = sql.substring(sql.lastIndexOf("(") + 1, sql.lastIndexOf(")"));
         String[] tmpKeys = tmpKey.split(",");
-        String[] tmpValues = tmpValue.split(",");
-
-        if (tmpKeys.length != tmpValues.length) {
-            throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
+        int valuePos = 0;
+        if (sql.contains("VALUES")) {
+            valuePos = sql.indexOf("VALUES") + 6;
+        } else {
+            valuePos = sql.indexOf("values") + 6;
         }
+        String sqlValues = sql.substring(valuePos);
+        //说明批操作
 
-        if (tmpKeys.length < 1) {
-            throw new IllegalArgumentException("sql 错误 未找到key" + sql);
-        }
-        for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
-            if("''".equals(tmpValues[keyIndex])){
-                continue;
+        String[] sqlVauleses = sqlValues.split("\\)");
+        JSONObject afterValue = null;
+        for (String sqlV : sqlVauleses) {
+            String tmpValue = sqlV.substring(sqlV.lastIndexOf("(") + 1);
+            String[] tmpValues = tmpValue.split(",");
+            afterValue = new JSONObject();
+
+            if (tmpKeys.length != tmpValues.length) {
+                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
             }
-            afterValue.put(tmpKeys[keyIndex], tmpValues[keyIndex]);
+
+            if (tmpKeys.length < 1) {
+                throw new IllegalArgumentException("sql 错误 未找到key" + sql);
+            }
+            for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
+                if ("''".equals(tmpValues[keyIndex])) {
+                    continue;
+                }
+                afterValue.put(tmpKeys[keyIndex], tmpValues[keyIndex]);
+            }
+            afterValues.add(afterValue);
         }
-        afterValues.add(afterValue);
+
 
         JSONObject logText = new JSONObject();
         logText.put("preValue", preValues);

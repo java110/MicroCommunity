@@ -1,6 +1,7 @@
 package com.java110.dto.importFee;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,8 +16,9 @@ import java.util.Date;
 public class ImportFeeDto extends PageDto implements Serializable {
 
     private String feeTypeCd;
-private String importFeeId;
-private String communityId;
+    private String feeTypeCdName;
+    private String importFeeId;
+    private String communityId;
 
 
     private Date createTime;
@@ -27,19 +29,24 @@ private String communityId;
     public String getFeeTypeCd() {
         return feeTypeCd;
     }
-public void setFeeTypeCd(String feeTypeCd) {
+
+    public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
     }
-public String getImportFeeId() {
+
+    public String getImportFeeId() {
         return importFeeId;
     }
-public void setImportFeeId(String importFeeId) {
+
+    public void setImportFeeId(String importFeeId) {
         this.importFeeId = importFeeId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -58,5 +65,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getFeeTypeCdName() {
+        return feeTypeCdName;
+    }
+
+    public void setFeeTypeCdName(String feeTypeCdName) {
+        this.feeTypeCdName = feeTypeCdName;
     }
 }

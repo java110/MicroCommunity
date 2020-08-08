@@ -170,7 +170,7 @@
 
     <!-- 批量插入费用 -->
     <insert id="saveFeeAttrs" parameterType="Map">
-        insert into pay_fee_attrs (attr_id,operate,spec_cd,community_id,b_id,fee_id,value)
+        insert into pay_fee_attrs (attr_id,status_cd,spec_cd,community_id,b_id,fee_id,value)
         VALUES
         <foreach collection="feeAttrPos" item="item" separator=",">
             (#{item.attrId},'0',#{item.specCd},#{item.communityId},'-1',#{item.feeId},#{item.value})

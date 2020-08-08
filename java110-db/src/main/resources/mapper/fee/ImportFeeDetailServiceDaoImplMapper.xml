@@ -8,9 +8,9 @@
     <!-- 保存费用导入明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveImportFeeDetailInfo" parameterType="Map">
         insert into import_fee_detail(
-        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,end_time,state,community_id
+        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,end_time,state,community_id,import_fee_id
         ) values (
-        #{amount},#{unitNum},#{feeId},#{floorNum},#{roomId},#{roomNum},#{ifdId},#{feeName},#{startTime},#{endTime},#{state},#{communityId}
+        #{amount},#{unitNum},#{feeId},#{floorNum},#{roomId},#{roomNum},#{ifdId},#{feeName},#{startTime},#{endTime},#{state},#{communityId},#{importFeeId}
         )
     </insert>
 
@@ -61,6 +61,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="importFeeId !=null and importFeeId != ''">
+            and t.import_fee_id= #{importFeeId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -160,6 +163,9 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="importFeeId !=null and importFeeId != ''">
+            and t.import_fee_id= #{importFeeId}
+        </if>
 
 
     </select>
@@ -169,10 +175,11 @@
     <!-- 批量插入费用 -->
     <insert id="saveImportFeeDetails" parameterType="Map">
         insert into import_fee_detail(
-        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,end_time,state,community_id
+        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,end_time,state,community_id,import_fee_id
         ) values
         <foreach collection="importFeeDetailPos" item="item" separator=",">
-          (#{amount},#{unitNum},#{feeId},#{floorNum},#{roomId},#{roomNum},#{ifdId},#{feeName},#{startTime},#{endTime},#{state},#{communityId})
+          (#{item.amount},#{item.unitNum},#{item.feeId},#{item.floorNum},#{item.roomId},#{item.roomNum},#{item.ifdId},#{item.feeName},
+            #{item.startTime},#{item.endTime},#{item.state},#{item.communityId},#{item.importFeeId})
         </foreach>
     </insert>
 

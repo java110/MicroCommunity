@@ -124,6 +124,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             payFeePo.setFeeTypeCd(feeTypeCd);
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setAmount(importRoomFee.getAmount());
+            payFeePo.setStartTime(importRoomFee.getStartTime());
 
             payFeePos.add(payFeePo);
 
@@ -132,6 +133,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_IMPORT_FEE_NAME);
             feeAttrPo.setValue(importRoomFee.getFeeName());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
             importFeeDetailPo = new ImportFeeDetailPo();
             importFeeDetailPo.setAmount(importRoomFee.getAmount());
@@ -146,6 +148,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             importFeeDetailPo.setStartTime(importRoomFee.getStartTime());
             importFeeDetailPo.setIfdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
             importFeeDetailPo.setState("1000");
+            importFeeDetailPo.setImportFeeId(importFeeId);
             importFeeDetailPos.add(importFeeDetailPo);
         }
 

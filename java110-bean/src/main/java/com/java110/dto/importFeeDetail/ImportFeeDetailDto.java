@@ -1,6 +1,7 @@
 package com.java110.dto.importFeeDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,17 +16,18 @@ import java.util.Date;
 public class ImportFeeDetailDto extends PageDto implements Serializable {
 
     private String amount;
-private String unitNum;
-private String feeId;
-private String floorNum;
-private String roomId;
-private String roomNum;
-private String ifdId;
-private String feeName;
-private String startTime;
-private String endTime;
-private String state;
-private String communityId;
+    private String unitNum;
+    private String feeId;
+    private String floorNum;
+    private String roomId;
+    private String roomNum;
+    private String ifdId;
+    private String feeName;
+    private String startTime;
+    private String endTime;
+    private String state;
+    private String communityId;
+    private String importFeeId;
 
 
     private Date createTime;
@@ -36,73 +38,96 @@ private String communityId;
     public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getUnitNum() {
+
+    public String getUnitNum() {
         return unitNum;
     }
-public void setUnitNum(String unitNum) {
+
+    public void setUnitNum(String unitNum) {
         this.unitNum = unitNum;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-public String getFloorNum() {
+
+    public String getFloorNum() {
         return floorNum;
     }
-public void setFloorNum(String floorNum) {
+
+    public void setFloorNum(String floorNum) {
         this.floorNum = floorNum;
     }
-public String getRoomId() {
+
+    public String getRoomId() {
         return roomId;
     }
-public void setRoomId(String roomId) {
+
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
-public String getRoomNum() {
+
+    public String getRoomNum() {
         return roomNum;
     }
-public void setRoomNum(String roomNum) {
+
+    public void setRoomNum(String roomNum) {
         this.roomNum = roomNum;
     }
-public String getIfdId() {
+
+    public String getIfdId() {
         return ifdId;
     }
-public void setIfdId(String ifdId) {
+
+    public void setIfdId(String ifdId) {
         this.ifdId = ifdId;
     }
-public String getFeeName() {
+
+    public String getFeeName() {
         return feeName;
     }
-public void setFeeName(String feeName) {
+
+    public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -121,5 +146,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getImportFeeId() {
+        return importFeeId;
+    }
+
+    public void setImportFeeId(String importFeeId) {
+        this.importFeeId = importFeeId;
     }
 }

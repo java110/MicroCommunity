@@ -38,8 +38,8 @@ public class ImportFeeApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /importFeeDetail/saveImportFeeDetail
-     * @path /app/importFeeDetail/saveImportFeeDetail
+     * @serviceCode /importFee/saveImportFeeDetail
+     * @path /app/importFee/saveImportFeeDetail
      */
     @RequestMapping(value = "/saveImportFeeDetail", method = RequestMethod.POST)
     public ResponseEntity<String> saveImportFeeDetail(@RequestBody JSONObject reqJson) {
@@ -56,8 +56,8 @@ public class ImportFeeApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /importFeeDetail/updateImportFeeDetail
-     * @path /app/importFeeDetail/updateImportFeeDetail
+     * @serviceCode /importFee/updateImportFeeDetail
+     * @path /app/importFee/updateImportFeeDetail
      */
     @RequestMapping(value = "/updateImportFeeDetail", method = RequestMethod.POST)
     public ResponseEntity<String> updateImportFeeDetail(@RequestBody JSONObject reqJson) {
@@ -75,8 +75,8 @@ public class ImportFeeApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /importFeeDetail/deleteImportFeeDetail
-     * @path /app/importFeeDetail/deleteImportFeeDetail
+     * @serviceCode /importFee/deleteImportFeeDetail
+     * @path /app/importFee/deleteImportFeeDetail
      */
     @RequestMapping(value = "/deleteImportFeeDetail", method = RequestMethod.POST)
     public ResponseEntity<String> deleteImportFeeDetail(@RequestBody JSONObject reqJson) {
@@ -94,17 +94,25 @@ public class ImportFeeApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /importFeeDetail/queryImportFeeDetail
-     * @path /app/importFeeDetail/queryImportFeeDetail
+     * @serviceCode /importFee/queryImportFeeDetail
+     * @path /app/importFee/queryImportFeeDetail
      */
     @RequestMapping(value = "/queryImportFeeDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryImportFeeDetail(@RequestParam(value = "communityId") String communityId,
                                                        @RequestParam(value = "page") int page,
-                                                       @RequestParam(value = "row") int row) {
+                                                       @RequestParam(value = "row") int row,
+                                                       @RequestParam(value = "floorNum", required = false) String floorNum,
+                                                       @RequestParam(value = "unitNum", required = false) String unitNum,
+                                                       @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                       @RequestParam(value = "importFeeId") String importFeeId) {
         ImportFeeDetailDto importFeeDetailDto = new ImportFeeDetailDto();
         importFeeDetailDto.setPage(page);
         importFeeDetailDto.setRow(row);
         importFeeDetailDto.setCommunityId(communityId);
+        importFeeDetailDto.setImportFeeId(importFeeId);
+        importFeeDetailDto.setFloorNum(floorNum);
+        importFeeDetailDto.setUnitNum(unitNum);
+        importFeeDetailDto.setRoomNum(roomNum);
         return getImportFeeDetailBMOImpl.get(importFeeDetailDto);
     }
 
@@ -114,13 +122,13 @@ public class ImportFeeApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /importFeeDetail/queryImportFeeDetail
+     * @serviceCode /importFee/queryImportFee
      * @path /app/importFee/queryImportFee
      */
     @RequestMapping(value = "/queryImportFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryImportFee(@RequestParam(value = "communityId") String communityId,
-                                                       @RequestParam(value = "page") int page,
-                                                       @RequestParam(value = "row") int row) {
+                                                 @RequestParam(value = "page") int page,
+                                                 @RequestParam(value = "row") int row) {
         ImportFeeDto importFeeDto = new ImportFeeDto();
         importFeeDto.setPage(page);
         importFeeDto.setRow(row);
