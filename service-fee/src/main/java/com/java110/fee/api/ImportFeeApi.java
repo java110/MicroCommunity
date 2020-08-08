@@ -128,10 +128,15 @@ public class ImportFeeApi {
     @RequestMapping(value = "/queryImportFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryImportFee(@RequestParam(value = "communityId") String communityId,
                                                  @RequestParam(value = "page") int page,
+                                                 @RequestParam(value = "importFeeId", required = false) String importFeeId,
+                                                 @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
+
                                                  @RequestParam(value = "row") int row) {
         ImportFeeDto importFeeDto = new ImportFeeDto();
         importFeeDto.setPage(page);
         importFeeDto.setRow(row);
+        importFeeDto.setImportFeeId(importFeeId);
+        importFeeDto.setFeeTypeCd(feeTypeCd);
         importFeeDto.setCommunityId(communityId);
         return getImportFeeBMOImpl.get(importFeeDto);
     }
