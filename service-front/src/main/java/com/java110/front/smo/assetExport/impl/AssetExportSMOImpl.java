@@ -14,6 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class AssetExportSMOImpl extends BaseComponentSMO implements IAssetExport
 
         Workbook workbook = null;  //工作簿
         //工作表
-        workbook = new HSSFWorkbook();
+        workbook = new XSSFWorkbook();
         //获取楼信息
         getFloors(pd, result, workbook);
         //获取业主信息
@@ -65,7 +66,7 @@ public class AssetExportSMOImpl extends BaseComponentSMO implements IAssetExport
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultiValueMap headers = new HttpHeaders();
         headers.add("content-type", "application/octet-stream;charset=UTF-8");
-        headers.add("Content-Disposition", "attachment;filename=" + DateUtil.getyyyyMMddhhmmssDateString() + ".xls");
+        headers.add("Content-Disposition", "attachment;filename=" + DateUtil.getyyyyMMddhhmmssDateString() + ".xlsx");
         headers.add("Pargam", "no-cache");
         headers.add("Cache-Control", "no-cache");
         //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));

@@ -12,6 +12,7 @@ import com.java110.utils.util.DateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
 
         Workbook workbook = null;  //工作簿
         //工作表
-        workbook = new HSSFWorkbook();
+        workbook = new XSSFWorkbook();
         //获取楼信息
         getRooms(pd, result, workbook);
 
