@@ -1,9 +1,6 @@
 package com.java110.community.api;
 
-import com.java110.community.bmo.assets.IQueryAssetsBMO;
-import com.java110.community.bmo.assets.IQueryAssetsFeeBMO;
-import com.java110.community.bmo.assets.IQueryAssetsRepairBMO;
-import com.java110.community.bmo.assets.IQueryAssetsRoomBMO;
+import com.java110.community.bmo.assets.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +24,9 @@ public class BigScreenApi {
 
     @Autowired
     private IQueryAssetsFeeBMO queryAssetsFeeBMOImpl;
+
+    @Autowired
+    private IQueryAssetsInspectionBMO queryAssetsInspectionBMOImpl;
 
 
     /**
@@ -78,5 +78,18 @@ public class BigScreenApi {
     @RequestMapping(value = "/getAssetsFee", method = RequestMethod.GET)
     public ResponseEntity<String> getAssetsFee(@RequestParam(value = "communityId") String communityId) {
         return queryAssetsFeeBMOImpl.query(communityId);
+    }
+
+    /**
+     * 今日巡检
+     *
+     * @param communityId
+     * @return
+     * @Service /bigScreen/getAssetInspection
+     * @path /app/bigScreen/getAssetInspection
+     */
+    @RequestMapping(value = "/getAssetInspection", method = RequestMethod.GET)
+    public ResponseEntity<String> getAssetInspection(@RequestParam(value = "communityId") String communityId) {
+        return queryAssetsInspectionBMOImpl.query(communityId);
     }
 }

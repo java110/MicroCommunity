@@ -238,7 +238,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     }
 
     @Override
-    public JSONArray getAssetsFee(String communityId) {
+    public JSONArray getAssetsFee(@RequestBody String communityId) {
 
         JSONArray data = new JSONArray();
         FeeConfigDto feeConfigDto = new FeeConfigDto();

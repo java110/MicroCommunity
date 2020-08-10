@@ -141,6 +141,9 @@
         <if test="planInsTime !=null ">
             and t.plan_ins_time= #{planInsTime}
         </if>
+        <if test="todayPlanInsTime !=null ">
+            and t.plan_ins_time &gt; #{todayPlanInsTime}
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
