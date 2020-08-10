@@ -77,7 +77,9 @@
     用户名为 wuxw 密码为 admin  如下图
 
     点击登录，进入如下图：
-    
+
+![image](docs/images/0004.png)
+
 ![image](docs/img/index.png)
 
 ![image](docs/img/owner.png)
