@@ -502,7 +502,7 @@
         where o.status_cd = '0'
         and o.owner_type_cd = '1001'
         and o.community_id = #{communityId}
-        and orr.rel_id is null or orr.state in ('2001','2003')
+        and orr.rel_id is null
     </select>
 
     <!-- queryOwnersByRoom -->
