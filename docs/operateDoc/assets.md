@@ -17,3 +17,11 @@
 ![image](img/096.png)
 ![image](img/097.png)
 ![image](img/098.png)
+
+## 2.5.4 添加房屋
+
+添加房屋时，必须确保已经添加了房屋对应的楼栋和单元，点击“资产管理”--> 房屋管理 点击添加
+
+![image](img/099.png)
+![image](img/100.png)
+![image](img/101.png)
