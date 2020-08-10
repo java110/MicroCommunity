@@ -1,19 +1,19 @@
 package com.java110.fee.smo.impl;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.fee.BillDto;
-import com.java110.dto.fee.BillOweFeeDto;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeDto;
+import com.java110.dto.fee.*;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.dao.IFeeServiceDao;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +38,11 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     private IFeeServiceDao feeServiceDaoImpl;
 
     @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
 
     @Override
     public List<FeeDto> queryFees(@RequestBody FeeDto feeDto) {
@@ -231,6 +235,78 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
         Map info = new HashMap();
         info.put("payFeePos", fees);
         return feeServiceDaoImpl.insertFees(info);
+    }
+
+    @Override
+    public JSONArray getAssetsFee(String communityId) {
+
+        JSONArray data = new JSONArray();
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(communityId);
+        feeConfigDto.setCurTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
+            return data;
+        }
+
+
+        for (FeeConfigDto tmpFeeConfigDto : feeConfigDtos) {
+            dealFeeConfig(data, tmpFeeConfigDto);
+        }
+
+
+        return data;
+    }
+
+    private void dealFeeConfig(JSONArray data, FeeConfigDto tmpFeeConfigDto) {
+        String billType = tmpFeeConfigDto.getBillType();
+        JSONObject config = new JSONObject();
+        if (FeeConfigDto.BILL_TYPE_EVERY.equals(billType)) {
+            Map info = new HashMap();
+            info.put("configId", tmpFeeConfigDto.getConfigId());
+            info.put("communityId", tmpFeeConfigDto.getCommunityId());
+            info.put("arrearsEndTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            info.put("state", FeeDto.STATE_DOING);
+            int oweFeeCount = feeServiceDaoImpl.queryFeesCount(info);
+            config.put("oweFeeCount", oweFeeCount);
+
+            info.put("noArrearsEndTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            info.put("state", FeeDto.STATE_DOING);
+            int feeCount = feeServiceDaoImpl.queryFeesCount(info);
+            config.put("feeCount", feeCount);
+
+            config.put("feeName", tmpFeeConfigDto.getFeeName());
+            data.add(config);
+            return;
+        }
+        BillDto billDto = new BillDto();
+        billDto.setConfigId(tmpFeeConfigDto.getConfigId());
+        billDto.setCommunityId(tmpFeeConfigDto.getCommunityId());
+        billDto.setCurBill("T");
+        List<Map> bills = feeServiceDaoImpl.queryBills(BeanConvertUtil.beanCovertMap(billDto));
+        if (bills == null || bills.size() < 1) {
+            config.put("oweFeeCount", 0);
+            config.put("feeCount", 0);
+            config.put("feeName", tmpFeeConfigDto.getFeeName());
+            return;
+        }
+
+        Map tmpBillDto = bills.get(0);
+        Map info = new HashMap();
+        info.put("billId", tmpBillDto.get("billId"));
+        info.put("communityId", tmpFeeConfigDto.getCommunityId());
+        int oweFeeCount = feeServiceDaoImpl.queryBillOweFeeCount(info);
+
+        config.put("oweFeeCount", oweFeeCount);
+        info.put("configId", tmpFeeConfigDto.getConfigId());
+        info.put("communityId", tmpFeeConfigDto.getCommunityId());
+        info.put("state", FeeDto.STATE_DOING);
+        int feeTotalCount = feeServiceDaoImpl.queryFeesCount(info);
+        config.put("feeCount", feeTotalCount - oweFeeCount);
+
+        config.put("feeName", tmpFeeConfigDto.getFeeName());
+        data.add(config);
     }
 
 

@@ -79,10 +79,11 @@ public class ToNotifySMOImpl implements IToNotifySMO {
 
     public int confirmPayFee(Map<String, Object> map) {
         String wId = map.get("wId").toString();
+        wId = wId.replace(" ", "+");
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         ResponseEntity<String> responseEntity = null;
         for (String key : map.keySet()) {
-            if("wId".equals(key)){
+            if ("wId".equals(key)) {
                 continue;
             }
             paramMap.put(key, map.get(key).toString());

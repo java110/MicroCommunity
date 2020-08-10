@@ -15,6 +15,8 @@ import java.util.List;
 public class RoomDto extends PageDto implements Serializable {
 
     public static final String STATE_SELL = "2001";
+    public static final String STATE_FREE = "2002";
+
 
     private String unitPrice;
     private String section;

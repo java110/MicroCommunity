@@ -86,7 +86,7 @@ public class WechatFactory {
      * @return
      */
     public static String getWId(String appId) {
-        return AuthenticationFactory.encrypt(password,appId);
+        return AuthenticationFactory.encrypt(password, appId);
     }
 
     /**
@@ -96,7 +96,7 @@ public class WechatFactory {
      * @return
      */
     public static String getAppId(String wId) {
-        return AuthenticationFactory.decrypt(password,wId);
+        return AuthenticationFactory.decrypt(password, wId);
     }
 
 }
