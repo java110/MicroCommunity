@@ -41,7 +41,7 @@ public class QueryAssetsInspectionBMOImpl implements IQueryAssetsInspectionBMO {
         InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
         inspectionTaskDto.setCommunityId(communityId);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
+        calendar.add(Calendar.DATE, -2);
 
         inspectionTaskDto.setTodayPlanInsTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         List<InspectionTaskDto> inspectionTaskDtos = inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);

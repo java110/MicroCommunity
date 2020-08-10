@@ -130,5 +130,11 @@ public class MachineRecordServiceDaoImpl extends BaseServiceDao implements IMach
         return Integer.parseInt(businessMachineRecordInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> getAssetsMachineRecords(Map info) {
+        List<Map> machineRecordInfos = sqlSessionTemplate.selectList("machineRecordServiceDaoImpl.getAssetsMachineRecords", info);
+        return machineRecordInfos;
+    }
+
 
 }

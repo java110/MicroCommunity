@@ -92,4 +92,17 @@ public class BigScreenApi {
     public ResponseEntity<String> getAssetInspection(@RequestParam(value = "communityId") String communityId) {
         return queryAssetsInspectionBMOImpl.query(communityId);
     }
+
+    /**
+     * 开门
+     *
+     * @param communityId
+     * @return
+     * @Service /bigScreen/getAssetOpenDoor
+     * @path /app/bigScreen/getAssetOpenDoor
+     */
+    @RequestMapping(value = "/getAssetOpenDoor", method = RequestMethod.GET)
+    public ResponseEntity<String> getAssetOpenDoor(@RequestParam(value = "communityId") String communityId) {
+        return queryAssetsInspectionBMOImpl.query(communityId);
+    }
 }

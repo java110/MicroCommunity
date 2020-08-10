@@ -269,4 +269,15 @@
 
     </select>
 
+    <select id="getAssetsMachineRecords" parameterType="Map" resultType="Map">
+        select DATE_FORMAT(t.create_time,'%m-%d') createTime, count(1) count
+        from machine_record t
+        where t.status_cd = '0'
+        and t.community_id = #{communityId}
+        group by DATE_FORMAT(t.create_time,'%Y-%m-%d')
+        order by t.create_time desc
+        limit 0,7
+    </select>
+
+
 </mapper>

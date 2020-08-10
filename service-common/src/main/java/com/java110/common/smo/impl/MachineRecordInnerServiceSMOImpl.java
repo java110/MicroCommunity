@@ -1,18 +1,21 @@
 package com.java110.common.smo.impl;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.common.dao.IMachineRecordServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.common.IMachineRecordInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.machine.MachineRecordDto;
+import com.java110.intf.common.IMachineRecordInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -52,6 +55,17 @@ public class MachineRecordInnerServiceSMOImpl extends BaseServiceSMO implements 
     @Override
     public int queryMachineRecordsCount(@RequestBody MachineRecordDto machineRecordDto) {
         return machineRecordServiceDaoImpl.queryMachineRecordsCount(BeanConvertUtil.beanCovertMap(machineRecordDto));
+    }
+
+    @Override
+    public JSONArray getAssetsMachineRecords(@RequestBody String communityId) {
+
+        Map<String, Object> info = new HashMap<>();
+        info.put("communityId", communityId);
+
+        List<Map> records = machineRecordServiceDaoImpl.getAssetsMachineRecords(info);
+
+        return JSONArray.parseArray(JSONArray.toJSONString(records));
     }
 
     public IMachineRecordServiceDao getMachineRecordServiceDaoImpl() {
