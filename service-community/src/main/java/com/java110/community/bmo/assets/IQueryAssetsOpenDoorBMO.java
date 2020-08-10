@@ -13,4 +13,11 @@ public interface IQueryAssetsOpenDoorBMO {
      * @return
      */
     ResponseEntity<String> query(String communityId);
+
+    /**
+     * 查询资产信息
+     * @param communityId
+     * @return
+     */
+    ResponseEntity<String> queryImage(String communityId);
 }

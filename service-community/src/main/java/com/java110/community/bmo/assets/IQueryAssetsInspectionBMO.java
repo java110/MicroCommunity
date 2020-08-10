@@ -13,4 +13,6 @@ public interface IQueryAssetsInspectionBMO {
      * @return
      */
     ResponseEntity<String> query(String communityId);
+
+
 }

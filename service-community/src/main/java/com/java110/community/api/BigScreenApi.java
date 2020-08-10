@@ -28,6 +28,9 @@ public class BigScreenApi {
     @Autowired
     private IQueryAssetsInspectionBMO queryAssetsInspectionBMOImpl;
 
+    @Autowired
+    private IQueryAssetsOpenDoorBMO queryAssetsOpenDoorBMOImpl;
+
 
     /**
      * 查询资产
@@ -103,6 +106,12 @@ public class BigScreenApi {
      */
     @RequestMapping(value = "/getAssetOpenDoor", method = RequestMethod.GET)
     public ResponseEntity<String> getAssetOpenDoor(@RequestParam(value = "communityId") String communityId) {
-        return queryAssetsInspectionBMOImpl.query(communityId);
+        return queryAssetsOpenDoorBMOImpl.query(communityId);
+    }
+
+    @RequestMapping(value = "/getAssetOpenDoorImage", method = RequestMethod.GET)
+    public ResponseEntity<String> getAssetOpenDoorImage(@RequestParam(value = "communityId") String communityId) {
+        return queryAssetsOpenDoorBMOImpl.queryImage(communityId);
+
     }
 }

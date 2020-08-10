@@ -56,6 +56,8 @@ public class QueryAssetsInspectionBMOImpl implements IQueryAssetsInspectionBMO {
         return ResultVo.createResponseEntity(data);
     }
 
+
+
     private void dealInpectionTask(JSONArray data, InspectionTaskDto inspectionTaskDto1) {
         JSONObject dataObj = null;
         dataObj = new JSONObject();
