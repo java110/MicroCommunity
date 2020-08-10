@@ -304,7 +304,7 @@
             AND ppr.status_cd = '0'
             )
         </if>
-        order by t.create_time desc
+        order by t.seq asc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

@@ -734,7 +734,7 @@
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
         INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
-        WHERE and t.status_cd= '0'
+        WHERE t.status_cd= '0'
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>

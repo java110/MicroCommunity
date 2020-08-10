@@ -1,28 +1,31 @@
 {
-  "autoMove": false,
-  "id": "attrId",
-  "name": "storeAttr",
-  "desc": "商户属性ID",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "store",
-  "tableName": "mall_store_attr",
+  "autoMove": true,
+  "id": "ifdId",
+  "name": "importFeeDetail",
+  "desc": "费用导入明细",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "import_fee_detail",
   "param": {
-    "storeId": "store_id",
-    "attrId": "attr_id",
-    "specCd": "spec_cd",
-    "value": "value",
+    "ifdId": "ifd_id",
+    "floorNum": "floor_num",
+    "unitNum": "unit_num",
+    "roomNum": "room_num",
+    "feeName": "fee_name",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "amount": "amount",
+    "roomId": "room_id",
+    "feeId": "fee_id",
+    "state": "state",
+    "communityId": "community_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "storeId",
-      "msg": "商户ID不能为空"
-    },
-    {
-      "code": "specCd",
-      "msg": "商户规格不能为空"
+      "code": "ifdId",
+      "msg": "费用导入明细不能为空"
     }
   ]
 }
-

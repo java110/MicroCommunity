@@ -1,5 +1,7 @@
 package com.java110.intf.fee;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
@@ -140,4 +142,11 @@ public interface IFeeInnerServiceSMO {
 
     @RequestMapping(value = "/updateFee", method = RequestMethod.POST)
     public int updateFee(@RequestBody PayFeePo payFeePo);
+
+    @RequestMapping(value = "/saveFee", method = RequestMethod.POST)
+    int saveFee(@RequestBody List<PayFeePo> payFeePos);
+
+
+    @RequestMapping(value = "/getAssetsFee", method = RequestMethod.POST)
+    public JSONArray getAssetsFee(@RequestBody String communityId);
 }

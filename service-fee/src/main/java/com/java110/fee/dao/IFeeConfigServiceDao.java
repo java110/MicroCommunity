@@ -74,4 +74,12 @@ public interface IFeeConfigServiceDao {
      */
     int queryFeeConfigsCount(Map info);
 
+
+    /**
+     * 保存费用配置
+     * @param info
+     * @return
+     */
+    int saveFeeConfig(Map info);
+
 }

@@ -27,7 +27,8 @@ public class RoomApi {
      *
      * @param reqJson
      * @return
-     * @path /room/getRoom
+     * @Service /room/getRoom
+     * @path /app/room/getRoom
      */
     @RequestMapping(value = "/getRoom", method = RequestMethod.POST)
     public ResponseEntity<String> getRoom(@RequestBody JSONObject reqJson) {

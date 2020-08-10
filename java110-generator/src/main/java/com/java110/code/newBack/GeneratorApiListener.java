@@ -88,7 +88,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "service-"+data.getShareName()+"\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\bmo\\" + data.getName() + "/I" + toUpperCaseFirstOne(data.getName()) + "BMO.java");
+            FileUtilBase.copyfile(writePath, "service-"+data.getShareName()+"\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\bmo\\" + data.getName() + "/ISave" + toUpperCaseFirstOne(data.getName()) + "BMO.java");
         }
     }
 
@@ -112,7 +112,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "service-"+data.getShareName()+"\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\bmo\\" + data.getName() + "/impl/" + toUpperCaseFirstOne(data.getName()) + "BMOImpl.java");
+            FileUtilBase.copyfile(writePath, "service-"+data.getShareName()+"\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\bmo\\" + data.getName() + "/impl/Save" + toUpperCaseFirstOne(data.getName()) + "BMOImpl.java");
         }
     }
 
@@ -286,7 +286,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "service-"+data.getShareName()+"\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\" + toUpperCaseFirstOne(data.getName()) + "Api.java");
+            FileUtilBase.copyfile(writePath, "service-"+data.getShareName()+"\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\api\\" + toUpperCaseFirstOne(data.getName()) + "Api.java");
         }
     }
 

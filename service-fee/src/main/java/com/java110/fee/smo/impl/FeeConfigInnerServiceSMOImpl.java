@@ -1,13 +1,14 @@
 package com.java110.fee.smo.impl;
 
 
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.fee.dao.IFeeConfigServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.fee.dao.IFeeConfigServiceDao;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.fee.PayFeeConfigPo;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,7 @@ public class FeeConfigInnerServiceSMOImpl extends BaseServiceSMO implements IFee
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<FeeConfigDto> queryFeeConfigs(@RequestBody  FeeConfigDto feeConfigDto) {
+    public List<FeeConfigDto> queryFeeConfigs(@RequestBody FeeConfigDto feeConfigDto) {
 
         //校验是否传了 分页信息
 
@@ -49,12 +50,15 @@ public class FeeConfigInnerServiceSMOImpl extends BaseServiceSMO implements IFee
     }
 
 
-
-
-
     @Override
     public int queryFeeConfigsCount(@RequestBody FeeConfigDto feeConfigDto) {
-        return feeConfigServiceDaoImpl.queryFeeConfigsCount(BeanConvertUtil.beanCovertMap(feeConfigDto));    }
+        return feeConfigServiceDaoImpl.queryFeeConfigsCount(BeanConvertUtil.beanCovertMap(feeConfigDto));
+    }
+
+    @Override
+    public int saveFeeConfig(@RequestBody PayFeeConfigPo payFeeConfigPo) {
+        return feeConfigServiceDaoImpl.saveFeeConfig(BeanConvertUtil.beanCovertMap(payFeeConfigPo));
+    }
 
     public IFeeConfigServiceDao getFeeConfigServiceDaoImpl() {
         return feeConfigServiceDaoImpl;

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="importFeeServiceDaoImpl">
+
+
+    <!-- 保存费用导入信息 add by wuxw 2018-07-03 -->
+    <insert id="saveImportFeeInfo" parameterType="Map">
+        insert into import_fee(
+        fee_type_cd,import_fee_id,community_id
+        ) values (
+        #{feeTypeCd},#{importFeeId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询费用导入信息 add by wuxw 2018-07-03 -->
+    <select id="getImportFeeInfo" parameterType="Map" resultType="Map">
+        select t.fee_type_cd,t.fee_type_cd feeTypeCd,t.status_cd,t.status_cd statusCd,t.import_fee_id,t.import_fee_id
+        importFeeId,t.community_id,t.community_id communityId,t.create_time createTime,d.name feeTypeCdName
+        from import_fee t
+        left join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
+        where 1 =1
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="importFeeId !=null and importFeeId != ''">
+            and t.import_fee_id= #{importFeeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改费用导入信息 add by wuxw 2018-07-03 -->
+    <update id="updateImportFeeInfo" parameterType="Map">
+        update import_fee t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            , t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="importFeeId !=null and importFeeId != ''">
+            and t.import_fee_id= #{importFeeId}
+        </if>
+
+    </update>
+
+    <!-- 查询费用导入数量 add by wuxw 2018-07-03 -->
+    <select id="queryImportFeesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from import_fee t
+        where 1 =1
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="importFeeId !=null and importFeeId != ''">
+            and t.import_fee_id= #{importFeeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

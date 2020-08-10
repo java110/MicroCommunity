@@ -14,7 +14,11 @@ HC小区物业管理系统是由java110团队于2017年4月份发起的前后端
 [https://hc.demo.winqi.cn](https://hc.demo.winqi.cn)
 
 
-## 1.1.3 产品源码
+## 1.1.3 功能图
+
+![image](img/func.png)
+
+## 1.1.4 产品源码
 
 #### HC小区后端代码
 [https://gitee.com/wuxw7/MicroCommunity](https://gitee.com/wuxw7/MicroCommunity)
@@ -28,7 +32,7 @@ HC小区物业管理系统是由java110团队于2017年4月份发起的前后端
 #### HC掌上物业
 [https://gitee.com/java110/PropertyApp](https://gitee.com/java110/PropertyApp)
 
-## 关于我们
+## 1.1.5 关于我们
 
 HC小区管理系统交流群 827669685(已满)，799748606（群二）
 

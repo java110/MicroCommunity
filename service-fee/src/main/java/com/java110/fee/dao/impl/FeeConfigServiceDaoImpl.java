@@ -125,5 +125,13 @@ public class FeeConfigServiceDaoImpl extends BaseServiceDao implements IFeeConfi
         return Integer.parseInt(businessFeeConfigInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int saveFeeConfig(Map info) {
+        logger.debug("保存费用配置saveFeeConfig : {}",info);
+        int saveFlag = sqlSessionTemplate.update("feeConfigServiceDaoImpl.saveFeeConfig",info);
+
+        return saveFlag;
+    }
+
 
 }

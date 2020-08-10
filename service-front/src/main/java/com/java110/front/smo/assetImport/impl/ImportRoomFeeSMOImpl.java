@@ -26,7 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -96,6 +98,9 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
 
         JSONObject data = JSONObject.parseObject(pd.getReqData());
         data.put("importFeeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+        data.put("storeId", result.getStoreId());
+        data.put("userId", result.getUserId());
+        data.put("communityId", result.getCommunityId());
 
         List<ImportRoomFee> tmpImportRoomFees = new ArrayList<>();
         for (int roomIndex = 0; roomIndex < roomFees.size(); roomIndex++) {
@@ -141,7 +146,7 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
      */
     private void getRooms(Workbook workbook, List<ImportRoomFee> rooms) {
         Sheet sheet = null;
-        sheet = ImportExcelUtils.getSheet(workbook, "房屋信息");
+        sheet = ImportExcelUtils.getSheet(workbook, "房屋费用信息");
         List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
         ImportRoomFee importRoomFee = null;
         for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
@@ -164,19 +169,49 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
             Assert.hasValue(os[5], (osIndex + 1) + "行结束时间不能为空");
             Assert.hasValue(os[6], (osIndex + 1) + "行费用不能为空");
 
-            Assert.isDate(os[4].toString(), DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
-            Assert.isDate(os[5].toString(), DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
+//
+
+            String startTime = excelDoubleToDate(os[4].toString());
+            String endTime = excelDoubleToDate(os[5].toString());
+            Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
+            Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
+
 
             importRoomFee = new ImportRoomFee();
             importRoomFee.setFloorNum(os[0].toString());
             importRoomFee.setUnitNum(os[1].toString());
             importRoomFee.setRoomNum(os[2].toString());
             importRoomFee.setFeeName(os[3].toString());
-            importRoomFee.setStartTime(os[4].toString());
-            importRoomFee.setEndTime(os[5].toString());
+            importRoomFee.setStartTime(startTime);
+            importRoomFee.setEndTime(endTime);
             importRoomFee.setAmount(os[6].toString());
             rooms.add(importRoomFee);
         }
+    }
+
+
+    //解析Excel日期格式
+    public static String excelDoubleToDate(String strDate) {
+        if (strDate.length() == 5) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date tDate = DoubleToDate(Double.parseDouble(strDate));
+                return sdf.format(tDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return strDate;
+            }
+        }
+        return strDate;
+    }
+
+    //解析Excel日期格式
+    public static Date DoubleToDate(Double dVal) {
+        Date tDate = new Date();
+        long localOffset = tDate.getTimezoneOffset() * 60000; //系统时区偏移 1900/1/1 到 1970/1/1 的 25569 天
+        tDate.setTime((long) ((dVal - 25569) * 24 * 3600 * 1000 + localOffset));
+
+        return tDate;
     }
 
     public RestTemplate getRestTemplate() {

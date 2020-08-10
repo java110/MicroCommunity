@@ -73,4 +73,6 @@ public interface IMachineRecordServiceDao {
      */
     int queryMachineRecordsCount(Map info);
 
+    List<Map> getAssetsMachineRecords(Map info);
+
 }

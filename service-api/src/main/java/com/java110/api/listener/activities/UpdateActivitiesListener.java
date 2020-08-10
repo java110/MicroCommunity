@@ -91,7 +91,7 @@ public class UpdateActivitiesListener extends AbstractServiceApiPlusListener {
                 FileRelPo fileRelPo = new FileRelPo();
                 fileRelPo.setFileRelId(fileRelDtos.get(0).getFileRelId());
                 fileRelPo.setFileRealName(reqJson.getString("headerImg"));
-                fileRelPo.setFileSaveName(reqJson.getString("headerImg"));
+                fileRelPo.setFileSaveName(reqJson.getString("fileSaveName"));
                 fileRelPo.setObjId(reqJson.getString("activitiesId"));
                 super.update(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
             }
