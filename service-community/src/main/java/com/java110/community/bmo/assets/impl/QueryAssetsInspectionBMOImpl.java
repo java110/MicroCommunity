@@ -57,7 +57,6 @@ public class QueryAssetsInspectionBMOImpl implements IQueryAssetsInspectionBMO {
     }
 
 
-
     private void dealInpectionTask(JSONArray data, InspectionTaskDto inspectionTaskDto1) {
         JSONObject dataObj = null;
         dataObj = new JSONObject();
@@ -70,7 +69,7 @@ public class QueryAssetsInspectionBMOImpl implements IQueryAssetsInspectionBMO {
             } else if ("20200406".equals(state)) {
                 dataObj.put("msg", inspectionTaskDto1.getPlanUserName() + " 正在巡检中");
             } else {
-                if (planInTime.getTime() > DateUtil.getCurrentDate().getTime()) {
+                if (planInTime.getTime() < DateUtil.getCurrentDate().getTime()) {
                     dataObj.put("msg", inspectionTaskDto1.getPlanUserName() + " 未巡检");
                 } else {
                     dataObj.put("msg", inspectionTaskDto1.getPlanUserName() + " 将于 " + inspectionTaskDto1.getPlanInsTime() + " 开始巡检");
