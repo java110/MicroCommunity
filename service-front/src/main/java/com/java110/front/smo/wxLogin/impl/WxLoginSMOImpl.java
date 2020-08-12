@@ -111,6 +111,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
             //将openId放到redis 缓存，给前段下发临时票据
             paramOut.put("openId", openId);
+            paramOut.put("sessionKey", sessionKey);
             paramOut.put("msg", "还没有注册请先注册");
             responseEntity = new ResponseEntity<String>(paramOut.toJSONString(), HttpStatus.UNAUTHORIZED);
 

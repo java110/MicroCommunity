@@ -1,11 +1,14 @@
 package com.java110.front.controller.mina;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.front.smo.wxLogin.IWxLoginSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.core.factory.WechatFactory;
+import com.java110.front.smo.wxLogin.IWxLoginSMO;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,14 +53,27 @@ public class WxLoginController extends BaseController {
 
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         String appId = request.getHeader("APP_ID");
-        if(StringUtil.isEmpty(appId)){
+        if (StringUtil.isEmpty(appId)) {
             appId = request.getHeader("APP-ID");
         }
-        IPageData pd = PageData.newInstance().builder("", "","", postInfo,
+        IPageData pd = PageData.newInstance().builder("", "", "", postInfo,
                 "", "", "", "",
                 appId);
 
         return wxLoginSMOImpl.doLogin(pd);
     }
 
+
+    @RequestMapping(path = "/getWxPhoto", method = RequestMethod.POST)
+    public ResponseEntity<String> getWxPhoto(@RequestBody String postInfo) {
+        JSONObject postObj = JSONObject.parseObject(postInfo);
+
+
+        String photoInfo = WechatFactory.getPhoneNumberBeanS5(postObj.getString("decryptData"),
+                postObj.getString("key"), postObj.getString("iv"));
+        JSONObject photoObj = JSONObject.parseObject(photoInfo);
+        CommonCache.setValue(postObj.getString("key"), photoObj.toJSONString(), CommonCache.defaultExpireTime);
+        return ResultVo.createResponseEntity(photoObj);
+
+    }
 }

@@ -25,6 +25,7 @@ public class ServiceConfiguration {
         exclusions.append("/callComponent/download/getFile/fileByObjId,");//放开 下载图片也不需要登录
         exclusions.append("/app/payment/notify,");//微信支付通知
         exclusions.append("/app/loginWx,");// 登录跳过
+        exclusions.append("/app/getWxPhoto,");// 登录跳过
         exclusions.append("/app/loginProperty,");// 物业APP登录跳过
         exclusions.append("/app/loginOwner,");// 业主APP登录跳过
         exclusions.append("/app/loginOwnerByKey,");// 根据key登录业主
@@ -32,6 +33,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/community.listCommunitys,");// 加载小区
         exclusions.append("/app/user.userSendSms,");// 发送短信验证码
         exclusions.append("/app/owner.ownerRegister,");// 业主注册
+        exclusions.append("/app/owner.ownerRegisterWxPhoto,");// 业主注册
         exclusions.append("/app/activities.listActivitiess,");//小区广告
         exclusions.append("/app/advert.listAdvertPhoto,");//小区广告图片
         exclusions.append("/app/junkRequirement.listJunkRequirements,");//市场

@@ -8,7 +8,11 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
+import sun.misc.BASE64Decoder;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 
 /**
@@ -97,6 +101,32 @@ public class WechatFactory {
      */
     public static String getAppId(String wId) {
         return AuthenticationFactory.decrypt(password, wId);
+    }
+
+
+    public static String getPhoneNumberBeanS5(String decryptData, String key, String iv) {
+        /*
+         *这里你没必要非按照我的方式写，下面打代码主要是在一个自己的类中 放上decrypts5这个解密工具，工具在下方有代码
+         */
+        String resultMessage = decryptS5(decryptData, "UTF-8", key, iv);
+        return resultMessage;
+    }
+
+    public static String decryptS5(String sSrc, String encodingFormat, String sKey, String ivParameter) {
+        try {
+            BASE64Decoder decoder = new BASE64Decoder();
+            byte[] raw = decoder.decodeBuffer(sKey);
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+            IvParameterSpec iv = new IvParameterSpec(decoder.decodeBuffer(ivParameter));
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+            byte[] myendicod = decoder.decodeBuffer(sSrc);
+            byte[] original = cipher.doFinal(myendicod);
+            String originalString = new String(original, encodingFormat);
+            return originalString;
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
 }

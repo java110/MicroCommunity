@@ -4,17 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.file.FileRelPo;
@@ -160,6 +160,10 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         JSONObject businessOwner = new JSONObject();
         businessOwner.putAll(BeanConvertUtil.beanCovertMap(ownerDtos.get(0)));
         businessOwner.putAll(paramInJson);
+
+        if (paramInJson.containsKey("wxPhoto")) {
+            businessOwner.put("link", paramInJson.getString("wxPhoto"));
+        }
         businessOwner.put("state", ownerDtos.get(0).getState());
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
         super.delete(dataFlowContext, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO);

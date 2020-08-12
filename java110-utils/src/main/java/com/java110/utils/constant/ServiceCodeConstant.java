@@ -471,7 +471,7 @@ public class ServiceCodeConstant {
     // App 用户绑定业主接口
     public static final String SERVICE_CODE_APP_USER_BINDING_OWNER = "owner.appUserBindingOwner";
     // App 业主注册接口
-    public static final String SERVICE_CODE_OWNER_REGISTER = "owner.ownerRegister";
+    public static final String SERVICE_CODE_OWNER_REGISTER = "owner.ownerRegisterWxPhoto";
 
 
     /**
