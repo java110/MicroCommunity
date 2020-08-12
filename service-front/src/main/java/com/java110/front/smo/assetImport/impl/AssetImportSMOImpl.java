@@ -4,20 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
-import com.java110.entity.assetImport.ImportFee;
-import com.java110.entity.assetImport.ImportFloor;
-import com.java110.entity.assetImport.ImportOwner;
-import com.java110.entity.assetImport.ImportParkingSpace;
-import com.java110.entity.assetImport.ImportRoom;
+import com.java110.entity.assetImport.*;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.CommonUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ImportExcelUtils;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -508,7 +500,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 JSONObject body = JSONObject.parseObject(responseEntity.getBody());
-                if(body.containsKey("code") && body.getIntValue("code") != 0){
+                if (body.containsKey("code") && body.getIntValue("code") != 0) {
                     throw new IllegalArgumentException(body.getString("msg"));
                 }
                 savedOwnerInfo = getExistsOwner(pd, result, owner);
@@ -909,6 +901,11 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             Assert.hasValue(os[2], "业主信息选项中" + (osIndex + 1) + "行业主性别为空");
             String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
             String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
+
+            if (os[5].toString().length() > 18) {
+                throw new IllegalArgumentException(os[1].toString() + " 的身份证超过18位,请核实");
+            }
+
             String age = StringUtil.isNullOrNone(os[3]) ? CommonUtil.getAgeByCertId(idCard) : os[3].toString();
             importOwner = new ImportOwner();
             importOwner.setOwnerNum(os[0].toString());
