@@ -103,19 +103,14 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             return;
         }
 
+        List<RoomAttrDto> tmpRoomAttrDtos = new ArrayList<>();
         for (RoomAttrDto roomAttrDto : roomAttrDtos) {
             if (!roomAttrDto.getRoomId().equals(room.getRoomId())) {
                 continue;
             }
-
-            List<RoomAttrDto> tmpRoomAttrDtos = room.getRoomAttrDto();
-
-            if (tmpRoomAttrDtos == null) {
-                tmpRoomAttrDtos = new ArrayList<>();
-            }
-
             tmpRoomAttrDtos.add(roomAttrDto);
         }
+        room.setRoomAttrDto(tmpRoomAttrDtos);
     }
 
     /**

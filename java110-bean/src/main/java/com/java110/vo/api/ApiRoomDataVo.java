@@ -36,7 +36,7 @@ public class ApiRoomDataVo implements Serializable {
     private String idCard;
     private String link;
 
-    private List<RoomAttrDto> roomAttrDtos;
+    private List<RoomAttrDto> roomAttrDto;
 
 
 
@@ -193,11 +193,11 @@ public class ApiRoomDataVo implements Serializable {
         this.link = link;
     }
 
-    public List<RoomAttrDto> getRoomAttrDtos() {
-        return roomAttrDtos;
+    public List<RoomAttrDto> getRoomAttrDto() {
+        return roomAttrDto;
     }
 
-    public void setRoomAttrDtos(List<RoomAttrDto> roomAttrDtos) {
-        this.roomAttrDtos = roomAttrDtos;
+    public void setRoomAttrDto(List<RoomAttrDto> roomAttrDto) {
+        this.roomAttrDto = roomAttrDto;
     }
 }
