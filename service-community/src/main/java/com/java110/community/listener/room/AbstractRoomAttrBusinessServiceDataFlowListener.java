@@ -56,7 +56,7 @@ public abstract class AbstractRoomAttrBusinessServiceDataFlowListener extends Ab
     protected void autoSaveDelBusinessRoomAttr(Business business, JSONObject businessRoomAttr) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("roomAttrId", businessRoomAttr.getString("roomAttrId"));
+        info.put("attrId", businessRoomAttr.getString("attrId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentRoomAttrInfos = getRoomAttrServiceDaoImpl().getRoomAttrInfo(info);
         if (currentRoomAttrInfos == null || currentRoomAttrInfos.size() != 1) {

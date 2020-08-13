@@ -11,6 +11,7 @@ import com.java110.dto.UnitDto;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +108,7 @@ public class UpdateRoomListener extends AbstractServiceApiPlusListener {
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = attrs.getJSONObject(attrIndex);
             attr.put("roomId", reqJson.getString("roomId"));
-            if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-")) {
+            if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-") || StringUtil.isEmpty(attr.getString("attrId"))) {
                 roomBMOImpl.addRoomAttr(attr, context);
                 continue;
             }
