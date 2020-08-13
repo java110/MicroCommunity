@@ -1,31 +1,53 @@
 {
   "autoMove": true,
-  "id": "ifdId",
-  "name": "importFeeDetail",
-  "desc": "费用导入明细",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "fee",
-  "tableName": "import_fee_detail",
+  "id": "specCd",
+  "name": "attrSpec",
+  "desc": "属性规格表",
+  "shareParam": "specCd",
+  "shareColumn": "spec_cd",
+  "shareName": "common",
+  "tableName": "attr_spec",
   "param": {
-    "ifdId": "ifd_id",
-    "floorNum": "floor_num",
-    "unitNum": "unit_num",
-    "roomNum": "room_num",
-    "feeName": "fee_name",
-    "startTime": "start_time",
-    "endTime": "end_time",
-    "amount": "amount",
-    "roomId": "room_id",
-    "feeId": "fee_id",
-    "state": "state",
-    "communityId": "community_id",
+    "specCd": "spec_cd",
+    "tableName": "table_name",
+    "specName": "spec_name",
+    "specHoldplace": "spec_holdplace",
+    "required": "required",
+    "specShow": "spec_show",
+    "specValueType": "spec_value_type",
+    "specType": "spec_type",
+    "listShow": "list_show",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "ifdId",
-      "msg": "费用导入明细不能为空"
+      "code": "specCd",
+      "msg": "规格ID不能为空"
+    },
+    {
+      "code": "tableName",
+      "msg": "表名称不能为空"
+    },{
+      "code": "specName",
+      "msg": "规格名称不能为空"
+    },{
+      "code": "specHoldplace",
+      "msg": "提示不能为空"
+    },{
+      "code": "required",
+      "msg": "必填不能为空"
+    },{
+      "code": "specShow",
+      "msg": "是否显示不能为空"
+    },{
+      "code": "specValueType",
+      "msg": "规格值不能为空"
+    },{
+      "code": "specType",
+      "msg": "规格类型不能为空"
+    },{
+      "code": "listShow",
+      "msg": "是否list中显示不能为空"
     }
   ]
 }

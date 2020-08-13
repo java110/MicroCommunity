@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attrSpecServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存属性规格表信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAttrSpecInfo" parameterType="Map">
+        insert into attr_spec(
+spec_type,spec_name,spec_holdplace,spec_value_type,spec_cd,spec_show,required,table_name,list_show
+) values (
+#{specType},#{specName},#{specHoldplace},#{specValueType},#{specCd},#{specShow},#{required},#{tableName},#{listShow}
+)
+    </insert>
+
+
+
+    <!-- 查询属性规格表信息 add by wuxw 2018-07-03 -->
+    <select id="getAttrSpecInfo" parameterType="Map" resultType="Map">
+        select  t.spec_type,t.spec_type specType,t.spec_name,t.spec_name specName,t.spec_holdplace,t.spec_holdplace specHoldplace,t.spec_value_type,t.spec_value_type specValueType,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.spec_show,t.spec_show specShow,t.required,t.table_name,t.table_name tableName,t.list_show,t.list_show listShow 
+from attr_spec t 
+where 1 =1 
+<if test="specType !=null and specType != ''">
+   and t.spec_type= #{specType}
+</if> 
+<if test="specName !=null and specName != ''">
+   and t.spec_name= #{specName}
+</if> 
+<if test="specHoldplace !=null and specHoldplace != ''">
+   and t.spec_holdplace= #{specHoldplace}
+</if> 
+<if test="specValueType !=null and specValueType != ''">
+   and t.spec_value_type= #{specValueType}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="specShow !=null and specShow != ''">
+   and t.spec_show= #{specShow}
+</if> 
+<if test="required !=null and required != ''">
+   and t.required= #{required}
+</if> 
+<if test="tableName !=null and tableName != ''">
+   and t.table_name= #{tableName}
+</if> 
+<if test="listShow !=null and listShow != ''">
+   and t.list_show= #{listShow}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改属性规格表信息 add by wuxw 2018-07-03 -->
+    <update id="updateAttrSpecInfo" parameterType="Map">
+        update  attr_spec t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="specType !=null and specType != ''">
+, t.spec_type= #{specType}
+</if> 
+<if test="specName !=null and specName != ''">
+, t.spec_name= #{specName}
+</if> 
+<if test="specHoldplace !=null and specHoldplace != ''">
+, t.spec_holdplace= #{specHoldplace}
+</if> 
+<if test="specValueType !=null and specValueType != ''">
+, t.spec_value_type= #{specValueType}
+</if> 
+<if test="specShow !=null and specShow != ''">
+, t.spec_show= #{specShow}
+</if> 
+<if test="required !=null and required != ''">
+, t.required= #{required}
+</if> 
+<if test="tableName !=null and tableName != ''">
+, t.table_name= #{tableName}
+</if> 
+<if test="listShow !=null and listShow != ''">
+, t.list_show= #{listShow}
+</if> 
+ where 1=1 <if test="specCd !=null and specCd != ''">
+and t.spec_cd= #{specCd}
+</if> 
+
+    </update>
+
+    <!-- 查询属性规格表数量 add by wuxw 2018-07-03 -->
+     <select id="queryAttrSpecsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from attr_spec t 
+where 1 =1 
+<if test="specType !=null and specType != ''">
+   and t.spec_type= #{specType}
+</if> 
+<if test="specName !=null and specName != ''">
+   and t.spec_name= #{specName}
+</if> 
+<if test="specHoldplace !=null and specHoldplace != ''">
+   and t.spec_holdplace= #{specHoldplace}
+</if> 
+<if test="specValueType !=null and specValueType != ''">
+   and t.spec_value_type= #{specValueType}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="specShow !=null and specShow != ''">
+   and t.spec_show= #{specShow}
+</if> 
+<if test="required !=null and required != ''">
+   and t.required= #{required}
+</if> 
+<if test="tableName !=null and tableName != ''">
+   and t.table_name= #{tableName}
+</if> 
+<if test="listShow !=null and listShow != ''">
+   and t.list_show= #{listShow}
+</if> 
+
+
+     </select>
+
+</mapper>

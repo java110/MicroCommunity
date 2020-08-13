@@ -1,0 +1,31 @@
+{
+  "autoMove": true,
+  "id": "ifdId",
+  "name": "importFeeDetail",
+  "desc": "费用导入明细",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "import_fee_detail",
+  "param": {
+    "ifdId": "ifd_id",
+    "floorNum": "floor_num",
+    "unitNum": "unit_num",
+    "roomNum": "room_num",
+    "feeName": "fee_name",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "amount": "amount",
+    "roomId": "room_id",
+    "feeId": "fee_id",
+    "state": "state",
+    "communityId": "community_id",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "ifdId",
+      "msg": "费用导入明细不能为空"
+    }
+  ]
+}
