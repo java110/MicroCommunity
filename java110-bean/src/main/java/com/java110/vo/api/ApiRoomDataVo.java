@@ -1,6 +1,9 @@
 package com.java110.vo.api;
 
+import com.java110.dto.RoomAttrDto;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @ClassName ApiRoomVo
@@ -32,6 +35,8 @@ public class ApiRoomDataVo implements Serializable {
     private String ownerName;
     private String idCard;
     private String link;
+
+    private List<RoomAttrDto> roomAttrDtos;
 
 
 
@@ -186,5 +191,13 @@ public class ApiRoomDataVo implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public List<RoomAttrDto> getRoomAttrDtos() {
+        return roomAttrDtos;
+    }
+
+    public void setRoomAttrDtos(List<RoomAttrDto> roomAttrDtos) {
+        this.roomAttrDtos = roomAttrDtos;
     }
 }

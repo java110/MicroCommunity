@@ -4,18 +4,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.floor.FloorPo;
 import com.java110.po.owner.OwnerRoomRelPo;
+import com.java110.po.room.RoomAttrPo;
 import com.java110.po.room.RoomPo;
 import com.java110.po.unit.UnitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -205,7 +207,28 @@ public class RoomBMOImpl extends ApiBaseBMO implements IRoomBMO {
         businessUnit.put("roomId", "-1");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         RoomPo roomPo = BeanConvertUtil.covertBean(businessUnit, RoomPo.class);
-        super.delete(dataFlowContext, roomPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO);
+        super.insert(dataFlowContext, roomPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO);
+    }
+
+    @Override
+    public void addRoomAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        RoomAttrPo roomAttrPo = new RoomAttrPo();
+        roomAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+        roomAttrPo.setRoomId(paramInJson.getString("roomId"));
+        roomAttrPo.setSpecCd(paramInJson.getString("specCd"));
+        roomAttrPo.setValue(paramInJson.getString("value"));
+        super.insert(dataFlowContext, roomAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO);
+    }
+
+
+    @Override
+    public void updateRoomAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        RoomAttrPo roomAttrPo = new RoomAttrPo();
+        roomAttrPo.setAttrId(paramInJson.getString("attrId"));
+        roomAttrPo.setRoomId(paramInJson.getString("roomId"));
+        roomAttrPo.setSpecCd(paramInJson.getString("specCd"));
+        roomAttrPo.setValue(paramInJson.getString("value"));
+        super.update(dataFlowContext, roomAttrPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ROOM_INFO);
     }
 
     /**

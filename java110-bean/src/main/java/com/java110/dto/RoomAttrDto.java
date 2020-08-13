@@ -15,9 +15,9 @@ import java.util.Date;
 public class RoomAttrDto extends PageDto implements Serializable {
 
     private String attrId;
-private String specCd;
-private String value;
-private String roomId;
+    private String specCd;
+    private String value;
+    private String roomId;
 
 
     private Date createTime;
@@ -28,25 +28,32 @@ private String roomId;
     public String getAttrId() {
         return attrId;
     }
-public void setAttrId(String attrId) {
+
+    public void setAttrId(String attrId) {
         this.attrId = attrId;
     }
-public String getSpecCd() {
+
+    public String getSpecCd() {
         return specCd;
     }
-public void setSpecCd(String specCd) {
+
+    public void setSpecCd(String specCd) {
         this.specCd = specCd;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
-public String getRoomId() {
+
+    public String getRoomId() {
         return roomId;
     }
-public void setRoomId(String roomId) {
+
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
 

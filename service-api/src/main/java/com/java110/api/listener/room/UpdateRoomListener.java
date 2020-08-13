@@ -1,13 +1,14 @@
 package com.java110.api.listener.room;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IUnitInnerServiceSMO;
-import com.java110.dto.UnitDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.UnitDto;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -83,11 +84,35 @@ public class UpdateRoomListener extends AbstractServiceApiPlusListener {
         if (units == null || units.size() < 1) {
             throw new IllegalArgumentException("传入单元ID不是该小区的单元");
         }
+
+        Assert.judgeAttrValue(reqJson);
+
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         roomBMOImpl.updateShellRoom(reqJson, context);
+
+        if (!reqJson.containsKey("attrs")) {
+            return;
+        }
+
+        JSONArray attrs = reqJson.getJSONArray("attrs");
+        if (attrs.size() < 1) {
+            return;
+        }
+
+
+        JSONObject attr = null;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = attrs.getJSONObject(attrIndex);
+            attr.put("roomId", reqJson.getString("roomId"));
+            if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-")) {
+                roomBMOImpl.addRoomAttr(attr, context);
+                continue;
+            }
+            roomBMOImpl.updateRoomAttr(attr, context);
+        }
     }
 
 

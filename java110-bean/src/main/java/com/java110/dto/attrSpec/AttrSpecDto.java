@@ -1,6 +1,9 @@
 package com.java110.dto.attrSpec;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +18,14 @@ import java.util.Date;
 public class AttrSpecDto extends PageDto implements Serializable {
 
     private String specType;
-private String specName;
-private String specHoldplace;
-private String specValueType;
-private String specCd;
-private String specShow;
-private String required;
-private String tableName;
-private String listShow;
+    private String specName;
+    private String specHoldplace;
+    private String specValueType;
+    private String specCd;
+    private String specShow;
+    private String required;
+    private String tableName;
+    private String listShow;
 
 
     private Date createTime;
@@ -33,55 +36,72 @@ private String listShow;
     public String getSpecType() {
         return specType;
     }
-public void setSpecType(String specType) {
+
+    public void setSpecType(String specType) {
         this.specType = specType;
     }
-public String getSpecName() {
+
+    public String getSpecName() {
         return specName;
     }
-public void setSpecName(String specName) {
+
+    public void setSpecName(String specName) {
         this.specName = specName;
     }
-public String getSpecHoldplace() {
+
+    public String getSpecHoldplace() {
         return specHoldplace;
     }
-public void setSpecHoldplace(String specHoldplace) {
+
+    public void setSpecHoldplace(String specHoldplace) {
         this.specHoldplace = specHoldplace;
     }
-public String getSpecValueType() {
+
+    public String getSpecValueType() {
         return specValueType;
     }
-public void setSpecValueType(String specValueType) {
+
+    public void setSpecValueType(String specValueType) {
         this.specValueType = specValueType;
     }
-public String getSpecCd() {
+
+    public String getSpecCd() {
         return specCd;
     }
-public void setSpecCd(String specCd) {
+
+    public void setSpecCd(String specCd) {
         this.specCd = specCd;
     }
-public String getSpecShow() {
+
+    public String getSpecShow() {
         return specShow;
     }
-public void setSpecShow(String specShow) {
+
+    public void setSpecShow(String specShow) {
         this.specShow = specShow;
     }
-public String getRequired() {
+
+    public String getRequired() {
         return required;
     }
-public void setRequired(String required) {
+
+    public void setRequired(String required) {
         this.required = required;
     }
-public String getTableName() {
+
+    public String getTableName() {
         return tableName;
     }
-public void setTableName(String tableName) {
+
+    public void setTableName(String tableName) {
         this.tableName = tableName;
     }
-public String getListShow() {
+
+    public String getListShow() {
         return listShow;
     }
-public void setListShow(String listShow) {
+
+    public void setListShow(String listShow) {
         this.listShow = listShow;
     }
 
@@ -101,4 +121,7 @@ public void setListShow(String listShow) {
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+
+
 }
