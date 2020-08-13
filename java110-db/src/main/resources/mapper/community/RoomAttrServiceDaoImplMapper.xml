@@ -5,97 +5,95 @@
 <mapper namespace="roomAttrServiceDaoImpl">
 
     <!-- 保存小区房屋属性信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessRoomAttrInfo" parameterType="Map">
-           insert into business_building_room_attr(
-attr_id,operate,spec_cd,b_id,value,room_id
-) values (
-#{attrId},#{operate},#{specCd},#{bId},#{value},#{roomId}
-)
-       </insert>
+    <insert id="saveBusinessRoomAttrInfo" parameterType="Map">
+        insert into business_building_room_attr(
+        attr_id,operate,spec_cd,b_id,value,room_id
+        ) values (
+        #{attrId},#{operate},#{specCd},#{bId},#{value},#{roomId}
+        )
+    </insert>
 
 
-       <!-- 查询小区房屋属性信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessRoomAttrInfo" parameterType="Map" resultType="Map">
-           select  t.attr_id,t.attr_id attrId,t.operate,t.spec_cd,t.spec_cd specCd,t.b_id,t.b_id bId,t.value,t.room_id,t.room_id roomId 
-from business_building_room_attr t 
-where 1 =1 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="roomId !=null and roomId != ''">
-   and t.room_id= #{roomId}
-</if> 
+    <!-- 查询小区房屋属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessRoomAttrInfo" parameterType="Map" resultType="Map">
+        select t.attr_id,t.attr_id attrId,t.operate,t.spec_cd,t.spec_cd specCd,t.b_id,t.b_id
+        bId,t.value,t.room_id,t.room_id roomId
+        from business_building_room_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存小区房屋属性信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRoomAttrInfoInstance" parameterType="Map">
         insert into building_room_attr(
-attr_id,spec_cd,status_cd,b_id,value,room_id
-) select t.attr_id,t.spec_cd,'0',t.b_id,t.value,t.room_id from business_building_room_attr t where 1=1
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-   and t.operate= 'ADD'
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="roomId !=null and roomId != ''">
-   and t.room_id= #{roomId}
-</if> 
+        attr_id,spec_cd,status_cd,b_id,value,room_id
+        ) select t.attr_id,t.spec_cd,'0',t.b_id,t.value,t.room_id from business_building_room_attr t where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询小区房屋属性信息 add by wuxw 2018-07-03 -->
     <select id="getRoomAttrInfo" parameterType="Map" resultType="Map">
-        select  t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.value,t.room_id,t.room_id roomId 
-from building_room_attr t 
-where 1 =1 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="roomId !=null and roomId != ''">
-   and t.room_id= #{roomId}
-</if> 
-<if test="page != -1 and page != null and page != ''">
-   limit page,row
-</if>
+        select t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id
+        bId,t.value,t.room_id,t.room_id roomId
+        from building_room_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="page != -1 and page != null and page != ''">
+            limit page,row
+        </if>
         <if test="roomIds != null and roomIds != null">
             and t.room_id in
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
@@ -106,57 +104,56 @@ where 1 =1
     </select>
 
 
-
-
     <!-- 修改小区房屋属性信息 add by wuxw 2018-07-03 -->
     <update id="updateRoomAttrInfoInstance" parameterType="Map">
-        update  building_room_attr t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-, t.spec_cd= #{specCd}
-</if> 
-<if test="value !=null and value != ''">
-, t.value= #{value}
-</if> 
-<if test="roomId !=null and roomId != ''">
-, t.room_id= #{roomId}
-</if> 
- where 1=1 <if test="attrId !=null and attrId != ''">
-and t.attr_id= #{attrId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update building_room_attr t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询小区房屋属性数量 add by wuxw 2018-07-03 -->
-     <select id="queryRoomAttrsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from building_room_attr t 
-where 1 =1 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="roomId !=null and roomId != ''">
-   and t.room_id= #{roomId}
-</if> 
+    <select id="queryRoomAttrsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from building_room_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

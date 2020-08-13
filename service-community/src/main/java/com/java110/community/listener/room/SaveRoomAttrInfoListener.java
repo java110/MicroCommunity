@@ -132,13 +132,13 @@ public class SaveRoomAttrInfoListener extends AbstractRoomAttrBusinessServiceDat
      */
     private void doBusinessRoomAttr(Business business, JSONObject businessRoomAttr) {
 
-        Assert.jsonObjectHaveKey(businessRoomAttr, "roomAttrId", "businessRoomAttr 节点下没有包含 roomAttrId 节点");
+        Assert.jsonObjectHaveKey(businessRoomAttr, "attrId", "businessRoomAttr 节点下没有包含 attrId 节点");
 
-        if (businessRoomAttr.getString("roomAttrId").startsWith("-")) {
+        if (businessRoomAttr.getString("attrId").startsWith("-")) {
             //刷新缓存
             //flushRoomAttrId(business.getDatas());
 
-            businessRoomAttr.put("roomAttrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomAttrId));
+            businessRoomAttr.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomAttrId));
 
         }
 

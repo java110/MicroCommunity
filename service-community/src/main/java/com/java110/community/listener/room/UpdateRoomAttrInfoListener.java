@@ -161,10 +161,10 @@ public class UpdateRoomAttrInfoListener extends AbstractRoomAttrBusinessServiceD
      */
     private void doBusinessRoomAttr(Business business, JSONObject businessRoomAttr) {
 
-        Assert.jsonObjectHaveKey(businessRoomAttr, "roomAttrId", "businessRoomAttr 节点下没有包含 roomAttrId 节点");
+        Assert.jsonObjectHaveKey(businessRoomAttr, "attrId", "businessRoomAttr 节点下没有包含 attrId 节点");
 
-        if (businessRoomAttr.getString("roomAttrId").startsWith("-")) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "roomAttrId 错误，不能自动生成（必须已经存在的roomAttrId）" + businessRoomAttr);
+        if (businessRoomAttr.getString("attrId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "roomAttrId 错误，不能自动生成（必须已经存在的attrId）" + businessRoomAttr);
         }
         //自动保存DEL
         autoSaveDelBusinessRoomAttr(business, businessRoomAttr);
