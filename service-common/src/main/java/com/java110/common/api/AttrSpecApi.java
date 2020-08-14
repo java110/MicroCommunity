@@ -113,9 +113,19 @@ public class AttrSpecApi {
      * @path /app/attrSpec/queryAttrSpec
      */
     @RequestMapping(value = "/queryAttrSpec", method = RequestMethod.GET)
-    public ResponseEntity<String> queryAttrSpec(@RequestParam(value = "tableName",required = false) String tableName) {
+    public ResponseEntity<String> queryAttrSpec(@RequestParam(value = "tableName", required = false) String tableName,
+                                                @RequestParam(value = "specCd", required = false) String specCd,
+                                                @RequestParam(value = "specName", required = false) String specName,
+                                                @RequestParam(value = "page", required = false) int page,
+                                                @RequestParam(value = "row", required = false) int row
+
+    ) {
         AttrSpecDto attrSpecDto = new AttrSpecDto();
         attrSpecDto.setTableName(tableName);
+        attrSpecDto.setPage(page);
+        attrSpecDto.setRow(row);
+        attrSpecDto.setSpecCd(specCd);
+        attrSpecDto.setSpecName(specName);
         return getAttrSpecBMOImpl.get(attrSpecDto);
     }
 }

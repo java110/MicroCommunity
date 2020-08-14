@@ -270,7 +270,7 @@ public class GenerateCodeFactory {
      * @throws GenerateCodeException
      */
     public static String getSpecCd() throws GenerateCodeException {
-            return DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+            return DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_L) + nextId("%04d");
     }
 
     public static String getOId() throws GenerateCodeException {
