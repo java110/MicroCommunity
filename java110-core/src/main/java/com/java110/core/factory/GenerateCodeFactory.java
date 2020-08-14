@@ -263,6 +263,16 @@ public class GenerateCodeFactory {
         return getCode(prefix);
     }
 
+    /**
+     * 规格ID
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getSpecCd() throws GenerateCodeException {
+            return DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+    }
+
     public static String getOId() throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
             return prefixMap.get("oId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");

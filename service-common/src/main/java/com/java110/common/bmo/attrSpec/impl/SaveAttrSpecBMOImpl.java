@@ -25,13 +25,12 @@ public class SaveAttrSpecBMOImpl implements ISaveAttrSpecBMO {
     @Java110Transactional
     public ResponseEntity<String> save(AttrSpecPo attrSpecPo) {
 
-        //attrSpecPo.setSpecCd(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_specCd));
+        attrSpecPo.setSpecCd(GenerateCodeFactory.getSpecCd());
         int flag = attrSpecInnerServiceSMOImpl.saveAttrSpec(attrSpecPo);
 
         if (flag > 0) {
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
         }
-
         return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
     }
 

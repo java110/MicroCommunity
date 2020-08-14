@@ -43,7 +43,7 @@ public class AttrSpecApi {
     @RequestMapping(value = "/saveAttrSpec", method = RequestMethod.POST)
     public ResponseEntity<String> saveAttrSpec(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        //Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
         Assert.hasKeyAndValue(reqJson, "tableName", "请求报文中未包含tableName");
         Assert.hasKeyAndValue(reqJson, "specName", "请求报文中未包含specName");
         Assert.hasKeyAndValue(reqJson, "specHoldplace", "请求报文中未包含specHoldplace");
