@@ -222,7 +222,8 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey(getWorkflowDto(user.getStoreId()))
-                .taskAssignee(user.getUserId());
+                .taskAssignee(user.getUserId())
+                .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaint");
         } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
@@ -243,7 +244,8 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey(getWorkflowDto(user.getStoreId()))
-                .taskAssignee(user.getUserId());
+                .taskAssignee(user.getUserId())
+                .finished();
 //        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
 //            historicTaskInstanceQuery.taskName("complaint");
 //        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {

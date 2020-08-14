@@ -1,22 +1,18 @@
 {
   "autoMove": true,
-  "id": "specCd",
-  "name": "attrSpec",
-  "desc": "属性规格表",
-  "shareParam": "specCd",
-  "shareColumn": "spec_cd",
+  "id": "valueId",
+  "name": "attrValue",
+  "desc": "属性值",
+  "shareParam": "valueId",
+  "shareColumn": "value_id",
   "shareName": "common",
-  "tableName": "attr_spec",
+  "tableName": "attr_value",
   "param": {
+    "valueId": "value_id",
     "specCd": "spec_cd",
-    "tableName": "table_name",
-    "specName": "spec_name",
-    "specHoldplace": "spec_holdplace",
-    "required": "required",
-    "specShow": "spec_show",
-    "specValueType": "spec_value_type",
-    "specType": "spec_type",
-    "listShow": "list_show",
+    "value": "value",
+    "valueName": "value_name",
+    "valueShow": "value_show",
     "statusCd": "status_cd"
   },
   "required": [
@@ -25,29 +21,14 @@
       "msg": "规格ID不能为空"
     },
     {
-      "code": "tableName",
-      "msg": "表名称不能为空"
+      "code": "value",
+      "msg": "值不能为空"
     },{
-      "code": "specName",
-      "msg": "规格名称不能为空"
+      "code": "valueName",
+      "msg": "值名称不能为空"
     },{
-      "code": "specHoldplace",
-      "msg": "提示不能为空"
-    },{
-      "code": "required",
-      "msg": "必填不能为空"
-    },{
-      "code": "specShow",
+      "code": "valueShow",
       "msg": "是否显示不能为空"
-    },{
-      "code": "specValueType",
-      "msg": "规格值不能为空"
-    },{
-      "code": "specType",
-      "msg": "规格类型不能为空"
-    },{
-      "code": "listShow",
-      "msg": "是否list中显示不能为空"
     }
   ]
 }

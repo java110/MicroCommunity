@@ -18,6 +18,9 @@ public class RoomAttrDto extends PageDto implements Serializable {
     private String specCd;
     private String value;
     private String roomId;
+    private String valueName;
+    private String specName;
+    private String listShow;
 
 
     private Date createTime;
@@ -72,5 +75,29 @@ public class RoomAttrDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getValueName() {
+        return valueName;
+    }
+
+    public void setValueName(String valueName) {
+        this.valueName = valueName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getListShow() {
+        return listShow;
+    }
+
+    public void setListShow(String listShow) {
+        this.listShow = listShow;
     }
 }

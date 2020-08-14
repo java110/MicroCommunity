@@ -194,7 +194,8 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey(getWorkflowDto(user.getCommunityId()))
-                .taskAssignee(user.getUserId());
+                .taskAssignee(user.getUserId())
+                .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaint");
         } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
@@ -202,6 +203,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         }
 
         Query query = historicTaskInstanceQuery;
+
         return query.count();
     }
 
@@ -215,7 +217,8 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey(getWorkflowDto(user.getCommunityId()))
-                .taskAssignee(user.getUserId());
+                .taskAssignee(user.getUserId())
+                .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaint");
         } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {

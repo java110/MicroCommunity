@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attrValueServiceDaoImpl">
+
+
+    <!-- 保存属性值信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAttrValueInfo" parameterType="Map">
+        insert into attr_value(
+        value_id,value_name,value_show,spec_cd,value
+        ) values (
+        #{valueId},#{valueName},#{valueShow},#{specCd},#{value}
+        )
+    </insert>
+
+
+    <!-- 查询属性值信息 add by wuxw 2018-07-03 -->
+    <select id="getAttrValueInfo" parameterType="Map" resultType="Map">
+        select t.value_id,t.value_id valueId,t.value_name,t.value_name valueName,t.value_show,t.value_show
+        valueShow,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.value
+        from attr_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="valueName !=null and valueName != ''">
+            and t.value_name= #{valueName}
+        </if>
+        <if test="valueShow !=null and valueShow != ''">
+            and t.value_show= #{valueShow}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改属性值信息 add by wuxw 2018-07-03 -->
+    <update id="updateAttrValueInfo" parameterType="Map">
+        update attr_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="valueName !=null and valueName != ''">
+            , t.value_name= #{valueName}
+        </if>
+        <if test="valueShow !=null and valueShow != ''">
+            , t.value_show= #{valueShow}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        where 1=1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+
+    </update>
+
+    <!-- 查询属性值数量 add by wuxw 2018-07-03 -->
+    <select id="queryAttrValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from attr_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="valueName !=null and valueName != ''">
+            and t.value_name= #{valueName}
+        </if>
+        <if test="valueShow !=null and valueShow != ''">
+            and t.value_show= #{valueShow}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+
+    </select>
+
+</mapper>

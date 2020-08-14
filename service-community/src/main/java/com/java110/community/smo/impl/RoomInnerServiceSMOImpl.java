@@ -14,6 +14,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,9 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         for (RoomAttrDto roomAttrDto : roomAttrDtos) {
             if (!roomAttrDto.getRoomId().equals(room.getRoomId())) {
                 continue;
+            }
+            if (StringUtil.isEmpty(roomAttrDto.getValueName())) {
+                roomAttrDto.setValueName(roomAttrDto.getValue());
             }
             tmpRoomAttrDtos.add(roomAttrDto);
         }
