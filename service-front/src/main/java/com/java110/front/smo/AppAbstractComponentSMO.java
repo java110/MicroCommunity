@@ -7,6 +7,7 @@ import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
@@ -130,11 +131,13 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
                                                      String tradeType, double payAmount, String openid,
                                                      SmallWeChatDto smallWeChatDto) throws Exception {
 
+        String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         paramMap.put("appid", smallWeChatDto.getAppId());
         paramMap.put("mch_id", smallWeChatDto.getMchId());
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
-        paramMap.put("body", "HC智慧家园-" + feeName);
+        paramMap.put("body", systemName + feeName);
         paramMap.put("out_trade_no", orderNum);
         paramMap.put("total_fee", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("spbill_create_ip", PayUtil.getLocalIp());

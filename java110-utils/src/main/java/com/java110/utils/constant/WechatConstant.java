@@ -18,6 +18,8 @@ public class WechatConstant {
 
     public static final String KEY_PROPERTY_FEE_TEMPLATE_ID = "PROPERTY_FEE_TEMPLATE_ID";
 
+    public static final String PAY_GOOD_NAME = "PAY_GOOD_NAME";
+
     public static final String TOKEN = "TOKEN";
     public static final String WELCOME = "WELCOME";
     public static final String NO_BIND_OWNER = "NO_BIND_OWNER"; // 未绑定业主
