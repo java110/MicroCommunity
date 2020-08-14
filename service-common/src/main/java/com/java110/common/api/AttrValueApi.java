@@ -11,7 +11,11 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -97,11 +101,25 @@ public class AttrValueApi {
      * @return
      * @serviceCode /attrValue/queryAttrValue
      * @path /app/attrValue/queryAttrValue
+     * value: '',
+     * valueShow: '',
+     * valueName: '',
      */
     @RequestMapping(value = "/queryAttrValue", method = RequestMethod.GET)
-    public ResponseEntity<String> queryAttrValue(@RequestParam(value = "specCd") String specCd) {
+    public ResponseEntity<String> queryAttrValue(@RequestParam(value = "specCd") String specCd,
+                                                 @RequestParam(value = "page", required = false) int page,
+                                                 @RequestParam(value = "row", required = false) int row,
+                                                 @RequestParam(value = "value", required = false) String value,
+                                                 @RequestParam(value = "valueShow", required = false) String valueShow,
+                                                 @RequestParam(value = "valueName", required = false) String valueName
+    ) {
         AttrValueDto attrValueDto = new AttrValueDto();
         attrValueDto.setSpecCd(specCd);
+        attrValueDto.setPage(page);
+        attrValueDto.setRow(row);
+        attrValueDto.setValue(value);
+        attrValueDto.setValueName(valueName);
+        attrValueDto.setValueShow(valueShow);
         return getAttrValueBMOImpl.get(attrValueDto);
     }
 }
