@@ -113,7 +113,7 @@ public class AttrSpecApi {
      * @path /app/attrSpec/queryAttrSpec
      */
     @RequestMapping(value = "/queryAttrSpec", method = RequestMethod.GET)
-    public ResponseEntity<String> queryAttrSpec(@RequestParam(value = "tableName") String tableName) {
+    public ResponseEntity<String> queryAttrSpec(@RequestParam(value = "tableName",required = false) String tableName) {
         AttrSpecDto attrSpecDto = new AttrSpecDto();
         attrSpecDto.setTableName(tableName);
         return getAttrSpecBMOImpl.get(attrSpecDto);
