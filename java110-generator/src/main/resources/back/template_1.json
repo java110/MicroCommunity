@@ -1,48 +1,43 @@
 {
   "autoMove": true,
-  "id": "typeUserId",
-  "name": "repairTypeUser",
-  "desc": "报修设置",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "community",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_REPAIR_TYPE_USER",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_REPAIR_TYPE_USER",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_REPAIR_TYPE_USER",
-  "newBusinessTypeCdValue": "132100030001",
-  "updateBusinessTypeCdValue": "132100040001",
-  "deleteBusinessTypeCdValue": "132100050001",
-  "businessTableName": "business_repair_type_user",
-  "tableName": "r_repair_type_user",
+  "id": "attrId",
+  "name": "ownerAttr",
+  "desc": "业主属性",
+  "shareParam": "community_id",
+  "shareColumn": "communityId",
+  "shareName": "user",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_OWNER_ATTR_INFO",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_OWNER_ATTR_INFO",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_OWNER_ATTR_INFO",
+  "newBusinessTypeCdValue": "110200030001",
+  "updateBusinessTypeCdValue": "110200040001",
+  "deleteBusinessTypeCdValue": "110200050001",
+  "businessTableName": "business_building_owner_attr",
+  "tableName": "building_owner_attr",
   "param": {
-    "typeUserId": "type_user_id",
-    "userId": "user_id",
-    "userName": "user_name",
+    "attrId": "attr_id",
     "bId": "b_id",
-    "repairType": "repair_type",
-    "remark": "remark",
-    "state": "state",
-    "communityId": "community_id",
+    "memberId": "member_id",
+    "specCd": "spec_cd",
+    "value": "value",
     "statusCd": "status_cd",
+    "createTime": "create_time",
+    "communityId": "community_id",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "userId",
-      "msg": "用户不能为空"
+
+      "code": "memberId",
+      "msg": "业主ID不能为空"
     },
     {
-      "code": "userName",
-      "msg": "用户名称不能为空"
+      "code": "specCd",
+      "msg": "任务属性不能为空"
     },
     {
-      "code": "repairType",
-      "msg": "报修类型不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "小区不能为空"
+      "code": "value",
+      "msg": "任务属性值不能为空"
     }
   ]
 }
-

@@ -90,6 +90,23 @@ public class BusinessTypeConstant {
 
 
     /**
+     * 增加业主
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_ATTR_INFO = "110200030001";
+
+    /**tia
+     * 修改业主
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_ATTR_INFO = "110200040001";
+
+
+    /**
+     * 删除业主
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_ATTR_INFO = "110200050001";
+
+
+    /**
      * 房屋购买
      */
     public static final String BUSINESS_TYPE_SAVE_OWNER_ROOM_REL = "111100030001";
