@@ -1,7 +1,9 @@
 package com.java110.api.listener.owner;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.owner.IOwnerBMO;
+import com.java110.api.bmo.ownerAttr.IOwnerAttrBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -13,6 +15,7 @@ import com.java110.dto.file.FileDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,9 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IOwnerBMO ownerBMOImpl;
+
+    @Autowired
+    private IOwnerAttrBMO ownerAttrBMOImpl;
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -66,6 +72,8 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
         // Assert.jsonObjectHaveKey(paramIn, "idCard", "请求报文中未包含身份证号");
+
+        Assert.judgeAttrValue(reqJson);
     }
 
     @Override
@@ -91,6 +99,25 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
 
         }
         ownerBMOImpl.editOwner(reqJson, context);
+
+
+        JSONArray attrs = reqJson.getJSONArray("attrs");
+        if (attrs.size() < 1) {
+            return;
+        }
+
+
+        JSONObject attr = null;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = attrs.getJSONObject(attrIndex);
+            attr.put("memberId", reqJson.getString("memberId"));
+            attr.put("communityId", reqJson.getString("communityId"));
+            if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-") || StringUtil.isEmpty(attr.getString("attrId"))) {
+                ownerAttrBMOImpl.addOwnerAttr(attr, context);
+                continue;
+            }
+            ownerAttrBMOImpl.updateOwnerAttr(attr, context);
+        }
     }
 
 

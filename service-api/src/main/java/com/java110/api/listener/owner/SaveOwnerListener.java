@@ -1,18 +1,20 @@
 package com.java110.api.listener.owner;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.owner.IOwnerBMO;
+import com.java110.api.bmo.ownerAttr.IOwnerAttrBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
-import com.java110.intf.common.ISmsInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.msg.SmsDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -36,6 +38,9 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IOwnerBMO ownerBMOImpl;
+
+    @Autowired
+    private IOwnerAttrBMO ownerAttrBMOImpl;
 
     @Autowired
     private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
@@ -91,6 +96,8 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
                 throw new IllegalArgumentException(smsDto.getMsg());
             }
         }
+        //属性校验
+        Assert.judgeAttrValue(reqJson);
     }
 
     @Override
@@ -129,6 +136,8 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
             ownerBMOImpl.addOwnerPhoto(reqJson, context);
         }
 
+        dealOwnerAttr(reqJson, context);
+
     }
 
     /**
@@ -142,6 +151,28 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
         if (!paramObj.containsKey("ownerId") || "1001".equals(paramObj.getString("ownerTypeCd"))) {
             paramObj.put("ownerId", memberId);
         }
+    }
+
+    private void dealOwnerAttr(JSONObject paramObj, DataFlowContext context) {
+
+        if (!paramObj.containsKey("attrs")) {
+            return;
+        }
+
+        JSONArray attrs = paramObj.getJSONArray("attrs");
+        if (attrs.size() < 1) {
+            return;
+        }
+
+
+        JSONObject attr = null;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = attrs.getJSONObject(attrIndex);
+            attr.put("communityId", paramObj.getString("communityId"));
+            attr.put("memberId", paramObj.getString("memberId"));
+            ownerAttrBMOImpl.addOwnerAttr(attr, context);
+        }
+
     }
 
 

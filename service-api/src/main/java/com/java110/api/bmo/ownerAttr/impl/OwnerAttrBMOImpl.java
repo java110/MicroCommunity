@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.ownerAttr.IOwnerAttrBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.user.IOwnerAttrInnerServiceSMO;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -26,7 +27,7 @@ public class OwnerAttrBMOImpl extends ApiBaseBMO implements IOwnerAttrBMO {
      */
     public void addOwnerAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        paramInJson.put("attrId", "-1");
+        paramInJson.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         OwnerAttrPo ownerAttrPo = BeanConvertUtil.covertBean(paramInJson, OwnerAttrPo.class);
         super.insert(dataFlowContext, ownerAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ATTR_INFO);
     }
