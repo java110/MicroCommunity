@@ -137,9 +137,6 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="createTime !=null and createTime != ''">
-            , t.create_time= #{createTime}
-        </if>
         <if test="specCd !=null and specCd != ''">
             , t.spec_cd= #{specCd}
         </if>
