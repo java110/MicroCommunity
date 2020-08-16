@@ -902,6 +902,9 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
             String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
 
+            if (os[4].toString().length() > 11) {
+                throw new IllegalArgumentException(os[1].toString() + " 的手机号超过11位,请核实");
+            }
             if (os[5].toString().length() > 18) {
                 throw new IllegalArgumentException(os[1].toString() + " 的身份证超过18位,请核实");
             }
