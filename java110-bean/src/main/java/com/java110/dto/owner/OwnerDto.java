@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -46,6 +47,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String bId;
 
     private String userName;
+
+    private List<OwnerAttrDto> ownerAttrDtos;
 
 
     private Date createTime;
@@ -253,5 +256,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setOwnerTypeCds(String[] ownerTypeCds) {
         this.ownerTypeCds = ownerTypeCds;
+    }
+
+    public List<OwnerAttrDto> getOwnerAttrDtos() {
+        return ownerAttrDtos;
+    }
+
+    public void setOwnerAttrDtos(List<OwnerAttrDto> ownerAttrDtos) {
+        this.ownerAttrDtos = ownerAttrDtos;
     }
 }

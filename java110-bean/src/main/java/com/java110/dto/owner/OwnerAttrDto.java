@@ -20,6 +20,11 @@ public class OwnerAttrDto extends PageDto implements Serializable {
     private String communityId;
     private String value;
     private String memberId;
+    private String[] memberIds;
+
+    private String valueName;
+    private String specName;
+    private String listShow;
 
 
     private Date createTime;
@@ -82,5 +87,37 @@ public class OwnerAttrDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getMemberIds() {
+        return memberIds;
+    }
+
+    public void setMemberIds(String[] memberIds) {
+        this.memberIds = memberIds;
+    }
+
+    public String getValueName() {
+        return valueName;
+    }
+
+    public void setValueName(String valueName) {
+        this.valueName = valueName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getListShow() {
+        return listShow;
+    }
+
+    public void setListShow(String listShow) {
+        this.listShow = listShow;
     }
 }

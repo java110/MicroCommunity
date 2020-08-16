@@ -1,6 +1,9 @@
 package com.java110.vo.api;
 
+import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.vo.Vo;
+
+import java.util.List;
 
 /**
  * @ClassName ApiFloorDataVo
@@ -35,6 +38,8 @@ public class ApiOwnerDataVo extends Vo {
 
     private String ownerTypeCd;
     private String ownerTypeName;
+
+    private List<OwnerAttrDto> ownerAttrDtos;
 
     private String idCard;
 
@@ -132,5 +137,13 @@ public class ApiOwnerDataVo extends Vo {
 
     public void setOwnerTypeName(String ownerTypeName) {
         this.ownerTypeName = ownerTypeName;
+    }
+
+    public List<OwnerAttrDto> getOwnerAttrDtos() {
+        return ownerAttrDtos;
+    }
+
+    public void setOwnerAttrDtos(List<OwnerAttrDto> ownerAttrDtos) {
+        this.ownerAttrDtos = ownerAttrDtos;
     }
 }
