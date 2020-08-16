@@ -7,9 +7,9 @@
     <!-- 保存业主属性信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerAttrInfo" parameterType="Map">
         insert into business_building_owner_attr(
-        attr_id,operate,create_time,spec_cd,b_id,community_id,value,member_id
+        attr_id,operate,spec_cd,b_id,community_id,value,member_id
         ) values (
-        #{attrId},#{operate},#{createTime},#{specCd},#{bId},#{communityId},#{value},#{memberId}
+        #{attrId},#{operate},#{specCd},#{bId},#{communityId},#{value},#{memberId}
         )
     </insert>
 
@@ -26,7 +26,7 @@
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
-        <if test="createTime !=null and createTime != ''">
+        <if test="createTime !=null ">
             and t.create_time= #{createTime}
         </if>
         <if test="specCd !=null and specCd != ''">
