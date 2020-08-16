@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.smo.user.IOwnerAttrInnerServiceSMO;
+import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.utils.constant.ServiceCodeOwnerAttrConstant;
 import com.java110.utils.util.BeanConvertUtil;

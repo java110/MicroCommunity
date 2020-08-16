@@ -1,4 +1,4 @@
-package com.java110.core.smo.user;
+package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.owner.OwnerAttrDto;

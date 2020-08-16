@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.ownerAttr.IOwnerAttrBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.user.IOwnerAttrInnerServiceSMO;
+import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;

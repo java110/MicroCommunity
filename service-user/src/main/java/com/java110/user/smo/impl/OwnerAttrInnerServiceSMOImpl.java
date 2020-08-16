@@ -2,7 +2,7 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.user.IOwnerAttrInnerServiceSMO;
+import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.user.UserDto;
