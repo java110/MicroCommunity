@@ -87,7 +87,7 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "communityName", "未包含小区名称");
         Assert.hasKeyAndValue(reqJson, "areaCode", "未包含小区地区");
         Assert.hasKeyAndValue(reqJson, "appUserName", "未包含用户名称");
-        Assert.hasKeyAndValue(reqJson, "idCard", "未包含身份证号");
+        //Assert.hasKeyAndValue(reqJson, "idCard", "未包含身份证号");
         Assert.hasKeyAndValue(reqJson, "link", "未包含联系电话");
         Assert.hasKeyAndValue(reqJson, "msgCode", "未包含联系电话验证码");
         Assert.hasKeyAndValue(reqJson, "password", "未包含密码");
@@ -131,7 +131,7 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
 
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setCommunityId(tmpCommunityDto.getCommunityId());
-            ownerDto.setIdCard(reqJson.getString("idCard"));
+            //ownerDto.setIdCard(reqJson.getString("idCard"));
             ownerDto.setName(reqJson.getString("appUserName"));
             ownerDto.setLink(reqJson.getString("link"));
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
