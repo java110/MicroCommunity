@@ -72,7 +72,7 @@ public class OwnerRegisterWxPhotoListener extends AbstractServiceApiPlusListener
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_OWNER_REGISTER;
+        return ServiceCodeConstant.SERVICE_CODE_OWNER_REGISTER_WX_PHOTO;
     }
 
     @Override
