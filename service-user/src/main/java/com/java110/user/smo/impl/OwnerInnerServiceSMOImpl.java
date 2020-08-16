@@ -268,6 +268,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     @Override
     public int updateOwnerMember(OwnerPo ownerPo) {
         Map info = BeanConvertUtil.beanCovertMap(ownerPo);
+        info.put("statusCd","0");
         ownerServiceDaoImpl.updateOwnerInfoInstance(info);
         return 1;
     }

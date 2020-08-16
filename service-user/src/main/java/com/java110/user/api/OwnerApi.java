@@ -44,7 +44,7 @@ public class OwnerApi {
      *
      * @param reqJson
      * @return
-     * @service /ownerApi/changeOwnerPhoto
+     * @service /ownerApi/changeOwnerPhone
      * @path /app/ownerApi/changeOwnerPhoto
      */
     @RequestMapping(value = "/changeOwnerPhone", method = RequestMethod.POST)
