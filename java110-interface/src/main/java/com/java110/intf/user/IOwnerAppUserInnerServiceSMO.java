@@ -2,6 +2,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.po.owner.OwnerAppUserPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,4 +39,7 @@ public interface IOwnerAppUserInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOwnerAppUsersCount", method = RequestMethod.POST)
     int queryOwnerAppUsersCount(@RequestBody OwnerAppUserDto ownerAppUserDto);
+
+    @RequestMapping(value = "/updateOwnerAppUser", method = RequestMethod.POST)
+    int updateOwnerAppUser(@RequestBody OwnerAppUserPo ownerAppUserPo);
 }

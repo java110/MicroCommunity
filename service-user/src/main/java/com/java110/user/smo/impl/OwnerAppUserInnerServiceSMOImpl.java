@@ -6,6 +6,7 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.user.dao.IOwnerAppUserServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -51,6 +53,14 @@ public class OwnerAppUserInnerServiceSMOImpl extends BaseServiceSMO implements I
     @Override
     public int queryOwnerAppUsersCount(@RequestBody OwnerAppUserDto ownerAppUserDto) {
         return ownerAppUserServiceDaoImpl.queryOwnerAppUsersCount(BeanConvertUtil.beanCovertMap(ownerAppUserDto));
+    }
+
+    @Override
+    public int updateOwnerAppUser(@RequestBody OwnerAppUserPo ownerAppUserPo) {
+        Map info = BeanConvertUtil.beanCovertMap(ownerAppUserPo);
+        info.put("statusCd","0");
+        ownerAppUserServiceDaoImpl.updateOwnerAppUserInfoInstance(info);
+        return 0;
     }
 
     public IOwnerAppUserServiceDao getOwnerAppUserServiceDaoImpl() {

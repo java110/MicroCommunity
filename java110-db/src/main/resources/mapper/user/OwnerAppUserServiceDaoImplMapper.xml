@@ -229,9 +229,6 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
         <if test="appTypeCd !=null and appTypeCd != ''">
             , t.app_type_cd= #{appTypeCd}
         </if>
@@ -247,6 +244,12 @@
         where 1=1
         <if test="appUserId !=null and appUserId != ''">
             and t.app_user_id= #{appUserId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

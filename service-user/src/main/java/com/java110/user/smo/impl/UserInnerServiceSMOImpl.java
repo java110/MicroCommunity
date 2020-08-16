@@ -4,6 +4,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
+import com.java110.po.user.UserPo;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -105,6 +106,13 @@ public class UserInnerServiceSMOImpl implements IUserInnerServiceSMO {
         List<UserAttrDto> userAttrDtos = BeanConvertUtil.covertBeanList(
                 userServiceDaoImpl.queryUserInfoAttrs(BeanConvertUtil.beanCovertMap(userAttrDto)), UserAttrDto.class);
         return userAttrDtos;
+    }
+
+    @Override
+    public int updateUser(@RequestBody UserPo userPo) {
+        userPo.setStatusCd("0");
+        userServiceDaoImpl.updateUserInfoInstance(BeanConvertUtil.beanCovertMap(userPo));
+        return 1;
     }
 
     private void freshUserAttrs(List<UserDto> userDtos) {

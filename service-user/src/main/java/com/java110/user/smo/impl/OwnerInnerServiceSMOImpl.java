@@ -11,6 +11,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.owner.OwnerPo;
 import com.java110.user.dao.IOwnerServiceDao;
 import com.java110.utils.constant.OwnerTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -101,7 +102,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         List<OwnerAttrDto> ownerAttrDtos = ownerAttrInnerServiceSMOImpl.queryOwnerAttrs(ownerAttrDto);
 
         for (OwnerDto owner : owners) {
-            refreshOwner(owner, users,ownerAttrDtos);
+            refreshOwner(owner, users, ownerAttrDtos);
         }
         return owners;
     }
@@ -243,7 +244,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         List<OwnerAttrDto> ownerAttrDtos = ownerAttrInnerServiceSMOImpl.queryOwnerAttrs(ownerAttrDto);
 
         for (OwnerDto owner : owners) {
-            refreshOwner(owner, users,ownerAttrDtos);
+            refreshOwner(owner, users, ownerAttrDtos);
         }
         return owners;
     }
@@ -262,6 +263,13 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     @Override
     public List<OwnerDto> queryOwnersByParkingSpace(@RequestBody OwnerDto ownerDto) {
         return BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.queryOwnersByParkingSpace(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
+    }
+
+    @Override
+    public int updateOwnerMember(OwnerPo ownerPo) {
+        Map info = BeanConvertUtil.beanCovertMap(ownerPo);
+        ownerServiceDaoImpl.updateOwnerInfoInstance(info);
+        return 1;
     }
 
     public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {

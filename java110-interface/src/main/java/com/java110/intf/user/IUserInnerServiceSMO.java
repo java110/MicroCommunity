@@ -3,6 +3,7 @@ package com.java110.intf.user;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
+import com.java110.po.user.UserPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,4 +94,7 @@ public interface IUserInnerServiceSMO {
      */
     @RequestMapping(value = "/getUserAttrs", method = RequestMethod.POST)
     List<UserAttrDto> getUserAttrs(@RequestBody UserAttrDto userAttrDto);
+
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    int updateUser(@RequestBody  UserPo userPo);
 }

@@ -50,12 +50,14 @@ public class OwnerApi {
     @RequestMapping(value = "/changeOwnerPhone", method = RequestMethod.POST)
     public ResponseEntity<String> changeOwnerPhone(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson,"link","请求报文中未包含手机号");
+        Assert.hasKeyAndValue(reqJson,"userId","请求报文中未包含用户ID");
         Assert.hasKeyAndValue(reqJson,"memberId","请求报文中未包含业主信息");
         Assert.hasKeyAndValue(reqJson,"communityId","请求报文中未包含小区信息");
         OwnerPo ownerPo = new OwnerPo();
         ownerPo.setLink(reqJson.getString("link"));
         ownerPo.setMemberId(reqJson.getString("memberId"));
         ownerPo.setCommunityId(reqJson.getString("communityId"));
+        ownerPo.setUserId(reqJson.getString("userId"));
 
         return changeOwnerPhoneImpl.change(ownerPo);
     }
