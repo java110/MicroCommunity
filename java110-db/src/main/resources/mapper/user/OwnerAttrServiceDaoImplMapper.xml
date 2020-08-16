@@ -89,7 +89,7 @@
         v.value_name valueName,
         s.list_show listShow
         from building_owner_attr t
-        left join attr_spec s on t.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name = 'building_room_attr'
+        left join attr_spec s on t.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name = 'building_owner_attr'
         left join attr_value v on t.`value` = v.`value` and t.spec_cd = v.spec_cd and v.status_cd = '0'
         where 1 =1
         <if test="attrId !=null and attrId != ''">
