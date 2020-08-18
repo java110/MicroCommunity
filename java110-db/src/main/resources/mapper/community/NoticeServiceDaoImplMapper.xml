@@ -135,6 +135,9 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         <if test="noticeId !=null and noticeId != ''">
             and t.notice_id= #{noticeId}
         </if>
