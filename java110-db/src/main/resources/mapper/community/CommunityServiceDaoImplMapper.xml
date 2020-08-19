@@ -515,7 +515,7 @@
 
     <!-- 查询小区数量 add by wuxw 2018-07-03 -->
     <select id="queryCommunitysCount" parameterType="Map" resultType="Map">
-        select  count(1) count
+        select  count(DISTINCT(t.community_id)) count
         from s_community t,city_area ca
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
