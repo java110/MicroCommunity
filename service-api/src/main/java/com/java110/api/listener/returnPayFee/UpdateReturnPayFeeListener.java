@@ -80,6 +80,7 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
             reqJson.put("state", feeDto1.getState());
             reqJson.put("configId", feeDto1.getConfigId());
             reqJson.put("payerObjType", feeDto1.getPayerObjType());
+            reqJson.put("feeId",feeDto1.getFeeId());
             if ("888800010006".equals(feeDto1.getFeeTypeCds())) {
                 reqJson.put("state", "2009001");
             }
