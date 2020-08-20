@@ -33,7 +33,7 @@ public interface IFeeBMO extends IApiBaseBMO {
      */
     public void deleteFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
-    public JSONObject updateFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 修改费用信息
