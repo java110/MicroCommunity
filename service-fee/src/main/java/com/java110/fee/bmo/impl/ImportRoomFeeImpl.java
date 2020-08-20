@@ -101,6 +101,10 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
 
         List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
 
+        for(ImportRoomFee tmpImportRoomFee: tmpImportRoomFees){
+            tmpImportRoomFee.setCommunityId(communityId);
+        }
+
         Assert.isNotNull(tmpImportRoomFees, "参数错误，未包含处理费用");
 
         tmpImportRoomFees = roomInnerServiceSMOImpl.freshRoomIds(tmpImportRoomFees);
