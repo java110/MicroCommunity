@@ -5,6 +5,7 @@ import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.fee.bmo.IQueryOweFee;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
@@ -19,7 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -148,6 +152,66 @@ public class QueryOweFeeImpl implements IQueryOweFee {
      * @param psFees
      */
     private void computePsFee(List<FeeDto> psFees, List<String> psIds) {
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setCommunityId(psFees.get(0).getCommunityId());
+        parkingSpaceDto.setPsIds(psIds.toArray(new String[psIds.size()]));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+            return;
+        }
+        List<String> ownerIds = new ArrayList<>();
+        for (ParkingSpaceDto tmpParkingSpaceDto : parkingSpaceDtos) {
+            for (FeeDto feeDto : psFees) {
+                dealFeePs(tmpParkingSpaceDto, feeDto);
+            }
+            ownerIds.add(tmpParkingSpaceDto.getOwnerId());
+        }
+
+        if (ownerIds.size() < 1) {
+            return;
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
+        ownerDto.setCommunityId(psFees.get(0).getCommunityId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+
+        for (OwnerDto tmpOwnerDto : ownerDtos) {
+            for (FeeDto feeDto : psFees) {
+                dealFeeOwner(tmpOwnerDto, feeDto);
+            }
+        }
+    }
+
+    private void dealFeePs(ParkingSpaceDto tmpParkingSpaceDto, FeeDto feeDto) {
+        if (!tmpParkingSpaceDto.getPsId().equals(feeDto.getPayerObjId())) {
+            return;
+        }
+        feeDto.setRoomName(tmpParkingSpaceDto.getAreaNum() + "停车场" + tmpParkingSpaceDto.getNum() + "车位");
+
+        String computingFormula = feeDto.getComputingFormula();
+        double feePrice = 0.00;
+        if ("1001".equals(computingFormula)) { //面积*单价+附加费
+            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+            BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(tmpParkingSpaceDto.getArea()));
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+            feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        } else if ("2002".equals(computingFormula)) { // 固定费用
+
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+            feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        } else if ("4004".equals(computingFormula)) {
+            feePrice = Double.parseDouble(feeDto.getAmount());
+        } else {
+            feePrice = 0.00;
+        }
+
+        feeDto.setFeePrice(feePrice);
+        double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
+        price = price.multiply(new BigDecimal(month));
+        feeDto.setAmountOwed(price.doubleValue());
     }
 
     /**
@@ -171,7 +235,27 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             }
         }
 
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        ownerDto.setCommunityId(roomFees.get(0).getCommunityId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
 
+        for (OwnerDto tmpOwnerDto : ownerDtos) {
+            for (FeeDto feeDto : roomFees) {
+                dealFeeOwner(tmpOwnerDto, feeDto);
+            }
+        }
+
+    }
+
+    private void dealFeeOwner(OwnerDto tmpOwnerDto, FeeDto feeDto) {
+
+        if (!tmpOwnerDto.getRoomId().equals(feeDto.getPayerObjId())) {
+            return;
+        }
+
+        feeDto.setOwnerName(tmpOwnerDto.getName());
+        feeDto.setOwnerTel(feeDto.getOwnerTel());
     }
 
     private void dealFeeRoom(RoomDto tmpRoomDto, FeeDto feeDto) {
@@ -197,6 +281,11 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feePrice = 0.00;
         }
         feeDto.setFeePrice(feePrice);
+
+        double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
+        price = price.multiply(new BigDecimal(month));
+        feeDto.setAmountOwed(price.doubleValue());
 
     }
 
@@ -310,6 +399,34 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
 
         feeDto.setFeePrice(feePrice);
+    }
+
+
+    /**
+     * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
+     * 比如：2011-02-02 到  2017-03-02
+     * 以年为单位相差为：6年
+     * 以月为单位相差为：73个月
+     * 以日为单位相差为：2220天
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    public static double dayCompare(Date fromDate, Date toDate) {
+        Calendar from = Calendar.getInstance();
+        from.setTime(fromDate);
+        Calendar to = Calendar.getInstance();
+        to.setTime(toDate);
+
+        long t1 = from.getTimeInMillis();
+        long t2 = to.getTimeInMillis();
+        long days = (t2 - t1) / (24 * 60 * 60 * 1000);
+
+        BigDecimal tmpDays = new BigDecimal(days);
+        BigDecimal monthDay = new BigDecimal(30);
+
+        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
     }
 
 }

@@ -125,6 +125,9 @@
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,
         t.community_id communityId,t.id_card, t.id_card idCard,t.state,td.name ownerTypeName
+        <if test="roomIds != null">
+            , borr.room_id roomId
+        </if>
         from building_owner t,t_dict td
         <if test="roomId != null and roomId != ''">
             ,building_owner_room_rel borr
