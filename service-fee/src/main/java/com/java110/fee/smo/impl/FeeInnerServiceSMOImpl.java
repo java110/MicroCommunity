@@ -95,7 +95,8 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
         }
 
         if (!StringUtil.isEmpty(fee.getImportFeeName())) {
-            fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");
+            //fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");
+            fee.setFeeName(fee.getImportFeeName());
         }
 
     }
