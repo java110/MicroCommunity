@@ -117,7 +117,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         for (ImportRoomFee importRoomFee : tmpImportRoomFees) {
             payFeePo = new PayFeePo();
             payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
-            payFeePo.setEndTime(importRoomFee.getEndTime());
+            payFeePo.setEndTime(importRoomFee.getStartTime());
             payFeePo.setState(FeeDto.STATE_DOING);
             payFeePo.setCommunityId(communityId);
             payFeePo.setConfigId(feeConfigDto.getConfigId());
