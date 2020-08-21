@@ -264,7 +264,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(month));
-        feeDto.setAmountOwed(price.doubleValue() + "");
+        feeDto.setAmountOwed(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue() + "");
     }
 
     /**
@@ -338,7 +338,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(month));
-        feeDto.setAmountOwed(price.doubleValue() + "");
+        feeDto.setAmountOwed(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue() + "");
 
     }
 
