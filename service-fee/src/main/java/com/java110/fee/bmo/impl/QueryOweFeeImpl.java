@@ -308,7 +308,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
 
         feeDto.setOwnerName(tmpOwnerDto.getName());
-        feeDto.setOwnerTel(feeDto.getOwnerTel());
+        feeDto.setOwnerTel(tmpOwnerDto.getLink());
     }
 
     private void dealFeeRoom(RoomDto tmpRoomDto, FeeDto feeDto) {

@@ -814,7 +814,7 @@
 
     <select id="computeEveryOweFee" parameterType="Map" resultType="Map">
         select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,pf.payer_obj_id payerObjId,pf.payer_obj_type payerObjType,
-        pf.community_id communityId
+        pf.community_id communityId,pfc.computing_formula computingFormula,pfc.square_price squarePrice,pfc.additional_amount additionalAmount
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type = '004' and pfc.status_cd = '0'
         and pf.community_id = pfc.community_id
