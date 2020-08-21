@@ -185,7 +185,7 @@ public class FeeApi extends BaseController {
     /**
      * 查询欠费费用(批量查询)
      *
-     * @param payObjId    付费方ID
+     * @param num    停车位或房屋编号
      * @param communityId 小区ID
      * @return
      * @path /app/feeApi/getOweFees

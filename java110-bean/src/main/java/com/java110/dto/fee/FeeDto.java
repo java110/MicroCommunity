@@ -64,7 +64,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String bId;
     private String importFeeName;
 
-    private double amountOwed;
+    private String amountOwed;
 
     private String roomName;
 
@@ -393,11 +393,11 @@ public class FeeDto extends PageDto implements Serializable {
         this.importFeeName = importFeeName;
     }
 
-    public double getAmountOwed() {
+    public String getAmountOwed() {
         return amountOwed;
     }
 
-    public void setAmountOwed(double amountOwed) {
+    public void setAmountOwed(String amountOwed) {
         this.amountOwed = amountOwed;
     }
 

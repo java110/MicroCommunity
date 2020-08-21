@@ -1,5 +1,6 @@
 package com.java110.fee.bmo.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
@@ -14,6 +15,7 @@ import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -75,12 +77,63 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     @Override
     public ResponseEntity<String> queryAllOwneFee(FeeDto feeDto) {
         ResponseEntity<String> responseEntity = null;
+
+        if (!freshFeeDtoParam(feeDto)) {
+            return ResultVo.createResponseEntity(1, 0, new JSONArray());
+        }
+
         if (FeeConfigDto.BILL_TYPE_EVERY.equals(feeDto.getBillType())) {
             responseEntity = computeEveryOweFee(feeDto);
         } else {
             responseEntity = computeBillOweFee(feeDto);
         }
         return responseEntity;
+    }
+
+    private boolean freshFeeDtoParam(FeeDto feeDto) {
+
+        if (StringUtil.isEmpty(feeDto.getPayerObjId())) {
+            return false;
+        }
+
+        if (!feeDto.getPayerObjId().contains("#")) {
+            return false;
+        }
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
+            String[] nums = feeDto.getPayerObjId().split("#");
+            if (nums.length != 3) {
+                return false;
+            }
+            RoomDto roomDto = new RoomDto();
+            roomDto.setFloorId(nums[0]);
+            roomDto.setUnitNum(nums[1]);
+            roomDto.setRoomNum(nums[2]);
+            roomDto.setCommunityId(feeDto.getCommunityId());
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+            if (roomDtos == null || roomDtos.size() < 1) {
+                return false;
+            }
+            feeDto.setPayerObjId(roomDtos.get(0).getRoomId());
+
+        } else {
+            String[] nums = feeDto.getPayerObjId().split("#");
+            if (nums.length != 2) {
+                return false;
+            }
+            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setAreaNum(nums[0]);
+            parkingSpaceDto.setNum(nums[1]);
+            parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
+            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+            if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
+                return false;
+            }
+            feeDto.setPayerObjId(parkingSpaceDtos.get(0).getPsId());
+        }
+
+        return true;
     }
 
     /**
@@ -211,7 +264,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(month));
-        feeDto.setAmountOwed(price.doubleValue());
+        feeDto.setAmountOwed(price.doubleValue() + "");
     }
 
     /**
@@ -285,7 +338,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(month));
-        feeDto.setAmountOwed(price.doubleValue());
+        feeDto.setAmountOwed(price.doubleValue() + "");
 
     }
 

@@ -788,6 +788,9 @@
         <if test="payerObjType !=null and payerObjType != ''">
             and pf.payer_obj_type = #{payerObjType}
         </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
     </select>
 
 
@@ -822,6 +825,9 @@
         </if>
         <if test="payerObjType !=null and payerObjType != ''">
             and pf.payer_obj_type = #{payerObjType}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
         </if>
     </select>
 
