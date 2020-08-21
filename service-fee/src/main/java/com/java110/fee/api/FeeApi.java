@@ -188,11 +188,11 @@ public class FeeApi extends BaseController {
      * @param payObjId    付费方ID
      * @param communityId 小区ID
      * @return
-     * @path /app/feeApi/listOweFees
+     * @path /app/feeApi/getOweFees
      */
     @RequestMapping(value = "/getOweFees", method = RequestMethod.GET)
     public ResponseEntity<String> getOweFees(
-            @RequestParam(value = "payObjId") String payObjId,
+            @RequestParam(value = "num",required = false) String num,
             @RequestParam(value = "payObjType") String payObjType,
             @RequestParam(value = "communityId") String communityId,
             @RequestParam(value = "billType") String billType,
@@ -200,7 +200,7 @@ public class FeeApi extends BaseController {
             @RequestParam(value = "page") int page
     ) {
         FeeDto feeDto = new FeeDto();
-        feeDto.setPayerObjId(payObjId);
+        feeDto.setPayerObjId(num);
         feeDto.setPayerObjType(payObjType);
         feeDto.setCommunityId(communityId);
         feeDto.setBillType(billType);
