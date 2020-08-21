@@ -758,8 +758,8 @@
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type in ('001','002','003') and
         pfc.status_cd = '0' and pf.community_id = pfc.community_id
-        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state =
-        '1000'
+        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state ='1000' and bof.amount_owed &gt; 0
+        inner join bill b on bof.bill_id = b.bill_id and b.community_id = bof.community_id and b.cur_bill = 'T'
         where pf.status_cd = '0'
         and pf.state = '2008001'
         and pf.community_id = #{communityId}
@@ -777,8 +777,8 @@
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type in ('001','002','003') and
         pfc.status_cd = '0' and pf.community_id = pfc.community_id
-        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state =
-        '1000'
+        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state ='1000' and bof.amount_owed &gt; 0
+        inner join bill b on bof.bill_id = b.bill_id and b.community_id = bof.community_id and b.cur_bill = 'T'
         where pf.status_cd = '0'
         and pf.state = '2008001'
         and pf.community_id = #{communityId}
