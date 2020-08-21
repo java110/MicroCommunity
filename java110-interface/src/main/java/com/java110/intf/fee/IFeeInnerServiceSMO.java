@@ -1,7 +1,6 @@
 package com.java110.intf.fee;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
@@ -44,7 +43,6 @@ public interface IFeeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryBusinessFees", method = RequestMethod.POST)
     List<FeeDto> queryBusinessFees(@RequestBody FeeDto feeDto);
-
 
 
     /**
@@ -95,6 +93,45 @@ public interface IFeeInnerServiceSMO {
     @RequestMapping(value = "/queryBills", method = RequestMethod.POST)
     public List<BillDto> queryBills(@RequestBody BillDto billDto);
 
+
+    /**
+     * 查询账单欠费
+     *
+     * @param feeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/computeBillOweFeeCount", method = RequestMethod.POST)
+    public int computeBillOweFeeCount(@RequestBody FeeDto feeDto);
+
+    /**
+     * 查询账单欠费
+     *
+     * @param feeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/computeEveryOweFee", method = RequestMethod.POST)
+    public List<FeeDto> computeEveryOweFee(@RequestBody FeeDto feeDto);
+
+
+    /**
+     * 查询账单欠费
+     *
+     * @param feeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/computeEveryOweFeeCount", method = RequestMethod.POST)
+    public int computeEveryOweFeeCount(@RequestBody FeeDto feeDto);
+
+    /**
+     * 查询账单欠费
+     *
+     * @param feeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/computeBillOweFee", method = RequestMethod.POST)
+    public List<FeeDto> computeBillOweFee(@RequestBody FeeDto feeDto);
+
+
     /**
      * 查询 欠费数量
      *
@@ -120,7 +157,7 @@ public interface IFeeInnerServiceSMO {
      * @return
      */
     @RequestMapping(value = "/insertBillOweFees", method = RequestMethod.POST)
-    public int insertBillOweFees(@RequestBody BillOweFeeDto billDto) ;
+    public int insertBillOweFees(@RequestBody BillOweFeeDto billDto);
 
     /**
      * 保存欠费
@@ -129,7 +166,8 @@ public interface IFeeInnerServiceSMO {
      * @return
      */
     @RequestMapping(value = "/updateBillOweFees", method = RequestMethod.POST)
-    public int updateBillOweFees(@RequestBody BillOweFeeDto billDto) ;
+    public int updateBillOweFees(@RequestBody BillOweFeeDto billDto);
+
     /**
      * 保存账单
      *

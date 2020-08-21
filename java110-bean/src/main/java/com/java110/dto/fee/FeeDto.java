@@ -64,6 +64,14 @@ public class FeeDto extends PageDto implements Serializable {
     private String bId;
     private String importFeeName;
 
+    private double amountOwed;
+
+    private String roomName;
+
+    private String ownerName;
+
+    private String ownerTel;
+
 
     private Date createTime;
 
@@ -383,5 +391,37 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setImportFeeName(String importFeeName) {
         this.importFeeName = importFeeName;
+    }
+
+    public double getAmountOwed() {
+        return amountOwed;
+    }
+
+    public void setAmountOwed(double amountOwed) {
+        this.amountOwed = amountOwed;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerTel() {
+        return ownerTel;
+    }
+
+    public void setOwnerTel(String ownerTel) {
+        this.ownerTel = ownerTel;
     }
 }

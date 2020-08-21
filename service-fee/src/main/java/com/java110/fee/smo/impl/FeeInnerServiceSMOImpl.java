@@ -171,6 +171,44 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
     }
 
+    @Override
+    public int computeBillOweFeeCount(@RequestBody FeeDto feeDto) {
+        return feeServiceDaoImpl.computeBillOweFeeCount(BeanConvertUtil.beanCovertMap(feeDto));
+    }
+
+
+
+    @Override
+    public List<FeeDto> computeBillOweFee(@RequestBody FeeDto feeDto) {
+        int page = feeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDto.setPage((page - 1) * feeDto.getRow());
+        }
+
+        List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.computeBillOweFee(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
+
+        return fees;
+    }
+
+    @Override
+    public List<FeeDto> computeEveryOweFee(FeeDto feeDto) {
+        int page = feeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDto.setPage((page - 1) * feeDto.getRow());
+        }
+
+        List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.computeEveryOweFee(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
+
+        return fees;
+    }
+
+    @Override
+    public int computeEveryOweFeeCount(FeeDto feeDto) {
+        return feeServiceDaoImpl.computeEveryOweFeeCount(BeanConvertUtil.beanCovertMap(feeDto));
+    }
+
 
     @Override
     public int queryBillOweFeeCount(@RequestBody BillOweFeeDto billDto) {

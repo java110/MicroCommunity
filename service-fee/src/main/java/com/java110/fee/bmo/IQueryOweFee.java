@@ -12,4 +12,11 @@ public interface IQueryOweFee {
      * @return
      */
     ResponseEntity<String> query(FeeDto feeDto);
+
+    /**
+     * 查询费用
+     * @param feeDto
+     * @return
+     */
+    ResponseEntity<String> queryAllOwneFee(FeeDto feeDto);
 }

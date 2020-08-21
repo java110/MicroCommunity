@@ -164,6 +164,11 @@ public interface IFeeServiceDao {
     int insertFees(Map info);
 
 
+    int computeBillOweFeeCount(Map beanCovertMap);
 
+    List<Map> computeBillOweFee(Map beanCovertMap);
 
+    int computeEveryOweFeeCount(Map beanCovertMap);
+
+    List<Map> computeEveryOweFee(Map beanCovertMap);
 }

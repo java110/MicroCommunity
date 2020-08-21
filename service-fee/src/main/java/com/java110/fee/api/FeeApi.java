@@ -181,6 +181,34 @@ public class FeeApi extends BaseController {
         return queryOweFeeImpl.query(feeDto);
     }
 
+
+    /**
+     * 查询欠费费用(批量查询)
+     *
+     * @param payObjId    付费方ID
+     * @param communityId 小区ID
+     * @return
+     * @path /app/feeApi/listOweFees
+     */
+    @RequestMapping(value = "/getOweFees", method = RequestMethod.GET)
+    public ResponseEntity<String> getOweFees(
+            @RequestParam(value = "payObjId") String payObjId,
+            @RequestParam(value = "payObjType") String payObjType,
+            @RequestParam(value = "communityId") String communityId,
+            @RequestParam(value = "billType") String billType,
+            @RequestParam(value = "row") int row,
+            @RequestParam(value = "page") int page
+    ) {
+        FeeDto feeDto = new FeeDto();
+        feeDto.setPayerObjId(payObjId);
+        feeDto.setPayerObjType(payObjType);
+        feeDto.setCommunityId(communityId);
+        feeDto.setBillType(billType);
+        feeDto.setRow(row);
+        feeDto.setPage(page);
+        return queryOweFeeImpl.queryAllOwneFee(feeDto);
+    }
+
     /**
      * 欠费批量缴费
      *
