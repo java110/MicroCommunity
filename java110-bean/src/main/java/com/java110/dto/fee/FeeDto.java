@@ -62,6 +62,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String paymentCycle;
 
     private String bId;
+    private String importFeeName;
 
 
     private Date createTime;
@@ -374,5 +375,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setBillTypeName(String billTypeName) {
         this.billTypeName = billTypeName;
+    }
+
+    public String getImportFeeName() {
+        return importFeeName;
+    }
+
+    public void setImportFeeName(String importFeeName) {
+        this.importFeeName = importFeeName;
     }
 }

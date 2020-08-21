@@ -14,6 +14,8 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,6 +94,11 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
                 BeanConvertUtil.covertBean(user, fee);
             }
         }
+
+        if(!StringUtil.isEmpty(fee.getImportFeeName())){
+            fee.setFeeName(fee.getFeeName() + "(" + fee.getImportFeeName() + ")");
+        }
+
     }
 
     /**
@@ -104,6 +111,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
         List<String> userIds = new ArrayList<String>();
         for (FeeDto fee : fees) {
             userIds.add(fee.getUserId());
+
         }
 
         return userIds.toArray(new String[userIds.size()]);
