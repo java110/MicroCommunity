@@ -15,7 +15,6 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -95,8 +94,8 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
             }
         }
 
-        if(!StringUtil.isEmpty(fee.getImportFeeName())){
-            fee.setFeeName(fee.getFeeName() + "(" + fee.getImportFeeName() + ")");
+        if (!StringUtil.isEmpty(fee.getImportFeeName())) {
+            fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");
         }
 
     }
