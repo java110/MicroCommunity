@@ -753,7 +753,7 @@
     </insert>
 
 
-    <select id="computeBillOweFeeCount" parameterType="Map">
+    <select id="computeBillOweFeeCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type in ('001','002','003') and
@@ -771,7 +771,7 @@
         </if>
     </select>
 
-    <select id="computeBillOweFee" parameterType="Map">
+    <select id="computeBillOweFee" parameterType="Map" resultType="Map">
         select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,bof.amount_owed amountOwed,bof.payer_obj_name
         roomName,bof.owner_name ownerName,bof.owner_tel ownerTel
         from pay_fee pf
@@ -791,7 +791,7 @@
     </select>
 
 
-    <select id="computeEveryOweFeeCount" parameterType="Map">
+    <select id="computeEveryOweFeeCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type = '004' and pfc.status_cd = '0'
