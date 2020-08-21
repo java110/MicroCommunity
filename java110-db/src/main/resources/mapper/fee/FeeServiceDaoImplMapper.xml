@@ -767,7 +767,7 @@
             and pf.payer_obj_id= #{payerObjId}
         </if>
         <if test="payerObjType !=null and payerObjType != ''">
-            and t.payer_obj_type = #{payerObjType}
+            and pf.payer_obj_type = #{payerObjType}
         </if>
     </select>
 
@@ -786,7 +786,7 @@
             and pf.payer_obj_id= #{payerObjId}
         </if>
         <if test="payerObjType !=null and payerObjType != ''">
-            and t.payer_obj_type = #{payerObjType}
+            and pf.payer_obj_type = #{payerObjType}
         </if>
     </select>
 
