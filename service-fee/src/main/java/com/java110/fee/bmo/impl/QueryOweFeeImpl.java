@@ -194,7 +194,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             computeRoomFee(roomFees, roomIds);
         }
 
-        if (roomFees.size() > 0) {
+        if (psFees.size() > 0) {
             computePsFee(psFees, psIds);
         }
     }
