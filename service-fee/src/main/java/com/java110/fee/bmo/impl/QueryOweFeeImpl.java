@@ -93,7 +93,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     private boolean freshFeeDtoParam(FeeDto feeDto) {
 
         if (StringUtil.isEmpty(feeDto.getPayerObjId())) {
-            return false;
+            return true;
         }
 
         if (!feeDto.getPayerObjId().contains("#")) {
