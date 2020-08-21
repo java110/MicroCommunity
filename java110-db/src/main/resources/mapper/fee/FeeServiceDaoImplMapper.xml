@@ -773,7 +773,7 @@
 
     <select id="computeBillOweFee" parameterType="Map" resultType="Map">
         select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,bof.amount_owed amountOwed,bof.payer_obj_name
-        roomName,bof.owner_name ownerName,bof.owner_tel ownerTel
+        roomName,bof.owner_name ownerName,bof.owner_tel ownerTel,pf.payer_obj_id payerObjId,pf.payer_obj_type payerObjType
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type in ('001','002','003') and
         pfc.status_cd = '0' and pf.community_id = pfc.community_id
@@ -812,7 +812,7 @@
     </select>
 
     <select id="computeEveryOweFee" parameterType="Map" resultType="Map">
-        select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,bof.amount_owed amountOwed,bof.payer_obj_name payObjName
+        select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,pf.payer_obj_id payerObjId,pf.payer_obj_type payerObjType
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type = '004' and pfc.status_cd = '0'
         and pf.community_id = pfc.community_id
