@@ -192,7 +192,6 @@ public class FeeApi extends BaseController {
      */
     @RequestMapping(value = "/getOweFees", method = RequestMethod.GET)
     public ResponseEntity<String> getOweFees(
-
             @RequestParam(value = "payObjType") String payObjType,
             @RequestParam(value = "communityId") String communityId,
             @RequestParam(value = "billType") String billType,

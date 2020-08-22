@@ -213,22 +213,16 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
             return;
         }
-        List<String> ownerIds = new ArrayList<>();
         for (ParkingSpaceDto tmpParkingSpaceDto : parkingSpaceDtos) {
             for (FeeDto feeDto : psFees) {
                 dealFeePs(tmpParkingSpaceDto, feeDto);
             }
-            ownerIds.add(tmpParkingSpaceDto.getOwnerId());
-        }
-
-        if (ownerIds.size() < 1) {
-            return;
         }
 
         OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
+        ownerDto.setOwnerIds(psIds.toArray(new String[psIds.size()]));
         ownerDto.setCommunityId(psFees.get(0).getCommunityId());
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByParkingSpace(ownerDto);
 
         for (OwnerDto tmpOwnerDto : ownerDtos) {
             for (FeeDto feeDto : psFees) {
