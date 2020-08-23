@@ -30,6 +30,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String link;
     private String remark;
     private String ownerId;
+    private String[] ownerIds;
     private String userId;
     private String age;
     private String memberId;
@@ -264,5 +265,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setOwnerAttrDtos(List<OwnerAttrDto> ownerAttrDtos) {
         this.ownerAttrDtos = ownerAttrDtos;
+    }
+
+    public String[] getOwnerIds() {
+        return ownerIds;
+    }
+
+    public void setOwnerIds(String[] ownerIds) {
+        this.ownerIds = ownerIds;
     }
 }

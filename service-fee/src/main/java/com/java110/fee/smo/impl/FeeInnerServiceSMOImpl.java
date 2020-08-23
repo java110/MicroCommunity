@@ -14,6 +14,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,6 +93,12 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
                 BeanConvertUtil.covertBean(user, fee);
             }
         }
+
+        if (!StringUtil.isEmpty(fee.getImportFeeName())) {
+            //fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");
+            fee.setFeeName(fee.getImportFeeName());
+        }
+
     }
 
     /**
@@ -104,6 +111,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
         List<String> userIds = new ArrayList<String>();
         for (FeeDto fee : fees) {
             userIds.add(fee.getUserId());
+
         }
 
         return userIds.toArray(new String[userIds.size()]);
@@ -161,6 +169,44 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         return billDtos;
 
+    }
+
+    @Override
+    public int computeBillOweFeeCount(@RequestBody FeeDto feeDto) {
+        return feeServiceDaoImpl.computeBillOweFeeCount(BeanConvertUtil.beanCovertMap(feeDto));
+    }
+
+
+
+    @Override
+    public List<FeeDto> computeBillOweFee(@RequestBody FeeDto feeDto) {
+        int page = feeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDto.setPage((page - 1) * feeDto.getRow());
+        }
+
+        List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.computeBillOweFee(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
+
+        return fees;
+    }
+
+    @Override
+    public List<FeeDto> computeEveryOweFee(FeeDto feeDto) {
+        int page = feeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDto.setPage((page - 1) * feeDto.getRow());
+        }
+
+        List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.computeEveryOweFee(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
+
+        return fees;
+    }
+
+    @Override
+    public int computeEveryOweFeeCount(FeeDto feeDto) {
+        return feeServiceDaoImpl.computeEveryOweFeeCount(BeanConvertUtil.beanCovertMap(feeDto));
     }
 
 

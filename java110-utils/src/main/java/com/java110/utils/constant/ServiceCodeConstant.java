@@ -525,6 +525,9 @@ public class ServiceCodeConstant {
     //查询首页统计信息
     public static final String SERVICE_CODE_QUERY_INDEX_STATISTIC = "index.queryIndexStatistic";
 
+    //查询首页待办
+    public static final String SERVICE_CODE_QUERY_INDEX_TODO_TASK = "index.queryIndexTodoTask";
+
     //查询费用配置 根据停车位
     public static final String SERVICE_CODE_QUERY_FEE_BY_PARKING_SPACE = "fee.queryFeeByParkingSpace";
 

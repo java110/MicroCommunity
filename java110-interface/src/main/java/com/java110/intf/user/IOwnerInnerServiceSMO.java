@@ -32,6 +32,8 @@ public interface IOwnerInnerServiceSMO {
     @RequestMapping(value = "/queryOwners", method = RequestMethod.POST)
     List<OwnerDto> queryOwners(@RequestBody OwnerDto ownerDto);
 
+
+
     /**
      * <p>查询业主成员</p>
      *

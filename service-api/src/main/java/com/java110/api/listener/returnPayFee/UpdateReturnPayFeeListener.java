@@ -65,7 +65,7 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
             Calendar endCalender = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             endCalender.setTime(feeDto1.getEndTime());
-            endCalender.add(Calendar.MONTH, -new Double(cycles).intValue());
+            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
             reqJson.put("endTime", sdf.format(endCalender.getTime()));
             reqJson.put("amount", feeDto1.getAmount());
             reqJson.put("feeTypeCd", feeDto1.getFeeTypeCd());
@@ -80,8 +80,11 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
             reqJson.put("state", feeDto1.getState());
             reqJson.put("configId", feeDto1.getConfigId());
             reqJson.put("payerObjType", feeDto1.getPayerObjType());
+            reqJson.put("feeId",feeDto1.getFeeId());
             if ("888800010006".equals(feeDto1.getFeeTypeCds())) {
                 reqJson.put("state", "2009001");
+            }else{
+                reqJson.put("state", "2008001");
             }
             feeBMOImpl.updateFee(reqJson, context);
 

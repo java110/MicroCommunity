@@ -72,7 +72,7 @@ public class WxLoginController extends BaseController {
         String photoInfo = WechatFactory.getPhoneNumberBeanS5(postObj.getString("decryptData"),
                 postObj.getString("key"), postObj.getString("iv"));
         JSONObject photoObj = JSONObject.parseObject(photoInfo);
-        CommonCache.setValue(postObj.getString("key"), photoObj.toJSONString(), CommonCache.defaultExpireTime);
+        CommonCache.setValue(postObj.getString("key"), photoObj.getString("phoneNumber"), CommonCache.defaultExpireTime);
         return ResultVo.createResponseEntity(photoObj);
 
     }

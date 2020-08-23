@@ -47,6 +47,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private String paymentCycle;
 
+    private String valid;
+
 
     private Date createTime;
 
@@ -213,5 +215,13 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setCurTime(String curTime) {
         this.curTime = curTime;
+    }
+
+    public String getValid() {
+        return valid;
+    }
+
+    public void setValid(String valid) {
+        this.valid = valid;
     }
 }

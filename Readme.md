@@ -4,7 +4,7 @@
 
 ### HC小区后端代码
  [https://gitee.com/wuxw7/MicroCommunity](https://gitee.com/wuxw7/MicroCommunity)
-### HC小区前段代码
+### HC小区前端代码
 [https://gitee.com/java110/MicroCommunityWeb](https://gitee.com/java110/MicroCommunityWeb)
 ### HC智慧家庭（业主版）
 [https://gitee.com/java110/WechatOwnerService](https://gitee.com/java110/WechatOwnerService)
@@ -45,12 +45,12 @@
     
 ### 产品
 
-   ![image](docs/operateDoc/img/hc.png)
+   ![image](docs/img/hc.png)
 
     
 ### 系统功能（function） 
 
-   ![image](docs/operateDoc/img/func.png)
+   ![image](docs/img/func.png)
    
    主要系统功能请查看
      
@@ -78,20 +78,18 @@
 
     点击登录，进入如下图：
 
-![image](docs/images/0004.png)
+![image](docs/img/0004.png)
 
 ![image](docs/img/index.png)
 
 ![image](docs/img/owner.png)
 
-2.数据模型图
-![image](dataModel.png)
 
 ### 加入我们（join）
 
 加入微小区交流群随时了解项目进度，和java110开发者零距离沟通 qq群号 827669685(已满)，799748606（群二），邮箱：928255095@qq.com
 
-![image](docs/images/MicroCommunity_qq.png)
+![image](docs/img/qq.png)
 
 
 

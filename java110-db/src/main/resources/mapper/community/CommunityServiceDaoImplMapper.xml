@@ -515,12 +515,14 @@
 
     <!-- 查询小区数量 add by wuxw 2018-07-03 -->
     <select id="queryCommunitysCount" parameterType="Map" resultType="Map">
-        select  count(1) count
-        from s_community t
+        select  count(DISTINCT(t.community_id)) count
+        from s_community t,city_area ca
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
         </if>
         where 1 =1
+        and t.city_code = ca.area_code
+        and ca.status_cd = '0'
         <if test="address !=null and address != ''">
             and t.address= #{address}
         </if>

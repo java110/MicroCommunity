@@ -140,24 +140,19 @@
         computingFormula,
         pfc.bill_type billType,t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name
-        billTypeName
-        from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3,t_dict td4
+        billTypeName,pfa.value importFeeName
+        from pay_fee t
+        INNER join pay_fee_config pfc on t.fee_type_cd = pfc.fee_type_cd and t.config_id = pfc.config_id and
+        pfc.status_cd = '0'
+        left join t_dict td1 on pfc.fee_type_cd = td1.status_cd and td1.table_name = 'pay_fee_config' and
+        td1.table_columns = 'fee_type_cd'
+        left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'pay_fee' and td2.table_columns = 'state'
+        left join t_dict td3 on t.fee_flag = td3.status_cd and td3.table_name = 'pay_fee' and td3.table_columns =
+        'fee_flag'
+        left join t_dict td4 on pfc.bill_type = td4.status_cd and td4.table_name = 'pay_fee_config' and
+        td4.table_columns = 'bill_type'
+        LEFT JOIN pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002' and pfa.status_cd = '0'
         where 1 =1
-        and t.fee_type_cd = pfc.fee_type_cd
-        and t.config_id = pfc.config_id
-        and pfc.status_cd = '0'
-        and pfc.fee_type_cd = td1.status_cd
-        and td1.table_name = 'pay_fee_config'
-        and td1.table_columns = 'fee_type_cd'
-        and t.state = td2.status_cd
-        and td2.table_name = 'pay_fee'
-        and td2.table_columns = 'state'
-        and t.fee_flag = td3.status_cd
-        and td3.table_name = 'pay_fee'
-        and td3.table_columns = 'fee_flag'
-        and pfc.bill_type = td4.status_cd
-        and td4.table_name = 'pay_fee_config'
-        and td4.table_columns = 'bill_type'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
@@ -756,5 +751,86 @@
             '-1',#{item.feeId},#{item.userId},#{item.payerObjId},#{item.feeFlag},#{item.state},#{item.configId},#{item.payerObjType})
         </foreach>
     </insert>
+
+
+    <select id="computeBillOweFeeCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee pf
+        INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type in ('001','002','003') and
+        pfc.status_cd = '0' and pf.community_id = pfc.community_id
+        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state ='1000' and bof.amount_owed &gt; 0
+        inner join bill b on bof.bill_id = b.bill_id and b.community_id = bof.community_id and b.cur_bill = 'T'
+        where pf.status_cd = '0'
+        and pf.state = '2008001'
+        and pf.community_id = #{communityId}
+        <if test="payerObjId !=null and payerObjId != ''">
+            and pf.payer_obj_id= #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and pf.payer_obj_type = #{payerObjType}
+        </if>
+    </select>
+
+    <select id="computeBillOweFee" parameterType="Map" resultType="Map">
+        select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,bof.amount_owed amountOwed,bof.payer_obj_name
+        roomName,bof.owner_name ownerName,bof.owner_tel ownerTel,pf.payer_obj_id payerObjId,pf.payer_obj_type payerObjType,
+        pf.community_id communityId
+        from pay_fee pf
+        INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type in ('001','002','003') and
+        pfc.status_cd = '0' and pf.community_id = pfc.community_id
+        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state ='1000' and bof.amount_owed &gt; 0
+        inner join bill b on bof.bill_id = b.bill_id and b.community_id = bof.community_id and b.cur_bill = 'T'
+        where pf.status_cd = '0'
+        and pf.state = '2008001'
+        and pf.community_id = #{communityId}
+        <if test="payerObjId !=null and payerObjId != ''">
+            and pf.payer_obj_id= #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and pf.payer_obj_type = #{payerObjType}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+    <select id="computeEveryOweFeeCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee pf
+        INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type = '004' and pfc.status_cd = '0'
+        and pf.community_id = pfc.community_id
+        where pf.end_time &lt; NOW()
+        and pf.status_cd = '0'
+        and pf.state = '2008001'
+        and pf.community_id = #{communityId}
+        <if test="payerObjId !=null and payerObjId != ''">
+            and pf.payer_obj_id= #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and pf.payer_obj_type = #{payerObjType}
+        </if>
+    </select>
+
+    <select id="computeEveryOweFee" parameterType="Map" resultType="Map">
+        select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,pf.payer_obj_id payerObjId,pf.payer_obj_type payerObjType,
+        pf.community_id communityId,pfc.computing_formula computingFormula,pfc.square_price squarePrice,pfc.additional_amount additionalAmount
+        from pay_fee pf
+        INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type = '004' and pfc.status_cd = '0'
+        and pf.community_id = pfc.community_id
+        where pf.end_time &lt; NOW()
+        and pf.status_cd = '0'
+        and pf.state = '2008001'
+        and pf.community_id = #{communityId}
+        <if test="payerObjId !=null and payerObjId != ''">
+            and pf.payer_obj_id= #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and pf.payer_obj_type = #{payerObjType}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
 
 </mapper>

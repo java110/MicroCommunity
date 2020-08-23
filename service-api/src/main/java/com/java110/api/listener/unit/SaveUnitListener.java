@@ -5,9 +5,11 @@ import com.java110.api.bmo.unit.IUnitBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.UnitDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.dto.FloorDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -31,6 +33,9 @@ public class SaveUnitListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
+
+    @Autowired
+    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -65,6 +70,17 @@ public class SaveUnitListener extends AbstractServiceApiPlusListener {
 
         if (total < 1) {
             throw new IllegalArgumentException("传入小区楼ID不是该小区的楼");
+        }
+
+        //校验单元编号是否已经存在
+        UnitDto unitDto = new UnitDto();
+        unitDto.setCommunityId(reqJson.getString("communityId"));
+        unitDto.setFloorId(reqJson.getString("floorId"));
+        unitDto.setUnitNum(reqJson.getString("unitNum"));
+        int count = unitInnerServiceSMOImpl.queryUnitsCount(unitDto);
+
+        if(count > 0){
+            throw new IllegalArgumentException("单元编号已经存在，请勿重复添加");
         }
     }
 

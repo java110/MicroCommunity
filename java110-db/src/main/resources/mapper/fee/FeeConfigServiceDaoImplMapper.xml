@@ -179,6 +179,9 @@
         <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
+        <if test="valid !=null and valid == 1">
+            and t.end_time &gt; now()
+        </if>
         <if test="curTime !=null ">
             and t.end_time &gt; #{curTime}
             and t.start_time &lt; #{curTime}
@@ -307,6 +310,9 @@
         </if>
         <if test="endTime !=null ">
             and t.end_time= #{endTime}
+        </if>
+        <if test="valid !=null and valid == 1">
+            and t.end_time &gt; now()
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

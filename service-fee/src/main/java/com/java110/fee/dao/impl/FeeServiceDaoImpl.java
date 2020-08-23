@@ -3,7 +3,6 @@ package com.java110.fee.dao.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.fee.dao.IFeeServiceDao;
-import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
@@ -286,6 +285,38 @@ public class FeeServiceDaoImpl extends BaseServiceDao implements IFeeServiceDao 
         int saveFlag = sqlSessionTemplate.insert("feeServiceDaoImpl.insertFees", info);
 
         return saveFlag;
+    }
+
+    @Override
+    public int computeBillOweFeeCount(Map beanCovertMap) {
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.computeBillOweFeeCount", beanCovertMap);
+        if (businessFeeInfos.size() < 1) {
+            return 0;
+        }
+        return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> computeBillOweFee(Map beanCovertMap) {
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.computeBillOweFee", beanCovertMap);
+
+        return businessFeeInfos;
+    }
+
+    @Override
+    public int computeEveryOweFeeCount(Map beanCovertMap) {
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.computeEveryOweFeeCount", beanCovertMap);
+        if (businessFeeInfos.size() < 1) {
+            return 0;
+        }
+        return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> computeEveryOweFee(Map beanCovertMap) {
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.computeEveryOweFee", beanCovertMap);
+
+        return businessFeeInfos;
     }
 
 

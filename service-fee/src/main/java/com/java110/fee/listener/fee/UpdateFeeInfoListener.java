@@ -2,18 +2,18 @@ package com.java110.fee.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.intf.order.IOrderInnerServiceSMO;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
 import com.java110.dto.order.BusinessDto;
+import com.java110.entity.center.Business;
 import com.java110.fee.dao.IFeeDetailServiceDao;
+import com.java110.fee.dao.IFeeServiceDao;
+import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.fee.dao.IFeeServiceDao;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -120,6 +120,18 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
         List<BusinessDto> businessDtos = orderInnerServiceSMOImpl.querySameOrderBusiness(businessDto);
         Assert.listOnlyOne(businessDtos, "存在多条缴费记录或没有");
 
+        //查询是否为退费逻辑
+        businessDto = new BusinessDto();
+        businessDto.setbId(business.getbId());
+        businessDto.setBusinessTypeCd("621100040001");
+        List<BusinessDto> returnPayFeeDtos = orderInnerServiceSMOImpl.querySameOrderBusiness(businessDto);
+
+
+        if (returnPayFeeDtos != null && returnPayFeeDtos.size() > 0) {
+            returnPayFee(businessFeeInfos, businessDtos, dataFlowContext, business, returnPayFeeDtos);
+            return;
+        }
+
         //查询费用明细过程表
         Map feeDetailInfo = new HashMap();
         feeDetailInfo.put("bId", businessDtos.get(0).getbId());
@@ -183,8 +195,65 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                 }
             }
         }
+    }
+
+    private void returnPayFee(List<Map> businessFeeInfos, List<BusinessDto> businessDtos, DataFlowContext dataFlowContext, Business business, List<BusinessDto> returnPayFeeDtos) {
+        //查询费用明细过程表
+        Map feeDetailInfo = new HashMap();
+        feeDetailInfo.put("bId", businessDtos.get(0).getbId());
+        feeDetailInfo.put("operate", "ADD");
+        List<Map> feeDetails = feeDetailServiceDaoImpl.getBusinessFeeDetailInfo(feeDetailInfo);
+        Assert.listOnlyOne(feeDetails, "business表中存在多条缴费记录或没有");
+        String cyclesStr = feeDetails.get(0).get("cycles").toString();
+        double cycles = Double.parseDouble(cyclesStr);
+
+        Map feeMap = null;
+        if (businessFeeInfos != null && businessFeeInfos.size() > 0) {
+            for (int _feeIndex = 0; _feeIndex < businessFeeInfos.size(); _feeIndex++) {
+                Map businessFeeInfo = businessFeeInfos.get(_feeIndex);
+                //开始锁代码
+                String requestId = DistributedLock.getLockUUID();
+                String key = this.getClass().getSimpleName() + businessFeeInfo.get("fee_id");
+                try {
+                    DistributedLock.waitGetDistributedLock(key, requestId);
+                    //这里考虑并发问题
+                    feeMap = new HashMap();
+                    feeMap.put("feeId", businessFeeInfo.get("fee_id"));
+                    feeMap.put("communityId", businessFeeInfo.get("community_id"));
+                    feeMap.put("statusCd", "0");
+                    List<Map> feeInfo = feeServiceDaoImpl.getFeeInfo(feeMap);
+                    Assert.listOnlyOne(feeInfo, "查询到多条数据或未查询到数据" + feeMap);
+                    //根据当前的结束时间 修改
+                    Date endTime = (Date) feeInfo.get(0).get("end_time");
+
+                    Calendar endCalender = Calendar.getInstance();
+                    endCalender.setTime(endTime);
+                    if (StringUtil.isNumber(cyclesStr)) {
+                        endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
+                    } else {
+                        int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
+                        endCalender.add(Calendar.HOUR, hours);
+                    }
+                    businessFeeInfo.put("end_time", endCalender.getTime());
 
 
+                    // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
+                    if (FeeFlagTypeConstant.ONETIME.equals(feeInfo.get(0).get("feeFlag"))) {
+                        //押金的话费用直接结束
+                        businessFeeInfo.put("state", "888800010006".equals(feeInfo.get(0).get("feeTypeCd")) ? FeeStateConstant.END : FeeStateConstant.CHARGING);
+                        businessFeeInfo.put("end_time", feeInfo.get(0).get("startTime"));
+                    }
+
+                    flushBusinessFeeInfo(businessFeeInfo, StatusConstant.STATUS_CD_VALID);
+                    feeServiceDaoImpl.updateFeeInfoInstance(businessFeeInfo);
+                    if (businessFeeInfo.size() == 1) {
+                        dataFlowContext.addParamOut("feeId", businessFeeInfo.get("fee_id"));
+                    }
+                } finally {
+                    DistributedLock.releaseDistributedLock(requestId, key);
+                }
+            }
+        }
     }
 
     /**
