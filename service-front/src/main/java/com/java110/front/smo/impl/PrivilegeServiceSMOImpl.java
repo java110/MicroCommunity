@@ -322,7 +322,11 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
 
         JSONObject privilegeInfoObj = JSONObject.parseObject(pd.getReqData());
-        Assert.jsonObjectHaveKey(privilegeInfoObj, "staffId", "请求报文中未包含员工ID 节点");
+        //Assert.jsonObjectHaveKey(privilegeInfoObj, "staffId", "请求报文中未包含员工ID 节点");
+
+        if (!privilegeInfoObj.containsKey("staffId")) {
+            privilegeInfoObj.put("staffId", pd.getUserId());
+        }
 
         ResponseEntity<String> storeInfo = super.getStoreInfo(pd, restTemplate);
 
