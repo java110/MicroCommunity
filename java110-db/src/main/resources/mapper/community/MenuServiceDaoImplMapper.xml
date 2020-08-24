@@ -239,9 +239,9 @@
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getMenuInfo" parameterType="Map" resultType="Map">
-        select t.m_id mId,t.name,t.g_id gId,t.url,t.seq,t.p_id pId,t.description,t.is_show isShow,
+        select DISTINCT t.m_id mId,t.name,t.g_id gId,t.url,t.seq,t.p_id pId,t.description,t.is_show isShow,
         if(t.is_show='Y','显示','不显示') isShowName,
-        p.p_id pId,p.name pName
+        p.p_id pId,t.name pName
         from m_menu t,p_privilege p
         where t.status_cd= '0'
         and p.status_cd= '0'
@@ -346,7 +346,7 @@
 
     <!-- 查询路由数量 add by wuxw 2018-07-03 -->
     <select id="queryMenusCount" parameterType="Map" resultType="Map">
-        select count(1) count
+        select count(DISTINCT(t.m_id)) count
         from m_menu t,p_privilege p
         where t.status_cd= '0'
         and p.status_cd= '0'
