@@ -344,6 +344,14 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
 
         JSONArray privileges = resultObj.getJSONArray("privileges");
 
+        JSONArray tmpPrivilegeArrays = new JSONArray();
+
+        JSONObject privilegeObj = null;
+        for (int privilegeIndex = 0; privilegeIndex < privileges.size(); privilegeIndex++) {
+            privilegeObj = privileges.getJSONObject(privilegeIndex);
+            hasSameData(privilegeObj, tmpPrivilegeArrays);
+        }
+
         JSONObject resObj = new JSONObject();
         resObj.put("datas", privileges);
 
