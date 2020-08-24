@@ -2,13 +2,13 @@ package com.java110.order.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.order.dao.IPrivilegeDAO;
+import com.java110.order.smo.IPrivilegeSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.order.dao.IPrivilegeDAO;
-import com.java110.order.smo.IPrivilegeSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,15 +209,34 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
 
         Assert.jsonObjectHaveKey(privilegeInfo, "storeId", "请求报文中未包含storeId节点");
 
-        Assert.jsonObjectHaveKey(privilegeInfo, "pId", "请求报文中未包含pId节点");
+//        Assert.jsonObjectHaveKey(privilegeInfo, "pId", "请求报文中未包含pId节点");
 
         JSONObject privilegeObj = JSONObject.parseObject(privilegeInfo);
         //根据权限组ID和商户ID查询是否有数据
         List<Map> privilegeGroups = privilegeDAOImpl.queryPrivilegeGroup(privilegeObj);
         Assert.isNotNull(privilegeGroups, "当前没有权限操作权限组pgId = " + privilegeObj.getString("pgId"));
 
-        if (!privilegeDAOImpl.deletePrivilegeRel(privilegeObj)) {
-            return new ResponseEntity<String>("删除权限失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        if (privilegeObj.containsKey("pIds")) {
+            JSONArray pIds = privilegeObj.getJSONArray("pIds");
+            int errorCount = 0;
+            JSONObject tmpPId = null;
+            for (int pIdIndex = 0; pIdIndex < pIds.size(); pIdIndex++) {
+                try {
+                    tmpPId = pIds.getJSONObject(pIdIndex);
+                    privilegeObj.put("pId", tmpPId.getString("pId"));
+                    if (!privilegeDAOImpl.deletePrivilegeRel(privilegeObj)) {
+                        errorCount++;
+                    }
+
+                } catch (Exception e) {
+                    logger.error("保存权限关系失败", e);
+                    errorCount++;
+                }
+            }
+        } else {
+            if (!privilegeDAOImpl.deletePrivilegeRel(privilegeObj)) {
+                return new ResponseEntity<String>("删除权限失败", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
 
         return new ResponseEntity<String>("成功", HttpStatus.OK);
