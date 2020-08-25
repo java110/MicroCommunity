@@ -1,0 +1,135 @@
+{
+  "templateName":"租聘设置",
+  "directories": "admin",
+  "templateCode":"rentingConfig",
+  "templateKey":"rentingConfigId",
+  "templateKeyName":"配置ID",
+  "searchCode": "rentingConfigId",
+  "searchName": "配置ID",
+  "conditions": [
+    {
+      "name": "配置ID",
+      "inputType": "input",
+      "code": "rentingConfigId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "租聘类型",
+      "inputType": "select",
+      "selectValue":"3344,4455",
+      "selectValueName":"整租,合租",
+      "code": "rentingType",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "收费公式",
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"固定值,每月租金比例",
+      "code": "rentingFormula",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"rentingType",
+      "cnCode":"租聘类型",
+      "desc":"必填，请填写值",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"3344,4455",
+      "selectValueName":"整租,合租",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"值超过200位",
+      "show": true
+    },
+    {
+      "code":"rentingFormula",
+      "cnCode":"收费公式",
+      "desc":"必填，请选择算费公式",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"固定值,每月租金比例",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"显示格式错误",
+      "show": true
+    },
+    {
+      "code": "servicePrice",
+      "cnCode":"服务费",
+      "desc":"必填，请填写服务费",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"money",
+      "limitParam":"",
+      "limitErrInfo":"格式错误",
+      "show": true
+    },
+    {
+      "code": "serviceOwnerRate",
+      "cnCode":"业主收费比率",
+      "desc":"必填，请填写业主收费比率",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"money",
+      "limitParam":"",
+      "limitErrInfo":"格式错误",
+      "show": true
+    },
+    {
+      "code": "serviceTenantRate",
+      "cnCode":"租客收费比率",
+      "desc":"必填，请填写租客收费比率",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"money",
+      "limitParam":"",
+      "limitErrInfo":"格式错误",
+      "show": true
+    },
+    {
+      "code": "adminSeparateRate",
+      "cnCode":"运营分账比率",
+      "desc":"必填，请填写运营分账比率",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"money",
+      "limitParam":"",
+      "limitErrInfo":"格式错误",
+      "show": true
+    },
+    {
+      "code": "proxySeparateRate",
+      "cnCode":"代理商分账比率",
+      "desc":"必填，请填写代理商分账比率",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"money",
+      "limitParam":"",
+      "limitErrInfo":"格式错误",
+      "show": true
+    },
+    {
+      "code": "propertySeparateRate",
+      "cnCode":"物业分账比率",
+      "desc":"必填，请填写物业分账比率",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"money",
+      "limitParam":"",
+      "limitErrInfo":"格式错误",
+      "show": true
+    }
+  ]
+}
