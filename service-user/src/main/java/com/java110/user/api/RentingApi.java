@@ -2,11 +2,17 @@ package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.rentingConfig.RentingConfigDto;
+import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.po.rentingConfig.RentingConfigPo;
+import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.user.bmo.rentingConfig.IDeleteRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.IGetRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.ISaveRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.IUpdateRentingConfigBMO;
+import com.java110.user.bmo.rentingPool.IDeleteRentingPoolBMO;
+import com.java110.user.bmo.rentingPool.IGetRentingPoolBMO;
+import com.java110.user.bmo.rentingPool.ISaveRentingPoolBMO;
+import com.java110.user.bmo.rentingPool.IUpdateRentingPoolBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +33,17 @@ public class RentingApi {
 
     @Autowired
     private IGetRentingConfigBMO getRentingConfigBMOImpl;
+
+
+    @Autowired
+    private ISaveRentingPoolBMO saveRentingPoolBMOImpl;
+    @Autowired
+    private IUpdateRentingPoolBMO updateRentingPoolBMOImpl;
+    @Autowired
+    private IDeleteRentingPoolBMO deleteRentingPoolBMOImpl;
+
+    @Autowired
+    private IGetRentingPoolBMO getRentingPoolBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -113,5 +130,97 @@ public class RentingApi {
         rentingConfigDto.setPage(page);
         rentingConfigDto.setRow(row);
         return getRentingConfigBMOImpl.get(rentingConfigDto);
+    }
+
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /renting/saveRentingPool
+     * @path /app/renting/saveRentingPool
+     */
+    @RequestMapping(value = "/saveRentingPool", method = RequestMethod.POST)
+    public ResponseEntity<String> saveRentingPool(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "rentingTitle", "请求报文中未包含rentingTitle");
+        Assert.hasKeyAndValue(reqJson, "roomId", "请求报文中未包含roomId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "price", "请求报文中未包含price");
+        Assert.hasKeyAndValue(reqJson, "paymentType", "请求报文中未包含paymentType");
+        Assert.hasKeyAndValue(reqJson, "checkInDate", "请求报文中未包含checkInDate");
+        Assert.hasKeyAndValue(reqJson, "rentingConfigId", "请求报文中未包含rentingConfigId");
+        Assert.hasKeyAndValue(reqJson, "ownerName", "请求报文中未包含ownerName");
+        Assert.hasKeyAndValue(reqJson, "ownerTel", "请求报文中未包含ownerTel");
+
+
+        RentingPoolPo rentingPoolPo = BeanConvertUtil.covertBean(reqJson, RentingPoolPo.class);
+        return saveRentingPoolBMOImpl.save(rentingPoolPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /renting/updateRentingPool
+     * @path /app/renting/updateRentingPool
+     */
+    @RequestMapping(value = "/updateRentingPool", method = RequestMethod.POST)
+    public ResponseEntity<String> updateRentingPool(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "rentingTitle", "请求报文中未包含rentingTitle");
+        Assert.hasKeyAndValue(reqJson, "roomId", "请求报文中未包含roomId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "price", "请求报文中未包含price");
+        Assert.hasKeyAndValue(reqJson, "paymentType", "请求报文中未包含paymentType");
+        Assert.hasKeyAndValue(reqJson, "checkInDate", "请求报文中未包含checkInDate");
+        Assert.hasKeyAndValue(reqJson, "rentingConfigId", "请求报文中未包含rentingConfigId");
+        Assert.hasKeyAndValue(reqJson, "ownerName", "请求报文中未包含ownerName");
+        Assert.hasKeyAndValue(reqJson, "ownerTel", "请求报文中未包含ownerTel");
+        Assert.hasKeyAndValue(reqJson, "rentingId", "rentingId不能为空");
+
+
+        RentingPoolPo rentingPoolPo = BeanConvertUtil.covertBean(reqJson, RentingPoolPo.class);
+        return updateRentingPoolBMOImpl.update(rentingPoolPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /renting/deleteRentingPool
+     * @path /app/renting/deleteRentingPool
+     */
+    @RequestMapping(value = "/deleteRentingPool", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteRentingPool(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "rentingId", "rentingId不能为空");
+
+
+        RentingPoolPo rentingPoolPo = BeanConvertUtil.covertBean(reqJson, RentingPoolPo.class);
+        return deleteRentingPoolBMOImpl.delete(rentingPoolPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /renting/queryRentingPool
+     * @path /app/renting/queryRentingPool
+     */
+    @RequestMapping(value = "/queryRentingPool", method = RequestMethod.GET)
+    public ResponseEntity<String> queryRentingPool(@RequestParam(value = "communityId") String communityId,
+                                                   @RequestParam(value = "page") int page,
+                                                   @RequestParam(value = "row") int row) {
+        RentingPoolDto rentingPoolDto = new RentingPoolDto();
+        rentingPoolDto.setPage(page);
+        rentingPoolDto.setRow(row);
+        rentingPoolDto.setCommunityId(communityId);
+        return getRentingPoolBMOImpl.get(rentingPoolDto);
     }
 }

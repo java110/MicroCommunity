@@ -1,6 +1,7 @@
 package com.java110.dto.rentingConfig;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,16 @@ import java.util.Date;
 public class RentingConfigDto extends PageDto implements Serializable {
 
     private String serviceTenantRate;
-private String propertySeparateRate;
-private String servicePrice;
-private String adminSeparateRate;
-private String serviceOwnerRate;
-private String rentingConfigId;
-private String rentingType;
-private String proxySeparateRate;
-private String rentingFormula;
+    private String propertySeparateRate;
+    private String servicePrice;
+    private String adminSeparateRate;
+    private String serviceOwnerRate;
+    private String rentingConfigId;
+    private String rentingType;
+    private String rentingTypeName;
+    private String proxySeparateRate;
+    private String rentingFormula;
+    private String rentingFormulaName;
 
 
     private Date createTime;
@@ -33,55 +36,72 @@ private String rentingFormula;
     public String getServiceTenantRate() {
         return serviceTenantRate;
     }
-public void setServiceTenantRate(String serviceTenantRate) {
+
+    public void setServiceTenantRate(String serviceTenantRate) {
         this.serviceTenantRate = serviceTenantRate;
     }
-public String getPropertySeparateRate() {
+
+    public String getPropertySeparateRate() {
         return propertySeparateRate;
     }
-public void setPropertySeparateRate(String propertySeparateRate) {
+
+    public void setPropertySeparateRate(String propertySeparateRate) {
         this.propertySeparateRate = propertySeparateRate;
     }
-public String getServicePrice() {
+
+    public String getServicePrice() {
         return servicePrice;
     }
-public void setServicePrice(String servicePrice) {
+
+    public void setServicePrice(String servicePrice) {
         this.servicePrice = servicePrice;
     }
-public String getAdminSeparateRate() {
+
+    public String getAdminSeparateRate() {
         return adminSeparateRate;
     }
-public void setAdminSeparateRate(String adminSeparateRate) {
+
+    public void setAdminSeparateRate(String adminSeparateRate) {
         this.adminSeparateRate = adminSeparateRate;
     }
-public String getServiceOwnerRate() {
+
+    public String getServiceOwnerRate() {
         return serviceOwnerRate;
     }
-public void setServiceOwnerRate(String serviceOwnerRate) {
+
+    public void setServiceOwnerRate(String serviceOwnerRate) {
         this.serviceOwnerRate = serviceOwnerRate;
     }
-public String getRentingConfigId() {
+
+    public String getRentingConfigId() {
         return rentingConfigId;
     }
-public void setRentingConfigId(String rentingConfigId) {
+
+    public void setRentingConfigId(String rentingConfigId) {
         this.rentingConfigId = rentingConfigId;
     }
-public String getRentingType() {
+
+    public String getRentingType() {
         return rentingType;
     }
-public void setRentingType(String rentingType) {
+
+    public void setRentingType(String rentingType) {
         this.rentingType = rentingType;
     }
-public String getProxySeparateRate() {
+
+    public String getProxySeparateRate() {
         return proxySeparateRate;
     }
-public void setProxySeparateRate(String proxySeparateRate) {
+
+    public void setProxySeparateRate(String proxySeparateRate) {
         this.proxySeparateRate = proxySeparateRate;
     }
-public String getRentingFormula() {
+
+    public String getRentingFormula() {
         return rentingFormula;
     }
-public void setRentingFormula(String rentingFormula) {
+
+    public void setRentingFormula(String rentingFormula) {
         this.rentingFormula = rentingFormula;
     }
 
@@ -100,5 +120,22 @@ public void setRentingFormula(String rentingFormula) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+
+    public String getRentingTypeName() {
+        return rentingTypeName;
+    }
+
+    public void setRentingTypeName(String rentingTypeName) {
+        this.rentingTypeName = rentingTypeName;
+    }
+
+    public String getRentingFormulaName() {
+        return rentingFormulaName;
+    }
+
+    public void setRentingFormulaName(String rentingFormulaName) {
+        this.rentingFormulaName = rentingFormulaName;
     }
 }
