@@ -1,0 +1,34 @@
+{
+  "autoMove": true,
+  "id": "valueId",
+  "name": "attrValue",
+  "desc": "属性值",
+  "shareParam": "valueId",
+  "shareColumn": "value_id",
+  "shareName": "common",
+  "tableName": "attr_value",
+  "param": {
+    "valueId": "value_id",
+    "specCd": "spec_cd",
+    "value": "value",
+    "valueName": "value_name",
+    "valueShow": "value_show",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "specCd",
+      "msg": "规格ID不能为空"
+    },
+    {
+      "code": "value",
+      "msg": "值不能为空"
+    },{
+      "code": "valueName",
+      "msg": "值名称不能为空"
+    },{
+      "code": "valueShow",
+      "msg": "是否显示不能为空"
+    }
+  ]
+}

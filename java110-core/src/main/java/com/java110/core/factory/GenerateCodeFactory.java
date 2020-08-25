@@ -136,6 +136,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_settingId = "78";
     public static final String CODE_PREFIX_typeUserId = "79";
     public static final String CODE_PREFIX_appraiseId = "80";
+    public static final String CODE_PREFIX_rentingConfigId = "81";
 
 
 
