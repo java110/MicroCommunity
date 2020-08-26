@@ -92,7 +92,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
     public void updateFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         PayFeePo payFeePo = BeanConvertUtil.covertBean(paramInJson, PayFeePo.class);
 
-        super.update(dataFlowContext,payFeePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
+        super.update(dataFlowContext, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
     }
 
     /**
@@ -123,7 +123,20 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
 
+
         feeDto = feeDtos.get(0);
+        businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        Date endTime = feeDto.getEndTime();
+        Calendar endCalender = Calendar.getInstance();
+        endCalender.setTime(endTime);
+        int hours = 0;
+        if ("-101".equals(paramInJson.getString("cycles"))) {
+            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
+            endCalender.add(Calendar.HOUR, hours);
+        } else {
+            endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+        }
+        businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         paramInJson.put("feeInfo", feeDto);
 
         BigDecimal feePrice = new BigDecimal("0.00");
