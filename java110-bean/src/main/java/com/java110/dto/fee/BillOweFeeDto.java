@@ -32,6 +32,7 @@ public class BillOweFeeDto extends PageDto implements Serializable {
     private String state;
     private String createTime;
     private String[] ownerIds;
+    private String deadlineTime;
 
 
     public String getOweId() {
@@ -152,5 +153,13 @@ public class BillOweFeeDto extends PageDto implements Serializable {
 
     public void setOwnerIds(String[] ownerIds) {
         this.ownerIds = ownerIds;
+    }
+
+    public String getDeadlineTime() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(String deadlineTime) {
+        this.deadlineTime = deadlineTime;
     }
 }

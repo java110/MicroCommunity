@@ -140,7 +140,7 @@
         computingFormula,
         pfc.bill_type billType,t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name
-        billTypeName,pfa.value importFeeName
+        billTypeName,pfa.value importFeeName,ifd.end_time importFeeEndTime
         from pay_fee t
         INNER join pay_fee_config pfc on t.fee_type_cd = pfc.fee_type_cd and t.config_id = pfc.config_id and
         pfc.status_cd = '0'
@@ -152,6 +152,7 @@
         left join t_dict td4 on pfc.bill_type = td4.status_cd and td4.table_name = 'pay_fee_config' and
         td4.table_columns = 'bill_type'
         LEFT JOIN pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002' and pfa.status_cd = '0'
+        left join import_fee_detail ifd on t.fee_id = ifd.fee_id and ifd.status_cd = '0' and t.fee_flag = '2006012'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}

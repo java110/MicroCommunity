@@ -75,6 +75,7 @@ public class FeeDto extends PageDto implements Serializable {
 
     private Date createTime;
 
+
     private String statusCd = "0";
 
     /**
@@ -85,6 +86,12 @@ public class FeeDto extends PageDto implements Serializable {
      * 费用项结束时间
      */
     private Date configEndTime;
+
+    private Date deadlineTime;
+
+    private Date importFeeEndTime;
+
+
 
 
     public String getAmount() {
@@ -423,5 +430,21 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setOwnerTel(String ownerTel) {
         this.ownerTel = ownerTel;
+    }
+
+    public Date getDeadlineTime() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(Date deadlineTime) {
+        this.deadlineTime = deadlineTime;
+    }
+
+    public Date getImportFeeEndTime() {
+        return importFeeEndTime;
+    }
+
+    public void setImportFeeEndTime(Date importFeeEndTime) {
+        this.importFeeEndTime = importFeeEndTime;
     }
 }

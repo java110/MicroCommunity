@@ -25,9 +25,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ClassName GenerateOwnerBillTemplate
@@ -198,34 +196,21 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         // 目标到期时间 - 到期时间 = 欠费月份
         // 月份 * 每月单价 = 欠费金额
 
+        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
+
         //当前时间
         Date billEndTime = DateUtil.getCurrentDate();
-        //开始时间
-        Date startDate = feeDto.getStartTime();
-        //到期时间
-        Date endDate = feeDto.getEndTime();
+
         //缴费周期
         long paymentCycle = Long.parseLong(feeConfigDto.getPaymentCycle());
-        // 当前时间 - 开始时间  = 月份
-        double mulMonth = dayCompare(startDate, billEndTime);
-        // 月份/ 周期 = 轮数（向上取整）
-        double round = 0.0;
-        if ("1200".equals(feeConfigDto.getPaymentCd())) { // 预付费
-            round = Math.floor(mulMonth / paymentCycle) + 1;
-        } else { //后付费
-            round = Math.floor(mulMonth / paymentCycle);
-        }
-        // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-        Date targetEndDate = getTargetEndTime(round * paymentCycle * 30, startDate);
+
 
         //说明没有欠费
-        if (endDate.getTime() > targetEndDate.getTime()) {
+        if (oweMonth <= 0.0) {
             return;
         }
-
-        // 目标到期时间 - 到期时间 = 欠费月份
-        double oweMonth = dayCompare(endDate, targetEndDate);
-
 
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
             computeFeePriceByRoom(feeDto);
@@ -255,7 +240,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         billOweFeeDto.setCommunityId(feeDto.getCommunityId());
         billOweFeeDto.setPayerObjType(feeDto.getPayerObjType());
         billOweFeeDto.setState("1000");
-
+        billOweFeeDto.setDeadlineTime(DateUtil.getFormatTimeString(targetEndDate, DateUtil.DATE_FORMATE_STRING_A));
         if ("3333".equals(feeDto.getPayerObjType())) {
             getRoomInfo(billOweFeeDto, feeDto);
         } else {
@@ -293,10 +278,64 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
                 curReceipts = recAmount.add(curReceipts);
             }
         }
-
         billDto.setReceipts(curReceipts.doubleValue() + "");
+    }
 
+    private Map getTargetEndDateAndOweMonth(FeeDto feeDto) {
+        Date targetEndDate = null;
+        double oweMonth = 0.0;
 
+        Map<String, Object> targetEndDateAndOweMonth = new HashMap<>();
+
+        if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            targetEndDate = feeDto.getEndTime();
+            targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+            targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+            return targetEndDateAndOweMonth;
+        }
+        if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+            if (feeDto.getImportFeeEndTime() == null) {
+                targetEndDate = feeDto.getConfigEndTime();
+            } else {
+                targetEndDate = feeDto.getImportFeeEndTime();
+            }
+            //判断当前费用是不是导入费用
+            oweMonth = 1.0;
+
+        } else {
+            //当前时间
+            Date billEndTime = DateUtil.getCurrentDate();
+            //开始时间
+            Date startDate = feeDto.getStartTime();
+            //到期时间
+            Date endDate = feeDto.getEndTime();
+            //缴费周期
+            long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
+            // 当前时间 - 开始时间  = 月份
+            double mulMonth = dayCompare(startDate, billEndTime);
+            // 月份/ 周期 = 轮数（向上取整）
+            double round = 0.0;
+            if ("1200".equals(feeDto.getPaymentCd())) { // 预付费
+                round = Math.floor(mulMonth / paymentCycle) + 1;
+            } else { //后付费
+                round = Math.floor(mulMonth / paymentCycle);
+            }
+            // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
+            targetEndDate = getTargetEndTime(round * paymentCycle * 30, startDate);
+            //费用 快结束了
+            if (feeDto.getConfigEndTime().getTime() < targetEndDate.getTime()) {
+                targetEndDate = feeDto.getConfigEndTime();
+            }
+            //说明没有欠费
+            if (endDate.getTime() < targetEndDate.getTime()) {
+                // 目标到期时间 - 到期时间 = 欠费月份
+                oweMonth = dayCompare(endDate, targetEndDate);
+            }
+        }
+
+        targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+        targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+        return targetEndDateAndOweMonth;
     }
 
     private Date getTargetEndTime(double v, Date startDate) {

@@ -39,6 +39,9 @@ public class ApiFeeDataVo implements Serializable {
     private String paymentCd;
 
     private String paymentCycle;
+    private String computingFormula;
+    private String deadlineTime;
+    private String amountOwed;
     public String getAmount() {
         return amount;
     }
@@ -213,5 +216,29 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setAdditionalAmount(String additionalAmount) {
         this.additionalAmount = additionalAmount;
+    }
+
+    public String getComputingFormula() {
+        return computingFormula;
+    }
+
+    public void setComputingFormula(String computingFormula) {
+        this.computingFormula = computingFormula;
+    }
+
+    public String getDeadlineTime() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(String deadlineTime) {
+        this.deadlineTime = deadlineTime;
+    }
+
+    public String getAmountOwed() {
+        return amountOwed;
+    }
+
+    public void setAmountOwed(String amountOwed) {
+        this.amountOwed = amountOwed;
     }
 }
