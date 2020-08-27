@@ -281,6 +281,18 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
         feeDto = feeDtos.get(0);
         paramInJson.put("feeInfo", feeDto);
+        businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        Date endTime = feeDto.getEndTime();
+        Calendar endCalender = Calendar.getInstance();
+        endCalender.setTime(endTime);
+        int hours = 0;
+        if ("-101".equals(paramInJson.getString("cycles"))) {
+            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
+            endCalender.add(Calendar.HOUR, hours);
+        } else {
+            endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+        }
+        businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
 
         BigDecimal feePrice = new BigDecimal("0.00");
 
