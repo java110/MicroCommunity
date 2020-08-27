@@ -1,58 +1,28 @@
 {
   "autoMove": true,
-  "id": "rentingId",
-  "name": "rentingPool",
-  "desc": "房屋出租",
-  "shareParam": "rentingId",
-  "shareColumn": "renting_id",
+  "id": "attrId",
+  "name": "rentingPoolAttr",
+  "desc": "出租房屋属性",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
   "shareName": "user",
-  "tableName": "renting_pool",
+  "tableName": "renting_pool_attr",
   "param": {
     "rentingId": "renting_id",
-    "rentingTitle": "renting_title",
-    "roomId": "room_id",
-    "communityId": "community_id",
-    "price": "price",
-    "paymentType": "payment_type",
-    "checkInDate": "check_in_date",
-    "rentingConfigId": "renting_config_id",
-    "rentingDesc": "renting_desc",
-    "state": "state",
-    "ownerName": "owner_name",
-    "ownerTel": "owner_tel",
-    "longitude": "longitude",
-    "latitude": "latitude",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
+    "value": "value",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "rentingTitle",
-      "msg": "租户名称不能为空"
+      "code": "rentingId",
+      "msg": "出租房屋ID不能为空"
     },
     {
-      "code": "roomId",
-      "msg": "房屋ID不能为空"
-    },{
-      "code": "communityId",
-      "msg": "小区ID不能为空"
-    },{
-      "code": "price",
-      "msg": "价格不能为空"
-    },{
-      "code": "paymentType",
-      "msg": "付费方式不能为空"
-    },{
-      "code": "checkInDate",
-      "msg": "入住时间不能为空"
-    },{
-      "code": "rentingConfigId",
-      "msg": "租户配置不能为空"
-    },{
-      "code": "ownerName",
-      "msg": "业主名称不能为空"
-    },{
-      "code": "ownerTel",
-      "msg": "业主手机号不能为空"
+      "code": "specCd",
+      "msg": "用户规格不能为空"
     }
   ]
 }
+

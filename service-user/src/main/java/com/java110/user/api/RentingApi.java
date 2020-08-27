@@ -3,8 +3,10 @@ package com.java110.user.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.rentingConfig.RentingConfigDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
+import com.java110.dto.rentingPoolAttr.RentingPoolAttrDto;
 import com.java110.po.rentingConfig.RentingConfigPo;
 import com.java110.po.rentingPool.RentingPoolPo;
+import com.java110.po.rentingPoolAttr.RentingPoolAttrPo;
 import com.java110.user.bmo.rentingConfig.IDeleteRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.IGetRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.ISaveRentingConfigBMO;
@@ -13,6 +15,10 @@ import com.java110.user.bmo.rentingPool.IDeleteRentingPoolBMO;
 import com.java110.user.bmo.rentingPool.IGetRentingPoolBMO;
 import com.java110.user.bmo.rentingPool.ISaveRentingPoolBMO;
 import com.java110.user.bmo.rentingPool.IUpdateRentingPoolBMO;
+import com.java110.user.bmo.rentingPoolAttr.IDeleteRentingPoolAttrBMO;
+import com.java110.user.bmo.rentingPoolAttr.IGetRentingPoolAttrBMO;
+import com.java110.user.bmo.rentingPoolAttr.ISaveRentingPoolAttrBMO;
+import com.java110.user.bmo.rentingPoolAttr.IUpdateRentingPoolAttrBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +50,16 @@ public class RentingApi {
 
     @Autowired
     private IGetRentingPoolBMO getRentingPoolBMOImpl;
+
+    @Autowired
+    private ISaveRentingPoolAttrBMO saveRentingPoolAttrBMOImpl;
+    @Autowired
+    private IUpdateRentingPoolAttrBMO updateRentingPoolAttrBMOImpl;
+    @Autowired
+    private IDeleteRentingPoolAttrBMO deleteRentingPoolAttrBMOImpl;
+
+    @Autowired
+    private IGetRentingPoolAttrBMO getRentingPoolAttrBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -222,5 +238,83 @@ public class RentingApi {
         rentingPoolDto.setRow(row);
         rentingPoolDto.setCommunityId(communityId);
         return getRentingPoolBMOImpl.get(rentingPoolDto);
+    }
+
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /renting/saveRentingPoolAttr
+     * @path /app/renting/saveRentingPoolAttr
+     */
+    @RequestMapping(value = "/saveRentingPoolAttr", method = RequestMethod.POST)
+    public ResponseEntity<String> saveRentingPoolAttr(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "rentingId", "请求报文中未包含rentingId");
+        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+
+
+        RentingPoolAttrPo rentingPoolAttrPo = BeanConvertUtil.covertBean(reqJson, RentingPoolAttrPo.class);
+        return saveRentingPoolAttrBMOImpl.save(rentingPoolAttrPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /renting/updateRentingPoolAttr
+     * @path /app/renting/updateRentingPoolAttr
+     */
+    @RequestMapping(value = "/updateRentingPoolAttr", method = RequestMethod.POST)
+    public ResponseEntity<String> updateRentingPoolAttr(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "rentingId", "请求报文中未包含rentingId");
+        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        Assert.hasKeyAndValue(reqJson, "attrId", "attrId不能为空");
+
+
+        RentingPoolAttrPo rentingPoolAttrPo = BeanConvertUtil.covertBean(reqJson, RentingPoolAttrPo.class);
+        return updateRentingPoolAttrBMOImpl.update(rentingPoolAttrPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /renting/deleteRentingPoolAttr
+     * @path /app/renting/deleteRentingPoolAttr
+     */
+    @RequestMapping(value = "/deleteRentingPoolAttr", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteRentingPoolAttr(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "attrId", "attrId不能为空");
+
+
+        RentingPoolAttrPo rentingPoolAttrPo = BeanConvertUtil.covertBean(reqJson, RentingPoolAttrPo.class);
+        return deleteRentingPoolAttrBMOImpl.delete(rentingPoolAttrPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /renting/queryRentingPoolAttr
+     * @path /app/renting/queryRentingPoolAttr
+     */
+    @RequestMapping(value = "/queryRentingPoolAttr", method = RequestMethod.GET)
+    public ResponseEntity<String> queryRentingPoolAttr(@RequestParam(value = "communityId") String communityId,
+                                                       @RequestParam(value = "page") int page,
+                                                       @RequestParam(value = "row") int row) {
+        RentingPoolAttrDto rentingPoolAttrDto = new RentingPoolAttrDto();
+        rentingPoolAttrDto.setPage(page);
+        rentingPoolAttrDto.setRow(row);
+        rentingPoolAttrDto.setCommunityId(communityId);
+        return getRentingPoolAttrBMOImpl.get(rentingPoolAttrDto);
     }
 }
