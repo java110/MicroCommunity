@@ -171,7 +171,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
                 round = Math.floor(mulMonth / paymentCycle);
             }
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-            targetEndDate = getTargetEndTime(round * paymentCycle * 30, startDate);
+            targetEndDate = getTargetEndTime(round * paymentCycle, startDate);
             //费用 快结束了
             if (feeDto.getConfigEndTime().getTime() < targetEndDate.getTime()) {
                 targetEndDate = feeDto.getConfigEndTime();
@@ -293,7 +293,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
     private Date getTargetEndTime(double v, Date startDate) {
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(startDate);
-        endDate.add(Calendar.DATE, (int) v);
+        endDate.add(Calendar.MONTH, (int) v);
         return endDate.getTime();
     }
 }
