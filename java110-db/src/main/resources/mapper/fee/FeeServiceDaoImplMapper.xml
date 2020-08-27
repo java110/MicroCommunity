@@ -460,7 +460,8 @@
         t.payer_obj_type payerObjType,
         t.community_id communityId,
         t.state,
-        t.create_time createTime
+        t.create_time createTime,
+        t.deadline_time deadlineTime
         from bill_owe_fee t
         where 1 =1
         <if test="oweId !=null and oweId != ''">

@@ -1,6 +1,7 @@
 package com.java110.dto.rentingPool;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,19 +16,19 @@ import java.util.Date;
 public class RentingPoolDto extends PageDto implements Serializable {
 
     private String latitude;
-private String ownerTel;
-private String rentingConfigId;
-private String rentingDesc;
-private String rentingTitle;
-private String checkInDate;
-private String rentingId;
-private String roomId;
-private String paymentType;
-private String ownerName;
-private String price;
-private String state;
-private String communityId;
-private String longitude;
+    private String ownerTel;
+    private String rentingConfigId;
+    private String rentingDesc;
+    private String rentingTitle;
+    private String checkInDate;
+    private String rentingId;
+    private String roomId;
+    private String paymentType;
+    private String ownerName;
+    private String price;
+    private String state;
+    private String communityId;
+    private String longitude;
 
 
     private Date createTime;
@@ -38,85 +39,112 @@ private String longitude;
     public String getLatitude() {
         return latitude;
     }
-public void setLatitude(String latitude) {
+
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
-public String getOwnerTel() {
+
+    public String getOwnerTel() {
         return ownerTel;
     }
-public void setOwnerTel(String ownerTel) {
+
+    public void setOwnerTel(String ownerTel) {
         this.ownerTel = ownerTel;
     }
-public String getRentingConfigId() {
+
+    public String getRentingConfigId() {
         return rentingConfigId;
     }
-public void setRentingConfigId(String rentingConfigId) {
+
+    public void setRentingConfigId(String rentingConfigId) {
         this.rentingConfigId = rentingConfigId;
     }
-public String getRentingDesc() {
+
+    public String getRentingDesc() {
         return rentingDesc;
     }
-public void setRentingDesc(String rentingDesc) {
+
+    public void setRentingDesc(String rentingDesc) {
         this.rentingDesc = rentingDesc;
     }
-public String getRentingTitle() {
+
+    public String getRentingTitle() {
         return rentingTitle;
     }
-public void setRentingTitle(String rentingTitle) {
+
+    public void setRentingTitle(String rentingTitle) {
         this.rentingTitle = rentingTitle;
     }
-public String getCheckInDate() {
+
+    public String getCheckInDate() {
         return checkInDate;
     }
-public void setCheckInDate(String checkInDate) {
+
+    public void setCheckInDate(String checkInDate) {
         this.checkInDate = checkInDate;
     }
-public String getRentingId() {
+
+    public String getRentingId() {
         return rentingId;
     }
-public void setRentingId(String rentingId) {
+
+    public void setRentingId(String rentingId) {
         this.rentingId = rentingId;
     }
-public String getRoomId() {
+
+    public String getRoomId() {
         return roomId;
     }
-public void setRoomId(String roomId) {
+
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
-public String getPaymentType() {
+
+    public String getPaymentType() {
         return paymentType;
     }
-public void setPaymentType(String paymentType) {
+
+    public void setPaymentType(String paymentType) {
         this.paymentType = paymentType;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getPrice() {
+
+    public String getPrice() {
         return price;
     }
-public void setPrice(String price) {
+
+    public void setPrice(String price) {
         this.price = price;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getLongitude() {
+
+    public String getLongitude() {
         return longitude;
     }
-public void setLongitude(String longitude) {
+
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
