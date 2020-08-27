@@ -103,7 +103,7 @@
       "limit":"maxLength",
       "limitParam":"500",
       "limitErrInfo":"备注格式错误",
-      "show": true
+      "show": false
     },
     {
       "code": "ownerName",
