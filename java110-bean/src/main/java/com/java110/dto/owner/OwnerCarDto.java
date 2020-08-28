@@ -33,6 +33,15 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String idCard;
     private String link;
 
+    private Date startTime;
+    private Date endTime;
+    private String state;
+    private String stateName;
+
+    private String areaNum;
+
+    private String num;
+
 
     private Date createTime;
 
@@ -190,5 +199,53 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getAreaNum() {
+        return areaNum;
+    }
+
+    public void setAreaNum(String areaNum) {
+        this.areaNum = areaNum;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

@@ -278,17 +278,20 @@ public class ListFeeListener extends AbstractServiceApiListener {
         from.setTime(fromDate);
         Calendar to = Calendar.getInstance();
         to.setTime(toDate);
+        int result = to.get(Calendar.MONTH) - from.get(Calendar.MONTH);
+        Calendar newFrom = Calendar.getInstance();
+        newFrom.setTime(fromDate);
+        newFrom.add(Calendar.MONTH, result);
 
-        long t1 = from.getTimeInMillis();
+        long t1 = newFrom.getTimeInMillis();
         long t2 = to.getTimeInMillis();
         long days = (t2 - t1) / (24 * 60 * 60 * 1000);
 
         BigDecimal tmpDays = new BigDecimal(days);
         BigDecimal monthDay = new BigDecimal(30);
 
-        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
+        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue() + result;
     }
-
 
     private Date getTargetEndTime(double v, Date startDate) {
         Calendar endDate = Calendar.getInstance();

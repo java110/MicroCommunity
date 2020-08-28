@@ -462,6 +462,12 @@ public class ServiceCodeConstant {
     //查询业主
     public static final String SERVICE_CODE_QUERY_OWNER = "owner.queryOwners";
 
+    //查询业主车辆
+    public static final String SERVICE_CODE_QUERY_OWNER_CAR = "owner.queryOwnerCars";
+
+    //删除业主车辆
+    public static final String SERVICE_CODE_DELETE_OWNER_CAR = "owner.deleteOwnerCars";
+
     //查询业主成员
     public static final String SERVICE_CODE_QUERY_OWNER_MEMBER = "owner.queryOwnerMembers";
 

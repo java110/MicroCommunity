@@ -20,6 +20,7 @@ public class FeeDto extends PageDto implements Serializable {
 
     public static final String PAYER_OBJ_TYPE_ROOM = "3333"; //房屋 6666 是车位
     public static final String PAYER_OBJ_TYPE_PARKING_SPACE = "6666";//是车位
+    public static final String PAYER_OBJ_TYPE_CAR = "6666";//是车位
 
     public static final String FEE_FLAG_ONCE = "2006012";
 
