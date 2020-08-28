@@ -279,6 +279,9 @@ public class ListFeeListener extends AbstractServiceApiListener {
         Calendar to = Calendar.getInstance();
         to.setTime(toDate);
         int result = to.get(Calendar.MONTH) - from.get(Calendar.MONTH);
+        int month = (to.get(Calendar.YEAR) - from.get(Calendar.YEAR)) * 12;
+
+        result = result + month;
         Calendar newFrom = Calendar.getInstance();
         newFrom.setTime(fromDate);
         newFrom.add(Calendar.MONTH, result);

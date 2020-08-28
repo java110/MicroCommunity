@@ -321,7 +321,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
                 round = Math.floor(mulMonth / paymentCycle);
             }
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-            targetEndDate = getTargetEndTime(round * paymentCycle , startDate);
+            targetEndDate = getTargetEndTime(round * paymentCycle, startDate);
             //费用 快结束了
             if (feeDto.getConfigEndTime().getTime() < targetEndDate.getTime()) {
                 targetEndDate = feeDto.getConfigEndTime();
@@ -571,16 +571,24 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         from.setTime(fromDate);
         Calendar to = Calendar.getInstance();
         to.setTime(toDate);
+        int result = to.get(Calendar.MONTH) - from.get(Calendar.MONTH);
+        int month = (to.get(Calendar.YEAR) - from.get(Calendar.YEAR)) * 12;
 
-        long t1 = from.getTimeInMillis();
+        result = result + month;
+        Calendar newFrom = Calendar.getInstance();
+        newFrom.setTime(fromDate);
+        newFrom.add(Calendar.MONTH, result);
+
+        long t1 = newFrom.getTimeInMillis();
         long t2 = to.getTimeInMillis();
         long days = (t2 - t1) / (24 * 60 * 60 * 1000);
 
         BigDecimal tmpDays = new BigDecimal(days);
         BigDecimal monthDay = new BigDecimal(30);
 
-        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
+        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue() + result;
     }
+
 
 
 }
