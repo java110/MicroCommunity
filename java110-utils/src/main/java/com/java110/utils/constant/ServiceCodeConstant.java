@@ -471,6 +471,9 @@ public class ServiceCodeConstant {
     //添加业主车辆
     public static final String SERVICE_CODE_SAVE_OWNER_CAR = "owner.saveOwnerCar";
 
+    //添加业主车辆
+    public static final String SERVICE_CODE_EDIT_OWNER_CAR = "owner.editOwnerCar";
+
     //查询业主成员
     public static final String SERVICE_CODE_QUERY_OWNER_MEMBER = "owner.queryOwnerMembers";
 
