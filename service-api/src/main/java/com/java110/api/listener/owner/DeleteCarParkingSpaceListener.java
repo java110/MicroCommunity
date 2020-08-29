@@ -1,12 +1,14 @@
 package com.java110.api.listener.owner;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
@@ -43,6 +45,9 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingSpaceBMO parkingSpaceBMOImpl;
 
 
     @Override
@@ -117,6 +122,9 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
         }
         super.update(context, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR);
 
+        reqJson.put("carNumType", ParkingSpaceDto.STATE_FREE);
+        reqJson.put("psId", ownerCarDto.getPsId());
+        parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
     }
 
 
