@@ -128,7 +128,8 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             payFeePo.setFeeTypeCd(feeTypeCd);
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setAmount(importRoomFee.getAmount());
-            payFeePo.setStartTime(importRoomFee.getStartTime());
+            //payFeePo.setStartTime(importRoomFee.getStartTime());
+            payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
             payFeePos.add(payFeePo);
 
