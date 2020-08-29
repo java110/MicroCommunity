@@ -469,7 +469,7 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_OWNER_CAR = "owner.deleteOwnerCars";
 
     //添加业主车辆
-    public static final String SERVICE_CODE_SAVE_OWNER_CAR = "owner.saveOwnerCars";
+    public static final String SERVICE_CODE_SAVE_OWNER_CAR = "owner.saveOwnerCar";
 
     //查询业主成员
     public static final String SERVICE_CODE_QUERY_OWNER_MEMBER = "owner.queryOwnerMembers";
