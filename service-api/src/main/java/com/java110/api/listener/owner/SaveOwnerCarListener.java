@@ -53,6 +53,21 @@ public class SaveOwnerCarListener extends AbstractServiceApiPlusListener {
     }
 
 
+    /**
+     * {"communityId":"7020181217000001",
+     * "data":[
+     * {
+     * "flowComponent":"viewSelectParkingSpace","parkingSpaceFlag":"","num":"lbwnb","area":"11.00","state":"F",
+     * "stateName":"空闲 ","remark":"","areaNum":"3","psId":"792020082657940123","typeCd":"1001"},
+     * {"flowComponent":"viewOwnerInfo","viewOwnerFlag":"","ownerId":"772020082849180061","name":"王鹏飞","age":"28",
+     * "sex":"0","userName":"wuxw","remark":"","idCard":"340803199211182134","link":"17721036947","ownerPhoto":"/img/noPhoto.jpg",
+     * "showCallBackButton":"false"},
+     * {"flowComponent":"addCar","carNum":"青AGK916","carBrand":"传祺","carType":"9901","carColor":"白色","carRemark":"",
+     * "startTime":"2020-08-29 14:55:04","endTime":"2021-08-29 14:55:04","carNumType":"H","index":2}
+     * ]}
+     * @param event   事件对象
+     * @param reqJson 请求报文数据
+     */
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
@@ -63,39 +78,23 @@ public class SaveOwnerCarListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "carColor", "未包含carColor");
         Assert.jsonObjectHaveKey(reqJson, "psId", "未包含psId");
         Assert.jsonObjectHaveKey(reqJson, "storeId", "未包含storeId");
-        Assert.jsonObjectHaveKey(reqJson, "receivedAmount", "未包含receivedAmount");
-        Assert.jsonObjectHaveKey(reqJson, "sellOrHire", "未包含sellOrHire");
+        Assert.jsonObjectHaveKey(reqJson, "carNumType", "未包含carNumType");
 
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(reqJson.getString("psId"), "psId不能为空");
-        Assert.isMoney(reqJson.getString("receivedAmount"), "不是有效的实收金额");
 
-        if (!"H".equals(reqJson.getString("sellOrHire"))
-                && !"S".equals(reqJson.getString("sellOrHire"))) {
+        if (!"H".equals(reqJson.getString("carNumType"))
+                && !"S".equals(reqJson.getString("carNumType"))) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "请求报文中sellOrFire值错误 ，出售为S 出租为H");
         }
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        String feeId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId);
-        reqJson.put("feeId", feeId);
-
         //添加小区楼
         parkingSpaceBMOImpl.sellParkingSpace(reqJson, context);
-
         parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
-
-        //计算 费用信息
-        parkingSpaceBMOImpl.computeFeeInfo(reqJson, context);
-        //添加物业费用信息
-        parkingSpaceBMOImpl.addParkingSpaceFee(reqJson, context);
-
-        parkingSpaceBMOImpl.addFeeDetail(reqJson, context);
-
-
     }
 
 

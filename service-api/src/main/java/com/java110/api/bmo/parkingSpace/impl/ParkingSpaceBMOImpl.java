@@ -214,7 +214,7 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         businessOwnerCar.putAll(paramInJson);
         businessOwnerCar.put("carId", "-1");
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(businessOwnerCar, OwnerCarPo.class);
-        super.delete(dataFlowContext, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
+        super.insert(dataFlowContext, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
     }
 
     /**
@@ -239,9 +239,9 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         JSONObject businessParkingSpace = new JSONObject();
 
         businessParkingSpace.putAll(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
-        businessParkingSpace.put("state", this.isHireParkingSpace(paramInJson) ? "H" : "S");
+        businessParkingSpace.put("state", paramInJson.getString("carNumType"));
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
-        super.delete(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
+        super.update(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
     }
 
 
