@@ -12,6 +12,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,12 @@ public class EditOwnerCarListener extends AbstractServiceApiPlusListener {
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
         Assert.listOnlyOne(ownerCarDtos, "未找到车辆信息");
+
+        String psId = ownerCarDtos.get(0).getPsId();
+
+        if (StringUtil.isEmpty(psId) || "-1".equals(psId)) {
+            throw new IllegalArgumentException("车位已经被释放，不允许修改车辆信息");
+        }
     }
 
     @Override
