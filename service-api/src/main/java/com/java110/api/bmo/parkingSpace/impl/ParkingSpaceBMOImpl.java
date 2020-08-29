@@ -214,6 +214,7 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         businessOwnerCar.putAll(paramInJson);
         businessOwnerCar.put("carId", "-1");
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(businessOwnerCar, OwnerCarPo.class);
+        ownerCarPo.setState(OwnerCarDto.STATE_NORMAL);
         super.insert(dataFlowContext, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
     }
 

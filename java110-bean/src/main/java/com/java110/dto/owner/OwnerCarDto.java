@@ -15,6 +15,10 @@ import java.util.Date;
  **/
 public class OwnerCarDto extends PageDto implements Serializable {
 
+    public static final String STATE_NORMAL = "1001";
+    public static final String STATE_OWE = "2002";
+    public static final String STATE_FINISH = "3003";
+
     private String carColor;
     private String carBrand;
     private String carType;
