@@ -1,16 +1,20 @@
 package com.java110.api.listener.owner;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
@@ -27,6 +31,12 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingSpaceBMO parkingSpaceBMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -47,14 +57,31 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
             }
         }
 
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCarId(reqJson.getString("carId"));
+        ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+        Assert.listOnlyOne(ownerCarDtos, "当前未找到需要删除车辆");
+        reqJson.put("psId", ownerCarDtos.get(0).getPsId());
+
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+
         OwnerCarPo ownerCarPo = new OwnerCarPo();
         ownerCarPo.setCommunityId(reqJson.getString("communityId"));
         ownerCarPo.setCarId(reqJson.getString("carId"));
         super.delete(context, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR);
+
+        if (StringUtil.isEmpty(reqJson.getString("psId"))) {
+            return;
+        }
+        //释放车位
+        reqJson.put("carNumType", "F");//修改为空闲
+        parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
     }
 
     @Override
