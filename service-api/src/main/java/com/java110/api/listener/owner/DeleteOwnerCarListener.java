@@ -8,6 +8,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
@@ -80,7 +81,7 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
             return;
         }
         //释放车位
-        reqJson.put("carNumType", "F");//修改为空闲
+        reqJson.put("carNumType", ParkingSpaceDto.STATE_FREE);//修改为空闲
         parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
     }
 
