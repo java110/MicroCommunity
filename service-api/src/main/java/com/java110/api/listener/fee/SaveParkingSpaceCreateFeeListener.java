@@ -144,9 +144,9 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         }
 
         JSONObject paramOut = new JSONObject();
-        paramOut.put("totalParkingSpace", ownerCarDtos.size());
-        paramOut.put("successParkingSpace", ownerCarDtos.size() - failParkingSpaces);
-        paramOut.put("errorParkingSpace", failParkingSpaces);
+        paramOut.put("totalCar", ownerCarDtos.size());
+        paramOut.put("successCar", ownerCarDtos.size() - failParkingSpaces);
+        paramOut.put("errorCar", failParkingSpaces);
 
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
 

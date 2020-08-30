@@ -7,12 +7,14 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.IImportFeeDetailInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -40,6 +42,9 @@ public class ListFeeListener extends AbstractServiceApiListener {
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -123,7 +128,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
             //一次性费用
             if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
                 computeFeePriceByRoom(feeDto, oweMonth);
-            } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
+            } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
                 computeFeePriceByParkingSpace(feeDto, oweMonth);
             }
 
@@ -159,6 +164,29 @@ public class ListFeeListener extends AbstractServiceApiListener {
             Date startDate = feeDto.getStartTime();
             //到期时间
             Date endDate = feeDto.getEndTime();
+            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+                OwnerCarDto ownerCarDto = new OwnerCarDto();
+                ownerCarDto.setCommunityId(feeDto.getCommunityId());
+                ownerCarDto.setCarId(feeDto.getPayerObjId());
+                List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+                if (ownerCarDtos == null || ownerCarDtos.size() != 1) {
+                    targetEndDateAndOweMonth.put("oweMonth", 0);
+                    targetEndDateAndOweMonth.put("targetEndDate", "");
+                    return targetEndDateAndOweMonth;
+                }
+
+                targetEndDate = ownerCarDtos.get(0).getEndTime();
+                //说明没有欠费
+                if (endDate.getTime() < targetEndDate.getTime()) {
+                    // 目标到期时间 - 到期时间 = 欠费月份
+                    oweMonth = dayCompare(endDate, targetEndDate);
+                }
+                targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+                targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+                return targetEndDateAndOweMonth;
+            }
+
             //缴费周期
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
