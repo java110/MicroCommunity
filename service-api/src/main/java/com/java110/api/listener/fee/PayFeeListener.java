@@ -7,16 +7,19 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.repair.RepairDto;
+import com.java110.entity.center.AppService;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
-import com.java110.dto.repair.RepairDto;
-import com.java110.entity.center.AppService;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.car.OwnerCarPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -64,6 +67,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
 
     @Override
     public String getServiceCode() {
@@ -97,6 +103,28 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         businesses.add(feeBMOImpl.addFeeDetail(paramObj, dataFlowContext));
         businesses.add(feeBMOImpl.modifyFee(paramObj, dataFlowContext));
 
+
+        //为停车费单独处理
+        if (paramObj.containsKey("carPayerObjType") && FeeDto.PAYER_OBJ_TYPE_CAR.equals(paramObj.getString("carPayerObjType"))) {
+            Date feeEndTime = (Date) paramObj.get("carFeeEndTime");
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setCommunityId(paramObj.getString("communityId"));
+            ownerCarDto.setCarId(paramObj.getString("carPayerObjId"));
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            //车位费用续租
+            if (ownerCarDtos != null && ownerCarDtos.size() == 1 && ownerCarDtos.get(0).getEndTime().getTime() < feeEndTime.getTime()) {
+                JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+                business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR);
+                business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+                business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+                OwnerCarPo ownerCarPo = new OwnerCarPo();
+                ownerCarPo.setCarId(ownerCarDtos.get(0).getCarId());
+                ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
+                business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(OwnerCarPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(ownerCarPo));
+                businesses.add(business);
+            }
+        }
+
         //判断是否有派单属性ID
         FeeAttrDto feeAttrDto = new FeeAttrDto();
         feeAttrDto.setCommunityId(paramObj.getString("communityId"));
@@ -108,7 +136,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
             JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
             business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
-            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
             business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
@@ -171,7 +199,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
 
                 Date newDate = DateUtil.stepMonth(endTime, paramInObj.getInteger("cycles") - 1);
 
-                if (newDate.getTime() > configEndTime.getTime()){
+                if (newDate.getTime() > configEndTime.getTime()) {
                     throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
                 }
 
