@@ -272,6 +272,18 @@ public class StringUtil {
         }
     }
 
+    public static boolean isInteger(String str) {
+        try {
+            double value = Double.parseDouble(str);
+            if (value == Math.ceil(value)) {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return false;
+    }
 
     /**
      * Description: 获得字符(byte)的实际长度<br>

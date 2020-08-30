@@ -162,7 +162,7 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     if (cycles > 0) {
                         Calendar endCalender = Calendar.getInstance();
                         endCalender.setTime(endTime);
-                        if (StringUtil.isNumber(cyclesStr)) {
+                        if (StringUtil.isInteger(cyclesStr)) {
                             endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
                         } else {
                             int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
