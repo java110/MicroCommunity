@@ -7,11 +7,13 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -47,6 +49,9 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Override
@@ -72,7 +77,7 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         logger.debug("ServiceDataFlowEvent : {}", event);
-        List<ParkingSpaceDto> parkingSpaceDtos = null;
+        List<OwnerCarDto> ownerCarDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
         feeConfigDto.setConfigId(reqJson.getString("configId"));
@@ -81,39 +86,29 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         reqJson.put("feeTypeCd", feeConfigDtos.get(0).getFeeTypeCd());
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         //判断收费范围
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setState(reqJson.containsKey("parkingSpaceState") ? reqJson.getString("parkingSpaceState") : "");
-        if (reqJson.containsKey("parkingSpaceState") && "SH".equals(reqJson.getString("parkingSpaceState"))) {
-            parkingSpaceDto.setState("");
-            parkingSpaceDto.setStates(new String[]{"S", "H"});
-        }
-        if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
-            parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
-            parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
 
+        if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
+            ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+            ownerCarDto.setValid("1");
+            ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         } else if ("2000".equals(reqJson.getString("locationTypeCd"))) {//停车场
             //ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-            parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
-            parkingSpaceDto.setPaId(reqJson.getString("locationObjId"));
-            parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-
-        } else if ("3000".equals(reqJson.getString("locationTypeCd"))) {//停车位
-            //ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-            parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
-            parkingSpaceDto.setPsId(reqJson.getString("locationObjId"));
-            parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+            ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+            ownerCarDto.setCarId(reqJson.getString("locationObjId"));
+            ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         } else {
             throw new IllegalArgumentException("收费范围错误");
         }
 
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
             throw new IllegalArgumentException("未查到需要付费的车位");
         }
 
-        dealParkingSpaceFee(parkingSpaceDtos, context, reqJson, event);
+        dealParkingSpaceFee(ownerCarDtos, context, reqJson, event);
     }
 
-    private void dealParkingSpaceFee(List<ParkingSpaceDto> parkingSpaceDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) {
+    private void dealParkingSpaceFee(List<OwnerCarDto> ownerCarDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) {
 
         AppService service = event.getAppService();
 
@@ -125,11 +120,11 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         ResponseEntity<String> responseEntity = null;
         int failParkingSpaces = 0;
         //添加单元信息
-        for (int parkingSpaceIndex = 0; parkingSpaceIndex < parkingSpaceDtos.size(); parkingSpaceIndex++) {
+        for (int ownerCarIndex = 0; ownerCarIndex < ownerCarDtos.size(); ownerCarIndex++) {
 
-            businesses.add(feeBMOImpl.addFee(parkingSpaceDtos.get(parkingSpaceIndex), reqJson, context));
+            businesses.add(feeBMOImpl.addFee(ownerCarDtos.get(ownerCarIndex), reqJson, context));
 
-            if (parkingSpaceIndex % DEFAULT_ADD_FEE_COUNT == 0 && parkingSpaceIndex != 0) {
+            if (ownerCarIndex % DEFAULT_ADD_FEE_COUNT == 0 && ownerCarIndex != 0) {
 
                 responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
 
@@ -149,8 +144,8 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         }
 
         JSONObject paramOut = new JSONObject();
-        paramOut.put("totalParkingSpace", parkingSpaceDtos.size());
-        paramOut.put("successParkingSpace", parkingSpaceDtos.size() - failParkingSpaces);
+        paramOut.put("totalParkingSpace", ownerCarDtos.size());
+        paramOut.put("successParkingSpace", ownerCarDtos.size() - failParkingSpaces);
         paramOut.put("errorParkingSpace", failParkingSpaces);
 
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);

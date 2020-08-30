@@ -51,6 +51,8 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String valid;
+
 
     public String getCarColor() {
         return carColor;
@@ -251,5 +253,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getValid() {
+        return valid;
+    }
+
+    public void setValid(String valid) {
+        this.valid = valid;
     }
 }

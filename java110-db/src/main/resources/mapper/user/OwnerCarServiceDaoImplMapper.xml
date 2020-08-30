@@ -168,6 +168,9 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="valid == '1'">
+            and t.end_time &gt; now()
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

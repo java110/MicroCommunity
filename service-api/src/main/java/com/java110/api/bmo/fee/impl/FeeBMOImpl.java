@@ -9,6 +9,7 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.common.ICarInoutInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
@@ -534,7 +535,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFee(ParkingSpaceDto parkingSpaceDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public JSONObject addFee(OwnerCarDto ownerCarDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
@@ -550,8 +551,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessUnit.put("communityId", paramInJson.getString("communityId"));
-        businessUnit.put("payerObjId", parkingSpaceDto.getPsId());
-        businessUnit.put("payerObjType", "6666");
+        businessUnit.put("payerObjId", ownerCarDto.getCarId());
+        businessUnit.put("payerObjType", FeeDto.PAYER_OBJ_TYPE_CAR);
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
