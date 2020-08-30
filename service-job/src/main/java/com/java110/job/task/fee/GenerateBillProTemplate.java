@@ -309,6 +309,28 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
             Date startDate = feeDto.getStartTime();
             //到期时间
             Date endDate = feeDto.getEndTime();
+            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+                OwnerCarDto ownerCarDto = new OwnerCarDto();
+                ownerCarDto.setCommunityId(feeDto.getCommunityId());
+                ownerCarDto.setCarId(feeDto.getPayerObjId());
+                List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+                if (ownerCarDtos == null || ownerCarDtos.size() != 1) {
+                    targetEndDateAndOweMonth.put("oweMonth", 0);
+                    targetEndDateAndOweMonth.put("targetEndDate", "");
+                    return targetEndDateAndOweMonth;
+                }
+
+                targetEndDate = ownerCarDtos.get(0).getEndTime();
+                //说明没有欠费
+                if (endDate.getTime() < targetEndDate.getTime()) {
+                    // 目标到期时间 - 到期时间 = 欠费月份
+                    oweMonth = dayCompare(endDate, targetEndDate);
+                }
+                targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+                targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+                return targetEndDateAndOweMonth;
+            }
             //缴费周期
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
@@ -354,25 +376,10 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
      */
     private void getParkingSpaceInfo(BillOweFeeDto billOweFeeDto, FeeDto feeDto) {
 
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setPsId(feeDto.getPayerObjId());
-        parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
-            //车位可能被删除了
-            billOweFeeDto.setOwnerId("1");
-            billOweFeeDto.setOwnerName("未知");
-            billOweFeeDto.setOwnerTel("19999999999");
-            billOweFeeDto.setPayerObjName("未知");
-            return;
-        }
-
-        billOweFeeDto.setPayerObjName(parkingSpaceDtos.get(0).getAreaNum() + "停车场" + parkingSpaceDtos.get(0).getNum() + "车位");
-
 
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setWithOwner(true);
-        ownerCarDto.setPsId(parkingSpaceDtos.get(0).getPsId());
+        ownerCarDto.setCarId(feeDto.getPayerObjId());
         ownerCarDto.setCommunityId(feeDto.getCommunityId());
 
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
@@ -386,6 +393,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
             return;
         }
 
+        billOweFeeDto.setPayerObjName(ownerCarDtos.get(0).getCarNum());
         billOweFeeDto.setOwnerId(ownerCarDtos.get(0).getOwnerId());
         billOweFeeDto.setOwnerName(ownerCarDtos.get(0).getOwnerName());
         billOweFeeDto.setOwnerTel(ownerCarDtos.get(0).getLink());
@@ -504,9 +512,18 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
      * @param feeDto
      */
     private void computeFeePriceByParkingSpace(FeeDto feeDto) {
+
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(feeDto.getCommunityId());
+        ownerCarDto.setCarId(feeDto.getPayerObjId());
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) { //数据有问题
+            return;
+        }
+
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-        parkingSpaceDto.setPsId(feeDto.getPayerObjId());
+        parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
 
         if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
@@ -588,7 +605,6 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
 
         return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue() + result;
     }
-
 
 
 }
