@@ -162,12 +162,7 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     if (cycles > 0) {
                         Calendar endCalender = Calendar.getInstance();
                         endCalender.setTime(endTime);
-                        if (StringUtil.isInteger(cyclesStr)) {
-                            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
-                        } else {
-                            int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
-                            endCalender.add(Calendar.HOUR, hours);
-                        }
+                        endCalender = getTargetEndTime(endCalender, cycles);
                         businessFeeInfo.put("end_time", endCalender.getTime());
                     }
 
@@ -195,6 +190,23 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                 }
             }
         }
+    }
+
+    private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
+        if (StringUtil.isInteger(cycles.toString())) {
+            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
+
+            return endCalender;
+        }
+
+        if(cycles >= 1){
+            endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
+            cycles = cycles - Math.floor(cycles);
+        }
+        int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
+        endCalender.add(Calendar.HOUR, hours);
+
+        return endCalender;
     }
 
     private void returnPayFee(List<Map> businessFeeInfos, List<BusinessDto> businessDtos, DataFlowContext dataFlowContext, Business business, List<BusinessDto> returnPayFeeDtos) {
