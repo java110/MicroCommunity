@@ -548,10 +548,10 @@
     <insert id="insertBillOweFees" parameterType="Map">
         INSERT INTO bill_owe_fee
         (`owe_id`, `bill_id`, `fee_id`, `bill_amount_owed`, `amount_owed`, `fee_end_time`, `owner_id`, `owner_name`,
-        `owner_tel`, `payer_obj_name`, `payer_obj_type`, `community_id`, `state`)
+        `owner_tel`, `payer_obj_name`, `payer_obj_type`, `community_id`, `state`,deadline_time)
         VALUES (#{oweId}, #{billId}, #{feeId}, #{billAmountOwed}, #{amountOwed}, #{feeEndTime}, #{ownerId},
         #{ownerName},
-        #{ownerTel}, #{payerObjName}, #{payerObjType}, #{communityId}, #{state})
+        #{ownerTel}, #{payerObjName}, #{payerObjType}, #{communityId}, #{state},#{deadlineTime})
     </insert>
 
     <update id="updateBillOweFees" parameterType="Map">
