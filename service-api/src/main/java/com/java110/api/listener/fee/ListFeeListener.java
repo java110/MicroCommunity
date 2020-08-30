@@ -129,7 +129,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
             if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
                 computeFeePriceByRoom(feeDto, oweMonth);
             } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
-                computeFeePriceByParkingSpace(feeDto, oweMonth);
+                computeFeePriceByCar(feeDto, oweMonth);
             }
 
             feeDto.setDeadlineTime(targetEndDate);
@@ -216,11 +216,19 @@ public class ListFeeListener extends AbstractServiceApiListener {
         return targetEndDateAndOweMonth;
     }
 
-    private void computeFeePriceByParkingSpace(FeeDto feeDto, double oweMonth) {
+    private void computeFeePriceByCar(FeeDto feeDto, double oweMonth) {
+
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(feeDto.getCommunityId());
+        ownerCarDto.setCarId(feeDto.getPayerObjId());
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) { //数据有问题
+            return;
+        }
 
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-        parkingSpaceDto.setPsId(feeDto.getPayerObjId());
+        parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
 
         if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
