@@ -21,6 +21,7 @@ public class ApiFeeDataVo implements Serializable {
     private String feeId;
     private String userId;
     private String payerObjId;
+    private String payerObjType;
     private String configId;
 
     private String state;
@@ -240,5 +241,13 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setAmountOwed(String amountOwed) {
         this.amountOwed = amountOwed;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
     }
 }
