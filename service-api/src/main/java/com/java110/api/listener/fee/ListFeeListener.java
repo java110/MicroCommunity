@@ -191,11 +191,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
             double mulMonth = 0.0;
-            if(feeDto.getEndTime().getTime()> billEndTime.getTime()){
-                mulMonth = dayCompare(startDate, feeDto.getEndTime());
-            }else{
-                mulMonth = dayCompare(startDate, billEndTime);
-            }
+            mulMonth = dayCompare(startDate, billEndTime);
 
             // 月份/ 周期 = 轮数（向上取整）
             double round = 0.0;
@@ -216,7 +212,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
                 oweMonth = dayCompare(endDate, targetEndDate);
             }
 
-            if(feeDto.getEndTime().getTime() > targetEndDate.getTime()){
+            if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
                 targetEndDate = feeDto.getEndTime();
             }
         }
