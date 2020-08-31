@@ -215,6 +215,10 @@ public class ListFeeListener extends AbstractServiceApiListener {
                 // 目标到期时间 - 到期时间 = 欠费月份
                 oweMonth = dayCompare(endDate, targetEndDate);
             }
+
+            if(feeDto.getEndTime().getTime() > targetEndDate.getTime()){
+                targetEndDate = feeDto.getEndTime();
+            }
         }
 
         targetEndDateAndOweMonth.put("oweMonth", oweMonth);
