@@ -190,7 +190,13 @@ public class ListFeeListener extends AbstractServiceApiListener {
             //缴费周期
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
-            double mulMonth = dayCompare(startDate, billEndTime);
+            double mulMonth = 0.0;
+            if(feeDto.getEndTime().getTime()> billEndTime.getTime()){
+                mulMonth = dayCompare(startDate, feeDto.getEndTime());
+            }else{
+                mulMonth = dayCompare(startDate, billEndTime);
+            }
+
             // 月份/ 周期 = 轮数（向上取整）
             double round = 0.0;
             if ("1200".equals(feeDto.getPaymentCd())) { // 预付费
