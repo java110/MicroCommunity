@@ -63,8 +63,8 @@ public class OwnerCarMachineTranslateBMOImpl implements IOwnerCarMachineTranslat
         machineUserResultDto.setName(ownerCarDto.getCarNum());
         machineUserResultDto.setFaceBase64("");
         machineUserResultDto.setIdNumber("");
-        machineUserResultDto.setStartTime(DateUtil.getFormatTimeString(ownerCarDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
-        machineUserResultDto.setEndTime(DateUtil.getFormatTimeString(ownerCarDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        machineUserResultDto.setStartTime(ownerCarDto.getStartTime().getTime()+"");
+        machineUserResultDto.setEndTime(ownerCarDto.getEndTime().getTime()+"");
 
         machineUserResultDto.setRemarks("HC小区管理系统");
         machineUserResultDto.setReserved(ownerCarDto.getCarId());
