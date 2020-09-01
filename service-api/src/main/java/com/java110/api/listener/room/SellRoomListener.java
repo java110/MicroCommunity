@@ -72,7 +72,7 @@ public class SellRoomListener extends AbstractServiceApiPlusListener {
         roomBMOImpl.updateShellRoom(reqJson, context);
 
         //添加物业费用信息
-        roomBMOImpl.addPropertyFee(reqJson, context);
+        //roomBMOImpl.addPropertyFee(reqJson, context);
     }
 
 
