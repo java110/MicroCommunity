@@ -2,10 +2,7 @@ package com.java110.api.listener.machineTranslate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.machineTranslate.IApplicationKeyMachineTranslateBMO;
-import com.java110.api.bmo.machineTranslate.IOwnerMachineTranslateBMO;
-import com.java110.api.bmo.machineTranslate.IStaffMachineTranslateBMO;
-import com.java110.api.bmo.machineTranslate.IVisitMachineTranslateBMO;
+import com.java110.api.bmo.machineTranslate.*;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
@@ -47,6 +44,7 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
     public static final String TYPE_APPLICATION_KEY = "7788";//申请钥匙
     public static final String TYPE_VISIT = "6677";//访客人脸
     public static final String TYPE_STAFF = "5566";//员工人脸
+    public static final String TYPE_OWNER_CAR = "4455";//业主车辆
 
 
     private static final String DEFAULT_DOMAIN = "YUNLUN";
@@ -85,6 +83,9 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
 
     @Autowired
     private IStaffMachineTranslateBMO staffMachineTranslateBMOImpl;
+
+    @Autowired
+    private IOwnerCarMachineTranslateBMO ownerCarMachineTranslateBMOImpl;
 
     /**
      * @param event   事件对象
@@ -159,6 +160,9 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
                 break;
             case TYPE_STAFF:
                 machineUserResultDto = staffMachineTranslateBMOImpl.getPhotoInfo(reqJson);
+                break;
+            case TYPE_OWNER_CAR:
+                machineUserResultDto = ownerCarMachineTranslateBMOImpl.getInfo(reqJson);
             default:
                 break;
         }
