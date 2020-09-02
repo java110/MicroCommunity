@@ -232,26 +232,28 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("psId", savedParkingSpaceInfo.getString("psId"));
             paramIn.put("storeId", result.getStoreId());
             paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
+            paramIn.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            paramIn.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
             if ("H".equals(parkingSpace.getSellOrHire())) {
                 paramIn.put("cycles", "0");
             }
 
-            String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
-                    ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd + "&isDefault=T";
-            responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+//            String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
+//                    ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
+//            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd + "&isDefault=T";
+//            responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+//
+//            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+//                continue;
+//            }
 
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                continue;
-            }
+//            JSONObject configInfo = JSONObject.parseObject(responseEntity.getBody()).getJSONArray("feeConfigs").getJSONObject(0);
+//            if (!configInfo.containsKey("additionalAmount")) {
+//                continue;
+//            }
 
-            JSONObject configInfo = JSONObject.parseObject(responseEntity.getBody()).getJSONArray("feeConfigs").getJSONObject(0);
-            if (!configInfo.containsKey("additionalAmount")) {
-                continue;
-            }
-
-            paramIn.put("receivedAmount", configInfo.getString("additionalAmount"));
+//            paramIn.put("receivedAmount", configInfo.getString("additionalAmount"));
 
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace";
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);

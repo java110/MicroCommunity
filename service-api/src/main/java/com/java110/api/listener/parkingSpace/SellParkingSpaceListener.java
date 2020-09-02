@@ -63,7 +63,7 @@ public class SellParkingSpaceListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "carColor", "未包含carColor");
         Assert.jsonObjectHaveKey(reqJson, "psId", "未包含psId");
         Assert.jsonObjectHaveKey(reqJson, "storeId", "未包含storeId");
-        Assert.jsonObjectHaveKey(reqJson, "receivedAmount", "未包含receivedAmount");
+        //Assert.jsonObjectHaveKey(reqJson, "receivedAmount", "未包含receivedAmount");
         Assert.jsonObjectHaveKey(reqJson, "sellOrHire", "未包含sellOrHire");
 
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
@@ -88,12 +88,12 @@ public class SellParkingSpaceListener extends AbstractServiceApiPlusListener {
 
         parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
 
-        //计算 费用信息
-        parkingSpaceBMOImpl.computeFeeInfo(reqJson, context);
-        //添加物业费用信息
-        parkingSpaceBMOImpl.addParkingSpaceFee(reqJson, context);
-
-        parkingSpaceBMOImpl.addFeeDetail(reqJson, context);
+//        //计算 费用信息
+//        parkingSpaceBMOImpl.computeFeeInfo(reqJson, context);
+//        //添加物业费用信息
+//        parkingSpaceBMOImpl.addParkingSpaceFee(reqJson, context);
+//
+//        parkingSpaceBMOImpl.addFeeDetail(reqJson, context);
 
 
     }
