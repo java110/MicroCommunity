@@ -53,6 +53,13 @@ public class SellParkingSpaceListener extends AbstractServiceApiPlusListener {
     }
 
 
+    /**
+     * {"carBrand":"大众","carNum":"琼A00D16","psId":"792020090377480065","cycles":"0","ownerId":"772020090241570534",
+     * "storeId":"402020082680880179","userId":"302020082625140085","carColor":"白色","carType":"9901",
+     * "startTime":"2020-09-03 10:24:39","endTime":"2020-09-03 10:24:39","communityId":"702020082605020183","sellOrHire":"H"}
+     * @param event   事件对象
+     * @param reqJson 请求报文数据
+     */
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
@@ -69,7 +76,7 @@ public class SellParkingSpaceListener extends AbstractServiceApiPlusListener {
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(reqJson.getString("psId"), "psId不能为空");
-        Assert.isMoney(reqJson.getString("receivedAmount"), "不是有效的实收金额");
+        //Assert.isMoney(reqJson.getString("receivedAmount"), "不是有效的实收金额");
 
         if (!"H".equals(reqJson.getString("sellOrHire"))
                 && !"S".equals(reqJson.getString("sellOrHire"))) {
