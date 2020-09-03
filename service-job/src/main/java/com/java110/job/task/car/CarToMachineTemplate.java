@@ -36,9 +36,11 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
 
     private static final String STATE_NO_TRANSLATE = "10000";
 
-    private static final String CREATE_OWNER_CAR = "201"; //添加人脸
+    private static final String CREATE_OWNER_CAR = "201"; //添加
 
-    private static final String DELETE_OWNER_CAR = "202"; //删除人脸
+    private static final String DELETE_OWNER_CAR = "202"; //删除
+
+    private static final String UPDATE_OWNER_CAR = "203"; //修改
 
     @Autowired
     private IOrderInnerServiceSMO orderInnerServiceSMOImpl;
@@ -69,7 +71,6 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
                 ownerCarDto = new OwnerCarDto();
 
                 ownerCarDto.setbId(tmpOrderDto.getbId());
-
 
                 List<OwnerCarDto> ownerCarDtos = null;
 
