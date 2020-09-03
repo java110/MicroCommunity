@@ -1,6 +1,7 @@
 package com.java110.api.bmo.machineTranslate;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.machine.CarResultDto;
 import com.java110.dto.machine.MachineUserResultDto;
 
 /**
@@ -18,5 +19,5 @@ public interface IOwnerCarMachineTranslateBMO {
      *
      * @return
      */
-    MachineUserResultDto getInfo(JSONObject reqJson);
+    CarResultDto getInfo(JSONObject reqJson);
 }

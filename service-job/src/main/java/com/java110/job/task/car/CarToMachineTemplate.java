@@ -111,9 +111,10 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
 
         for (OwnerCarDto ownerCarDto : ownerCarDtos) {
 
-            if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())
-                    || BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())) {
-                saveMachineTranslate(tmpOrderDto, ownerCarDto);
+            if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())) {
+                saveOrUpdateMachineTranslate(tmpOrderDto, ownerCarDto, CREATE_OWNER_CAR);
+            } else if (BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())) {
+                saveOrUpdateMachineTranslate(tmpOrderDto, ownerCarDto, UPDATE_OWNER_CAR);
             } else if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())
             ) {
                 deleteMachineTranslate(tmpOrderDto, ownerCarDto);
@@ -126,7 +127,7 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
 
     }
 
-    private void saveMachineTranslate(OrderDto tmpOrderDto, OwnerCarDto ownerCarDto) {
+    private void saveOrUpdateMachineTranslate(OrderDto tmpOrderDto, OwnerCarDto ownerCarDto, String cmd) {
 
         MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
         machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
@@ -138,7 +139,7 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
         machineTranslateDto.setState(STATE_NO_TRANSLATE);
         machineTranslateDto.setCommunityId(ownerCarDto.getCommunityId());
         machineTranslateDto.setbId("-1");
-        machineTranslateDto.setMachineCmd(CREATE_OWNER_CAR);
+        machineTranslateDto.setMachineCmd(cmd);
         machineTranslateDto.setObjBId(tmpOrderDto.getbId());
         machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
 
