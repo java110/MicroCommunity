@@ -93,6 +93,9 @@ public class SellParkingSpaceListener extends AbstractServiceApiPlusListener {
         //添加小区楼
         parkingSpaceBMOImpl.sellParkingSpace(reqJson, context);
 
+
+        reqJson.put("carNumType",reqJson.getString("sellOrHire"));
+
         parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
 
 //        //计算 费用信息
