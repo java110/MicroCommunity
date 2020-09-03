@@ -175,7 +175,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
         for (ImportParkingSpace parkingSpace : parkingSpaces) {
-
+            responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
             JSONObject savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
             paramIn = new JSONObject();
             // 如果不存在，才插入
