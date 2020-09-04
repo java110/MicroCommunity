@@ -479,6 +479,11 @@ public class BusinessTypeConstant {
      * 修改费用信息
      */
     public static final String BUSINESS_TYPE_UPDATE_FEE_INFO = "600100040001";
+
+    /**
+     * 修改费用信息
+     */
+    public static final String BUSINESS_TYPE_ONLY_UPDATE_FEE_INFO = "600100040002";
     /**
      * 删除费用信息
      */

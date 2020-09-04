@@ -9,8 +9,11 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.po.fee.PayFeePo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,9 +74,8 @@ public class UpdateFeeListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        feeBMOImpl.updateFee(reqJson, context);
-
-
+        PayFeePo payFeePo = BeanConvertUtil.covertBean(reqJson, PayFeePo.class);
+        super.update(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_ONLY_UPDATE_FEE_INFO);
     }
 
     @Override
