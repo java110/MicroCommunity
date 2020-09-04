@@ -40,7 +40,7 @@
 
 ### 技术文档
 
-[技术文档](http://www.homecommunity.cn/document)
+[技术文档](http://www.homecommunity.cn/devDoc)
 
     
 ### 产品
