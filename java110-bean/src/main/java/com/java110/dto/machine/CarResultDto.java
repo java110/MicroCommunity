@@ -33,6 +33,20 @@ public class CarResultDto {
 
     private String phone;
 
+    private String num;
+
+    private String paId;
+
+    private String areaNum;
+    public String getAreaNum() {
+        return areaNum;
+    }
+
+    public void setAreaNum(String areaNum) {
+        this.areaNum = areaNum;
+    }
+
+
     public String getCarId() {
         return carId;
     }
@@ -128,4 +142,21 @@ public class CarResultDto {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
+
 }

@@ -6,11 +6,14 @@ import com.java110.dto.machine.CarResultDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +45,9 @@ public class OwnerCarMachineTranslateBMOImpl implements IOwnerCarMachineTranslat
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
     @Override
     public CarResultDto getInfo(JSONObject reqJson) {
 
@@ -65,6 +71,20 @@ public class OwnerCarMachineTranslateBMOImpl implements IOwnerCarMachineTranslat
         }
 
         CarResultDto carResultDto = new CarResultDto();
+        if (!StringUtil.isEmpty(ownerCarDto.getPsId())) {
+            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setPsId(ownerCarDto.getPsId());
+            parkingSpaceDto.setCommunityId(communityId);
+            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+            if (parkingSpaceDtos != null && parkingSpaceDtos.size() > 0) {
+                carResultDto.setPaId(parkingSpaceDtos.get(0).getPaId());
+                carResultDto.setAreaNum(parkingSpaceDtos.get(0).getAreaNum());
+                carResultDto.setNum(parkingSpaceDtos.get(0).getNum());
+            }
+        }
+
+
         carResultDto.setCarId(ownerCarDto.getCarId());
         carResultDto.setCommunityId(communityId);
         carResultDto.setCommunityName(reqJson.getString("communityName"));

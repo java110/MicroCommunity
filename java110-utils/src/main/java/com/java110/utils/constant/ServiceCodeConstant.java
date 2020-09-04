@@ -569,6 +569,9 @@ public class ServiceCodeConstant {
     //设置房屋费用
     public static final String SERVICE_CODE_DELETE_FEE = "fee.deleteFee";
 
+    //修改房屋费用
+    public static final String SERVICE_CODE_UPDATE_FEE = "fee.updateFee";
+
     //预交费
     public static final String SERVICE_CODE_PAY_FEE_PRE = "fee.payFeePre";
     /**
