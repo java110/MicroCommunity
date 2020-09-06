@@ -13,6 +13,7 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeMeterWaterConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -67,6 +68,7 @@ public class ListMeterWatersListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
     }
 
     @Override
@@ -90,7 +92,7 @@ public class ListMeterWatersListener extends AbstractServiceApiListener {
             meterWaterDtos = new ArrayList<>();
         }
 
-         resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, meterWaterDtos);
+        resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, meterWaterDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
@@ -113,6 +115,11 @@ public class ListMeterWatersListener extends AbstractServiceApiListener {
         if (!roomNum.contains("-")) {
             return false;
         }
+
+        if (StringUtil.isEmpty(meterWaterDto.getObjType())) {
+            meterWaterDto.setObjType(MeterWaterDto.METER_TYPE_ROOM);
+        }
+
         if (MeterWaterDto.METER_TYPE_ROOM.equals(meterWaterDto.getObjType())) {
             String[] nums = roomNum.split("-");
             if (nums.length != 3) {
