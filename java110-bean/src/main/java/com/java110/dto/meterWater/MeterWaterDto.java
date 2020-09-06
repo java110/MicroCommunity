@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class MeterWaterDto extends PageDto implements Serializable {
 
+    public static final String METER_TYPE_ROOM = "1010";
+
     private String remark;
     private String curReadingTime;
     private String waterId;

@@ -93,6 +93,11 @@ public class FeeDto extends PageDto implements Serializable {
     private Date importFeeEndTime;
 
 
+    private String curDegrees;
+    private String preDegrees;
+
+    private Date preReadingTime;
+    private Date curReadingTime;
 
 
     public String getAmount() {
@@ -447,5 +452,37 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setImportFeeEndTime(Date importFeeEndTime) {
         this.importFeeEndTime = importFeeEndTime;
+    }
+
+    public String getCurDegrees() {
+        return curDegrees;
+    }
+
+    public void setCurDegrees(String curDegrees) {
+        this.curDegrees = curDegrees;
+    }
+
+    public String getPreDegrees() {
+        return preDegrees;
+    }
+
+    public void setPreDegrees(String preDegrees) {
+        this.preDegrees = preDegrees;
+    }
+
+    public Date getPreReadingTime() {
+        return preReadingTime;
+    }
+
+    public void setPreReadingTime(Date preReadingTime) {
+        this.preReadingTime = preReadingTime;
+    }
+
+    public Date getCurReadingTime() {
+        return curReadingTime;
+    }
+
+    public void setCurReadingTime(Date curReadingTime) {
+        this.curReadingTime = curReadingTime;
     }
 }
