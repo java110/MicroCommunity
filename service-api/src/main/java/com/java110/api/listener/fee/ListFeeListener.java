@@ -153,10 +153,10 @@ public class ListFeeListener extends AbstractServiceApiListener {
             return targetEndDateAndOweMonth;
         }
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-            if (feeDto.getImportFeeEndTime() == null) {
-                targetEndDate = feeDto.getConfigEndTime();
-            } else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+            if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 targetEndDate = feeDto.getCurReadingTime();
+            } else if (feeDto.getImportFeeEndTime() == null) {
+                targetEndDate = feeDto.getConfigEndTime();
             } else {
                 targetEndDate = feeDto.getImportFeeEndTime();
             }
