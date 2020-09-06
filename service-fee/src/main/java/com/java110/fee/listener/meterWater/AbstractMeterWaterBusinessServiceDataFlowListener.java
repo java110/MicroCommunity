@@ -49,6 +49,7 @@ public abstract class AbstractMeterWaterBusinessServiceDataFlowListener extends 
         businessMeterWaterInfo.put("preReadingTime", businessMeterWaterInfo.get("pre_reading_time"));
         businessMeterWaterInfo.put("communityId", businessMeterWaterInfo.get("community_id"));
         businessMeterWaterInfo.put("objType", businessMeterWaterInfo.get("obj_type"));
+        businessMeterWaterInfo.put("feeId", businessMeterWaterInfo.get("fee_id"));
         businessMeterWaterInfo.remove("bId");
         businessMeterWaterInfo.put("statusCd", statusCd);
     }
@@ -85,6 +86,7 @@ public abstract class AbstractMeterWaterBusinessServiceDataFlowListener extends 
         currentMeterWaterInfo.put("preReadingTime", currentMeterWaterInfo.get("pre_reading_time"));
         currentMeterWaterInfo.put("communityId", currentMeterWaterInfo.get("community_id"));
         currentMeterWaterInfo.put("objType", currentMeterWaterInfo.get("obj_type"));
+        currentMeterWaterInfo.put("feeId", currentMeterWaterInfo.get("fee_id"));
 
 
         currentMeterWaterInfo.put("operate", StatusConstant.OPERATE_DEL);
