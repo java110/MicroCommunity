@@ -62,8 +62,8 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         payFeePo.setIncomeObjId(reqJson.getString("storeId"));
         payFeePo.setAmount("-1");
-        payFeePo.setStartTime(reqJson.getString("preDegrees"));
-        payFeePo.setEndTime(reqJson.getString("preDegrees"));
+        payFeePo.setStartTime(reqJson.getString("preReadingTime"));
+        payFeePo.setEndTime(reqJson.getString("preReadingTime"));
         payFeePo.setPayerObjId(reqJson.getString("objId"));
         payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
