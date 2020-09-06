@@ -105,7 +105,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                 return false;
             }
             RoomDto roomDto = new RoomDto();
-            roomDto.setFloorId(nums[0]);
+            roomDto.setFloorNum(nums[0]);
             roomDto.setUnitNum(nums[1]);
             roomDto.setRoomNum(nums[2]);
             roomDto.setCommunityId(feeDto.getCommunityId());

@@ -615,6 +615,9 @@
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and f.`floor_num`= #{floorNum}
+        </if>
         <if test="unitPrice !=null and unitPrice != ''">
             and t.unit_price= #{unitPrice}
         </if>
@@ -650,6 +653,9 @@
         </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and u.unit_num= #{unitNum}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

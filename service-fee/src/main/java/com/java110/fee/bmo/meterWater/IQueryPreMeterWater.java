@@ -14,5 +14,5 @@ public interface IQueryPreMeterWater {
      * @param meterWaterDto 表信息
      * @return
      */
-    ResponseEntity<String> query(MeterWaterDto meterWaterDto);
+    ResponseEntity<String> query(MeterWaterDto meterWaterDto,String roomNum);
 }

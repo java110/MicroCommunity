@@ -29,13 +29,14 @@ public class MeterWaterApi {
     @RequestMapping(value = "/queryPreMeterWater", method = RequestMethod.GET)
     public ResponseEntity<String> queryPreMeterWater(@RequestParam(value = "communityId") String communityId,
                                                      @RequestParam(value = "objId") String objId,
-                                                     @RequestParam(value = "objType") String objType) {
+                                                     @RequestParam(value = "objType") String objType,
+                                                     @RequestParam(value = "roomNum" ,required = false) String roomNum) {
         MeterWaterDto meterWaterDto = new MeterWaterDto();
         meterWaterDto.setObjId(objId);
         meterWaterDto.setObjType(objType);
         meterWaterDto.setPage(1);
         meterWaterDto.setRow(1);
         meterWaterDto.setCommunityId(communityId);
-        return queryPreMeterWaterImpl.query(meterWaterDto);
+        return queryPreMeterWaterImpl.query(meterWaterDto,roomNum);
     }
 }
