@@ -8,10 +8,10 @@
     <insert id="saveBusinessMeterWaterInfo" parameterType="Map">
         insert into business_meter_water(
         remark,cur_reading_time,water_id,cur_degrees,operate,meter_type,pre_degrees,obj_id,pre_reading_time,
-        b_id,community_id,obj_type,fee_id
+        b_id,community_id,obj_type,fee_id,obj_name
         ) values (
         #{remark},#{curReadingTime},#{waterId},#{curDegrees},#{operate},#{meterType},#{preDegrees},#{objId},
-        #{preReadingTime},#{bId},#{communityId},#{objType},#{feeId}
+        #{preReadingTime},#{bId},#{communityId},#{objType},#{feeId},#{objName}
         )
     </insert>
 
@@ -21,13 +21,13 @@
         select t.remark,t.cur_reading_time,t.cur_reading_time curReadingTime,t.water_id,t.water_id
         waterId,t.cur_degrees,t.cur_degrees curDegrees,t.operate,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
         objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
-        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId
+        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName
         from business_meter_water t
         where 1 =1
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="curReadingTime !=null and curReadingTime != ''">
+        <if test="curReadingTime !=null ">
             and t.cur_reading_time= #{curReadingTime}
         </if>
         <if test="waterId !=null and waterId != ''">
@@ -51,7 +51,7 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
-        <if test="preReadingTime !=null and preReadingTime != ''">
+        <if test="preReadingTime !=null ">
             and t.pre_reading_time= #{preReadingTime}
         </if>
         <if test="bId !=null and bId != ''">
@@ -70,15 +70,16 @@
     <!-- 保存水电费信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMeterWaterInfoInstance" parameterType="Map">
         insert into meter_water(
-        remark,status_cd,cur_reading_time,water_id,cur_degrees,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,community_id,obj_type,fee_id
+        remark,status_cd,cur_reading_time,water_id,cur_degrees,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,
+        community_id,obj_type,fee_id,obj_name
         ) select
         t.remark,'0',t.cur_reading_time,t.water_id,t.cur_degrees,t.meter_type,t.pre_degrees,t.obj_id,
-        t.pre_reading_time,t.b_id,t.community_id,t.obj_type,t.fee_id
+        t.pre_reading_time,t.b_id,t.community_id,t.obj_type,t.fee_id,t.obj_name
         from business_meter_water t where 1=1
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="curReadingTime !=null and curReadingTime != ''">
+        <if test="curReadingTime !=null ">
             and t.cur_reading_time= #{curReadingTime}
         </if>
         <if test="waterId !=null and waterId != ''">
@@ -100,7 +101,7 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
-        <if test="preReadingTime !=null and preReadingTime != ''">
+        <if test="preReadingTime !=null ">
             and t.pre_reading_time= #{preReadingTime}
         </if>
         <if test="bId !=null and bId != ''">
@@ -122,7 +123,7 @@
         curReadingTime,t.water_id,t.water_id waterId,t.cur_degrees,t.cur_degrees curDegrees,t.create_time,t.create_time
         createTime,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
         objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
-        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId
+        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName
         from meter_water t
         where 1 =1
         <if test="remark !=null and remark != ''">
@@ -131,7 +132,7 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-        <if test="curReadingTime !=null and curReadingTime != ''">
+        <if test="curReadingTime !=null ">
             and t.cur_reading_time= #{curReadingTime}
         </if>
         <if test="waterId !=null and waterId != ''">
@@ -152,7 +153,7 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
-        <if test="preReadingTime !=null and preReadingTime != ''">
+        <if test="preReadingTime !=null ">
             and t.pre_reading_time= #{preReadingTime}
         </if>
         <if test="bId !=null and bId != ''">
@@ -184,7 +185,7 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="curReadingTime !=null and curReadingTime != ''">
+        <if test="curReadingTime !=null ">
             , t.cur_reading_time= #{curReadingTime}
         </if>
         <if test="curDegrees !=null and curDegrees != ''">
@@ -202,7 +203,7 @@
         <if test="objId !=null and objId != ''">
             , t.obj_id= #{objId}
         </if>
-        <if test="preReadingTime !=null and preReadingTime != ''">
+        <if test="preReadingTime !=null ">
             , t.pre_reading_time= #{preReadingTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -232,7 +233,7 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-        <if test="curReadingTime !=null and curReadingTime != ''">
+        <if test="curReadingTime !=null ">
             and t.cur_reading_time= #{curReadingTime}
         </if>
         <if test="waterId !=null and waterId != ''">
@@ -240,9 +241,6 @@
         </if>
         <if test="curDegrees !=null and curDegrees != ''">
             and t.cur_degrees= #{curDegrees}
-        </if>
-        <if test="createTime !=null and createTime != ''">
-            and t.create_time= #{createTime}
         </if>
         <if test="meterType !=null and meterType != ''">
             and t.meter_type= #{meterType}
@@ -253,7 +251,7 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
-        <if test="preReadingTime !=null and preReadingTime != ''">
+        <if test="preReadingTime !=null ">
             and t.pre_reading_time= #{preReadingTime}
         </if>
         <if test="bId !=null and bId != ''">

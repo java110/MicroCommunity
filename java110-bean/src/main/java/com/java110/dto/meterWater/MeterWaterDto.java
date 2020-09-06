@@ -24,6 +24,7 @@ public class MeterWaterDto extends PageDto implements Serializable {
     private String meterType;
     private String preDegrees;
     private String objId;
+    private String objName;
     private String preReadingTime;
     private String communityId;
     private String objType;
@@ -138,5 +139,14 @@ public class MeterWaterDto extends PageDto implements Serializable {
 
     public void setFeeId(String feeId) {
         this.feeId = feeId;
+    }
+
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
     }
 }

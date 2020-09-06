@@ -11,6 +11,7 @@ public class MeterWaterPo implements Serializable {
     private String meterType;
     private String preDegrees;
     private String objId;
+    private String objName;
     private String preReadingTime;
     private String communityId;
     private String objType;
@@ -102,5 +103,13 @@ public class MeterWaterPo implements Serializable {
 
     public void setFeeId(String feeId) {
         this.feeId = feeId;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
     }
 }
