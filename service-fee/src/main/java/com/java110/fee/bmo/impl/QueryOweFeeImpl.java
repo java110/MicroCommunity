@@ -96,11 +96,11 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             return true;
         }
 
-        if (!feeDto.getPayerObjId().contains("#")) {
+        if (!feeDto.getPayerObjId().contains("-")) {
             return false;
         }
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
-            String[] nums = feeDto.getPayerObjId().split("#");
+            String[] nums = feeDto.getPayerObjId().split("-");
             if (nums.length != 3) {
                 return false;
             }
@@ -117,7 +117,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feeDto.setPayerObjId(roomDtos.get(0).getRoomId());
 
         } else {
-            String[] nums = feeDto.getPayerObjId().split("#");
+            String[] nums = feeDto.getPayerObjId().split("-");
             if (nums.length != 2) {
                 return false;
             }
