@@ -56,7 +56,7 @@ public class UpdateMeterWaterListener extends AbstractServiceApiPlusListener {
         payFeePo.setFeeId(meterWaterDtos.get(0).getFeeId());
         payFeePo.setCommunityId(meterWaterDtos.get(0).getCommunityId());
         payFeePo.setStartTime(reqJson.getString("preReadingTime"));
-        payFeePo.setEndTime(reqJson.getString("curReadingTime"));
+        //payFeePo.setEndTime(reqJson.getString("curReadingTime"));
         super.update(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_ONLY_UPDATE_FEE_INFO);
         meterWaterBMOImpl.updateMeterWater(reqJson, context);
     }
