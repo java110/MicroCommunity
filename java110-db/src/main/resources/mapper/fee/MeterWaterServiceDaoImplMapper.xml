@@ -7,10 +7,10 @@
     <!-- 保存水电费信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessMeterWaterInfo" parameterType="Map">
         insert into business_meter_water(
-        remark,cur_reading_time,water_id,cur_degrees,operate,create_time,meter_type,pre_degrees,obj_id,pre_reading_time,
+        remark,cur_reading_time,water_id,cur_degrees,operate,meter_type,pre_degrees,obj_id,pre_reading_time,
         b_id,community_id,obj_type,fee_id
         ) values (
-        #{remark},#{curReadingTime},#{waterId},#{curDegrees},#{operate},#{createTime},#{meterType},#{preDegrees},#{objId},
+        #{remark},#{curReadingTime},#{waterId},#{curDegrees},#{operate},#{meterType},#{preDegrees},#{objId},
         #{preReadingTime},#{bId},#{communityId},#{objType},#{feeId}
         )
     </insert>
@@ -19,8 +19,7 @@
     <!-- 查询水电费信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessMeterWaterInfo" parameterType="Map" resultType="Map">
         select t.remark,t.cur_reading_time,t.cur_reading_time curReadingTime,t.water_id,t.water_id
-        waterId,t.cur_degrees,t.cur_degrees curDegrees,t.operate,t.create_time,t.create_time
-        createTime,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
+        waterId,t.cur_degrees,t.cur_degrees curDegrees,t.operate,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
         objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
         communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId
         from business_meter_water t
@@ -71,9 +70,9 @@
     <!-- 保存水电费信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMeterWaterInfoInstance" parameterType="Map">
         insert into meter_water(
-        remark,status_cd,cur_reading_time,water_id,cur_degrees,create_time,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,community_id,obj_type,fee_id
+        remark,status_cd,cur_reading_time,water_id,cur_degrees,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,community_id,obj_type,fee_id
         ) select
-        t.remark,'0',t.cur_reading_time,t.water_id,t.cur_degrees,t.create_time,t.meter_type,t.pre_degrees,t.obj_id,
+        t.remark,'0',t.cur_reading_time,t.water_id,t.cur_degrees,t.meter_type,t.pre_degrees,t.obj_id,
         t.pre_reading_time,t.b_id,t.community_id,t.obj_type,t.fee_id
         from business_meter_water t where 1=1
         <if test="remark !=null and remark != ''">

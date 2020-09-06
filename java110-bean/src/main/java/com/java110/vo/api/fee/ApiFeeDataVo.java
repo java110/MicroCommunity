@@ -43,6 +43,13 @@ public class ApiFeeDataVo implements Serializable {
     private String computingFormula;
     private String deadlineTime;
     private String amountOwed;
+
+    private String curDegrees;
+    private String preDegrees;
+
+    private String preReadingTime;
+    private String curReadingTime;
+
     public String getAmount() {
         return amount;
     }
@@ -249,5 +256,37 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
+    }
+
+    public String getCurDegrees() {
+        return curDegrees;
+    }
+
+    public void setCurDegrees(String curDegrees) {
+        this.curDegrees = curDegrees;
+    }
+
+    public String getPreDegrees() {
+        return preDegrees;
+    }
+
+    public void setPreDegrees(String preDegrees) {
+        this.preDegrees = preDegrees;
+    }
+
+    public String getPreReadingTime() {
+        return preReadingTime;
+    }
+
+    public void setPreReadingTime(String preReadingTime) {
+        this.preReadingTime = preReadingTime;
+    }
+
+    public String getCurReadingTime() {
+        return curReadingTime;
+    }
+
+    public void setCurReadingTime(String curReadingTime) {
+        this.curReadingTime = curReadingTime;
     }
 }
