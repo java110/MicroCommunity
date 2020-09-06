@@ -117,10 +117,10 @@ public class ListMeterWatersListener extends AbstractServiceApiListener {
         }
 
         if (StringUtil.isEmpty(meterWaterDto.getObjType())) {
-            meterWaterDto.setObjType(MeterWaterDto.METER_TYPE_ROOM);
+            meterWaterDto.setObjType(MeterWaterDto.OBJ_TYPE_ROOM);
         }
 
-        if (MeterWaterDto.METER_TYPE_ROOM.equals(meterWaterDto.getObjType())) {
+        if (MeterWaterDto.OBJ_TYPE_ROOM.equals(meterWaterDto.getObjType())) {
             String[] nums = roomNum.split("-");
             if (nums.length != 3) {
                 return false;
