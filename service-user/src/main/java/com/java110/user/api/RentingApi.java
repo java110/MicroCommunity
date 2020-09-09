@@ -121,8 +121,7 @@ public class RentingApi {
      * @path /app/renting/deleteRentingConfig
      */
     @RequestMapping(value = "/deleteRentingConfig", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteRentingConfig(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+    public ResponseEntity<String> deleteRentingConfig(@RequestBody JSONObject reqJson) { ;
 
         Assert.hasKeyAndValue(reqJson, "rentingConfigId", "rentingConfigId不能为空");
 
