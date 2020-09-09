@@ -166,14 +166,15 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
             Assert.hasValue(os[1], (osIndex + 1) + "行单元编号不能为空");
             Assert.hasValue(os[2], (osIndex + 1) + "行房屋编号不能为空");
             Assert.hasValue(os[3], (osIndex + 1) + "行收费项目不能为空");
-            Assert.hasValue(os[4], (osIndex + 1) + "行开始时间不能为空");
-            Assert.hasValue(os[5], (osIndex + 1) + "行结束时间不能为空");
-            Assert.hasValue(os[6], (osIndex + 1) + "行缴费金额不能为空");
+            Assert.hasValue(os[4], (osIndex + 1) + "行缴费周期不能为空");
+            Assert.hasValue(os[5], (osIndex + 1) + "行开始时间不能为空");
+            Assert.hasValue(os[6], (osIndex + 1) + "行结束时间不能为空");
+            Assert.hasValue(os[7], (osIndex + 1) + "行缴费金额不能为空");
 
 //
 
-            String startTime = excelDoubleToDate(os[4].toString());
-            String endTime = excelDoubleToDate(os[5].toString());
+            String startTime = excelDoubleToDate(os[5].toString());
+            String endTime = excelDoubleToDate(os[6].toString());
             Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
             Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
 
@@ -183,10 +184,11 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
             importRoomFee.setUnitNum(os[1].toString());
             importRoomFee.setRoomNum(os[2].toString());
             importRoomFee.setFeeName(os[3].toString());
+            importRoomFee.setCycle(os[4].toString());
             importRoomFee.setStartTime(startTime);
             importRoomFee.setEndTime(endTime);
-            importRoomFee.setAmount(os[6].toString());
-            importRoomFee.setRemark(StringUtil.isNullOrNone(os[7]) ? os[7].toString() : "");
+            importRoomFee.setAmount(os[7].toString());
+            importRoomFee.setRemark(StringUtil.isNullOrNone(os[8]) ? os[8].toString() : "");
             rooms.add(importRoomFee);
         }
     }
