@@ -188,7 +188,7 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
             importRoomFee.setStartTime(startTime);
             importRoomFee.setEndTime(endTime);
             importRoomFee.setAmount(os[7].toString());
-            importRoomFee.setRemark(StringUtil.isNullOrNone(os[8]) ? os[8].toString() : "");
+            importRoomFee.setRemark(!StringUtil.isNullOrNone(os[8]) ? os[8].toString() : "");
             rooms.add(importRoomFee);
         }
     }
