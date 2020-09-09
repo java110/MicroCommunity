@@ -20,7 +20,7 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private String rentingConfigId;
     private String rentingDesc;
     private String rentingTitle;
-    private String checkInDate;
+    private String checkIn;
     private String rentingId;
     private String roomId;
     private String paymentType;
@@ -76,12 +76,12 @@ public class RentingPoolDto extends PageDto implements Serializable {
         this.rentingTitle = rentingTitle;
     }
 
-    public String getCheckInDate() {
-        return checkInDate;
+    public String getCheckIn() {
+        return checkIn;
     }
 
-    public void setCheckInDate(String checkInDate) {
-        this.checkInDate = checkInDate;
+    public void setCheckIn(String checkIn) {
+        this.checkIn = checkIn;
     }
 
     public String getRentingId() {

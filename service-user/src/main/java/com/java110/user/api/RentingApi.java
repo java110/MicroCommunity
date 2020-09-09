@@ -165,7 +165,7 @@ public class RentingApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "price", "请求报文中未包含price");
         Assert.hasKeyAndValue(reqJson, "paymentType", "请求报文中未包含paymentType");
-        Assert.hasKeyAndValue(reqJson, "checkInDate", "请求报文中未包含checkInDate");
+        Assert.hasKeyAndValue(reqJson, "checkIn", "请求报文中未包含checkIn");
         Assert.hasKeyAndValue(reqJson, "rentingConfigId", "请求报文中未包含rentingConfigId");
         Assert.hasKeyAndValue(reqJson, "ownerName", "请求报文中未包含ownerName");
         Assert.hasKeyAndValue(reqJson, "ownerTel", "请求报文中未包含ownerTel");
