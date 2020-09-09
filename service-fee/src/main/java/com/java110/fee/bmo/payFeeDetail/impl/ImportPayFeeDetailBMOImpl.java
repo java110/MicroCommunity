@@ -57,7 +57,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
 
-        JSONArray datas = reqJson.getJSONArray("datas");
+        JSONArray datas = reqJson.getJSONArray("importRoomFees");
 
         JSONObject data = null;
         List<ImportRoomFee> importRoomFees = new ArrayList<>();
@@ -104,6 +104,8 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         FeeDto feeDto = new FeeDto();
         feeDto.setConfigId(tmpFeeConfigDto.getConfigId());
         feeDto.setCommunityId(importRoomFee.getCommunityId());
+        feeDto.setPayerObjId(importRoomFee.getRoomId());
+        feeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         List<PayFeePo> payFeePos = null;

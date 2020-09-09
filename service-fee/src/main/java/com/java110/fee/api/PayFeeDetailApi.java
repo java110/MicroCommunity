@@ -29,10 +29,10 @@ public class PayFeeDetailApi {
      */
     @RequestMapping(value = "/importPayFeeDetail", method = RequestMethod.POST)
     public ResponseEntity<String> saveImportFeeDetail(@RequestBody String reqJsonStr) {
-
-        Assert.hasKeyAndValue(reqJsonStr, "communityId", "请求报文中未包含小区信息");
-
         JSONObject reqJson = JSONObject.parseObject(reqJsonStr);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
+
+
 
 
         return importPayFeeDetailImpl.importPayFeeDetail(reqJson);
