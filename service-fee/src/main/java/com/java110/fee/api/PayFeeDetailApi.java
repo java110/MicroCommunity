@@ -24,8 +24,8 @@ public class PayFeeDetailApi {
      *
      * @param reqJsonStr
      * @return
-     * @serviceCode /importFee/saveImportFeeDetail
-     * @path /app/importFee/saveImportFeeDetail
+     * @serviceCode /payFeeDetail/importPayFeeDetail
+     * @path /app/payFeeDetail/importPayFeeDetail
      */
     @RequestMapping(value = "/importPayFeeDetail", method = RequestMethod.POST)
     public ResponseEntity<String> saveImportFeeDetail(@RequestBody String reqJsonStr) {
