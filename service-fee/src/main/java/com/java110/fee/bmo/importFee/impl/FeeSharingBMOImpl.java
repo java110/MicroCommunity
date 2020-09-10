@@ -117,7 +117,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         String formulaValue = deakFormula(feeFormulaDtos.get(0));
 
         //公摊费用到房屋
-        sharingFeeToRoom(formulaValue, feeFormulaDtos.get(0).getPrice(), roomDtos, reqJson, feeConfigDto);
+        sharingFeeToRoom(formulaValue, Double.parseDouble(feeFormulaDtos.get(0).getPrice()), roomDtos, reqJson, feeConfigDto);
 
 
         return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
