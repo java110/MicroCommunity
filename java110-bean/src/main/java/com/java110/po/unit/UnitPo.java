@@ -19,6 +19,7 @@ public class UnitPo implements Serializable {
     private String lift;
     private String userId;
     private String remark;
+    private String unitArea;
 
     public String getUnitId() {
         return unitId;
@@ -74,5 +75,13 @@ public class UnitPo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getUnitArea() {
+        return unitArea;
+    }
+
+    public void setUnitArea(String unitArea) {
+        this.unitArea = unitArea;
     }
 }

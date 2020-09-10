@@ -45,6 +45,7 @@ public abstract class AbstractUnitBusinessServiceDataFlowListener extends Abstra
         businessUnitInfo.put("lift", businessUnitInfo.get("lift"));
         businessUnitInfo.put("remark", businessUnitInfo.get("remark"));
         businessUnitInfo.put("userId", businessUnitInfo.get("user_id"));
+        businessUnitInfo.put("unitArea", businessUnitInfo.get("unit_area"));
         //删除bId
         businessUnitInfo.remove("bId");
 
@@ -79,6 +80,7 @@ public abstract class AbstractUnitBusinessServiceDataFlowListener extends Abstra
         currentUnitInfo.put("lift", currentUnitInfo.get("lift"));
         currentUnitInfo.put("remark", currentUnitInfo.get("remark"));
         currentUnitInfo.put("userId", currentUnitInfo.get("user_id"));
+        currentUnitInfo.put("unitArea", currentUnitInfo.get("unit_area"));
 
 
         currentUnitInfo.put("operate", StatusConstant.OPERATE_DEL);

@@ -83,6 +83,7 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
         businessFloor.put("userId", paramInJson.getString("userId"));
         businessFloor.put("floorNum", paramInJson.getString("floorNum"));
         businessFloor.put("communityId", paramInJson.getString("communityId"));
+        businessFloor.put("floorArea", paramInJson.getString("floorArea"));
 
         FloorPo floorPo = BeanConvertUtil.covertBean(businessFloor, FloorPo.class);
         super.update(context, floorPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FLOOR_INFO);
@@ -103,6 +104,7 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
         businessFloor.put("userId", paramInJson.getString("userId"));
         businessFloor.put("floorNum", paramInJson.getString("floorNum"));
         businessFloor.put("communityId", paramInJson.getString("communityId"));
+        businessFloor.put("floorArea", paramInJson.getString("floorArea"));
         FloorPo floorPo = BeanConvertUtil.covertBean(businessFloor, FloorPo.class);
         super.insert(context, floorPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FLOOR_INFO);
     }

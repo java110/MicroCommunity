@@ -7,9 +7,9 @@
     <!-- 保存小区单元信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessUnitInfo" parameterType="Map">
         insert into business_building_unit(
-        floor_id,operate,layer_count,unit_id,unit_num,lift,remark,b_id,user_id
+        floor_id,operate,layer_count,unit_id,unit_num,lift,remark,b_id,user_id,unit_area
         ) values (
-        #{floorId},#{operate},#{layerCount},#{unitId},#{unitNum},#{lift},#{remark},#{bId},#{userId}
+        #{floorId},#{operate},#{layerCount},#{unitId},#{unitNum},#{lift},#{remark},#{bId},#{userId},#{unitArea}
         )
     </insert>
 
@@ -17,7 +17,8 @@
     <!-- 查询小区单元信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessUnitInfo" parameterType="Map" resultType="Map">
         select t.floor_id,t.floor_id floorId,t.operate,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id
-        unitId,t.unit_num,t.unit_num unitNum,t.lift,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        unitId,t.unit_num,t.unit_num unitNum,t.lift,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId,
+        t.unit_area,t.unit_area unitArea
         from business_building_unit t
         where 1 =1
         <if test="floorId !=null and floorId != ''">
@@ -55,8 +56,9 @@
     <!-- 保存小区单元信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveUnitInfoInstance" parameterType="Map">
         insert into building_unit(
-        floor_id,layer_count,unit_id,unit_num,lift,status_cd,remark,b_id,user_id
-        ) select t.floor_id,t.layer_count,t.unit_id,t.unit_num,t.lift,'0',t.remark,t.b_id,t.user_id from
+        floor_id,layer_count,unit_id,unit_num,lift,status_cd,remark,b_id,user_id,unit_area
+        ) select t.floor_id,t.layer_count,t.unit_id,t.unit_num,t.lift,'0',t.remark,t.b_id,t.user_id,t.unit_area
+        from
         business_building_unit t where 1=1
         <if test="floorId !=null and floorId != ''">
             and t.floor_id= #{floorId}
@@ -91,7 +93,7 @@
     <select id="getUnitInfo" parameterType="Map" resultType="Map">
         select t.floor_id,t.floor_id floorId,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id
         unitId,t.unit_num,t.unit_num unitNum,t.lift,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id
-        bId,t.user_id,t.user_id userId
+        bId,t.user_id,t.user_id userId,t.unit_area,t.unit_area unitArea
         from building_unit t
         <if test="communityId!=null and communityId != ''">
             ,f_floor ff
@@ -158,6 +160,9 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
+        <if test="unitArea !=null and unitArea != ''">
+            , t.unit_area= #{unitArea}
+        </if>
         <if test="userId !=null and userId != ''">
             , t.user_id= #{userId}
         </if>
@@ -210,7 +215,7 @@
     <select id="queryUnitsByCommunityId" parameterType="Map" resultType="Map">
         select t.floor_id,t.floor_id floorId,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id
         unitId,t.unit_num,t.unit_num unitNum,t.lift,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id
-        bId,t.user_id,t.user_id userId
+        bId,t.user_id,t.user_id userId,t.unit_area,t.unit_area unitArea
         from building_unit t,f_floor f
         where 1 =1
         and t.floor_id = f.floor_id

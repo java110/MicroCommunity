@@ -28,6 +28,8 @@ public class UnitDto extends PageDto implements Serializable {
      */
     private String unitNum;
 
+    private String unitArea;
+
     /**
      * 名称
      */
@@ -140,5 +142,13 @@ public class UnitDto extends PageDto implements Serializable {
 
     public void setUnitIds(String[] unitIds) {
         this.unitIds = unitIds;
+    }
+
+    public String getUnitArea() {
+        return unitArea;
+    }
+
+    public void setUnitArea(String unitArea) {
+        this.unitArea = unitArea;
     }
 }
