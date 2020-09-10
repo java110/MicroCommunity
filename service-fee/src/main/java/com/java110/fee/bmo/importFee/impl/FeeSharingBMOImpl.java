@@ -235,7 +235,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         feeAttrPo.setCommunityId(reqJson.getString("communityId"));
         feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_SHARE_DEGREES);
-        feeAttrPo.setValue(reqJson.getString("value"));
+        feeAttrPo.setValue(value);
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
         ImportFeeDetailPo importFeeDetailPo = new ImportFeeDetailPo();
