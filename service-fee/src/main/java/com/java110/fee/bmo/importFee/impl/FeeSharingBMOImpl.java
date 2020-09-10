@@ -120,7 +120,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         sharingFeeToRoom(formulaValue, Double.parseDouble(feeFormulaDtos.get(0).getPrice()), roomDtos, reqJson, feeConfigDto);
 
 
-        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        return ResultVo.success();
     }
 
     /**
@@ -211,7 +211,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         payFeePo.setState(FeeDto.STATE_DOING);
         payFeePo.setCommunityId(reqJson.getString("communityId"));
         payFeePo.setConfigId(feeConfigDto.getConfigId());
-        payFeePo.setPayerObjId(reqJson.getString("objId"));
+        payFeePo.setPayerObjId(roomDto.getRoomId());
         payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
         payFeePo.setUserId(reqJson.getString("userId"));
         payFeePo.setIncomeObjId(reqJson.getString("storeId"));
@@ -239,7 +239,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
         ImportFeeDetailPo importFeeDetailPo = new ImportFeeDetailPo();
-        importFeeDetailPo.setAmount(value);
+        importFeeDetailPo.setAmount(amount + "");
         importFeeDetailPo.setCommunityId(reqJson.getString("communityId"));
         importFeeDetailPo.setEndTime(reqJson.getString("endTime"));
         importFeeDetailPo.setFeeId(payFeePo.getFeeId());
