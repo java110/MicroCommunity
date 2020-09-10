@@ -19,6 +19,8 @@ public class FeeAttrDto extends PageDto implements Serializable {
 
     public static final String SPEC_CD_IMPORT_FEE_NAME = "390002";//导入费用名称
 
+    public static final String SPEC_CD_SHARE_DEGREES = "390003";//公摊用量
+
     private String attrId;
     private String specCd;
     private String communityId;

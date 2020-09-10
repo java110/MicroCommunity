@@ -11,6 +11,8 @@ public class FeeFormulaPo implements Serializable {
     private String formulaDesc;
     private String communityId;
 
+    private String price;
+
 
     public String getFormulaId() {
         return formulaId;
@@ -58,5 +60,13 @@ public class FeeFormulaPo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

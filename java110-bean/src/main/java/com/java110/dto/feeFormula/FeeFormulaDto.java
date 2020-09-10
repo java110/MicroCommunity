@@ -22,6 +22,7 @@ public class FeeFormulaDto extends PageDto implements Serializable {
     private String formulaValue;
     private String formulaDesc;
     private String communityId;
+    private double price;
 
 
     private Date createTime;
@@ -84,5 +85,13 @@ public class FeeFormulaDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
