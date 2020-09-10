@@ -160,7 +160,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
             scopeName = roomDtos.get(0).getFloorNum() + "栋" + roomDtos.get(0).getUnitNum() + "单元";
         }
         importFeePo.setRemark("总使用量：" + reqJson.getString("totalDegrees")
-                + ",公式：" + formulaValue + ",公摊范围：" + scopeName);
+                + ";公式：" + formulaValue + ";公摊范围：" + scopeName);
         importFeeInnerServiceSMOImpl.saveImportFee(importFeePo);
 
         importFeeDetailInnerServiceSMOImpl.saveImportFeeDetails(importFeeDetailPos);
