@@ -7,16 +7,16 @@
     <!-- 保存小区楼信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessFloorInfo" parameterType="Map">
         insert into business_floor(
-        floor_id,operate,name,remark,b_id,user_id,floor_num,community_id
+        floor_id,operate,name,remark,b_id,user_id,floor_num,community_id,floor_area
         ) values (
-        #{floorId},#{operate},#{name},#{remark},#{bId},#{userId},#{floorNum},#{communityId}
+        #{floorId},#{operate},#{name},#{remark},#{bId},#{userId},#{floorNum},#{communityId},#{floorArea}
         )
     </insert>
 
 
     <!-- 查询小区楼信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessFloorInfo" parameterType="Map" resultType="Map">
-        select t.floor_id,t.operate,t.name,t.remark,t.b_id,t.user_id,t.floor_num,t.community_id
+        select t.floor_id,t.operate,t.name,t.remark,t.b_id,t.user_id,t.floor_num,t.community_id,t.floor_area
         from business_floor t
         where 1 =1
         <if test="floorId !=null and floorId != ''">
@@ -50,8 +50,8 @@
     <!-- 保存小区楼信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFloorInfoInstance" parameterType="Map">
         insert into f_floor(
-        floor_id,name,status_cd,remark,b_id,user_id,floor_num,community_id
-        ) select t.floor_id,t.name,'0',t.remark,t.b_id,t.user_id,t.floor_num,t.community_id
+        floor_id,name,status_cd,remark,b_id,user_id,floor_num,community_id,floor_area
+        ) select t.floor_id,t.name,'0',t.remark,t.b_id,t.user_id,t.floor_num,t.community_id,t.floor_area
         from business_floor t where 1=1
         <if test="floorId !=null and floorId != ''">
             and t.floor_id= #{floorId}
@@ -83,7 +83,8 @@
     <!-- 查询小区楼信息 add by wuxw 2018-07-03 -->
     <select id="getFloorInfo" parameterType="Map" resultType="Map">
         select t.floor_id,t.floor_id floorId,t.name,t.status_cd, t.status_cd statusCd,t.remark,t.b_id,
-        t.b_id bId,t.user_id, t.user_id userId,t.floor_num ,t.floor_num floorNum,t.community_id communityId,t.community_id
+        t.b_id bId,t.user_id, t.user_id userId,t.floor_num ,t.floor_num floorNum,t.community_id communityId,t.community_id,
+        t.floor_area,t.floor_area floorArea
         from f_floor t
         where 1 =1
         <if test="floorId !=null and floorId != ''">
@@ -126,6 +127,9 @@
         </if>
         <if test="name !=null and name != ''">
             , t.name= #{name}
+        </if>
+        <if test="floorArea !=null and floorArea != ''">
+            , t.floor_area= #{floorArea}
         </if>
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
@@ -196,7 +200,8 @@
         f.`name` floorName,
         f.`remark`,
         f.`user_id` userId,
-        f.`community_id` communityId
+        f.`community_id` communityId,
+        f.floor_area floorArea
         FROM
         f_floor f
         where f.`community_id` = #{communityId}
