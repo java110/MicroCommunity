@@ -7,9 +7,9 @@
     <!-- 保存小区房屋信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRoomInfo" parameterType="Map">
         insert into business_building_room(
-        unit_price,section,remark,user_id,room_id,layer,built_up_area,operate,room_num,unit_id,b_id,apartment,state,community_id
+        fee_coefficient,section,remark,user_id,room_id,layer,built_up_area,operate,room_num,unit_id,b_id,apartment,state,community_id
         ) values (
-        #{unitPrice},#{section},#{remark},#{userId},#{roomId},#{layer},#{builtUpArea},#{operate},#{roomNum},#{unitId},#{bId},#{apartment},#{state},
+        #{feeCoefficient},#{section},#{remark},#{userId},#{roomId},#{layer},#{builtUpArea},#{operate},#{roomNum},#{unitId},#{bId},#{apartment},#{state},
         #{communityId}
         )
     </insert>
@@ -17,14 +17,14 @@
 
     <!-- 查询小区房屋信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessRoomInfo" parameterType="Map" resultType="Map">
-        select t.unit_price,t.unit_price unitPrice,t.section,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id
+        select t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id
         roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.operate,t.room_num,t.room_num
         roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,t.community_id,t.community_id
         communityId
         from business_building_room t
         where 1 =1
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -72,12 +72,12 @@
     <!-- 保存小区房屋信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRoomInfoInstance" parameterType="Map">
         insert into building_room(
-        unit_price,section,status_cd,remark,user_id,room_id,layer,built_up_area,room_num,unit_id,b_id,apartment,state,community_id
+        fee_coefficient,section,status_cd,remark,user_id,room_id,layer,built_up_area,room_num,unit_id,b_id,apartment,state,community_id
         ) select
-        t.unit_price,t.section,'0',t.remark,t.user_id,t.room_id,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state,t.community_id
+        t.fee_coefficient,t.section,'0',t.remark,t.user_id,t.room_id,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state,t.community_id
         from business_building_room t where 1=1
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -122,14 +122,14 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfo" parameterType="Map" resultType="Map">
-        select t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd
+        select t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
         statusCd,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area
         builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id
         bId,t.apartment,t.state,t.community_id,t.community_id communityId
         from building_room t
         where 1 =1
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -192,8 +192,8 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="unitPrice !=null and unitPrice != ''">
-            , t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            , t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             , t.section= #{section}
@@ -240,8 +240,8 @@
         select count(1) count
         from building_room t
         where 1 =1
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -301,8 +301,8 @@
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -361,8 +361,8 @@
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -422,8 +422,8 @@
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -471,7 +471,7 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfoWithOutSellByCommunityId" parameterType="Map" resultType="Map">
-        SELECT t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
         FROM
@@ -484,8 +484,8 @@
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -535,7 +535,7 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfoWithSellByCommunityId" parameterType="Map" resultType="Map">
-        SELECT t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
         FROM
@@ -548,8 +548,8 @@
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -600,7 +600,7 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfoByCommunityId" parameterType="Map" resultType="Map">
-        SELECT t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
         u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum
@@ -618,8 +618,8 @@
         <if test="floorNum !=null and floorNum != ''">
             and f.`floor_num`= #{floorNum}
         </if>
-        <if test="unitPrice !=null and unitPrice != ''">
-            and t.unit_price= #{unitPrice}
+        <if test="feeCoefficient !=null and feeCoefficient != ''">
+            and t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">
             and t.section= #{section}
@@ -678,7 +678,7 @@
     <!-- 根据业主查询房屋信息 -->
     <select id="getRoomInfoByOwner" parameterType="Map" resultType="Map">
         SELECT
-        t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num`
         unitNum,f.`floor_num` floorNum
@@ -733,7 +733,7 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfos" parameterType="Map" resultType="Map">
-        SELECT t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
         FROM
