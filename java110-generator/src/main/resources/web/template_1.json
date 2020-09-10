@@ -1,107 +1,43 @@
 {
-  "templateName":"抄表",
+  "templateName":"公摊公式",
   "directories": "property",
-  "templateCode":"meterWater",
-  "templateKey":"waterId",
-  "templateKeyName":"表ID",
-  "searchCode": "waterId",
-  "searchName": "表ID",
+  "templateCode":"feeFormula",
+  "templateKey":"formulaId",
+  "templateKeyName":"公式ID",
+  "searchCode": "formulaId",
+  "searchName": "公式ID",
   "conditions": [
     {
-      "name": "表ID",
+      "name": "公式ID",
       "inputType": "input",
-      "code": "waterId",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "表类型",
-      "inputType": "select",
-      "selectValue":"1010,2020",
-      "selectValueName":"电表,水表",
-      "code": "meterType",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "房屋编号",
-      "inputType": "input",
-      "code": "roomNum",
+      "code": "formulaId",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code": "meterType",
-      "cnCode":"表类型",
-      "desc":"必填，请选择表类型",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "select",
-      "selectValue":"1010,2020",
-      "selectValueName":"电表,水表",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"表类型错误",
-      "show": true
-    },
-    {
-      "code": "preDegrees",
-      "cnCode":"上期度数",
-      "desc":"必填，请填写上期度数",
+      "code": "formulaValue",
+      "cnCode":"公式",
+      "desc":"必填，请填写公式",
       "required":true,
       "hasDefaultValue":false,
       "inputType": "input",
-      "limit":"money",
-      "limitParam":"",
-      "limitErrInfo":"上期度数格式错误",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"公式太复杂",
       "show": true
     },
     {
-      "code": "curDegrees",
-      "cnCode":"本期度数",
-      "desc":"必填，请填写本期度数",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"money",
-      "limitParam":"",
-      "limitErrInfo":"本期度数格式错误",
-      "show": true
-    },
-    {
-      "code": "preReadingTime",
-      "cnCode":"上期读表时间",
-      "desc":"必填，请填写上期读表时间",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"date",
-      "limitParam":"",
-      "limitErrInfo":"格式错误",
-      "show": true
-    },
-    {
-      "code": "curReadingTime",
-      "cnCode":"本期读表时间",
-      "desc":"必填，请填写本期读表时间",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"date",
-      "limitParam":"",
-      "limitErrInfo":"格式错误",
-      "show": true
-    },
-    {
-      "code": "remark",
-      "cnCode":"备注",
-      "desc":"选填，请填写备注",
+      "code": "formulaDesc",
+      "cnCode":"描述",
+      "desc":"选填，请填写本期度数",
       "required":false,
       "hasDefaultValue":false,
       "inputType": "input",
       "limit":"maxLength",
-      "limitParam":"500",
-      "limitErrInfo":"备注格式错误",
-      "show": false
+      "limitParam":"200",
+      "limitErrInfo":"描述太长",
+      "show": true
     }
   ]
 }

@@ -1,28 +1,28 @@
 {
   "autoMove": true,
-  "id": "attrId",
-  "name": "rentingPoolAttr",
-  "desc": "出租房屋属性",
+  "id": "formulaId",
+  "name": "feeFormula",
+  "desc": "费用公式",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "shareName": "user",
-  "tableName": "renting_pool_attr",
+  "shareName": "fee",
+  "tableName": "fee_formula",
   "param": {
-    "rentingId": "renting_id",
-    "attrId": "attr_id",
-    "specCd": "spec_cd",
-    "value": "value",
+    "formulaId": "formula_id",
+    "formulaType": "formula_type",
+    "formulaValue": "formula_value",
+    "formulaDesc": "formula_desc",
+    "communityId": "community_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "rentingId",
-      "msg": "出租房屋ID不能为空"
+      "code": "formulaValue",
+      "msg": "公式不能为空"
     },
     {
-      "code": "specCd",
-      "msg": "用户规格不能为空"
+      "code": "communityId",
+      "msg": "小区不能为空"
     }
   ]
 }
-
