@@ -100,6 +100,7 @@ public class WechatFactory {
      * @return
      */
     public static String getAppId(String wId) {
+        wId = wId.replace(" ", "+");
         return AuthenticationFactory.decrypt(password, wId);
     }
 
