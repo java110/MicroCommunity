@@ -45,6 +45,7 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "curDegrees", "请求报文中未包含curDegrees");
         Assert.hasKeyAndValue(reqJson, "preReadingTime", "请求报文中未包含preReadingTime");
         Assert.hasKeyAndValue(reqJson, "curReadingTime", "请求报文中未包含curReadingTime");
+        Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
@@ -65,7 +66,8 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         payFeePo.setStartTime(reqJson.getString("preReadingTime"));
         payFeePo.setEndTime(reqJson.getString("preReadingTime"));
         payFeePo.setPayerObjId(reqJson.getString("objId"));
-        payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        //payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        payFeePo.setPayerObjType(reqJson.getString("objType"));
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
         payFeePo.setState(FeeDto.STATE_DOING);
         payFeePo.setUserId(context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));

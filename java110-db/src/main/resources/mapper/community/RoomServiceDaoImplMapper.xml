@@ -301,6 +301,7 @@
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
+
         <if test="feeCoefficient !=null and feeCoefficient != ''">
             and t.fee_coefficient= #{feeCoefficient}
         </if>
@@ -342,6 +343,13 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+
+        <if test="floorNum !=null and floorNum != ''">
+            and f.`floor_num`= #{floorNum}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and t.unit_num= #{unitNum}
         </if>
 
 
