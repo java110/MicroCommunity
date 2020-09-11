@@ -29,7 +29,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("feeSharingBMOImpl")
 public class FeeSharingBMOImpl implements IFeeSharingBMO {
@@ -133,8 +135,10 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         List<FeeAttrPo> feeAttrPos = new ArrayList<>();
         List<ImportFeeDetailPo> importFeeDetailPos = new ArrayList<>();
         String importFeeId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId);
+        Map<String, Integer> floorRooms = new HashMap();
+        Map<String, Integer> unitRooms = new HashMap();
         for (RoomDto roomDto : roomDtos) {
-            doSharingFeeToRoom(formulaValue, price, roomDto, reqJson, payFeePos, feeConfigDto, feeAttrPos, importFeeId, importFeeDetailPos);
+            doSharingFeeToRoom(formulaValue, price, roomDto, reqJson, payFeePos, feeConfigDto, feeAttrPos, importFeeId, importFeeDetailPos, floorRooms, unitRooms);
         }
 
         feeInnerServiceSMOImpl.saveFee(payFeePos);
@@ -179,13 +183,40 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
     private void doSharingFeeToRoom(String formulaValue, double price, RoomDto roomDto, JSONObject reqJson,
                                     List<PayFeePo> payFeePos, FeeConfigDto feeConfigDto,
                                     List<FeeAttrPo> feeAttrPos, String importFeeId,
-                                    List<ImportFeeDetailPo> importFeeDetailPos) {
+                                    List<ImportFeeDetailPo> importFeeDetailPos,
+                                    Map<String, Integer> floorRooms,
+                                    Map<String, Integer> unitRooms) {
+
+        if (!floorRooms.containsKey(roomDto.getFloorId())) {
+            RoomDto tmpRoomDto = new RoomDto();
+            tmpRoomDto.setCommunityId(roomDto.getCommunityId());
+            tmpRoomDto.setFloorId(roomDto.getFloorId());
+            tmpRoomDto.setState(RoomDto.STATE_SELL);
+            int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(tmpRoomDto);
+            floorRooms.put(roomDto.getFloorId(), roomCount);
+        }
+
+        if (!unitRooms.containsKey(roomDto.getUnitId())) {
+            RoomDto tmpRoomDto = new RoomDto();
+            tmpRoomDto.setCommunityId(roomDto.getCommunityId());
+            tmpRoomDto.setUnitId(roomDto.getUnitId());
+            tmpRoomDto.setState(RoomDto.STATE_SELL);
+            int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(tmpRoomDto);
+            unitRooms.put(roomDto.getUnitId(), roomCount);
+        }
+
+        long floorRoomCount = floorRooms.get(roomDto.getFloorId());
+        long unitRoomCount = unitRooms.get(roomDto.getUnitId());
+
         String orgFormulaValue = formulaValue;
         formulaValue = formulaValue.replace("T", reqJson.getString("totalDegrees"))
                 .replace("F", roomDto.getFloorArea())
                 .replace("U", roomDto.getUnitArea())
                 .replace("R", roomDto.getBuiltUpArea())
-                .replace("X", roomDto.getFeeCoefficient());
+                .replace("X", roomDto.getFeeCoefficient())
+                .replace("L", floorRoomCount + "")
+                .replace("D", unitRoomCount + "");
+
 
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
