@@ -536,6 +536,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("floorNum", importFloor.getFloorNum());
                 paramIn.put("userId", result.getUserId());
                 paramIn.put("name", importFloor.getFloorNum() + "号楼");
+                paramIn.put("floorArea", 1.00);
+
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
                 savedFloorInfo = getExistsFloor(pd, result, importFloor);
             }
@@ -563,6 +565,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("unitNum", importFloor.getUnitNum());
             paramIn.put("layerCount", importFloor.getLayerCount());
             paramIn.put("lift", importFloor.getLift());
+            paramIn.put("unitArea", 1.00);
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
 
             //将unitId 刷入ImportFloor对象
