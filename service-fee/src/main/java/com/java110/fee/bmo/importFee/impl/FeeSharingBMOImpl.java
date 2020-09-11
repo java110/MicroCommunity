@@ -11,11 +11,7 @@ import com.java110.dto.feeFormula.FeeFormulaDto;
 import com.java110.fee.bmo.importFee.IFeeSharingBMO;
 import com.java110.intf.IImportFeeDetailInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeFormulaInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IImportFeeInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeePo;
@@ -250,11 +246,13 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
 
-        String formulaValueRemark = orgFormulaValue.replace("T", reqJson.getString("totalDegrees")+"<总用量>")
-                .replace("F", roomDto.getFloorArea()+"<"+roomDto.getFloorNum()+"栋面积>")
-                .replace("U", roomDto.getUnitArea()+"<"+roomDto.getUnitNum()+"单元面积>")
-                .replace("R", roomDto.getBuiltUpArea()+"<"+roomDto.getRoomNum()+"室面积>")
-                .replace("X", roomDto.getFeeCoefficient()+"<"+roomDto.getRoomNum()+"室算费系数>");
+        String formulaValueRemark = orgFormulaValue.replace("T", reqJson.getString("totalDegrees") + "<总用量>")
+                .replace("F", roomDto.getFloorArea() + "<" + roomDto.getFloorNum() + "栋面积>")
+                .replace("U", roomDto.getUnitArea() + "<" + roomDto.getUnitNum() + "单元面积>")
+                .replace("R", roomDto.getBuiltUpArea() + "<" + roomDto.getRoomNum() + "室面积>")
+                .replace("X", roomDto.getFeeCoefficient() + "<" + roomDto.getRoomNum() + "室算费系数>");
+
+        formulaValueRemark += (" * " + price + "<单价>");
         // 公摊公式
         feeAttrPo = new FeeAttrPo();
         feeAttrPo.setCommunityId(reqJson.getString("communityId"));
