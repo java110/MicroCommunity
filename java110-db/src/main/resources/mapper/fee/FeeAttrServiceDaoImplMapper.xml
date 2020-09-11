@@ -79,7 +79,7 @@
         statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.value,
         td.name specCdName
         from pay_fee_attrs t
-        left join t_dict td on t.spec_cd = td.table_columns and td.table_name = 'pay_fee_attrs'
+        left join t_dict td on t.spec_cd = td.status_cd and td.table_name = 'pay_fee_attrs' and td.table_columns = 'spec_cd'
         where 1 =1
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
