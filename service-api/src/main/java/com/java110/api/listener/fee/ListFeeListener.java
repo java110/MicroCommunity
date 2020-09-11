@@ -28,12 +28,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -103,6 +98,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
             List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
             computeFeePrice(feeDtos);
             fees = BeanConvertUtil.covertBeanList(feeDtos, ApiFeeDataVo.class);
+            freshFeeAttrs(fees, feeDtos);
 
 
         } else {
@@ -119,6 +115,17 @@ public class ListFeeListener extends AbstractServiceApiListener {
 
         context.setResponseEntity(responseEntity);
 
+    }
+
+    private void freshFeeAttrs(List<ApiFeeDataVo> fees, List<FeeDto> feeDtos) {
+
+        for (ApiFeeDataVo apiFeeDataVo : fees) {
+            for (FeeDto feeDto : feeDtos) {
+                if (apiFeeDataVo.getFeeId().equals(feeDto.getFeeId())) {
+                    apiFeeDataVo.setFeeAttrs(feeDto.getFeeAttrDtos());
+                }
+            }
+        }
     }
 
     private void computeFeePrice(List<FeeDto> feeDtos) {

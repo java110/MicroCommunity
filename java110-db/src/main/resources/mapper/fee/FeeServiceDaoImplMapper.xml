@@ -655,6 +655,7 @@
     </select>
 
 
+
     <!-- 查询费用信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeByAttr" parameterType="Map" resultType="Map">
         select t.amount,t.income_obj_id,t.income_obj_id incomeObjId,t.fee_type_cd,t.fee_type_cd

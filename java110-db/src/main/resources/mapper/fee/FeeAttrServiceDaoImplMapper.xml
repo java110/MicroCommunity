@@ -76,8 +76,10 @@
     <!-- 查询费用属性信息 add by wuxw 2018-07-03 -->
     <select id="getFeeAttrInfo" parameterType="Map" resultType="Map">
         select t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.value
+        statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.value,
+        td.name specCdName
         from pay_fee_attrs t
+        left join t_dict td on t.spec_cd = td.table_columns and td.table_name = 'pay_fee_attrs'
         where 1 =1
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
@@ -96,6 +98,12 @@
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
+        </if>
+        <if test="feeIds !=null">
+            and t.fee_id in
+            <foreach collection="feeIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="value !=null and value != ''">
             and t.value= #{value}

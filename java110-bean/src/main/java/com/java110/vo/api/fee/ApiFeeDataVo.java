@@ -1,7 +1,10 @@
 package com.java110.vo.api.fee;
 
+import com.java110.dto.fee.FeeAttrDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName ApiFeeDataVo
@@ -49,6 +52,7 @@ public class ApiFeeDataVo implements Serializable {
 
     private String preReadingTime;
     private String curReadingTime;
+    private List<FeeAttrDto> feeAttrs;
 
     public String getAmount() {
         return amount;
@@ -288,5 +292,13 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setCurReadingTime(String curReadingTime) {
         this.curReadingTime = curReadingTime;
+    }
+
+    public List<FeeAttrDto> getFeeAttrs() {
+        return feeAttrs;
+    }
+
+    public void setFeeAttrs(List<FeeAttrDto> feeAttrs) {
+        this.feeAttrs = feeAttrs;
     }
 }

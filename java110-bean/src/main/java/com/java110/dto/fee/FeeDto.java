@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -98,6 +99,8 @@ public class FeeDto extends PageDto implements Serializable {
 
     private Date preReadingTime;
     private Date curReadingTime;
+
+    private List<FeeAttrDto> feeAttrDtos;
 
 
     public String getAmount() {
@@ -484,5 +487,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setCurReadingTime(Date curReadingTime) {
         this.curReadingTime = curReadingTime;
+    }
+
+    public List<FeeAttrDto> getFeeAttrDtos() {
+        return feeAttrDtos;
+    }
+
+    public void setFeeAttrDtos(List<FeeAttrDto> feeAttrDtos) {
+        this.feeAttrDtos = feeAttrDtos;
     }
 }

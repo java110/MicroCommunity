@@ -223,6 +223,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
 
         payFeePos.add(payFeePo);
 
+        // 导入费用名称
         FeeAttrPo feeAttrPo = new FeeAttrPo();
         feeAttrPo.setCommunityId(reqJson.getString("communityId"));
         feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
@@ -231,6 +232,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
 
+        // 公摊用量
         feeAttrPo = new FeeAttrPo();
         feeAttrPo.setCommunityId(reqJson.getString("communityId"));
         feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
@@ -238,6 +240,30 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         feeAttrPo.setValue(value);
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
+
+        // 公摊总用量
+        feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_TOTAL_DEGREES);
+        feeAttrPo.setValue(reqJson.getString("totalDegrees"));
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPos.add(feeAttrPo);
+
+        String formulaValueRemark = orgFormulaValue.replace("T", reqJson.getString("totalDegrees")+"<总用量>")
+                .replace("F", roomDto.getFloorArea()+"<"+roomDto.getFloorNum()+"栋面积>")
+                .replace("U", roomDto.getUnitArea()+"<"+roomDto.getUnitNum()+"单元面积>")
+                .replace("R", roomDto.getBuiltUpArea()+"<"+roomDto.getRoomNum()+"室面积>")
+                .replace("X", roomDto.getFeeCoefficient()+"<"+roomDto.getRoomNum()+"室算费系数>");
+        // 公摊公式
+        feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_SHARE_FORMULA);
+        feeAttrPo.setValue(formulaValueRemark);
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPos.add(feeAttrPo);
+
         ImportFeeDetailPo importFeeDetailPo = new ImportFeeDetailPo();
         importFeeDetailPo.setAmount(amount + "");
         importFeeDetailPo.setCommunityId(reqJson.getString("communityId"));
@@ -254,8 +280,6 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         importFeeDetailPo.setImportFeeId(importFeeId);
         importFeeDetailPo.setRemark("公摊用量：" + value);
         importFeeDetailPos.add(importFeeDetailPo);
-
-
     }
 
     private String deakFormula(FeeFormulaDto feeFormulaDto) {
