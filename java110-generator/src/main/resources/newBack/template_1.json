@@ -1,24 +1,44 @@
 {
   "autoMove": true,
-  "id": "formulaId",
-  "name": "feeFormula",
-  "desc": "费用公式",
+  "id": "flowId",
+  "name": "rentingPoolFlow",
+  "desc": "出租流程",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "shareName": "fee",
-  "tableName": "fee_formula",
+  "shareName": "user",
+  "tableName": "renting_pool_flow",
   "param": {
-    "formulaId": "formula_id",
-    "formulaType": "formula_type",
-    "formulaValue": "formula_value",
-    "formulaDesc": "formula_desc",
+    "flowId": "flow_id",
+    "rentingId": "renting_id",
+    "useName": "user_name",
+    "userTel": "user_tel",
+    "dealTime": "deal_time",
+    "state": "state",
+    "userRole": "user_role",
+    "context": "context",
     "communityId": "community_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "formulaValue",
-      "msg": "公式不能为空"
+      "code": "rentingId",
+      "msg": "出租不能为空"
+    },
+    {
+      "code": "useName",
+      "msg": "处理人不能为空"
+    },
+    {
+      "code": "useTel",
+      "msg": "处理人电话不能为空"
+    },
+    {
+      "code": "dealTime",
+      "msg": "处理时间不能为空"
+    },
+    {
+      "code": "userRole",
+      "msg": "处理人角色不能为空"
     },
     {
       "code": "communityId",
