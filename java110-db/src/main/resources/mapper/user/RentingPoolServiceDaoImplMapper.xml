@@ -65,7 +65,7 @@
             and t.state= #{state}
         </if>
         <if test="states !=null ">
-            and t.states in
+            and t.state in
             <foreach collection="states" item="item" index="index" open="(" close=")" separator=",">
                 #{item}
             </foreach>
