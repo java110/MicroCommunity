@@ -1,26 +1,26 @@
 package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.rentingConfig.RentingConfigDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.rentingPoolAttr.RentingPoolAttrDto;
 import com.java110.po.rentingConfig.RentingConfigPo;
 import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.po.rentingPoolAttr.RentingPoolAttrPo;
+import com.java110.po.rentingPoolFlow.RentingPoolFlowPo;
 import com.java110.user.bmo.rentingConfig.IDeleteRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.IGetRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.ISaveRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.IUpdateRentingConfigBMO;
-import com.java110.user.bmo.rentingPool.IDeleteRentingPoolBMO;
-import com.java110.user.bmo.rentingPool.IGetRentingPoolBMO;
-import com.java110.user.bmo.rentingPool.ISaveRentingPoolBMO;
-import com.java110.user.bmo.rentingPool.IUpdateRentingPoolBMO;
+import com.java110.user.bmo.rentingPool.*;
 import com.java110.user.bmo.rentingPoolAttr.IDeleteRentingPoolAttrBMO;
 import com.java110.user.bmo.rentingPoolAttr.IGetRentingPoolAttrBMO;
 import com.java110.user.bmo.rentingPoolAttr.ISaveRentingPoolAttrBMO;
 import com.java110.user.bmo.rentingPoolAttr.IUpdateRentingPoolAttrBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +60,9 @@ public class RentingApi {
 
     @Autowired
     private IGetRentingPoolAttrBMO getRentingPoolAttrBMOImpl;
+
+    @Autowired
+    private IAuditRentingBMO auditRentingBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -121,7 +124,8 @@ public class RentingApi {
      * @path /app/renting/deleteRentingConfig
      */
     @RequestMapping(value = "/deleteRentingConfig", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteRentingConfig(@RequestBody JSONObject reqJson) { ;
+    public ResponseEntity<String> deleteRentingConfig(@RequestBody JSONObject reqJson) {
+        ;
 
         Assert.hasKeyAndValue(reqJson, "rentingConfigId", "rentingConfigId不能为空");
 
@@ -315,5 +319,35 @@ public class RentingApi {
         rentingPoolAttrDto.setRow(row);
         rentingPoolAttrDto.setCommunityId(communityId);
         return getRentingPoolAttrBMOImpl.get(rentingPoolAttrDto);
+    }
+
+    /**
+     * 代理商 或者运营团队审核
+     *
+     * @param reqJson 请求信息
+     * @return
+     * @serviceCode /renting/auditRenting
+     * @path /app/renting/auditRenting
+     */
+    public ResponseEntity<String> auditRenting(@RequestBody JSONObject reqJson,
+                                               @RequestHeader(value = "store-id") String storeId,
+                                               @RequestHeader(value = "user-id") String userId) {
+        Assert.hasKeyAndValue(reqJson, "rentingId", "请求报文中未包含出租信息");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含状态");
+        Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含审核内容");
+        Assert.hasKeyAndValue(reqJson, "userRole", "请求报文中未包含角色");
+        Assert.hasValue(storeId, "请求报文中未包含商户ID");
+        Assert.hasValue(userId, "请求报文中未包含用户ID");
+
+
+        RentingPoolFlowPo rentingPoolFlowPo = new RentingPoolFlowPo();
+        rentingPoolFlowPo.setContext(reqJson.getString("context"));
+        rentingPoolFlowPo.setDealTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        rentingPoolFlowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
+        rentingPoolFlowPo.setRentingId(reqJson.getString("rentingId"));
+        rentingPoolFlowPo.setState(reqJson.getString("state"));
+        rentingPoolFlowPo.setUserRole(reqJson.getString("userRole"));
+
+        return auditRentingBMOImpl.audit(rentingPoolFlowPo, userId);
     }
 }

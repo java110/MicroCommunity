@@ -1,6 +1,7 @@
 package com.java110.dto.rentingPoolFlow;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,15 +15,20 @@ import java.util.Date;
  **/
 public class RentingPoolFlowDto extends PageDto implements Serializable {
 
+    public static final String STATE_SUBMIT = "1001";
+    public static final String STATE_PROXY_TRUE = "2002";
+    public static final String STATE_PROXY_FALSE = "3003";
+
+
     private String dealTime;
-private String useName;
-private String context;
-private String userTel;
-private String state;
-private String userRole;
-private String communityId;
-private String flowId;
-private String rentingId;
+    private String useName;
+    private String context;
+    private String userTel;
+    private String state;
+    private String userRole;
+    private String communityId;
+    private String flowId;
+    private String rentingId;
 
 
     private Date createTime;
@@ -33,55 +39,72 @@ private String rentingId;
     public String getDealTime() {
         return dealTime;
     }
-public void setDealTime(String dealTime) {
+
+    public void setDealTime(String dealTime) {
         this.dealTime = dealTime;
     }
-public String getUseName() {
+
+    public String getUseName() {
         return useName;
     }
-public void setUseName(String useName) {
+
+    public void setUseName(String useName) {
         this.useName = useName;
     }
-public String getContext() {
+
+    public String getContext() {
         return context;
     }
-public void setContext(String context) {
+
+    public void setContext(String context) {
         this.context = context;
     }
-public String getUserTel() {
+
+    public String getUserTel() {
         return userTel;
     }
-public void setUserTel(String userTel) {
+
+    public void setUserTel(String userTel) {
         this.userTel = userTel;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getUserRole() {
+
+    public String getUserRole() {
         return userRole;
     }
-public void setUserRole(String userRole) {
+
+    public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFlowId() {
+
+    public String getFlowId() {
         return flowId;
     }
-public void setFlowId(String flowId) {
+
+    public void setFlowId(String flowId) {
         this.flowId = flowId;
     }
-public String getRentingId() {
+
+    public String getRentingId() {
         return rentingId;
     }
-public void setRentingId(String rentingId) {
+
+    public void setRentingId(String rentingId) {
         this.rentingId = rentingId;
     }
 

@@ -14,6 +14,14 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class RentingPoolDto extends PageDto implements Serializable {
+    //-- 状态，提交中 0，代理商确认 1，预约看房 2，待支付 3，申请合同 4，运营团队确认 5 ，完成 6
+    public static final String STATE_SUBMIT = "0";
+    public static final String STATE_PROXY_AUDIT = "1";
+    public static final String STATE_PROXY_VIEW_ROOM = "2";
+    public static final String STATE_TO_PAY = "3";
+    public static final String STATE_APPLY_AGREE = "4";
+    public static final String STATE_ADMIN_AUDIT = "5";
+    public static final String STATE_FINISH = "6";
 
     private String latitude;
     private String ownerTel;
