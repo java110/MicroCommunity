@@ -233,13 +233,20 @@ public class RentingApi {
      * @path /app/renting/queryRentingPool
      */
     @RequestMapping(value = "/queryRentingPool", method = RequestMethod.GET)
-    public ResponseEntity<String> queryRentingPool(@RequestParam(value = "communityId") String communityId,
+    public ResponseEntity<String> queryRentingPool(@RequestParam(value = "communityId", required = false) String communityId,
                                                    @RequestParam(value = "page") int page,
-                                                   @RequestParam(value = "row") int row) {
+                                                   @RequestParam(value = "row") int row,
+                                                   @RequestParam(value = "state", required = false) String state
+    ) {
         RentingPoolDto rentingPoolDto = new RentingPoolDto();
         rentingPoolDto.setPage(page);
         rentingPoolDto.setRow(row);
         rentingPoolDto.setCommunityId(communityId);
+        if (state.contains(",")) {
+            rentingPoolDto.setStates(state.split(","));
+        } else {
+            rentingPoolDto.setState(state);
+        }
         return getRentingPoolBMOImpl.get(rentingPoolDto);
     }
 

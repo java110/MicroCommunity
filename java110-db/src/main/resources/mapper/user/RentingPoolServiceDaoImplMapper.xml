@@ -64,6 +64,13 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="states !=null ">
+            and t.states in
+            <foreach collection="states" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
