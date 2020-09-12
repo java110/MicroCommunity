@@ -329,6 +329,7 @@ public class RentingApi {
      * @serviceCode /renting/auditRenting
      * @path /app/renting/auditRenting
      */
+    @RequestMapping(value = "/auditRenting", method = RequestMethod.POST)
     public ResponseEntity<String> auditRenting(@RequestBody JSONObject reqJson,
                                                @RequestHeader(value = "store-id") String storeId,
                                                @RequestHeader(value = "user-id") String userId) {
