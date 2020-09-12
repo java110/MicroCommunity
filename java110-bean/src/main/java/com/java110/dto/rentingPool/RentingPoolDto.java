@@ -35,6 +35,7 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private String ownerName;
     private String price;
     private String state;
+    private String stateName;
     private String[] states;
     private String communityId;
     private String longitude;
@@ -180,5 +181,13 @@ public class RentingPoolDto extends PageDto implements Serializable {
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
