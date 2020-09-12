@@ -31,6 +31,7 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private String checkIn;
     private String rentingId;
     private String roomId;
+    private String roomName;
     private String paymentType;
     private String paymentTypeName;
     private String ownerName;
@@ -208,5 +209,13 @@ public class RentingPoolDto extends PageDto implements Serializable {
 
     public void setRentingType(String rentingType) {
         this.rentingType = rentingType;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }
