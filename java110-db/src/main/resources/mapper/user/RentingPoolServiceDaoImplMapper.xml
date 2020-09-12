@@ -22,10 +22,11 @@
         statusCd,t.renting_title,t.renting_title rentingTitle,t.check_in,t.check_in
         checkIn,t.renting_id,t.renting_id rentingId,t.room_id,t.room_id roomId,t.payment_type,t.payment_type
         paymentType,t.owner_name,t.owner_name ownerName,t.price,t.state,t.community_id,t.community_id
-        communityId,t.longitude,td.name stateName,td2.name paymentTypeName
+        communityId,t.longitude,td.name stateName,td2.name paymentTypeName,rc.renting_type rentingType
         from renting_pool t
         left join t_dict td on td.status_cd = t.state and td.table_name = 'renting_pool' and td.table_columns = 'state'
         left join t_dict td2 on td2.status_cd = t.payment_type and td2.table_name = 'renting_pool' and td2.table_columns = 'payment_type'
+        left join renting_config rc on t.renting_config_id = rc.renting_config_id and rc.status_cd = '0'
         where 1 =1
         <if test="latitude !=null and latitude != ''">
             and t.latitude= #{latitude}

@@ -41,6 +41,8 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private String communityId;
     private String longitude;
 
+    private String rentingType;
+
 
     private Date createTime;
 
@@ -198,5 +200,13 @@ public class RentingPoolDto extends PageDto implements Serializable {
 
     public void setPaymentTypeName(String paymentTypeName) {
         this.paymentTypeName = paymentTypeName;
+    }
+
+    public String getRentingType() {
+        return rentingType;
+    }
+
+    public void setRentingType(String rentingType) {
+        this.rentingType = rentingType;
     }
 }
