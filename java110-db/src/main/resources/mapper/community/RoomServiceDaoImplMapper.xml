@@ -349,7 +349,7 @@
             and f.`floor_num`= #{floorNum}
         </if>
         <if test="unitNum !=null and unitNum != ''">
-            and t.unit_num= #{unitNum}
+            and u.unit_num= #{unitNum}
         </if>
 
 
