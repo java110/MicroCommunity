@@ -1,0 +1,40 @@
+{
+  "autoMove": true,
+  "id": "prestoreFeeId",
+  "name": "prestoreFee",
+  "desc": "预存费用",
+  "shareParam": "prestoreFeeId",
+  "shareColumn": "prestore_fee_id",
+  "shareName": "fee",
+  "tableName": "prestore_fee",
+  "param": {
+    "prestoreFeeId": "prestore_fee_id",
+    "prestoreFeeType": "prestore_fee_type",
+    "roomId": "room_id",
+    "prestoreFeeObjType": "prestore_fee_obj_type",
+    "prestoreFeeAmount": "prestore_fee_amount",
+    "remark": "remark",
+    "communityId": "community_id",
+    "state": "state",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "prestoreFeeType",
+      "msg": "预存费用类型不能为空"
+    },
+    {
+      "code": "roomId",
+      "msg": "房屋不能为空"
+    },
+    {
+      "code": "prestoreFeeObjType",
+      "msg": "预存费用对象不能为空"
+    },
+    {
+      "code": "prestoreFeeAmount",
+      "msg": "预存费用金额不能为空"
+    }
+  ]
+}
+
