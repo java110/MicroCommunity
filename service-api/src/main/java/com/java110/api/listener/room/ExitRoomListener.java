@@ -77,29 +77,29 @@ public class ExitRoomListener extends AbstractServiceApiPlusListener {
         super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
 
         //校验物业费是否已经交清
-        FeeDto feeDto = new FeeDto();
-        feeDto.setCommunityId(reqJson.getString("communityId"));
-        feeDto.setIncomeObjId(reqJson.getString("storeId"));
-        feeDto.setPayerObjId(reqJson.getString("roomId"));
-        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        if (feeDtos == null || feeDtos.size() == 0) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未包含物业费，数据异常");
-        }
-
-        if (feeDtos.size() > 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "包含多条物业费，数据异常");
-        }
-
-        FeeDto feeDtoData = feeDtos.get(0);
-
-        Calendar calc = Calendar.getInstance();
-        calc.setTime(feeDtoData.getEndTime());
-        calc.add(Calendar.DATE, 30);
-        if (calc.getTime().getTime() < DateUtil.getCurrentDate().getTime()) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "你还有物业费没有缴清，请先缴清欠款");
-        }
+//        FeeDto feeDto = new FeeDto();
+//        feeDto.setCommunityId(reqJson.getString("communityId"));
+//        feeDto.setIncomeObjId(reqJson.getString("storeId"));
+//        feeDto.setPayerObjId(reqJson.getString("roomId"));
+//        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
+//        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+//
+//        if (feeDtos == null || feeDtos.size() == 0) {
+//            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未包含物业费，数据异常");
+//        }
+//
+//        if (feeDtos.size() > 1) {
+//            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "包含多条物业费，数据异常");
+//        }
+//
+//        FeeDto feeDtoData = feeDtos.get(0);
+//
+//        Calendar calc = Calendar.getInstance();
+//        calc.setTime(feeDtoData.getEndTime());
+//        calc.add(Calendar.DATE, 30);
+//        if (calc.getTime().getTime() < DateUtil.getCurrentDate().getTime()) {
+//            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "你还有物业费没有缴清，请先缴清欠款");
+//        }
     }
 
     @Override
@@ -112,7 +112,7 @@ public class ExitRoomListener extends AbstractServiceApiPlusListener {
         roomBMOImpl.updateRoom(reqJson, context);
 
         //删除费用信息
-        roomBMOImpl.exitPropertyFee(reqJson, context);
+        //roomBMOImpl.exitPropertyFee(reqJson, context);
 
     }
 
