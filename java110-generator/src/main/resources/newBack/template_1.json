@@ -1,48 +1,42 @@
 {
   "autoMove": true,
-  "id": "flowId",
-  "name": "rentingPoolFlow",
-  "desc": "出租流程",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
+  "id": "appointmentId",
+  "name": "rentingAppointment",
+  "desc": "租赁预约",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
   "shareName": "user",
-  "tableName": "renting_pool_flow",
+  "tableName": "renting_appointment",
   "param": {
-    "flowId": "flow_id",
-    "rentingId": "renting_id",
-    "useName": "user_name",
-    "userTel": "user_tel",
-    "dealTime": "deal_time",
+    "appointmentId": "appointment_id",
+    "tenantName": "tenant_name",
+    "tenantSex": "tenant_sex",
+    "tenantTel": "tenant_tel",
+    "appointmentTime": "appointment_time",
+    "appointmentRoomId": "appointment_room_id",
+    "roomId": "room_id",
+    "storeId": "store_id",
     "state": "state",
-    "userRole": "user_role",
-    "context": "context",
-    "communityId": "community_id",
+    "msg": "msg",
+    "remark": "remark",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "rentingId",
-      "msg": "出租不能为空"
+      "code": "tenantName",
+      "msg": "租客名称不能为空"
     },
     {
-      "code": "useName",
-      "msg": "处理人不能为空"
+      "code": "tenantSex",
+      "msg": "租客性别不能为空"
     },
     {
-      "code": "useTel",
-      "msg": "处理人电话不能为空"
+      "code": "tenantTel",
+      "msg": "租客电话不能为空"
     },
     {
-      "code": "dealTime",
-      "msg": "处理时间不能为空"
-    },
-    {
-      "code": "userRole",
-      "msg": "处理人角色不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "小区不能为空"
+      "code": "appointmentTime",
+      "msg": "预约时间不能为空"
     }
   ]
 }

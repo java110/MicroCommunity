@@ -1,43 +1,106 @@
 {
-  "templateName":"公摊公式",
-  "directories": "property",
-  "templateCode":"feeFormula",
-  "templateKey":"formulaId",
-  "templateKeyName":"公式ID",
-  "searchCode": "formulaId",
-  "searchName": "公式ID",
+  "templateName":"租赁预约",
+  "directories": "admin",
+  "templateCode":"rentingAppointment",
+  "templateKey":"appointmentId",
+  "templateKeyName":"预约ID",
+  "searchCode": "appointmentId",
+  "searchName": "预约ID",
   "conditions": [
     {
-      "name": "公式ID",
+      "name": "租客名称",
       "inputType": "input",
-      "code": "formulaId",
+      "code": "tenantName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "租客手机号",
+      "inputType": "input",
+      "code": "tenantTel",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "预约房屋编号",
+      "inputType": "input",
+      "code": "appointmentRoomId",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code": "formulaValue",
-      "cnCode":"公式",
-      "desc":"必填，请填写公式",
+      "code": "tenantName",
+      "cnCode":"租客名称",
+      "desc":"必填，请填写租客名称",
       "required":true,
       "hasDefaultValue":false,
       "inputType": "input",
       "limit":"maxLength",
-      "limitParam":"200",
-      "limitErrInfo":"公式太复杂",
+      "limitParam":"64",
+      "limitErrInfo":"租客名称不能超过64位",
       "show": true
     },
     {
-      "code": "formulaDesc",
-      "cnCode":"描述",
-      "desc":"选填，请填写本期度数",
+      "code": "tenantSex",
+      "cnCode":"租客性别",
+      "desc":"选填，请选择租客性别",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"0,1",
+      "selectValueName":"男,女",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"年龄格式错误",
+      "show": true
+    },
+    {
+      "code": "tenantTel",
+      "cnCode":"租客电话",
+      "desc":"必填，请填写租客电话",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"phone",
+      "limitParam":"",
+      "limitErrInfo":"手机号格式错误",
+      "show": true
+    },
+    {
+      "code": "appointmentTime",
+      "cnCode":"预约时间",
+      "desc":"必填，请填写预约时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"datetime",
+      "limitParam":"",
+      "limitErrInfo":"预约时间格式错误",
+      "show": true
+    },
+    {
+      "code": "appointmentRoomId",
+      "cnCode":"预约房屋",
+      "desc":"选填，请填写预约房屋",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"预约房屋格式错误",
+      "show": true
+    },
+    {
+      "code": "remark",
+      "cnCode":"备注",
+      "desc":"选填，请填写备注",
       "required":false,
       "hasDefaultValue":false,
       "inputType": "input",
       "limit":"maxLength",
-      "limitParam":"200",
-      "limitErrInfo":"描述太长",
+      "limitParam":"500",
+      "limitErrInfo":"备注不能超过500字",
       "show": true
     }
+
   ]
 }
