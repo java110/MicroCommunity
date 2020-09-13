@@ -139,7 +139,7 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
         ApiCommunityVo apiCommunityVo = new ApiCommunityVo();
 
         apiCommunityVo.setTotal(count);
-        apiCommunityVo.setRecords(1);
+        apiCommunityVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiCommunityVo.setCommunitys(communitys);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiCommunityVo), HttpStatus.OK);

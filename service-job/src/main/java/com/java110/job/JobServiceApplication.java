@@ -1,7 +1,7 @@
 package com.java110.job;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
-import com.java110.core.event.center.DataFlowEventPublishing;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
@@ -16,7 +16,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 
@@ -48,9 +47,10 @@ public class JobServiceApplication {
     @Bean
     public RestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
     }
+
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
      *
@@ -60,7 +60,7 @@ public class JobServiceApplication {
     @LoadBalanced
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
     }
 

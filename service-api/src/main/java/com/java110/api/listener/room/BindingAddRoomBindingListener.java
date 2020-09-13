@@ -38,7 +38,7 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
         Assert.hasKeyByFlowData(infos, "addRoomView", "section", "必填，请填写房屋楼层");
         Assert.hasKeyByFlowData(infos, "addRoomView", "apartment", "必填，请选择房屋户型");
         Assert.hasKeyByFlowData(infos, "addRoomView", "builtUpArea", "必填，请填写房屋建筑面积");
-        Assert.hasKeyByFlowData(infos, "addRoomView", "unitPrice", "必填，请填写房屋每平米单价");
+        Assert.hasKeyByFlowData(infos, "addRoomView", "feeCoefficient", "必填，请填写房屋每平米单价");
         Assert.hasKeyByFlowData(infos, "addRoomView", "state", "必填，请选择房屋状态");
 
         JSONObject addRoomView = null;

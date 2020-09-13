@@ -37,7 +37,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
      */
     protected void flushBusinessRoomInfo(Map businessRoomInfo, String statusCd) {
         businessRoomInfo.put("newBId", businessRoomInfo.get("b_id"));
-        businessRoomInfo.put("unitPrice", businessRoomInfo.get("unit_price"));
+        businessRoomInfo.put("feeCoefficient", businessRoomInfo.get("fee_coefficient"));
         businessRoomInfo.put("section", businessRoomInfo.get("section"));
         businessRoomInfo.put("remark", businessRoomInfo.get("remark"));
         businessRoomInfo.put("userId", businessRoomInfo.get("user_id"));
@@ -74,7 +74,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
 
         currentRoomInfo.put("bId", business.getbId());
 
-        currentRoomInfo.put("unitPrice", currentRoomInfo.get("unit_price"));
+        currentRoomInfo.put("feeCoefficient", currentRoomInfo.get("fee_coefficient"));
         currentRoomInfo.put("section", currentRoomInfo.get("section"));
         currentRoomInfo.put("remark", currentRoomInfo.get("remark"));
         currentRoomInfo.put("userId", currentRoomInfo.get("user_id"));

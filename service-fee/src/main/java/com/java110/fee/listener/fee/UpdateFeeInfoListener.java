@@ -169,7 +169,15 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
                     if (FeeFlagTypeConstant.ONETIME.equals(feeInfo.get(0).get("feeFlag"))) {
                         businessFeeInfo.put("state", FeeStateConstant.END);
-                        businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
+                        //businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
+                        if (!StringUtil.isNullOrNone(feeInfo.get(0).get("curDegrees"))) {
+                            businessFeeInfo.put("end_time", feeInfo.get(0).get("curReadingTime"));
+                        } else if (feeInfo.get(0).get("importFeeEndTime") != null) {
+                            //targetEndDate = feeDto.getConfigEndTime();
+                            businessFeeInfo.put("end_time", feeInfo.get(0).get("importFeeEndTime"));
+                        } else {
+                            businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
+                        }
                     }
 
                     // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期

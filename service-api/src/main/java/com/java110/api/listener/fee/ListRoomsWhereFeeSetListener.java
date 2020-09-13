@@ -71,11 +71,11 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
         //根据 业主来定位房屋信息
         if (reqJson.containsKey("ownerName") || reqJson.containsKey("idCard")) {
             queryRoomByOwnerInfo(apiRoomVo, reqJson, context);
-
             return;
         }
 
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
+
         //查询总记录数
         int total = roomInnerServiceSMOImpl.queryRoomsCount(BeanConvertUtil.covertBean(reqJson, RoomDto.class));
         apiRoomVo.setTotal(total);

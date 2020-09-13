@@ -14,21 +14,35 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class RentingPoolDto extends PageDto implements Serializable {
+    //-- 状态，提交中 0，代理商确认 1，预约看房 2，待支付 3，申请合同 4，运营团队确认 5 ，完成 6
+    public static final String STATE_SUBMIT = "0";
+    public static final String STATE_PROXY_AUDIT = "1";
+    public static final String STATE_PROXY_VIEW_ROOM = "2";
+    public static final String STATE_TO_PAY = "3";
+    public static final String STATE_APPLY_AGREE = "4";
+    public static final String STATE_ADMIN_AUDIT = "5";
+    public static final String STATE_FINISH = "6";
 
     private String latitude;
     private String ownerTel;
     private String rentingConfigId;
     private String rentingDesc;
     private String rentingTitle;
-    private String checkInDate;
+    private String checkIn;
     private String rentingId;
     private String roomId;
+    private String roomName;
     private String paymentType;
+    private String paymentTypeName;
     private String ownerName;
     private String price;
     private String state;
+    private String stateName;
+    private String[] states;
     private String communityId;
     private String longitude;
+
+    private String rentingType;
 
 
     private Date createTime;
@@ -76,12 +90,12 @@ public class RentingPoolDto extends PageDto implements Serializable {
         this.rentingTitle = rentingTitle;
     }
 
-    public String getCheckInDate() {
-        return checkInDate;
+    public String getCheckIn() {
+        return checkIn;
     }
 
-    public void setCheckInDate(String checkInDate) {
-        this.checkInDate = checkInDate;
+    public void setCheckIn(String checkIn) {
+        this.checkIn = checkIn;
     }
 
     public String getRentingId() {
@@ -163,5 +177,45 @@ public class RentingPoolDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getPaymentTypeName() {
+        return paymentTypeName;
+    }
+
+    public void setPaymentTypeName(String paymentTypeName) {
+        this.paymentTypeName = paymentTypeName;
+    }
+
+    public String getRentingType() {
+        return rentingType;
+    }
+
+    public void setRentingType(String rentingType) {
+        this.rentingType = rentingType;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

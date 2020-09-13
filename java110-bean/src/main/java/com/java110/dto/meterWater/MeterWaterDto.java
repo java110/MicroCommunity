@@ -1,6 +1,7 @@
 package com.java110.dto.meterWater;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,16 +15,21 @@ import java.util.Date;
  **/
 public class MeterWaterDto extends PageDto implements Serializable {
 
+    public static final String METER_TYPE_ROOM = "1010";
+    public static final String OBJ_TYPE_ROOM = "1001";
+
     private String remark;
-private String curReadingTime;
-private String waterId;
-private String curDegrees;
-private String meterType;
-private String preDegrees;
-private String objId;
-private String preReadingTime;
-private String communityId;
-private String objType;
+    private String curReadingTime;
+    private String waterId;
+    private String curDegrees;
+    private String meterType;
+    private String preDegrees;
+    private String objId;
+    private String objName;
+    private String preReadingTime;
+    private String communityId;
+    private String objType;
+    private String feeId;
 
 
     private Date createTime;
@@ -34,61 +40,80 @@ private String objType;
     public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCurReadingTime() {
+
+    public String getCurReadingTime() {
         return curReadingTime;
     }
-public void setCurReadingTime(String curReadingTime) {
+
+    public void setCurReadingTime(String curReadingTime) {
         this.curReadingTime = curReadingTime;
     }
-public String getWaterId() {
+
+    public String getWaterId() {
         return waterId;
     }
-public void setWaterId(String waterId) {
+
+    public void setWaterId(String waterId) {
         this.waterId = waterId;
     }
-public String getCurDegrees() {
+
+    public String getCurDegrees() {
         return curDegrees;
     }
-public void setCurDegrees(String curDegrees) {
+
+    public void setCurDegrees(String curDegrees) {
         this.curDegrees = curDegrees;
     }
-public String getMeterType() {
+
+    public String getMeterType() {
         return meterType;
     }
-public void setMeterType(String meterType) {
+
+    public void setMeterType(String meterType) {
         this.meterType = meterType;
     }
-public String getPreDegrees() {
+
+    public String getPreDegrees() {
         return preDegrees;
     }
-public void setPreDegrees(String preDegrees) {
+
+    public void setPreDegrees(String preDegrees) {
         this.preDegrees = preDegrees;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getPreReadingTime() {
+
+    public String getPreReadingTime() {
         return preReadingTime;
     }
-public void setPreReadingTime(String preReadingTime) {
+
+    public void setPreReadingTime(String preReadingTime) {
         this.preReadingTime = preReadingTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getObjType() {
+
+    public String getObjType() {
         return objType;
     }
-public void setObjType(String objType) {
+
+    public void setObjType(String objType) {
         this.objType = objType;
     }
 
@@ -107,5 +132,22 @@ public void setObjType(String objType) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getFeeId() {
+        return feeId;
+    }
+
+    public void setFeeId(String feeId) {
+        this.feeId = feeId;
+    }
+
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
     }
 }

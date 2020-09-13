@@ -1,28 +1,42 @@
 {
   "autoMove": true,
-  "id": "attrId",
-  "name": "rentingPoolAttr",
-  "desc": "出租房屋属性",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
+  "id": "appointmentId",
+  "name": "rentingAppointment",
+  "desc": "租赁预约",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
   "shareName": "user",
-  "tableName": "renting_pool_attr",
+  "tableName": "renting_appointment",
   "param": {
-    "rentingId": "renting_id",
-    "attrId": "attr_id",
-    "specCd": "spec_cd",
-    "value": "value",
+    "appointmentId": "appointment_id",
+    "tenantName": "tenant_name",
+    "tenantSex": "tenant_sex",
+    "tenantTel": "tenant_tel",
+    "appointmentTime": "appointment_time",
+    "appointmentRoomId": "appointment_room_id",
+    "roomId": "room_id",
+    "storeId": "store_id",
+    "state": "state",
+    "msg": "msg",
+    "remark": "remark",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "rentingId",
-      "msg": "出租房屋ID不能为空"
+      "code": "tenantName",
+      "msg": "租客名称不能为空"
     },
     {
-      "code": "specCd",
-      "msg": "用户规格不能为空"
+      "code": "tenantSex",
+      "msg": "租客性别不能为空"
+    },
+    {
+      "code": "tenantTel",
+      "msg": "租客电话不能为空"
+    },
+    {
+      "code": "appointmentTime",
+      "msg": "预约时间不能为空"
     }
   ]
 }
-

@@ -1,39 +1,52 @@
 package com.java110.po.importFee;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ImportFeePo implements Serializable {
 
     private String feeTypeCd;
-private String statusCd = "0";
-private String importFeeId;
-private String communityId;
-public String getFeeTypeCd() {
+    private String statusCd = "0";
+    private String importFeeId;
+    private String communityId;
+    private String remark;
+
+    public String getFeeTypeCd() {
         return feeTypeCd;
     }
-public void setFeeTypeCd(String feeTypeCd) {
+
+    public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getImportFeeId() {
+
+    public String getImportFeeId() {
         return importFeeId;
     }
-public void setImportFeeId(String importFeeId) {
+
+    public void setImportFeeId(String importFeeId) {
         this.importFeeId = importFeeId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
+    public String getRemark() {
+        return remark;
+    }
 
-
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

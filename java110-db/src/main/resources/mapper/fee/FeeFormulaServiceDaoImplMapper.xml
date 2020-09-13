@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeFormulaServiceDaoImpl">
+
+
+    <!-- 保存费用公式信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeFormulaInfo" parameterType="Map">
+        insert into fee_formula(
+        formula_id,formula_type,formula_value,formula_desc,community_id,price
+        ) values (
+        #{formulaId},#{formulaType},#{formulaValue},#{formulaDesc},#{communityId},#{price}
+        )
+    </insert>
+
+
+    <!-- 查询费用公式信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeFormulaInfo" parameterType="Map" resultType="Map">
+        select t.formula_id,t.formula_id formulaId,t.formula_type,t.formula_type
+        formulaType,t.formula_value,t.formula_value formulaValue,t.status_cd,t.status_cd
+        statusCd,t.formula_desc,t.formula_desc formulaDesc,t.community_id,t.community_id communityId,
+        t.price
+        from fee_formula t
+        where 1 =1
+        <if test="formulaId !=null and formulaId != ''">
+            and t.formula_id= #{formulaId}
+        </if>
+        <if test="formulaType !=null and formulaType != ''">
+            and t.formula_type= #{formulaType}
+        </if>
+        <if test="formulaValue !=null and formulaValue != ''">
+            and t.formula_value= #{formulaValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="formulaDesc !=null and formulaDesc != ''">
+            and t.formula_desc= #{formulaDesc}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改费用公式信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeFormulaInfo" parameterType="Map">
+        update fee_formula t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="formulaType !=null and formulaType != ''">
+            , t.formula_type= #{formulaType}
+        </if>
+        <if test="formulaValue !=null and formulaValue != ''">
+            , t.formula_value= #{formulaValue}
+        </if>
+        <if test="formulaDesc !=null and formulaDesc != ''">
+            , t.formula_desc= #{formulaDesc}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="price !=null and price != ''">
+            , t.price= #{price}
+        </if>
+
+        where 1=1
+        <if test="formulaId !=null and formulaId != ''">
+            and t.formula_id= #{formulaId}
+        </if>
+
+    </update>
+
+    <!-- 查询费用公式数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeFormulasCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_formula t
+        where 1 =1
+        <if test="formulaId !=null and formulaId != ''">
+            and t.formula_id= #{formulaId}
+        </if>
+        <if test="formulaType !=null and formulaType != ''">
+            and t.formula_type= #{formulaType}
+        </if>
+        <if test="formulaValue !=null and formulaValue != ''">
+            and t.formula_value= #{formulaValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="formulaDesc !=null and formulaDesc != ''">
+            and t.formula_desc= #{formulaDesc}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

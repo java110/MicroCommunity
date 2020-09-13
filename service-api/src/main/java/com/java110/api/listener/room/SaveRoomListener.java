@@ -56,11 +56,11 @@ public class SaveRoomListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "apartment", "请求报文中未包含apartment节点");
         Assert.jsonObjectHaveKey(reqJson, "state", "请求报文中未包含state节点");
         Assert.jsonObjectHaveKey(reqJson, "builtUpArea", "请求报文中未包含builtUpArea节点");
-        Assert.jsonObjectHaveKey(reqJson, "unitPrice", "请求报文中未包含unitPrice节点");
+        Assert.jsonObjectHaveKey(reqJson, "feeCoefficient", "请求报文中未包含feeCoefficient节点");
 
         Assert.isInteger(reqJson.getString("section"), "房间数不是有效数字");
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
-        Assert.isMoney(reqJson.getString("unitPrice"), "房屋单价数据格式错误");
+        Assert.isMoney(reqJson.getString("feeCoefficient"), "房屋单价数据格式错误");
 
         /*if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");

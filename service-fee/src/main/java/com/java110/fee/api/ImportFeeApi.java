@@ -3,6 +3,7 @@ package com.java110.fee.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.importFee.ImportFeeDto;
 import com.java110.dto.importFeeDetail.ImportFeeDetailDto;
+import com.java110.fee.bmo.importFee.IFeeSharingBMO;
 import com.java110.fee.bmo.importFee.IGetImportFeeBMO;
 import com.java110.fee.bmo.importFeeDetail.IDeleteImportFeeDetailBMO;
 import com.java110.fee.bmo.importFeeDetail.IGetImportFeeDetailBMO;
@@ -32,6 +33,9 @@ public class ImportFeeApi {
 
     @Autowired
     private IGetImportFeeBMO getImportFeeBMOImpl;
+
+    @Autowired
+    private IFeeSharingBMO feeSharingBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -139,5 +143,33 @@ public class ImportFeeApi {
         importFeeDto.setFeeTypeCd(feeTypeCd);
         importFeeDto.setCommunityId(communityId);
         return getImportFeeBMOImpl.get(importFeeDto);
+    }
+
+    /**
+     * 费用公摊
+     *
+     * @param reqJson 公摊信息
+     * @return
+     * @serviceCode /importFee/feeSharing
+     * @path /app/importFee/feeSharing
+     */
+    @RequestMapping(value = "/feeSharing", method = RequestMethod.POST)
+    public ResponseEntity<String> feeSharing(@RequestBody String reqJson,
+                                             @RequestHeader(value = "store-id") String storeId,
+                                             @RequestHeader(value = "user-id") String userId) {
+        JSONObject reqObj = JSONObject.parseObject(reqJson);
+        Assert.hasKeyAndValue(reqObj, "communityId", "未包含小区ID");
+        Assert.hasKeyAndValue(reqObj, "totalDegrees", "未包含使用量");
+        Assert.hasKeyAndValue(reqObj, "scope", "未包含公摊范围");
+        Assert.hasKeyAndValue(reqObj, "formulaId", "未包含公摊公式");
+        Assert.hasKeyAndValue(reqObj, "feeName", "未包含费用名称");
+        Assert.hasKeyAndValue(reqObj, "startTime", "未包含开始时间");
+        Assert.hasKeyAndValue(reqObj, "endTime", "未包含结束时间");
+        Assert.hasKeyAndValue(reqObj, "objId", "未包含公摊对象");
+        Assert.hasKeyAndValue(reqObj, "feeTypeCd", "未包含费用类型");
+        reqObj.put("storeId",storeId);
+        reqObj.put("userId",userId);
+
+        return feeSharingBMOImpl.share(reqObj);
     }
 }

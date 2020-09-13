@@ -142,7 +142,7 @@ public class GenerateCodeFactory {
 
 
     public static final String CODE_PREFIX_waterId = "78";
-    public static final String CODE_PREFIX_prestoreFeeId = "78";
+
 
     /**
      * 只有在不调用服务生成ID时有用

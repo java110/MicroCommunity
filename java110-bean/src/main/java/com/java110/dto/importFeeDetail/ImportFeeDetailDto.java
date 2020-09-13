@@ -34,6 +34,8 @@ public class ImportFeeDetailDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String remark;
+
 
     public String getAmount() {
         return amount;
@@ -154,5 +156,13 @@ public class ImportFeeDetailDto extends PageDto implements Serializable {
 
     public void setImportFeeId(String importFeeId) {
         this.importFeeId = importFeeId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -19,6 +19,7 @@ public class ImportFeeDetailPo implements Serializable {
     private String communityId;
 
     private String importFeeId;
+    private String remark;
 
     public String getAmount() {
         return amount;
@@ -130,5 +131,13 @@ public class ImportFeeDetailPo implements Serializable {
 
     public void setImportFeeId(String importFeeId) {
         this.importFeeId = importFeeId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -9,7 +9,6 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.intf.IImportFeeDetailInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -19,6 +18,7 @@ import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.fee.ApiFeeDataVo;
 import com.java110.vo.api.fee.ApiFeeVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
-    private IImportFeeDetailInnerServiceSMO importFeeDetailInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -99,6 +98,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
             List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
             computeFeePrice(feeDtos);
             fees = BeanConvertUtil.covertBeanList(feeDtos, ApiFeeDataVo.class);
+            freshFeeAttrs(fees, feeDtos);
 
 
         } else {
@@ -115,6 +115,17 @@ public class ListFeeListener extends AbstractServiceApiListener {
 
         context.setResponseEntity(responseEntity);
 
+    }
+
+    private void freshFeeAttrs(List<ApiFeeDataVo> fees, List<FeeDto> feeDtos) {
+
+        for (ApiFeeDataVo apiFeeDataVo : fees) {
+            for (FeeDto feeDto : feeDtos) {
+                if (apiFeeDataVo.getFeeId().equals(feeDto.getFeeId())) {
+                    apiFeeDataVo.setFeeAttrs(feeDto.getFeeAttrDtos());
+                }
+            }
+        }
     }
 
     private void computeFeePrice(List<FeeDto> feeDtos) {
@@ -149,7 +160,9 @@ public class ListFeeListener extends AbstractServiceApiListener {
             return targetEndDateAndOweMonth;
         }
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-            if (feeDto.getImportFeeEndTime() == null) {
+            if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                targetEndDate = feeDto.getCurReadingTime();
+            } else if (feeDto.getImportFeeEndTime() == null) {
                 targetEndDate = feeDto.getConfigEndTime();
             } else {
                 targetEndDate = feeDto.getImportFeeEndTime();
@@ -223,7 +236,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
     }
 
     private void computeFeePriceByCar(FeeDto feeDto, double oweMonth) {
-
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(feeDto.getCommunityId());
         ownerCarDto.setCarId(feeDto.getPayerObjId());
@@ -231,7 +243,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
         if (ownerCarDtos == null || ownerCarDtos.size() < 1) { //数据有问题
             return;
         }
-
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
         parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
@@ -254,17 +265,26 @@ public class ListFeeListener extends AbstractServiceApiListener {
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
+        } else if ("5005".equals(computingFormula)) {
+            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                feePrice = -1.00;
+            } else {
+                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal sub = curDegree.subtract(preDegree);
+                feePrice = sub.multiply(squarePrice)
+                        .add(additionalAmount)
+                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            }
         } else {
             feePrice = -1.00;
         }
-
         feeDto.setFeePrice(feePrice);
-
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
-
-
     }
 
     /**
@@ -281,7 +301,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
         if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
             return;
         }
-
         String computingFormula = feeDto.getComputingFormula();
         double feePrice = 0.00;
         if ("1001".equals(computingFormula)) { //面积*单价+附加费
@@ -294,6 +313,20 @@ public class ListFeeListener extends AbstractServiceApiListener {
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
+        } else if ("5005".equals(computingFormula)) {
+
+            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                feePrice = -1.00;
+            } else {
+                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal sub = curDegree.subtract(preDegree);
+                feePrice = sub.multiply(squarePrice)
+                        .add(additionalAmount)
+                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            }
         } else {
             feePrice = -1.00;
         }

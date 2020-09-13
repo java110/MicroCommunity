@@ -8,9 +8,11 @@
     <!-- 保存费用导入明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveImportFeeDetailInfo" parameterType="Map">
         insert into import_fee_detail(
-        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,end_time,state,community_id,import_fee_id
+        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,
+        end_time,state,community_id,import_fee_id,remark
         ) values (
-        #{amount},#{unitNum},#{feeId},#{floorNum},#{roomId},#{roomNum},#{ifdId},#{feeName},#{startTime},#{endTime},#{state},#{communityId},#{importFeeId}
+        #{amount},#{unitNum},#{feeId},#{floorNum},#{roomId},#{roomNum},#{ifdId},#{feeName},#{startTime},
+        #{endTime},#{state},#{communityId},#{importFeeId},#{remark}
         )
     </insert>
 
@@ -20,7 +22,8 @@
         select t.amount,t.unit_num,t.unit_num unitNum,t.status_cd,t.status_cd statusCd,t.fee_id,t.fee_id
         feeId,t.floor_num,t.floor_num floorNum,t.room_id,t.room_id roomId,t.room_num,t.room_num
         roomNum,t.ifd_id,t.ifd_id ifdId,t.fee_name,t.fee_name feeName,t.start_time,t.start_time
-        startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId
+        startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,
+        t.remark
         from import_fee_detail t
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -175,11 +178,12 @@
     <!-- 批量插入费用 -->
     <insert id="saveImportFeeDetails" parameterType="Map">
         insert into import_fee_detail(
-        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,end_time,state,community_id,import_fee_id
+        amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,
+        end_time,state,community_id,import_fee_id,remark
         ) values
         <foreach collection="importFeeDetailPos" item="item" separator=",">
           (#{item.amount},#{item.unitNum},#{item.feeId},#{item.floorNum},#{item.roomId},#{item.roomNum},#{item.ifdId},#{item.feeName},
-            #{item.startTime},#{item.endTime},#{item.state},#{item.communityId},#{item.importFeeId})
+            #{item.startTime},#{item.endTime},#{item.state},#{item.communityId},#{item.importFeeId},#{item.remark})
         </foreach>
     </insert>
 

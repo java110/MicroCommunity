@@ -25,6 +25,8 @@ public class ImportFeeDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String remark;
+
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -73,5 +75,13 @@ public class ImportFeeDto extends PageDto implements Serializable {
 
     public void setFeeTypeCdName(String feeTypeCdName) {
         this.feeTypeCdName = feeTypeCdName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

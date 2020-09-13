@@ -27,6 +27,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -136,6 +137,15 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             endCalender.add(Calendar.HOUR, hours);
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+            if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+                if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                    endCalender.setTime(feeDto.getCurReadingTime());
+                } else if (feeDto.getImportFeeEndTime() == null) {
+                    endCalender.setTime(feeDto.getConfigEndTime());
+                } else {
+                    endCalender.setTime(feeDto.getImportFeeEndTime());
+                }
+            }
         }
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         paramInJson.put("feeInfo", feeDto);
@@ -164,6 +174,19 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
             } else if ("4004".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            } else if ("5005".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                    throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -189,6 +212,19 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
             } else if ("4004".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            } else if ("5005".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                    throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -250,9 +286,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
 
         //为停车费单独处理
-        paramInJson.put("carFeeEndTime",feeInfo.getEndTime());
-        paramInJson.put("carPayerObjType",feeInfo.getPayerObjType());
-        paramInJson.put("carPayerObjId",feeInfo.getPayerObjId());
+        paramInJson.put("carFeeEndTime", feeInfo.getEndTime());
+        paramInJson.put("carPayerObjType", feeInfo.getPayerObjType());
+        paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
 
         return business;
     }
@@ -297,6 +333,15 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             endCalender.add(Calendar.HOUR, hours);
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+            if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+                if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                    endCalender.setTime(feeDto.getCurReadingTime());
+                } else if (feeDto.getImportFeeEndTime() == null) {
+                    endCalender.setTime(feeDto.getConfigEndTime());
+                } else {
+                    endCalender.setTime(feeDto.getImportFeeEndTime());
+                }
+            }
         }
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
 

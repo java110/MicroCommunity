@@ -23,6 +23,9 @@ public class ImportRoomFee {
 
     private String communityId;
 
+    private String cycle;
+    private String remark;
+
 
     public String getFloorNum() {
         return floorNum;
@@ -94,5 +97,21 @@ public class ImportRoomFee {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

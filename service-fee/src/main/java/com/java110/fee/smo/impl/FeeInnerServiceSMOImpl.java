@@ -7,6 +7,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.*;
 import com.java110.dto.user.UserDto;
+import com.java110.fee.dao.IFeeAttrServiceDao;
 import com.java110.fee.dao.IFeeServiceDao;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -44,12 +45,14 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeAttrServiceDao feeAttrServiceDaoImpl;
+
 
     @Override
     public List<FeeDto> queryFees(@RequestBody FeeDto feeDto) {
 
         //校验是否传了 分页信息
-
         int page = feeDto.getPage();
 
         if (page != PageDto.DEFAULT_PAGE) {
@@ -68,6 +71,30 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         for (FeeDto fee : fees) {
             refreshFee(fee, users);
+        }
+
+        List<String> feeIds = new ArrayList<>();
+        for (FeeDto tmpFeeDto : fees) {
+            feeIds.add(tmpFeeDto.getFeeId());
+        }
+
+        Map info = new HashMap();
+        info.put("feeIds", feeIds);
+        info.put("communityId", feeDto.getCommunityId());
+
+        List<Map> attrMaps = feeAttrServiceDaoImpl.getFeeAttrInfo(info);
+
+        List<FeeAttrDto> feeAttrDtos = BeanConvertUtil.covertBeanList(attrMaps, FeeAttrDto.class);
+        List<FeeAttrDto> tmpFeeAttrDtos = null;
+        for (FeeDto tmpFeeDto : fees) {
+            tmpFeeAttrDtos = new ArrayList<>();
+            for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+
+                if (tmpFeeDto.getFeeId().equals(feeAttrDto.getFeeId())) {
+                    tmpFeeAttrDtos.add(feeAttrDto);
+                }
+            }
+            tmpFeeDto.setFeeAttrDtos(tmpFeeAttrDtos);
         }
         return fees;
     }
@@ -175,7 +202,6 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     public int computeBillOweFeeCount(@RequestBody FeeDto feeDto) {
         return feeServiceDaoImpl.computeBillOweFeeCount(BeanConvertUtil.beanCovertMap(feeDto));
     }
-
 
 
     @Override

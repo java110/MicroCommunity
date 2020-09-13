@@ -20,7 +20,7 @@ public class RoomPo implements Serializable {
     private String section;
     private String apartment;
     private String builtUpArea;
-    private String unitPrice;
+    private String feeCoefficient;
     private String userId;
     private String remark;
     private String state;
@@ -83,13 +83,7 @@ public class RoomPo implements Serializable {
         this.builtUpArea = builtUpArea;
     }
 
-    public String getUnitPrice() {
-        return unitPrice;
-    }
 
-    public void setUnitPrice(String unitPrice) {
-        this.unitPrice = unitPrice;
-    }
 
     public String getUserId() {
         return userId;
@@ -121,5 +115,13 @@ public class RoomPo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getFeeCoefficient() {
+        return feeCoefficient;
+    }
+
+    public void setFeeCoefficient(String feeCoefficient) {
+        this.feeCoefficient = feeCoefficient;
     }
 }

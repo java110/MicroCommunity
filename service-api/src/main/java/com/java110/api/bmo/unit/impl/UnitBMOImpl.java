@@ -52,6 +52,7 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
         businessUnit.put("unitNum", paramInJson.getString("unitNum"));
         businessUnit.put("lift", paramInJson.getString("lift"));
         businessUnit.put("remark", paramInJson.getString("remark"));
+        businessUnit.put("unitArea", paramInJson.getString("unitArea"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         UnitPo unitPo = BeanConvertUtil.covertBean(businessUnit, UnitPo.class);
 
@@ -74,6 +75,7 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
         businessUnit.put("unitNum", paramInJson.getString("unitNum"));
         businessUnit.put("lift", paramInJson.getString("lift"));
         businessUnit.put("remark", paramInJson.getString("remark"));
+        businessUnit.put("unitArea", paramInJson.getString("unitArea"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         UnitPo unitPo = BeanConvertUtil.covertBean(businessUnit, UnitPo.class);
 

@@ -1,6 +1,7 @@
 package com.java110.api.listener.owner;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
@@ -64,6 +65,21 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
         int row = reqJson.getInteger("row");
 
+        if (reqJson.containsKey("num") && !StringUtil.isEmpty(reqJson.getString("num"))) {
+            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setAreaNum(reqJson.getString("areaNum"));
+            parkingSpaceDto.setNum(reqJson.getString("num"));
+            parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
+            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+            if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(1, 1, new JSONArray());
+                dataFlowContext.setResponseEntity(responseEntity);
+                return;
+            }
+
+            reqJson.put("psId", parkingSpaceDtos.get(0).getPsId());
+        }
+
         //查询总记录数
         int total = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class));
         List<OwnerCarDto> ownerCarDtoList = null;
@@ -88,7 +104,7 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
         List<String> psIds = new ArrayList<>();
         for (OwnerCarDto ownerCarDto : ownerCarDtoList) {
-            if(StringUtil.isEmpty(ownerCarDto.getPsId())){
+            if (StringUtil.isEmpty(ownerCarDto.getPsId())) {
                 continue;
             }
             psIds.add(ownerCarDto.getPsId());
@@ -99,9 +115,9 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
         parkingSpaceDto.setPsIds(psIds.toArray(new String[psIds.size()]));
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
 
-        for(ParkingSpaceDto tmpParkingSpaceDto : parkingSpaceDtos){
-            for (OwnerCarDto ownerCarDto : ownerCarDtoList){
-                if(tmpParkingSpaceDto.getPsId().equals(ownerCarDto.getPsId())){
+        for (ParkingSpaceDto tmpParkingSpaceDto : parkingSpaceDtos) {
+            for (OwnerCarDto ownerCarDto : ownerCarDtoList) {
+                if (tmpParkingSpaceDto.getPsId().equals(ownerCarDto.getPsId())) {
                     ownerCarDto.setAreaNum(tmpParkingSpaceDto.getAreaNum());
                     ownerCarDto.setNum(tmpParkingSpaceDto.getNum());
                 }

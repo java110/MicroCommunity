@@ -33,6 +33,8 @@ public class ApiUnitVo implements Serializable {
     //备注
     private String remark;
 
+    private String unitArea;
+
     //创建时间
     private String createTime;
 
@@ -99,5 +101,13 @@ public class ApiUnitVo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getUnitArea() {
+        return unitArea;
+    }
+
+    public void setUnitArea(String unitArea) {
+        this.unitArea = unitArea;
     }
 }

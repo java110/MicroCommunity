@@ -77,7 +77,7 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
         ownerCarPo.setCarId(reqJson.getString("carId"));
         super.delete(context, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR);
 
-        if (StringUtil.isEmpty(reqJson.getString("psId"))) {
+        if (StringUtil.isEmpty(reqJson.getString("psId")) || "-1".equals(reqJson.getString("psId"))) {
             return;
         }
         //释放车位

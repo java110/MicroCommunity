@@ -6,10 +6,16 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.meterWater.MeterWaterDto;
+import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
+import com.java110.po.fee.PayFeePo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeMeterWaterConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+
+import java.util.List;
 
 
 /**
@@ -22,6 +28,9 @@ public class DeleteMeterWaterListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IMeterWaterBMO meterWaterBMOImpl;
 
+    @Autowired
+    private IMeterWaterInnerServiceSMO meterWaterInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -32,7 +41,17 @@ public class DeleteMeterWaterListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        MeterWaterDto meterWaterDto = new MeterWaterDto();
+        meterWaterDto.setWaterId(reqJson.getString("waterId"));
+        meterWaterDto.setCommunityId(reqJson.getString("communityId"));
+        List<MeterWaterDto> meterWaterDtos = meterWaterInnerServiceSMOImpl.queryMeterWaters(meterWaterDto);
 
+        Assert.listOnlyOne(meterWaterDtos, "数据异常未找到费用信息");
+
+        PayFeePo payFeePo = new PayFeePo();
+        payFeePo.setFeeId(meterWaterDtos.get(0).getFeeId());
+        payFeePo.setCommunityId(meterWaterDtos.get(0).getCommunityId());
+        super.delete(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
         meterWaterBMOImpl.deleteMeterWater(reqJson, context);
     }
 

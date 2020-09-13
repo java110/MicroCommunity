@@ -23,6 +23,8 @@ public class ApiFloorDataVo  extends Vo {
      */
     private String floorNum;
 
+    private String floorArea;
+
     /**
      * 名称
      */
@@ -89,5 +91,13 @@ public class ApiFloorDataVo  extends Vo {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getFloorArea() {
+        return floorArea;
+    }
+
+    public void setFloorArea(String floorArea) {
+        this.floorArea = floorArea;
     }
 }

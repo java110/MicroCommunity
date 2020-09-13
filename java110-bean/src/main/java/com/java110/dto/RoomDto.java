@@ -18,7 +18,7 @@ public class RoomDto extends PageDto implements Serializable {
     public static final String STATE_FREE = "2002";
 
 
-    private String unitPrice;
+    private String feeCoefficient;
     private String section;
     private String remark;
     private String userId;
@@ -28,11 +28,13 @@ public class RoomDto extends PageDto implements Serializable {
     private String builtUpArea;
     private String roomNum;
     private String unitId;
+    private String unitArea;
     private String apartment;
     private String apartmentName;
     private String communityId;
     private String floorId;
     private String floorNum;
+    private String floorArea;
     private String userName;
     private String ownerId;
     private String ownerName;
@@ -51,12 +53,12 @@ public class RoomDto extends PageDto implements Serializable {
     private String statusCd = "0";
 
 
-    public String getUnitPrice() {
-        return unitPrice;
+    public String getFeeCoefficient() {
+        return feeCoefficient;
     }
 
-    public void setUnitPrice(String unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setFeeCoefficient(String feeCoefficient) {
+        this.feeCoefficient = feeCoefficient;
     }
 
     public String getSection() {
@@ -252,5 +254,21 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getUnitArea() {
+        return unitArea;
+    }
+
+    public void setUnitArea(String unitArea) {
+        this.unitArea = unitArea;
+    }
+
+    public String getFloorArea() {
+        return floorArea;
+    }
+
+    public void setFloorArea(String floorArea) {
+        this.floorArea = floorArea;
     }
 }
