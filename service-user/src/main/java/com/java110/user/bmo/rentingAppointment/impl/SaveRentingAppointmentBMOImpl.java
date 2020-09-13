@@ -2,6 +2,7 @@ package com.java110.user.bmo.rentingAppointment.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.rentingAppointment.RentingAppointmentDto;
 import com.java110.intf.IRentingAppointmentInnerServiceSMO;
 import com.java110.po.rentingAppointment.RentingAppointmentPo;
 import com.java110.user.bmo.rentingAppointment.ISaveRentingAppointmentBMO;
@@ -26,6 +27,7 @@ public class SaveRentingAppointmentBMOImpl implements ISaveRentingAppointmentBMO
     public ResponseEntity<String> save(RentingAppointmentPo rentingAppointmentPo) {
 
         rentingAppointmentPo.setAppointmentId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appointmentId));
+        rentingAppointmentPo.setState(RentingAppointmentDto.STATE_SUBMIT);
         int flag = rentingAppointmentInnerServiceSMOImpl.saveRentingAppointment(rentingAppointmentPo);
 
         if (flag > 0) {

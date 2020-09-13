@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 租赁 预约接口类 controller
- *
+ * <p>
  * add by 吴学文
- *
  */
 @RestController
 @RequestMapping(value = "/rentingAppointment")
@@ -42,7 +41,8 @@ public class RentingAppointmentApi {
      * @path /app/rentingAppointment/saveRentingAppointment
      */
     @RequestMapping(value = "/saveRentingAppointment", method = RequestMethod.POST)
-    public ResponseEntity<String> saveRentingAppointment(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveRentingAppointment(@RequestBody JSONObject reqJson,
+                                                         @RequestHeader(value = "store-id") String storeId) {
 
         Assert.hasKeyAndValue(reqJson, "tenantName", "请求报文中未包含tenantName");
         Assert.hasKeyAndValue(reqJson, "tenantSex", "请求报文中未包含tenantSex");
@@ -51,6 +51,7 @@ public class RentingAppointmentApi {
 
 
         RentingAppointmentPo rentingAppointmentPo = BeanConvertUtil.covertBean(reqJson, RentingAppointmentPo.class);
+        rentingAppointmentPo.setStoreId(storeId);
         return saveRentingAppointmentBMOImpl.save(rentingAppointmentPo);
     }
 
