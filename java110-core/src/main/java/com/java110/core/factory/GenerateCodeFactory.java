@@ -144,6 +144,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_waterId = "78";
     public static final String CODE_PREFIX_prestoreFeeId = "78";
     public static final String CODE_PREFIX_formulaId = "79";
+    public static final String CODE_PREFIX_appointmentId = "80";
 
 
     /**
