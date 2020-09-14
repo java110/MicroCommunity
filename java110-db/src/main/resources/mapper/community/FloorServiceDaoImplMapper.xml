@@ -183,9 +183,7 @@
         <if test="bId !=null and bId != ''">
             and f.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and f.user_id= #{userId}
-        </if>
+
         <if test="floorNum !=null and floorNum != ''">
             and f.floor_num= #{floorNum}
         </if>
