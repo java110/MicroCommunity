@@ -314,9 +314,7 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -637,9 +635,6 @@
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
