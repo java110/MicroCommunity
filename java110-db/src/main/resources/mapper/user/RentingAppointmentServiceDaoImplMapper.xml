@@ -20,8 +20,9 @@
         select t.msg,t.tenant_tel,t.tenant_tel tenantTel,t.tenant_name,t.tenant_name
         tenantName,t.appointment_time,t.appointment_time appointmentTime,t.appointment_room_id,t.appointment_room_id
         appointmentRoomId,t.appointment_id,t.appointment_id appointmentId,t.remark,t.status_cd,t.status_cd
-        statusCd,t.state,t.tenant_sex,t.tenant_sex tenantSex,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId
+        statusCd,t.state,t.tenant_sex,t.tenant_sex tenantSex,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,td.`name` stateName
         from renting_appointment t
+        LEFT JOIN t_dict td on t.state=td.status_cd and td.table_columns = 'state' and td.table_name = 'renting_appointment'
         where 1 =1
         <if test="msg !=null and msg != ''">
             and t.msg= #{msg}

@@ -66,10 +66,10 @@ public class RentingAppointmentApi {
     @RequestMapping(value = "/updateRentingAppointment", method = RequestMethod.POST)
     public ResponseEntity<String> updateRentingAppointment(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "tenantName", "请求报文中未包含tenantName");
-        Assert.hasKeyAndValue(reqJson, "tenantSex", "请求报文中未包含tenantSex");
-        Assert.hasKeyAndValue(reqJson, "tenantTel", "请求报文中未包含tenantTel");
-        Assert.hasKeyAndValue(reqJson, "appointmentTime", "请求报文中未包含appointmentTime");
+//        Assert.hasKeyAndValue(reqJson, "tenantName", "请求报文中未包含tenantName");
+//        Assert.hasKeyAndValue(reqJson, "tenantSex", "请求报文中未包含tenantSex");
+//        Assert.hasKeyAndValue(reqJson, "tenantTel", "请求报文中未包含tenantTel");
+//        Assert.hasKeyAndValue(reqJson, "appointmentTime", "请求报文中未包含appointmentTime");
         Assert.hasKeyAndValue(reqJson, "appointmentId", "appointmentId不能为空");
 
 
@@ -107,11 +107,18 @@ public class RentingAppointmentApi {
     @RequestMapping(value = "/queryRentingAppointment", method = RequestMethod.GET)
     public ResponseEntity<String> queryRentingAppointment(@RequestHeader(value = "store-id") String storeId,
                                                           @RequestParam(value = "page") int page,
-                                                          @RequestParam(value = "row") int row) {
+                                                          @RequestParam(value = "row") int row,
+                                                          @RequestParam(value = "state", required = false) String state,
+                                                          @RequestParam(value = "tenantName", required = false) String tenantName,
+                                                          @RequestParam(value = "tenantTel", required = false) String tenantTel
+    ) {
         RentingAppointmentDto rentingAppointmentDto = new RentingAppointmentDto();
         rentingAppointmentDto.setPage(page);
         rentingAppointmentDto.setRow(row);
         rentingAppointmentDto.setStoreId(storeId);
+        rentingAppointmentDto.setState(state);
+        rentingAppointmentDto.setTenantName(tenantName);
+        rentingAppointmentDto.setTenantTel(tenantTel);
         return getRentingAppointmentBMOImpl.get(rentingAppointmentDto);
     }
 }
