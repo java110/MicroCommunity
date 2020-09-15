@@ -16,6 +16,7 @@ public class RentingAppointmentPo implements Serializable {
     private String tenantSex;
     private String storeId;
     private String roomId;
+    private String rentingId;
 
     public String getMsg() {
         return msg;
@@ -113,5 +114,11 @@ public class RentingAppointmentPo implements Serializable {
         this.roomId = roomId;
     }
 
+    public String getRentingId() {
+        return rentingId;
+    }
 
+    public void setRentingId(String rentingId) {
+        this.rentingId = rentingId;
+    }
 }

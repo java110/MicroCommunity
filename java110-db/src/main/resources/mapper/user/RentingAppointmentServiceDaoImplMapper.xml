@@ -8,9 +8,11 @@
     <!-- 保存租赁预约信息 add by wuxw 2018-07-03 -->
     <insert id="saveRentingAppointmentInfo" parameterType="Map">
         insert into renting_appointment(
-        msg,tenant_tel,tenant_name,appointment_time,appointment_room_id,appointment_id,remark,state,tenant_sex,store_id,room_id
+        msg,tenant_tel,tenant_name,appointment_time,appointment_room_id,appointment_id,remark,state,tenant_sex,store_id,
+        room_id,renting_id
         ) values (
-        #{msg},#{tenantTel},#{tenantName},#{appointmentTime},#{appointmentRoomId},#{appointmentId},#{remark},#{state},#{tenantSex},#{storeId},#{roomId}
+        #{msg},#{tenantTel},#{tenantName},#{appointmentTime},#{appointmentRoomId},#{appointmentId},#{remark},#{state},
+        #{tenantSex},#{storeId},#{roomId},#{rentingId}
         )
     </insert>
 
@@ -20,7 +22,8 @@
         select t.msg,t.tenant_tel,t.tenant_tel tenantTel,t.tenant_name,t.tenant_name
         tenantName,t.appointment_time,t.appointment_time appointmentTime,t.appointment_room_id,t.appointment_room_id
         appointmentRoomId,t.appointment_id,t.appointment_id appointmentId,t.remark,t.status_cd,t.status_cd
-        statusCd,t.state,t.tenant_sex,t.tenant_sex tenantSex,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,td.`name` stateName
+        statusCd,t.state,t.tenant_sex,t.tenant_sex tenantSex,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,
+        td.`name` stateName,t.renting_id rentingId
         from renting_appointment t
         LEFT JOIN t_dict td on t.state=td.status_cd and td.table_columns = 'state' and td.table_name = 'renting_appointment'
         where 1 =1
@@ -104,6 +107,10 @@
         <if test="roomId !=null and roomId != ''">
             , t.room_id= #{roomId}
         </if>
+        <if test="rentingId !=null and rentingId != ''">
+            ,t.renting_id= #{rentingId}
+        </if>
+
         where 1=1
         <if test="appointmentId !=null and appointmentId != ''">
             and t.appointment_id= #{appointmentId}

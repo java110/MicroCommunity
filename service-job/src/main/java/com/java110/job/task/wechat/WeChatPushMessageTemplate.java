@@ -1,6 +1,8 @@
 package com.java110.job.task.wechat;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
@@ -22,9 +24,11 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -66,6 +70,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
 
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
+    private static String getUser = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN";
 
 
     @Override
@@ -255,10 +260,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
     }
 
     private void sendAllOwner(NoticeDto noticeDto, String templateId, String accessToken) {
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        doSend(ownerAppUserDtos, noticeDto, templateId, accessToken);
+        doSendToOpenId(noticeDto, templateId, accessToken, "");
     }
 
     private void doSend(List<OwnerAppUserDto> ownerAppUserDtos, NoticeDto noticeDto, String templateId, String accessToken) {
@@ -278,6 +280,49 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(sendMsgUrl + accessToken, JSON.toJSONString(templateMessage), String.class);
             logger.info("微信模板返回内容:{}", responseEntity);
+        }
+    }
+
+    private void doSendToOpenId(NoticeDto noticeDto, String templateId, String accessToken, String nextOpenid) {
+        String url = getUser.replace("ACCESS_TOKEN", accessToken);
+        if (!StringUtil.isEmpty(nextOpenid)) {
+            url += ("&next_openid=" + nextOpenid);
+        }
+        ResponseEntity<String> paramOut = outRestTemplate.getForEntity(url, String.class);
+
+        if (paramOut.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException(paramOut.getBody());
+        }
+
+        JSONObject paramOutObj = JSONObject.parseObject(paramOut.getBody());
+        if (paramOutObj.containsKey("errcode")) {
+            throw new IllegalArgumentException(paramOut.getBody());
+        }
+        JSONObject dataObj = paramOutObj.getJSONObject("data");
+        JSONArray openids = dataObj.getJSONArray("openid");
+        nextOpenid = paramOutObj.getString("next_openid");
+        String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/#/pages/notice/detail/detail?noticeId=";
+        for (int openIndex = 0; openIndex < openids.size(); openIndex++) {
+            String openId = openids.getString(openIndex);
+            Data data = new Data();
+            PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+            templateMessage.setTemplate_id(templateId);
+            templateMessage.setTouser(openId);
+            data.setFirst(new Content(noticeDto.getTitle()));
+            data.setKeyword1(new Content(noticeDto.getTitle()));
+            data.setKeyword2(new Content(noticeDto.getStartTime()));
+            data.setKeyword3(new Content(noticeDto.getContext()));
+            data.setRemark(new Content("如有疑问请联系相关物业人员"));
+            templateMessage.setData(data);
+            templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId());
+            logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+            ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(sendMsgUrl + accessToken, JSON.toJSONString(templateMessage), String.class);
+            logger.info("微信模板返回内容:{}", responseEntity);
+        }
+
+        //（关注者列表已返回完时，返回next_openid为空）
+        if (!StringUtil.isEmpty(nextOpenid)) {
+            doSendToOpenId(noticeDto, templateId, accessToken, nextOpenid);
         }
     }
 

@@ -29,6 +29,7 @@ public class RentingAppointmentDto extends PageDto implements Serializable {
     private String tenantSex;
     private String storeId;
     private String roomId;
+    private String rentingId;
 
 
     private Date createTime;
@@ -147,5 +148,13 @@ public class RentingAppointmentDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getRentingId() {
+        return rentingId;
+    }
+
+    public void setRentingId(String rentingId) {
+        this.rentingId = rentingId;
     }
 }
