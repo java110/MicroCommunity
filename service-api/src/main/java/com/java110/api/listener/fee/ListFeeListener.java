@@ -191,13 +191,13 @@ public class ListFeeListener extends AbstractServiceApiListener {
 
                 targetEndDate = ownerCarDtos.get(0).getEndTime();
                 //说明没有欠费
-                if (endDate.getTime() < targetEndDate.getTime()) {
+                if (endDate.getTime() >= targetEndDate.getTime()) {
                     // 目标到期时间 - 到期时间 = 欠费月份
-                    oweMonth = dayCompare(endDate, targetEndDate);
+                    oweMonth = 0;
+                    targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+                    targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+                    return targetEndDateAndOweMonth;
                 }
-                targetEndDateAndOweMonth.put("oweMonth", oweMonth);
-                targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
-                return targetEndDateAndOweMonth;
             }
 
             //缴费周期
