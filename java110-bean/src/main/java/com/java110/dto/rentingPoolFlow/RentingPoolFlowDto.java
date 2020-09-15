@@ -18,6 +18,7 @@ public class RentingPoolFlowDto extends PageDto implements Serializable {
     public static final String STATE_SUBMIT = "1001";
     public static final String STATE_PROXY_TRUE = "2002";
     public static final String STATE_PROXY_FALSE = "3003";
+    public static final String STATE_CONFIRM_RENTING = "4004"; // 租客确定租房
 
 
     private String dealTime;

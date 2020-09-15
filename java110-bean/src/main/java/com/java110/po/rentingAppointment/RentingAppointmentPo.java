@@ -18,6 +18,7 @@ public class RentingAppointmentPo implements Serializable {
     private String roomId;
     private String rentingId;
 
+
     public String getMsg() {
         return msg;
     }

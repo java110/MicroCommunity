@@ -23,9 +23,11 @@
         tenantName,t.appointment_time,t.appointment_time appointmentTime,t.appointment_room_id,t.appointment_room_id
         appointmentRoomId,t.appointment_id,t.appointment_id appointmentId,t.remark,t.status_cd,t.status_cd
         statusCd,t.state,t.tenant_sex,t.tenant_sex tenantSex,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,
-        td.`name` stateName,t.renting_id rentingId
+        td.`name` stateName,t.renting_id rentingId,rp.community_id appointmentCommunityId,rpr.community_id communityId
         from renting_appointment t
         LEFT JOIN t_dict td on t.state=td.status_cd and td.table_columns = 'state' and td.table_name = 'renting_appointment'
+        LEFT JOIN renting_pool rp on t.appointment_room_id = rp.room_id and rp.status_cd = '0'
+        left join renting_pool rpr on t.renting_id = rpr.renting_id and rpr.status_cd = '0'
         where 1 =1
         <if test="msg !=null and msg != ''">
             and t.msg= #{msg}

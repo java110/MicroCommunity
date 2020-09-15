@@ -3,10 +3,7 @@ package com.java110.user.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.rentingAppointment.RentingAppointmentDto;
 import com.java110.po.rentingAppointment.RentingAppointmentPo;
-import com.java110.user.bmo.rentingAppointment.IDeleteRentingAppointmentBMO;
-import com.java110.user.bmo.rentingAppointment.IGetRentingAppointmentBMO;
-import com.java110.user.bmo.rentingAppointment.ISaveRentingAppointmentBMO;
-import com.java110.user.bmo.rentingAppointment.IUpdateRentingAppointmentBMO;
+import com.java110.user.bmo.rentingAppointment.*;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,9 @@ public class RentingAppointmentApi {
 
     @Autowired
     private IGetRentingAppointmentBMO getRentingAppointmentBMOImpl;
+
+    @Autowired
+    private IConfirmRentingBMO confirmRentingBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -121,4 +121,25 @@ public class RentingAppointmentApi {
         rentingAppointmentDto.setTenantTel(tenantTel);
         return getRentingAppointmentBMOImpl.get(rentingAppointmentDto);
     }
+
+
+    /**
+     * 确认租房
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /rentingAppointment/confirmRenting
+     * @path /app/rentingAppointment/confirmRenting
+     */
+    @RequestMapping(value = "/confirmRenting", method = RequestMethod.POST)
+    public ResponseEntity<String> confirmRenting(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "appointmentId", "appointmentId不能为空");
+        Assert.hasKeyAndValue(reqJson, "rentingId", "rentingId不能为空");
+
+        RentingAppointmentPo rentingAppointmentPo = BeanConvertUtil.covertBean(reqJson, RentingAppointmentPo.class);
+        return confirmRentingBMOImpl.confirm(rentingAppointmentPo);
+    }
+
+
 }

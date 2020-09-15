@@ -16,12 +16,14 @@ import java.util.Date;
 public class RentingAppointmentDto extends PageDto implements Serializable {
 
     public static final String STATE_SUBMIT = "1001";//提交
+    public static final String STATE_SUCCESS = "3003";//租房成功
 
     private String msg;
     private String tenantTel;
     private String tenantName;
     private String appointmentTime;
     private String appointmentRoomId;
+    private String appointmentRoomName;
     private String appointmentId;
     private String remark;
     private String state;
@@ -29,7 +31,11 @@ public class RentingAppointmentDto extends PageDto implements Serializable {
     private String tenantSex;
     private String storeId;
     private String roomId;
+    private String roomName;
     private String rentingId;
+
+    private String appointmentCommunityId;
+    private String communityId;
 
 
     private Date createTime;
@@ -156,5 +162,37 @@ public class RentingAppointmentDto extends PageDto implements Serializable {
 
     public void setRentingId(String rentingId) {
         this.rentingId = rentingId;
+    }
+
+    public String getAppointmentRoomName() {
+        return appointmentRoomName;
+    }
+
+    public void setAppointmentRoomName(String appointmentRoomName) {
+        this.appointmentRoomName = appointmentRoomName;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getAppointmentCommunityId() {
+        return appointmentCommunityId;
+    }
+
+    public void setAppointmentCommunityId(String appointmentCommunityId) {
+        this.appointmentCommunityId = appointmentCommunityId;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
