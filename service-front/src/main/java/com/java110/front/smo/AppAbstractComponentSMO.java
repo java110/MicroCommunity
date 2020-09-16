@@ -14,7 +14,11 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -112,6 +116,9 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
                 resultMap.put("prepayid", resMap.get("prepay_id"));
                 //resultMap.put("signType", "MD5");
                 resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
+            } else if (WechatAuthProperties.TRADE_TYPE_NATIVE.equals(tradeType)) {
+                resultMap.put("prepayId", resMap.get("prepay_id"));
+                resultMap.put("codeUrl", resMap.get("code_url"));
             }
             resultMap.put("code", "0");
             resultMap.put("msg", "下单成功");

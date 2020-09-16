@@ -1,11 +1,12 @@
 package com.java110.front.controller;
 
-import com.java110.front.smo.payment.IToNotifySMO;
-import com.java110.front.smo.payment.IToPaySMO;
-import com.java110.front.smo.payment.IToPayTempCarInoutSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.front.smo.payment.IRentingToPaySMO;
+import com.java110.front.smo.payment.IToNotifySMO;
+import com.java110.front.smo.payment.IToPaySMO;
+import com.java110.front.smo.payment.IToPayTempCarInoutSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class PaymentController extends BaseController {
     private IToPaySMO toPaySMOImpl;
 
     @Autowired
+    private IRentingToPaySMO rentingToPaySMOImpl;
+
+    @Autowired
     private IToPayTempCarInoutSMO toPayTempCarInoutSMOImpl;
 
     @Autowired
@@ -46,8 +50,8 @@ public class PaymentController extends BaseController {
     public ResponseEntity<String> toPay(@RequestBody String postInfo, HttpServletRequest request) {
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
-       String appId = request.getHeader("APP_ID");
-        if(StringUtil.isEmpty(appId)){
+        String appId = request.getHeader("APP_ID");
+        if (StringUtil.isEmpty(appId)) {
             appId = request.getHeader("APP-ID");
         }
 
@@ -68,7 +72,7 @@ public class PaymentController extends BaseController {
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         String appId = request.getHeader("APP_ID");
-        if(StringUtil.isEmpty(appId)){
+        if (StringUtil.isEmpty(appId)) {
             appId = request.getHeader("APP-ID");
         }
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
@@ -89,9 +93,29 @@ public class PaymentController extends BaseController {
 
         logger.debug("微信支付回调报文" + postInfo);
 
-        return toNotifySMOImpl.toNotify(postInfo,request);
+        return toNotifySMOImpl.toNotify(postInfo, request);
 
 
+    }
+
+    /**
+     * <p>出租统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/rentingToPay", method = RequestMethod.POST)
+    public ResponseEntity<String> rentingToPay(@RequestBody String postInfo, HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        String appId = request.getHeader("APP_ID");
+        if (StringUtil.isEmpty(appId)) {
+            appId = request.getHeader("APP-ID");
+        }
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                appId);
+        return rentingToPaySMOImpl.toPay(newPd);
     }
 
 }

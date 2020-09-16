@@ -22,7 +22,9 @@
         statusCd,t.renting_title,t.renting_title rentingTitle,t.check_in,t.check_in
         checkIn,t.renting_id,t.renting_id rentingId,t.room_id,t.room_id roomId,t.payment_type,t.payment_type
         paymentType,t.owner_name,t.owner_name ownerName,t.price,t.state,t.community_id,t.community_id
-        communityId,t.longitude,td.name stateName,td2.name paymentTypeName,rc.renting_type rentingType
+        communityId,t.longitude,td.name stateName,td2.name paymentTypeName,rc.renting_type rentingType,
+        rc.service_owner_rate serviceOwnerRate,rc.service_tenant_rate serviceTenantRate,rc.admin_separate_rate adminSeparateRate,
+        rc.proxy_separate_rate proxySeparateRate,rc.property_separate_rate propertySeparateRate,rc.service_price servicePrice
         from renting_pool t
         left join t_dict td on td.status_cd = t.state and td.table_name = 'renting_pool' and td.table_columns = 'state'
         left join t_dict td2 on td2.status_cd = t.payment_type and td2.table_name = 'renting_pool' and td2.table_columns = 'payment_type'
