@@ -70,10 +70,14 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         attrParamInfo.put("roomIds", roomIds);
         attrParamInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<RoomAttrDto> roomAttrDtos = BeanConvertUtil.covertBeanList(roomAttrServiceDaoImpl.getRoomAttrInfo(attrParamInfo), RoomAttrDto.class);
-
-        String[] userIds = getUserIds(rooms);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+        List<UserDto> users = null;
+        if (rooms.size() < 50) {
+            String[] userIds = getUserIds(rooms);
+            //根据 userId 查询用户信息
+            users = userInnerServiceSMOImpl.getUserInfo(userIds);
+        } else {
+            users = new ArrayList<>();
+        }
 
         for (RoomDto room : rooms) {
             try {
