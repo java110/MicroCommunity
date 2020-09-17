@@ -1,19 +1,14 @@
 package com.java110.front.smo.payment.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.factory.WechatFactory;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.payment.IRentingToNotifySMO;
 import com.java110.utils.cache.CommonCache;
-import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
@@ -104,8 +99,11 @@ public class RentingToNotifySMOImpl implements IRentingToNotifySMO {
         }
 
         String orderId = map.get("out_trade_no").toString();
-
         String order = CommonCache.getAndRemoveValue(RentingPoolDto.REDIS_PAY_RENTING + orderId);
+
+        if (StringUtil.isEmpty(order)) {
+            return 1;// 说明已经处理过了 再不处理
+        }
 
         //查询用户ID
         JSONObject paramIn = JSONObject.parseObject(order);
@@ -118,7 +116,6 @@ public class RentingToNotifySMOImpl implements IRentingToNotifySMO {
         }
         return 1;
     }
-
 
 
     /**

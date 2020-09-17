@@ -208,7 +208,7 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
 
         communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
-        communityMemberDto.setMemberTypeCd("390001200003");//查询代理商
+        communityMemberDto.setMemberTypeCd("390001200000");//查询代理商
         communityMemberDto.setAuditStatusCd(CommunityMemberDto.AUDIT_STATUS_NORMAL);
         communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
