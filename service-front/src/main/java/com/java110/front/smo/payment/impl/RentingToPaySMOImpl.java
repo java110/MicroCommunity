@@ -105,7 +105,7 @@ public class RentingToPaySMOImpl extends AppAbstractComponentSMO implements IRen
         if (RentingPoolDto.STATE_TO_PAY.equals(rentingPoolDto.getState())) {
             rate = Double.parseDouble(rentingPoolDto.getServiceTenantRate());
             feeName += "(租客)";
-        } else if (RentingPoolDto.STATE_TO_PAY.equals(rentingPoolDto.getState())) {
+        } else if (RentingPoolDto.STATE_OWNER_TO_PAY.equals(rentingPoolDto.getState())) {
             rate = Double.parseDouble(rentingPoolDto.getServiceOwnerRate());
             feeName += "(业主)";
         } else {
