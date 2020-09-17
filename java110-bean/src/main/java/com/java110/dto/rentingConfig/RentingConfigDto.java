@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class RentingConfigDto extends PageDto implements Serializable {
 
+    public static final String RENTING_FORMULA_RATE = "2002";
+
     private String serviceTenantRate;
     private String propertySeparateRate;
     private String servicePrice;

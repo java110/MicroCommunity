@@ -250,6 +250,26 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
 
     /**
+     * 添加费用明细信息
+     *
+     * @param payFeeDetailPo  费用明细
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addSimpleFeeDetail(PayFeeDetailPo payFeeDetailPo, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFeeDetail = JSONObject.parseObject(JSONObject.toJSONString(payFeeDetailPo));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
+
+        return business;
+    }
+
+    /**
      * 修改费用信息
      *
      * @param paramInJson     接口调用放传入入参
@@ -605,6 +625,28 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("payerObjType", FeeDto.PAYER_OBJ_TYPE_CAR);
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
+        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
+
+        return business;
+    }
+
+    /**
+     * 添加费用
+     *
+     * @param payFeePo        接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addSimpleFee(PayFeePo payFeePo, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = null;
+        businessUnit = JSONObject.parseObject(JSONObject.toJSONString(payFeePo));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
 

@@ -59,6 +59,7 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private String proxySeparateRate;
     private String propertySeparateRate;
     private String servicePrice;
+    private String rentingFormula;
 
 
     public String getLatitude() {
@@ -276,5 +277,13 @@ public class RentingPoolDto extends PageDto implements Serializable {
 
     public void setServicePrice(String servicePrice) {
         this.servicePrice = servicePrice;
+    }
+
+    public String getRentingFormula() {
+        return rentingFormula;
+    }
+
+    public void setRentingFormula(String rentingFormula) {
+        this.rentingFormula = rentingFormula;
     }
 }

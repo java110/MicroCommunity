@@ -6,6 +6,7 @@ import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.rentingConfig.RentingConfigDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
@@ -110,10 +111,16 @@ public class RentingToPaySMOImpl extends AppAbstractComponentSMO implements IRen
         } else {
             throw new IllegalAccessException("当前状态不是支付状态");
         }
-
+        String rentingFormula = rentingPoolDto.getRentingFormula();
         BigDecimal serviceDec = new BigDecimal(service);
         BigDecimal rateDec = new BigDecimal(rate);
-        double money = serviceDec.multiply(rateDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        double money = 0.0;
+        if (RentingConfigDto.RENTING_FORMULA_RATE.equals(rentingFormula)) {
+            BigDecimal monthMoney = new BigDecimal(rentingPoolDto.getPrice());
+            money = serviceDec.multiply(rateDec).multiply(monthMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        } else {
+            money = serviceDec.multiply(rateDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        }
 
         Map result = super.java110Payment(outRestTemplate, feeName, WechatAuthProperties.TRADE_TYPE_NATIVE, orderId, money, "", smallWeChatDto);
         result.put("money", money);

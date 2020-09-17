@@ -519,8 +519,6 @@ public class ServiceCodeConstant {
     public static final String REFRESH_APP_USER_BINDING_OWNER_OPEN_ID = "owner.refreshAppUserBindingOwnerOpenId";
 
 
-
-
     public static final String SERVICE_CODE_APPLICATION_KEY = "owner.applicationKey";
 
     // 编辑业主信息
@@ -582,6 +580,9 @@ public class ServiceCodeConstant {
     //交费通知
     public static final String SERVICE_CODE_PAY_CONFIRM_PRE = "fee.payFeeConfirm";
 
+    //租赁服务费
+    public static final String SERVICE_CODE_RENTING_PAY_CONFIRM_PRE = "fee.rentingPayFeeConfirm";
+
 
     //查询停车位
     public static final String SERVICE_CODE_QUERY_PARKING_SPACE = "parkingSpace.queryParkingSpaces";
@@ -603,7 +604,6 @@ public class ServiceCodeConstant {
 
     // 保存停车位信息
     public static final String SERVICE_CODE_SELL_PARKING_SPACE = "parkingSpace.sellParkingSpace";
-
 
 
     // 保存停车位信息
@@ -651,7 +651,7 @@ public class ServiceCodeConstant {
      * 修改小区
      */
     public static final String SERVICE_CODE_UPDATE_COMMUNITY = "community.updateCommunity";
-/**
+    /**
      * 删除小区community.deleteCommunity
      */
     public static final String SERVICE_CODE_DELETE_COMMUNITY = "community.deleteCommunity";
@@ -686,7 +686,7 @@ public class ServiceCodeConstant {
     /**
      * 查询数据字典
      */
-    public static final String SERVICE_CODE_DICT_TYPE="dict.queryDict";
+    public static final String SERVICE_CODE_DICT_TYPE = "dict.queryDict";
 
     /**
      * 查询 地区

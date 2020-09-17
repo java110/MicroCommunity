@@ -3,10 +3,7 @@ package com.java110.front.controller;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
-import com.java110.front.smo.payment.IRentingToPaySMO;
-import com.java110.front.smo.payment.IToNotifySMO;
-import com.java110.front.smo.payment.IToPaySMO;
-import com.java110.front.smo.payment.IToPayTempCarInoutSMO;
+import com.java110.front.smo.payment.*;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -39,6 +36,11 @@ public class PaymentController extends BaseController {
 
     @Autowired
     private IToNotifySMO toNotifySMOImpl;
+
+    @Autowired
+    private IRentingToNotifySMO rentingToNotifySMOImpl;
+
+
 
     /**
      * <p>统一下单入口</p>
@@ -116,6 +118,22 @@ public class PaymentController extends BaseController {
                 "", "", "", pd.getSessionId(),
                 appId);
         return rentingToPaySMOImpl.toPay(newPd);
+    }
+
+    /**
+     * <p>支付回调Api</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/rentingNotify", method = RequestMethod.POST)
+    public ResponseEntity<String> rentingNotify(@RequestBody String postInfo, HttpServletRequest request) {
+
+        logger.debug("微信支付回调报文" + postInfo);
+
+        return rentingToNotifySMOImpl.toNotify(postInfo, request);
+
+
     }
 
 }

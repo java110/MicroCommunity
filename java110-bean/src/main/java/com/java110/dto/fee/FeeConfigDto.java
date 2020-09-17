@@ -25,6 +25,10 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public static final String FEE_TYPE_CD_WATER = "888800010016";//电费
     public static final String FEE_TYPE_CD_METER = "888800010015";//水费
+    public static final String FEE_TYPE_CD_SYSTEM = "888800010000";//系统
+
+    public static final String CONFIG_ID_RENTING = "920000000000000000";//租赁费用项
+
 
 
     private String feeTypeCd;
