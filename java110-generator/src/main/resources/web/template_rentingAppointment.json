@@ -1,9 +1,9 @@
 {
-  "templateName":"合同信息",
+  "templateName":"租赁预约",
   "directories": "admin",
-  "templateCode":"contract",
-  "templateKey":"contractId",
-  "templateKeyName":"合同ID",
+  "templateCode":"rentingAppointment",
+  "templateKey":"appointmentId",
+  "templateKeyName":"预约ID",
   "searchCode": "appointmentId",
   "searchName": "预约ID",
   "conditions": [

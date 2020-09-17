@@ -7,7 +7,7 @@ public class GeneratorStart extends BaseGenerator {
 
     public static void main(String[] args) throws Exception {
         //加载配置
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/template_prestoreFee.json").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/template_1.json").getFile());
 
         JSONObject data = JSONObject.parseObject(sb.toString());
 

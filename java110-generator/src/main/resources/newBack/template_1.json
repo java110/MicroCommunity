@@ -1,42 +1,91 @@
 {
   "autoMove": true,
-  "id": "appointmentId",
-  "name": "rentingAppointment",
-  "desc": "租赁预约",
+  "id": "contractId",
+  "name": "contract",
+  "desc": "合同管理",
   "shareParam": "storeId",
   "shareColumn": "store_id",
-  "shareName": "user",
-  "tableName": "renting_appointment",
+  "shareName": "store",
+  "tableName": "contract",
   "param": {
-    "appointmentId": "appointment_id",
-    "tenantName": "tenant_name",
-    "tenantSex": "tenant_sex",
-    "tenantTel": "tenant_tel",
-    "appointmentTime": "appointment_time",
-    "appointmentRoomId": "appointment_room_id",
-    "roomId": "room_id",
+    "contractId": "contract_id",
+    "contractCode": "contract_code",
+    "contractName": "contract_name",
+    "contractType": "contract_type",
+    "objType": "obj_type",
+    "objId": "obj_id",
+    "partyA": "party_a",
+    "partyB": "party_b",
+    "aContacts": "a_contacts",
+    "aLink": "a_link",
+    "bContacts": "b_contacts",
+    "bLink": "b_link",
+    "operator": "operator",
+    "operatorLink": "operator_link",
+    "amount": "amount",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "signingTime": "signing_time",
     "storeId": "store_id",
     "state": "state",
-    "msg": "msg",
-    "remark": "remark",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "tenantName",
-      "msg": "租客名称不能为空"
+      "code": "contractCode",
+      "msg": "合同编码不能为空"
     },
     {
-      "code": "tenantSex",
-      "msg": "租客性别不能为空"
+      "code": "contractName",
+      "msg": "合同名称不能为空"
     },
     {
-      "code": "tenantTel",
-      "msg": "租客电话不能为空"
+      "code": "contractType",
+      "msg": "合同类型不能为空"
     },
     {
-      "code": "appointmentTime",
-      "msg": "预约时间不能为空"
+      "code": "partyA",
+      "msg": "甲方不能为空"
+    },
+    {
+      "code": "partyB",
+      "msg": "乙方不能为空"
+    },
+    {
+      "code": "aContacts",
+      "msg": "甲方联系人不能为空"
+    },
+    {
+      "code": "aLink",
+      "msg": "甲方联系电话不能为空"
+    },
+    {
+      "code": "bContacts",
+      "msg": "乙方联系人不能为空"
+    },
+    {
+      "code": "bLink",
+      "msg": "乙方联系电话不能为空"
+    },
+    {
+      "code": "operator",
+      "msg": "经办人不能为空"
+    },
+    {
+      "code": "operatorLink",
+      "msg": "经办人联系电话不能为空"
+    },
+    {
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
+    },
+    {
+      "code": "signingTime",
+      "msg": "签订时间不能为空"
     }
   ]
 }

@@ -29,7 +29,7 @@ public class BackCoderGeneratorStart extends BaseGenerator {
     public static void main(String[] args) throws Exception {
 
         //加载配置
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newBack/template_prestoreFee.json").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newBack/template_1.json").getFile());
 
         JSONObject dataJson = JSONObject.parseObject(sb.toString());
 
