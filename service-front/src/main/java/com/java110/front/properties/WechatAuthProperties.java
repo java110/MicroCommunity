@@ -28,6 +28,7 @@ public class WechatAuthProperties {
     private String mchId;
     private String wxPayUnifiedOrder;
     private String wxNotifyUrl;
+    private String rentingNotifyUrl;
 
     private String wechatAppId;//微信公众号ID
     private String wechatAppSecret;//微信公众号秘钥
@@ -120,5 +121,13 @@ public class WechatAuthProperties {
 
     public void setSendMsgUrl(String sendMsgUrl) {
         this.sendMsgUrl = sendMsgUrl;
+    }
+
+    public String getRentingNotifyUrl() {
+        return rentingNotifyUrl;
+    }
+
+    public void setRentingNotifyUrl(String rentingNotifyUrl) {
+        this.rentingNotifyUrl = rentingNotifyUrl;
     }
 }

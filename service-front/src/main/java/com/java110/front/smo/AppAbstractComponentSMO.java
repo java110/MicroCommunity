@@ -14,11 +14,7 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -91,6 +87,22 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
                                                  String feeName, String tradeType,
                                                  String orderNum, double money,
                                                  String openId, SmallWeChatDto smallWeChatDto) throws Exception {
+        return java110Payment(outRestTemplate, feeName, tradeType, orderNum, money, openId, smallWeChatDto, "");
+    }
+
+    /**
+     * 预下单
+     *
+     * @param orderNum
+     * @param money
+     * @param openId
+     * @return
+     * @throws Exception
+     */
+    protected Map<String, String> java110Payment(RestTemplate outRestTemplate,
+                                                 String feeName, String tradeType,
+                                                 String orderNum, double money,
+                                                 String openId, SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
 //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -98,7 +110,14 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue("HC_ENV"), money);
 //添加或更新支付记录(参数跟进自己业务需求添加)
 
-        Map<String, String> resMap = this.java110UnifieldOrder(outRestTemplate, feeName, orderNum, tradeType, payAmount, openId, smallWeChatDto);
+        Map<String, String> resMap = null;
+
+        if (StringUtil.isEmpty(notifyUrl)) {
+            resMap = this.java110UnifieldOrder(outRestTemplate, feeName, orderNum, tradeType, payAmount, openId, smallWeChatDto);
+        } else {
+            resMap = this.java110UnifieldOrder(outRestTemplate, feeName, orderNum, tradeType, payAmount, openId, smallWeChatDto, notifyUrl);
+        }
+
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
             if (WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
 
@@ -137,6 +156,15 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
     private Map<String, String> java110UnifieldOrder(RestTemplate outRestTemplate, String feeName, String orderNum,
                                                      String tradeType, double payAmount, String openid,
                                                      SmallWeChatDto smallWeChatDto) throws Exception {
+        return java110UnifieldOrder(outRestTemplate, feeName, orderNum, tradeType, payAmount, openid, smallWeChatDto, wechatAuthProperties.getWxNotifyUrl());
+    }
+
+    /**
+     * 小程序支付统一下单
+     */
+    private Map<String, String> java110UnifieldOrder(RestTemplate outRestTemplate, String feeName, String orderNum,
+                                                     String tradeType, double payAmount, String openid,
+                                                     SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
 
         String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
 
@@ -148,7 +176,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         paramMap.put("out_trade_no", orderNum);
         paramMap.put("total_fee", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("spbill_create_ip", PayUtil.getLocalIp());
-        paramMap.put("notify_url", wechatAuthProperties.getWxNotifyUrl() + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
+        paramMap.put("notify_url", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
         paramMap.put("trade_type", tradeType);
         paramMap.put("openid", openid);
 

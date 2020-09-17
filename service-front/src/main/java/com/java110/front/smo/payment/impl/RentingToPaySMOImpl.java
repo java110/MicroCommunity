@@ -122,7 +122,7 @@ public class RentingToPaySMOImpl extends AppAbstractComponentSMO implements IRen
             money = serviceDec.multiply(rateDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
 
-        Map result = super.java110Payment(outRestTemplate, feeName, WechatAuthProperties.TRADE_TYPE_NATIVE, orderId, money, "", smallWeChatDto);
+        Map result = super.java110Payment(outRestTemplate, feeName, WechatAuthProperties.TRADE_TYPE_NATIVE, orderId, money, "", smallWeChatDto, wechatAuthProperties.getRentingNotifyUrl());
         result.put("money", money);
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
         if (!"0".equals(result.get("code"))) {
