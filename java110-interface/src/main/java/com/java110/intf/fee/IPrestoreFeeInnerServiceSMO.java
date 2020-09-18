@@ -1,4 +1,4 @@
-package com.java110.intf.fee;
+package com.java110.intf;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.prestoreFee.PrestoreFeeDto;
@@ -24,13 +24,13 @@ public interface IPrestoreFeeInnerServiceSMO {
 
 
     @RequestMapping(value = "/savePrestoreFee", method = RequestMethod.POST)
-    public int savePrestoreFee(@RequestBody PrestoreFeePo prestoreFeePo);
+    public int savePrestoreFee(@RequestBody  PrestoreFeePo prestoreFeePo);
 
     @RequestMapping(value = "/updatePrestoreFee", method = RequestMethod.POST)
     public int updatePrestoreFee(@RequestBody  PrestoreFeePo prestoreFeePo);
 
     @RequestMapping(value = "/deletePrestoreFee", method = RequestMethod.POST)
-    public int deletePrestoreFee(@RequestBody  PrestoreFeePo prestoreFeePo);
+    public int deletePrestoreFee(@RequestBody PrestoreFeePo prestoreFeePo);
 
     /**
      * <p>查询小区楼信息</p>

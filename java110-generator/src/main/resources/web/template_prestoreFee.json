@@ -98,6 +98,18 @@
       "show": true
     },
     {
+      "code": "reason",
+      "cnCode":"原因",
+      "desc":"选填，请填写原因",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"100",
+      "limitErrInfo":"原因格式错误",
+      "show": false
+    },
+    {
       "code": "remark",
       "cnCode":"备注",
       "desc":"必填，请填写入住时间",

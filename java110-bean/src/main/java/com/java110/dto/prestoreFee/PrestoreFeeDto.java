@@ -1,7 +1,6 @@
 package com.java110.dto.prestoreFee;
 
 import com.java110.dto.PageDto;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,80 +15,76 @@ import java.util.Date;
 public class PrestoreFeeDto extends PageDto implements Serializable {
 
     private String prestoreFeeAmount;
-    private String prestoreFeeObjType;
-    private String prestoreFeeId;
-    private String remark;
-    private String state;
-    private String communityId;
-    private String prestoreFeeType;
-    private String roomId;
+private String reason;
+private String prestoreFeeObjType;
+private String prestoreFeeId;
+private String remark;
+private String state;
+private String communityId;
+private String prestoreFeeType;
+private String roomId;
+
 
     private Date createTime;
+
     private String statusCd = "0";
+
 
     public String getPrestoreFeeAmount() {
         return prestoreFeeAmount;
     }
-
-    public void setPrestoreFeeAmount(String prestoreFeeAmount) {
+public void setPrestoreFeeAmount(String prestoreFeeAmount) {
         this.prestoreFeeAmount = prestoreFeeAmount;
     }
-
-    public String getPrestoreFeeObjType() {
+public String getReason() {
+        return reason;
+    }
+public void setReason(String reason) {
+        this.reason = reason;
+    }
+public String getPrestoreFeeObjType() {
         return prestoreFeeObjType;
     }
-
-    public void setPrestoreFeeObjType(String prestoreFeeObjType) {
+public void setPrestoreFeeObjType(String prestoreFeeObjType) {
         this.prestoreFeeObjType = prestoreFeeObjType;
     }
-
-    public String getPrestoreFeeId() {
+public String getPrestoreFeeId() {
         return prestoreFeeId;
     }
-
-    public void setPrestoreFeeId(String prestoreFeeId) {
+public void setPrestoreFeeId(String prestoreFeeId) {
         this.prestoreFeeId = prestoreFeeId;
     }
-
-    public String getRemark() {
+public String getRemark() {
         return remark;
     }
-
-    public void setRemark(String remark) {
+public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    public String getState() {
+public String getState() {
         return state;
     }
-
-    public void setState(String state) {
+public void setState(String state) {
         this.state = state;
     }
-
-    public String getCommunityId() {
+public String getCommunityId() {
         return communityId;
     }
-
-    public void setCommunityId(String communityId) {
+public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
-    public String getPrestoreFeeType() {
+public String getPrestoreFeeType() {
         return prestoreFeeType;
     }
-
-    public void setPrestoreFeeType(String prestoreFeeType) {
+public void setPrestoreFeeType(String prestoreFeeType) {
         this.prestoreFeeType = prestoreFeeType;
     }
-
-    public String getRoomId() {
+public String getRoomId() {
         return roomId;
     }
-
-    public void setRoomId(String roomId) {
+public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
+
 
     public Date getCreateTime() {
         return createTime;

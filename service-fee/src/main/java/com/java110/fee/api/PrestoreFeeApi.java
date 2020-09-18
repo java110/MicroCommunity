@@ -100,20 +100,20 @@ public class PrestoreFeeApi {
      */
     @RequestMapping(value = "/queryPrestoreFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryPrestoreFee(@RequestParam(value = "communityId") String communityId,
-                                                   @RequestParam(value = "prestoreFeeAmount", required = false) String prestoreFeeAmount,
-                                                   @RequestParam(value = "prestoreFeeType", required = false) String prestoreFeeType,
-                                                   @RequestParam(value = "state", required = false) String state,
-                                                   @RequestParam(value = "roomId", required = false) String roomId,
                                                    @RequestParam(value = "page") int page,
+                                                   @RequestParam(value = "state" ,required = false) String state,
+                                                   @RequestParam(value = "roomId" ,required = false) String roomId,
+                                                   @RequestParam(value = "prestoreFeeType" ,required = false) String prestoreFeeType,
+                                                   @RequestParam(value = "prestoreFeeAmount" ,required = false) String prestoreFeeAmount,
                                                    @RequestParam(value = "row") int row) {
         PrestoreFeeDto prestoreFeeDto = new PrestoreFeeDto();
         prestoreFeeDto.setPage(page);
         prestoreFeeDto.setRow(row);
-        prestoreFeeDto.setRoomId(roomId);
-        prestoreFeeDto.setCommunityId(communityId);
-        prestoreFeeDto.setPrestoreFeeAmount(prestoreFeeType);
-        prestoreFeeDto.setPrestoreFeeAmount(prestoreFeeAmount);
         prestoreFeeDto.setState(state);
+        prestoreFeeDto.setRoomId(roomId);
+        prestoreFeeDto.setPrestoreFeeType(prestoreFeeType);
+        prestoreFeeDto.setPrestoreFeeAmount(prestoreFeeAmount);
+        prestoreFeeDto.setCommunityId(communityId);
         return getPrestoreFeeBMOImpl.get(prestoreFeeDto);
     }
 }

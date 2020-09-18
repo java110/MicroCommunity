@@ -11,9 +11,9 @@
     <!-- 保存预存费用信息 add by wuxw 2018-07-03 -->
     <insert id="savePrestoreFeeInfo" parameterType="Map">
         insert into prestore_fee(
-prestore_fee_amount,prestore_fee_obj_type,prestore_fee_id,remark,state,community_id,prestore_fee_type,room_id
+prestore_fee_amount,reason,prestore_fee_obj_type,prestore_fee_id,remark,state,community_id,prestore_fee_type,room_id
 ) values (
-#{prestoreFeeAmount},#{prestoreFeeObjType},#{prestoreFeeId},#{remark},#{state},#{communityId},#{prestoreFeeType},#{roomId}
+#{prestoreFeeAmount},#{reason},#{prestoreFeeObjType},#{prestoreFeeId},#{remark},#{state},#{communityId},#{prestoreFeeType},#{roomId}
 )
     </insert>
 
@@ -21,11 +21,14 @@ prestore_fee_amount,prestore_fee_obj_type,prestore_fee_id,remark,state,community
 
     <!-- 查询预存费用信息 add by wuxw 2018-07-03 -->
     <select id="getPrestoreFeeInfo" parameterType="Map" resultType="Map">
-        select  t.prestore_fee_amount,t.prestore_fee_amount prestoreFeeAmount,t.prestore_fee_obj_type,t.prestore_fee_obj_type prestoreFeeObjType,t.prestore_fee_id,t.prestore_fee_id prestoreFeeId,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.prestore_fee_type,t.prestore_fee_type prestoreFeeType,t.room_id,t.room_id roomId
+        select  t.prestore_fee_amount,t.prestore_fee_amount prestoreFeeAmount,t.reason,t.prestore_fee_obj_type,t.prestore_fee_obj_type prestoreFeeObjType,t.prestore_fee_id,t.prestore_fee_id prestoreFeeId,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.prestore_fee_type,t.prestore_fee_type prestoreFeeType,t.room_id,t.room_id roomId 
 from prestore_fee t 
 where 1 =1 
 <if test="prestoreFeeAmount !=null and prestoreFeeAmount != ''">
    and t.prestore_fee_amount= #{prestoreFeeAmount}
+</if> 
+<if test="reason !=null and reason != ''">
+   and t.reason= #{reason}
 </if> 
 <if test="prestoreFeeObjType !=null and prestoreFeeObjType != ''">
    and t.prestore_fee_obj_type= #{prestoreFeeObjType}
@@ -70,6 +73,9 @@ order by t.create_time desc
 <if test="prestoreFeeAmount !=null and prestoreFeeAmount != ''">
 , t.prestore_fee_amount= #{prestoreFeeAmount}
 </if> 
+<if test="reason !=null and reason != ''">
+, t.reason= #{reason}
+</if> 
 <if test="prestoreFeeObjType !=null and prestoreFeeObjType != ''">
 , t.prestore_fee_obj_type= #{prestoreFeeObjType}
 </if> 
@@ -101,6 +107,9 @@ from prestore_fee t
 where 1 =1 
 <if test="prestoreFeeAmount !=null and prestoreFeeAmount != ''">
    and t.prestore_fee_amount= #{prestoreFeeAmount}
+</if> 
+<if test="reason !=null and reason != ''">
+   and t.reason= #{reason}
 </if> 
 <if test="prestoreFeeObjType !=null and prestoreFeeObjType != ''">
    and t.prestore_fee_obj_type= #{prestoreFeeObjType}
