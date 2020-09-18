@@ -3,8 +3,10 @@ package com.java110.store.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractType.ContractTypeDto;
+import com.java110.dto.contractTypeSpec.ContractTypeSpecDto;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractType.ContractTypePo;
+import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
 import com.java110.store.bmo.contract.IDeleteContractBMO;
 import com.java110.store.bmo.contract.IGetContractBMO;
 import com.java110.store.bmo.contract.ISaveContractBMO;
@@ -13,6 +15,10 @@ import com.java110.store.bmo.contractType.IDeleteContractTypeBMO;
 import com.java110.store.bmo.contractType.IGetContractTypeBMO;
 import com.java110.store.bmo.contractType.ISaveContractTypeBMO;
 import com.java110.store.bmo.contractType.IUpdateContractTypeBMO;
+import com.java110.store.bmo.contractTypeSpec.IDeleteContractTypeSpecBMO;
+import com.java110.store.bmo.contractTypeSpec.IGetContractTypeSpecBMO;
+import com.java110.store.bmo.contractTypeSpec.ISaveContractTypeSpecBMO;
+import com.java110.store.bmo.contractTypeSpec.IUpdateContractTypeSpecBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +49,16 @@ public class ContractApi {
 
     @Autowired
     private IGetContractTypeBMO getContractTypeBMOImpl;
+
+    @Autowired
+    private ISaveContractTypeSpecBMO saveContractTypeSpecBMOImpl;
+    @Autowired
+    private IUpdateContractTypeSpecBMO updateContractTypeSpecBMOImpl;
+    @Autowired
+    private IDeleteContractTypeSpecBMO deleteContractTypeSpecBMOImpl;
+
+    @Autowired
+    private IGetContractTypeSpecBMO getContractTypeSpecBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -221,5 +237,97 @@ public class ContractApi {
         contractTypeDto.setRow(row);
         contractTypeDto.setStoreId(storeId);
         return getContractTypeBMOImpl.get(contractTypeDto);
+    }
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/saveContractTypeSpec
+     * @path /app/contract/saveContractTypeSpec
+     */
+    @RequestMapping(value = "/saveContractTypeSpec", method = RequestMethod.POST)
+    public ResponseEntity<String> saveContractTypeSpec(@RequestBody JSONObject reqJson, @RequestParam(value = "store-id") String storeId) {
+
+        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        Assert.hasKeyAndValue(reqJson, "contractTypeId", "请求报文中未包含contractTypeId");
+        Assert.hasKeyAndValue(reqJson, "specName", "请求报文中未包含specName");
+        Assert.hasKeyAndValue(reqJson, "specHoldplace", "请求报文中未包含specHoldplace");
+        Assert.hasKeyAndValue(reqJson, "required", "请求报文中未包含required");
+        Assert.hasKeyAndValue(reqJson, "specShow", "请求报文中未包含specShow");
+        Assert.hasKeyAndValue(reqJson, "specValueType", "请求报文中未包含specValueType");
+        Assert.hasKeyAndValue(reqJson, "specType", "请求报文中未包含specType");
+        Assert.hasKeyAndValue(reqJson, "listShow", "请求报文中未包含listShow");
+
+
+        ContractTypeSpecPo contractTypeSpecPo = BeanConvertUtil.covertBean(reqJson, ContractTypeSpecPo.class);
+        contractTypeSpecPo.setStoreId(storeId);
+        return saveContractTypeSpecBMOImpl.save(contractTypeSpecPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/updateContractTypeSpec
+     * @path /app/contract/updateContractTypeSpec
+     */
+    @RequestMapping(value = "/updateContractTypeSpec", method = RequestMethod.POST)
+    public ResponseEntity<String> updateContractTypeSpec(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        Assert.hasKeyAndValue(reqJson, "contractTypeId", "请求报文中未包含contractTypeId");
+        Assert.hasKeyAndValue(reqJson, "specName", "请求报文中未包含specName");
+        Assert.hasKeyAndValue(reqJson, "specHoldplace", "请求报文中未包含specHoldplace");
+        Assert.hasKeyAndValue(reqJson, "required", "请求报文中未包含required");
+        Assert.hasKeyAndValue(reqJson, "specShow", "请求报文中未包含specShow");
+        Assert.hasKeyAndValue(reqJson, "specValueType", "请求报文中未包含specValueType");
+        Assert.hasKeyAndValue(reqJson, "specType", "请求报文中未包含specType");
+        Assert.hasKeyAndValue(reqJson, "listShow", "请求报文中未包含listShow");
+        Assert.hasKeyAndValue(reqJson, "specCd", "specCd不能为空");
+
+
+        ContractTypeSpecPo contractTypeSpecPo = BeanConvertUtil.covertBean(reqJson, ContractTypeSpecPo.class);
+        return updateContractTypeSpecBMOImpl.update(contractTypeSpecPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/deleteContractTypeSpec
+     * @path /app/contract/deleteContractTypeSpec
+     */
+    @RequestMapping(value = "/deleteContractTypeSpec", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteContractTypeSpec(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "specCd", "specCd不能为空");
+
+
+        ContractTypeSpecPo contractTypeSpecPo = BeanConvertUtil.covertBean(reqJson, ContractTypeSpecPo.class);
+        return deleteContractTypeSpecBMOImpl.delete(contractTypeSpecPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /contract/queryContractTypeSpec
+     * @path /app/contract/queryContractTypeSpec
+     */
+    @RequestMapping(value = "/queryContractTypeSpec", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractTypeSpec(@RequestParam(value = "store-id") String storeId,
+                                                        @RequestParam(value = "page") int page,
+                                                        @RequestParam(value = "row") int row) {
+        ContractTypeSpecDto contractTypeSpecDto = new ContractTypeSpecDto();
+        contractTypeSpecDto.setPage(page);
+        contractTypeSpecDto.setRow(row);
+        contractTypeSpecDto.setStoreId(storeId);
+        return getContractTypeSpecBMOImpl.get(contractTypeSpecDto);
     }
 }

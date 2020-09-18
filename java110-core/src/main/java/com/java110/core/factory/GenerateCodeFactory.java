@@ -147,6 +147,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_appointmentId = "80";
     public static final String CODE_PREFIX_contractId = "81";
     public static final String CODE_PREFIX_contractTypeId = "81";
+    public static final String CODE_PREFIX_specCd = "82";
 
 
 
