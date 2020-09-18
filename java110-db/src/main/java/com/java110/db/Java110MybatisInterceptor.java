@@ -242,12 +242,14 @@ public class Java110MybatisInterceptor implements Interceptor {
 //                }
 //                afterValue.put(tmpKeys[keyIndex], tmpValues[keyIndex]);
 //            }
-//            afterValues.add(afterValue);
+//
 //        }
+
+        afterValues.add(sqlValue);
 
         JSONObject logText = new JSONObject();
         logText.put("preValue", preValues);
-        logText.put("afterValue", sqlValue);
+        logText.put("afterValue", afterValues);
 
         OrderItemDto orderItemDto = new OrderItemDto();
         orderItemDto.setbId("-1");
