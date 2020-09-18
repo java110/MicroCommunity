@@ -248,7 +248,7 @@ public class ContractApi {
      * @path /app/contract/saveContractTypeSpec
      */
     @RequestMapping(value = "/saveContractTypeSpec", method = RequestMethod.POST)
-    public ResponseEntity<String> saveContractTypeSpec(@RequestBody JSONObject reqJson, @RequestParam(value = "store-id") String storeId) {
+    public ResponseEntity<String> saveContractTypeSpec(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
 
         Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
         Assert.hasKeyAndValue(reqJson, "contractTypeId", "请求报文中未包含contractTypeId");
