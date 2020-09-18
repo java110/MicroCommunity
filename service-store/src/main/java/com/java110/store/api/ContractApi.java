@@ -147,28 +147,31 @@ public class ContractApi {
 
     /**
      * 微信保存消息模板
-     * @serviceCode /contract/saveContractType
-     * @path /app/contract/saveContractType
+     *
      * @param reqJson
      * @return
+     * @serviceCode /contract/saveContractType
+     * @path /app/contract/saveContractType
      */
     @RequestMapping(value = "/saveContractType", method = RequestMethod.POST)
-    public ResponseEntity<String> saveContractType(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveContractType(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id", required = false) String storeId) {
 
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
         Assert.hasKeyAndValue(reqJson, "audit", "请求报文中未包含audit");
 
 
         ContractTypePo contractTypePo = BeanConvertUtil.covertBean(reqJson, ContractTypePo.class);
+        contractTypePo.setStoreId(storeId);
         return saveContractTypeBMOImpl.save(contractTypePo);
     }
 
     /**
      * 微信修改消息模板
-     * @serviceCode /contract/updateContractType
-     * @path /app/contract/updateContractType
+     *
      * @param reqJson
      * @return
+     * @serviceCode /contract/updateContractType
+     * @path /app/contract/updateContractType
      */
     @RequestMapping(value = "/updateContractType", method = RequestMethod.POST)
     public ResponseEntity<String> updateContractType(@RequestBody JSONObject reqJson) {
@@ -184,10 +187,11 @@ public class ContractApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /contract/deleteContractType
-     * @path /app/contract/deleteContractType
+     *
      * @param reqJson
      * @return
+     * @serviceCode /contract/deleteContractType
+     * @path /app/contract/deleteContractType
      */
     @RequestMapping(value = "/deleteContractType", method = RequestMethod.POST)
     public ResponseEntity<String> deleteContractType(@RequestBody JSONObject reqJson) {
@@ -202,10 +206,11 @@ public class ContractApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /contract/queryContractType
-     * @path /app/contract/queryContractType
+     *
      * @param storeId 商户ID
      * @return
+     * @serviceCode /contract/queryContractType
+     * @path /app/contract/queryContractType
      */
     @RequestMapping(value = "/queryContractType", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractType(@RequestHeader(value = "store-id") String storeId,
