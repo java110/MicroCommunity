@@ -23,7 +23,12 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -250,7 +255,7 @@ public class ContractApi {
     @RequestMapping(value = "/saveContractTypeSpec", method = RequestMethod.POST)
     public ResponseEntity<String> saveContractTypeSpec(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
 
-       // Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        // Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
         Assert.hasKeyAndValue(reqJson, "contractTypeId", "请求报文中未包含contractTypeId");
         Assert.hasKeyAndValue(reqJson, "specName", "请求报文中未包含specName");
         Assert.hasKeyAndValue(reqJson, "specHoldplace", "请求报文中未包含specHoldplace");
@@ -323,11 +328,13 @@ public class ContractApi {
     @RequestMapping(value = "/queryContractTypeSpec", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractTypeSpec(@RequestHeader(value = "store-id") String storeId,
                                                         @RequestParam(value = "page") int page,
-                                                        @RequestParam(value = "row") int row) {
+                                                        @RequestParam(value = "row") int row,
+                                                        @RequestParam(value = "contractTypeId") String contractTypeId) {
         ContractTypeSpecDto contractTypeSpecDto = new ContractTypeSpecDto();
         contractTypeSpecDto.setPage(page);
         contractTypeSpecDto.setRow(row);
         contractTypeSpecDto.setStoreId(storeId);
+        contractTypeSpecDto.setContractTypeId(contractTypeId);
         return getContractTypeSpecBMOImpl.get(contractTypeSpecDto);
     }
 }
