@@ -192,7 +192,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="feeCoefficient !=null and feeCoefficient != ''">
+        <if test="feeCoefficient !=null">
             , t.fee_coefficient= #{feeCoefficient}
         </if>
         <if test="section !=null and section != ''">

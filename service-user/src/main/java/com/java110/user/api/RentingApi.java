@@ -1,6 +1,7 @@
 package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.utils.StringUtils;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.rentingConfig.RentingConfigDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
@@ -144,10 +145,12 @@ public class RentingApi {
     @RequestMapping(value = "/queryRentingConfig", method = RequestMethod.GET)
     public ResponseEntity<String> queryRentingConfig(
             @RequestParam(value = "page") int page,
-            @RequestParam(value = "row") int row) {
+            @RequestParam(value = "row") int row,
+            @RequestParam(value = "rentingConfigId", required = false) String rentingConfigId) {
         RentingConfigDto rentingConfigDto = new RentingConfigDto();
         rentingConfigDto.setPage(page);
         rentingConfigDto.setRow(row);
+        rentingConfigDto.setRentingConfigId(rentingConfigId);
         return getRentingConfigBMOImpl.get(rentingConfigDto);
     }
 
@@ -236,13 +239,17 @@ public class RentingApi {
     public ResponseEntity<String> queryRentingPool(@RequestParam(value = "communityId", required = false) String communityId,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row,
-                                                   @RequestParam(value = "state", required = false) String state
+                                                   @RequestParam(value = "state", required = false) String state,
+                                                   @RequestParam(value = "rentingType", required = false) String rentingType,
+                                                   @RequestParam(value = "rentingId", required = false) String rentingId
     ) {
         RentingPoolDto rentingPoolDto = new RentingPoolDto();
         rentingPoolDto.setPage(page);
         rentingPoolDto.setRow(row);
         rentingPoolDto.setCommunityId(communityId);
-        if (state.contains(",")) {
+        rentingPoolDto.setRentingId(rentingId);
+        rentingPoolDto.setRentingType(rentingType);
+        if (!StringUtils.isEmpty(state) && state.contains(",")) {
             rentingPoolDto.setStates(state.split(","));
         } else {
             rentingPoolDto.setState(state);

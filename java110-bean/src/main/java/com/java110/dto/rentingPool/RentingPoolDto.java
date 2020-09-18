@@ -19,9 +19,13 @@ public class RentingPoolDto extends PageDto implements Serializable {
     public static final String STATE_PROXY_AUDIT = "1";
     public static final String STATE_PROXY_VIEW_ROOM = "2";
     public static final String STATE_TO_PAY = "3";
+    public static final String STATE_OWNER_TO_PAY = "7";
     public static final String STATE_APPLY_AGREE = "4";
     public static final String STATE_ADMIN_AUDIT = "5";
     public static final String STATE_FINISH = "6";
+
+    //房屋服务费 redis前缀
+    public static final String REDIS_PAY_RENTING = "PAY_RENTING_";
 
     private String latitude;
     private String ownerTel;
@@ -48,6 +52,14 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String serviceOwnerRate;
+    private String serviceTenantRate;
+    private String adminSeparateRate;
+    private String proxySeparateRate;
+    private String propertySeparateRate;
+    private String servicePrice;
+    private String rentingFormula;
 
 
     public String getLatitude() {
@@ -217,5 +229,61 @@ public class RentingPoolDto extends PageDto implements Serializable {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getServiceOwnerRate() {
+        return serviceOwnerRate;
+    }
+
+    public void setServiceOwnerRate(String serviceOwnerRate) {
+        this.serviceOwnerRate = serviceOwnerRate;
+    }
+
+    public String getServiceTenantRate() {
+        return serviceTenantRate;
+    }
+
+    public void setServiceTenantRate(String serviceTenantRate) {
+        this.serviceTenantRate = serviceTenantRate;
+    }
+
+    public String getAdminSeparateRate() {
+        return adminSeparateRate;
+    }
+
+    public void setAdminSeparateRate(String adminSeparateRate) {
+        this.adminSeparateRate = adminSeparateRate;
+    }
+
+    public String getProxySeparateRate() {
+        return proxySeparateRate;
+    }
+
+    public void setProxySeparateRate(String proxySeparateRate) {
+        this.proxySeparateRate = proxySeparateRate;
+    }
+
+    public String getPropertySeparateRate() {
+        return propertySeparateRate;
+    }
+
+    public void setPropertySeparateRate(String propertySeparateRate) {
+        this.propertySeparateRate = propertySeparateRate;
+    }
+
+    public String getServicePrice() {
+        return servicePrice;
+    }
+
+    public void setServicePrice(String servicePrice) {
+        this.servicePrice = servicePrice;
+    }
+
+    public String getRentingFormula() {
+        return rentingFormula;
+    }
+
+    public void setRentingFormula(String rentingFormula) {
+        this.rentingFormula = rentingFormula;
     }
 }
