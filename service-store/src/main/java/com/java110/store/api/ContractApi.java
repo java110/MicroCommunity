@@ -321,7 +321,7 @@ public class ContractApi {
      * @path /app/contract/queryContractTypeSpec
      */
     @RequestMapping(value = "/queryContractTypeSpec", method = RequestMethod.GET)
-    public ResponseEntity<String> queryContractTypeSpec(@RequestParam(value = "store-id") String storeId,
+    public ResponseEntity<String> queryContractTypeSpec(@RequestHeader(value = "store-id") String storeId,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         ContractTypeSpecDto contractTypeSpecDto = new ContractTypeSpecDto();
