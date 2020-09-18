@@ -3,7 +3,7 @@ package com.java110.fee.smo.impl;
 
 import com.java110.fee.dao.IPrestoreFeeServiceDao;
 import com.java110.dto.prestoreFee.PrestoreFeeDto;
-import com.java110.intf.fee.IPrestoreFeeInnerServiceSMO;
+import com.java110.intf.IPrestoreFeeInnerServiceSMO;
 import com.java110.po.prestoreFee.PrestoreFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;

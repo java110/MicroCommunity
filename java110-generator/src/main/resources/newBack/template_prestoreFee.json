@@ -15,6 +15,7 @@
     "prestoreFeeAmount": "prestore_fee_amount",
     "remark": "remark",
     "communityId": "community_id",
+    "reason":"reason",
     "state": "state",
     "statusCd": "status_cd"
   },
