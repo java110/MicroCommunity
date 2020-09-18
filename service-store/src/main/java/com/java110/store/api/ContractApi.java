@@ -2,11 +2,17 @@ package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.contract.ContractDto;
+import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.po.contract.ContractPo;
+import com.java110.po.contractType.ContractTypePo;
 import com.java110.store.bmo.contract.IDeleteContractBMO;
 import com.java110.store.bmo.contract.IGetContractBMO;
 import com.java110.store.bmo.contract.ISaveContractBMO;
 import com.java110.store.bmo.contract.IUpdateContractBMO;
+import com.java110.store.bmo.contractType.IDeleteContractTypeBMO;
+import com.java110.store.bmo.contractType.IGetContractTypeBMO;
+import com.java110.store.bmo.contractType.ISaveContractTypeBMO;
+import com.java110.store.bmo.contractType.IUpdateContractTypeBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +33,16 @@ public class ContractApi {
 
     @Autowired
     private IGetContractBMO getContractBMOImpl;
+
+    @Autowired
+    private ISaveContractTypeBMO saveContractTypeBMOImpl;
+    @Autowired
+    private IUpdateContractTypeBMO updateContractTypeBMOImpl;
+    @Autowired
+    private IDeleteContractTypeBMO deleteContractTypeBMOImpl;
+
+    @Autowired
+    private IGetContractTypeBMO getContractTypeBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -127,5 +143,78 @@ public class ContractApi {
         contractDto.setRow(row);
         contractDto.setStoreId(storeId);
         return getContractBMOImpl.get(contractDto);
+    }
+
+    /**
+     * 微信保存消息模板
+     * @serviceCode /contract/saveContractType
+     * @path /app/contract/saveContractType
+     * @param reqJson
+     * @return
+     */
+    @RequestMapping(value = "/saveContractType", method = RequestMethod.POST)
+    public ResponseEntity<String> saveContractType(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
+        Assert.hasKeyAndValue(reqJson, "audit", "请求报文中未包含audit");
+
+
+        ContractTypePo contractTypePo = BeanConvertUtil.covertBean(reqJson, ContractTypePo.class);
+        return saveContractTypeBMOImpl.save(contractTypePo);
+    }
+
+    /**
+     * 微信修改消息模板
+     * @serviceCode /contract/updateContractType
+     * @path /app/contract/updateContractType
+     * @param reqJson
+     * @return
+     */
+    @RequestMapping(value = "/updateContractType", method = RequestMethod.POST)
+    public ResponseEntity<String> updateContractType(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
+        Assert.hasKeyAndValue(reqJson, "audit", "请求报文中未包含audit");
+        Assert.hasKeyAndValue(reqJson, "contractTypeId", "contractTypeId不能为空");
+
+
+        ContractTypePo contractTypePo = BeanConvertUtil.covertBean(reqJson, ContractTypePo.class);
+        return updateContractTypeBMOImpl.update(contractTypePo);
+    }
+
+    /**
+     * 微信删除消息模板
+     * @serviceCode /contract/deleteContractType
+     * @path /app/contract/deleteContractType
+     * @param reqJson
+     * @return
+     */
+    @RequestMapping(value = "/deleteContractType", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteContractType(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "contractTypeId", "contractTypeId不能为空");
+
+
+        ContractTypePo contractTypePo = BeanConvertUtil.covertBean(reqJson, ContractTypePo.class);
+        return deleteContractTypeBMOImpl.delete(contractTypePo);
+    }
+
+    /**
+     * 微信删除消息模板
+     * @serviceCode /contract/queryContractType
+     * @path /app/contract/queryContractType
+     * @param storeId 商户ID
+     * @return
+     */
+    @RequestMapping(value = "/queryContractType", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractType(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
+        ContractTypeDto contractTypeDto = new ContractTypeDto();
+        contractTypeDto.setPage(page);
+        contractTypeDto.setRow(row);
+        contractTypeDto.setStoreId(storeId);
+        return getContractTypeBMOImpl.get(contractTypeDto);
     }
 }

@@ -69,6 +69,10 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+
+        <if test="rentingType !=null and rentingType != ''">
+            and rc.renting_type= #{rentingType}
+        </if>
         <if test="states !=null ">
             and t.state in
             <foreach collection="states" item="item" index="index" open="(" close=")" separator=",">
@@ -146,6 +150,7 @@
     <select id="queryRentingPoolsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from renting_pool t
+        left join renting_config rc on t.renting_config_id = rc.renting_config_id and rc.status_cd = '0'
         where 1 =1
         <if test="latitude !=null and latitude != ''">
             and t.latitude= #{latitude}
@@ -191,6 +196,9 @@
         </if>
         <if test="longitude !=null and longitude != ''">
             and t.longitude= #{longitude}
+        </if>
+        <if test="rentingType !=null and rentingType != ''">
+            and rc.renting_type= #{rentingType}
         </if>
 
 

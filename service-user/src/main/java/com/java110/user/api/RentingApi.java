@@ -14,11 +14,7 @@ import com.java110.user.bmo.rentingConfig.IDeleteRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.IGetRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.ISaveRentingConfigBMO;
 import com.java110.user.bmo.rentingConfig.IUpdateRentingConfigBMO;
-import com.java110.user.bmo.rentingPool.IAuditRentingBMO;
-import com.java110.user.bmo.rentingPool.IDeleteRentingPoolBMO;
-import com.java110.user.bmo.rentingPool.IGetRentingPoolBMO;
-import com.java110.user.bmo.rentingPool.ISaveRentingPoolBMO;
-import com.java110.user.bmo.rentingPool.IUpdateRentingPoolBMO;
+import com.java110.user.bmo.rentingPool.*;
 import com.java110.user.bmo.rentingPoolAttr.IDeleteRentingPoolAttrBMO;
 import com.java110.user.bmo.rentingPoolAttr.IGetRentingPoolAttrBMO;
 import com.java110.user.bmo.rentingPoolAttr.ISaveRentingPoolAttrBMO;
@@ -28,12 +24,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -249,6 +240,7 @@ public class RentingApi {
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row,
                                                    @RequestParam(value = "state", required = false) String state,
+                                                   @RequestParam(value = "rentingType", required = false) String rentingType,
                                                    @RequestParam(value = "rentingId", required = false) String rentingId
     ) {
         RentingPoolDto rentingPoolDto = new RentingPoolDto();
@@ -256,6 +248,7 @@ public class RentingApi {
         rentingPoolDto.setRow(row);
         rentingPoolDto.setCommunityId(communityId);
         rentingPoolDto.setRentingId(rentingId);
+        rentingPoolDto.setRentingType(rentingType);
         if (!StringUtils.isEmpty(state) && state.contains(",")) {
             rentingPoolDto.setStates(state.split(","));
         } else {
