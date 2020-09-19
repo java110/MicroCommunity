@@ -1,55 +1,33 @@
 {
   "autoMove": true,
-  "id": "specCd",
-  "name": "contractTypeSpec",
-  "desc": "合同类型规格",
-  "shareParam": "specCd",
-  "shareColumn": "spec_cd",
-  "shareName": "store",
-  "tableName": "contract_type_spec",
+  "id": "loginId",
+  "name": "userLogin",
+  "desc": "用户登录",
+  "shareParam": "loginId",
+  "shareColumn": "login_id",
+  "shareName": "user",
+  "tableName": "u_user_login",
   "param": {
-    "specCd": "spec_cd",
-    "contractTypeId": "contract_type_id",
-    "storeId": "store_id",
-    "specName": "spec_name",
-    "specHoldplace": "spec_holdplace",
-    "required": "required",
-    "specShow": "spec_show",
-    "specValueType": "spec_value_type",
-    "specType": "spec_type",
-    "listShow": "list_show",
-    "statusCd": "status_cd"
+    "loginId": "login_id",
+    "userId": "user_id",
+    "userName": "user_name",
+    "password": "password",
+    "loginTime": "login_time",
+    "source": "source",
+    "token": "token"
   },
   "required": [
     {
-      "code": "specCd",
-      "msg": "规格ID不能为空"
+      "code": "userId",
+      "msg": "用户ID不能为空"
     },
     {
-      "code": "contractTypeId",
-      "msg": "合同类型不能为空"
+      "code": "userName",
+      "msg": "用户名称不能为空"
     },
     {
-      "code": "specName",
-      "msg": "规格名称不能为空"
-    },{
-      "code": "specHoldplace",
-      "msg": "提示不能为空"
-    },{
-      "code": "required",
-      "msg": "必填不能为空"
-    },{
-      "code": "specShow",
-      "msg": "是否显示不能为空"
-    },{
-      "code": "specValueType",
-      "msg": "规格值不能为空"
-    },{
-      "code": "specType",
-      "msg": "规格类型不能为空"
-    },{
-      "code": "listShow",
-      "msg": "是否list中显示不能为空"
+      "code": "password",
+      "msg": "密码不能为空"
     }
   ]
 }

@@ -1,20 +1,30 @@
 package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.userLogin.UserLoginDto;
+import com.java110.entity.center.AppService;
+import com.java110.intf.IUserLoginInnerServiceSMO;
+import com.java110.po.userLogin.UserLoginPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.AuthenticationFactory;
-import com.java110.core.factory.DataFlowFactory;
-import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +40,9 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
 
     private final static Logger logger = LoggerFactory.getLogger(UserLoginServiceListener.class);
 
+
+    @Autowired
+    private IUserLoginInnerServiceSMO userLoginInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -120,6 +133,16 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
             String token = AuthenticationFactory.createAndSaveToken(userMap);
             userInfo.remove("userPwd");
             userInfo.put("token", token);
+            //记录登录日志
+            UserLoginPo userLoginPo = new UserLoginPo();
+            userLoginPo.setLoginId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_loginId));
+            userLoginPo.setLoginTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            userLoginPo.setPassword(userPwd);
+            userLoginPo.setSource(UserLoginDto.SOURCE_WEB);
+            userLoginPo.setToken(token);
+            userLoginPo.setUserId(userInfo.getString("userId"));
+            userLoginPo.setUserName(userInfo.getString("userName"));
+            userLoginInnerServiceSMOImpl.saveUserLogin(userLoginPo);
             responseEntity = new ResponseEntity<String>(userInfo.toJSONString(), HttpStatus.OK);
             dataFlowContext.setResponseEntity(responseEntity);
         } catch (Exception e) {
