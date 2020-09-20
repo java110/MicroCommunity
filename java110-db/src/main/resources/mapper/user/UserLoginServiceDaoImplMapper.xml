@@ -18,9 +18,19 @@
     <!-- 查询用户登录信息 add by wuxw 2018-07-03 -->
     <select id="getUserLoginInfo" parameterType="Map" resultType="Map">
         select t.password,t.login_id,t.login_id loginId,t.login_time,t.login_time
-        loginTime,t.source,t.user_name,t.user_name userName,t.user_id,t.user_id userId,t.token
+        loginTime,t.source,t.user_name,t.user_name userName,t.user_id,t.user_id userId,t.token,
+        puo.org_id parentOrgId,puo.org_name parentOrgName,uo.org_name orgName
         from u_user_login t
+        left join u_org_staff_rel uosr on t.user_id = uosr.staff_id and uosr.status_cd = '0'
+        left join u_org uo on uosr.org_id = uo.org_id  and uo.status_cd = '0'
+        left join u_org puo on uo.parent_org_id = puo.org_id and puo.status_cd = '0'
         where 1 =1
+        <if test="parentOrgName !=null and parentOrgName != ''">
+            and puo.org_name= #{parentOrgName}
+        </if>
+        <if test="orgName !=null and orgName != ''">
+            and uo.org_name= #{orgName}
+        </if>
         <if test="password !=null and password != ''">
             and t.password= #{password}
         </if>

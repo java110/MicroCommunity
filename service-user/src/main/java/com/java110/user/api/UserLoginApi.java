@@ -100,13 +100,17 @@ public class UserLoginApi {
      * @path /app/userLogin/queryUserLogin
      */
     @RequestMapping(value = "/queryUserLogin", method = RequestMethod.GET)
-    public ResponseEntity<String> queryUserLogin(@RequestParam(value = "userName") String userName,
+    public ResponseEntity<String> queryUserLogin(@RequestParam(value = "userName",required = false) String userName,
+                                                 @RequestParam(value = "parentOrgName",required = false) String parentOrgName,
+                                                 @RequestParam(value = "orgName",required = false) String orgName,
                                                  @RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row) {
         UserLoginDto userLoginDto = new UserLoginDto();
         userLoginDto.setPage(page);
         userLoginDto.setRow(row);
         userLoginDto.setUserName(userName);
+        userLoginDto.setParentOrgName(parentOrgName);
+        userLoginDto.setOrgName(orgName);
         return getUserLoginBMOImpl.get(userLoginDto);
     }
 }

@@ -24,6 +24,8 @@ public class UserLoginDto extends PageDto implements Serializable {
     private String userName;
     private String userId;
     private String token;
+    private String parentOrgName;
+    private String orgName;
 
 
     private Date createTime;
@@ -102,5 +104,21 @@ public class UserLoginDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getParentOrgName() {
+        return parentOrgName;
+    }
+
+    public void setParentOrgName(String parentOrgName) {
+        this.parentOrgName = parentOrgName;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }
