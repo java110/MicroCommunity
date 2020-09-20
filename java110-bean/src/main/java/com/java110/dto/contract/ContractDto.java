@@ -1,9 +1,11 @@
 package com.java110.dto.contract;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.contractAttr.ContractAttrDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -40,6 +42,8 @@ public class ContractDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<ContractAttrDto> attrs;
 
     public String getaLink() {
         return aLink;
@@ -215,5 +219,13 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<ContractAttrDto> getAttrs() {
+        return attrs;
+    }
+
+    public void setAttrs(List<ContractAttrDto> attrs) {
+        this.attrs = attrs;
     }
 }

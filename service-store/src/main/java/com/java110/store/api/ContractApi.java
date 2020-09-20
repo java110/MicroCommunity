@@ -2,15 +2,21 @@ package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.contract.ContractDto;
+import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.contractTypeSpec.ContractTypeSpecDto;
 import com.java110.po.contract.ContractPo;
+import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractType.ContractTypePo;
 import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
 import com.java110.store.bmo.contract.IDeleteContractBMO;
 import com.java110.store.bmo.contract.IGetContractBMO;
 import com.java110.store.bmo.contract.ISaveContractBMO;
 import com.java110.store.bmo.contract.IUpdateContractBMO;
+import com.java110.store.bmo.contractAttr.IDeleteContractAttrBMO;
+import com.java110.store.bmo.contractAttr.IGetContractAttrBMO;
+import com.java110.store.bmo.contractAttr.ISaveContractAttrBMO;
+import com.java110.store.bmo.contractAttr.IUpdateContractAttrBMO;
 import com.java110.store.bmo.contractType.IDeleteContractTypeBMO;
 import com.java110.store.bmo.contractType.IGetContractTypeBMO;
 import com.java110.store.bmo.contractType.ISaveContractTypeBMO;
@@ -65,6 +71,16 @@ public class ContractApi {
     @Autowired
     private IGetContractTypeSpecBMO getContractTypeSpecBMOImpl;
 
+    @Autowired
+    private ISaveContractAttrBMO saveContractAttrBMOImpl;
+    @Autowired
+    private IUpdateContractAttrBMO updateContractAttrBMOImpl;
+    @Autowired
+    private IDeleteContractAttrBMO deleteContractAttrBMOImpl;
+
+    @Autowired
+    private IGetContractAttrBMO getContractAttrBMOImpl;
+
     /**
      * 微信保存消息模板
      *
@@ -93,7 +109,7 @@ public class ContractApi {
 
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
         contractPo.setStoreId(storeId);
-        return saveContractBMOImpl.save(contractPo);
+        return saveContractBMOImpl.save(contractPo,reqJson);
     }
 
     /**
@@ -337,4 +353,86 @@ public class ContractApi {
         contractTypeSpecDto.setContractTypeId(contractTypeId);
         return getContractTypeSpecBMOImpl.get(contractTypeSpecDto);
     }
+
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/saveContractAttr
+     * @path /app/contract/saveContractAttr
+     */
+    @RequestMapping(value = "/saveContractAttr", method = RequestMethod.POST)
+    public ResponseEntity<String> saveContractAttr(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "contractId", "请求报文中未包含contractId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+
+
+        ContractAttrPo contractAttrPo = BeanConvertUtil.covertBean(reqJson, ContractAttrPo.class);
+        return saveContractAttrBMOImpl.save(contractAttrPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/updateContractAttr
+     * @path /app/contract/updateContractAttr
+     */
+    @RequestMapping(value = "/updateContractAttr", method = RequestMethod.POST)
+    public ResponseEntity<String> updateContractAttr(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "contractId", "请求报文中未包含contractId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        Assert.hasKeyAndValue(reqJson, "attrId", "attrId不能为空");
+
+
+        ContractAttrPo contractAttrPo = BeanConvertUtil.covertBean(reqJson, ContractAttrPo.class);
+        return updateContractAttrBMOImpl.update(contractAttrPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/deleteContractAttr
+     * @path /app/contract/deleteContractAttr
+     */
+    @RequestMapping(value = "/deleteContractAttr", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteContractAttr(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "attrId", "attrId不能为空");
+
+
+        ContractAttrPo contractAttrPo = BeanConvertUtil.covertBean(reqJson, ContractAttrPo.class);
+        return deleteContractAttrBMOImpl.delete(contractAttrPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /contract/queryContractAttr
+     * @path /app/contract/queryContractAttr
+     */
+    @RequestMapping(value = "/queryContractAttr", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractAttr(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
+        ContractAttrDto contractAttrDto = new ContractAttrDto();
+        contractAttrDto.setPage(page);
+        contractAttrDto.setRow(row);
+        contractAttrDto.setStoreId(storeId);
+        return getContractAttrBMOImpl.get(contractAttrDto);
+    }
+
+
 }

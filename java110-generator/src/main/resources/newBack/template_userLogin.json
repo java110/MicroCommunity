@@ -1,0 +1,33 @@
+{
+  "autoMove": true,
+  "id": "loginId",
+  "name": "userLogin",
+  "desc": "用户登录",
+  "shareParam": "loginId",
+  "shareColumn": "login_id",
+  "shareName": "user",
+  "tableName": "u_user_login",
+  "param": {
+    "loginId": "login_id",
+    "userId": "user_id",
+    "userName": "user_name",
+    "password": "password",
+    "loginTime": "login_time",
+    "source": "source",
+    "token": "token"
+  },
+  "required": [
+    {
+      "code": "userId",
+      "msg": "用户ID不能为空"
+    },
+    {
+      "code": "userName",
+      "msg": "用户名称不能为空"
+    },
+    {
+      "code": "password",
+      "msg": "密码不能为空"
+    }
+  ]
+}
