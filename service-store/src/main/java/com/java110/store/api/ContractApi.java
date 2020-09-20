@@ -141,7 +141,7 @@ public class ContractApi {
 
 
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
-        return updateContractBMOImpl.update(contractPo);
+        return updateContractBMOImpl.update(contractPo,reqJson);
     }
 
     /**

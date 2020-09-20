@@ -1,4 +1,5 @@
 package com.java110.store.bmo.contract;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.po.contract.ContractPo;
 import org.springframework.http.ResponseEntity;
 
@@ -11,7 +12,7 @@ public interface IUpdateContractBMO {
      * @param contractPo
      * @return
      */
-    ResponseEntity<String> update(ContractPo contractPo);
+    ResponseEntity<String> update(ContractPo contractPo, JSONObject reqJson);
 
 
 }
