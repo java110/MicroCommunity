@@ -29,12 +29,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -109,7 +104,7 @@ public class ContractApi {
 
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
         contractPo.setStoreId(storeId);
-        return saveContractBMOImpl.save(contractPo,reqJson);
+        return saveContractBMOImpl.save(contractPo, reqJson);
     }
 
     /**
@@ -141,7 +136,7 @@ public class ContractApi {
 
 
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
-        return updateContractBMOImpl.update(contractPo,reqJson);
+        return updateContractBMOImpl.update(contractPo, reqJson);
     }
 
     /**
@@ -173,12 +168,14 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContract", method = RequestMethod.GET)
     public ResponseEntity<String> queryContract(@RequestHeader(value = "store-id") String storeId,
+                                                @RequestParam(value = "state") String state,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         ContractDto contractDto = new ContractDto();
         contractDto.setPage(page);
         contractDto.setRow(row);
         contractDto.setStoreId(storeId);
+        contractDto.setState(state);
         return getContractBMOImpl.get(contractDto);
     }
 
