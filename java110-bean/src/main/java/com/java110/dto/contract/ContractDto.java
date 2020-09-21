@@ -42,6 +42,7 @@ public class ContractDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+    private String contractTypeName;
 
     private List<ContractAttrDto> attrs;
 
@@ -227,5 +228,13 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setAttrs(List<ContractAttrDto> attrs) {
         this.attrs = attrs;
+    }
+
+    public String getContractTypeName() {
+        return contractTypeName;
+    }
+
+    public void setContractTypeName(String contractTypeName) {
+        this.contractTypeName = contractTypeName;
     }
 }
