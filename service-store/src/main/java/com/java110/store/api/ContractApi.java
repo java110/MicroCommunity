@@ -35,7 +35,12 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -476,14 +481,14 @@ public class ContractApi {
      * @path /app/contract/saveContractTypeTemplate
      */
     @RequestMapping(value = "/saveContractTypeTemplate", method = RequestMethod.POST)
-    public ResponseEntity<String> saveContractTypeTemplate(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveContractTypeTemplate(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
 
         Assert.hasKeyAndValue(reqJson, "contractTypeId", "请求报文中未包含contractTypeId");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
         Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
 
 
         ContractTypeTemplatePo contractTypeTemplatePo = BeanConvertUtil.covertBean(reqJson, ContractTypeTemplatePo.class);
+        contractTypeTemplatePo.setStoreId(storeId);
         return saveContractTypeTemplateBMOImpl.save(contractTypeTemplatePo);
     }
 
@@ -499,7 +504,6 @@ public class ContractApi {
     public ResponseEntity<String> updateContractTypeTemplate(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "contractTypeId", "请求报文中未包含contractTypeId");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
         Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
         Assert.hasKeyAndValue(reqJson, "templateId", "templateId不能为空");
 
@@ -537,12 +541,14 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContractTypeTemplate", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractTypeTemplate(@RequestHeader(value = "store-id") String storeId,
+                                                            @RequestParam(value = "contractTypeId", required = false) String contractTypeId,
                                                             @RequestParam(value = "page") int page,
                                                             @RequestParam(value = "row") int row) {
         ContractTypeTemplateDto contractTypeTemplateDto = new ContractTypeTemplateDto();
         contractTypeTemplateDto.setPage(page);
         contractTypeTemplateDto.setRow(row);
         contractTypeTemplateDto.setStoreId(storeId);
+        contractTypeTemplateDto.setContractTypeId(contractTypeId);
         return getContractTypeTemplateBMOImpl.get(contractTypeTemplateDto);
     }
 
