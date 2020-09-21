@@ -315,12 +315,15 @@ public class Java110MybatisInterceptor implements Interceptor {
             String tmpKey = orgSql.substring(orgSql.indexOf("(") + 1, orgSql.indexOf(")"));
             String[] tmpKeys = tmpKey.split(",");
 
-            if (values.size() < tmpKeys.length) {
-                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
-            }
+//            if (values.size() < tmpKeys.length) {
+//                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
+//            }
             for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
                 String key = tmpKeys[keyIndex].trim();
                 String value = "";
+                if (values.size() - 1 < keyIndex) {
+                    continue;
+                }
                 value = values.get(keyIndex);
                 if ("''".equals(value)) {
                     continue;
@@ -330,9 +333,9 @@ public class Java110MybatisInterceptor implements Interceptor {
         } else if (sqlCommandType == SqlCommandType.UPDATE) {
             String tmpKey = orgSql.substring(sql.indexOf("set") + 3, orgSql.indexOf("where"));
             String[] tmpKeys = tmpKey.split(",");
-            if (values.size() < tmpKeys.length) {
-                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
-            }
+//            if (values.size() < tmpKeys.length) {
+//                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
+//            }
             for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
                 String tmpSetKey = tmpKeys[keyIndex];
                 String[] keyValues = tmpSetKey.split("=");
@@ -346,6 +349,9 @@ public class Java110MybatisInterceptor implements Interceptor {
                     key = keyValues[0].trim();
                 }
                 String value = "";
+                if (values.size() - 1 < keyIndex) {
+                    continue;
+                }
                 value = values.get(keyIndex);
                 if ("''".equals(value)) {
                     continue;
