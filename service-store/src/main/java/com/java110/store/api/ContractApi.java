@@ -168,7 +168,7 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContract", method = RequestMethod.GET)
     public ResponseEntity<String> queryContract(@RequestHeader(value = "store-id") String storeId,
-                                                @RequestParam(value = "state") String state,
+                                                @RequestParam(value = "state", required = false) String state,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         ContractDto contractDto = new ContractDto();
