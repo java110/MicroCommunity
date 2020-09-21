@@ -24,7 +24,7 @@
         partyB,t.contract_id,t.contract_id contractId,t.obj_id,t.obj_id objId,t.contract_name,t.contract_name
         contractName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.state,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
-        objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name` stateName
+        objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name` stateName,t.state_desc stateDesc
         from contract t
         LEFT JOIN contract_type ct on t.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id = t.store_id
         LEFT JOIN t_dict td on td.status_cd = t.state and td.table_name = 'contract' and td.table_columns = 'state'
@@ -153,6 +153,9 @@
         </if>
         <if test="state !=null and state != ''">
             , t.state= #{state}
+        </if>
+        <if test="stateDesc !=null and stateDesc != ''">
+            , t.state_desc= #{stateDesc}
         </if>
         <if test="contractCode !=null and contractCode != ''">
             , t.contract_code= #{contractCode}

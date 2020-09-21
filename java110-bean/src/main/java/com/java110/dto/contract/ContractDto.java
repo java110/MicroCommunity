@@ -34,6 +34,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
     private String state;
+    private String stateDesc;
     private String contractCode;
     private String objType;
     private String operatorLink;
@@ -245,5 +246,13 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getStateDesc() {
+        return stateDesc;
+    }
+
+    public void setStateDesc(String stateDesc) {
+        this.stateDesc = stateDesc;
     }
 }

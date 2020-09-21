@@ -140,6 +140,25 @@ public class ContractApi {
     }
 
     /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/auditContract
+     * @path /app/contract/auditContract
+     */
+    @RequestMapping(value = "/auditContract", method = RequestMethod.POST)
+    public ResponseEntity<String> auditContract(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含状态");
+        Assert.hasKeyAndValue(reqJson, "stateDesc", "请求报文中未包含状态");
+        Assert.hasKeyAndValue(reqJson, "contractId", "contractId不能为空");
+
+
+        ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
+        return updateContractBMOImpl.update(contractPo, reqJson);
+    }
+
+    /**
      * 微信删除消息模板
      *
      * @param reqJson
