@@ -20,6 +20,7 @@ public class ContractTypeDto extends PageDto implements Serializable {
     public static final String ADMIN_AUDIT = "3003";
     public static final String PROXY_AUDIT = "4004";
     private String audit;
+    private String auditName;
     private String typeName;
     private String remark;
     private String storeId;
@@ -86,5 +87,13 @@ public class ContractTypeDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAuditName() {
+        return auditName;
+    }
+
+    public void setAuditName(String auditName) {
+        this.auditName = auditName;
     }
 }
