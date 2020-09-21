@@ -5,10 +5,12 @@ import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.contractTypeSpec.ContractTypeSpecDto;
+import com.java110.dto.contractTypeTemplate.ContractTypeTemplateDto;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractType.ContractTypePo;
 import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
+import com.java110.po.contractTypeTemplate.ContractTypeTemplatePo;
 import com.java110.store.bmo.contract.IDeleteContractBMO;
 import com.java110.store.bmo.contract.IGetContractBMO;
 import com.java110.store.bmo.contract.ISaveContractBMO;
@@ -25,6 +27,10 @@ import com.java110.store.bmo.contractTypeSpec.IDeleteContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.IGetContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.ISaveContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.IUpdateContractTypeSpecBMO;
+import com.java110.store.bmo.contractTypeTemplate.IDeleteContractTypeTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.IGetContractTypeTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.ISaveContractTypeTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.IUpdateContractTypeTemplateBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +81,16 @@ public class ContractApi {
 
     @Autowired
     private IGetContractAttrBMO getContractAttrBMOImpl;
+
+    @Autowired
+    private ISaveContractTypeTemplateBMO saveContractTypeTemplateBMOImpl;
+    @Autowired
+    private IUpdateContractTypeTemplateBMO updateContractTypeTemplateBMOImpl;
+    @Autowired
+    private IDeleteContractTypeTemplateBMO deleteContractTypeTemplateBMOImpl;
+
+    @Autowired
+    private IGetContractTypeTemplateBMO getContractTypeTemplateBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -450,5 +466,84 @@ public class ContractApi {
         return getContractAttrBMOImpl.get(contractAttrDto);
     }
 
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/saveContractTypeTemplate
+     * @path /app/contract/saveContractTypeTemplate
+     */
+    @RequestMapping(value = "/saveContractTypeTemplate", method = RequestMethod.POST)
+    public ResponseEntity<String> saveContractTypeTemplate(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "contractTypeId", "请求报文中未包含contractTypeId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
+
+
+        ContractTypeTemplatePo contractTypeTemplatePo = BeanConvertUtil.covertBean(reqJson, ContractTypeTemplatePo.class);
+        return saveContractTypeTemplateBMOImpl.save(contractTypeTemplatePo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/updateContractTypeTemplate
+     * @path /app/contract/updateContractTypeTemplate
+     */
+    @RequestMapping(value = "/updateContractTypeTemplate", method = RequestMethod.POST)
+    public ResponseEntity<String> updateContractTypeTemplate(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "contractTypeId", "请求报文中未包含contractTypeId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
+        Assert.hasKeyAndValue(reqJson, "templateId", "templateId不能为空");
+
+
+        ContractTypeTemplatePo contractTypeTemplatePo = BeanConvertUtil.covertBean(reqJson, ContractTypeTemplatePo.class);
+        return updateContractTypeTemplateBMOImpl.update(contractTypeTemplatePo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/deleteContractTypeTemplate
+     * @path /app/contract/deleteContractTypeTemplate
+     */
+    @RequestMapping(value = "/deleteContractTypeTemplate", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteContractTypeTemplate(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "templateId", "templateId不能为空");
+
+
+        ContractTypeTemplatePo contractTypeTemplatePo = BeanConvertUtil.covertBean(reqJson, ContractTypeTemplatePo.class);
+        return deleteContractTypeTemplateBMOImpl.delete(contractTypeTemplatePo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 商户ID
+     * @return
+     * @serviceCode /contract/queryContractTypeTemplate
+     * @path /app/contract/queryContractTypeTemplate
+     */
+    @RequestMapping(value = "/queryContractTypeTemplate", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractTypeTemplate(@RequestHeader(value = "store-id") String storeId,
+                                                            @RequestParam(value = "page") int page,
+                                                            @RequestParam(value = "row") int row) {
+        ContractTypeTemplateDto contractTypeTemplateDto = new ContractTypeTemplateDto();
+        contractTypeTemplateDto.setPage(page);
+        contractTypeTemplateDto.setRow(row);
+        contractTypeTemplateDto.setStoreId(storeId);
+        return getContractTypeTemplateBMOImpl.get(contractTypeTemplateDto);
+    }
 
 }

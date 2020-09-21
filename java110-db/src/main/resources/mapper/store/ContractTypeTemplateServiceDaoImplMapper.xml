@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contractTypeTemplateServiceDaoImpl">
+
+
+    <!-- 保存合同属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveContractTypeTemplateInfo" parameterType="Map">
+        insert into contract_type_template(
+        context,store_id,contract_type_id,template_id
+        ) values (
+        #{context},#{storeId},#{contractTypeId},#{templateId}
+        )
+    </insert>
+
+
+    <!-- 查询合同属性信息 add by wuxw 2018-07-03 -->
+    <select id="getContractTypeTemplateInfo" parameterType="Map" resultType="Map">
+        select t.context,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
+        storeId,t.contract_type_id,t.contract_type_id contractTypeId,t.template_id templateId
+        from contract_type_template t
+        where 1 =1
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="contractTypeId !=null and contractTypeId != ''">
+            and t.contract_type_id= #{contractTypeId}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改合同属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateContractTypeTemplateInfo" parameterType="Map">
+        update contract_type_template t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="context !=null and context != ''">
+            , t.context= #{context}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="contractTypeId !=null and contractTypeId != ''">
+            , t.contract_type_id= #{contractTypeId}
+        </if>
+        where 1=1
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+    </update>
+
+    <!-- 查询合同属性数量 add by wuxw 2018-07-03 -->
+    <select id="queryContractTypeTemplatesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_type_template t
+        where 1 =1
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="contractTypeId !=null and contractTypeId != ''">
+            and t.contract_type_id= #{contractTypeId}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+
+
+    </select>
+
+</mapper>
