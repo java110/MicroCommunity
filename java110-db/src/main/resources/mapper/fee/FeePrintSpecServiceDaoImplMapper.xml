@@ -10,22 +10,22 @@
         insert into fee_print_spec(
         print_id,content,spec_cd,community_id,qr_img
         ) values (
-        #{printId},#{context},#{specCd},#{communityId},#{qrImg}
+        #{printId},#{content},#{specCd},#{communityId},#{qrImg}
         )
     </insert>
 
 
     <!-- 查询打印说明信息 add by wuxw 2018-07-03 -->
     <select id="getFeePrintSpecInfo" parameterType="Map" resultType="Map">
-        select t.print_id,t.print_id printId,t.content,t.content context,t.spec_cd,t.spec_cd
+        select t.print_id,t.print_id printId,t.content,t.spec_cd,t.spec_cd
         specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.qr_img,t.qr_img qrImg
         from fee_print_spec t
         where 1 =1
         <if test="printId !=null and printId != ''">
             and t.print_id= #{printId}
         </if>
-        <if test="context !=null and context != ''">
-            and t.content= #{context}
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
         </if>
         <if test="specCd !=null and specCd != ''">
             and t.spec_cd= #{specCd}
@@ -53,8 +53,8 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="context !=null and context != ''">
-            , t.content= #{context}
+        <if test="content !=null and content != ''">
+            , t.content= #{content}
         </if>
         <if test="specCd !=null and specCd != ''">
             , t.spec_cd= #{specCd}
@@ -80,8 +80,8 @@
         <if test="printId !=null and printId != ''">
             and t.print_id= #{printId}
         </if>
-        <if test="context !=null and context != ''">
-            and t.content= #{context}
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
         </if>
         <if test="specCd !=null and specCd != ''">
             and t.spec_cd= #{specCd}

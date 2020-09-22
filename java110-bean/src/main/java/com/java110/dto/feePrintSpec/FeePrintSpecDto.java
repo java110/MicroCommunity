@@ -1,6 +1,7 @@
 package com.java110.dto.feePrintSpec;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,10 @@ import java.util.Date;
 public class FeePrintSpecDto extends PageDto implements Serializable {
 
     private String printId;
-private String context;
-private String specCd;
-private String communityId;
-private String qrImg;
+    private String content;
+    private String specCd;
+    private String communityId;
+    private String qrImg;
 
 
     private Date createTime;
@@ -29,31 +30,40 @@ private String qrImg;
     public String getPrintId() {
         return printId;
     }
-public void setPrintId(String printId) {
+
+    public void setPrintId(String printId) {
         this.printId = printId;
     }
-public String getContext() {
-        return context;
+
+    public String getContent() {
+        return content;
     }
-public void setContext(String context) {
-        this.context = context;
+
+    public void setContent(String content) {
+        this.content = content;
     }
-public String getSpecCd() {
+
+    public String getSpecCd() {
         return specCd;
     }
-public void setSpecCd(String specCd) {
+
+    public void setSpecCd(String specCd) {
         this.specCd = specCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getQrImg() {
+
+    public String getQrImg() {
         return qrImg;
     }
-public void setQrImg(String qrImg) {
+
+    public void setQrImg(String qrImg) {
         this.qrImg = qrImg;
     }
 
