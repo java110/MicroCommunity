@@ -72,7 +72,9 @@ public class UpdateRoomListener extends AbstractServiceApiPlusListener {
         if (!"2001".equals(reqJson.getString("state"))
                 && !"2002".equals(reqJson.getString("state"))
                 && !"2003".equals(reqJson.getString("state"))
-                && !"2004".equals(reqJson.getString("state"))) {
+                && !"2004".equals(reqJson.getString("state"))
+                && !"2005".equals(reqJson.getString("state"))
+        ) {
             throw new IllegalArgumentException("不是有效房屋状态 传入数据错误");
         }
 

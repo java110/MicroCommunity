@@ -14,8 +14,10 @@ import java.util.List;
  **/
 public class RoomDto extends PageDto implements Serializable {
 
-    public static final String STATE_SELL = "2001";
-    public static final String STATE_FREE = "2002";
+    public static final String STATE_SELL = "2001"; // 已入住
+    public static final String STATE_FREE = "2002"; //未入住
+    public static final String STATE_DELIVERY = "2003";//已交房
+    public static final String STATE_RENOVATION = "2005";//已装修
 
 
     private String feeCoefficient;
@@ -43,6 +45,7 @@ public class RoomDto extends PageDto implements Serializable {
 
 
     private String state;
+    private String[] states;
     private String stateName;
     private String unitNum;
 
@@ -279,5 +282,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }

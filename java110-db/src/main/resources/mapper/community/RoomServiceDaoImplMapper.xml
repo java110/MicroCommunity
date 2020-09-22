@@ -337,6 +337,12 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="states != null">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -664,6 +670,12 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="states != null">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

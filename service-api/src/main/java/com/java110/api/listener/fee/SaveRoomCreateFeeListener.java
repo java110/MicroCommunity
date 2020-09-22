@@ -82,8 +82,12 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         //判断收费范围
         RoomDto roomDto = new RoomDto();
-        if (reqJson.containsKey("roomState") && "2001".equals(reqJson.getString("roomState"))) {
-            roomDto.setState("2001");
+        if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
+            roomDto.setState(RoomDto.STATE_SELL);
+        }
+        if (reqJson.containsKey("roomState") && reqJson.getString("roomState").contains(",")) {
+            String states = reqJson.getString("roomState");
+            roomDto.setStates(states.split(","));
         }
         if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
 
@@ -161,7 +165,6 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
 
         context.setResponseEntity(responseEntity);
     }
-
 
 
     @Override
