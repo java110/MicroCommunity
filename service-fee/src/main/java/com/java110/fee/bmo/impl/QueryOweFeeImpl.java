@@ -17,12 +17,15 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +33,9 @@ import java.util.List;
 
 @Service
 public class QueryOweFeeImpl implements IQueryOweFee {
+
+
+    private final static Logger logger = LoggerFactory.getLogger(QueryOweFeeImpl.class);
 
 
     @Autowired
@@ -366,6 +372,11 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         if (billOweFeeDtos == null || billOweFeeDtos.size() < 1) {
             tmpFeeDto.setFeePrice(0.00);
             return;
+        }
+        try {
+            tmpFeeDto.setDeadlineTime(DateUtil.getDateFromString(billOweFeeDtos.get(0).getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
+        } catch (ParseException e) {
+            logger.error("获取结束时间失败", e);
         }
         tmpFeeDto.setFeePrice(Double.parseDouble(billOweFeeDtos.get(0).getAmountOwed()));
     }
