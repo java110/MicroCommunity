@@ -290,13 +290,11 @@
     <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
     <select id="queryRoomsByCommunityIdCount" parameterType="Map" resultType="Map">
         select count(1) count
-        FROM building_room t,building_unit u,f_floor f
+        FROM building_room t
+        left join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
+        LEFT JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
         WHERE 1 =1
-        AND t.`unit_id` = u.`unit_id`
-        AND u.`floor_id` = f.`floor_id`
-        AND f.`community_id` = t.`community_id`
-        AND u.`status_cd` = '0'
-        AND f.`status_cd` = '0'
         AND t.`community_id` = #{communityId}
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
