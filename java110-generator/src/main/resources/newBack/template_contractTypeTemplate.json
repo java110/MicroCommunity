@@ -1,0 +1,31 @@
+{
+  "autoMove": true,
+  "id": "templateId",
+  "name": "contractTypeTemplate",
+  "desc": "合同属性",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "tableName": "contract_type_template",
+  "param": {
+    "storeId": "store_id",
+    "contractTypeId": "contract_type_id",
+    "context": "context",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "contractTypeId",
+      "msg": "合同类型不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户ID不能为空"
+    },
+    {
+      "code": "context",
+      "msg": "内容不能为空"
+    }
+  ]
+}
+

@@ -150,6 +150,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_specCd = "82";
     public static final String CODE_PREFIX_loginId = "82";
     public static final String CODE_PREFIX_templateId = "82";
+    public static final String CODE_PREFIX_printId = "83";
 
 
 
