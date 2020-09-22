@@ -43,6 +43,7 @@ public class RoomDto extends PageDto implements Serializable {
 
 
     private String state;
+    private String stateName;
     private String unitNum;
 
     private List<RoomAttrDto> roomAttrDto;
@@ -270,5 +271,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setFloorArea(String floorArea) {
         this.floorArea = floorArea;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
