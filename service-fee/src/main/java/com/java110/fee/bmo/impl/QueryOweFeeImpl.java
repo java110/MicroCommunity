@@ -6,6 +6,7 @@ import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.fee.bmo.IQueryOweFee;
@@ -13,6 +14,7 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -26,10 +28,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class QueryOweFeeImpl implements IQueryOweFee {
@@ -40,6 +39,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
@@ -187,6 +189,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         List<String> psIds = new ArrayList<>();
 
         for (FeeDto fee : feeDtos) {
+            // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
             if ("3333".equals(fee.getPayerObjType())) { //房屋相关
                 roomFees.add(fee);
                 roomIds.add(fee.getPayerObjId());
@@ -238,6 +241,10 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     }
 
     private void dealFeePs(ParkingSpaceDto tmpParkingSpaceDto, FeeDto feeDto) {
+        // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
+        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
         if (!tmpParkingSpaceDto.getPsId().equals(feeDto.getPayerObjId())) {
             return;
         }
@@ -256,15 +263,34 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
+        } else if ("5005".equals(computingFormula)) {
+            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                feePrice = -1.00;
+            } else {
+                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal sub = curDegree.subtract(preDegree);
+                feePrice = sub.multiply(squarePrice)
+                        .add(additionalAmount)
+                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            }
         } else {
             feePrice = 0.00;
         }
 
         feeDto.setFeePrice(feePrice);
-        double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+        // double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
-        price = price.multiply(new BigDecimal(month));
+        price = price.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue() + "");
+        feeDto.setDeadlineTime(targetEndDate);
+        //动态费用
+        if ("4004".equals(computingFormula)) {
+            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+        }
     }
 
     /**
@@ -281,6 +307,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
             return;
         }
+
 
         for (RoomDto tmpRoomDto : roomDtos) {
             for (FeeDto feeDto : roomFees) {
@@ -312,7 +339,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     }
 
     private void dealFeeRoom(RoomDto tmpRoomDto, FeeDto feeDto) {
-
+        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
         if (!tmpRoomDto.getRoomId().equals(feeDto.getPayerObjId())) {
             return;
         }
@@ -330,15 +359,36 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
+        } else if ("5005".equals(computingFormula)) {
+
+            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                feePrice = -1.00;
+            } else {
+                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal sub = curDegree.subtract(preDegree);
+                feePrice = sub.multiply(squarePrice)
+                        .add(additionalAmount)
+                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            }
         } else {
             feePrice = 0.00;
         }
         feeDto.setFeePrice(feePrice);
 
-        double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+        //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
-        price = price.multiply(new BigDecimal(month));
+        price = price.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue() + "");
+        feeDto.setDeadlineTime(targetEndDate);
+
+        //动态费用
+        if ("4004".equals(computingFormula)) {
+            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+        }
 
     }
 
@@ -491,6 +541,101 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         BigDecimal monthDay = new BigDecimal(30);
 
         return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    private Map getTargetEndDateAndOweMonth(FeeDto feeDto) {
+        Date targetEndDate = null;
+        double oweMonth = 0.0;
+
+        Map<String, Object> targetEndDateAndOweMonth = new HashMap<>();
+
+        if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            targetEndDate = feeDto.getEndTime();
+            targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+            targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+            return targetEndDateAndOweMonth;
+        }
+        if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+            if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                targetEndDate = feeDto.getCurReadingTime();
+            } else if (feeDto.getImportFeeEndTime() == null) {
+                targetEndDate = feeDto.getConfigEndTime();
+            } else {
+                targetEndDate = feeDto.getImportFeeEndTime();
+            }
+            //判断当前费用是不是导入费用
+            oweMonth = 1.0;
+
+        } else {
+            //当前时间
+            Date billEndTime = DateUtil.getCurrentDate();
+            //开始时间
+            Date startDate = feeDto.getStartTime();
+            //到期时间
+            Date endDate = feeDto.getEndTime();
+            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+                OwnerCarDto ownerCarDto = new OwnerCarDto();
+                ownerCarDto.setCommunityId(feeDto.getCommunityId());
+                ownerCarDto.setCarId(feeDto.getPayerObjId());
+                List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+                if (ownerCarDtos == null || ownerCarDtos.size() != 1) {
+                    targetEndDateAndOweMonth.put("oweMonth", 0);
+                    targetEndDateAndOweMonth.put("targetEndDate", "");
+                    return targetEndDateAndOweMonth;
+                }
+
+                targetEndDate = ownerCarDtos.get(0).getEndTime();
+                //说明没有欠费
+                if (endDate.getTime() >= targetEndDate.getTime()) {
+                    // 目标到期时间 - 到期时间 = 欠费月份
+                    oweMonth = 0;
+                    targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+                    targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+                    return targetEndDateAndOweMonth;
+                }
+            }
+
+            //缴费周期
+            long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
+            // 当前时间 - 开始时间  = 月份
+            double mulMonth = 0.0;
+            mulMonth = dayCompare(startDate, billEndTime);
+
+            // 月份/ 周期 = 轮数（向上取整）
+            double round = 0.0;
+            if ("1200".equals(feeDto.getPaymentCd())) { // 预付费
+                round = Math.floor(mulMonth / paymentCycle) + 1;
+            } else { //后付费
+                round = Math.floor(mulMonth / paymentCycle);
+            }
+            // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
+            targetEndDate = getTargetEndTime(round * paymentCycle, startDate);
+            //费用 快结束了
+            if (feeDto.getConfigEndTime().getTime() < targetEndDate.getTime()) {
+                targetEndDate = feeDto.getConfigEndTime();
+            }
+            //说明没有欠费
+            if (endDate.getTime() < targetEndDate.getTime()) {
+                // 目标到期时间 - 到期时间 = 欠费月份
+                oweMonth = dayCompare(endDate, targetEndDate);
+            }
+
+            if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
+                targetEndDate = feeDto.getEndTime();
+            }
+        }
+
+        targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+        targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+        return targetEndDateAndOweMonth;
+    }
+
+    private Date getTargetEndTime(double v, Date startDate) {
+        Calendar endDate = Calendar.getInstance();
+        endDate.setTime(startDate);
+        endDate.add(Calendar.MONTH, (int) v);
+        return endDate.getTime();
     }
 
 }
