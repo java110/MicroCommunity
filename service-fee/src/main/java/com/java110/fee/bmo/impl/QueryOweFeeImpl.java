@@ -442,7 +442,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     }
 
     private void computeFeePriceByParkingSpace(FeeDto feeDto) {
-
+        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
         parkingSpaceDto.setPsId(feeDto.getPayerObjId());
@@ -465,15 +467,34 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
+        } else if ("5005".equals(computingFormula)) {
+            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                feePrice = -1.00;
+            } else {
+                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal sub = curDegree.subtract(preDegree);
+                feePrice = sub.multiply(squarePrice)
+                        .add(additionalAmount)
+                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            }
         } else {
             feePrice = 0.00;
         }
         feeDto.setFeePrice(feePrice);
         double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
-        price = price.multiply(new BigDecimal(month));
+        price = price.multiply(new BigDecimal(oweMonth));
         feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+        feeDto.setDeadlineTime(targetEndDate);
 
+        //动态费用
+        if ("4004".equals(computingFormula)) {
+            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+        }
 
     }
 
@@ -483,6 +504,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
      * @param feeDto
      */
     private void computeFeePriceByRoom(FeeDto feeDto) {
+        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(feeDto.getCommunityId());
         roomDto.setRoomId(feeDto.getPayerObjId());
@@ -504,15 +528,35 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
+        } else if ("5005".equals(computingFormula)) {
+            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                feePrice = -1.00;
+            } else {
+                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal sub = curDegree.subtract(preDegree);
+                feePrice = sub.multiply(squarePrice)
+                        .add(additionalAmount)
+                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            }
         } else {
             feePrice = 0.00;
         }
 
         feeDto.setFeePrice(feePrice);
-        double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+        //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
-        price = price.multiply(new BigDecimal(month));
+        price = price.multiply(new BigDecimal(oweMonth));
         feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+        feeDto.setDeadlineTime(targetEndDate);
+
+        //动态费用
+        if ("4004".equals(computingFormula)) {
+            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+        }
     }
 
 
