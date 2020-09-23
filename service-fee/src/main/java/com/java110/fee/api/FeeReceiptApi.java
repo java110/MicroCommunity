@@ -113,7 +113,7 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceipt", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceipt(@RequestParam(value = "communityId") String communityId,
-                                                  @RequestParam(value = "receiptId") String receiptId,
+                                                  @RequestParam(value = "receiptId",required = false) String receiptId,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row) {
         FeeReceiptDto feeReceiptDto = new FeeReceiptDto();
@@ -194,7 +194,7 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceiptDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceiptDetail(@RequestParam(value = "communityId") String communityId,
-                                                        @RequestParam(value = "receiptId") String receiptId,
+                                                        @RequestParam(value = "receiptId",required = false) String receiptId,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
