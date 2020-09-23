@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.RoomDto;
 import com.java110.dto.fee.*;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.fee.bmo.IPayOweFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
@@ -22,8 +19,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
-import com.java110.utils.constant.FeeFlagTypeConstant;
-import com.java110.utils.constant.FeeStateConstant;
+import com.java110.service.smo.IComputeFeeSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
@@ -39,7 +35,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -81,6 +76,9 @@ public class PayOweFeeImpl implements IPayOweFee {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
 
     /**
      * 欠费缴费
@@ -186,35 +184,18 @@ public class PayOweFeeImpl implements IPayOweFee {
 
         PayFeePo payFeePo = new PayFeePo();
         FeeDto feeInfo = (FeeDto) feeObj.get("feeInfo");
-        Date endTime = feeInfo.getEndTime();
-        Calendar endCalender = Calendar.getInstance();
-        endCalender.setTime(endTime);
-        int hours = 0;
-        hours = new Double(Double.parseDouble(feeObj.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
-        endCalender.add(Calendar.HOUR, hours);
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setConfigId(feeInfo.getConfigId());
         feeConfigDto.setCommunityId(feeInfo.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-
         Assert.listOnlyOne(feeConfigDtos, "未找到费用配置");
-        payFeePo.setEndTime(DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeObj.put("billType", feeConfigDtos.get(0).getBillType());
         feeObj.put("configId", feeConfigDtos.get(0).getConfigId());
-        // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用 项终止日期
-        if (FeeFlagTypeConstant.ONETIME.equals(feeConfigDtos.get(0).getFeeFlag())) {
-            payFeePo.setState(FeeStateConstant.END);
-            payFeePo.setEndTime(feeConfigDtos.get(0).getEndTime());
-        }
-        // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
-        if (FeeFlagTypeConstant.CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
-            if ((feeInfo.getEndTime()).after(DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A))) {
-                payFeePo.setState(FeeStateConstant.END);
-                payFeePo.setEndTime(feeConfigDtos.get(0).getEndTime());
-            }
-        }
+        Date targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeInfo, feeObj.getString("tmpCycles"));
+        String state = computeFeeSMOImpl.getFeeStateByCycles(feeInfo, feeObj.getString("tmpCycles"));
         payFeePo.setFeeId(feeObj.getString("feeId"));
-        //payFeePo.setEndTime(DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        payFeePo.setEndTime(DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
+        payFeePo.setState(state);
         payFeePo.setCommunityId(feeObj.getString("communityId"));
         payFeePo.setStatusCd("0");
         int saveFlag = feeInnerServiceSMOImpl.updateFee(payFeePo);
@@ -232,88 +213,24 @@ public class PayOweFeeImpl implements IPayOweFee {
 
         PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
         payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-
         payFeeDetailPo.setPrimeRate("1.00");
         //计算 应收金额
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(paramInJson.getString("feeId"));
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-
         feeDto = feeDtos.get(0);
         paramInJson.put("feeInfo", feeDto);
-
-        BigDecimal feePrice = new BigDecimal("0.00");
-
-        if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
-            String computingFormula = feeDto.getComputingFormula();
-            RoomDto roomDto = new RoomDto();
-            roomDto.setRoomId(feeDto.getPayerObjId());
-            roomDto.setCommunityId(feeDto.getCommunityId());
-            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            if (roomDtos == null || roomDtos.size() != 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
-            }
-            roomDto = roomDtos.get(0);
-            feeReceiptPo.setObjName(roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum());
-            if ("1001".equals(computingFormula)) { //面积*单价+附加费
-
-                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
-                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-            } else if ("2002".equals(computingFormula)) { // 固定费用
-                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-            } else if ("4004".equals(computingFormula)) {
-                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            } else {
-                throw new IllegalArgumentException("暂不支持该类公式");
-            }
-        } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
-            String computingFormula = feeDto.getComputingFormula();
-            OwnerCarDto ownerCarDto = new OwnerCarDto();
-            ownerCarDto.setCommunityId(feeDto.getCommunityId());
-            ownerCarDto.setCarId(feeDto.getPayerObjId());
-            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-            if (ownerCarDtos != null && ownerCarDtos.size() > 0) {
-                feeReceiptPo.setObjName(ownerCarDtos.get(0).getCarNum());
-            }
-            if ("1001".equals(computingFormula)) { //面积*单价+附加费
-                ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-                parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-                parkingSpaceDto.setPsId(feeDto.getPayerObjId());
-                List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-
-                if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
-                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到停车位信息，查询多条数据");
-                }
-                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(parkingSpaceDtos.get(0).getArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
-                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(parkingSpaceDtos.get(0).getArea()));
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-            } else if ("2002".equals(computingFormula)) { // 固定费用
-                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-            } else if ("4004".equals(computingFormula)) {
-                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            } else {
-                throw new IllegalArgumentException("暂不支持该类公式");
-            }
-        }
+        payFeeDetailPo.setStartTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        BigDecimal feePrice = new BigDecimal(computeFeeSMOImpl.getFeePrice(feeDto));
 
         BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("feePrice")));
         BigDecimal cycles = receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_EVEN);
         paramInJson.put("tmpCycles", cycles);
+        payFeeDetailPo.setEndTime(computeFeeSMOImpl.getFeeStateByCycles(feeDto, cycles.doubleValue() + ""));
         payFeeDetailPo.setCommunityId(paramInJson.getString("communityId"));
         payFeeDetailPo.setCycles(cycles.doubleValue() + "");
         payFeeDetailPo.setReceivableAmount(receivedAmount.doubleValue() + "");
@@ -343,5 +260,8 @@ public class PayOweFeeImpl implements IPayOweFee {
         feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
         feeReceiptPo.setObjType(feeDto.getPayerObjType());
         feeReceiptPo.setObjId(feeDto.getPayerObjId());
+        if (StringUtil.isEmpty(feeReceiptPo.getObjName())) {
+            feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
+        }
     }
 }

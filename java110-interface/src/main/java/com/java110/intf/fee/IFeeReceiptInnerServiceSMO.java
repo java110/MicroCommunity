@@ -18,7 +18,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "user-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "fee-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/feeReceiptApi")
 public interface IFeeReceiptInnerServiceSMO {
 
