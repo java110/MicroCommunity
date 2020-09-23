@@ -11,7 +11,11 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -98,12 +102,14 @@ public class FeePrintSpecApi {
      */
     @RequestMapping(value = "/queryFeePrintSpec", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeePrintSpec(@RequestParam(value = "communityId") String communityId,
+                                                    @RequestParam(value = "specCd", required = false) String specCd,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         FeePrintSpecDto feePrintSpecDto = new FeePrintSpecDto();
         feePrintSpecDto.setPage(page);
         feePrintSpecDto.setRow(row);
         feePrintSpecDto.setCommunityId(communityId);
+        feePrintSpecDto.setSpecCd(specCd);
         return getFeePrintSpecBMOImpl.get(feePrintSpecDto);
     }
 }
