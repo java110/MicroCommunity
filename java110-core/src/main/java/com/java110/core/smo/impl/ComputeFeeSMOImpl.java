@@ -1,5 +1,6 @@
 package com.java110.core.smo.impl;
 
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -8,7 +9,6 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -50,6 +50,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     /**
      * 查询费用对象名称
+     *
      * @param feeDto
      * @return
      */
@@ -120,7 +121,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Date endTime = feeDto.getEndTime();
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
-        endCalender.add(Calendar.MONTH, Integer.parseInt(Math.floor(cycle) + ""));
+        endCalender.add(Calendar.MONTH, new Double(Math.floor(cycle)).intValue());
         int hours = new Double((cycle - Math.floor(cycle)) * DateUtil.getCurrentMonthDay() * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
