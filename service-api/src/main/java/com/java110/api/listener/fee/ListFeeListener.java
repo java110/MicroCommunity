@@ -5,6 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
@@ -13,13 +14,14 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.api.fee.ApiFeeDataVo;
 import com.java110.vo.api.fee.ApiFeeVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,7 @@ import java.util.Map;
  */
 @Java110Listener("listFeeListener")
 public class ListFeeListener extends AbstractServiceApiListener {
+    private static Logger logger = LoggerFactory.getLogger(ListFeeListener.class);
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
@@ -135,19 +138,21 @@ public class ListFeeListener extends AbstractServiceApiListener {
     private void computeFeePrice(List<FeeDto> feeDtos) {
 
         for (FeeDto feeDto : feeDtos) {
-
-            // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-            Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto);
-            Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
-            double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-            //一次性费用
-            if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
-                computeFeePriceByRoom(feeDto, oweMonth);
-            } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
-                computeFeePriceByCar(feeDto, oweMonth);
+            try {
+                // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
+                Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto);
+                Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+                double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
+                //一次性费用
+                if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
+                    computeFeePriceByRoom(feeDto, oweMonth);
+                } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
+                    computeFeePriceByCar(feeDto, oweMonth);
+                }
+                feeDto.setDeadlineTime(targetEndDate);
+            } catch (Exception e) {
+                logger.error("查询费用信息 ，费用信息错误", e);
             }
-
-            feeDto.setDeadlineTime(targetEndDate);
         }
     }
 

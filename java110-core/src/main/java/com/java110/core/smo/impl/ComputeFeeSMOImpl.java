@@ -173,7 +173,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
-                    throw new IllegalArgumentException("抄表数据异常");
+                    //throw new IllegalArgumentException("抄表数据异常");
                 } else {
                     BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
                     BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
