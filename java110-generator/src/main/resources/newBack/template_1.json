@@ -1,23 +1,22 @@
 {
   "autoMove": true,
-  "id": "receiptId",
-  "name": "feeReceiptDetail",
-  "desc": "收据明细",
+  "id": "detailId",
+  "name": "feeManualCollectionDetail",
+  "desc": "托收明细",
   "shareParam": "communityId",
   "shareColumn": "community_id",
   "shareName": "fee",
-  "tableName": "fee_receipt_detail",
+  "tableName": "fee_manual_collection_detail",
   "param": {
-    "receiptId": "receipt_id",
-    "communityId": "community_id",
+    "collectionId": "collection_id",
     "detailId": "detail_id",
     "feeId": "fee_id",
     "feeName": "fee_name",
-    "area": "area",
     "startTime": "start_time",
     "endTime": "end_time",
     "amount": "amount",
-    "cycle": "cycle",
+    "communityId": "community_id",
+    "state": "state",
     "statusCd": "status_cd"
   },
   "required": [
@@ -26,12 +25,24 @@
       "msg": "小区不能为空"
     },
     {
-      "code": "amount",
-      "msg": "费用金额不能为空"
+      "code": "collectionId",
+      "msg": "托收不能为空"
     },
     {
-      "code": "feeName",
-      "msg": "费用名称不能为空"
+      "code": "feeId",
+      "msg": "费用不能为空"
+    },
+    {
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
+    },
+    {
+      "code": "amount",
+      "msg": "金额不能为空"
     }
   ]
 }
