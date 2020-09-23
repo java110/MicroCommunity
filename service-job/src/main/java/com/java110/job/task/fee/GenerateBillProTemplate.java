@@ -15,7 +15,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.service.smo.IComputeFeeSMO;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.TaskTemplateException;
 import com.java110.utils.util.DateUtil;

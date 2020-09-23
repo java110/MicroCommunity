@@ -1,4 +1,4 @@
-package com.java110.service.smo;
+package com.java110.core.smo;
 
 import com.java110.dto.fee.FeeDto;
 

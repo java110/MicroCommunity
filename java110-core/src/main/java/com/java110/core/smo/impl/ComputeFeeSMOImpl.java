@@ -1,4 +1,4 @@
-package com.java110.service.smo.impl;
+package com.java110.core.smo.impl;
 
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
@@ -8,7 +8,7 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.service.smo.IComputeFeeSMO;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
