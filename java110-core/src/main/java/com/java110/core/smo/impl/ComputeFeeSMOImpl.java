@@ -102,7 +102,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Date endTime = feeDto.getEndTime();
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
-        endCalender.add(Calendar.MONTH, Integer.parseInt(Math.floor(cycle) + ""));
+        endCalender.add(Calendar.MONTH, new Double(Math.floor(cycle)).intValue());
         int hours = new Double((cycle - Math.floor(cycle)) * DateUtil.getCurrentMonthDay() * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
