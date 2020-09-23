@@ -8,13 +8,7 @@ import com.java110.utils.exception.FilterException;
 import com.java110.utils.util.StringUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -91,7 +85,7 @@ public class PageProcessAspect {
                     if (params.get(key).length > 0) {
                         String value = "";
                         for (int paramIndex = 0; paramIndex < params.get(key).length; paramIndex++) {
-                            value = params.get(key)[paramIndex] + ",";
+                            value += (params.get(key)[paramIndex] + ",");
                         }
                         value = value.endsWith(",") ? value.substring(0, value.length() - 1) : value;
                         paramObj.put(key, value);

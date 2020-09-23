@@ -19,7 +19,7 @@
     <select id="getFeeReceiptInfo" parameterType="Map" resultType="Map">
         select t.amount,t.obj_id,t.obj_id objId,t.remark,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name
         objName,t.community_id,t.community_id communityId,t.receipt_id,t.receipt_id receiptId,t.obj_type,t.obj_type
-        objType
+        objType,t.create_time createTime
         from fee_receipt t
         where 1 =1
         <if test="amount !=null and amount != ''">

@@ -5,147 +5,144 @@
 <mapper namespace="feeReceiptDetailServiceDaoImpl">
 
 
-
-
-
     <!-- 保存收据明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeReceiptDetailInfo" parameterType="Map">
         insert into fee_receipt_detail(
-area,amount,fee_name,detail_id,start_time,end_time,community_id,receipt_id,fee_id,cycle
-) values (
-#{area},#{amount},#{feeName},#{detailId},#{startTime},#{endTime},#{communityId},#{receiptId},#{feeId},#{cycle}
-)
+        area,amount,fee_name,detail_id,start_time,end_time,community_id,receipt_id,fee_id,cycle,square_price
+        ) values (
+        #{area},#{amount},#{feeName},#{detailId},#{startTime},#{endTime},#{communityId},#{receiptId},#{feeId},#{cycle},#{squarePrice}
+        )
     </insert>
-
 
 
     <!-- 查询收据明细信息 add by wuxw 2018-07-03 -->
     <select id="getFeeReceiptDetailInfo" parameterType="Map" resultType="Map">
-        select  t.area,t.amount,t.fee_name,t.fee_name feeName,t.detail_id,t.detail_id detailId,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.receipt_id,t.receipt_id receiptId,t.fee_id,t.fee_id feeId,t.cycle 
-from fee_receipt_detail t 
-where 1 =1 
-<if test="area !=null and area != ''">
-   and t.area= #{area}
-</if> 
-<if test="amount !=null and amount != ''">
-   and t.amount= #{amount}
-</if> 
-<if test="feeName !=null and feeName != ''">
-   and t.fee_name= #{feeName}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="receiptId !=null and receiptId != ''">
-   and t.receipt_id= #{receiptId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
-<if test="cycle !=null and cycle != ''">
-   and t.cycle= #{cycle}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.area,t.amount,t.fee_name,t.fee_name feeName,t.detail_id,t.detail_id detailId,t.start_time,t.start_time
+        startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        communityId,t.receipt_id,t.receipt_id receiptId,t.fee_id,t.fee_id feeId,t.cycle,t.square_price squarePrice
+        from fee_receipt_detail t
+        where 1 =1
+        <if test="area !=null and area != ''">
+            and t.area= #{area}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="receiptId !=null and receiptId != ''">
+            and t.receipt_id= #{receiptId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="cycle !=null and cycle != ''">
+            and t.cycle= #{cycle}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改收据明细信息 add by wuxw 2018-07-03 -->
     <update id="updateFeeReceiptDetailInfo" parameterType="Map">
-        update  fee_receipt_detail t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="area !=null and area != ''">
-, t.area= #{area}
-</if> 
-<if test="amount !=null and amount != ''">
-, t.amount= #{amount}
-</if> 
-<if test="feeName !=null and feeName != ''">
-, t.fee_name= #{feeName}
-</if> 
-<if test="detailId !=null and detailId != ''">
-, t.detail_id= #{detailId}
-</if> 
-<if test="startTime !=null and startTime != ''">
-, t.start_time= #{startTime}
-</if> 
-<if test="endTime !=null and endTime != ''">
-, t.end_time= #{endTime}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-, t.fee_id= #{feeId}
-</if> 
-<if test="cycle !=null and cycle != ''">
-, t.cycle= #{cycle}
-</if> 
- where 1=1 <if test="receiptId !=null and receiptId != ''">
-and t.receipt_id= #{receiptId}
-</if> 
+        update fee_receipt_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="area !=null and area != ''">
+            , t.area= #{area}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            , t.detail_id= #{detailId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="cycle !=null and cycle != ''">
+            , t.cycle= #{cycle}
+        </if>
+        where 1=1
+        <if test="receiptId !=null and receiptId != ''">
+            and t.receipt_id= #{receiptId}
+        </if>
 
     </update>
 
     <!-- 查询收据明细数量 add by wuxw 2018-07-03 -->
-     <select id="queryFeeReceiptDetailsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from fee_receipt_detail t 
-where 1 =1 
-<if test="area !=null and area != ''">
-   and t.area= #{area}
-</if> 
-<if test="amount !=null and amount != ''">
-   and t.amount= #{amount}
-</if> 
-<if test="feeName !=null and feeName != ''">
-   and t.fee_name= #{feeName}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="receiptId !=null and receiptId != ''">
-   and t.receipt_id= #{receiptId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
-<if test="cycle !=null and cycle != ''">
-   and t.cycle= #{cycle}
-</if> 
+    <select id="queryFeeReceiptDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_receipt_detail t
+        where 1 =1
+        <if test="area !=null and area != ''">
+            and t.area= #{area}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="receiptId !=null and receiptId != ''">
+            and t.receipt_id= #{receiptId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="cycle !=null and cycle != ''">
+            and t.cycle= #{cycle}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

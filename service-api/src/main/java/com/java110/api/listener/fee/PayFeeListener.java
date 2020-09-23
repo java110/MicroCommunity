@@ -31,6 +31,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,6 +170,8 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
         feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
         feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
+
+        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailPo));
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.java110.core.smo;
 
 import com.java110.dto.fee.FeeDto;
+import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 
 import java.util.Date;
 import java.util.Map;
@@ -21,6 +22,13 @@ public interface IComputeFeeSMO {
      * @return
      */
     Date getFeeEndTime();
+
+    /**
+     * 刷新
+     * @param feeDto
+     * @param feeReceiptDetailPo
+     */
+    void freshFeeReceiptDetail(FeeDto feeDto, FeeReceiptDetailPo feeReceiptDetailPo);
 
     /**
      * 根据周期 计算费用状态

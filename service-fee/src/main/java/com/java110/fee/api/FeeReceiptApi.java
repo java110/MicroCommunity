@@ -113,12 +113,14 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceipt", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceipt(@RequestParam(value = "communityId") String communityId,
+                                                  @RequestParam(value = "receiptId") String receiptId,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row) {
         FeeReceiptDto feeReceiptDto = new FeeReceiptDto();
         feeReceiptDto.setPage(page);
         feeReceiptDto.setRow(row);
         feeReceiptDto.setCommunityId(communityId);
+        feeReceiptDto.setReceiptId(receiptId);
         return getFeeReceiptBMOImpl.get(feeReceiptDto);
     }
 
@@ -192,12 +194,14 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceiptDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceiptDetail(@RequestParam(value = "communityId") String communityId,
+                                                        @RequestParam(value = "receiptId") String receiptId,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
         feeReceiptDetailDto.setPage(page);
         feeReceiptDetailDto.setRow(row);
         feeReceiptDetailDto.setCommunityId(communityId);
+        feeReceiptDetailDto.setReceiptId(receiptId);
         return getFeeReceiptDetailBMOImpl.get(feeReceiptDetailDto);
     }
 }

@@ -120,7 +120,7 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
             ownerBMOImpl.sellRoom(reqJson, context);
 
             //添加物业费用信息
-            ownerBMOImpl.addPropertyFee(reqJson, context);
+            //ownerBMOImpl.addPropertyFee(reqJson, context);
         }
         if (reqJson.containsKey("ownerPhoto") && !StringUtils.isEmpty(reqJson.getString("ownerPhoto"))) {
             FileDto fileDto = new FileDto();

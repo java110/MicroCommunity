@@ -9,6 +9,7 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -46,6 +47,76 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     @Override
     public Date getFeeEndTime() {
         return null;
+    }
+
+
+    /**
+     * 刷新 收据明细
+     * @param feeDto
+     * @param feeReceiptDetailPo
+     */
+    @Override
+    public void freshFeeReceiptDetail(FeeDto feeDto, FeeReceiptDetailPo feeReceiptDetailPo) {
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
+            String computingFormula = feeDto.getComputingFormula();
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(feeDto.getPayerObjId());
+            roomDto.setCommunityId(feeDto.getCommunityId());
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            if (roomDtos == null || roomDtos.size() != 1) {
+                return;
+            }
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                feeReceiptDetailPo.setArea(roomDtos.get(0).getBuiltUpArea());
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                feeReceiptDetailPo.setArea("");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getAdditionalAmount());
+            } else if ("4004".equals(computingFormula)) {
+            } else if ("5005".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal sub = curDegree.subtract(preDegree).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    feeReceiptDetailPo.setArea(sub.doubleValue() + "");
+                    feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+                }
+            } else {
+            }
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
+            String computingFormula = feeDto.getComputingFormula();
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setCommunityId(feeDto.getCommunityId());
+            ownerCarDto.setCarId(feeDto.getPayerObjId());
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            Assert.listOnlyOne(ownerCarDtos, "未找到车辆信息");
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+                parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
+                parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
+                List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+                if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+                    return;
+                }
+                feeReceiptDetailPo.setArea(parkingSpaceDtos.get(0).getArea());
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                feeReceiptDetailPo.setArea("");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getAdditionalAmount());
+            } else if ("4004".equals(computingFormula)) {
+            } else if ("5005".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal sub = curDegree.subtract(preDegree).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    feeReceiptDetailPo.setArea(sub.doubleValue() + "");
+                    feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+                }
+            } else {
+            }
+        }
     }
 
     /**

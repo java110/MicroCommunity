@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.*;
 import com.java110.dto.repair.RepairDto;
 import com.java110.fee.bmo.IPayOweFee;
@@ -19,7 +20,6 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
-import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
@@ -110,7 +110,7 @@ public class PayOweFeeImpl implements IPayOweFee {
         if (fees.size() > 0) {
             feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
         }
-        return ResultVo.success();
+        return ResultVo.createResponseEntity(feeReceiptPo);
     }
 
     private void doPayOweFee(JSONObject feeObj, FeeReceiptPo feeReceiptPo) {
@@ -230,7 +230,7 @@ public class PayOweFeeImpl implements IPayOweFee {
         BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("feePrice")));
         BigDecimal cycles = receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_EVEN);
         paramInJson.put("tmpCycles", cycles);
-        payFeeDetailPo.setEndTime(computeFeeSMOImpl.getFeeStateByCycles(feeDto, cycles.doubleValue() + ""));
+        payFeeDetailPo.setEndTime(DateUtil.getFormatTimeString(computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, cycles.doubleValue() + ""), DateUtil.DATE_FORMATE_STRING_A));
         payFeeDetailPo.setCommunityId(paramInJson.getString("communityId"));
         payFeeDetailPo.setCycles(cycles.doubleValue() + "");
         payFeeDetailPo.setReceivableAmount(receivedAmount.doubleValue() + "");
@@ -252,6 +252,7 @@ public class PayOweFeeImpl implements IPayOweFee {
         feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
         feeReceiptDetailPo.setStartTime(payFeeDetailPo.getStartTime());
         feeReceiptDetailPo.setReceiptId(feeReceiptPo.getReceiptId());
+        computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
         feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
 
         BigDecimal amount = new BigDecimal(Double.parseDouble(feeReceiptPo.getAmount()));

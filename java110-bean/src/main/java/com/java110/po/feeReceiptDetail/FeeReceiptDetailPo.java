@@ -15,6 +15,7 @@ public class FeeReceiptDetailPo implements Serializable {
     private String receiptId;
     private String feeId;
     private String cycle;
+    private String squarePrice;
 
     public String getArea() {
         return area;
@@ -104,5 +105,11 @@ public class FeeReceiptDetailPo implements Serializable {
         this.cycle = cycle;
     }
 
+    public String getSquarePrice() {
+        return squarePrice;
+    }
 
+    public void setSquarePrice(String squarePrice) {
+        this.squarePrice = squarePrice;
+    }
 }
