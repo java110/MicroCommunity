@@ -7,6 +7,8 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.feeReceipt.FeeReceiptPo;
+import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 
 /**
  * @ClassName IFeeBMO
@@ -54,7 +56,7 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext, FeeReceiptDetailPo feeReceiptDetailPo, FeeReceiptPo feeReceiptPo);
 
     /**
      * 添加费用明细信息

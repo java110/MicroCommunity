@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeReceiptServiceDaoImpl">
+
+
+    <!-- 保存收据信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeReceiptInfo" parameterType="Map">
+        insert into fee_receipt(
+        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type
+        ) values (
+        #{amount},#{objId},#{remark},#{objName},#{communityId},#{receiptId},#{objType}
+        )
+    </insert>
+
+
+    <!-- 查询收据信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeReceiptInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.obj_id,t.obj_id objId,t.remark,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name
+        objName,t.community_id,t.community_id communityId,t.receipt_id,t.receipt_id receiptId,t.obj_type,t.obj_type
+        objType
+        from fee_receipt t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="receiptId !=null and receiptId != ''">
+            and t.receipt_id= #{receiptId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改收据信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeReceiptInfo" parameterType="Map">
+        update fee_receipt t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        where 1=1
+        <if test="receiptId !=null and receiptId != ''">
+            and t.receipt_id= #{receiptId}
+        </if>
+
+    </update>
+
+    <!-- 查询收据数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeReceiptsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_receipt t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="receiptId !=null and receiptId != ''">
+            and t.receipt_id= #{receiptId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+
+
+    </select>
+
+</mapper>

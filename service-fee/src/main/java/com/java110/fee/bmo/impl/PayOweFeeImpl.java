@@ -5,24 +5,22 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
-import com.java110.dto.fee.BillDto;
-import com.java110.dto.fee.BillOweFeeDto;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
+import com.java110.dto.fee.*;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.fee.bmo.IPayOweFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
+import com.java110.intf.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.*;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.feeReceipt.FeeReceiptPo;
+import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.constant.FeeFlagTypeConstant;
 import com.java110.utils.constant.FeeStateConstant;
@@ -31,6 +29,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +73,15 @@ public class PayOweFeeImpl implements IPayOweFee {
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
     /**
      * 欠费缴费
      *
@@ -90,26 +98,31 @@ public class PayOweFeeImpl implements IPayOweFee {
         JSONArray fees = reqJson.getJSONArray("fees");
 
         JSONObject feeObj = null;
-
+        FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
+        feeReceiptPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
+        feeReceiptPo.setAmount("0.0");
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObj = fees.getJSONObject(feeIndex);
             Assert.hasKeyAndValue(feeObj, "feeId", "未包含费用项ID");
             Assert.hasKeyAndValue(feeObj, "feePrice", "未包含缴费金额");
 
             feeObj.put("communityId", communityId);
-            doPayOweFee(feeObj);
+            doPayOweFee(feeObj, feeReceiptPo);
+        }
+        if (fees.size() > 0) {
+            feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
         }
         return ResultVo.success();
     }
 
-    private void doPayOweFee(JSONObject feeObj) {
+    private void doPayOweFee(JSONObject feeObj, FeeReceiptPo feeReceiptPo) {
         //开启全局锁
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + feeObj.get("feeId");
         try {
             DistributedLock.waitGetDistributedLock(key, requestId);
 
-            addFeeDetail(feeObj);
+            addFeeDetail(feeObj, feeReceiptPo);
 
             modifyFee(feeObj);
 
@@ -215,10 +228,11 @@ public class PayOweFeeImpl implements IPayOweFee {
      *
      * @param paramInJson
      */
-    private void addFeeDetail(JSONObject paramInJson) {
+    private void addFeeDetail(JSONObject paramInJson, FeeReceiptPo feeReceiptPo) {
 
         PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
         payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+
         payFeeDetailPo.setPrimeRate("1.00");
         //计算 应收金额
         FeeDto feeDto = new FeeDto();
@@ -237,14 +251,17 @@ public class PayOweFeeImpl implements IPayOweFee {
 
         if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
             String computingFormula = feeDto.getComputingFormula();
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(feeDto.getPayerObjId());
+            roomDto.setCommunityId(feeDto.getCommunityId());
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            if (roomDtos == null || roomDtos.size() != 1) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
+            }
+            roomDto = roomDtos.get(0);
+            feeReceiptPo.setObjName(roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum());
             if ("1001".equals(computingFormula)) { //面积*单价+附加费
-                RoomDto roomDto = new RoomDto();
-                roomDto.setRoomId(feeDto.getPayerObjId());
-                roomDto.setCommunityId(feeDto.getCommunityId());
-                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-                if (roomDtos == null || roomDtos.size() != 1) {
-                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
-                }
+
                 //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
                 BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
@@ -261,6 +278,14 @@ public class PayOweFeeImpl implements IPayOweFee {
             }
         } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
             String computingFormula = feeDto.getComputingFormula();
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setCommunityId(feeDto.getCommunityId());
+            ownerCarDto.setCarId(feeDto.getPayerObjId());
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+            if (ownerCarDtos != null && ownerCarDtos.size() > 0) {
+                feeReceiptPo.setObjName(ownerCarDtos.get(0).getCarNum());
+            }
             if ("1001".equals(computingFormula)) { //面积*单价+附加费
                 ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
                 parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
@@ -300,5 +325,23 @@ public class PayOweFeeImpl implements IPayOweFee {
         if (saveFeeDetail < 1) {
             throw new IllegalArgumentException("保存费用详情失败" + payFeeDetailPo.toString());
         }
+        FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
+        feeReceiptDetailPo.setAmount(payFeeDetailPo.getReceivableAmount());
+        feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
+        feeReceiptDetailPo.setCycle(payFeeDetailPo.getCycles());
+        feeReceiptDetailPo.setDetailId(payFeeDetailPo.getDetailId());
+        feeReceiptDetailPo.setEndTime(payFeeDetailPo.getEndTime());
+        feeReceiptDetailPo.setFeeId(feeDto.getFeeId());
+        feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
+        feeReceiptDetailPo.setStartTime(payFeeDetailPo.getStartTime());
+        feeReceiptDetailPo.setReceiptId(feeReceiptPo.getReceiptId());
+        feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
+
+        BigDecimal amount = new BigDecimal(Double.parseDouble(feeReceiptPo.getAmount()));
+        amount = amount.add(receivedAmount);
+        feeReceiptPo.setAmount(amount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue() + "");
+        feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
+        feeReceiptPo.setObjType(feeDto.getPayerObjType());
+        feeReceiptPo.setObjId(feeDto.getPayerObjId());
     }
 }

@@ -13,13 +13,17 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
+import com.java110.po.feeReceipt.FeeReceiptPo;
+import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -32,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
@@ -70,6 +75,12 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
+
 
     @Override
     public String getServiceCode() {
@@ -100,7 +111,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
 
         //添加单元信息
-        businesses.add(feeBMOImpl.addFeeDetail(paramObj, dataFlowContext));
+        FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
+        FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
+        businesses.add(feeBMOImpl.addFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPo, feeReceiptPo));
         businesses.add(feeBMOImpl.modifyFee(paramObj, dataFlowContext));
 
 
@@ -146,11 +159,16 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             businesses.add(business);
         }
 
-
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
         dataFlowContext.setResponseEntity(responseEntity);
 
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return;
+        }
+
+        //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
+        feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
+        feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
     }
 
     /**

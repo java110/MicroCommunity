@@ -1,23 +1,20 @@
 {
   "autoMove": true,
   "id": "receiptId",
-  "name": "feeReceiptDetail",
-  "desc": "收据明细",
+  "name": "feeReceipt",
+  "desc": "收据",
   "shareParam": "communityId",
   "shareColumn": "community_id",
   "shareName": "fee",
-  "tableName": "fee_receipt_detail",
+  "tableName": "fee_receipt",
   "param": {
     "receiptId": "receipt_id",
     "communityId": "community_id",
-    "detailId": "detail_id",
-    "feeId": "fee_id",
-    "feeName": "fee_name",
-    "area": "area",
-    "startTime": "start_time",
-    "endTime": "end_time",
+    "objType": "obj_type",
+    "objId": "obj_id",
+    "objName": "obj_name",
     "amount": "amount",
-    "cycle": "cycle",
+    "remark": "remark",
     "statusCd": "status_cd"
   },
   "required": [
@@ -27,11 +24,11 @@
     },
     {
       "code": "amount",
-      "msg": "费用金额不能为空"
+      "msg": "金额不能为空"
     },
     {
-      "code": "feeName",
-      "msg": "费用名称不能为空"
+      "code": "objName",
+      "msg": "名称不能为空"
     }
   ]
 }
