@@ -34,7 +34,7 @@ import java.nio.charset.Charset;
         "com.java110.core",
         "com.java110.config.properties.code",
         "com.java110.report"
-})
+},excludeName = {"com.java110.core.smo"})
 
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
