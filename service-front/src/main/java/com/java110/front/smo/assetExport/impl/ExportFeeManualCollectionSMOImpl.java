@@ -2,6 +2,7 @@ package com.java110.front.smo.assetExport.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.Feature;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
@@ -101,7 +102,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
             return null;
         }
 
-        JSONObject savedRoomInfoResults = JSONObject.parseObject(responseEntity.getBody());
+        JSONObject savedRoomInfoResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
 
 
         if (!savedRoomInfoResults.containsKey("data")) {
@@ -147,8 +148,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         JSONObject dataObj = rooms.getJSONObject(0);
         int dataKeyIndex = 1;
         for (String key : dataObj.keySet()) {
-            if (key.contains("-")) {
-                row.createCell(dataKeyIndex).setCellValue(key.substring(key.indexOf("-") + 1));
+            if (key.contains("_")) {
+                row.createCell(dataKeyIndex).setCellValue(key.substring(key.indexOf("_") + 1));
             } else {
                 row.createCell(dataKeyIndex).setCellValue(key);
             }
