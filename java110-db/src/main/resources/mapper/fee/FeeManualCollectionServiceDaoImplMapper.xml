@@ -104,6 +104,9 @@
             , t.room_name= #{roomName}
         </if>
         where 1=1
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
     </update>
 
     <!-- 查询人工托收数量 add by wuxw 2018-07-03 -->
