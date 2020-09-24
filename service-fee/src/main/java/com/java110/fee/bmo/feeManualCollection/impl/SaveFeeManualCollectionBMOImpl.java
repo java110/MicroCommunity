@@ -3,6 +3,7 @@ package com.java110.fee.bmo.feeManualCollection.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeManualCollection.FeeManualCollectionDto;
 import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
@@ -10,6 +11,7 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.fee.bmo.feeManualCollection.ISaveFeeManualCollectionBMO;
 import com.java110.intf.IFeeManualCollectionDetailInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IFeeManualCollectionInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -17,6 +19,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.feeManualCollection.FeeManualCollectionPo;
 import com.java110.po.feeManualCollectionDetail.FeeManualCollectionDetailPo;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -48,6 +51,9 @@ public class SaveFeeManualCollectionBMOImpl implements ISaveFeeManualCollectionB
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -56,6 +62,15 @@ public class SaveFeeManualCollectionBMOImpl implements ISaveFeeManualCollectionB
      */
     @Java110Transactional
     public ResponseEntity<String> save(FeeManualCollectionPo feeManualCollectionPo) {
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(feeManualCollectionPo.getRoomId());
+        roomDto.setCommunityId(feeManualCollectionPo.getCommunityId());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        Assert.listOnlyOne(roomDtos, "未找到房屋信息");
+
+        roomDto = roomDtos.get(0);
 
         FeeDto feeDto = new FeeDto();
         feeDto.setPayerObjId(feeManualCollectionPo.getRoomId());
@@ -98,17 +113,27 @@ public class SaveFeeManualCollectionBMOImpl implements ISaveFeeManualCollectionB
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "当前房屋不存在托收费用");
         }
 
-        feeManualCollectionPo.setOwnerId(ownerDtos.get(0).getOwnerId());
-        feeManualCollectionPo.setLink(ownerCarDtos.get(0).getLink());
-        feeManualCollectionPo.setOwnerName(ownerCarDtos.get(0).getOwnerName());
-        feeManualCollectionPo.setState(FeeManualCollectionDto.STATE_COLLECTION);
+        FeeManualCollectionDto feeManualCollectionDto = new FeeManualCollectionDto();
+        feeManualCollectionDto.setRoomId(roomDto.getRoomId());
+        feeManualCollectionDto.setCommunityId(roomDto.getCommunityId());
+        List<FeeManualCollectionDto> feeManualCollectionDtos = feeManualCollectionInnerServiceSMOImpl.queryFeeManualCollections(feeManualCollectionDto);
+        if (feeManualCollectionDtos == null || feeManualCollectionDtos.size() < 1) {
+            feeManualCollectionPo.setOwnerId(ownerDtos.get(0).getOwnerId());
+            feeManualCollectionPo.setLink(ownerCarDtos.get(0).getLink());
+            feeManualCollectionPo.setOwnerName(ownerCarDtos.get(0).getOwnerName());
+            feeManualCollectionPo.setState(FeeManualCollectionDto.STATE_COLLECTION);
+            feeManualCollectionPo.setRoomArea(roomDto.getBuiltUpArea());
+            feeManualCollectionPo.setRoomName(roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum());
+            feeManualCollectionPo.setCollectionId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
+            int flag = feeManualCollectionInnerServiceSMOImpl.saveFeeManualCollection(feeManualCollectionPo);
 
-        feeManualCollectionPo.setCollectionId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
-        int flag = feeManualCollectionInnerServiceSMOImpl.saveFeeManualCollection(feeManualCollectionPo);
-
-        if (flag < 1) {
-            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+            if (flag < 1) {
+                return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+            }
+        } else {
+            feeManualCollectionPo = BeanConvertUtil.covertBean(feeManualCollectionDtos.get(0), FeeManualCollectionPo.class);
         }
+
 
         for (FeeDto tmpFeeDto : tmpFeeDtos) {
             saveFeeManualCollectionDetailInfo(tmpFeeDto, feeManualCollectionPo);
@@ -129,7 +154,17 @@ public class SaveFeeManualCollectionBMOImpl implements ISaveFeeManualCollectionB
         feeManualCollectionDetailPo.setFeeName(StringUtil.isEmpty(tmpFeeDto.getImportFeeName()) ? tmpFeeDto.getFeeName() : tmpFeeDto.getImportFeeName());
         feeManualCollectionDetailPo.setStartTime(DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeManualCollectionDetailPo.setState(FeeManualCollectionDetailDto.STATE_COLLECTION);
-        feeManualCollectionDetailInnerServiceSMOImpl.saveFeeManualCollectionDetail(feeManualCollectionDetailPo);
+        FeeManualCollectionDetailDto feeManualCollectionDetailDto = new FeeManualCollectionDetailDto();
+        feeManualCollectionDetailDto.setFeeId(tmpFeeDto.getFeeId());
+        feeManualCollectionDetailDto.setCollectionId(feeManualCollectionPo.getCollectionId());
+        feeManualCollectionDetailDto.setCommunityId(feeManualCollectionPo.getCommunityId());
+        List<FeeManualCollectionDetailDto> feeManualCollectionDetailDtos = feeManualCollectionDetailInnerServiceSMOImpl.queryFeeManualCollectionDetails(feeManualCollectionDetailDto);
+        if (feeManualCollectionDetailDtos == null || feeManualCollectionDetailDtos.size() < 1) {
+            feeManualCollectionDetailInnerServiceSMOImpl.saveFeeManualCollectionDetail(feeManualCollectionDetailPo);
+        } else {
+            feeManualCollectionDetailPo.setDetailId(feeManualCollectionDetailDtos.get(0).getDetailId());
+            feeManualCollectionDetailInnerServiceSMOImpl.updateFeeManualCollectionDetail(feeManualCollectionDetailPo);
+        }
     }
 
     /**
