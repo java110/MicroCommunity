@@ -101,7 +101,7 @@ public class FeeManualCollectionApi {
     public ResponseEntity<String> deleteFeeManualCollection(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
-        Assert.hasKeyAndValue(reqJson, "receiptId", "receiptId不能为空");
+        Assert.hasKeyAndValue(reqJson, "collectionId", "collectionId不能为空");
 
 
         FeeManualCollectionPo feeManualCollectionPo = BeanConvertUtil.covertBean(reqJson, FeeManualCollectionPo.class);
