@@ -71,7 +71,12 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
 
         String scope = reqJson.getString("scope");
         RoomDto roomDto = new RoomDto();
-        roomDto.setState(RoomDto.STATE_SELL); // 已售房屋
+        if(reqJson.containsKey("roomState") && reqJson.getString("roomState").split(",").length > 0){
+            String[] states = reqJson.getString("roomState").split(",");
+            roomDto.setStates(states);
+        }else{
+            roomDto.setState(RoomDto.STATE_SELL); // 已经入住
+        }
         List<RoomDto> roomDtos = null;
         if ("1001".equals(scope)) {//小区
             roomDto.setCommunityId(reqJson.getString("objId"));
