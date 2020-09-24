@@ -2,6 +2,9 @@ package com.java110.core.smo.impl;
 
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.BillDto;
+import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
@@ -15,11 +18,14 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -32,6 +38,9 @@ import java.util.*;
 
 @Service
 public class ComputeFeeSMOImpl implements IComputeFeeSMO {
+
+    protected static final Logger logger = LoggerFactory.getLogger(ComputeFeeSMOImpl.class);
+
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
@@ -49,9 +58,123 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         return null;
     }
 
+    /**
+     * 计算欠费金额
+     *
+     * @param tmpFeeDto
+     */
+    public void computeOweFee(FeeDto tmpFeeDto) {
+        String billType = tmpFeeDto.getBillType();
+
+        if (FeeConfigDto.BILL_TYPE_EVERY.equals(billType)) {
+            computeFeePrice(tmpFeeDto);
+            return;
+        }
+        BillDto billDto = new BillDto();
+        billDto.setCommunityId(tmpFeeDto.getCommunityId());
+        billDto.setConfigId(tmpFeeDto.getConfigId());
+        billDto.setCurBill("T");
+        List<BillDto> billDtos = feeInnerServiceSMOImpl.queryBills(billDto);
+        if (billDtos == null || billDtos.size() < 1) {
+            tmpFeeDto.setFeePrice(0.00);
+            return;
+        }
+        BillOweFeeDto billOweFeeDto = new BillOweFeeDto();
+        billOweFeeDto.setCommunityId(tmpFeeDto.getCommunityId());
+        billOweFeeDto.setFeeId(tmpFeeDto.getFeeId());
+        billOweFeeDto.setState(BillOweFeeDto.STATE_WILL_FEE);
+        billOweFeeDto.setBillId(billDtos.get(0).getBillId());
+        List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
+        if (billOweFeeDtos == null || billOweFeeDtos.size() < 1) {
+            tmpFeeDto.setFeePrice(0.00);
+            return;
+        }
+        try {
+            tmpFeeDto.setDeadlineTime(DateUtil.getDateFromString(billOweFeeDtos.get(0).getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
+        } catch (ParseException e) {
+            logger.error("获取结束时间失败", e);
+        }
+        tmpFeeDto.setFeePrice(Double.parseDouble(billOweFeeDtos.get(0).getAmountOwed()));
+    }
+
+    private void computeFeePrice(FeeDto feeDto) {
+
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
+            computeFeePriceByRoom(feeDto);
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
+            computeFeePriceByParkingSpace(feeDto);
+        }
+    }
+
+    private void computeFeePriceByParkingSpace(FeeDto feeDto) {
+        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
+        parkingSpaceDto.setPsId(feeDto.getPayerObjId());
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+            return;
+        }
+
+        String computingFormula = feeDto.getComputingFormula();
+        double feePrice = getFeePrice(feeDto);
+
+        feeDto.setFeePrice(feePrice);
+        double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
+        price = price.multiply(new BigDecimal(oweMonth));
+        feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+        feeDto.setDeadlineTime(targetEndDate);
+
+        //动态费用
+        if ("4004".equals(computingFormula)) {
+            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+        }
+
+    }
+
+    /**
+     * 根据房屋来算单价
+     *
+     * @param feeDto
+     */
+    private void computeFeePriceByRoom(FeeDto feeDto) {
+        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(feeDto.getCommunityId());
+        roomDto.setRoomId(feeDto.getPayerObjId());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
+            return;
+        }
+
+        String computingFormula = feeDto.getComputingFormula();
+        double feePrice = getFeePrice(feeDto);
+        feeDto.setFeePrice(feePrice);
+        //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
+        price = price.multiply(new BigDecimal(oweMonth));
+        feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+        feeDto.setDeadlineTime(targetEndDate);
+
+        //动态费用
+        if ("4004".equals(computingFormula)) {
+            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+        }
+    }
+
 
     /**
      * 刷新 收据明细
+     *
      * @param feeDto
      * @param feeReceiptDetailPo
      */

@@ -61,7 +61,7 @@ public class FeeManualCollectionApi {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "roomId", "请求报文中未包含roomId");
-        Assert.hasKeyAndValue(reqJson, "ownerId", "请求报文中未包含ownerId");
+        //Assert.hasKeyAndValue(reqJson, "ownerId", "请求报文中未包含ownerId");
 
 
         FeeManualCollectionPo feeManualCollectionPo = BeanConvertUtil.covertBean(reqJson, FeeManualCollectionPo.class);

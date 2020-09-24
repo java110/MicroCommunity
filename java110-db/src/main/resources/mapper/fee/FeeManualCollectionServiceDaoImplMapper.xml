@@ -8,25 +8,23 @@
     <!-- 保存人工托收信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeManualCollectionInfo" parameterType="Map">
         insert into fee_manual_collection(
-        square_price,owner_name,link,room_area,remark,state,owner_id,community_id,collection_id,room_id,room_name
+        owner_name,link,room_area,remark,state,owner_id,community_id,collection_id,room_id,room_name
         ) values (
-        #{squarePrice},#{ownerName},#{link},#{roomArea},#{remark},#{state},#{ownerId},#{communityId},#{collectionId},#{roomId},#{roomName}
+        #{ownerName},#{link},#{roomArea},#{remark},#{state},#{ownerId},#{communityId},#{collectionId},#{roomId},#{roomName}
         )
     </insert>
 
 
     <!-- 查询人工托收信息 add by wuxw 2018-07-03 -->
     <select id="getFeeManualCollectionInfo" parameterType="Map" resultType="Map">
-        select t.square_price,t.square_price squarePrice,t.owner_name,t.owner_name
+        select t.owner_name,t.owner_name
         ownerName,t.link,t.room_area,t.room_area roomArea,t.remark,t.status_cd,t.status_cd
         statusCd,t.state,t.owner_id,t.owner_id ownerId,t.community_id,t.community_id
         communityId,t.collection_id,t.collection_id collectionId,t.room_id,t.room_id roomId,t.room_name,t.room_name
         roomName
         from fee_manual_collection t
         where 1 =1
-        <if test="squarePrice !=null and squarePrice != ''">
-            and t.square_price= #{squarePrice}
-        </if>
+
         <if test="ownerName !=null and ownerName != ''">
             and t.owner_name= #{ownerName}
         </if>
@@ -74,9 +72,6 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="squarePrice !=null and squarePrice != ''">
-            , t.square_price= #{squarePrice}
-        </if>
         <if test="ownerName !=null and ownerName != ''">
             , t.owner_name= #{ownerName}
         </if>
@@ -115,9 +110,6 @@
         select count(1) count
         from fee_manual_collection t
         where 1 =1
-        <if test="squarePrice !=null and squarePrice != ''">
-            and t.square_price= #{squarePrice}
-        </if>
         <if test="ownerName !=null and ownerName != ''">
             and t.owner_name= #{ownerName}
         </if>

@@ -1,6 +1,7 @@
 package com.java110.dto.feeManualCollectionDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,15 +15,20 @@ import java.util.Date;
  **/
 public class FeeManualCollectionDetailDto extends PageDto implements Serializable {
 
+    //1010 托收中，2020 已缴费 3030 作废
+    public static final String STATE_COLLECTION ="1010";
+    public static final String STATE_PAY_FEE ="2020";
+    public static final String STATE_DELETE ="3030";
+
     private String amount;
-private String feeName;
-private String detailId;
-private String startTime;
-private String endTime;
-private String state;
-private String communityId;
-private String collectionId;
-private String feeId;
+    private String feeName;
+    private String detailId;
+    private String startTime;
+    private String endTime;
+    private String state;
+    private String communityId;
+    private String collectionId;
+    private String feeId;
 
 
     private Date createTime;
@@ -33,55 +39,72 @@ private String feeId;
     public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getFeeName() {
+
+    public String getFeeName() {
         return feeName;
     }
-public void setFeeName(String feeName) {
+
+    public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCollectionId() {
+
+    public String getCollectionId() {
         return collectionId;
     }
-public void setCollectionId(String collectionId) {
+
+    public void setCollectionId(String collectionId) {
         this.collectionId = collectionId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
 

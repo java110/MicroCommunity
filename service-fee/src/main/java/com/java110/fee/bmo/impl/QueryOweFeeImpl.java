@@ -1,6 +1,7 @@
 package com.java110.fee.bmo.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
@@ -55,6 +56,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
+
 
     @Override
     public ResponseEntity<String> query(FeeDto feeDto) {
@@ -70,7 +74,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
         for (FeeDto tmpFeeDto : feeDtos) {
-            computeOweFee(tmpFeeDto);//计算欠费金额
+            computeFeeSMOImpl.computeOweFee(tmpFeeDto);//计算欠费金额
 
             //如果金额为0 就排除
             if (tmpFeeDto.getFeePrice() > 0) {
@@ -392,172 +396,10 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
     }
 
-    /**
-     * 计算欠费金额
-     *
-     * @param tmpFeeDto
-     */
-    private void computeOweFee(FeeDto tmpFeeDto) {
-        String billType = tmpFeeDto.getBillType();
-
-        if (FeeConfigDto.BILL_TYPE_EVERY.equals(billType)) {
-            computeFeePrice(tmpFeeDto);
-            return;
-        }
-        BillDto billDto = new BillDto();
-        billDto.setCommunityId(tmpFeeDto.getCommunityId());
-        billDto.setConfigId(tmpFeeDto.getConfigId());
-        billDto.setCurBill("T");
-        List<BillDto> billDtos = feeInnerServiceSMOImpl.queryBills(billDto);
-        if (billDtos == null || billDtos.size() < 1) {
-            tmpFeeDto.setFeePrice(0.00);
-            return;
-        }
-        BillOweFeeDto billOweFeeDto = new BillOweFeeDto();
-        billOweFeeDto.setCommunityId(tmpFeeDto.getCommunityId());
-        billOweFeeDto.setFeeId(tmpFeeDto.getFeeId());
-        billOweFeeDto.setState(BillOweFeeDto.STATE_WILL_FEE);
-        billOweFeeDto.setBillId(billDtos.get(0).getBillId());
-        List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
-        if (billOweFeeDtos == null || billOweFeeDtos.size() < 1) {
-            tmpFeeDto.setFeePrice(0.00);
-            return;
-        }
-        try {
-            tmpFeeDto.setDeadlineTime(DateUtil.getDateFromString(billOweFeeDtos.get(0).getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
-        } catch (ParseException e) {
-            logger.error("获取结束时间失败", e);
-        }
-        tmpFeeDto.setFeePrice(Double.parseDouble(billOweFeeDtos.get(0).getAmountOwed()));
-    }
 
 
-    private void computeFeePrice(FeeDto feeDto) {
 
-        if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
-            computeFeePriceByRoom(feeDto);
-        } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
-            computeFeePriceByParkingSpace(feeDto);
-        }
-    }
 
-    private void computeFeePriceByParkingSpace(FeeDto feeDto) {
-        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
-        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
-        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-        parkingSpaceDto.setPsId(feeDto.getPayerObjId());
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
-            return;
-        }
-
-        String computingFormula = feeDto.getComputingFormula();
-        double feePrice = 0.00;
-        if ("1001".equals(computingFormula)) { //面积*单价+附加费
-            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-            BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(parkingSpaceDtos.get(0).getArea()));
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else if ("2002".equals(computingFormula)) { // 固定费用
-
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else if ("4004".equals(computingFormula)) {
-            feePrice = Double.parseDouble(feeDto.getAmount());
-        } else if ("5005".equals(computingFormula)) {
-            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
-                feePrice = -1.00;
-            } else {
-                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
-                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
-                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                BigDecimal sub = curDegree.subtract(preDegree);
-                feePrice = sub.multiply(squarePrice)
-                        .add(additionalAmount)
-                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-            }
-        } else {
-            feePrice = 0.00;
-        }
-        feeDto.setFeePrice(feePrice);
-        double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
-        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
-        price = price.multiply(new BigDecimal(oweMonth));
-        feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
-        feeDto.setDeadlineTime(targetEndDate);
-
-        //动态费用
-        if ("4004".equals(computingFormula)) {
-            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
-            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
-        }
-
-    }
-
-    /**
-     * 根据房屋来算单价
-     *
-     * @param feeDto
-     */
-    private void computeFeePriceByRoom(FeeDto feeDto) {
-        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
-        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
-        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-        RoomDto roomDto = new RoomDto();
-        roomDto.setCommunityId(feeDto.getCommunityId());
-        roomDto.setRoomId(feeDto.getPayerObjId());
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
-        if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
-            return;
-        }
-
-        String computingFormula = feeDto.getComputingFormula();
-        double feePrice = 0.00;
-        if ("1001".equals(computingFormula)) { //面积*单价+附加费
-            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-            BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else if ("2002".equals(computingFormula)) { // 固定费用
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else if ("4004".equals(computingFormula)) {
-            feePrice = Double.parseDouble(feeDto.getAmount());
-        } else if ("5005".equals(computingFormula)) {
-            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
-                feePrice = -1.00;
-            } else {
-                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
-                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
-                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                BigDecimal sub = curDegree.subtract(preDegree);
-                feePrice = sub.multiply(squarePrice)
-                        .add(additionalAmount)
-                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-            }
-        } else {
-            feePrice = 0.00;
-        }
-
-        feeDto.setFeePrice(feePrice);
-        //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
-        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
-        price = price.multiply(new BigDecimal(oweMonth));
-        feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
-        feeDto.setDeadlineTime(targetEndDate);
-
-        //动态费用
-        if ("4004".equals(computingFormula)) {
-            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
-            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
-        }
-    }
 
 
     /**

@@ -24,7 +24,15 @@ public interface IComputeFeeSMO {
     Date getFeeEndTime();
 
     /**
+     * 计算欠费金额
+     *
+     * @param tmpFeeDto
+     */
+    public void computeOweFee(FeeDto tmpFeeDto);
+
+    /**
      * 刷新
+     *
      * @param feeDto
      * @param feeReceiptDetailPo
      */
@@ -32,6 +40,7 @@ public interface IComputeFeeSMO {
 
     /**
      * 根据周期 计算费用状态
+     *
      * @param feeDto
      * @param cycles
      * @return
@@ -40,12 +49,15 @@ public interface IComputeFeeSMO {
 
     /**
      * 查询费用对象名称
+     *
      * @param feeDto
      * @return
      */
     public String getFeeObjName(FeeDto feeDto);
+
     /**
      * 根据缴费周期计算 结束时间
+     *
      * @param feeDto
      * @param cycles 缴费周期
      * @return
