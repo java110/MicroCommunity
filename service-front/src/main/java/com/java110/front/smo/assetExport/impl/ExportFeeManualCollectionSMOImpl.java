@@ -30,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -141,7 +142,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         //查询楼栋信息
         JSONArray rooms = this.getExistsRoomFee(pd, componentValidateResult);
         if (rooms == null || rooms.size() < 1) {
-            CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+            CellRangeAddress region = new CellRangeAddress(0, 0, 0, 10);
             sheet.addMergedRegion(region);
             return;
         }
@@ -155,6 +156,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
             }
             dataKeyIndex++;
         }
+        row.createCell(dataKeyIndex+2).setCellValue("备注");
+
 
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 2);
@@ -165,9 +168,10 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
                 row.createCell(dataKeyIndex).setCellValue(dataObj.getString(key));
                 dataKeyIndex++;
             }
+            row.createCell(dataKeyIndex+2).setCellValue("");
         }
 
-        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 10);
         sheet.addMergedRegion(region);
     }
 

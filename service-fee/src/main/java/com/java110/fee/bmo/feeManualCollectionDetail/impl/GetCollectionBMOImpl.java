@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service("getCollectionBMOImpl")
@@ -82,6 +83,7 @@ public class GetCollectionBMOImpl implements IGetExportCollectionBMO {
         dataObj.put("联系电话", tmpFeeManualCollectionDto.getLink());
         dataObj.put("收费面积/m2", tmpFeeManualCollectionDto.getRoomArea());
 
+        BigDecimal totalFee = new BigDecimal(0);
 
         for (FeeConfigDto feeConfigDto : feeConfigDtos) {
 
@@ -93,10 +95,16 @@ public class GetCollectionBMOImpl implements IGetExportCollectionBMO {
                 continue;
             }
 
+            BigDecimal amount = new BigDecimal(tmpFeeManualCollectionDetailDto.getAmount());
+
+            totalFee = totalFee.add(amount);
+
             dataObj.put(feeConfigDto.getFeeName(), tmpFeeManualCollectionDetailDto.getAmount());
             dataObj.put(feeConfigDto.getFeeName() + "_起止日期",
                     tmpFeeManualCollectionDetailDto.getStartTime() + "至" + tmpFeeManualCollectionDetailDto.getEndTime());
         }
+
+        dataObj.put("应交款总额", totalFee.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
 
         data.add(dataObj);
 
