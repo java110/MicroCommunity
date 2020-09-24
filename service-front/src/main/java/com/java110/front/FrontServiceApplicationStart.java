@@ -13,6 +13,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,15 +30,16 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {
-        "com.java110.service.configuration",
+@SpringBootApplication
+@ComponentScan(basePackages = { "com.java110.service.configuration",
         "com.java110.service.init",
         "com.java110.front",
         "com.java110.core",
         "com.java110.config.properties.code",
-        "com.java110.report"
-},exclude = {ComputeFeeSMOImpl.class})
-
+        "com.java110.report"},excludeFilters =
+        {
+                @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.java110.core.smo.*")
+        })
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
