@@ -62,7 +62,7 @@ public class GetCollectionBMOImpl implements IGetExportCollectionBMO {
 
     private void doDealDetail(FeeManualCollectionDto tmpFeeManualCollectionDto, List<FeeConfigDto> feeConfigDtos, JSONArray data) {
 
-        JSONObject dataObj = new JSONObject();
+        JSONObject dataObj = new JSONObject(true);
 
         List<FeeManualCollectionDetailDto> feeManualCollectionDetailDtos = null;
 

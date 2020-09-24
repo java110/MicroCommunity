@@ -135,10 +135,6 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.setHeight((short) (200 * 10));
         row = sheet.createRow(1);
         row.createCell(0).setCellValue("序号");
-        row.createCell(1).setCellValue("房号");
-        row.createCell(2).setCellValue("姓名");
-        row.createCell(3).setCellValue("联系电话");
-        row.createCell(4).setCellValue("收费面积/m2");
 
 
         //查询楼栋信息
@@ -162,7 +158,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 2);
             dataObj = rooms.getJSONObject(roomIndex);
-            dataKeyIndex = 0;
+            dataKeyIndex = 1;
+            row.createCell(0).setCellValue(roomIndex + 1);
             for (String key : dataObj.keySet()) {
                 row.createCell(dataKeyIndex).setCellValue(dataObj.getString(key));
                 dataKeyIndex++;
