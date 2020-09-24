@@ -179,11 +179,11 @@ public class FeeManualCollectionApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /feeManualCollection/deleteFeeManualCollectionDetail
-     * @path /app/feeManualCollection/deleteFeeManualCollectionDetail
+     * @serviceCode /feeManualCollection/deleteCollectionDetail
+     * @path /app/feeManualCollection/deleteCollectionDetail
      */
-    @RequestMapping(value = "/deleteFeeManualCollectionDetail", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteFeeManualCollectionDetail(@RequestBody JSONObject reqJson) {
+    @RequestMapping(value = "/deleteCollectionDetail", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteCollectionDetail(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "detailId", "detailId不能为空");
@@ -198,11 +198,11 @@ public class FeeManualCollectionApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /feeManualCollection/queryFeeManualCollectionDetail
-     * @path /app/feeManualCollection/queryFeeManualCollectionDetail
+     * @serviceCode /feeManualCollection/queryCollectionDetail
+     * @path /app/feeManualCollection/queryCollectionDetail
      */
-    @RequestMapping(value = "/queryFeeManualCollectionDetail", method = RequestMethod.GET)
-    public ResponseEntity<String> queryFeeManualCollectionDetail(@RequestParam(value = "communityId") String communityId,
+    @RequestMapping(value = "/queryCollectionDetail", method = RequestMethod.GET)
+    public ResponseEntity<String> queryCollectionDetail(@RequestParam(value = "communityId") String communityId,
                                                                  @RequestParam(value = "collectionId", required = false) String collectionId,
                                                                  @RequestParam(value = "page") int page,
                                                                  @RequestParam(value = "row") int row) {
