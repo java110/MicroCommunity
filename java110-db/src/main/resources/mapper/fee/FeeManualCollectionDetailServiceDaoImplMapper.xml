@@ -19,9 +19,11 @@
     <select id="getFeeManualCollectionDetailInfo" parameterType="Map" resultType="Map">
         select t.amount,t.fee_name,t.fee_name feeName,t.detail_id,t.detail_id detailId,t.start_time,t.start_time
         startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id
-        communityId,t.collection_id,t.collection_id collectionId,t.fee_id,t.fee_id feeId,td.name stateName
+        communityId,t.collection_id,t.collection_id collectionId,t.fee_id,t.fee_id feeId,td.name stateName,
+        pf.config_id configId
         from fee_manual_collection_detail t
         left join t_dict td on t.state = td.status_cd and td.table_name = 'fee_manual_collection_detail' and td.table_columns = 'state'
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.community_id = t.community_id
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}

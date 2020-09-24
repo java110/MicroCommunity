@@ -30,6 +30,7 @@ public class FeeManualCollectionDetailDto extends PageDto implements Serializabl
     private String communityId;
     private String collectionId;
     private String feeId;
+    private String configId;
 
 
     private Date createTime;
@@ -132,5 +133,13 @@ public class FeeManualCollectionDetailDto extends PageDto implements Serializabl
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
     }
 }

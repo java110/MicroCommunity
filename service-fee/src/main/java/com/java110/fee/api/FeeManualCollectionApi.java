@@ -8,6 +8,7 @@ import com.java110.fee.bmo.feeManualCollection.IGetFeeManualCollectionBMO;
 import com.java110.fee.bmo.feeManualCollection.ISaveFeeManualCollectionBMO;
 import com.java110.fee.bmo.feeManualCollection.IUpdateFeeManualCollectionBMO;
 import com.java110.fee.bmo.feeManualCollectionDetail.IDeleteFeeManualCollectionDetailBMO;
+import com.java110.fee.bmo.feeManualCollectionDetail.IGetExportCollectionBMO;
 import com.java110.fee.bmo.feeManualCollectionDetail.IGetFeeManualCollectionDetailBMO;
 import com.java110.fee.bmo.feeManualCollectionDetail.ISaveFeeManualCollectionDetailBMO;
 import com.java110.fee.bmo.feeManualCollectionDetail.IUpdateFeeManualCollectionDetailBMO;
@@ -47,6 +48,9 @@ public class FeeManualCollectionApi {
 
     @Autowired
     private IGetFeeManualCollectionDetailBMO getFeeManualCollectionDetailBMOImpl;
+
+    @Autowired
+    private IGetExportCollectionBMO getExportCollectionBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -203,14 +207,30 @@ public class FeeManualCollectionApi {
      */
     @RequestMapping(value = "/queryCollectionDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryCollectionDetail(@RequestParam(value = "communityId") String communityId,
-                                                                 @RequestParam(value = "collectionId", required = false) String collectionId,
-                                                                 @RequestParam(value = "page") int page,
-                                                                 @RequestParam(value = "row") int row) {
+                                                        @RequestParam(value = "collectionId", required = false) String collectionId,
+                                                        @RequestParam(value = "page") int page,
+                                                        @RequestParam(value = "row") int row) {
         FeeManualCollectionDetailDto feeManualCollectionDetailDto = new FeeManualCollectionDetailDto();
         feeManualCollectionDetailDto.setPage(page);
         feeManualCollectionDetailDto.setRow(row);
         feeManualCollectionDetailDto.setCommunityId(communityId);
         feeManualCollectionDetailDto.setCollectionId(collectionId);
         return getFeeManualCollectionDetailBMOImpl.get(feeManualCollectionDetailDto);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /feeManualCollection/queryExportCollections
+     * @path /app/feeManualCollection/queryExportCollections
+     */
+    @RequestMapping(value = "/queryExportCollections", method = RequestMethod.GET)
+    public ResponseEntity<String> queryExportCollections(@RequestParam(value = "communityId") String communityId) {
+        FeeManualCollectionDetailDto feeManualCollectionDetailDto = new FeeManualCollectionDetailDto();
+        feeManualCollectionDetailDto.setCommunityId(communityId);
+
+        return getExportCollectionBMOImpl.get(feeManualCollectionDetailDto);
     }
 }
