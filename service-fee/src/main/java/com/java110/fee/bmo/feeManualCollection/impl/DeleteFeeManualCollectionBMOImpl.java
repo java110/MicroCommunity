@@ -1,9 +1,12 @@
 package com.java110.fee.bmo.feeManualCollection.impl;
 
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
 import com.java110.fee.bmo.feeManualCollection.IDeleteFeeManualCollectionBMO;
+import com.java110.intf.IFeeManualCollectionDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeManualCollectionInnerServiceSMO;
 import com.java110.po.feeManualCollection.FeeManualCollectionPo;
+import com.java110.po.feeManualCollectionDetail.FeeManualCollectionDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,8 @@ public class DeleteFeeManualCollectionBMOImpl implements IDeleteFeeManualCollect
 
     @Autowired
     private IFeeManualCollectionInnerServiceSMO feeManualCollectionInnerServiceSMOImpl;
+    @Autowired
+    private IFeeManualCollectionDetailInnerServiceSMO feeManualCollectionDetailInnerServiceSMOImpl;
 
     /**
      * @param feeManualCollectionPo 数据
@@ -21,6 +26,11 @@ public class DeleteFeeManualCollectionBMOImpl implements IDeleteFeeManualCollect
      */
     @Java110Transactional
     public ResponseEntity<String> delete(FeeManualCollectionPo feeManualCollectionPo) {
+
+        FeeManualCollectionDetailPo feeManualCollectionDetailPo = new FeeManualCollectionDetailPo();
+        feeManualCollectionDetailPo.setCollectionId(feeManualCollectionPo.getCollectionId());
+
+        feeManualCollectionDetailInnerServiceSMOImpl.deleteFeeManualCollectionDetail(feeManualCollectionDetailPo);
 
         int flag = feeManualCollectionInnerServiceSMOImpl.deleteFeeManualCollection(feeManualCollectionPo);
 

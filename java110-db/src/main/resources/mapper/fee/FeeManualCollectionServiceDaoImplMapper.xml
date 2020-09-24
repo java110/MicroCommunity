@@ -21,8 +21,9 @@
         ownerName,t.link,t.room_area,t.room_area roomArea,t.remark,t.status_cd,t.status_cd
         statusCd,t.state,t.owner_id,t.owner_id ownerId,t.community_id,t.community_id
         communityId,t.collection_id,t.collection_id collectionId,t.room_id,t.room_id roomId,t.room_name,t.room_name
-        roomName
+        roomName,td.name stateName
         from fee_manual_collection t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'fee_manual_collection' and td.table_columns = 'state'
         where 1 =1
 
         <if test="ownerName !=null and ownerName != ''">

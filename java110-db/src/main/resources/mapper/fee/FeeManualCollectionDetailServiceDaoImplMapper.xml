@@ -19,8 +19,9 @@
     <select id="getFeeManualCollectionDetailInfo" parameterType="Map" resultType="Map">
         select t.amount,t.fee_name,t.fee_name feeName,t.detail_id,t.detail_id detailId,t.start_time,t.start_time
         startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id
-        communityId,t.collection_id,t.collection_id collectionId,t.fee_id,t.fee_id feeId
+        communityId,t.collection_id,t.collection_id collectionId,t.fee_id,t.fee_id feeId,td.name stateName
         from fee_manual_collection_detail t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'fee_manual_collection_detail' and td.table_columns = 'state'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
@@ -93,6 +94,9 @@
         where 1=1
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
         </if>
 
     </update>

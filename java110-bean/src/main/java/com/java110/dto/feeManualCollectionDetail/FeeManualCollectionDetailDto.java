@@ -16,9 +16,9 @@ import java.util.Date;
 public class FeeManualCollectionDetailDto extends PageDto implements Serializable {
 
     //1010 托收中，2020 已缴费 3030 作废
-    public static final String STATE_COLLECTION ="1010";
-    public static final String STATE_PAY_FEE ="2020";
-    public static final String STATE_DELETE ="3030";
+    public static final String STATE_COLLECTION = "1010";
+    public static final String STATE_PAY_FEE = "2020";
+    public static final String STATE_DELETE = "3030";
 
     private String amount;
     private String feeName;
@@ -26,6 +26,7 @@ public class FeeManualCollectionDetailDto extends PageDto implements Serializabl
     private String startTime;
     private String endTime;
     private String state;
+    private String stateName;
     private String communityId;
     private String collectionId;
     private String feeId;
@@ -123,5 +124,13 @@ public class FeeManualCollectionDetailDto extends PageDto implements Serializabl
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

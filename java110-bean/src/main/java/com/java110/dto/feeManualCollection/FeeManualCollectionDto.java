@@ -24,6 +24,7 @@ public class FeeManualCollectionDto extends PageDto implements Serializable {
     private String roomArea;
     private String remark;
     private String state;
+    private String stateName;
     private String ownerId;
     private String communityId;
     private String collectionId;
@@ -139,5 +140,13 @@ public class FeeManualCollectionDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
