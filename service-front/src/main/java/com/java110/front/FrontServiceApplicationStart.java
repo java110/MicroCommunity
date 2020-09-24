@@ -1,5 +1,6 @@
 package com.java110.front;
 
+import com.java110.core.smo.impl.ComputeFeeSMOImpl;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ import java.nio.charset.Charset;
         "com.java110.core",
         "com.java110.config.properties.code",
         "com.java110.report"
-},excludeName = {"com.java110.core.smo"})
+},exclude = {ComputeFeeSMOImpl.class})
 
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)

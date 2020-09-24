@@ -46,7 +46,8 @@ import java.nio.charset.Charset;
 @EnableFeignClients(basePackages = {
         "com.java110.intf.user",
         "com.java110.intf.store",
-        "com.java110.intf.fee"
+        "com.java110.intf.fee",
+        "com.java110.intf.community"
 })
 public class CommonServiceApplicationStart {
 
