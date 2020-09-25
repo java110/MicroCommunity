@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.util.Map;
 
-@Service("toPayOweFeeSMOImpl")
+@Service("toQrPayOweFeeSMOImpl")
 public class ToQrPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToQrPayOweFeeSMO {
     private static final Logger logger = LoggerFactory.getLogger(ToQrPayOweFeeSMOImpl.class);
 
