@@ -46,7 +46,8 @@ public class PaymentController extends BaseController {
     @Autowired
     private IOweFeeToNotifySMO oweFeeToNotifySMOImpl;
 
-
+    @Autowired
+    private IToQrPayOweFeeSMO toQrPayOweFeeSMOImpl;
 
     /**
      * <p>统一下单入口</p>
@@ -173,6 +174,26 @@ public class PaymentController extends BaseController {
         return rentingToNotifySMOImpl.toNotify(postInfo, request);
 
 
+    }
+
+    /**
+     * <p>出租统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/toQrOweFeePay", method = RequestMethod.POST)
+    public ResponseEntity<String> toQrOweFeePay(@RequestBody String postInfo, HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        String appId = request.getHeader("APP_ID");
+        if (StringUtil.isEmpty(appId)) {
+            appId = request.getHeader("APP-ID");
+        }
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                appId);
+        return toQrPayOweFeeSMOImpl.toPay(newPd);
     }
 
 }
