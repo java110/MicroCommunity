@@ -29,6 +29,9 @@ public class PaymentController extends BaseController {
     private IToPaySMO toPaySMOImpl;
 
     @Autowired
+    private IToPayOweFeeSMO toPayOweFeeSMOImpl;
+
+    @Autowired
     private IRentingToPaySMO rentingToPaySMOImpl;
 
     @Autowired
@@ -61,6 +64,27 @@ public class PaymentController extends BaseController {
                 "", "", "", pd.getSessionId(),
                 appId);
         return toPaySMOImpl.toPay(newPd);
+    }
+
+    /**
+     * <p>统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/toOweFeePay", method = RequestMethod.POST)
+    public ResponseEntity<String> toOweFeePay(@RequestBody String postInfo, HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        String appId = request.getHeader("APP_ID");
+        if (StringUtil.isEmpty(appId)) {
+            appId = request.getHeader("APP-ID");
+        }
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                appId);
+        return toPayOweFeeSMOImpl.toPay(newPd);
     }
 
     /**
@@ -120,6 +144,25 @@ public class PaymentController extends BaseController {
         return rentingToPaySMOImpl.toPay(newPd);
     }
 
+    /**
+     * <p>出租统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/oweFeeToPay", method = RequestMethod.POST)
+    public ResponseEntity<String> oweFeeToPay(@RequestBody String postInfo, HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        String appId = request.getHeader("APP_ID");
+        if (StringUtil.isEmpty(appId)) {
+            appId = request.getHeader("APP-ID");
+        }
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                appId);
+        return rentingToPaySMOImpl.toPay(newPd);
+    }
     /**
      * <p>支付回调Api</p>
      *

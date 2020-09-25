@@ -583,6 +583,9 @@ public class ServiceCodeConstant {
     //租赁服务费
     public static final String SERVICE_CODE_RENTING_PAY_CONFIRM_PRE = "fee.rentingPayFeeConfirm";
 
+    //欠费
+    public static final String SERVICE_CODE_OWE_FEE_PAY_CONFIRM_PRE = "fee.oweFeePayFeeConfirm";
+
 
     //查询停车位
     public static final String SERVICE_CODE_QUERY_PARKING_SPACE = "parkingSpace.queryParkingSpaces";
