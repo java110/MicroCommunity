@@ -43,6 +43,9 @@ public class PaymentController extends BaseController {
     @Autowired
     private IRentingToNotifySMO rentingToNotifySMOImpl;
 
+    @Autowired
+    private IOweFeeToNotifySMO oweFeeToNotifySMOImpl;
+
 
 
     /**
@@ -150,18 +153,11 @@ public class PaymentController extends BaseController {
      * @param request
      * @throws Exception
      */
-    @RequestMapping(path = "/oweFeeToPay", method = RequestMethod.POST)
-    public ResponseEntity<String> oweFeeToPay(@RequestBody String postInfo, HttpServletRequest request) {
-        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-        String appId = request.getHeader("APP_ID");
-        if (StringUtil.isEmpty(appId)) {
-            appId = request.getHeader("APP-ID");
-        }
+    @RequestMapping(path = "/oweFeeNotify", method = RequestMethod.POST)
+    public ResponseEntity<String> oweFeeNotify(@RequestBody String postInfo, HttpServletRequest request) {
+        logger.debug("微信支付回调报文" + postInfo);
 
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
-                "", "", "", pd.getSessionId(),
-                appId);
-        return rentingToPaySMOImpl.toPay(newPd);
+        return oweFeeToNotifySMOImpl.toNotify(postInfo,request);
     }
     /**
      * <p>支付回调Api</p>
