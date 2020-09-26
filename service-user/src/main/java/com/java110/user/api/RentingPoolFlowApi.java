@@ -104,11 +104,15 @@ public class RentingPoolFlowApi {
      */
     @RequestMapping(value = "/queryRentingPoolFlow", method = RequestMethod.GET)
     public ResponseEntity<String> queryRentingPoolFlow(@RequestParam(value = "communityId") String communityId,
+                                                       @RequestParam(value = "rentingId") String rentingId,
+                                                       @RequestParam(value = "state", required = false) String state,
                                                        @RequestParam(value = "page") int page,
                                                        @RequestParam(value = "row") int row) {
         RentingPoolFlowDto rentingPoolFlowDto = new RentingPoolFlowDto();
         rentingPoolFlowDto.setPage(page);
         rentingPoolFlowDto.setRow(row);
+        rentingPoolFlowDto.setRentingId(rentingId);
+        rentingPoolFlowDto.setState(state);
         rentingPoolFlowDto.setCommunityId(communityId);
         return getRentingPoolFlowBMOImpl.get(rentingPoolFlowDto);
     }

@@ -98,144 +98,155 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
         RentingPoolDto rentingPoolDto = BeanConvertUtil.covertBean(paramObj, RentingPoolDto.class);
 
         JSONArray businesses = new JSONArray();
-
+        BigDecimal serviceDec = null;
+        BigDecimal payMoney = null;
+        double receivableAmount = 0.0;
+        PayFeeDetailPo payFeeDetailPo = null;
+        CommunityMemberDto communityMemberDto = null;
+        List<CommunityMemberDto> communityMemberDtos = null;
+        PayFeePo payFeePo = null;
         //物业 收取费用
         double propertyRate = Double.parseDouble(rentingPoolDto.getPropertySeparateRate());
-        BigDecimal serviceDec = new BigDecimal(propertyRate);
-        BigDecimal payMoney = new BigDecimal(money);
-        double receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
-        payFeeDetailPo.setDetailId("-1");
-        payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
-        payFeeDetailPo.setPrimeRate("1.0");
-        payFeeDetailPo.setCycles("1");
-        payFeeDetailPo.setReceivableAmount(receivableAmount + "");
-        payFeeDetailPo.setReceivedAmount(receivableAmount + "");
-        payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
-        //添加单元信息
-        businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
+        if (propertyRate > 0) {
+            serviceDec = new BigDecimal(propertyRate);
+            payMoney = new BigDecimal(money);
+            receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            payFeeDetailPo = new PayFeeDetailPo();
+            payFeeDetailPo.setDetailId("-1");
+            payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+            payFeeDetailPo.setPrimeRate("1.0");
+            payFeeDetailPo.setCycles("1");
+            payFeeDetailPo.setReceivableAmount(receivableAmount + "");
+            payFeeDetailPo.setReceivedAmount(receivableAmount + "");
+            payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
+            //添加单元信息
+            businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
 
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
-        communityMemberDto.setMemberTypeCd("390001200002");//查询物业
-        communityMemberDto.setAuditStatusCd(CommunityMemberDto.AUDIT_STATUS_NORMAL);
-        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+            communityMemberDto = new CommunityMemberDto();
+            communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
+            communityMemberDto.setMemberTypeCd("390001200002");//查询物业
+            communityMemberDto.setAuditStatusCd(CommunityMemberDto.AUDIT_STATUS_NORMAL);
+            communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
-        Assert.listOnlyOne(communityMemberDtos, "物业信息查询有误");
+            Assert.listOnlyOne(communityMemberDtos, "物业信息查询有误");
 
-        String propertyId = communityMemberDtos.get(0).getMemberId();
-        PayFeePo payFeePo = new PayFeePo();
-        payFeePo.setFeeId(payFeeDetailPo.getFeeId());
-        payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
-        payFeePo.setIncomeObjId(propertyId);
-        payFeePo.setCommunityId(rentingPoolDto.getCommunityId());
-        payFeePo.setUserId("-1");
-        payFeePo.setPayerObjId(rentingPoolDto.getRentingId());
-        payFeePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeePo.setFeeTypeCd(FeeConfigDto.FEE_TYPE_CD_SYSTEM);
-        payFeePo.setAmount(receivableAmount + "");
-        payFeePo.setState(FeeDto.STATE_FINISH);
-        payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
-        payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
-        businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
-
+            String propertyId = communityMemberDtos.get(0).getMemberId();
+            payFeePo = new PayFeePo();
+            payFeePo.setFeeId(payFeeDetailPo.getFeeId());
+            payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
+            payFeePo.setIncomeObjId(propertyId);
+            payFeePo.setCommunityId(rentingPoolDto.getCommunityId());
+            payFeePo.setUserId("-1");
+            payFeePo.setPayerObjId(rentingPoolDto.getRentingId());
+            payFeePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeePo.setFeeTypeCd(FeeConfigDto.FEE_TYPE_CD_SYSTEM);
+            payFeePo.setAmount(receivableAmount + "");
+            payFeePo.setState(FeeDto.STATE_FINISH);
+            payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
+            payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
+            businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
+        }
 
         //代理商分成
         //物业 收取费用
         double proxyRate = Double.parseDouble(rentingPoolDto.getProxySeparateRate());
-        serviceDec = new BigDecimal(proxyRate);
-        payMoney = new BigDecimal(money);
-        receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        payFeeDetailPo = new PayFeeDetailPo();
-        payFeeDetailPo.setDetailId("-2");
-        payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
-        payFeeDetailPo.setPrimeRate("1.0");
-        payFeeDetailPo.setCycles("1");
-        payFeeDetailPo.setReceivableAmount(receivableAmount + "");
-        payFeeDetailPo.setReceivedAmount(receivableAmount + "");
-        payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
-        //添加单元信息
-        businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
+        if (proxyRate > 0) {
+            serviceDec = new BigDecimal(proxyRate);
+            payMoney = new BigDecimal(money);
+            receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            payFeeDetailPo = new PayFeeDetailPo();
+            payFeeDetailPo.setDetailId("-2");
+            payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+            payFeeDetailPo.setPrimeRate("1.0");
+            payFeeDetailPo.setCycles("1");
+            payFeeDetailPo.setReceivableAmount(receivableAmount + "");
+            payFeeDetailPo.setReceivedAmount(receivableAmount + "");
+            payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
+            //添加单元信息
+            businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
 
-        communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
-        communityMemberDto.setMemberTypeCd("390001200003");//查询代理商
-        communityMemberDto.setAuditStatusCd(CommunityMemberDto.AUDIT_STATUS_NORMAL);
-        communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+            communityMemberDto = new CommunityMemberDto();
+            communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
+            communityMemberDto.setMemberTypeCd("390001200003");//查询代理商
+            communityMemberDto.setAuditStatusCd(CommunityMemberDto.AUDIT_STATUS_NORMAL);
+            communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
-        Assert.listOnlyOne(communityMemberDtos, "代理商信息查询有误");
+            Assert.listOnlyOne(communityMemberDtos, "代理商信息查询有误");
 
-        String proxyId = communityMemberDtos.get(0).getMemberId();
-        payFeePo = new PayFeePo();
-        payFeePo.setFeeId(payFeeDetailPo.getFeeId());
-        payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
-        payFeePo.setIncomeObjId(proxyId);
-        payFeePo.setCommunityId(rentingPoolDto.getCommunityId());
-        payFeePo.setUserId("-1");
-        payFeePo.setPayerObjId(rentingPoolDto.getRentingId());
-        payFeePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeePo.setFeeTypeCd(FeeConfigDto.FEE_TYPE_CD_SYSTEM);
-        payFeePo.setAmount(receivableAmount + "");
-        payFeePo.setState(FeeDto.STATE_FINISH);
-        payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
-        payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
-        businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
-
+            String proxyId = communityMemberDtos.get(0).getMemberId();
+            payFeePo = new PayFeePo();
+            payFeePo.setFeeId(payFeeDetailPo.getFeeId());
+            payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
+            payFeePo.setIncomeObjId(proxyId);
+            payFeePo.setCommunityId(rentingPoolDto.getCommunityId());
+            payFeePo.setUserId("-1");
+            payFeePo.setPayerObjId(rentingPoolDto.getRentingId());
+            payFeePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeePo.setFeeTypeCd(FeeConfigDto.FEE_TYPE_CD_SYSTEM);
+            payFeePo.setAmount(receivableAmount + "");
+            payFeePo.setState(FeeDto.STATE_FINISH);
+            payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
+            payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
+            businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
+        }
         //运营分成
         //物业 收取费用
         double adminRate = Double.parseDouble(rentingPoolDto.getAdminSeparateRate());
-        serviceDec = new BigDecimal(adminRate);
-        payMoney = new BigDecimal(money);
-        receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        payFeeDetailPo = new PayFeeDetailPo();
-        payFeeDetailPo.setDetailId("-3");
-        payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
-        payFeeDetailPo.setPrimeRate("1.0");
-        payFeeDetailPo.setCycles("1");
-        payFeeDetailPo.setReceivableAmount(receivableAmount + "");
-        payFeeDetailPo.setReceivedAmount(receivableAmount + "");
-        payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
-        //添加单元信息
-        businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
 
-        communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
-        communityMemberDto.setMemberTypeCd("390001200000");//查询代理商
-        communityMemberDto.setAuditStatusCd(CommunityMemberDto.AUDIT_STATUS_NORMAL);
-        communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+        if (adminRate > 0) {
+            serviceDec = new BigDecimal(adminRate);
+            payMoney = new BigDecimal(money);
+            receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            payFeeDetailPo = new PayFeeDetailPo();
+            payFeeDetailPo.setDetailId("-3");
+            payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+            payFeeDetailPo.setPrimeRate("1.0");
+            payFeeDetailPo.setCycles("1");
+            payFeeDetailPo.setReceivableAmount(receivableAmount + "");
+            payFeeDetailPo.setReceivedAmount(receivableAmount + "");
+            payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
+            //添加单元信息
+            businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
 
-        Assert.listOnlyOne(communityMemberDtos, "代理商信息查询有误");
+            communityMemberDto = new CommunityMemberDto();
+            communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
+            communityMemberDto.setMemberTypeCd("390001200000");//查询代理商
+            communityMemberDto.setAuditStatusCd(CommunityMemberDto.AUDIT_STATUS_NORMAL);
+            communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
-        String adminId = communityMemberDtos.get(0).getMemberId();
-        payFeePo = new PayFeePo();
-        payFeePo.setFeeId(payFeeDetailPo.getFeeId());
-        payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
-        payFeePo.setIncomeObjId(adminId);
-        payFeePo.setCommunityId(rentingPoolDto.getCommunityId());
-        payFeePo.setUserId("-1");
-        payFeePo.setPayerObjId(rentingPoolDto.getRentingId());
-        payFeePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeePo.setFeeTypeCd(FeeConfigDto.FEE_TYPE_CD_SYSTEM);
-        payFeePo.setAmount(receivableAmount + "");
-        payFeePo.setState(FeeDto.STATE_FINISH);
-        payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
-        payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
-        businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
+            Assert.listOnlyOne(communityMemberDtos, "代理商信息查询有误");
 
+            String adminId = communityMemberDtos.get(0).getMemberId();
+            payFeePo = new PayFeePo();
+            payFeePo.setFeeId(payFeeDetailPo.getFeeId());
+            payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
+            payFeePo.setIncomeObjId(adminId);
+            payFeePo.setCommunityId(rentingPoolDto.getCommunityId());
+            payFeePo.setUserId("-1");
+            payFeePo.setPayerObjId(rentingPoolDto.getRentingId());
+            payFeePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeePo.setFeeTypeCd(FeeConfigDto.FEE_TYPE_CD_SYSTEM);
+            payFeePo.setAmount(receivableAmount + "");
+            payFeePo.setState(FeeDto.STATE_FINISH);
+            payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
+            payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
+            businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
+        }
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
         dataFlowContext.setResponseEntity(responseEntity);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return;
         }
+
 
         RentingPoolPo rentingPoolPo = new RentingPoolPo();
         rentingPoolPo.setRentingId(rentingPoolDto.getRentingId());
