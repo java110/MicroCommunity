@@ -5,13 +5,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.contractType.ContractTypeDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.rentingPool.RentingPoolDto;
+import com.java110.dto.store.StoreDto;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.store.IContractTypeInnerServiceSMO;
+import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
+import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.store.bmo.contract.ISaveContractBMO;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +36,9 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
     @Autowired
     private IContractTypeInnerServiceSMO contractTypeInnerServiceSMOImpl;
+
+    @Autowired
+    private IRentingPoolInnerServiceSMO rentingPoolInnerServiceSMOImpl; // 房屋租赁
 
     /**
      * 添加小区信息
@@ -64,6 +73,11 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
         }
 
+        if (StoreDto.STORE_ADMIN.equals(contractPo.getStoreId())) {
+            noticeRentUpdateState(contractPo,audit);
+        }
+
+
         if (!reqJson.containsKey("contractTypeSpecs")) {
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
         }
@@ -81,6 +95,40 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
 
+    }
+
+    /**
+     * 修改 房屋租赁状态
+     *
+     * @param contractPo
+     */
+    private void noticeRentUpdateState(ContractPo contractPo,String audit) {
+
+        if (!contractPo.getObjType().equals(FeeDto.PAYER_OBJ_TYPE_ROOM)
+                || StringUtil.isEmpty(contractPo.getObjId())
+                || contractPo.getObjId().startsWith("-")) {
+            return;
+        }
+        RentingPoolDto rentingPoolDto = new RentingPoolDto();
+        rentingPoolDto.setRoomId(contractPo.getObjId());
+        rentingPoolDto.setState(RentingPoolDto.STATE_APPLY_AGREE);
+        List<RentingPoolDto> rentingPoolDtos = rentingPoolInnerServiceSMOImpl.queryRentingPools(rentingPoolDto);
+
+        if (rentingPoolDtos == null || rentingPoolDtos.size() < 1) {
+            return;
+        }
+
+
+        RentingPoolPo rentingPoolPo = new RentingPoolPo();
+        rentingPoolPo.setCommunityId(rentingPoolDtos.get(0).getCommunityId());
+        rentingPoolPo.setRentingId(rentingPoolDtos.get(0).getRentingId());
+
+        if (ContractTypeDto.NO_AUDIT.equals(audit)) {
+            rentingPoolPo.setState(RentingPoolDto.STATE_FINISH);
+        } else {
+            rentingPoolPo.setState(RentingPoolDto.STATE_ADMIN_AUDIT);
+        }
+        rentingPoolInnerServiceSMOImpl.updateRentingPool(rentingPoolPo);
     }
 
     /**
