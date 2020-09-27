@@ -29,6 +29,7 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String amount;
     private String incomeObjId;
+    private String incomeObjName;
     private String feeTypeCd;
     private Date startTime;
     private Date endTime;
@@ -497,5 +498,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setFeeAttrDtos(List<FeeAttrDto> feeAttrDtos) {
         this.feeAttrDtos = feeAttrDtos;
+    }
+
+    public String getIncomeObjName() {
+        return incomeObjName;
+    }
+
+    public void setIncomeObjName(String incomeObjName) {
+        this.incomeObjName = incomeObjName;
     }
 }
