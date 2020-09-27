@@ -19,8 +19,9 @@
     <select id="getRentingPoolFlowInfo" parameterType="Map" resultType="Map">
         select t.deal_time,t.deal_time dealTime,t.user_name,t.user_name useName,t.context,t.user_tel,t.user_tel
         userTel,t.status_cd,t.status_cd statusCd,t.state,t.user_role,t.user_role userRole,t.community_id,t.community_id
-        communityId,t.flow_id,t.flow_id flowId,t.renting_id,t.renting_id rentingId
+        communityId,t.flow_id,t.flow_id flowId,t.renting_id,t.renting_id rentingId,td.name stateName
         from renting_pool_flow t
+        left join t_dict td on td.status_cd = t.state and td.table_name =  'renting_pool_flow' and td.table_columns = 'state'
         where 1 =1
         <if test="dealTime !=null and dealTime != ''">
             and t.deal_time= #{dealTime}

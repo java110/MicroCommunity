@@ -26,6 +26,7 @@ public class RentingPoolFlowDto extends PageDto implements Serializable {
     private String context;
     private String userTel;
     private String state;
+    private String stateName;
     private String userRole;
     private String communityId;
     private String flowId;
@@ -124,5 +125,13 @@ public class RentingPoolFlowDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
