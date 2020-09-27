@@ -124,6 +124,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
             payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
             payFeePo.setPayerObjId(importRoomFee.getRoomId());
             payFeePo.setUserId(userId);
+            payFeePo.setCreateTime(importRoomFee.getCreateTime());
             payFeePos = new ArrayList<>();
             payFeePos.add(payFeePo);
             feeInnerServiceSMOImpl.saveFee(payFeePos);
@@ -166,6 +167,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         payFeeDetailPo.setEndTime(importRoomFee.getEndTime());
         payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         payFeeDetailPo.setRemark(importRoomFee.getRemark());
+        payFeeDetailPo.setCreateTime(importRoomFee.getCreateTime());
         int saved = feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
 
         if (saved < 1) {

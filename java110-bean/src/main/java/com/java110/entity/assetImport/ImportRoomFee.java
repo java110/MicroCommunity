@@ -17,6 +17,8 @@ public class ImportRoomFee {
 
     private String endTime;
 
+    private String createTime;
+
     private String amount;
 
     private String roomId;
@@ -113,5 +115,13 @@ public class ImportRoomFee {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

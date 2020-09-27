@@ -169,14 +169,17 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
             Assert.hasValue(os[4], (osIndex + 1) + "行缴费周期不能为空");
             Assert.hasValue(os[5], (osIndex + 1) + "行开始时间不能为空");
             Assert.hasValue(os[6], (osIndex + 1) + "行结束时间不能为空");
-            Assert.hasValue(os[7], (osIndex + 1) + "行缴费金额不能为空");
+            Assert.hasValue(os[7], (osIndex + 1) + "行缴费时间不能为空");
+            Assert.hasValue(os[8], (osIndex + 1) + "行缴费金额不能为空");
 
 //
 
             String startTime = excelDoubleToDate(os[5].toString());
             String endTime = excelDoubleToDate(os[6].toString());
+            String createTime = excelDoubleToDate(os[7].toString());
             Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
             Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
+            Assert.isDate(createTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
 
 
             importRoomFee = new ImportRoomFee();
@@ -187,8 +190,9 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
             importRoomFee.setCycle(os[4].toString());
             importRoomFee.setStartTime(startTime);
             importRoomFee.setEndTime(endTime);
-            importRoomFee.setAmount(os[7].toString());
-            importRoomFee.setRemark(!StringUtil.isNullOrNone(os[8]) ? os[8].toString() : "");
+            importRoomFee.setCreateTime(createTime);
+            importRoomFee.setAmount(os[8].toString());
+            importRoomFee.setRemark(!StringUtil.isNullOrNone(os[9]) ? os[9].toString() : "");
             rooms.add(importRoomFee);
         }
     }
