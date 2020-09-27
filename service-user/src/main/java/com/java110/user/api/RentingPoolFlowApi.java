@@ -98,7 +98,7 @@ public class RentingPoolFlowApi {
      * 微信删除消息模板
      *
      * @param communityId 小区ID
-     * @return
+     * @returnaddOwner
      * @serviceCode /rentingPoolFlow/queryRentingPoolFlow
      * @path /app/rentingPoolFlow/queryRentingPoolFlow
      */
