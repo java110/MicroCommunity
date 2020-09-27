@@ -185,7 +185,7 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
-            and pfc.community_id= #{communityId}
+            and pfc.community_id in (#{communityId},'9999')
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
