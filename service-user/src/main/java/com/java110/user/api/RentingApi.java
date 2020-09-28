@@ -169,6 +169,7 @@ public class RentingApi {
         Assert.hasKeyAndValue(reqJson, "rentingTitle", "请求报文中未包含rentingTitle");
         Assert.hasKeyAndValue(reqJson, "roomId", "请求报文中未包含roomId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "communityName", "请求报文中未包含communityName");
         Assert.hasKeyAndValue(reqJson, "price", "请求报文中未包含price");
         Assert.hasKeyAndValue(reqJson, "paymentType", "请求报文中未包含paymentType");
         Assert.hasKeyAndValue(reqJson, "checkIn", "请求报文中未包含checkIn");
@@ -237,6 +238,7 @@ public class RentingApi {
      */
     @RequestMapping(value = "/queryRentingPool", method = RequestMethod.GET)
     public ResponseEntity<String> queryRentingPool(@RequestParam(value = "communityId", required = false) String communityId,
+                                                   @RequestParam(value = "communityName", required = false) String communityName,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row,
                                                    @RequestParam(value = "state", required = false) String state,
@@ -247,6 +249,7 @@ public class RentingApi {
         rentingPoolDto.setPage(page);
         rentingPoolDto.setRow(row);
         rentingPoolDto.setCommunityId(communityId);
+        rentingPoolDto.setCommunityName(communityName);
         rentingPoolDto.setRentingId(rentingId);
         rentingPoolDto.setRentingType(rentingType);
         if (!StringUtils.isEmpty(state) && state.contains(",")) {

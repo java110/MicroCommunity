@@ -36,6 +36,9 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private String rentingId;
     private String roomId;
     private String roomName;
+    private String builtUpArea;
+    private String section;
+
     private String paymentType;
     private String paymentTypeName;
     private String ownerName;
@@ -44,6 +47,7 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private String stateName;
     private String[] states;
     private String communityId;
+    private String communityName;
     private String longitude;
 
     private String rentingType;
@@ -285,5 +289,29 @@ public class RentingPoolDto extends PageDto implements Serializable {
 
     public void setRentingFormula(String rentingFormula) {
         this.rentingFormula = rentingFormula;
+    }
+
+    public String getBuiltUpArea() {
+        return builtUpArea;
+    }
+
+    public void setBuiltUpArea(String builtUpArea) {
+        this.builtUpArea = builtUpArea;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

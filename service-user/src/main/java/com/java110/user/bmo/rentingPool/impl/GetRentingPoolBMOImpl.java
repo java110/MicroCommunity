@@ -2,6 +2,7 @@ package com.java110.user.bmo.rentingPool.impl;
 
 import com.java110.dto.RoomDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.user.bmo.rentingPool.IGetRentingPoolBMO;
@@ -22,6 +23,7 @@ public class GetRentingPoolBMOImpl implements IGetRentingPoolBMO {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
 
     /**
      * @param rentingPoolDto
@@ -52,7 +54,6 @@ public class GetRentingPoolBMOImpl implements IGetRentingPoolBMO {
     private void refreshRoomInfo(List<RentingPoolDto> rentingPoolDtos) {
         List<String> roomIds = new ArrayList<>();
 
-
         for (RentingPoolDto rentingPoolDto : rentingPoolDtos) {
             roomIds.add(rentingPoolDto.getRoomId());
         }
@@ -68,6 +69,8 @@ public class GetRentingPoolBMOImpl implements IGetRentingPoolBMO {
             for (RentingPoolDto rentingPoolDto : rentingPoolDtos) {
                 if (tmpRoomDto.getRoomId().equals(rentingPoolDto.getRoomId())) {
                     rentingPoolDto.setRoomName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
+                    rentingPoolDto.setBuiltUpArea(tmpRoomDto.getBuiltUpArea());
+                    rentingPoolDto.setSection(tmpRoomDto.getSection());
                 }
             }
         }

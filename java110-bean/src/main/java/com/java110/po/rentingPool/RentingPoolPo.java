@@ -18,6 +18,7 @@ public class RentingPoolPo implements Serializable {
     private String price;
     private String state;
     private String communityId;
+    private String communityName;
     private String longitude;
 
     public String getLatitude() {
@@ -140,5 +141,11 @@ public class RentingPoolPo implements Serializable {
         this.longitude = longitude;
     }
 
+    public String getCommunityName() {
+        return communityName;
+    }
 
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
 }
