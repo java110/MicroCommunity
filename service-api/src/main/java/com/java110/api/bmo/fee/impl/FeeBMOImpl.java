@@ -141,34 +141,29 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         int hours = 0;
         Date targetEndTime = null;
+        BigDecimal cycles = null;
+        BigDecimal feePrice = new BigDecimal(computeFeeSMOImpl.getFeePrice(feeDto));
         if ("-101".equals(paramInJson.getString("cycles"))) {
             Date endTime = feeDto.getEndTime();
             Calendar endCalender = Calendar.getInstance();
             endCalender.setTime(endTime);
-            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
-            endCalender.add(Calendar.HOUR, hours);
-            targetEndTime = endCalender.getTime();
-        } else {
-            targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));
-        }
-        businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
-        paramInJson.put("feeInfo", feeDto);
-
-        BigDecimal feePrice = new BigDecimal(computeFeeSMOImpl.getFeePrice(feeDto));
-
-        BigDecimal cycles = null;
-        //BigDecimal receivableAmount = feePrice;
-        if ("-101".equals(paramInJson.getString("cycles"))) {//自定义缴费
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_EVEN);
-            paramInJson.put("tmpCycles", cycles);
+            hours = new Double(cycles.doubleValue() * DateUtil.getCurrentMonthDay() * 24).intValue();
+            endCalender.add(Calendar.HOUR, hours);
+            targetEndTime = endCalender.getTime();
+            paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
             businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
         } else {
+            targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));
             cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
             double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
         }
+
+        businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
+        paramInJson.put("feeInfo", feeDto);
 
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
 
