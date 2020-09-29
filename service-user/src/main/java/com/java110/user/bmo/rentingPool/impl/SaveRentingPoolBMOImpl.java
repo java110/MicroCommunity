@@ -29,6 +29,7 @@ public class SaveRentingPoolBMOImpl implements ISaveRentingPoolBMO {
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
+    @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     /**
