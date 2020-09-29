@@ -169,12 +169,11 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row = sheet.createRow(rooms.size() + 2);
         cell0 = row.createCell(0);
         cell0.setCellValue("注：此《欠费统计表》交由厦门维度智临科技有限公司进行催收");
-        cs = workbook.createCellStyle();
-        cs.setWrapText(true);  //关键
-        cell0.setCellStyle(cs);
-        row.setHeight((short) (200 * 10));
 
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, dataKeyIndex);
+        sheet.addMergedRegion(region);
+
+        region = new CellRangeAddress(rooms.size() + 2, rooms.size() + 2, 0, dataKeyIndex);
         sheet.addMergedRegion(region);
     }
 
