@@ -51,13 +51,13 @@ public class SaveRentingPoolBMOImpl implements ISaveRentingPoolBMO {
         if (rentingPoolDtos != null && rentingPoolDtos.size() > 0) {
             throw new IllegalArgumentException("该房屋当前为" + rentingPoolDtos.get(0).getStateName() + ",不能再次出租");
         }
-
+        rentingPoolPo.setRentingId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rentingId));
         if (photos.size() > 0) {
             savaRentingFile(photos, rentingPoolPo);
         }
 
 
-        rentingPoolPo.setRentingId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rentingId));
+
         int flag = rentingPoolInnerServiceSMOImpl.saveRentingPool(rentingPoolPo);
 
         if (flag > 0) {
