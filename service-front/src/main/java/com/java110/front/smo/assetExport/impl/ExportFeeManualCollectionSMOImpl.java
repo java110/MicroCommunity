@@ -166,11 +166,13 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
             row.createCell(dataKeyIndex + 2).setCellValue("");
         }
 
-//        row = sheet.createRow(rooms.size() + 2);
-//        cell0 = row.createCell(0);
-//        cell0.setCellValue("注：此《欠费统计表》交由厦门维度智临科技有限公司进行催收");
+        row = sheet.createRow(rooms.size() + 2);
+        cell0 = row.createCell(0);
+        cell0.setCellValue("注：此《欠费统计表》交由厦门维度智临科技有限公司进行催收");
 
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, dataKeyIndex);
+        sheet.addMergedRegion(region);
+        region = new CellRangeAddress(rooms.size() + 2, rooms.size() + 2, 0, dataKeyIndex);
         sheet.addMergedRegion(region);
     }
 
