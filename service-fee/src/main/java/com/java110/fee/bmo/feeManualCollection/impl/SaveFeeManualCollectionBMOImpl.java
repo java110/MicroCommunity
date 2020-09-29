@@ -119,8 +119,8 @@ public class SaveFeeManualCollectionBMOImpl implements ISaveFeeManualCollectionB
         List<FeeManualCollectionDto> feeManualCollectionDtos = feeManualCollectionInnerServiceSMOImpl.queryFeeManualCollections(feeManualCollectionDto);
         if (feeManualCollectionDtos == null || feeManualCollectionDtos.size() < 1) {
             feeManualCollectionPo.setOwnerId(ownerDtos.get(0).getOwnerId());
-            feeManualCollectionPo.setLink(ownerCarDtos.get(0).getLink());
-            feeManualCollectionPo.setOwnerName(ownerCarDtos.get(0).getOwnerName());
+            feeManualCollectionPo.setLink(ownerDtos.get(0).getLink());
+            feeManualCollectionPo.setOwnerName(ownerDtos.get(0).getName());
             feeManualCollectionPo.setState(FeeManualCollectionDto.STATE_COLLECTION);
             feeManualCollectionPo.setRoomArea(roomDto.getBuiltUpArea());
             feeManualCollectionPo.setRoomName(roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum());

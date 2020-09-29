@@ -2,10 +2,6 @@ package com.java110.job.task.wechat;
 
 import com.alibaba.fastjson.JSON;
 import com.java110.core.factory.WechatFactory;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
-import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
@@ -15,7 +11,13 @@ import com.java110.dto.task.TaskDto;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.WechatConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +146,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
 
         String url = sendMsgUrl + accessToken;
+        String oweUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.OWE_FEE_PAGE);
         for (BillOweFeeDto fee : billOweFeeDtos) {
             for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
                 if (fee.getOwnerId().equals(appUserDto.getMemberId())) {
@@ -161,6 +164,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     data.setKeyword2(new Content(year + "年-" + month + "月"));
                     data.setKeyword3(new Content(fee.getAmountOwed()));
                     data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
+                    templateMessage.setUrl(oweUrl + fee.getPayObjId());
                     templateMessage.setData(data);
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

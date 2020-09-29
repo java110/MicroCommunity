@@ -28,6 +28,8 @@ public class WechatConstant {
 
     public static final String NO_BIND_OWNER_RESPONSE_MESSAGE = "亲，您还没有绑定业主请先<a href=\"https://owner.demo.winqi.cn/#/pages/login/login\">绑定</a>";
 
+    public static final String OWE_FEE_PAGE = "OWE_FEE_PAGE";
+
 
     public static final String MSG_TYPE_TEXT = "text";
     public static final String MSG_TYPE_LOCATION = "location";
