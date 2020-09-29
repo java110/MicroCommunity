@@ -32,7 +32,7 @@ public interface IFileRelInnerServiceSMO {
     List<FileRelDto> queryFileRels(@RequestBody FileRelDto fileRelDto);
 
 
-    @RequestMapping(value = "/queryFileRels", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveFileRel", method = RequestMethod.POST)
     public int saveFileRel(@RequestBody FileRelPo fileRelPo);
 
     /**
