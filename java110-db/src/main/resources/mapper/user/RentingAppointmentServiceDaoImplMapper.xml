@@ -19,7 +19,7 @@
 
     <!-- 查询租赁预约信息 add by wuxw 2018-07-03 -->
     <select id="getRentingAppointmentInfo" parameterType="Map" resultType="Map">
-        select t.msg,t.tenant_tel,t.tenant_tel tenantTel,t.tenant_name,t.tenant_name
+        select DISTINCT t.msg,t.tenant_tel,t.tenant_tel tenantTel,t.tenant_name,t.tenant_name
         tenantName,t.appointment_time,t.appointment_time appointmentTime,t.appointment_room_id,t.appointment_room_id
         appointmentRoomId,t.appointment_id,t.appointment_id appointmentId,t.remark,t.status_cd,t.status_cd
         statusCd,t.state,t.tenant_sex,t.tenant_sex tenantSex,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,
