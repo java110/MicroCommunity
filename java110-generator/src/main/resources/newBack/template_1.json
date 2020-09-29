@@ -1,20 +1,18 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "feeManualCollectionDetail",
-  "desc": "托收明细",
+  "id": "auditId",
+  "name": "payFeeAudit",
+  "desc": "缴费审核",
   "shareParam": "communityId",
   "shareColumn": "community_id",
   "shareName": "fee",
-  "tableName": "fee_manual_collection_detail",
+  "tableName": "pay_fee_audit",
   "param": {
-    "collectionId": "collection_id",
-    "detailId": "detail_id",
     "feeId": "fee_id",
-    "feeName": "fee_name",
-    "startTime": "start_time",
-    "endTime": "end_time",
-    "amount": "amount",
+    "feeDetailId": "fee_detail_id",
+    "message": "message",
+    "auditUserId": "audit_user_id",
+    "auditUserName": "audit_user_name",
     "communityId": "community_id",
     "state": "state",
     "statusCd": "status_cd"
@@ -25,24 +23,20 @@
       "msg": "小区不能为空"
     },
     {
-      "code": "collectionId",
-      "msg": "托收不能为空"
-    },
-    {
       "code": "feeId",
       "msg": "费用不能为空"
     },
     {
-      "code": "startTime",
-      "msg": "开始时间不能为空"
+      "code": "auditUserId",
+      "msg": "审核人不能为空"
     },
     {
-      "code": "endTime",
-      "msg": "结束时间不能为空"
+      "code": "auditUserName",
+      "msg": "审核人不能为空"
     },
     {
-      "code": "amount",
-      "msg": "金额不能为空"
+      "code": "state",
+      "msg": "审核状态不能为空"
     }
   ]
 }

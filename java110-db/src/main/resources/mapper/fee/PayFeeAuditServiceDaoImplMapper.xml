@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="payFeeAuditServiceDaoImpl">
+
+
+    <!-- 保存缴费审核信息 add by wuxw 2018-07-03 -->
+    <insert id="savePayFeeAuditInfo" parameterType="Map">
+        insert into pay_fee_audit(
+        audit_user_id,audit_user_name,fee_detail_id,state,message,community_id,fee_id,audit_id
+        ) values (
+        #{auditUserId},#{auditUserName},#{feeDetailId},#{state},#{message},#{communityId},#{feeId},#{auditId}
+        )
+    </insert>
+
+
+    <!-- 查询缴费审核信息 add by wuxw 2018-07-03 -->
+    <select id="getPayFeeAuditInfo" parameterType="Map" resultType="Map">
+        select t.audit_user_id,t.audit_user_id auditUserId,t.audit_user_name,t.audit_user_name
+        auditUserName,t.fee_detail_id,t.fee_detail_id feeDetailId,t.status_cd,t.status_cd
+        statusCd,t.state,t.message,t.community_id,t.community_id communityId,t.fee_id,t.fee_id feeId,
+        t.audit_id auditId
+        from pay_fee_audit t
+        where 1 =1
+        <if test="auditUserId !=null and auditUserId != ''">
+            and t.audit_user_id= #{auditUserId}
+        </if>
+        <if test="auditUserName !=null and auditUserName != ''">
+            and t.audit_user_name= #{auditUserName}
+        </if>
+        <if test="feeDetailId !=null and feeDetailId != ''">
+            and t.fee_detail_id= #{feeDetailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="auditId !=null and auditId != ''">
+            and t.audit_id= #{auditId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改缴费审核信息 add by wuxw 2018-07-03 -->
+    <update id="updatePayFeeAuditInfo" parameterType="Map">
+        update pay_fee_audit t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="auditUserId !=null and auditUserId != ''">
+            , t.audit_user_id= #{auditUserId}
+        </if>
+        <if test="auditUserName !=null and auditUserName != ''">
+            , t.audit_user_name= #{auditUserName}
+        </if>
+        <if test="feeDetailId !=null and feeDetailId != ''">
+            , t.fee_detail_id= #{feeDetailId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="message !=null and message != ''">
+            , t.message= #{message}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        where 1=1
+        <if test="auditId !=null and auditId != ''">
+            and t.audit_id= #{auditId}
+        </if>
+    </update>
+
+    <!-- 查询缴费审核数量 add by wuxw 2018-07-03 -->
+    <select id="queryPayFeeAuditsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee_audit t
+        where 1 =1
+        <if test="auditUserId !=null and auditUserId != ''">
+            and t.audit_user_id= #{auditUserId}
+        </if>
+        <if test="auditUserName !=null and auditUserName != ''">
+            and t.audit_user_name= #{auditUserName}
+        </if>
+        <if test="feeDetailId !=null and feeDetailId != ''">
+            and t.fee_detail_id= #{feeDetailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="auditId !=null and auditId != ''">
+            and t.audit_id= #{auditId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -1,0 +1,49 @@
+{
+  "autoMove": true,
+  "id": "detailId",
+  "name": "feeManualCollectionDetail",
+  "desc": "托收明细",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "fee_manual_collection_detail",
+  "param": {
+    "collectionId": "collection_id",
+    "detailId": "detail_id",
+    "feeId": "fee_id",
+    "feeName": "fee_name",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "amount": "amount",
+    "communityId": "community_id",
+    "state": "state",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "collectionId",
+      "msg": "托收不能为空"
+    },
+    {
+      "code": "feeId",
+      "msg": "费用不能为空"
+    },
+    {
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
+    },
+    {
+      "code": "amount",
+      "msg": "金额不能为空"
+    }
+  ]
+}
+
