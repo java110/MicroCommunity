@@ -1,7 +1,9 @@
 package com.java110.user.bmo.rentingPool.impl;
 
 import com.java110.dto.RoomDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.user.bmo.rentingPool.IGetRentingPoolBMO;
@@ -22,6 +24,9 @@ public class GetRentingPoolBMOImpl implements IGetRentingPoolBMO {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
 
     /**
@@ -53,8 +58,11 @@ public class GetRentingPoolBMOImpl implements IGetRentingPoolBMO {
     private void refreshRoomInfo(List<RentingPoolDto> rentingPoolDtos) {
         List<String> roomIds = new ArrayList<>();
 
+        List<String> rentingIds = new ArrayList<>();
+
         for (RentingPoolDto rentingPoolDto : rentingPoolDtos) {
             roomIds.add(rentingPoolDto.getRoomId());
+            rentingIds.add(rentingPoolDto.getRentingId());
         }
 
         RoomDto roomDto = new RoomDto();
@@ -74,6 +82,24 @@ public class GetRentingPoolBMOImpl implements IGetRentingPoolBMO {
             }
         }
 
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjIds(rentingIds.toArray(new String[rentingIds.size()]));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        //刷入图片信息
+        List<String> photoVos = null;
+        String url = null;
+        for (RentingPoolDto rentingPoolDto : rentingPoolDtos) {
+            photoVos = new ArrayList<>();
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                if (rentingPoolDto.getRentingId().equals(tmpFileRelDto.getObjId())){
+                    url = "/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + rentingPoolDto.getCommunityId();
+                    photoVos.add(url);
+                }
+            }
+            rentingPoolDto.setPhotos(photoVos);
+        }
     }
 
 }

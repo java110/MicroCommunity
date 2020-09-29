@@ -1,5 +1,6 @@
 package com.java110.user.bmo.rentingPool;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.po.rentingPool.RentingPoolPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveRentingPoolBMO {
@@ -11,7 +12,7 @@ public interface ISaveRentingPoolBMO {
      * @param rentingPoolPo
      * @return
      */
-    ResponseEntity<String> save(RentingPoolPo rentingPoolPo);
+    ResponseEntity<String> save(RentingPoolPo rentingPoolPo, JSONArray photos);
 
 
 }

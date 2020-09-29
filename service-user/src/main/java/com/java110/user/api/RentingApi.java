@@ -1,5 +1,6 @@
 package com.java110.user.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -176,10 +177,16 @@ public class RentingApi {
         Assert.hasKeyAndValue(reqJson, "rentingConfigId", "请求报文中未包含rentingConfigId");
         Assert.hasKeyAndValue(reqJson, "ownerName", "请求报文中未包含ownerName");
         Assert.hasKeyAndValue(reqJson, "ownerTel", "请求报文中未包含ownerTel");
+        JSONArray photos = null;
+        if (reqJson.containsKey("photos")) {
+            photos = reqJson.getJSONArray("photos");
+        }else{
+            photos = new JSONArray();
+        }
 
 
         RentingPoolPo rentingPoolPo = BeanConvertUtil.covertBean(reqJson, RentingPoolPo.class);
-        return saveRentingPoolBMOImpl.save(rentingPoolPo);
+        return saveRentingPoolBMOImpl.save(rentingPoolPo,photos);
     }
 
     /**

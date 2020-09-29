@@ -17,6 +17,8 @@ public class FileRelDto extends PageDto implements Serializable {
 
 
     public static final String REL_TYPE_CD_REPAIR = "14000";//报修图片
+    public static final String REL_TYPE_CD_RENTING = "16000";//租赁图片
+    public static final String SAVE_WAY_FTP = "ftp";//租赁图片
 
     private String relTypeCd;
     private String[] relTypeCds;
@@ -24,6 +26,7 @@ public class FileRelDto extends PageDto implements Serializable {
     private String fileRelId;
     private String fileRealName;
     private String objId;
+    private String[] objIds;
     private String fileSaveName;
 
 
@@ -103,5 +106,13 @@ public class FileRelDto extends PageDto implements Serializable {
 
     public void setRelTypeCds(String[] relTypeCds) {
         this.relTypeCds = relTypeCds;
+    }
+
+    public String[] getObjIds() {
+        return objIds;
+    }
+
+    public void setObjIds(String[] objIds) {
+        this.objIds = objIds;
     }
 }

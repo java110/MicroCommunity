@@ -2,6 +2,7 @@ package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.file.FileRelDto;
+import com.java110.po.file.FileRelPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,10 @@ public interface IFileRelInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFileRels", method = RequestMethod.POST)
     List<FileRelDto> queryFileRels(@RequestBody FileRelDto fileRelDto);
+
+
+    @RequestMapping(value = "/queryFileRels", method = RequestMethod.POST)
+    public int saveFileRel(@RequestBody FileRelPo fileRelPo);
 
     /**
      * 查询<p>小区楼</p>总记录数

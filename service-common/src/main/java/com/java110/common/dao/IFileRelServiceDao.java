@@ -1,6 +1,7 @@
 package com.java110.common.dao;
 
 
+import com.java110.po.file.FileRelPo;
 import com.java110.utils.exception.DAOException;
 import com.java110.entity.merchant.BoMerchant;
 import com.java110.entity.merchant.BoMerchantAttr;
@@ -47,6 +48,14 @@ public interface IFileRelServiceDao {
      * @throws DAOException DAO异常
      */
     void saveFileRelInfoInstance(Map info) throws DAOException;
+
+
+    /**
+     * 保存文件管理
+     * @param info
+     * @return
+     */
+    int saveFileRel(Map info);
 
 
 

@@ -1,9 +1,11 @@
 package com.java110.dto.rentingPool;
 
 import com.java110.dto.PageDto;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -65,6 +67,8 @@ public class RentingPoolDto extends PageDto implements Serializable {
     private String propertySeparateRate;
     private String servicePrice;
     private String rentingFormula;
+
+    List<String> photos;
 
 
     public String getLatitude() {
@@ -322,5 +326,13 @@ public class RentingPoolDto extends PageDto implements Serializable {
 
     public void setApartmentName(String apartmentName) {
         this.apartmentName = apartmentName;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
     }
 }
