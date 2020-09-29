@@ -10,6 +10,8 @@ import com.java110.po.feeManualCollectionDetail.FeeManualCollectionDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -67,6 +69,17 @@ public class FeeManualCollectionDetailInnerServiceSMOImpl extends BaseServiceSMO
         return feeManualCollectionDetails;
     }
 
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param feeManualCollectionDetailDto 数据对象分享
+     * @return FeeManualCollectionDetailDto 对象数据
+     */
+    public double queryFeeManualCollectionDetailTotalFee(@RequestBody FeeManualCollectionDetailDto feeManualCollectionDetailDto){
+        return feeManualCollectionDetailServiceDaoImpl.queryFeeManualCollectionDetailTotalFee(BeanConvertUtil.beanCovertMap(feeManualCollectionDetailDto));
+    }
 
     @Override
     public int queryFeeManualCollectionDetailsCount(@RequestBody FeeManualCollectionDetailDto feeManualCollectionDetailDto) {

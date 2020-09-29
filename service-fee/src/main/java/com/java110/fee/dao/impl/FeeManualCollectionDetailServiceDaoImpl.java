@@ -95,4 +95,22 @@ public class FeeManualCollectionDetailServiceDaoImpl extends BaseServiceDao impl
     }
 
 
+
+    /**
+     * 查询托收明细数量
+     * @param info 托收明细信息
+     * @return 托收明细数量
+     */
+    @Override
+    public double queryFeeManualCollectionDetailTotalFee(Map info) {
+        logger.debug("查询托收明细数据 入参 info : {}",info);
+
+        List<Map> businessFeeManualCollectionDetailInfos = sqlSessionTemplate.selectList("feeManualCollectionDetailServiceDaoImpl.queryFeeManualCollectionDetailTotalFee", info);
+        if (businessFeeManualCollectionDetailInfos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(businessFeeManualCollectionDetailInfos.get(0).get("totalFee").toString());
+    }
+
 }

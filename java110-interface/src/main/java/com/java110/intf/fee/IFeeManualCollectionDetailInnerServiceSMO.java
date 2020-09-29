@@ -43,6 +43,16 @@ public interface IFeeManualCollectionDetailInnerServiceSMO {
     List<FeeManualCollectionDetailDto> queryFeeManualCollectionDetails(@RequestBody FeeManualCollectionDetailDto feeManualCollectionDetailDto);
 
     /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param feeManualCollectionDetailDto 数据对象分享
+     * @return FeeManualCollectionDetailDto 对象数据
+     */
+    @RequestMapping(value = "/queryFeeManualCollectionDetailTotalFee", method = RequestMethod.POST)
+    double queryFeeManualCollectionDetailTotalFee(@RequestBody FeeManualCollectionDetailDto feeManualCollectionDetailDto);
+
+    /**
      * 查询<p>小区楼</p>总记录数
      *
      * @param feeManualCollectionDetailDto 数据对象分享

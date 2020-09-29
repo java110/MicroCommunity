@@ -141,5 +141,17 @@
 
 
     </select>
+    <select id="queryFeeManualCollectionDetailTotalFee" parameterType="Map" resultType="Map">
+        select sum(t.amount) totalFee
+        from fee_manual_collection_detail t
+        where 1 =1
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+    </select>
+
 
 </mapper>

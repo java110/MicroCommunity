@@ -36,6 +36,8 @@ public class FeeManualCollectionDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String totalFee;
+
 
     public String getSquarePrice() {
         return squarePrice;
@@ -148,5 +150,13 @@ public class FeeManualCollectionDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getTotalFee() {
+        return totalFee;
+    }
+
+    public void setTotalFee(String totalFee) {
+        this.totalFee = totalFee;
     }
 }

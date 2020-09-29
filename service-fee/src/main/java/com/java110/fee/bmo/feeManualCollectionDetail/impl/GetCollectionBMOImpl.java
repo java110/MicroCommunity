@@ -9,6 +9,7 @@ import com.java110.fee.bmo.feeManualCollectionDetail.IGetExportCollectionBMO;
 import com.java110.intf.IFeeManualCollectionDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeManualCollectionInnerServiceSMO;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -101,7 +102,8 @@ public class GetCollectionBMOImpl implements IGetExportCollectionBMO {
 
             dataObj.put(feeConfigDto.getFeeName(), tmpFeeManualCollectionDetailDto.getAmount());
             dataObj.put(feeConfigDto.getFeeName() + "_起止日期",
-                    tmpFeeManualCollectionDetailDto.getStartTime() + "至" + tmpFeeManualCollectionDetailDto.getEndTime());
+                    DateUtil.dateTimeToDate(tmpFeeManualCollectionDetailDto.getStartTime())
+                            + "至" + DateUtil.dateTimeToDate(tmpFeeManualCollectionDetailDto.getEndTime()));
         }
 
         dataObj.put("应交款总额", totalFee.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());

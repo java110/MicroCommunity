@@ -414,4 +414,16 @@ public class DateUtil {
 
         return c.getTime();
     }
+
+    public static String dateTimeToDate(String dateTime) {
+        String dateStr = "";
+        try {
+            Date date = getDateFromString(dateTime, DATE_FORMATE_STRING_A);
+            dateStr = getFormatTimeString(date, DATE_FORMATE_STRING_B);
+        } catch (ParseException e) {
+            dateStr = dateTime;
+        }
+
+        return dateStr;
+    }
 }

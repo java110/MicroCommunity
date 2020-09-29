@@ -10,11 +10,7 @@ import com.java110.front.smo.assetExport.IExportFeeManualCollectionSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -30,7 +26,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -168,8 +163,16 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
                 row.createCell(dataKeyIndex).setCellValue(dataObj.getString(key));
                 dataKeyIndex++;
             }
-            row.createCell(dataKeyIndex+2).setCellValue("");
+            row.createCell(dataKeyIndex + 2).setCellValue("");
         }
+
+        row = sheet.createRow(rooms.size() + 2);
+        cell0 = row.createCell(0);
+        cell0.setCellValue("注：此《欠费统计表》交由厦门维度智临科技有限公司进行催收");
+        cs = workbook.createCellStyle();
+        cs.setWrapText(true);  //关键
+        cell0.setCellStyle(cs);
+        row.setHeight((short) (200 * 10));
 
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, dataKeyIndex);
         sheet.addMergedRegion(region);
