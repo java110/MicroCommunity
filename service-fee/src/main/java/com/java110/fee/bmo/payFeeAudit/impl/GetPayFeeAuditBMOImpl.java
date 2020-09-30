@@ -58,6 +58,10 @@ public class GetPayFeeAuditBMOImpl implements IGetPayFeeAuditBMO {
 
     private void frashRoomAndStaff(List<PayFeeAuditDto> payFeeAuditDtos) {
 
+        if (payFeeAuditDtos == null || payFeeAuditDtos.size() < 1) {
+            return;
+        }
+
         List<FeeDto> feeDtos = BeanConvertUtil.covertBeanList(payFeeAuditDtos, FeeDto.class);
         computeFeeSMOImpl.freshFeeObjName(feeDtos);
         List<String> bIds = new ArrayList<>();
