@@ -402,7 +402,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     continue;
                 }
                 if (tmpRoomDto.getRoomId().equals(feeDto.getPayerObjId())) {
-                    objName = roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室";
+                    objName = tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室";
                     feeDto.setPayerObjName(objName);
                 }
             }
