@@ -20,7 +20,7 @@
         select pf.payer_obj_id payerObjId,pf.payer_obj_type payerObjType,pfc.fee_name feeName,
         pfd.cycles,pfd.start_time startTime,pfd.end_time endTime,pfd.receivable_amount receivableAmount,
         pfd.received_amount receivedAmount,pfd.create_time createTime,pfa.state,pfa.message,pfd.remark,
-        pfa.audit_user_name auditUserName,pfd.b_id bId,pf.fee_id feeId
+        pfa.audit_user_name auditUserName,pfd.b_id bId,pf.fee_id feeId,pf.community_id communityId
         from pay_fee_detail pfd
         INNER JOIN pay_fee pf on pf.fee_id = pfd.fee_id and pf.community_id = pfd.community_id and pf.status_cd = '0'
         inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pf.community_id = pfc.community_id and pfc.status_cd = '0'
@@ -28,6 +28,7 @@
         where 1=1
         and pfd.community_id = #{communityId}
         and  pfd.status_cd = '0'
+        and pfd.state not in ('1000','1100','1200','1300')
         <if test="roomId !=null and roomId != ''">
             and pf.payer_obj_id = #{roomId}
             and pf.payer_obj_type = '3333'
