@@ -165,6 +165,12 @@
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
+        <if test="carIds !=null">
+            and t.car_id in
+            <foreach collection="carIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>

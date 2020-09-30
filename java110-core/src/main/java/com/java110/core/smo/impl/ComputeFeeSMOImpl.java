@@ -284,6 +284,131 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         return objName;
     }
 
+    @Override
+    public void freshFeeObjName(List<FeeDto> feeDtos) {
+
+        List<String> roomIds = new ArrayList<>();
+        List<String> carIds = new ArrayList<>();
+        for (FeeDto feeDto : feeDtos) {
+            if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
+                roomIds.add(feeDto.getPayerObjId());
+            } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+                carIds.add(feeDto.getPayerObjId());
+            }
+        }
+
+        // 用房屋信息刷 费用付费对象
+        freshFeeObjNameByRoomId(feeDtos, roomIds);
+
+        // 用车辆车位 刷 付费对象
+        freshFeeObjNameByCarId(feeDtos, carIds);
+
+    }
+
+    /**
+     * 刷费用
+     *
+     * @param feeDtos
+     * @param carIds
+     */
+    private void freshFeeObjNameByCarId(List<FeeDto> feeDtos, List<String> carIds) {
+
+        if (carIds.size() < 1) {
+            return;
+        }
+
+
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(feeDtos.get(0).getCommunityId());
+        ownerCarDto.setCarIds(carIds.toArray(new String[carIds.size()]));
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+            return;
+        }
+
+        List<String> psIds = new ArrayList<>();
+
+        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+            if (StringUtil.isEmpty(tmpOwnerCarDto.getPsId()) || tmpOwnerCarDto.getPsId().startsWith("-")) {
+                continue;
+            }
+            psIds.add(tmpOwnerCarDto.getPsId());
+        }
+
+        //没有车位情况下
+        if (psIds.size() < 1) {
+            for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+                for (FeeDto feeDto : feeDtos) {
+                    if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+                        continue;
+                    }
+
+                    if (feeDto.getPayerObjId().equals(tmpOwnerCarDto.getCarId())) {
+                        feeDto.setPayerObjName(tmpOwnerCarDto.getCarNum());
+                    }
+                }
+            }
+            return;
+        }
+
+
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setCommunityId(feeDtos.get(0).getCommunityId());
+        parkingSpaceDto.setPsIds(psIds.toArray(new String[psIds.size()]));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+            for (ParkingSpaceDto tmpParkingSpaceDto : parkingSpaceDtos) {
+                if (tmpParkingSpaceDto.getPsId().equals(tmpOwnerCarDto.getPsId())) {
+                    tmpOwnerCarDto.setAreaNum(tmpParkingSpaceDto.getAreaNum());
+                    tmpOwnerCarDto.setNum(tmpParkingSpaceDto.getNum());
+                }
+            }
+        }
+        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+            for (FeeDto feeDto : feeDtos) {
+                if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+                    continue;
+                }
+
+                if (feeDto.getPayerObjId().equals(tmpOwnerCarDto.getCarId())) {
+                    feeDto.setPayerObjName(tmpOwnerCarDto.getCarNum() + "(" + tmpOwnerCarDto.getAreaNum() + "停车场" + tmpOwnerCarDto.getNum() + "车位)");
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 用房屋信息刷付费方名称
+     *
+     * @param feeDtos
+     * @param roomIds
+     */
+    private void freshFeeObjNameByRoomId(List<FeeDto> feeDtos, List<String> roomIds) {
+
+        if (roomIds.size() < 1) {
+            return;
+        }
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        roomDto.setCommunityId(feeDtos.get(0).getCommunityId());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        String objName = "";
+        for (RoomDto tmpRoomDto : roomDtos) {
+            for (FeeDto feeDto : feeDtos) {
+                if (!FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
+                    continue;
+                }
+                if (tmpRoomDto.getRoomId().equals(feeDto.getPayerObjId())) {
+                    objName = roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室";
+                    feeDto.setPayerObjName(objName);
+                }
+            }
+        }
+    }
+
     /**
      * 根据周期 计算费用状态
      *

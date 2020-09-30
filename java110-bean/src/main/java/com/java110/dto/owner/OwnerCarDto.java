@@ -32,6 +32,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String ownerId;
     private String userId;
     private String carId;
+    private String[] carIds;
     private boolean withOwner =false;
     private String ownerName;
     private String idCard;
@@ -271,5 +272,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String[] getCarIds() {
+        return carIds;
+    }
+
+    public void setCarIds(String[] carIds) {
+        this.carIds = carIds;
     }
 }

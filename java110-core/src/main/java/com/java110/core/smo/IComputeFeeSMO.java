@@ -4,6 +4,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,6 +55,12 @@ public interface IComputeFeeSMO {
      * @return
      */
     public String getFeeObjName(FeeDto feeDto);
+
+    /**
+     * 刷入 付费方名称
+     * @param feeDtos
+     */
+    public void freshFeeObjName(List<FeeDto> feeDtos);
 
     /**
      * 根据缴费周期计算 结束时间

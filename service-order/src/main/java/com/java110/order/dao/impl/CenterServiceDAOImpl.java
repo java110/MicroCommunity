@@ -373,6 +373,17 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryOrderByBusinessType", info);
     }
 
+    /**
+     * 查询业主订单
+     *
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryOrderByBId(Map info) {
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryOrderByBId", info);
+    }
+
     public int updateBusinessStatusCd(Map info) {
         return sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessStatusCd", info);
     }

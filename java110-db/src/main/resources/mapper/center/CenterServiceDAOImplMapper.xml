@@ -175,6 +175,24 @@
 
         ]]>
     </select>
+    <select id="queryOrderByBId" parameterType="Map" resultType="Map">
+        select distinct co.app_id appId,co.o_id oId,co.create_time createTime,
+        co.ext_transaction_id extTransactionId,co.user_id userId,cb.b_id bId
+        from c_orders co
+        INNER JOIN c_business cb on co.o_id = cb.o_id
+        where 1=1
+        <if test="bId != null and bId != ''">
+            cb.b_id = #{bId}
+        </if>
+        <if test="bIds !=null">
+            and cb.b_id in
+            <foreach collection="bIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+    </select>
+
     <!-- 根据 OID 查询 business -->
     <select id="getBusinessByOId" parameterType="map" resultType="map">
         SELECT co.`o_id`,co.`app_id`,co.`order_type_cd`,co.`user_id`,cb.`business_type_cd`,cb.`b_id`,cb.`status_cd`

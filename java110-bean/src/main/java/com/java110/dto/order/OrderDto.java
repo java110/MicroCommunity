@@ -17,6 +17,7 @@ public class OrderDto extends PageDto implements Serializable {
     private String appId;
     private String extTransactionId;
     private String userId;
+    private String userName;
     private String requestTime;
     private String orderTypeCd;
     private String finishTime;
@@ -30,6 +31,7 @@ public class OrderDto extends PageDto implements Serializable {
     private String businessTypeCd;
 
     private String[] businessTypeCds;
+
 
 
     public String getoId() {
@@ -126,5 +128,13 @@ public class OrderDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
