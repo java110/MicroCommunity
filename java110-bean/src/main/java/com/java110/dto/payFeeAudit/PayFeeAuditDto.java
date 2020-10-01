@@ -35,6 +35,7 @@ public class PayFeeAuditDto extends PageDto implements Serializable {
     private String userId;
     private String userName;
     private String bId;
+    private String detailId;
 
 
 
@@ -218,5 +219,13 @@ public class PayFeeAuditDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(String detailId) {
+        this.detailId = detailId;
     }
 }
