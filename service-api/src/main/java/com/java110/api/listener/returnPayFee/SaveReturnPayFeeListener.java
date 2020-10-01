@@ -65,6 +65,7 @@ public class SaveReturnPayFeeListener extends AbstractServiceApiPlusListener {
 
 
         reqJson.put("configId",feeDtos.get(0).getConfigId());
+        reqJson.put("feeTypeCd",feeDtos.get(0).getFeeTypeCd());
 
         returnPayFeeBMOImpl.addReturnPayFee(reqJson, context);
         reqJson.put("state","1000");
