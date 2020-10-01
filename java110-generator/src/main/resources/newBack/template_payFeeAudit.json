@@ -1,0 +1,43 @@
+{
+  "autoMove": true,
+  "id": "auditId",
+  "name": "payFeeAudit",
+  "desc": "缴费审核",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "pay_fee_audit",
+  "param": {
+    "feeId": "fee_id",
+    "feeDetailId": "fee_detail_id",
+    "message": "message",
+    "auditUserId": "audit_user_id",
+    "auditUserName": "audit_user_name",
+    "communityId": "community_id",
+    "state": "state",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "feeId",
+      "msg": "费用不能为空"
+    },
+    {
+      "code": "auditUserId",
+      "msg": "审核人不能为空"
+    },
+    {
+      "code": "auditUserName",
+      "msg": "审核人不能为空"
+    },
+    {
+      "code": "state",
+      "msg": "审核状态不能为空"
+    }
+  ]
+}
+
