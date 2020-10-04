@@ -154,6 +154,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_receiptId = "83";
     public static final String CODE_PREFIX_auditId = "84";
     public static final String CODE_PREFIX_typeCd = "85";
+    public static final String CODE_PREFIX_docId = "86";
 
 
 

@@ -1,0 +1,38 @@
+{
+  "autoMove": false,
+  "id": "typeCd",
+  "name": "activitiesType",
+  "desc": "信息分类",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "tableName": "activities_type",
+  "param": {
+    "typeCd": "type_cd",
+    "typeName": "type_name",
+    "typeDesc": "type_desc",
+    "seq": "seq",
+    "defaultShow": "defalut_show",
+    "communityId": "community_id",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "typeName",
+      "msg": "分类不能为空"
+    },
+    {
+      "code": "seq",
+      "msg": "顺序不能为空"
+    },
+    {
+      "code": "defaultShow",
+      "msg": "显示不能为空"
+    }
+  ]
+}
+
