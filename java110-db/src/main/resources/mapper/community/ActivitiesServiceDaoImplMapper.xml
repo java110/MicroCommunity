@@ -158,9 +158,7 @@
         <if test="userName !=null and userName != ''">
             and t.user_name= #{userName}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="activitiesId !=null and activitiesId != ''">
             and t.activities_id= #{activitiesId}
         </if>
@@ -272,9 +270,6 @@
         </if>
         <if test="userName !=null and userName != ''">
             and t.user_name= #{userName}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="activitiesId !=null and activitiesId != ''">
             and t.activities_id= #{activitiesId}
