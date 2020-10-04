@@ -43,6 +43,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/loginOwnerWechatAuth,");//微信公众号对接接口
         exclusions.append("/app/refreshToken,");//微信公众号对接接口
         exclusions.append("/app/renting/queryRentingPool");//微信公众号对接接口
+        exclusions.append("/app/activitiesType/queryActivitiesType");//查询大类
 
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
