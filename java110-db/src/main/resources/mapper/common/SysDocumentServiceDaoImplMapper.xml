@@ -18,7 +18,7 @@
     <!-- 查询系统文档信息 add by wuxw 2018-07-03 -->
     <select id="getSysDocumentInfo" parameterType="Map" resultType="Map">
         select t.doc_id docId,t.doc_content,t.doc_content docContent,t.doc_code,t.doc_code docCode,t.status_cd,t.status_cd statusCd,
-        t.doc_title docTitle
+        t.doc_title docTitle,t.create_time createTime
         from sys_document t
         where 1 =1
         <if test="docContent !=null and docContent != ''">
