@@ -155,8 +155,8 @@
         <if test="readCount !=null and readCount != ''">
             and t.read_count= #{readCount}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="staffName !=null and staffName != ''">
+            and t.user_name= #{staffName}
         </if>
 
         <if test="activitiesId !=null and activitiesId != ''">
@@ -268,8 +268,8 @@
         <if test="readCount !=null and readCount != ''">
             and t.read_count= #{readCount}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="staffName !=null and staffName != ''">
+            and t.user_name= #{staffName}
         </if>
         <if test="activitiesId !=null and activitiesId != ''">
             and t.activities_id= #{activitiesId}
