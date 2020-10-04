@@ -8,6 +8,7 @@ public class SysDocumentPo implements Serializable {
     private String docId;
 
     private String docContent;
+    private String docTitle;
     private String docCode;
     private String statusCd = "0";
 
@@ -41,5 +42,13 @@ public class SysDocumentPo implements Serializable {
 
     public void setDocId(String docId) {
         this.docId = docId;
+    }
+
+    public String getDocTitle() {
+        return docTitle;
+    }
+
+    public void setDocTitle(String docTitle) {
+        this.docTitle = docTitle;
     }
 }

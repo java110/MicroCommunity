@@ -96,12 +96,16 @@ public class SysDocumentApi {
      */
     @RequestMapping(value = "/querySysDocument", method = RequestMethod.GET)
     public ResponseEntity<String> querySysDocument(@RequestParam(value = "docCode",required = false) String docCode,
+                                                   @RequestParam(value = "docTitle",required = false) String docTitle,
+                                                   @RequestParam(value = "docId",required = false) String docId,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
         SysDocumentDto sysDocumentDto = new SysDocumentDto();
         sysDocumentDto.setPage(page);
         sysDocumentDto.setRow(row);
         sysDocumentDto.setDocCode(docCode);
+        sysDocumentDto.setDocTitle(docTitle);
+        sysDocumentDto.setDocId(docId);
         return getSysDocumentBMOImpl.get(sysDocumentDto);
     }
 }

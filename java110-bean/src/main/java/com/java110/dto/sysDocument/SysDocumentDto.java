@@ -15,8 +15,11 @@ import java.util.Date;
  **/
 public class SysDocumentDto extends PageDto implements Serializable {
 
+    private String docId;
     private String docContent;
     private String docCode;
+    private String docTitle;
+
 
 
     private Date createTime;
@@ -55,5 +58,21 @@ public class SysDocumentDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getDocTitle() {
+        return docTitle;
+    }
+
+    public void setDocTitle(String docTitle) {
+        this.docTitle = docTitle;
+    }
+
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 }
