@@ -34,6 +34,7 @@ public class BillOweFeeDto extends PageDto implements Serializable {
     private String[] ownerIds;
     private String deadlineTime;
     private String payObjId;
+    private String curBill;
 
 
     public String getOweId() {
@@ -170,5 +171,13 @@ public class BillOweFeeDto extends PageDto implements Serializable {
 
     public void setPayObjId(String payObjId) {
         this.payObjId = payObjId;
+    }
+
+    public String getCurBill() {
+        return curBill;
+    }
+
+    public void setCurBill(String curBill) {
+        this.curBill = curBill;
     }
 }

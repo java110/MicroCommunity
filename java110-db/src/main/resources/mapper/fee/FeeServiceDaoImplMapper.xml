@@ -466,7 +466,9 @@
         t.deadline_time deadlineTime,
         pf.payer_obj_id payObjId
         from bill_owe_fee t
-        inner join bill b on t.bill_id = b.bill_id and b.community_id = t.community_id and b.cur_bill = 'T'
+        <if test="curBill !=null and curBill != ''">
+        inner join bill b on t.bill_id = b.bill_id and b.community_id = t.community_id and b.cur_bill = #{curBill}
+        </if>
         left join pay_fee pf on t.fee_id = pf.fee_id and t.community_id = pf.community_id and pf.status_cd = '0'
         where 1 =1
         <if test="oweId !=null and oweId != ''">
