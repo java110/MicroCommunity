@@ -9,10 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>service-fee</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>service-goods</artifactId>
 
-    <name>service-fee</name>
+    <name>service-goods</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
@@ -27,12 +26,10 @@
             <groupId>com.java110</groupId>
             <artifactId>java110-service</artifactId>
         </dependency>
-
-
     </dependencies>
 
     <build>
-        <finalName>service-fee</finalName>
+        <finalName>service-goods</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -64,7 +61,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.fee.FeeServiceApplicationStart</mainClass>
+                    <mainClass>com.java110.goods.GoodsServiceApplicationStart</mainClass>
                 </configuration>
             </plugin>
         </plugins>
