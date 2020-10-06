@@ -54,7 +54,7 @@ shardingRule:
   bindingTables:
     - business_xxx
 
-  defaultDataSourceName: ds1
+  defaultDataSourceName: ds0
   defaultDatabaseStrategy:
     none:
   defaultTableStrategy:
