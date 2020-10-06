@@ -1,22 +1,22 @@
 {
-  "templateName": "商品分类",
-  "directories": "goods",
-  "templateCode": "productCategory",
-  "templateKey": "categoryId",
-  "templateKeyName": "分类ID",
-  "searchCode": "categoryId",
-  "searchName": "分类ID",
+  "templateName": "信息大类",
+  "directories": "property",
+  "templateCode": "activitiesType",
+  "templateKey": "typeCd",
+  "templateKeyName": "大类编码",
+  "searchCode": "typeCd",
+  "searchName": "大类编码",
   "conditions": [
     {
-      "name": "名称",
+      "name": "大类编码",
       "inputType": "input",
-      "code": "categoryName",
+      "code": "typeCd",
       "whereCondition": "equal"
     },
     {
-      "name": "分类级别",
+      "name": "大类名称",
       "inputType": "input",
-      "code": "categoryLevel",
+      "code": "typeName",
       "whereCondition": "equal"
     },
     {
@@ -24,21 +24,33 @@
       "inputType": "select",
       "selectValue":"Y,N",
       "selectValueName":"是,否",
-      "code": "isShow",
+      "code": "defalutShow",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "categoryName",
-      "cnCode": "分类名称",
-      "desc": "必填，请填写分类名称",
+      "code": "typeName",
+      "cnCode": "大类名称",
+      "desc": "必填，请填写大类名称",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
       "limitParam": "100",
-      "limitErrInfo": "分类名称不能超过100位",
+      "limitErrInfo": "大类名称超过100位",
+      "show": true
+    },
+    {
+      "code": "typeDesc",
+      "cnCode": "大类描述",
+      "desc": "可填，请填写类型描述",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "500",
+      "limitErrInfo": "描述超过500位",
       "show": true
     },
     {
@@ -54,7 +66,7 @@
       "show": true
     },
     {
-      "code": "isShow",
+      "code": "defalutShow",
       "cnCode": "是否显示",
       "desc": "必填，请填写是否显示",
       "required": true,
