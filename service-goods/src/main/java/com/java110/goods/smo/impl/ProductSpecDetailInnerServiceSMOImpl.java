@@ -62,7 +62,8 @@ public class ProductSpecDetailInnerServiceSMOImpl extends BaseServiceSMO impleme
             productSpecDetailDto.setPage((page - 1) * productSpecDetailDto.getRow());
         }
 
-        List<ProductSpecDetailDto> productSpecDetails = BeanConvertUtil.covertBeanList(productSpecDetailServiceDaoImpl.getProductSpecDetailInfo(BeanConvertUtil.beanCovertMap(productSpecDetailDto)), ProductSpecDetailDto.class);
+        List<ProductSpecDetailDto> productSpecDetails
+                = BeanConvertUtil.covertBeanList(productSpecDetailServiceDaoImpl.getProductSpecDetailInfo(BeanConvertUtil.beanCovertMap(productSpecDetailDto)), ProductSpecDetailDto.class);
 
         return productSpecDetails;
     }

@@ -1,6 +1,7 @@
 package com.java110.dto.product;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class ProductSpecDetailDto extends PageDto implements Serializable {
 
     private String specId;
-private String detailName;
-private String detailValue;
-private String detailId;
-private String storeId;
+    private String[] specIds;
+    private String detailName;
+    private String detailValue;
+    private String detailId;
+    private String storeId;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String storeId;
     public String getSpecId() {
         return specId;
     }
-public void setSpecId(String specId) {
+
+    public void setSpecId(String specId) {
         this.specId = specId;
     }
-public String getDetailName() {
+
+    public String getDetailName() {
         return detailName;
     }
-public void setDetailName(String detailName) {
+
+    public void setDetailName(String detailName) {
         this.detailName = detailName;
     }
-public String getDetailValue() {
+
+    public String getDetailValue() {
         return detailValue;
     }
-public void setDetailValue(String detailValue) {
+
+    public void setDetailValue(String detailValue) {
         this.detailValue = detailValue;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 
@@ -72,5 +83,13 @@ public void setStoreId(String storeId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getSpecIds() {
+        return specIds;
+    }
+
+    public void setSpecIds(String[] specIds) {
+        this.specIds = specIds;
     }
 }
