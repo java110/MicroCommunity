@@ -248,9 +248,29 @@ public class ProductApi {
         Assert.hasKeyAndValue(reqJson, "specId", "specId不能为空");
 
 
+        if (!reqJson.containsKey("specDetails")) {
+            throw new IllegalArgumentException("未包含规格信息");
+        }
+
+        JSONArray specDetails = reqJson.getJSONArray("specDetails");
+
+        if(specDetails.size() < 1){
+            throw new IllegalArgumentException("未包含规格信息");
+        }
+        ProductSpecDetailPo productSpecDetailPo = null;
+        JSONObject specDetail = null;
+        List<ProductSpecDetailPo> productSpecDetailPos = new ArrayList<>();
+        for(int detailIndex = 0 ; detailIndex < specDetails.size(); detailIndex ++){
+            specDetail = specDetails.getJSONObject(detailIndex);
+            Assert.hasKeyAndValue(specDetail,"detailName","未包含规格");
+            Assert.hasKeyAndValue(specDetail,"detailValue","未包含规格值");
+            productSpecDetailPo = BeanConvertUtil.covertBean(specDetail,ProductSpecDetailPo.class);
+            productSpecDetailPos.add(productSpecDetailPo);
+        }
+
         ProductSpecPo productSpecPo = BeanConvertUtil.covertBean(reqJson, ProductSpecPo.class);
         productSpecPo.setStoreId(storeId);
-        return updateProductSpecBMOImpl.update(productSpecPo);
+        return updateProductSpecBMOImpl.update(productSpecPo,productSpecDetailPos);
     }
 
     /**

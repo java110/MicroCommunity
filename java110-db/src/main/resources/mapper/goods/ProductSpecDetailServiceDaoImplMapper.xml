@@ -56,24 +56,23 @@
     <!-- 修改产品规格明细信息 add by wuxw 2018-07-03 -->
     <update id="updateProductSpecDetailInfo" parameterType="Map">
         update product_spec_detail t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
-        <if test="specId !=null and specId != ''">
-            , t.spec_id= #{specId}
-        </if>
         <if test="detailName !=null and detailName != ''">
             , t.detail_name= #{detailName}
         </if>
         <if test="detailValue !=null and detailValue != ''">
             , t.detail_value= #{detailValue}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
         where 1=1
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
+        </if>
+
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>
