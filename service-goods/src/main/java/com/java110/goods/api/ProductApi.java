@@ -1,5 +1,6 @@
 package com.java110.goods.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.product.ProductDto;
 import com.java110.dto.product.ProductSpecDetailDto;
@@ -41,6 +42,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -202,10 +206,30 @@ public class ProductApi {
 
         Assert.hasKeyAndValue(reqJson, "specName", "请求报文中未包含specName");
 
+        if (!reqJson.containsKey("specDetails")) {
+            throw new IllegalArgumentException("未包含规格信息");
+        }
+
+        JSONArray specDetails = reqJson.getJSONArray("specDetails");
+
+        if(specDetails.size() < 1){
+            throw new IllegalArgumentException("未包含规格信息");
+        }
+        ProductSpecDetailPo productSpecDetailPo = null;
+        JSONObject specDetail = null;
+        List<ProductSpecDetailPo> productSpecDetailPos = new ArrayList<>();
+        for(int detailIndex = 0 ; detailIndex < specDetails.size(); detailIndex ++){
+            specDetail = specDetails.getJSONObject(detailIndex);
+            Assert.hasKeyAndValue(specDetail,"detailName","未包含规格");
+            Assert.hasKeyAndValue(specDetail,"detailValue","未包含规格值");
+            productSpecDetailPo = BeanConvertUtil.covertBean(specDetail,ProductSpecDetailPo.class);
+            productSpecDetailPos.add(productSpecDetailPo);
+        }
+
 
         ProductSpecPo productSpecPo = BeanConvertUtil.covertBean(reqJson, ProductSpecPo.class);
         productSpecPo.setStoreId(storeId);
-        return saveProductSpecBMOImpl.save(productSpecPo);
+        return saveProductSpecBMOImpl.save(productSpecPo,productSpecDetailPos);
     }
 
     /**
