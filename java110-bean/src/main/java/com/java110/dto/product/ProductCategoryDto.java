@@ -1,4 +1,4 @@
-package com.java110.dto.productCategory;
+package com.java110.dto.product;
 
 import com.java110.dto.PageDto;
 import java.io.Serializable;

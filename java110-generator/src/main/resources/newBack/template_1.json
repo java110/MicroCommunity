@@ -1,38 +1,55 @@
 {
   "autoMove": false,
-  "id": "categoryId",
-  "name": "productCategory",
-  "desc": "产品目录",
-  "shareParam": "categoryId",
-  "shareColumn": "category_id",
+  "id": "productId",
+  "name": "product",
+  "desc": "产品",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
   "shareName": "goods",
-  "tableName": "product_category",
+  "tableName": "product",
   "param": {
-    "categoryId": "category_id",
-    "categoryName": "category_name",
-    "parentCategoryId": "parent_category_id",
-    "categoryLevel": "category_level",
-    "seq": "seq",
-    "isShow": "is_show",
+    "productId": "product_id",
     "storeId": "store_id",
+    "prodName": "prod_name",
+    "prodDesc": "prod_desc",
+    "keyword": "keyword",
+    "barCode": "bar_code",
+    "categoryId": "category_id",
+    "unitName": "unit_name",
+    "state": "state",
+    "sort": "sort",
+    "postage": "postage",
+    "isPostage": "is_postage",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "categoryName",
-      "msg": "目录名称不能为空"
+      "code": "prodName",
+      "msg": "产品名称不能为空"
     },
     {
-      "code": "categoryLevel",
-      "msg": "目录级别不能为空"
+      "code": "storeId",
+      "msg": "商户不能为空"
     },
     {
-      "code": "seq",
-      "msg": "顺序不能为空"
+      "code": "keyword",
+      "msg": "关键字不能为空"
     },
     {
-      "code": "isShow",
-      "msg": "是否显示不能为空"
+      "code": "categoryId",
+      "msg": "产品目录不能为空"
+    },
+    {
+      "code": "unitName",
+      "msg": "单位不能为空"
+    },
+    {
+      "code": "sort",
+      "msg": "排序不能为空"
+    },
+    {
+      "code": "isPostage",
+      "msg": "是否包邮不能为空"
     }
   ]
 }

@@ -1,6 +1,6 @@
 package com.java110.goods.bmo.productCategory;
 
-import com.java110.po.productCategory.ProductCategoryPo;
+import com.java110.po.product.ProductCategoryPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveProductCategoryBMO {
 

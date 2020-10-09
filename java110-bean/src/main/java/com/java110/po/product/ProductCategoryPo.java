@@ -1,4 +1,4 @@
-package com.java110.po.productCategory;
+package com.java110.po.product;
 
 import java.io.Serializable;
 import java.util.Date;

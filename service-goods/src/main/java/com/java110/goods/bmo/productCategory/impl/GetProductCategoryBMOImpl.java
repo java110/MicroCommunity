@@ -1,6 +1,6 @@
 package com.java110.goods.bmo.productCategory.impl;
 
-import com.java110.dto.productCategory.ProductCategoryDto;
+import com.java110.dto.product.ProductCategoryDto;
 import com.java110.goods.bmo.productCategory.IGetProductCategoryBMO;
 import com.java110.intf.goods.IProductCategoryInnerServiceSMO;
 import com.java110.vo.ResultVo;

@@ -1,12 +1,12 @@
 package com.java110.goods.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.productCategory.ProductCategoryDto;
+import com.java110.dto.product.ProductCategoryDto;
 import com.java110.goods.bmo.productCategory.IDeleteProductCategoryBMO;
 import com.java110.goods.bmo.productCategory.IGetProductCategoryBMO;
 import com.java110.goods.bmo.productCategory.ISaveProductCategoryBMO;
 import com.java110.goods.bmo.productCategory.IUpdateProductCategoryBMO;
-import com.java110.po.productCategory.ProductCategoryPo;
+import com.java110.po.product.ProductCategoryPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

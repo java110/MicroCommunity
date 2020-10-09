@@ -3,7 +3,7 @@ package com.java110.goods.bmo.productCategory.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.goods.bmo.productCategory.IUpdateProductCategoryBMO;
 import com.java110.intf.goods.IProductCategoryInnerServiceSMO;
-import com.java110.po.productCategory.ProductCategoryPo;
+import com.java110.po.product.ProductCategoryPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -3,10 +3,10 @@ package com.java110.goods.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.productCategory.ProductCategoryDto;
+import com.java110.dto.product.ProductCategoryDto;
 import com.java110.goods.dao.IProductCategoryServiceDao;
 import com.java110.intf.goods.IProductCategoryInnerServiceSMO;
-import com.java110.po.productCategory.ProductCategoryPo;
+import com.java110.po.product.ProductCategoryPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
