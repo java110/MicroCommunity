@@ -11,7 +11,12 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -37,7 +42,8 @@ public class ProductCategoryApi {
      * @path /app/productCategory/saveProductCategory
      */
     @RequestMapping(value = "/saveProductCategory", method = RequestMethod.POST)
-    public ResponseEntity<String> saveProductCategory(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveProductCategory(@RequestBody JSONObject reqJson,
+                                                      @RequestHeader(value = "store-id") String storeId) {
 
         Assert.hasKeyAndValue(reqJson, "categoryName", "请求报文中未包含categoryName");
         Assert.hasKeyAndValue(reqJson, "categoryLevel", "请求报文中未包含categoryLevel");
@@ -46,6 +52,10 @@ public class ProductCategoryApi {
 
 
         ProductCategoryPo productCategoryPo = BeanConvertUtil.covertBean(reqJson, ProductCategoryPo.class);
+        productCategoryPo.setStoreId(storeId);
+        if (!reqJson.containsKey("parentCategoryId")) {
+            productCategoryPo.setParentCategoryId("-1");
+        }
         return saveProductCategoryBMOImpl.save(productCategoryPo);
     }
 
@@ -58,7 +68,8 @@ public class ProductCategoryApi {
      * @path /app/productCategory/updateProductCategory
      */
     @RequestMapping(value = "/updateProductCategory", method = RequestMethod.POST)
-    public ResponseEntity<String> updateProductCategory(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> updateProductCategory(@RequestBody JSONObject reqJson,
+                                                        @RequestHeader(value = "store-id") String storeId) {
 
         Assert.hasKeyAndValue(reqJson, "categoryName", "请求报文中未包含categoryName");
         Assert.hasKeyAndValue(reqJson, "categoryLevel", "请求报文中未包含categoryLevel");
@@ -68,6 +79,7 @@ public class ProductCategoryApi {
 
 
         ProductCategoryPo productCategoryPo = BeanConvertUtil.covertBean(reqJson, ProductCategoryPo.class);
+        productCategoryPo.setStoreId(storeId);
         return updateProductCategoryBMOImpl.update(productCategoryPo);
     }
 
@@ -80,13 +92,15 @@ public class ProductCategoryApi {
      * @path /app/productCategory/deleteProductCategory
      */
     @RequestMapping(value = "/deleteProductCategory", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteProductCategory(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> deleteProductCategory(@RequestBody JSONObject reqJson,
+                                                        @RequestHeader(value = "store-id") String storeId) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "categoryId", "categoryId不能为空");
 
 
         ProductCategoryPo productCategoryPo = BeanConvertUtil.covertBean(reqJson, ProductCategoryPo.class);
+        productCategoryPo.setStoreId(storeId);
         return deleteProductCategoryBMOImpl.delete(productCategoryPo);
     }
 
