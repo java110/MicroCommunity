@@ -40,7 +40,7 @@ public class SaveProductSpecBMOImpl implements ISaveProductSpecBMO {
         }
 
         for (ProductSpecDetailPo productSpecDetailPo : productSpecDetailPos) {
-            productSpecDetailPo.setDetailId(GenerateCodeFactory.CODE_PREFIX_detailId);
+            productSpecDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
             productSpecDetailPo.setStoreId(productSpecPo.getStoreId());
             productSpecDetailPo.setSpecId(productSpecPo.getSpecId());
             flag = productSpecDetailInnerServiceSMOImpl.saveProductSpecDetail(productSpecDetailPo);
