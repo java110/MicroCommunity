@@ -1,6 +1,7 @@
 package com.java110.dto.product;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.productSpecValue.ProductSpecValueDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +35,8 @@ public class ProductDto extends PageDto implements Serializable {
     private String coverPhoto;
 
     private List<String> carouselFigurePhotos;
+
+    private List<ProductSpecValueDto> productSpecValues;
 
 
     private Date createTime;
@@ -176,5 +179,13 @@ public class ProductDto extends PageDto implements Serializable {
 
     public void setCarouselFigurePhotos(List<String> carouselFigurePhotos) {
         this.carouselFigurePhotos = carouselFigurePhotos;
+    }
+
+    public List<ProductSpecValueDto> getProductSpecValues() {
+        return productSpecValues;
+    }
+
+    public void setProductSpecValues(List<ProductSpecValueDto> productSpecValues) {
+        this.productSpecValues = productSpecValues;
     }
 }

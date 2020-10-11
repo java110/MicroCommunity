@@ -2,11 +2,16 @@ package com.java110.goods.bmo.product.impl;
 
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.product.ProductDto;
+import com.java110.dto.product.ProductSpecDetailDto;
+import com.java110.dto.product.ProductSpecDto;
 import com.java110.dto.productDetail.ProductDetailDto;
+import com.java110.dto.productSpecValue.ProductSpecValueDto;
 import com.java110.goods.bmo.product.IGetProductBMO;
 import com.java110.intf.IProductDetailInnerServiceSMO;
+import com.java110.intf.IProductSpecValueInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.goods.IProductInnerServiceSMO;
+import com.java110.intf.goods.IProductSpecDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +32,12 @@ public class GetProductBMOImpl implements IGetProductBMO {
 
     @Autowired
     private IProductDetailInnerServiceSMO productDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IProductSpecValueInnerServiceSMO productSpecValueInnerServiceSMOImpl;
+
+    @Autowired
+    private IProductSpecDetailInnerServiceSMO productSpecDetailInnerServiceSMOImpl;
 
     /**
      * @param productDto
@@ -82,6 +93,7 @@ public class GetProductBMOImpl implements IGetProductBMO {
             }
         }
 
+        // 查询规格
         if (productDtos.size() > 1) {
             return;
         }
@@ -102,6 +114,8 @@ public class GetProductBMOImpl implements IGetProductBMO {
             tmpProductDto.setCarouselFigurePhotos(photos);
         }
 
+        freshProductSpecValue(productDtos);
+
         ProductDetailDto productDetailDto = new ProductDetailDto();
         productDetailDto.setProductId(productDtos.get(0).getProductId());
         productDetailDto.setStoreId(productDtos.get(0).getStoreId());
@@ -112,6 +126,38 @@ public class GetProductBMOImpl implements IGetProductBMO {
         }
 
         productDtos.get(0).setContent(productDetailDtos.get(0).getContent());
+    }
+
+    private void freshProductSpecValue(List<ProductDto> productDtos) {
+        ProductSpecValueDto productSpecValueDto = new ProductSpecValueDto();
+        productSpecValueDto.setProductId(productDtos.get(0).getProductId());
+        productSpecValueDto.setStoreId(productDtos.get(0).getStoreId());
+        List<ProductSpecValueDto> productSpecValueDtos = productSpecValueInnerServiceSMOImpl.queryProductSpecValues(productSpecValueDto);
+
+        if (productSpecValueDtos == null || productSpecValueDtos.size() < 1) {
+            return;
+        }
+        productDtos.get(0).setProductSpecValues(productSpecValueDtos);
+
+        List<String> specIds = new ArrayList<>();
+        for (ProductSpecValueDto productSpecValue : productSpecValueDtos) {
+            specIds.add(productSpecValue.getSpecId());
+        }
+
+        ProductSpecDetailDto productSpecDetailDto = new ProductSpecDetailDto();
+        productSpecDetailDto.setSpecIds(specIds.toArray(new String[specIds.size()]));
+        productSpecDetailDto.setStoreId(productDtos.get(0).getStoreId());
+        List<ProductSpecDetailDto> productSpecDetailDtos = productSpecDetailInnerServiceSMOImpl.queryProductSpecDetails(productSpecDetailDto);
+        List<ProductSpecDetailDto> tmpProductSpecDetailDtos = null;
+        for (ProductSpecValueDto productSpecValue : productSpecValueDtos) {
+            tmpProductSpecDetailDtos = new ArrayList<>();
+            for (ProductSpecDetailDto tmpProductSpecDetailDto : productSpecDetailDtos) {
+                if (productSpecValue.getSpecId().equals(tmpProductSpecDetailDto.getSpecId())) {
+                    tmpProductSpecDetailDtos.add(tmpProductSpecDetailDto);
+                }
+            }
+            productSpecValue.setProductSpecDetails(tmpProductSpecDetailDtos);
+        }
     }
 
 }

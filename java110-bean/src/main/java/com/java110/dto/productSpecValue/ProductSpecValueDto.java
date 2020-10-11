@@ -1,9 +1,11 @@
 package com.java110.dto.productSpecValue;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.product.ProductSpecDetailDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -18,6 +20,7 @@ public class ProductSpecValueDto extends PageDto implements Serializable {
     private String specId;
     private String valueId;
     private String productId;
+    private String[] productIds;
     private String price;
     private String otPrice;
     private String costPrice;
@@ -30,6 +33,8 @@ public class ProductSpecValueDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<ProductSpecDetailDto> productSpecDetails;
 
 
     public String getSpecId() {
@@ -127,5 +132,21 @@ public class ProductSpecValueDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(String[] productIds) {
+        this.productIds = productIds;
+    }
+
+    public List<ProductSpecDetailDto> getProductSpecDetails() {
+        return productSpecDetails;
+    }
+
+    public void setProductSpecDetails(List<ProductSpecDetailDto> productSpecDetails) {
+        this.productSpecDetails = productSpecDetails;
     }
 }
