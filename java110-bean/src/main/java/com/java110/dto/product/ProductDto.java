@@ -26,6 +26,7 @@ public class ProductDto extends PageDto implements Serializable {
     private String postage;
     private String prodName;
     private String state;
+    private String stateName;
     private String keyword;
     private String prodDesc;
     private String categoryId;
@@ -215,5 +216,13 @@ public class ProductDto extends PageDto implements Serializable {
 
     public void setSales(String sales) {
         this.sales = sales;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
