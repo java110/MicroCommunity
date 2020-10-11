@@ -51,9 +51,18 @@ public class UpdateProductBMOImpl implements IUpdateProductBMO {
         int flag = productInnerServiceSMOImpl.updateProduct(productPo);
 
 //保存商品封面
+        //删除 图片
+        FileRelPo fileRelPo = new FileRelPo();
+        fileRelPo.setObjId(productPo.getProductId());
+        fileRelPo.setRelTypeCd(FileRelDto.REL_TYPE_CD_GOODS_COVER);
+        fileRelInnerServiceSMOImpl.deleteFileRel(fileRelPo);
         doSavaRentingFile(coverPhoto, productPo, FileRelDto.REL_TYPE_CD_GOODS_COVER);
 
         if (carouselFigurePhoto != null) {
+            fileRelPo = new FileRelPo();
+            fileRelPo.setObjId(productPo.getProductId());
+            fileRelPo.setRelTypeCd(FileRelDto.REL_TYPE_CD_GOODS_CAROUSEL_FIGURE);
+            fileRelInnerServiceSMOImpl.deleteFileRel(fileRelPo);
             for (int carouselIndex = 0; carouselIndex < carouselFigurePhoto.size(); carouselIndex++) {
                 doSavaRentingFile(carouselFigurePhoto.getString(carouselIndex), productPo, FileRelDto.REL_TYPE_CD_GOODS_CAROUSEL_FIGURE);
             }
@@ -88,7 +97,7 @@ public class UpdateProductBMOImpl implements IUpdateProductBMO {
             productDetailPo.setProductId(productPo.getProductId());
             productDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
             flag = productDetailInnerServiceSMOImpl.saveProductDetail(productDetailPo);
-        }else{
+        } else {
             productDetailPo.setProductId(productPo.getProductId());
             flag = productDetailInnerServiceSMOImpl.updateProductDetail(productDetailPo);
 
@@ -114,11 +123,6 @@ public class UpdateProductBMOImpl implements IUpdateProductBMO {
             return;
         }
 
-        //删除 图片
-        FileRelPo fileRelPo = new FileRelPo();
-        fileRelPo.setObjId(productPo.getProductId());
-        fileRelPo.setRelTypeCd(fileTypeCd);
-        fileRelInnerServiceSMOImpl.deleteFileRel(fileRelPo);
 
         FileDto fileDto = new FileDto();
         fileDto.setCommunityId("-1");
@@ -128,7 +132,7 @@ public class UpdateProductBMOImpl implements IUpdateProductBMO {
 
         fileDto.setSuffix("jpeg");
         String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-
+        FileRelPo fileRelPo = null;
         fileRelPo = new FileRelPo();
         fileRelPo.setObjId(productPo.getProductId());
         fileRelPo.setRelTypeCd(fileTypeCd);
