@@ -6,6 +6,7 @@ import com.java110.dto.product.ProductDto;
 import com.java110.dto.product.ProductSpecDetailDto;
 import com.java110.dto.product.ProductSpecDto;
 import com.java110.dto.productAttr.ProductAttrDto;
+import com.java110.dto.productDetail.ProductDetailDto;
 import com.java110.dto.productSpecValue.ProductSpecValueDto;
 import com.java110.goods.bmo.product.IDeleteProductBMO;
 import com.java110.goods.bmo.product.IGetProductBMO;
@@ -15,6 +16,10 @@ import com.java110.goods.bmo.productAttr.IDeleteProductAttrBMO;
 import com.java110.goods.bmo.productAttr.IGetProductAttrBMO;
 import com.java110.goods.bmo.productAttr.ISaveProductAttrBMO;
 import com.java110.goods.bmo.productAttr.IUpdateProductAttrBMO;
+import com.java110.goods.bmo.productDetail.IDeleteProductDetailBMO;
+import com.java110.goods.bmo.productDetail.IGetProductDetailBMO;
+import com.java110.goods.bmo.productDetail.ISaveProductDetailBMO;
+import com.java110.goods.bmo.productDetail.IUpdateProductDetailBMO;
 import com.java110.goods.bmo.productSpec.IDeleteProductSpecBMO;
 import com.java110.goods.bmo.productSpec.IGetProductSpecBMO;
 import com.java110.goods.bmo.productSpec.ISaveProductSpecBMO;
@@ -31,6 +36,7 @@ import com.java110.po.product.ProductPo;
 import com.java110.po.product.ProductSpecDetailPo;
 import com.java110.po.product.ProductSpecPo;
 import com.java110.po.productAttr.ProductAttrPo;
+import com.java110.po.productDetail.ProductDetailPo;
 import com.java110.po.productSpecValue.ProductSpecValuePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -102,6 +108,17 @@ public class ProductApi {
     private IGetProductAttrBMO getProductAttrBMOImpl;
 
 
+    @Autowired
+    private ISaveProductDetailBMO saveProductDetailBMOImpl;
+    @Autowired
+    private IUpdateProductDetailBMO updateProductDetailBMOImpl;
+    @Autowired
+    private IDeleteProductDetailBMO deleteProductDetailBMOImpl;
+
+    @Autowired
+    private IGetProductDetailBMO getProductDetailBMOImpl;
+
+
     /**
      * 微信保存消息模板
      *
@@ -121,9 +138,10 @@ public class ProductApi {
         Assert.hasKeyAndValue(reqJson, "sort", "请求报文中未包含sort");
         Assert.hasKeyAndValue(reqJson, "isPostage", "请求报文中未包含isPostage");
         Assert.hasKeyAndValue(reqJson, "coverPhoto", "请求报文中未包含商品封面");
+        Assert.hasKeyAndValue(reqJson, "content", "请求报文中未包含商品描述");
 
-        Assert.hasKey(reqJson,"carouselFigurePhoto","请求报文中未包含轮播图");
-        Assert.hasKey(reqJson,"productSpecs","请求报文中未包含规格信息");
+        Assert.hasKey(reqJson, "carouselFigurePhoto", "请求报文中未包含轮播图");
+        Assert.hasKey(reqJson, "productSpecs", "请求报文中未包含规格信息");
 
 
         String coverPhoto = reqJson.getString("coverPhoto");
@@ -131,10 +149,10 @@ public class ProductApi {
 
         JSONArray productSpecs = reqJson.getJSONArray("productSpecs");
 
-        if(carouselFigurePhoto.size() < 1){
+        if (carouselFigurePhoto.size() < 1) {
             throw new IllegalArgumentException("请求报文中未包含轮播图");
         }
-        if(productSpecs.size() < 1){
+        if (productSpecs.size() < 1) {
             throw new IllegalArgumentException("请求报文中未包含规格信息");
         }
 
@@ -142,12 +160,16 @@ public class ProductApi {
         List<ProductSpecValuePo> productSpecValuePos = new ArrayList<>();
         for (int specIndex = 0; specIndex < productSpecs.size(); specIndex++) {
             spec = productSpecs.getJSONObject(specIndex);
-            productSpecValuePos.add(BeanConvertUtil.covertBean(spec,ProductSpecValuePo.class));
+            productSpecValuePos.add(BeanConvertUtil.covertBean(spec, ProductSpecValuePo.class));
         }
 
         ProductPo productPo = BeanConvertUtil.covertBean(reqJson, ProductPo.class);
         productPo.setStoreId(storeId);
-        return saveProductBMOImpl.save(productPo,coverPhoto,carouselFigurePhoto,productSpecValuePos);
+
+        ProductDetailPo productDetailPo = new ProductDetailPo();
+        productDetailPo.setStoreId(storeId);
+        productDetailPo.setContent(reqJson.getString("content"));
+        return saveProductBMOImpl.save(productPo, coverPhoto, carouselFigurePhoto, productSpecValuePos, productDetailPo);
     }
 
     /**
@@ -206,12 +228,14 @@ public class ProductApi {
      */
     @RequestMapping(value = "/queryProduct", method = RequestMethod.GET)
     public ResponseEntity<String> queryProduct(@RequestHeader(value = "store-id") String storeId,
+                                               @RequestParam(value = "productId", required = false) String productId,
                                                @RequestParam(value = "page") int page,
                                                @RequestParam(value = "row") int row) {
         ProductDto productDto = new ProductDto();
         productDto.setPage(page);
         productDto.setRow(row);
         productDto.setStoreId(storeId);
+        productDto.setProductId(productId);
         return getProductBMOImpl.get(productDto);
     }
 
@@ -602,5 +626,92 @@ public class ProductApi {
         productAttrDto.setStoreId(storeId);
         productAttrDto.setProductId(productId);
         return getProductAttrBMOImpl.get(productAttrDto);
+    }
+
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /productDetail/saveProductDetail
+     * @path /app/productDetail/saveProductDetail
+     */
+    @RequestMapping(value = "/saveProductDetail", method = RequestMethod.POST)
+    public ResponseEntity<String> saveProductDetail(@RequestBody JSONObject reqJson,
+                                                    @RequestHeader(value = "store-id") String storeId) {
+
+        Assert.hasKeyAndValue(reqJson, "productId", "请求报文中未包含productId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "content", "请求报文中未包含content");
+
+
+        ProductDetailPo productDetailPo = BeanConvertUtil.covertBean(reqJson, ProductDetailPo.class);
+        productDetailPo.setStoreId(storeId);
+        return saveProductDetailBMOImpl.save(productDetailPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /productDetail/updateProductDetail
+     * @path /app/productDetail/updateProductDetail
+     */
+    @RequestMapping(value = "/updateProductDetail", method = RequestMethod.POST)
+    public ResponseEntity<String> updateProductDetail(@RequestBody JSONObject reqJson,
+                                                      @RequestHeader(value = "store-id") String storeId) {
+
+        Assert.hasKeyAndValue(reqJson, "productId", "请求报文中未包含productId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "content", "请求报文中未包含content");
+        Assert.hasKeyAndValue(reqJson, "detailId", "detailId不能为空");
+
+
+        ProductDetailPo productDetailPo = BeanConvertUtil.covertBean(reqJson, ProductDetailPo.class);
+        productDetailPo.setStoreId(storeId);
+        return updateProductDetailBMOImpl.update(productDetailPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /productDetail/deleteProductDetail
+     * @path /app/productDetail/deleteProductDetail
+     */
+    @RequestMapping(value = "/deleteProductDetail", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteProductDetail(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "detailId", "detailId不能为空");
+
+
+        ProductDetailPo productDetailPo = BeanConvertUtil.covertBean(reqJson, ProductDetailPo.class);
+        productDetailPo.setStoreId(storeId);
+        return deleteProductDetailBMOImpl.delete(productDetailPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /productDetail/queryProductDetail
+     * @path /app/productDetail/queryProductDetail
+     */
+    @RequestMapping(value = "/queryProductDetail", method = RequestMethod.GET)
+    public ResponseEntity<String> queryProductDetail(@RequestHeader(value = "store-id") String storeId,
+                                                     @RequestParam(value = "productId") String productId,
+                                                     @RequestParam(value = "page") int page,
+                                                     @RequestParam(value = "row") int row) {
+        ProductDetailDto productDetailDto = new ProductDetailDto();
+        productDetailDto.setPage(page);
+        productDetailDto.setRow(row);
+        productDetailDto.setStoreId(storeId);
+        productDetailDto.setProductId(productId);
+        return getProductDetailBMOImpl.get(productDetailDto);
     }
 }

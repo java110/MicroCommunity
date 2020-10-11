@@ -1,7 +1,11 @@
 package com.java110.goods.bmo.product.impl;
 
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.product.ProductDto;
+import com.java110.dto.productDetail.ProductDetailDto;
 import com.java110.goods.bmo.product.IGetProductBMO;
+import com.java110.intf.IProductDetailInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.goods.IProductInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +22,25 @@ public class GetProductBMOImpl implements IGetProductBMO {
     @Autowired
     private IProductInnerServiceSMO productInnerServiceSMOImpl;
 
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IProductDetailInnerServiceSMO productDetailInnerServiceSMOImpl;
+
     /**
      * @param productDto
      * @return 订单服务能够接受的报文
      */
     public ResponseEntity<String> get(ProductDto productDto) {
 
-
         int count = productInnerServiceSMOImpl.queryProductsCount(productDto);
 
         List<ProductDto> productDtos = null;
         if (count > 0) {
             productDtos = productInnerServiceSMOImpl.queryProducts(productDto);
+
+            freshProductDtos(productDtos, productDto);
         } else {
             productDtos = new ArrayList<>();
         }
@@ -39,6 +50,68 @@ public class GetProductBMOImpl implements IGetProductBMO {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    private void freshProductDtos(List<ProductDto> productDtos, ProductDto productDto) {
+
+        if (productDtos == null || productDtos.size() < 1) {
+            return;
+        }
+
+        //输入
+        List<String> productIds = new ArrayList<>();
+
+        for (ProductDto tmpProductDto : productDtos) {
+            productIds.add(tmpProductDto.getProductId());
+        }
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjIds(productIds.toArray(new String[productIds.size()]));
+        fileRelDto.setRelTypeCd(FileRelDto.REL_TYPE_CD_GOODS_COVER);
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        //刷入图片信息
+        List<String> photoVos = null;
+        String url = null;
+        for (ProductDto tmpProductDto : productDtos) {
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                if (tmpProductDto.getProductId().equals(tmpFileRelDto.getObjId())) {
+                    url = "/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=-1";
+                    tmpProductDto.setCoverPhoto(url);
+                }
+            }
+        }
+
+        if (productDtos.size() > 1) {
+            return;
+        }
+
+        //输入轮播图
+        fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(productDtos.get(0).getProductId());
+        fileRelDto.setRelTypeCd(FileRelDto.REL_TYPE_CD_GOODS_CAROUSEL_FIGURE);
+        fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+        List<String> photos = new ArrayList<>();
+        for (ProductDto tmpProductDto : productDtos) {
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                if (tmpProductDto.getProductId().equals(tmpFileRelDto.getObjId())) {
+                    url = "/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=-1";
+                    photos.add(url);
+                }
+            }
+            tmpProductDto.setCarouselFigurePhotos(photos);
+        }
+
+        ProductDetailDto productDetailDto = new ProductDetailDto();
+        productDetailDto.setProductId(productDtos.get(0).getProductId());
+        productDetailDto.setStoreId(productDtos.get(0).getStoreId());
+        List<ProductDetailDto> productDetailDtos = productDetailInnerServiceSMOImpl.queryProductDetails(productDetailDto);
+
+        if (productDetailDtos == null || productDetailDtos.size() < 1) {
+            return;
+        }
+
+        productDtos.get(0).setContent(productDetailDtos.get(0).getContent());
     }
 
 }
