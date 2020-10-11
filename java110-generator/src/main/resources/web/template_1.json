@@ -1,36 +1,140 @@
 {
-  "templateName": "商品规格",
+  "templateName": "商品信息",
   "directories": "goods",
-  "templateCode": "productSpec",
-  "templateKey": "specId",
-  "templateKeyName": "规格ID",
-  "searchCode": "specId",
-  "searchName": "规格ID",
+  "templateCode": "product",
+  "templateKey": "productId",
+  "templateKeyName": "商品ID",
+  "searchCode": "productId",
+  "searchName": "商品ID",
   "conditions": [
     {
-      "name": "名称",
+      "name": "商品名称",
       "inputType": "input",
-      "code": "specName",
+      "code": "prodName",
       "whereCondition": "equal"
     },
     {
-      "name": "规格ID",
+      "name": "关键字",
       "inputType": "input",
-      "code": "specId",
+      "code": "keyword",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "产品条码",
+      "inputType": "input",
+      "code": "barCode",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "specName",
-      "cnCode": "规格名称",
-      "desc": "必填，请填写规格名称",
+      "code": "categoryId",
+      "cnCode": "商品大类",
+      "desc": "必填，请填写商品大类",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "num",
+      "limitParam": "",
+      "limitErrInfo": "商品大类错误",
+      "show": true
+    },
+    {
+      "code": "prodName",
+      "cnCode": "商品名称",
+      "desc": "必填，请填写商品名称",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
-      "limitParam": "100",
-      "limitErrInfo": "规格名称不能超过100位",
+      "limitParam": "128",
+      "limitErrInfo": "商品名称不能超过128位",
+      "show": true
+    },
+    {
+      "code": "prodDesc",
+      "cnCode": "商品简介",
+      "desc": "必填，请填写商品简介",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "256",
+      "limitErrInfo": "商品简介不能超过256位",
+      "show": true
+    },
+    {
+      "code": "keyword",
+      "cnCode": "关键词",
+      "desc": "必填，请填写关键词",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "256",
+      "limitErrInfo": "关键词不能超过256位",
+      "show": true
+    },
+    {
+      "code": "barCode",
+      "cnCode": "产品条码",
+      "desc": "选填，请填写产品条码",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "15",
+      "limitErrInfo": "产品条码不能超过15位",
+      "show": true
+    },
+    {
+      "code": "unitName",
+      "cnCode": "单位",
+      "desc": "选填，请填写单位",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "32",
+      "limitErrInfo": "单位不能超过32位",
+      "show": true
+    },
+    {
+      "code": "sort",
+      "cnCode": "排序",
+      "desc": "选填，请填写排序",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "num",
+      "limitParam": "",
+      "limitErrInfo": "排序格式错误",
+      "show": true
+    },
+    {
+      "code": "isPostage",
+      "cnCode": "是否包邮",
+      "desc": "选填，请填写排序",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue":"1,2",
+      "selectValueName":"包邮,不包邮",
+      "limit": "num",
+      "limitParam": "",
+      "limitErrInfo": "是否包邮格式错误",
+      "show": true
+    },
+    {
+      "code": "postage",
+      "cnCode": "邮费",
+      "desc": "选填，请填写邮费",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "money",
+      "limitParam": "",
+      "limitErrInfo": "邮费格式错误,请填写如 3.00",
       "show": true
     }
   ]

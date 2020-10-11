@@ -1,7 +1,12 @@
 package com.java110.goods.bmo.product;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.po.product.ProductPo;
+import com.java110.po.productSpecValue.ProductSpecValuePo;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 public interface ISaveProductBMO {
 
 
@@ -11,7 +16,7 @@ public interface ISaveProductBMO {
      * @param productPo
      * @return
      */
-    ResponseEntity<String> save(ProductPo productPo);
+    ResponseEntity<String> save(ProductPo productPo, String coverPhoto, JSONArray carouselFigurePhoto, List<ProductSpecValuePo> productSpecValuePos);
 
 
 }

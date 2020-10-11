@@ -120,11 +120,34 @@ public class ProductApi {
         Assert.hasKeyAndValue(reqJson, "unitName", "请求报文中未包含unitName");
         Assert.hasKeyAndValue(reqJson, "sort", "请求报文中未包含sort");
         Assert.hasKeyAndValue(reqJson, "isPostage", "请求报文中未包含isPostage");
+        Assert.hasKeyAndValue(reqJson, "coverPhoto", "请求报文中未包含商品封面");
 
+        Assert.hasKey(reqJson,"carouselFigurePhoto","请求报文中未包含轮播图");
+        Assert.hasKey(reqJson,"productSpecs","请求报文中未包含规格信息");
+
+
+        String coverPhoto = reqJson.getString("coverPhoto");
+        JSONArray carouselFigurePhoto = reqJson.getJSONArray("carouselFigurePhoto");
+
+        JSONArray productSpecs = reqJson.getJSONArray("productSpecs");
+
+        if(carouselFigurePhoto.size() < 1){
+            throw new IllegalArgumentException("请求报文中未包含轮播图");
+        }
+        if(productSpecs.size() < 1){
+            throw new IllegalArgumentException("请求报文中未包含规格信息");
+        }
+
+        JSONObject spec = null;
+        List<ProductSpecValuePo> productSpecValuePos = new ArrayList<>();
+        for (int specIndex = 0; specIndex < productSpecs.size(); specIndex++) {
+            spec = productSpecs.getJSONObject(specIndex);
+            productSpecValuePos.add(BeanConvertUtil.covertBean(spec,ProductSpecValuePo.class));
+        }
 
         ProductPo productPo = BeanConvertUtil.covertBean(reqJson, ProductPo.class);
         productPo.setStoreId(storeId);
-        return saveProductBMOImpl.save(productPo);
+        return saveProductBMOImpl.save(productPo,coverPhoto,carouselFigurePhoto,productSpecValuePos);
     }
 
     /**
@@ -212,24 +235,24 @@ public class ProductApi {
 
         JSONArray specDetails = reqJson.getJSONArray("specDetails");
 
-        if(specDetails.size() < 1){
+        if (specDetails.size() < 1) {
             throw new IllegalArgumentException("未包含规格信息");
         }
         ProductSpecDetailPo productSpecDetailPo = null;
         JSONObject specDetail = null;
         List<ProductSpecDetailPo> productSpecDetailPos = new ArrayList<>();
-        for(int detailIndex = 0 ; detailIndex < specDetails.size(); detailIndex ++){
+        for (int detailIndex = 0; detailIndex < specDetails.size(); detailIndex++) {
             specDetail = specDetails.getJSONObject(detailIndex);
-            Assert.hasKeyAndValue(specDetail,"detailName","未包含规格");
-            Assert.hasKeyAndValue(specDetail,"detailValue","未包含规格值");
-            productSpecDetailPo = BeanConvertUtil.covertBean(specDetail,ProductSpecDetailPo.class);
+            Assert.hasKeyAndValue(specDetail, "detailName", "未包含规格");
+            Assert.hasKeyAndValue(specDetail, "detailValue", "未包含规格值");
+            productSpecDetailPo = BeanConvertUtil.covertBean(specDetail, ProductSpecDetailPo.class);
             productSpecDetailPos.add(productSpecDetailPo);
         }
 
 
         ProductSpecPo productSpecPo = BeanConvertUtil.covertBean(reqJson, ProductSpecPo.class);
         productSpecPo.setStoreId(storeId);
-        return saveProductSpecBMOImpl.save(productSpecPo,productSpecDetailPos);
+        return saveProductSpecBMOImpl.save(productSpecPo, productSpecDetailPos);
     }
 
     /**
@@ -254,23 +277,23 @@ public class ProductApi {
 
         JSONArray specDetails = reqJson.getJSONArray("specDetails");
 
-        if(specDetails.size() < 1){
+        if (specDetails.size() < 1) {
             throw new IllegalArgumentException("未包含规格信息");
         }
         ProductSpecDetailPo productSpecDetailPo = null;
         JSONObject specDetail = null;
         List<ProductSpecDetailPo> productSpecDetailPos = new ArrayList<>();
-        for(int detailIndex = 0 ; detailIndex < specDetails.size(); detailIndex ++){
+        for (int detailIndex = 0; detailIndex < specDetails.size(); detailIndex++) {
             specDetail = specDetails.getJSONObject(detailIndex);
-            Assert.hasKeyAndValue(specDetail,"detailName","未包含规格");
-            Assert.hasKeyAndValue(specDetail,"detailValue","未包含规格值");
-            productSpecDetailPo = BeanConvertUtil.covertBean(specDetail,ProductSpecDetailPo.class);
+            Assert.hasKeyAndValue(specDetail, "detailName", "未包含规格");
+            Assert.hasKeyAndValue(specDetail, "detailValue", "未包含规格值");
+            productSpecDetailPo = BeanConvertUtil.covertBean(specDetail, ProductSpecDetailPo.class);
             productSpecDetailPos.add(productSpecDetailPo);
         }
 
         ProductSpecPo productSpecPo = BeanConvertUtil.covertBean(reqJson, ProductSpecPo.class);
         productSpecPo.setStoreId(storeId);
-        return updateProductSpecBMOImpl.update(productSpecPo,productSpecDetailPos);
+        return updateProductSpecBMOImpl.update(productSpecPo, productSpecDetailPos);
     }
 
     /**
