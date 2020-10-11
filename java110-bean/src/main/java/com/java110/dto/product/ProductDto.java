@@ -29,6 +29,7 @@ public class ProductDto extends PageDto implements Serializable {
     private String keyword;
     private String prodDesc;
     private String categoryId;
+    private String categoryName;
 
     private String content;
 
@@ -187,5 +188,13 @@ public class ProductDto extends PageDto implements Serializable {
 
     public void setProductSpecValues(List<ProductSpecValueDto> productSpecValues) {
         this.productSpecValues = productSpecValues;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
