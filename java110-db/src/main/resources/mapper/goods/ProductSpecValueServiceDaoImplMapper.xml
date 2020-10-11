@@ -19,8 +19,9 @@
     <select id="getProductSpecValueInfo" parameterType="Map" resultType="Map">
         select t.spec_id,t.spec_id specId,t.value_id,t.value_id valueId,t.product_id,t.product_id
         productId,t.price,t.ot_price,t.ot_price otPrice,t.cost_price,t.cost_price costPrice,t.vip_price,t.vip_price
-        vipPrice,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.stock,t.sales
+        vipPrice,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.stock,t.sales,ps.spec_name specName
         from product_spec_value t
+        left join product_spec ps on t.spec_id = ps.spec_id and ps.store_id = t.store_id and ps.status_cd = '0'
         where 1 =1
         <if test="specId !=null and specId != ''">
             and t.spec_id= #{specId}
@@ -93,9 +94,7 @@
         <if test="specId !=null and specId != ''">
             , t.spec_id= #{specId}
         </if>
-        <if test="productId !=null and productId != ''">
-            , t.product_id= #{productId}
-        </if>
+
         <if test="price !=null and price != ''">
             , t.price= #{price}
         </if>
@@ -120,6 +119,9 @@
         where 1=1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
         </if>
 
     </update>

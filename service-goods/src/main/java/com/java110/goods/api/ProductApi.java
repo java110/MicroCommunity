@@ -191,10 +191,33 @@ public class ProductApi {
         Assert.hasKeyAndValue(reqJson, "isPostage", "请求报文中未包含isPostage");
         Assert.hasKeyAndValue(reqJson, "productId", "productId不能为空");
 
+        String coverPhoto = reqJson.containsKey("coverPhoto") ? reqJson.getString("coverPhoto") : "";
+        JSONArray carouselFigurePhoto = reqJson.containsKey("carouselFigurePhoto") ? reqJson.getJSONArray("carouselFigurePhoto") : null;
+
+        JSONArray productSpecs = reqJson.containsKey("productSpecs") ? reqJson.getJSONArray("productSpecs") : null;
+
+        JSONObject spec = null;
+        List<ProductSpecValuePo> productSpecValuePos = null;;
+        if (productSpecs != null) {
+            productSpecValuePos = new ArrayList<>();
+            for (int specIndex = 0; specIndex < productSpecs.size(); specIndex++) {
+                spec = productSpecs.getJSONObject(specIndex);
+                productSpecValuePos.add(BeanConvertUtil.covertBean(spec, ProductSpecValuePo.class));
+            }
+        }
 
         ProductPo productPo = BeanConvertUtil.covertBean(reqJson, ProductPo.class);
         productPo.setStoreId(storeId);
-        return updateProductBMOImpl.update(productPo);
+
+
+        ProductDetailPo productDetailPo = null;
+        if(reqJson.containsKey("content")) {
+            productDetailPo = new ProductDetailPo();
+            productDetailPo.setStoreId(storeId);
+            productDetailPo.setContent(reqJson.getString("content"));
+        }
+
+        return updateProductBMOImpl.update(productPo, coverPhoto, carouselFigurePhoto, productSpecValuePos, productDetailPo);
     }
 
     /**

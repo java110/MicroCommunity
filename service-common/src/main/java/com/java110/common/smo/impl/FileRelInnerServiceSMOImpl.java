@@ -59,6 +59,10 @@ public class FileRelInnerServiceSMOImpl extends BaseServiceSMO implements IFileR
         return fileRelServiceDaoImpl.saveFileRel(BeanConvertUtil.beanCovertMap(fileRelPo));
     }
 
+    public int deleteFileRel(@RequestBody FileRelPo fileRelPo){
+        return fileRelServiceDaoImpl.deleteFileRel(BeanConvertUtil.beanCovertMap(fileRelPo));
+    }
+
 
     @Override
     public int queryFileRelsCount(@RequestBody FileRelDto fileRelDto) {

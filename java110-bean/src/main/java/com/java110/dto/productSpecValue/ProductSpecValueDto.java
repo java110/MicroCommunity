@@ -18,6 +18,7 @@ import java.util.List;
 public class ProductSpecValueDto extends PageDto implements Serializable {
 
     private String specId;
+    private String specName;
     private String valueId;
     private String productId;
     private String[] productIds;
@@ -148,5 +149,13 @@ public class ProductSpecValueDto extends PageDto implements Serializable {
 
     public void setProductSpecDetails(List<ProductSpecDetailDto> productSpecDetails) {
         this.productSpecDetails = productSpecDetails;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
     }
 }
