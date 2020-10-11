@@ -3,7 +3,6 @@ package com.java110.goods.bmo.product.impl;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.product.ProductDto;
 import com.java110.dto.product.ProductSpecDetailDto;
-import com.java110.dto.product.ProductSpecDto;
 import com.java110.dto.productDetail.ProductDetailDto;
 import com.java110.dto.productSpecValue.ProductSpecValueDto;
 import com.java110.goods.bmo.product.IGetProductBMO;
@@ -89,6 +88,20 @@ public class GetProductBMOImpl implements IGetProductBMO {
                 if (tmpProductDto.getProductId().equals(tmpFileRelDto.getObjId())) {
                     url = "/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=-1";
                     tmpProductDto.setCoverPhoto(url);
+                }
+            }
+        }
+
+        //刷入库存和销量
+        ProductSpecValueDto productSpecValueDto = new ProductSpecValueDto();
+        productSpecValueDto.setStoreId(productDtos.get(0).getStoreId());
+        productSpecValueDto.setProductIds(productIds.toArray(new String[productIds.size()]));
+        List<ProductSpecValueDto> productSpecValueDtos = productSpecValueInnerServiceSMOImpl.queryProductStockAndSales(productSpecValueDto);
+        for (ProductDto tmpProduct : productDtos) {
+            for (ProductSpecValueDto tmpProdSpecValue : productSpecValueDtos) {
+                if (tmpProdSpecValue.getProductId().equals(tmpProduct.getProductId())) {
+                    tmpProduct.setSales(tmpProdSpecValue.getSales());
+                    tmpProduct.setStock(tmpProdSpecValue.getStock());
                 }
             }
         }

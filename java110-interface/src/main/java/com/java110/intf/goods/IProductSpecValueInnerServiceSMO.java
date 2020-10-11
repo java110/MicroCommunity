@@ -43,6 +43,16 @@ public interface IProductSpecValueInnerServiceSMO {
     List<ProductSpecValueDto> queryProductSpecValues(@RequestBody ProductSpecValueDto productSpecValueDto);
 
     /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param productSpecValueDto 数据对象分享
+     * @return ProductSpecValueDto 对象数据
+     */
+    @RequestMapping(value = "/queryProductStockAndSales", method = RequestMethod.POST)
+    List<ProductSpecValueDto> queryProductStockAndSales(@RequestBody ProductSpecValueDto productSpecValueDto);
+
+    /**
      * 查询<p>小区楼</p>总记录数
      *
      * @param productSpecValueDto 数据对象分享

@@ -41,6 +41,11 @@ public interface IProductSpecValueServiceDao {
     List<Map> getProductSpecValueInfo(Map info) throws DAOException;
 
 
+    List<Map> queryProductStockAndSales(Map info) throws DAOException;
+
+
+
+
 
     /**
      * 修改产品规格值信息

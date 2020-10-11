@@ -67,6 +67,15 @@ public class ProductSpecValueInnerServiceSMOImpl extends BaseServiceSMO implemen
         return productSpecValues;
     }
 
+    @Override
+    public List<ProductSpecValueDto> queryProductStockAndSales(@RequestBody ProductSpecValueDto productSpecValueDto) {
+        List<ProductSpecValueDto> productSpecValues = BeanConvertUtil.covertBeanList(
+                productSpecValueServiceDaoImpl.queryProductStockAndSales(BeanConvertUtil.beanCovertMap(productSpecValueDto)),
+                ProductSpecValueDto.class);
+
+        return productSpecValues;
+    }
+
 
     @Override
     public int queryProductSpecValuesCount(@RequestBody ProductSpecValueDto productSpecValueDto) {

@@ -35,6 +35,9 @@ public class ProductDto extends PageDto implements Serializable {
 
     private String coverPhoto;
 
+    private String stock;
+    private String sales;
+
     private List<String> carouselFigurePhotos;
 
     private List<ProductSpecValueDto> productSpecValues;
@@ -196,5 +199,21 @@ public class ProductDto extends PageDto implements Serializable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+    public String getSales() {
+        return sales;
+    }
+
+    public void setSales(String sales) {
+        this.sales = sales;
     }
 }

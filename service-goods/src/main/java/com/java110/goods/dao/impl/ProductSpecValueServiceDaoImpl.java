@@ -61,6 +61,22 @@ public class ProductSpecValueServiceDaoImpl extends BaseServiceDao implements IP
     }
 
 
+
+    /**
+     * 查询库存和销量（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> queryProductStockAndSales(Map info) throws DAOException {
+        logger.debug("查询产品规格值信息 入参 info : {}",info);
+
+        List<Map> businessProductSpecValueInfos = sqlSessionTemplate.selectList("productSpecValueServiceDaoImpl.queryProductStockAndSales",info);
+
+        return businessProductSpecValueInfos;
+    }
+
     /**
      * 修改产品规格值信息
      * @param info 修改信息

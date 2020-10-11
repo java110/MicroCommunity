@@ -63,6 +63,27 @@
     </select>
 
 
+    <!-- 查询产品库存和销量 add by wuxw 2018-07-03 -->
+    <select id="queryProductStockAndSales" parameterType="Map" resultType="Map">
+        select t.product_id productId,sum(psv.stock) stock,SUM(psv.sales) sales
+        from product_spec_value t
+        where 1 =1
+        and t.status_cd= '0'
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="productIds != null">
+            and t.product_id in
+            <foreach collection="productIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        group by t.product_id
+    </select>
+
     <!-- 修改产品规格值信息 add by wuxw 2018-07-03 -->
     <update id="updateProductSpecValueInfo" parameterType="Map">
         update product_spec_value t set t.status_cd = #{statusCd}
