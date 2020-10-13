@@ -21,7 +21,6 @@
         <module>service-eureka</module>
         <module>service-sequence</module>
         <module>service-store</module>
-        <module>service-rule</module>
         <module>service-order</module>
         <module>service-api</module>
         <module>service-community</module>
@@ -29,7 +28,9 @@
         <module>service-common</module>
         <module>service-report</module>
         <module>service-front</module>
+        <module>service-goods</module>
         <module>java110-generator</module>
+
     </modules>
 
     <parent>

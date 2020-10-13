@@ -35,6 +35,9 @@ public interface IFileRelInnerServiceSMO {
     @RequestMapping(value = "/saveFileRel", method = RequestMethod.POST)
     public int saveFileRel(@RequestBody FileRelPo fileRelPo);
 
+    @RequestMapping(value = "/deleteFileRel", method = RequestMethod.POST)
+    public int deleteFileRel(@RequestBody FileRelPo fileRelPo);
+
     /**
      * 查询<p>小区楼</p>总记录数
      *

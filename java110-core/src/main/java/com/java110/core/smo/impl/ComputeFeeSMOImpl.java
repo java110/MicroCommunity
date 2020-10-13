@@ -41,16 +41,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     protected static final Logger logger = LoggerFactory.getLogger(ComputeFeeSMOImpl.class);
 
-    @Autowired
+    @Autowired(required = false)
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
-    @Autowired
+    @Autowired(required = false)
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
-    @Autowired
+    @Autowired(required = false)
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
-    @Autowired
+    @Autowired(required = false)
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     @Override

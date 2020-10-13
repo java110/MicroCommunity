@@ -149,6 +149,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
 
         feeDetailDto.setStartTime(DateUtil.getDateFromString(importRoomFee.getStartTime(), DateUtil.DATE_FORMATE_STRING_B));
         feeDetailDto.setEndTime(DateUtil.getDateFromString(importRoomFee.getEndTime(), DateUtil.DATE_FORMATE_STRING_B));
+        feeDetailDto.setCreateTime(DateUtil.getDateFromString(importRoomFee.getCreateTime(), DateUtil.DATE_FORMATE_STRING_B));
 
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
 

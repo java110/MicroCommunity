@@ -143,6 +143,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         billOweFeeDto.setCommunityId(weChatDto.getObjId());
         billOweFeeDto.setOwnerIds(memberIds);
         billOweFeeDto.setState("1000");
+        billOweFeeDto.setCurBill("T");
         List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
 
         String url = sendMsgUrl + accessToken;

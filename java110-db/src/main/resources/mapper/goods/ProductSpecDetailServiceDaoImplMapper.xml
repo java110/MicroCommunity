@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productSpecDetailServiceDaoImpl">
+
+
+    <!-- 保存产品规格明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveProductSpecDetailInfo" parameterType="Map">
+        insert into product_spec_detail(
+        spec_id,detail_name,detail_value,detail_id,store_id
+        ) values (
+        #{specId},#{detailName},#{detailValue},#{detailId},#{storeId}
+        )
+    </insert>
+
+
+    <!-- 查询产品规格明细信息 add by wuxw 2018-07-03 -->
+    <select id="getProductSpecDetailInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.detail_name,t.detail_name detailName,t.detail_value,t.detail_value
+        detailValue,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId
+        from product_spec_detail t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specIds != null">
+            and t.spec_id in
+            <foreach collection="specIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="detailName !=null and detailName != ''">
+            and t.detail_name= #{detailName}
+        </if>
+        <if test="detailValue !=null and detailValue != ''">
+            and t.detail_value= #{detailValue}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改产品规格明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateProductSpecDetailInfo" parameterType="Map">
+        update product_spec_detail t set t.status_cd = #{statusCd}
+        <if test="detailName !=null and detailName != ''">
+            , t.detail_name= #{detailName}
+        </if>
+        <if test="detailValue !=null and detailValue != ''">
+            , t.detail_value= #{detailValue}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询产品规格明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryProductSpecDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from product_spec_detail t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="detailName !=null and detailName != ''">
+            and t.detail_name= #{detailName}
+        </if>
+        <if test="detailValue !=null and detailValue != ''">
+            and t.detail_value= #{detailValue}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+
+    </select>
+
+</mapper>

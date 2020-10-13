@@ -11,11 +11,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -41,16 +37,19 @@ public class PayFeeAuditApi {
      * @path /app/payFeeAudit/savePayFeeAudit
      */
     @RequestMapping(value = "/savePayFeeAudit", method = RequestMethod.POST)
-    public ResponseEntity<String> savePayFeeAudit(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> savePayFeeAudit(@RequestBody JSONObject reqJson,
+                                                  @RequestHeader(value = "user-id") String userId,
+                                                  @RequestHeader(value="user-name")String userName) {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
-        Assert.hasKeyAndValue(reqJson, "auditUserId", "请求报文中未包含auditUserId");
-        Assert.hasKeyAndValue(reqJson, "auditUserName", "请求报文中未包含auditUserName");
+        Assert.hasKeyAndValue(reqJson, "feeDetailId", "请求报文中未包含缴费ID");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
 
 
         PayFeeAuditPo payFeeAuditPo = BeanConvertUtil.covertBean(reqJson, PayFeeAuditPo.class);
+        payFeeAuditPo.setAuditUserId(userId);
+        payFeeAuditPo.setAuditUserName(userName);
         return savePayFeeAuditBMOImpl.save(payFeeAuditPo);
     }
 

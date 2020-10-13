@@ -144,10 +144,13 @@
             and t.fee_id= #{feeId}
         </if>
         <if test="startTime !=null ">
-            and t.create_time &gt;= #{startTime}
+            and t.start_time = #{startTime}
         </if>
         <if test="endTime !=null ">
-            and t.create_time &lt;= #{endTime}
+            and t.end_time = #{endTime}
+        </if>
+        <if test="createTime !=null ">
+            and t.create_time = #{createTime}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">

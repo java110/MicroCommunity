@@ -1,0 +1,26 @@
+{
+  "autoMove": false,
+  "id": "docId",
+  "name": "sysDocument",
+  "desc": "系统文档",
+  "shareParam": "docId",
+  "shareColumn": "doc_id",
+  "shareName": "common",
+  "tableName": "sys_document",
+  "param": {
+    "docCode": "doc_code",
+    "docContent": "doc_content",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "docCode",
+      "msg": "文档编码不能为空"
+    },
+    {
+      "code": "docContent",
+      "msg": "文档内容不能为空"
+    }
+  ]
+}
+

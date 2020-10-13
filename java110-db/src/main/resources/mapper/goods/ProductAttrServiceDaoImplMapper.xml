@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productAttrServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存产品属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveProductAttrInfo" parameterType="Map">
+        insert into product_attr(
+attr_id,product_id,spec_cd,store_id,value
+) values (
+#{attrId},#{productId},#{specCd},#{storeId},#{value}
+)
+    </insert>
+
+
+
+    <!-- 查询产品属性信息 add by wuxw 2018-07-03 -->
+    <select id="getProductAttrInfo" parameterType="Map" resultType="Map">
+        select  t.attr_id,t.attr_id attrId,t.product_id,t.product_id productId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.value 
+from product_attr t 
+where 1 =1 
+<if test="attrId !=null and attrId != ''">
+   and t.attr_id= #{attrId}
+</if> 
+<if test="productId !=null and productId != ''">
+   and t.product_id= #{productId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改产品属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateProductAttrInfo" parameterType="Map">
+        update  product_attr t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="productId !=null and productId != ''">
+, t.product_id= #{productId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+, t.spec_cd= #{specCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="value !=null and value != ''">
+, t.value= #{value}
+</if> 
+ where 1=1 <if test="attrId !=null and attrId != ''">
+and t.attr_id= #{attrId}
+</if> 
+
+    </update>
+
+    <!-- 查询产品属性数量 add by wuxw 2018-07-03 -->
+     <select id="queryProductAttrsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from product_attr t 
+where 1 =1 
+<if test="attrId !=null and attrId != ''">
+   and t.attr_id= #{attrId}
+</if> 
+<if test="productId !=null and productId != ''">
+   and t.product_id= #{productId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+
+
+     </select>
+
+</mapper>

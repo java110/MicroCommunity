@@ -1,0 +1,56 @@
+{
+  "autoMove": false,
+  "id": "productId",
+  "name": "product",
+  "desc": "产品",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "goods",
+  "tableName": "product",
+  "param": {
+    "productId": "product_id",
+    "storeId": "store_id",
+    "prodName": "prod_name",
+    "prodDesc": "prod_desc",
+    "keyword": "keyword",
+    "barCode": "bar_code",
+    "categoryId": "category_id",
+    "unitName": "unit_name",
+    "state": "state",
+    "sort": "sort",
+    "postage": "postage",
+    "isPostage": "is_postage",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "prodName",
+      "msg": "产品名称不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户不能为空"
+    },
+    {
+      "code": "keyword",
+      "msg": "关键字不能为空"
+    },
+    {
+      "code": "categoryId",
+      "msg": "产品目录不能为空"
+    },
+    {
+      "code": "unitName",
+      "msg": "单位不能为空"
+    },
+    {
+      "code": "sort",
+      "msg": "排序不能为空"
+    },
+    {
+      "code": "isPostage",
+      "msg": "是否包邮不能为空"
+    }
+  ]
+}
+

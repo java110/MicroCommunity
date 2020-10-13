@@ -1,0 +1,27 @@
+{
+  "autoMove": false,
+  "id": "specId",
+  "name": "productSpec",
+  "desc": "产品规格",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "goods",
+  "tableName": "product_spec",
+  "param": {
+    "specId": "spec_id",
+    "storeId": "store_id",
+    "specName": "spec_name",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "specName",
+      "msg": "规格名称不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户不能为空"
+    }
+  ]
+}
+

@@ -89,6 +89,27 @@
         )
     </insert>
 
+    <insert id="deleteFileRel" parameterType="Map">
+        update file_rel t set t.status_cd = '1'
+        where 1=1
+        <if test="relTypeCd !=null and relTypeCd != ''">
+            and t.rel_type_cd= #{relTypeCd}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            and t.file_real_name= #{fileRealName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            and t.file_save_name= #{fileSaveName}
+        </if>
+        <if test="fileRelId !=null and fileRelId != ''">
+            and t.file_rel_id= #{fileRelId}
+        </if>
+
+    </insert>
+
 
     <!-- 查询文件存放信息 add by wuxw 2018-07-03 -->
     <select id="getFileRelInfo" parameterType="Map" resultType="Map">

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productSpecServiceDaoImpl">
+
+
+    <!-- 保存产品规格信息 add by wuxw 2018-07-03 -->
+    <insert id="saveProductSpecInfo" parameterType="Map">
+        insert into product_spec(
+        spec_id,spec_name,store_id
+        ) values (
+        #{specId},#{specName},#{storeId}
+        )
+    </insert>
+
+
+    <!-- 查询产品规格信息 add by wuxw 2018-07-03 -->
+    <select id="getProductSpecInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.spec_name,t.spec_name specName,t.status_cd,t.status_cd
+        statusCd,t.store_id,t.store_id storeId,t.create_time createTime
+        from product_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改产品规格信息 add by wuxw 2018-07-03 -->
+    <update id="updateProductSpecInfo" parameterType="Map">
+        update product_spec t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            , t.spec_name= #{specName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+
+    </update>
+
+    <!-- 查询产品规格数量 add by wuxw 2018-07-03 -->
+    <select id="queryProductSpecsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from product_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+
+    </select>
+
+</mapper>
