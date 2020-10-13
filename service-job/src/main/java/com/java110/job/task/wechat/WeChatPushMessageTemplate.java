@@ -14,6 +14,7 @@ import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
+import com.java110.entity.wechat.Miniprogram;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.community.INoticeInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -307,7 +308,14 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         JSONObject dataObj = paramOutObj.getJSONObject("data");
         JSONArray openids = dataObj.getJSONArray("openid");
         nextOpenid = paramOutObj.getString("next_openid");
-        String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/#/pages/notice/detail/detail?noticeId=";
+        String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+        Miniprogram miniprogram = null;
+        if (wechatUrl.startsWith("https://") || wechatUrl.startsWith("http://")) {
+
+        } else {
+            miniprogram = new Miniprogram();
+            miniprogram.setAppid(wechatUrl);
+        }
         for (int openIndex = 0; openIndex < openids.size(); openIndex++) {
             String openId = openids.getString(openIndex);
             Data data = new Data();
@@ -320,7 +328,14 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             data.setKeyword3(new Content(noticeDto.getContext()));
             data.setRemark(new Content("如有疑问请联系相关物业人员"));
             templateMessage.setData(data);
-            templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId());
+            if (!StringUtil.isEmpty(wechatUrl)) {
+                if (miniprogram == null) {
+                    templateMessage.setUrl(wechatUrl + "/#/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId());
+                } else {
+                    miniprogram.setPagepath("/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId());
+                    templateMessage.setMiniprogram(miniprogram);
+                }
+            }
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(sendMsgUrl + accessToken, JSON.toJSONString(templateMessage), String.class);
             logger.info("微信模板返回内容:{}", responseEntity);
