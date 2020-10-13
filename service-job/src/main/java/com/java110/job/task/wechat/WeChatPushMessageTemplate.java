@@ -290,6 +290,8 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         }
         ResponseEntity<String> paramOut = outRestTemplate.getForEntity(url, String.class);
 
+        logger.info("获取用户返回:{}", paramOut);
+
         if (paramOut.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException(paramOut.getBody());
         }
@@ -297,6 +299,10 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         JSONObject paramOutObj = JSONObject.parseObject(paramOut.getBody());
         if (paramOutObj.containsKey("errcode")) {
             throw new IllegalArgumentException(paramOut.getBody());
+        }
+
+        if (!paramOutObj.containsKey("data")) {
+            return;
         }
         JSONObject dataObj = paramOutObj.getJSONObject("data");
         JSONArray openids = dataObj.getJSONArray("openid");
