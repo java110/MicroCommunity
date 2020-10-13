@@ -10,6 +10,7 @@ import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
+import com.java110.entity.wechat.Miniprogram;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
@@ -18,6 +19,7 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,7 +149,12 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
 
         String url = sendMsgUrl + accessToken;
-        String oweUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.OWE_FEE_PAGE);
+        String oweUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
+        Miniprogram miniprogram = null;
+        if (oweUrl.contains("@@")) {
+            miniprogram = new Miniprogram();
+            miniprogram.setAppid(oweUrl.split("@@")[0]);
+        }
         for (BillOweFeeDto fee : billOweFeeDtos) {
             for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
                 if (fee.getOwnerId().equals(appUserDto.getMemberId())) {
@@ -165,7 +172,14 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     data.setKeyword2(new Content(year + "年-" + month + "月"));
                     data.setKeyword3(new Content(fee.getAmountOwed()));
                     data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
-                    templateMessage.setUrl(oweUrl + fee.getPayObjId());
+                    if (!StringUtil.isEmpty(oweUrl)) {
+                        if (miniprogram == null) {
+                            templateMessage.setUrl(oweUrl + fee.getPayObjId());
+                        } else {
+                            miniprogram.setPagepath(oweUrl.split("@@")[1] + fee.getPayObjId());
+                            templateMessage.setMiniprogram(miniprogram);
+                        }
+                    }
                     templateMessage.setData(data);
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
