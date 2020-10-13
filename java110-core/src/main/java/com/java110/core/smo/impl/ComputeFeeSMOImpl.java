@@ -2,10 +2,7 @@ package com.java110.core.smo.impl;
 
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
-import com.java110.dto.fee.BillDto;
-import com.java110.dto.fee.BillOweFeeDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
+import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
@@ -205,6 +202,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     feeReceiptDetailPo.setArea(sub.doubleValue() + "");
                     feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
                 }
+            } else if ("6006".equals(computingFormula)) {
+                String value = "";
+                List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+                for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+                    if (feeAttrDto.getSpecCd().equals(FeeAttrDto.SPEC_CD_PROXY_CONSUMPTION)) {
+                        value = feeAttrDto.getValue();
+                    }
+                }
+                feeReceiptDetailPo.setArea(value);
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
             } else {
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
@@ -237,6 +244,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     feeReceiptDetailPo.setArea(sub.doubleValue() + "");
                     feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
                 }
+            } else if ("6006".equals(computingFormula)) {
+                String value = "";
+                List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+                for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+                    if (feeAttrDto.getSpecCd().equals(FeeAttrDto.SPEC_CD_PROXY_CONSUMPTION)) {
+                        value = feeAttrDto.getValue();
+                    }
+                }
+                feeReceiptDetailPo.setArea(value);
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
             } else {
             }
         }
@@ -504,6 +521,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                             .add(additionalAmount)
                             .setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 }
+            } else if ("6006".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -546,6 +565,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                             .add(additionalAmount)
                             .setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 }
+            } else if ("6006".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }

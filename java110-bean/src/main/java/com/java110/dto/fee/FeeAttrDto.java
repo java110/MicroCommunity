@@ -22,6 +22,7 @@ public class FeeAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_SHARE_DEGREES = "390003";//公摊用量
     public static final String SPEC_CD_TOTAL_DEGREES = "390004";//公摊总用量
     public static final String SPEC_CD_SHARE_FORMULA = "390005";//公摊公式
+    public static final String SPEC_CD_PROXY_CONSUMPTION = "390006";//用量
 
     private String attrId;
     private String specCd;
