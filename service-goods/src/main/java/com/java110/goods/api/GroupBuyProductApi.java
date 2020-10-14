@@ -2,16 +2,22 @@ package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.groupBuyProduct.GroupBuyProductDto;
+import com.java110.dto.groupBuyProductSpec.GroupBuyProductSpecDto;
 import com.java110.dto.groupBuySetting.GroupBuySettingDto;
 import com.java110.goods.bmo.groupBuyProduct.IDeleteGroupBuyProductBMO;
 import com.java110.goods.bmo.groupBuyProduct.IGetGroupBuyProductBMO;
 import com.java110.goods.bmo.groupBuyProduct.ISaveGroupBuyProductBMO;
 import com.java110.goods.bmo.groupBuyProduct.IUpdateGroupBuyProductBMO;
+import com.java110.goods.bmo.groupBuyProductSpec.IDeleteGroupBuyProductSpecBMO;
+import com.java110.goods.bmo.groupBuyProductSpec.IGetGroupBuyProductSpecBMO;
+import com.java110.goods.bmo.groupBuyProductSpec.ISaveGroupBuyProductSpecBMO;
+import com.java110.goods.bmo.groupBuyProductSpec.IUpdateGroupBuyProductSpecBMO;
 import com.java110.goods.bmo.groupBuySetting.IDeleteGroupBuySettingBMO;
 import com.java110.goods.bmo.groupBuySetting.IGetGroupBuySettingBMO;
 import com.java110.goods.bmo.groupBuySetting.ISaveGroupBuySettingBMO;
 import com.java110.goods.bmo.groupBuySetting.IUpdateGroupBuySettingBMO;
 import com.java110.po.groupBuyProduct.GroupBuyProductPo;
+import com.java110.po.groupBuyProductSpec.GroupBuyProductSpecPo;
 import com.java110.po.groupBuySetting.GroupBuySettingPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -43,6 +49,18 @@ public class GroupBuyProductApi {
 
     @Autowired
     private IGetGroupBuySettingBMO getGroupBuySettingBMOImpl;
+
+
+    @Autowired
+    private ISaveGroupBuyProductSpecBMO saveGroupBuyProductSpecBMOImpl;
+    @Autowired
+    private IUpdateGroupBuyProductSpecBMO updateGroupBuyProductSpecBMOImpl;
+    @Autowired
+    private IDeleteGroupBuyProductSpecBMO deleteGroupBuyProductSpecBMOImpl;
+
+    @Autowired
+    private IGetGroupBuyProductSpecBMO getGroupBuyProductSpecBMOImpl;
+
 
     /**
      * 微信保存消息模板
@@ -208,5 +226,86 @@ public class GroupBuyProductApi {
         groupBuySettingDto.setRow(row);
         groupBuySettingDto.setStoreId(storeId);
         return getGroupBuySettingBMOImpl.get(groupBuySettingDto);
+    }
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /groupBuyProductSpec/saveGroupBuyProductSpec
+     * @path /app/groupBuyProductSpec/saveGroupBuyProductSpec
+     */
+    @RequestMapping(value = "/saveGroupBuyProductSpec", method = RequestMethod.POST)
+    public ResponseEntity<String> saveGroupBuyProductSpec(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "groupStock", "请求报文中未包含groupStock");
+        Assert.hasKeyAndValue(reqJson, "groupSales", "请求报文中未包含groupSales");
+        Assert.hasKeyAndValue(reqJson, "defaultShow", "请求报文中未包含defaultShow");
+        Assert.hasKeyAndValue(reqJson, "productId", "请求报文中未包含productId");
+
+
+        GroupBuyProductSpecPo groupBuyProductSpecPo = BeanConvertUtil.covertBean(reqJson, GroupBuyProductSpecPo.class);
+        return saveGroupBuyProductSpecBMOImpl.save(groupBuyProductSpecPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /groupBuyProductSpec/updateGroupBuyProductSpec
+     * @path /app/groupBuyProductSpec/updateGroupBuyProductSpec
+     */
+    @RequestMapping(value = "/updateGroupBuyProductSpec", method = RequestMethod.POST)
+    public ResponseEntity<String> updateGroupBuyProductSpec(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "groupStock", "请求报文中未包含groupStock");
+        Assert.hasKeyAndValue(reqJson, "groupSales", "请求报文中未包含groupSales");
+        Assert.hasKeyAndValue(reqJson, "defaultShow", "请求报文中未包含defaultShow");
+        Assert.hasKeyAndValue(reqJson, "productId", "请求报文中未包含productId");
+        Assert.hasKeyAndValue(reqJson, "specId", "specId不能为空");
+
+
+        GroupBuyProductSpecPo groupBuyProductSpecPo = BeanConvertUtil.covertBean(reqJson, GroupBuyProductSpecPo.class);
+        return updateGroupBuyProductSpecBMOImpl.update(groupBuyProductSpecPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /groupBuyProductSpec/deleteGroupBuyProductSpec
+     * @path /app/groupBuyProductSpec/deleteGroupBuyProductSpec
+     */
+    @RequestMapping(value = "/deleteGroupBuyProductSpec", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteGroupBuyProductSpec(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "specId", "specId不能为空");
+
+
+        GroupBuyProductSpecPo groupBuyProductSpecPo = BeanConvertUtil.covertBean(reqJson, GroupBuyProductSpecPo.class);
+        return deleteGroupBuyProductSpecBMOImpl.delete(groupBuyProductSpecPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /groupBuyProductSpec/queryGroupBuyProductSpec
+     * @path /app/groupBuyProductSpec/queryGroupBuyProductSpec
+     */
+    @RequestMapping(value = "/queryGroupBuyProductSpec", method = RequestMethod.GET)
+    public ResponseEntity<String> queryGroupBuyProductSpec(@RequestHeader(value = "store-id") String storeId,
+                                                           @RequestParam(value = "page") int page,
+                                                           @RequestParam(value = "row") int row) {
+        GroupBuyProductSpecDto groupBuyProductSpecDto = new GroupBuyProductSpecDto();
+        groupBuyProductSpecDto.setPage(page);
+        groupBuyProductSpecDto.setRow(row);
+        groupBuyProductSpecDto.setStoreId(storeId);
+        return getGroupBuyProductSpecBMOImpl.get(groupBuyProductSpecDto);
     }
 }
