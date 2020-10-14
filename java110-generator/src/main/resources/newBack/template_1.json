@@ -1,38 +1,47 @@
 {
   "autoMove": true,
-  "id": "specId",
-  "name": "groupBuyProductSpec",
-  "desc": "拼团产品规格",
+  "id": "buyId",
+  "name": "groupBuy",
+  "desc": "拼团购买",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "goods",
-  "tableName": "group_buy_product_spec",
+  "tableName": "group_buy",
   "param": {
-    "specId": "spec_id",
-    "productId": "product_id",
-    "groupStock": "group_stock",
-    "groupSales": "group_sales",
-    "groupPrice": "group_price",
-    "defaultShow": "default_show",
+    "buyId": "buy_id",
+    "batchId": "batch_id",
     "storeId": "store_id",
+    "productId": "product_id",
+    "specId": "spec_id",
+    "groupId": "group_id",
+    "persionId": "persion_id",
+    "persionName": "persion_name",
+    "buyCount": "buy_count",
+    "groupPrice": "group_price",
+    "amount": "amount",
+    "state": "state",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "groupStock",
-      "msg": "拼团产品库存不能为空"
+      "code": "batchId",
+      "msg": "批次不能为空"
     },
     {
-      "code": "groupSales",
-      "msg": "拼团销售不能为空"
-    },
-    {
-      "code": "defaultShow",
-      "msg": "默认显示不能为空"
+      "code": "buyCount",
+      "msg": "购买数量不能为空"
     },
     {
       "code": "productId",
-      "msg": "商品不能为空"
+      "msg": "默认显示不能为空"
+    },
+    {
+      "code": "specId",
+      "msg": "规格不能为空"
+    },
+    {
+      "code": "persionId",
+      "msg": "用户不能为空"
     }
   ]
 }
