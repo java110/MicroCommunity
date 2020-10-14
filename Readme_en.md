@@ -1,4 +1,4 @@
-# HC community management system is an open source and free commercial community property management system, including back-end project, front-end project, property version uni app and owner's version uni app. The latest SQL file group access 827669685 (full), 799748606 (group 2)
+# HC community management system is an open source and free commercial community property management system, including back-end project, front-end project, property version uni-app and owner's version uni-app. 
 
 
 
