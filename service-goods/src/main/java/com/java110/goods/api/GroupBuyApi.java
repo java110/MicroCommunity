@@ -35,7 +35,12 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/groupBuy")
@@ -183,8 +188,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyProduct/saveGroupBuyProduct
-     * @path /app/groupBuyProduct/saveGroupBuyProduct
+     * @serviceCode /groupBuy/saveGroupBuyProduct
+     * @path /app/groupBuy/saveGroupBuyProduct
      */
     @RequestMapping(value = "/saveGroupBuyProduct", method = RequestMethod.POST)
     public ResponseEntity<String> saveGroupBuyProduct(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
@@ -205,8 +210,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyProduct/updateGroupBuyProduct
-     * @path /app/groupBuyProduct/updateGroupBuyProduct
+     * @serviceCode /groupBuy/updateGroupBuyProduct
+     * @path /app/groupBuy/updateGroupBuyProduct
      */
     @RequestMapping(value = "/updateGroupBuyProduct", method = RequestMethod.POST)
     public ResponseEntity<String> updateGroupBuyProduct(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
@@ -228,8 +233,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyProduct/deleteGroupBuyProduct
-     * @path /app/groupBuyProduct/deleteGroupBuyProduct
+     * @serviceCode /groupBuy/deleteGroupBuyProduct
+     * @path /app/groupBuy/deleteGroupBuyProduct
      */
     @RequestMapping(value = "/deleteGroupBuyProduct", method = RequestMethod.POST)
     public ResponseEntity<String> deleteGroupBuyProduct(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
@@ -248,8 +253,8 @@ public class GroupBuyApi {
      *
      * @param storeId 商户
      * @return
-     * @serviceCode /groupBuyProduct/queryGroupBuyProduct
-     * @path /app/groupBuyProduct/queryGroupBuyProduct
+     * @serviceCode /groupBuy/queryGroupBuyProduct
+     * @path /app/groupBuy/queryGroupBuyProduct
      */
     @RequestMapping(value = "/queryGroupBuyProduct", method = RequestMethod.GET)
     public ResponseEntity<String> queryGroupBuyProduct(@RequestHeader(value = "store-id") String storeId,
@@ -268,11 +273,11 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuySetting/saveGroupBuySetting
-     * @path /app/groupBuySetting/saveGroupBuySetting
+     * @serviceCode /groupBuy/saveGroupBuySetting
+     * @path /app/groupBuy/saveGroupBuySetting
      */
     @RequestMapping(value = "/saveGroupBuySetting", method = RequestMethod.POST)
-    public ResponseEntity<String> saveGroupBuySetting(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveGroupBuySetting(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
 
         Assert.hasKeyAndValue(reqJson, "groupBuyName", "请求报文中未包含groupBuyName");
         Assert.hasKeyAndValue(reqJson, "validHours", "请求报文中未包含validHours");
@@ -281,6 +286,7 @@ public class GroupBuyApi {
 
 
         GroupBuySettingPo groupBuySettingPo = BeanConvertUtil.covertBean(reqJson, GroupBuySettingPo.class);
+        groupBuySettingPo.setStoreId(storeId);
         return saveGroupBuySettingBMOImpl.save(groupBuySettingPo);
     }
 
@@ -289,11 +295,11 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuySetting/updateGroupBuySetting
-     * @path /app/groupBuySetting/updateGroupBuySetting
+     * @serviceCode /groupBuy/updateGroupBuySetting
+     * @path /app/groupBuy/updateGroupBuySetting
      */
     @RequestMapping(value = "/updateGroupBuySetting", method = RequestMethod.POST)
-    public ResponseEntity<String> updateGroupBuySetting(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> updateGroupBuySetting(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
 
         Assert.hasKeyAndValue(reqJson, "groupBuyName", "请求报文中未包含groupBuyName");
         Assert.hasKeyAndValue(reqJson, "validHours", "请求报文中未包含validHours");
@@ -303,6 +309,7 @@ public class GroupBuyApi {
 
 
         GroupBuySettingPo groupBuySettingPo = BeanConvertUtil.covertBean(reqJson, GroupBuySettingPo.class);
+        groupBuySettingPo.setStoreId(storeId);
         return updateGroupBuySettingBMOImpl.update(groupBuySettingPo);
     }
 
@@ -311,17 +318,18 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuySetting/deleteGroupBuySetting
-     * @path /app/groupBuySetting/deleteGroupBuySetting
+     * @serviceCode /groupBuy/deleteGroupBuySetting
+     * @path /app/groupBuy/deleteGroupBuySetting
      */
     @RequestMapping(value = "/deleteGroupBuySetting", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteGroupBuySetting(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> deleteGroupBuySetting(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "settingId", "settingId不能为空");
 
 
         GroupBuySettingPo groupBuySettingPo = BeanConvertUtil.covertBean(reqJson, GroupBuySettingPo.class);
+        groupBuySettingPo.setStoreId(storeId);
         return deleteGroupBuySettingBMOImpl.delete(groupBuySettingPo);
     }
 
@@ -330,8 +338,8 @@ public class GroupBuyApi {
      *
      * @param storeId 商户ID
      * @return
-     * @serviceCode /groupBuySetting/queryGroupBuySetting
-     * @path /app/groupBuySetting/queryGroupBuySetting
+     * @serviceCode /groupBuy/queryGroupBuySetting
+     * @path /app/groupBuy/queryGroupBuySetting
      */
     @RequestMapping(value = "/queryGroupBuySetting", method = RequestMethod.GET)
     public ResponseEntity<String> queryGroupBuySetting(@RequestHeader(value = "store-id") String storeId,
@@ -349,8 +357,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyProductSpec/saveGroupBuyProductSpec
-     * @path /app/groupBuyProductSpec/saveGroupBuyProductSpec
+     * @serviceCode /groupBuy/saveGroupBuyProductSpec
+     * @path /app/groupBuy/saveGroupBuyProductSpec
      */
     @RequestMapping(value = "/saveGroupBuyProductSpec", method = RequestMethod.POST)
     public ResponseEntity<String> saveGroupBuyProductSpec(@RequestBody JSONObject reqJson) {
@@ -370,8 +378,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyProductSpec/updateGroupBuyProductSpec
-     * @path /app/groupBuyProductSpec/updateGroupBuyProductSpec
+     * @serviceCode /groupBuy/updateGroupBuyProductSpec
+     * @path /app/groupBuy/updateGroupBuyProductSpec
      */
     @RequestMapping(value = "/updateGroupBuyProductSpec", method = RequestMethod.POST)
     public ResponseEntity<String> updateGroupBuyProductSpec(@RequestBody JSONObject reqJson) {
@@ -392,8 +400,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyProductSpec/deleteGroupBuyProductSpec
-     * @path /app/groupBuyProductSpec/deleteGroupBuyProductSpec
+     * @serviceCode /groupBuy/deleteGroupBuyProductSpec
+     * @path /app/groupBuy/deleteGroupBuyProductSpec
      */
     @RequestMapping(value = "/deleteGroupBuyProductSpec", method = RequestMethod.POST)
     public ResponseEntity<String> deleteGroupBuyProductSpec(@RequestBody JSONObject reqJson) {
@@ -411,8 +419,8 @@ public class GroupBuyApi {
      *
      * @param storeId 小区ID
      * @return
-     * @serviceCode /groupBuyProductSpec/queryGroupBuyProductSpec
-     * @path /app/groupBuyProductSpec/queryGroupBuyProductSpec
+     * @serviceCode /groupBuy/queryGroupBuyProductSpec
+     * @path /app/groupBuy/queryGroupBuyProductSpec
      */
     @RequestMapping(value = "/queryGroupBuyProductSpec", method = RequestMethod.GET)
     public ResponseEntity<String> queryGroupBuyProductSpec(@RequestHeader(value = "store-id") String storeId,
@@ -431,8 +439,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyBatch/saveGroupBuyBatch
-     * @path /app/groupBuyBatch/saveGroupBuyBatch
+     * @serviceCode /groupBuy/saveGroupBuyBatch
+     * @path /app/groupBuy/saveGroupBuyBatch
      */
     @RequestMapping(value = "/saveGroupBuyBatch", method = RequestMethod.POST)
     public ResponseEntity<String> saveGroupBuyBatch(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
@@ -452,8 +460,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyBatch/updateGroupBuyBatch
-     * @path /app/groupBuyBatch/updateGroupBuyBatch
+     * @serviceCode /groupBuy/updateGroupBuyBatch
+     * @path /app/groupBuy/updateGroupBuyBatch
      */
     @RequestMapping(value = "/updateGroupBuyBatch", method = RequestMethod.POST)
     public ResponseEntity<String> updateGroupBuyBatch(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
@@ -474,8 +482,8 @@ public class GroupBuyApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /groupBuyBatch/deleteGroupBuyBatch
-     * @path /app/groupBuyBatch/deleteGroupBuyBatch
+     * @serviceCode /groupBuy/deleteGroupBuyBatch
+     * @path /app/groupBuy/deleteGroupBuyBatch
      */
     @RequestMapping(value = "/deleteGroupBuyBatch", method = RequestMethod.POST)
     public ResponseEntity<String> deleteGroupBuyBatch(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
@@ -494,8 +502,8 @@ public class GroupBuyApi {
      *
      * @param storeId 小区ID
      * @return
-     * @serviceCode /groupBuyBatch/queryGroupBuyBatch
-     * @path /app/groupBuyBatch/queryGroupBuyBatch
+     * @serviceCode /groupBuy/queryGroupBuyBatch
+     * @path /app/groupBuy/queryGroupBuyBatch
      */
     @RequestMapping(value = "/queryGroupBuyBatch", method = RequestMethod.GET)
     public ResponseEntity<String> queryGroupBuyBatch(@RequestHeader(value = "store-id") String storeId,
