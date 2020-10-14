@@ -1,47 +1,33 @@
 {
   "autoMove": true,
-  "id": "buyId",
-  "name": "groupBuy",
-  "desc": "拼团购买",
+  "id": "batchId",
+  "name": "groupBuyBatch",
+  "desc": "拼团批次",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "goods",
-  "tableName": "group_buy",
+  "tableName": "group_buy_batch",
   "param": {
-    "buyId": "buy_id",
     "batchId": "batch_id",
     "storeId": "store_id",
-    "productId": "product_id",
-    "specId": "spec_id",
-    "groupId": "group_id",
-    "persionId": "persion_id",
-    "persionName": "persion_name",
-    "buyCount": "buy_count",
-    "groupPrice": "group_price",
-    "amount": "amount",
-    "state": "state",
+    "settingId": "setting_id",
+    "batchStartTime": "batch_start_time",
+    "batchEndTime": "batch_end_time",
+    "curBatch": "cur_batch",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "batchId",
-      "msg": "批次不能为空"
+      "code": "settingId",
+      "msg": "设置ID不能为空"
     },
     {
-      "code": "buyCount",
-      "msg": "购买数量不能为空"
+      "code": "batchStartTime",
+      "msg": "开始时间不能为空"
     },
     {
-      "code": "productId",
-      "msg": "默认显示不能为空"
-    },
-    {
-      "code": "specId",
-      "msg": "规格不能为空"
-    },
-    {
-      "code": "persionId",
-      "msg": "用户不能为空"
+      "code": "batchEndTime",
+      "msg": "结束时间不能为空"
     }
   ]
 }
