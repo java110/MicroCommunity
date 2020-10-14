@@ -1,30 +1,30 @@
-#HC community management system is an open source and free commercial community property management system, including back-end project, front-end project, property version uni app and owner's version uni app. The latest SQL file group access 827669685 (full), 799748606 (group 2)
+# HC community management system is an open source and free commercial community property management system, including back-end project, front-end project, property version uni app and owner's version uni app. The latest SQL file group access 827669685 (full), 799748606 (group 2)
 
 
 
-##Open source code description
+## Open source code description
 
 
 
-###HC cell back end code
+### HC cell back end code
 
 [ https://gitee.com/wuxw7/MicroCommunity ] https://gitee.com/wuxw7/MicroCommunity )
 
-###HC cell front end code
+### HC cell front end code
 
 [ https://gitee.com/java110/MicroCommunityWeb ] https://gitee.com/java110/MicroCommunityWeb )
 
-###HC smart home (owner version)
+### HC smart home (owner version)
 
 [ https://gitee.com/java110/WechatOwnerService ] https://gitee.com/java110/WechatOwnerService )
 
-###HC handheld property (uni app for property)
+### HC handheld property (uni app for property)
 
 [ https://gitee.com/java110/PropertyApp ] https://gitee.com/java110/PropertyApp )
 
 
 
-###Branch description
+### Branch description
 
 
 
@@ -33,7 +33,7 @@ Branch management Description: Master is the main branch, 0.5-stable is the late
 
 
 
-###How to start
+### How to start
 
 
 
@@ -41,7 +41,7 @@ Branch management Description: Master is the main branch, 0.5-stable is the late
 
 
 
-###How to install
+### How to install
 
 
 
@@ -69,7 +69,7 @@ Scheme 2: self service deployment according to demand
 
 
 
-###Operation document
+### Operation document
 
 
 
@@ -77,7 +77,7 @@ Scheme 2: self service deployment according to demand
 
 
 
-###Technical documentation
+### Technical documentation
 
 
 
@@ -86,7 +86,7 @@ Scheme 2: self service deployment according to demand
 
 
 
-###Products
+### Products
 
 
 
@@ -95,7 +95,7 @@ Scheme 2: self service deployment according to demand
 
 
 
-###System function
+### System function
 
 
 
@@ -112,7 +112,7 @@ Please check the main system functions
 
 
 
-###Demo address
+### Demo address
 
 
 
@@ -136,7 +136,7 @@ Development team account / password: dev / (due to the large rights of developer
 
 
 
-###Running effect (view)
+### Running effect (view)
 
 1. Input in the browser http://localhost : 3000 / as shown in the figure below
 
@@ -164,14 +164,6 @@ Click login to enter the following figure:
 
 ![image](docs/img/ owner.png )
 
-
-
-
-###Join us
-
-
-
-Join the micro community communication group to know the progress of the project at any time, and communicate with java110 developers in zero distance. QQ group number: 827669685 (full), 799748606 (group 2), email: 928255095@qq.com
 
 
 
