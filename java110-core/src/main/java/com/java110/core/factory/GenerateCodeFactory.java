@@ -159,6 +159,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_specId = "88";
     public static final String CODE_PREFIX_productId = "90";
     public static final String CODE_PREFIX_valueId = "91";
+    public static final String CODE_PREFIX_groupId = "92";
 
 
 

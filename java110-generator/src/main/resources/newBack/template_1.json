@@ -1,31 +1,38 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "productDetail",
-  "desc": "产品属性",
+  "id": "specId",
+  "name": "groupBuyProductSpec",
+  "desc": "拼团产品规格",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "goods",
-  "tableName": "product_detail",
+  "tableName": "group_buy_product_spec",
   "param": {
-    "storeId": "store_id",
+    "specId": "spec_id",
     "productId": "product_id",
-    "detailId": "detail_id",
-    "content": "content",
+    "groupStock": "group_stock",
+    "groupSales": "group_sales",
+    "groupPrice": "group_price",
+    "defaultShow": "default_show",
+    "storeId": "store_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
+      "code": "groupStock",
+      "msg": "拼团产品库存不能为空"
+    },
+    {
+      "code": "groupSales",
+      "msg": "拼团销售不能为空"
+    },
+    {
+      "code": "defaultShow",
+      "msg": "默认显示不能为空"
+    },
+    {
       "code": "productId",
-      "msg": "产品不能为空"
-    },
-    {
-      "code": "storeId",
-      "msg": "商户ID不能为空"
-    },
-    {
-      "code": "content",
-      "msg": "产品详情不能为空"
+      "msg": "商品不能为空"
     }
   ]
 }
