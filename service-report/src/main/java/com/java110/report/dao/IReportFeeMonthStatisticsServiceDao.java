@@ -1,6 +1,7 @@
 package com.java110.report.dao;
 
 
+import com.java110.dto.RoomDto;
 import com.java110.utils.exception.DAOException;
 import com.java110.entity.merchant.BoMerchant;
 import com.java110.entity.merchant.BoMerchantAttr;

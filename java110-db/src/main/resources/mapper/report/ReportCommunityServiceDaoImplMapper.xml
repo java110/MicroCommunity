@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportCommunityServiceDaoImpl">
+
+    <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
+    <select id="getRoomCount" parameterType="com.java110.dto.report.ReportRoomDto" resultType="Map">
+        select count(1) count
+        from building_room t
+        where t.status_cd = '0'
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </select>
+
+    <!-- 查询 房屋 楼栋 单元 业主 -->
+    <select id="getRoomFloorUnitAndOwner" parameterType="com.java110.dto.report.ReportRoomDto"
+            resultType="com.java110.dto.report.ReportRoomDto">
+        select t.apartment,t.built_up_area builtUpArea,t.community_id communityId,t.create_time createTime,
+        t.fee_coefficient feeCoefficient,t.layer,t.room_id roomId,t.room_num roomNum,t.section,
+        t.state,bu.unit_id unitId,bu.unit_num unitNum,ff.floor_id floorId,ff.floor_num floorNum,
+        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.owner_id ownerId
+        from building_room t
+        INNER JOIN building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
+        LEFT JOIN building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
+        left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+</mapper>

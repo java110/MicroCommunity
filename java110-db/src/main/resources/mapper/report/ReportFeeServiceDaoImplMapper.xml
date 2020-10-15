@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportFeeServiceDaoImpl">
+
+    <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
+    <select id="getFeeCount" parameterType="com.java110.dto.report.ReportFeeDto" resultType="Map">
+        select count(1) count
+        from pay_fee t
+        where t.status_cd = '0'
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type= #{payerObjType}
+        </if>
+    </select>
+
+    <!-- 查询 费用 -->
+    <select id="getFees" parameterType="com.java110.dto.report.ReportFeeDto"
+            resultType="com.java110.dto.report.ReportFeeDto">
+        select pfc.fee_name,pfc.start_time configStartTime,pfc.end_time configEndTime,pfc.config_id configId,pfc.fee_type_cd feeTypeCd,
+        pfc.additional_amount additionalAmount,pfc.bill_type billType,pfc.computing_formula computingFormula,pfc.payment_cd paymentCd,
+        pfc.payment_cycle paymentCycle,pfc.square_price squarePrice,pfc.fee_flag feeFlag,t.payer_obj_id payerObjId,t.payer_obj_type payerObjType,
+        t.amount,t.create_time createTime,t.end_time endTime,t.fee_id feeId,t.income_obj_id incomeObjId,t.start_time startTime,t.state,
+        br.room_id roomId,br.room_num roomNum,oc.car_num carNum,ss.store_id storeId,ss.`name` storeName,ss.store_type_cd storeTypeCd
+        from pay_fee t
+        INNER JOIN pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0'
+        left join s_store ss on t.income_obj_id = ss.store_id and ss.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id= #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type= #{payerObjType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+</mapper>
