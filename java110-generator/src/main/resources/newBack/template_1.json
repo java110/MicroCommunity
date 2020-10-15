@@ -1,33 +1,35 @@
 {
   "autoMove": true,
-  "id": "batchId",
-  "name": "groupBuyBatch",
-  "desc": "拼团批次",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "goods",
-  "tableName": "group_buy_batch",
+  "id": "statisticsId",
+  "name": "reportFeeMonthStatistics",
+  "desc": "费用月统计",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "report",
+  "tableName": "report_fee_month_statistics",
   "param": {
-    "batchId": "batch_id",
-    "storeId": "store_id",
-    "settingId": "setting_id",
-    "batchStartTime": "batch_start_time",
-    "batchEndTime": "batch_end_time",
-    "curBatch": "cur_batch",
+    "statisticsId": "statistics_id",
+    "feeYear": "fee_year",
+    "feeMonth": "fee_month",
+    "communityId": "community_id",
+    "objType": "obj_type",
+    "objId": "obj_id",
+    "objName": "obj_name",
+    "feeId": "fee_id",
+    "feeName": "fee_name",
+    "configId": "config_id",
+    "receivableAmount": "receivable_amount",
+    "receivedAmount": "received_amount",
+    "oweAmount": "owe_amount",
+    "feeCreateTime": "fee_create_time",
+    "updateTime": "update_time",
+    "remark": "remark",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "settingId",
-      "msg": "设置ID不能为空"
-    },
-    {
-      "code": "batchStartTime",
-      "msg": "开始时间不能为空"
-    },
-    {
-      "code": "batchEndTime",
-      "msg": "结束时间不能为空"
+      "code": "feeYear",
+      "msg": "年不能为空"
     }
   ]
 }
