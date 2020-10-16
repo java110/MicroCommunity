@@ -1,5 +1,6 @@
 package com.java110.report.dao;
 
+import com.java110.dto.report.ReportFeeDetailDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
 
@@ -27,4 +28,11 @@ public interface IReportFeeServiceDao {
      * @return
      */
     List<ReportFeeDto> getFees(ReportFeeDto reportFeeDto);
+
+    /**
+     * 实收费用查询
+     * @param reportFeeDetailDto
+     * @return
+     */
+    double getFeeReceivedAmount(ReportFeeDetailDto reportFeeDetailDto);
 }

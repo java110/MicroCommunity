@@ -1,5 +1,6 @@
 package com.java110.report.dao;
 
+import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportRoomDto;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface IReportCommunityServiceDao {
 
     /**
      * 查询房屋个数
+     *
      * @param reportRoomDto
      * @return
      */
@@ -23,7 +25,24 @@ public interface IReportCommunityServiceDao {
 
     /**
      * 查询 房屋 楼栋 单元 和 业主 信息
+     *
      * @return
      */
     List<ReportRoomDto> getRoomFloorUnitAndOwner(ReportRoomDto reportRoomDto);
+
+
+    /**
+     * 查询房屋个数
+     *
+     * @param reportCarDto
+     * @return
+     */
+    int getCarCount(ReportCarDto reportCarDto);
+
+    /**
+     * 查询 房屋 楼栋 单元 和 业主 信息
+     *
+     * @return
+     */
+    List<ReportCarDto> getCarParkingSpace(ReportCarDto reportCarDto);
 }

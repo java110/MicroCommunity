@@ -347,16 +347,22 @@ public class DateUtil {
         return returndate;
     }
 
+    public static Date getNextMonthFirstDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.MONTH, 1);
+        return calendar.getTime();
+    }
+
+    public static Date getFirstDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
+    }
+
     public static String getNextMonthFirstDay(String fmt) {
         String returndate = "";
-        Date date = null;
-
-        Calendar cl = Calendar.getInstance();
-        cl.set(2, cl.get(2) + 1);
-        cl.set(5, 1);
-
-        date = cl.getTime();
-
+        Date date = getNextMonthFirstDate();
         returndate = getFormatTimeString(date, fmt);
 
         return returndate;
@@ -425,5 +431,43 @@ public class DateUtil {
         }
 
         return dateStr;
+    }
+
+    public static int getYear() {
+        Date date = getCurrentDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public static int getMonth() {
+        Date date = getCurrentDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MONTH) + 1;
+    }
+
+    /**
+     * 判断时间是否在时间段内
+     *
+     * @param nowTime
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(beginTime);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else if (nowTime.compareTo(beginTime) == 0 || nowTime.compareTo(endTime) == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

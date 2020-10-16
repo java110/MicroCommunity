@@ -2,6 +2,7 @@ package com.java110.report.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportRoomDto;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import org.slf4j.Logger;
@@ -43,5 +44,32 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
         List<ReportRoomDto> roomDtos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.getRoomFloorUnitAndOwner", reportRoomDto);
 
         return roomDtos;
+    }
+
+    /**
+     * 统计车辆
+     *
+     * @param reportCarDto
+     * @return
+     */
+    @Override
+    public int getCarCount(ReportCarDto reportCarDto) {
+        logger.debug("查询费用月统计数据 入参 info : {}", JSONObject.toJSONString(reportCarDto));
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.getCarCount", reportCarDto);
+        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<ReportCarDto> getCarParkingSpace(ReportCarDto reportCarDto) {
+        logger.debug("查询房屋信息 入参 info : {}", JSONObject.toJSONString(reportCarDto));
+
+        List<ReportCarDto> carDtos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.getCarParkingSpace", reportCarDto);
+
+        return carDtos;
     }
 }

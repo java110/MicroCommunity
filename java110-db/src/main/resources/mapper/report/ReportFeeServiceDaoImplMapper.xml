@@ -4,6 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reportFeeServiceDaoImpl">
 
+    <!-- 查询实收金额 -->
+    <select id="getFeeReceivedAmount" parameterType="com.java110.dto.report.ReportFeeDetailDto" resultType="Map">
+        select SUM(t.received_amount) receivedAmount from pay_fee_detail t
+        where 1=1
+        and t.fee_id = #{feeId}
+        <if test="startTime != null">
+        and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null">
+            and t.create_time &lt; #{endTime}
+        </if>
+    </select>
+
     <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
     <select id="getFeeCount" parameterType="com.java110.dto.report.ReportFeeDto" resultType="Map">
         select count(1) count

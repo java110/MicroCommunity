@@ -51,6 +51,15 @@ public interface IReportFeeMonthStatisticsServiceDao {
     void updateReportFeeMonthStatisticsInfo(Map info) throws DAOException;
 
 
+
+    /**
+     * 修改费用月统计信息
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    void updateReportFeeMonthStatisticsOwe(Map info) throws DAOException;
+
+
     /**
      * 查询费用月统计总数
      *
