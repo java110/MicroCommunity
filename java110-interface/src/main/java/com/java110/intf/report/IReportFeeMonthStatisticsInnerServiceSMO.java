@@ -50,4 +50,19 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryReportFeeMonthStatisticssCount", method = RequestMethod.POST)
     int queryReportFeeMonthStatisticssCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+
+    /**
+     * 查询费用汇总表个数
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    int queryReportFeeSummaryCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询费用汇总表
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    List<ReportFeeMonthStatisticsDto> queryReportFeeSummary(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 }
