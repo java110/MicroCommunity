@@ -21,6 +21,7 @@ import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,6 +60,12 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
     @Override
     public int generatorData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
 
+        doGeneratorData(reportFeeMonthStatisticsPo);
+        return 0;
+    }
+
+    @Async
+    private void doGeneratorData(ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
         String communityId = reportFeeMonthStatisticsPo.getCommunityId();
 
         Assert.hasLength(communityId, "未包含小区信息");
@@ -68,8 +75,6 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         //处理车位费用
         dealCarFee(reportFeeMonthStatisticsPo);
-
-        return 0;
     }
 
     /**
