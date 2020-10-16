@@ -1,6 +1,7 @@
 package com.java110.dto.reportFeeMonthStatistics;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,21 +16,28 @@ import java.util.Date;
 public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable {
 
     private String receivableAmount;
-private String statisticsId;
-private String updateTime;
-private String remark;
-private String objName;
-private String receivedAmount;
-private String feeYear;
-private String feeMonth;
-private String feeId;
-private String configId;
-private String objId;
-private String feeName;
-private String oweAmount;
-private String communityId;
-private String feeCreateTime;
-private String objType;
+    private String statisticsId;
+    private String updateTime;
+    private String remark;
+    private String objName;
+    private String receivedAmount;
+    private String feeYear;
+    private String feeMonth;
+    private String feeId;
+    private String configId;
+    private String objId;
+    private String feeName;
+    private String oweAmount;
+    private String communityId;
+    private String feeCreateTime;
+    private String objType;
+    private String floorId;
+    private String floorNum;
+    private String unitId;
+    private String unitNum;
+    private String roomId;
+    private String roomNum;
+
 
 
     private Date createTime;
@@ -40,97 +48,128 @@ private String objType;
     public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getStatisticsId() {
+
+    public String getStatisticsId() {
         return statisticsId;
     }
-public void setStatisticsId(String statisticsId) {
+
+    public void setStatisticsId(String statisticsId) {
         this.statisticsId = statisticsId;
     }
-public String getUpdateTime() {
+
+    public String getUpdateTime() {
         return updateTime;
     }
-public void setUpdateTime(String updateTime) {
+
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getObjName() {
+
+    public String getObjName() {
         return objName;
     }
-public void setObjName(String objName) {
+
+    public void setObjName(String objName) {
         this.objName = objName;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getFeeYear() {
+
+    public String getFeeYear() {
         return feeYear;
     }
-public void setFeeYear(String feeYear) {
+
+    public void setFeeYear(String feeYear) {
         this.feeYear = feeYear;
     }
-public String getFeeMonth() {
+
+    public String getFeeMonth() {
         return feeMonth;
     }
-public void setFeeMonth(String feeMonth) {
+
+    public void setFeeMonth(String feeMonth) {
         this.feeMonth = feeMonth;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getFeeName() {
+
+    public String getFeeName() {
         return feeName;
     }
-public void setFeeName(String feeName) {
+
+    public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-public String getOweAmount() {
+
+    public String getOweAmount() {
         return oweAmount;
     }
-public void setOweAmount(String oweAmount) {
+
+    public void setOweAmount(String oweAmount) {
         this.oweAmount = oweAmount;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeCreateTime() {
+
+    public String getFeeCreateTime() {
         return feeCreateTime;
     }
-public void setFeeCreateTime(String feeCreateTime) {
+
+    public void setFeeCreateTime(String feeCreateTime) {
         this.feeCreateTime = feeCreateTime;
     }
-public String getObjType() {
+
+    public String getObjType() {
         return objType;
     }
-public void setObjType(String objType) {
+
+    public void setObjType(String objType) {
         this.objType = objType;
     }
 
@@ -149,5 +188,53 @@ public void setObjType(String objType) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getFloorNum() {
+        return floorNum;
+    }
+
+    public void setFloorNum(String floorNum) {
+        this.floorNum = floorNum;
+    }
+
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
+    }
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomNum() {
+        return roomNum;
+    }
+
+    public void setRoomNum(String roomNum) {
+        this.roomNum = roomNum;
     }
 }

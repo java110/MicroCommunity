@@ -46,4 +46,22 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> queryReportFeeSummary(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeMonthStatisticssCount(reportFeeMonthStatisticsDto);
+
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
+        if (count > 0) {
+            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeMonthStatisticss(reportFeeMonthStatisticsDto);
+        } else {
+            reportFeeMonthStatisticsDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
 }

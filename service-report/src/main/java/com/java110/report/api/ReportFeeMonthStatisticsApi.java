@@ -102,4 +102,31 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setCommunityId(communityId);
         return getReportFeeMonthStatisticsBMOImpl.get(reportFeeMonthStatisticsDto);
     }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryReportFeeMonthStatistics
+     * @path /app/reportFeeMonthStatistics/queryReportFeeMonthStatistics
+     */
+    @RequestMapping(value = "/queryReportFeeSummary", method = RequestMethod.GET)
+    public ResponseEntity<String> queryReportFeeSummary(@RequestParam(value = "communityId") String communityId,
+                                                        @RequestParam(value = "floorId", required = false) String floorId,
+                                                        @RequestParam(value = "floorNum", required = false) String floorNum,
+                                                        @RequestParam(value = "unitNum", required = false) String unitNum,
+                                                        @RequestParam(value = "unitId", required = false) String unitId,
+                                                        @RequestParam(value = "roomId", required = false) String roomId,
+                                                        @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                        @RequestParam(value = "page") int page,
+                                                        @RequestParam(value = "row") int row) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setPage(page);
+        reportFeeMonthStatisticsDto.setRow(row);
+        reportFeeMonthStatisticsDto.setCommunityId(communityId);
+        reportFeeMonthStatisticsDto.setFloorId(floorId);
+        reportFeeMonthStatisticsDto.setFloorNum(floorNum);
+        return getReportFeeMonthStatisticsBMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
+    }
 }

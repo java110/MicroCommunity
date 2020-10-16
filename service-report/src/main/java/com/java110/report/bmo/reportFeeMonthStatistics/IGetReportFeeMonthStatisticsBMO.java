@@ -12,5 +12,13 @@ public interface IGetReportFeeMonthStatisticsBMO {
      */
     ResponseEntity<String> get(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
+    /**
+     * 查询费用月统计
+     * add by wuxw
+     * @param  reportFeeMonthStatisticsDto
+     * @return
+     */
+    ResponseEntity<String> queryReportFeeSummary(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
 
 }
