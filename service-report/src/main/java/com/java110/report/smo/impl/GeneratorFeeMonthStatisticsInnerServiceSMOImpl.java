@@ -191,7 +191,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 && receivedAmount == 0) {
             return;
         }
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto,null,tmpReportCarDto); //应收
+        double receivableAmount = getReceivableAmount(tmpReportFeeDto, null, tmpReportCarDto); //应收
         double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
@@ -284,14 +284,14 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 && receivedAmount == 0) {
             return;
         }
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto,reportRoomDto,null); //应收
+        double receivableAmount = getReceivableAmount(tmpReportFeeDto, reportRoomDto, null); //应收
         double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         if (!ListUtil.isNull(statistics)) {
             ReportFeeMonthStatisticsDto statistic = statistics.get(0);
             reportFeeMonthStatisticsPo.setStatisticsId(statistic.getStatisticsId());
-            reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
+            //reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
             reportFeeMonthStatisticsPo.setReceivedAmount(receivedAmount + "");
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -339,20 +339,12 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      * @param receivedAmount
      * @return
      */
-    private double getOweAmount(ReportFeeDto tmpReportFeeDto, double receivableAmount, double receivedAmount) {
+    private double getOweAmount(ReportFeeDto tmpReportFeeDto, double receivableAmount, double receivedAmount
+    ) {
 
-        if (receivableAmount == 0) {
-            return 0;
-        }
+        return receivableAmount;
 
-        if (receivedAmount > receivableAmount) {
-            return 0;
-        }
 
-        BigDecimal receivedAmountDec = new BigDecimal(receivedAmount);
-        BigDecimal receivableAmountDec = new BigDecimal(receivedAmount);
-
-        return receivableAmountDec.subtract(receivedAmountDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
     }
 
     /**
@@ -377,9 +369,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      * @param tmpReportFeeDto
      * @return
      */
-    private double getReceivableAmount(ReportFeeDto tmpReportFeeDto,ReportRoomDto reportRoomDto,ReportCarDto reportCarDto) {
+    private double getReceivableAmount(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto) {
 
-        double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto,reportRoomDto,reportCarDto);
+        double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, reportCarDto);
         BigDecimal feePriceDec = new BigDecimal(feePrice);
 
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeTypeCd())) {
