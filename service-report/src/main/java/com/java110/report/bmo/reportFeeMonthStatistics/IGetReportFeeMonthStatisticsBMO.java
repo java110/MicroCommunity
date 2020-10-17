@@ -20,5 +20,7 @@ public interface IGetReportFeeMonthStatisticsBMO {
      */
     ResponseEntity<String> queryReportFeeSummary(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
+    ResponseEntity<String> queryReportFloorUnitFeeSummary(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
 
 }
