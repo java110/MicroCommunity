@@ -271,6 +271,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setCommunityId(reportRoomDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
+        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
@@ -339,8 +340,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      * @param receivedAmount
      * @return
      */
-    private double getOweAmount(ReportFeeDto tmpReportFeeDto, double receivableAmount, double receivedAmount
-    ) {
+    private double getOweAmount(ReportFeeDto tmpReportFeeDto, double receivableAmount, double receivedAmount) {
 
         return receivableAmount;
 
