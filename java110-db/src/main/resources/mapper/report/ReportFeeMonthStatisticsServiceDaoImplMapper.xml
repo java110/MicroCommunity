@@ -264,7 +264,7 @@
                 and t.create_time &lt;= #{endTime}
             </if>
             group by t.fee_year,t.fee_month
-        )
+        ) t
     </select>
 
 
