@@ -101,6 +101,25 @@ public interface IReportFeeMonthStatisticsServiceDao {
      */
     List<Map> queryReportFloorUnitFeeSummary(Map info) throws DAOException;
 
+    /**
+     * 查询费用月统计总数
+     *
+     * @param info 费用月统计信息
+     * @return 费用月统计数量
+     */
+    int queryFeeBreakdownCount(Map info);
+
+
+    /**
+     * 查询费用月统计信息（instance过程）
+     * 根据bId 查询费用月统计信息
+     *
+     * @param info bId 信息
+     * @return 费用月统计信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> queryFeeBreakdown(Map info) throws DAOException;
+
 
 
 

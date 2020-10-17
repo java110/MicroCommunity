@@ -172,4 +172,41 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryReportFloorUnitFeeSummary(reportFeeMonthStatisticsDto);
     }
+
+    /**
+     * 查询费用分项表
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryFeeBreakdown
+     * @path /app/reportFeeMonthStatistics/queryFeeBreakdown
+     */
+    @RequestMapping(value = "/queryFeeBreakdown", method = RequestMethod.GET)
+    public ResponseEntity<String> queryFeeBreakdown(@RequestParam(value = "communityId") String communityId,
+                                                           @RequestParam(value = "floorId", required = false) String floorId,
+                                                           @RequestParam(value = "floorNum", required = false) String floorNum,
+                                                           @RequestParam(value = "unitNum", required = false) String unitNum,
+                                                           @RequestParam(value = "unitId", required = false) String unitId,
+                                                           @RequestParam(value = "roomId", required = false) String roomId,
+                                                           @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                           @RequestParam(value = "startTime", required = false) String startTime,
+                                                           @RequestParam(value = "endTime", required = false) String endTime,
+                                                           @RequestParam(value = "page") int page,
+                                                           @RequestParam(value = "row") int row) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setPage(page);
+        reportFeeMonthStatisticsDto.setRow(row);
+        reportFeeMonthStatisticsDto.setCommunityId(communityId);
+        reportFeeMonthStatisticsDto.setFloorId(floorId);
+        reportFeeMonthStatisticsDto.setFloorNum(floorNum);
+        reportFeeMonthStatisticsDto.setUnitId(unitId);
+        reportFeeMonthStatisticsDto.setUnitNum(unitNum);
+        reportFeeMonthStatisticsDto.setRoomId(roomId);
+        reportFeeMonthStatisticsDto.setRoomNum(roomNum);
+        reportFeeMonthStatisticsDto.setStartTime(startTime);
+        reportFeeMonthStatisticsDto.setEndTime(endTime);
+        return getReportFeeMonthStatisticsBMOImpl.queryFeeBreakdown(reportFeeMonthStatisticsDto);
+    }
+
+
 }
