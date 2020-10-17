@@ -57,6 +57,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      * @param reportFeeMonthStatisticsDto
      * @return
      */
+    @RequestMapping(value = "/queryReportFeeSummaryCount", method = RequestMethod.POST)
     int queryReportFeeSummaryCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
@@ -64,5 +65,6 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      * @param reportFeeMonthStatisticsDto
      * @return
      */
+    @RequestMapping(value = "/queryReportFeeSummary", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryReportFeeSummary(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 }
