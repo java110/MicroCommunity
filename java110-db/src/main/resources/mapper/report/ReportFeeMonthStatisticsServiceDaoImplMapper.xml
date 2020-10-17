@@ -225,37 +225,56 @@
 
     </select>
 
+
+    <!-- 查询费用月统计数量 add by wuxw 2018-07-03 -->
+    <select id="queryReportFeeSummaryCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from (
+            select t.fee_year,t.fee_month
+            from report_fee_month_statistics t
+            where t.status_cd = '0'
+            <if test="objName !=null and objName != ''">
+                and t.obj_name= #{objName}
+            </if>
+            <if test="feeYear !=null and feeYear != ''">
+                and t.fee_year= #{feeYear}
+            </if>
+            <if test="feeMonth !=null and feeMonth != ''">
+                and t.fee_month= #{feeMonth}
+            </if>
+            <if test="feeId !=null and feeId != ''">
+                and t.fee_id= #{feeId}
+            </if>
+            <if test="configId !=null and configId != ''">
+                and t.config_id= #{configId}
+            </if>
+            <if test="objId !=null and objId != ''">
+                and t.obj_id= #{objId}
+            </if>
+            <if test="feeName !=null and feeName != ''">
+                and t.fee_name= #{feeName}
+            </if>
+            <if test="communityId !=null and communityId != ''">
+                and t.community_id= #{communityId}
+            </if>
+            <if test="startTime !=null">
+                and t.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime !=null">
+                and t.create_time &lt;= #{endTime}
+            </if>
+            group by t.fee_year,t.fee_month
+        )
+    </select>
+
+
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryReportFeeSummary" parameterType="Map" resultType="Map">
-        select t.receivable_amount,t.receivable_amount receivableAmount,t.statistics_id,t.statistics_id
-        statisticsId,t.update_time,t.update_time updateTime,t.remark,t.status_cd,t.status_cd
-        statusCd,t.obj_name,t.obj_name objName,t.received_amount,t.received_amount receivedAmount,t.fee_year,t.fee_year
-        feeYear,t.fee_month,t.fee_month feeMonth,t.fee_id,t.fee_id feeId,t.config_id,t.config_id
-        configId,t.obj_id,t.obj_id objId,t.fee_name,t.fee_name feeName,t.owe_amount,t.owe_amount
-        oweAmount,t.community_id,t.community_id communityId,t.fee_create_time,t.fee_create_time
-        feeCreateTime,t.obj_type,t.obj_type objType
+        select t.fee_year,t.fee_month,SUM(t.receivable_amount) receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
-        where 1 =1
-        <if test="receivableAmount !=null and receivableAmount != ''">
-            and t.receivable_amount= #{receivableAmount}
-        </if>
-        <if test="statisticsId !=null and statisticsId != ''">
-            and t.statistics_id= #{statisticsId}
-        </if>
-        <if test="updateTime !=null and updateTime != ''">
-            and t.update_time= #{updateTime}
-        </if>
-        <if test="remark !=null and remark != ''">
-            and t.remark= #{remark}
-        </if>
-        <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
-        </if>
+        where t.status_cd = '0'
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
-        </if>
-        <if test="receivedAmount !=null and receivedAmount != ''">
-            and t.received_amount= #{receivedAmount}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -275,23 +294,19 @@
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
         </if>
-        <if test="oweAmount !=null and oweAmount != ''">
-            and t.owe_amount= #{oweAmount}
-        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <if test="feeCreateTime !=null and feeCreateTime != ''">
-            and t.fee_create_time= #{feeCreateTime}
+        <if test="startTime !=null">
+            and t.create_time &gt;= #{startTime}
         </if>
-        <if test="objType !=null and objType != ''">
-            and t.obj_type= #{objType}
+        <if test="endTime !=null">
+            and t.create_time &lt;= #{endTime}
         </if>
-        order by t.create_time desc
+        group by t.fee_year,t.fee_month
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 </mapper>

@@ -104,12 +104,12 @@ public class ReportFeeMonthStatisticsApi {
     }
 
     /**
-     * 微信删除消息模板
+     * 查询费用汇总表
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /reportFeeMonthStatistics/queryReportFeeMonthStatistics
-     * @path /app/reportFeeMonthStatistics/queryReportFeeMonthStatistics
+     * @serviceCode /reportFeeMonthStatistics/queryReportFeeSummary
+     * @path /app/reportFeeMonthStatistics/queryReportFeeSummary
      */
     @RequestMapping(value = "/queryReportFeeSummary", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportFeeSummary(@RequestParam(value = "communityId") String communityId,
@@ -119,6 +119,8 @@ public class ReportFeeMonthStatisticsApi {
                                                         @RequestParam(value = "unitId", required = false) String unitId,
                                                         @RequestParam(value = "roomId", required = false) String roomId,
                                                         @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                        @RequestParam(value = "startTime", required = false) String startTime,
+                                                        @RequestParam(value = "endTime", required = false) String endTime,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -127,6 +129,12 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setCommunityId(communityId);
         reportFeeMonthStatisticsDto.setFloorId(floorId);
         reportFeeMonthStatisticsDto.setFloorNum(floorNum);
+        reportFeeMonthStatisticsDto.setUnitId(unitId);
+        reportFeeMonthStatisticsDto.setUnitNum(unitNum);
+        reportFeeMonthStatisticsDto.setRoomId(roomId);
+        reportFeeMonthStatisticsDto.setRoomNum(roomNum);
+        reportFeeMonthStatisticsDto.setStartTime(startTime);
+        reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
     }
 }
