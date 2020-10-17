@@ -55,6 +55,8 @@ public class ReportFeeServiceDaoImpl extends BaseServiceDao implements IReportFe
             return 0;
         }
 
-        return Double.parseDouble(businessReportFeeMonthStatisticsInfos.get(0).get("receivedAmount").toString());
+        Object receivedAmount = businessReportFeeMonthStatisticsInfos.get(0).get("receivedAmount");
+
+        return Double.parseDouble(receivedAmount == null ? "0" : receivedAmount.toString());
     }
 }
