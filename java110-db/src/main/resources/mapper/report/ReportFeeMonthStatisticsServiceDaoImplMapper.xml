@@ -439,7 +439,7 @@
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
-    <select id="queryReportFloorUnitFeeSummary" parameterType="Map" resultType="Map">
+    <select id="queryFeeBreakdown" parameterType="Map" resultType="Map">
         select t.fee_name feeName,pfc.start_time feeCreateTime,SUM(t.receivable_amount) receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
