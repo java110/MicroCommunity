@@ -178,6 +178,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setCommunityId(tmpReportCarDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
+        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
@@ -215,7 +216,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setFeeMonth(DateUtil.getMonth() + "");
             reportFeeMonthStatisticsPo.setFeeYear(DateUtil.getYear() + "");
             reportFeeMonthStatisticsPo.setObjId(tmpReportCarDto.getCarId());
-            reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
             reportFeeMonthStatisticsPo.setFeeName(tmpReportFeeDto.getFeeName());
             reportFeeMonthStatisticsPo.setObjName(tmpReportCarDto.getCarNum() + "(" + tmpReportCarDto.getAreaNum() + "停车场" + tmpReportCarDto.getNum() + "车位");
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
