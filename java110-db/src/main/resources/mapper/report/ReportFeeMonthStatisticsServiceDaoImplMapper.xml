@@ -479,5 +479,87 @@
             limit #{page}, #{row}
         </if>
     </select>
+    <select id="queryFeeDetailCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from (
+        select t.obj_name objName,t.fee_name feeName,pfc.start_time
+        from report_fee_month_statistics t
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="feeYear !=null and feeYear != ''">
+            and t.fee_year= #{feeYear}
+        </if>
+        <if test="feeMonth !=null and feeMonth != ''">
+            and t.fee_month= #{feeMonth}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        group by t.config_id,t.fee_name,pfc.start_time,t.obj_id,t.obj_name
+        ) t
+    </select>
+
+    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
+    <select id="queryFeeDetail" parameterType="Map" resultType="Map">
+        select t.obj_name objName,t.fee_name feeName,pfc.start_time,SUM(t.receivable_amount) receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
+        from report_fee_month_statistics t
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="feeYear !=null and feeYear != ''">
+            and t.fee_year= #{feeYear}
+        </if>
+        <if test="feeMonth !=null and feeMonth != ''">
+            and t.fee_month= #{feeMonth}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        group by t.config_id,t.fee_name,pfc.start_time,t.obj_id,t.obj_name
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
 
 </mapper>
