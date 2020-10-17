@@ -5,6 +5,9 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.dto.report.ReportCarDto;
+import com.java110.dto.report.ReportFeeDto;
+import com.java110.dto.report.ReportRoomDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -481,6 +484,78 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     @Override
     public double getCycle() {
         return 0;
+    }
+
+    @Override
+    public double getReportFeePrice(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto) {
+        BigDecimal feePrice = new BigDecimal(0.0);
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(tmpReportFeeDto.getPayerObjType())) { //房屋相关
+            String computingFormula = tmpReportFeeDto.getComputingFormula();
+
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getSquarePrice()));
+                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(reportRoomDto.getBuiltUpArea()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAdditionalAmount()));
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAdditionalAmount()));
+                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("4004".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
+            } else if ("5005".equals(computingFormula)) {
+                if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
+                    //throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getSquarePrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
+            } else if ("6006".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
+            } else {
+                throw new IllegalArgumentException("暂不支持该类公式");
+            }
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(tmpReportFeeDto.getPayerObjType())) {//车位相关
+            String computingFormula = tmpReportFeeDto.getComputingFormula();
+
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getSquarePrice()));
+                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble("0"));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAdditionalAmount()));
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAdditionalAmount()));
+                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("4004".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
+            } else if ("5005".equals(computingFormula)) {
+                if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
+                    throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getSquarePrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
+            } else if ("6006".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
+            } else {
+                throw new IllegalArgumentException("暂不支持该类公式");
+            }
+        }
+        return feePrice.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
     }
 
     @Override

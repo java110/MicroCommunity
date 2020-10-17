@@ -191,7 +191,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 && receivedAmount == 0) {
             return;
         }
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto); //应收
+        double receivableAmount = getReceivableAmount(tmpReportFeeDto,null,tmpReportCarDto); //应收
         double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
@@ -284,7 +284,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 && receivedAmount == 0) {
             return;
         }
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto); //应收
+        double receivableAmount = getReceivableAmount(tmpReportFeeDto,reportRoomDto,null); //应收
         double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
@@ -377,10 +377,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      * @param tmpReportFeeDto
      * @return
      */
-    private double getReceivableAmount(ReportFeeDto tmpReportFeeDto) {
-        FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
+    private double getReceivableAmount(ReportFeeDto tmpReportFeeDto,ReportRoomDto reportRoomDto,ReportCarDto reportCarDto) {
 
-        double feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
+        double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto,reportRoomDto,reportCarDto);
         BigDecimal feePriceDec = new BigDecimal(feePrice);
 
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeTypeCd())) {

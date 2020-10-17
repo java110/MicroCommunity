@@ -1,6 +1,9 @@
 package com.java110.core.smo;
 
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.report.ReportCarDto;
+import com.java110.dto.report.ReportFeeDto;
+import com.java110.dto.report.ReportRoomDto;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 
 import java.util.Date;
@@ -117,4 +120,5 @@ public interface IComputeFeeSMO {
      */
     double dayCompare(Date fromDate, Date toDate);
 
+    double getReportFeePrice(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto);
 }
