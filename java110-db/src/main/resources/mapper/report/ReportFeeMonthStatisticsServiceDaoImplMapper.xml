@@ -354,7 +354,7 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryReportFloorUnitFeeSummary" parameterType="Map" resultType="Map">
-        select t.fee_year feeYear,t.fee_month feeMonth, f.floor_num flooNum, bu.unit_num unitNum,
+        select t.fee_year feeYear,t.fee_month feeMonth, f.floor_num floorNum, bu.unit_num unitNum,
         SUM(t.receivable_amount) receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         INNER JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
