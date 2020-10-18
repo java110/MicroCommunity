@@ -233,7 +233,7 @@
         from report_fee_month_statistics t
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -286,7 +286,7 @@
         from report_fee_month_statistics t
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -447,7 +447,7 @@
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -500,7 +500,7 @@
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -554,7 +554,7 @@
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -607,7 +607,7 @@
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -661,7 +661,7 @@
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -715,7 +715,7 @@
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
