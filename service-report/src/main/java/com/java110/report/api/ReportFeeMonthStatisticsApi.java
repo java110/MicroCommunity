@@ -9,9 +9,14 @@ import com.java110.report.bmo.reportFeeMonthStatistics.ISaveReportFeeMonthStatis
 import com.java110.report.bmo.reportFeeMonthStatistics.IUpdateReportFeeMonthStatisticsBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -133,8 +138,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(startTime+"-01");
-        reportFeeMonthStatisticsDto.setEndTime(endTime+"-01");
+        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? "" : startTime + "-01");
+        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? "" : endTime + "-01");
         return getReportFeeMonthStatisticsBMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
     }
 
@@ -148,16 +153,16 @@ public class ReportFeeMonthStatisticsApi {
      */
     @RequestMapping(value = "/queryFloorUnitFeeSummary", method = RequestMethod.GET)
     public ResponseEntity<String> queryFloorUnitFeeSummary(@RequestParam(value = "communityId") String communityId,
-                                                        @RequestParam(value = "floorId", required = false) String floorId,
-                                                        @RequestParam(value = "floorNum", required = false) String floorNum,
-                                                        @RequestParam(value = "unitNum", required = false) String unitNum,
-                                                        @RequestParam(value = "unitId", required = false) String unitId,
-                                                        @RequestParam(value = "roomId", required = false) String roomId,
-                                                        @RequestParam(value = "roomNum", required = false) String roomNum,
-                                                        @RequestParam(value = "startTime", required = false) String startTime,
-                                                        @RequestParam(value = "endTime", required = false) String endTime,
-                                                        @RequestParam(value = "page") int page,
-                                                        @RequestParam(value = "row") int row) {
+                                                           @RequestParam(value = "floorId", required = false) String floorId,
+                                                           @RequestParam(value = "floorNum", required = false) String floorNum,
+                                                           @RequestParam(value = "unitNum", required = false) String unitNum,
+                                                           @RequestParam(value = "unitId", required = false) String unitId,
+                                                           @RequestParam(value = "roomId", required = false) String roomId,
+                                                           @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                           @RequestParam(value = "startTime", required = false) String startTime,
+                                                           @RequestParam(value = "endTime", required = false) String endTime,
+                                                           @RequestParam(value = "page") int page,
+                                                           @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setPage(page);
         reportFeeMonthStatisticsDto.setRow(row);
@@ -183,16 +188,16 @@ public class ReportFeeMonthStatisticsApi {
      */
     @RequestMapping(value = "/queryFeeBreakdown", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeBreakdown(@RequestParam(value = "communityId") String communityId,
-                                                           @RequestParam(value = "floorId", required = false) String floorId,
-                                                           @RequestParam(value = "floorNum", required = false) String floorNum,
-                                                           @RequestParam(value = "unitNum", required = false) String unitNum,
-                                                           @RequestParam(value = "unitId", required = false) String unitId,
-                                                           @RequestParam(value = "roomId", required = false) String roomId,
-                                                           @RequestParam(value = "roomNum", required = false) String roomNum,
-                                                           @RequestParam(value = "startTime", required = false) String startTime,
-                                                           @RequestParam(value = "endTime", required = false) String endTime,
-                                                           @RequestParam(value = "page") int page,
-                                                           @RequestParam(value = "row") int row) {
+                                                    @RequestParam(value = "floorId", required = false) String floorId,
+                                                    @RequestParam(value = "floorNum", required = false) String floorNum,
+                                                    @RequestParam(value = "unitNum", required = false) String unitNum,
+                                                    @RequestParam(value = "unitId", required = false) String unitId,
+                                                    @RequestParam(value = "roomId", required = false) String roomId,
+                                                    @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                    @RequestParam(value = "startTime", required = false) String startTime,
+                                                    @RequestParam(value = "endTime", required = false) String endTime,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setPage(page);
         reportFeeMonthStatisticsDto.setRow(row);
@@ -218,16 +223,16 @@ public class ReportFeeMonthStatisticsApi {
      */
     @RequestMapping(value = "/queryFeeDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeDetail(@RequestParam(value = "communityId") String communityId,
-                                                    @RequestParam(value = "floorId", required = false) String floorId,
-                                                    @RequestParam(value = "floorNum", required = false) String floorNum,
-                                                    @RequestParam(value = "unitNum", required = false) String unitNum,
-                                                    @RequestParam(value = "unitId", required = false) String unitId,
-                                                    @RequestParam(value = "roomId", required = false) String roomId,
-                                                    @RequestParam(value = "roomNum", required = false) String roomNum,
-                                                    @RequestParam(value = "startTime", required = false) String startTime,
-                                                    @RequestParam(value = "endTime", required = false) String endTime,
-                                                    @RequestParam(value = "page") int page,
-                                                    @RequestParam(value = "row") int row) {
+                                                 @RequestParam(value = "floorId", required = false) String floorId,
+                                                 @RequestParam(value = "floorNum", required = false) String floorNum,
+                                                 @RequestParam(value = "unitNum", required = false) String unitNum,
+                                                 @RequestParam(value = "unitId", required = false) String unitId,
+                                                 @RequestParam(value = "roomId", required = false) String roomId,
+                                                 @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                 @RequestParam(value = "startTime", required = false) String startTime,
+                                                 @RequestParam(value = "endTime", required = false) String endTime,
+                                                 @RequestParam(value = "page") int page,
+                                                 @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setPage(page);
         reportFeeMonthStatisticsDto.setRow(row);
@@ -253,16 +258,16 @@ public class ReportFeeMonthStatisticsApi {
      */
     @RequestMapping(value = "/queryOweFeeDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryOweFeeDetail(@RequestParam(value = "communityId") String communityId,
-                                                 @RequestParam(value = "floorId", required = false) String floorId,
-                                                 @RequestParam(value = "floorNum", required = false) String floorNum,
-                                                 @RequestParam(value = "unitNum", required = false) String unitNum,
-                                                 @RequestParam(value = "unitId", required = false) String unitId,
-                                                 @RequestParam(value = "roomId", required = false) String roomId,
-                                                 @RequestParam(value = "roomNum", required = false) String roomNum,
-                                                 @RequestParam(value = "startTime", required = false) String startTime,
-                                                 @RequestParam(value = "endTime", required = false) String endTime,
-                                                 @RequestParam(value = "page") int page,
-                                                 @RequestParam(value = "row") int row) {
+                                                    @RequestParam(value = "floorId", required = false) String floorId,
+                                                    @RequestParam(value = "floorNum", required = false) String floorNum,
+                                                    @RequestParam(value = "unitNum", required = false) String unitNum,
+                                                    @RequestParam(value = "unitId", required = false) String unitId,
+                                                    @RequestParam(value = "roomId", required = false) String roomId,
+                                                    @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                    @RequestParam(value = "startTime", required = false) String startTime,
+                                                    @RequestParam(value = "endTime", required = false) String endTime,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setPage(page);
         reportFeeMonthStatisticsDto.setRow(row);
