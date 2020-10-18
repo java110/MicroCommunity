@@ -445,7 +445,19 @@
         select t.fee_name,pfc.start_time
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
         where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
@@ -486,7 +498,19 @@
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
         where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
@@ -528,7 +552,19 @@
         select t.obj_name objName,t.fee_name feeName,pfc.start_time
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
         where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
@@ -569,7 +605,19 @@
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
         where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
@@ -611,7 +659,19 @@
         select t.obj_name objName,t.fee_name feeName,pfc.start_time,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
         where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
@@ -653,7 +713,19 @@
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd
         where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>

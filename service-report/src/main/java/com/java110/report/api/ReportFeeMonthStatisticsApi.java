@@ -208,8 +208,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(startTime);
-        reportFeeMonthStatisticsDto.setEndTime(endTime);
+        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
+        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
         return getReportFeeMonthStatisticsBMOImpl.queryFeeBreakdown(reportFeeMonthStatisticsDto);
     }
 
@@ -243,8 +243,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(startTime);
-        reportFeeMonthStatisticsDto.setEndTime(endTime);
+        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
+        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
         return getReportFeeMonthStatisticsBMOImpl.queryFeeDetail(reportFeeMonthStatisticsDto);
     }
 
@@ -278,8 +278,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(startTime);
-        reportFeeMonthStatisticsDto.setEndTime(endTime);
+        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
+        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
         return getReportFeeMonthStatisticsBMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
     }
 
