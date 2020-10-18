@@ -251,7 +251,7 @@ public class ReportFeeMonthStatisticsApi {
      * @serviceCode /reportFeeMonthStatistics/queryOweFeeDetail
      * @path /app/reportFeeMonthStatistics/queryOweFeeDetail
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryOweFeeDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryOweFeeDetail(@RequestParam(value = "communityId") String communityId,
                                                  @RequestParam(value = "floorId", required = false) String floorId,
                                                  @RequestParam(value = "floorNum", required = false) String floorNum,
