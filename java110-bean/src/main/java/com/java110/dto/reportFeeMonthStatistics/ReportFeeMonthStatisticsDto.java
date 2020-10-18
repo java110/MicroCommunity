@@ -46,6 +46,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String statusCd = "0";
 
+    private int oweDay;
+
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -254,5 +256,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public int getOweDay() {
+        return oweDay;
+    }
+
+    public void setOweDay(int oweDay) {
+        this.oweDay = oweDay;
     }
 }

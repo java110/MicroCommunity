@@ -470,4 +470,30 @@ public class DateUtil {
             return false;
         }
     }
+
+    //获取两个日期之间的天数
+    public static int daysBetween(Date now, Date returnDate) {
+        Calendar cNow = Calendar.getInstance();
+        Calendar cReturnDate = Calendar.getInstance();
+        cNow.setTime(now);
+        cReturnDate.setTime(returnDate);
+        setTimeToMidnight(cNow);
+        setTimeToMidnight(cReturnDate);
+        long todayMs = cNow.getTimeInMillis();
+        long returnMs = cReturnDate.getTimeInMillis();
+        long intervalMs = todayMs - returnMs;
+        return millisecondsToDays(intervalMs);
+    }
+
+    //获取两个日期之间的毫秒数
+    private static void setTimeToMidnight(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+    }
+
+    //获取两个日期之间的分钟数
+    private static int millisecondsToDays(long intervalMs) {
+        return (int) (intervalMs / (1000 * 86400));
+    }
 }

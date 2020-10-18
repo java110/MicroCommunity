@@ -152,6 +152,25 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
 
         return reportFeeMonthStatisticss;
     }
+    @Override
+    public int queryOweFeeDetailCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetailCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+    }
+
+    @Override
+    public List<ReportFeeMonthStatisticsDto> queryOweFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        //校验是否传了 分页信息
+
+        int page = reportFeeMonthStatisticsDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportFeeMonthStatisticsDto.setPage((page - 1) * reportFeeMonthStatisticsDto.getRow());
+        }
+
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetail(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+
+        return reportFeeMonthStatisticss;
+    }
 
 
     public IReportFeeMonthStatisticsServiceDao getReportFeeMonthStatisticsServiceDaoImpl() {
