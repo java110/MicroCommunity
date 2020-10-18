@@ -342,6 +342,15 @@
         inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
@@ -385,6 +394,15 @@
         inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
