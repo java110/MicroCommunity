@@ -202,6 +202,16 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         return reportFeeMonthStatisticss;
     }
 
+    @Override
+    public List<ReportFeeMonthStatisticsDto> queryOwePaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        //校验是否传了 分页信息
+
+
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryOwePaymentCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+
+        return reportFeeMonthStatisticss;
+    }
+
 
     public IReportFeeMonthStatisticsServiceDao getReportFeeMonthStatisticsServiceDaoImpl() {
         return reportFeeMonthStatisticsServiceDaoImpl;

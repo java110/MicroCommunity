@@ -324,5 +324,19 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         return getReportFeeMonthStatisticsBMOImpl.queryPrePayment(reportFeeMonthStatisticsDto);
     }
+    /**
+     * 查询费用分项表
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryOwePaymentCount
+     * @path /app/reportFeeMonthStatistics/queryOwePaymentCount
+     */
+    @RequestMapping(value = "/queryOwePaymentCount", method = RequestMethod.GET)
+    public ResponseEntity<String> queryOwePaymentCount(@RequestParam(value = "communityId") String communityId) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setCommunityId(communityId);
+        return getReportFeeMonthStatisticsBMOImpl.queryOwePaymentCount(reportFeeMonthStatisticsDto);
+    }
 
 }
