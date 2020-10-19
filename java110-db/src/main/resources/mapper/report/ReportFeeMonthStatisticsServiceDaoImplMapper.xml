@@ -778,10 +778,10 @@
             and t.community_id= #{communityId}
         </if>
         <if test="startTime !=null">
-            and t.create_time &gt;= #{startTime}
+            and t.end_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null">
-            and t.create_time &lt;= #{endTime}
+            and t.end_time &lt;= #{endTime}
         </if>
         ) t
     </select>
@@ -802,10 +802,10 @@
             and t.community_id= #{communityId}
         </if>
         <if test="startTime !=null">
-            and t.create_time &gt;= #{startTime}
+            and t.end_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null">
-            and t.create_time &lt;= #{endTime}
+            and t.end_time &lt;= #{endTime}
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
