@@ -821,7 +821,7 @@
         and t.end_time &lt; #{endTime}
         and t.community_id= #{communityId}
         group by pfc.fee_name ,pfc.config_id
-        order by oweCount
+        order by objCount
     </select>
 
     <select id="queryOwePaymentCount" parameterType="Map" resultType="Map">
