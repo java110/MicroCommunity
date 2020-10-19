@@ -27,14 +27,13 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     public int saveReportFeeMonthStatistics(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
 
     @RequestMapping(value = "/updateReportFeeMonthStatistics", method = RequestMethod.POST)
-    public int updateReportFeeMonthStatistics(@RequestBody  ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
+    public int updateReportFeeMonthStatistics(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
 
     @RequestMapping(value = "/deleteReportFeeMonthStatistics", method = RequestMethod.POST)
-    public int deleteReportFeeMonthStatistics(@RequestBody  ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
+    public int deleteReportFeeMonthStatistics(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param reportFeeMonthStatisticsDto 数据对象分享
      * @return ReportFeeMonthStatisticsDto 对象数据
@@ -54,6 +53,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询费用汇总表个数
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -62,6 +62,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询费用汇总表
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -70,6 +71,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询费用汇总表个数
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -78,6 +80,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询费用汇总表
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -86,6 +89,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询费用汇总表个数
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -94,13 +98,16 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询费用汇总表
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
     @RequestMapping(value = "/queryFeeBreakdown", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryFeeBreakdown(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询费用汇总表个数
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -109,6 +116,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询费用汇总表
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -116,6 +124,25 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     List<ReportFeeMonthStatisticsDto> queryFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
     /**
      * 查询费用汇总表个数
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryPrePaymentNewCount", method = RequestMethod.POST)
+    int queryPrePaymentNewCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询费用汇总表
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryPrePayment", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryPrePayment(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询费用汇总表个数
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -124,11 +151,21 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询费用汇总表
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
     @RequestMapping(value = "/queryOweFeeDetail", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryOweFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询预付费户数
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryPrePaymentCount", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryPrePaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
 
 }

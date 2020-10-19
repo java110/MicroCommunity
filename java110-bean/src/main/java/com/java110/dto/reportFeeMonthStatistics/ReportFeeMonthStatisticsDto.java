@@ -37,7 +37,10 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String unitNum;
     private String roomId;
     private String roomNum;
+    private String carNum;
+    private String payerObjType;
 
+    private String objCount;
 
 
     private Date createTime;
@@ -47,6 +50,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String statusCd = "0";
 
     private int oweDay;
+
 
 
     public String getReceivableAmount() {
@@ -264,5 +268,29 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setOweDay(int oweDay) {
         this.oweDay = oweDay;
+    }
+
+    public String getObjCount() {
+        return objCount;
+    }
+
+    public void setObjCount(String objCount) {
+        this.objCount = objCount;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
     }
 }

@@ -9,14 +9,13 @@ import com.java110.report.bmo.reportFeeMonthStatistics.ISaveReportFeeMonthStatis
 import com.java110.report.bmo.reportFeeMonthStatistics.IUpdateReportFeeMonthStatisticsBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Calendar;
 
 
 @RestController
@@ -283,5 +282,47 @@ public class ReportFeeMonthStatisticsApi {
         return getReportFeeMonthStatisticsBMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
     }
 
+
+    /**
+     * 查询费用分项表
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryPrePaymentCount
+     * @path /app/reportFeeMonthStatistics/queryPrePaymentCount
+     */
+    @RequestMapping(value = "/queryPrePaymentCount", method = RequestMethod.GET)
+    public ResponseEntity<String> queryPrePaymentCount(@RequestParam(value = "communityId") String communityId) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setCommunityId(communityId);
+        reportFeeMonthStatisticsDto.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+        return getReportFeeMonthStatisticsBMOImpl.queryPrePaymentCount(reportFeeMonthStatisticsDto);
+    }
+
+    /**
+     * 查询费用分项表
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryPrePayment
+     * @path /app/reportFeeMonthStatistics/queryPrePayment
+     */
+    @RequestMapping(value = "/queryPrePayment", method = RequestMethod.GET)
+    public ResponseEntity<String> queryPrePayment(@RequestParam(value = "communityId") String communityId,
+                                                  @RequestParam(value = "page") int page,
+                                                  @RequestParam(value = "row") int row) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setCommunityId(communityId);
+        reportFeeMonthStatisticsDto.setPage(page);
+        reportFeeMonthStatisticsDto.setRow(row);
+        reportFeeMonthStatisticsDto.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+        return getReportFeeMonthStatisticsBMOImpl.queryPrePayment(reportFeeMonthStatisticsDto);
+    }
 
 }
