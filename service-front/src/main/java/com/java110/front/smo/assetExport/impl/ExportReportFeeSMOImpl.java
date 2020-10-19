@@ -42,6 +42,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
 
     public static final String REPORT_FEE_SUMMARY = "reportFeeSummary";
     public static final String REPORT_FLOOR_UNIT_FEE_SUMMARY = "reportFloorUnitFeeSummary";
+    public static final String REPORT_FEE_BREAKDOWN = "reportFeeBreakdown";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -66,6 +67,9 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
                 break;
             case REPORT_FLOOR_UNIT_FEE_SUMMARY:
                 reportFloorUnitFeeSummary(pd, result, workbook);
+                break;
+            case REPORT_FEE_BREAKDOWN:
+                reportFeeBreakdown(pd, result, workbook);
                 break;
         }
 
@@ -93,6 +97,56 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
     }
 
+    private void reportFeeBreakdown(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+        Sheet sheet = workbook.createSheet("费用分项表");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("费用编号");
+        row.createCell(1).setCellValue("费用项");
+        row.createCell(2).setCellValue("费用开始时间");
+        row.createCell(3).setCellValue("应收金额");
+        row.createCell(4).setCellValue("实收金额");
+        row.createCell(5).setCellValue("欠费金额");
+
+
+        //查询楼栋信息
+        JSONArray rooms = this.getReportFeeBreakdown(pd, result);
+        JSONObject dataObj = null;
+        for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
+            row = sheet.createRow(roomIndex + 1);
+            dataObj = rooms.getJSONObject(roomIndex);
+
+            row.createCell(0).setCellValue(dataObj.getString("feeYear") + "年" + dataObj.getString("feeMonth") + "月");
+            row.createCell(1).setCellValue(dataObj.getString("receivableAmount"));
+            row.createCell(2).setCellValue(dataObj.getString("floorNum") + "号楼");
+            row.createCell(3).setCellValue(dataObj.getString("unitNum") + "单元");
+            row.createCell(4).setCellValue(dataObj.getString("receivedAmount"));
+            row.createCell(5).setCellValue(dataObj.getString("oweAmount"));
+
+        }
+    }
+
+    private JSONArray getReportFeeBreakdown(IPageData pd, ComponentValidateResult result) {
+
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/reportFeeMonthStatistics/queryFeeBreakdown?communityId=" + result.getCommunityId() + "&page=1&row=10000";
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedRoomInfoResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
+
+
+        if (!savedRoomInfoResults.containsKey("data")) {
+            return null;
+        }
+
+
+        return savedRoomInfoResults.getJSONArray("data");
+    }
+
     private void reportFloorUnitFeeSummary(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("楼栋费用表");
         Row row = sheet.createRow(0);
@@ -108,7 +162,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         JSONArray rooms = this.getReportFloorUnitFeeSummary(pd, result);
         JSONObject dataObj = null;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex + 2);
+            row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
 
             row.createCell(0).setCellValue(dataObj.getString("feeYear") + "年" + dataObj.getString("feeMonth") + "月");
@@ -193,7 +247,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         JSONArray rooms = this.getReportFeeSummaryFee(pd, componentValidateResult);
         JSONObject dataObj = null;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex + 2);
+            row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
 
             row.createCell(0).setCellValue(dataObj.getString("feeYear") + "年" + dataObj.getString("feeMonth") + "月");
