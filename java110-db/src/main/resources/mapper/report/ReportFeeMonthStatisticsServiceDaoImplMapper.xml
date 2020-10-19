@@ -813,8 +813,8 @@
     </select>
 
     <select id="queryPrePaymentCount" parameterType="Map" resultType="Map">
-        select pfc.fee_name feeName,count(t.payer_obj_id) from pay_fee t
-        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        select pfc.fee_name feeName,count(t.payer_obj_id) objCount from pay_fee t
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where t.state = '2008001'
         and t.status_cd = '0'
         and t.end_time &gt; #{startTime}
