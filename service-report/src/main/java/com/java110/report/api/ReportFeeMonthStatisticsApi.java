@@ -281,6 +281,7 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
         return getReportFeeMonthStatisticsBMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
     }
+
     /**
      * 查询费用分项表
      *
@@ -291,16 +292,16 @@ public class ReportFeeMonthStatisticsApi {
      */
     @RequestMapping(value = "/queryDeadlineFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryDeadlineFee(@RequestParam(value = "communityId") String communityId,
-                                                    @RequestParam(value = "floorId", required = false) String floorId,
-                                                    @RequestParam(value = "floorNum", required = false) String floorNum,
-                                                    @RequestParam(value = "unitNum", required = false) String unitNum,
-                                                    @RequestParam(value = "unitId", required = false) String unitId,
-                                                    @RequestParam(value = "roomId", required = false) String roomId,
-                                                    @RequestParam(value = "roomNum", required = false) String roomNum,
-                                                    @RequestParam(value = "startTime", required = false) String startTime,
-                                                    @RequestParam(value = "endTime", required = false) String endTime,
-                                                    @RequestParam(value = "page") int page,
-                                                    @RequestParam(value = "row") int row) {
+                                                   @RequestParam(value = "floorId", required = false) String floorId,
+                                                   @RequestParam(value = "floorNum", required = false) String floorNum,
+                                                   @RequestParam(value = "unitNum", required = false) String unitNum,
+                                                   @RequestParam(value = "unitId", required = false) String unitId,
+                                                   @RequestParam(value = "roomId", required = false) String roomId,
+                                                   @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                   @RequestParam(value = "startTime", required = false) String startTime,
+                                                   @RequestParam(value = "endTime", required = false) String endTime,
+                                                   @RequestParam(value = "page") int page,
+                                                   @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setPage(page);
         reportFeeMonthStatisticsDto.setRow(row);
@@ -311,8 +312,10 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
-        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
+        reportFeeMonthStatisticsDto.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         return getReportFeeMonthStatisticsBMOImpl.queryDeadlineFee(reportFeeMonthStatisticsDto);
     }
 
@@ -358,6 +361,7 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         return getReportFeeMonthStatisticsBMOImpl.queryPrePayment(reportFeeMonthStatisticsDto);
     }
+
     /**
      * 查询费用分项表
      *
