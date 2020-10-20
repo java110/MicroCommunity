@@ -142,6 +142,26 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     }
 
     @Override
+    public ResponseEntity<String> queryDeadlineFee(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryDeadlineFeeCount(reportFeeMonthStatisticsDto);
+
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
+        if (count > 0) {
+            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryDeadlineFee(reportFeeMonthStatisticsDto);
+
+            freshReportOweDay(reportFeeMonthStatisticsDtos);
+        } else {
+            reportFeeMonthStatisticsDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
     public ResponseEntity<String> queryPrePaymentCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
@@ -205,11 +225,11 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     private void freshReportOweDay(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
 
-        Date monthFirstDate = DateUtil.getNextMonthFirstDate();
+        Date nowDate = DateUtil.getCurrentDate();
 
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
             try {
-                int day = DateUtil.daysBetween(monthFirstDate, DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
+                int day = DateUtil.daysBetween(nowDate, DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getDeadlineTime(),
                         DateUtil.DATE_FORMATE_STRING_A));
                 reportFeeMonthStatisticsDto.setOweDay(day);
             } catch (Exception e) {
