@@ -147,6 +147,7 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @return 费用月统计数量
      */
     int queryOweFeeDetailCount(Map info);
+    int queryPayFeeDetailCount(Map info);
     int queryDeadlineFeeCount(Map info);
     /**
      * 查询费用月统计信息（instance过程）
@@ -177,6 +178,7 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> queryOweFeeDetail(Map info) throws DAOException;
+    List<Map> queryPayFeeDetail(Map info) throws DAOException;
     List<Map> queryDeadlineFee(Map info) throws DAOException;
 
     /**

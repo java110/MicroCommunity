@@ -765,6 +765,118 @@
             limit #{page}, #{row}
         </if>
     </select>
+    <select id="queryPayFeeDetailCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from (
+        select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,oc.car_num carNum,
+        pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,
+        t.receivable_amount receivableAmount,t.received_amount receivedAmount
+        from pay_fee_detail t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="feeYear !=null and feeYear != ''">
+            and t.fee_year= #{feeYear}
+        </if>
+        <if test="feeMonth !=null and feeMonth != ''">
+            and t.fee_month= #{feeMonth}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        ) t
+    </select>
+
+    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
+    <select id="queryPayFeeDetail" parameterType="Map" resultType="Map">
+        select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,oc.car_num carNum,
+        pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,
+        t.receivable_amount receivableAmount,t.received_amount receivedAmount
+        from pay_fee_detail t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="feeYear !=null and feeYear != ''">
+            and t.fee_year= #{feeYear}
+        </if>
+        <if test="feeMonth !=null and feeMonth != ''">
+            and t.fee_month= #{feeMonth}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
     <select id="queryDeadlineFeeCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (

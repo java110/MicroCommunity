@@ -163,6 +163,23 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      * @param reportFeeMonthStatisticsDto
      * @return
      */
+    @RequestMapping(value = "/queryPayFeeDetailCount", method = RequestMethod.POST)
+    int queryPayFeeDetailCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询费用汇总表
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryPayFeeDetail", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryPayFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+    /**
+     * 查询费用汇总表个数
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
     @RequestMapping(value = "/queryDeadlineFeeCount", method = RequestMethod.POST)
     int queryDeadlineFeeCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
