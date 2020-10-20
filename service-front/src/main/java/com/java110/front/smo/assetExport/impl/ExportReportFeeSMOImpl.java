@@ -45,6 +45,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
     public static final String REPORT_FEE_BREAKDOWN = "reportFeeBreakdown";
     public static final String REPORT_FEE_DETAIL = "reportFeeDetail";
     public static final String REPORT_OWE_FEE_DETAIL = "reportOweFeeDetail";
+    public static final String REPORT_PAY_FEE_DETAIL = "reportPayFeeDetail";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -80,7 +81,9 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             case REPORT_OWE_FEE_DETAIL:
                 reportOweFeeDetail(pd, result, workbook);
                 break;
-
+            case REPORT_PAY_FEE_DETAIL:
+                reportPayFeeDetail(pd, result, workbook);
+                break;
 
         }
 
@@ -106,6 +109,62 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         }
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
+    }
+
+    private void reportPayFeeDetail(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+        Sheet sheet = workbook.createSheet("缴费明细表");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("费用编号");
+        row.createCell(1).setCellValue("房号");
+        row.createCell(2).setCellValue("费用项");
+        row.createCell(3).setCellValue("缴费开始时间");
+        row.createCell(4).setCellValue("缴费结束时间");
+        row.createCell(5).setCellValue("缴费时间");
+        row.createCell(6).setCellValue("应收金额");
+        row.createCell(7).setCellValue("实收金额");
+
+
+        //查询楼栋信息
+        JSONArray rooms = this.getReportPayFeeDetail(pd, result);
+        JSONObject dataObj = null;
+        for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
+            row = sheet.createRow(roomIndex + 1);
+            dataObj = rooms.getJSONObject(roomIndex);
+
+            row.createCell(0).setCellValue(roomIndex + 1);
+            row.createCell(1).setCellValue(dataObj.getString("objName"));
+            row.createCell(2).setCellValue(dataObj.getString("feeName"));
+            row.createCell(3).setCellValue(dataObj.getString("startTime"));
+            row.createCell(4).setCellValue(dataObj.getString("endTime"));
+            row.createCell(5).setCellValue(dataObj.getString("createTime"));
+            row.createCell(6).setCellValue(dataObj.getString("receivableAmount"));
+            row.createCell(7).setCellValue(dataObj.getString("receivedAmount"));
+
+        }
+    }
+
+    private JSONArray getReportPayFeeDetail(IPageData pd, ComponentValidateResult result) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        reqJson.put("page", 1);
+        reqJson.put("row", 10000);
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/reportFeeMonthStatistics/queryPayFeeDetail" + mapToUrlParam(reqJson);
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedRoomInfoResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
+
+
+        if (!savedRoomInfoResults.containsKey("data")) {
+            return null;
+        }
+
+
+        return savedRoomInfoResults.getJSONArray("data");
     }
 
     private void reportOweFeeDetail(IPageData pd, ComponentValidateResult result, Workbook workbook) {
