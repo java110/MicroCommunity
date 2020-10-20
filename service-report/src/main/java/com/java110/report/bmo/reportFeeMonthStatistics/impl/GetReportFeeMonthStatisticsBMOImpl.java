@@ -176,6 +176,20 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     }
 
     @Override
+    public ResponseEntity<String> queryDeadlinePaymentCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
+
+        reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryDeadlinePaymentCount(reportFeeMonthStatisticsDto);
+
+        ResultVo resultVo = new ResultVo(reportFeeMonthStatisticsDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
     public ResponseEntity<String> queryOwePaymentCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;

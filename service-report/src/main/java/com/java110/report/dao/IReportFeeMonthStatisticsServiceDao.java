@@ -188,6 +188,7 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> queryPrePaymentCount(Map info) throws DAOException;
+    List<Map> queryDeadlinePaymentCount(Map info) throws DAOException;
     /**
      * 查询预交费
      * 根据bId 查询费用月统计信息

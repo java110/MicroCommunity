@@ -336,6 +336,24 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         return getReportFeeMonthStatisticsBMOImpl.queryPrePaymentCount(reportFeeMonthStatisticsDto);
     }
+    /**
+     * 查询到期提醒
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryDeadlineCount
+     * @path /app/reportFeeMonthStatistics/queryDeadlineCount
+     */
+    @RequestMapping(value = "/queryDeadlineCount", method = RequestMethod.GET)
+    public ResponseEntity<String> queryDeadlineCount(@RequestParam(value = "communityId") String communityId) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setCommunityId(communityId);
+        reportFeeMonthStatisticsDto.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+        return getReportFeeMonthStatisticsBMOImpl.queryDeadlinePaymentCount(reportFeeMonthStatisticsDto);
+    }
 
     /**
      * 查询费用分项表

@@ -942,6 +942,24 @@
         order by objCount
     </select>
 
+    <select id="queryDeadlinePaymentCount" parameterType="Map" resultType="Map">
+        SELECT
+        t.fee_name feeName,
+        count(t.obj_id) objCount
+        FROM
+        report_fee_month_statistics t
+        WHERE
+        1 = 1
+        AND t.status_cd = '0'
+        and t.community_id= #{communityId}
+        AND t.deadline_time &gt; #{startTime}
+        AND t.deadline_time &lt; #{endTime}
+        group by t.config_id,t.fee_name
+        order by objCount desc
+    </select>
+
+
+
     <select id="queryOwePaymentCount" parameterType="Map" resultType="Map">
         select t.fee_name feeName,count(t.obj_id) objCount
         from report_fee_month_statistics t

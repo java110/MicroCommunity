@@ -183,6 +183,15 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryPrePaymentCount", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryPrePaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询预付费户数
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryDeadlinePaymentCount", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryDeadlinePaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
     /**
      * 查询预付费户数
      *
