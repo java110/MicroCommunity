@@ -18,6 +18,7 @@ import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,16 +94,9 @@ public class TranslateOwnerPhotoToMachineTemplate extends TaskSystemQuartz {
                 List<OwnerDto> ownerDtos = null;
                 //根据bId 查询业主信息
                 //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
-                /*if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
+                if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
                     ownerDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
-                    ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-                    MachineDto machineDto = new MachineDto();
-                    machineDto.setMachineId("");
-                    deleteMachineTranslate(tmpOrderDto, machineDto, ownerDtos.get(0));
-                    orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
-                    logger.debug("没有数据数据直接刷为C1,当前为删除业主操作" + JSONObject.toJSONString(tmpOrderDto));
-                    continue;
-                }*/
+                }
 
                 ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
