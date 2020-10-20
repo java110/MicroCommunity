@@ -3,6 +3,7 @@ package com.java110.dto.report;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @ClassName ReportRoomDto
@@ -31,6 +32,10 @@ public class ReportCarDto extends PageDto implements Serializable {
     private String paId;
     private String areaNum;
     private String communityId;
+
+    private Date startTime;
+
+    private Date endTime;
 
 
     public String getCarId() {
@@ -167,5 +172,21 @@ public class ReportCarDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

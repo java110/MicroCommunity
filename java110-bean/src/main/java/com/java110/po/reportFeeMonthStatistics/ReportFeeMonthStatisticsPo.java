@@ -21,6 +21,7 @@ public class ReportFeeMonthStatisticsPo implements Serializable {
     private String communityId;
     private String feeCreateTime;
     private String objType;
+    private String deadlineTime;
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -158,5 +159,11 @@ public class ReportFeeMonthStatisticsPo implements Serializable {
         this.objType = objType;
     }
 
+    public String getDeadlineTime() {
+        return deadlineTime;
+    }
 
+    public void setDeadlineTime(String deadlineTime) {
+        this.deadlineTime = deadlineTime;
+    }
 }

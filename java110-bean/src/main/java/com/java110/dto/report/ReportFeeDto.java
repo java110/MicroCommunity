@@ -91,6 +91,8 @@ public class ReportFeeDto extends PageDto implements Serializable {
     private String storeTypeCd;
 
 
+
+
     public String getAmount() {
         return amount;
     }

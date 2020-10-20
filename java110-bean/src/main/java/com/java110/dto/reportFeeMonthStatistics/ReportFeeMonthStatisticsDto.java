@@ -50,6 +50,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String statusCd = "0";
 
     private int oweDay;
+    private String deadlineTime;
+
 
 
 
@@ -293,4 +295,14 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
     }
+
+    public String getDeadlineTime() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(String deadlineTime) {
+        this.deadlineTime = deadlineTime;
+    }
+
+
 }

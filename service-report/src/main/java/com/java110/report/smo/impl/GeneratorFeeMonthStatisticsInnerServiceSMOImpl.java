@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportFeeDetailDto;
 import com.java110.dto.report.ReportFeeDto;
@@ -29,6 +30,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName GeneratorFeeMonthStatisticsInnerServiceSMOImpl
@@ -194,8 +196,14 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         }
         double receivableAmount = getReceivableAmount(tmpReportFeeDto, null, tmpReportCarDto); //应收
         double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
+        FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
+        OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(tmpReportCarDto, OwnerCarDto.class);
+        Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto, ownerCarDto);
+
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
+        reportFeeMonthStatisticsPo.setDeadlineTime(DateUtil.getFormatTimeString(targetEndDate, DateUtil.DATE_FORMATE_STRING_A));
         if (!ListUtil.isNull(statistics)) {
             ReportFeeMonthStatisticsDto statistic = statistics.get(0);
             reportFeeMonthStatisticsPo.setStatisticsId(statistic.getStatisticsId());
@@ -288,8 +296,13 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         }
         double receivableAmount = getReceivableAmount(tmpReportFeeDto, reportRoomDto, null); //应收
         double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
+        FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
+        Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto, null);
+
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
+        reportFeeMonthStatisticsPo.setDeadlineTime(DateUtil.getFormatTimeString(targetEndDate, DateUtil.DATE_FORMATE_STRING_A));
         if (!ListUtil.isNull(statistics)) {
             ReportFeeMonthStatisticsDto statistic = statistics.get(0);
             reportFeeMonthStatisticsPo.setStatisticsId(statistic.getStatisticsId());

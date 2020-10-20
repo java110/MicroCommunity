@@ -118,6 +118,9 @@
         <if test="updateTime !=null and updateTime != ''">
             , t.update_time= #{updateTime}
         </if>
+        <if test="deadlineTime !=null ">
+            , t.deadline_time= #{deadlineTime}
+        </if>
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
@@ -765,7 +768,8 @@
     <select id="queryPrePaymentNewCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select pfc.fee_name feeName, f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,t.end_time endTime ,oc.car_num carNum
+        select pfc.fee_name feeName, f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,t.end_time endTime
+        ,oc.car_num carNum
         from pay_fee t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
@@ -829,7 +833,7 @@
         from report_fee_month_statistics t
         where t.community_id = '7020181217000001'
         group by t.config_id,t.fee_name
-        order by  objCount desc
+        order by objCount desc
     </select>
 
 </mapper>

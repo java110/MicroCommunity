@@ -1,6 +1,7 @@
 package com.java110.core.smo;
 
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
@@ -91,6 +92,8 @@ public interface IComputeFeeSMO {
      * @return
      */
     double getCycle();
+
+    public Map getTargetEndDateAndOweMonth(FeeDto feeDto, OwnerCarDto ownerCarDto);
 
     /**
      * 获取目标结束时间和欠费月份
