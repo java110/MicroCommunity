@@ -229,8 +229,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
             try {
-                int day = DateUtil.daysBetween(nowDate, DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getDeadlineTime(),
-                        DateUtil.DATE_FORMATE_STRING_A));
+                int day = DateUtil.daysBetween(DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getDeadlineTime(),
+                        DateUtil.DATE_FORMATE_STRING_A), nowDate);
                 reportFeeMonthStatisticsDto.setOweDay(day);
             } catch (Exception e) {
                 logger.error("计算欠费天数失败", e);

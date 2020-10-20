@@ -298,8 +298,6 @@ public class ReportFeeMonthStatisticsApi {
                                                    @RequestParam(value = "unitId", required = false) String unitId,
                                                    @RequestParam(value = "roomId", required = false) String roomId,
                                                    @RequestParam(value = "roomNum", required = false) String roomNum,
-                                                   @RequestParam(value = "startTime", required = false) String startTime,
-                                                   @RequestParam(value = "endTime", required = false) String endTime,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();

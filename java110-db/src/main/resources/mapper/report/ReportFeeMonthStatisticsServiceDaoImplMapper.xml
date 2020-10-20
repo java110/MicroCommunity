@@ -873,6 +873,7 @@
         <if test="endTime !=null">
             and t.deadline_time &lt;= #{endTime}
         </if>
+        order by t.deadline_time
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
