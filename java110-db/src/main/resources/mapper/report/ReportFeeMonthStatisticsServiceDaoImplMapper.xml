@@ -600,13 +600,13 @@
         <if test="endTime !=null">
             and t.create_time &lt;= #{endTime}
         </if>
-        group by t.config_id,t.fee_name,pfc.start_time,t.obj_id,t.obj_name
+        group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,t.deadline_time
         ) t
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeDetail" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.fee_name feeName,pfc.start_time feeCreateTime,SUM(t.receivable_amount)
+        select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,t.deadline_time deadlineTime,SUM(t.receivable_amount)
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -653,7 +653,7 @@
         <if test="endTime !=null">
             and t.create_time &lt;= #{endTime}
         </if>
-        group by t.config_id,t.fee_name,pfc.start_time,t.obj_id,t.obj_name
+        group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,t.deadline_time
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
