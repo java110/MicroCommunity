@@ -2,7 +2,9 @@ package com.java110.goods.bmo.groupBuyProduct.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.groupBuyBatch.GroupBuyBatchDto;
 import com.java110.goods.bmo.groupBuyProduct.ISaveGroupBuyProductBMO;
+import com.java110.intf.IGroupBuyBatchInnerServiceSMO;
 import com.java110.intf.IGroupBuyProductInnerServiceSMO;
 import com.java110.intf.IGroupBuyProductSpecInnerServiceSMO;
 import com.java110.po.groupBuyProduct.GroupBuyProductPo;
@@ -23,6 +25,9 @@ public class SaveGroupBuyProductBMOImpl implements ISaveGroupBuyProductBMO {
     @Autowired
     private IGroupBuyProductSpecInnerServiceSMO groupBuyProductSpecInnerServiceSMOImpl;
 
+    @Autowired
+    private IGroupBuyBatchInnerServiceSMO groupBuyBatchInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -32,6 +37,16 @@ public class SaveGroupBuyProductBMOImpl implements ISaveGroupBuyProductBMO {
     @Java110Transactional
     public ResponseEntity<String> save(GroupBuyProductPo groupBuyProductPo,
                                        List<GroupBuyProductSpecPo> groupBuyProductSpecPos) {
+        GroupBuyBatchDto groupBuyBatchDto = new GroupBuyBatchDto();
+        groupBuyBatchDto.setCurBatch("Y");
+        groupBuyBatchDto.setStoreId(groupBuyProductPo.getStoreId());
+        List<GroupBuyBatchDto> groupBuyBatchDtos = groupBuyBatchInnerServiceSMOImpl.queryGroupBuyBatchs(groupBuyBatchDto);
+
+        if (groupBuyBatchDtos.size() < 1) {
+            throw new IllegalArgumentException("未找到批次信息");
+        }
+
+        groupBuyProductPo.setBatchId(groupBuyBatchDtos.get(0).getBatchId());
 
         groupBuyProductPo.setGroupId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_groupId));
         int flag = groupBuyProductInnerServiceSMOImpl.saveGroupBuyProduct(groupBuyProductPo);
