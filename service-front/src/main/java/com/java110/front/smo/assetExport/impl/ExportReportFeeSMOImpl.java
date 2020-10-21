@@ -222,7 +222,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             row.createCell(1).setCellValue(dataObj.getString("objName"));
             row.createCell(2).setCellValue(dataObj.getString("feeName"));
             row.createCell(3).setCellValue(dataObj.getString("feeCreateTime"));
-            row.createCell(4).setCellValue("-");
+            row.createCell(4).setCellValue(dataObj.getString("deadlineTime"));
             row.createCell(5).setCellValue(dataObj.getString("receivableAmount"));
             row.createCell(6).setCellValue(dataObj.getString("receivedAmount"));
 
