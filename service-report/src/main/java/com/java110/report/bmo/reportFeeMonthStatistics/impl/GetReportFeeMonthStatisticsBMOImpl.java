@@ -177,7 +177,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryDeadlineFee(reportFeeMonthStatisticsDto);
 
-            freshReportOweDay(reportFeeMonthStatisticsDtos);
+            freshReportDeadlineDay(reportFeeMonthStatisticsDtos);
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
@@ -266,6 +266,22 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     }
 
     private void freshReportOweDay(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
+
+        Date nowDate = DateUtil.getCurrentDate();
+
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            try {
+                int day = DateUtil.daysBetween(DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
+                        DateUtil.DATE_FORMATE_STRING_A), nowDate);
+                reportFeeMonthStatisticsDto.setOweDay(day);
+            } catch (Exception e) {
+                logger.error("计算欠费天数失败", e);
+            }
+
+        }
+    }
+
+    private void freshReportDeadlineDay(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
 
         Date nowDate = DateUtil.getCurrentDate();
 
