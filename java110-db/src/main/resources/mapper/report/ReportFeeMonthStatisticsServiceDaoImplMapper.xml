@@ -8,9 +8,11 @@
     <!-- 保存费用月统计信息 add by wuxw 2018-07-03 -->
     <insert id="saveReportFeeMonthStatisticsInfo" parameterType="Map">
         insert into report_fee_month_statistics(
-        receivable_amount,statistics_id,update_time,remark,obj_name,received_amount,fee_year,fee_month,fee_id,config_id,obj_id,fee_name,owe_amount,community_id,fee_create_time,obj_type
+        receivable_amount,statistics_id,update_time,remark,obj_name,received_amount,fee_year,fee_month,fee_id,config_id,
+        obj_id,fee_name,owe_amount,community_id,fee_create_time,obj_type,deadline_time
         ) values (
-        #{receivableAmount},#{statisticsId},#{updateTime},#{remark},#{objName},#{receivedAmount},#{feeYear},#{feeMonth},#{feeId},#{configId},#{objId},#{feeName},#{oweAmount},#{communityId},#{feeCreateTime},#{objType}
+        #{receivableAmount},#{statisticsId},#{updateTime},#{remark},#{objName},#{receivedAmount},#{feeYear},#{feeMonth},
+        #{feeId},#{configId},#{objId},#{feeName},#{oweAmount},#{communityId},#{feeCreateTime},#{objType},#{deadlineTime}
         )
     </insert>
 

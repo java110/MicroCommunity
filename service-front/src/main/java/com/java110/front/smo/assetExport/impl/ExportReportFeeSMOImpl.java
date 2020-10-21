@@ -126,6 +126,10 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
 
         //查询楼栋信息
         JSONArray rooms = this.getReportPayFeeDetail(pd, result);
+
+        if (rooms == null) {
+            return;
+        }
         JSONObject dataObj = null;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
