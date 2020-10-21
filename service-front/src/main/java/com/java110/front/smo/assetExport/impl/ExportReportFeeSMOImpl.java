@@ -338,11 +338,10 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
-
             row.createCell(0).setCellValue(dataObj.getString("feeYear") + "年" + dataObj.getString("feeMonth") + "月");
-            row.createCell(1).setCellValue(dataObj.getString("receivableAmount"));
-            row.createCell(2).setCellValue(dataObj.getString("floorNum") + "号楼");
-            row.createCell(3).setCellValue(dataObj.getString("unitNum") + "单元");
+            row.createCell(1).setCellValue(dataObj.getString("floorNum") + "号楼");
+            row.createCell(2).setCellValue(dataObj.getString("unitNum") + "单元");
+            row.createCell(3).setCellValue(dataObj.getString("receivableAmount"));
             row.createCell(4).setCellValue(dataObj.getString("receivedAmount"));
             row.createCell(5).setCellValue(dataObj.getString("oweAmount"));
 
