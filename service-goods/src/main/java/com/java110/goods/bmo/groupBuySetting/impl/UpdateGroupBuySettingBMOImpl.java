@@ -8,13 +8,10 @@ import com.java110.intf.IGroupBuyBatchInnerServiceSMO;
 import com.java110.intf.IGroupBuySettingInnerServiceSMO;
 import com.java110.po.groupBuyBatch.GroupBuyBatchPo;
 import com.java110.po.groupBuySetting.GroupBuySettingPo;
-import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Calendar;
 
 @Service("updateGroupBuySettingBMOImpl")
 public class UpdateGroupBuySettingBMOImpl implements IUpdateGroupBuySettingBMO {
@@ -47,11 +44,9 @@ public class UpdateGroupBuySettingBMOImpl implements IUpdateGroupBuySettingBMO {
             groupBuyBatchPo.setStoreId(groupBuySettingPo.getStoreId());
             groupBuyBatchPo.setSettingId(groupBuySettingPo.getSettingId());
             groupBuyBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_batchId));
-            groupBuyBatchPo.setBatchStartTime(DateUtil.getFormatTimeString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A));
+            groupBuyBatchPo.setBatchStartTime(groupBuySettingPo.getStartTime());
             groupBuyBatchPo.setCurBatch("Y");
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.HOUR_OF_DAY, Integer.parseInt(groupBuySettingPo.getValidHours()));
-            groupBuyBatchPo.setBatchEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+            groupBuyBatchPo.setBatchEndTime(groupBuySettingPo.getEndTime());
             flag = groupBuyBatchInnerServiceSMOImpl.saveGroupBuyBatch(groupBuyBatchPo);
 
             if (flag < 0) {

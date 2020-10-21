@@ -44,11 +44,9 @@ public class SaveGroupBuySettingBMOImpl implements ISaveGroupBuySettingBMO {
         groupBuyBatchPo.setStoreId(groupBuySettingPo.getStoreId());
         groupBuyBatchPo.setSettingId(groupBuySettingPo.getSettingId());
         groupBuyBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_batchId));
-        groupBuyBatchPo.setBatchStartTime(DateUtil.getFormatTimeString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A));
+        groupBuyBatchPo.setBatchStartTime(groupBuySettingPo.getStartTime());
         groupBuyBatchPo.setCurBatch("Y");
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY, Integer.parseInt(groupBuySettingPo.getValidHours()));
-        groupBuyBatchPo.setBatchEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+        groupBuyBatchPo.setBatchEndTime(groupBuySettingPo.getEndTime());
         flag = groupBuyBatchInnerServiceSMOImpl.saveGroupBuyBatch(groupBuyBatchPo);
 
         if (flag < 0) {
