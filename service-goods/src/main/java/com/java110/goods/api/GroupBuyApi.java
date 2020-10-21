@@ -1,5 +1,6 @@
 package com.java110.goods.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.groupBuy.GroupBuyDto;
 import com.java110.dto.groupBuyBatch.GroupBuyBatchDto;
@@ -35,12 +36,10 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/groupBuy")
@@ -199,10 +198,26 @@ public class GroupBuyApi {
         Assert.hasKeyAndValue(reqJson, "groupProdDesc", "请求报文中未包含groupProdDesc");
         Assert.hasKeyAndValue(reqJson, "sort", "请求报文中未包含sort");
 
+        Assert.hasKey(reqJson, "productSpecs", "请求报文中未包含商品规格信息");
 
+        JSONArray productSpecs = reqJson.getJSONArray("productSpecs");
+
+        if (productSpecs.size() < 1) {
+            throw new IllegalArgumentException("请求报文中商品规格数量为0");
+        }
+        List<GroupBuyProductSpecPo> groupBuyProductSpecPos = new ArrayList<>();
+        GroupBuyProductSpecPo groupBuyProductSpecPo = null;
+        for (int specIndex = 0; specIndex < productSpecs.size(); specIndex++) {
+            groupBuyProductSpecPo = BeanConvertUtil.covertBean(productSpecs.getJSONObject(specIndex), GroupBuyProductSpecPo.class);
+            groupBuyProductSpecPo.setProductId(reqJson.getString("productId"));
+            groupBuyProductSpecPo.setDefaultShow("F");
+            groupBuyProductSpecPo.setGroupSales("1");
+            groupBuyProductSpecPo.setStoreId(storeId);
+            groupBuyProductSpecPos.add(groupBuyProductSpecPo);
+        }
         GroupBuyProductPo groupBuyProductPo = BeanConvertUtil.covertBean(reqJson, GroupBuyProductPo.class);
         groupBuyProductPo.setStoreId(storeId);
-        return saveGroupBuyProductBMOImpl.save(groupBuyProductPo);
+        return saveGroupBuyProductBMOImpl.save(groupBuyProductPo,groupBuyProductSpecPos);
     }
 
     /**
