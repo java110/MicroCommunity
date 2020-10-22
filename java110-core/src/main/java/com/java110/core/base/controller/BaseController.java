@@ -291,6 +291,9 @@ public class BaseController extends AppBase {
 
         //校验资源路劲是否定义权限
         List<BasePrivilegeDto> basePrivilegeDtos = PrivilegeCache.getPrivileges();
+        if (basePrivilegeDtos == null || basePrivilegeDtos.size() < 1) {
+            return;
+        }
         String tmpResource = null;
         boolean hasPrivilege = false;
         for (BasePrivilegeDto privilegeDto : basePrivilegeDtos) {
@@ -308,9 +311,6 @@ public class BaseController extends AppBase {
         }
         JSONArray privileges = JSONArray.parseArray(resultVo.getMsg());
 
-        if (basePrivilegeDtos == null || basePrivilegeDtos.size() < 1) {
-            return;
-        }
         hasPrivilege = false;
         if (privileges == null || privileges.size() < 1) {
             throw new UnsupportedOperationException("用户没有权限操作");

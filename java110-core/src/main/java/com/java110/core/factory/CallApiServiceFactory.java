@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.dto.app.AppDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
@@ -201,7 +202,7 @@ public class CallApiServiceFactory {
     public static ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
         ResponseEntity<String> responseEntity = null;
         HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), pd.getAppId());
+        header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), StringUtil.isEmpty(pd.getAppId()) ? AppDto.WEB_APP_ID : pd.getApiUrl());
         header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), pd.getTransactionId());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
@@ -220,8 +221,6 @@ public class CallApiServiceFactory {
         }
 
     }
-
-
 
 
     /**
