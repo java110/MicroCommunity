@@ -1,6 +1,7 @@
 package com.java110.core.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -16,8 +17,8 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import java.time.Duration;
 
 @Configuration
-
 @EnableCaching //开启缓存，默认是rendis缓存，继承CachingConfigurerSupport ，直接重写里面的方法
+@ConditionalOnBean(Java110RedisCacheWriter.class)
 public class Java110RedisConfig extends CachingConfigurerSupport {
 
     public final static String REDIS_EXPIRE_TIME_KEY = "#key_expire_time";
@@ -34,6 +35,7 @@ public class Java110RedisConfig extends CachingConfigurerSupport {
     public CacheManager cacheManager() {
 
         RedisConnectionFactory connectionFactory = redisTemplate.getConnectionFactory();
+        System.out.printf("123123");
         //上面实现的缓存读写
         Java110RedisCacheWriter java110RedisCacheWriter
                 = new Java110RedisCacheWriter(connectionFactory);
