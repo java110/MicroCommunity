@@ -70,6 +70,25 @@ public class CommonCache extends BaseCache {
 
     }
 
+
+    /**
+     * 保存数据
+     *
+     * @param key
+     */
+    public static void setValue(String key, String value) {
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            redis.set(key, value);
+        } finally {
+            if (redis != null) {
+                redis.close();
+            }
+        }
+
+    }
+
     /**
      * 删除记录
      *

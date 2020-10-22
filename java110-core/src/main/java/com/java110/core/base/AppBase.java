@@ -3,14 +3,13 @@ package com.java110.core.base;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
+import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.utils.cache.BaseCache;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.log.LoggerEngine;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
-import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -123,25 +122,7 @@ public class AppBase extends BaseCache {
      * @return
      */
     protected ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
-        ResponseEntity<String> responseEntity = null;
-        HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), CommonConstant.HC_WEB_APP_ID);
-        header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
-        header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), pd.getTransactionId());
-        header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
-        header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
-        HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
-        //logger.debug("请求中心服务信息，{}", httpEntity);
-        try {
-            responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
-        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>( e.getResponseBodyAsString(), e.getStatusCode());
-        } catch (Exception e) {
-            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } finally {
-            logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);
-            return responseEntity;
-        }
+        return CallApiServiceFactory.callCenterService(restTemplate, pd, param, url, httpMethod);
 
     }
 

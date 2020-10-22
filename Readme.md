@@ -54,7 +54,7 @@
    
    主要系统功能请查看
      
-   [http://www.homecommunity.cn//document/#/func/funcation](http://www.homecommunity.cn//document/#/func/funcation)
+   [http://www.homecommunity.cn/devDoc/#/func/funcation](http://www.homecommunity.cn/devDoc/#/func/funcation)
   
 
 ### 演示地址（demo）

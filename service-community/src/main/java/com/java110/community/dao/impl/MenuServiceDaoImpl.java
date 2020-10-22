@@ -185,14 +185,12 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
     }
 
     @Override
-    public boolean checkUserHasResource(Map info) {
+    public List<Map> checkUserHasResource(Map info) {
         logger.debug("查询路由信息 入参 info : {}", info);
 
         List<Map> businessBasePrivilegeInfos = sqlSessionTemplate.selectList("menuServiceDaoImpl.checkUserHasResource", info);
-        if (businessBasePrivilegeInfos != null && businessBasePrivilegeInfos.size() > 0) {
-            return true;
-        }
-        return false;
+
+        return businessBasePrivilegeInfos;
     }
 
 

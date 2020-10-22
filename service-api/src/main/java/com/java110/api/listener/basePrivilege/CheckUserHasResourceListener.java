@@ -5,17 +5,19 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 检查用户是否有资源
@@ -43,32 +45,16 @@ public class CheckUserHasResourceListener extends AbstractServiceApiDataFlowList
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         AppService service = event.getAppService();
         JSONObject data = dataFlowContext.getReqJson();
-        Assert.hasKeyAndValue(data, "resource", "请求报文中未包含资源路径");
         logger.debug("请求信息：{}", data);
-        //Assert.hasKeyAndValue(data, "userId", "请求报文中未包含userId节点");
         ResponseEntity<String> responseEntity = null;
-
-        //判断资源路径是否配置权限 ，没有配置权限则都能访问
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
         basePrivilegeDto.setResource(data.getString("resource"));
-        int count = menuInnerServiceSMOImpl.queryBasePrivilegesCount(basePrivilegeDto);
-        //没有配置权限，都能访问
-        if (count < 1) {
-            responseEntity = new ResponseEntity<String>("校验成功，该资源路径未配置权限，建议开发者账户配置权限", HttpStatus.OK);
-            dataFlowContext.setResponseEntity(responseEntity);
-            return;
-        }
         basePrivilegeDto.setUserId(data.getString("userId"));
-        boolean checkFlag = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
 
-        if (!checkFlag) {
-            responseEntity = new ResponseEntity<String>("没有权限操作", HttpStatus.UNAUTHORIZED);
-        } else {
-
-            responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
-
-        }
-
+        data = new JSONObject();
+        data.put("privileges", privileges);
+        responseEntity = new ResponseEntity<String>(data.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
     }
 

@@ -1,21 +1,22 @@
 package com.java110.core.base.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.AppBase;
-import com.java110.core.cache.Java110RedisConfig;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.smo.IGetCommunityStoreInfoSMO;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.utils.cache.PrivilegeCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.NoAuthorityException;
 import com.java110.utils.util.StringUtil;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +30,9 @@ import java.util.*;
  * Created by wuxw on 2017/2/23.
  */
 public class BaseController extends AppBase {
+
+    @Autowired
+    private IGetCommunityStoreInfoSMO getCommunityStoreInfoSMOImpl;
 
 
     /**
@@ -282,22 +286,47 @@ public class BaseController extends AppBase {
             return;
         }
         JSONObject paramIn = new JSONObject();
-        paramIn.put("resource", resource);
+        //paramIn.put("resource", resource);
         paramIn.put("userId", pd.getUserId());
 
-        responseEntity = checkUserHasResourceListener(restTemplate, pd, paramIn, resource + pd.getUserId());
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+        //校验资源路劲是否定义权限
+        List<BasePrivilegeDto> basePrivilegeDtos = PrivilegeCache.getPrivileges();
+        String tmpResource = null;
+        boolean hasPrivilege = false;
+        for (BasePrivilegeDto privilegeDto : basePrivilegeDtos) {
+            if (resource.equals(privilegeDto.getResource())) {
+                hasPrivilege = true;
+            }
+        }
+        if (!hasPrivilege) { //权限没有配置，直接跳过
+            return;
+        }
+
+        ResultVo resultVo = getCommunityStoreInfoSMOImpl.checkUserHasResourceListener(restTemplate, pd, paramIn, pd.getUserId());
+        if (resultVo == null || resultVo.getCode() != ResultVo.CODE_OK) {
             throw new UnsupportedOperationException("用户没有权限操作");
         }
+        JSONArray privileges = JSONArray.parseArray(resultVo.getMsg());
+
+        if (basePrivilegeDtos == null || basePrivilegeDtos.size() < 1) {
+            return;
+        }
+        hasPrivilege = false;
+        if (privileges == null || privileges.size() < 1) {
+            throw new UnsupportedOperationException("用户没有权限操作");
+        }
+        for (int privilegeIndex = 0; privilegeIndex < privileges.size(); privilegeIndex++) {
+            tmpResource = privileges.getJSONObject(privilegeIndex).getString("resource");
+            if (resource.equals(tmpResource)) {
+                hasPrivilege = true;
+                break;
+            }
+        }
+        if (!hasPrivilege) {
+            throw new UnsupportedOperationException("用户没有权限操作");
+        }
+
     }
 
-    @Cacheable(value = "checkUserHasResourceListener" + Java110RedisConfig.DEFAULT_EXPIRE_TIME_KEY, key = "#cacheKey")
-    private ResponseEntity<String> checkUserHasResourceListener(RestTemplate restTemplate, IPageData pd, JSONObject paramIn, String cacheKey) {
-        ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/basePrivilege.CheckUserHasResourceListener",
-                HttpMethod.POST);
-        return responseEntity;
-    }
 
 }

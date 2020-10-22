@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.smo.IGetCommunityStoreInfoSMO;
 import com.java110.front.smo.IPrivilegeServiceSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,9 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private IGetCommunityStoreInfoSMO getCommunityStoreInfoSMOImpl;
 
     /**
      * 查询 权限组
@@ -339,8 +344,11 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
         String storeId = storeInfoObj.getString("storeId");
         privilegeInfoObj.put("storeId", storeId);
 
-        ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.user.privilege?userId=" + privilegeInfoObj.getString("staffId") + "&domain=" + storeInfoObj.getString("storeTypeCd"), HttpMethod.GET);
+//        ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, "",
+//                ServiceConstant.SERVICE_API_URL + "/api/query.user.privilege?userId=" + privilegeInfoObj.getString("staffId") + "&domain=" + storeInfoObj.getString("storeTypeCd"), HttpMethod.GET);
+
+        ResultVo resultVo = getCommunityStoreInfoSMOImpl.getUserPrivileges(pd, privilegeInfoObj.getString("staffId"), storeInfoObj.getString("storeTypeCd"), restTemplate);
+        ResponseEntity<String> privilegeGroup = new ResponseEntity<>(resultVo.getMsg(), resultVo.getCode() == ResultVo.CODE_OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         if (privilegeGroup.getStatusCode() != HttpStatus.OK) {
             return privilegeGroup;
         }

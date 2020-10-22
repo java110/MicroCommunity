@@ -119,6 +119,12 @@ public class CommonConstant {
     /**
      * 映射 缓存常量
      */
+    public final static String CACHE_PRIVILEGE = "PRIVILEGE";
+
+
+    /**
+     * 映射 缓存常量
+     */
     public final static String CACHE_SERVICE_SQL = "SERVICE_SQL";
 
 

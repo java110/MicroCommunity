@@ -253,6 +253,12 @@
         ]]>
     </select>
 
+    <select id="getPrivilegeAll" resultType="com.java110.dto.basePrivilege.BasePrivilegeDto">
+        <![CDATA[
+              select t.p_id pId,t.name,t.domain,t.resource,t.description,t.create_time createTime from p_privilege t where t.status_cd = '0'
+        ]]>
+    </select>
+
     <select id="judgeAllBusinessCompleted" parameterType="map" resultType="map">
         SELECT co.* FROM c_orders co WHERE co.`o_id` = #{oId} and not exists (
         SELECT 1 FROM c_business cb WHERE cb.`o_id` = co.`o_id`

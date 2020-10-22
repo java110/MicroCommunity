@@ -53,7 +53,9 @@ public class Java110RedisCacheWriter implements RedisCacheWriter {
 
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
-        Assert.notNull(value, "Value must not be null!");
+        if (value == null) {
+            return;
+        }
 
         execute(name, connection -> {
 
@@ -77,6 +79,7 @@ public class Java110RedisCacheWriter implements RedisCacheWriter {
             return "OK";
         });
     }
+
     /*
      * (non-Javadoc)
      * @see org.springframework.data.redis.cache.RedisCacheWriter#get(java.lang.String, byte[])

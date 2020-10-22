@@ -198,7 +198,7 @@ public class CallApiServiceFactory {
         return list;
     }
 
-    private static ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
+    public static ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
         ResponseEntity<String> responseEntity = null;
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), pd.getAppId());
@@ -220,6 +220,9 @@ public class CallApiServiceFactory {
         }
 
     }
+
+
+
 
     /**
      * map 参数转 url get 参数 非空值转为get参数 空值忽略

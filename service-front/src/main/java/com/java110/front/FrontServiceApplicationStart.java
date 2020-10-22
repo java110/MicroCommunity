@@ -30,6 +30,11 @@ import java.nio.charset.Charset;
  * @mail 928255095@qq.com
  * @date 2016年8月6日
  * @tag
+ *
+ * , excludeFilters =
+ *         {
+ *                 @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.java110.core.smo.*")
+ *         }
  */
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.java110.service.configuration",
@@ -37,13 +42,11 @@ import java.nio.charset.Charset;
         "com.java110.front",
         "com.java110.core",
         "com.java110.config.properties.code",
-        "com.java110.report"},excludeFilters =
-        {
-                @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.java110.core.smo.*")
-        })
+        "com.java110.report"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@EnableCaching
 public class FrontServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(FrontServiceApplicationStart.class);
