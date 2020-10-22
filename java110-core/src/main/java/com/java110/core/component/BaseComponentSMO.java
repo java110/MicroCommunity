@@ -3,6 +3,7 @@ package com.java110.core.component;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.cache.Java110RedisConfig;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.cache.MappingCache;
@@ -16,6 +17,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -155,10 +157,36 @@ public class BaseComponentSMO extends BaseServiceSMO {
      *
      * @return
      */
-    protected ResponseEntity<String> getStoreInfo(IPageData pd, RestTemplate restTemplate) {
+    @Cacheable(value = "getStoreInfo" + Java110RedisConfig.GET_STORE_INFO_EXPIRE_TIME_KEY, key = "#userId")
+    protected ResponseEntity<String> getStoreInfo(IPageData pd, RestTemplate restTemplate, String userId) {
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.store.byuser?userId=" + pd.getUserId(), HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.store.byuser?userId=" + userId, HttpMethod.GET);
+
+        return responseEntity;
+    }
+
+    /**
+     * 查询商户信息
+     *
+     * @return
+     */
+    protected ResponseEntity<String> getStoreInfo(IPageData pd, RestTemplate restTemplate) {
+        Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
+
+        return getStoreInfo(pd, restTemplate, pd.getUserId());
+//        ResponseEntity<String> responseEntity = null;
+//        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.store.byuser?userId=" + pd.getUserId(), HttpMethod.GET);
+//
+//        return responseEntity;
+    }
+
+    @Cacheable(value = "getStoreEnterCommunitys" + Java110RedisConfig.GET_STORE_ENTER_COMMUNITYS_EXPIRE_TIME_KEY, key = "#storeId")
+    private ResponseEntity<String> getStoreEnterCommunitys(IPageData pd, String storeId, String storeTypeCd, RestTemplate restTemplate) {
+        ResponseEntity<String> responseEntity = null;
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember?memberId=" + storeId + "&memberTypeCd="
+                        + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd), HttpMethod.GET);
 
         return responseEntity;
     }
@@ -171,9 +199,7 @@ public class BaseComponentSMO extends BaseServiceSMO {
     protected void checkStoreEnterCommunity(IPageData pd, String storeId, String storeTypeCd, String communityId, RestTemplate restTemplate) {
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember?memberId=" + storeId + "&memberTypeCd="
-                        + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd), HttpMethod.GET);
+        responseEntity = getStoreEnterCommunitys(pd, storeId, storeTypeCd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "还未入驻小区，请先入驻小区");
         }

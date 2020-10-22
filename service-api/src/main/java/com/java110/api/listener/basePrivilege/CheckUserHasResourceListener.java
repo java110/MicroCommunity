@@ -54,7 +54,7 @@ public class CheckUserHasResourceListener extends AbstractServiceApiDataFlowList
         int count = menuInnerServiceSMOImpl.queryBasePrivilegesCount(basePrivilegeDto);
         //没有配置权限，都能访问
         if (count < 1) {
-            responseEntity = new ResponseEntity<String>("该资源路径没有配置权限", HttpStatus.OK);
+            responseEntity = new ResponseEntity<String>("校验成功，该资源路径未配置权限，建议开发者账户配置权限", HttpStatus.OK);
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }

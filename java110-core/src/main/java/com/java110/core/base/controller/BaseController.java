@@ -2,17 +2,18 @@ package com.java110.core.base.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.base.AppBase;
+import com.java110.core.cache.Java110RedisConfig;
+import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.core.factory.DataFlowFactory;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.NoAuthorityException;
-
 import com.java110.utils.util.StringUtil;
-import com.java110.core.base.AppBase;
-import com.java110.core.context.BusinessServiceDataFlow;
-import com.java110.core.factory.DataFlowFactory;
-import com.java110.core.context.PageData;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -128,23 +129,23 @@ public class BaseController extends AppBase {
         headers.put("port", request.getLocalPort() + "");
 
         //处理app-id
-        if(headers.containsKey("app-id")){
-            headers.put("app_id",headers.get("app-id"));
+        if (headers.containsKey("app-id")) {
+            headers.put("app_id", headers.get("app-id"));
         }
 
         //处理transaction-id
-        if(headers.containsKey("transaction-id")){
-            headers.put("transaction_id",headers.get("transaction-id"));
+        if (headers.containsKey("transaction-id")) {
+            headers.put("transaction_id", headers.get("transaction-id"));
         }
 
         //处理req-time
-        if(headers.containsKey("req-time")){
-            headers.put("req_time",headers.get("req-time"));
+        if (headers.containsKey("req-time")) {
+            headers.put("req_time", headers.get("req-time"));
         }
 
         //处理req-time
-        if(headers.containsKey("user-id")){
-            headers.put("user_id",headers.get("user-id"));
+        if (headers.containsKey("user-id")) {
+            headers.put("user_id", headers.get("user-id"));
         }
 
     }
@@ -283,13 +284,20 @@ public class BaseController extends AppBase {
         JSONObject paramIn = new JSONObject();
         paramIn.put("resource", resource);
         paramIn.put("userId", pd.getUserId());
-        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/basePrivilege.CheckUserHasResourceListener",
-                HttpMethod.POST);
 
+        responseEntity = checkUserHasResourceListener(restTemplate, pd, paramIn, resource + pd.getUserId());
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new UnsupportedOperationException("用户没有权限操作");
         }
+    }
+
+    @Cacheable(value = "checkUserHasResourceListener" + Java110RedisConfig.DEFAULT_EXPIRE_TIME_KEY, key = "#cacheKey")
+    private ResponseEntity<String> checkUserHasResourceListener(RestTemplate restTemplate, IPageData pd, JSONObject paramIn, String cacheKey) {
+        ResponseEntity<String> responseEntity = null;
+        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/basePrivilege.CheckUserHasResourceListener",
+                HttpMethod.POST);
+        return responseEntity;
     }
 
 }
