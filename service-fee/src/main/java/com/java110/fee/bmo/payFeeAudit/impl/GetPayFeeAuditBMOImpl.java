@@ -78,6 +78,9 @@ public class GetPayFeeAuditBMOImpl implements IGetPayFeeAuditBMO {
 
             bIds.add(payFeeAuditDto.getbId());
         }
+        if (bIds.size() < 1) {
+            return;
+        }
         BusinessDto businessDto = new BusinessDto();
         businessDto.setbIds(bIds.toArray(new String[bIds.size()]));
         List<OrderDto> orderDtos = orderInnerServiceSMOImpl.queryOrderByBId(businessDto);

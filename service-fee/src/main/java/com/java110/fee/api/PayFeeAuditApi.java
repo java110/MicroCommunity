@@ -39,7 +39,7 @@ public class PayFeeAuditApi {
     @RequestMapping(value = "/savePayFeeAudit", method = RequestMethod.POST)
     public ResponseEntity<String> savePayFeeAudit(@RequestBody JSONObject reqJson,
                                                   @RequestHeader(value = "user-id") String userId,
-                                                  @RequestHeader(value="user-name")String userName) {
+                                                  @RequestHeader(value = "user-name") String userName) {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
@@ -105,12 +105,19 @@ public class PayFeeAuditApi {
      */
     @RequestMapping(value = "/queryPayFeeAudit", method = RequestMethod.GET)
     public ResponseEntity<String> queryPayFeeAudit(@RequestParam(value = "communityId") String communityId,
+                                                   @RequestParam(value = "payObjType", required = false) String payObjType,
+                                                   @RequestParam(value = "payerObjId", required = false) String payerObjId,
+                                                   @RequestParam(value = "state", required = false) String state,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
+
         PayFeeAuditDto payFeeAuditDto = new PayFeeAuditDto();
         payFeeAuditDto.setPage(page);
         payFeeAuditDto.setRow(row);
         payFeeAuditDto.setCommunityId(communityId);
+        payFeeAuditDto.setState(state);
+        payFeeAuditDto.setPayerObjType(payObjType);
+        payFeeAuditDto.setPayerObjId(payerObjId);
         return getPayFeeAuditBMOImpl.get(payFeeAuditDto);
     }
 }

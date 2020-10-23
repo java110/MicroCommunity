@@ -37,6 +37,12 @@
             and pf.payer_obj_id = #{carId}
             and pf.payer_obj_type = '6666'
         </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and pf.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and pf.payer_obj_type = #{payerObjType}
+        </if>
         <if test="state !=null and state != ''">
             and (pfa.state is null
             or pfa.state = #{state})
@@ -99,6 +105,16 @@
         <if test="carId !=null and carId != ''">
             and pf.payer_obj_id = #{carId}
             and pf.payer_obj_type = '6666'
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and pf.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and pf.payer_obj_type = #{payerObjType}
+        </if>
+        <if test="state !=null and state != ''">
+            and (pfa.state is null
+            or pfa.state = #{state})
         </if>
         <if test="state !=null and state != ''">
             and (pfa.state is null
