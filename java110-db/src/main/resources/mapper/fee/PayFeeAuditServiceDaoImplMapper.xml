@@ -43,9 +43,11 @@
         <if test="payerObjType !=null and payerObjType != ''">
             and pf.payer_obj_type = #{payerObjType}
         </if>
-        <if test="state !=null and state != ''">
-            and (pfa.state is null
-            or pfa.state = #{state})
+        <if test="state !=null and state != '1010'">
+            and  pfa.state = #{state}
+        </if>
+        <if test="state !=null and state == '1010'">
+            and pfa.state is null
         </if>
         ORDER BY pfd.create_time desc
         <if test="page != -1 and page != null ">
@@ -113,9 +115,11 @@
         <if test="payerObjType !=null and payerObjType != ''">
             and pf.payer_obj_type = #{payerObjType}
         </if>
-        <if test="state !=null and state != ''">
-            and (pfa.state is null
-            or pfa.state = #{state})
+        <if test="state !=null and state != '1010'">
+            and  pfa.state = #{state}
+        </if>
+        <if test="state !=null and state == '1010'">
+            and pfa.state is null
         </if>
 
 
