@@ -8,7 +8,6 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
-import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
@@ -137,7 +136,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-
+        if (!businessFeeDetail.containsKey("state")) {
+            businessFeeDetail.put("state", "1400");
+        }
         feeDto = feeDtos.get(0);
         businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         int hours = 0;
@@ -271,6 +272,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", "-1");
         businessFeeDetail.put("primeRate", "1.00");
+
+        if (!businessFeeDetail.containsKey("state")) {
+            businessFeeDetail.put("state", "1400");
+        }
         //计算 应收金额
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(paramInJson.getString("feeId"));
@@ -329,7 +334,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
             } else if ("4004".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            }  else if ("5005".equals(computingFormula)) {
+            } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
                     //throw new IllegalArgumentException("抄表数据异常");
                 } else {
@@ -344,7 +349,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 }
             } else if ("6006".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            }else {
+            } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
@@ -471,7 +476,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", "-1");
         businessFeeDetail.put("primeRate", "1.00");
-        //计算 应收金额
+        if (!businessFeeDetail.containsKey("state")) {
+            businessFeeDetail.put("state","1400");
+        }
+            //计算 应收金额
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(paramInJson.getString("feeId"));
         feeDto.setCommunityId(paramInJson.getString("communityId"));

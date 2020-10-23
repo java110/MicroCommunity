@@ -121,6 +121,8 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payFeeDetailPo.setReceivableAmount(receivableAmount + "");
             payFeeDetailPo.setReceivedAmount(receivableAmount + "");
             payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
+
+            payFeeDetailPo.setState("1400");
             //添加单元信息
             businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
 

@@ -28,7 +28,7 @@
         where 1=1
         and pfd.community_id = #{communityId}
         and  pfd.status_cd = '0'
-        and pfd.state is null
+        and pfd.state = '1400'
         <if test="roomId !=null and roomId != ''">
             and pf.payer_obj_id = #{roomId}
             and pf.payer_obj_type = '3333'
@@ -103,7 +103,7 @@
         where 1=1
         and pfd.community_id = #{communityId}
         and  pfd.status_cd = '0'
-        and pfd.state is null
+        and pfd.state = '1400'
         <if test="roomId !=null and roomId != ''">
             and pf.payer_obj_id = #{roomId}
             and pf.payer_obj_type = '3333'
