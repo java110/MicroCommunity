@@ -96,11 +96,6 @@
         inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pf.community_id = pfc.community_id and pfc.status_cd = '0'
         left join pay_fee_audit pfa on pf.fee_id = pfa.fee_id and pfd.detail_id = pfa.fee_detail_id and pfa.status_cd = '0'
         where 1=1
-        from pay_fee_detail pfd
-        INNER JOIN pay_fee pf on pf.fee_id = pfd.fee_id and pf.community_id = pfd.community_id and pf.status_cd = '0'
-        inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pf.community_id = pfc.community_id and pfc.status_cd = '0'
-        left join pay_fee_audit pfa on pf.fee_id = pfa.fee_id and pfd.detail_id = pfa.fee_detail_id and pfa.status_cd = '0'
-        where 1=1
         and pfd.community_id = #{communityId}
         and  pfd.status_cd = '0'
         and pfd.state = '1400'
