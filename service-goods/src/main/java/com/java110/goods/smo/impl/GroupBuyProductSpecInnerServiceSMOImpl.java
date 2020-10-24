@@ -73,6 +73,12 @@ public class GroupBuyProductSpecInnerServiceSMOImpl extends BaseServiceSMO imple
         return groupBuyProductSpecServiceDaoImpl.queryGroupBuyProductSpecsCount(BeanConvertUtil.beanCovertMap(groupBuyProductSpecDto));
     }
 
+    @Override
+    public List<GroupBuyProductSpecDto> queryProductStockAndSales(GroupBuyProductSpecDto groupBuyProductSpecDto) {
+        return BeanConvertUtil.covertBeanList(groupBuyProductSpecServiceDaoImpl.queryProductStockAndSales(BeanConvertUtil.beanCovertMap(groupBuyProductSpecDto)), GroupBuyProductSpecDto.class);
+    }
+
+
     public IGroupBuyProductSpecServiceDao getGroupBuyProductSpecServiceDaoImpl() {
         return groupBuyProductSpecServiceDaoImpl;
     }

@@ -60,6 +60,15 @@ public class GroupBuyProductSpecServiceDaoImpl extends BaseServiceDao implements
         return businessGroupBuyProductSpecInfos;
     }
 
+    @Override
+    public List<Map> queryProductStockAndSales(Map info) throws DAOException {
+        logger.debug("查询拼团产品规格信息 入参 info : {}",info);
+
+        List<Map> businessGroupBuyProductSpecInfos = sqlSessionTemplate.selectList("groupBuyProductSpecServiceDaoImpl.queryProductStockAndSales",info);
+
+        return businessGroupBuyProductSpecInfos;
+    }
+
 
     /**
      * 修改拼团产品规格信息

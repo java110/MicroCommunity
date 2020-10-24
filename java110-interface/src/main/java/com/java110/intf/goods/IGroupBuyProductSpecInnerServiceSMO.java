@@ -27,14 +27,13 @@ public interface IGroupBuyProductSpecInnerServiceSMO {
     public int saveGroupBuyProductSpec(@RequestBody GroupBuyProductSpecPo groupBuyProductSpecPo);
 
     @RequestMapping(value = "/updateGroupBuyProductSpec", method = RequestMethod.POST)
-    public int updateGroupBuyProductSpec(@RequestBody  GroupBuyProductSpecPo groupBuyProductSpecPo);
+    public int updateGroupBuyProductSpec(@RequestBody GroupBuyProductSpecPo groupBuyProductSpecPo);
 
     @RequestMapping(value = "/deleteGroupBuyProductSpec", method = RequestMethod.POST)
-    public int deleteGroupBuyProductSpec(@RequestBody  GroupBuyProductSpecPo groupBuyProductSpecPo);
+    public int deleteGroupBuyProductSpec(@RequestBody GroupBuyProductSpecPo groupBuyProductSpecPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param groupBuyProductSpecDto 数据对象分享
      * @return GroupBuyProductSpecDto 对象数据
@@ -50,4 +49,7 @@ public interface IGroupBuyProductSpecInnerServiceSMO {
      */
     @RequestMapping(value = "/queryGroupBuyProductSpecsCount", method = RequestMethod.POST)
     int queryGroupBuyProductSpecsCount(@RequestBody GroupBuyProductSpecDto groupBuyProductSpecDto);
+
+    @RequestMapping(value = "/queryProductStockAndSales", method = RequestMethod.POST)
+    List<GroupBuyProductSpecDto> queryProductStockAndSales(@RequestBody GroupBuyProductSpecDto groupBuyProductSpecDto);
 }

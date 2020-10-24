@@ -1,6 +1,7 @@
 package com.java110.dto.groupBuyProductSpec;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,12 +16,13 @@ import java.util.Date;
 public class GroupBuyProductSpecDto extends PageDto implements Serializable {
 
     private String specId;
-private String groupSales;
-private String productId;
-private String groupPrice;
-private String defaultShow;
-private String storeId;
-private String groupStock;
+    private String groupSales;
+    private String productId;
+    private String[] productIds;
+    private String groupPrice;
+    private String defaultShow;
+    private String storeId;
+    private String groupStock;
 
 
     private Date createTime;
@@ -31,43 +33,56 @@ private String groupStock;
     public String getSpecId() {
         return specId;
     }
-public void setSpecId(String specId) {
+
+    public void setSpecId(String specId) {
         this.specId = specId;
     }
-public String getGroupSales() {
+
+    public String getGroupSales() {
         return groupSales;
     }
-public void setGroupSales(String groupSales) {
+
+    public void setGroupSales(String groupSales) {
         this.groupSales = groupSales;
     }
-public String getProductId() {
+
+    public String getProductId() {
         return productId;
     }
-public void setProductId(String productId) {
+
+    public void setProductId(String productId) {
         this.productId = productId;
     }
-public String getGroupPrice() {
+
+    public String getGroupPrice() {
         return groupPrice;
     }
-public void setGroupPrice(String groupPrice) {
+
+    public void setGroupPrice(String groupPrice) {
         this.groupPrice = groupPrice;
     }
-public String getDefaultShow() {
+
+    public String getDefaultShow() {
         return defaultShow;
     }
-public void setDefaultShow(String defaultShow) {
+
+    public void setDefaultShow(String defaultShow) {
         this.defaultShow = defaultShow;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getGroupStock() {
+
+    public String getGroupStock() {
         return groupStock;
     }
-public void setGroupStock(String groupStock) {
+
+    public void setGroupStock(String groupStock) {
         this.groupStock = groupStock;
     }
 
@@ -86,5 +101,13 @@ public void setGroupStock(String groupStock) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(String[] productIds) {
+        this.productIds = productIds;
     }
 }

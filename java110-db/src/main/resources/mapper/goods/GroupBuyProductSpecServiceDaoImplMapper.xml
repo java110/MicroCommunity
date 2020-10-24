@@ -119,4 +119,24 @@
 
     </select>
 
+    <select id="queryProductStockAndSales" parameterType="Map" resultType="Map">
+        select t.product_id productId,sum(t.group_stock) groupStock,SUM(t.group_sales) groupSales
+        from group_buy_product_spec t
+        where 1 =1
+        and t.status_cd= '0'
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="productIds != null">
+            and t.product_id in
+            <foreach collection="productIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        group by t.product_id
+    </select>
+
 </mapper>

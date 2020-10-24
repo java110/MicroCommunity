@@ -39,6 +39,14 @@ public interface IGroupBuyProductSpecServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getGroupBuyProductSpecInfo(Map info) throws DAOException;
+    /**
+     * 查询拼团产品规格信息（instance过程）
+     * 根据bId 查询拼团产品规格信息
+     * @param info bId 信息
+     * @return 拼团产品规格信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> queryProductStockAndSales(Map info) throws DAOException;
 
 
 
