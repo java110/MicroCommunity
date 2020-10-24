@@ -23,7 +23,8 @@
         groupStock,ps.spec_name specName,psv.price,psv.ot_price otPrice,psv.cost_price costPrice,psv.vip_price vipPrice,
         psv.stock,psv.sales,t.value_id valueId
         from group_buy_product_spec t
-        inner join product_spec_value psv on psv.spec_id = t.spec_id and psv.product_id = t.product_id and psv.status_cd = '0' and psv.store_id = t.store_id
+        inner join product_spec_value psv on psv.spec_id = t.spec_id and psv.product_id = t.product_id and psv.status_cd = '0'
+        and psv.store_id = t.store_id and psv.value_id = t.value_id
         left join product_spec ps on t.spec_id = ps.spec_id and ps.store_id = t.store_id and ps.status_cd = '0'
         where 1 =1
         <if test="specId !=null and specId != ''">
