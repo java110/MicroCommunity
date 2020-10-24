@@ -237,10 +237,26 @@ public class GroupBuyApi {
         Assert.hasKeyAndValue(reqJson, "sort", "请求报文中未包含sort");
         Assert.hasKeyAndValue(reqJson, "groupId", "groupId不能为空");
 
+        Assert.hasKey(reqJson, "productSpecs", "请求报文中未包含商品规格信息");
 
+        JSONArray productSpecs = reqJson.getJSONArray("productSpecs");
+
+        if (productSpecs.size() < 1) {
+            throw new IllegalArgumentException("请求报文中商品规格数量为0");
+        }
+        List<GroupBuyProductSpecPo> groupBuyProductSpecPos = new ArrayList<>();
+        GroupBuyProductSpecPo groupBuyProductSpecPo = null;
+        for (int specIndex = 0; specIndex < productSpecs.size(); specIndex++) {
+            groupBuyProductSpecPo = BeanConvertUtil.covertBean(productSpecs.getJSONObject(specIndex), GroupBuyProductSpecPo.class);
+            groupBuyProductSpecPo.setProductId(reqJson.getString("productId"));
+            groupBuyProductSpecPo.setDefaultShow("F");
+            groupBuyProductSpecPo.setGroupSales("1");
+            groupBuyProductSpecPo.setStoreId(storeId);
+            groupBuyProductSpecPos.add(groupBuyProductSpecPo);
+        }
         GroupBuyProductPo groupBuyProductPo = BeanConvertUtil.covertBean(reqJson, GroupBuyProductPo.class);
         groupBuyProductPo.setStoreId(storeId);
-        return updateGroupBuyProductBMOImpl.update(groupBuyProductPo);
+        return updateGroupBuyProductBMOImpl.update(groupBuyProductPo, groupBuyProductSpecPos);
     }
 
     /**
