@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class GroupBuyProductSpecPo implements Serializable {
 
+    private String valueId;
     private String specId;
     private String groupSales;
     private String productId;
@@ -77,5 +78,11 @@ public class GroupBuyProductSpecPo implements Serializable {
         this.groupStock = groupStock;
     }
 
+    public String getValueId() {
+        return valueId;
+    }
 
+    public void setValueId(String valueId) {
+        this.valueId = valueId;
+    }
 }

@@ -8,9 +8,9 @@
     <!-- 保存拼团产品规格信息 add by wuxw 2018-07-03 -->
     <insert id="saveGroupBuyProductSpecInfo" parameterType="Map">
         insert into group_buy_product_spec(
-        spec_id,group_sales,product_id,group_price,default_show,store_id,group_stock
+        spec_id,group_sales,product_id,group_price,default_show,store_id,group_stock,value_id
         ) values (
-        #{specId},#{groupSales},#{productId},#{groupPrice},#{defaultShow},#{storeId},#{groupStock}
+        #{specId},#{groupSales},#{productId},#{groupPrice},#{defaultShow},#{storeId},#{groupStock},#{valueId}
         )
     </insert>
 
@@ -21,13 +21,16 @@
         productId,t.group_price,t.group_price groupPrice,t.default_show,t.default_show
         defaultShow,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.group_stock,t.group_stock
         groupStock,ps.spec_name specName,psv.price,psv.ot_price otPrice,psv.cost_price costPrice,psv.vip_price vipPrice,
-        psv.stock,psv.sales
+        psv.stock,psv.sales,t.value_id valueId
         from group_buy_product_spec t
         inner join product_spec_value psv on psv.spec_id = t.spec_id and psv.product_id = t.product_id and psv.status_cd = '0' and psv.store_id = t.store_id
         left join product_spec ps on t.spec_id = ps.spec_id and ps.store_id = t.store_id and ps.status_cd = '0'
         where 1 =1
         <if test="specId !=null and specId != ''">
             and t.spec_id= #{specId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
         </if>
         <if test="groupSales !=null and groupSales != ''">
             and t.group_sales= #{groupSales}
@@ -67,9 +70,6 @@
         <if test="groupSales !=null and groupSales != ''">
             , t.group_sales= #{groupSales}
         </if>
-        <if test="productId !=null and productId != ''">
-            , t.product_id= #{productId}
-        </if>
         <if test="groupPrice !=null and groupPrice != ''">
             , t.group_price= #{groupPrice}
         </if>
@@ -86,6 +86,12 @@
         <if test="specId !=null and specId != ''">
             and t.spec_id= #{specId}
         </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
 
     </update>
 
@@ -96,6 +102,9 @@
         where 1 =1
         <if test="specId !=null and specId != ''">
             and t.spec_id= #{specId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id = #{valueId}
         </if>
         <if test="groupSales !=null and groupSales != ''">
             and t.group_sales= #{groupSales}

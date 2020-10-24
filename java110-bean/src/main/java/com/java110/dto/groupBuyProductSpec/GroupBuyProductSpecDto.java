@@ -16,6 +16,7 @@ import java.util.Date;
  **/
 public class GroupBuyProductSpecDto extends ProductSpecValueDto implements Serializable {
 
+    private String valueId;
     private String specId;
     private String groupSales;
     private String productId;
@@ -110,5 +111,15 @@ public class GroupBuyProductSpecDto extends ProductSpecValueDto implements Seria
 
     public void setProductIds(String[] productIds) {
         this.productIds = productIds;
+    }
+
+    @Override
+    public String getValueId() {
+        return valueId;
+    }
+
+    @Override
+    public void setValueId(String valueId) {
+        this.valueId = valueId;
     }
 }
