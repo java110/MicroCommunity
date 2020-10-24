@@ -1,7 +1,9 @@
 package com.java110.dto.groupBuyProduct;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.groupBuyProductSpec.GroupBuyProductSpecDto;
 import com.java110.dto.product.ProductDto;
+import com.java110.dto.productSpecValue.ProductSpecValueDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,6 +28,8 @@ public class GroupBuyProductDto extends ProductDto implements Serializable {
     private String state;
     private String storeId;
     private String batchId;
+
+    private List<GroupBuyProductSpecDto> groupBuyProductSpecs;
 
 
 
@@ -125,4 +129,11 @@ public class GroupBuyProductDto extends ProductDto implements Serializable {
     }
 
 
+    public List<GroupBuyProductSpecDto> getGroupBuyProductSpecs() {
+        return groupBuyProductSpecs;
+    }
+
+    public void setGroupBuyProductSpecs(List<GroupBuyProductSpecDto> groupBuyProductSpecs) {
+        this.groupBuyProductSpecs = groupBuyProductSpecs;
+    }
 }

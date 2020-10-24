@@ -217,7 +217,7 @@ public class GroupBuyApi {
         }
         GroupBuyProductPo groupBuyProductPo = BeanConvertUtil.covertBean(reqJson, GroupBuyProductPo.class);
         groupBuyProductPo.setStoreId(storeId);
-        return saveGroupBuyProductBMOImpl.save(groupBuyProductPo,groupBuyProductSpecPos);
+        return saveGroupBuyProductBMOImpl.save(groupBuyProductPo, groupBuyProductSpecPos);
     }
 
     /**
@@ -274,11 +274,13 @@ public class GroupBuyApi {
     @RequestMapping(value = "/queryGroupBuyProduct", method = RequestMethod.GET)
     public ResponseEntity<String> queryGroupBuyProduct(@RequestHeader(value = "store-id") String storeId,
                                                        @RequestParam(value = "page") int page,
-                                                       @RequestParam(value = "row") int row) {
+                                                       @RequestParam(value = "row") int row,
+                                                       @RequestParam(value = "groupId", required = false) String groupId) {
         GroupBuyProductDto groupBuyProductDto = new GroupBuyProductDto();
         groupBuyProductDto.setPage(page);
         groupBuyProductDto.setRow(row);
         groupBuyProductDto.setStoreId(storeId);
+        groupBuyProductDto.setGroupId(groupId);
         return getGroupBuyProductBMOImpl.get(groupBuyProductDto);
     }
 

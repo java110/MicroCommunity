@@ -151,15 +151,15 @@ public class GetGroupBuyProductBMOImpl implements IGetGroupBuyProductBMO {
     }
 
     private void freshProductSpecValue(List<GroupBuyProductDto> productDtos) {
-        ProductSpecValueDto productSpecValueDto = new ProductSpecValueDto();
+        GroupBuyProductSpecDto productSpecValueDto = new GroupBuyProductSpecDto();
         productSpecValueDto.setProductId(productDtos.get(0).getProductId());
         productSpecValueDto.setStoreId(productDtos.get(0).getStoreId());
-        List<ProductSpecValueDto> productSpecValueDtos = productSpecValueInnerServiceSMOImpl.queryProductSpecValues(productSpecValueDto);
+        List<GroupBuyProductSpecDto> productSpecValueDtos = groupBuyProductSpecInnerServiceSMOImpl.queryGroupBuyProductSpecs(productSpecValueDto);
 
         if (productSpecValueDtos == null || productSpecValueDtos.size() < 1) {
             return;
         }
-        productDtos.get(0).setProductSpecValues(productSpecValueDtos);
+        productDtos.get(0).setGroupBuyProductSpecs(productSpecValueDtos);
 
         List<String> specIds = new ArrayList<>();
         for (ProductSpecValueDto productSpecValue : productSpecValueDtos) {
