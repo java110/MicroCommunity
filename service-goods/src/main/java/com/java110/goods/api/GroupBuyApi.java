@@ -540,7 +540,7 @@ public class GroupBuyApi {
      */
     @RequestMapping(value = "/queryGroupBuyBatch", method = RequestMethod.GET)
     public ResponseEntity<String> queryGroupBuyBatch(@RequestHeader(value = "store-id") String storeId,
-                                                     @RequestParam(value = "batchId") String batchId,
+                                                     @RequestParam(value = "batchId",required = false) String batchId,
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) {
         GroupBuyBatchDto groupBuyBatchDto = new GroupBuyBatchDto();
