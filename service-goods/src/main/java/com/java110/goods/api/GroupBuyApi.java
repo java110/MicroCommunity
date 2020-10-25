@@ -172,12 +172,18 @@ public class GroupBuyApi {
      */
     @RequestMapping(value = "/queryGroupBuy", method = RequestMethod.GET)
     public ResponseEntity<String> queryGroupBuy(@RequestHeader(value = "store-id") String storeId,
+                                                @RequestParam(value = "batchId", required = false) String batchId,
+                                                @RequestParam(value = "groupProdName", required = false) String groupProdName,
+                                                @RequestParam(value = "buyId", required = false) String buyId,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         GroupBuyDto groupBuyDto = new GroupBuyDto();
         groupBuyDto.setPage(page);
         groupBuyDto.setRow(row);
         groupBuyDto.setStoreId(storeId);
+        groupBuyDto.setBatchId(batchId);
+        groupBuyDto.setGroupProdName(groupProdName);
+        groupBuyDto.setBuyId(buyId);
         return getGroupBuyBMOImpl.get(groupBuyDto);
     }
 
@@ -540,7 +546,7 @@ public class GroupBuyApi {
      */
     @RequestMapping(value = "/queryGroupBuyBatch", method = RequestMethod.GET)
     public ResponseEntity<String> queryGroupBuyBatch(@RequestHeader(value = "store-id") String storeId,
-                                                     @RequestParam(value = "batchId",required = false) String batchId,
+                                                     @RequestParam(value = "batchId", required = false) String batchId,
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) {
         GroupBuyBatchDto groupBuyBatchDto = new GroupBuyBatchDto();
