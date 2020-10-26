@@ -50,7 +50,7 @@ public class GeneratorGroupBuyBatchTemplate extends TaskSystemQuartz {
         logger.debug("开始生成拼团批次" + taskDto.toString());
 
         // 获取小区
-        List<StoreDto> storeDtos = getAllStore(StoreDto.STORE_ADMIN);
+        List<StoreDto> storeDtos = getAllStore(StoreDto.STORE_TYPE_ADMIN);
 
         for (StoreDto storeDto : storeDtos) {
             try {
