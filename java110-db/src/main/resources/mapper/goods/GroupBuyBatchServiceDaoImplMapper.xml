@@ -61,12 +61,7 @@
         <if test="batchEndTime !=null and batchEndTime != ''">
             , t.batch_end_time= #{batchEndTime}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
-        <if test="settingId !=null and settingId != ''">
-            , t.setting_id= #{settingId}
-        </if>
+
         <if test="batchStartTime !=null and batchStartTime != ''">
             , t.batch_start_time= #{batchStartTime}
         </if>
@@ -77,6 +72,16 @@
         <if test="batchId !=null and batchId != ''">
             and t.batch_id= #{batchId}
         </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="defaultCurBatch !=null and defaultCurBatch != ''">
+            and t.cur_batch= #{defaultCurBatch}
+        </if>
+
 
     </update>
 

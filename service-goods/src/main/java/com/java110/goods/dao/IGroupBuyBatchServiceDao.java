@@ -47,7 +47,7 @@ public interface IGroupBuyBatchServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    void updateGroupBuyBatchInfo(Map info) throws DAOException;
+    int updateGroupBuyBatchInfo(Map info) throws DAOException;
 
 
     /**

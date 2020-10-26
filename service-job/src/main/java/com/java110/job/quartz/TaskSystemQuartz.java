@@ -1,9 +1,11 @@
 package com.java110.job.quartz;
 
-import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.dto.taskAttr.TaskAttrDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.job.dao.ITaskServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,9 @@ public abstract class TaskSystemQuartz {
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
 
 
     public void initTask() {
@@ -113,7 +118,20 @@ public abstract class TaskSystemQuartz {
     }
 
     /**
+     * 查询商户信息
+     *
+     * @return
+     */
+    protected List<StoreDto> getAllStore(String storeTypeCd) {
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreTypeCd(storeTypeCd);
+        List<StoreDto> storeDtos = storeInnerServiceSMOImpl.getStores(storeDto);
+        return storeDtos;
+    }
+
+    /**
      * 获取当前属性
+     *
      * @param taskDto
      * @param specCd
      * @return

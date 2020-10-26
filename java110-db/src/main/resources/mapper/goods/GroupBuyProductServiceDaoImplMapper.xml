@@ -65,9 +65,7 @@
     <!-- 修改拼团产品信息 add by wuxw 2018-07-03 -->
     <update id="updateGroupBuyProductInfo" parameterType="Map">
         update group_buy_product t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
+
         <if test="groupProdName !=null and groupProdName != ''">
             , t.group_prod_name= #{groupProdName}
         </if>
@@ -86,15 +84,16 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="batchId !=null and batchId != ''">
             , t.batch_id= #{batchId}
         </if>
         where 1=1
         <if test="groupId !=null and groupId != ''">
             and t.group_id= #{groupId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>

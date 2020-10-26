@@ -57,9 +57,6 @@
     <!-- 修改拼团设置信息 add by wuxw 2018-07-03 -->
     <update id="updateGroupBuySettingInfo" parameterType="Map">
         update group_buy_setting t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
         <if test="groupBuyName !=null and groupBuyName != ''">
             , t.group_buy_name= #{groupBuyName}
         </if>
