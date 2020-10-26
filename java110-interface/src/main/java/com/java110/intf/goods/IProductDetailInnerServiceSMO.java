@@ -1,4 +1,4 @@
-package com.java110.intf;
+package com.java110.intf.goods;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.productDetail.ProductDetailDto;
