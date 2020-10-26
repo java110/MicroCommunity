@@ -14,6 +14,8 @@ import java.io.Serializable;
  **/
 public class MachineDto extends PageDto implements Serializable {
 
+    public static final String MACHINE_TYPE_CAR = "9996";
+
     private String machineMac;
     private String machineId;
     private String machineCode;

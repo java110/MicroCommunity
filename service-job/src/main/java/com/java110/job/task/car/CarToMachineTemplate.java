@@ -2,10 +2,12 @@ package com.java110.job.task.car;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.task.TaskDto;
+import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -51,6 +53,9 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
 
     @Override
@@ -107,17 +112,25 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
 
         //拿到小区ID
         String communityId = ownerCarDtos.get(0).getCommunityId();
+        MachineDto machineDto = new MachineDto();
+        machineDto.setCommunityId(communityId);
+        machineDto.setMachineTypeCd(MachineDto.MACHINE_TYPE_CAR);
+        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+        if (machineDtos == null || machineDtos.size() < 1) {
+            return;
+        }
         //根据小区ID查询现有设备
+
 
         for (OwnerCarDto ownerCarDto : ownerCarDtos) {
 
             if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())) {
-                saveOrUpdateMachineTranslate(tmpOrderDto, ownerCarDto, CREATE_OWNER_CAR);
+                saveOrUpdateMachineTranslate(tmpOrderDto, ownerCarDto, machineDtos, CREATE_OWNER_CAR);
             } else if (BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())) {
-                saveOrUpdateMachineTranslate(tmpOrderDto, ownerCarDto, UPDATE_OWNER_CAR);
+                saveOrUpdateMachineTranslate(tmpOrderDto, ownerCarDto, machineDtos, UPDATE_OWNER_CAR);
             } else if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())
             ) {
-                deleteMachineTranslate(tmpOrderDto, ownerCarDto);
+                deleteMachineTranslate(tmpOrderDto, ownerCarDto, machineDtos);
             } else {
 
             }
@@ -127,38 +140,41 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
 
     }
 
-    private void saveOrUpdateMachineTranslate(OrderDto tmpOrderDto, OwnerCarDto ownerCarDto, String cmd) {
+    private void saveOrUpdateMachineTranslate(OrderDto tmpOrderDto, OwnerCarDto ownerCarDto, List<MachineDto> machineDtos, String cmd) {
 
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setMachineId(ownerCarDto.getCommunityId());
-        machineTranslateDto.setMachineCode(ownerCarDto.getCommunityId());
-        machineTranslateDto.setTypeCd(TYPE_OWNER_CAR);
-        machineTranslateDto.setObjId(ownerCarDto.getCarId());
-        machineTranslateDto.setObjName(ownerCarDto.getCarNum());
-        machineTranslateDto.setState(STATE_NO_TRANSLATE);
-        machineTranslateDto.setCommunityId(ownerCarDto.getCommunityId());
-        machineTranslateDto.setbId("-1");
-        machineTranslateDto.setMachineCmd(cmd);
-        machineTranslateDto.setObjBId(tmpOrderDto.getbId());
-        machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
+        for (MachineDto machineDto : machineDtos) {
+            MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+            machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+            machineTranslateDto.setMachineId(machineDto.getMachineId());
+            machineTranslateDto.setMachineCode(machineDto.getMachineCode());
+            machineTranslateDto.setTypeCd(TYPE_OWNER_CAR);
+            machineTranslateDto.setObjId(ownerCarDto.getCarId());
+            machineTranslateDto.setObjName(ownerCarDto.getCarNum());
+            machineTranslateDto.setState(STATE_NO_TRANSLATE);
+            machineTranslateDto.setCommunityId(ownerCarDto.getCommunityId());
+            machineTranslateDto.setbId("-1");
+            machineTranslateDto.setMachineCmd(cmd);
+            machineTranslateDto.setObjBId(tmpOrderDto.getbId());
+            machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
+        }
 
     }
 
-    private void deleteMachineTranslate(OrderDto tmpOrderDto, OwnerCarDto ownerCarDto) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setMachineId(ownerCarDto.getCommunityId());
-        machineTranslateDto.setMachineCode(ownerCarDto.getCommunityId());
-        machineTranslateDto.setTypeCd(TYPE_OWNER_CAR);
-        machineTranslateDto.setObjId(ownerCarDto.getCarId());
-        machineTranslateDto.setObjName(ownerCarDto.getCarNum());
-        machineTranslateDto.setState(STATE_NO_TRANSLATE);
-        machineTranslateDto.setCommunityId(ownerCarDto.getCommunityId());
-        machineTranslateDto.setbId("-1");
-        machineTranslateDto.setMachineCmd(DELETE_OWNER_CAR);
-        machineTranslateDto.setObjBId(tmpOrderDto.getbId());
-        machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
-
+    private void deleteMachineTranslate(OrderDto tmpOrderDto, OwnerCarDto ownerCarDto, List<MachineDto> machineDtos) {
+        for (MachineDto machineDto : machineDtos) {
+            MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+            machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+            machineTranslateDto.setMachineId(machineDto.getMachineId());
+            machineTranslateDto.setMachineCode(machineDto.getMachineCode());
+            machineTranslateDto.setTypeCd(TYPE_OWNER_CAR);
+            machineTranslateDto.setObjId(ownerCarDto.getCarId());
+            machineTranslateDto.setObjName(ownerCarDto.getCarNum());
+            machineTranslateDto.setState(STATE_NO_TRANSLATE);
+            machineTranslateDto.setCommunityId(ownerCarDto.getCommunityId());
+            machineTranslateDto.setbId("-1");
+            machineTranslateDto.setMachineCmd(DELETE_OWNER_CAR);
+            machineTranslateDto.setObjBId(tmpOrderDto.getbId());
+            machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
+        }
     }
 }
