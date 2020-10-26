@@ -3,8 +3,9 @@ package com.java110.goods.bmo.groupBuySetting.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.goods.bmo.groupBuySetting.ISaveGroupBuySettingBMO;
-import com.java110.intf.IGroupBuyBatchInnerServiceSMO;
-import com.java110.intf.IGroupBuySettingInnerServiceSMO;
+
+import com.java110.intf.goods.IGroupBuyBatchInnerServiceSMO;
+import com.java110.intf.goods.IGroupBuySettingInnerServiceSMO;
 import com.java110.po.groupBuyBatch.GroupBuyBatchPo;
 import com.java110.po.groupBuySetting.GroupBuySettingPo;
 import com.java110.utils.util.DateUtil;

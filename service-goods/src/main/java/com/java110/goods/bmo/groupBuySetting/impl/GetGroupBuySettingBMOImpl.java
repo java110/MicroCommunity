@@ -2,7 +2,7 @@ package com.java110.goods.bmo.groupBuySetting.impl;
 
 import com.java110.dto.groupBuySetting.GroupBuySettingDto;
 import com.java110.goods.bmo.groupBuySetting.IGetGroupBuySettingBMO;
-import com.java110.intf.IGroupBuySettingInnerServiceSMO;
+import com.java110.intf.goods.IGroupBuySettingInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

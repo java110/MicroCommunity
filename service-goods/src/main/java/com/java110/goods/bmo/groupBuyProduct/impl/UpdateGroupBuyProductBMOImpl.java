@@ -2,8 +2,8 @@ package com.java110.goods.bmo.groupBuyProduct.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.goods.bmo.groupBuyProduct.IUpdateGroupBuyProductBMO;
-import com.java110.intf.IGroupBuyProductInnerServiceSMO;
-import com.java110.intf.IGroupBuyProductSpecInnerServiceSMO;
+import com.java110.intf.goods.IGroupBuyProductInnerServiceSMO;
+import com.java110.intf.goods.IGroupBuyProductSpecInnerServiceSMO;
 import com.java110.po.groupBuyProduct.GroupBuyProductPo;
 import com.java110.po.groupBuyProductSpec.GroupBuyProductSpecPo;
 import com.java110.vo.ResultVo;

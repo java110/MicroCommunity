@@ -3,7 +3,7 @@ package com.java110.goods.bmo.productDetail.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.goods.bmo.productDetail.ISaveProductDetailBMO;
-import com.java110.intf.IProductDetailInnerServiceSMO;
+import com.java110.intf.goods.IProductDetailInnerServiceSMO;
 import com.java110.po.productDetail.ProductDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

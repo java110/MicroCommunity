@@ -2,7 +2,7 @@ package com.java110.goods.bmo.productSpecValue.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.goods.bmo.productSpecValue.IUpdateProductSpecValueBMO;
-import com.java110.intf.IProductSpecValueInnerServiceSMO;
+import com.java110.intf.goods.IProductSpecValueInnerServiceSMO;
 import com.java110.po.productSpecValue.ProductSpecValuePo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

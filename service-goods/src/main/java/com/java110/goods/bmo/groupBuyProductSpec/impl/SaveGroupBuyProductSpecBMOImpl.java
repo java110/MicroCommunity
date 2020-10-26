@@ -3,7 +3,7 @@ package com.java110.goods.bmo.groupBuyProductSpec.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.goods.bmo.groupBuyProductSpec.ISaveGroupBuyProductSpecBMO;
-import com.java110.intf.IGroupBuyProductSpecInnerServiceSMO;
+import com.java110.intf.goods.IGroupBuyProductSpecInnerServiceSMO;
 import com.java110.po.groupBuyProductSpec.GroupBuyProductSpecPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

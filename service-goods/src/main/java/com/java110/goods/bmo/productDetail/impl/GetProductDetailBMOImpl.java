@@ -2,7 +2,7 @@ package com.java110.goods.bmo.productDetail.impl;
 
 import com.java110.dto.productDetail.ProductDetailDto;
 import com.java110.goods.bmo.productDetail.IGetProductDetailBMO;
-import com.java110.intf.IProductDetailInnerServiceSMO;
+import com.java110.intf.goods.IProductDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

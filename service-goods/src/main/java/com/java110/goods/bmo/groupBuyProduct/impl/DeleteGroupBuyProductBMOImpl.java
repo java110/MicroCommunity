@@ -2,7 +2,7 @@ package com.java110.goods.bmo.groupBuyProduct.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.goods.bmo.groupBuyProduct.IDeleteGroupBuyProductBMO;
-import com.java110.intf.IGroupBuyProductInnerServiceSMO;
+import com.java110.intf.goods.IGroupBuyProductInnerServiceSMO;
 import com.java110.po.groupBuyProduct.GroupBuyProductPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
