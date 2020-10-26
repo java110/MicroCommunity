@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.groupBuyProduct.GroupBuyProductDto;
 import com.java110.goods.dao.IGroupBuyProductServiceDao;
-import com.java110.intf.IGroupBuyProductInnerServiceSMO;
+import com.java110.intf.goods.IGroupBuyProductInnerServiceSMO;
 import com.java110.po.groupBuyProduct.GroupBuyProductPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
