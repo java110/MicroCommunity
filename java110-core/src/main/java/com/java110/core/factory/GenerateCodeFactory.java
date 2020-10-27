@@ -162,6 +162,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_groupId = "92";
     public static final String CODE_PREFIX_batchId = "93";
     public static final String CODE_PREFIX_statisticsId = "94";
+    public static final String CODE_PREFIX_labelId = "94";
 
 
 

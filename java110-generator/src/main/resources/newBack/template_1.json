@@ -1,35 +1,27 @@
 {
   "autoMove": true,
-  "id": "statisticsId",
-  "name": "reportFeeMonthStatistics",
-  "desc": "费用月统计",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "report",
-  "tableName": "report_fee_month_statistics",
+  "id": "labelId",
+  "name": "productLabel",
+  "desc": "产品标签",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "goods",
+  "tableName": "product_label",
   "param": {
-    "statisticsId": "statistics_id",
-    "feeYear": "fee_year",
-    "feeMonth": "fee_month",
-    "communityId": "community_id",
-    "objType": "obj_type",
-    "objId": "obj_id",
-    "objName": "obj_name",
-    "feeId": "fee_id",
-    "feeName": "fee_name",
-    "configId": "config_id",
-    "receivableAmount": "receivable_amount",
-    "receivedAmount": "received_amount",
-    "oweAmount": "owe_amount",
-    "feeCreateTime": "fee_create_time",
-    "updateTime": "update_time",
-    "remark": "remark",
+    "labelId": "label_id",
+    "productId": "product_id",
+    "storeId": "store_id",
+    "labelCd": "label_cd",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "feeYear",
-      "msg": "年不能为空"
+      "code": "labelCd",
+      "msg": "标签不能为空"
+    },
+    {
+      "code": "productId",
+      "msg": "产品不能为空"
     }
   ]
 }
