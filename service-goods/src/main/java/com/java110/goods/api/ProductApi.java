@@ -818,12 +818,15 @@ public class ProductApi {
      */
     @RequestMapping(value = "/queryProductLabel", method = RequestMethod.GET)
     public ResponseEntity<String> queryProductLabel(@RequestParam(value = "labelCd", required = false) String labelCd,
+                                                    @RequestParam(value = "hasProduct", required = false) String hasProduct,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ProductLabelDto productLabelDto = new ProductLabelDto();
         productLabelDto.setPage(page);
         productLabelDto.setRow(row);
         productLabelDto.setLabelCd(labelCd);
+        productLabelDto.setHasProduct(hasProduct);
         return getProductLabelBMOImpl.get(productLabelDto);
     }
+
 }

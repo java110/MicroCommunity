@@ -5,93 +5,103 @@
 <mapper namespace="productLabelServiceDaoImpl">
 
 
-
-
-
     <!-- 保存产品标签信息 add by wuxw 2018-07-03 -->
     <insert id="saveProductLabelInfo" parameterType="Map">
         insert into product_label(
-label_id,product_id,store_id,label_cd
-) values (
-#{labelId},#{productId},#{storeId},#{labelCd}
-)
+        label_id,product_id,store_id,label_cd
+        ) values (
+        #{labelId},#{productId},#{storeId},#{labelCd}
+        )
     </insert>
-
 
 
     <!-- 查询产品标签信息 add by wuxw 2018-07-03 -->
     <select id="getProductLabelInfo" parameterType="Map" resultType="Map">
-        select  t.label_id,t.label_id labelId,t.product_id,t.product_id productId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.label_cd,t.label_cd labelCd 
-from product_label t 
-where 1 =1 
-<if test="labelId !=null and labelId != ''">
-   and t.label_id= #{labelId}
-</if> 
-<if test="productId !=null and productId != ''">
-   and t.product_id= #{productId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="labelCd !=null and labelCd != ''">
-   and t.label_cd= #{labelCd}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.label_id,t.label_id labelId,p.product_id productId,p.store_id storeId,t.label_cd,t.label_cd labelCd,
+        p.unit_name unitName,p.is_postage isPostage,p.sort,p.bar_code barCode,p.postage,p.prod_name prodName,
+        p.state,p.keyword,p.prod_desc prodDesc,p.category_id categoryId,pc.category_name categoryName,td.name stateName,
+        t.create_time createTime
+        from product p
+        left join product_category pc on pc.category_id = p.category_id and pc.store_id = p.store_id and pc.status_cd = '0'
+        left join t_dict td on p.state = td.status_cd and td.table_name= 'product' and td.table_columns = 'state'
+        left join product_label t on t.product_id = p.product_id and t.store_id = p.store_id and t.status_cd = '0'
+        where 1 =1
+        <if test="labelId !=null and labelId != ''">
+            and t.label_id= #{labelId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="labelCd !=null and labelCd != ''">
+            and t.label_cd= #{labelCd}
+        </if>
+        <if test="hasProduct !=null and hasProduct == 'N'">
+            and p.product_id is null
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改产品标签信息 add by wuxw 2018-07-03 -->
     <update id="updateProductLabelInfo" parameterType="Map">
-        update  product_label t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="productId !=null and productId != ''">
-, t.product_id= #{productId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="labelCd !=null and labelCd != ''">
-, t.label_cd= #{labelCd}
-</if> 
- where 1=1 <if test="labelId !=null and labelId != ''">
-and t.label_id= #{labelId}
-</if> 
+        update product_label t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            , t.product_id= #{productId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="labelCd !=null and labelCd != ''">
+            , t.label_cd= #{labelCd}
+        </if>
+        where 1=1
+        <if test="labelId !=null and labelId != ''">
+            and t.label_id= #{labelId}
+        </if>
 
     </update>
 
     <!-- 查询产品标签数量 add by wuxw 2018-07-03 -->
-     <select id="queryProductLabelsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from product_label t 
-where 1 =1 
-<if test="labelId !=null and labelId != ''">
-   and t.label_id= #{labelId}
-</if> 
-<if test="productId !=null and productId != ''">
-   and t.product_id= #{productId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="labelCd !=null and labelCd != ''">
-   and t.label_cd= #{labelCd}
-</if> 
+    <select id="queryProductLabelsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from product p
+        left join product_category pc on pc.category_id = p.category_id and pc.store_id = p.store_id and pc.status_cd = '0'
+        left join t_dict td on p.state = td.status_cd and td.table_name= 'product' and td.table_columns = 'state'
+        left join product_label t on t.product_id = p.product_id and t.store_id = p.store_id and t.status_cd = '0'
+        where 1 =1
+        <if test="labelId !=null and labelId != ''">
+            and t.label_id= #{labelId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="labelCd !=null and labelCd != ''">
+            and t.label_cd= #{labelCd}
+        </if>
+        <if test="hasProduct !=null and hasProduct == 'N'">
+            and p.product_id is null
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

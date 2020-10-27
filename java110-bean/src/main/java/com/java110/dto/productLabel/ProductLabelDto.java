@@ -1,6 +1,7 @@
 package com.java110.dto.productLabel;
 
-import com.java110.dto.PageDto;
+import com.java110.dto.product.ProductDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,12 +13,13 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class ProductLabelDto extends PageDto implements Serializable {
+public class ProductLabelDto extends ProductDto implements Serializable {
 
     private String labelId;
-private String productId;
-private String storeId;
-private String labelCd;
+    private String productId;
+    private String storeId;
+    private String labelCd;
+    private String hasProduct;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String labelCd;
     public String getLabelId() {
         return labelId;
     }
-public void setLabelId(String labelId) {
+
+    public void setLabelId(String labelId) {
         this.labelId = labelId;
     }
-public String getProductId() {
+
+    public String getProductId() {
         return productId;
     }
-public void setProductId(String productId) {
+
+    public void setProductId(String productId) {
         this.productId = productId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getLabelCd() {
+
+    public String getLabelCd() {
         return labelCd;
     }
-public void setLabelCd(String labelCd) {
+
+    public void setLabelCd(String labelCd) {
         this.labelCd = labelCd;
     }
 
@@ -65,5 +74,13 @@ public void setLabelCd(String labelCd) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getHasProduct() {
+        return hasProduct;
+    }
+
+    public void setHasProduct(String hasProduct) {
+        this.hasProduct = hasProduct;
     }
 }
