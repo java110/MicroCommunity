@@ -800,7 +800,6 @@ public class ProductApi {
      */
     @RequestMapping(value = "/deleteProductLabel", method = RequestMethod.POST)
     public ResponseEntity<String> deleteProductLabel(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "labelId", "labelId不能为空");
 

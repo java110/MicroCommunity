@@ -6,11 +6,14 @@ import com.java110.api.bmo.returnPayFee.IReturnPayFeeBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.dto.fee.FeeDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.fee.FeeDetailDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeReturnPayFeeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
@@ -30,6 +33,9 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
     private IReturnPayFeeBMO returnPayFeeBMOImpl;
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
     @Autowired
     private IFeeBMO feeBMOImpl;
 
@@ -38,16 +44,29 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "returnFeeId", "returnFeeId不能为空");
         Assert.hasKeyAndValue(reqJson, "state", "state不能为空");
         Assert.hasKeyAndValue(reqJson, "feeId", "feeId不能为空");
+
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setDetailId(reqJson.getString("detailId"));
+        feeDetailDto.setFeeId(reqJson.getString("feeId"));
+        feeDetailDto.setCommunityId(reqJson.getString("communityId"));
+        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+
+        Assert.listOnlyOne(feeDetailDtos, "不存在缴费记录");
+        reqJson.put("feeDetailDto", feeDetailDtos.get(0));
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+        FeeDetailDto feeDetailDto = (FeeDetailDto)reqJson.get("feeDetailDto");
         returnPayFeeBMOImpl.updateReturnPayFee(reqJson, context);
+
         //退费审核通过
         if ("1100".equals(reqJson.getString("state"))) {
             reqJson.put("state", "1300");
+            reqJson.put("startTime", DateUtil.getFormatTimeString(feeDetailDto.getStartTime(),DateUtil.DATE_FORMATE_STRING_A));
+            reqJson.put("endTime",DateUtil.getFormatTimeString(feeDetailDto.getEndTime(),DateUtil.DATE_FORMATE_STRING_A));
             returnPayFeeBMOImpl.addFeeDetail(reqJson, context);
+
             reqJson.put("state", "1100");
             String cycles = (String) reqJson.get("cycles");
             String receivableAmount = (String) reqJson.get("receivableAmount");
@@ -80,10 +99,10 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
             reqJson.put("state", feeDto1.getState());
             reqJson.put("configId", feeDto1.getConfigId());
             reqJson.put("payerObjType", feeDto1.getPayerObjType());
-            reqJson.put("feeId",feeDto1.getFeeId());
+            reqJson.put("feeId", feeDto1.getFeeId());
             if ("888800010006".equals(feeDto1.getFeeTypeCds())) {
                 reqJson.put("state", "2009001");
-            }else{
+            } else {
                 reqJson.put("state", "2008001");
             }
             feeBMOImpl.updateFee(reqJson, context);
