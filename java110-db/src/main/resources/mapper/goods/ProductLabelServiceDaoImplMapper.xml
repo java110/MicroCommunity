@@ -41,7 +41,7 @@
         <if test="labelCd !=null and labelCd != ''">
             and t.label_cd= #{labelCd}
         </if>
-        <if test="hasProduct !=null and hasProduct == 'N'">
+        <if test='hasProduct !=null and hasProduct == "N"'>
             and p.product_id is null
         </if>
         order by t.create_time desc
@@ -97,7 +97,7 @@
         <if test="labelCd !=null and labelCd != ''">
             and t.label_cd= #{labelCd}
         </if>
-        <if test="hasProduct !=null and hasProduct == 'N'">
+        <if test='hasProduct !=null and hasProduct == "N"'>
             and p.product_id is null
         </if>
 
