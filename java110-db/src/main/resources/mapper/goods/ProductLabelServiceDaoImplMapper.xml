@@ -35,10 +35,10 @@
             and t.product_id= #{productId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
+            and p.status_cd= #{statusCd}
         </if>
         <if test="storeId !=null and storeId != ''">
-            and t.store_id= #{storeId}
+            and p.store_id= #{storeId}
         </if>
         <if test='hasProduct !=null and hasProduct == "N"'>
             and t.product_id is null
@@ -91,10 +91,10 @@
             and t.product_id= #{productId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
+            and p.status_cd= #{statusCd}
         </if>
         <if test="storeId !=null and storeId != ''">
-            and t.store_id= #{storeId}
+            and p.store_id= #{storeId}
         </if>
         <if test='hasProduct !=null and hasProduct == "N"'>
             and t.product_id is null
