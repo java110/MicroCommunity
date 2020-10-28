@@ -44,6 +44,9 @@
         <if test='hasProduct !=null and hasProduct == "N"'>
             and t.product_id is null
         </if>
+        <if test='hasProduct !=null and hasProduct == "Y"'>
+            and t.product_id is not null
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -99,6 +102,9 @@
         </if>
         <if test='hasProduct !=null and hasProduct == "N"'>
             and t.product_id is null
+        </if>
+        <if test='hasProduct !=null and hasProduct == "Y"'>
+            and t.product_id is not null
         </if>
 
 
