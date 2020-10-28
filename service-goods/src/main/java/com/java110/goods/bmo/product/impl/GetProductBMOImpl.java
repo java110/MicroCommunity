@@ -1,12 +1,14 @@
 package com.java110.goods.bmo.product.impl;
 
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.groupBuyProduct.GroupBuyProductDto;
 import com.java110.dto.product.ProductDto;
 import com.java110.dto.product.ProductSpecDetailDto;
 import com.java110.dto.productDetail.ProductDetailDto;
 import com.java110.dto.productSpecValue.ProductSpecValueDto;
 import com.java110.goods.bmo.product.IGetProductBMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.goods.IGroupBuyProductInnerServiceSMO;
 import com.java110.intf.goods.IProductDetailInnerServiceSMO;
 import com.java110.intf.goods.IProductInnerServiceSMO;
 import com.java110.intf.goods.IProductSpecDetailInnerServiceSMO;
@@ -37,6 +39,9 @@ public class GetProductBMOImpl implements IGetProductBMO {
 
     @Autowired
     private IProductSpecDetailInnerServiceSMO productSpecDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IGroupBuyProductInnerServiceSMO groupBuyProductInnerServiceSMOImpl;
 
     /**
      * @param productDto
@@ -128,6 +133,8 @@ public class GetProductBMOImpl implements IGetProductBMO {
         }
 
         freshProductSpecValue(productDtos);
+        judgeGroupBuyProduct(productDtos.get(0));
+
 
         ProductDetailDto productDetailDto = new ProductDetailDto();
         productDetailDto.setProductId(productDtos.get(0).getProductId());
@@ -139,6 +146,18 @@ public class GetProductBMOImpl implements IGetProductBMO {
         }
 
         productDtos.get(0).setContent(productDetailDtos.get(0).getContent());
+    }
+
+    private void judgeGroupBuyProduct(ProductDto productDto) {
+        //判断商品是否 拼团
+        GroupBuyProductDto groupBuyProductDto = new GroupBuyProductDto();
+        groupBuyProductDto.setProductId(productDto.getProductId());
+        groupBuyProductDto.setStoreId(productDto.getStoreId());
+        List<GroupBuyProductDto> groupBuyProductDtos = groupBuyProductInnerServiceSMOImpl.queryGroupBuyProducts(groupBuyProductDto);
+
+        if (groupBuyProductDtos == null || groupBuyProductDtos.size() < 1) {
+            return;
+        }
     }
 
     private void freshProductSpecValue(List<ProductDto> productDtos) {

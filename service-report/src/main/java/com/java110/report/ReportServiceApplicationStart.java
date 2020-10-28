@@ -62,7 +62,7 @@ public class ReportServiceApplicationStart {
      * @return restTemplate
      */
     @Bean
-    public com.java110.core.client.RestTemplate outRestTemplate() {
+    public RestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
