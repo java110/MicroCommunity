@@ -21,10 +21,12 @@
         p.unit_name unitName,p.is_postage isPostage,p.sort,p.bar_code barCode,p.postage,p.prod_name prodName,
         p.state,p.keyword,p.prod_desc prodDesc,p.category_id categoryId,pc.category_name categoryName,td.name stateName,
         t.create_time createTime
-        from product p
         left join product_category pc on pc.category_id = p.category_id and pc.store_id = p.store_id and pc.status_cd = '0'
         left join t_dict td on p.state = td.status_cd and td.table_name= 'product' and td.table_columns = 'state'
         left join product_label t on t.product_id = p.product_id and t.store_id = p.store_id and t.status_cd = '0'
+        <if test="labelCd !=null and labelCd != ''">
+            and t.label_cd= #{labelCd}
+        </if>
         where 1 =1
         <if test="labelId !=null and labelId != ''">
             and t.label_id= #{labelId}
@@ -38,11 +40,8 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-        <if test="labelCd !=null and labelCd != ''">
-            and t.label_cd= #{labelCd}
-        </if>
         <if test='hasProduct !=null and hasProduct == "N"'>
-            and p.product_id is null
+            and t.product_id is null
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -81,6 +80,9 @@
         left join product_category pc on pc.category_id = p.category_id and pc.store_id = p.store_id and pc.status_cd = '0'
         left join t_dict td on p.state = td.status_cd and td.table_name= 'product' and td.table_columns = 'state'
         left join product_label t on t.product_id = p.product_id and t.store_id = p.store_id and t.status_cd = '0'
+        <if test="labelCd !=null and labelCd != ''">
+            and t.label_cd= #{labelCd}
+        </if>
         where 1 =1
         <if test="labelId !=null and labelId != ''">
             and t.label_id= #{labelId}
@@ -94,11 +96,8 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-        <if test="labelCd !=null and labelCd != ''">
-            and t.label_cd= #{labelCd}
-        </if>
         <if test='hasProduct !=null and hasProduct == "N"'>
-            and p.product_id is null
+            and t.product_id is null
         </if>
 
 
