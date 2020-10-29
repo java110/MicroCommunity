@@ -3,7 +3,9 @@ package com.java110.goods.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.product.ProductDto;
 import com.java110.dto.productLabel.ProductLabelDto;
+import com.java110.dto.productSpecValue.ProductSpecValueDto;
 import com.java110.goods.dao.IProductLabelServiceDao;
 import com.java110.intf.goods.IProductLabelInnerServiceSMO;
 import com.java110.po.productLabel.ProductLabelPo;
@@ -12,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -61,10 +65,17 @@ public class ProductLabelInnerServiceSMOImpl extends BaseServiceSMO implements I
         if (page != PageDto.DEFAULT_PAGE) {
             productLabelDto.setPage((page - 1) * productLabelDto.getRow());
         }
-
-        List<ProductLabelDto> productLabels = BeanConvertUtil.covertBeanList(productLabelServiceDaoImpl.getProductLabelInfo(BeanConvertUtil.beanCovertMap(productLabelDto)), ProductLabelDto.class);
-
-        return productLabels;
+        List<ProductLabelDto> products = new ArrayList<>();
+        List<Map> prods = productLabelServiceDaoImpl.getProductLabelInfo(BeanConvertUtil.beanCovertMap(productLabelDto));
+        ProductLabelDto tmpProductDto = null;
+        ProductSpecValueDto productSpecValueDto = null;
+        for (Map prod : prods) {
+            tmpProductDto = BeanConvertUtil.covertBean(prod, ProductLabelDto.class);
+            productSpecValueDto = BeanConvertUtil.covertBean(prod, ProductSpecValueDto.class);
+            tmpProductDto.setDefaultSpecValue(productSpecValueDto);
+            products.add(tmpProductDto);
+        }
+        return products;
     }
 
 
