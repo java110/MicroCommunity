@@ -4,6 +4,7 @@ package com.java110.goods.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.groupBuyProduct.GroupBuyProductDto;
+import com.java110.dto.groupBuyProductSpec.GroupBuyProductSpecDto;
 import com.java110.goods.dao.IGroupBuyProductServiceDao;
 import com.java110.intf.goods.IGroupBuyProductInnerServiceSMO;
 import com.java110.po.groupBuyProduct.GroupBuyProductPo;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -62,9 +65,19 @@ public class GroupBuyProductInnerServiceSMOImpl extends BaseServiceSMO implement
             groupBuyProductDto.setPage((page - 1) * groupBuyProductDto.getRow());
         }
 
-        List<GroupBuyProductDto> groupBuyProducts = BeanConvertUtil.covertBeanList(groupBuyProductServiceDaoImpl.getGroupBuyProductInfo(BeanConvertUtil.beanCovertMap(groupBuyProductDto)), GroupBuyProductDto.class);
+        List<Map> groupBuyProductMaps =  groupBuyProductServiceDaoImpl.getGroupBuyProductInfo(BeanConvertUtil.beanCovertMap(groupBuyProductDto));
+        List<GroupBuyProductDto> groupBuyProductDtos = new ArrayList<>();
+        GroupBuyProductDto tmpGroupBuyProductDto = null;
+        GroupBuyProductSpecDto groupBuyProductSpecDto = null;
+        for(Map groupBuyProductMap: groupBuyProductMaps){
+            tmpGroupBuyProductDto = BeanConvertUtil.covertBean(groupBuyProductMap,GroupBuyProductDto.class);
+            groupBuyProductSpecDto = BeanConvertUtil.covertBean(groupBuyProductMap,GroupBuyProductSpecDto.class);
+            tmpGroupBuyProductDto.setDefaultGroupBuyProductSpec(groupBuyProductSpecDto);
+            groupBuyProductDtos.add(tmpGroupBuyProductDto);
+        }
 
-        return groupBuyProducts;
+
+        return groupBuyProductDtos;
     }
 
 
