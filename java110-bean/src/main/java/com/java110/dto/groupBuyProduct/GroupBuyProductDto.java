@@ -29,6 +29,9 @@ public class GroupBuyProductDto extends ProductDto implements Serializable {
     private String storeId;
     private String batchId;
 
+    private Date batchStartTime;
+    private Date batchEndTime;
+
     private List<GroupBuyProductSpecDto> groupBuyProductSpecs;
 
 
@@ -135,5 +138,21 @@ public class GroupBuyProductDto extends ProductDto implements Serializable {
 
     public void setGroupBuyProductSpecs(List<GroupBuyProductSpecDto> groupBuyProductSpecs) {
         this.groupBuyProductSpecs = groupBuyProductSpecs;
+    }
+
+    public Date getBatchStartTime() {
+        return batchStartTime;
+    }
+
+    public void setBatchStartTime(Date batchStartTime) {
+        this.batchStartTime = batchStartTime;
+    }
+
+    public Date getBatchEndTime() {
+        return batchEndTime;
+    }
+
+    public void setBatchEndTime(Date batchEndTime) {
+        this.batchEndTime = batchEndTime;
     }
 }

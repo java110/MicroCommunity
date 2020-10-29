@@ -69,18 +69,22 @@ public class UpdateProductBMOImpl implements IUpdateProductBMO {
         }
         if (productSpecValuePos != null) {
             //删除所有 规格
-            ProductSpecValuePo deleteProductSpecValuePo = new ProductSpecValuePo();
-            deleteProductSpecValuePo.setStoreId(productPo.getStoreId());
-            deleteProductSpecValuePo.setProductId(productPo.getProductId());
-            productSpecValueInnerServiceSMOImpl.deleteProductSpecValue(deleteProductSpecValuePo);
+//            ProductSpecValuePo deleteProductSpecValuePo = new ProductSpecValuePo();
+//            deleteProductSpecValuePo.setStoreId(productPo.getStoreId());
+//            deleteProductSpecValuePo.setProductId(productPo.getProductId());
+//            productSpecValueInnerServiceSMOImpl.deleteProductSpecValue(deleteProductSpecValuePo);
             for (ProductSpecValuePo productSpecValuePo : productSpecValuePos) {
-                productSpecValuePo.setStoreId(productPo.getStoreId());
-                productSpecValuePo.setProductId(productPo.getProductId());
-                productSpecValuePo.setValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_valueId));
-                flag = productSpecValueInnerServiceSMOImpl.saveProductSpecValue(productSpecValuePo);
-
-                if (flag < 1) {
-                    throw new IllegalArgumentException("保存规格失败");
+                if (StringUtil.isEmpty(productSpecValuePo.getValueId())
+                        || productSpecValuePo.getValueId().startsWith("-")) {
+                    productSpecValuePo.setStoreId(productPo.getStoreId());
+                    productSpecValuePo.setProductId(productPo.getProductId());
+                    productSpecValuePo.setValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_valueId));
+                    flag = productSpecValueInnerServiceSMOImpl.saveProductSpecValue(productSpecValuePo);
+                    if (flag < 1) {
+                        throw new IllegalArgumentException("保存规格失败");
+                    }
+                } else {
+                    productSpecValueInnerServiceSMOImpl.updateProductSpecValue(productSpecValuePo);
                 }
             }
         }

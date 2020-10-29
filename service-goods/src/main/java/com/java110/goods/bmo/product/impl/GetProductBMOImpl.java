@@ -2,17 +2,15 @@ package com.java110.goods.bmo.product.impl;
 
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.groupBuyProduct.GroupBuyProductDto;
+import com.java110.dto.groupBuyProductSpec.GroupBuyProductSpecDto;
+import com.java110.dto.product.ProductActivityDto;
 import com.java110.dto.product.ProductDto;
 import com.java110.dto.product.ProductSpecDetailDto;
 import com.java110.dto.productDetail.ProductDetailDto;
 import com.java110.dto.productSpecValue.ProductSpecValueDto;
 import com.java110.goods.bmo.product.IGetProductBMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.goods.IGroupBuyProductInnerServiceSMO;
-import com.java110.intf.goods.IProductDetailInnerServiceSMO;
-import com.java110.intf.goods.IProductInnerServiceSMO;
-import com.java110.intf.goods.IProductSpecDetailInnerServiceSMO;
-import com.java110.intf.goods.IProductSpecValueInnerServiceSMO;
+import com.java110.intf.goods.*;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +40,10 @@ public class GetProductBMOImpl implements IGetProductBMO {
 
     @Autowired
     private IGroupBuyProductInnerServiceSMO groupBuyProductInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IGroupBuyProductSpecInnerServiceSMO groupBuyProductSpecInnerServiceSMOImpl;
 
     /**
      * @param productDto
@@ -158,6 +160,16 @@ public class GetProductBMOImpl implements IGetProductBMO {
         if (groupBuyProductDtos == null || groupBuyProductDtos.size() < 1) {
             return;
         }
+
+        productDto.setActType(ProductActivityDto.ACT_TYPE_GROUP);
+        productDto.setActEndTime(groupBuyProductDtos.get(0).getBatchEndTime());
+        productDto.setActProdName(groupBuyProductDtos.get(0).getGroupProdName());
+        productDto.setActProdDesc(groupBuyProductDtos.get(0).getGroupProdDesc());
+
+        GroupBuyProductSpecDto groupBuyProductSpecDto = new GroupBuyProductSpecDto();
+        groupBuyProductSpecDto.setStoreId(groupBuyProductDtos.get(0).getStoreId());
+        groupBuyProductSpecDto.setProductId(groupBuyProductDtos.get(0).getProductId());
+        groupBuyProductSpecInnerServiceSMOImpl.queryGroupBuyProductSpecs(groupBuyProductSpecDto);
 
 
     }

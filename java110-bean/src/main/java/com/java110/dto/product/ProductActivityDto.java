@@ -7,6 +7,12 @@ import java.util.Date;
 
 public class ProductActivityDto extends PageDto implements Serializable {
 
+    public static final String ACT_TYPE_GROUP ="GROUP"; //团购
+    public static final String ACT_TYPE_SKILL ="SKILL"; //秒杀
+
+
+
+    private String actType;
     private double actPrice; // 活动价格
     private double actStock; // 活动库存
     private double actSales; // 活动销量
@@ -60,5 +66,13 @@ public class ProductActivityDto extends PageDto implements Serializable {
 
     public void setActProdDesc(String actProdDesc) {
         this.actProdDesc = actProdDesc;
+    }
+
+    public String getActType() {
+        return actType;
+    }
+
+    public void setActType(String actType) {
+        this.actType = actType;
     }
 }
