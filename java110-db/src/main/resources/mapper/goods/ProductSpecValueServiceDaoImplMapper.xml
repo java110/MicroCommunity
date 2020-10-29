@@ -8,9 +8,9 @@
     <!-- 保存产品规格值信息 add by wuxw 2018-07-03 -->
     <insert id="saveProductSpecValueInfo" parameterType="Map">
         insert into product_spec_value(
-        spec_id,value_id,product_id,price,ot_price,cost_price,vip_price,store_id,stock,sales
+        spec_id,value_id,product_id,price,ot_price,cost_price,vip_price,store_id,stock,sales,is_default
         ) values (
-        #{specId},#{valueId},#{productId},#{price},#{otPrice},#{costPrice},#{vipPrice},#{storeId},#{stock},#{sales}
+        #{specId},#{valueId},#{productId},#{price},#{otPrice},#{costPrice},#{vipPrice},#{storeId},#{stock},#{sales},#{isDefault}
         )
     </insert>
 
@@ -19,7 +19,8 @@
     <select id="getProductSpecValueInfo" parameterType="Map" resultType="Map">
         select t.spec_id,t.spec_id specId,t.value_id,t.value_id valueId,t.product_id,t.product_id
         productId,t.price,t.ot_price,t.ot_price otPrice,t.cost_price,t.cost_price costPrice,t.vip_price,t.vip_price
-        vipPrice,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.stock,t.sales,ps.spec_name specName
+        vipPrice,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.stock,t.sales,ps.spec_name specName,
+        t.is_default isDefault
         from product_spec_value t
         left join product_spec ps on t.spec_id = ps.spec_id and ps.store_id = t.store_id and ps.status_cd = '0'
         where 1 =1
@@ -55,6 +56,9 @@
         </if>
         <if test="sales !=null and sales != ''">
             and t.sales= #{sales}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            and t.is_default= #{isDefault}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -116,6 +120,9 @@
         <if test="sales !=null and sales != ''">
             , t.sales= #{sales}
         </if>
+        <if test="isDefault !=null and isDefault != ''">
+            , t.is_default= #{isDefault}
+        </if>
         where 1=1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
@@ -163,6 +170,9 @@
         </if>
         <if test="sales !=null and sales != ''">
             and t.sales= #{sales}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            and t.is_default= #{isDefault}
         </if>
 
 

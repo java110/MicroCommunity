@@ -158,6 +158,8 @@ public class GetProductBMOImpl implements IGetProductBMO {
         if (groupBuyProductDtos == null || groupBuyProductDtos.size() < 1) {
             return;
         }
+
+
     }
 
     private void freshProductSpecValue(List<ProductDto> productDtos) {

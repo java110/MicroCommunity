@@ -169,9 +169,19 @@ public class ProductApi {
 
         JSONObject spec = null;
         List<ProductSpecValuePo> productSpecValuePos = new ArrayList<>();
+        boolean hasDefault = false;
+        ProductSpecValuePo productSpecValuePo = null;
         for (int specIndex = 0; specIndex < productSpecs.size(); specIndex++) {
             spec = productSpecs.getJSONObject(specIndex);
-            productSpecValuePos.add(BeanConvertUtil.covertBean(spec, ProductSpecValuePo.class));
+            productSpecValuePo = BeanConvertUtil.covertBean(spec, ProductSpecValuePo.class);
+            productSpecValuePos.add(productSpecValuePo);
+            if("T".equals(productSpecValuePo.getIsDefault())){
+                hasDefault = true;
+            }
+        }
+
+        if(!hasDefault){
+            throw new IllegalArgumentException("请求报文中未包含默认规格");
         }
 
         ProductPo productPo = BeanConvertUtil.covertBean(reqJson, ProductPo.class);
@@ -209,13 +219,23 @@ public class ProductApi {
 
         JSONObject spec = null;
         List<ProductSpecValuePo> productSpecValuePos = null;
-        ;
+
+        boolean hasDefault = false;
+        ProductSpecValuePo productSpecValuePo = null;
         if (productSpecs != null) {
             productSpecValuePos = new ArrayList<>();
             for (int specIndex = 0; specIndex < productSpecs.size(); specIndex++) {
                 spec = productSpecs.getJSONObject(specIndex);
-                productSpecValuePos.add(BeanConvertUtil.covertBean(spec, ProductSpecValuePo.class));
+                productSpecValuePo = BeanConvertUtil.covertBean(spec, ProductSpecValuePo.class);
+                productSpecValuePos.add(productSpecValuePo);
+                if("T".equals(productSpecValuePo.getIsDefault())){
+                    hasDefault = true;
+                }
             }
+        }
+
+        if(!hasDefault){
+            throw new IllegalArgumentException("请求报文中未包含默认规格");
         }
 
         ProductPo productPo = BeanConvertUtil.covertBean(reqJson, ProductPo.class);

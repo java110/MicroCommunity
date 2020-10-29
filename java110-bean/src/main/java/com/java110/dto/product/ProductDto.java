@@ -15,7 +15,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class ProductDto extends PageDto implements Serializable {
+public class ProductDto extends ProductActivityDto implements Serializable {
 
     private String productId;
     private String unitName;
@@ -42,6 +42,8 @@ public class ProductDto extends PageDto implements Serializable {
     private List<String> carouselFigurePhotos;
 
     private List<ProductSpecValueDto> productSpecValues;
+
+    private ProductSpecValueDto defaultSpecValue;
 
 
     private Date createTime;
@@ -224,5 +226,13 @@ public class ProductDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public ProductSpecValueDto getDefaultSpecValue() {
+        return defaultSpecValue;
+    }
+
+    public void setDefaultSpecValue(ProductSpecValueDto defaultSpecValue) {
+        this.defaultSpecValue = defaultSpecValue;
     }
 }

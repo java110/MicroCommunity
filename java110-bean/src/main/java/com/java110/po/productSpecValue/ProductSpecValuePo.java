@@ -15,6 +15,7 @@ public class ProductSpecValuePo implements Serializable {
     private String storeId;
     private String stock;
     private String sales;
+    private String isDefault;
 
     public String getSpecId() {
         return specId;
@@ -104,5 +105,11 @@ public class ProductSpecValuePo implements Serializable {
         this.sales = sales;
     }
 
+    public String getIsDefault() {
+        return isDefault;
+    }
 
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
+    }
 }

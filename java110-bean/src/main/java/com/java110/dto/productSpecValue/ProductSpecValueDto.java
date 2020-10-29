@@ -29,6 +29,7 @@ public class ProductSpecValueDto extends PageDto implements Serializable {
     private String storeId;
     private String stock;
     private String sales;
+    private String isDefault;
 
 
     private Date createTime;
@@ -157,5 +158,13 @@ public class ProductSpecValueDto extends PageDto implements Serializable {
 
     public void setSpecName(String specName) {
         this.specName = specName;
+    }
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
     }
 }

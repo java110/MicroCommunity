@@ -20,10 +20,12 @@
         select t.product_id,t.product_id productId,t.unit_name,t.unit_name unitName,t.is_postage,t.is_postage
         isPostage,t.status_cd,t.status_cd statusCd,t.sort,t.store_id,t.store_id storeId,t.bar_code,t.bar_code
         barCode,t.postage,t.prod_name,t.prod_name prodName,t.state,t.keyword,t.prod_desc,t.prod_desc
-        prodDesc,t.category_id,t.category_id categoryId,pc.category_name categoryName,td.name stateName
+        prodDesc,t.category_id,t.category_id categoryId,pc.category_name categoryName,td.name stateName,
+        psv.cost_price costPrice,psv.ot_price otPrice,psv.price,psv.sales,psv.stock,psv.vip_price vipPrice
         from product t
         left join product_category pc on pc.category_id = t.category_id and pc.store_id = t.store_id and pc.status_cd = '0'
         left join t_dict td on t.state = td.status_cd and td.table_name= 'product' and td.table_columns = 'state'
+        left join product_spec_value psv on psv.product_id = t.product_id and psv.store_id = t.store_id and psv.is_default = 'T'
         where 1 =1
         <if test="productId !=null and productId != ''">
             and t.product_id= #{productId}
