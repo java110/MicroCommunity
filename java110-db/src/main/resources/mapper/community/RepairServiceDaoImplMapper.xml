@@ -107,8 +107,9 @@
         repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
         bId,
         d.name stateName,
-        rs.repair_type_name repairTypeName,rs.repair_way repairWay,rs.return_visit_flag returnVisitFlag
-        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,t.repair_obj_name repairObjName
+        rs.repair_type_name repairTypeName,rs.repair_way repairWay,rs.return_visit_flag returnVisitFlag,
+        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,
+        t.repair_obj_name repairObjName
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
