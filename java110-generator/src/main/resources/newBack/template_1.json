@@ -1,38 +1,41 @@
 {
   "autoMove": true,
-  "id": "cartId",
-  "name": "storeCart",
+  "id": "orderId",
+  "name": "storeOrder",
   "desc": "购物车",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "goods",
-  "tableName": "store_cart",
+  "tableName": "store_order",
   "param": {
-    "cartId": "cart_id",
-    "productId": "product_id",
-    "storeId": "store_id",
-    "valueId": "value_id",
+    "orderId": "order_id",
+    "oId": "o_id",
     "personId": "person_id",
-    "cartNum": "cart_num",
+    "personName": "person_name",
+    "totalPrice": "total_price",
+    "payPrice": "pay_price",
+    "freightPrice": "freight_price",
+    "extOrderId": "ext_order_id",
+    "remark": "remark",
     "state": "state",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "productId",
-      "msg": "产品不能为空"
-    },
-    {
-      "code": "valueId",
-      "msg": "规格值不能为空"
-    },
-    {
       "code": "personId",
-      "msg": "用户ID不能为空"
+      "msg": "用户不能为空"
     },
     {
-      "code": "cartNum",
-      "msg": "产品数量不能为空"
+      "code": "personName",
+      "msg": "用户名称不能为空"
+    },
+    {
+      "code": "totalPrice",
+      "msg": "总价不能为空"
+    },
+    {
+      "code": "payPrice",
+      "msg": "支付价格不能为空"
     }
   ]
 }

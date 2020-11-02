@@ -164,6 +164,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_statisticsId = "94";
     public static final String CODE_PREFIX_labelId = "94";
     public static final String CODE_PREFIX_cartId = "95";
+    public static final String CODE_PREFIX_orderId = "96";
 
 
 
