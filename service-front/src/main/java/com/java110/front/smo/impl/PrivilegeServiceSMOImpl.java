@@ -344,11 +344,11 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
         String storeId = storeInfoObj.getString("storeId");
         privilegeInfoObj.put("storeId", storeId);
 
-//        ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, "",
-//                ServiceConstant.SERVICE_API_URL + "/api/query.user.privilege?userId=" + privilegeInfoObj.getString("staffId") + "&domain=" + storeInfoObj.getString("storeTypeCd"), HttpMethod.GET);
+        ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/query.user.privilege?userId=" + privilegeInfoObj.getString("staffId") + "&domain=" + storeInfoObj.getString("storeTypeCd"), HttpMethod.GET);
 
-        ResultVo resultVo = getCommunityStoreInfoSMOImpl.getUserPrivileges(pd, privilegeInfoObj.getString("staffId"), storeInfoObj.getString("storeTypeCd"), restTemplate);
-        ResponseEntity<String> privilegeGroup = new ResponseEntity<>(resultVo.getMsg(), resultVo.getCode() == ResultVo.CODE_OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+//        ResultVo resultVo = getCommunityStoreInfoSMOImpl.getUserPrivileges(pd, privilegeInfoObj.getString("staffId"), storeInfoObj.getString("storeTypeCd"), restTemplate);
+//        ResponseEntity<String> privilegeGroup = new ResponseEntity<>(resultVo.getMsg(), resultVo.getCode() == ResultVo.CODE_OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         if (privilegeGroup.getStatusCode() != HttpStatus.OK) {
             return privilegeGroup;
         }
