@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeOrderCartServiceDaoImpl">
+
+
+    <!-- 保存订单购物车信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreOrderCartInfo" parameterType="Map">
+        insert into store_order_cart(
+        value_id,product_id,order_id,cart_id,remark,store_id,cart_num,price,pay_price,person_id,state,freight_price
+        ) values (
+        #{valueId},#{productId},#{orderId},#{cartId},#{remark},#{storeId},#{cartNum},#{price},#{payPrice},#{personId},#{state},#{freightPrice}
+        )
+    </insert>
+
+
+    <!-- 查询订单购物车信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreOrderCartInfo" parameterType="Map" resultType="Map">
+        select t.value_id,t.value_id valueId,t.product_id,t.product_id productId,t.order_id,t.order_id
+        orderId,t.cart_id,t.cart_id cartId,t.remark,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
+        storeId,t.cart_num,t.cart_num cartNum,t.price,t.pay_price,t.pay_price payPrice,t.person_id,t.person_id
+        personId,t.state,t.freight_price,t.freight_price freightPrice
+        from store_order_cart t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="cartNum !=null and cartNum != ''">
+            and t.cart_num= #{cartNum}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="payPrice !=null and payPrice != ''">
+            and t.pay_price= #{payPrice}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="freightPrice !=null and freightPrice != ''">
+            and t.freight_price= #{freightPrice}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改订单购物车信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreOrderCartInfo" parameterType="Map">
+        update store_order_cart t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            , t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            , t.product_id= #{productId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="cartNum !=null and cartNum != ''">
+            , t.cart_num= #{cartNum}
+        </if>
+        <if test="price !=null and price != ''">
+            , t.price= #{price}
+        </if>
+        <if test="payPrice !=null and payPrice != ''">
+            , t.pay_price= #{payPrice}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="freightPrice !=null and freightPrice != ''">
+            , t.freight_price= #{freightPrice}
+        </if>
+        where 1=1
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+
+    </update>
+
+    <!-- 查询订单购物车数量 add by wuxw 2018-07-03 -->
+    <select id="queryStoreOrderCartsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from store_order_cart t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="cartNum !=null and cartNum != ''">
+            and t.cart_num= #{cartNum}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="payPrice !=null and payPrice != ''">
+            and t.pay_price= #{payPrice}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="freightPrice !=null and freightPrice != ''">
+            and t.freight_price= #{freightPrice}
+        </if>
+
+
+    </select>
+
+</mapper>
