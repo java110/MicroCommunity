@@ -1079,6 +1079,7 @@
         select t.fee_name feeName,count(t.obj_id) objCount
         from report_fee_month_statistics t
         where t.community_id = #{communityId}
+        and t.owe_amount > 0
         group by t.config_id,t.fee_name
         order by objCount desc
     </select>
