@@ -2,6 +2,7 @@ package com.java110.goods.bmo.storeCart.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.storeCart.StoreCartDto;
 import com.java110.goods.bmo.storeCart.ISaveStoreCartBMO;
 import com.java110.intf.goods.IStoreCartInnerServiceSMO;
 import com.java110.po.storeCart.StoreCartPo;
@@ -26,6 +27,7 @@ public class SaveStoreCartBMOImpl implements ISaveStoreCartBMO {
     public ResponseEntity<String> save(StoreCartPo storeCartPo) {
 
         storeCartPo.setCartId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_cartId));
+        storeCartPo.setState(StoreCartDto.STATE_NO_BUY);
         int flag = storeCartInnerServiceSMOImpl.saveStoreCart(storeCartPo);
 
         if (flag > 0) {

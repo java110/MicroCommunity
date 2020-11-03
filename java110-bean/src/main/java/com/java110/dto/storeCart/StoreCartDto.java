@@ -1,6 +1,7 @@
 package com.java110.dto.storeCart;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,13 +15,15 @@ import java.util.Date;
  **/
 public class StoreCartDto extends PageDto implements Serializable {
 
+    public static final String STATE_NO_BUY = "1001"; // 未购买
+
     private String valueId;
-private String productId;
-private String cartId;
-private String personId;
-private String state;
-private String storeId;
-private String cartNum;
+    private String productId;
+    private String cartId;
+    private String personId;
+    private String state;
+    private String storeId;
+    private String cartNum;
 
 
     private Date createTime;
@@ -31,43 +34,56 @@ private String cartNum;
     public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getProductId() {
+
+    public String getProductId() {
         return productId;
     }
-public void setProductId(String productId) {
+
+    public void setProductId(String productId) {
         this.productId = productId;
     }
-public String getCartId() {
+
+    public String getCartId() {
         return cartId;
     }
-public void setCartId(String cartId) {
+
+    public void setCartId(String cartId) {
         this.cartId = cartId;
     }
-public String getPersonId() {
+
+    public String getPersonId() {
         return personId;
     }
-public void setPersonId(String personId) {
+
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getCartNum() {
+
+    public String getCartNum() {
         return cartNum;
     }
-public void setCartNum(String cartNum) {
+
+    public void setCartNum(String cartNum) {
         this.cartNum = cartNum;
     }
 
