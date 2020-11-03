@@ -147,8 +147,8 @@ public class StoreOrderApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /storeCart/saveStoreCart
-     * @path /app/storeCart/saveStoreCart
+     * @serviceCode /storeOrder/saveStoreCart
+     * @path /app/storeOrder/saveStoreCart
      */
     @RequestMapping(value = "/saveStoreCart", method = RequestMethod.POST)
     public ResponseEntity<String> saveStoreCart(@RequestBody JSONObject reqJson) {
@@ -168,8 +168,8 @@ public class StoreOrderApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /storeCart/updateStoreCart
-     * @path /app/storeCart/updateStoreCart
+     * @serviceCode /storeOrder/updateStoreCart
+     * @path /app/storeOrder/updateStoreCart
      */
     @RequestMapping(value = "/updateStoreCart", method = RequestMethod.POST)
     public ResponseEntity<String> updateStoreCart(@RequestBody JSONObject reqJson) {
@@ -190,8 +190,8 @@ public class StoreOrderApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /storeCart/deleteStoreCart
-     * @path /app/storeCart/deleteStoreCart
+     * @serviceCode /storeOrder/deleteStoreCart
+     * @path /app/storeOrder/deleteStoreCart
      */
     @RequestMapping(value = "/deleteStoreCart", method = RequestMethod.POST)
     public ResponseEntity<String> deleteStoreCart(@RequestBody JSONObject reqJson) {
@@ -209,8 +209,8 @@ public class StoreOrderApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /storeCart/queryStoreCart
-     * @path /app/storeCart/queryStoreCart
+     * @serviceCode /storeOrder/queryStoreCart
+     * @path /app/storeOrder/queryStoreCart
      */
     @RequestMapping(value = "/queryStoreCart", method = RequestMethod.GET)
     public ResponseEntity<String> queryStoreCart(@RequestParam(value = "communityId") String communityId,
@@ -229,8 +229,8 @@ public class StoreOrderApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /storeOrderCart/saveStoreOrderCart
-     * @path /app/storeOrderCart/saveStoreOrderCart
+     * @serviceCode /storeOrder/saveStoreOrderCart
+     * @path /app/storeOrder/saveStoreOrderCart
      */
     @RequestMapping(value = "/saveStoreOrderCart", method = RequestMethod.POST)
     public ResponseEntity<String> saveStoreOrderCart(@RequestBody JSONObject reqJson) {
@@ -250,8 +250,8 @@ public class StoreOrderApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /storeOrderCart/updateStoreOrderCart
-     * @path /app/storeOrderCart/updateStoreOrderCart
+     * @serviceCode /storeOrder/updateStoreOrderCart
+     * @path /app/storeOrder/updateStoreOrderCart
      */
     @RequestMapping(value = "/updateStoreOrderCart", method = RequestMethod.POST)
     public ResponseEntity<String> updateStoreOrderCart(@RequestBody JSONObject reqJson) {
@@ -272,8 +272,8 @@ public class StoreOrderApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /storeOrderCart/deleteStoreOrderCart
-     * @path /app/storeOrderCart/deleteStoreOrderCart
+     * @serviceCode /storeOrder/deleteStoreOrderCart
+     * @path /app/storeOrder/deleteStoreOrderCart
      */
     @RequestMapping(value = "/deleteStoreOrderCart", method = RequestMethod.POST)
     public ResponseEntity<String> deleteStoreOrderCart(@RequestBody JSONObject reqJson) {
@@ -290,8 +290,8 @@ public class StoreOrderApi {
      * 微信删除消息模板
      *
      * @return
-     * @serviceCode /storeOrderCart/queryStoreOrderCart
-     * @path /app/storeOrderCart/queryStoreOrderCart
+     * @serviceCode /storeOrder/queryStoreOrderCart
+     * @path /app/storeOrder/queryStoreOrderCart
      */
     @RequestMapping(value = "/queryStoreOrderCart", method = RequestMethod.GET)
     public ResponseEntity<String> queryStoreOrderCart(
