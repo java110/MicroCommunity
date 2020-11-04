@@ -29,8 +29,8 @@ import java.util.Map;
  * http://api.demo.winqi.cn/api/machineTranslate.machineUploadFaceLog?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1
  * 硬件获取用户信息
  */
-@Java110Listener("machineUploadCarPhotoLogListener")
-public class MachineUploadCarPhotoLogListener extends BaseMachineListener {
+@Java110Listener("machineUploadCarLogListener")
+public class MachineUploadCarLogListener extends BaseMachineListener {
 
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
@@ -91,7 +91,8 @@ public class MachineUploadCarPhotoLogListener extends BaseMachineListener {
             //判断是否有 进场记录
             CarInoutDto carInoutDto = new CarInoutDto();
             carInoutDto.setCommunityId(reqJson.getString("communityId"));
-            carInoutDto.setInoutId(reqJson.getString("inoutId"));
+            carInoutDto.setCarNum(reqJson.getString("carNum"));
+            carInoutDto.setStates(new String[]{"100300", "100400", "100600"});
             List<CarInoutDto> carInoutDtos = carInoutInnerServiceSMOImpl.queryCarInouts(carInoutDto);
             MachineDto machineDto = new MachineDto();
             machineDto.setMachineId(reqJson.getString("communityId"));
@@ -137,7 +138,7 @@ public class MachineUploadCarPhotoLogListener extends BaseMachineListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeMachineTranslateConstant.MACHINE_UPLOAD_FACE_LOG;
+        return ServiceCodeMachineTranslateConstant.MACHINE_UPLOAD_CAR_LOG;
     }
 
     @Override
