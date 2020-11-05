@@ -64,7 +64,7 @@ public class MachineUploadCarLogListener extends BaseMachineListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         // Assert.hasKeyAndValue(reqJson, "faceid", "请求报文中未包含用户ID");
         super.validateMachineHeader(event, reqJson);
-        Assert.hasKeyAndValue(reqJson, "machineCode", "必填，请填写设备编码");
+        //Assert.hasKeyAndValue(reqJson, "machineCode", "必填，请填写设备编码");
         Assert.hasKeyAndValue(reqJson, "photo", "必填，请填写用户照片信息");
     }
 
