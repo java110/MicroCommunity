@@ -207,19 +207,18 @@ public class StoreOrderApi {
     /**
      * 微信删除消息模板
      *
-     * @param communityId 小区ID
      * @return
      * @serviceCode /storeOrder/queryStoreCart
      * @path /app/storeOrder/queryStoreCart
      */
     @RequestMapping(value = "/queryStoreCart", method = RequestMethod.GET)
-    public ResponseEntity<String> queryStoreCart(@RequestParam(value = "communityId") String communityId,
+    public ResponseEntity<String> queryStoreCart(@RequestParam(value = "personId",required = false) String personId,
                                                  @RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row) {
         StoreCartDto storeCartDto = new StoreCartDto();
         storeCartDto.setPage(page);
         storeCartDto.setRow(row);
-        //storeCartDto.setCommunityId(communityId);
+        storeCartDto.setPersonId(personId);
         return getStoreCartBMOImpl.get(storeCartDto);
     }
 
