@@ -98,7 +98,10 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
 
         for (ApiSmallWeChatDataVo apiSmallWeChatDataVo : smallWeChats) {
             apiSmallWeChatDataVo.setwId(WechatFactory.getWId(apiSmallWeChatDataVo.getAppId()));
-            if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId) || AppDto.WECHAT_OWNER_APP_ID.equals(appId) || AppDto.OWNER_WECHAT_PAY.equals(appId)) {
+            if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)
+                    || AppDto.WECHAT_OWNER_APP_ID.equals(appId)
+                    || AppDto.OWNER_WECHAT_PAY.equals(appId)
+                    || AppDto.OWNER_APP_PAY.equals(appId)) {
                 continue;
             }
             apiSmallWeChatDataVo.setAppSecret("");
