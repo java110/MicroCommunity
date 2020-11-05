@@ -25,7 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+/**
+ * 商户订单
+ * add by wuxw 2020-11-15
+ *
+ */
 @RestController
 @RequestMapping(value = "/storeOrder")
 public class StoreOrderApi {
