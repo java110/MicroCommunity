@@ -19,8 +19,10 @@
     <select id="getStoreCartInfo" parameterType="Map" resultType="Map">
         select t.value_id,t.value_id valueId,t.product_id,t.product_id productId,t.cart_id,t.cart_id
         cartId,t.person_id,t.person_id personId,t.status_cd,t.status_cd statusCd,t.state,t.store_id,t.store_id
-        storeId,t.cart_num,t.cart_num cartNum
+        storeId,t.cart_num,t.cart_num cartNum,p.prod_name prodName,psv.price
         from store_cart t
+        left join product p on t.product_id = p.product_id and t.store_id = p.store_id and p.status_cd = '0'
+        left join product_spec_value psv on psv.product_id = t.product_id and psv.value_id = t.value_id and psv.store_id = t.store_id and psv.status_cd = '0'
         where 1 =1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}

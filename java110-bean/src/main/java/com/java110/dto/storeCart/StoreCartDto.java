@@ -24,6 +24,10 @@ public class StoreCartDto extends PageDto implements Serializable {
     private String state;
     private String storeId;
     private String cartNum;
+    private String prodName;
+    private String price;
+
+    private String coverPhoto;
 
 
     private Date createTime;
@@ -102,5 +106,29 @@ public class StoreCartDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getProdName() {
+        return prodName;
+    }
+
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getCoverPhoto() {
+        return coverPhoto;
+    }
+
+    public void setCoverPhoto(String coverPhoto) {
+        this.coverPhoto = coverPhoto;
     }
 }
