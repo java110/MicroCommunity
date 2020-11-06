@@ -4,6 +4,7 @@ package com.java110.fee.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.feeReceipt.FeeReceiptDto;
+import com.java110.dto.feeReceipt.FeeReceiptDtoNew;
 import com.java110.fee.dao.IFeeReceiptServiceDao;
 import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
 import com.java110.po.feeReceipt.FeeReceiptPo;
@@ -63,6 +64,22 @@ public class FeeReceiptInnerServiceSMOImpl extends BaseServiceSMO implements IFe
         }
 
         List<FeeReceiptDto> feeReceipts = BeanConvertUtil.covertBeanList(feeReceiptServiceDaoImpl.getFeeReceiptInfo(BeanConvertUtil.beanCovertMap(feeReceiptDto)), FeeReceiptDto.class);
+
+        return feeReceipts;
+    }
+
+
+    @Override
+    public List<FeeReceiptDtoNew> queryFeeReceiptsNew(FeeReceiptDtoNew feeReceiptDto) {
+        //校验是否传了 分页信息
+
+        int page = feeReceiptDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeReceiptDto.setPage((page - 1) * feeReceiptDto.getRow());
+        }
+
+        List<FeeReceiptDtoNew> feeReceipts = BeanConvertUtil.covertBeanList(feeReceiptServiceDaoImpl.getFeeReceiptInfoNew(BeanConvertUtil.beanCovertMap(feeReceiptDto)), FeeReceiptDtoNew.class);
 
         return feeReceipts;
     }

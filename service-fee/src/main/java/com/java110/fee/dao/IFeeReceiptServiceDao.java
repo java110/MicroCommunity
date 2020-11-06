@@ -40,6 +40,14 @@ public interface IFeeReceiptServiceDao {
      */
     List<Map> getFeeReceiptInfo(Map info) throws DAOException;
 
+    /**
+     * 查询收据信息（instance过程）
+     * 根据bId 查询收据信息
+     * @param info bId 信息
+     * @return 收据信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getFeeReceiptInfoNew(Map info) throws DAOException;
 
 
     /**

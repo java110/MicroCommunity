@@ -1,6 +1,7 @@
 package com.java110.fee.bmo.feeReceipt.impl;
 
 import com.java110.dto.feeReceipt.FeeReceiptDto;
+import com.java110.dto.feeReceipt.FeeReceiptDtoNew;
 import com.java110.fee.bmo.feeReceipt.IGetFeeReceiptBMO;
 import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
 import com.java110.vo.ResultVo;
@@ -41,4 +42,29 @@ public class GetFeeReceiptBMOImpl implements IGetFeeReceiptBMO {
         return responseEntity;
     }
 
+
+    @Override
+    public ResponseEntity<String> gets(FeeReceiptDtoNew feeReceiptDtonew) {
+        FeeReceiptDto feeReceiptDto = new FeeReceiptDto();
+        feeReceiptDto.setPage(feeReceiptDtonew.getPage());
+        feeReceiptDto.setRow(feeReceiptDtonew.getRow());
+        feeReceiptDto.setCommunityId(feeReceiptDtonew.getCommunityId());
+        feeReceiptDto.setReceiptId(feeReceiptDtonew.getReceiptId());
+        feeReceiptDto.setObjType(feeReceiptDto.getObjType());
+        feeReceiptDto.setObjName(feeReceiptDto.getObjName());
+        int count = feeReceiptInnerServiceSMOImpl.queryFeeReceiptsCount(feeReceiptDto);
+
+        List<FeeReceiptDtoNew> feeReceiptDtos = null;
+        if (count > 0) {
+            feeReceiptDtos = feeReceiptInnerServiceSMOImpl.queryFeeReceiptsNew(feeReceiptDtonew);
+        } else {
+            feeReceiptDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) feeReceiptDto.getRow()), count, feeReceiptDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
 }

@@ -54,6 +54,166 @@
     </select>
 
 
+
+    <!-- 查询收据信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeReceiptInfoNew" parameterType="Map" resultType="Map">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        t.obj_name AS objName,
+        '' AS carNum,
+        bo.NAME AS name,
+        b.built_up_area AS roomArea,
+        tt.fee_name feeName,
+        tt.area num,
+        SPLIT_STR ( tt.square_price, '/', 1 ) AS unit,
+        CASE
+        pf.fee_flag
+        WHEN '1003006' THEN
+        tt.start_time ELSE NULL
+        END start,
+        tt.start_time as startTime,
+        CASE
+        pf.fee_flag
+        WHEN '1003006' THEN
+        tt.end_time ELSE NULL
+        END
+        end,
+        tt.end_time as endTime,
+        tt.cycle as cycle,
+        tt.amount amount,
+        uu.NAME AS userName,
+        t.create_time AS createTime
+        FROM
+        fee_receipt t
+        LEFT JOIN fee_receipt_detail tt ON t.receipt_id = tt.receipt_id
+        LEFT JOIN building_room b ON t.obj_id = b.room_id
+        LEFT JOIN building_owner_room_rel borr ON b.room_id = borr.room_id
+        LEFT JOIN building_owner bo ON borr.owner_id = bo.owner_id
+        LEFT JOIN pay_fee pf ON tt.fee_id = pf.fee_id
+        LEFT JOIN pay_fee_detail p ON tt.fee_id = p.fee_id
+        AND tt.start_time = p.start_time
+        AND tt.end_time = p.end_time
+        LEFT JOIN c_business cb ON p.b_id = cb.b_id
+        LEFT JOIN c_orders co ON cb.o_id = co.o_id
+        LEFT JOIN u_user uu ON co.user_id = uu.user_id
+        WHERE
+        t.status_cd = '0'
+        AND tt.status_cd = '0'
+        AND b.status_cd = '0'
+        AND borr.status_cd = '0'
+        AND bo.status_cd = '0'
+        AND bo.owner_type_cd = '1001'
+        AND p.status_cd = '0'
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+        UNION ALL
+
+        SELECT
+        CONCAT( f.floor_num, '栋', bu.unit_num, '单元', b.room_num, '室' ) AS objName,
+        oc.car_num AS carNum,
+        bo.NAME AS name,
+        b.built_up_area AS roomArea,
+        tt.fee_name feeName,
+        tt.cycle num,
+        SPLIT_STR ( tt.square_price, '/', 1 ) AS unit,
+        CASE
+        pf.fee_flag
+        WHEN '1003006' THEN
+        tt.start_time ELSE NULL
+        END start,
+        tt.start_time as startTime,
+        CASE
+        pf.fee_flag
+        WHEN '1003006' THEN
+        tt.end_time ELSE NULL
+        END
+        end,
+        tt.end_time as endTime,
+        tt.cycle as cycle,
+        tt.amount amount,
+        uu.NAME AS userName,
+        t.create_time AS createTime
+        FROM
+        fee_receipt t
+        LEFT JOIN fee_receipt_detail tt ON t.receipt_id = tt.receipt_id
+        LEFT JOIN owner_car oc ON oc.car_id = t.obj_id
+        LEFT JOIN building_owner bo ON bo.member_id = oc.owner_id
+        LEFT JOIN building_owner_room_rel borr ON bo.owner_id = borr.owner_id
+        LEFT JOIN building_room b ON borr.room_id = b.room_id
+        LEFT JOIN building_room_attr ba ON b.room_id = ba.room_id
+        LEFT JOIN building_unit bu ON b.unit_id = bu.unit_id
+        AND bu.status_cd = '0'
+        LEFT JOIN f_floor f ON bu.floor_id = f.floor_id
+        LEFT JOIN pay_fee pf ON tt.fee_id = pf.fee_id
+        AND pf.status_cd = '0'
+        LEFT JOIN pay_fee_detail p ON tt.fee_id = p.fee_id
+        AND p.status_cd = '0'
+        AND tt.start_time = p.start_time
+        AND tt.end_time = p.end_time
+        LEFT JOIN c_business cb ON p.b_id = cb.b_id
+        LEFT JOIN c_orders co ON cb.o_id = co.o_id
+        LEFT JOIN u_user uu ON co.user_id = uu.user_id
+        WHERE
+        t.obj_type = '6666'
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+           AND bo.owner_type_cd = '1001'
+        ) AS t
+        WHERE 1=1
+        <if test="type !=null and type == 1 ">
+          AND  feeName in ('预交物业管理费','装修垃圾清运费','装修电梯使用费','水费','电费')
+        </if>
+        <if test="type !=null and type == 2">
+            AND  feeName in ('装修保证金','施工进入证')
+        </if>
+        <if test="type !=null and type == 3">
+            AND  feeName in ('预交物业管理费','水费','电费','地下停车费','地上停车费')
+        </if>
+        <if test="type !=null and type == 4">
+            AND  feeName in ('地上停车费','地下停车费')
+        </if>
+        <if test="type !=null and type == 5">
+            AND  feeName in ('公共区域公摊电费','生活水泵公摊电费','走廊楼道应急公摊电费','电梯公摊电费')
+        </if>
+        <if test="month !=null and month != ''">
+            AND DATE_FORMAT(t.createTime, '%Y-%m') = #{month}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.objName= #{objName}
+        </if>
+        <if test="receiptId !=null and receiptId != ''">
+            and t.receipt_id= #{receiptId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        order by t.createTime desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+
     <!-- 修改收据信息 add by wuxw 2018-07-03 -->
     <update id="updateFeeReceiptInfo" parameterType="Map">
         update fee_receipt t set t.status_cd = #{statusCd}

@@ -2,6 +2,7 @@ package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.feeReceipt.FeeReceiptDto;
+import com.java110.dto.feeReceipt.FeeReceiptDtoNew;
 import com.java110.dto.feeReceiptDetail.FeeReceiptDetailDto;
 import com.java110.fee.bmo.feeReceipt.IDeleteFeeReceiptBMO;
 import com.java110.fee.bmo.feeReceipt.IGetFeeReceiptBMO;
@@ -113,6 +114,8 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceipt", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceipt(@RequestParam(value = "communityId") String communityId,
+                                                  @RequestParam(value = "objType",required = false) String objType,
+                                                  @RequestParam(value = "roomId",required = false) String roomId,
                                                   @RequestParam(value = "receiptId",required = false) String receiptId,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row) {
@@ -121,9 +124,39 @@ public class FeeReceiptApi {
         feeReceiptDto.setRow(row);
         feeReceiptDto.setCommunityId(communityId);
         feeReceiptDto.setReceiptId(receiptId);
+        feeReceiptDto.setObjType(objType);
+        feeReceiptDto.setObjName(roomId);
         return getFeeReceiptBMOImpl.get(feeReceiptDto);
     }
 
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /feeReceipt/queryFeeReceipt
+     * @path /app/feeReceipt/queryFeeReceipt
+     */
+    @RequestMapping(value = "/queryFeeReceiptNew", method = RequestMethod.GET)
+    public ResponseEntity<String> queryFeeReceiptNew(@RequestParam(value = "communityId") String communityId,
+                                                     @RequestParam(value = "objType",required = false) String objType,
+                                                     @RequestParam(value = "roomName",required = false) String roomName,
+                                                     @RequestParam(value = "type",required = false) String type,
+                                                     @RequestParam(value = "month",required = false) String month,
+                                                     @RequestParam(value = "page") int page,
+                                                     @RequestParam(value = "row") int row
+    ) {
+        FeeReceiptDtoNew feeReceiptDto = new FeeReceiptDtoNew();
+        feeReceiptDto.setPage(page);
+        feeReceiptDto.setRow(row);
+        feeReceiptDto.setCommunityId(communityId);
+        feeReceiptDto.setType(type);
+        feeReceiptDto.setMonth(month);
+        feeReceiptDto.setObjType(objType);
+        feeReceiptDto.setObjName(roomName   );
+        return getFeeReceiptBMOImpl.gets(feeReceiptDto);
+    }
     /**
      * 微信保存消息模板
      *

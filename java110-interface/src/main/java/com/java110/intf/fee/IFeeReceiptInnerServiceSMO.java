@@ -2,6 +2,7 @@ package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.feeReceipt.FeeReceiptDto;
+import com.java110.dto.feeReceipt.FeeReceiptDtoNew;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +42,17 @@ public interface IFeeReceiptInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeeReceipts", method = RequestMethod.POST)
     List<FeeReceiptDto> queryFeeReceipts(@RequestBody FeeReceiptDto feeReceiptDto);
+
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param feeReceiptDto 数据对象分享
+     * @return FeeReceiptDtoNew 对象数据
+     */
+    @RequestMapping(value = "/queryFeeReceiptsNew", method = RequestMethod.POST)
+    List<FeeReceiptDtoNew> queryFeeReceiptsNew(@RequestBody FeeReceiptDtoNew feeReceiptDto);
 
     /**
      * 查询<p>小区楼</p>总记录数

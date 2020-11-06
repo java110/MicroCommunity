@@ -60,6 +60,22 @@ public class FeeReceiptServiceDaoImpl extends BaseServiceDao implements IFeeRece
         return businessFeeReceiptInfos;
     }
 
+    /**
+     * 查询收据信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getFeeReceiptInfoNew(Map info) throws DAOException {
+        logger.debug("查询收据信息 入参 info : {}",info);
+
+        List<Map> businessFeeReceiptInfos = sqlSessionTemplate.selectList("feeReceiptServiceDaoImpl.getFeeReceiptInfoNew",info);
+
+        return businessFeeReceiptInfos;
+    }
+
+
 
     /**
      * 修改收据信息
