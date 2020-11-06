@@ -77,6 +77,10 @@ public class CarToMachineTemplate extends TaskSystemQuartz {
 
                 ownerCarDto.setbId(tmpOrderDto.getbId());
 
+                if(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR.equals(tmpOrderDto.getBusinessTypeCd())){
+                    ownerCarDto.setStatusCd("1");
+                }
+
                 List<OwnerCarDto> ownerCarDtos = null;
 
 

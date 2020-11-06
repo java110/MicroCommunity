@@ -104,7 +104,7 @@ public class MachineUploadCarLogListener extends BaseMachineListener {
                 machineDto.setDirection("3306");
             } else {
                 CarInoutDto tmpCarInoutDto = new CarInoutDto();
-                tmpCarInoutDto.setInoutId(reqJson.getString("inoutId"));
+                tmpCarInoutDto.setInoutId(carInoutDtos.get(0).getInoutId());
                 tmpCarInoutDto.setCommunityId(reqJson.getString("communityId"));
                 machineTranslateBMOImpl.modifyCarInout(reqJson, context, tmpCarInoutDto, "100500", reqJson.getString("outTime"));
                 machineDto.setDirection("3307");
