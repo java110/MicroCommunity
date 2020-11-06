@@ -122,8 +122,8 @@
         left join building_owner bow on t.owner_id = bow.member_id and bow.status_cd = '0' and bow.community_id =
         t.community_id
         where 1=1
-        <if test="bId ==null or bId == ''">
-            and  t.status_cd = '0'
+        <if test="statusCd !=null and statusCd != ''">
+            and  t.status_cd = #{statusCd}
         </if>
         <if test="carColor !=null and carColor != ''">
             and t.car_color= #{carColor}
