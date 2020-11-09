@@ -169,7 +169,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
 
-        feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivableAmount"));
+        feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivedAmount"));
         feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
         feeReceiptDetailPo.setCycle(businessFeeDetail.getString("cycles"));
         feeReceiptDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
