@@ -52,6 +52,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private int oweDay;
     private String deadlineTime;
 
+    private String importFeeName;
+
 
 
 
@@ -304,5 +306,11 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
         this.deadlineTime = deadlineTime;
     }
 
+    public String getImportFeeName() {
+        return importFeeName;
+    }
 
+    public void setImportFeeName(String importFeeName) {
+        this.importFeeName = importFeeName;
+    }
 }

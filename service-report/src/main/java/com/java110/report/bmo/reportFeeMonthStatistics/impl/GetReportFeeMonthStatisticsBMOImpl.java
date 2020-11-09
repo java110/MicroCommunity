@@ -5,6 +5,7 @@ import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,6 +158,10 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 } else {
                     tmpReportFeeMonthStatisticsDto.setObjName(tmpReportFeeMonthStatisticsDto.getCarNum());
                 }
+
+                if (!StringUtil.isEmpty(tmpReportFeeMonthStatisticsDto.getImportFeeName())) {
+                    tmpReportFeeMonthStatisticsDto.setFeeName(tmpReportFeeMonthStatisticsDto.getImportFeeName());
+                }
             }
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
@@ -271,7 +276,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
             try {
-                int day = DateUtil.daysBetween(nowDate,DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
+                int day = DateUtil.daysBetween(nowDate, DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
                         DateUtil.DATE_FORMATE_STRING_A));
                 reportFeeMonthStatisticsDto.setOweDay(day);
             } catch (Exception e) {
