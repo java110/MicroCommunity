@@ -87,9 +87,9 @@ public class UserAddressApi {
      */
     @RequestMapping(value = "/deleteUserAddress", method = RequestMethod.POST)
     public ResponseEntity<String> deleteUserAddress(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "addressId", "addressId不能为空");
+        Assert.hasKeyAndValue(reqJson, "userId", "用户ID不能为空");
 
 
         UserAddressPo userAddressPo = BeanConvertUtil.covertBean(reqJson, UserAddressPo.class);
@@ -106,12 +106,14 @@ public class UserAddressApi {
      */
     @RequestMapping(value = "/queryUserAddress", method = RequestMethod.GET)
     public ResponseEntity<String> queryUserAddress(@RequestParam(value = "userId") String userId,
+                                                   @RequestParam(value = "addressId", required = false) String addressId,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
         UserAddressDto userAddressDto = new UserAddressDto();
         userAddressDto.setPage(page);
         userAddressDto.setRow(row);
         userAddressDto.setUserId(userId);
+        userAddressDto.setAddressId(addressId);
         return getUserAddressBMOImpl.get(userAddressDto);
     }
 }
