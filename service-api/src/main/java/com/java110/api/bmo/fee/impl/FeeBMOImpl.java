@@ -151,8 +151,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             endCalender.setTime(endTime);
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_EVEN);
-            hours = new Double(cycles.doubleValue() * DateUtil.getCurrentMonthDay() * 24).intValue();
-            endCalender.add(Calendar.HOUR, hours);
+            endCalender = getTargetEndTime(endCalender,cycles.doubleValue());
             targetEndTime = endCalender.getTime();
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
@@ -186,6 +185,23 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeReceiptPo.setObjId(feeDto.getPayerObjId());
         feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
         return business;
+    }
+
+    private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
+        if (StringUtil.isInteger(cycles.toString())) {
+            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
+
+            return endCalender;
+        }
+
+        if(cycles >= 1){
+            endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
+            cycles = cycles - Math.floor(cycles);
+        }
+        int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
+        endCalender.add(Calendar.HOUR, hours);
+
+        return endCalender;
     }
 
 
