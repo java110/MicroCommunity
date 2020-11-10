@@ -125,7 +125,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
-        businessFeeDetail.put("detailId", "-1");
+        businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         businessFeeDetail.put("primeRate", "1.00");
         //计算 应收金额
         FeeDto feeDto = new FeeDto();
@@ -172,7 +172,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivedAmount"));
         feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
         feeReceiptDetailPo.setCycle(businessFeeDetail.getString("cycles"));
-        feeReceiptDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        feeReceiptDetailPo.setDetailId(businessFeeDetail.getString("detailId"));
         feeReceiptDetailPo.setEndTime(businessFeeDetail.getString("endTime"));
         feeReceiptDetailPo.setFeeId(feeDto.getFeeId());
         feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
@@ -477,9 +477,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessFeeDetail.put("detailId", "-1");
         businessFeeDetail.put("primeRate", "1.00");
         if (!businessFeeDetail.containsKey("state")) {
-            businessFeeDetail.put("state","1400");
+            businessFeeDetail.put("state", "1400");
         }
-            //计算 应收金额
+        //计算 应收金额
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(paramInJson.getString("feeId"));
         feeDto.setCommunityId(paramInJson.getString("communityId"));

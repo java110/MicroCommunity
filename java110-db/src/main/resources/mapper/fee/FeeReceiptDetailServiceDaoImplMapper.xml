@@ -19,8 +19,10 @@
     <select id="getFeeReceiptDetailInfo" parameterType="Map" resultType="Map">
         select t.area,t.amount,t.fee_name,t.fee_name feeName,t.detail_id,t.detail_id detailId,t.start_time,t.start_time
         startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.receipt_id,t.receipt_id receiptId,t.fee_id,t.fee_id feeId,t.cycle,t.square_price squarePrice
+        communityId,t.receipt_id,t.receipt_id receiptId,t.fee_id,t.fee_id feeId,t.cycle,t.square_price squarePrice,
+        pfd.remark
         from fee_receipt_detail t
+        left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0' and t.community_id = pfd.community_id
         where 1 =1
         <if test="area !=null and area != ''">
             and t.area= #{area}

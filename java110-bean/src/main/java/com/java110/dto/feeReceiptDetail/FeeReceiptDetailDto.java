@@ -26,6 +26,7 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
     private String feeId;
     private String cycle;
     private String squarePrice;
+    private String remark;
 
 
     private Date createTime;
@@ -136,5 +137,13 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     public void setSquarePrice(String squarePrice) {
         this.squarePrice = squarePrice;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
