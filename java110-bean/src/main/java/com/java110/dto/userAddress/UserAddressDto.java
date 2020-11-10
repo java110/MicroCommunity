@@ -1,6 +1,7 @@
 package com.java110.dto.userAddress;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,12 @@ import java.util.Date;
 public class UserAddressDto extends PageDto implements Serializable {
 
     private String areaCode;
-private String isDefault;
-private String address;
-private String tel;
-private String userId;
-private String addressId;
+    private String isDefault;
+    private String address;
+    private String tel;
+    private String userId;
+    private String addressId;
+    private String username;
 
 
     private Date createTime;
@@ -30,37 +32,48 @@ private String addressId;
     public String getAreaCode() {
         return areaCode;
     }
-public void setAreaCode(String areaCode) {
+
+    public void setAreaCode(String areaCode) {
         this.areaCode = areaCode;
     }
-public String getIsDefault() {
+
+    public String getIsDefault() {
         return isDefault;
     }
-public void setIsDefault(String isDefault) {
+
+    public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
     }
-public String getAddress() {
+
+    public String getAddress() {
         return address;
     }
-public void setAddress(String address) {
+
+    public void setAddress(String address) {
         this.address = address;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getAddressId() {
+
+    public String getAddressId() {
         return addressId;
     }
-public void setAddressId(String addressId) {
+
+    public void setAddressId(String addressId) {
         this.addressId = addressId;
     }
 
@@ -79,5 +92,13 @@ public void setAddressId(String addressId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
