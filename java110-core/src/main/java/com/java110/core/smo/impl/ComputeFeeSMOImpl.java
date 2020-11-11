@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.*;
 
@@ -758,19 +757,32 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         long t1 = newFrom.getTimeInMillis();
         long t2 = to.getTimeInMillis();
-        double days = (t2 - t1)*1.00 / (24 * 60 * 60 * 1000);
+        double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
 
         BigDecimal tmpDays = new BigDecimal(days);
         BigDecimal monthDay = new BigDecimal(30);
 
-        return tmpDays.divide(monthDay,2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
+        return tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
     }
 
     @Override
     public Date getTargetEndTime(double month, Date startDate) {
+//        Calendar endDate = Calendar.getInstance();
+//        endDate.setTime(startDate);
+//        endDate.add(Calendar.MONTH, (int) month);
+//        return endDate.getTime();
+
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(startDate);
-        endDate.add(Calendar.MONTH, (int) month);
+
+        Double intMonth = Math.floor(month);
+        endDate.add(Calendar.MONTH, intMonth.intValue());
+        double doubleMonth = month - intMonth;
+        if (doubleMonth <= 0) {
+            return endDate.getTime();
+        }
+        Double hour = doubleMonth * 30 * 24;
+        endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
         return endDate.getTime();
     }
 

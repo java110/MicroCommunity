@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.order.BusinessDto;
 import com.java110.entity.center.Business;
 import com.java110.fee.dao.IFeeDetailServiceDao;
@@ -42,6 +43,9 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
 
     @Autowired
     private IOrderInnerServiceSMO orderInnerServiceSMOImpl;
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
 
     @Autowired
     private IFeeServiceDao feeServiceDaoImpl;
@@ -207,7 +211,7 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
             return endCalender;
         }
 
-        if(cycles >= 1){
+        if (cycles >= 1) {
             endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
             cycles = cycles - Math.floor(cycles);
         }
@@ -246,15 +250,18 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     //根据当前的结束时间 修改
                     Date endTime = (Date) feeInfo.get(0).get("end_time");
 
-                    Calendar endCalender = Calendar.getInstance();
-                    endCalender.setTime(endTime);
-                    if (StringUtil.isNumber(cyclesStr)) {
-                        endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
-                    } else {
-                        int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
-                        endCalender.add(Calendar.HOUR, hours);
-                    }
-                    businessFeeInfo.put("end_time", endCalender.getTime());
+//                    Calendar endCalender = Calendar.getInstance();
+//                    endCalender.setTime(endTime);
+//                    if (StringUtil.isNumber(cyclesStr)) {
+//                        endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
+//                    } else {
+//                        int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
+//                        endCalender.add(Calendar.HOUR, hours);
+//                    }
+
+                    Date newEndTime = computeFeeSMOImpl.getTargetEndTime(Double.parseDouble(cyclesStr), endTime);
+
+                    businessFeeInfo.put("end_time", newEndTime);
 
 
                     // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
