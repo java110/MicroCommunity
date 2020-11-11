@@ -9,7 +9,7 @@ import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.userLogin.UserLoginDto;
 import com.java110.entity.center.AppService;
-import com.java110.intf.IUserLoginInnerServiceSMO;
+import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.po.userLogin.UserLoginPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;

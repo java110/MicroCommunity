@@ -2,7 +2,7 @@ package com.java110.fee.bmo.feeManualCollectionDetail.impl;
 
 import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
 import com.java110.fee.bmo.feeManualCollectionDetail.IGetFeeManualCollectionDetailBMO;
-import com.java110.intf.IFeeManualCollectionDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeManualCollectionDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

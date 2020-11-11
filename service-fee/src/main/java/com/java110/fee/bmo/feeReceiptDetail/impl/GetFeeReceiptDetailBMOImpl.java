@@ -2,7 +2,7 @@ package com.java110.fee.bmo.feeReceiptDetail.impl;
 
 import com.java110.dto.feeReceiptDetail.FeeReceiptDetailDto;
 import com.java110.fee.bmo.feeReceiptDetail.IGetFeeReceiptDetailBMO;
-import com.java110.intf.IFeeReceiptDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

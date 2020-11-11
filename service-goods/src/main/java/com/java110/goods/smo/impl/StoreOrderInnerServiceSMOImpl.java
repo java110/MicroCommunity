@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.storeOrder.StoreOrderDto;
 import com.java110.goods.dao.IStoreOrderServiceDao;
-import com.java110.intf.IStoreOrderInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderInnerServiceSMO;
 import com.java110.po.storeOrder.StoreOrderPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.java110.goods.bmo.storeOrderAddress.impl;
 
 import com.java110.dto.storeOrderAddress.StoreOrderAddressDto;
 import com.java110.goods.bmo.storeOrderAddress.IGetStoreOrderAddressBMO;
-import com.java110.intf.IStoreOrderAddressInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderAddressInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

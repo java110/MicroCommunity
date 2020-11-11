@@ -8,7 +8,7 @@ import com.java110.dto.order.OrderDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.payFeeAudit.PayFeeAuditDto;
 import com.java110.fee.bmo.payFeeAudit.IGetPayFeeAuditBMO;
-import com.java110.intf.IPayFeeAuditInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeAuditInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;

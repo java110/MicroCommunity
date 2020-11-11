@@ -4,7 +4,7 @@ package com.java110.report.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
-import com.java110.intf.IReportFeeMonthStatisticsInnerServiceSMO;
+import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

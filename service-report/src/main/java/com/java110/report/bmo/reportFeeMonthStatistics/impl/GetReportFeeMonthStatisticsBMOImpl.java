@@ -2,7 +2,7 @@ package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
-import com.java110.intf.IReportFeeMonthStatisticsInnerServiceSMO;
+import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;

@@ -3,7 +3,7 @@ package com.java110.fee.bmo.feeManualCollection.impl;
 import com.java110.dto.feeManualCollection.FeeManualCollectionDto;
 import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
 import com.java110.fee.bmo.feeManualCollection.IGetFeeManualCollectionBMO;
-import com.java110.intf.IFeeManualCollectionDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeManualCollectionDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeManualCollectionInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

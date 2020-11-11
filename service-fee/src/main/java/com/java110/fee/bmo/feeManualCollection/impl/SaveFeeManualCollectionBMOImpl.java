@@ -10,7 +10,7 @@ import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.fee.bmo.feeManualCollection.ISaveFeeManualCollectionBMO;
-import com.java110.intf.IFeeManualCollectionDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeManualCollectionDetailInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IFeeManualCollectionInnerServiceSMO;

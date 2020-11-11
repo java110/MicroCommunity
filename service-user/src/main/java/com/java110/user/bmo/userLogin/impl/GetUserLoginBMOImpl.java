@@ -1,7 +1,7 @@
 package com.java110.user.bmo.userLogin.impl;
 
 import com.java110.dto.userLogin.UserLoginDto;
-import com.java110.intf.IUserLoginInnerServiceSMO;
+import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.user.bmo.userLogin.IGetUserLoginBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.java110.user.bmo.rentingPoolAttr.impl;
 
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.intf.IRentingPoolAttrInnerServiceSMO;
+import com.java110.intf.user.IRentingPoolAttrInnerServiceSMO;
 import com.java110.po.rentingPoolAttr.RentingPoolAttrPo;
 import com.java110.user.bmo.rentingPoolAttr.IUpdateRentingPoolAttrBMO;
 import com.java110.vo.ResultVo;

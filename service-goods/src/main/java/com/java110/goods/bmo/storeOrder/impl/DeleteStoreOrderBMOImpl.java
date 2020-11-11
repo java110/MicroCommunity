@@ -2,7 +2,7 @@ package com.java110.goods.bmo.storeOrder.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.goods.bmo.storeOrder.IDeleteStoreOrderBMO;
-import com.java110.intf.IStoreOrderInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderInnerServiceSMO;
 import com.java110.po.storeOrder.StoreOrderPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

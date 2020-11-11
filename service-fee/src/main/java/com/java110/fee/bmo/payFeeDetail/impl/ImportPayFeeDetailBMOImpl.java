@@ -8,7 +8,7 @@ import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.payFeeDetail.IImportPayFeeBMODetail;
-import com.java110.intf.IImportFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;

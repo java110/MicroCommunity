@@ -1,7 +1,7 @@
 package com.java110.user.bmo.userAddress.impl;
 
 import com.java110.dto.userAddress.UserAddressDto;
-import com.java110.intf.IUserAddressInnerServiceSMO;
+import com.java110.intf.user.IUserAddressInnerServiceSMO;
 import com.java110.user.bmo.userAddress.IGetUserAddressBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

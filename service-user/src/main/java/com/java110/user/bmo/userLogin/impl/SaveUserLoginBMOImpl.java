@@ -2,7 +2,7 @@ package com.java110.user.bmo.userLogin.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.IUserLoginInnerServiceSMO;
+import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.po.userLogin.UserLoginPo;
 import com.java110.user.bmo.userLogin.ISaveUserLoginBMO;
 import com.java110.vo.ResultVo;

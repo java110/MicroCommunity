@@ -2,7 +2,7 @@ package com.java110.goods.bmo.storeOrderCart.impl;
 
 import com.java110.dto.storeOrderCart.StoreOrderCartDto;
 import com.java110.goods.bmo.storeOrderCart.IGetStoreOrderCartBMO;
-import com.java110.intf.IStoreOrderCartInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderCartInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -2,7 +2,7 @@ package com.java110.fee.bmo.feePrintSpec.impl;
 
 import com.java110.dto.feePrintSpec.FeePrintSpecDto;
 import com.java110.fee.bmo.feePrintSpec.IGetFeePrintSpecBMO;
-import com.java110.intf.IFeePrintSpecInnerServiceSMO;
+import com.java110.intf.fee.IFeePrintSpecInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

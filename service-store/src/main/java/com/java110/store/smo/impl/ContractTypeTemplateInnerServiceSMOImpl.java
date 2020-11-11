@@ -4,7 +4,7 @@ package com.java110.store.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.contractTypeTemplate.ContractTypeTemplateDto;
-import com.java110.intf.IContractTypeTemplateInnerServiceSMO;
+import com.java110.intf.store.IContractTypeTemplateInnerServiceSMO;
 import com.java110.po.contractTypeTemplate.ContractTypeTemplatePo;
 import com.java110.store.dao.IContractTypeTemplateServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

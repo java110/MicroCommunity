@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.importFeeDetail.ImportFeeDetailDto;
 import com.java110.fee.dao.IImportFeeDetailServiceDao;
-import com.java110.intf.IImportFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
 import com.java110.po.importFeeDetail.ImportFeeDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

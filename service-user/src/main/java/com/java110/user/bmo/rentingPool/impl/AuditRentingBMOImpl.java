@@ -4,7 +4,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.rentingPoolFlow.RentingPoolFlowDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.IRentingPoolFlowInnerServiceSMO;
+import com.java110.intf.user.IRentingPoolFlowInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.rentingPool.RentingPoolPo;

@@ -6,7 +6,7 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.feeManualCollection.FeeManualCollectionDto;
 import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
 import com.java110.fee.bmo.feeManualCollectionDetail.IGetExportCollectionBMO;
-import com.java110.intf.IFeeManualCollectionDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeManualCollectionDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeManualCollectionInnerServiceSMO;
 import com.java110.utils.util.DateUtil;

@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.feePrintSpec.FeePrintSpecDto;
 import com.java110.fee.dao.IFeePrintSpecServiceDao;
-import com.java110.intf.IFeePrintSpecInnerServiceSMO;
+import com.java110.intf.fee.IFeePrintSpecInnerServiceSMO;
 import com.java110.po.feePrintSpec.FeePrintSpecPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

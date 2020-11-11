@@ -3,7 +3,7 @@ package com.java110.fee.bmo.feePrintSpec.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.fee.bmo.feePrintSpec.ISaveFeePrintSpecBMO;
-import com.java110.intf.IFeePrintSpecInnerServiceSMO;
+import com.java110.intf.fee.IFeePrintSpecInnerServiceSMO;
 import com.java110.po.feePrintSpec.FeePrintSpecPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

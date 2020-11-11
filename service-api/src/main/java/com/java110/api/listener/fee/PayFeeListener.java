@@ -13,7 +13,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
-import com.java110.intf.IFeeReceiptDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;

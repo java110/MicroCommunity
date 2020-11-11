@@ -9,7 +9,7 @@ import com.java110.dto.fee.*;
 import com.java110.dto.repair.RepairDto;
 import com.java110.fee.bmo.IPayOweFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
-import com.java110.intf.IFeeReceiptDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;

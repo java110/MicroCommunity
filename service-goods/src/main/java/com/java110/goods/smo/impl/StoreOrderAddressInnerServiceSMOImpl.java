@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.storeOrderAddress.StoreOrderAddressDto;
 import com.java110.goods.dao.IStoreOrderAddressServiceDao;
-import com.java110.intf.IStoreOrderAddressInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderAddressInnerServiceSMO;
 import com.java110.po.storeOrderAddress.StoreOrderAddressPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

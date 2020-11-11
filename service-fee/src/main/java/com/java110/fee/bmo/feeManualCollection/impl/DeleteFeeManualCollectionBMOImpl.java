@@ -3,7 +3,7 @@ package com.java110.fee.bmo.feeManualCollection.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
 import com.java110.fee.bmo.feeManualCollection.IDeleteFeeManualCollectionBMO;
-import com.java110.intf.IFeeManualCollectionDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeManualCollectionDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeManualCollectionInnerServiceSMO;
 import com.java110.po.feeManualCollection.FeeManualCollectionPo;
 import com.java110.po.feeManualCollectionDetail.FeeManualCollectionDetailPo;

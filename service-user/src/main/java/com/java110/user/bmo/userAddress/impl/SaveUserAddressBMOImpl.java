@@ -2,7 +2,7 @@ package com.java110.user.bmo.userAddress.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.IUserAddressInnerServiceSMO;
+import com.java110.intf.user.IUserAddressInnerServiceSMO;
 import com.java110.po.userAddress.UserAddressPo;
 import com.java110.user.bmo.userAddress.ISaveUserAddressBMO;
 import com.java110.utils.util.StringUtil;

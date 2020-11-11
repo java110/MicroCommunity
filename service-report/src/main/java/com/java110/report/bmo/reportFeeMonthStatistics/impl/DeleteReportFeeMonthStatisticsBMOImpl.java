@@ -1,7 +1,7 @@
 package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.intf.IReportFeeMonthStatisticsInnerServiceSMO;
+import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.bmo.reportFeeMonthStatistics.IDeleteReportFeeMonthStatisticsBMO;
 import com.java110.vo.ResultVo;
