@@ -151,7 +151,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             endCalender.setTime(endTime);
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_EVEN);
-            endCalender = getTargetEndTime(endCalender,cycles.doubleValue());
+            endCalender = getTargetEndTime(endCalender, cycles.doubleValue());
             targetEndTime = endCalender.getTime();
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
@@ -194,7 +194,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             return endCalender;
         }
 
-        if(cycles >= 1){
+        if (cycles >= 1) {
             endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
             cycles = cycles - Math.floor(cycles);
         }
@@ -602,6 +602,11 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      */
     public JSONObject addFee(OwnerCarDto ownerCarDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
+
+        if (paramInJson.containsKey("startTime")) {
+            time = paramInJson.getString("startTime");
+        }
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
@@ -613,8 +618,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
         businessUnit.put("amount", "-1.00");
-        businessUnit.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessUnit.put("startTime", time);
+        businessUnit.put("endTime", time);
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", ownerCarDto.getCarId());
         businessUnit.put("payerObjType", FeeDto.PAYER_OBJ_TYPE_CAR);
@@ -657,7 +662,13 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      */
     public JSONObject addRoomFee(RoomDto roomDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
 
+        if(paramInJson.containsKey("feeEndDate")){
+            time = paramInJson.getString("feeEndDate");
+        }else if (paramInJson.containsKey("startTime")) {
+            time = paramInJson.getString("startTime");
+        }
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
@@ -668,9 +679,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
         businessUnit.put("amount", "-1.00");
-        businessUnit.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        businessUnit.put("endTime", paramInJson.containsKey("feeEndDate") ? paramInJson.getString("feeEndDate")
-                : DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessUnit.put("startTime", time);
+        businessUnit.put("endTime", time);
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", roomDto.getRoomId());
         businessUnit.put("payerObjType", "3333");

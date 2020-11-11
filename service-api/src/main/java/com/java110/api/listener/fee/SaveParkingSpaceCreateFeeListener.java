@@ -72,6 +72,7 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         Assert.hasKeyAndValue(reqJson, "locationObjId", "未包含收费对象");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
+        //Assert.hasKeyAndValue(reqJson, "startTime", "未包含费用起始时间");
     }
 
     @Override

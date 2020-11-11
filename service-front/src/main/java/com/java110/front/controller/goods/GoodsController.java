@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 public class GoodsController extends BaseController {
 
 
-    //@Autowired
+    @Autowired
     private IGoodsToPaySMO goodsToPaySMOImpl;
 
     /**
