@@ -32,11 +32,12 @@ import java.nio.charset.Charset;
         "com.java110.core", "com.java110.config.properties.code", "com.java110.db"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
-        basePackages = {"com.java110.fee.listener"})
+        basePackages = {"com.java110.goods.listener"})
 @EnableFeignClients(basePackages = {"com.java110.intf.user",
         "com.java110.intf.order",
         "com.java110.intf.community",
         "com.java110.intf.store",
+        "com.java110.intf.fee",
         "com.java110.intf.common"})
 public class GoodsServiceApplicationStart {
 
