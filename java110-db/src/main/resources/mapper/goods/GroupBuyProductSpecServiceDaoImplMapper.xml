@@ -65,9 +65,6 @@
     <!-- 修改拼团产品规格信息 add by wuxw 2018-07-03 -->
     <update id="updateGroupBuyProductSpecInfo" parameterType="Map">
         update group_buy_product_spec t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
         <if test="groupSales !=null and groupSales != ''">
             , t.group_sales= #{groupSales}
         </if>
@@ -77,9 +74,7 @@
         <if test="defaultShow !=null and defaultShow != ''">
             , t.default_show= #{defaultShow}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="groupStock !=null and groupStock != ''">
             , t.group_stock= #{groupStock}
         </if>
@@ -92,6 +87,9 @@
         </if>
         <if test="productId !=null and productId != ''">
             and t.product_id= #{productId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>

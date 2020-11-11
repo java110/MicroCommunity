@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class GroupBuyDto extends PageDto implements Serializable {
 
+    public static final String STATE_SUCCESS = "2002";
+
     private String specId;
     private String buyCount;
     private String amount;

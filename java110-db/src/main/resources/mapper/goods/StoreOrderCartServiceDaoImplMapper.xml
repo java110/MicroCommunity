@@ -73,18 +73,14 @@
     <!-- 修改订单购物车信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreOrderCartInfo" parameterType="Map">
         update store_order_cart t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
+
         <if test="valueId !=null and valueId != ''">
             , t.value_id= #{valueId}
         </if>
         <if test="productId !=null and productId != ''">
             , t.product_id= #{productId}
         </if>
-        <if test="orderId !=null and orderId != ''">
-            , t.order_id= #{orderId}
-        </if>
+
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
@@ -112,6 +108,9 @@
         where 1=1
         <if test="cartId !=null and cartId != ''">
             and t.cart_id= #{cartId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
         </if>
 
     </update>

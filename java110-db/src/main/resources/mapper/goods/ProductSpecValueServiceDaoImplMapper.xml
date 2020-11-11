@@ -92,9 +92,7 @@
     <!-- 修改产品规格值信息 add by wuxw 2018-07-03 -->
     <update id="updateProductSpecValueInfo" parameterType="Map">
         update product_spec_value t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
+
         <if test="specId !=null and specId != ''">
             , t.spec_id= #{specId}
         </if>
@@ -111,9 +109,7 @@
         <if test="vipPrice !=null and vipPrice != ''">
             , t.vip_price= #{vipPrice}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="stock !=null and stock != ''">
             , t.stock= #{stock}
         </if>
@@ -129,6 +125,9 @@
         </if>
         <if test="productId !=null and productId != ''">
             and t.product_id= #{productId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>

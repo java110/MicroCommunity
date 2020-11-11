@@ -59,9 +59,7 @@
     <!-- 修改购物车信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreCartInfo" parameterType="Map">
         update store_cart t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
+
         <if test="valueId !=null and valueId != ''">
             , t.value_id= #{valueId}
         </if>
@@ -74,15 +72,16 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="cartNum !=null and cartNum != ''">
             , t.cart_num= #{cartNum}
         </if>
         where 1=1
         <if test="cartId !=null and cartId != ''">
             and t.cart_id= #{cartId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>

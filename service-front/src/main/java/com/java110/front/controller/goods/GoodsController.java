@@ -15,12 +15,16 @@
  */
 package com.java110.front.controller.goods;
 
+import com.java110.core.base.AppBase;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.front.smo.payment.IGoodsToNotifySMO;
 import com.java110.front.smo.payment.IGoodsToPaySMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,9 +44,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(path = "/goods")
 public class GoodsController extends BaseController {
 
+    private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
     @Autowired
     private IGoodsToPaySMO goodsToPaySMOImpl;
+
+    @Autowired
+    private IGoodsToNotifySMO goodsToNotifySMOImpl;
 
     /**
      * <p>统一下单入口</p>
@@ -62,5 +70,21 @@ public class GoodsController extends BaseController {
                 "", "", "", pd.getSessionId(),
                 appId);
         return goodsToPaySMOImpl.toPay(newPd);
+    }
+
+    /**
+     * <p>支付回调Api</p>
+     * /goods/notify
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/notify", method = RequestMethod.POST)
+    public ResponseEntity<String> notify(@RequestBody String postInfo, HttpServletRequest request) {
+
+        logger.debug("微信支付回调报文" + postInfo);
+
+        return goodsToNotifySMOImpl.toNotify(postInfo, request);
+
+
     }
 }

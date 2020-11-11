@@ -96,12 +96,7 @@ public class StoreOrderApi {
     @RequestMapping(value = "/updateStoreOrder", method = RequestMethod.POST)
     public ResponseEntity<String> updateStoreOrder(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "personId", "请求报文中未包含personId");
-        Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
-        Assert.hasKeyAndValue(reqJson, "totalPrice", "请求报文中未包含totalPrice");
-        Assert.hasKeyAndValue(reqJson, "payPrice", "请求报文中未包含payPrice");
-        Assert.hasKeyAndValue(reqJson, "orderId", "orderId不能为空");
-
+        Assert.hasKeyAndValue(reqJson, "orderId", "请求报文中未包含orderId");
 
         StoreOrderPo storeOrderPo = BeanConvertUtil.covertBean(reqJson, StoreOrderPo.class);
         return updateStoreOrderBMOImpl.update(storeOrderPo);

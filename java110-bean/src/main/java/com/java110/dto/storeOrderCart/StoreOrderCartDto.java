@@ -16,7 +16,7 @@ import java.util.Date;
 public class StoreOrderCartDto extends PageDto implements Serializable {
 
     public static final String STATE_WAIT_BUY = "1001";//未购买
-    public static final String STATE_FINISH_BUY = "2002";//已支付
+    public static final String STATE_WAIT_SEND = "2002";//待发货
 
     private String valueId;
     private String productId;

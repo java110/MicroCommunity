@@ -67,9 +67,7 @@
     <!-- 修改购物车信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreOrderInfo" parameterType="Map">
         update store_order t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
+
         <if test="personName !=null and personName != ''">
             , t.person_name= #{personName}
         </if>
