@@ -99,10 +99,12 @@ public class StoreOrderApi {
 
         Assert.hasKeyAndValue(reqJson, "personId", "请求报文中未包含personId");
         Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
+        Assert.hasKeyAndValue(reqJson, "addressId", "请求报文中未包含收货人信息");
         Assert.hasKey(reqJson, "goodsList", "未包含商品信息");
 
         StoreOrderPo storeOrderPo = BeanConvertUtil.covertBean(reqJson, StoreOrderPo.class);
-        return saveStoreOrderBMOImpl.save(storeOrderPo, reqJson.getJSONArray("goodsList"));
+        return saveStoreOrderBMOImpl.save(storeOrderPo, reqJson.getJSONArray("goodsList"),
+                reqJson.getString("addressId"));
     }
 
     /**

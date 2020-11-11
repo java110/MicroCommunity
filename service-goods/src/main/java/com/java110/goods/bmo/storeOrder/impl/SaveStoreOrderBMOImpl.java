@@ -9,15 +9,19 @@ import com.java110.dto.groupBuyProductSpec.GroupBuyProductSpecDto;
 import com.java110.dto.productSpecValue.ProductSpecValueDto;
 import com.java110.dto.storeOrder.StoreOrderDto;
 import com.java110.dto.storeOrderCart.StoreOrderCartDto;
+import com.java110.dto.userAddress.UserAddressDto;
 import com.java110.goods.bmo.storeOrder.ISaveStoreOrderBMO;
+import com.java110.intf.IStoreOrderAddressInnerServiceSMO;
 import com.java110.intf.IStoreOrderCartInnerServiceSMO;
 import com.java110.intf.IStoreOrderInnerServiceSMO;
+import com.java110.intf.IUserAddressInnerServiceSMO;
 import com.java110.intf.goods.IGroupBuyProductSpecInnerServiceSMO;
 import com.java110.intf.goods.IProductInnerServiceSMO;
 import com.java110.intf.goods.IProductSpecValueInnerServiceSMO;
 import com.java110.po.groupBuyProductSpec.GroupBuyProductSpecPo;
 import com.java110.po.productSpecValue.ProductSpecValuePo;
 import com.java110.po.storeOrder.StoreOrderPo;
+import com.java110.po.storeOrderAddress.StoreOrderAddressPo;
 import com.java110.po.storeOrderCart.StoreOrderCartPo;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
@@ -48,6 +52,12 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
     @Autowired
     private IGroupBuyProductSpecInnerServiceSMO groupBuyProductSpecInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserAddressInnerServiceSMO userAddressInnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreOrderAddressInnerServiceSMO storeOrderAddressInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -65,7 +75,7 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
      * @return 订单服务能够接受的报文
      */
     @Java110Transactional
-    public ResponseEntity<String> save(StoreOrderPo storeOrderPo, JSONArray goodsList) {
+    public ResponseEntity<String> save(StoreOrderPo storeOrderPo, JSONArray goodsList, String addressId) {
 
         storeOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
         storeOrderPo.setPayPrice("0");
@@ -85,7 +95,38 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
+        //保存收货人信息
+        saveOrderAddress(storeOrderPo, addressId);
+
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功", storeOrderPo);
+
+    }
+
+    private void saveOrderAddress(StoreOrderPo storeOrderPo, String addressId) {
+
+        UserAddressDto userAddressDto = new UserAddressDto();
+        userAddressDto.setAddressId(addressId);
+        userAddressDto.setUserId(storeOrderPo.getPersonId());
+        List<UserAddressDto> userAddressDtos = userAddressInnerServiceSMOImpl.queryUserAddresss(userAddressDto);
+
+        Assert.listOnlyOne(userAddressDtos, "未找到收货人信息");
+
+        userAddressDto = userAddressDtos.get(0);
+
+        StoreOrderAddressPo storeOrderAddressPo = new StoreOrderAddressPo();
+        storeOrderAddressPo.setAddress(userAddressDto.getAddress());
+        storeOrderAddressPo.setAddressId(userAddressDto.getAddressId());
+        storeOrderAddressPo.setAreaCode(userAddressDto.getAreaCode());
+        storeOrderAddressPo.setOaId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oaId));
+        storeOrderAddressPo.setOrderId(storeOrderPo.getOrderId());
+        storeOrderAddressPo.setTel(userAddressDto.getTel());
+        storeOrderAddressPo.setUsername(userAddressDto.getUsername());
+
+        int flag = storeOrderAddressInnerServiceSMOImpl.saveStoreOrderAddress(storeOrderAddressPo);
+
+        if (flag < 1) {
+            throw new IllegalArgumentException("保存收货人信息失败");
+        }
 
     }
 

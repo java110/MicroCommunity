@@ -12,7 +12,7 @@ public interface ISaveStoreOrderBMO {
      * @param storeOrderPo
      * @return
      */
-    ResponseEntity<String> save(StoreOrderPo storeOrderPo, JSONArray goodsList);
+    ResponseEntity<String> save(StoreOrderPo storeOrderPo, JSONArray goodsList,String addressId);
 
 
 }
