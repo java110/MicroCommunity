@@ -198,7 +198,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
             cycles = cycles - Math.floor(cycles);
         }
-        int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
+        //int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
+        int hours = new Double(cycles * 30 * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
 
         return endCalender;

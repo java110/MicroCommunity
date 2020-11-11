@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.front.controller;
+package com.java110.front.controller.goods;
 
-import com.java110.front.smo.complaint.ISaveComplaintSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.front.smo.payment.IGoodsToPaySMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,39 +31,36 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 投诉意见
+ * @desc 商品相关入口类 ，主要 对支付做拦截
+ * <p>
+ * add by 吴学文 8:54
  */
+
 @RestController
-@RequestMapping(path = "/app")
-public class ComplaintController extends BaseController {
-    private final static Logger logger = LoggerFactory.getLogger(ComplaintController.class);
+@RequestMapping(path = "/goods")
+public class GoodsController extends BaseController {
 
-    @Autowired
-    private ISaveComplaintSMO saveComplaintSMOImpl;
 
+    //@Autowired
+    private IGoodsToPaySMO goodsToPaySMOImpl;
 
     /**
-     * 微信登录接口
+     * <p>统一下单入口</p>
      *
-     * @param postInfo
      * @param request
+     * @throws Exception
      */
-    @RequestMapping(path = "/complaint", method = RequestMethod.POST)
-    public ResponseEntity<String> complaint(@RequestBody String postInfo, HttpServletRequest request) {
-
-        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
-
+    @RequestMapping(path = "/unifieldOrder", method = RequestMethod.POST)
+    public ResponseEntity<String> unifieldOrder(@RequestBody String postInfo, HttpServletRequest request) {
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         String appId = request.getHeader("APP_ID");
-        if(StringUtil.isEmpty(appId)){
+        if (StringUtil.isEmpty(appId)) {
             appId = request.getHeader("APP-ID");
         }
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(),pd.getToken(), postInfo,
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
                 "", "", "", pd.getSessionId(),
                 appId);
-
-        return saveComplaintSMOImpl.save(newPd);
+        return goodsToPaySMOImpl.toPay(newPd);
     }
-
 }

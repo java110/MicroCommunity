@@ -758,12 +758,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         long t1 = newFrom.getTimeInMillis();
         long t2 = to.getTimeInMillis();
-        long days = (t2 - t1) / (24 * 60 * 60 * 1000);
+        double days = (t2 - t1)*1.00 / (24 * 60 * 60 * 1000);
 
         BigDecimal tmpDays = new BigDecimal(days);
         BigDecimal monthDay = new BigDecimal(30);
 
-        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue() + result;
+        return tmpDays.divide(monthDay,2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
     }
 
     @Override
@@ -773,4 +773,5 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         endDate.add(Calendar.MONTH, (int) month);
         return endDate.getTime();
     }
+
 }
