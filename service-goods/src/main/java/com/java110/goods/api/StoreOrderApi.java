@@ -3,6 +3,7 @@ package com.java110.goods.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.storeCart.StoreCartDto;
 import com.java110.dto.storeOrder.StoreOrderDto;
+import com.java110.dto.storeOrderAddress.StoreOrderAddressDto;
 import com.java110.dto.storeOrderCart.StoreOrderCartDto;
 import com.java110.goods.bmo.storeCart.IDeleteStoreCartBMO;
 import com.java110.goods.bmo.storeCart.IGetStoreCartBMO;
@@ -12,23 +13,31 @@ import com.java110.goods.bmo.storeOrder.IDeleteStoreOrderBMO;
 import com.java110.goods.bmo.storeOrder.IGetStoreOrderBMO;
 import com.java110.goods.bmo.storeOrder.ISaveStoreOrderBMO;
 import com.java110.goods.bmo.storeOrder.IUpdateStoreOrderBMO;
+import com.java110.goods.bmo.storeOrderAddress.IDeleteStoreOrderAddressBMO;
+import com.java110.goods.bmo.storeOrderAddress.IGetStoreOrderAddressBMO;
+import com.java110.goods.bmo.storeOrderAddress.ISaveStoreOrderAddressBMO;
+import com.java110.goods.bmo.storeOrderAddress.IUpdateStoreOrderAddressBMO;
 import com.java110.goods.bmo.storeOrderCart.IDeleteStoreOrderCartBMO;
 import com.java110.goods.bmo.storeOrderCart.IGetStoreOrderCartBMO;
 import com.java110.goods.bmo.storeOrderCart.ISaveStoreOrderCartBMO;
 import com.java110.goods.bmo.storeOrderCart.IUpdateStoreOrderCartBMO;
 import com.java110.po.storeCart.StoreCartPo;
 import com.java110.po.storeOrder.StoreOrderPo;
+import com.java110.po.storeOrderAddress.StoreOrderAddressPo;
 import com.java110.po.storeOrderCart.StoreOrderCartPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 商户订单
  * add by wuxw 2020-11-15
- *
  */
 @RestController
 @RequestMapping(value = "/storeOrder")
@@ -66,6 +75,17 @@ public class StoreOrderApi {
     @Autowired
     private IGetStoreOrderCartBMO getStoreOrderCartBMOImpl;
 
+
+    @Autowired
+    private ISaveStoreOrderAddressBMO saveStoreOrderAddressBMOImpl;
+    @Autowired
+    private IUpdateStoreOrderAddressBMO updateStoreOrderAddressBMOImpl;
+    @Autowired
+    private IDeleteStoreOrderAddressBMO deleteStoreOrderAddressBMOImpl;
+
+    @Autowired
+    private IGetStoreOrderAddressBMO getStoreOrderAddressBMOImpl;
+
     /**
      * 微信保存消息模板
      *
@@ -82,7 +102,7 @@ public class StoreOrderApi {
         Assert.hasKey(reqJson, "goodsList", "未包含商品信息");
 
         StoreOrderPo storeOrderPo = BeanConvertUtil.covertBean(reqJson, StoreOrderPo.class);
-        return saveStoreOrderBMOImpl.save(storeOrderPo,reqJson.getJSONArray("goodsList"));
+        return saveStoreOrderBMOImpl.save(storeOrderPo, reqJson.getJSONArray("goodsList"));
     }
 
     /**
@@ -209,7 +229,7 @@ public class StoreOrderApi {
      * @path /app/storeOrder/queryStoreCart
      */
     @RequestMapping(value = "/queryStoreCart", method = RequestMethod.GET)
-    public ResponseEntity<String> queryStoreCart(@RequestParam(value = "personId",required = false) String personId,
+    public ResponseEntity<String> queryStoreCart(@RequestParam(value = "personId", required = false) String personId,
                                                  @RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row) {
         StoreCartDto storeCartDto = new StoreCartDto();
@@ -297,5 +317,89 @@ public class StoreOrderApi {
         storeOrderCartDto.setPage(page);
         storeOrderCartDto.setRow(row);
         return getStoreOrderCartBMOImpl.get(storeOrderCartDto);
+    }
+
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /storeOrder/saveStoreOrderAddress
+     * @path /app/storeOrder/saveStoreOrderAddress
+     */
+    @RequestMapping(value = "/saveStoreOrderAddress", method = RequestMethod.POST)
+    public ResponseEntity<String> saveStoreOrderAddress(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "orderId", "请求报文中未包含orderId");
+        Assert.hasKeyAndValue(reqJson, "areaCode", "请求报文中未包含areaCode");
+        Assert.hasKeyAndValue(reqJson, "tel", "请求报文中未包含tel");
+        Assert.hasKeyAndValue(reqJson, "address", "请求报文中未包含address");
+        Assert.hasKeyAndValue(reqJson, "username", "请求报文中未包含username");
+
+
+        StoreOrderAddressPo storeOrderAddressPo = BeanConvertUtil.covertBean(reqJson, StoreOrderAddressPo.class);
+        return saveStoreOrderAddressBMOImpl.save(storeOrderAddressPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /storeOrder/updateStoreOrderAddress
+     * @path /app/storeOrder/updateStoreOrderAddress
+     */
+    @RequestMapping(value = "/updateStoreOrderAddress", method = RequestMethod.POST)
+    public ResponseEntity<String> updateStoreOrderAddress(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "orderId", "请求报文中未包含orderId");
+        Assert.hasKeyAndValue(reqJson, "areaCode", "请求报文中未包含areaCode");
+        Assert.hasKeyAndValue(reqJson, "tel", "请求报文中未包含tel");
+        Assert.hasKeyAndValue(reqJson, "address", "请求报文中未包含address");
+        Assert.hasKeyAndValue(reqJson, "username", "请求报文中未包含username");
+        Assert.hasKeyAndValue(reqJson, "oaId", "oaId不能为空");
+
+
+        StoreOrderAddressPo storeOrderAddressPo = BeanConvertUtil.covertBean(reqJson, StoreOrderAddressPo.class);
+        return updateStoreOrderAddressBMOImpl.update(storeOrderAddressPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /storeOrder/deleteStoreOrderAddress
+     * @path /app/storeOrder/deleteStoreOrderAddress
+     */
+    @RequestMapping(value = "/deleteStoreOrderAddress", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteStoreOrderAddress(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "oaId", "oaId不能为空");
+
+
+        StoreOrderAddressPo storeOrderAddressPo = BeanConvertUtil.covertBean(reqJson, StoreOrderAddressPo.class);
+        return deleteStoreOrderAddressBMOImpl.delete(storeOrderAddressPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param orderId 订单ID
+     * @return
+     * @serviceCode /storeOrder/queryStoreOrderAddress
+     * @path /app/storeOrder/queryStoreOrderAddress
+     */
+    @RequestMapping(value = "/queryStoreOrderAddress", method = RequestMethod.GET)
+    public ResponseEntity<String> queryStoreOrderAddress(@RequestParam(value = "orderId") String orderId,
+                                                         @RequestParam(value = "page") int page,
+                                                         @RequestParam(value = "row") int row) {
+        StoreOrderAddressDto storeOrderAddressDto = new StoreOrderAddressDto();
+        storeOrderAddressDto.setPage(page);
+        storeOrderAddressDto.setRow(row);
+        storeOrderAddressDto.setOrderId(orderId);
+        return getStoreOrderAddressBMOImpl.get(storeOrderAddressDto);
     }
 }

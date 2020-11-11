@@ -1,25 +1,26 @@
 {
   "autoMove": true,
-  "id": "addressId",
-  "name": "userAddress",
-  "desc": "用户联系地址",
-  "shareParam": "userId",
-  "shareColumn": "user_id",
-  "shareName": "user",
-  "tableName": "u_user_address",
+  "id": "oaId",
+  "name": "storeOrderAddress",
+  "desc": "发货地址",
+  "shareParam": "orderId",
+  "shareColumn": "order_id",
+  "shareName": "goods",
+  "tableName": "store_order_address",
   "param": {
+    "oaId": "oa_id",
     "addressId": "address_id",
-    "userId": "user_id",
+    "orderId": "order_id",
     "tel": "tel",
     "areaCode": "area_code",
     "address": "address",
-    "isDefault": "is_default",
+    "username": "username",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "userId",
-      "msg": "用户不能为空"
+      "code": "orderId",
+      "msg": "订单不能为空"
     },
     {
       "code": "areaCode",
@@ -34,8 +35,8 @@
       "msg": "详细地址不能为空"
     },
     {
-      "code": "isDefault",
-      "msg": "默认地址不能为空"
+      "code": "username",
+      "msg": "收货人不能为空"
     }
   ]
 }
