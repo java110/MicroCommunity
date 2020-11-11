@@ -1,6 +1,7 @@
 package com.java110.dto.storeOrderCart;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,18 +15,21 @@ import java.util.Date;
  **/
 public class StoreOrderCartDto extends PageDto implements Serializable {
 
+    public static final String STATE_WAIT_BUY = "1001";//未购买
+    public static final String STATE_FINISH_BUY = "2002";//已支付
+
     private String valueId;
-private String productId;
-private String orderId;
-private String cartId;
-private String remark;
-private String storeId;
-private String cartNum;
-private String price;
-private String payPrice;
-private String personId;
-private String state;
-private String freightPrice;
+    private String productId;
+    private String orderId;
+    private String cartId;
+    private String remark;
+    private String storeId;
+    private String cartNum;
+    private String price;
+    private String payPrice;
+    private String personId;
+    private String state;
+    private String freightPrice;
 
 
     private Date createTime;
@@ -36,73 +40,96 @@ private String freightPrice;
     public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getProductId() {
+
+    public String getProductId() {
         return productId;
     }
-public void setProductId(String productId) {
+
+    public void setProductId(String productId) {
         this.productId = productId;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getCartId() {
+
+    public String getCartId() {
         return cartId;
     }
-public void setCartId(String cartId) {
+
+    public void setCartId(String cartId) {
         this.cartId = cartId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getCartNum() {
+
+    public String getCartNum() {
         return cartNum;
     }
-public void setCartNum(String cartNum) {
+
+    public void setCartNum(String cartNum) {
         this.cartNum = cartNum;
     }
-public String getPrice() {
+
+    public String getPrice() {
         return price;
     }
-public void setPrice(String price) {
+
+    public void setPrice(String price) {
         this.price = price;
     }
-public String getPayPrice() {
+
+    public String getPayPrice() {
         return payPrice;
     }
-public void setPayPrice(String payPrice) {
+
+    public void setPayPrice(String payPrice) {
         this.payPrice = payPrice;
     }
-public String getPersonId() {
+
+    public String getPersonId() {
         return personId;
     }
-public void setPersonId(String personId) {
+
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getFreightPrice() {
+
+    public String getFreightPrice() {
         return freightPrice;
     }
-public void setFreightPrice(String freightPrice) {
+
+    public void setFreightPrice(String freightPrice) {
         this.freightPrice = freightPrice;
     }
 

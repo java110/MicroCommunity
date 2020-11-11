@@ -70,15 +70,15 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
 
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payFeePre";
+        String url = ServiceConstant.SERVICE_API_URL + "/app/storeOrder/saveStoreOrder";
         responseEntity = super.callCenterService(restTemplate, pd, paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
-        String orderId = orderInfo.getString("oId");
-        double money = Double.parseDouble(orderInfo.getString("receivableAmount"));
+        String orderId = orderInfo.getString("orderId");
+        double money = Double.parseDouble(orderInfo.getString("payPrice"));
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
         if (AppDto.WECHAT_OWNER_APP_ID.equals(pd.getAppId())) {
             appType = OwnerAppUserDto.APP_TYPE_WECHAT;
