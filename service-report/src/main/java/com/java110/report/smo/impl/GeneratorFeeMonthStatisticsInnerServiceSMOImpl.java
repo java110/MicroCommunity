@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName GeneratorFeeMonthStatisticsInnerServiceSMOImpl
@@ -74,6 +71,38 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         //处理车位费用
         dealCarFee(reportFeeMonthStatisticsPo);
+
+        //处理缴费结束的情况
+
+        dealFinishFee(communityId);
+    }
+
+    private void dealFinishFee(String communityId) {
+        Map reportFeeDto = new HashMap();
+        reportFeeDto.put("communityId", communityId);
+        List<Map> feeDtos = reportFeeMonthStatisticsServiceDaoImpl.queryFinishOweFee(reportFeeDto);
+        ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = null;
+        for (Map info : feeDtos) {
+            try {
+                Date tmpTime = DateUtil.getDateFromString(info.get("feeYear").toString() + "-" + info.get("feeMonth").toString() + "-01", DateUtil.DATE_FORMATE_STRING_B);
+                Calendar c = Calendar.getInstance();
+                c.setTime(tmpTime);
+                c.add(Calendar.MONTH, 1);
+                ReportFeeDetailDto feeDetailDto = new ReportFeeDetailDto();
+                feeDetailDto.setStartTime(DateUtil.getFormatTimeString(tmpTime, DateUtil.DATE_FORMATE_STRING_A));
+                feeDetailDto.setEndTime(DateUtil.getFormatTimeString(c.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+                feeDetailDto.setFeeId(info.get("feeId").toString());
+                double receivedAmount = reportFeeServiceDaoImpl.getFeeReceivedAmount(feeDetailDto);
+                reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
+                reportFeeMonthStatisticsPo.setStatisticsId(info.get("statisticsId").toString());
+                reportFeeMonthStatisticsPo.setReceivedAmount(receivedAmount + "");
+                reportFeeMonthStatisticsPo.setOweAmount("0");
+                reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
+            } catch (Exception e) {
+                logger.error("处理 缴费结束报表失败");
+            }
+        }
     }
 
     /**

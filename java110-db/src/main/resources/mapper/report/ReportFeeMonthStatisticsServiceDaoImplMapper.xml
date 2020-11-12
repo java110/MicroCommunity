@@ -1085,4 +1085,14 @@
         order by objCount desc
     </select>
 
+    <select id="queryFinishOweFee" parameterType="Map" resultType="Map">
+        select t.config_id configId, t.fee_id feeId,t.statistics_id statisticsId,t.fee_year feeYear,fee_month feeMonth
+        from report_fee_month_statistics t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.state = '2009001' and pf.community_id = #{communityId} and pf.status_cd = '0'
+        where t.owe_amount > 0
+        and t.status_cd = '0'
+        and t.community_id = #{communityId}
+    </select>
+
+
 </mapper>

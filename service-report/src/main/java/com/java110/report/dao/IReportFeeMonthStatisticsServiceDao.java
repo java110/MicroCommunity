@@ -202,4 +202,15 @@ public interface IReportFeeMonthStatisticsServiceDao {
     List<Map> queryOwePaymentCount(Map info) throws DAOException;
 
 
+    /**
+     * 查询 缴费已经结束 报表表还有欠费的数据
+     * 根据bId 查询费用月统计信息
+     *
+     * @param info bId 信息
+     * @return 费用月统计信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> queryFinishOweFee(Map info) throws DAOException;
+
+
 }

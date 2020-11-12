@@ -303,5 +303,13 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return businessReportFeeMonthStatisticsInfos;
     }
 
+    @Override
+    public List<Map> queryFinishOweFee(Map info) throws DAOException {
+        logger.debug("查询费用月统计信息 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFinishOweFee", info);
+
+        return businessReportFeeMonthStatisticsInfos;    }
+
 
 }

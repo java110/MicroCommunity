@@ -13,6 +13,7 @@ import com.java110.front.smo.payment.IGoodsToPaySMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,9 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
             return responseEntity;
         }
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
+        if(orderInfo.getInteger("code") != ResultVo.CODE_OK){
+            throw new IllegalArgumentException("下单失败："+orderInfo.getString("msg"));
+        }
         String orderId = orderInfo.getString("orderId");
         double money = Double.parseDouble(orderInfo.getString("payPrice"));
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
