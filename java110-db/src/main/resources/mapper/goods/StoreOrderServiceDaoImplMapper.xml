@@ -10,7 +10,7 @@
         insert into store_order(
         person_name,ext_order_id,order_id,total_price,pay_price,person_id,remark,o_id,state,freight_price
         ) values (
-        #{personName},#{extOrderId},#{orderId},#{totalPrice},#{payPrice},#{personId},#{remark},#{oId},#{state},#{freightPrice}
+        #{personName},#{extOrderId},#{orderId},#{totalPrice},#{payPrice},#{personId},#{remark},#{OId},#{state},#{freightPrice}
         )
     </insert>
 
