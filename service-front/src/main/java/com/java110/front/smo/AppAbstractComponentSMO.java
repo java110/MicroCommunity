@@ -59,6 +59,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), pd.getTransactionId());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        header.add("content-type", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
         //logger.debug("请求中心服务信息，{}", httpEntity);
         try {
