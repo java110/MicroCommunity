@@ -67,7 +67,7 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
      *                     cartId:"123",//没有写-1
      *                     productId:"产品ID",
      *                     valueId:"产品规格ID",
-     *                     cartNum:1,//购买数量
+     *                     goodsNum:1,//购买数量
      *                     storeId:"产品商户ID",
      *                     <p>
      *                     }
@@ -141,7 +141,7 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
         Assert.hasKeyAndValue(goods, "cartId", "未包含购物车ID");
         Assert.hasKeyAndValue(goods, "productId", "未包含商品");
         Assert.hasKeyAndValue(goods, "valueId", "未包含商品规格");
-        Assert.hasKeyAndValue(goods, "cartNum", "未包含商品数量");
+        Assert.hasKeyAndValue(goods, "goodsNum", "未包含商品数量");
         Assert.hasKeyAndValue(goods, "storeId", "未包含商户");
 
         int flag = 0;
@@ -167,7 +167,7 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
 
         StoreOrderCartPo storeOrderCartPo = new StoreOrderCartPo();
         storeOrderCartPo.setCartId(goods.getString("carId"));
-        storeOrderCartPo.setCartNum(goods.getString("cartNum"));
+        storeOrderCartPo.setCartNum(goods.getString("goodsNum"));
         storeOrderCartPo.setFreightPrice("0");
         storeOrderCartPo.setOrderId(storeOrderPo.getOrderId());
         storeOrderCartPo.setPayPrice(payPrice);
