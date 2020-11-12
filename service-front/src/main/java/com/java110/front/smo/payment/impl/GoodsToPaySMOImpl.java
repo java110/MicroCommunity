@@ -49,7 +49,7 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         Assert.jsonObjectHaveKey(paramIn, "addressId", "请求报文中未包含地址");
-        Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含用户ID");
+        Assert.jsonObjectHaveKey(paramIn, "personId", "请求报文中未包含用户ID");
 
         Assert.hasKey(paramIn, "goodsList", "未包含商品信息");
 
@@ -70,7 +70,7 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
 
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = ServiceConstant.SERVICE_API_URL + "/app/storeOrder/saveStoreOrder";
+        String url = ServiceConstant.SERVICE_API_URL + "/api/storeOrder/saveStoreOrder";
         responseEntity = super.callCenterService(restTemplate, pd, paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

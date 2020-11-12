@@ -131,7 +131,7 @@ public class GoodsToNotifySMOImpl implements IGoodsToNotifySMO {
         //查询用户ID
         JSONObject paramIn = new JSONObject();
         paramIn.put("orderId", outTradeNo);
-        String url = ServiceConstant.SERVICE_API_URL + "/app/storeOrder/updateStoreOrder";
+        String url = ServiceConstant.SERVICE_API_URL + "/api/storeOrder/updateStoreOrder";
         responseEntity = this.callCenterService(restTemplate, useId, paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
