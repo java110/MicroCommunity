@@ -159,14 +159,14 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
             DistributedLock.releaseDistributedLock(requestId, key);
         }
 
-        if (goods.getString("carId").startsWith("-")) {
-            goods.put("carId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_cartId));
+        if (goods.getString("cartId").startsWith("-")) {
+            goods.put("cartId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_cartId));
         }
 
         String payPrice = groupBuyProductSpecDto == null ? productSpecValueDto.getPrice() : groupBuyProductSpecDto.getGroupPrice();
 
         StoreOrderCartPo storeOrderCartPo = new StoreOrderCartPo();
-        storeOrderCartPo.setCartId(goods.getString("carId"));
+        storeOrderCartPo.setCartId(goods.getString("cartId"));
         storeOrderCartPo.setCartNum(goods.getString("goodsNum"));
         storeOrderCartPo.setFreightPrice("0");
         storeOrderCartPo.setOrderId(storeOrderPo.getOrderId());
