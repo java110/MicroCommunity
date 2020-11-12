@@ -78,9 +78,10 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
             return responseEntity;
         }
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
-        if(orderInfo.getInteger("code") != ResultVo.CODE_OK){
-            throw new IllegalArgumentException("下单失败："+orderInfo.getString("msg"));
+        if (orderInfo.getInteger("code") != ResultVo.CODE_OK) {
+            throw new IllegalArgumentException("下单失败：" + orderInfo.getString("msg"));
         }
+        orderInfo = orderInfo.getJSONObject("data");
         String orderId = orderInfo.getString("orderId");
         double money = Double.parseDouble(orderInfo.getString("payPrice"));
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
