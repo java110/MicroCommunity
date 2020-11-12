@@ -1092,6 +1092,7 @@
         where t.owe_amount > 0
         and t.status_cd = '0'
         and t.community_id = #{communityId}
+        limit 100
     </select>
 
 

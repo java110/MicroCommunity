@@ -73,7 +73,6 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         dealCarFee(reportFeeMonthStatisticsPo);
 
         //处理缴费结束的情况
-
         dealFinishFee(communityId);
     }
 
@@ -100,7 +99,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                 reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
             } catch (Exception e) {
-                logger.error("处理 缴费结束报表失败");
+                logger.error("处理 缴费结束报表失败", e);
             }
         }
     }
