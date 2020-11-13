@@ -1,9 +1,11 @@
 package com.java110.dto.storeOrderCart;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.product.ProductSpecDetailDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -33,11 +35,14 @@ public class StoreOrderCartDto extends PageDto implements Serializable {
     private String state;
     private String stateName;
     private String freightPrice;
+    private String specId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<ProductSpecDetailDto> productSpecDetails;
 
 
     public String getValueId() {
@@ -175,5 +180,21 @@ public class StoreOrderCartDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
+    }
+
+    public List<ProductSpecDetailDto> getProductSpecDetails() {
+        return productSpecDetails;
+    }
+
+    public void setProductSpecDetails(List<ProductSpecDetailDto> productSpecDetails) {
+        this.productSpecDetails = productSpecDetails;
     }
 }

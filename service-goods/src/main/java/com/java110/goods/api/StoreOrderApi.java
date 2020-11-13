@@ -311,6 +311,8 @@ public class StoreOrderApi {
     public ResponseEntity<String> queryStoreOrderCart(
             @RequestHeader(value = "store-id", required = false) String storeId,
             @RequestParam(value = "personId", required = false) String personId,
+            @RequestParam(value = "state", required = false) String state,
+            @RequestParam(value = "cartId", required = false) String cartId,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row) {
         StoreOrderCartDto storeOrderCartDto = new StoreOrderCartDto();
@@ -318,6 +320,8 @@ public class StoreOrderApi {
         storeOrderCartDto.setRow(row);
         storeOrderCartDto.setStoreId(storeId);
         storeOrderCartDto.setPersonId(personId);
+        storeOrderCartDto.setState(state);
+        storeOrderCartDto.setCartId(cartId);
         return getStoreOrderCartBMOImpl.get(storeOrderCartDto);
     }
 

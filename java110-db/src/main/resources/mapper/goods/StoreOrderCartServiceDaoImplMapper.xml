@@ -21,11 +21,12 @@
         orderId,t.cart_id,t.cart_id cartId,t.remark,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
         storeId,t.cart_num,t.cart_num cartNum,t.price,t.pay_price,t.pay_price payPrice,t.person_id,t.person_id
         personId,t.state,t.freight_price,t.freight_price freightPrice,p.prod_name prodName,so.person_name personName,
-        td.name stateName,t.create_time createTime
+        td.name stateName,t.create_time createTime,psv.spec_id specId
         from store_order_cart t
         left join store_order so on t.order_id = so.order_id
         left join t_dict td on t.state = td.status_cd and td.table_name = 'store_order_cart' and td.table_columns = 'state'
         left join product p on t.product_id = p.product_id and p.status_cd = '0'  and p.store_id = t.store_id
+        left join product_spec_value psv on p.product_id = psv.product_id and psv.store_id = p.store_id and t.value_id = psv.value_id and psv.status_cd = '0'
         where 1 =1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
