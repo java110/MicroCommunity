@@ -26,6 +26,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/payment/notify,");//微信支付通知
         exclusions.append("/app/payment/rentingNotify,");//微信支付通知
         exclusions.append("/app/payment/oweFeeNotify,");//欠费微信支付通知
+        exclusions.append("/goods/notify,");//商品购买通知
         exclusions.append("/app/loginWx,");// 登录跳过
         exclusions.append("/app/getWxPhoto,");// 登录跳过
         exclusions.append("/app/loginProperty,");// 物业APP登录跳过
