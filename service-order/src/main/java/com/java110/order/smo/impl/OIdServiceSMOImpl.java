@@ -212,6 +212,9 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
             String whereSql = " where 1=1 ";
             for (String key : keyValue.keySet()) {
                 sql += (key + "=" + keyValue.getString(key) + ",");
+                if ("''".equals(afterKeyValue.getString(key))) { //条件中不拼写 为空的结果
+                    continue;
+                }
                 whereSql += (" and " + key + " = " + afterKeyValue.getString(key));
             }
             if (sql.endsWith(",")) {
