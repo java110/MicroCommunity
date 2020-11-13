@@ -20,7 +20,7 @@
         select t.spec_id,t.spec_id specId,t.buy_count,t.buy_count buyCount,t.amount,t.product_id,t.product_id
         productId,t.group_id,t.group_id groupId,t.status_cd,t.status_cd statusCd,t.persion_id,t.persion_id
         persionId,t.batch_id,t.batch_id batchId,t.store_id,t.store_id storeId,t.persion_name,t.persion_name
-        persionName,t.group_price,t.group_price groupPrice,t.buy_id,t.buy_id buyId,t.state
+        persionName,t.group_price,t.group_price groupPrice,t.buy_id,t.buy_id buyId,t.state,gbp.group_prod_name groupProdName
         from group_buy t
         left join group_buy_product gbp on t.group_id = gbp.group_id and t.store_id = gbp.store_id and gbp.status_cd = '0'
         where 1 =1
