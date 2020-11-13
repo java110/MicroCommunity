@@ -19,7 +19,7 @@
     <select id="getStoreOrderInfo" parameterType="Map" resultType="Map">
         select t.person_name,t.person_name personName,t.ext_order_id,t.ext_order_id extOrderId,t.order_id,t.order_id
         orderId,t.total_price,t.total_price totalPrice,t.pay_price,t.pay_price payPrice,t.person_id,t.person_id
-        personId,t.remark,t.status_cd,t.o_id,t.o_id oId,t.state,t.freight_price,t.freight_price
+        personId,t.remark,t.o_id,t.o_id oId,t.state,t.freight_price,t.freight_price
         freightPrice
         from store_order t
         where 1 =1
