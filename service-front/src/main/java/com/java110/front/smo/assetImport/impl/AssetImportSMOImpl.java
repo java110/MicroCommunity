@@ -925,7 +925,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 owners.add(importOwner);
             } catch (Exception e) {
                 logger.error("第" + (osIndex + 1) + "行数据出现问题", e);
-                throw e;
+                throw new IllegalArgumentException("第" + (osIndex + 1) + "行数据出现问题"+e.getLocalizedMessage(),e);
             }
         }
     }
