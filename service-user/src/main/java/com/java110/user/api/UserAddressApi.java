@@ -107,6 +107,7 @@ public class UserAddressApi {
     @RequestMapping(value = "/queryUserAddress", method = RequestMethod.GET)
     public ResponseEntity<String> queryUserAddress(@RequestParam(value = "userId") String userId,
                                                    @RequestParam(value = "addressId", required = false) String addressId,
+                                                   @RequestParam(value="isDefault",required = false) String isDefault,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
         UserAddressDto userAddressDto = new UserAddressDto();
@@ -114,6 +115,7 @@ public class UserAddressApi {
         userAddressDto.setRow(row);
         userAddressDto.setUserId(userId);
         userAddressDto.setAddressId(addressId);
+        userAddressDto.setIsDefault(isDefault);
         return getUserAddressBMOImpl.get(userAddressDto);
     }
 }
