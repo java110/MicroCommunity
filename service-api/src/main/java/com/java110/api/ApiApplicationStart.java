@@ -33,7 +33,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
-
+import org.springframework.scheduling.annotation.EnableAsync;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -60,7 +60,7 @@ import java.nio.charset.Charset;
         "com.java110.api",
         "com.java110.core",
         "com.java110.config.properties.code",
-        })
+})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = ServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.api.listener"})
@@ -68,6 +68,7 @@ import java.nio.charset.Charset;
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableFeignClients(basePackages = {"com.java110.intf"})
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@EnableAsync
 public class ApiApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(ApiApplicationStart.class);
@@ -129,13 +130,13 @@ public class ApiApplicationStart {
 
 
     public static void main(String[] args) throws Exception {
-        try{
+        try {
             ApplicationContext context = SpringApplication.run(ApiApplicationStart.class, args);
 
             //服务启动加载
             ServiceStartInit.initSystemConfig(context);
-        }catch (Throwable e){
-            logger.error("系统启动失败",e);
+        } catch (Throwable e) {
+            logger.error("系统启动失败", e);
         }
     }
 

@@ -154,6 +154,7 @@ public class CommonConstant {
     public final static String HTTP_METHOD = "METHOD";
     public final static String HTTP_APP_ID = "app_id";
     public final static String HTTP_TRANSACTION_ID = "transaction_id";
+    public final static String HTTP_SRC_IP = "IP";
 
     public final static String HTTP_REQ_TIME = "req_time";
     public final static String HTTP_RES_TIME = "res_time";

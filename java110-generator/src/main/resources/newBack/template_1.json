@@ -1,42 +1,23 @@
 {
   "autoMove": true,
-  "id": "oaId",
-  "name": "storeOrderAddress",
-  "desc": "发货地址",
-  "shareParam": "orderId",
-  "shareColumn": "order_id",
-  "shareName": "goods",
-  "tableName": "store_order_address",
+  "id": "logId",
+  "name": "transactionLogMessage",
+  "desc": "交互日志",
+  "shareParam": "logId",
+  "shareColumn": "log_id",
+  "shareName": "common",
+  "tableName": "transaction_log_message",
   "param": {
-    "oaId": "oa_id",
-    "addressId": "address_id",
-    "orderId": "order_id",
-    "tel": "tel",
-    "areaCode": "area_code",
-    "address": "address",
-    "username": "username",
-    "statusCd": "status_cd"
+    "logId": "log_id",
+    "requestHeader": "request_header",
+    "responseHeader": "response_header",
+    "requestMessage": "request_message",
+    "responseMessage": "response_message"
   },
   "required": [
     {
-      "code": "orderId",
-      "msg": "订单不能为空"
-    },
-    {
-      "code": "areaCode",
-      "msg": "地区编码不能为空"
-    },
-    {
-      "code": "tel",
-      "msg": "手机号不能为空"
-    },
-    {
-      "code": "address",
-      "msg": "详细地址不能为空"
-    },
-    {
-      "code": "username",
-      "msg": "收货人不能为空"
+      "code": "logId",
+      "msg": "日志ID不能为空"
     }
   ]
 }
