@@ -93,7 +93,7 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
             appType = OwnerAppUserDto.APP_TYPE_APP;
         }
         Map tmpParamIn = new HashMap();
-        tmpParamIn.put("userId", pd.getUserId());
+        tmpParamIn.put("userId", paramIn.getString("personId"));
         tmpParamIn.put("appType", appType);
         responseEntity = super.getOwnerAppUser(pd, restTemplate, tmpParamIn);
         logger.debug("查询用户信息返回报文：" + responseEntity);
@@ -111,7 +111,9 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
         JSONObject realUserInfo = userResult.getJSONArray("data").getJSONObject(0);
         String openId = realUserInfo.getString("openId");
 
-        Map result = super.java110Payment(outRestTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"), orderId, money, openId, smallWeChatDto);
+        Map result = super.java110Payment(outRestTemplate, "商品购买",
+                paramIn.getString("tradeType"), orderId, money, openId,
+                smallWeChatDto, wechatAuthProperties.getGoodsNotifyUrl());
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
 
         return responseEntity;

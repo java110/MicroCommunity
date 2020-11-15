@@ -1,9 +1,11 @@
 package com.java110.dto.storeOrderCart;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.product.ProductSpecDetailDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -20,6 +22,7 @@ public class StoreOrderCartDto extends PageDto implements Serializable {
 
     private String valueId;
     private String productId;
+    private String prodName;
     private String orderId;
     private String cartId;
     private String remark;
@@ -28,13 +31,18 @@ public class StoreOrderCartDto extends PageDto implements Serializable {
     private String price;
     private String payPrice;
     private String personId;
+    private String personName;
     private String state;
+    private String stateName;
     private String freightPrice;
+    private String specId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<ProductSpecDetailDto> productSpecDetails;
 
 
     public String getValueId() {
@@ -148,5 +156,45 @@ public class StoreOrderCartDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getProdName() {
+        return prodName;
+    }
+
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
+    }
+
+    public List<ProductSpecDetailDto> getProductSpecDetails() {
+        return productSpecDetails;
+    }
+
+    public void setProductSpecDetails(List<ProductSpecDetailDto> productSpecDetails) {
+        this.productSpecDetails = productSpecDetails;
     }
 }

@@ -7,7 +7,6 @@ import com.java110.core.context.IPageData;
 import com.java110.entity.assetImport.*;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
-import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.*;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -894,35 +893,40 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
         ImportOwner importOwner = null;
         for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
-            Object[] os = oList.get(osIndex);
-            if (osIndex == 0) { // 第一行是 头部信息 直接跳过
-                continue;
-            }
-            if (StringUtil.isNullOrNone(os[0])) {
-                continue;
-            }
-            Assert.hasValue(os[0], "业主信息选项中" + (osIndex + 1) + "行业主编号为空");
-            Assert.hasValue(os[1], "业主信息选项中" + (osIndex + 1) + "行业主名称为空");
-            Assert.hasValue(os[2], "业主信息选项中" + (osIndex + 1) + "行业主性别为空");
-            String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
-            String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
+            try {
+                Object[] os = oList.get(osIndex);
+                if (osIndex == 0) { // 第一行是 头部信息 直接跳过
+                    continue;
+                }
+                if (StringUtil.isNullOrNone(os[0])) {
+                    continue;
+                }
+                Assert.hasValue(os[0], "业主信息选项中" + (osIndex + 1) + "行业主编号为空");
+                Assert.hasValue(os[1], "业主信息选项中" + (osIndex + 1) + "行业主名称为空");
+                Assert.hasValue(os[2], "业主信息选项中" + (osIndex + 1) + "行业主性别为空");
+                String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
+                String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
 
-            if (os[4].toString().length() > 11) {
-                throw new IllegalArgumentException(os[1].toString() + " 的手机号超过11位,请核实");
-            }
-            if (os[5].toString().length() > 18) {
-                throw new IllegalArgumentException(os[1].toString() + " 的身份证超过18位,请核实");
-            }
+                if (os[4].toString().length() > 11) {
+                    throw new IllegalArgumentException(os[1].toString() + " 的手机号超过11位,请核实");
+                }
+                if (os[5].toString().length() > 18) {
+                    throw new IllegalArgumentException(os[1].toString() + " 的身份证超过18位,请核实");
+                }
 
-            String age = StringUtil.isNullOrNone(os[3]) ? CommonUtil.getAgeByCertId(idCard) : os[3].toString();
-            importOwner = new ImportOwner();
-            importOwner.setOwnerNum(os[0].toString());
-            importOwner.setOwnerName(os[1].toString());
-            importOwner.setSex("男".equals(os[2].toString()) ? "0" : "1");
-            importOwner.setAge(Integer.parseInt(age));
-            importOwner.setTel(tel);
-            importOwner.setIdCard(idCard);
-            owners.add(importOwner);
+                String age = StringUtil.isNullOrNone(os[3]) ? CommonUtil.getAgeByCertId(idCard) : os[3].toString();
+                importOwner = new ImportOwner();
+                importOwner.setOwnerNum(os[0].toString());
+                importOwner.setOwnerName(os[1].toString());
+                importOwner.setSex("男".equals(os[2].toString()) ? "0" : "1");
+                importOwner.setAge(Integer.parseInt(age));
+                importOwner.setTel(tel);
+                importOwner.setIdCard(idCard);
+                owners.add(importOwner);
+            } catch (Exception e) {
+                logger.error("第" + (osIndex + 1) + "行数据出现问题", e);
+                throw new IllegalArgumentException("第" + (osIndex + 1) + "行数据出现问题"+e.getLocalizedMessage(),e);
+            }
         }
     }
 
