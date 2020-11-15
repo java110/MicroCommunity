@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -155,6 +154,13 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         String serviceCode = dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE);
 
         String logServiceCode = MappingCache.getValue(MappingCache.LOG_SERVICE_CODE);
+
+        //日志查询不记录
+        if ("/transactionLog/queryTransactionLog".equals(logServiceCode)
+                || "/transactionLog/queryTransactionLogMessage".equals(logServiceCode)
+        ) {
+            return;
+        }
 
         if (StringUtil.isEmpty(logServiceCode)) {
             return;
