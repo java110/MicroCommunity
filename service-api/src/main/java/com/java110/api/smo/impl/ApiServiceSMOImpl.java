@@ -156,8 +156,8 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         String logServiceCode = MappingCache.getValue(MappingCache.LOG_SERVICE_CODE);
 
         //日志查询不记录
-        if ("/transactionLog/queryTransactionLog".equals(logServiceCode)
-                || "/transactionLog/queryTransactionLogMessage".equals(logServiceCode)
+        if ("/transactionLog/queryTransactionLog".equals(serviceCode)
+                || "/transactionLog/queryTransactionLogMessage".equals(serviceCode)
         ) {
             return;
         }
