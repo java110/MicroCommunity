@@ -3,8 +3,6 @@ package com.java110.fee.bmo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
-import com.java110.dto.fee.BillDto;
-import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -28,8 +26,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class QueryOweFeeImpl implements IQueryOweFee {
@@ -77,7 +79,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             computeFeeSMOImpl.computeOweFee(tmpFeeDto);//计算欠费金额
 
             //如果金额为0 就排除
-            if (tmpFeeDto.getFeePrice() > 0) {
+            if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
                 tmpFeeDtos.add(tmpFeeDto);
             }
         }
@@ -397,11 +399,6 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     }
 
 
-
-
-
-
-
     /**
      * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
      * 比如：2011-02-02 到  2017-03-02
@@ -421,7 +418,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
         long t1 = from.getTimeInMillis();
         long t2 = to.getTimeInMillis();
-        double days = (t2 - t1) *1.00/ (24 * 60 * 60 * 1000);
+        double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
 
         BigDecimal tmpDays = new BigDecimal(days);
         BigDecimal monthDay = new BigDecimal(30);
