@@ -3,6 +3,7 @@ package com.java110.api.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
+import com.java110.api.smo.ISaveTransactionLogSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
@@ -13,10 +14,8 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.AppService;
 import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.intf.common.ITransactionLogInnerServiceSMO;
 import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.utils.cache.AppRouteCache;
-import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.KafkaConstant;
@@ -64,7 +63,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
     private RestTemplate outRestTemplate;
 
     @Autowired
-    private ITransactionLogInnerServiceSMO transactionLogInnerServiceSMOImpl;
+    private ISaveTransactionLogSMO saveTransactionLogSMOImpl;
 
 
     /**
@@ -181,7 +180,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         }
     }
 
-    @Async
+
     private void doSaveLog(ApiDataFlow dataFlow, Date startDate, Date endDate, String serviceCode, String reqJson, ResponseEntity<String> responseEntity) {
 
         TransactionLogPo transactionLogPo = new TransactionLogPo();
@@ -198,7 +197,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         transactionLogPo.setResponseHeader(responseEntity.getHeaders().toSingleValueMap().toString());
         transactionLogPo.setRequestMessage(reqJson);
         transactionLogPo.setResponseMessage(responseEntity.getBody());
-        transactionLogInnerServiceSMOImpl.saveTransactionLog(transactionLogPo);
+        saveTransactionLogSMOImpl.saveLog(transactionLogPo);
     }
 
 
