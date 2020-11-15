@@ -5,7 +5,9 @@ import com.java110.common.bmo.transactionLog.IDeleteTransactionLogBMO;
 import com.java110.common.bmo.transactionLog.IGetTransactionLogBMO;
 import com.java110.common.bmo.transactionLog.ISaveTransactionLogBMO;
 import com.java110.common.bmo.transactionLog.IUpdateTransactionLogBMO;
+import com.java110.common.bmo.transactionLogMessage.IGetTransactionLogMessageBMO;
 import com.java110.dto.transactionLog.TransactionLogDto;
+import com.java110.dto.transactionLogMessage.TransactionLogMessageDto;
 import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,6 +33,9 @@ public class TransactionLogApi {
     @Autowired
     private IGetTransactionLogBMO getTransactionLogBMOImpl;
 
+    @Autowired
+    private IGetTransactionLogMessageBMO getTransactionLogMessageBMOImpl;
+
     /**
      * 微信保存消息模板
      *
@@ -41,10 +46,7 @@ public class TransactionLogApi {
      */
     @RequestMapping(value = "/saveTransactionLog", method = RequestMethod.POST)
     public ResponseEntity<String> saveTransactionLog(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "serviceCode", "请求报文中未包含serviceCode");
-
-
         TransactionLogPo transactionLogPo = BeanConvertUtil.covertBean(reqJson, TransactionLogPo.class);
         return saveTransactionLogBMOImpl.save(transactionLogPo);
     }
@@ -97,12 +99,31 @@ public class TransactionLogApi {
      */
     @RequestMapping(value = "/queryTransactionLog", method = RequestMethod.GET)
     public ResponseEntity<String> queryTransactionLog(@RequestParam(value = "serviceCode", required = false) String serviceCode,
+                                                      @RequestParam(value = "appId", required = false) String appId,
+                                                      @RequestParam(value = "transactionId", required = false) String transactionId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         TransactionLogDto transactionLogDto = new TransactionLogDto();
         transactionLogDto.setPage(page);
         transactionLogDto.setRow(row);
         transactionLogDto.setServiceCode(serviceCode);
+        transactionLogDto.setAppId(appId);
+        transactionLogDto.setTransactionId(transactionId);
         return getTransactionLogBMOImpl.get(transactionLogDto);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param logId 日志ID
+     * @return
+     * @serviceCode /transactionLog/queryTransactionLogMessage
+     * @path /app/transactionLog/queryTransactionLogMessage
+     */
+    @RequestMapping(value = "/queryTransactionLogMessage", method = RequestMethod.GET)
+    public ResponseEntity<String> queryTransactionLogMessage(@RequestParam(value = "logId") String logId) {
+        TransactionLogMessageDto transactionLogMessageDto = new TransactionLogMessageDto();
+        transactionLogMessageDto.setLogId(logId);
+        return getTransactionLogMessageBMOImpl.get(transactionLogMessageDto);
     }
 }
