@@ -158,6 +158,8 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         //日志查询不记录
         if ("/transactionLog/queryTransactionLog".equals(serviceCode)
                 || "/transactionLog/queryTransactionLogMessage".equals(serviceCode)
+                || "file.getFile".equals(serviceCode)
+                || "file.getFileByObjId".equals(serviceCode)
         ) {
             return;
         }
