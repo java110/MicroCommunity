@@ -15,7 +15,8 @@ public class MappingCache extends BaseCache {
 
     //后缀 用来刷缓存时删除 所有以这个为后缀的数据
     public final static String _SUFFIX_MAPPING = "_SUFFIX_MAPPING";
-
+    //日志
+    public final static String LOG_SERVICE_CODE = "LOG_SERVICE_CODE";
     /**
      * 获取值
      *

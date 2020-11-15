@@ -14,8 +14,7 @@ public class CommonCache extends BaseCache {
     //支付默认回话
     public final static int PAY_DEFAULT_EXPIRE_TIME = 2 * 60 * 60;
 
-    //日志
-    public final static String LOG_SERVICE_CODE = "LOG_SERVICE_CODE";
+
 
     /**
      * 获取值(用户ID)

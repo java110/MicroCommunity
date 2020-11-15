@@ -155,7 +155,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         String serviceCode = dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE);
 
-        String logServiceCode = CommonCache.getValue(CommonCache.LOG_SERVICE_CODE);
+        String logServiceCode = MappingCache.getValue(MappingCache.LOG_SERVICE_CODE);
 
         if (StringUtil.isEmpty(logServiceCode)) {
             return;
