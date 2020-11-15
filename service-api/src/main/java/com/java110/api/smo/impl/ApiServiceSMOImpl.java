@@ -190,7 +190,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         transactionLogPo.setIp("");
         transactionLogPo.setServiceCode(serviceCode);
         transactionLogPo.setSrcIp(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SRC_IP));
-        transactionLogPo.setState(responseEntity.getStatusCode() != HttpStatus.OK ? "S" : "F");
+        transactionLogPo.setState(responseEntity.getStatusCode() != HttpStatus.OK ? "F" : "S");
         transactionLogPo.setTimestamp(dataFlow.getRequestTime());
         transactionLogPo.setUserId(dataFlow.getUserId());
         transactionLogPo.setTransactionId(dataFlow.getTransactionId());
