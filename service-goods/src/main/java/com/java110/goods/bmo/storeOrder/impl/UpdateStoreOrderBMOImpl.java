@@ -11,20 +11,22 @@ import com.java110.dto.storeCart.StoreCartDto;
 import com.java110.dto.storeOrder.StoreOrderDto;
 import com.java110.dto.storeOrderCart.StoreOrderCartDto;
 import com.java110.goods.bmo.storeOrder.IUpdateStoreOrderBMO;
-import com.java110.intf.goods.IStoreOrderCartInnerServiceSMO;
-import com.java110.intf.goods.IStoreOrderInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.goods.IGroupBuyInnerServiceSMO;
 import com.java110.intf.goods.IGroupBuyProductInnerServiceSMO;
 import com.java110.intf.goods.IProductSpecValueInnerServiceSMO;
 import com.java110.intf.goods.IStoreCartInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderCartEventInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderCartInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.groupBuy.GroupBuyPo;
 import com.java110.po.storeCart.StoreCartPo;
 import com.java110.po.storeOrder.StoreOrderPo;
 import com.java110.po.storeOrderCart.StoreOrderCartPo;
+import com.java110.po.storeOrderCartEvent.StoreOrderCartEventPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
@@ -62,6 +64,9 @@ public class UpdateStoreOrderBMOImpl implements IUpdateStoreOrderBMO {
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private IStoreOrderCartEventInnerServiceSMO storeOrderCartEventInnerServiceSMOImpl;
+
     /**
      * @param storeOrderPo
      * @return 订单服务能够接受的报文
@@ -98,6 +103,18 @@ public class UpdateStoreOrderBMOImpl implements IUpdateStoreOrderBMO {
         flag = storeOrderCartInnerServiceSMOImpl.updateStoreOrderCart(storeOrderCartPo);
         if (flag < 1) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存购物车失败");
+        }
+
+        StoreOrderCartEventPo storeOrderCartEventPo = new StoreOrderCartEventPo();
+        storeOrderCartEventPo.setCartId(storeOrderCartPo.getCartId());
+        storeOrderCartEventPo.setOrderId(storeOrderCartPo.getOrderId());
+        storeOrderCartEventPo.setEventId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_eventId));
+        storeOrderCartEventPo.setEventObjType("U");
+        storeOrderCartEventPo.setEventObjId(storeOrderPo.getPersonId());
+        storeOrderCartEventPo.setEventMsg("用户支付完成");
+        flag = storeOrderCartEventInnerServiceSMOImpl.saveStoreOrderCartEvent(storeOrderCartEventPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("保存购物车事件失败");
         }
 
 

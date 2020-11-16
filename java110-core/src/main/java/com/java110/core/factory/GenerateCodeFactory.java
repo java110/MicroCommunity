@@ -168,6 +168,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_orderId = "96";
     public static final String CODE_PREFIX_oaId = "97";
     public static final String CODE_PREFIX_logId = "10";
+    public static final String CODE_PREFIX_eventId = "11";
 
 
 

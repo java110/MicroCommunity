@@ -1,23 +1,24 @@
 {
   "autoMove": true,
-  "id": "logId",
-  "name": "transactionLogMessage",
-  "desc": "交互日志",
-  "shareParam": "logId",
-  "shareColumn": "log_id",
-  "shareName": "common",
-  "tableName": "transaction_log_message",
+  "id": "eventId",
+  "name": "storeOrderCartEvent",
+  "desc": "购物车事件",
+  "shareParam": "eventId",
+  "shareColumn": "event_id",
+  "shareName": "goods",
+  "tableName": "store_order_cart_event",
   "param": {
-    "logId": "log_id",
-    "requestHeader": "request_header",
-    "responseHeader": "response_header",
-    "requestMessage": "request_message",
-    "responseMessage": "response_message"
+    "eventId": "event_id",
+    "orderId": "order_id",
+    "cartId": "cart_id",
+    "eventObjType": "event_obj_type",
+    "eventObjId": "event_obj_id",
+    "eventMsg": "event_msg"
   },
   "required": [
     {
-      "code": "logId",
-      "msg": "日志ID不能为空"
+      "code": "orderId",
+      "msg": "订单ID不能为空"
     }
   ]
 }

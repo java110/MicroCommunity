@@ -11,18 +11,20 @@ import com.java110.dto.storeOrder.StoreOrderDto;
 import com.java110.dto.storeOrderCart.StoreOrderCartDto;
 import com.java110.dto.userAddress.UserAddressDto;
 import com.java110.goods.bmo.storeOrder.ISaveStoreOrderBMO;
-import com.java110.intf.goods.IStoreOrderAddressInnerServiceSMO;
-import com.java110.intf.goods.IStoreOrderCartInnerServiceSMO;
-import com.java110.intf.goods.IStoreOrderInnerServiceSMO;
-import com.java110.intf.user.IUserAddressInnerServiceSMO;
 import com.java110.intf.goods.IGroupBuyProductSpecInnerServiceSMO;
 import com.java110.intf.goods.IProductInnerServiceSMO;
 import com.java110.intf.goods.IProductSpecValueInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderAddressInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderCartEventInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderCartInnerServiceSMO;
+import com.java110.intf.goods.IStoreOrderInnerServiceSMO;
+import com.java110.intf.user.IUserAddressInnerServiceSMO;
 import com.java110.po.groupBuyProductSpec.GroupBuyProductSpecPo;
 import com.java110.po.productSpecValue.ProductSpecValuePo;
 import com.java110.po.storeOrder.StoreOrderPo;
 import com.java110.po.storeOrderAddress.StoreOrderAddressPo;
 import com.java110.po.storeOrderCart.StoreOrderCartPo;
+import com.java110.po.storeOrderCartEvent.StoreOrderCartEventPo;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -57,6 +59,9 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
 
     @Autowired
     private IStoreOrderAddressInnerServiceSMO storeOrderAddressInnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreOrderCartEventInnerServiceSMO storeOrderCartEventInnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -182,6 +187,20 @@ public class SaveStoreOrderBMOImpl implements ISaveStoreOrderBMO {
 
         if (flag < 1) {
             throw new IllegalArgumentException("保存购物车失败");
+        }
+
+        StoreOrderCartEventPo storeOrderCartEventPo = new StoreOrderCartEventPo();
+        storeOrderCartEventPo.setCartId(storeOrderCartPo.getCartId());
+        storeOrderCartEventPo.setOrderId(storeOrderCartPo.getOrderId());
+        storeOrderCartEventPo.setEventId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_eventId));
+        storeOrderCartEventPo.setEventObjType("U");
+        storeOrderCartEventPo.setEventObjId(storeOrderPo.getPersonId());
+        storeOrderCartEventPo.setEventMsg("用户下单");
+
+        flag = storeOrderCartEventInnerServiceSMOImpl.saveStoreOrderCartEvent(storeOrderCartEventPo);
+
+        if (flag < 1) {
+            throw new IllegalArgumentException("保存购物车事件失败");
         }
 
         BigDecimal orderPayPrice = new BigDecimal(Double.parseDouble(storeOrderPo.getPayPrice()));

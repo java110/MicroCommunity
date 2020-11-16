@@ -5,6 +5,7 @@ import com.java110.dto.storeCart.StoreCartDto;
 import com.java110.dto.storeOrder.StoreOrderDto;
 import com.java110.dto.storeOrderAddress.StoreOrderAddressDto;
 import com.java110.dto.storeOrderCart.StoreOrderCartDto;
+import com.java110.dto.storeOrderCartEvent.StoreOrderCartEventDto;
 import com.java110.goods.bmo.storeCart.IDeleteStoreCartBMO;
 import com.java110.goods.bmo.storeCart.IGetStoreCartBMO;
 import com.java110.goods.bmo.storeCart.ISaveStoreCartBMO;
@@ -21,6 +22,7 @@ import com.java110.goods.bmo.storeOrderCart.IDeleteStoreOrderCartBMO;
 import com.java110.goods.bmo.storeOrderCart.IGetStoreOrderCartBMO;
 import com.java110.goods.bmo.storeOrderCart.ISaveStoreOrderCartBMO;
 import com.java110.goods.bmo.storeOrderCart.IUpdateStoreOrderCartBMO;
+import com.java110.goods.bmo.storeOrderCartEvent.IGetStoreOrderCartEventBMO;
 import com.java110.po.storeCart.StoreCartPo;
 import com.java110.po.storeOrder.StoreOrderPo;
 import com.java110.po.storeOrderAddress.StoreOrderAddressPo;
@@ -29,7 +31,12 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 商户订单
@@ -81,6 +88,9 @@ public class StoreOrderApi {
 
     @Autowired
     private IGetStoreOrderAddressBMO getStoreOrderAddressBMOImpl;
+
+    @Autowired
+    private IGetStoreOrderCartEventBMO getStoreOrderCartEventBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -407,5 +417,26 @@ public class StoreOrderApi {
         storeOrderAddressDto.setRow(row);
         storeOrderAddressDto.setOrderId(orderId);
         return getStoreOrderAddressBMOImpl.get(storeOrderAddressDto);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param cartId 购物车ID
+     * @return
+     * @serviceCode /storeOrderCartEvent/queryStoreOrderCartEvent
+     * @path /app/storeOrderCartEvent/queryStoreOrderCartEvent
+     */
+    @RequestMapping(value = "/queryStoreOrderCartEvent", method = RequestMethod.GET)
+    public ResponseEntity<String> queryStoreOrderCartEvent(@RequestParam(value = "cartId") String cartId,
+                                                           @RequestParam(value = "orderId") String orderId,
+                                                           @RequestParam(value = "page") int page,
+                                                           @RequestParam(value = "row") int row) {
+        StoreOrderCartEventDto storeOrderCartEventDto = new StoreOrderCartEventDto();
+        storeOrderCartEventDto.setPage(page);
+        storeOrderCartEventDto.setRow(row);
+        storeOrderCartEventDto.setCartId(cartId);
+        storeOrderCartEventDto.setOrderId(orderId);
+        return getStoreOrderCartEventBMOImpl.get(storeOrderCartEventDto);
     }
 }
