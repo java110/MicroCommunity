@@ -63,34 +63,34 @@
     <logger name="org.springframework" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
-    <logger name="com.java110.api" level="DEBUG">
+    <logger name="com.java110.api" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
-    <logger name="com.java110.order" level="DEBUG">
+    <logger name="com.java110.order" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
     <!--myibatis log configure-->
-    <logger name="com.apache.ibatis" level="DEBUG">
+    <logger name="com.apache.ibatis" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
-    <logger name="org.mybatis" level="DEBUG">
+    <logger name="org.mybatis" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
-    <logger name="druid.sql.Statement" level="DEBUG">
+    <logger name="druid.sql.Statement" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
-    <logger name="druid.sql.ResultSet" level="DEBUG">
-        <appender-ref ref="STDOUT_FILE"/>
-    </logger>
-
-
-    <logger name="com.java110" level="DEBUG">
+    <logger name="druid.sql.ResultSet" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
-    <logger name="io.shardingsphere" level="DEBUG">
+
+    <logger name="com.java110" level="ERROR">
+        <appender-ref ref="STDOUT_FILE"/>
+    </logger>
+
+    <logger name="io.shardingsphere" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
