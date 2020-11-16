@@ -112,7 +112,7 @@ public class ListCommunitysListener extends AbstractServiceApiListener {
                 for (AreaDto tmpAreaDto : areaDtos) {
                     if (communityDataVo.getCityCode().equals(tmpAreaDto.getAreaCode())) {
                         communityDataVo.setCityName(tmpAreaDto.getProvName() + tmpAreaDto.getCityName() + tmpAreaDto.getAreaName());
-                        continue;
+                        break;
                     }
                     communityDataVo.setCityName("未知");
                 }
