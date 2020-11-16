@@ -424,8 +424,8 @@ public class StoreOrderApi {
      *
      * @param cartId 购物车ID
      * @return
-     * @serviceCode /storeOrderCartEvent/queryStoreOrderCartEvent
-     * @path /app/storeOrderCartEvent/queryStoreOrderCartEvent
+     * @serviceCode /storeOrder/queryStoreOrderCartEvent
+     * @path /app/storeOrder/queryStoreOrderCartEvent
      */
     @RequestMapping(value = "/queryStoreOrderCartEvent", method = RequestMethod.GET)
     public ResponseEntity<String> queryStoreOrderCartEvent(@RequestParam(value = "cartId") String cartId,
