@@ -16,4 +16,11 @@ public interface IUpdateStoreOrderCartBMO {
     ResponseEntity<String> update(StoreOrderCartPo storeOrderCartPo);
 
 
+    /**
+     * 发货 接口
+     * @param storeOrderCartPo 购物车信息
+     * @param userId 操作员工
+     * @return
+     */
+    ResponseEntity<String> sendOrderCart(StoreOrderCartPo storeOrderCartPo, String userId);
 }
