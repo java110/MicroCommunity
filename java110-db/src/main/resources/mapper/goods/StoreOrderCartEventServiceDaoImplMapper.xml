@@ -19,7 +19,7 @@
     <select id="getStoreOrderCartEventInfo" parameterType="Map" resultType="Map">
         select t.event_id,t.event_id eventId,t.event_msg,t.event_msg eventMsg,t.order_id,t.order_id
         orderId,t.cart_id,t.cart_id cartId,t.event_obj_type,t.event_obj_type eventObjType,t.event_obj_id,t.event_obj_id
-        eventObjId
+        eventObjId,t.create_time createTime
         from store_order_cart_event t
         where 1 =1
         <if test="eventId !=null and eventId != ''">

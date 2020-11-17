@@ -1,6 +1,7 @@
 package com.java110.dto.storeOrderCartEvent;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,11 @@ import java.util.Date;
 public class StoreOrderCartEventDto extends PageDto implements Serializable {
 
     private String eventId;
-private String eventMsg;
-private String orderId;
-private String cartId;
-private String eventObjType;
-private String eventObjId;
+    private String eventMsg;
+    private String orderId;
+    private String cartId;
+    private String eventObjType;
+    private String eventObjId;
 
 
     private Date createTime;
@@ -30,37 +31,48 @@ private String eventObjId;
     public String getEventId() {
         return eventId;
     }
-public void setEventId(String eventId) {
+
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
-public String getEventMsg() {
+
+    public String getEventMsg() {
         return eventMsg;
     }
-public void setEventMsg(String eventMsg) {
+
+    public void setEventMsg(String eventMsg) {
         this.eventMsg = eventMsg;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getCartId() {
+
+    public String getCartId() {
         return cartId;
     }
-public void setCartId(String cartId) {
+
+    public void setCartId(String cartId) {
         this.cartId = cartId;
     }
-public String getEventObjType() {
+
+    public String getEventObjType() {
         return eventObjType;
     }
-public void setEventObjType(String eventObjType) {
+
+    public void setEventObjType(String eventObjType) {
         this.eventObjType = eventObjType;
     }
-public String getEventObjId() {
+
+    public String getEventObjId() {
         return eventObjId;
     }
-public void setEventObjId(String eventObjId) {
+
+    public void setEventObjId(String eventObjId) {
         this.eventObjId = eventObjId;
     }
 
