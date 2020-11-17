@@ -1,24 +1,24 @@
 {
   "autoMove": true,
   "id": "eventId",
-  "name": "storeOrderCartEvent",
-  "desc": "购物车事件",
-  "shareParam": "eventId",
-  "shareColumn": "event_id",
+  "name": "storeOrderCartReturnEvent",
+  "desc": "退货事件",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
   "shareName": "goods",
-  "tableName": "store_order_cart_event",
+  "tableName": "store_order_cart_return_event",
   "param": {
     "eventId": "event_id",
-    "orderId": "order_id",
-    "cartId": "cart_id",
+    "returnId": "return_id",
+    "storeId": "store_id",
     "eventObjType": "event_obj_type",
     "eventObjId": "event_obj_id",
     "eventMsg": "event_msg"
   },
   "required": [
     {
-      "code": "orderId",
-      "msg": "订单ID不能为空"
+      "code": "returnId",
+      "msg": "退货ID不能为空"
     }
   ]
 }

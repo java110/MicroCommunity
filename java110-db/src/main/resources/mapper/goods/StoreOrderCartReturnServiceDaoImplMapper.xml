@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeOrderCartReturnServiceDaoImpl">
+
+
+    <!-- 保存购物车事件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreOrderCartReturnInfo" parameterType="Map">
+        insert into store_order_cart_return(
+        order_id,return_reason,return_pay_price,cart_id,return_id,person_id,state,store_id
+        ) values (
+        #{orderId},#{returnReason},#{returnPayPrice},#{cartId},#{returnId},#{personId},#{state},#{storeId}
+        )
+    </insert>
+
+
+    <!-- 查询购物车事件信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreOrderCartReturnInfo" parameterType="Map" resultType="Map">
+        select t.order_id,t.order_id orderId,t.return_reason,t.return_reason
+        returnReason,t.return_pay_price,t.return_pay_price returnPayPrice,t.cart_id,t.cart_id
+        cartId,t.return_id,t.return_id returnId,t.person_id,t.person_id personId,t.status_cd,t.status_cd
+        statusCd,t.state,t.store_id storeId
+        from store_order_cart_return t
+        where 1 =1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="returnReason !=null and returnReason != ''">
+            and t.return_reason= #{returnReason}
+        </if>
+        <if test="returnPayPrice !=null and returnPayPrice != ''">
+            and t.return_pay_price= #{returnPayPrice}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="returnId !=null and returnId != ''">
+            and t.return_id= #{returnId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改购物车事件信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreOrderCartReturnInfo" parameterType="Map">
+        update store_order_cart_return t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="returnReason !=null and returnReason != ''">
+            , t.return_reason= #{returnReason}
+        </if>
+        <if test="returnPayPrice !=null and returnPayPrice != ''">
+            , t.return_pay_price= #{returnPayPrice}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            , t.cart_id= #{cartId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        where 1=1
+        <if test="returnId !=null and returnId != ''">
+            and t.return_id= #{returnId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询购物车事件数量 add by wuxw 2018-07-03 -->
+    <select id="queryStoreOrderCartReturnsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from store_order_cart_return t
+        where 1 =1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="returnReason !=null and returnReason != ''">
+            and t.return_reason= #{returnReason}
+        </if>
+        <if test="returnPayPrice !=null and returnPayPrice != ''">
+            and t.return_pay_price= #{returnPayPrice}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="returnId !=null and returnId != ''">
+            and t.return_id= #{returnId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+
+    </select>
+
+</mapper>
