@@ -354,12 +354,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         }
-        //费用没有结束时直接返回
-        if (!FeeDto.STATE_FINISH.equals(tmpReportFeeDto.getState())) {
-            return;
-        }
 
-        //费用已经结束时将欠费全改为0
+
+        //将缴费 到期时间之前得欠费刷为0
         Date endTime = tmpReportFeeDto.getEndTime();
 
         Calendar calender = Calendar.getInstance();
@@ -417,7 +414,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, reportCarDto);
         BigDecimal feePriceDec = new BigDecimal(feePrice);
 
-        if (DateUtil.getCurrentDate().getTime() < tmpReportFeeDto.getConfigStartTime().getTime()) {
+        if (DateUtil.getCurrentDate().getTime() < tmpReportFeeDto.getStartTime().getTime()) {
             return 0.0;
         }
 
