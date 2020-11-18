@@ -354,8 +354,12 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         }
+        //费用没有结束时直接返回
+        if (!FeeDto.STATE_FINISH.equals(tmpReportFeeDto.getState())) {
+            return;
+        }
 
-
+        //费用已经结束时将欠费全改为0
         Date endTime = tmpReportFeeDto.getEndTime();
 
         Calendar calender = Calendar.getInstance();
