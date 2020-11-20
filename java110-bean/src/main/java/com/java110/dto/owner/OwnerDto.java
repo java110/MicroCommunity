@@ -1,6 +1,7 @@
 package com.java110.dto.owner;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.RoomDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -51,6 +52,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String userName;
 
     private List<OwnerAttrDto> ownerAttrDtos;
+
+    private List<RoomDto> rooms;
 
 
     private Date createTime;
@@ -274,5 +277,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setOwnerIds(String[] ownerIds) {
         this.ownerIds = ownerIds;
+    }
+
+    public List<RoomDto> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<RoomDto> rooms) {
+        this.rooms = rooms;
     }
 }
