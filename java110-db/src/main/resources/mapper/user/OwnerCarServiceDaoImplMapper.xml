@@ -161,9 +161,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
