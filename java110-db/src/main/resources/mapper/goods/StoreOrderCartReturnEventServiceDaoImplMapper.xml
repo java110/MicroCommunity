@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeOrderCartReturnEventServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存退货事件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreOrderCartReturnEventInfo" parameterType="Map">
+        insert into store_order_cart_return_event(
+event_id,event_msg,return_id,event_obj_type,event_obj_id,store_id
+) values (
+#{eventId},#{eventMsg},#{returnId},#{eventObjType},#{eventObjId},#{storeId}
+)
+    </insert>
+
+
+
+    <!-- 查询退货事件信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreOrderCartReturnEventInfo" parameterType="Map" resultType="Map">
+        select  t.event_id,t.event_id eventId,t.event_msg,t.event_msg eventMsg,t.return_id,t.return_id returnId,t.event_obj_type,t.event_obj_type eventObjType,t.event_obj_id,t.event_obj_id eventObjId,t.store_id,t.store_id storeId 
+from store_order_cart_return_event t 
+where 1 =1 
+<if test="eventId !=null and eventId != ''">
+   and t.event_id= #{eventId}
+</if> 
+<if test="eventMsg !=null and eventMsg != ''">
+   and t.event_msg= #{eventMsg}
+</if> 
+<if test="returnId !=null and returnId != ''">
+   and t.return_id= #{returnId}
+</if> 
+<if test="eventObjType !=null and eventObjType != ''">
+   and t.event_obj_type= #{eventObjType}
+</if> 
+<if test="eventObjId !=null and eventObjId != ''">
+   and t.event_obj_id= #{eventObjId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改退货事件信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreOrderCartReturnEventInfo" parameterType="Map">
+        update  store_order_cart_return_event t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="eventMsg !=null and eventMsg != ''">
+, t.event_msg= #{eventMsg}
+</if> 
+<if test="returnId !=null and returnId != ''">
+, t.return_id= #{returnId}
+</if> 
+<if test="eventObjType !=null and eventObjType != ''">
+, t.event_obj_type= #{eventObjType}
+</if> 
+<if test="eventObjId !=null and eventObjId != ''">
+, t.event_obj_id= #{eventObjId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+ where 1=1 <if test="eventId !=null and eventId != ''">
+and t.event_id= #{eventId}
+</if> 
+
+    </update>
+
+    <!-- 查询退货事件数量 add by wuxw 2018-07-03 -->
+     <select id="queryStoreOrderCartReturnEventsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from store_order_cart_return_event t 
+where 1 =1 
+<if test="eventId !=null and eventId != ''">
+   and t.event_id= #{eventId}
+</if> 
+<if test="eventMsg !=null and eventMsg != ''">
+   and t.event_msg= #{eventMsg}
+</if> 
+<if test="returnId !=null and returnId != ''">
+   and t.return_id= #{returnId}
+</if> 
+<if test="eventObjType !=null and eventObjType != ''">
+   and t.event_obj_type= #{eventObjType}
+</if> 
+<if test="eventObjId !=null and eventObjId != ''">
+   and t.event_obj_id= #{eventObjId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+
+
+     </select>
+
+</mapper>

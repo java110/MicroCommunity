@@ -19,6 +19,13 @@ public class StoreOrderCartDto extends PageDto implements Serializable {
 
     public static final String STATE_WAIT_BUY = "1001";//未购买
     public static final String STATE_WAIT_SEND = "2002";//待发货
+    public static final String STATE_SENDING = "3003";//待收货
+    public static final String STATE_WAIT_REPAIR = "4004";//待评价
+    public static final String STATE_REQ_RETURN = "5005";//申请退款
+    public static final String STATE_RETURN_SUCCESS = "6006";//退货成功
+    public static final String STATE_RETURN_MONEY = "7007";//已退款
+    public static final String STATE_FINISH = "8008";//已评价
+
 
     private String valueId;
     private String productId;

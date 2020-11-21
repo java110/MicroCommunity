@@ -292,6 +292,27 @@ public class StoreOrderApi {
     }
 
     /**
+     * 发货接口
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /storeOrder/sendStoreOrderCart
+     * @path /app/storeOrder/sendStoreOrderCart
+     */
+    @RequestMapping(value = "/sendStoreOrderCart", method = RequestMethod.POST)
+    public ResponseEntity<String> sendStoreOrderCart(
+            @RequestHeader(value = "user-id",required = false) String userId,
+            @RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "orderId", "请求报文中未包含orderId");
+        Assert.hasKeyAndValue(reqJson, "cartId", "cartId不能为空");
+
+
+        StoreOrderCartPo storeOrderCartPo = BeanConvertUtil.covertBean(reqJson, StoreOrderCartPo.class);
+        return updateStoreOrderCartBMOImpl.sendOrderCart(storeOrderCartPo,userId);
+    }
+
+    /**
      * 微信删除消息模板
      *
      * @param reqJson
