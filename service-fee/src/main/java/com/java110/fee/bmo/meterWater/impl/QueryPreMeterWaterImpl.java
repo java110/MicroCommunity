@@ -1,7 +1,10 @@
 package com.java110.fee.bmo.meterWater.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.meterWater.ImportExportMeterWaterDto;
 import com.java110.dto.meterWater.MeterWaterDto;
@@ -9,7 +12,11 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.fee.bmo.meterWater.IQueryPreMeterWater;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
+import com.java110.po.fee.PayFeePo;
+import com.java110.po.meterWater.MeterWaterPo;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -39,6 +46,9 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
 
     @Override
@@ -76,6 +86,95 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             importExportMeterWaterDtos.add(importExportMeterWaterDto);
         }
         return ResultVo.createResponseEntity(1, importExportMeterWaterDtos.size(), importExportMeterWaterDtos);
+    }
+
+    @Override
+    public ResponseEntity<String> importMeterWater(JSONObject reqJson) {
+        String communityId = reqJson.getString("communityId");
+        String storeId = reqJson.getString("storeId");
+        String configId = reqJson.getString("configId");
+        String userId = reqJson.getString("userId");
+        String feeTypeCd = reqJson.getString("feeTypeCd");
+        JSONArray importMeteWaterFees = reqJson.getJSONArray("importMeteWaterFees");
+        JSONObject meteWaterJson = null;
+        ImportExportMeterWaterDto importExportMeterWaterDto = null;
+
+        List<PayFeePo> fees = new ArrayList<>();
+        List<MeterWaterPo> meterWaterPos = new ArrayList<>();
+        for (int meteWaterIndex = 0; meteWaterIndex < importMeteWaterFees.size(); meteWaterIndex++) {
+            meteWaterJson = importMeteWaterFees.getJSONObject(meteWaterIndex);
+
+            importExportMeterWaterDto = BeanConvertUtil.covertBean(meteWaterJson, ImportExportMeterWaterDto.class);
+
+            dealImportExportMeterWater(importExportMeterWaterDto,
+                    communityId,
+                    storeId,
+                    configId,
+                    userId,
+                    feeTypeCd,
+                    fees,
+                    meterWaterPos
+            );
+        }
+
+        if (fees.size() < 1 || meterWaterPos.size() < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "批量抄表失败");
+        }
+
+        feeInnerServiceSMOImpl.saveFee(fees);
+
+        meterWaterInnerServiceSMOImpl.saveMeterWaters(meterWaterPos);
+        return ResultVo.success();
+    }
+
+    private void dealImportExportMeterWater(ImportExportMeterWaterDto importExportMeterWaterDto, String communityId,
+                                            String storeId, String configId, String userId, String feeTypeCd,
+                                            List<PayFeePo> fees, List<MeterWaterPo> meterWaterPos) {
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(communityId);
+        roomDto.setFloorNum(importExportMeterWaterDto.getFloorNum());
+        roomDto.setUnitNum(importExportMeterWaterDto.getUnitNum());
+        roomDto.setRoomNum(importExportMeterWaterDto.getRoomNum());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        Assert.listOnlyOne(roomDtos, "房屋未找到或找到多条" + importExportMeterWaterDto.getFloorNum() + "-" + importExportMeterWaterDto.getUnitNum() + "-" + importExportMeterWaterDto.getRoomNum());
+
+        if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(feeTypeCd)) {
+            importExportMeterWaterDto.setMeterType("1010");
+        } else {
+            importExportMeterWaterDto.setMeterType("2020");
+        }
+
+        PayFeePo payFeePo = new PayFeePo();
+        payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+        payFeePo.setIncomeObjId(storeId);
+        payFeePo.setAmount("-1");
+        payFeePo.setStartTime(importExportMeterWaterDto.getPreReadingTime());
+        payFeePo.setEndTime(importExportMeterWaterDto.getPreReadingTime());
+        payFeePo.setPayerObjId(roomDtos.get(0).getRoomId());
+        //payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
+        payFeePo.setState(FeeDto.STATE_DOING);
+        payFeePo.setUserId(userId);
+        payFeePo.setFeeTypeCd(feeTypeCd);
+        payFeePo.setConfigId(configId);
+        fees.add(payFeePo);
+
+        MeterWaterPo meterWaterPo = new MeterWaterPo();
+        meterWaterPo.setCommunityId(communityId);
+        meterWaterPo.setCurDegrees(importExportMeterWaterDto.getCurDegrees());
+        meterWaterPo.setCurReadingTime(importExportMeterWaterDto.getCurReadingTime());
+        meterWaterPo.setFeeId(payFeePo.getFeeId());
+        meterWaterPo.setMeterType(importExportMeterWaterDto.getMeterType());
+        meterWaterPo.setObjId(roomDtos.get(0).getRoomId());
+        meterWaterPo.setObjName(importExportMeterWaterDto.getFloorNum() + "栋" + importExportMeterWaterDto.getUnitNum() + "单元" + importExportMeterWaterDto.getRoomNum() + "室");
+        meterWaterPo.setObjType(MeterWaterDto.OBJ_TYPE_ROOM);
+        meterWaterPo.setPreDegrees(importExportMeterWaterDto.getPreDegrees());
+        meterWaterPo.setPreReadingTime(importExportMeterWaterDto.getPreReadingTime());
+        meterWaterPo.setWaterId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_waterId));
+        meterWaterPos.add(meterWaterPo);
     }
 
     private boolean freshFeeDtoParam(MeterWaterDto meterWaterDto, String roomNum) {

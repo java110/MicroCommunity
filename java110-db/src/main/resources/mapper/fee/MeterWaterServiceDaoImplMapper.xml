@@ -19,7 +19,8 @@
     <!-- 查询水电费信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessMeterWaterInfo" parameterType="Map" resultType="Map">
         select t.remark,t.cur_reading_time,t.cur_reading_time curReadingTime,t.water_id,t.water_id
-        waterId,t.cur_degrees,t.cur_degrees curDegrees,t.operate,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
+        waterId,t.cur_degrees,t.cur_degrees curDegrees,t.operate,t.meter_type,t.meter_type
+        meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
         objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
         communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName
         from business_meter_water t
@@ -269,5 +270,18 @@
 
 
     </select>
+
+
+    <!-- 批量插入费用 -->
+    <insert id="insertMeterWaters" parameterType="Map">
+        insert into meter_water
+        (remark,status_cd,cur_reading_time,water_id,cur_degrees,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,
+        community_id,obj_type,fee_id,obj_name)
+        VALUES
+        <foreach collection="meterWaterPos" item="item" separator=",">
+            (#{item.remark},'0',#{item.curReadingTime},#{item.waterId},#{item.curDegrees},#{item.meterType},#{item.preDegrees},
+            '-1',#{item.objId},#{item.preReadingTime},'-1',#{item.communityId},#{item.objType},#{item.feeId},#{item.objName})
+        </foreach>
+    </insert>
 
 </mapper>

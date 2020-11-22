@@ -2,6 +2,7 @@ package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.meterWater.MeterWaterDto;
+import com.java110.po.meterWater.MeterWaterPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,6 @@ public interface IMeterWaterInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param meterWaterDto 数据对象分享
      * @return MeterWaterDto 对象数据
      */
@@ -39,4 +39,14 @@ public interface IMeterWaterInnerServiceSMO {
      */
     @RequestMapping(value = "/queryMeterWatersCount", method = RequestMethod.POST)
     int queryMeterWatersCount(@RequestBody MeterWaterDto meterWaterDto);
+
+
+    /**
+     * <p>添加抄表对象</p>
+     *
+     * @param meterWaterPos 抄表对象
+     * @return MeterWaterDto 对象数据
+     */
+    @RequestMapping(value = "/saveMeterWaters", method = RequestMethod.POST)
+    int saveMeterWaters(@RequestBody List<MeterWaterPo> meterWaterPos);
 }

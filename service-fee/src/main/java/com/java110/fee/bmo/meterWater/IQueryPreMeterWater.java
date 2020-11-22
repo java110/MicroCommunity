@@ -1,5 +1,6 @@
 package com.java110.fee.bmo.meterWater;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.meterWater.MeterWaterDto;
 import org.springframework.http.ResponseEntity;
 
@@ -24,4 +25,13 @@ public interface IQueryPreMeterWater {
      * @return
      */
     ResponseEntity<String> queryExportRoomAndMeterWater(String communityId, String meterType);
+
+    /**
+     * 导入
+     *
+     * @param reqJson 请求报文
+     * @return
+     */
+    ResponseEntity<String> importMeterWater(JSONObject reqJson);
+
 }

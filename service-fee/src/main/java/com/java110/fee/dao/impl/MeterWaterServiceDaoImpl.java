@@ -125,5 +125,13 @@ public class MeterWaterServiceDaoImpl extends BaseServiceDao implements IMeterWa
         return Integer.parseInt(businessMeterWaterInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int insertMeterWaters(Map info) {
+
+        int saveFlag = sqlSessionTemplate.insert("meterWaterServiceDaoImpl.insertMeterWaters", info);
+
+        return saveFlag;
+    }
+
 
 }
