@@ -2,12 +2,16 @@ package com.java110.fee.bmo.meterWater.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.meterWater.ImportExportMeterWaterDto;
 import com.java110.dto.meterWater.MeterWaterDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.fee.bmo.meterWater.IQueryPreMeterWater;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -16,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +51,31 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         List<MeterWaterDto> meterWaterDtos = meterWaterInnerServiceSMOImpl.queryMeterWaters(meterWaterDto);
         int total = meterWaterDtos == null ? 0 : meterWaterDtos.size();
         return ResultVo.createResponseEntity(1, total, meterWaterDtos);
+    }
+
+    @Override
+    public ResponseEntity<String> queryExportRoomAndMeterWater(String communityId, String meterType) {
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(communityId);
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        MeterWaterDto meterWaterDto = null;
+        List<ImportExportMeterWaterDto> importExportMeterWaterDtos = new ArrayList<>();
+        ImportExportMeterWaterDto importExportMeterWaterDto = null;
+        for (RoomDto tmpRoomDto : roomDtos) {
+            meterWaterDto = new MeterWaterDto();
+            meterWaterDto.setMeterType(meterType);
+            meterWaterDto.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            List<MeterWaterDto> meterWaterDtos = meterWaterInnerServiceSMOImpl.queryMeterWaters(meterWaterDto);
+            importExportMeterWaterDto = BeanConvertUtil.covertBean(tmpRoomDto, ImportExportMeterWaterDto.class);
+            String preDegree = meterWaterDtos == null ? "0" : meterWaterDtos.get(0).getCurDegrees();
+            String preReadTime = meterWaterDtos == null ? DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A)
+                    : meterWaterDtos.get(0).getCurReadingTime();
+
+            importExportMeterWaterDto.setPreDegrees(preDegree);
+            importExportMeterWaterDto.setPreReadingTime(preReadTime);
+            importExportMeterWaterDtos.add(importExportMeterWaterDto);
+        }
+        return ResultVo.createResponseEntity(1, importExportMeterWaterDtos.size(), importExportMeterWaterDtos);
     }
 
     private boolean freshFeeDtoParam(MeterWaterDto meterWaterDto, String roomNum) {

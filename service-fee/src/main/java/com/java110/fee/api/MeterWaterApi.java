@@ -30,8 +30,8 @@ public class MeterWaterApi {
     public ResponseEntity<String> queryPreMeterWater(@RequestParam(value = "communityId") String communityId,
                                                      @RequestParam(value = "objId") String objId,
                                                      @RequestParam(value = "objType") String objType,
-                                                     @RequestParam(value = "roomNum" ,required = false) String roomNum,
-                                                     @RequestParam(value = "meterType",required = false) String meterType) {
+                                                     @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                     @RequestParam(value = "meterType", required = false) String meterType) {
         MeterWaterDto meterWaterDto = new MeterWaterDto();
         meterWaterDto.setObjId(objId);
         meterWaterDto.setObjType(objType);
@@ -39,6 +39,20 @@ public class MeterWaterApi {
         meterWaterDto.setRow(1);
         meterWaterDto.setCommunityId(communityId);
         meterWaterDto.setMeterType(meterType);
-        return queryPreMeterWaterImpl.query(meterWaterDto,roomNum);
+        return queryPreMeterWaterImpl.query(meterWaterDto, roomNum);
+    }
+
+    /**
+     * 查询 导出模板数据
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /meterWater/queryExportRoomAndMeterWater
+     * @path /app/meterWater/queryExportRoomAndMeterWater
+     */
+    @RequestMapping(value = "/queryExportRoomAndMeterWater", method = RequestMethod.GET)
+    public ResponseEntity<String> queryExportRoomAndMeterWater(@RequestParam(value = "communityId") String communityId,
+                                                               @RequestParam(value = "meterType") String meterType) {
+        return  queryPreMeterWaterImpl.queryExportRoomAndMeterWater(communityId,meterType);
     }
 }
