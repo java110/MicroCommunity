@@ -58,19 +58,19 @@ public class MeterWaterApi {
     /**
      * 导入水电抄表
      *
-     * @param reqJson 请求报文
+     * @param reqString 请求报文
      * @return
      * @serviceCode /meterWater/importMeterWater
      * @path /app/meterWater/importMeterWater
      */
     @RequestMapping(value = "/importMeterWater", method = RequestMethod.POST)
-    public ResponseEntity<String> importMeterWater(@RequestBody String reqJson) {
-
+    public ResponseEntity<String> importMeterWater(@RequestBody String reqString) {
+        JSONObject reqJson = JSONObject.parseObject(reqString);
         Assert.hasKeyAndValue(reqJson, "communityId", "请求信息中未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "configId", "请求信息中未包含费用项");
         Assert.hasKeyAndValue(reqJson, "storeId", "请求信息中未包含商户信息");
         Assert.hasKeyAndValue(reqJson, "feeTypeCd", "请求信息中未包含费用类型");
-        return queryPreMeterWaterImpl.importMeterWater(JSONObject.parseObject(reqJson));
+        return queryPreMeterWaterImpl.importMeterWater(reqJson);
     }
 
 

@@ -4,6 +4,7 @@ import com.java110.core.context.IPageData;
 import com.java110.front.controller.CallComponentController;
 import com.java110.front.smo.assetExport.IExportMeterWaterSMO;
 import com.java110.front.smo.assetExport.IExportRoomSMO;
+import com.java110.front.smo.assetImport.IImportMeterWaterFeeSMO;
 import com.java110.front.smo.assetImport.IImportRoomFeeSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class ImportMeterWaterFeeComponent {
 
 
     @Autowired
-    private IImportRoomFeeSMO importRoomFeeSMOImpl;
+    private IImportMeterWaterFeeSMO importMeterWaterFeeSMOImpl;
 
     @Autowired
     private IExportMeterWaterSMO exportMeterWaterSMOImpl;
@@ -35,7 +36,7 @@ public class ImportMeterWaterFeeComponent {
      */
     public ResponseEntity<String> importData(IPageData pd, MultipartFile uploadFile) throws Exception {
 
-        return importRoomFeeSMOImpl.importExcelData(pd, uploadFile);
+        return importMeterWaterFeeSMOImpl.importExcelData(pd, uploadFile);
     }
 
     /**
