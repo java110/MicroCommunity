@@ -102,6 +102,8 @@
         LEFT JOIN u_user uu ON co.user_id = uu.user_id
         WHERE
         t.status_cd = '0'
+        AND t.obj_type = '3333'
+        AND p.state='1400'
         AND tt.status_cd = '0'
         AND b.status_cd = '0'
         AND borr.status_cd = '0'
@@ -162,6 +164,7 @@
         LEFT JOIN u_user uu ON co.user_id = uu.user_id
         WHERE
         t.obj_type = '6666'
+        AND p.state='1400'
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
