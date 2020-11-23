@@ -21,6 +21,8 @@ public class CommunityPo implements Serializable {
     private String mapY;
     private String state;
 
+    private String communityArea;
+
     public String getCommunityId() {
         return communityId;
     }
@@ -83,5 +85,13 @@ public class CommunityPo implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getCommunityArea() {
+        return communityArea;
+    }
+
+    public void setCommunityArea(String communityArea) {
+        this.communityArea = communityArea;
     }
 }

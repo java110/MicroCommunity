@@ -6,8 +6,10 @@
     
     <!-- 保存小区信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityInfo" parameterType="Map">
-        insert into business_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,month,state,operate)
-        values(#{communityId},#{bId},#{name},#{address},#{cityCode},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate})
+        insert into business_community(community_id,b_id,name,address,city_code,
+        nearby_landmarks,map_x,map_y,month,state,operate,community_area)
+        values(#{communityId},#{bId},#{name},#{address},#{cityCode},
+        #{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate},#{communityArea})
     </insert>
     <!-- 保存小区属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityAttr" parameterType="Map">
@@ -23,7 +25,8 @@
 
     <!-- 查询小区信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCommunityInfo" parameterType="Map" resultType="Map">
-        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.operate,s.state
+        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,
+        s.map_x,s.map_y,s.operate,s.state,s.community_area communityArea,s.community_area
         from business_community s where 1 = 1
         <if test="operate != null and operate != ''">
             and s.operate = #{operate}
@@ -73,8 +76,8 @@
 
     <!-- 保存小区信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityInfoInstance" parameterType="Map">
-        insert into s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd,state)
-        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0',#{state})
+        insert into s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd,state,community_area)
+        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0',#{state},#{communityArea})
     </insert>
 
     <!-- 保存小区属性信息到 instance add by wuxw 2018-07-03 -->
@@ -183,6 +186,10 @@
         <if test="state != null and state != ''">
             ,s.state = #{state}
         </if>
+        <if test="communityArea != null and communityArea != ''">
+            ,s.community_area = #{communityArea}
+        </if>
+
         where 1=1
         <if test="bId != null and bId !=''">
             and s.b_id = #{bId}
@@ -446,7 +453,8 @@
         ELSE
         '审核拒绝'
         END) stateName,ca.area_code areaCode,ca.area_name areaName,
-        ca.parent_area_code parentAreaCode,ca.parent_area_name parentAreaName
+        ca.parent_area_code parentAreaCode,ca.parent_area_name parentAreaName,
+        t.community_area communityArea
         from s_community t,city_area ca
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
