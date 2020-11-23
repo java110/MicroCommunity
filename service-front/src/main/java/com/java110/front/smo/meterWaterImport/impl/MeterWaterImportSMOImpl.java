@@ -38,7 +38,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/9/23
  **/
-@Service("feeImportSMOImpl")
+@Service("meterWaterImportSMOImpl")
 public class MeterWaterImportSMOImpl extends BaseComponentSMO implements IMeterWaterImportSMO {
     private final static Logger logger = LoggerFactory.getLogger(MeterWaterImportSMOImpl.class);
 

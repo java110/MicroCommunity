@@ -135,7 +135,17 @@ public class ImportMeterWaterFeeSMOImpl extends BaseComponentSMO implements IImp
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/meterWater/importMeterWater";
 
-        this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException(responseEntity.getBody());
+        }
+
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        if (ResultVo.CODE_OK != paramOut.getInteger("code")) {
+            throw new IllegalArgumentException(paramOut.getString("msg"));
+        }
+
     }
 
 
@@ -179,8 +189,8 @@ public class ImportMeterWaterFeeSMOImpl extends BaseComponentSMO implements IImp
             importRoomFee.setRoomNum(os[2].toString());
             importRoomFee.setPreDegrees(os[3].toString());
             importRoomFee.setPreReadingTime(startTime);
-            importRoomFee.setCurDegrees(endTime);
-            importRoomFee.setCurReadingTime(os[6].toString());
+            importRoomFee.setCurDegrees(os[5].toString());
+            importRoomFee.setCurReadingTime(endTime);
             rooms.add(importRoomFee);
         }
     }
