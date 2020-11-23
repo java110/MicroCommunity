@@ -305,6 +305,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
                 .replace("F", roomDto.getFloorArea() + "<" + roomDto.getFloorNum() + "栋面积>")
                 .replace("U", roomDto.getUnitArea() + "<" + roomDto.getUnitNum() + "单元面积>")
                 .replace("R", roomDto.getBuiltUpArea() + "<" + roomDto.getRoomNum() + "室面积>")
+                .replace("C", communityDto.getCommunityArea() + "<小区面积>")
                 .replace("X", roomDto.getFeeCoefficient() + "<" + roomDto.getRoomNum() + "室算费系数>");
 
         formulaValueRemark += (" * " + price + "<单价>");
