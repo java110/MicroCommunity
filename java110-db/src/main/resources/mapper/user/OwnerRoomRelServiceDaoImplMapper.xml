@@ -6,12 +6,12 @@
 
     <!-- 保存业主房屋信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerRoomRelInfo" parameterType="Map">
-           insert into business_building_owner_room_rel(
-rel_id,operate,remark,state,owner_id,b_id,user_id,room_id
-) values (
-#{relId},#{operate},#{remark},#{state},#{ownerId},#{bId},#{userId},#{roomId}
-)
-       </insert>
+        insert into business_building_owner_room_rel(
+        rel_id,operate,remark,state,owner_id,b_id,user_id,room_id
+        ) values (
+        #{relId},#{operate},#{remark},#{state},#{ownerId},#{bId},#{userId},#{roomId}
+        )
+    </insert>
 
 
     <!-- 查询业主房屋信息（Business） add by wuxw 2018-07-03 -->
@@ -93,7 +93,7 @@ rel_id,operate,remark,state,owner_id,b_id,user_id,room_id
         </if>
         where 1 =1
         <if test="byOwnerInfo == true">
-           and t.owner_id = bow.owner_id
+            and t.owner_id = bow.owner_id
             and bow.status_cd = '0'
         </if>
         <if test="byOwnerInfo == true and ownerName !=null and ownerName != ''">
@@ -123,9 +123,7 @@ rel_id,operate,remark,state,owner_id,b_id,user_id,room_id
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
