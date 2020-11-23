@@ -85,7 +85,8 @@
         tt.cycle as cycle,
         tt.amount amount,
         uu.NAME AS userName,
-        t.create_time AS createTime
+        t.create_time AS createTime,
+        p.remark  as remark
         FROM
         fee_receipt t
         LEFT JOIN fee_receipt_detail tt ON t.receipt_id = tt.receipt_id
@@ -137,7 +138,8 @@
         tt.cycle as cycle,
         tt.amount amount,
         uu.NAME AS userName,
-        t.create_time AS createTime
+        t.create_time AS createTime,
+        p.remark as remark
         FROM
         fee_receipt t
         LEFT JOIN fee_receipt_detail tt ON t.receipt_id = tt.receipt_id
@@ -184,8 +186,11 @@
         <if test="type !=null and type == 5">
             AND  feeName in ('公共区域公摊电费','生活水泵公摊电费','走廊楼道应急公摊电费','电梯公摊电费')
         </if>
-        <if test="month !=null and month != ''">
-            AND DATE_FORMAT(t.createTime, '%Y-%m') = #{month}
+        <if test="qstartTime !=null and qstartTime != ''">
+            AND DATE_FORMAT(t.createTime, '%Y-%m-%d') &gt;= DATE_FORMAT( #{qstartTime}, '%Y-%m-%d' )
+        </if>
+        <if test="qendTime !=null and qendTime != ''">
+            AND DATE_FORMAT(t.createTime, '%Y-%m-%d') &lt;= DATE_FORMAT( #{qendTime}, '%Y-%m-%d' )
         </if>
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}

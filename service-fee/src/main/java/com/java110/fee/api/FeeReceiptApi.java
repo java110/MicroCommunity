@@ -140,19 +140,21 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceiptNew", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceiptNew(@RequestParam(value = "communityId") String communityId,
-                                                     @RequestParam(value = "objType",required = false) String objType,
-                                                     @RequestParam(value = "roomName",required = false) String roomName,
-                                                     @RequestParam(value = "type",required = false) String type,
-                                                     @RequestParam(value = "month",required = false) String month,
+                                                  @RequestParam(value = "objType",required = false) String objType,
+                                                  @RequestParam(value = "roomName",required = false) String roomName,
+                                                  @RequestParam(value = "type",required = false) String type,
+                                                     @RequestParam(value = "qstartTime",required = false) String qstartTime,
+                                                     @RequestParam(value = "qendTime",required = false) String qendTime,
                                                      @RequestParam(value = "page") int page,
-                                                     @RequestParam(value = "row") int row
+                                                  @RequestParam(value = "row") int row
     ) {
         FeeReceiptDtoNew feeReceiptDto = new FeeReceiptDtoNew();
         feeReceiptDto.setPage(page);
         feeReceiptDto.setRow(row);
         feeReceiptDto.setCommunityId(communityId);
         feeReceiptDto.setType(type);
-        feeReceiptDto.setMonth(month);
+        feeReceiptDto.setQstartTime(qstartTime);
+        feeReceiptDto.setQendTime(qendTime);
         feeReceiptDto.setObjType(objType);
         feeReceiptDto.setObjName(roomName   );
         return getFeeReceiptBMOImpl.gets(feeReceiptDto);

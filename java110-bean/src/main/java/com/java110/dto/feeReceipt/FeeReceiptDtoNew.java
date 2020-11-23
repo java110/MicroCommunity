@@ -33,15 +33,31 @@ public class FeeReceiptDtoNew extends PageDto implements Serializable {
     private String month;
     private String type;
     private String carNum;
+    private String qstartTime; //给公摊费使用的时间
+    private String qendTime;   //给公摊费使用的时间
     private String startTime; //给公摊费使用的时间
     private String endTime;   //给公摊费使用的时间
     private String cycle;   //给公摊费使用的数量
 
-
-
     private Date createTime;
 
     private String statusCd = "0";
+
+    public String getQstartTime() {
+        return qstartTime;
+    }
+
+    public void setQstartTime(String qstartTime) {
+        this.qstartTime = qstartTime;
+    }
+
+    public String getQendTime() {
+        return qendTime;
+    }
+
+    public void setQendTime(String qendTime) {
+        this.qendTime = qendTime;
+    }
 
     public String getCycle() {
         return cycle;
