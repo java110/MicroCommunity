@@ -160,6 +160,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         payFeePo.setUserId(userId);
         payFeePo.setFeeTypeCd(feeTypeCd);
         payFeePo.setConfigId(configId);
+        payFeePo.setCommunityId(communityId);
         fees.add(payFeePo);
 
         MeterWaterPo meterWaterPo = new MeterWaterPo();
@@ -174,6 +175,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         meterWaterPo.setPreDegrees(importExportMeterWaterDto.getPreDegrees());
         meterWaterPo.setPreReadingTime(importExportMeterWaterDto.getPreReadingTime());
         meterWaterPo.setWaterId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_waterId));
+        meterWaterPo.setRemark(importExportMeterWaterDto.getRemark());
         meterWaterPos.add(meterWaterPo);
     }
 

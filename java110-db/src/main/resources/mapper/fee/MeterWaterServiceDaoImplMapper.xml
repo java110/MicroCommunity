@@ -280,7 +280,7 @@
         VALUES
         <foreach collection="meterWaterPos" item="item" separator=",">
             (#{item.remark},'0',#{item.curReadingTime},#{item.waterId},#{item.curDegrees},#{item.meterType},#{item.preDegrees},
-            '-1',#{item.objId},#{item.preReadingTime},'-1',#{item.communityId},#{item.objType},#{item.feeId},#{item.objName})
+            #{item.objId},#{item.preReadingTime},'-1',#{item.communityId},#{item.objType},#{item.feeId},#{item.objName})
         </foreach>
     </insert>
 
