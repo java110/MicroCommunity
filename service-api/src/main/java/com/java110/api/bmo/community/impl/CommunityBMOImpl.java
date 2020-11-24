@@ -6,14 +6,21 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.community.CommunityPo;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.*;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.CommunityMemberTypeConstant;
+import com.java110.utils.constant.FeeTypeConstant;
+import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.StateConstant;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -483,6 +490,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
         paramInJson.put("communityId", GenerateCodeFactory.getCommunityId());
         paramInJson.put("state", "1000");
+        paramInJson.put("communityArea", "0");
         CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
         super.insert(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
 
@@ -496,7 +504,6 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @return 订单服务能够接受的报文
      */
     public void updateCommunityOne(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
 
         CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
 

@@ -4,14 +4,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeFormula.FeeFormulaDto;
 import com.java110.fee.bmo.importFee.IFeeSharingBMO;
-import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.*;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeFormulaInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeePo;
@@ -59,6 +65,9 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
     @Autowired
     private IImportFeeDetailInnerServiceSMO importFeeDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -69,12 +78,18 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
     public ResponseEntity<String> share(JSONObject reqJson) {
 
 
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(reqJson.getString("communityId"));
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        Assert.listOnlyOne(communityDtos, "未找到小区信息");
+
         String scope = reqJson.getString("scope");
         RoomDto roomDto = new RoomDto();
-        if(reqJson.containsKey("roomState") && reqJson.getString("roomState").split(",").length > 0){
+        if (reqJson.containsKey("roomState") && reqJson.getString("roomState").split(",").length > 0) {
             String[] states = reqJson.getString("roomState").split(",");
             roomDto.setStates(states);
-        }else{
+        } else {
             roomDto.setState(RoomDto.STATE_SELL); // 已经入住
         }
         List<RoomDto> roomDtos = null;
@@ -120,7 +135,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         String formulaValue = deakFormula(feeFormulaDtos.get(0));
 
         //公摊费用到房屋
-        sharingFeeToRoom(formulaValue, Double.parseDouble(feeFormulaDtos.get(0).getPrice()), roomDtos, reqJson, feeConfigDto);
+        sharingFeeToRoom(formulaValue, Double.parseDouble(feeFormulaDtos.get(0).getPrice()), roomDtos, reqJson, feeConfigDto, communityDtos.get(0));
 
 
         return ResultVo.success();
@@ -133,7 +148,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
      * @param roomDtos
      */
     private void sharingFeeToRoom(String formulaValue, double price, List<RoomDto> roomDtos,
-                                  JSONObject reqJson, FeeConfigDto feeConfigDto) {
+                                  JSONObject reqJson, FeeConfigDto feeConfigDto, CommunityDto communityDto) {
 
 
         List<PayFeePo> payFeePos = new ArrayList<>();
@@ -143,7 +158,8 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         Map<String, Integer> floorRooms = new HashMap();
         Map<String, Integer> unitRooms = new HashMap();
         for (RoomDto roomDto : roomDtos) {
-            doSharingFeeToRoom(formulaValue, price, roomDto, reqJson, payFeePos, feeConfigDto, feeAttrPos, importFeeId, importFeeDetailPos, floorRooms, unitRooms);
+            doSharingFeeToRoom(formulaValue, price, roomDto, reqJson, payFeePos, feeConfigDto, feeAttrPos,
+                    importFeeId, importFeeDetailPos, floorRooms, unitRooms, communityDto);
         }
 
         feeInnerServiceSMOImpl.saveFee(payFeePos);
@@ -190,7 +206,8 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
                                     List<FeeAttrPo> feeAttrPos, String importFeeId,
                                     List<ImportFeeDetailPo> importFeeDetailPos,
                                     Map<String, Integer> floorRooms,
-                                    Map<String, Integer> unitRooms) {
+                                    Map<String, Integer> unitRooms,
+                                    CommunityDto communityDto) {
 
         if (!floorRooms.containsKey(roomDto.getFloorId())) {
             RoomDto tmpRoomDto = new RoomDto();
@@ -213,6 +230,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         long floorRoomCount = floorRooms.get(roomDto.getFloorId());
         long unitRoomCount = unitRooms.get(roomDto.getUnitId());
 
+
         String orgFormulaValue = formulaValue;
         formulaValue = formulaValue.replace("T", reqJson.getString("totalDegrees"))
                 .replace("F", roomDto.getFloorArea())
@@ -220,7 +238,8 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
                 .replace("R", roomDto.getBuiltUpArea())
                 .replace("X", roomDto.getFeeCoefficient())
                 .replace("L", floorRoomCount + "")
-                .replace("D", unitRoomCount + "");
+                .replace("D", unitRoomCount + "")
+                .replace("C", communityDto.getCommunityArea());
 
 
         ScriptEngineManager manager = new ScriptEngineManager();
@@ -286,6 +305,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
                 .replace("F", roomDto.getFloorArea() + "<" + roomDto.getFloorNum() + "栋面积>")
                 .replace("U", roomDto.getUnitArea() + "<" + roomDto.getUnitNum() + "单元面积>")
                 .replace("R", roomDto.getBuiltUpArea() + "<" + roomDto.getRoomNum() + "室面积>")
+                .replace("C", communityDto.getCommunityArea() + "<小区面积>")
                 .replace("X", roomDto.getFeeCoefficient() + "<" + roomDto.getRoomNum() + "室算费系数>");
 
         formulaValueRemark += (" * " + price + "<单价>");
