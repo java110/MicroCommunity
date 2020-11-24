@@ -1,5 +1,6 @@
 package com.java110.fee.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.dto.feeDiscountRule.FeeDiscountRuleDto;
@@ -57,9 +58,9 @@ public class FeeDiscountApi {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
         Assert.hasKeyAndValue(reqJson, "discountType", "请求报文中未包含discountType");
 
-
+        JSONArray feeDiscountRuleSpecs = reqJson.getJSONArray("feeDiscountRuleSpecs");
         FeeDiscountPo feeDiscountPo = BeanConvertUtil.covertBean(reqJson, FeeDiscountPo.class);
-        return saveFeeDiscountBMOImpl.save(feeDiscountPo);
+        return saveFeeDiscountBMOImpl.save(feeDiscountPo,feeDiscountRuleSpecs);
     }
 
     /**
@@ -124,27 +125,29 @@ public class FeeDiscountApi {
     /**
      * 微信删除消息模板
      *
-
      * @return
      * @serviceCode /feeDiscount/queryFeeDiscountRule
      * @path /app/feeDiscount/queryFeeDiscountRule
      */
     @RequestMapping(value = "/queryFeeDiscountRule", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeDiscountRule(
-                                                       @RequestParam(value = "page") int page,
-                                                       @RequestParam(value = "row") int row) {
+            @RequestParam(value = "discountType", required = false) String discountType,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "row") int row) {
         FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
         feeDiscountRuleDto.setPage(page);
         feeDiscountRuleDto.setRow(row);
+        feeDiscountRuleDto.setDiscountType(discountType);
         return getFeeDiscountRuleBMOImpl.get(feeDiscountRuleDto);
     }
 
     /**
      * 微信删除消息模板
-     * @serviceCode /feeDiscount/queryFeeDiscountRuleSpec
-     * @path /app/feeDiscount/queryFeeDiscountRuleSpec
+     *
      * @param ruleId 小区ID
      * @return
+     * @serviceCode /feeDiscount/queryFeeDiscountRuleSpec
+     * @path /app/feeDiscount/queryFeeDiscountRuleSpec
      */
     @RequestMapping(value = "/queryFeeDiscountRuleSpec", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeDiscountRuleSpec(@RequestParam(value = "ruleId") String ruleId,

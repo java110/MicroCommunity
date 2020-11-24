@@ -20,7 +20,7 @@
         select t.discount_name,t.discount_name discountName,t.discount_desc,t.discount_desc
         discountDesc,t.discount_type,t.discount_type discountType,t.status_cd,t.status_cd
         statusCd,t.discount_id,t.discount_id discountId,t.community_id,t.community_id communityId,t.rule_id,t.rule_id
-        ruleId
+        ruleId,t.create_time createTime
         from fee_discount t
         where 1 =1
         <if test="discountName !=null and discountName != ''">

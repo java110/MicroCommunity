@@ -1,8 +1,11 @@
 package com.java110.dto.feeDiscount;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,11 +18,13 @@ import java.util.Date;
 public class FeeDiscountDto extends PageDto implements Serializable {
 
     private String discountName;
-private String discountDesc;
-private String discountType;
-private String discountId;
-private String communityId;
-private String ruleId;
+    private String discountDesc;
+    private String discountType;
+    private String discountId;
+    private String communityId;
+    private String ruleId;
+
+    private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
 
     private Date createTime;
@@ -30,37 +35,48 @@ private String ruleId;
     public String getDiscountName() {
         return discountName;
     }
-public void setDiscountName(String discountName) {
+
+    public void setDiscountName(String discountName) {
         this.discountName = discountName;
     }
-public String getDiscountDesc() {
+
+    public String getDiscountDesc() {
         return discountDesc;
     }
-public void setDiscountDesc(String discountDesc) {
+
+    public void setDiscountDesc(String discountDesc) {
         this.discountDesc = discountDesc;
     }
-public String getDiscountType() {
+
+    public String getDiscountType() {
         return discountType;
     }
-public void setDiscountType(String discountType) {
+
+    public void setDiscountType(String discountType) {
         this.discountType = discountType;
     }
-public String getDiscountId() {
+
+    public String getDiscountId() {
         return discountId;
     }
-public void setDiscountId(String discountId) {
+
+    public void setDiscountId(String discountId) {
         this.discountId = discountId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
 
@@ -79,5 +95,13 @@ public void setRuleId(String ruleId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<FeeDiscountSpecDto> getFeeDiscountSpecs() {
+        return feeDiscountSpecs;
+    }
+
+    public void setFeeDiscountSpecs(List<FeeDiscountSpecDto> feeDiscountSpecs) {
+        this.feeDiscountSpecs = feeDiscountSpecs;
     }
 }

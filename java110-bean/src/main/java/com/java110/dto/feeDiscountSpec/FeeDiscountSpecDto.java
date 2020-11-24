@@ -1,6 +1,7 @@
 package com.java110.dto.feeDiscountSpec;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class FeeDiscountSpecDto extends PageDto implements Serializable {
 
     private String specId;
-private String specName;
-private String specValue;
-private String discountId;
-private String communityId;
+    private String specName;
+    private String specValue;
+    private String discountId;
+    private String[] discountIds;
+    private String communityId;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String communityId;
     public String getSpecId() {
         return specId;
     }
-public void setSpecId(String specId) {
+
+    public void setSpecId(String specId) {
         this.specId = specId;
     }
-public String getSpecName() {
+
+    public String getSpecName() {
         return specName;
     }
-public void setSpecName(String specName) {
+
+    public void setSpecName(String specName) {
         this.specName = specName;
     }
-public String getSpecValue() {
+
+    public String getSpecValue() {
         return specValue;
     }
-public void setSpecValue(String specValue) {
+
+    public void setSpecValue(String specValue) {
         this.specValue = specValue;
     }
-public String getDiscountId() {
+
+    public String getDiscountId() {
         return discountId;
     }
-public void setDiscountId(String discountId) {
+
+    public void setDiscountId(String discountId) {
         this.discountId = discountId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -72,5 +83,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getDiscountIds() {
+        return discountIds;
+    }
+
+    public void setDiscountIds(String[] discountIds) {
+        this.discountIds = discountIds;
     }
 }
