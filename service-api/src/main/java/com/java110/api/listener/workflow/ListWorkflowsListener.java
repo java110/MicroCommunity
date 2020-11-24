@@ -7,8 +7,6 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
-import com.java110.po.workflow.WorkflowPo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeWorkflowConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -57,30 +55,12 @@ public class ListWorkflowsListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         WorkflowDto workflowDto = BeanConvertUtil.covertBean(reqJson, WorkflowDto.class);
-
         int count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-
         List<WorkflowDto> workflowDtos = null;
-
-        if (count > 2) {
-            workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
-            ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workflowDtos);
-            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-            context.setResponseEntity(responseEntity);
-            return;
-        }
-
-
-        workflowDto = BeanConvertUtil.covertBean(reqJson, WorkflowDto.class);
-        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-
         workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workflowDtos);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
-
-
     }
 }
