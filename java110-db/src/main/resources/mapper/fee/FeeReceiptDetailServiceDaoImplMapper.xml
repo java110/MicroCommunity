@@ -24,6 +24,7 @@
         from fee_receipt_detail t
         left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0' and t.community_id = pfd.community_id
         where 1 =1
+
         <if test="area !=null and area != ''">
             and t.area= #{area}
         </if>

@@ -39,6 +39,7 @@ public class FeeReceiptDtoNew extends PageDto implements Serializable {
     private String endTime;   //给公摊费使用的时间
     private String cycle;   //给公摊费使用的数量
 
+
     private Date createTime;
 
     private String statusCd = "0";

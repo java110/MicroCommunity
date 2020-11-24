@@ -239,4 +239,5 @@ public class FeeReceiptApi {
         feeReceiptDetailDto.setReceiptId(receiptId);
         return getFeeReceiptDetailBMOImpl.get(feeReceiptDetailDto);
     }
+
 }
