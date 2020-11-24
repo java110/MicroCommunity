@@ -274,7 +274,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
         workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
         workflowPo.setStoreId(paramInJson.getString("storeId"));
-        businessOrgStaffRels.add(JSONObject.toJSONString(workflowPo));
+        businessOrgStaffRels.add(JSONObject.parseObject(JSONObject.toJSONString(workflowPo)));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), businessOrgStaffRels);
         return business;
     }
@@ -293,7 +293,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
         workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
         workflowPo.setStoreId(paramInJson.getString("storeId"));
-        businessOrgStaffRels.add(JSONObject.toJSONString(workflowPo));
+        businessOrgStaffRels.add(JSONObject.parseObject(JSONObject.toJSONString(workflowPo)));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), businessOrgStaffRels);
         return business;
     }
