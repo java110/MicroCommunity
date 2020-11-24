@@ -124,13 +124,13 @@ public class FeeDiscountApi {
     /**
      * 微信删除消息模板
      *
-     * @param communityId 小区ID
+
      * @return
      * @serviceCode /feeDiscount/queryFeeDiscountRule
      * @path /app/feeDiscount/queryFeeDiscountRule
      */
     @RequestMapping(value = "/queryFeeDiscountRule", method = RequestMethod.GET)
-    public ResponseEntity<String> queryFeeDiscountRule(@RequestParam(value = "communityId") String communityId,
+    public ResponseEntity<String> queryFeeDiscountRule(
                                                        @RequestParam(value = "page") int page,
                                                        @RequestParam(value = "row") int row) {
         FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();

@@ -1,6 +1,7 @@
 package com.java110.dto.feeDiscountRuleSpec;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,10 @@ import java.util.Date;
 public class FeeDiscountRuleSpecDto extends PageDto implements Serializable {
 
     private String specId;
-private String specName;
-private String remark;
-private String ruleId;
+    private String specName;
+    private String remark;
+    private String ruleId;
+    private String[] ruleIds;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String ruleId;
     public String getSpecId() {
         return specId;
     }
-public void setSpecId(String specId) {
+
+    public void setSpecId(String specId) {
         this.specId = specId;
     }
-public String getSpecName() {
+
+    public String getSpecName() {
         return specName;
     }
-public void setSpecName(String specName) {
+
+    public void setSpecName(String specName) {
         this.specName = specName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
 
@@ -65,5 +74,13 @@ public void setRuleId(String ruleId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getRuleIds() {
+        return ruleIds;
+    }
+
+    public void setRuleIds(String[] ruleIds) {
+        this.ruleIds = ruleIds;
     }
 }
