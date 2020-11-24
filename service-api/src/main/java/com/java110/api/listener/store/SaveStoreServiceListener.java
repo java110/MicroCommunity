@@ -6,19 +6,15 @@ import com.java110.api.bmo.store.IStoreBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.po.store.StorePo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 /**
  * 保存商户信息
@@ -77,7 +73,8 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         //总部办公室
         businesses.add(storeBMOImpl.addOrgHeadPart(paramObj));
         businesses.add(storeBMOImpl.addStaffOrg(paramObj));
-
+        businesses.add(storeBMOImpl.addPurchase(paramObj));
+        businesses.add(storeBMOImpl.addCollection(paramObj));
 
         //super.doResponse(dataFlowContext);
         ResponseEntity<String> responseEntity = storeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
@@ -86,6 +83,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return;
         }
+
 
         //赋权
         privilegeUserDefault(dataFlowContext, paramObj);

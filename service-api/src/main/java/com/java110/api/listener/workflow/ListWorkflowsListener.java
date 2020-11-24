@@ -71,56 +71,7 @@ public class ListWorkflowsListener extends AbstractServiceApiPlusListener {
             context.setResponseEntity(responseEntity);
             return;
         }
-        WorkflowPo workflowPo = null;
-        workflowDto = new WorkflowDto();
-        workflowDto.setStoreId(reqJson.getString("storeId"));
-        workflowDto.setCommunityId(reqJson.getString("communityId"));
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
-        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-        if (count < 1) {
-            //插入默认的工作信息  投诉流程
-            workflowPo = new WorkflowPo();
-            workflowPo.setCommunityId(reqJson.getString("communityId"));
-            workflowPo.setFlowId("-1");
-            workflowPo.setFlowName("投诉建议流程");
-            workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
-            workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-            workflowPo.setStoreId(reqJson.getString("storeId"));
-            super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
-        }
 
-        workflowDto = new WorkflowDto();
-        workflowDto.setStoreId(reqJson.getString("storeId"));
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
-        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-        if (count < 1) {
-            workflowPo = new WorkflowPo();
-            workflowPo.setCommunityId("9999"); //所有小区
-            workflowPo.setFlowId("-3");
-            workflowPo.setFlowName("采购流程");
-            workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
-            workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-            workflowPo.setStoreId(reqJson.getString("storeId"));
-            super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
-        }
-
-        workflowDto = new WorkflowDto();
-        workflowDto.setStoreId(reqJson.getString("storeId"));
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
-        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-        if (count < 1) {
-            workflowPo = new WorkflowPo();
-            workflowPo.setCommunityId("9999"); //所有小区
-            workflowPo.setFlowId("-4");
-            workflowPo.setFlowName("物品领用");
-            workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
-            workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-            workflowPo.setStoreId(reqJson.getString("storeId"));
-            super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
-        }
-
-
-        commit(context);
 
         workflowDto = BeanConvertUtil.covertBean(reqJson, WorkflowDto.class);
         count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
