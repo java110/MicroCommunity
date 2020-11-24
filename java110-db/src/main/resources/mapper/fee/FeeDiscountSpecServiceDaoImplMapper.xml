@@ -8,7 +8,7 @@
     <!-- 保存费用折扣信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeDiscountSpecInfo" parameterType="Map">
         insert into fee_discount_spec(
-        spec_id,spec_name,spec_value,discount_id,community_id, discount_spec_id;
+        spec_id,spec_name,spec_value,discount_id,community_id, discount_spec_id
 
         ) values (
         #{specId},#{specName},#{specValue},#{discountId},#{communityId},#{discountSpecId}
