@@ -141,7 +141,6 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_addressId = "82";
 
 
-
     public static final String CODE_PREFIX_waterId = "78";
     public static final String CODE_PREFIX_prestoreFeeId = "78";
     public static final String CODE_PREFIX_formulaId = "79";
@@ -170,7 +169,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_logId = "10";
     public static final String CODE_PREFIX_eventId = "11";
     public static final String CODE_PREFIX_returnId = "12";
-
+    public static final String CODE_PREFIX_discountId = "13";
+    public static final String CODE_PREFIX_ruleId = "14";
 
 
     /**
@@ -301,7 +301,7 @@ public class GenerateCodeFactory {
      * @throws GenerateCodeException
      */
     public static String getSpecCd() throws GenerateCodeException {
-            return DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_L) + nextId("%04d");
+        return DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_L) + nextId("%04d");
     }
 
     public static String getOId() throws GenerateCodeException {

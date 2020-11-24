@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeDiscountServiceDaoImpl">
+
+
+    <!-- 保存费用折扣信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeDiscountInfo" parameterType="Map">
+        insert into fee_discount(
+        discount_name,discount_desc,discount_type,discount_id,community_id,rule_id
+        ) values (
+        #{discountName},#{discountDesc},#{discountType},#{discountId},#{communityId},#{ruleId}
+        )
+    </insert>
+
+
+    <!-- 查询费用折扣信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeDiscountInfo" parameterType="Map" resultType="Map">
+        select t.discount_name,t.discount_name discountName,t.discount_desc,t.discount_desc
+        discountDesc,t.discount_type,t.discount_type discountType,t.status_cd,t.status_cd
+        statusCd,t.discount_id,t.discount_id discountId,t.community_id,t.community_id communityId,t.rule_id,t.rule_id
+        ruleId
+        from fee_discount t
+        where 1 =1
+        <if test="discountName !=null and discountName != ''">
+            and t.discount_name= #{discountName}
+        </if>
+        <if test="discountDesc !=null and discountDesc != ''">
+            and t.discount_desc= #{discountDesc}
+        </if>
+        <if test="discountType !=null and discountType != ''">
+            and t.discount_type= #{discountType}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改费用折扣信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeDiscountInfo" parameterType="Map">
+        update fee_discount t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="discountName !=null and discountName != ''">
+            , t.discount_name= #{discountName}
+        </if>
+        <if test="discountDesc !=null and discountDesc != ''">
+            , t.discount_desc= #{discountDesc}
+        </if>
+        <if test="discountType !=null and discountType != ''">
+            , t.discount_type= #{discountType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        where 1=1
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+
+    </update>
+
+    <!-- 查询费用折扣数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeDiscountsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_discount t
+        where 1 =1
+        <if test="discountName !=null and discountName != ''">
+            and t.discount_name= #{discountName}
+        </if>
+        <if test="discountDesc !=null and discountDesc != ''">
+            and t.discount_desc= #{discountDesc}
+        </if>
+        <if test="discountType !=null and discountType != ''">
+            and t.discount_type= #{discountType}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+
+
+    </select>
+
+</mapper>

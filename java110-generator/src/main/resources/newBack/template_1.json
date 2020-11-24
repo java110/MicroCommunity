@@ -1,24 +1,23 @@
 {
   "autoMove": true,
-  "id": "eventId",
-  "name": "storeOrderCartReturnEvent",
-  "desc": "退货事件",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "goods",
-  "tableName": "store_order_cart_return_event",
+  "id": "specId",
+  "name": "feeDiscountRuleSpec",
+  "desc": "折扣规则配置",
+  "shareParam": "ruleId",
+  "shareColumn": "rule_id",
+  "shareName": "fee",
+  "tableName": "fee_discount_rule_spec",
   "param": {
-    "eventId": "event_id",
-    "returnId": "return_id",
-    "storeId": "store_id",
-    "eventObjType": "event_obj_type",
-    "eventObjId": "event_obj_id",
-    "eventMsg": "event_msg"
+    "specId": "spec_id",
+    "ruleId": "rule_id",
+    "specName": "spec_name",
+    "remark": "remark",
+    "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "returnId",
-      "msg": "退货ID不能为空"
+      "code": "ruleId",
+      "msg": "规则不能为空"
     }
   ]
 }

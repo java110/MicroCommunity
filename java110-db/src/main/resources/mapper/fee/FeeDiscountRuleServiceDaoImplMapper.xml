@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeDiscountRuleServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存费用折扣规则信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeDiscountRuleInfo" parameterType="Map">
+        insert into fee_discount_rule(
+rule_name,remark,rule_id,bean_impl
+) values (
+#{ruleName},#{remark},#{ruleId},#{beanImpl}
+)
+    </insert>
+
+
+
+    <!-- 查询费用折扣规则信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeDiscountRuleInfo" parameterType="Map" resultType="Map">
+        select  t.rule_name,t.rule_name ruleName,t.remark,t.status_cd,t.status_cd statusCd,t.rule_id,t.rule_id ruleId,t.bean_impl,t.bean_impl beanImpl 
+from fee_discount_rule t 
+where 1 =1 
+<if test="ruleName !=null and ruleName != ''">
+   and t.rule_name= #{ruleName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ruleId !=null and ruleId != ''">
+   and t.rule_id= #{ruleId}
+</if> 
+<if test="beanImpl !=null and beanImpl != ''">
+   and t.bean_impl= #{beanImpl}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改费用折扣规则信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeDiscountRuleInfo" parameterType="Map">
+        update  fee_discount_rule t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="ruleName !=null and ruleName != ''">
+, t.rule_name= #{ruleName}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="beanImpl !=null and beanImpl != ''">
+, t.bean_impl= #{beanImpl}
+</if> 
+ where 1=1 <if test="ruleId !=null and ruleId != ''">
+and t.rule_id= #{ruleId}
+</if> 
+
+    </update>
+
+    <!-- 查询费用折扣规则数量 add by wuxw 2018-07-03 -->
+     <select id="queryFeeDiscountRulesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from fee_discount_rule t 
+where 1 =1 
+<if test="ruleName !=null and ruleName != ''">
+   and t.rule_name= #{ruleName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ruleId !=null and ruleId != ''">
+   and t.rule_id= #{ruleId}
+</if> 
+<if test="beanImpl !=null and beanImpl != ''">
+   and t.bean_impl= #{beanImpl}
+</if> 
+
+
+     </select>
+
+</mapper>
