@@ -64,6 +64,13 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         businesses.add(communityBMOImpl.addCommunityMember(paramObj));
 
 
+        JSONObject data = communityBMOImpl.updateComplaint(paramObj);
+
+        if(data != null){
+            businesses.add(data);
+        }
+
+
         ResponseEntity<String> responseEntity = communityBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);

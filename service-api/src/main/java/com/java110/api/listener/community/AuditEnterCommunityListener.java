@@ -38,6 +38,7 @@ public class AuditEnterCommunityListener extends AbstractServiceApiPlusListener 
 
         communityBMOImpl.updateCommunityMember(reqJson, context);
 
+
     }
 
     @Override
