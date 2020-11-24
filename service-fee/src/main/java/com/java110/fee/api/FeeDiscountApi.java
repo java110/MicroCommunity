@@ -79,9 +79,9 @@ public class FeeDiscountApi {
         Assert.hasKeyAndValue(reqJson, "discountType", "请求报文中未包含discountType");
         Assert.hasKeyAndValue(reqJson, "discountId", "discountId不能为空");
 
-
+        JSONArray feeDiscountRuleSpecs = reqJson.getJSONArray("feeDiscountRuleSpecs");
         FeeDiscountPo feeDiscountPo = BeanConvertUtil.covertBean(reqJson, FeeDiscountPo.class);
-        return updateFeeDiscountBMOImpl.update(feeDiscountPo);
+        return updateFeeDiscountBMOImpl.update(feeDiscountPo,feeDiscountRuleSpecs);
     }
 
     /**

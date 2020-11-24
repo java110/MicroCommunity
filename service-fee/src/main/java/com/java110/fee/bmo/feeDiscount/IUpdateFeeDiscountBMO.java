@@ -1,5 +1,6 @@
 package com.java110.fee.bmo.feeDiscount;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.po.feeDiscount.FeeDiscountPo;
 import org.springframework.http.ResponseEntity;
 
@@ -13,7 +14,7 @@ public interface IUpdateFeeDiscountBMO {
      * @param feeDiscountPo
      * @return
      */
-    ResponseEntity<String> update(FeeDiscountPo feeDiscountPo);
+    ResponseEntity<String> update(FeeDiscountPo feeDiscountPo, JSONArray feeDiscountRuleSpecs);
 
 
 }
