@@ -4,13 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.common.ICarInoutInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.common.ICarInoutInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceCodeCarInoutConstant;
 import com.java110.utils.util.Assert;
@@ -97,7 +97,7 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
         if (count > 0) {
             carInouts = BeanConvertUtil.covertBeanList(carInoutInnerServiceSMOImpl.queryCarInouts(carInoutDto), ApiCarInoutDataVo.class);
 
-            refreshCarInout(carInouts,reqJson.getString("communityId"));
+            refreshCarInout(carInouts, reqJson.getString("communityId"));
         } else {
             carInouts = new ArrayList<>();
         }
@@ -116,20 +116,21 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
 
     /**
      * 刷新返回数据 加入 停车时间和 应收费用
+     *
      * @param carInouts
      */
-    private void refreshCarInout(List<ApiCarInoutDataVo> carInouts,String communityId) {
+    private void refreshCarInout(List<ApiCarInoutDataVo> carInouts, String communityId) {
 
         Date nowTime = new Date();
         Date inTime = null;
         List<String> inoutIds = new ArrayList<>();
-        for(ApiCarInoutDataVo apiCarInoutDataVo : carInouts){
-            if("100600".equals(apiCarInoutDataVo.getState())){
+        for (ApiCarInoutDataVo apiCarInoutDataVo : carInouts) {
+            if ("100600".equals(apiCarInoutDataVo.getState())) {
                 inoutIds.add(apiCarInoutDataVo.getInoutId());
             }
         }
 
-        if(inoutIds.size()>0){
+        if (inoutIds.size() > 0) {
             FeeDto feeDto = new FeeDto();
             feeDto.setCommunityId(communityId);
             feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
@@ -137,10 +138,10 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
             feeDto.setState("2008001");
             feeDto.setFeeFlag("2006012");
             List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-            for(FeeDto tmpFeeDto : feeDtos){
-                for(ApiCarInoutDataVo apiCarInoutDataVo : carInouts){
-                    if(tmpFeeDto.getPayerObjId().equals(apiCarInoutDataVo.getInoutId())){
-                        apiCarInoutDataVo.setInTime(DateUtil.getFormatTimeString(tmpFeeDto.getStartTime(),DateUtil.DATE_FORMATE_STRING_A));
+            for (FeeDto tmpFeeDto : feeDtos) {
+                for (ApiCarInoutDataVo apiCarInoutDataVo : carInouts) {
+                    if (tmpFeeDto.getPayerObjId().equals(apiCarInoutDataVo.getInoutId())) {
+                        apiCarInoutDataVo.setInTime(DateUtil.getFormatTimeString(tmpFeeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
                     }
                 }
             }
@@ -151,15 +152,18 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
         feeConfigDto.setIsDefault("T");
         feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
+            return;
+        }
         FeeConfigDto tmpFeeConfigDto = feeConfigDtos.get(0);
-        for(ApiCarInoutDataVo apiCarInoutDataVo : carInouts){
-            if("100500".equals(apiCarInoutDataVo.getState())){
+        for (ApiCarInoutDataVo apiCarInoutDataVo : carInouts) {
+            if ("100500".equals(apiCarInoutDataVo.getState())) {
                 continue;
             }
             try {
                 inTime = DateUtil.getDateFromString(apiCarInoutDataVo.getInTime(), DateUtil.DATE_FORMATE_STRING_A);
-            }catch (Exception e){
-                logger.error("格式化入场时间出错",e);
+            } catch (Exception e) {
+                logger.error("格式化入场时间出错", e);
                 continue;
             }
             long diff = nowTime.getTime() - inTime.getTime();
@@ -171,7 +175,7 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
             double min = 0;
             day = diff / nd;// 计算差多少天
             hour = diff % nd / nh + day * 24;// 计算差多少小时
-            min = diff % nd % nh / nm ;// 计算差多少分钟
+            min = diff % nd % nh / nm;// 计算差多少分钟
             double money = 0.00;
             double newHour = hour;
             if (min > 0) { //一小时超过

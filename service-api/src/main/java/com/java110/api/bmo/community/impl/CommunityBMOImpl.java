@@ -140,7 +140,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("flowId", workflowDtos.get(0).getFlowId());
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
-        businessCommunityMember.put("storeId", paramInJson.getString("storeId"));
+        businessCommunityMember.put("storeId", paramInJson.getString("memberId"));
         JSONArray data = new JSONArray();
         data.add(businessCommunityMember);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), data);
