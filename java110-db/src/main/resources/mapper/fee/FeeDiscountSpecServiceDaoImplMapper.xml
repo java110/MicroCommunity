@@ -8,9 +8,10 @@
     <!-- 保存费用折扣信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeDiscountSpecInfo" parameterType="Map">
         insert into fee_discount_spec(
-        spec_id,spec_name,spec_value,discount_id,community_id
+        spec_id,spec_name,spec_value,discount_id,community_id, discount_spec_id;
+
         ) values (
-        #{specId},#{specName},#{specValue},#{discountId},#{communityId}
+        #{specId},#{specName},#{specValue},#{discountId},#{communityId},#{discountSpecId}
         )
     </insert>
 
@@ -19,7 +20,7 @@
     <select id="getFeeDiscountSpecInfo" parameterType="Map" resultType="Map">
         select t.spec_id,t.spec_id specId,t.spec_name,t.spec_name specName,t.spec_value,t.spec_value
         specValue,t.status_cd,t.status_cd statusCd,t.discount_id,t.discount_id discountId,t.community_id,t.community_id
-        communityId
+        communityId,t.discount_spec_id discountSpecId
         from fee_discount_spec t
         where 1 =1
         <if test="specId !=null and specId != ''">
@@ -46,6 +47,10 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="discountSpecId !=null and discountSpecId != ''">
+            and t.discount_spec_id= #{discountSpecId}
+        </if>
+
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -66,15 +71,20 @@
         <if test="specValue !=null and specValue != ''">
             , t.spec_value= #{specValue}
         </if>
-        <if test="discountId !=null and discountId != ''">
-            , t.discount_id= #{discountId}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
+
         where 1=1
         <if test="specId !=null and specId != ''">
             and t.spec_id= #{specId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="discountSpecId !=null and discountSpecId != ''">
+            and t.discount_spec_id= #{discountSpecId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>
@@ -101,6 +111,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="discountSpecId !=null and discountSpecId != ''">
+            and t.discount_spec_id= #{discountSpecId}
         </if>
 
 

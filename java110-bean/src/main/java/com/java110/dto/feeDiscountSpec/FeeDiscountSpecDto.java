@@ -14,6 +14,7 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class FeeDiscountSpecDto extends PageDto implements Serializable {
+    private String discountSpecId;
 
     private String specId;
     private String specName;
@@ -91,5 +92,13 @@ public class FeeDiscountSpecDto extends PageDto implements Serializable {
 
     public void setDiscountIds(String[] discountIds) {
         this.discountIds = discountIds;
+    }
+
+    public String getDiscountSpecId() {
+        return discountSpecId;
+    }
+
+    public void setDiscountSpecId(String discountSpecId) {
+        this.discountSpecId = discountSpecId;
     }
 }

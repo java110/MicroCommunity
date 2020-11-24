@@ -83,6 +83,7 @@ public class SaveFeeDiscountBMOImpl implements ISaveFeeDiscountBMO {
             feeDiscountSpecPo.setSpecId(specObj.getString("specId"));
             feeDiscountSpecPo.setSpecName(specObj.getString("specName"));
             feeDiscountSpecPo.setSpecValue(specObj.getString("specValue"));
+            feeDiscountSpecPo.setDiscountSpecId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_specId));
             flag = feeDiscountSpecInnerServiceSMOImpl.saveFeeDiscountSpec(feeDiscountSpecPo);
             if (flag < 1) {
                 throw new IllegalArgumentException("保存 折扣规格失败");
