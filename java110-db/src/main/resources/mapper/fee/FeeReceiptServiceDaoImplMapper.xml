@@ -95,8 +95,7 @@
         LEFT JOIN building_owner bo ON borr.owner_id = bo.owner_id
         LEFT JOIN pay_fee pf ON tt.fee_id = pf.fee_id
         LEFT JOIN pay_fee_detail p ON tt.fee_id = p.fee_id
-        AND tt.start_time = p.start_time
-        AND tt.end_time = p.end_time
+        AND tt.detail_id = p.detail_id
         LEFT JOIN c_business cb ON p.b_id = cb.b_id
         LEFT JOIN c_orders co ON cb.o_id = co.o_id
         LEFT JOIN u_user uu ON co.user_id = uu.user_id
@@ -157,8 +156,7 @@
         AND pf.status_cd = '0'
         LEFT JOIN pay_fee_detail p ON tt.fee_id = p.fee_id
         AND p.status_cd = '0'
-        AND tt.start_time = p.start_time
-        AND tt.end_time = p.end_time
+        AND tt.detail_id = p.detail_id
         LEFT JOIN c_business cb ON p.b_id = cb.b_id
         LEFT JOIN c_orders co ON cb.o_id = co.o_id
         LEFT JOIN u_user uu ON co.user_id = uu.user_id
