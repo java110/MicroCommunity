@@ -1,50 +1,24 @@
 {
   "templateName": "费用折扣",
   "directories": "property",
-  "templateCode": "feeDiscount",
-  "templateKey": "discountId",
-  "templateKeyName": "折扣ID",
-  "searchCode": "discountId",
-  "searchName": "折扣ID",
+  "templateCode": "payFeeConfigDiscount",
+  "templateKey": "configDiscountId",
+  "templateKeyName": "费用折扣ID",
+  "searchCode": "configDiscountId",
+  "searchName": "费用折扣ID",
   "conditions": [
     {
       "name": "折扣名称",
       "inputType": "input",
-      "code": "discountName",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "折扣类型",
-      "inputType": "select",
-      "selectValue":"1001,2002",
-      "selectValueName":"优惠,违约",
-      "code": "discountType",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "规则名称",
-      "inputType": "input",
-      "code": "ruleName",
+      "code": "configId",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "discountName",
+      "code": "discountId",
       "cnCode": "折扣名称",
-      "desc": "必填，请填写折扣名称",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "256",
-      "limitErrInfo": "折扣名称不能超过256位",
-      "show": true
-    },
-    {
-      "code": "discountType",
-      "cnCode": "折扣类型",
-      "desc": "必填，请选择折扣类型",
+      "desc": "必填，请选择折扣名称",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "select",
@@ -52,32 +26,22 @@
       "selectValueName":"优惠,违约",
       "limit": "num",
       "limitParam": "",
-      "limitErrInfo": "折扣类型格式错误",
+      "limitErrInfo": "折扣格式错误",
       "show": true
     },
     {
-      "code": "ruleId",
-      "cnCode": "规则",
-      "desc": "必填，请选择规则",
+      "code": "discountId",
+      "cnCode": "折扣名称",
+      "desc": "必填，请选择折扣名称",
       "required": true,
       "hasDefaultValue": false,
-      "inputType": "input",
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"优惠,违约",
       "limit": "num",
       "limitParam": "",
-      "limitErrInfo": "规则不是有效数字",
+      "limitErrInfo": "折扣格式错误",
       "show": true
-    },
-    {
-      "code": "discountDesc",
-      "cnCode": "描述",
-      "desc": "可填，请填写描述",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "",
-      "limitErrInfo": "描述不能超过500位",
-      "show": false
     }
   ]
 }

@@ -1,23 +1,31 @@
 {
   "autoMove": true,
-  "id": "specId",
-  "name": "feeDiscountRuleSpec",
-  "desc": "折扣规则配置",
-  "shareParam": "ruleId",
-  "shareColumn": "rule_id",
+  "id": "configDiscountId",
+  "name": "payFeeConfigDiscount",
+  "desc": "费用项折扣",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
   "shareName": "fee",
-  "tableName": "fee_discount_rule_spec",
+  "tableName": "pay_fee_config_discount",
   "param": {
-    "specId": "spec_id",
-    "ruleId": "rule_id",
-    "specName": "spec_name",
-    "remark": "remark",
+    "configDiscountId": "config_discount_id",
+    "configId": "config_id",
+    "discountId": "discount_id",
+    "communityId": "community_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "ruleId",
-      "msg": "规则不能为空"
+      "code": "configId",
+      "msg": "费用项不能为空"
+    },
+    {
+      "code": "discountId",
+      "msg": "折扣不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
     }
   ]
 }

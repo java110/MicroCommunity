@@ -16,11 +16,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -60,7 +56,7 @@ public class FeeDiscountApi {
 
         JSONArray feeDiscountRuleSpecs = reqJson.getJSONArray("feeDiscountRuleSpecs");
         FeeDiscountPo feeDiscountPo = BeanConvertUtil.covertBean(reqJson, FeeDiscountPo.class);
-        return saveFeeDiscountBMOImpl.save(feeDiscountPo,feeDiscountRuleSpecs);
+        return saveFeeDiscountBMOImpl.save(feeDiscountPo, feeDiscountRuleSpecs);
     }
 
     /**
@@ -81,7 +77,7 @@ public class FeeDiscountApi {
 
         JSONArray feeDiscountRuleSpecs = reqJson.getJSONArray("feeDiscountRuleSpecs");
         FeeDiscountPo feeDiscountPo = BeanConvertUtil.covertBean(reqJson, FeeDiscountPo.class);
-        return updateFeeDiscountBMOImpl.update(feeDiscountPo,feeDiscountRuleSpecs);
+        return updateFeeDiscountBMOImpl.update(feeDiscountPo, feeDiscountRuleSpecs);
     }
 
     /**
@@ -113,12 +109,14 @@ public class FeeDiscountApi {
      */
     @RequestMapping(value = "/queryFeeDiscount", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeDiscount(@RequestParam(value = "communityId") String communityId,
+                                                   @RequestParam(value = "discountType") String discountType,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
         FeeDiscountDto feeDiscountDto = new FeeDiscountDto();
         feeDiscountDto.setPage(page);
         feeDiscountDto.setRow(row);
         feeDiscountDto.setCommunityId(communityId);
+        feeDiscountDto.setDiscountType(discountType);
         return getFeeDiscountBMOImpl.get(feeDiscountDto);
     }
 

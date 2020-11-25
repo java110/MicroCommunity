@@ -1,0 +1,69 @@
+package com.java110.dto.payFeeConfigDiscount;
+
+import com.java110.dto.PageDto;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @ClassName FloorDto
+ * @Description 费用项折扣数据层封装
+ * @Author wuxw
+ * @Date 2019/4/24 8:52
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+public class PayFeeConfigDiscountDto extends PageDto implements Serializable {
+
+    private String configDiscountId;
+private String configId;
+private String discountId;
+private String communityId;
+
+
+    private Date createTime;
+
+    private String statusCd = "0";
+
+
+    public String getConfigDiscountId() {
+        return configDiscountId;
+    }
+public void setConfigDiscountId(String configDiscountId) {
+        this.configDiscountId = configDiscountId;
+    }
+public String getConfigId() {
+        return configId;
+    }
+public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+public String getDiscountId() {
+        return discountId;
+    }
+public void setDiscountId(String discountId) {
+        this.discountId = discountId;
+    }
+public String getCommunityId() {
+        return communityId;
+    }
+public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+}
