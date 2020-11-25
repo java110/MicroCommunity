@@ -23,6 +23,7 @@ public class FeeDiscountDto extends PageDto implements Serializable {
     private String discountId;
     private String communityId;
     private String ruleId;
+    private String ruleName;
 
     private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
@@ -103,5 +104,13 @@ public class FeeDiscountDto extends PageDto implements Serializable {
 
     public void setFeeDiscountSpecs(List<FeeDiscountSpecDto> feeDiscountSpecs) {
         this.feeDiscountSpecs = feeDiscountSpecs;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 }
