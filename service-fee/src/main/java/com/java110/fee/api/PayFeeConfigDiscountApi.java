@@ -98,11 +98,13 @@ public class PayFeeConfigDiscountApi {
      */
     @RequestMapping(value = "/queryPayFeeConfigDiscount", method = RequestMethod.GET)
     public ResponseEntity<String> queryPayFeeConfigDiscount(@RequestParam(value = "communityId") String communityId,
+                                                            @RequestParam(value = "configId", required = false) String configId,
                                                             @RequestParam(value = "page") int page,
                                                             @RequestParam(value = "row") int row) {
         PayFeeConfigDiscountDto payFeeConfigDiscountDto = new PayFeeConfigDiscountDto();
         payFeeConfigDiscountDto.setPage(page);
         payFeeConfigDiscountDto.setRow(row);
+        payFeeConfigDiscountDto.setConfigId(configId);
         payFeeConfigDiscountDto.setCommunityId(communityId);
         return getPayFeeConfigDiscountBMOImpl.get(payFeeConfigDiscountDto);
     }
