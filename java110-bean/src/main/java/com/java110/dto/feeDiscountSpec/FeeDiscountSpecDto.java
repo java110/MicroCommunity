@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -22,6 +23,8 @@ public class FeeDiscountSpecDto extends PageDto implements Serializable {
     private String discountId;
     private String[] discountIds;
     private String communityId;
+
+
 
 
     private Date createTime;
@@ -101,4 +104,5 @@ public class FeeDiscountSpecDto extends PageDto implements Serializable {
     public void setDiscountSpecId(String discountSpecId) {
         this.discountSpecId = discountSpecId;
     }
+
 }

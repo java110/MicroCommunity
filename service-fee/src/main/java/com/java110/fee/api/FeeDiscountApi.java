@@ -109,7 +109,7 @@ public class FeeDiscountApi {
      */
     @RequestMapping(value = "/queryFeeDiscount", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeDiscount(@RequestParam(value = "communityId") String communityId,
-                                                   @RequestParam(value = "discountType") String discountType,
+                                                   @RequestParam(value = "discountType", required = false) String discountType,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
         FeeDiscountDto feeDiscountDto = new FeeDiscountDto();

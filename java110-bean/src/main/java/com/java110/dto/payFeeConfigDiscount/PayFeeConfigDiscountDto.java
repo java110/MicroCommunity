@@ -1,9 +1,11 @@
 package com.java110.dto.payFeeConfigDiscount;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -22,7 +24,7 @@ public class PayFeeConfigDiscountDto extends PageDto implements Serializable {
 
     private String  discountName;
     private String discountType;
-
+    private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
     private Date createTime;
 
@@ -92,5 +94,13 @@ public class PayFeeConfigDiscountDto extends PageDto implements Serializable {
 
     public void setDiscountType(String discountType) {
         this.discountType = discountType;
+    }
+
+    public List<FeeDiscountSpecDto> getFeeDiscountSpecs() {
+        return feeDiscountSpecs;
+    }
+
+    public void setFeeDiscountSpecs(List<FeeDiscountSpecDto> feeDiscountSpecs) {
+        this.feeDiscountSpecs = feeDiscountSpecs;
     }
 }
