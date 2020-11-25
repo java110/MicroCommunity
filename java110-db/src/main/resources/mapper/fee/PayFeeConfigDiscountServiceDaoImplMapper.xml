@@ -5,93 +5,91 @@
 <mapper namespace="payFeeConfigDiscountServiceDaoImpl">
 
 
-
-
-
     <!-- 保存费用项折扣信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeConfigDiscountInfo" parameterType="Map">
         insert into pay_fee_config_discount(
-config_discount_id,config_id,discount_id,community_id
-) values (
-#{configDiscountId},#{configId},#{discountId},#{communityId}
-)
+        config_discount_id,config_id,discount_id,community_id
+        ) values (
+        #{configDiscountId},#{configId},#{discountId},#{communityId}
+        )
     </insert>
-
 
 
     <!-- 查询费用项折扣信息 add by wuxw 2018-07-03 -->
     <select id="getPayFeeConfigDiscountInfo" parameterType="Map" resultType="Map">
-        select  t.config_discount_id,t.config_discount_id configDiscountId,t.config_id,t.config_id configId,t.status_cd,t.status_cd statusCd,t.discount_id,t.discount_id discountId,t.community_id,t.community_id communityId 
-from pay_fee_config_discount t 
-where 1 =1 
-<if test="configDiscountId !=null and configDiscountId != ''">
-   and t.config_discount_id= #{configDiscountId}
-</if> 
-<if test="configId !=null and configId != ''">
-   and t.config_id= #{configId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="discountId !=null and discountId != ''">
-   and t.discount_id= #{discountId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.config_discount_id,t.config_discount_id configDiscountId,t.config_id,t.config_id
+        configId,t.status_cd,t.status_cd statusCd,t.discount_id,t.discount_id discountId,t.community_id,t.community_id
+        communityId,fd.discount_name discountName,fd.discount_type discountType
+        from pay_fee_config_discount t
+        left join fee_discount fd on t.discount_id = fd.discount_id and t.community_id = fd.community_id and fd.status_cd = '0'
+        where 1 =1
+        <if test="configDiscountId !=null and configDiscountId != ''">
+            and t.config_discount_id= #{configDiscountId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改费用项折扣信息 add by wuxw 2018-07-03 -->
     <update id="updatePayFeeConfigDiscountInfo" parameterType="Map">
-        update  pay_fee_config_discount t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="configId !=null and configId != ''">
-, t.config_id= #{configId}
-</if> 
-<if test="discountId !=null and discountId != ''">
-, t.discount_id= #{discountId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="configDiscountId !=null and configDiscountId != ''">
-and t.config_discount_id= #{configDiscountId}
-</if> 
+        update pay_fee_config_discount t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            , t.discount_id= #{discountId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="configDiscountId !=null and configDiscountId != ''">
+            and t.config_discount_id= #{configDiscountId}
+        </if>
 
     </update>
 
     <!-- 查询费用项折扣数量 add by wuxw 2018-07-03 -->
-     <select id="queryPayFeeConfigDiscountsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from pay_fee_config_discount t 
-where 1 =1 
-<if test="configDiscountId !=null and configDiscountId != ''">
-   and t.config_discount_id= #{configDiscountId}
-</if> 
-<if test="configId !=null and configId != ''">
-   and t.config_id= #{configId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="discountId !=null and discountId != ''">
-   and t.discount_id= #{discountId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
+    <select id="queryPayFeeConfigDiscountsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee_config_discount t
+        where 1 =1
+        <if test="configDiscountId !=null and configDiscountId != ''">
+            and t.config_discount_id= #{configDiscountId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

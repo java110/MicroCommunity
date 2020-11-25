@@ -1,6 +1,7 @@
 package com.java110.dto.payFeeConfigDiscount;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,12 @@ import java.util.Date;
 public class PayFeeConfigDiscountDto extends PageDto implements Serializable {
 
     private String configDiscountId;
-private String configId;
-private String discountId;
-private String communityId;
+    private String configId;
+    private String discountId;
+    private String communityId;
+
+    private String  discountName;
+    private String discountType;
 
 
     private Date createTime;
@@ -28,25 +32,32 @@ private String communityId;
     public String getConfigDiscountId() {
         return configDiscountId;
     }
-public void setConfigDiscountId(String configDiscountId) {
+
+    public void setConfigDiscountId(String configDiscountId) {
         this.configDiscountId = configDiscountId;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getDiscountId() {
+
+    public String getDiscountId() {
         return discountId;
     }
-public void setDiscountId(String discountId) {
+
+    public void setDiscountId(String discountId) {
         this.discountId = discountId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -65,5 +76,21 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getDiscountName() {
+        return discountName;
+    }
+
+    public void setDiscountName(String discountName) {
+        this.discountName = discountName;
+    }
+
+    public String getDiscountType() {
+        return discountType;
+    }
+
+    public void setDiscountType(String discountType) {
+        this.discountType = discountType;
     }
 }
