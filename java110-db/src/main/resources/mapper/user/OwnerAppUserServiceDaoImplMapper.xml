@@ -129,12 +129,16 @@
         statusCd,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
         communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,
-        td1.name stateName,t.user_id,t.user_id userId,t.app_type,t.app_type appType,t.create_time createTime
-        from owner_app_user t,t_dict td1
+        td1.name stateName,t.user_id,t.user_id userId,t.app_type,t.app_type appType,t.create_time createTime,
+        bo.owner_id ownerId
+        from owner_app_user t,t_dict td1,building_owner bo
         where 1 =1
         and t.state = td1.status_cd
         and td1.table_name = 'owner_app_user'
         and td1.table_columns = 'state'
+        and t.member_id = bo.member_id
+        and t.community_id = bo.community_id
+        and bo.status_cd = '0'
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
         </if>

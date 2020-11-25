@@ -34,6 +34,7 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String communityId;
     private String appTypeCd;
     private String memberId;
+    private String ownerId;
     private String userId;
     private String appType;
     private String[] userIds;
@@ -46,7 +47,6 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String areaName;
     private String parentAreaCode;
     private String parentAreaName;
-
 
 
     private Date createTime;
@@ -237,5 +237,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setOldAppUserId(String oldAppUserId) {
         this.oldAppUserId = oldAppUserId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }
