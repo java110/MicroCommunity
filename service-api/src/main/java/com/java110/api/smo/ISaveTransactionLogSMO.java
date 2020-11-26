@@ -13,4 +13,6 @@ import com.java110.po.transactionLog.TransactionLogPo;
 public interface ISaveTransactionLogSMO {
 
     public void saveLog(TransactionLogPo transactionLogPo);
+
+
 }

@@ -30,11 +30,8 @@ public class TaskSystemJob implements Job {
         try {
             TaskDto taskDto = (TaskDto) (context.getJobDetail().getJobDataMap()
                     .get(JOB_DATA_TASK));
-
-
             taskSystemQuartz = (TaskSystemQuartz) ApplicationContextFactory.getBean(taskDto.getTaskTemplateDto().getClassBean());
             taskSystemQuartz.startTask(taskDto);
-
         } catch (Throwable ex) {
             logger.error("执行任务失败：", ex);
         }

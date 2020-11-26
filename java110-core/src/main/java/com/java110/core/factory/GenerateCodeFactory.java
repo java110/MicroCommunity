@@ -172,6 +172,10 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_discountId = "13";
     public static final String CODE_PREFIX_ruleId = "14";
     public static final String CODE_PREFIX_configDiscountId = "14";
+    public static final String CODE_PREFIX_detailDiscountId = "15";
+    public static final String CODE_PREFIX_errId = "10";
+
+
 
 
     /**

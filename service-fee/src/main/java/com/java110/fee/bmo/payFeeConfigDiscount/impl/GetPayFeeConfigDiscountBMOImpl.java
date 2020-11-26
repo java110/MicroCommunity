@@ -1,6 +1,5 @@
 package com.java110.fee.bmo.payFeeConfigDiscount.impl;
 
-import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
 import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
 import com.java110.fee.bmo.payFeeConfigDiscount.IGetPayFeeConfigDiscountBMO;
@@ -75,11 +74,9 @@ public class GetPayFeeConfigDiscountBMOImpl implements IGetPayFeeConfigDiscountB
             for (FeeDiscountSpecDto feeDiscountSpecDto : feeDiscountSpecDtos) {
                 if (payFeeConfigDiscountDto.getDiscountId().equals(feeDiscountSpecDto.getDiscountId())) {
                     tmpSpecs.add(feeDiscountSpecDto);
-
                 }
             }
             payFeeConfigDiscountDto.setFeeDiscountSpecs(tmpSpecs);
         }
     }
-
 }

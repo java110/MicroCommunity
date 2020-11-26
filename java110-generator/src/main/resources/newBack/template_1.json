@@ -1,31 +1,22 @@
 {
   "autoMove": true,
-  "id": "configDiscountId",
-  "name": "payFeeConfigDiscount",
-  "desc": "费用项折扣",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "fee",
-  "tableName": "pay_fee_config_discount",
+  "id": "errId",
+  "name": "logSystemError",
+  "desc": "系统异常",
+  "shareParam": "errId",
+  "shareColumn": "errId",
+  "shareName": "common",
+  "tableName": "log_system_error",
   "param": {
-    "configDiscountId": "config_discount_id",
-    "configId": "config_id",
-    "discountId": "discount_id",
-    "communityId": "community_id",
+    "errId": "err_id",
+    "errType": "err_type",
+    "msg": "msg",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "configId",
-      "msg": "费用项不能为空"
-    },
-    {
-      "code": "discountId",
-      "msg": "折扣不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "小区不能为空"
+      "code": "errType",
+      "msg": "异常不能为空"
     }
   ]
 }
