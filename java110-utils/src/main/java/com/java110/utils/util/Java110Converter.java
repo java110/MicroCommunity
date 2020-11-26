@@ -95,6 +95,10 @@ public class Java110Converter implements Converter {
             return Double.parseDouble(String.valueOf(value));
         }
 
+        if (target == String[].class) {
+            return String.valueOf(value).split(",");
+        }
+
         return value;
     }
 }
