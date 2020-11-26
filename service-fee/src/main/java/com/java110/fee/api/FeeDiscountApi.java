@@ -10,6 +10,7 @@ import com.java110.fee.bmo.feeDiscount.IGetFeeDiscountBMO;
 import com.java110.fee.bmo.feeDiscount.ISaveFeeDiscountBMO;
 import com.java110.fee.bmo.feeDiscount.IUpdateFeeDiscountBMO;
 import com.java110.fee.bmo.feeDiscountRule.IGetFeeDiscountRuleBMO;
+import com.java110.fee.bmo.feeDiscountRuleSpec.IComputeFeeDiscountBMO;
 import com.java110.fee.bmo.feeDiscountRuleSpec.IGetFeeDiscountRuleSpecBMO;
 import com.java110.po.feeDiscount.FeeDiscountPo;
 import com.java110.utils.util.Assert;
@@ -38,6 +39,9 @@ public class FeeDiscountApi {
 
     @Autowired
     private IGetFeeDiscountRuleSpecBMO getFeeDiscountRuleSpecBMOImpl;
+
+    @Autowired
+    private IComputeFeeDiscountBMO computeFeeDiscountBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -156,5 +160,22 @@ public class FeeDiscountApi {
         feeDiscountRuleSpecDto.setRow(row);
         feeDiscountRuleSpecDto.setRuleId(ruleId);
         return getFeeDiscountRuleSpecBMOImpl.get(feeDiscountRuleSpecDto);
+    }
+
+    /**
+     * 计算费用折扣
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /feeDiscount/computeFeeDiscount
+     * @path /app/feeDiscount/computeFeeDiscount
+     */
+    @RequestMapping(value = "/computeFeeDiscount", method = RequestMethod.GET)
+    public ResponseEntity<String> computeFeeDiscount(@RequestParam(value = "feeId") String feeId,
+                                                     @RequestParam(value = "communityId") String communityId,
+                                                     @RequestParam(value = "cycles") double cycles,
+                                                     @RequestParam(value = "page") int page,
+                                                     @RequestParam(value = "row") int row) {
+        return computeFeeDiscountBMOImpl.compute(feeId, communityId, cycles, page, row);
     }
 }
