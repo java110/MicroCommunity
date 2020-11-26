@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+<!--    <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
 
     <!-- 控制台输出 -->
     <appender name="STDOUT_FILE" class="ch.qos.logback.core.ConsoleAppender">
