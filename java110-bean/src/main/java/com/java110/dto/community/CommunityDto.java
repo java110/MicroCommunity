@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -34,6 +35,8 @@ public class CommunityDto extends PageDto implements Serializable {
     private String parentAreaName;
 
     private String communityArea;
+
+    private List<CommunityAttrDto> communityAttrDtos;
 
 
     private Date createTime;
@@ -201,5 +204,13 @@ public class CommunityDto extends PageDto implements Serializable {
 
     public void setCommunityArea(String communityArea) {
         this.communityArea = communityArea;
+    }
+
+    public List<CommunityAttrDto> getCommunityAttrDtos() {
+        return communityAttrDtos;
+    }
+
+    public void setCommunityAttrDtos(List<CommunityAttrDto> communityAttrDtos) {
+        this.communityAttrDtos = communityAttrDtos;
     }
 }

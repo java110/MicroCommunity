@@ -1,20 +1,22 @@
 package com.java110.community.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.community.CommunityAttrDto;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.PageDto;
+import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +51,7 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
     @Override
     public int getCommunityMemberCount(@RequestBody CommunityMemberDto communityMemberDto) {
-         logger.debug("getCommunityMemberCount：{}", JSONObject.toJSONString(communityMemberDto));
+        logger.debug("getCommunityMemberCount：{}", JSONObject.toJSONString(communityMemberDto));
 
         return communityServiceDaoImpl.getCommunityMemberCount(BeanConvertUtil.beanCovertMap(communityMemberDto));
     }
@@ -79,13 +81,36 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
         List<CommunityDto> communitys = BeanConvertUtil.covertBeanList(communityServiceDaoImpl.getCommunityInfoNew(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);
 
+        List<String> communityIds = new ArrayList<>();
 
+        if (communitys == null || communitys.size() < 1) {
+            return communitys;
+        }
+        for (CommunityDto tmpCommunityDto : communitys) {
+            communityIds.add(tmpCommunityDto.getCommunityId());
+        }
+        Map info = new HashMap();
+        info.put("communityIds", communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityAttrDto> communityAttrDtos = BeanConvertUtil.covertBeanList(communityServiceDaoImpl.getCommunityAttrs(info), CommunityAttrDto.class);
+
+        if (communityAttrDtos == null || communityAttrDtos.size() < 1) {
+            return communitys;
+        }
+
+
+        for (CommunityDto tmpCommunityDto : communitys) {
+            List<CommunityAttrDto> tmpCommunityAttrDtos = new ArrayList<>();
+            for (CommunityAttrDto communityAttrDto : communityAttrDtos) {
+                if (tmpCommunityDto.getCommunityId().equals(communityAttrDto.getCommunityId())) {
+                    tmpCommunityAttrDtos.add(communityAttrDto);
+                }
+            }
+            tmpCommunityDto.setCommunityAttrDtos(tmpCommunityAttrDtos);
+
+        }
 
         return communitys;
     }
-
-
-
 
 
     @Override

@@ -2,13 +2,6 @@ package com.java110.job.task.ownerToMachine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
-import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
-import com.java110.intf.order.IOrderInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineTranslateDto;
@@ -16,6 +9,13 @@ import com.java110.dto.order.OrderDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.task.TaskDto;
+import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
+import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.order.IOrderInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -87,6 +87,19 @@ public class TranslateOwnerPhotoToMachineTemplate extends TaskSystemQuartz {
                     List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
                     Assert.listOnlyOne(ownerRoomRelDtos, "数据错误 业主房屋关系未找到，或找到多条" + JSONObject.toJSONString(tmpOrderDto));
                     ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
+                } else if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL.equals(tmpOrderDto.getBusinessTypeCd())) {
+                    OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+                    ownerRoomRelDto.setbId(tmpOrderDto.getbId());
+                    ownerRoomRelDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+                    List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+                    if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+                        //刷新 状态为C1
+                        orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
+                        logger.debug("没有数据数据直接刷为C1" + JSONObject.toJSONString(tmpOrderDto));
+                        continue;
+                    }
+                    ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
                 } else {
                     ownerDto.setbId(tmpOrderDto.getbId());
                 }
@@ -109,6 +122,10 @@ public class TranslateOwnerPhotoToMachineTemplate extends TaskSystemQuartz {
                 }
                 RoomDto roomDto = new RoomDto();
                 roomDto.setOwnerId(ownerDtos.get(0).getOwnerId());
+                //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
+                if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL.equals(tmpOrderDto.getBusinessTypeCd())) {
+                    roomDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+                }
                 List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
 
                 dealData(tmpOrderDto, ownerDtos, rooms);

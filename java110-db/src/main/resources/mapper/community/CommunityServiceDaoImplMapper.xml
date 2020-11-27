@@ -135,6 +135,13 @@
         <if test="communityId != null and communityId !=''">
             and sa.community_id = #{communityId}
         </if>
+        <if test="communityIds != null ">
+            and sa.community_id in
+            <foreach collection="communityIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="attrId != null and attrId != ''">
             and sa.attr_id = #{attrId}
         </if>

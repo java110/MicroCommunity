@@ -225,7 +225,6 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
      */
     private void doSaveBusinessCommunityAttrs(Business business, JSONArray businessCommunityAttrs) {
         JSONObject data = business.getDatas();
-        JSONObject businessCommunity = data.getJSONObject("businessCommunity");
         for (int communityAttrIndex = 0; communityAttrIndex < businessCommunityAttrs.size(); communityAttrIndex++) {
             JSONObject communityAttr = businessCommunityAttrs.getJSONObject(communityAttrIndex);
             Assert.jsonObjectHaveKey(communityAttr, "attrId", "businessCommunityAttr 节点下没有包含 attrId 节点");
@@ -236,7 +235,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
             }
 
             communityAttr.put("bId", business.getbId());
-            communityAttr.put("communityId", businessCommunity.getString("communityId"));
+            //communityAttr.put("communityId", businessCommunity.getString("communityId"));
             communityAttr.put("operate", StatusConstant.OPERATE_ADD);
 
             communityServiceDaoImpl.saveBusinessCommunityAttr(communityAttr);
