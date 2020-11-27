@@ -122,7 +122,8 @@
 
     <!-- 查询小区属性信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityAttrs" parameterType="Map" resultType="Map">
-        select sa.b_id,sa.attr_id,sa.community_id,sa.spec_cd,sa.value,sa.status_cd
+        select sa.b_id,sa.attr_id,sa.community_id,sa.spec_cd,sa.value,sa.status_cd,
+        sa.b_id bId,sa.attr_id attrId,sa.community_id communityId,sa.spec_cd specCd,sa.value
         from s_community_attr sa
         where
         1=1
