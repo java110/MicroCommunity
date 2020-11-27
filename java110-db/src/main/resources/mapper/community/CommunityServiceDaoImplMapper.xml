@@ -123,8 +123,13 @@
     <!-- 查询小区属性信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityAttrs" parameterType="Map" resultType="Map">
         select sa.b_id,sa.attr_id,sa.community_id,sa.spec_cd,sa.value,sa.status_cd,
-        sa.b_id bId,sa.attr_id attrId,sa.community_id communityId,sa.spec_cd specCd,sa.value
+        sa.b_id bId,sa.attr_id attrId,sa.community_id communityId,sa.spec_cd specCd,
+        s.spec_name specName,
+        v.value_name valueName,
+        s.list_show listShow
         from s_community_attr sa
+        left join attr_spec s on sa.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name = 'building_community_attr'
+        left join attr_value v on sa.`value` = v.`value` and sa.spec_cd = v.spec_cd and v.status_cd = '0'
         where
         1=1
         <if test="statusCd != null and statusCd != ''">

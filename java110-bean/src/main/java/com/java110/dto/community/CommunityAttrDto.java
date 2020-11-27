@@ -19,11 +19,13 @@ public class CommunityAttrDto extends PageDto implements Serializable {
     private String communityId;
     private String specCd;
     private String value;
+    private String specName;
+    private String valueName;
+    private String listShow;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getAttrId() {
         return attrId;
@@ -71,5 +73,29 @@ public class CommunityAttrDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getValueName() {
+        return valueName;
+    }
+
+    public void setValueName(String valueName) {
+        this.valueName = valueName;
+    }
+
+    public String getListShow() {
+        return listShow;
+    }
+
+    public void setListShow(String listShow) {
+        this.listShow = listShow;
     }
 }
