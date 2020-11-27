@@ -156,6 +156,22 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public void addCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void addAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void updateAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息

@@ -1,5 +1,6 @@
 package com.java110.api.listener.community;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
@@ -36,7 +37,8 @@ public class SaveCommunityListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "address", "必填，请填写小区地址");
         Assert.hasKeyAndValue(reqJson, "nearbyLandmarks", "必填，请填写小区附近地标");
 
-
+        //属性校验
+        Assert.judgeAttrValue(reqJson);
 
     }
 
@@ -51,6 +53,8 @@ public class SaveCommunityListener extends AbstractServiceApiPlusListener {
         communityBMOImpl.addFeeConfigRepair(reqJson, context); // 报修费用
         communityBMOImpl.addFeeConfigParkingSpaceTemp(reqJson, context);//地下出租
 
+        dealAttr(reqJson, context);
+
         WorkflowPo workflowPo = null;
         workflowPo = new WorkflowPo();
         workflowPo.setCommunityId(reqJson.getString("communityId"));
@@ -60,6 +64,28 @@ public class SaveCommunityListener extends AbstractServiceApiPlusListener {
         workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
         workflowPo.setStoreId(reqJson.getString("storeId"));
         super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+    }
+
+
+    private void dealAttr(JSONObject paramObj, DataFlowContext context) {
+
+        if (!paramObj.containsKey("attrs")) {
+            return;
+        }
+
+        JSONArray attrs = paramObj.getJSONArray("attrs");
+        if (attrs.size() < 1) {
+            return;
+        }
+
+
+        JSONObject attr = null;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = attrs.getJSONObject(attrIndex);
+            attr.put("communityId", paramObj.getString("communityId"));
+            communityBMOImpl.addAttr(attr, context);
+        }
+
     }
 
 

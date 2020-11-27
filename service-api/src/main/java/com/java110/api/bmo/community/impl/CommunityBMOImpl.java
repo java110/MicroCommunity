@@ -11,6 +11,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.po.community.CommunityAttrPo;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.community.CommunityPo;
 import com.java110.po.fee.PayFeeConfigPo;
@@ -522,6 +523,33 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         paramInJson.put("communityArea", "0");
         CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
         super.insert(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
+
+    }
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void addAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        paramInJson.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        CommunityAttrPo communityAttrPo = BeanConvertUtil.covertBean(paramInJson, CommunityAttrPo.class);
+        super.insert(dataFlowContext, communityAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
+
+    }
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void updateAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        CommunityAttrPo communityAttrPo = BeanConvertUtil.covertBean(paramInJson, CommunityAttrPo.class);
+        super.insert(dataFlowContext, communityAttrPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
 
     }
 
