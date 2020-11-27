@@ -176,8 +176,6 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_errId = "10";
 
 
-
-
     /**
      * 只有在不调用服务生成ID时有用
      */
@@ -247,6 +245,7 @@ public class GenerateCodeFactory {
         }
     }
 
+
     public static String nextId() {
         return nextId("%04d");
     }
@@ -306,7 +305,7 @@ public class GenerateCodeFactory {
      * @throws GenerateCodeException
      */
     public static String getSpecCd() throws GenerateCodeException {
-        return DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_L) + nextId("%04d");
+        return nextId("%06d");
     }
 
     public static String getOId() throws GenerateCodeException {

@@ -1,6 +1,8 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.fee.FeeDetailDto;
+import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.po.feeDiscount.FeeDiscountPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -49,4 +51,13 @@ public interface IFeeDiscountInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeeDiscountsCount", method = RequestMethod.POST)
     int queryFeeDiscountsCount(@RequestBody FeeDiscountDto feeDiscountDto);
+
+    /**
+     * 计算折扣
+     *
+     * @param feeDetailDto
+     * @return
+     */
+    @RequestMapping(value = "/computeDiscount", method = RequestMethod.POST)
+    public List<ComputeDiscountDto> computeDiscount(@RequestBody FeeDetailDto feeDetailDto);
 }

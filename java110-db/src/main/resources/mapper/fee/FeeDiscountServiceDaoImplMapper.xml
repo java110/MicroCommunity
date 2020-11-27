@@ -20,7 +20,7 @@
         select t.discount_name,t.discount_name discountName,t.discount_desc,t.discount_desc
         discountDesc,t.discount_type,t.discount_type discountType,t.status_cd,t.status_cd
         statusCd,t.discount_id,t.discount_id discountId,t.community_id,t.community_id communityId,t.rule_id,t.rule_id
-        ruleId,t.create_time createTime,fdr.rule_name ruleName
+        ruleId,t.create_time createTime,fdr.rule_name ruleName,fdr.bean_impl beanImpl
         from fee_discount t
         left join fee_discount_rule fdr on t.rule_id = fdr.rule_id and fdr.status_cd = '0'
         where 1 =1
