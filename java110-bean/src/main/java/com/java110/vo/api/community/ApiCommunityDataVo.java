@@ -1,9 +1,11 @@
 package com.java110.vo.api.community;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.java110.dto.community.CommunityAttrDto;
 
-public class ApiCommunityDataVo  implements Serializable {
+import java.io.Serializable;
+import java.util.List;
+
+public class ApiCommunityDataVo implements Serializable {
 
     private String communityMemberId;
     private String communityId;
@@ -22,6 +24,8 @@ public class ApiCommunityDataVo  implements Serializable {
     private String storeTypeCd;
     private String storeTypeName;
     private String tel;
+
+    private List<CommunityAttrDto> communityAttrDtos;
 
     public String getCommunityId() {
         return communityId;
@@ -157,5 +161,13 @@ public class ApiCommunityDataVo  implements Serializable {
 
     public void setAuditStatusCd(String auditStatusCd) {
         this.auditStatusCd = auditStatusCd;
+    }
+
+    public List<CommunityAttrDto> getCommunityAttrDtos() {
+        return communityAttrDtos;
+    }
+
+    public void setCommunityAttrDtos(List<CommunityAttrDto> communityAttrDtos) {
+        this.communityAttrDtos = communityAttrDtos;
     }
 }
