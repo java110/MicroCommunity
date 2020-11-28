@@ -702,10 +702,12 @@
         AND u.`floor_id` = f.`floor_id`
         AND u.`status_cd` = '0'
         AND f.`status_cd` = '0'
-        AND borr.`status_cd` = '0'
         AND t.`status_cd` = '0'
         AND bo.`status_cd` = '0'
         AND bo.`owner_type_cd` = '1001'
+        <if test="statusCd !=null and statusCd != ''">
+            and borr.`status_cd` = #{statusCd}
+        </if>
         <if test="sex !=null ">
             and bo.sex= #{sex}
         </if>
@@ -715,9 +717,9 @@
         <if test="link !=null and link != ''">
             and bo.link= #{link}
         </if>
-        <if test="statusCd !=null and statusCd != ''">
-            and bo.status_cd= #{statusCd}
-        </if>
+        <!--        <if test="statusCd !=null and statusCd != ''">-->
+        <!--            and bo.status_cd= #{statusCd}-->
+        <!--        </if>-->
         <if test="remark !=null and remark != ''">
             and bo.remark= #{remark}
         </if>
