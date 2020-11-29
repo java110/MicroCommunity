@@ -71,13 +71,29 @@ public class LateFeeByDayRule implements IComputeDiscount {
         Date endTime = feeDtos.get(0).getEndTime();
 
         if (endTime.getTime() > curTime.getTime()) {
-            return null;
+            ComputeDiscountDto computeDiscountDto = new ComputeDiscountDto();
+            computeDiscountDto.setDiscountId(feeDiscountDto.getDiscountId());
+            computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_V);
+            computeDiscountDto.setRuleId(feeDiscountDto.getRuleId());
+            computeDiscountDto.setRuleName(feeDiscountDto.getRuleName());
+            computeDiscountDto.setDiscountName(feeDiscountDto.getDiscountName());
+            computeDiscountDto.setDiscountPrice(0.0);
+            computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
+            return computeDiscountDto;
         }
         //查询费用
         int day = DateUtil.daysBetween(curTime, endTime);
 
         if (day < 1) {
-            return null;
+            ComputeDiscountDto computeDiscountDto = new ComputeDiscountDto();
+            computeDiscountDto.setDiscountId(feeDiscountDto.getDiscountId());
+            computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_V);
+            computeDiscountDto.setRuleId(feeDiscountDto.getRuleId());
+            computeDiscountDto.setRuleName(feeDiscountDto.getRuleName());
+            computeDiscountDto.setDiscountName(feeDiscountDto.getDiscountName());
+            computeDiscountDto.setDiscountPrice(0.0);
+            computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
+            return computeDiscountDto;
         }
 
         double price = computeFeeSMOImpl.getFeePrice(feeDtos.get(0));

@@ -16,7 +16,11 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.*;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
@@ -119,9 +123,14 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
 
         //折扣管理
         if (paramObj.containsKey("selectDiscount")) {
+            JSONObject discountBusiness = null;
             JSONArray selectDiscounts = paramObj.getJSONArray("selectDiscount");
             for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
-                businesses.add(payFeeDetailDiscountBMOImpl.addPayFeeDetailDiscount(paramObj, selectDiscounts.getJSONObject(discountIndex), dataFlowContext));
+                discountBusiness = payFeeDetailDiscountBMOImpl.addPayFeeDetailDiscount(paramObj,
+                        selectDiscounts.getJSONObject(discountIndex), dataFlowContext);
+                if (discountBusiness != null) {
+                    businesses.add(discountBusiness);
+                }
             }
         }
 

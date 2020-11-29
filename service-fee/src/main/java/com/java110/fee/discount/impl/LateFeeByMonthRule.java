@@ -71,7 +71,15 @@ public class LateFeeByMonthRule implements IComputeDiscount {
         Date endTime = feeDtos.get(0).getEndTime();
 
         if (endTime.getTime() > curTime.getTime()) {
-            return null;
+            ComputeDiscountDto computeDiscountDto = new ComputeDiscountDto();
+            computeDiscountDto.setDiscountId(feeDiscountDto.getDiscountId());
+            computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_V);
+            computeDiscountDto.setRuleId(feeDiscountDto.getRuleId());
+            computeDiscountDto.setRuleName(feeDiscountDto.getRuleName());
+            computeDiscountDto.setDiscountName(feeDiscountDto.getDiscountName());
+            computeDiscountDto.setDiscountPrice(0.0);
+            computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
+            return computeDiscountDto;
         }
         //查询费用
         Double month = computeFeeSMOImpl.dayCompare(curTime, endTime);
