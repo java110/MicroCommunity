@@ -5,213 +5,216 @@
 <mapper namespace="payFeeDetailDiscountServiceDaoImpl">
 
     <!-- 保存缴费优惠信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessPayFeeDetailDiscountInfo" parameterType="Map">
-           insert into business_pay_fee_detail_discount(
-operate,create_time,detail_discount_id,discount_price,detail_id,remark,b_id,community_id,discount_id,fee_id
-) values (
-#{operate},#{createTime},#{detailDiscountId},#{discountPrice},#{detailId},#{remark},#{bId},#{communityId},#{discountId},#{feeId}
-)
-       </insert>
+    <insert id="saveBusinessPayFeeDetailDiscountInfo" parameterType="Map">
+        insert into business_pay_fee_detail_discount(
+        operate,detail_discount_id,discount_price,detail_id,remark,b_id,community_id,discount_id,fee_id
+        ) values (
+        #{operate},#{detailDiscountId},#{discountPrice},#{detailId},#{remark},#{bId},#{communityId},#{discountId},#{feeId}
+        )
+    </insert>
 
 
-       <!-- 查询缴费优惠信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessPayFeeDetailDiscountInfo" parameterType="Map" resultType="Map">
-           select  t.operate,t.create_time,t.create_time createTime,t.detail_discount_id,t.detail_discount_id detailDiscountId,t.discount_price,t.discount_price discountPrice,t.detail_id,t.detail_id detailId,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId,t.fee_id,t.fee_id feeId 
-from business_pay_fee_detail_discount t 
-where 1 =1 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="detailDiscountId !=null and detailDiscountId != ''">
-   and t.detail_discount_id= #{detailDiscountId}
-</if> 
-<if test="discountPrice !=null and discountPrice != ''">
-   and t.discount_price= #{discountPrice}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="discountId !=null and discountId != ''">
-   and t.discount_id= #{discountId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
+    <!-- 查询缴费优惠信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessPayFeeDetailDiscountInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.create_time,t.create_time createTime,t.detail_discount_id,t.detail_discount_id
+        detailDiscountId,t.discount_price,t.discount_price discountPrice,t.detail_id,t.detail_id
+        detailId,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.discount_id,t.discount_id
+        discountId,t.fee_id,t.fee_id feeId
+        from business_pay_fee_detail_discount t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="detailDiscountId !=null and detailDiscountId != ''">
+            and t.detail_discount_id= #{detailDiscountId}
+        </if>
+        <if test="discountPrice !=null and discountPrice != ''">
+            and t.discount_price= #{discountPrice}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存缴费优惠信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeDetailDiscountInfoInstance" parameterType="Map">
         insert into pay_fee_detail_discount(
-create_time,detail_discount_id,discount_price,detail_id,status_cd,remark,b_id,community_id,discount_id,fee_id
-) select t.create_time,t.detail_discount_id,t.discount_price,t.detail_id,'0',t.remark,t.b_id,t.community_id,t.discount_id,t.fee_id from business_pay_fee_detail_discount t where 1=1
-   and t.operate= 'ADD'
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="detailDiscountId !=null and detailDiscountId != ''">
-   and t.detail_discount_id= #{detailDiscountId}
-</if> 
-<if test="discountPrice !=null and discountPrice != ''">
-   and t.discount_price= #{discountPrice}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="discountId !=null and discountId != ''">
-   and t.discount_id= #{discountId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
+        create_time,detail_discount_id,discount_price,detail_id,status_cd,remark,b_id,community_id,discount_id,fee_id
+        ) select
+        t.create_time,t.detail_discount_id,t.discount_price,t.detail_id,'0',t.remark,t.b_id,t.community_id,t.discount_id,t.fee_id
+        from business_pay_fee_detail_discount t where 1=1
+        and t.operate= 'ADD'
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="detailDiscountId !=null and detailDiscountId != ''">
+            and t.detail_discount_id= #{detailDiscountId}
+        </if>
+        <if test="discountPrice !=null and discountPrice != ''">
+            and t.discount_price= #{discountPrice}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询缴费优惠信息 add by wuxw 2018-07-03 -->
     <select id="getPayFeeDetailDiscountInfo" parameterType="Map" resultType="Map">
-        select  t.create_time,t.create_time createTime,t.detail_discount_id,t.detail_discount_id detailDiscountId,t.discount_price,t.discount_price discountPrice,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId,t.fee_id,t.fee_id feeId 
-from pay_fee_detail_discount t 
-where 1 =1 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="detailDiscountId !=null and detailDiscountId != ''">
-   and t.detail_discount_id= #{detailDiscountId}
-</if> 
-<if test="discountPrice !=null and discountPrice != ''">
-   and t.discount_price= #{discountPrice}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="discountId !=null and discountId != ''">
-   and t.discount_id= #{discountId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.create_time,t.create_time createTime,t.detail_discount_id,t.detail_discount_id
+        detailDiscountId,t.discount_price,t.discount_price discountPrice,t.detail_id,t.detail_id
+        detailId,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id
+        communityId,t.discount_id,t.discount_id discountId,t.fee_id,t.fee_id feeId
+        from pay_fee_detail_discount t
+        where 1 =1
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="detailDiscountId !=null and detailDiscountId != ''">
+            and t.detail_discount_id= #{detailDiscountId}
+        </if>
+        <if test="discountPrice !=null and discountPrice != ''">
+            and t.discount_price= #{discountPrice}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改缴费优惠信息 add by wuxw 2018-07-03 -->
     <update id="updatePayFeeDetailDiscountInfoInstance" parameterType="Map">
-        update  pay_fee_detail_discount t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="createTime !=null and createTime != ''">
-, t.create_time= #{createTime}
-</if> 
-<if test="discountPrice !=null and discountPrice != ''">
-, t.discount_price= #{discountPrice}
-</if> 
-<if test="detailId !=null and detailId != ''">
-, t.detail_id= #{detailId}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="discountId !=null and discountId != ''">
-, t.discount_id= #{discountId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-, t.fee_id= #{feeId}
-</if> 
- where 1=1 <if test="detailDiscountId !=null and detailDiscountId != ''">
-and t.detail_discount_id= #{detailDiscountId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update pay_fee_detail_discount t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="discountPrice !=null and discountPrice != ''">
+            , t.discount_price= #{discountPrice}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            , t.detail_id= #{detailId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            , t.discount_id= #{discountId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        where 1=1
+        <if test="detailDiscountId !=null and detailDiscountId != ''">
+            and t.detail_discount_id= #{detailDiscountId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询缴费优惠数量 add by wuxw 2018-07-03 -->
-     <select id="queryPayFeeDetailDiscountsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from pay_fee_detail_discount t 
-where 1 =1 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="detailDiscountId !=null and detailDiscountId != ''">
-   and t.detail_discount_id= #{detailDiscountId}
-</if> 
-<if test="discountPrice !=null and discountPrice != ''">
-   and t.discount_price= #{discountPrice}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="discountId !=null and discountId != ''">
-   and t.discount_id= #{discountId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
+    <select id="queryPayFeeDetailDiscountsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee_detail_discount t
+        where 1 =1
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="detailDiscountId !=null and detailDiscountId != ''">
+            and t.detail_discount_id= #{detailDiscountId}
+        </if>
+        <if test="discountPrice !=null and discountPrice != ''">
+            and t.discount_price= #{discountPrice}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
