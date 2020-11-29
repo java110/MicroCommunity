@@ -167,7 +167,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         paramInJson.put("feeInfo", feeDto);
 
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
-
+        paramInJson.put("detailId", businessFeeDetail.getString("detailId"));
         feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivedAmount"));
         feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
         feeReceiptDetailPo.setCycle(businessFeeDetail.getString("cycles"));
@@ -664,9 +664,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
         String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
 
-        if(paramInJson.containsKey("feeEndDate")){
+        if (paramInJson.containsKey("feeEndDate")) {
             time = paramInJson.getString("feeEndDate");
-        }else if (paramInJson.containsKey("startTime")) {
+        } else if (paramInJson.containsKey("startTime")) {
             time = paramInJson.getString("startTime");
         }
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");

@@ -33,7 +33,7 @@ public class SavePayFeeDetailDiscountListener extends AbstractServiceApiPlusList
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        payFeeDetailDiscountBMOImpl.addPayFeeDetailDiscount(reqJson, context);
+        //payFeeDetailDiscountBMOImpl.addPayFeeDetailDiscount(reqJson, context);
     }
 
     @Override

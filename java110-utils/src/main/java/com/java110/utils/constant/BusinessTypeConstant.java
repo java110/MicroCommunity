@@ -1219,8 +1219,8 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_WORKFLOW_STEP_STAFF="580300050001";
     /**
-     *  保存工作流节点 处理员工
-     *  3保存
+     *  保存工作流节点 处理员工 ORDER_FEE_SERVICE_URL
+     *  3保存 feeServiceTopic
      */
     public static final String BUSINESS_TYPE_SAVE_DETAIL_DISCOUNT_INFO="641100030001";
 

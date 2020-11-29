@@ -13,7 +13,7 @@ public interface IPayFeeDetailDiscountBMO extends IApiBaseBMO {
      * @param dataFlowContext
      * @return
      */
-     void addPayFeeDetailDiscount(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    JSONObject addPayFeeDetailDiscount(JSONObject paramInJson,JSONObject discountJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加缴费优惠信息

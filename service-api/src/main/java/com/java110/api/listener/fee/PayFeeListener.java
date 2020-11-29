@@ -3,6 +3,7 @@ package com.java110.api.listener.fee;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.fee.IFeeBMO;
+import com.java110.api.bmo.payFeeDetailDiscount.IPayFeeDetailDiscountBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -13,13 +14,9 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
-import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
@@ -82,6 +79,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
+
 
     @Override
     public String getServiceCode() {
@@ -117,6 +117,13 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         businesses.add(feeBMOImpl.addFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPo, feeReceiptPo));
         businesses.add(feeBMOImpl.modifyFee(paramObj, dataFlowContext));
 
+        //折扣管理
+        if (paramObj.containsKey("selectDiscount")) {
+            JSONArray selectDiscounts = paramObj.getJSONArray("selectDiscount");
+            for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
+                businesses.add(payFeeDetailDiscountBMOImpl.addPayFeeDetailDiscount(paramObj, selectDiscounts.getJSONObject(discountIndex), dataFlowContext));
+            }
+        }
 
         //为停车费单独处理
         if (paramObj.containsKey("carPayerObjType") && FeeDto.PAYER_OBJ_TYPE_CAR.equals(paramObj.getString("carPayerObjType"))) {
@@ -173,6 +180,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
 
         dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailPo));
     }
+
 
     /**
      * 数据校验
