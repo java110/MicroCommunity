@@ -30,6 +30,8 @@ public class ComputeDiscountDto extends PageDto implements Serializable {
 
     private String discountType;
 
+    private String discountName;
+
     private String ruleName;
 
     private String ruleId;
@@ -85,5 +87,13 @@ public class ComputeDiscountDto extends PageDto implements Serializable {
 
     public void setDiscountType(String discountType) {
         this.discountType = discountType;
+    }
+
+    public String getDiscountName() {
+        return discountName;
+    }
+
+    public void setDiscountName(String discountName) {
+        this.discountName = discountName;
     }
 }

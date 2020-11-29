@@ -89,6 +89,7 @@ public class LateFeeByMonthRule implements IComputeDiscount {
         computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_V);
         computeDiscountDto.setRuleId(feeDiscountDto.getRuleId());
         computeDiscountDto.setRuleName(feeDiscountDto.getRuleName());
+        computeDiscountDto.setDiscountName(feeDiscountDto.getDiscountName());
         computeDiscountDto.setDiscountPrice(discountPrice);
         computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
         return computeDiscountDto;

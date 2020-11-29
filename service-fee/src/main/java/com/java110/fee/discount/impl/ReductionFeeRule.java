@@ -81,6 +81,7 @@ public class ReductionFeeRule implements IComputeDiscount {
         computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_D);
         computeDiscountDto.setRuleId(feeDiscountDto.getRuleId());
         computeDiscountDto.setRuleName(feeDiscountDto.getRuleName());
+        computeDiscountDto.setDiscountName(feeDiscountDto.getDiscountName());
         computeDiscountDto.setDiscountPrice(discountPrice);
         computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
         return computeDiscountDto;

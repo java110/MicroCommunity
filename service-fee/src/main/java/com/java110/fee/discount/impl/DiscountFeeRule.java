@@ -88,14 +88,14 @@ public class DiscountFeeRule implements IComputeDiscount {
 
         BigDecimal cycleDec = new BigDecimal(feeDiscountDto.getCycles());
 
-        double discountPrice = priceDec.multiply(cycleDec).multiply(new BigDecimal(rate)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-
+        double discountPrice = priceDec.multiply(cycleDec).multiply(new BigDecimal(1.0 - rate)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 
         ComputeDiscountDto computeDiscountDto = new ComputeDiscountDto();
         computeDiscountDto.setDiscountId(feeDiscountDto.getDiscountId());
         computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_D);
         computeDiscountDto.setRuleId(feeDiscountDto.getRuleId());
         computeDiscountDto.setRuleName(feeDiscountDto.getRuleName());
+        computeDiscountDto.setDiscountName(feeDiscountDto.getDiscountName());
         computeDiscountDto.setDiscountPrice(discountPrice);
         computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
         return computeDiscountDto;

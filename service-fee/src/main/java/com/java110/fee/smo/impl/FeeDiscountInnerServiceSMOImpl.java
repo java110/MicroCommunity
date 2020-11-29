@@ -144,7 +144,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         PayFeeConfigDiscountDto payFeeConfigDiscountDto = new PayFeeConfigDiscountDto();
         payFeeConfigDiscountDto.setConfigId(feeDtos.get(0).getConfigId());
         payFeeConfigDiscountDto.setRow(feeDetailDto.getRow());
-        payFeeConfigDiscountDto.setPage(feeDetailDto.getRow());
+        payFeeConfigDiscountDto.setPage(feeDetailDto.getPage());
         payFeeConfigDiscountDto.setCommunityId(feeDetailDto.getCommunityId());
         List<PayFeeConfigDiscountDto> payFeeConfigDiscountDtos =
                 payFeeConfigDiscountInnerServiceSMOImpl.queryPayFeeConfigDiscounts(payFeeConfigDiscountDto);
