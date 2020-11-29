@@ -1,9 +1,11 @@
 package com.java110.dto.payFeeDetailDiscount;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -21,7 +23,11 @@ public class PayFeeDetailDiscountDto extends PageDto implements Serializable {
     private String remark;
     private String communityId;
     private String discountId;
+    private String discountName;
+    private String discountType;
     private String feeId;
+
+    private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
 
     private Date createTime;
@@ -100,5 +106,29 @@ public class PayFeeDetailDiscountDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<FeeDiscountSpecDto> getFeeDiscountSpecs() {
+        return feeDiscountSpecs;
+    }
+
+    public void setFeeDiscountSpecs(List<FeeDiscountSpecDto> feeDiscountSpecs) {
+        this.feeDiscountSpecs = feeDiscountSpecs;
+    }
+
+    public String getDiscountName() {
+        return discountName;
+    }
+
+    public void setDiscountName(String discountName) {
+        this.discountName = discountName;
+    }
+
+    public String getDiscountType() {
+        return discountType;
+    }
+
+    public void setDiscountType(String discountType) {
+        this.discountType = discountType;
     }
 }

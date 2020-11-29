@@ -1,6 +1,7 @@
 package com.java110.fee.bmo.feeDiscount;
 
 import com.java110.dto.feeDiscount.FeeDiscountDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetFeeDiscountBMO {
@@ -16,4 +17,10 @@ public interface IGetFeeDiscountBMO {
     ResponseEntity<String> get(FeeDiscountDto feeDiscountDto);
 
 
+    /**
+     * 查询 缴费优惠
+     * @param payFeeDetailDiscountDto
+     * @return
+     */
+    ResponseEntity<String> getFeeDetailDiscount(PayFeeDetailDiscountDto payFeeDetailDiscountDto);
 }

@@ -2,9 +2,11 @@ package com.java110.fee.bmo.feeDiscount.impl;
 
 import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.fee.bmo.feeDiscount.IGetFeeDiscountBMO;
 import com.java110.intf.fee.IFeeDiscountInnerServiceSMO;
 import com.java110.intf.fee.IFeeDiscountSpecInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class GetFeeDiscountBMOImpl implements IGetFeeDiscountBMO {
 
     @Autowired
     private IFeeDiscountSpecInnerServiceSMO feeDiscountSpecInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeDetailDiscountInnerServiceSMO payFeeDetailDiscountInnerServiceSMOImpl;
 
     /**
      * @param feeDiscountDto
@@ -45,6 +50,60 @@ public class GetFeeDiscountBMOImpl implements IGetFeeDiscountBMO {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> getFeeDetailDiscount(PayFeeDetailDiscountDto payFeeDetailDiscountDto) {
+
+        int count = payFeeDetailDiscountInnerServiceSMOImpl.queryPayFeeDetailDiscountsCount(payFeeDetailDiscountDto);
+
+        List<PayFeeDetailDiscountDto> feeDetailDiscountDtos = null;
+        if (count > 0) {
+            feeDetailDiscountDtos = payFeeDetailDiscountInnerServiceSMOImpl.queryPayFeeDetailDiscounts(payFeeDetailDiscountDto);
+            freshDiscountDetailSpec(feeDetailDiscountDtos);
+        } else {
+            feeDetailDiscountDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) payFeeDetailDiscountDto.getRow()), count, feeDetailDiscountDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    private void freshDiscountDetailSpec(List<PayFeeDetailDiscountDto> feeDetailDiscountDtos) {
+
+        if (feeDetailDiscountDtos == null || feeDetailDiscountDtos.size() < 1) {
+            return;
+        }
+
+        List<String> discountIds = new ArrayList<>();
+        for (PayFeeDetailDiscountDto feeDetailDiscountDto : feeDetailDiscountDtos) {
+            discountIds.add(feeDetailDiscountDto.getDiscountId());
+        }
+
+        FeeDiscountSpecDto tmpFeeDiscountSpecDto = new FeeDiscountSpecDto();
+
+        tmpFeeDiscountSpecDto.setDiscountIds(discountIds.toArray(new String[discountIds.size()]));
+        tmpFeeDiscountSpecDto.setCommunityId(feeDetailDiscountDtos.get(0).getCommunityId());
+
+        List<FeeDiscountSpecDto> feeDiscountSpecDtos = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(tmpFeeDiscountSpecDto);
+
+        if (feeDiscountSpecDtos == null || feeDiscountSpecDtos.size() < 1) {
+            return;
+        }
+        List<FeeDiscountSpecDto> tmpSpecs = null;
+        for (PayFeeDetailDiscountDto feeDetailDiscountDto : feeDetailDiscountDtos) {
+            tmpSpecs = new ArrayList<>();
+            for (FeeDiscountSpecDto feeDiscountSpecDto : feeDiscountSpecDtos) {
+                if (feeDetailDiscountDto.getDiscountId().equals(feeDiscountSpecDto.getDiscountId())) {
+                    tmpSpecs.add(feeDiscountSpecDto);
+
+                }
+            }
+            feeDetailDiscountDto.setFeeDiscountSpecs(tmpSpecs);
+        }
     }
 
     private void freshDiscountSpec(List<FeeDiscountDto> feeDiscountDtos) {

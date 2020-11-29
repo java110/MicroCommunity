@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.dto.feeDiscountRule.FeeDiscountRuleDto;
 import com.java110.dto.feeDiscountRuleSpec.FeeDiscountRuleSpecDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.fee.bmo.feeDiscount.IDeleteFeeDiscountBMO;
 import com.java110.fee.bmo.feeDiscount.IGetFeeDiscountBMO;
 import com.java110.fee.bmo.feeDiscount.ISaveFeeDiscountBMO;
@@ -17,7 +18,11 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -177,5 +182,27 @@ public class FeeDiscountApi {
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) {
         return computeFeeDiscountBMOImpl.compute(feeId, communityId, cycles, page, row);
+    }
+
+
+    /**
+     * 查询 缴费优惠
+     *
+     * @return
+     * @serviceCode /feeDiscount/queryFeeDetailDiscount
+     * @path /app/feeDiscount/queryFeeDetailDiscount
+     */
+    @RequestMapping(value = "/queryFeeDetailDiscount", method = RequestMethod.GET)
+    public ResponseEntity<String> queryFeeDetailDiscount(
+            @RequestParam(value = "detailId") String detailId,
+            @RequestParam(value = "communityId") String communityId,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "row") int row) {
+        PayFeeDetailDiscountDto payFeeDetailDiscountDto = new PayFeeDetailDiscountDto();
+        payFeeDetailDiscountDto.setPage(page);
+        payFeeDetailDiscountDto.setRow(row);
+        payFeeDetailDiscountDto.setDetailId(detailId);
+        payFeeDetailDiscountDto.setCommunityId(communityId);
+        return getFeeDiscountBMOImpl.getFeeDetailDiscount(payFeeDetailDiscountDto);
     }
 }
