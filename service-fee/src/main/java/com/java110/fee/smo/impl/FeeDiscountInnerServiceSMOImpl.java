@@ -7,10 +7,12 @@ import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
+import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
 import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
 import com.java110.fee.dao.IFeeDiscountServiceDao;
 import com.java110.fee.discount.IComputeDiscount;
 import com.java110.intf.fee.IFeeDiscountInnerServiceSMO;
+import com.java110.intf.fee.IFeeDiscountSpecInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigDiscountInnerServiceSMO;
 import com.java110.po.feeDiscount.FeeDiscountPo;
@@ -43,6 +45,9 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
 
     @Autowired
     private IPayFeeConfigDiscountInnerServiceSMO payFeeConfigDiscountInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeDiscountSpecInnerServiceSMO feeDiscountSpecInnerServiceSMOImpl;
 
 
     @Override
@@ -80,7 +85,43 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
 
         List<FeeDiscountDto> feeDiscounts = BeanConvertUtil.covertBeanList(feeDiscountServiceDaoImpl.getFeeDiscountInfo(BeanConvertUtil.beanCovertMap(feeDiscountDto)), FeeDiscountDto.class);
 
+        freshDiscountSpec(feeDiscounts);
+
         return feeDiscounts;
+    }
+
+
+    private void freshDiscountSpec(List<FeeDiscountDto> feeDiscounts) {
+
+        if (feeDiscounts == null || feeDiscounts.size() < 1) {
+            return;
+        }
+
+        List<String> discountIds = new ArrayList<>();
+        for (FeeDiscountDto feeDiscount : feeDiscounts) {
+            discountIds.add(feeDiscount.getDiscountId());
+        }
+
+        FeeDiscountSpecDto tmpFeeDiscountSpecDto = new FeeDiscountSpecDto();
+
+        tmpFeeDiscountSpecDto.setDiscountIds(discountIds.toArray(new String[discountIds.size()]));
+        tmpFeeDiscountSpecDto.setCommunityId(feeDiscounts.get(0).getCommunityId());
+
+        List<FeeDiscountSpecDto> feeDiscountSpecDtos = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(tmpFeeDiscountSpecDto);
+
+        if (feeDiscountSpecDtos == null || feeDiscountSpecDtos.size() < 1) {
+            return;
+        }
+        List<FeeDiscountSpecDto> tmpSpecs = null;
+        for (FeeDiscountDto feeDiscount : feeDiscounts) {
+            tmpSpecs = new ArrayList<>();
+            for (FeeDiscountSpecDto feeDiscountSpecDto : feeDiscountSpecDtos) {
+                if (feeDiscount.getDiscountId().equals(feeDiscountSpecDto.getDiscountId())) {
+                    tmpSpecs.add(feeDiscountSpecDto);
+                }
+            }
+            feeDiscount.setFeeDiscountSpecs(tmpSpecs);
+        }
     }
 
 
@@ -113,13 +154,13 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         }
 
         for (PayFeeConfigDiscountDto tmpPayFeeConfigDiscountDto : payFeeConfigDiscountDtos) {
-            doCompute(tmpPayFeeConfigDiscountDto, Double.parseDouble(feeDetailDto.getCycles()), computeDiscountDtos);
+            doCompute(tmpPayFeeConfigDiscountDto, Double.parseDouble(feeDetailDto.getCycles()), computeDiscountDtos, feeDetailDto.getFeeId());
         }
         return computeDiscountDtos;
 
     }
 
-    private void doCompute(PayFeeConfigDiscountDto tmpPayFeeConfigDiscountDto, double cycles, List<ComputeDiscountDto> computeDiscountDtos) {
+    private void doCompute(PayFeeConfigDiscountDto tmpPayFeeConfigDiscountDto, double cycles, List<ComputeDiscountDto> computeDiscountDtos, String feeId) {
 
         FeeDiscountDto feeDiscountDto = new FeeDiscountDto();
         feeDiscountDto.setCommunityId(tmpPayFeeConfigDiscountDto.getCommunityId());
@@ -128,8 +169,16 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         if (feeDiscountDtos == null || feeDiscountDtos.size() < 1) {
             return;
         }
+        for (FeeDiscountDto tmpFeeDiscountDto : feeDiscountDtos) {
+            tmpFeeDiscountDto.setFeeId(feeId);
+            tmpFeeDiscountDto.setCycles(cycles);
+        }
         IComputeDiscount computeDiscount = (IComputeDiscount) ApplicationContextFactory.getBean(feeDiscountDtos.get(0).getBeanImpl());
         ComputeDiscountDto computeDiscountDto = computeDiscount.compute(feeDiscountDtos.get(0));
+
+        if (computeDiscountDto == null) {
+            return;
+        }
         computeDiscountDtos.add(computeDiscountDto);
     }
 

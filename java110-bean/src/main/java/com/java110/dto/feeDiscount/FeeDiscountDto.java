@@ -17,6 +17,10 @@ import java.util.List;
  **/
 public class FeeDiscountDto extends PageDto implements Serializable {
 
+    //类型 1001 优惠  2002 违约
+    public static final String DISCOUNT_TYPE_D = "1001"; //优惠
+    public static final String DISCOUNT_TYPE_V = "2002"; //违约
+
     private String discountName;
     private String discountDesc;
     private String discountType;
@@ -25,6 +29,8 @@ public class FeeDiscountDto extends PageDto implements Serializable {
     private String ruleId;
     private String ruleName;
     private String beanImpl;
+    private String feeId;
+    private double cycles;
 
     private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
@@ -121,5 +127,21 @@ public class FeeDiscountDto extends PageDto implements Serializable {
 
     public void setBeanImpl(String beanImpl) {
         this.beanImpl = beanImpl;
+    }
+
+    public String getFeeId() {
+        return feeId;
+    }
+
+    public void setFeeId(String feeId) {
+        this.feeId = feeId;
+    }
+
+    public double getCycles() {
+        return cycles;
+    }
+
+    public void setCycles(double cycles) {
+        this.cycles = cycles;
     }
 }

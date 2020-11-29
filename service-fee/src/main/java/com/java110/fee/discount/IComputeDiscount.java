@@ -27,7 +27,7 @@ public interface IComputeDiscount {
 
     /**
      * 计算折扣
-     * @param feeDiscountDto
+     * @param feeDiscountDto 费用优惠
      * @return
      */
     ComputeDiscountDto compute(FeeDiscountDto feeDiscountDto);

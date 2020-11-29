@@ -16,7 +16,7 @@
 package com.java110.dto.feeDiscount;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.feeDiscountRuleSpec.FeeDiscountRuleSpecDto;
+import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ComputeDiscountDto extends PageDto implements Serializable {
 
     private String ruleId;
 
-    private List<FeeDiscountRuleSpecDto> feeDiscountRuleSpecs;
+    private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
     private double discountPrice;
 
@@ -63,12 +63,12 @@ public class ComputeDiscountDto extends PageDto implements Serializable {
         this.ruleId = ruleId;
     }
 
-    public List<FeeDiscountRuleSpecDto> getFeeDiscountRuleSpecs() {
-        return feeDiscountRuleSpecs;
+    public List<FeeDiscountSpecDto> getFeeDiscountSpecs() {
+        return feeDiscountSpecs;
     }
 
-    public void setFeeDiscountRuleSpecs(List<FeeDiscountRuleSpecDto> feeDiscountRuleSpecs) {
-        this.feeDiscountRuleSpecs = feeDiscountRuleSpecs;
+    public void setFeeDiscountSpecs(List<FeeDiscountSpecDto> feeDiscountSpecs) {
+        this.feeDiscountSpecs = feeDiscountSpecs;
     }
 
     public double getDiscountPrice() {
