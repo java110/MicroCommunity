@@ -143,6 +143,8 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feeDto.setPayerObjName(ownerCarDto.getCarNum() + "(" + parkingSpaceDto.getAreaNum() + "停车场" + parkingSpaceDto.getNum() + "车位)");
             feeDto.setBuiltUpArea(parkingSpaceDto.getArea());
         }
+        double feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
+        feeDto.setFeePrice(feePrice);
         return ResultVo.createResponseEntity(feeDto);
     }
 
