@@ -767,11 +767,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Override
     public Date getTargetEndTime(double month, Date startDate) {
-//        Calendar endDate = Calendar.getInstance();
-//        endDate.setTime(startDate);
-//        endDate.add(Calendar.MONTH, (int) month);
-//        return endDate.getTime();
-
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(startDate);
 
@@ -781,7 +776,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         if (doubleMonth <= 0) {
             return endDate.getTime();
         }
-        Double hour = doubleMonth * 30 * 24;
+        Calendar futureDate = Calendar.getInstance();
+        futureDate.setTime(endDate.getTime());
+        futureDate.add(Calendar.MONTH, 1);
+        int futureDay = futureDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Double hour = doubleMonth * futureDay * 24;
         endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
         return endDate.getTime();
     }
