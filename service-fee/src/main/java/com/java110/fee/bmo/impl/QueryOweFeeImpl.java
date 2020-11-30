@@ -15,6 +15,9 @@ import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -26,12 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class QueryOweFeeImpl implements IQueryOweFee {
@@ -102,6 +100,50 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             responseEntity = computeBillOweFee(feeDto);
         }
         return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> listFeeObj(FeeDto feeDto) {
+
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        if (feeDtos == null || feeDtos.size() < 1) {
+            return ResultVo.success();
+        }
+
+        feeDto = feeDtos.get(0);
+
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(feeDto.getPayerObjId());
+            roomDto.setCommunityId(feeDto.getCommunityId());
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            if (roomDtos == null || roomDtos.size() != 1) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
+            }
+            roomDto = roomDtos.get(0);
+            feeDto.setPayerObjName(roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室");
+            feeDto.setBuiltUpArea(roomDto.getBuiltUpArea());
+
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setCommunityId(feeDto.getCommunityId());
+            ownerCarDto.setCarId(feeDto.getPayerObjId());
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            Assert.listOnlyOne(ownerCarDtos, "未找到车辆信息");
+            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
+            parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
+            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+            if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到停车位信息，查询多条数据");
+            }
+            ownerCarDto = ownerCarDtos.get(0);
+            parkingSpaceDto = parkingSpaceDtos.get(0);
+            feeDto.setPayerObjName(ownerCarDto.getCarNum() + "(" + parkingSpaceDto.getAreaNum() + "停车场" + parkingSpaceDto.getNum() + "车位)");
+            feeDto.setBuiltUpArea(parkingSpaceDto.getArea());
+        }
+        return ResultVo.createResponseEntity(feeDto);
     }
 
     private boolean freshFeeDtoParam(FeeDto feeDto) {

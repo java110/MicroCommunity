@@ -61,6 +61,7 @@ public class FeeDto extends PageDto implements Serializable {
     private double oweFee; // 欠费金额
     private String billType;
     private String billTypeName;
+    private String builtUpArea;
 
     private String paymentCd;
 
@@ -506,5 +507,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setIncomeObjName(String incomeObjName) {
         this.incomeObjName = incomeObjName;
+    }
+
+    public String getBuiltUpArea() {
+        return builtUpArea;
+    }
+
+    public void setBuiltUpArea(String builtUpArea) {
+        this.builtUpArea = builtUpArea;
     }
 }

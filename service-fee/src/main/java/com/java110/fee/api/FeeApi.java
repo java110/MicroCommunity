@@ -181,11 +181,29 @@ public class FeeApi extends BaseController {
         return queryOweFeeImpl.query(feeDto);
     }
 
+    /**
+     * 查询欠费费用
+     *
+     * @param feeId       费用ID
+     * @param communityId 小区ID
+     * @return
+     * @path /app/feeApi/listFeeObj
+     */
+    @RequestMapping(value = "/listFeeObj", method = RequestMethod.GET)
+    public ResponseEntity<String> listFeeObj(
+            @RequestParam(value = "feeId") String feeId,
+            @RequestParam(value = "communityId") String communityId) {
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(feeId);
+        feeDto.setCommunityId(communityId);
+        return queryOweFeeImpl.listFeeObj(feeDto);
+    }
+
 
     /**
      * 查询欠费费用(批量查询)
      *
-     * @param num    停车位或房屋编号
+     * @param num         停车位或房屋编号
      * @param communityId 小区ID
      * @return
      * @path /app/feeApi/getOweFees
@@ -197,7 +215,7 @@ public class FeeApi extends BaseController {
             @RequestParam(value = "billType") String billType,
             @RequestParam(value = "row") int row,
             @RequestParam(value = "page") int page,
-            @RequestParam(value = "num",required = false) String num
+            @RequestParam(value = "num", required = false) String num
     ) {
         FeeDto feeDto = new FeeDto();
         feeDto.setPayerObjId(num);
