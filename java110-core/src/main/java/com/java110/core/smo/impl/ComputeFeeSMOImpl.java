@@ -441,7 +441,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
         endCalender.add(Calendar.MONTH, new Double(Math.floor(cycle)).intValue());
-        int hours = new Double((cycle - Math.floor(cycle)) * DateUtil.getCurrentMonthDay() * 24).intValue();
+        Calendar futureDate = Calendar.getInstance();
+        futureDate.setTime(endCalender.getTime());
+        futureDate.add(Calendar.MONTH, 1);
+        int futureDay = futureDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int hours = new Double((cycle - Math.floor(cycle)) * futureDay * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
             return FeeDto.STATE_FINISH;
@@ -460,7 +464,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
         endCalender.add(Calendar.MONTH, new Double(Math.floor(cycle)).intValue());
-        int hours = new Double((cycle - Math.floor(cycle)) * DateUtil.getCurrentMonthDay() * 24).intValue();
+        Calendar futureDate = Calendar.getInstance();
+        futureDate.setTime(endCalender.getTime());
+        futureDate.add(Calendar.MONTH, 1);
+        int futureDay = futureDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int hours = new Double((cycle - Math.floor(cycle)) * futureDay * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
             if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {

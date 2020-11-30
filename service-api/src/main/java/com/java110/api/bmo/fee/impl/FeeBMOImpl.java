@@ -251,8 +251,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         endCalender.setTime(endTime);
         int hours = 0;
         if ("-101".equals(paramInJson.getString("cycles"))) {
-            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
-            endCalender.add(Calendar.HOUR, hours);
+//            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
+//            endCalender.add(Calendar.HOUR, hours);
+
+            endCalender = getTargetEndTime(endCalender, Double.parseDouble(paramInJson.getString("tmpCycles")));
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
         }
@@ -315,8 +317,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         endCalender.setTime(endTime);
         int hours = 0;
         if ("-101".equals(paramInJson.getString("cycles"))) {
-            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
-            endCalender.add(Calendar.HOUR, hours);
+//            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
+//            endCalender.add(Calendar.HOUR, hours);
+            endCalender = getTargetEndTime(endCalender, Double.parseDouble(paramInJson.getString("tmpCycles")));
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
             if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
