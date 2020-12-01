@@ -441,10 +441,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
         endCalender.add(Calendar.MONTH, new Double(Math.floor(cycle)).intValue());
-        Calendar futureDate = Calendar.getInstance();
-        futureDate.setTime(endCalender.getTime());
-        futureDate.add(Calendar.MONTH, 1);
-        int futureDay = futureDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+//        Calendar futureDate = Calendar.getInstance();
+//        futureDate.setTime(endCalender.getTime());
+//        futureDate.add(Calendar.MONTH, 1);
+        int futureDay = endCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
         int hours = new Double((cycle - Math.floor(cycle)) * futureDay * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
@@ -464,10 +464,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
         endCalender.add(Calendar.MONTH, new Double(Math.floor(cycle)).intValue());
-        Calendar futureDate = Calendar.getInstance();
-        futureDate.setTime(endCalender.getTime());
-        futureDate.add(Calendar.MONTH, 1);
-        int futureDay = futureDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+//        Calendar futureDate = Calendar.getInstance();
+//        futureDate.setTime(endCalender.getTime());
+//        futureDate.add(Calendar.MONTH, 1);
+        int futureDay = endCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
         int hours = new Double((cycle - Math.floor(cycle)) * futureDay * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
@@ -784,10 +784,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         if (doubleMonth <= 0) {
             return endDate.getTime();
         }
-        Calendar futureDate = Calendar.getInstance();
-        futureDate.setTime(endDate.getTime());
-        futureDate.add(Calendar.MONTH, 1);
-        int futureDay = futureDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+//        Calendar futureDate = Calendar.getInstance();
+//        futureDate.setTime(endDate.getTime());
+//        futureDate.add(Calendar.MONTH, 1);
+        int futureDay = endDate.getActualMaximum(Calendar.DAY_OF_MONTH);
         Double hour = doubleMonth * futureDay * 24;
         endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
         return endDate.getTime();
