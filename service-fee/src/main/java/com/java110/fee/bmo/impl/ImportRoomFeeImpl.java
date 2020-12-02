@@ -163,7 +163,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             importFeeDetailPo.setRoomNum(importRoomFee.getRoomNum());
             importFeeDetailPo.setRoomId(importRoomFee.getRoomId());
             importFeeDetailPo.setStartTime(importRoomFee.getStartTime());
-            importFeeDetailPo.setIfdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+            importFeeDetailPo.setIfdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_IfdId));
             importFeeDetailPo.setState("1000");
             importFeeDetailPo.setImportFeeId(importFeeId);
             importFeeDetailPos.add(importFeeDetailPo);

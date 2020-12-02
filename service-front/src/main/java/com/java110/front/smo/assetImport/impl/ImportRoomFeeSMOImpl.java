@@ -147,6 +147,12 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
 
         JSONObject resOut = JSONObject.parseObject(responseEntity.getBody());
 
+        if (ResultVo.CODE_OK != resOut.getInteger("code")) {
+            errorCount += tmpImportRoomFee.size();
+            paramOut.put("errorCount", errorCount);
+            return;
+        }
+
         successCount += resOut.getInteger("successCount");
         errorCount += resOut.getInteger("errorCount");
 
