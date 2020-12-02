@@ -96,25 +96,29 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
             throw new IllegalArgumentException("没有数据需要处理");
         }
 
+        JSONObject paramOut = new JSONObject();
+        paramOut.put("successCount", 0);
+        paramOut.put("errorCount", 0);
+
         JSONObject data = JSONObject.parseObject(pd.getReqData());
         data.put("storeId", result.getStoreId());
+        data.put("importFeeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         data.put("userId", result.getUserId());
         data.put("communityId", result.getCommunityId());
         List<ImportRoomFee> tmpImportRoomFees = new ArrayList<>();
         for (int roomIndex = 0; roomIndex < roomFees.size(); roomIndex++) {
             tmpImportRoomFees.add(roomFees.get(roomIndex));
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
-                data.put("importFeeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
-                createRoomFee(pd, tmpImportRoomFees, data);
+                createRoomFee(pd, tmpImportRoomFees, data, paramOut);
 
                 tmpImportRoomFees = new ArrayList<>();
             }
         }
         if (tmpImportRoomFees != null && tmpImportRoomFees.size() > 0) {
 
-            createRoomFee(pd, tmpImportRoomFees, data);
+            createRoomFee(pd, tmpImportRoomFees, data, paramOut);
         }
-        return ResultVo.success();
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "成功：" + paramOut.getString("successCount") + ",失败：" + paramOut.getString("errorCount"));
     }
 
     /**
@@ -123,14 +127,31 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
      * @param pd
      * @param tmpImportRoomFee
      */
-    private void createRoomFee(IPageData pd, List<ImportRoomFee> tmpImportRoomFee, JSONObject data) {
+    private void createRoomFee(IPageData pd, List<ImportRoomFee> tmpImportRoomFee, JSONObject data, JSONObject paramOut) {
+
+        int successCount = paramOut.getInteger("successCount");
+        int errorCount = paramOut.getInteger("errorCount");
 
         JSONArray importRoomFees = JSONArray.parseArray(JSONObject.toJSONString(tmpImportRoomFee));
         data.put("importRoomFees", importRoomFees);
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/importRoomFees";
 
-        this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
+
+        if (HttpStatus.OK != responseEntity.getStatusCode()) {
+            errorCount += tmpImportRoomFee.size();
+            paramOut.put("errorCount", errorCount);
+            return;
+        }
+
+        JSONObject resOut = JSONObject.parseObject(responseEntity.getBody());
+
+        successCount += resOut.getInteger("successCount");
+        errorCount += resOut.getInteger("errorCount");
+
+        paramOut.put("successCount", successCount);
+        paramOut.put("errorCount", errorCount);
     }
 
 

@@ -7,10 +7,10 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.importFee.ImportFeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.IImportRoomFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
-import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.po.fee.FeeAttrPo;
@@ -21,6 +21,7 @@ import com.java110.po.importFeeDetail.ImportFeeDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +76,9 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
     @Java110Transactional
     public ResponseEntity<String> importFee(JSONObject reqJson) {
 
+        int successCount = 0;
+        int errorCount = 0;
+
         //小区ID
         String communityId = reqJson.getString("communityId");
         String importFeeId = reqJson.getString("importFeeId");
@@ -101,7 +105,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
 
         List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
 
-        for(ImportRoomFee tmpImportRoomFee: tmpImportRoomFees){
+        for (ImportRoomFee tmpImportRoomFee : tmpImportRoomFees) {
             tmpImportRoomFee.setCommunityId(communityId);
         }
 
@@ -115,6 +119,14 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         PayFeePo payFeePo = null;
         ImportFeeDetailPo importFeeDetailPo = null;
         for (ImportRoomFee importRoomFee : tmpImportRoomFees) {
+            if (StringUtil.isEmpty(importRoomFee.getRoomId()) || importRoomFee.getRoomId().startsWith("-") ||
+                    StringUtil.isEmpty(importRoomFee.getFloorNum()) || importRoomFee.getFloorNum().startsWith("-") ||
+                    StringUtil.isEmpty(importRoomFee.getUnitNum()) || importRoomFee.getUnitNum().startsWith("-")
+            ) {
+                errorCount++;
+                continue;
+            }
+            successCount++;
             payFeePo = new PayFeePo();
             payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
             payFeePo.setEndTime(importRoomFee.getStartTime());
@@ -161,18 +173,30 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
 
         feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrPos);
 
-        //保存日志
-        ImportFeePo importFeePo = new ImportFeePo();
-        importFeePo.setCommunityId(communityId);
-        importFeePo.setFeeTypeCd(feeTypeCd);
-        importFeePo.setImportFeeId(importFeeId);
-        importFeeInnerServiceSMOImpl.saveImportFee(importFeePo);
+        ImportFeeDto importFeeDto = new ImportFeeDto();
+        importFeeDto.setCommunityId(communityId);
+        importFeeDto.setImportFeeId(importFeeId);
+
+        List<ImportFeeDto> importRoomFeess = importFeeInnerServiceSMOImpl.queryImportFees(importFeeDto);
+
+        if (importRoomFeess == null || importRoomFeess.size() < 1) {
+            //保存日志
+            ImportFeePo importFeePo = new ImportFeePo();
+            importFeePo.setCommunityId(communityId);
+            importFeePo.setFeeTypeCd(feeTypeCd);
+            importFeePo.setImportFeeId(importFeeId);
+            importFeeInnerServiceSMOImpl.saveImportFee(importFeePo);
+        }
 
 
         importFeeDetailInnerServiceSMOImpl.saveImportFeeDetails(importFeeDetailPos);
 
 
-        return ResultVo.success();
+        JSONObject data = new JSONObject();
+        data.put("successCount", successCount);
+        data.put("errorCount", errorCount);
+
+        return ResultVo.createResponseEntity(data);
     }
 
     /**
