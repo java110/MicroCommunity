@@ -25,6 +25,9 @@ public class IdSeqDto implements Serializable {
     private String id;
     private String prefix;
 
+    public IdSeqDto() {
+    }
+
     public IdSeqDto(String prefix) {
         this.prefix = prefix;
     }
