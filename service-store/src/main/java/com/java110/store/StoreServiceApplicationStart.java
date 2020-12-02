@@ -37,7 +37,8 @@ import java.nio.charset.Charset;
         "com.java110.intf.community",
         "com.java110.intf.fee",
         "com.java110.intf.user",
-        "com.java110.intf.common"
+        "com.java110.intf.common",
+        "com.java110.intf.order"
 })
 public class StoreServiceApplicationStart {
 
