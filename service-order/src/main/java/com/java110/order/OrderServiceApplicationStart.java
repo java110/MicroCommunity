@@ -15,14 +15,22 @@
  */
 package com.java110.order;
 
-import com.java110.utils.cache.MappingCache;
-import com.java110.utils.factory.ApplicationContextFactory;
-import com.java110.utils.util.StringUtil;
+import com.java110.config.properties.code.ZookeeperProperties;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.center.DataFlowEventPublishing;
 import com.java110.order.smo.ICenterServiceCacheSMO;
+import com.java110.service.init.ServiceInfoListener;
 import com.java110.service.init.ServiceStartInit;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.StartException;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
+import org.apache.zookeeper.*;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -35,7 +43,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.List;
 
 
 /**
@@ -48,7 +59,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.order",
-        "com.java110.core", "com.java110.core.event.order", "com.java110.config.properties.code","com.java110.db"})
+        "com.java110.core", "com.java110.core.event.order", "com.java110.config.properties.code", "com.java110.db"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,
@@ -62,7 +73,7 @@ import java.nio.charset.Charset;
 })
 public class OrderServiceApplicationStart {
 
-    private  static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);
+    private static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
@@ -101,8 +112,11 @@ public class OrderServiceApplicationStart {
 
             //刷新缓存
             flushMainCache(args);
-        }catch (Throwable e){
-            logger.error("系统启动失败",e);
+
+            //加载workId
+            loadWorkId();
+        } catch (Throwable e) {
+            logger.error("系统启动失败", e);
         }
     }
 
@@ -118,10 +132,10 @@ public class OrderServiceApplicationStart {
 
         //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
         String mapping = MappingCache.getValue("java110_hc_version");
-        if(StringUtil.isEmpty(mapping)){
+        if (StringUtil.isEmpty(mapping)) {
             ICenterServiceCacheSMO centerServiceCacheSMO = (ICenterServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
             centerServiceCacheSMO.startFlush();
-            return ;
+            return;
         }
 
         if (args == null || args.length == 0) {
@@ -134,5 +148,83 @@ public class OrderServiceApplicationStart {
                 centerServiceCacheSMO.startFlush();
             }
         }
+    }
+
+    /**
+     * 加载 workId
+     */
+    public static void loadWorkId() throws StartException {
+
+        if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
+            return;
+        }
+        ZookeeperProperties zookeeperProperties = ApplicationContextFactory.getBean("zookeeperProperties", ZookeeperProperties.class);
+
+        if (zookeeperProperties == null) {
+            throw new StartException(ResponseConstant.RESULT_CODE_ERROR, "系统启动失败，未加载zookeeper 配置信息");
+        }
+
+        String host = null;
+        try {
+            host = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new StartException(ResponseConstant.RESULT_CODE_ERROR, "系统启动失败，获取host失败" + e);
+        }
+
+        ServiceInfoListener serviceInfoListener = ApplicationContextFactory.getBean("serviceInfoListener", ServiceInfoListener.class);
+
+        if (serviceInfoListener == null) {
+            throw new StartException(ResponseConstant.RESULT_CODE_ERROR, "系统启动失败，获取服务监听端口失败");
+        }
+
+        serviceInfoListener.setServiceHost(host);
+
+        try {
+            ZooKeeper zooKeeper = new ZooKeeper(zookeeperProperties.getZookeeperConnectString(), zookeeperProperties.getTimeOut(), new Watcher() {
+
+                @Override
+                public void process(WatchedEvent watchedEvent) {
+
+                }
+            });
+
+
+            Stat stat = zooKeeper.exists(zookeeperProperties.getWorkDir(), true);
+
+            if (stat == null) {
+                zooKeeper.create(zookeeperProperties.getWorkDir(), "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,
+                        CreateMode.PERSISTENT);
+            }
+            String workDir = "";
+            List<String> workDirs = zooKeeper.getChildren(zookeeperProperties.getWorkDir(), true);
+
+            if (workDirs != null && workDirs.size() > 0) {
+                for (String workDirTemp : workDirs) {
+                    if (workDirTemp.startsWith(serviceInfoListener.getHostPort())) {
+                        workDir = workDirTemp;
+                        break;
+                    }
+                }
+            }
+            if (StringUtil.isNullOrNone(workDir)) {
+                workDir = zooKeeper.create(zookeeperProperties.getWorkDir() + "/" + serviceInfoListener.getHostPort(), "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,
+                        CreateMode.PERSISTENT_SEQUENTIAL);
+            }
+
+            String[] pathTokens = workDir.split("/");
+            if (pathTokens.length > 0
+                    && pathTokens[pathTokens.length - 1].contains("-")
+                    && pathTokens[pathTokens.length - 1].contains(":")) {
+                String workId = pathTokens[pathTokens.length - 1].substring(pathTokens[pathTokens.length - 1].indexOf("-") + 1);
+                serviceInfoListener.setWorkId(Long.parseLong(workId));
+            }
+
+            Assert.hasLength(serviceInfoListener.getWorkId() + "", "系统中加载workId 失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new StartException(ResponseConstant.RESULT_CODE_ERROR, "系统启动失败，链接zookeeper失败" + zookeeperProperties.getZookeeperConnectString());
+        }
+
+
     }
 }

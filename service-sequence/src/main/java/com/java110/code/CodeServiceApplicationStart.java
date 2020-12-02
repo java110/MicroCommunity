@@ -81,83 +81,10 @@ public class CodeServiceApplicationStart {
 
         ServiceStartInit.initSystemConfig(context);
 
-        //加载workId
-        loadWorkId();
-
-    }
-
-
-    /**
-     * 加载 workId
-     */
-    public static void loadWorkId() throws StartException {
-        ZookeeperProperties zookeeperProperties = ApplicationContextFactory.getBean("zookeeperProperties", ZookeeperProperties.class);
-
-        if (zookeeperProperties == null) {
-            throw new StartException(ResponseConstant.RESULT_CODE_ERROR, "系统启动失败，未加载zookeeper 配置信息");
-        }
-
-        String host = null;
-        try {
-            host = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            throw new StartException(ResponseConstant.RESULT_CODE_ERROR, "系统启动失败，获取host失败" + e);
-        }
-
-        ServiceInfoListener serviceInfoListener = ApplicationContextFactory.getBean("serviceInfoListener", ServiceInfoListener.class);
-
-        if (serviceInfoListener == null) {
-            throw new StartException(ResponseConstant.RESULT_CODE_ERROR, "系统启动失败，获取服务监听端口失败");
-        }
-
-        serviceInfoListener.setServiceHost(host);
-
-        try {
-            ZooKeeper zooKeeper = new ZooKeeper(zookeeperProperties.getZookeeperConnectString(), zookeeperProperties.getTimeOut(), new Watcher() {
-
-                @Override
-                public void process(WatchedEvent watchedEvent) {
-
-                }
-            });
-
-
-            Stat stat = zooKeeper.exists(zookeeperProperties.getWorkDir(), true);
-
-            if (stat == null) {
-                zooKeeper.create(zookeeperProperties.getWorkDir(), "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,
-                        CreateMode.PERSISTENT);
-            }
-            String workDir = "";
-            List<String> workDirs = zooKeeper.getChildren(zookeeperProperties.getWorkDir(), true);
-
-            if (workDirs != null && workDirs.size() > 0) {
-                for (String workDirTemp : workDirs) {
-                    if (workDirTemp.startsWith(serviceInfoListener.getHostPort())) {
-                        workDir = workDirTemp;
-                        break;
-                    }
-                }
-            }
-            if (StringUtil.isNullOrNone(workDir)) {
-                workDir = zooKeeper.create(zookeeperProperties.getWorkDir() + "/" + serviceInfoListener.getHostPort(), "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,
-                        CreateMode.PERSISTENT_SEQUENTIAL);
-            }
-
-            String[] pathTokens = workDir.split("/");
-            if (pathTokens.length > 0
-                    && pathTokens[pathTokens.length - 1].contains("-")
-                    && pathTokens[pathTokens.length - 1].contains(":")) {
-                String workId = pathTokens[pathTokens.length - 1].substring(pathTokens[pathTokens.length - 1].indexOf("-") + 1);
-                serviceInfoListener.setWorkId(Long.parseLong(workId));
-            }
-
-            Assert.hasLength(serviceInfoListener.getWorkId() + "", "系统中加载workId 失败");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new StartException(ResponseConstant.RESULT_CODE_ERROR, "系统启动失败，链接zookeeper失败" + zookeeperProperties.getZookeeperConnectString());
-        }
 
 
     }
+
+
+
 }

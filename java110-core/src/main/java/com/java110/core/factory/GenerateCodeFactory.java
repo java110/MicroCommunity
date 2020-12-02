@@ -1,14 +1,13 @@
 package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.idSeq.IdSeqDto;
 import com.java110.intf.code.ICodeApi;
+import com.java110.intf.order.IIdSeqInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.GenerateCodeException;
-import com.java110.utils.exception.ResponseErrorException;
 import com.java110.utils.factory.ApplicationContextFactory;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import org.springframework.web.client.RestTemplate;
 
@@ -326,29 +325,11 @@ public class GenerateCodeFactory {
      */
     private static String getCode(String prefix) throws GenerateCodeException {
         //调用服务
-        String code = "-1";
-        try {
-            String responseMessage = restTemplate().postForObject(MappingCache.getValue(MappingConstant.KEY_CODE_PATH),
-                    createCodeRequestJson(getTransactionId(), prefix, prefix).toJSONString(), String.class);
+        IIdSeqInnerServiceSMO idSeqInnerServiceSMOImpl = ApplicationContextFactory.getBean(IIdSeqInnerServiceSMO.class.getName(), IIdSeqInnerServiceSMO.class);
+        IdSeqDto idSeqDto = new IdSeqDto(prefix);
+        idSeqDto = idSeqInnerServiceSMOImpl.generateCode(idSeqDto);
 
-            if (ResponseConstant.RESULT_CODE_ERROR.equals(responseMessage)) {
-                throw new ResponseErrorException(ResponseConstant.RESULT_CODE_ERROR, "生成oId编码失败");
-            }
-            Assert.jsonObjectHaveKey(responseMessage, "code", "编码生成系统 返回报文错误" + responseMessage);
-
-            JSONObject resJson = JSONObject.parseObject(responseMessage);
-
-            if (!ResponseConstant.RESULT_CODE_SUCCESS.equals(resJson.getString("code"))) {
-                throw new ResponseErrorException(resJson.getString("code"), "生成oId编码失败 "
-                        + resJson.getString("message"));
-            }
-            code = resJson.getString("id");
-        } catch (Exception e) {
-            throw new GenerateCodeException(ResponseConstant.RESULT_CODE_ERROR, e.getMessage());
-        } finally {
-            return code;
-        }
-
+        return idSeqDto.getId();
     }
 
     public static String getBId() throws GenerateCodeException {
