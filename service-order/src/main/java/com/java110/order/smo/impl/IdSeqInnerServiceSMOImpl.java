@@ -19,7 +19,7 @@ import java.util.Map;
  * 用户服务信息管理业务信息实现
  * Created by wuxw on 2017/4/5.
  */
-@RestController
+@RestController(value = "com.java110.intf.order.IIdSeqInnerServiceSMO")
 public class IdSeqInnerServiceSMOImpl extends BaseServiceSMO implements IIdSeqInnerServiceSMO {
     protected final static Logger logger = LoggerFactory.getLogger(IdSeqInnerServiceSMOImpl.class);
 
