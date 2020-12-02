@@ -153,8 +153,10 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
             return;
         }
 
-        successCount += resOut.getInteger("successCount");
-        errorCount += resOut.getInteger("errorCount");
+        JSONObject resData = resOut.getJSONObject("data");
+
+        successCount += resData.getInteger("successCount");
+        errorCount += resData.getInteger("errorCount");
 
         paramOut.put("successCount", successCount);
         paramOut.put("errorCount", errorCount);
