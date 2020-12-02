@@ -97,18 +97,14 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
         }
 
         JSONObject data = JSONObject.parseObject(pd.getReqData());
-        data.put("importFeeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         data.put("storeId", result.getStoreId());
         data.put("userId", result.getUserId());
         data.put("communityId", result.getCommunityId());
-
         List<ImportRoomFee> tmpImportRoomFees = new ArrayList<>();
         for (int roomIndex = 0; roomIndex < roomFees.size(); roomIndex++) {
-
             tmpImportRoomFees.add(roomFees.get(roomIndex));
-
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
-
+                data.put("importFeeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
                 createRoomFee(pd, tmpImportRoomFees, data);
 
                 tmpImportRoomFees = new ArrayList<>();
