@@ -58,7 +58,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_subCommentAttrId = "62";
     public static final String CODE_PREFIX_commentPhotoId = "63";
     public static final String CODE_PREFIX_commentScoreId = "64";
-    public static final String CODE_PREFIX_communityId = "70";
+    public static final String CODE_PREFIX_communityId = "";
     public static final String CODE_PREFIX_communityPhotoId = "71";
     public static final String CODE_PREFIX_communityMemberId = "72";
     public static final String CODE_PREFIX_feeId = "90";
@@ -213,7 +213,7 @@ public class GenerateCodeFactory {
         prefixMap.put("subCommentAttrId", "62");
         prefixMap.put("commentPhotoId", "63");
         prefixMap.put("commentScoreId", "64");
-        prefixMap.put("communityId", "70");
+        prefixMap.put("communityId", "");
         prefixMap.put("communityPhotoId", "71");
         prefixMap.put("communityMemberId", "72");
         prefixMap.put("agentId", "80");
