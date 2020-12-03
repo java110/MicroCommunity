@@ -15,7 +15,6 @@
         )
     </insert>
 
-
     <!-- 查询费用配置信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessFeeConfigInfo" parameterType="Map" resultType="Map">
         select t.fee_type_cd,t.fee_type_cd feeTypeCd,t.computing_formula,t.computing_formula
@@ -51,7 +50,7 @@
             and t.fee_flag= #{feeFlag}
         </if>
         <if test="feeName !=null and feeName != ''">
-            and t.fee_name= #{feeName}
+            and t.fee_name like '%${feeName}%'
         </if>
         <if test="billType !=null and billType != ''">
             and t.bill_type= #{billType}
@@ -68,9 +67,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </select>
-
 
     <!-- 保存费用配置信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFeeConfigInfoInstance" parameterType="Map">
@@ -122,9 +119,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </insert>
-
 
     <!-- 查询费用配置信息 add by wuxw 2018-07-03 -->
     <select id="getFeeConfigInfo" parameterType="Map" resultType="Map">
@@ -171,7 +166,7 @@
             and t.fee_flag= #{feeFlag}
         </if>
         <if test="feeName !=null and feeName != ''">
-            and t.fee_name= #{feeName}
+            and t.fee_name like '%${feeName}%'
         </if>
         <if test="startTime !=null ">
             and t.start_time= #{startTime}
@@ -205,9 +200,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改费用配置信息 add by wuxw 2018-07-03 -->
     <update id="updateFeeConfigInfoInstance" parameterType="Map">
@@ -261,7 +254,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询费用配置数量 add by wuxw 2018-07-03 -->
@@ -303,7 +295,7 @@
             and t.fee_flag= #{feeFlag}
         </if>
         <if test="feeName !=null and feeName != ''">
-            and t.fee_name= #{feeName}
+            and t.fee_name like '%${feeName}%'
         </if>
         <if test="startTime !=null ">
             and t.start_time= #{startTime}
@@ -329,12 +321,7 @@
         <if test="billType !=null and billType != ''">
             and t.bill_type= #{billType}
         </if>
-
-
     </select>
-
-
-
 
     <!-- 保存费用配置信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeConfig" parameterType="Map">
@@ -346,5 +333,4 @@
         #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},'-1',#{billType},#{paymentCd},#{paymentCycle}
         )
     </insert>
-
 </mapper>
