@@ -150,7 +150,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             Calendar endCalender = Calendar.getInstance();
             endCalender.setTime(endTime);
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
-            cycles = receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_EVEN);
+            cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
             endCalender = getTargetEndTime(endCalender, cycles.doubleValue());
             targetEndTime = endCalender.getTime();
             paramInJson.put("tmpCycles", cycles.doubleValue());
