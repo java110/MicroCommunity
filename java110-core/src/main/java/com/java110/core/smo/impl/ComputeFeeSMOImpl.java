@@ -751,6 +751,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Override
     public double dayCompare(Date fromDate, Date toDate) {
+        double resMonth = 0.0;
         Calendar from = Calendar.getInstance();
         from.setTime(fromDate);
         Calendar to = Calendar.getInstance();
@@ -766,11 +767,28 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         long t1 = newFrom.getTimeInMillis();
         long t2 = to.getTimeInMillis();
         double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
-
         BigDecimal tmpDays = new BigDecimal(days);
-        BigDecimal monthDay = new BigDecimal(30);
+        BigDecimal monthDay = null;
+        Calendar newFromMaxDay = Calendar.getInstance();
+        newFromMaxDay.set(newFrom.get(Calendar.YEAR), newFrom.get(Calendar.MONTH), 1, 0, 0, 0);
+        newFromMaxDay.add(Calendar.MONTH, 1);
+        //在当前月中
+        if (toDate.getTime() < newFromMaxDay.getTime().getTime()) {
+            monthDay = new BigDecimal(newFromMaxDay.getActualMaximum(Calendar.DAY_OF_MONTH));
+            return tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
+        }
+        // 上月天数
+        days = (newFromMaxDay.getTimeInMillis() - t1) * 1.00 / (24 * 60 * 60 * 1000);
+        tmpDays = new BigDecimal(days);
+        monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
+        BigDecimal preRresMonth = tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result));
 
-        return tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
+        //下月天数
+        days = (t2 - newFromMaxDay.getTimeInMillis()) * 1.00 / (24 * 60 * 60 * 1000);
+        tmpDays = new BigDecimal(days);
+        monthDay = new BigDecimal(newFromMaxDay.getActualMaximum(Calendar.DAY_OF_MONTH));
+        resMonth = tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).add(preRresMonth).doubleValue();
+        return resMonth;
     }
 
     @Override
