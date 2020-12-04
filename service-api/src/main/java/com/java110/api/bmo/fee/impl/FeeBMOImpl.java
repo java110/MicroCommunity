@@ -418,10 +418,13 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         BigDecimal receivableAmount = feePrice;
         BigDecimal cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
         double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-
+        double discountPrice = paramInJson.getDouble("discountPrice");
         businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
+        businessFeeDetail.put("receivedAmount",
+                new BigDecimal(tmpReceivableAmount).subtract(new BigDecimal(discountPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
         paramInJson.put("receivableAmount", tmpReceivableAmount);
+        paramInJson.put("receivedAmount", businessFeeDetail.getString("receivedAmount"));
         return business;
     }
 

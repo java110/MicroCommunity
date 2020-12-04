@@ -47,6 +47,8 @@ public class PayFeeDetailDiscountInnerServiceSMOImpl extends BaseServiceSMO impl
         return payFeeDetailDiscounts;
     }
 
+
+
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *

@@ -82,13 +82,13 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         }
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         String orderId = orderInfo.getString("oId");
-        double money = Double.parseDouble(orderInfo.getString("receivableAmount"));
+        double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
         if (AppDto.WECHAT_OWNER_APP_ID.equals(pd.getAppId())) {
             appType = OwnerAppUserDto.APP_TYPE_WECHAT;
-        }else if(AppDto.WECHAT_MINA_OWNER_APP_ID.equals(pd.getAppId())){
+        } else if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(pd.getAppId())) {
             appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
-        }else{
+        } else {
             appType = OwnerAppUserDto.APP_TYPE_APP;
         }
         Map tmpParamIn = new HashMap();

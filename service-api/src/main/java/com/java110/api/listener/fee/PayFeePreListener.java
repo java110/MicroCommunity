@@ -3,17 +3,21 @@ package com.java110.api.listener.fee;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.fee.IFeeBMO;
+import com.java110.api.bmo.payFeeDetailDiscount.IPayFeeDetailDiscountBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.fee.FeeDetailDto;
+import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeDiscountInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -23,6 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @ClassName PayFeeListener
@@ -54,6 +61,12 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeDiscountInnerServiceSMO feeDiscountInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -77,15 +90,24 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
         //校验数据
         validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn)   ;
+        JSONObject paramObj = JSONObject.parseObject(paramIn);
 
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
+        //判断是否有折扣情况
+        judgeDiscount(paramObj);
 
         //添加单元信息
         businesses.add(feeBMOImpl.addFeePreDetail(paramObj, dataFlowContext));
         businesses.add(feeBMOImpl.modifyPreFee(paramObj, dataFlowContext));
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS,Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
+
+        double discountPrice = paramObj.getDouble("discountPrice");
+        if (discountPrice > 0) {
+            addDiscount(paramObj, businesses, dataFlowContext);
+        }
+
+
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS, Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);
@@ -93,9 +115,54 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         }
 
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        //这里调整为实收金额
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
+        paramOut.put("receivedAmount", paramObj.getString("receivedAmount"));
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void judgeDiscount(JSONObject paramObj) {
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setCommunityId(paramObj.getString("communityId"));
+        feeDetailDto.setFeeId(paramObj.getString("feeId"));
+        feeDetailDto.setCycles(paramObj.getString("cycles"));
+        feeDetailDto.setRow(1);
+        feeDetailDto.setPage(20);
+        List<ComputeDiscountDto> computeDiscountDtos = feeDiscountInnerServiceSMOImpl.computeDiscount(feeDetailDto);
+
+        if (computeDiscountDtos == null || computeDiscountDtos.size() < 1) {
+            paramObj.put("discountPrice", 0.0);
+            return;
+        }
+        BigDecimal discountPrice = new BigDecimal(0);
+        for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+            discountPrice = discountPrice.add(new BigDecimal(computeDiscountDto.getDiscountPrice()));
+        }
+
+        paramObj.put("discountPrice", discountPrice.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+        paramObj.put("computeDiscountDtos", computeDiscountDtos);
+    }
+
+    private void addDiscount(JSONObject paramObj, JSONArray businesses, DataFlowContext dataFlowContext) {
+        List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
+        JSONObject discountBusiness = null;
+        for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+            if (computeDiscountDto.getDiscountPrice() <= 0) {
+                continue;
+            }
+            JSONObject paramIn = new JSONObject();
+            paramIn.put("discountPrice", computeDiscountDto.getDiscountPrice());
+            paramIn.put("discountId", computeDiscountDto.getDiscountId());
+            paramIn.put("detailId", paramObj.getString("detailId"));
+            paramIn.put("communityId", paramObj.getString("communityId"));
+            paramIn.put("feeId", paramObj.getString("feeId"));
+            discountBusiness = payFeeDetailDiscountBMOImpl.addPayFeeDetailDiscount(paramObj,
+                    paramIn, dataFlowContext);
+            if (discountBusiness != null) {
+                businesses.add(discountBusiness);
+            }
+        }
     }
 
     /**
@@ -118,6 +185,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         Assert.hasLength(paramInObj.getString("receivedAmount"), "实收金额不能为空");
         Assert.hasLength(paramInObj.getString("feeId"), "费用ID不能为空");
         Assert.hasLength(paramInObj.getString("appId"), "appId不能为空");
+
 
     }
 
