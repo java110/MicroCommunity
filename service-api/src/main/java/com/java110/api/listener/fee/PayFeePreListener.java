@@ -127,8 +127,8 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         feeDetailDto.setCommunityId(paramObj.getString("communityId"));
         feeDetailDto.setFeeId(paramObj.getString("feeId"));
         feeDetailDto.setCycles(paramObj.getString("cycles"));
-        feeDetailDto.setRow(1);
-        feeDetailDto.setPage(20);
+        feeDetailDto.setRow(20);
+        feeDetailDto.setPage(1);
         List<ComputeDiscountDto> computeDiscountDtos = feeDiscountInnerServiceSMOImpl.computeDiscount(feeDetailDto);
 
         if (computeDiscountDtos == null || computeDiscountDtos.size() < 1) {
