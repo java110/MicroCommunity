@@ -290,7 +290,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
-        businessFeeDetail.put("detailId", "-1");
+        businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         businessFeeDetail.put("primeRate", "1.00");
 
         if (!businessFeeDetail.containsKey("state")) {
