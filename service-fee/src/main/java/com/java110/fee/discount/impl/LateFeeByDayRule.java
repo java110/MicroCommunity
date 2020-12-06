@@ -110,7 +110,7 @@ public class LateFeeByDayRule implements IComputeDiscount {
         computeDiscountDto.setRuleId(feeDiscountDto.getRuleId());
         computeDiscountDto.setRuleName(feeDiscountDto.getRuleName());
         computeDiscountDto.setDiscountName(feeDiscountDto.getDiscountName());
-        computeDiscountDto.setDiscountPrice(discountPrice);
+        computeDiscountDto.setDiscountPrice(discountPrice * -1);
         computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
         return computeDiscountDto;
     }
