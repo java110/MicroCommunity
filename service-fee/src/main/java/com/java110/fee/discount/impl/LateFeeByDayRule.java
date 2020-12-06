@@ -102,7 +102,7 @@ public class LateFeeByDayRule implements IComputeDiscount {
 
         BigDecimal dayDec = new BigDecimal(day);
 
-        double discountPrice = priceDec.divide(new BigDecimal(30)).multiply(new BigDecimal(rate)).multiply(dayDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        double discountPrice = priceDec.divide(new BigDecimal(30), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(rate)).multiply(dayDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 
         ComputeDiscountDto computeDiscountDto = new ComputeDiscountDto();
         computeDiscountDto.setDiscountId(feeDiscountDto.getDiscountId());
