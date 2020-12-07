@@ -16,10 +16,8 @@
         <module>java110-service</module>
         <module>java110-db</module>
         <module>service-user</module>
-        <module>service-log</module>
         <module>service-fee</module>
         <module>service-eureka</module>
-        <module>service-sequence</module>
         <module>service-store</module>
         <module>service-order</module>
         <module>service-api</module>

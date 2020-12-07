@@ -2,22 +2,23 @@ package com.java110.order.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.client.RestTemplate;
+import com.java110.core.context.*;
+import com.java110.core.event.center.DataFlowEventPublishing;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.OrderDataFlowContextFactory;
+import com.java110.core.log.LogAgent;
+import com.java110.entity.center.AppService;
+import com.java110.entity.center.DataFlowLinksCost;
+import com.java110.entity.order.Business;
+import com.java110.entity.order.ServiceBusiness;
+import com.java110.order.dao.ICenterServiceDAO;
+import com.java110.order.smo.IOrderServiceSMO;
+import com.java110.service.init.ServiceInfoListener;
+import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.KafkaConstant;
-import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.StatusConstant;
-import com.java110.utils.exception.BusinessException;
-import com.java110.utils.exception.BusinessStatusException;
-import com.java110.utils.exception.DAOException;
-import com.java110.utils.exception.DecryptException;
-import com.java110.utils.exception.InitConfigDataException;
-import com.java110.utils.exception.NoAuthorityException;
-import com.java110.utils.exception.NoSupportException;
-import com.java110.utils.exception.OrdersException;
-import com.java110.utils.exception.RuleException;
-import com.java110.utils.exception.SMOException;
+import com.java110.utils.constant.*;
+import com.java110.utils.exception.*;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.log.LoggerEngine;
@@ -25,25 +26,6 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ServiceBusinessUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.WebServiceAxisClient;
-import com.java110.core.client.RestTemplate;
-import com.java110.core.context.DataFlow;
-import com.java110.core.context.IOrderDataFlowContext;
-import com.java110.core.context.IOrderNotifyDataFlowContext;
-import com.java110.core.context.IOrderResponse;
-import com.java110.core.context.OrderDataFlow;
-import com.java110.core.context.OrderNotifyDataFlow;
-import com.java110.core.factory.AuthenticationFactory;
-import com.java110.core.factory.OrderDataFlowContextFactory;
-import com.java110.entity.center.AppService;
-import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.entity.order.Business;
-import com.java110.entity.order.ServiceBusiness;
-import com.java110.core.event.center.DataFlowEventPublishing;
-import com.java110.core.log.LogAgent;
-import com.java110.order.dao.ICenterServiceDAO;
-import com.java110.order.smo.IOrderServiceSMO;
-import com.java110.service.init.ServiceInfoListener;
-import com.java110.service.smo.IQueryServiceSMO;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,8 +51,6 @@ import java.util.Map;
 public class OrderServiceSMOImpl extends AbstractOrderServiceSMOImpl implements IOrderServiceSMO {
 
     private static Logger logger = LoggerFactory.getLogger(OrderServiceSMOImpl.class);
-
-
 
 
     @Autowired
@@ -106,6 +86,9 @@ public class OrderServiceSMOImpl extends AbstractOrderServiceSMOImpl implements 
             //6.0 调用下游系统
             DataFlowEventPublishing.invokeBusinessSystem(dataFlow);
             invokeBusinessSystem(dataFlow);
+
+            // 业务调用完成
+            DataFlowEventPublishing.invokeFinishBusinessSystem(dataFlow);
 
             //能够执行到这一步 认为是都成功了
             refreshOrderDataFlowResJson(dataFlow);
@@ -320,7 +303,6 @@ public class OrderServiceSMOImpl extends AbstractOrderServiceSMOImpl implements 
         //OrderDataFlowContextFactory.addCostTime(dataFlow, "updateOrderAndBusinessError", "订单状态改为失败耗时", startDate);
 
     }
-
 
 
     /**
@@ -647,7 +629,6 @@ public class OrderServiceSMOImpl extends AbstractOrderServiceSMOImpl implements 
     }
 
 
-
     /**
      * 处理异步业务
      *
@@ -742,7 +723,6 @@ public class OrderServiceSMOImpl extends AbstractOrderServiceSMOImpl implements 
             logger.error("报错日志出错了，", e);
         }
     }
-
 
 
     public ICenterServiceDAO getCenterServiceDaoImpl() {
