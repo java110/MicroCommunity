@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.db.dao.IQueryServiceDAO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
 import com.java110.entity.order.ServiceBusiness;
@@ -97,11 +98,13 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
         //3.0 分装 ServiceSql
         doFlushServiceSql();
-
+        //5.0 刷新全新
         doFlushServiceBusiness();
 
-        //5.0 刷新全新
+
         doFlushPrivilege();
+
+        doFlushDatabus();
     }
 
 
@@ -287,6 +290,14 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         //删除原始数据
         PrivilegeCache.removeData(PrivilegeCache.DEFAULT_PRIVILEGE);
         PrivilegeCache.setValue(basePrivilegeDtos);
+    }
+
+    private void doFlushDatabus() {
+        logger.debug("开始刷新 Mapping数据到redis数据库中");
+        List<BusinessDatabusDto> businessDatabusDtos = centerServiceDAOImpl.getDatabusAll();
+        //删除原始数据
+        DatabusCache.removeData(DatabusCache.DEFAULT_DATABUS);
+        DatabusCache.setValue(businessDatabusDtos);
     }
 
     /**

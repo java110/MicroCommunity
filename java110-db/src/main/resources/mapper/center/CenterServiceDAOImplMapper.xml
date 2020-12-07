@@ -259,6 +259,22 @@
         ]]>
     </select>
 
+    <select id="getDatabusAll" resultType="com.java110.dto.businessDatabus.BusinessDatabusDto">
+        <![CDATA[
+            SELECT
+                t.databus_id databusId,
+                t.databus_name databusName,
+                t.business_type_cd businessTypeCd,
+                t.bean_name beanName,
+                t.seq
+            FROM
+                c_business_databus t
+            WHERE
+                t.status_cd = '0'
+            AND t.state = '1001'
+        ]]>
+    </select>
+
     <select id="judgeAllBusinessCompleted" parameterType="map" resultType="map">
         SELECT co.* FROM c_orders co WHERE co.`o_id` = #{oId} and not exists (
         SELECT 1 FROM c_business cb WHERE cb.`o_id` = co.`o_id`
