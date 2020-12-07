@@ -34,13 +34,14 @@ public class Java110Converter implements Converter {
         if (value instanceof String && target == Date.class) {
             String date = (String) value;
             Date newDate = null;
+            SimpleDateFormat strdf = null;
             if (date.contains(":")) {
-                //sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                strdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             } else {
-                sdf = new SimpleDateFormat("yyyy-MM-dd");
+                strdf = new SimpleDateFormat("yyyy-MM-dd");
             }
             try {
-                newDate = sdf.parse(date);
+                newDate = strdf.parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
