@@ -9,6 +9,8 @@ public class BusinessDatabusPo implements Serializable {
     private String beanName;
     private String statusCd = "0";
     private String seq;
+    private String databusName;
+    private String state;
 
     public String getBusinessTypeCd() {
         return businessTypeCd;
@@ -50,5 +52,19 @@ public class BusinessDatabusPo implements Serializable {
         this.seq = seq;
     }
 
+    public String getDatabusName() {
+        return databusName;
+    }
 
+    public void setDatabusName(String databusName) {
+        this.databusName = databusName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 }
