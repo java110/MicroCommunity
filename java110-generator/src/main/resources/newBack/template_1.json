@@ -1,22 +1,27 @@
 {
   "autoMove": true,
-  "id": "errId",
-  "name": "logSystemError",
-  "desc": "系统异常",
-  "shareParam": "errId",
-  "shareColumn": "errId",
-  "shareName": "common",
-  "tableName": "log_system_error",
+  "id": "databusId",
+  "name": "businessDatabus",
+  "desc": "业务数据同步",
+  "shareParam": "databusId",
+  "shareColumn": "databus_id",
+  "shareName": "job",
+  "tableName": "c_business_databus",
   "param": {
-    "errId": "err_id",
-    "errType": "err_type",
-    "msg": "msg",
+    "databusId": "databus_id",
+    "businessTypeCd": "business_type_cd",
+    "beanName": "bean_name",
+    "seq": "seq",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "errType",
-      "msg": "异常不能为空"
+      "code": "businessTypeCd",
+      "msg": "业务类型不能为空"
+    },
+    {
+      "code": "beanName",
+      "msg": "适配器不能为空"
     }
   ]
 }
