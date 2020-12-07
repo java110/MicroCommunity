@@ -1,46 +1,66 @@
 {
-  "templateName": "费用折扣",
-  "directories": "property",
-  "templateCode": "payFeeConfigDiscount",
-  "templateKey": "configDiscountId",
-  "templateKeyName": "费用折扣ID",
-  "searchCode": "configDiscountId",
-  "searchName": "费用折扣ID",
+  "templateName": "databus",
+  "directories": "dev",
+  "templateCode": "businessDatabus",
+  "templateKey": "databusId",
+  "templateKeyName": "Databus ID",
+  "searchCode": "databusId",
+  "searchName": "Databus ID",
   "conditions": [
     {
-      "name": "折扣名称",
+      "name": "业务类型",
       "inputType": "input",
-      "code": "configId",
+      "code": "businessTypeCd",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "适配器",
+      "inputType": "input",
+      "code": "beanName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "ID",
+      "inputType": "input",
+      "code": "databusId",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "discountId",
-      "cnCode": "折扣名称",
-      "desc": "必填，请选择折扣名称",
+      "code": "businessTypeCd",
+      "cnCode": "业务类型",
+      "desc": "必填，请输入业务类型",
       "required": true,
       "hasDefaultValue": false,
-      "inputType": "select",
-      "selectValue":"1001,2002",
-      "selectValueName":"优惠,违约",
+      "inputType": "input",
       "limit": "num",
       "limitParam": "",
-      "limitErrInfo": "折扣格式错误",
+      "limitErrInfo": "业务类型格式错误",
       "show": true
     },
     {
-      "code": "discountId",
-      "cnCode": "折扣名称",
-      "desc": "必填，请选择折扣名称",
+      "code": "beanName",
+      "cnCode": "适配器",
+      "desc": "必填，请输入适配器",
       "required": true,
       "hasDefaultValue": false,
-      "inputType": "select",
-      "selectValue":"1001,2002",
-      "selectValueName":"优惠,违约",
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "256",
+      "limitErrInfo": "适配器名称太长",
+      "show": true
+    },
+    {
+      "code": "seq",
+      "cnCode": "顺序",
+      "desc": "必填，请输入顺序",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
       "limit": "num",
       "limitParam": "",
-      "limitErrInfo": "折扣格式错误",
+      "limitErrInfo": "顺序格式错误",
       "show": true
     }
   ]
