@@ -33,8 +33,8 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     public static final String DEFAULT_OPEN_DOOR_PROTOCOL = "ximoOpenDoorAdapt";//吸墨门禁
 
 
-    @Autowired
-    IDatabusAdapt databusAdaptImpl;
+   // @Autowired
+    private IDatabusAdapt databusAdaptImpl;
 
     @Override
     public boolean exchange(@RequestBody List<Business> businesses) {
