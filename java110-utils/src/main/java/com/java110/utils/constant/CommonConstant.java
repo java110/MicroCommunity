@@ -121,6 +121,12 @@ public class CommonConstant {
      */
     public final static String CACHE_PRIVILEGE = "PRIVILEGE";
 
+    /**
+     * 映射 databus
+     */
+    public final static String CACHE_DATABUS = "DATABUS";
+
+
 
     /**
      * 映射 缓存常量

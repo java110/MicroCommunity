@@ -61,6 +61,9 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         //5.0 刷新基础权限
         flushPrivilege(dataQuery);
 
+        //刷新databus
+        doFlushDatabus(dataQuery);
+
         dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS, "刷新成功"));
     }
 
@@ -83,6 +86,8 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
         //5.0 刷新基础权限
         flushPrivilege(headers);
+
+        flushDatabus(headers);
     }
 
     /**
@@ -104,6 +109,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
         doFlushPrivilege();
 
+        //刷新databus
         doFlushDatabus();
     }
 
@@ -230,6 +236,20 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     /**
      * 刷新 Mapping 数据
      */
+    private void doFlushDatabus(DataQuery dataQuery) {
+
+        JSONObject params = dataQuery.getRequestParams();
+
+        if (!CommonConstant.CACHE_DATABUS.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))) {
+            return;
+        }
+
+        doFlushDatabus();
+    }
+
+    /**
+     * 刷新 Mapping 数据
+     */
     private void flushPrivilege(Map<String, String> headers) {
 
         Assert.hasKey(headers, CommonConstant.CACHE_PARAM, "未包含cache参数" + headers.toString());
@@ -240,6 +260,21 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         }
 
         doFlushPrivilege();
+    }
+
+    /**
+     * 刷新 databus 数据
+     */
+    private void flushDatabus(Map<String, String> headers) {
+
+        Assert.hasKey(headers, CommonConstant.CACHE_PARAM, "未包含cache参数" + headers.toString());
+
+        if (!CommonConstant.CACHE_DATABUS.equals(headers.get(CommonConstant.CACHE_PARAM))
+                && !CommonConstant.CACHE_ALL.equals(headers.get(CommonConstant.CACHE_PARAM))) {
+            return;
+        }
+
+        doFlushDatabus();
     }
 
     /**

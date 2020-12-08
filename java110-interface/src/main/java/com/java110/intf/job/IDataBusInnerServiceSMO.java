@@ -1,7 +1,7 @@
 package com.java110.intf.job;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.task.TaskDto;
 import com.java110.entity.order.Business;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,5 +30,15 @@ public interface IDataBusInnerServiceSMO {
      */
     @RequestMapping(value = "/exchange", method = RequestMethod.POST)
     boolean exchange(@RequestBody List<Business> businesses);
+
+
+    /**
+     * <p>开门</p>
+     *
+     * @param reqJson 请求信息
+     * @return TaskDto 对象数据
+     */
+    @RequestMapping(value = "/openDoor", method = RequestMethod.POST)
+    boolean openDoor(@RequestBody JSONObject reqJson);
 
 }

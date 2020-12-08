@@ -13,29 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.hcIot;
+package com.java110.job.adapt.hcIot.asyn.impl;
 
-import com.java110.entity.order.Business;
-import com.java110.job.adapt.IDatabusAdapt;
 import com.java110.job.adapt.hcIot.asyn.ITransactionMachineAsyn;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 /**
- * HC iot 设备同步适配器
- *
- * @desc add by 吴学文 18:58
+ * @desc add by 吴学文 9:23
  */
-@Component(value = "machineTransactionIotAdapt")
-public class MachineTransactionIotAdapt implements IDatabusAdapt {
 
-    @Autowired
-    private ITransactionMachineAsyn transactionMachineAsynImpl;
-
+@Service
+public class TransactionMachineAsynImpl implements ITransactionMachineAsyn {
     @Override
-    public void execute(Business business, List<Business> businesses) {
+    @Async
+    public void doSend() {
 
     }
 }

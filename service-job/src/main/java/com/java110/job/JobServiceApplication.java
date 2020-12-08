@@ -15,6 +15,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.nio.charset.Charset;
@@ -41,6 +42,7 @@ import java.nio.charset.Charset;
         "com.java110.intf.goods"
 })
 @EnableScheduling
+@EnableAsync
 public class JobServiceApplication {
     private static Logger logger = LoggerFactory.getLogger(JobServiceApplication.class);
 

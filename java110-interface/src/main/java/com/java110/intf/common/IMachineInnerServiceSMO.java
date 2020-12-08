@@ -38,4 +38,14 @@ public interface IMachineInnerServiceSMO {
      */
     @RequestMapping(value = "/queryMachinesCount", method = RequestMethod.POST)
     int queryMachinesCount(@RequestBody MachineDto machineDto);
+
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     * @param machineDto 数据对象分享
+     * @return MachineDto 对象数据
+     */
+    @RequestMapping(value = "/updateMachineState", method = RequestMethod.POST)
+    int updateMachineState(@RequestBody MachineDto machineDto);
 }
