@@ -33,6 +33,7 @@ public class XimoIotConstant {
     public static final String ADD_MACHINE_URL = IOT_URL + "/devDevice/extapi/add";
     public static final String UPDATE_MACHINE_URL = IOT_URL + "/devDevice/extapi/update";
     public static final String DELETE_MACHINE_URL = IOT_URL + "/devDevice/extapi/delete";
+    public static final String OPEN_DOOR = IOT_URL + "/sqDoor/extapi/remoteOpenDoor";
 
     public static final String XI_MO_TOKEN = "XI_MO_TOKEN";
 

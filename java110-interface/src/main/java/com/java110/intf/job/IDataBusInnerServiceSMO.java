@@ -3,6 +3,7 @@ package com.java110.intf.job;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.entity.order.Business;
+import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,6 @@ public interface IDataBusInnerServiceSMO {
      * @return TaskDto 对象数据
      */
     @RequestMapping(value = "/openDoor", method = RequestMethod.POST)
-    boolean openDoor(@RequestBody JSONObject reqJson);
+    ResultVo openDoor(@RequestBody JSONObject reqJson);
 
 }

@@ -17,23 +17,33 @@ package com.java110.common.bmo.machine.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
  * 设备开门功能
+ *
  * @desc add by 吴学文 14:15
  */
 @Service
 public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
 
+
+    @Autowired
+    IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
     /**
      * 开门功能
+     *
      * @param reqJson 请求报文信息
      * @return
      */
     @Override
     public ResponseEntity<String> openDoor(JSONObject reqJson) {
-        return null;
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.openDoor(reqJson);
+        return ResultVo.createResponseEntity(resultVo);
     }
 }

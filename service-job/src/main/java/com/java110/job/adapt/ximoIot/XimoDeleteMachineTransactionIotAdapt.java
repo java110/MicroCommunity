@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.machine.MachineDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.IDatabusAdapt;
 import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
 import com.java110.po.machine.MachinePo;
@@ -38,7 +39,7 @@ import java.util.List;
  * @desc add by 吴学文 18:58
  */
 @Component(value = "ximoDeleteMachineTransactionIotAdapt")
-public class XimoDeleteMachineTransactionIotAdapt implements IDatabusAdapt {
+public class XimoDeleteMachineTransactionIotAdapt  extends DatabusAdaptImpl {
 
     @Autowired
     private IXimoMachineAsyn ximoMachineAsynImpl;

@@ -16,6 +16,7 @@
 package com.java110.job.adapt.hcIot;
 
 import com.java110.entity.order.Business;
+import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.IDatabusAdapt;
 import com.java110.job.adapt.hcIot.asyn.ITransactionMachineAsyn;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ import java.util.List;
  * @desc add by 吴学文 18:58
  */
 @Component(value = "machineTransactionIotAdapt")
-public class MachineTransactionIotAdapt implements IDatabusAdapt {
+public class MachineTransactionIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private ITransactionMachineAsyn transactionMachineAsynImpl;
