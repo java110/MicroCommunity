@@ -1,11 +1,13 @@
 package com.java110.user.bmo.owner.impl;
 
 import com.java110.dto.RoomDto;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ComprehensiveQueryImpl implements IComprehensiveQuery {
@@ -50,33 +53,36 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
+
     @Override
-    public ResponseEntity<String> query(String communityId, String searchValue, String searchType) {
+    public ResponseEntity<String> query(String communityId, String searchValue, String searchType, String userId) {
         OwnerDto ownerDto = null;
         switch (searchType) {
             case SEARCH_TYPE_ROOM:
-                ownerDto = queryByRoom(communityId, searchValue);
+                ownerDto = queryByRoom(communityId, searchValue, userId);
                 break;
             case SEARCH_TYPE_OWNER_NAME:
-                ownerDto = queryByOwnerName(communityId, searchValue);
+                ownerDto = queryByOwnerName(communityId, searchValue, userId);
                 break;
             case SEARCH_TYPE_OWNER_TEL:
-                ownerDto = queryByOwnerTel(communityId, searchValue);
+                ownerDto = queryByOwnerTel(communityId, searchValue, userId);
                 break;
             case SEARCH_TYPE_OWNER_IDCARD:
-                ownerDto = queryByOwnerIdCard(communityId, searchValue);
+                ownerDto = queryByOwnerIdCard(communityId, searchValue, userId);
                 break;
             case SEARCH_TYPE_OWNER_CAR:
-                ownerDto = queryByOwnerCar(communityId, searchValue);
+                ownerDto = queryByOwnerCar(communityId, searchValue, userId);
                 break;
             case SEARCH_TYPE_OWNER_MEMBER_NAME:
-                ownerDto = queryByOwnerMemberName(communityId, searchValue);
+                ownerDto = queryByOwnerMemberName(communityId, searchValue, userId);
                 break;
             case SEARCH_TYPE_OWNER_MEMBER_TEL:
-                ownerDto = queryByOwnerMemberTel(communityId, searchValue);
+                ownerDto = queryByOwnerMemberTel(communityId, searchValue, userId);
                 break;
             case SEARCH_TYPE_OWNER_MEMBER_IDCARD:
-                ownerDto = queryByOwnerMemberIdCard(communityId, searchValue);
+                ownerDto = queryByOwnerMemberIdCard(communityId, searchValue, userId);
                 break;
         }
         return ResultVo.createResponseEntity(1, 1, ownerDto);
@@ -89,16 +95,29 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
      * @param searchValue
      * @return
      */
-    private OwnerDto queryByOwnerMemberIdCard(String communityId, String searchValue) {
-
+    private OwnerDto queryByOwnerMemberIdCard(String communityId, String searchValue, String userId) {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
         ownerDto.setIdCard(searchValue);
         ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING});
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         Assert.listOnlyOne(ownerDtos, "未找到成员信息或者查询到多条，请换其他条件查询");
-
-        return queryByOwnerId(communityId, ownerDtos.get(0).getOwnerId());
+        OwnerDto owner = queryByOwnerId(communityId, ownerDtos.get(0).getOwnerId());
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        //对业主身份证号隐藏处理
+        String idCard = owner.getIdCard();
+        if (mark.size() == 0 && idCard != null && idCard != null) {
+            idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            owner.setIdCard(idCard);
+        }
+        //对业主手机号隐藏处理
+        String link = owner.getLink();
+        if (mark.size() == 0 && link != null && !link.equals("")) {
+            link = link.substring(0, 3) + "****" + link.substring(7);
+            owner.setLink(link);
+        }
+        return owner;
     }
 
     /**
@@ -108,16 +127,29 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
      * @param searchValue
      * @return
      */
-    private OwnerDto queryByOwnerMemberTel(String communityId, String searchValue) {
-
+    private OwnerDto queryByOwnerMemberTel(String communityId, String searchValue, String userId) {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
         ownerDto.setLink(searchValue);
         ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING});
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         Assert.listOnlyOne(ownerDtos, "未找到成员信息或者查询到多条，请换其他条件查询");
-
-        return queryByOwnerId(communityId, ownerDtos.get(0).getOwnerId());
+        OwnerDto owner = queryByOwnerId(communityId, ownerDtos.get(0).getOwnerId());
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        //对业主身份证号隐藏处理
+        String idCard = owner.getIdCard();
+        if (mark.size() == 0 && idCard != null && idCard != null) {
+            idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            owner.setIdCard(idCard);
+        }
+        //对业主手机号隐藏处理
+        String link = owner.getLink();
+        if (mark.size() == 0 && link != null && !link.equals("")) {
+            link = link.substring(0, 3) + "****" + link.substring(7);
+            owner.setLink(link);
+        }
+        return owner;
     }
 
     /**
@@ -127,7 +159,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
      * @param searchValue
      * @return
      */
-    private OwnerDto queryByOwnerMemberName(String communityId, String searchValue) {
+    private OwnerDto queryByOwnerMemberName(String communityId, String searchValue, String userId) {
 
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
@@ -135,8 +167,22 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING});
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         Assert.listOnlyOne(ownerDtos, "未找到成员信息或者查询到多条，请换其他条件查询");
-
-        return queryByOwnerId(communityId, ownerDtos.get(0).getOwnerId());
+        OwnerDto owner = queryByOwnerId(communityId, ownerDtos.get(0).getOwnerId());
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        //对业主身份证号隐藏处理
+        String idCard = owner.getIdCard();
+        if (mark.size() == 0 && idCard != null && idCard != null) {
+            idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            owner.setIdCard(idCard);
+        }
+        //对业主手机号隐藏处理
+        String link = owner.getLink();
+        if (mark.size() == 0 && link != null && !link.equals("")) {
+            link = link.substring(0, 3) + "****" + link.substring(7);
+            owner.setLink(link);
+        }
+        return owner;
     }
 
     /**
@@ -146,7 +192,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
      * @param searchValue
      * @return
      */
-    private OwnerDto queryByOwnerCar(String communityId, String searchValue) {
+    private OwnerDto queryByOwnerCar(String communityId, String searchValue, String userId) {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(communityId);
         ownerCarDto.setCarNum(searchValue);
@@ -156,7 +202,22 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
             throw new IllegalArgumentException("未查到车辆信息");
         }
 
-        return queryByOwnerId(communityId, ownerCarDtos.get(0).getOwnerId());
+        OwnerDto owner = queryByOwnerId(communityId, ownerCarDtos.get(0).getOwnerId());
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        //对业主身份证号隐藏处理
+        String idCard = owner.getIdCard();
+        if (mark.size() == 0 && idCard != null && idCard != null) {
+            idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            owner.setIdCard(idCard);
+        }
+        //对业主手机号隐藏处理
+        String link = owner.getLink();
+        if (mark.size() == 0 && link != null && !link.equals("")) {
+            link = link.substring(0, 3) + "****" + link.substring(7);
+            owner.setLink(link);
+        }
+        return owner;
     }
 
 
@@ -204,16 +265,34 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
      * @param searchValue
      * @return
      */
-    private OwnerDto queryByOwnerIdCard(String communityId, String searchValue) {
+    private OwnerDto queryByOwnerIdCard(String communityId, String searchValue, String userId) {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
         ownerDto.setIdCard(searchValue);
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
         Assert.listOnlyOne(ownerDtos, "未找到业主信息或者查询到多条，请换其他条件查询");
-        OwnerDto resOwnerDto = ownerDtos.get(0);
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        List<OwnerDto> ownerDtoList = new ArrayList<>();
+        for (OwnerDto owner : ownerDtos) {
+            //对业主身份证号隐藏处理
+            String idCard = owner.getIdCard();
+            if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            }
+            //对业主手机号隐藏处理
+            String link = owner.getLink();
+            if (mark.size() == 0 && link != null && !link.equals("")) {
+                link = link.substring(0, 3) + "****" + link.substring(7);
+            }
+            owner.setIdCard(idCard);
+            owner.setLink(link);
+            ownerDtoList.add(owner);
+        }
+        OwnerDto resOwnerDto = ownerDtoList.get(0);
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-        ownerRoomRelDto.setOwnerId(ownerDtos.get(0).getOwnerId());
+        ownerRoomRelDto.setOwnerId(ownerDtoList.get(0).getOwnerId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
         //没有房屋
@@ -241,16 +320,34 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
      * @param searchValue
      * @return
      */
-    private OwnerDto queryByOwnerTel(String communityId, String searchValue) {
+    private OwnerDto queryByOwnerTel(String communityId, String searchValue, String userId) {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
         ownerDto.setLink(searchValue);
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
         Assert.listOnlyOne(ownerDtos, "未找到业主信息或者查询到多条，请换其他条件查询");
-        OwnerDto resOwnerDto = ownerDtos.get(0);
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        List<OwnerDto> ownerDtoList = new ArrayList<>();
+        for (OwnerDto owner : ownerDtos) {
+            //对业主身份证号隐藏处理
+            String idCard = owner.getIdCard();
+            if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            }
+            //对业主手机号隐藏处理
+            String link = owner.getLink();
+            if (mark.size() == 0 && link != null && !link.equals("")) {
+                link = link.substring(0, 3) + "****" + link.substring(7);
+            }
+            owner.setIdCard(idCard);
+            owner.setLink(link);
+            ownerDtoList.add(owner);
+        }
+        OwnerDto resOwnerDto = ownerDtoList.get(0);
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-        ownerRoomRelDto.setOwnerId(ownerDtos.get(0).getOwnerId());
+        ownerRoomRelDto.setOwnerId(ownerDtoList.get(0).getOwnerId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
         //没有房屋
@@ -278,17 +375,34 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
      * @param searchValue
      * @return
      */
-    private OwnerDto queryByOwnerName(String communityId, String searchValue) {
-
+    private OwnerDto queryByOwnerName(String communityId, String searchValue, String userId) {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
         ownerDto.setName(searchValue);
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
         Assert.listOnlyOne(ownerDtos, "未找到业主信息或者查询到多条，请换其他条件查询");
-        OwnerDto resOwnerDto = ownerDtos.get(0);
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        List<OwnerDto> ownerDtoList = new ArrayList<>();
+        for (OwnerDto owner : ownerDtos) {
+            //对业主身份证号隐藏处理
+            String idCard = owner.getIdCard();
+            if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            }
+            //对业主手机号隐藏处理
+            String link = owner.getLink();
+            if (mark.size() == 0 && link != null && !link.equals("")) {
+                link = link.substring(0, 3) + "****" + link.substring(7);
+            }
+            owner.setIdCard(idCard);
+            owner.setLink(link);
+            ownerDtoList.add(owner);
+        }
+        OwnerDto resOwnerDto = ownerDtoList.get(0);
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-        ownerRoomRelDto.setOwnerId(ownerDtos.get(0).getOwnerId());
+        ownerRoomRelDto.setOwnerId(ownerDtoList.get(0).getOwnerId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
         //没有房屋
@@ -316,7 +430,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
      * @param searchValue
      * @return
      */
-    private OwnerDto queryByRoom(String communityId, String searchValue) {
+    private OwnerDto queryByRoom(String communityId, String searchValue, String userId) {
 
         if (!searchValue.contains("-")) {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-单元-房屋 如 1-1-1");
@@ -335,7 +449,6 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         roomDto.setCommunityId(communityId);
 
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
         Assert.listOnlyOne(roomDtos, "未找到房屋信息");
 
         OwnerDto ownerDto = new OwnerDto();
@@ -343,15 +456,43 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         ownerDto.setRoomId(roomDtos.get(0).getRoomId());
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-
         Assert.listOnlyOne(ownerDtos, "未找到业主信息");
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        List<OwnerDto> ownerDtoList = new ArrayList<>();
+        for (OwnerDto owner : ownerDtos) {
+            //对业主身份证号隐藏处理
+            String idCard = owner.getIdCard();
+            if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            }
+            //对业主手机号隐藏处理
+            String link = owner.getLink();
+            if (mark.size() == 0 && link != null && !link.equals("")) {
+                link = link.substring(0, 3) + "****" + link.substring(7);
+            }
+            owner.setIdCard(idCard);
+            owner.setLink(link);
+            ownerDtoList.add(owner);
+        }
 
-        OwnerDto resOwnerDto = ownerDtos.get(0);
+        OwnerDto resOwnerDto = ownerDtoList.get(0);
 
         resOwnerDto.setRooms(roomDtos);
 
         return resOwnerDto;
     }
 
-
+    /**
+     * 脱敏处理
+     *
+     * @return
+     */
+    public List<Map> getPrivilegeOwnerList(String resource, String userId) {
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource(resource);
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        return privileges;
+    }
 }
