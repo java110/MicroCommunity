@@ -74,7 +74,8 @@ public class OwnerApi {
     @RequestMapping(value = "/comprehensiveQuery", method = RequestMethod.GET)
     public ResponseEntity<String> comprehensiveQuery(@RequestParam(value = "communityId") String communityId,
                                                      @RequestParam(value = "searchValue") String searchValue,
-                                                     @RequestParam(value = "searchType") String searchType) {
-        return comprehensiveQueryImpl.query(communityId, searchValue, searchType);
+                                                     @RequestParam(value = "searchType") String searchType,
+                                                     @RequestHeader(value = "user-id") String userId) {
+        return comprehensiveQueryImpl.query(communityId, searchValue, searchType,userId);
     }
 }

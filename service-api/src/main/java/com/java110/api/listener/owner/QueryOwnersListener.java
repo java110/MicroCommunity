@@ -3,6 +3,8 @@ package com.java110.api.listener.owner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -18,7 +20,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName OwnerDto
@@ -33,6 +37,9 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -55,7 +62,8 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
         //获取请求数据
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateOwnerData(reqJson);
-
+        //获取当前用户id
+        String userId = dataFlowContext.getUserId();
 
         if (reqJson.containsKey("name")) {
             queryByCondition(reqJson, dataFlowContext);
@@ -69,9 +77,26 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
         //查询总记录数
         int total = ownerInnerServiceSMOImpl.queryOwnersCount(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
         apiOwnerVo.setTotal(total);
+        List<OwnerDto> ownerDtos = new ArrayList<>();
         if (total > 0) {
             List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwners(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
-            apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
+            List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+            for (OwnerDto ownerDto : ownerDtoList) {
+                //对业主身份证号隐藏处理
+                String idCard = ownerDto.getIdCard();
+                if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                    idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+                    ownerDto.setIdCard(idCard);
+                }
+                //对业主手机号隐藏处理
+                String link = ownerDto.getLink();
+                if (mark.size() == 0 && link != null && !link.equals("")) {
+                    link = link.substring(0, 3) + "****" + link.substring(7);
+                    ownerDto.setLink(link);
+                }
+                ownerDtos.add(ownerDto);
+            }
+            apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
         }
 
         apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
@@ -88,14 +113,32 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
      * @param dataFlowContext 上下文
      */
     private void queryByCondition(JSONObject reqJson, DataFlowContext dataFlowContext) {
-
+        //获取当前用户id
+        String userId = dataFlowContext.getUserId();
         int row = reqJson.getInteger("row");
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
         int total = ownerInnerServiceSMOImpl.queryOwnerCountByCondition(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
         apiOwnerVo.setTotal(total);
+        List<OwnerDto> ownerDtos = new ArrayList<>();
         if (total > 0) {
             List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnersByCondition(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
-            apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
+            List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+            for (OwnerDto ownerDto : ownerDtoList) {
+                //对业主身份证号隐藏处理
+                String idCard = ownerDto.getIdCard();
+                if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                    idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+                    ownerDto.setIdCard(idCard);
+                }
+                //对业主手机号隐藏处理
+                String link = ownerDto.getLink();
+                if (mark.size() == 0 && link != null && !link.equals("")) {
+                    link = link.substring(0, 3) + "****" + link.substring(7);
+                    ownerDto.setLink(link);
+                }
+                ownerDtos.add(ownerDto);
+            }
+            apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
         }
 
         apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
@@ -131,5 +174,18 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
 
     public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
         this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
+    }
+
+    /**
+     * 脱敏处理
+     *
+     * @return
+     */
+    public List<Map> getPrivilegeOwnerList(String resource, String userId) {
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource(resource);
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        return privileges;
     }
 }

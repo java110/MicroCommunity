@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -23,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -30,7 +33,6 @@ import java.util.List;
  */
 @Java110Listener("listRoomsWhereFeeSetListener")
 public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
-
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -40,6 +42,9 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
 
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -81,8 +86,8 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
         apiRoomVo.setTotal(total);
         if (total > 0) {
             List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
-            refreshRoomOwners(reqJson.getString("communityId"), roomDtoList);
+            String userId = context.getUserId();
+            refreshRoomOwners(userId, reqJson.getString("communityId"), roomDtoList);
 
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         }
@@ -153,8 +158,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
      *
      * @param roomDtos
      */
-    private void refreshRoomOwners(String communityId, List<RoomDto> roomDtos) {
-
+    private void refreshRoomOwners(String userId, String communityId, List<RoomDto> roomDtos) {
         List<String> roomIds = new ArrayList<>();
         for (RoomDto roomDto : roomDtos) {
             roomIds.add(roomDto.getRoomId());
@@ -162,15 +166,25 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
         ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
-
         for (RoomDto roomDto : roomDtos) {
             for (OwnerDto tmpOwnerDto : ownerDtos) {
                 if (roomDto.getRoomId().equals(tmpOwnerDto.getRoomId())) {
                     roomDto.setOwnerId(tmpOwnerDto.getOwnerId());
                     roomDto.setOwnerName(tmpOwnerDto.getName());
-                    roomDto.setIdCard(tmpOwnerDto.getIdCard());
-                    roomDto.setLink(tmpOwnerDto.getLink());
+                    //对业主身份证号隐藏处理
+                    String idCard = tmpOwnerDto.getIdCard();
+                    if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                        idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+                    }
+                    //对业主手机号隐藏处理
+                    String link = tmpOwnerDto.getLink();
+                    if (mark.size() == 0 && link != null && !link.equals("")) {
+                        link = link.substring(0, 3) + "****" + link.substring(7);
+                    }
+                    roomDto.setIdCard(idCard);
+                    roomDto.setLink(link);
                 }
             }
         }
@@ -198,5 +212,18 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
 
     public void setOwnerRoomRelInnerServiceSMOImpl(IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl) {
         this.ownerRoomRelInnerServiceSMOImpl = ownerRoomRelInnerServiceSMOImpl;
+    }
+
+    /**
+     * 脱敏处理
+     *
+     * @return
+     */
+    public List<Map> getPrivilegeOwnerList(String resource, String userId) {
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource(resource);
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        return privileges;
     }
 }

@@ -25,6 +25,9 @@ public interface DataFlowContext {
     //AppId
      String getAppId();
 
+     //userId
+     String getUserId();
+
      JSONObject getReqJson();
     /**
      * 返回报文
