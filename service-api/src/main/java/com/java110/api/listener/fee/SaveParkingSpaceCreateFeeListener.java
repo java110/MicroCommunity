@@ -7,12 +7,12 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
@@ -25,6 +25,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -93,11 +94,14 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
             ownerCarDto.setCommunityId(reqJson.getString("communityId"));
             ownerCarDto.setValid("1");
             ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        } else if ("2000".equals(reqJson.getString("locationTypeCd"))) {//停车场
+        } else if ("2000".equals(reqJson.getString("locationTypeCd"))) {//车辆
             //ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
             ownerCarDto.setCommunityId(reqJson.getString("communityId"));
             ownerCarDto.setCarId(reqJson.getString("locationObjId"));
             ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        } else if ("3000".equals(reqJson.getString("locationTypeCd"))) {//停车场
+            //ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            ownerCarDtos = getOwnerCarByParkingArea(reqJson);
         } else {
             throw new IllegalArgumentException("收费范围错误");
         }
@@ -107,6 +111,53 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         }
 
         dealParkingSpaceFee(ownerCarDtos, context, reqJson, event);
+    }
+
+    private List<OwnerCarDto> getOwnerCarByParkingArea(JSONObject reqJson) {
+        List<OwnerCarDto> ownerCarDtos = new ArrayList<>();
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
+        List<String> states = new ArrayList<>();
+        JSONArray carStates = reqJson.getJSONArray("carState");
+        if (carStates.size() < 1) {
+            throw new IllegalArgumentException("未选择车位状态");
+        }
+
+        for (int carStateIndex = 0; carStateIndex < carStates.size(); carStateIndex++) {
+            states.add(carStates.getString(carStateIndex));
+        }
+        parkingSpaceDto.setStates(states.toArray(new String[states.size()]));
+        parkingSpaceDto.setPaId(reqJson.getString("locationObjId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
+            return null;
+        }
+        List<String> psIds = new ArrayList<>();
+        for (int parkingSpaceIndex = 0; parkingSpaceIndex < parkingSpaceDtos.size(); parkingSpaceIndex++) {
+
+            psIds.add(parkingSpaceDtos.get(parkingSpaceIndex).getPsId());
+
+            if (parkingSpaceIndex % DEFAULT_ADD_FEE_COUNT == 0 && parkingSpaceIndex != 0) {
+
+                queryOwnerCar(reqJson, psIds, ownerCarDtos);
+
+                psIds = new ArrayList<>();
+            }
+        }
+        if (psIds.size() > 0) {
+            queryOwnerCar(reqJson, psIds, ownerCarDtos);
+        }
+
+        return ownerCarDtos;
+    }
+
+    private void queryOwnerCar(JSONObject reqJson, List<String> psIds, List<OwnerCarDto> ownerCarDtos) {
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setPsIds(psIds.toArray(new String[psIds.size()]));
+        List<OwnerCarDto> townerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        ownerCarDtos.addAll(townerCarDtos);
     }
 
     private void dealParkingSpaceFee(List<OwnerCarDto> ownerCarDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) {
