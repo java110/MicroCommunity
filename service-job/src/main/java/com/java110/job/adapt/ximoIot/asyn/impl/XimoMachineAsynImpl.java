@@ -78,4 +78,16 @@ public class XimoMachineAsynImpl implements IXimoMachineAsyn {
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }
+
+    @Override
+    public void sendOwner(MultiValueMap<String, Object> postParameters) {
+        postParameters.add("accessToken", GetToken.get(formRestTemplate));
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
+
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
+
+        logger.debug("调用吸墨信息：" + responseEntity);
+    }
 }

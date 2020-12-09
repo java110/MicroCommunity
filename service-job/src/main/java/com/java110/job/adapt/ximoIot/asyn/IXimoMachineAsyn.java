@@ -23,4 +23,6 @@ public interface IXimoMachineAsyn {
     void updateSend(MultiValueMap<String, Object> postParameters);
 
     void deleteSend(MultiValueMap<String, Object> postParameters);
+
+    public void sendOwner(MultiValueMap<String, Object> postParameters);
 }

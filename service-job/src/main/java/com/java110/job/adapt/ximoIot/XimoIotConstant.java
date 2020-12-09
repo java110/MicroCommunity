@@ -40,4 +40,6 @@ public class XimoIotConstant {
     //单位为秒
     public static final int DEFAULT_LOG_TIME = 5 * 60;
 
+    //添加业主
+    public static final String ADD_OWNER = "/persEmpHousehold/extapi/add";
 }
