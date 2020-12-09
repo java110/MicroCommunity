@@ -16,6 +16,7 @@ import java.util.Date;
 public class MachineAttrDto extends PageDto implements Serializable {
 
     private String machineId;
+    private String[] machineIds;
     private String attrId;
     private String specCd;
     private String communityId;
@@ -82,5 +83,13 @@ public class MachineAttrDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getMachineIds() {
+        return machineIds;
+    }
+
+    public void setMachineIds(String[] machineIds) {
+        this.machineIds = machineIds;
     }
 }

@@ -3,6 +3,7 @@ package com.java110.dto.machine;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -45,6 +46,8 @@ public class MachineDto extends PageDto implements Serializable {
     private String locationObjName;
     private String direction;//设备方向
     private String directionName;
+
+    private List<MachineAttrDto> machineAttrs;
 
 
 
@@ -284,5 +287,13 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setLocationType(String locationType) {
         this.locationType = locationType;
+    }
+
+    public List<MachineAttrDto> getMachineAttrs() {
+        return machineAttrs;
+    }
+
+    public void setMachineAttrs(List<MachineAttrDto> machineAttrs) {
+        this.machineAttrs = machineAttrs;
     }
 }

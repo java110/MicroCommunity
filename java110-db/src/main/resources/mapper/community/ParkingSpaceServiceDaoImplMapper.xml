@@ -145,7 +145,7 @@
             <if test="state !=null and state != ''">
                 and t.state= #{state}
             </if>
-            <if test="states != null and states != null">
+            <if test="states != null">
                 and t.state in
                 <foreach collection="states" item="item" open="(" close=")" separator=",">
                     #{item}

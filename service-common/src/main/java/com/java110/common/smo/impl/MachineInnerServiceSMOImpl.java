@@ -5,8 +5,10 @@ import com.java110.common.dao.IMachineServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.demo.DemoDto;
+import com.java110.dto.machine.MachineAttrDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
@@ -32,6 +34,9 @@ public class MachineInnerServiceSMOImpl extends BaseServiceSMO implements IMachi
     private IMachineServiceDao machineServiceDaoImpl;
 
     @Autowired
+    private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
+
+    @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
@@ -47,6 +52,31 @@ public class MachineInnerServiceSMOImpl extends BaseServiceSMO implements IMachi
 
         List<MachineDto> machines = BeanConvertUtil.covertBeanList(machineServiceDaoImpl.getMachineInfo(BeanConvertUtil.beanCovertMap(machineDto)), MachineDto.class);
 
+        if (machines == null || machines.size() < 1) {
+            return machines;
+        }
+
+        List<String> machineIds = new ArrayList<>();
+
+        for (MachineDto tMachineDto : machines) {
+            machineIds.add(tMachineDto.getMachineId());
+        }
+        MachineAttrDto machineAttrDto = new MachineAttrDto();
+        machineAttrDto.setMachineIds(machineIds.toArray(new String[machineIds.size()]));
+        machineAttrDto.setCommunityId(machines.get(0).getCommunityId());
+        List<MachineAttrDto> machineAttrDtos = machineAttrInnerServiceSMOImpl.queryMachineAttrs(machineAttrDto);
+
+        List<MachineAttrDto> tMachineAttrDtos = null;
+        for (MachineDto tMachineDto : machines) {
+            tMachineAttrDtos = new ArrayList<>();
+
+            for (MachineAttrDto tMachineAttrDto : machineAttrDtos) {
+                if (tMachineDto.getMachineId().equals(tMachineAttrDto.getMachineId())) {
+                    tMachineAttrDtos.add(tMachineAttrDto);
+                }
+            }
+            tMachineDto.setMachineAttrs(tMachineAttrDtos);
+        }
         return machines;
     }
 

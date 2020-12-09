@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.machine.IMachineBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.dto.machine.MachineDto;
 import com.java110.po.machine.MachinePo;
@@ -53,7 +54,7 @@ public class MachineBMOImpl extends ApiBaseBMO implements IMachineBMO {
         JSONObject businessMachine = new JSONObject();
         businessMachine.putAll(paramInJson);
         businessMachine.put("state", "1000");
-        businessMachine.put("machineId", "-1");
+        businessMachine.put("machineId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineId));
         //计算 应收金额
 
         MachinePo machinePo = BeanConvertUtil.covertBean(businessMachine, MachinePo.class);

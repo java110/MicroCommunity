@@ -83,6 +83,12 @@
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
         </if>
+        <if test="machineIds !=null ">
+            and t.machine_id in
+            <foreach collection="machineIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
         </if>
@@ -143,6 +149,12 @@
         where 1 =1
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
+        </if>
+        <if test="machineIds !=null ">
+            and t.machine_id in
+            <foreach collection="machineIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
