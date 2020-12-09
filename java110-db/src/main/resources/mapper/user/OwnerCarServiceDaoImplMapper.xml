@@ -146,6 +146,12 @@
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
         </if>
+        <if test="psIds !=null">
+            and t.ps_id in
+            <foreach collection="psIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
