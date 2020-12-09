@@ -67,6 +67,8 @@ public class XimoModifyMachineTransactionIotAdapt extends DatabusAdaptImpl {
             if (bObj instanceof JSONObject) {
                 businessMachines = new JSONArray();
                 businessMachines.add(bObj);
+            } else if (bObj instanceof List) {
+                businessMachines = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessMachines = (JSONArray) bObj;
             }

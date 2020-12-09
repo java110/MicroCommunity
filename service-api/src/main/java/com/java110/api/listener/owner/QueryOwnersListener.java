@@ -13,6 +13,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiOwnerDataVo;
 import com.java110.vo.api.ApiOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,13 +127,13 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
             for (OwnerDto ownerDto : ownerDtoList) {
                 //对业主身份证号隐藏处理
                 String idCard = ownerDto.getIdCard();
-                if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {
+                if (mark.size() == 0 && !StringUtil.isEmpty(idCard) && idCard.length() > 16) {
                     idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
                     ownerDto.setIdCard(idCard);
                 }
                 //对业主手机号隐藏处理
                 String link = ownerDto.getLink();
-                if (mark.size() == 0 && link != null && !link.equals("") && link.length() == 11) {
+                if (mark.size() == 0 && !StringUtil.isEmpty(link) && link.length() == 11) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                     ownerDto.setLink(link);
                 }

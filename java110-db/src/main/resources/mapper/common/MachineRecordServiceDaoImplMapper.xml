@@ -279,5 +279,18 @@
         limit 0,7
     </select>
 
+    <!-- 保存设备上报信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMachineRecords" parameterType="Map">
+        insert into machine_record(
+        file_time,machine_code,open_type_cd,id_card,machine_record_id,machine_id,`name`,tel,community_id,b_id,file_id,record_type_cd
+        ) values
+        <foreach collection="machineRecords" item="item" separator=",">
+            (
+            #{item.fileTime},#{item.machineCode},#{item.openTypeCd},#{item.idCard},#{item.machineRecordId},#{item.machineId},#{item.name},#{item.tel},#{item.communityId},'-1',#{item.fileId}
+            ,#{item.recordTypeCd}
+            )
+        </foreach>
+    </insert>
+
 
 </mapper>

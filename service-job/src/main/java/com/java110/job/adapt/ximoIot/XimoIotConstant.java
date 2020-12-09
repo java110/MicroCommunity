@@ -37,4 +37,7 @@ public class XimoIotConstant {
 
     public static final String XI_MO_TOKEN = "XI_MO_TOKEN";
 
+    //单位为秒
+    public static final int DEFAULT_LOG_TIME = 5 * 60;
+
 }

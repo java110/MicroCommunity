@@ -56,7 +56,7 @@ public class TransactionOrderInfoToDataBusListener implements DataFlowListener<I
             return;
         }
 
-        String databusSwitch = MappingCache.getRemark(DomainContant.COMMON_DOMAIN, DATABUS_SWITCH);
+        String databusSwitch = MappingCache.getValue(DomainContant.COMMON_DOMAIN, DATABUS_SWITCH);
 
         if (!DATABUS_SWITCH_ON.equals(databusSwitch)) {
             return;

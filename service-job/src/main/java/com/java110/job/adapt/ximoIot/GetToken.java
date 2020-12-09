@@ -21,10 +21,7 @@ import com.java110.core.client.RestTemplate;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 /**
  * 获取token
@@ -45,7 +42,7 @@ public class GetToken {
         HttpEntity httpEntity = new HttpEntity(headers);
         ResponseEntity<String> tokenRes = restTemplate.exchange(XimoIotConstant.GET_TOKEN_URL, HttpMethod.GET, httpEntity, String.class);
 
-        if (tokenRes.getStatusCode() != null) {
+        if (tokenRes.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("获取token失败" + tokenRes.getBody());
         }
         JSONObject tokenObj = JSONObject.parseObject(tokenRes.getBody());
@@ -55,7 +52,7 @@ public class GetToken {
         }
 
         token = tokenObj.getJSONObject("data").getString("accessToken");
-        int expiresIn = tokenObj.getJSONObject("data").getInteger("accessToken");
+        int expiresIn = tokenObj.getJSONObject("data").getInteger("expiresIn");
 
         CommonCache.setValue(XimoIotConstant.XI_MO_TOKEN, token, expiresIn - 200);
 

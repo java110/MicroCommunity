@@ -39,17 +39,17 @@ public class XimoMachineAsynImpl implements IXimoMachineAsyn {
 
 
     @Autowired
-    private RestTemplate outRestTemplate;
+    private RestTemplate formRestTemplate;
 
     @Override
     @Async
     public void send(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
+        postParameters.add("accessToken", GetToken.get(formRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(XimoIotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }
@@ -57,24 +57,24 @@ public class XimoMachineAsynImpl implements IXimoMachineAsyn {
     @Override
     @Async
     public void updateSend(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
+        postParameters.add("accessToken", GetToken.get(formRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(XimoIotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }
 
     @Override
     public void deleteSend(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
+        postParameters.add("accessToken", GetToken.get(formRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(XimoIotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }

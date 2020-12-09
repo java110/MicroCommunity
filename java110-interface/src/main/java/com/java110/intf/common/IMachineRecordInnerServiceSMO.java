@@ -3,11 +3,11 @@ package com.java110.intf.common;
 import com.alibaba.fastjson.JSONArray;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.machine.MachineRecordDto;
+import com.java110.po.machine.MachineRecordPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -43,4 +43,14 @@ public interface IMachineRecordInnerServiceSMO {
 
     @RequestMapping(value = "/getAssetsMachineRecords", method = RequestMethod.POST)
     JSONArray getAssetsMachineRecords(@RequestBody String communityId);
+
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param machineRecordPos 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/saveMachineRecords", method = RequestMethod.POST)
+    int saveMachineRecords(@RequestBody List<MachineRecordPo> machineRecordPos);
 }
