@@ -12,6 +12,7 @@ import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,6 +72,9 @@ public class MachineInnerServiceSMOImpl extends BaseServiceSMO implements IMachi
             tMachineAttrDtos = new ArrayList<>();
 
             for (MachineAttrDto tMachineAttrDto : machineAttrDtos) {
+                if (StringUtil.isEmpty(tMachineAttrDto.getValueName())) {
+                    tMachineAttrDto.setValueName(tMachineAttrDto.getValue());
+                }
                 if (tMachineDto.getMachineId().equals(tMachineAttrDto.getMachineId())) {
                     tMachineAttrDtos.add(tMachineAttrDto);
                 }

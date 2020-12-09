@@ -77,8 +77,13 @@
     <!-- 查询设备属性信息 add by wuxw 2018-07-03 -->
     <select id="getMachineAttrInfo" parameterType="Map" resultType="Map">
         select t.machine_id,t.machine_id machineId,t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd
-        specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value
+        specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value,
+        s.spec_name specName,
+        v.value_name valueName,
+        s.list_show listShow
         from machine_attrs t
+        left join attr_spec s on t.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name = 'machine_attr'
+        left join attr_value v on t.`value` = v.`value` and t.spec_cd = v.spec_cd and v.status_cd = '0'
         where 1 =1
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
