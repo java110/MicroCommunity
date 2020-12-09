@@ -3,16 +3,16 @@ package com.java110.api.listener.owner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.dto.owner.OwnerDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiOwnerDataVo;
 import com.java110.vo.api.ApiOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +132,7 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
                 }
                 //对业主手机号隐藏处理
                 String link = ownerDto.getLink();
-                if (mark.size() == 0 && link != null && !link.equals("")) {
+                if (mark.size() == 0 && link != null && !link.equals("") && link.length() == 11) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                     ownerDto.setLink(link);
                 }
