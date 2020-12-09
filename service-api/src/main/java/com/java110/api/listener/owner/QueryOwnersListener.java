@@ -84,13 +84,13 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
             for (OwnerDto ownerDto : ownerDtoList) {
                 //对业主身份证号隐藏处理
                 String idCard = ownerDto.getIdCard();
-                if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {
                     idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
                     ownerDto.setIdCard(idCard);
                 }
                 //对业主手机号隐藏处理
                 String link = ownerDto.getLink();
-                if (mark.size() == 0 && link != null && !link.equals("")) {
+                if (mark.size() == 0 && link != null && !link.equals("") && link.length() == 1) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                     ownerDto.setLink(link);
                 }
@@ -126,7 +126,7 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
             for (OwnerDto ownerDto : ownerDtoList) {
                 //对业主身份证号隐藏处理
                 String idCard = ownerDto.getIdCard();
-                if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {
                     idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
                     ownerDto.setIdCard(idCard);
                 }

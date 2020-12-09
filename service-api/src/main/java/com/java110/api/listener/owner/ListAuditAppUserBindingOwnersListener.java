@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
-import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -76,13 +76,13 @@ public class ListAuditAppUserBindingOwnersListener extends AbstractServiceApiLis
             for (ApiAuditAppUserBindingOwnerDataVo owner : auditAppUserBindingOwners) {
                 //对业主身份证号隐藏处理
                 String idCard = owner.getIdCard();
-                if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {
                     idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
                     owner.setIdCard(idCard);
                 }
                 //对业主手机号隐藏处理
                 String link = owner.getLink();
-                if (mark.size() == 0 && link != null && !link.equals("")) {
+                if (mark.size() == 0 && link != null && !link.equals("") && link.length() == 11) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                     owner.setLink(link);
                 }
