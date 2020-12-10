@@ -1,27 +1,30 @@
 {
   "autoMove": true,
-  "id": "databusId",
-  "name": "businessDatabus",
-  "desc": "业务数据同步",
-  "shareParam": "databusId",
-  "shareColumn": "databus_id",
-  "shareName": "job",
-  "tableName": "c_business_databus",
+  "id": "auId",
+  "name": "staffAppAuth",
+  "desc": "员工微信认证",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "user",
+  "tableName": "staff_app_auth",
   "param": {
-    "databusId": "databus_id",
-    "businessTypeCd": "business_type_cd",
-    "beanName": "bean_name",
-    "seq": "seq",
+    "auId": "au_id",
+    "staffId": "staff_id",
+    "storeId": "store_id",
+    "appType": "app_type",
+    "openId": "open_id",
+    "state": "state",
+    "openName": "open_name",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "businessTypeCd",
-      "msg": "业务类型不能为空"
+      "code": "staffId",
+      "msg": "员工不能为空"
     },
     {
-      "code": "beanName",
-      "msg": "适配器不能为空"
+      "code": "appType",
+      "msg": "应用类型不能为空"
     }
   ]
 }

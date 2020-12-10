@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="staffAppAuthServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存员工微信认证信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStaffAppAuthInfo" parameterType="Map">
+        insert into staff_app_auth(
+au_id,app_type,open_id,state,store_id,open_name,staff_id
+) values (
+#{auId},#{appType},#{openId},#{state},#{storeId},#{openName},#{staffId}
+)
+    </insert>
+
+
+
+    <!-- 查询员工微信认证信息 add by wuxw 2018-07-03 -->
+    <select id="getStaffAppAuthInfo" parameterType="Map" resultType="Map">
+        select  t.au_id,t.au_id auId,t.app_type,t.app_type appType,t.open_id,t.open_id openId,t.status_cd,t.status_cd statusCd,t.state,t.store_id,t.store_id storeId,t.open_name,t.open_name openName,t.staff_id,t.staff_id staffId 
+from staff_app_auth t 
+where 1 =1 
+<if test="auId !=null and auId != ''">
+   and t.au_id= #{auId}
+</if> 
+<if test="appType !=null and appType != ''">
+   and t.app_type= #{appType}
+</if> 
+<if test="openId !=null and openId != ''">
+   and t.open_id= #{openId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="openName !=null and openName != ''">
+   and t.open_name= #{openName}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改员工微信认证信息 add by wuxw 2018-07-03 -->
+    <update id="updateStaffAppAuthInfo" parameterType="Map">
+        update  staff_app_auth t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="appType !=null and appType != ''">
+, t.app_type= #{appType}
+</if> 
+<if test="openId !=null and openId != ''">
+, t.open_id= #{openId}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="openName !=null and openName != ''">
+, t.open_name= #{openName}
+</if> 
+<if test="staffId !=null and staffId != ''">
+, t.staff_id= #{staffId}
+</if> 
+ where 1=1 <if test="auId !=null and auId != ''">
+and t.au_id= #{auId}
+</if> 
+
+    </update>
+
+    <!-- 查询员工微信认证数量 add by wuxw 2018-07-03 -->
+     <select id="queryStaffAppAuthsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from staff_app_auth t 
+where 1 =1 
+<if test="auId !=null and auId != ''">
+   and t.au_id= #{auId}
+</if> 
+<if test="appType !=null and appType != ''">
+   and t.app_type= #{appType}
+</if> 
+<if test="openId !=null and openId != ''">
+   and t.open_id= #{openId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="openName !=null and openName != ''">
+   and t.open_name= #{openName}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+
+
+     </select>
+
+</mapper>
