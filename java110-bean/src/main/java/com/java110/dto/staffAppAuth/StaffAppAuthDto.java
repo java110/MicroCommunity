@@ -1,6 +1,7 @@
 package com.java110.dto.staffAppAuth;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,12 +16,14 @@ import java.util.Date;
 public class StaffAppAuthDto extends PageDto implements Serializable {
 
     private String auId;
-private String appType;
-private String openId;
-private String state;
-private String storeId;
-private String openName;
-private String staffId;
+    private String appType;
+    private String openId;
+    private String state;
+    private String stateName;
+    private String storeId;
+    private String openName;
+    private String staffId;
+    private String staffName;
 
 
     private Date createTime;
@@ -31,43 +34,54 @@ private String staffId;
     public String getAuId() {
         return auId;
     }
-public void setAuId(String auId) {
+
+    public void setAuId(String auId) {
         this.auId = auId;
     }
-public String getAppType() {
+
+    public String getAppType() {
         return appType;
     }
-public void setAppType(String appType) {
+
+    public void setAppType(String appType) {
         this.appType = appType;
     }
-public String getOpenId() {
+
+    public String getOpenId() {
         return openId;
     }
-public void setOpenId(String openId) {
+
+    public void setOpenId(String openId) {
         this.openId = openId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getOpenName() {
+
+    public String getOpenName() {
         return openName;
     }
-public void setOpenName(String openName) {
-        this.openName = openName;
-    }
-public String getStaffId() {
+
+
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -86,5 +100,25 @@ public void setStaffId(String staffId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public void setOpenName(String openName) {
+        this.openName = openName;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

@@ -1,66 +1,32 @@
 {
-  "templateName": "databus",
-  "directories": "dev",
-  "templateCode": "businessDatabus",
-  "templateKey": "databusId",
-  "templateKeyName": "Databus ID",
-  "searchCode": "databusId",
-  "searchName": "Databus ID",
+  "templateName": "staffAppAuth",
+  "directories": "property",
+  "templateCode": "staffAppAuth",
+  "templateKey": "auId",
+  "templateKeyName": "认证ID",
+  "searchCode": "auId",
+  "searchName": "认证ID",
   "conditions": [
     {
       "name": "业务类型",
       "inputType": "input",
       "code": "businessTypeCd",
       "whereCondition": "equal"
-    },
-    {
-      "name": "适配器",
-      "inputType": "input",
-      "code": "beanName",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "ID",
-      "inputType": "input",
-      "code": "databusId",
-      "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "businessTypeCd",
-      "cnCode": "业务类型",
-      "desc": "必填，请输入业务类型",
+      "code": "appType",
+      "cnCode": "认证方式",
+      "desc": "必填，请选择认证方式",
       "required": true,
       "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "num",
-      "limitParam": "",
-      "limitErrInfo": "业务类型格式错误",
-      "show": true
-    },
-    {
-      "code": "beanName",
-      "cnCode": "适配器",
-      "desc": "必填，请输入适配器",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
+      "inputType": "select",
+      "selectValue": "WECHAT",
+      "selectValueName": "微信",
       "limit": "maxLength",
-      "limitParam": "256",
-      "limitErrInfo": "适配器名称太长",
-      "show": true
-    },
-    {
-      "code": "seq",
-      "cnCode": "顺序",
-      "desc": "必填，请输入顺序",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "num",
-      "limitParam": "",
-      "limitErrInfo": "顺序格式错误",
+      "limitParam": "12",
+      "limitErrInfo": "认证方式错误",
       "show": true
     }
   ]

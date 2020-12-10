@@ -37,8 +37,8 @@ public class StaffApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /staffAppAuth/saveStaffAppAuth
-     * @path /app/staffAppAuth/saveStaffAppAuth
+     * @serviceCode /staff/saveStaffAppAuth
+     * @path /app/staff/saveStaffAppAuth
      */
     @RequestMapping(value = "/saveStaffAppAuth", method = RequestMethod.POST)
     public ResponseEntity<String> saveStaffAppAuth(@RequestBody JSONObject reqJson) {
@@ -56,8 +56,8 @@ public class StaffApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /staffAppAuth/updateStaffAppAuth
-     * @path /app/staffAppAuth/updateStaffAppAuth
+     * @serviceCode /staff/updateStaffAppAuth
+     * @path /app/staff/updateStaffAppAuth
      */
     @RequestMapping(value = "/updateStaffAppAuth", method = RequestMethod.POST)
     public ResponseEntity<String> updateStaffAppAuth(@RequestBody JSONObject reqJson) {
@@ -76,8 +76,8 @@ public class StaffApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /staffAppAuth/deleteStaffAppAuth
-     * @path /app/staffAppAuth/deleteStaffAppAuth
+     * @serviceCode /staff/deleteStaffAppAuth
+     * @path /app/staff/deleteStaffAppAuth
      */
     @RequestMapping(value = "/deleteStaffAppAuth", method = RequestMethod.POST)
     public ResponseEntity<String> deleteStaffAppAuth(@RequestBody JSONObject reqJson) {
@@ -95,8 +95,8 @@ public class StaffApi {
      *
      * @param storeId 小区ID
      * @return
-     * @serviceCode /staffAppAuth/queryStaffAppAuth
-     * @path /app/staffAppAuth/queryStaffAppAuth
+     * @serviceCode /staff/queryStaffAppAuth
+     * @path /app/staff/queryStaffAppAuth
      */
     @RequestMapping(value = "/queryStaffAppAuth", method = RequestMethod.GET)
     public ResponseEntity<String> queryStaffAppAuth(@RequestParam(value = "store-id") String storeId,
