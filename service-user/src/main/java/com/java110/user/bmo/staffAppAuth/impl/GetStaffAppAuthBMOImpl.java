@@ -32,7 +32,7 @@ public class GetStaffAppAuthBMOImpl implements IGetStaffAppAuthBMO {
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
         Assert.listOnlyOne(userDtos, "用户不存在");
-        staffAppAuthDto.setStaffName(userDtos.get(0).getStaffName());
+        staffAppAuthDto.setStaffName(userDtos.get(0).getName());
 
         List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMOImpl.queryStaffAppAuths(staffAppAuthDto);
 
@@ -48,6 +48,7 @@ public class GetStaffAppAuthBMOImpl implements IGetStaffAppAuthBMO {
             staffAppAuthDto.setOpenId(staffAppAuthDtos.get(0).getOpenId());
             staffAppAuthDto.setAppType(staffAppAuthDtos.get(0).getAppType());
             staffAppAuthDto.setOpenName(staffAppAuthDtos.get(0).getOpenName());
+            staffAppAuthDto.setCreateTime(staffAppAuthDtos.get(0).getCreateTime());
         }
         return ResultVo.createResponseEntity(staffAppAuthDto);
     }
