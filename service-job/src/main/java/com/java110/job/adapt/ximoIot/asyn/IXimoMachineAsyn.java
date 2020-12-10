@@ -16,13 +16,27 @@ package com.java110.job.adapt.ximoIot.asyn;/*
 
 import org.springframework.util.MultiValueMap;
 
+import java.util.List;
+
 public interface IXimoMachineAsyn {
 
-    public void send(MultiValueMap<String, Object> postParameters);
+    public void send(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos);
 
     void updateSend(MultiValueMap<String, Object> postParameters);
 
     void deleteSend(MultiValueMap<String, Object> postParameters);
 
     public void sendOwner(MultiValueMap<String, Object> postParameters);
+
+    /**
+     * 修改业主
+     * @param postParameters
+     */
+    void sendUpdateOwner(MultiValueMap<String, Object> postParameters);
+
+    /**
+     * 删除业主
+     * @param postParameters
+     */
+    void sendDeleteOwner(MultiValueMap<String, Object> postParameters);
 }

@@ -42,4 +42,6 @@ public class XimoIotConstant {
 
     //添加业主
     public static final String ADD_OWNER = "/persEmpHousehold/extapi/add";
+    public static final String EDIT_OWNER = "/persEmpHousehold/extapi/update";
+    public static final String DELETE_OWNER = "/persEmpHousehold/extapi/delete";
 }
