@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.feeReceipt.FeeReceiptDto;
 import com.java110.dto.feeReceipt.FeeReceiptDtoNew;
 import com.java110.dto.feeReceiptDetail.FeeReceiptDetailDto;
+import com.java110.dto.store.StoreUserDto;
 import com.java110.fee.bmo.feeReceipt.IDeleteFeeReceiptBMO;
 import com.java110.fee.bmo.feeReceipt.IGetFeeReceiptBMO;
 import com.java110.fee.bmo.feeReceipt.ISaveFeeReceiptBMO;
@@ -12,6 +13,7 @@ import com.java110.fee.bmo.feeReceiptDetail.IDeleteFeeReceiptDetailBMO;
 import com.java110.fee.bmo.feeReceiptDetail.IGetFeeReceiptDetailBMO;
 import com.java110.fee.bmo.feeReceiptDetail.ISaveFeeReceiptDetailBMO;
 import com.java110.fee.bmo.feeReceiptDetail.IUpdateFeeReceiptDetailBMO;
+import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.utils.util.Assert;
@@ -19,6 +21,8 @@ import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/feeReceipt")
@@ -43,6 +47,9 @@ public class FeeReceiptApi {
 
     @Autowired
     private IGetFeeReceiptDetailBMO getFeeReceiptDetailBMOImpl;
+
+    @Autowired
+    private IStoreInnerServiceSMO storeInnerServiceSMO;
 
     /**
      * 微信保存消息模板
@@ -114,11 +121,20 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceipt", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceipt(@RequestParam(value = "communityId") String communityId,
-                                                  @RequestParam(value = "objType",required = false) String objType,
-                                                  @RequestParam(value = "roomId",required = false) String roomId,
-                                                  @RequestParam(value = "receiptId",required = false) String receiptId,
+                                                  @RequestParam(value = "objType", required = false) String objType,
+                                                  @RequestParam(value = "roomId", required = false) String roomId,
+                                                  @RequestParam(value = "receiptId", required = false) String receiptId,
                                                   @RequestParam(value = "page") int page,
-                                                  @RequestParam(value = "row") int row) {
+                                                  @RequestParam(value = "row") int row,
+                                                  @RequestHeader(value = "user_id") String userId) {
+        //获取商户名称
+        StoreUserDto storeUserDto = new StoreUserDto();
+        storeUserDto.setUserId(userId);
+        List<StoreUserDto> storeUserDtos = storeInnerServiceSMO.getStoreUserInfo(storeUserDto);
+        String storeName = "";
+        for (StoreUserDto storeUser : storeUserDtos) {
+            storeName = storeUser.getName();
+        }
         FeeReceiptDto feeReceiptDto = new FeeReceiptDto();
         feeReceiptDto.setPage(page);
         feeReceiptDto.setRow(row);
@@ -126,6 +142,7 @@ public class FeeReceiptApi {
         feeReceiptDto.setReceiptId(receiptId);
         feeReceiptDto.setObjType(objType);
         feeReceiptDto.setObjName(roomId);
+        feeReceiptDto.setStoreName(storeName);
         return getFeeReceiptBMOImpl.get(feeReceiptDto);
     }
 
@@ -140,14 +157,13 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceiptNew", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceiptNew(@RequestParam(value = "communityId") String communityId,
-                                                  @RequestParam(value = "objType",required = false) String objType,
-                                                  @RequestParam(value = "roomName",required = false) String roomName,
-                                                  @RequestParam(value = "type",required = false) String type,
-                                                     @RequestParam(value = "qstartTime",required = false) String qstartTime,
-                                                     @RequestParam(value = "qendTime",required = false) String qendTime,
+                                                     @RequestParam(value = "objType", required = false) String objType,
+                                                     @RequestParam(value = "roomName", required = false) String roomName,
+                                                     @RequestParam(value = "type", required = false) String type,
+                                                     @RequestParam(value = "qstartTime", required = false) String qstartTime,
+                                                     @RequestParam(value = "qendTime", required = false) String qendTime,
                                                      @RequestParam(value = "page") int page,
-                                                  @RequestParam(value = "row") int row
-    ) {
+                                                     @RequestParam(value = "row") int row) {
         FeeReceiptDtoNew feeReceiptDto = new FeeReceiptDtoNew();
         feeReceiptDto.setPage(page);
         feeReceiptDto.setRow(row);
@@ -156,9 +172,10 @@ public class FeeReceiptApi {
         feeReceiptDto.setQstartTime(qstartTime);
         feeReceiptDto.setQendTime(qendTime);
         feeReceiptDto.setObjType(objType);
-        feeReceiptDto.setObjName(roomName   );
+        feeReceiptDto.setObjName(roomName);
         return getFeeReceiptBMOImpl.gets(feeReceiptDto);
     }
+
     /**
      * 微信保存消息模板
      *
@@ -229,7 +246,7 @@ public class FeeReceiptApi {
      */
     @RequestMapping(value = "/queryFeeReceiptDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceiptDetail(@RequestParam(value = "communityId") String communityId,
-                                                        @RequestParam(value = "receiptId",required = false) String receiptId,
+                                                        @RequestParam(value = "receiptId", required = false) String receiptId,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();

@@ -548,4 +548,17 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
         }
         return Integer.parseInt(stores.get(0).get("count").toString());
     }
+
+    /**
+     * 查询员工和商户信息表
+     *
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getStoreUserInfo(Map info) throws DAOException {
+        List<Map> storeUserInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreUserInfo", info);
+        return storeUserInfos;
+    }
 }

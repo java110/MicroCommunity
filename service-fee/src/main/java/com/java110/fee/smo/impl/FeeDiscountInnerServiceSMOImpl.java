@@ -16,6 +16,7 @@ import com.java110.intf.fee.IFeeDiscountSpecInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigDiscountInnerServiceSMO;
 import com.java110.po.feeDiscount.FeeDiscountPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +49,12 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
 
     @Autowired
     private IFeeDiscountSpecInnerServiceSMO feeDiscountSpecInnerServiceSMOImpl;
+
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    //键
+    public static final String DISCOUNT_MODE = "DISCOUNT_MODE";
 
 
     @Override
@@ -156,7 +163,17 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         for (PayFeeConfigDiscountDto tmpPayFeeConfigDiscountDto : payFeeConfigDiscountDtos) {
             doCompute(tmpPayFeeConfigDiscountDto, Double.parseDouble(feeDetailDto.getCycles()), computeDiscountDtos, feeDetailDto.getFeeId());
         }
-        return computeDiscountDtos;
+
+        //取出开关映射的值
+        String value = MappingCache.getValue(DOMAIN_COMMON, DISCOUNT_MODE);
+
+        List<ComputeDiscountDto> computeDiscountDtoList = new ArrayList<>();
+        for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+            computeDiscountDto.setValue(value);
+            computeDiscountDtoList.add(computeDiscountDto);
+        }
+
+        return computeDiscountDtoList;
 
     }
 

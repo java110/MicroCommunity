@@ -29,13 +29,19 @@ public class GetFeeReceiptBMOImpl implements IGetFeeReceiptBMO {
         int count = feeReceiptInnerServiceSMOImpl.queryFeeReceiptsCount(feeReceiptDto);
 
         List<FeeReceiptDto> feeReceiptDtos = null;
+        List<FeeReceiptDto> feeReceiptList = new ArrayList<>();
         if (count > 0) {
             feeReceiptDtos = feeReceiptInnerServiceSMOImpl.queryFeeReceipts(feeReceiptDto);
+            for (FeeReceiptDto feeReceipt : feeReceiptDtos) {
+                feeReceipt.setStoreName(feeReceiptDto.getStoreName());
+                feeReceiptList.add(feeReceipt);
+            }
         } else {
             feeReceiptDtos = new ArrayList<>();
+            feeReceiptList.addAll(feeReceiptDtos);
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) feeReceiptDto.getRow()), count, feeReceiptDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) feeReceiptDto.getRow()), count, feeReceiptList);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

@@ -1,6 +1,7 @@
 package com.java110.store.smo.impl;
 
 import com.java110.dto.store.StoreAttrDto;
+import com.java110.dto.store.StoreUserDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
@@ -22,7 +23,7 @@ import java.util.List;
  * add by wuxw 2019/9/20
  **/
 @RestController
-public class StoreInnerServiceSMOImpl  extends BaseServiceSMO implements IStoreInnerServiceSMO {
+public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreInnerServiceSMO {
 
     @Autowired
     private IStoreServiceDao storeServiceDaoImpl;
@@ -53,14 +54,26 @@ public class StoreInnerServiceSMOImpl  extends BaseServiceSMO implements IStoreI
         return storeDtos;
     }
 
-    public List<StoreAttrDto> getStoreAttrs(@RequestBody StoreAttrDto storeAttrDto){
+    public List<StoreAttrDto> getStoreAttrs(@RequestBody StoreAttrDto storeAttrDto) {
         List<StoreAttrDto> storeAttrDtos = BeanConvertUtil.covertBeanList(storeServiceDaoImpl.getStoreAttrs(BeanConvertUtil.beanCovertMap(storeAttrDto)), StoreAttrDto.class);
         return storeAttrDtos;
     }
 
 
-    public int getStoreCount(@RequestBody StoreDto storeDto){
+    public int getStoreCount(@RequestBody StoreDto storeDto) {
         return storeServiceDaoImpl.getStoreCount(BeanConvertUtil.beanCovertMap(storeDto));
+    }
+
+    /**
+     * 查询员工和员工所属商户信息
+     *
+     * @param storeUserDto
+     * @return
+     */
+    @Override
+    public List<StoreUserDto> getStoreUserInfo(@RequestBody StoreUserDto storeUserDto) {
+        List<StoreUserDto> storeUserInfos = BeanConvertUtil.covertBeanList(storeServiceDaoImpl.getStoreUserInfo(BeanConvertUtil.beanCovertMap(storeUserDto)), StoreUserDto.class);
+        return storeUserInfos;
     }
 
 
