@@ -7,6 +7,7 @@ import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.machine.MachineAttrDto;
+import com.java110.po.machine.MachineAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,6 +51,11 @@ public class MachineAttrInnerServiceSMOImpl extends BaseServiceSMO implements IM
     @Override
     public int queryMachineAttrsCount(@RequestBody MachineAttrDto machineAttrDto) {
         return machineAttrServiceDaoImpl.queryMachineAttrsCount(BeanConvertUtil.beanCovertMap(machineAttrDto));
+    }
+
+    @Override
+    public int saveMachineAttrs(@RequestBody MachineAttrPo machineAttrPo) {
+        return machineAttrServiceDaoImpl.saveMachineAttrs(BeanConvertUtil.beanCovertMap(machineAttrPo));
     }
 
     public IMachineAttrServiceDao getMachineAttrServiceDaoImpl() {

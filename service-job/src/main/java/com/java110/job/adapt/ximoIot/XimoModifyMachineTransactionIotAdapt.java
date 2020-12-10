@@ -91,9 +91,9 @@ public class XimoModifyMachineTransactionIotAdapt extends DatabusAdaptImpl {
 
         MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
 
-        postParameters.add("extCommunityUuid", machineDtos.get(0));
-        //postParameters.add("devSn", machinePo.getMachineCode());
-        postParameters.add("uuid", machinePo.getMachineId());
+        postParameters.add("extCommunityUuid", machineDtos.get(0).getCommunityId());
+        postParameters.add("devSn", machinePo.getMachineCode());
+        //postParameters.add("uuid", machinePo.getMachineId());
         postParameters.add("name", machinePo.getMachineName());
         postParameters.add("positionType", "0");
         postParameters.add("positionUuid", machinePo.getCommunityId());

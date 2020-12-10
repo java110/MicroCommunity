@@ -4,7 +4,7 @@ package com.java110.job.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
-import com.java110.intf.IBusinessDatabusInnerServiceSMO;
+import com.java110.intf.job.IBusinessDatabusInnerServiceSMO;
 import com.java110.job.dao.IBusinessDatabusServiceDao;
 import com.java110.po.businessDatabus.BusinessDatabusPo;
 import com.java110.utils.util.BeanConvertUtil;

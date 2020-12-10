@@ -14,6 +14,15 @@
     </insert>
 
 
+    <insert id="saveMachineAttrs" parameterType="Map">
+        insert into machine_attrs(
+        machine_id,attr_id,spec_cd,community_id,b_id,value
+        ) values (
+        #{machineId},#{attrId},#{specCd},#{communityId},'-1',#{value}
+        )
+    </insert>
+
+
     <!-- 查询设备属性信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessMachineAttrInfo" parameterType="Map" resultType="Map">
         select t.machine_id,t.machine_id machineId,t.attr_id,t.attr_id attrId,t.operate,t.spec_cd,t.spec_cd

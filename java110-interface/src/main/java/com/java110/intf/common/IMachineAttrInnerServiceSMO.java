@@ -2,6 +2,7 @@ package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.machine.MachineAttrDto;
+import com.java110.po.machine.MachineAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,4 +39,15 @@ public interface IMachineAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/queryMachineAttrsCount", method = RequestMethod.POST)
     int queryMachineAttrsCount(@RequestBody MachineAttrDto machineAttrDto);
+
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     * @param machineAttrPo 数据对象分享
+     * @return MachineAttrDto 对象数据
+     */
+    @RequestMapping(value = "/saveMachineAttrs", method = RequestMethod.POST)
+    int saveMachineAttrs(@RequestBody MachineAttrPo machineAttrPo);
+
 }

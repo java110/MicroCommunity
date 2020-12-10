@@ -17,9 +17,14 @@ package com.java110.job.adapt.ximoIot.asyn.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.machine.MachineDto;
+import com.java110.intf.common.IMachineAttrInnerServiceSMO;
+import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.job.adapt.ximoIot.GetToken;
 import com.java110.job.adapt.ximoIot.XimoIotConstant;
 import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
+import com.java110.po.machine.MachineAttrPo;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +47,12 @@ public class XimoMachineAsynImpl implements IXimoMachineAsyn {
     @Autowired
     private RestTemplate formRestTemplate;
 
+    @Autowired
+    private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
+
     @Override
     @Async
     public void send(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos) {
@@ -62,6 +73,24 @@ public class XimoMachineAsynImpl implements IXimoMachineAsyn {
         if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
             return;
         }
+
+        JSONObject data = tokenObj.getJSONObject("data");
+        String devMac = data.getString("devMac");
+        String appEkey = data.getString("appEkey");
+
+        MachineDto machinePo = new MachineDto();
+        machinePo.setMachineId(data.getString("uuid"));
+        machinePo.setState("1700");
+        machinePo.setMachineMac(devMac);
+        machineInnerServiceSMOImpl.updateMachineState(machinePo);
+
+        MachineAttrPo machineAttrPo = new MachineAttrPo();
+        machineAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        machineAttrPo.setCommunityId(postParameters.get("extCommunityUuid").get(0).toString());
+        machineAttrPo.setSpecCd("7127015495");
+        machineAttrPo.setMachineId(data.getString("uuid"));
+        machineAttrPo.setValue(appEkey);
+        machineAttrInnerServiceSMOImpl.saveMachineAttrs(machineAttrPo);
 
         for (MultiValueMap<String, Object> owner : ownerDtos) {
             sendOwner(owner);
