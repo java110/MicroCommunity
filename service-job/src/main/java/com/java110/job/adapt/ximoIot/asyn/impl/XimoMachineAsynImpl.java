@@ -15,10 +15,12 @@
  */
 package com.java110.job.adapt.ximoIot.asyn.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.job.adapt.ximoIot.GetToken;
 import com.java110.job.adapt.ximoIot.XimoIotConstant;
 import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,15 @@ public class XimoMachineAsynImpl implements IXimoMachineAsyn {
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return;
+        }
+        JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+        if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+            return;
+        }
+
+        for (MultiValueMap<String, Object> owner : ownerDtos) {
+            sendOwner(owner);
         }
     }
 
