@@ -23,6 +23,9 @@ public class FeeReceiptDto extends PageDto implements Serializable {
     private String receiptId;
     private String objType;
 
+    //商户名称
+    private String storeName;
+
 
     private Date createTime;
 
@@ -100,5 +103,13 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }

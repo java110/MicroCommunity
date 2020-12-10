@@ -36,6 +36,9 @@ public class ComputeDiscountDto extends PageDto implements Serializable {
 
     private String ruleId;
 
+    //映射关系值
+    private String value;
+
     private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
     private double discountPrice;
@@ -95,5 +98,13 @@ public class ComputeDiscountDto extends PageDto implements Serializable {
 
     public void setDiscountName(String discountName) {
         this.discountName = discountName;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }
