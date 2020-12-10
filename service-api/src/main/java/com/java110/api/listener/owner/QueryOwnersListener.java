@@ -91,7 +91,7 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
                 }
                 //对业主手机号隐藏处理
                 String link = ownerDto.getLink();
-                if (mark.size() == 0 && link != null && !link.equals("") && link.length() == 1) {
+                if (mark.size() == 0 && link != null && !link.equals("") && link.length() == 11) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                     ownerDto.setLink(link);
                 }
