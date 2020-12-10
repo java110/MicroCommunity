@@ -7,8 +7,10 @@ import com.java110.user.bmo.staffAppAuth.IDeleteStaffAppAuthBMO;
 import com.java110.user.bmo.staffAppAuth.IGetStaffAppAuthBMO;
 import com.java110.user.bmo.staffAppAuth.ISaveStaffAppAuthBMO;
 import com.java110.user.bmo.staffAppAuth.IUpdateStaffAppAuthBMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -110,5 +112,23 @@ public class StaffApi {
         staffAppAuthDto.setStoreId(storeId);
         staffAppAuthDto.setStaffId(userId);
         return getStaffAppAuthBMOImpl.get(staffAppAuthDto);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /staff/generatorQrCode
+     * @path /app/staff/generatorQrCode
+     */
+    @RequestMapping(value = "/generatorQrCode", method = RequestMethod.GET)
+    public ResponseEntity<String> generatorQrCode(@RequestHeader(value = "store-id") String storeId,
+                                                  @RequestHeader(value = "user-id") String userId,
+                                                  @RequestParam(value = "communityId") String communityId) {
+        String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL")
+                + "/app/staffAuth?storeId=" + storeId + "&staffId=" + userId
+                + "&communityId=" + communityId;
+        return ResultVo.createResponseEntity(ownerUrl);
     }
 }
