@@ -5,17 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
-import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
-import com.java110.dto.user.UserDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.staff.IStaffAuthSMO;
-import com.java110.utils.cache.CommonCache;
-import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.SMOException;
@@ -33,12 +29,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * wx登录
@@ -65,16 +57,8 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
     public ResponseEntity<String> getPageAccessToken(IPageData pd, HttpServletRequest request) throws SMOException {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         String authCode = paramIn.getString("code");
-        String state = paramIn.getString("state");
-        String paramStr = CommonCache.getAndRemoveValue(paramIn.getString("urlCode"));
-
-        if (StringUtil.isEmpty(paramStr)) {
-            return ResultVo.redirectPage("/");
-        }
-
-        JSONObject param = JSONObject.parseObject(paramStr);
-        String redirectUrl = param.getString("redirectUrl");
-        String errorUrl = param.getString("errorUrl");
+        String staffId = paramIn.getString("staffId");
+        String storeId = paramIn.getString("storeId");
         String wId = paramIn.getString("wId");
         SmallWeChatDto smallWeChatDto = null;
         if (!StringUtil.isEmpty(wId)) {
@@ -97,7 +81,7 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
 
         logger.debug("调用微信换去openId ", paramOut);
         if (paramOut.getStatusCode() != HttpStatus.OK) {
-            return ResultVo.redirectPage(errorUrl);
+            return ResultVo.redirectPage("/");
 
         }
 
@@ -106,53 +90,17 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
         //获取 openId
         String openId = paramObj.getString("openid");
 
-        int loginFlag = paramIn.getInteger("loginFlag");
-        //说明是登录页面，下发code 就可以，不需要下发key 之类
-        if (loginFlag == LOGIN_PAGE) {
-            //将openId放到redis 缓存，给前段下发临时票据
-            String code = UUID.randomUUID().toString();
-            CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage(errorUrl + "?code=" + code);
-        }
+        JSONObject paramAuth = new JSONObject();
+        paramAuth.put("openId", openId);
+        paramAuth.put("staffId", staffId);
+        paramAuth.put("storeId", storeId);
+        paramAuth.put("appType", "WECHAT");
+        paramAuth.put("state", "2002");
 
-        //判断当前openId 是否绑定了业主
-        pd = PageData.newInstance().builder("-1", "", "", pd.getReqData(),
-                "", "", "", "",
-                pd.getAppId());
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setOpenId(openId);
-        List<OwnerAppUserDto> ownerAppUserDtos = super.getForApis(pd, ownerAppUserDto, ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS, OwnerAppUserDto.class);
-
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
-            //将openId放到redis 缓存，给前段下发临时票据
-            String code = UUID.randomUUID().toString();
-            CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage(errorUrl + "?code=" + code);
-        }
-
-        // String accessToken = paramObj.getString("access_token");//暂时不用
-        Map userMap = new HashMap();
-        userMap.put(CommonConstant.LOGIN_USER_ID, ownerAppUserDtos.get(0).getUserId());
-        userMap.put(CommonConstant.LOGIN_USER_NAME, ownerAppUserDtos.get(0).getAppUserName());
-        String token = "";
-        try {
-            token = AuthenticationFactory.createAndSaveToken(userMap);
-            pd.setToken(token);
-        } catch (Exception e) {
-            logger.error("创建token失败");
-        }
-        //查询用户key
-        UserDto userDto = new UserDto();
-        userDto.setUserId(ownerAppUserDtos.get(0).getUserId());
-        UserDto tmpUserDto = super.getForApi(pd, userDto, ServiceCodeConstant.QUERY_USER_SECRET, UserDto.class);
-
-        if (StringUtil.isEmpty(tmpUserDto.getKey())) {
-            String code = UUID.randomUUID().toString();
-            CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage(errorUrl + "?code=" + code);
-        }
-        redirectUrl = redirectUrl + (redirectUrl.indexOf("?") > 0 ? "&key=" + tmpUserDto.getKey() : "?key=" + tmpUserDto.getKey());
-        return ResultVo.redirectPage(redirectUrl);
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramAuth.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/staff/updateStaffAppAuth", HttpMethod.POST);
+        url = MappingCache.getValue("OWNER_WECHAT_URL");
+        return ResultVo.redirectPage(url);
 
     }
 
@@ -160,24 +108,18 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
      * 刷新token
      *
      * @param pd
-     * @param redirectUrl
      * @param request
      * @param response
      * @return
      * @throws SMOException
      */
     @Override
-    public ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl,
-                                               String errorUrl,
-                                               String loginFlag,
+    public ResponseEntity<String> refreshToken(IPageData pd, String communityId, String staffId, String storeId,
                                                HttpServletRequest request, HttpServletResponse response) throws SMOException {
-        String wAppId = request.getHeader("w-app-id");
         SmallWeChatDto smallWeChatDto = null;
-        if (!StringUtil.isEmpty(wAppId)) {
-            JSONObject paramIn = new JSONObject();
-            paramIn.put("appId", wAppId);
-            smallWeChatDto = getSmallWechat(pd, paramIn);
-        }
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("communityId", communityId);
+        smallWeChatDto = getSmallWechat(pd, paramIn);
         if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
             smallWeChatDto = new SmallWeChatDto();
             smallWeChatDto.setAppId(wechatAuthProperties.getWechatAppId());
@@ -186,16 +128,9 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
 
-        URL url = null;
         String openUrl = "";
+        String url = MappingCache.getValue("OWNER_WECHAT_URL");
         try {
-            url = new URL(redirectUrl);
-
-            String newUrl = url.getProtocol() + "://" + url.getHost();
-            if (url.getPort() > 0) {
-                newUrl += (":" + url.getPort());
-            }
-
             openUrl = WechatConstant.OPEN_AUTH
                     .replace("APPID", smallWeChatDto.getAppId())
                     .replace("SCOPE", "snsapi_base")
@@ -203,12 +138,13 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
                             "REDIRECT_URL",
                             URLEncoder
                                     .encode(
-                                            (newUrl
-                                                    + "/app/loginStaffWechatAuth?appId=992020061452450002&wId=" + WechatFactory.getWId(wAppId)),
+                                            (url
+                                                    + "/app/loginStaffWechatAuth?appId=992020061452450002&staffId="
+                                                    + staffId + "&storeId=" + storeId + "&wId=" + WechatFactory.getWId(smallWeChatDto.getAppId())),
                                             "UTF-8")).replace("STATE", "1");
 
         } catch (Exception e) {
-            logger.error("微信公众号鉴权 redirectUrl 错误 " + redirectUrl, e);
+            logger.error("微信公众号鉴权 redirectUrl 错误 " + url, e);
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, e.getLocalizedMessage());
         }
 
@@ -216,138 +152,6 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
         urlObj.put("openUrl", openUrl);
 
         return ResultVo.createResponseEntity(ResultVo.CODE_MACHINE_OK, ResultVo.MSG_OK, urlObj);
-    }
-
-    /**
-     * 公众号登录
-     *
-     * @param pd
-     * @param paramIn
-     * @param paramOut
-     * @param userId
-     * @param ownerAppUserDtos
-     * @return
-     */
-    private ResponseEntity<String> wechat(IPageData pd, JSONObject paramIn, JSONObject paramOut, String userId,
-                                          List<OwnerAppUserDto> ownerAppUserDtos) {
-
-        ResponseEntity<String> responseEntity = null;
-        //查询微信信息
-        pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
-                "", "", "", "",
-                pd.getAppId());
-
-
-        String code = paramIn.getString("code");
-
-        String openId = CommonCache.getValue(code);
-
-        if (StringUtil.isEmpty(openId)) {
-            responseEntity = new ResponseEntity<>("页面失效，请刷新后重试", HttpStatus.UNAUTHORIZED);
-            return responseEntity;
-        }
-
-        OwnerAppUserDto curOwnerApp = judgeCurrentOwnerBind(ownerAppUserDtos, OwnerAppUserDto.APP_TYPE_WECHAT);
-
-        //说明 当前的openId 就是最新的
-        if (curOwnerApp != null && openId.equals(curOwnerApp.getOpenId())) {
-            return new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
-        }
-
-        JSONObject userOwnerInfo = new JSONObject();
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setOpenId(openId);
-        ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
-        if (curOwnerApp != null) {
-            ownerAppUserDto.setAppUserId(curOwnerApp.getAppUserId());
-            ownerAppUserDto.setCommunityId(curOwnerApp.getCommunityId());
-        } else {
-            ownerAppUserDto.setOldAppUserId(ownerAppUserDtos.get(0).getAppUserId());
-            ownerAppUserDto.setAppUserId("-1");
-            ownerAppUserDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
-        }
-
-        //查询微信信息
-        pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
-                "", "", "", "",
-                pd.getAppId());
-
-        super.postForApi(pd, ownerAppUserDto, ServiceCodeConstant.REFRESH_APP_USER_BINDING_OWNER_OPEN_ID,
-                OwnerAppUserDto.class);
-        return new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
-    }
-
-    private ResponseEntity<String> mina(IPageData pd, JSONObject paramIn, JSONObject paramOut, String userId, List<OwnerAppUserDto> ownerAppUserDtos) {
-
-        ResponseEntity<String> responseEntity = null;
-        //查询微信信息
-        pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
-                "", "", "", "",
-                pd.getAppId());
-        responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
-                        + paramIn.getString("appId") + "&page=1&row=1&communityId=" + ownerAppUserDtos.get(0).getCommunityId(), HttpMethod.GET);
-
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            return responseEntity;
-        }
-        JSONObject smallWechatObj = JSONObject.parseObject(responseEntity.getBody().toString());
-        JSONArray smallWeChats = smallWechatObj.getJSONArray("smallWeChats");
-        String appId = wechatAuthProperties.getAppId();
-        String secret = wechatAuthProperties.getSecret();
-        if (smallWeChats.size() > 0) {
-            appId = smallWeChats.getJSONObject(0).getString("appId");
-            secret = smallWeChats.getJSONObject(0).getString("appSecret");
-        }
-
-        String code = paramIn.getString("code");
-        String urlString = "?appid={appId}&secret={secret}&js_code={code}&grant_type={grantType}";
-        String response = outRestTemplate.getForObject(
-                wechatAuthProperties.getSessionHost() + urlString, String.class,
-                appId,
-                secret,
-                code,
-                wechatAuthProperties.getGrantType());
-
-        logger.debug("wechatAuthProperties:" + JSONObject.toJSONString(wechatAuthProperties));
-
-        logger.debug("微信返回报文：" + response);
-
-        //Assert.jsonObjectHaveKey(response, "errcode", "返回报文中未包含 错误编码，接口出错");
-        JSONObject responseObj = JSONObject.parseObject(response);
-
-        if (responseObj.containsKey("errcode") && !"0".equals(responseObj.getString("errcode"))) {
-            throw new IllegalArgumentException("微信验证失败，可能是code失效" + responseObj);
-        }
-
-        String openId = responseObj.getString("openid");
-
-        OwnerAppUserDto ownerAppUserDto = judgeCurrentOwnerBind(ownerAppUserDtos, OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
-
-        //说明 当前的openId 就是最新的
-        if (ownerAppUserDto != null && openId.equals(ownerAppUserDto.getOpenId())) {
-            return new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
-        }
-
-        OwnerAppUserDto tmpOwnerAppUserDto = new OwnerAppUserDto();
-        tmpOwnerAppUserDto.setOpenId(openId);
-        tmpOwnerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
-        if (ownerAppUserDto != null) {
-            tmpOwnerAppUserDto.setAppUserId(ownerAppUserDto.getAppUserId());
-            tmpOwnerAppUserDto.setCommunityId(ownerAppUserDto.getCommunityId());
-        } else {
-            tmpOwnerAppUserDto.setOldAppUserId(ownerAppUserDtos.get(0).getAppUserId());
-            tmpOwnerAppUserDto.setAppUserId("-1");
-            tmpOwnerAppUserDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
-        }
-        //查询微信信息
-        pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
-                "", "", "", "",
-                pd.getAppId());
-
-        super.postForApi(pd, tmpOwnerAppUserDto, ServiceCodeConstant.REFRESH_APP_USER_BINDING_OWNER_OPEN_ID,
-                OwnerAppUserDto.class);
-        return new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
     }
 
     /**
@@ -375,8 +179,8 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
                 "", "", "", "",
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
-                        + paramIn.getString("appId") + "&page=1&row=1", HttpMethod.GET);
+                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?communityId="
+                        + paramIn.getString("communityId") + "&page=1&row=1", HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return null;

@@ -1,6 +1,7 @@
 package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.app.AppDto;
 import com.java110.dto.staffAppAuth.StaffAppAuthDto;
 import com.java110.po.staffAppAuth.StaffAppAuthPo;
 import com.java110.user.bmo.staffAppAuth.IDeleteStaffAppAuthBMO;
@@ -13,12 +14,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -67,8 +63,8 @@ public class StaffApi {
 
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "appType", "请求报文中未包含appType");
-        Assert.hasKeyAndValue(reqJson, "auId", "auId不能为空");
-
+        Assert.hasKeyAndValue(reqJson, "openId", "请求报文中未包含openId");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含openId");
 
         StaffAppAuthPo staffAppAuthPo = BeanConvertUtil.covertBean(reqJson, StaffAppAuthPo.class);
         return updateStaffAppAuthBMOImpl.update(staffAppAuthPo);
@@ -126,9 +122,10 @@ public class StaffApi {
     public ResponseEntity<String> generatorQrCode(@RequestHeader(value = "store-id") String storeId,
                                                   @RequestHeader(value = "user-id") String userId,
                                                   @RequestParam(value = "communityId") String communityId) {
+
         String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL")
                 + "/app/staffAuth?storeId=" + storeId + "&staffId=" + userId
-                + "&communityId=" + communityId;
+                + "&communityId=" + communityId + "&appId=" + AppDto.WECHAT_OWNER_APP_ID;
         return ResultVo.createResponseEntity(ownerUrl);
     }
 }

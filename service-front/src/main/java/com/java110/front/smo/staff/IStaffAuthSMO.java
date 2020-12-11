@@ -33,7 +33,6 @@ public interface IStaffAuthSMO {
      * @return
      * @throws SMOException
      */
-    ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl, String errorUrl,
-                                        String loginFlag,
+    ResponseEntity<String> refreshToken(IPageData pd,String communityId,String staffId,String storeId,
                                         HttpServletRequest request, HttpServletResponse response) throws SMOException;
 }

@@ -1,6 +1,8 @@
 package com.java110.user.bmo.staffAppAuth.impl;
 
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.staffAppAuth.StaffAppAuthDto;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.po.staffAppAuth.StaffAppAuthPo;
 import com.java110.user.bmo.staffAppAuth.IUpdateStaffAppAuthBMO;
@@ -22,7 +24,18 @@ public class UpdateStaffAppAuthBMOImpl implements IUpdateStaffAppAuthBMO {
     @Java110Transactional
     public ResponseEntity<String> update(StaffAppAuthPo staffAppAuthPo) {
 
-        int flag = staffAppAuthInnerServiceSMOImpl.updateStaffAppAuth(staffAppAuthPo);
+        StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
+        staffAppAuthDto.setAppType(staffAppAuthPo.getAppType());
+        staffAppAuthDto.setStaffId(staffAppAuthPo.getStaffId());
+        staffAppAuthDto.setStoreId(staffAppAuthPo.getStoreId());
+        int count = staffAppAuthInnerServiceSMOImpl.queryStaffAppAuthsCount(staffAppAuthDto);
+        int flag = 0;
+        if (count > 0) {
+            flag = staffAppAuthInnerServiceSMOImpl.updateStaffAppAuth(staffAppAuthPo);
+        } else {
+            staffAppAuthPo.setAuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_auId));
+            flag = staffAppAuthInnerServiceSMOImpl.saveStaffAppAuth(staffAppAuthPo);
+        }
 
         if (flag > 0) {
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");

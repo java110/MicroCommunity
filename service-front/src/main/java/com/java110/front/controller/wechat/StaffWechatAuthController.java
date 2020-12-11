@@ -47,6 +47,7 @@ public class StaffWechatAuthController extends BaseController {
 
     /**
      * 微信登录接口
+     * /app/loginStaffWechatAuth
      *
      * @param request
      */
@@ -56,7 +57,7 @@ public class StaffWechatAuthController extends BaseController {
         Map<String, String> params = getParameterStringMap(request);
         String appId = params.get("appId");
         IPageData pd = PageData.newInstance().builder("", "", "", JSONObject.toJSONString(params),
-                "login", "", "", "", appId
+                "auth", "", "", "", appId
         );
         ResponseEntity responseEntity = staffAuthSMOImpl.getPageAccessToken(pd, request);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
@@ -65,19 +66,20 @@ public class StaffWechatAuthController extends BaseController {
 
     /**
      * 微信公众号号鉴权
+     * /app/staffAuth
      *
      * @param request
      */
     @RequestMapping(path = "/staffAuth")
-    public ResponseEntity<String> staffAuth(@RequestParam String redirectUrl,
-                                            @RequestParam String errorUrl,
-                                            @RequestParam String loginFlag,
+    public ResponseEntity<String> staffAuth(@RequestParam(value = "communityId") String communityId,
+                                            @RequestParam(value = "staffId") String staffId,
+                                            @RequestParam(value = "storeId") String storeId,
+                                            @RequestParam(value = "appId") String appId,
                                             HttpServletRequest request,
                                             HttpServletResponse response) {
         IPageData pd = PageData.newInstance().builder("", "", "", "",
-                "login", "", "", "", request.getHeader("app-id")
-        );
-        return staffAuthSMOImpl.refreshToken(pd, redirectUrl, errorUrl, loginFlag, request, response);
+                "login", "", "", "", appId);
+        return staffAuthSMOImpl.refreshToken(pd, communityId, staffId, storeId, request, response);
 
     }
 
