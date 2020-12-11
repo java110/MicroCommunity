@@ -274,7 +274,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             data.setFirst(new Content(noticeDto.getTitle()));
             data.setKeyword1(new Content(noticeDto.getTitle()));
             data.setKeyword2(new Content(noticeDto.getStartTime()));
-            data.setKeyword3(new Content(noticeDto.getContext()));
+            data.setKeyword3(new Content(StringUtil.delHtmlTag(noticeDto.getContext())));
             data.setRemark(new Content("如有疑问请联系相关物业人员"));
             templateMessage.setData(data);
             templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId());
@@ -325,7 +325,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             data.setFirst(new Content(noticeDto.getTitle()));
             data.setKeyword1(new Content(noticeDto.getTitle()));
             data.setKeyword2(new Content(noticeDto.getStartTime()));
-            data.setKeyword3(new Content(noticeDto.getContext()));
+            data.setKeyword3(new Content(StringUtil.delHtmlTag(noticeDto.getContext())));
             data.setRemark(new Content("如有疑问请联系相关物业人员"));
             templateMessage.setData(data);
             if (!StringUtil.isEmpty(wechatUrl)) {

@@ -35,7 +35,15 @@ public class BillOweFeeDto extends PageDto implements Serializable {
     private String deadlineTime;
     private String payObjId;
     private String curBill;
+    private String feeTypeCd;
 
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
+    }
 
     public String getOweId() {
         return oweId;
