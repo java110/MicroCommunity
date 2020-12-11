@@ -36,6 +36,7 @@ public class BillOweFeeDto extends PageDto implements Serializable {
     private String payObjId;
     private String curBill;
     private String feeTypeCd;
+    private String feeTypeName;
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -187,5 +188,13 @@ public class BillOweFeeDto extends PageDto implements Serializable {
 
     public void setCurBill(String curBill) {
         this.curBill = curBill;
+    }
+
+    public String getFeeTypeName() {
+        return feeTypeName;
+    }
+
+    public void setFeeTypeName(String feeTypeName) {
+        this.feeTypeName = feeTypeName;
     }
 }

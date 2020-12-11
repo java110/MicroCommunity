@@ -168,7 +168,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     templateMessage.setTemplate_id(templateId);
                     templateMessage.setTouser(appUserDto.getOpenId());
                     /*data.setFirst(new Content("物业费缴费提醒"));*/
-                    data.setFirst(new Content(fee.getFeeTypeCd()+"提醒"));
+                    data.setFirst(new Content(fee.getFeeTypeName() + "提醒"));
                     data.setKeyword1(new Content(fee.getPayerObjName()));
                     data.setKeyword2(new Content(year + "年-" + month + "月"));
                     data.setKeyword3(new Content(fee.getAmountOwed()));
