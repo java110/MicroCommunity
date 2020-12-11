@@ -57,7 +57,7 @@ public class StaffWechatAuthController extends BaseController {
         Map<String, String> params = getParameterStringMap(request);
         String appId = params.get("appId");
         IPageData pd = PageData.newInstance().builder("", "", "", JSONObject.toJSONString(params),
-                "auth", "", "", "", appId
+                "login", "", "", "", appId
         );
         ResponseEntity responseEntity = staffAuthSMOImpl.getPageAccessToken(pd, request);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);

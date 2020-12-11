@@ -33,7 +33,7 @@ public class MachineApi {
      * @path /app/machine/openDoor
      */
     @RequestMapping(value = "/openDoor", method = RequestMethod.POST)
-    public ResponseEntity<String> saveAttrValue(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> openDoor(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备信息");
