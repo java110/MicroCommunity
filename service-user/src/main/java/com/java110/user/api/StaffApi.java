@@ -59,14 +59,14 @@ public class StaffApi {
      * @path /app/staff/updateStaffAppAuth
      */
     @RequestMapping(value = "/updateStaffAppAuth", method = RequestMethod.POST)
-    public ResponseEntity<String> updateStaffAppAuth(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> updateStaffAppAuth(@RequestBody String reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "appType", "请求报文中未包含appType");
         Assert.hasKeyAndValue(reqJson, "openId", "请求报文中未包含openId");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含openId");
 
-        StaffAppAuthPo staffAppAuthPo = BeanConvertUtil.covertBean(reqJson, StaffAppAuthPo.class);
+        StaffAppAuthPo staffAppAuthPo = BeanConvertUtil.covertBean(JSONObject.parseObject(reqJson), StaffAppAuthPo.class);
         return updateStaffAppAuthBMOImpl.update(staffAppAuthPo);
     }
 
