@@ -28,6 +28,10 @@ public class PayFeeConfigDiscountDto extends PageDto implements Serializable {
 
     private Date createTime;
 
+    private Date startTime;
+
+    private Date endTime;
+
     private String statusCd = "0";
 
 
@@ -102,5 +106,21 @@ public class PayFeeConfigDiscountDto extends PageDto implements Serializable {
 
     public void setFeeDiscountSpecs(List<FeeDiscountSpecDto> feeDiscountSpecs) {
         this.feeDiscountSpecs = feeDiscountSpecs;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

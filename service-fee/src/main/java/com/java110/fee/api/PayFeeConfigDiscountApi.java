@@ -42,6 +42,8 @@ public class PayFeeConfigDiscountApi {
         Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含configId");
         Assert.hasKeyAndValue(reqJson, "discountId", "请求报文中未包含discountId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
+        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
 
 
         PayFeeConfigDiscountPo payFeeConfigDiscountPo = BeanConvertUtil.covertBean(reqJson, PayFeeConfigDiscountPo.class);
