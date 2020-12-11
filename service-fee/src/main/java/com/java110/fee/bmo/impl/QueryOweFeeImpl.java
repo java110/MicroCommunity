@@ -15,6 +15,7 @@ import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -59,6 +60,11 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    //键
+    public static final String TOTAL_FEE_PRICE = "TOTAL_FEE_PRICE";
 
     @Override
     public ResponseEntity<String> query(FeeDto feeDto) {
@@ -145,6 +151,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
         double feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(feePrice);
+        //取出开关映射的值
+        String val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
+        feeDto.setVal(val);
         return ResultVo.createResponseEntity(feeDto);
     }
 

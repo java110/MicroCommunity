@@ -42,6 +42,9 @@ public class FeeDto extends PageDto implements Serializable {
     private String[] feeTypeCds;
     private String configId;
 
+    //映射关系开关值
+    private String val;
+
     private String squarePrice;
     private String additionalAmount;
     private String state;
@@ -515,5 +518,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setBuiltUpArea(String builtUpArea) {
         this.builtUpArea = builtUpArea;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    public void setVal(String value) {
+        this.val = value;
     }
 }
