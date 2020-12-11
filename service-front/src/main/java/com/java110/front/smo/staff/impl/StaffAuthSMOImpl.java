@@ -133,7 +133,8 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
         try {
             openUrl = WechatConstant.OPEN_AUTH
                     .replace("APPID", smallWeChatDto.getAppId())
-                    .replace("SCOPE", "snsapi_base")
+                    //.replace("SCOPE", "snsapi_base")
+                    .replace("SCOPE", "snsapi_userinfo")
                     .replace(
                             "REDIRECT_URL",
                             URLEncoder

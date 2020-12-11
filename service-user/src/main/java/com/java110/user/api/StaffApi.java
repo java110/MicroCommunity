@@ -66,7 +66,7 @@ public class StaffApi {
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "appType", "请求报文中未包含appType");
         Assert.hasKeyAndValue(reqJson, "openId", "请求报文中未包含openId");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含openId");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
 
         StaffAppAuthPo staffAppAuthPo = BeanConvertUtil.covertBean(reqJson, StaffAppAuthPo.class);
         return updateStaffAppAuthBMOImpl.update(staffAppAuthPo);
