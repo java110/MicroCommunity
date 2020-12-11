@@ -18,7 +18,8 @@
     <!-- 查询员工微信认证信息 add by wuxw 2018-07-03 -->
     <select id="getStaffAppAuthInfo" parameterType="Map" resultType="Map">
         select t.au_id,t.au_id auId,t.app_type,t.app_type appType,t.open_id,t.open_id openId,t.status_cd,t.status_cd
-        statusCd,t.state,t.store_id,t.store_id storeId,t.open_name,t.open_name openName,t.staff_id,t.staff_id staffId
+        statusCd,t.state,t.store_id,t.store_id storeId,t.open_name,t.open_name openName,t.staff_id,t.staff_id staffId,
+        t.create_time createTime
         from staff_app_auth t
         where 1 =1
         <if test="auId !=null and auId != ''">
