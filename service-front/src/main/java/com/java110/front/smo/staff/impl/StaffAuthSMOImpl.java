@@ -86,16 +86,26 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
         }
 
         JSONObject paramObj = JSONObject.parseObject(paramOut.getBody());
-
         //获取 openId
         String openId = paramObj.getString("openid");
+        url = WechatConstant.APP_GET_USER_INFO_URL
+                .replace("ACCESS_TOKEN", paramObj.getString("access_token"))
+                .replace("OPENID", openId);
 
+        paramOut = outRestTemplate.getForEntity(url, String.class);
+
+        logger.debug("调用微信换去openId ", paramOut);
+        if (paramOut.getStatusCode() != HttpStatus.OK) {
+            return ResultVo.redirectPage("/");
+        }
+        paramObj = JSONObject.parseObject(paramOut.getBody());
         JSONObject paramAuth = new JSONObject();
         paramAuth.put("openId", openId);
         paramAuth.put("staffId", staffId);
         paramAuth.put("storeId", storeId);
         paramAuth.put("appType", "WECHAT");
         paramAuth.put("state", "2002");
+        paramAuth.put("openName", paramObj.getString("nickname"));
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramAuth.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/staff/updateStaffAppAuth", HttpMethod.POST);

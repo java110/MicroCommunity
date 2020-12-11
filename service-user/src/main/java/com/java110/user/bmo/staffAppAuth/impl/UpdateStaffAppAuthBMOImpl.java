@@ -28,6 +28,7 @@ public class UpdateStaffAppAuthBMOImpl implements IUpdateStaffAppAuthBMO {
         staffAppAuthDto.setAppType(staffAppAuthPo.getAppType());
         staffAppAuthDto.setStaffId(staffAppAuthPo.getStaffId());
         staffAppAuthDto.setStoreId(staffAppAuthPo.getStoreId());
+        staffAppAuthDto.setOpenName(staffAppAuthPo.getOpenName());
         int count = staffAppAuthInnerServiceSMOImpl.queryStaffAppAuthsCount(staffAppAuthDto);
         int flag = 0;
         if (count > 0) {
