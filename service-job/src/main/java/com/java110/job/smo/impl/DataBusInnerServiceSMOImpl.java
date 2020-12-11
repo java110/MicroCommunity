@@ -12,7 +12,6 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,9 +32,6 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     public static final String DEFAULT_OPEN_DOOR_PROTOCOL = "ximoOpenDoorAdapt";//吸墨门禁
 
 
-   // @Autowired
-    private IDatabusAdapt databusAdaptImpl;
-
     @Override
     public boolean exchange(@RequestBody List<Business> businesses) {
         List<BusinessDatabusDto> databusDtos = DatabusCache.getDatabuss();
@@ -47,7 +43,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
 
     @Override
     public ResultVo openDoor(@RequestBody JSONObject reqJson) {
-        databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.openDoor(reqJson);
 
     }
@@ -60,6 +56,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
      * @param databusDtos databus
      */
     private void doExchange(Business business, List<Business> businesses, List<BusinessDatabusDto> databusDtos) {
+        IDatabusAdapt databusAdaptImpl = null;
         for (BusinessDatabusDto databusDto : databusDtos) {
             try {
                 if (business.getBusinessTypeCd().equals(databusDto.getBusinessTypeCd())) {
