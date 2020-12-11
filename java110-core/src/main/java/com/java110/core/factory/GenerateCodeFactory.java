@@ -175,6 +175,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_errId = "10";
     public static final String CODE_PREFIX_IfdId = "11";
     public static final String CODE_PREFIX_databusId = "12";
+    public static final String CODE_PREFIX_auId = "13";
 
 
     /**
@@ -892,4 +893,6 @@ public class GenerateCodeFactory {
         }
         return result;
     }
+
+
 }

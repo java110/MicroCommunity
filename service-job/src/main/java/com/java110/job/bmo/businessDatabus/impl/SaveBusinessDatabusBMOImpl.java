@@ -2,7 +2,7 @@ package com.java110.job.bmo.businessDatabus.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.IBusinessDatabusInnerServiceSMO;
+import com.java110.intf.job.IBusinessDatabusInnerServiceSMO;
 import com.java110.job.bmo.businessDatabus.ISaveBusinessDatabusBMO;
 import com.java110.po.businessDatabus.BusinessDatabusPo;
 import com.java110.vo.ResultVo;

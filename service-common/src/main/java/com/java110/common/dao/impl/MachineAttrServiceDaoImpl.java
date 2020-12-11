@@ -130,5 +130,11 @@ public class MachineAttrServiceDaoImpl extends BaseServiceDao implements IMachin
         return Integer.parseInt(businessMachineAttrInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int saveMachineAttrs(Map info) {
+        int saveFlag = sqlSessionTemplate.update("machineAttrServiceDaoImpl.saveMachineAttrs", info);
+        return saveFlag;
+    }
+
 
 }
