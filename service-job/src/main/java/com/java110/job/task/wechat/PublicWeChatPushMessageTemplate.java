@@ -170,8 +170,8 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     /*data.setFirst(new Content("物业费缴费提醒"));*/
                     data.setFirst(new Content(fee.getFeeTypeName() + "提醒"));
                     data.setKeyword1(new Content(fee.getPayerObjName()));
-                    data.setKeyword2(new Content(year + "年-" + (month + 1) + "月"));
-                    data.setKeyword3(new Content(fee.getAmountOwed()));
+                    data.setKeyword2(new Content(fee.getAmountOwed()));
+                    data.setKeyword3(new Content(year + "年-" + (month + 1) + "月"));
                     data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
                     if (!StringUtil.isEmpty(oweUrl)) {
                         if (miniprogram == null) {
