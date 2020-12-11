@@ -53,20 +53,22 @@ public class StaffApi {
     /**
      * 微信修改消息模板
      *
-     * @param reqJson
+     * @param param
      * @return
      * @serviceCode /staff/updateStaffAppAuth
      * @path /app/staff/updateStaffAppAuth
+     * <p>
+     * {"openId":"oxeFbwJzDG8t87dVDcmrlRoPsTfM","appType":"WECHAT","state":"2002","storeId":"402019032924930007","staffId":"30518940136629616640"}
      */
     @RequestMapping(value = "/updateStaffAppAuth", method = RequestMethod.POST)
-    public ResponseEntity<String> updateStaffAppAuth(@RequestBody String reqJson) {
-
+    public ResponseEntity<String> updateStaffAppAuth(@RequestBody String param) {
+        JSONObject reqJson = JSONObject.parseObject(param);
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "appType", "请求报文中未包含appType");
         Assert.hasKeyAndValue(reqJson, "openId", "请求报文中未包含openId");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含openId");
 
-        StaffAppAuthPo staffAppAuthPo = BeanConvertUtil.covertBean(JSONObject.parseObject(reqJson), StaffAppAuthPo.class);
+        StaffAppAuthPo staffAppAuthPo = BeanConvertUtil.covertBean(reqJson, StaffAppAuthPo.class);
         return updateStaffAppAuthBMOImpl.update(staffAppAuthPo);
     }
 
