@@ -54,7 +54,6 @@
     </select>
 
 
-
     <!-- 查询收据信息 add by wuxw 2018-07-03 -->
     <select id="getFeeReceiptInfoNew" parameterType="Map" resultType="Map">
         SELECT
@@ -86,7 +85,7 @@
         tt.amount amount,
         uu.NAME AS userName,
         t.create_time AS createTime,
-        p.remark  as remark
+        p.remark as remark
         FROM
         fee_receipt t
         LEFT JOIN fee_receipt_detail tt ON t.receipt_id = tt.receipt_id
@@ -169,23 +168,23 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-           AND bo.owner_type_cd = '1001'
+        AND bo.owner_type_cd = '1001'
         ) AS t
         WHERE 1=1
         <if test="type !=null and type == 1 ">
-          AND  feeName in ('预交物业管理费','装修垃圾清运费','装修电梯使用费','水费','电费')
+            AND feeName in ('预交物业管理费','装修垃圾清运费','装修电梯使用费','水费','电费')
         </if>
         <if test="type !=null and type == 2">
-            AND  feeName in ('装修保证金','施工进入证')
+            AND feeName in ('装修保证金','施工进入证')
         </if>
         <if test="type !=null and type == 3">
-            AND  feeName in ('预交物业管理费','水费','电费','地下停车费','地上停车费')
+            AND feeName in ('预交物业管理费','水费','电费','地下停车费','地上停车费')
         </if>
         <if test="type !=null and type == 4">
-            AND  feeName in ('地上停车费','地下停车费')
+            AND feeName in ('地上停车费','地下停车费')
         </if>
         <if test="type !=null and type == 5">
-            AND  feeName in ('公共区域公摊电费','生活水泵公摊电费','走廊楼道应急公摊电费','电梯公摊电费')
+            AND feeName in ('公共区域公摊电费','生活水泵公摊电费','走廊楼道应急公摊电费','电梯公摊电费')
         </if>
         <if test="qstartTime !=null and qstartTime != ''">
             AND DATE_FORMAT(t.createTime, '%Y-%m-%d') &gt;= DATE_FORMAT( #{qstartTime}, '%Y-%m-%d' )
@@ -217,7 +216,6 @@
         </if>
 
     </select>
-
 
 
     <!-- 修改收据信息 add by wuxw 2018-07-03 -->
@@ -276,6 +274,12 @@
         </if>
         <if test="receiptId !=null and receiptId != ''">
             and t.receipt_id= #{receiptId}
+        </if>
+        <if test="receiptIds !=null">
+            and t.receipt_id in
+            <foreach collection="receiptIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}

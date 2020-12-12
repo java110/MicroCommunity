@@ -18,6 +18,7 @@ import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -125,6 +126,7 @@ public class FeeReceiptApi {
                                                   @RequestParam(value = "objId", required = false) String objId,
                                                   @RequestParam(value = "roomId", required = false) String roomId,
                                                   @RequestParam(value = "receiptId", required = false) String receiptId,
+                                                  @RequestParam(value = "receiptIds", required = false) String receiptIds,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row,
                                                   @RequestHeader(value = "user_id") String userId) {
@@ -141,6 +143,9 @@ public class FeeReceiptApi {
         feeReceiptDto.setRow(row);
         feeReceiptDto.setCommunityId(communityId);
         feeReceiptDto.setReceiptId(receiptId);
+        if (!StringUtil.isEmpty(receiptIds)) {
+            feeReceiptDto.setReceiptIds(receiptIds.split(","));
+        }
         feeReceiptDto.setObjType(objType);
         feeReceiptDto.setObjName(roomId);
         feeReceiptDto.setObjId(objId);
