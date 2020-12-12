@@ -151,7 +151,8 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
                                     .encode(
                                             (url
                                                     + "/app/loginStaffWechatAuth?appId=992020061452450002&staffId="
-                                                    + staffId + "&storeId=" + storeId + "&wId=" + WechatFactory.getWId(smallWeChatDto.getAppId())),
+                                                    + staffId + "&storeId=" + storeId + "&wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()))
+                                                    + "&communityId=" + communityId,
                                             "UTF-8")).replace("STATE", "1");
             response.sendRedirect(openUrl);
         } catch (Exception e) {
