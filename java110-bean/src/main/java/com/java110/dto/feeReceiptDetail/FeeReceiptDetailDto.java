@@ -23,6 +23,7 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
     private String endTime;
     private String communityId;
     private String receiptId;
+    private String[] receiptIds;
     private String feeId;
     private String cycle;
     private String squarePrice;
@@ -154,5 +155,13 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     public void setFeeFlag(String feeFlag) {
         this.feeFlag = feeFlag;
+    }
+
+    public String[] getReceiptIds() {
+        return receiptIds;
+    }
+
+    public void setReceiptIds(String[] receiptIds) {
+        this.receiptIds = receiptIds;
     }
 }

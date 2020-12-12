@@ -22,7 +22,8 @@
         communityId,t.receipt_id,t.receipt_id receiptId,t.fee_id,t.fee_id feeId,t.cycle,t.square_price squarePrice,
         pfd.remark,pf.fee_flag feeFlag
         from fee_receipt_detail t
-        left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0' and t.community_id = pfd.community_id
+        left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0' and t.community_id =
+        pfd.community_id
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and t.community_id = pf.community_id
         where 1 =1
 
@@ -52,6 +53,12 @@
         </if>
         <if test="receiptId !=null and receiptId != ''">
             and t.receipt_id= #{receiptId}
+        </if>
+        <if test="receiptIds !=null">
+            and t.receipt_id in
+            <foreach collection="receiptIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
@@ -138,6 +145,12 @@
         </if>
         <if test="receiptId !=null and receiptId != ''">
             and t.receipt_id= #{receiptId}
+        </if>
+        <if test="receiptIds !=null">
+            and t.receipt_id in
+            <foreach collection="receiptIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
