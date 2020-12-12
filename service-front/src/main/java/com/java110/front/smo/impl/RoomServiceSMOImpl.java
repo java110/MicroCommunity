@@ -2,15 +2,15 @@ package com.java110.front.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.component.BaseComponentSMO;
+import com.java110.core.context.IPageData;
+import com.java110.front.smo.IRoomServiceSMO;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
-import com.java110.core.context.IPageData;
-import com.java110.core.component.BaseComponentSMO;
-import com.java110.front.smo.IRoomServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,7 +141,7 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
             feeMap.put("communityId", communityId);
             feeMap.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
             feeMap.put("roomId", roomObj.getString("roomId"));
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.queryFee" + mapToUrlParam(feeMap);
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.listFee" + mapToUrlParam(feeMap);
             responseEntity = this.callCenterService(restTemplate, pd, "",
                     apiUrl,
                     HttpMethod.GET);
