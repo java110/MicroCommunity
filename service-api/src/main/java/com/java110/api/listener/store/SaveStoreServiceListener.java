@@ -14,7 +14,11 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 /**
  * 保存商户信息
@@ -110,6 +114,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         JSONObject paramInObj = new JSONObject();
         paramInObj.put("userId", paramObj.getJSONObject(StorePo.class.getSimpleName()).getString("userId"));
         paramInObj.put("storeTypeCd", paramObj.getJSONObject(StorePo.class.getSimpleName()).getString("storeTypeCd"));
+        paramInObj.put("storeId", paramObj.getString("storeId"));
         paramInObj.put("userFlag", "admin");
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
         doRequest(dataFlowContext, appService, httpEntity);

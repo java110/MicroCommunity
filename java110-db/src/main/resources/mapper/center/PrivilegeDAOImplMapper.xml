@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="privilegeDAOImpl">
     <select id="queryUserDefaultPrivilege" parameterType="map" resultType="map">
-        SELECT a.`p_id` pId,a.`privilege_flag` privilegeFlag,a.`user_id` userId FROM p_privilege_user a WHERE a.`p_id` = #{pId}
+        SELECT a.`p_id` pId,a.`privilege_flag` privilegeFlag,a.`user_id` userId FROM p_privilege_user a WHERE a.`p_id` =
+        #{pId}
         AND a.`user_id` = #{userId}
         AND a.`privilege_flag` = '1'
         AND a.`status_cd` = '0'
@@ -13,7 +14,7 @@
     <!-- 保存属性信息 c_business_attrs -->
     <insert id="saveUserDefaultPrivilege" parameterType="Map">
         <![CDATA[
-            INSERT INTO p_privilege_user(p_id,privilege_flag,user_id) VALUES(#{pId},'1',#{userId})
+            INSERT INTO p_privilege_user(p_id,privilege_flag,user_id,store_id) VALUES(#{pId},'1',#{userId},#{storeId})
         ]]>
     </insert>
 
@@ -31,10 +32,10 @@
     <update id="updatePrivilegeGroup" parameterType="Map">
         UPDATE p_privilege_group a SET
         <if test="name != null and name != ''">
-             a.name = #{name},
+            a.name = #{name},
         </if>
         <if test="description != null and description != ''">
-             a.description = #{description}
+            a.description = #{description}
         </if>
         WHERE 1= 1
         <if test="storeId != null and storeId != ''">
@@ -74,18 +75,18 @@
 
     <select id="queryPrivilegeRel" parameterType="Map" resultType="Map">
         SELECT
-            pp.`name`,
-            pp.`domain`,
-            pp.`p_id` pId,
-            pp.`description`,
-            pp.`create_time` createTime
+        pp.`name`,
+        pp.`domain`,
+        pp.`p_id` pId,
+        pp.`description`,
+        pp.`create_time` createTime
         FROM
-            p_privilege pp,
-            p_privilege_rel ppr
+        p_privilege pp,
+        p_privilege_rel ppr
         WHERE ppr.`p_id` = pp.`p_id`
-            AND ppr.`status_cd` = '0'
-            AND pp.`status_cd` = '0'
-            AND ppr.`pg_id` = #{pgId}
+        AND ppr.`status_cd` = '0'
+        AND pp.`status_cd` = '0'
+        AND ppr.`pg_id` = #{pgId}
 
     </select>
 
@@ -113,7 +114,7 @@
     <!-- 查询权限 -->
     <select id="queryPrivilege" parameterType="Map" resultType="Map">
         SELECT
-            pp.`p_id` pId,pp.`name`,pp.`description`,pp.`create_time` createTime,pp.`domain`
+        pp.`p_id` pId,pp.`name`,pp.`description`,pp.`create_time` createTime,pp.`domain`
         FROM p_privilege pp
         WHERE 1= 1
         <if test="pId != null and pId != ''">
@@ -122,17 +123,17 @@
         <if test="pId != null and pId != ''">
             AND pp.domain = '800900000003'
         </if>
-            AND pp.`status_cd` = '0'
+        AND pp.`status_cd` = '0'
     </select>
     <!-- 查询用户权限 -->
     <select id="queryUserPrivilege" parameterType="Map" resultType="Map">
         SELECT
-            ppu.`pu_id` puId,
-            ppu.`p_id` pId,
-            ppu.`privilege_flag` privilegeFlag,
-            ppu.`user_id` userId
+        ppu.`pu_id` puId,
+        ppu.`p_id` pId,
+        ppu.`privilege_flag` privilegeFlag,
+        ppu.`user_id` userId
         FROM
-            p_privilege_user ppu
+        p_privilege_user ppu
         WHERE 1 = 1
         <if test="privilegeFlag != null and privilegeFlag != ''">
             AND ppu.`privilege_flag` = #{privilegeFlag}
@@ -143,12 +144,12 @@
         <if test="userId != null and userId != ''">
             AND ppu.`user_id` = #{userId}
         </if>
-            AND ppu.`status_cd` = '0'
+        AND ppu.`status_cd` = '0'
     </select>
     <!-- 保存属性信息 c_business_attrs -->
     <insert id="addUserPrivilege" parameterType="Map">
         <![CDATA[
-            INSERT INTO p_privilege_user(p_id,privilege_flag,user_id) VALUES(#{pId},#{privilegeFlag},#{userId})
+            INSERT INTO p_privilege_user(p_id,privilege_flag,user_id,store_id) VALUES(#{pId},#{privilegeFlag},#{userId},#{storeId})
         ]]>
     </insert>
 
@@ -167,5 +168,21 @@
         </if>
         and ppu.status_cd = '0'
     </update>
+
+    <select id="queryPrivilegeUsers" parameterType="map" resultType="map">
+        select t.user_id userId from p_privilege_user t
+        where t.privilege_flag = '0'
+        and t.status_cd = '0'
+        and t.p_id = #{pId}
+        and t.store_id = #{storeId}
+        union ALL
+        select t.user_id userId from p_privilege_user t
+        inner join p_privilege_group pg on t.p_id = pg.pg_id and pg.status_cd = '0' and pg.pg_id != '600201904002'
+        inner join p_privilege_rel pr on pg.pg_id = pr.pg_id and pr.status_cd ='0'
+        where t.status_cd = '0'
+        and t.privilege_flag = '1'
+        and pr.p_id = #{pId}
+        and t.store_id = #{storeId}
+    </select>
 
 </mapper>

@@ -38,6 +38,7 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
         Assert.isJsonObject(privilegeInfo, "请求报文不是有效的json格式");
 
         Assert.jsonObjectHaveKey(privilegeInfo, "userId", "请求报文中未包含userId节点");
+        Assert.jsonObjectHaveKey(privilegeInfo, "storeId", "请求报文中未包含storeId节点");
 
         Assert.jsonObjectHaveKey(privilegeInfo, "storeTypeCd", "请求报文中未包含storeTypeCd节点");
 
