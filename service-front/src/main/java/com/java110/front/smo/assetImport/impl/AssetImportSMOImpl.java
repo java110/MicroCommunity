@@ -238,22 +238,6 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("cycles", "0");
             }
 
-//            String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
-//                    ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
-//            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd + "&isDefault=T";
-//            responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
-//
-//            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-//                continue;
-//            }
-
-//            JSONObject configInfo = JSONObject.parseObject(responseEntity.getBody()).getJSONArray("feeConfigs").getJSONObject(0);
-//            if (!configInfo.containsKey("additionalAmount")) {
-//                continue;
-//            }
-
-//            paramIn.put("receivedAmount", configInfo.getString("additionalAmount"));
-
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace";
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
         }
@@ -378,7 +362,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaces?page=1&row=1&communityId=" + result.getCommunityId()
-                + "&num=" + parkingSpace.getPsNum();
+                + "&num=" + parkingSpace.getPsNum()+"&areaNum="+parkingSpace.getPaNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息

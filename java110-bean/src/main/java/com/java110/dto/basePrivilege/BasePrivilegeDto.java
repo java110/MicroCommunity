@@ -19,6 +19,11 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 
+/**
+ * <p>基础权限 对象</p>
+ * <p>
+ * add by wuxw 2020-12-13
+ */
 public class BasePrivilegeDto extends PageDto implements Serializable {
 
     private String userId;
