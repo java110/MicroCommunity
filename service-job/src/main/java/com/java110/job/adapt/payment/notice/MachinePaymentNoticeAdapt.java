@@ -166,7 +166,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         // 根据特定权限查询 有该权限的 员工
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
         //basePrivilegeDto.setPId("502020121454780004");
-        basePrivilegeDto.setResource("/payFeeNotice");
+        basePrivilegeDto.setResource("/wechatNotification");
         basePrivilegeDto.setStoreId(feeDtos.get(0).getIncomeObjId());
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         String url = sendMsgUrl + accessToken;
