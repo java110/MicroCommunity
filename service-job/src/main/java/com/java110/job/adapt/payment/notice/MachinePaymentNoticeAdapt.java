@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.staffAppAuth.StaffAppAuthDto;
@@ -15,6 +16,7 @@ import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
@@ -23,6 +25,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +68,9 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IStaffAppAuthInnerServiceSMO staffAppAuthInnerServiceSMO;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
@@ -122,10 +128,10 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         paramIn.put("payFeeTime", startTime + "至" + endTime);
         paramIn.put("receivedAmount", receivedAmount);
         paramIn.put("endTime", endTime);
-        publishMsg(paramIn, communityDtos.get(0));
+        publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
     }
 
-    private void publishMsg(JSONObject paramIn, CommunityDto communityDto) {
+    private void publishMsg(JSONObject paramIn, CommunityDto communityDto, PayFeeDetailPo payFeeDetailPo) {
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");
@@ -152,10 +158,16 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
             return;
         }
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(payFeeDetailPo.getFeeId());
+        feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        Assert.listOnlyOne(feeDtos, "费用不存在");
         // 根据特定权限查询 有该权限的 员工
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-        basePrivilegeDto.setPId("502020121454780004");
-        basePrivilegeDto.setStoreId("402020112366290004");
+        //basePrivilegeDto.setPId("502020121454780004");
+        basePrivilegeDto.setResource("/payFeeNotice");
+        basePrivilegeDto.setStoreId(feeDtos.get(0).getIncomeObjId());
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         String url = sendMsgUrl + accessToken;
         for (UserDto userDto : userDtos) {
