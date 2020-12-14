@@ -32,6 +32,10 @@ public class PayFeeConfigDiscountDto extends PageDto implements Serializable {
 
     private Date endTime;
 
+    private Date payMaxEndTime;
+
+    private Date currentTime;
+
     private String statusCd = "0";
 
 
@@ -122,5 +126,21 @@ public class PayFeeConfigDiscountDto extends PageDto implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Date getPayMaxEndTime() {
+        return payMaxEndTime;
+    }
+
+    public void setPayMaxEndTime(Date payMaxEndTime) {
+        this.payMaxEndTime = payMaxEndTime;
+    }
+
+    public Date getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(Date currentTime) {
+        this.currentTime = currentTime;
     }
 }

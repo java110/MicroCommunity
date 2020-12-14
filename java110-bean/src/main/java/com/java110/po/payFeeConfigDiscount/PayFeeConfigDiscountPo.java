@@ -12,6 +12,7 @@ public class PayFeeConfigDiscountPo implements Serializable {
     private String communityId;
     private String startTime;
     private String endTime;
+    private String payMaxEndTime;
     public String getConfigDiscountId() {
             return configDiscountId;
         }
@@ -55,5 +56,14 @@ public class PayFeeConfigDiscountPo implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+
+    public String getPayMaxEndTime() {
+        return payMaxEndTime;
+    }
+
+    public void setPayMaxEndTime(String payMaxEndTime) {
+        this.payMaxEndTime = payMaxEndTime;
     }
 }

@@ -8,9 +8,9 @@
     <!-- 保存费用项折扣信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeConfigDiscountInfo" parameterType="Map">
         insert into pay_fee_config_discount(
-        config_discount_id,config_id,discount_id,community_id,start_time,end_time
+        config_discount_id,config_id,discount_id,community_id,start_time,end_time,paymax_end_time
         ) values (
-        #{configDiscountId},#{configId},#{discountId},#{communityId},#{startTime},#{endTime}
+        #{configDiscountId},#{configId},#{discountId},#{communityId},#{startTime},#{endTime},#{payMaxEndTime}
         )
     </insert>
 
@@ -19,7 +19,7 @@
     <select id="getPayFeeConfigDiscountInfo" parameterType="Map" resultType="Map">
         select t.config_discount_id,t.config_discount_id configDiscountId,t.config_id,t.config_id
         configId,t.status_cd,t.status_cd statusCd,t.discount_id,t.discount_id discountId,t.community_id,t.community_id
-        communityId,fd.discount_name discountName,fd.discount_type discountType,t.start_time startTime,t.end_time endTime
+        communityId,fd.discount_name discountName,fd.discount_type discountType,t.start_time startTime,t.end_time endTime,t.paymax_end_time payMaxEndTime
         from pay_fee_config_discount t
         left join fee_discount fd on t.discount_id = fd.discount_id and t.community_id = fd.community_id and fd.status_cd = '0'
         where 1 =1
@@ -37,6 +37,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="currentTime !=null ">
+            and t.start_time &lt; #{currentTime}
+        </if>
+        <if test="currentTime !=null ">
+            and t.end_time &gt; #{currentTime}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
