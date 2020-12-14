@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -153,6 +154,8 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         payFeeConfigDiscountDto.setRow(feeDetailDto.getRow());
         payFeeConfigDiscountDto.setPage(feeDetailDto.getPage());
         payFeeConfigDiscountDto.setCommunityId(feeDetailDto.getCommunityId());
+        Date currentTime = new Date();
+        payFeeConfigDiscountDto.setCurrentTime(currentTime);
         List<PayFeeConfigDiscountDto> payFeeConfigDiscountDtos =
                 payFeeConfigDiscountInnerServiceSMOImpl.queryPayFeeConfigDiscounts(payFeeConfigDiscountDto);
 
