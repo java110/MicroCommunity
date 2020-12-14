@@ -1,6 +1,7 @@
 package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Synchronized;
 import com.java110.utils.cache.JWTCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -49,6 +50,7 @@ public class WechatFactory {
      * @param appSecure
      * @return
      */
+    @Java110Synchronized(value = "appId")
     public static String getAccessToken(String appId, String appSecure) {
         String accessToken = JWTCache.getValue(WECHAT + appId);
         if (StringUtil.isEmpty(accessToken)) {
