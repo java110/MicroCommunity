@@ -15,15 +15,15 @@
  */
 package com.java110.order.smo.impl;
 
+import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.order.dao.IPrivilegeDAO;
 import com.java110.utils.util.BeanConvertUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -34,19 +34,15 @@ import java.util.Map;
  * Created by wuxw on 2019/4/1.
  */
 
-@Service("privilegeInnerServiceSMOImpl")
-public class PrivilegeInnerServiceSMOImpl implements IPrivilegeInnerServiceSMO {
-
-    private final static Logger logger = LoggerFactory.getLogger(PrivilegeInnerServiceSMOImpl.class);
+@RestController
+public class PrivilegeInnerServiceSMOImpl extends BaseServiceSMO implements IPrivilegeInnerServiceSMO {
 
     @Autowired
     private IPrivilegeDAO privilegeDAOImpl;
 
-
     @Override
-    public List<UserDto> queryPrivilegeUsers(BasePrivilegeDto privilegeDto) {
+    public List<UserDto> queryPrivilegeUsers(@RequestBody BasePrivilegeDto privilegeDto) {
         List<Map> userIds = privilegeDAOImpl.queryPrivilegeUsers(BeanConvertUtil.beanCovertMap(privilegeDto));
-
         return BeanConvertUtil.covertBeanList(userIds, UserDto.class);
     }
 }

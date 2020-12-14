@@ -73,6 +73,24 @@ public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
             smallWechatAttrPo.setWechatId(wechatId);
             super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
 
+            //业主缴费成功通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_SUCCESS_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写业主缴费成功通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //业主费用到期通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_EXPIRE_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写业主费用到期通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
         }
     }
 

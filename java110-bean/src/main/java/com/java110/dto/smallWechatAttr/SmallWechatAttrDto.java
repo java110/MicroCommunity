@@ -18,6 +18,8 @@ public class SmallWechatAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_TOKEN = "33001";//token
     public static final String SPEC_CD_OWE_FEE_TEMPLATE = "33002";//欠费推送模板
     public static final String SPEC_CD_WECHAT_TEMPLATE = "33003";//欠费推送模板
+    public static final String SPEC_CD_WECHAT_SUCCESS_TEMPLATE = "33004";//业主缴费成功推送模板
+    public static final String SPEC_CD_WECHAT_EXPIRE_TEMPLATE = "33005";//业主费用到期通知推送模板
 
     private String attrId;
     private String wechatId;
