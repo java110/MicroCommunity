@@ -94,7 +94,6 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         smallWeChatDto.setWeChatType("1100");
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         smallWeChatDto.setObjId(communityDto.getCommunityId());
-        smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
 
         if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
