@@ -124,4 +124,6 @@ public interface IComputeFeeSMO {
     double dayCompare(Date fromDate, Date toDate);
 
     double getReportFeePrice(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto);
+
+    void computeEveryOweFee(FeeDto tmpFeeDto);
 }

@@ -58,6 +58,17 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
     /**
+     * 计算实时欠费金额
+     *
+     * @param tmpFeeDto
+     */
+    public void computeEveryOweFee(FeeDto tmpFeeDto) {
+
+        computeFeePrice(tmpFeeDto);
+
+    }
+
+    /**
      * 计算欠费金额
      *
      * @param tmpFeeDto
