@@ -131,7 +131,7 @@
         from
         building_owner t
         left join t_dict td on td.table_name = 'building_owner' and td.`table_columns` = 'owner_type_cd' and td.status_cd = t.owner_type_cd
-        left join building_owner_room_rel borr on and borr.status_cd = '0' and t.owner_id = borr.owner_id
+        left join building_owner_room_rel borr on  borr.status_cd = '0' and t.owner_id = borr.owner_id
         where 1 =1
         <if test="roomId != null and roomId != ''">
             and borr.room_id = #{roomId}
@@ -209,7 +209,7 @@
         from
         building_owner t
         left join t_dict td on td.table_name = 'building_owner' and td.`table_columns` = 'owner_type_cd' and td.status_cd = t.owner_type_cd
-        left join building_owner_room_rel borr on and borr.status_cd = '0' and t.owner_id = borr.owner_id
+        left join building_owner_room_rel borr on  borr.status_cd = '0' and t.owner_id = borr.owner_id
         where 1 =1
         <if test="roomId != null and roomId != ''">
             and borr.room_id = #{roomId}
