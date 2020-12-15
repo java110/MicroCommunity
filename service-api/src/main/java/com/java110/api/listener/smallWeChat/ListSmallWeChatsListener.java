@@ -75,7 +75,7 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
         SmallWeChatDto smallWeChatDto = BeanConvertUtil.covertBean(reqJson, SmallWeChatDto.class);
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         smallWeChatDto.setObjId(reqJson.getString("communityId"));
-        smallWeChatDto.setWeChatType(reqJson.getString("wechatType"));
+        //smallWeChatDto.setWeChatType(reqJson.getString("wechatType"));
         int count = smallWeChatInnerServiceSMOImpl.querySmallWeChatsCount(smallWeChatDto);
         List<ApiSmallWeChatDataVo> smallWeChats = null;
         if (count > 0) {

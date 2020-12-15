@@ -192,7 +192,7 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?communityId="
-                        + paramIn.getString("communityId") + "&page=1&row=1&wechatType=" + SmallWeChatDto.WECHAT_TYPE_PUBLIC, HttpMethod.GET);
+                        + paramIn.getString("communityId") + "&page=1&row=1&weChatType=" + SmallWeChatDto.WECHAT_TYPE_PUBLIC, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return null;
