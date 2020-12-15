@@ -180,7 +180,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
         //动态费用
-        if ("4004".equals(computingFormula)) {
+        if ("4004".equals(computingFormula) && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
@@ -200,7 +200,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
         //动态费用
-        if ("4004".equals(computingFormula)) {
+        if ("4004".equals(computingFormula) && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
