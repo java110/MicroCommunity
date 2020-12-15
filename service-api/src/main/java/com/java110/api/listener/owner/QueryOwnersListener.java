@@ -106,7 +106,7 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
                 }
                 ownerDtos.add(ownerDto);
             }
-            freshRoomInfo(ownerDtos);
+            //freshRoomInfo(ownerDtos);
             apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
         }
 
