@@ -142,7 +142,6 @@
                 #{item}
             </foreach>
         </if>
-        and
         <if test="sex !=null">
             and t.sex= #{sex}
         </if>
@@ -221,7 +220,6 @@
                 #{item}
             </foreach>
         </if>
-        and
         <if test="sex !=null">
             and t.sex= #{sex}
         </if>
