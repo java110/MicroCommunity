@@ -7,10 +7,14 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -51,6 +55,12 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
         return HttpMethod.GET;
     }
 
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
     /**
      * 业务层数据处理
      *
@@ -88,6 +98,8 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
             ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class));
 
             freshPs(ownerCarDtoList);
+
+            freshRoomInfo(ownerCarDtoList);
         } else {
             ownerCarDtoList = new ArrayList<>();
         }
@@ -123,6 +135,53 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
                 }
             }
         }
+    }
+
+    /**
+     * 刷入房屋信息
+     *
+     * @param ownerCarDtos
+     */
+    private void freshRoomInfo(List<OwnerCarDto> ownerCarDtos) {
+
+        for (OwnerCarDto ownerCarDto : ownerCarDtos) {
+
+            doFreshRoomInfo(ownerCarDto);
+        }
+
+    }
+
+    /**
+     * 车位信息刷入房屋信息
+     *
+     * @param ownerCarDto
+     */
+    private void doFreshRoomInfo(OwnerCarDto ownerCarDto) {
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setOwnerId(ownerCarDto.getOwnerId());
+
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+            ownerCarDto.setRoomName("-");
+            return;
+        }
+
+        List<String> roomIds = new ArrayList<>();
+        for (OwnerRoomRelDto tOwnerRoomRelDto : ownerRoomRelDtos) {
+            roomIds.add(tOwnerRoomRelDto.getRoomId());
+        }
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(ownerCarDto.getCommunityId());
+        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        String roomName = "";
+        for (RoomDto tRoomDto : roomDtos) {
+            roomName += (tRoomDto.getFloorNum() + "栋" + tRoomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室" + "/");
+        }
+
+        roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
+        ownerCarDto.setRoomName(roomName);
     }
 
 
