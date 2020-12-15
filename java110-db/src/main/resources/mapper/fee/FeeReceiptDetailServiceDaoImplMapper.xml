@@ -17,7 +17,7 @@
 
     <!-- 批量插入费用 -->
     <insert id="saveFeeReceiptDetails" parameterType="Map">
-        insert into pay_feefee_receipt_detail(
+        insert into fee_receipt_detail(
         area,amount,fee_name,detail_id,start_time,end_time,community_id,receipt_id,fee_id,cycle,square_price )
         VALUES
         <foreach collection="feeReceiptDetailPos" item="item" separator=",">
