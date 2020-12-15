@@ -6,9 +6,11 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -42,6 +44,10 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_QUERY_OWNER;
@@ -65,6 +71,9 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
         validateOwnerData(reqJson);
         //获取当前用户id
         String userId = dataFlowContext.getUserId();
+
+        //根据房屋查询时 先用 房屋信息查询 业主ID
+        freshRoomId(reqJson);
 
         if (reqJson.containsKey("name")) {
             queryByCondition(reqJson, dataFlowContext);
@@ -105,6 +114,39 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void freshRoomId(JSONObject reqJson) {
+
+        if (!reqJson.containsKey("roomName")) {
+            return;
+        }
+
+        String roomName = reqJson.getString("roomName");
+        if (StringUtil.isEmpty(roomName)) {
+            return;
+        }
+
+        if (!roomName.contains("-")) {
+            throw new IllegalArgumentException("房屋格式错误,请写入如 楼栋-单元-房屋 格式");
+        }
+
+        String[] params = roomName.split("-");
+        if (params.length != 3) {
+            throw new IllegalArgumentException("房屋格式错误,请写入如 楼栋-单元-房屋 格式");
+        }
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setFloorNum(params[0]);
+        roomDto.setUnitNum(params[1]);
+        roomDto.setRoomNum(params[2]);
+        roomDto.setCommunityId(reqJson.getString("communityId"));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        Assert.listOnlyOne(roomDtos, "未查询到房屋下业主信息");
+
+        reqJson.put("roomId", roomDtos.get(0).getRoomId());
+
     }
 
     /**
