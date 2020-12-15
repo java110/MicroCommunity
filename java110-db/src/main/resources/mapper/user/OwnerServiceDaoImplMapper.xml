@@ -118,6 +118,8 @@
     </insert>
 
 
+
+
     <!-- 查询业主信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerInfo" parameterType="Map" resultType="Map">
         select t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,
@@ -125,33 +127,22 @@
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,
         t.community_id communityId,t.id_card, t.id_card idCard,t.state,td.name ownerTypeName
-        <if test="roomIds != null">
-            , borr.room_id roomId
-        </if>
-        from building_owner t,t_dict td
-        <if test="roomId != null and roomId != ''">
-            ,building_owner_room_rel borr
-        </if>
-        <if test="roomIds != null ">
-            ,building_owner_room_rel borr
-        </if>
+        , borr.room_id roomId
+        from
+        building_owner t
+        left join t_dict td on td.table_name = 'building_owner' and td.`table_columns` = 'owner_type_cd' and td.status_cd = t.owner_type_cd
+        left join building_owner_room_rel borr on and borr.status_cd = '0' and t.owner_id = borr.owner_id
         where 1 =1
         <if test="roomId != null and roomId != ''">
-            and t.owner_id = borr.owner_id
-            and borr.status_cd = '0'
             and borr.room_id = #{roomId}
         </if>
         <if test="roomIds != null">
-            and t.owner_id = borr.owner_id
-            and borr.status_cd = '0'
             and borr.room_id in
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        and td.table_name = 'building_owner'
-        and td.`table_columns` = 'owner_type_cd'
-        and td.status_cd = t.owner_type_cd
+        and
         <if test="sex !=null">
             and t.sex= #{sex}
         </if>
@@ -216,27 +207,21 @@
     <!-- 查询业主信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerInfoCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from building_owner t
-        <if test="roomId != null and roomId != ''">
-            ,building_owner_room_rel borr
-        </if>
-        <if test="roomIds != null ">
-            ,building_owner_room_rel borr
-        </if>
+        from
+        building_owner t
+        left join t_dict td on td.table_name = 'building_owner' and td.`table_columns` = 'owner_type_cd' and td.status_cd = t.owner_type_cd
+        left join building_owner_room_rel borr on and borr.status_cd = '0' and t.owner_id = borr.owner_id
         where 1 =1
         <if test="roomId != null and roomId != ''">
-            and t.owner_id = borr.owner_id
-            and borr.status_cd = '0'
             and borr.room_id = #{roomId}
         </if>
         <if test="roomIds != null">
-            and t.owner_id = borr.owner_id
-            and borr.status_cd = '0'
             and borr.room_id in
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
+        and
         <if test="sex !=null">
             and t.sex= #{sex}
         </if>
@@ -284,6 +269,12 @@
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="ownerTypeCds != null">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
     </select>

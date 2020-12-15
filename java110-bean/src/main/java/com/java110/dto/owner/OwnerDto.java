@@ -40,6 +40,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String[] ownerTypeCds;
     private String ownerTypeName;
     private String roomNum;
+    private String roomName;
     private String psId;
     private String num;
     private String idCard;
@@ -285,5 +286,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setRooms(List<RoomDto> rooms) {
         this.rooms = rooms;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

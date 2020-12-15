@@ -106,6 +106,7 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
                 }
                 ownerDtos.add(ownerDto);
             }
+            freshRoomInfo(ownerDtos);
             apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
         }
 
@@ -114,6 +115,34 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void freshRoomInfo(List<OwnerDto> ownerDtos) {
+        List<String> roomIds = new ArrayList<>();
+        for (OwnerDto ownerDto : ownerDtos) {
+            if (!StringUtil.isEmpty(ownerDto.getRoomId())) {
+                roomIds.add(ownerDto.getRoomId());
+            }
+        }
+
+        if (roomIds.size() < 1) {
+            return;
+        }
+
+        RoomDto tRoomDto = new RoomDto();
+        tRoomDto.setCommunityId(ownerDtos.get(0).getCommunityId());
+        tRoomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(tRoomDto);
+
+        for (RoomDto roomDto : roomDtos) {
+            for (OwnerDto tOwnerDto : ownerDtos) {
+                if (!roomDto.getRoomId().equals(tOwnerDto.getRoomId())) {
+                    continue;
+                }
+                tOwnerDto.setRoomName(roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum());
+            }
+        }
+
     }
 
     private void freshRoomId(JSONObject reqJson) {
