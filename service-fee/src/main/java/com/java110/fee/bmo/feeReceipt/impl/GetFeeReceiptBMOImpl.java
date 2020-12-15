@@ -75,6 +75,8 @@ public class GetFeeReceiptBMOImpl implements IGetFeeReceiptBMO {
 
         for (FeeReceiptDto feeReceiptDto : feeReceiptDtos) {
             if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeReceiptDto.getObjType())) {
+                feeReceiptDto.setRoomName(feeReceiptDto.getObjName());
+                feeReceiptDto.setCarNum("-");
                 continue;
             }
 
@@ -89,12 +91,14 @@ public class GetFeeReceiptBMOImpl implements IGetFeeReceiptBMO {
      * @param feeReceiptDto
      */
     private void doFreshRoomInfo(FeeReceiptDto feeReceiptDto) {
+        feeReceiptDto.setCarNum(feeReceiptDto.getObjName());
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarId(feeReceiptDto.getObjId());
         ownerCarDto.setCommunityId(feeReceiptDto.getCommunityId());
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
         if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+            feeReceiptDto.setRoomName("-");
             return;
         }
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
@@ -102,6 +106,7 @@ public class GetFeeReceiptBMOImpl implements IGetFeeReceiptBMO {
 
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+            feeReceiptDto.setRoomName("-");
             return;
         }
 
@@ -120,8 +125,7 @@ public class GetFeeReceiptBMOImpl implements IGetFeeReceiptBMO {
         }
 
         roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
-        feeReceiptDto.setCarNum(feeReceiptDto.getObjName());
-        feeReceiptDto.setObjName(roomName);
+        feeReceiptDto.setRoomName(roomName);
     }
 
 
