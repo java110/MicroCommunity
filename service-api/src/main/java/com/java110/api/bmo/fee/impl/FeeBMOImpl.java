@@ -37,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -370,7 +371,18 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("endTime", paramInJson.getString("endTime"));
         feeMap.put("cycles", paramInJson.getString("cycles"));
         feeMap.put("configEndTime", feeInfo.getConfigEndTime());
-
+        if (FeeDto.FEE_FLAG_ONCE.equals(feeInfo.getFeeFlag())) { //缴费结束
+            feeMap.put("state", FeeDto.STATE_FINISH);
+        }
+        try {
+            Date endTime = DateUtil.getDateFromString(paramInJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_A);
+            Date configEndTime = feeInfo.getConfigEndTime();
+            if (endTime.getTime() >= configEndTime.getTime()) {
+                feeMap.put("state", FeeDto.STATE_FINISH);
+            }
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("缴费异常" + e);
+        }
         businessFee.putAll(feeMap);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
 
