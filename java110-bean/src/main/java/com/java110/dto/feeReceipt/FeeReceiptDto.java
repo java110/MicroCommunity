@@ -19,6 +19,7 @@ public class FeeReceiptDto extends PageDto implements Serializable {
     private String objId;
     private String remark;
     private String objName;
+    private String carNum;
     private String communityId;
     private String receiptId;
     private String[] receiptIds;
@@ -129,5 +130,13 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     public void setReceiptIds(String[] receiptIds) {
         this.receiptIds = receiptIds;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
     }
 }
