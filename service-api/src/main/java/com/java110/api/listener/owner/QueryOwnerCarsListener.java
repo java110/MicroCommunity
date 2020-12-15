@@ -177,7 +177,7 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
         String roomName = "";
         for (RoomDto tRoomDto : roomDtos) {
-            roomName += (tRoomDto.getFloorNum() + "栋" + tRoomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室" + "/");
+            roomName += (tRoomDto.getFloorNum() + "栋" + tRoomDto.getUnitNum() + "单元" + tRoomDto.getRoomNum() + "室" + "/");
         }
 
         roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
