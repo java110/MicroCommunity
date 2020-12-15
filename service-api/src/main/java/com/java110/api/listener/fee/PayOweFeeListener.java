@@ -43,7 +43,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/6/3
  **/
-@Java110Listener("payFeeListener")
+@Java110Listener("payOweFeeListener")
 public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(PayOweFeeListener.class);
