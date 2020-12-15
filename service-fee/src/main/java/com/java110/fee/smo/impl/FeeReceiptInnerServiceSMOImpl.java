@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -35,6 +38,20 @@ public class FeeReceiptInnerServiceSMOImpl extends BaseServiceSMO implements IFe
         int saveFlag = 1;
         feeReceiptServiceDaoImpl.saveFeeReceiptInfo(BeanConvertUtil.beanCovertMap(feeReceiptPo));
         return saveFlag;
+    }
+
+    @Override
+    public int saveFeeReceipts(@RequestBody List<FeeReceiptPo> feeReceiptPos) {
+
+        List<Map> fees = new ArrayList<>();
+        for (FeeReceiptPo feeReceiptPo : feeReceiptPos) {
+            fees.add(BeanConvertUtil.beanCovertMap(feeReceiptPo));
+        }
+
+        Map info = new HashMap();
+        info.put("feeReceiptPos", fees);
+        feeReceiptServiceDaoImpl.saveFeeReceipts(info);
+        return 1;
     }
 
     @Override

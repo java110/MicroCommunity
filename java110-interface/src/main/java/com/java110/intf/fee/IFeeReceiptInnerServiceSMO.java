@@ -27,15 +27,17 @@ public interface IFeeReceiptInnerServiceSMO {
     @RequestMapping(value = "/saveFeeReceipt", method = RequestMethod.POST)
     public int saveFeeReceipt(@RequestBody FeeReceiptPo feeReceiptPo);
 
+    @RequestMapping(value = "/saveFeeReceipts", method = RequestMethod.POST)
+    public int saveFeeReceipts(@RequestBody List<FeeReceiptPo> feeReceiptPos);
+
     @RequestMapping(value = "/updateFeeReceipt", method = RequestMethod.POST)
-    public int updateFeeReceipt(@RequestBody  FeeReceiptPo feeReceiptPo);
+    public int updateFeeReceipt(@RequestBody FeeReceiptPo feeReceiptPo);
 
     @RequestMapping(value = "/deleteFeeReceipt", method = RequestMethod.POST)
-    public int deleteFeeReceipt(@RequestBody  FeeReceiptPo feeReceiptPo);
+    public int deleteFeeReceipt(@RequestBody FeeReceiptPo feeReceiptPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param feeReceiptDto 数据对象分享
      * @return FeeReceiptDto 对象数据
@@ -46,7 +48,6 @@ public interface IFeeReceiptInnerServiceSMO {
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param feeReceiptDto 数据对象分享
      * @return FeeReceiptDtoNew 对象数据

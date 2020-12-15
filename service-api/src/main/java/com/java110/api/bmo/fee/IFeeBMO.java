@@ -10,6 +10,8 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 
+import java.util.List;
+
 /**
  * @ClassName IFeeBMO
  * @Description TODO
@@ -50,8 +52,14 @@ public interface IFeeBMO extends IApiBaseBMO {
     public JSONObject modifyFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
-
-
+    /**
+     * 修改费用信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject modifyOweFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加费用明细信息
      *
@@ -60,6 +68,17 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext, FeeReceiptDetailPo feeReceiptDetailPo, FeeReceiptPo feeReceiptPo);
+
+    /**
+     * 添加费用明细信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addOweFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext,
+                                      List<FeeReceiptDetailPo> feeReceiptDetailPos,
+                                      List<FeeReceiptPo> feeReceiptPos);
 
     /**
      * 添加费用明细信息

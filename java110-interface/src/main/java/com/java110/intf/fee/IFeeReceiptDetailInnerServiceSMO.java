@@ -26,15 +26,18 @@ public interface IFeeReceiptDetailInnerServiceSMO {
     @RequestMapping(value = "/saveFeeReceiptDetail", method = RequestMethod.POST)
     public int saveFeeReceiptDetail(@RequestBody FeeReceiptDetailPo feeReceiptDetailPo);
 
+
+    @RequestMapping(value = "/saveFeeReceiptDetails", method = RequestMethod.POST)
+    public int saveFeeReceiptDetails(@RequestBody List<FeeReceiptDetailPo> feeReceiptDetailPos);
+
     @RequestMapping(value = "/updateFeeReceiptDetail", method = RequestMethod.POST)
-    public int updateFeeReceiptDetail(@RequestBody  FeeReceiptDetailPo feeReceiptDetailPo);
+    public int updateFeeReceiptDetail(@RequestBody FeeReceiptDetailPo feeReceiptDetailPo);
 
     @RequestMapping(value = "/deleteFeeReceiptDetail", method = RequestMethod.POST)
-    public int deleteFeeReceiptDetail(@RequestBody  FeeReceiptDetailPo feeReceiptDetailPo);
+    public int deleteFeeReceiptDetail(@RequestBody FeeReceiptDetailPo feeReceiptDetailPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param feeReceiptDetailDto 数据对象分享
      * @return FeeReceiptDetailDto 对象数据

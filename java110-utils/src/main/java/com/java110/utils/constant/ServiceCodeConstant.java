@@ -559,6 +559,9 @@ public class ServiceCodeConstant {
     //缴费
     public static final String SERVICE_CODE_PAY_FEE = "fee.payFee";
 
+    //欠费缴费
+    public static final String SERVICE_CODE_PAY_OWE_FEE = "fee.payOweFee";
+
     //设置费用
     public static final String SERVICE_CODE_SAVE_ROOM_CREATE_FEE = "fee.saveRoomCreateFee";
     //设置费用

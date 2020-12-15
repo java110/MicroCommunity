@@ -15,6 +15,18 @@
     </insert>
 
 
+    <!-- 批量插入费用 -->
+    <insert id="saveFeeReceiptDetails" parameterType="Map">
+        insert into pay_feefee_receipt_detail(
+        area,amount,fee_name,detail_id,start_time,end_time,community_id,receipt_id,fee_id,cycle,square_price )
+        VALUES
+        <foreach collection="feeReceiptDetailPos" item="item" separator=",">
+            (#{item.area},#{item.amount},#{item.feeName},#{item.detailId},#{item.startTime},#{item.endTime},
+            #{item.communityId},#{item.receiptId},#{item.feeId},#{item.cycle},#{item.squarePrice})
+        </foreach>
+    </insert>
+
+
     <!-- 查询收据明细信息 add by wuxw 2018-07-03 -->
     <select id="getFeeReceiptDetailInfo" parameterType="Map" resultType="Map">
         select t.area,t.amount,t.fee_name,t.fee_name feeName,t.detail_id,t.detail_id detailId,t.start_time,t.start_time

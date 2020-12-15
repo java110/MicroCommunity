@@ -44,6 +44,17 @@ public class FeeReceiptDetailServiceDaoImpl extends BaseServiceDao implements IF
         }
     }
 
+    @Override
+    public void saveFeeReceiptDetails(Map info) throws DAOException {
+        logger.debug("保存收据明细信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("feeReceiptDetailServiceDaoImpl.saveFeeReceiptDetails",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存收据明细信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
 
     /**
      * 查询收据明细信息（instance）

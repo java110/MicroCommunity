@@ -6,13 +6,17 @@ import com.java110.dto.PageDto;
 import com.java110.dto.feeReceiptDetail.FeeReceiptDetailDto;
 import com.java110.fee.dao.IFeeReceiptDetailServiceDao;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
+import com.java110.po.fee.PayFeePo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -35,6 +39,20 @@ public class FeeReceiptDetailInnerServiceSMOImpl extends BaseServiceSMO implemen
         feeReceiptDetailServiceDaoImpl.saveFeeReceiptDetailInfo(BeanConvertUtil.beanCovertMap(feeReceiptDetailPo));
         return saveFlag;
     }
+
+    @Override
+    public int saveFeeReceiptDetails(@RequestBody List<FeeReceiptDetailPo> feeReceiptDetailPos) {
+        List<Map> fees = new ArrayList<>();
+        for (FeeReceiptDetailPo feeReceiptDetailPo : feeReceiptDetailPos) {
+            fees.add(BeanConvertUtil.beanCovertMap(feeReceiptDetailPo));
+        }
+
+        Map info = new HashMap();
+        info.put("feeReceiptDetailPos", fees);
+        feeReceiptDetailServiceDaoImpl.saveFeeReceiptDetails(info);
+        return 1;
+    }
+
 
     @Override
     public int updateFeeReceiptDetail(@RequestBody FeeReceiptDetailPo feeReceiptDetailPo) {

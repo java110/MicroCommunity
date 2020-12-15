@@ -109,6 +109,46 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         super.update(dataFlowContext, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
     }
 
+    private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
+        if (StringUtil.isInteger(cycles.toString())) {
+            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
+
+            return endCalender;
+        }
+
+        if (cycles >= 1) {
+            endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
+            cycles = cycles - Math.floor(cycles);
+        }
+        //int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
+        int futureDay = endCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int hours = new Double(cycles * futureDay * 24).intValue();
+        endCalender.add(Calendar.HOUR, hours);
+
+        return endCalender;
+    }
+
+
+    /**
+     * 添加费用明细信息
+     *
+     * @param payFeeDetailPo  费用明细
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addSimpleFeeDetail(PayFeeDetailPo payFeeDetailPo, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFeeDetail = JSONObject.parseObject(JSONObject.toJSONString(payFeeDetailPo));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
+
+        return business;
+    }
+
     /**
      * 添加费用明细信息
      *
@@ -187,43 +227,78 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         return business;
     }
 
-    private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
-        if (StringUtil.isInteger(cycles.toString())) {
-            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
-
-            return endCalender;
-        }
-
-        if (cycles >= 1) {
-            endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
-            cycles = cycles - Math.floor(cycles);
-        }
-        //int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
-        int futureDay = endCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int hours = new Double(cycles * futureDay * 24).intValue();
-        endCalender.add(Calendar.HOUR, hours);
-
-        return endCalender;
-    }
-
-
     /**
      * 添加费用明细信息
      *
-     * @param payFeeDetailPo  费用明细
+     * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addSimpleFeeDetail(PayFeeDetailPo payFeeDetailPo, DataFlowContext dataFlowContext) {
+    public JSONObject addOweFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext,
+                                      List<FeeReceiptDetailPo> feeReceiptDetailPos,
+                                      List<FeeReceiptPo> feeReceiptPos) {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFeeDetail = JSONObject.parseObject(JSONObject.toJSONString(payFeeDetailPo));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
+        JSONObject businessFeeDetail = new JSONObject();
+        businessFeeDetail.putAll(paramInJson);
+        businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        businessFeeDetail.put("primeRate", "1.00");
+        //计算 应收金额
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(paramInJson.getString("feeId"));
+        feeDto.setCommunityId(paramInJson.getString("communityId"));
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
+        if (feeDtos == null || feeDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
+        }
+        if (!businessFeeDetail.containsKey("state")) {
+            businessFeeDetail.put("state", "1400");
+        }
+        feeDto = feeDtos.get(0);
+        businessFeeDetail.put("startTime", paramInJson.getString("startTime"));
+        BigDecimal cycles = null;
+        BigDecimal feePrice = new BigDecimal(computeFeeSMOImpl.getFeePrice(feeDto));
+        Date endTime = feeDto.getEndTime();
+        Calendar endCalender = Calendar.getInstance();
+        endCalender.setTime(endTime);
+        BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+        cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
+        businessFeeDetail.put("cycles", cycles.doubleValue());
+        businessFeeDetail.put("receivableAmount", paramInJson.getString("receivedAmount"));
+        businessFeeDetail.put("receivedAmount", paramInJson.getString("receivedAmount"));
+        businessFeeDetail.put("endTime", paramInJson.getString("endTime"));
+        paramInJson.put("feeInfo", feeDto);
+        paramInJson.put("cycles", cycles.doubleValue());
+
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
+        paramInJson.put("detailId", businessFeeDetail.getString("detailId"));
+
+        FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
+        FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
+        feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivedAmount"));
+        feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
+        feeReceiptDetailPo.setCycle(businessFeeDetail.getString("cycles"));
+        feeReceiptDetailPo.setDetailId(businessFeeDetail.getString("detailId"));
+        feeReceiptDetailPo.setEndTime(businessFeeDetail.getString("endTime"));
+        feeReceiptDetailPo.setFeeId(feeDto.getFeeId());
+        feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
+        feeReceiptDetailPo.setStartTime(businessFeeDetail.getString("startTime"));
+        feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
+        computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
+        feeReceiptDetailPos.add(feeReceiptDetailPo);
+        feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
+        feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
+        feeReceiptPo.setReceiptId(feeReceiptDetailPo.getReceiptId());
+        feeReceiptPo.setObjType(feeDto.getPayerObjType());
+        feeReceiptPo.setObjId(feeDto.getPayerObjId());
+        feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
+
+        feeReceiptPos.add(feeReceiptPo);
         return business;
     }
 
@@ -270,6 +345,34 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         paramInJson.put("carPayerObjType", feeInfo.getPayerObjType());
         paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
 
+
+        return business;
+    }
+
+    /**
+     * 修改费用信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject modifyOweFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_ONLY_UPDATE_FEE_INFO); //这里走only
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFee = new JSONObject();
+        FeeDto feeInfo = (FeeDto) paramInJson.get("feeInfo");
+        Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
+        feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+        feeMap.put("endTime", paramInJson.getString("endTime"));
+        feeMap.put("cycles", paramInJson.getString("cycles"));
+        feeMap.put("configEndTime", feeInfo.getConfigEndTime());
+
+        businessFee.putAll(feeMap);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
 
         return business;
     }
