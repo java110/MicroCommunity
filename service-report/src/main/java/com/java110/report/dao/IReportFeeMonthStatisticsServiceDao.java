@@ -213,4 +213,5 @@ public interface IReportFeeMonthStatisticsServiceDao {
     List<Map> queryFinishOweFee(Map info) throws DAOException;
 
 
+    List<Map> queryAllPaymentCount(Map beanCovertMap);
 }

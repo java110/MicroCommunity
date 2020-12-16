@@ -606,7 +606,8 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeDetail" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,t.deadline_time deadlineTime,SUM(t.receivable_amount)
+        select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,t.deadline_time
+        deadlineTime,SUM(t.receivable_amount)
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -835,7 +836,7 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'
-        left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and  pfa.spec_cd = '390002'
+        left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -1075,7 +1076,6 @@
     </select>
 
 
-
     <select id="queryOwePaymentCount" parameterType="Map" resultType="Map">
         select t.fee_name feeName,count(t.obj_id) objCount
         from report_fee_month_statistics t
@@ -1084,11 +1084,20 @@
         group by t.config_id,t.fee_name
         order by objCount desc
     </select>
+    <select id="queryAllPaymentCount" parameterType="Map" resultType="Map">
+        select t.fee_name feeName,count(t.obj_id) objCount
+        from report_fee_month_statistics t
+        where t.community_id = #{communityId}
+        group by t.config_id,t.fee_name
+        order by objCount desc
+    </select>
+
 
     <select id="queryFinishOweFee" parameterType="Map" resultType="Map">
         select t.config_id configId, t.fee_id feeId,t.statistics_id statisticsId,t.fee_year feeYear,fee_month feeMonth
         from report_fee_month_statistics t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.state = '2009001' and pf.community_id = #{communityId} and pf.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.state = '2009001' and pf.community_id = #{communityId} and
+        pf.status_cd = '0'
         where t.owe_amount > 0
         and t.status_cd = '0'
         and t.community_id = #{communityId}

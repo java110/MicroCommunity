@@ -313,5 +313,13 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return businessReportFeeMonthStatisticsInfos;
     }
 
+    @Override
+    public List<Map> queryAllPaymentCount(Map info) {
+        logger.debug("查询费用月统计信息 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllPaymentCount", info);
+
+        return businessReportFeeMonthStatisticsInfos;    }
+
 
 }

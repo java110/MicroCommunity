@@ -41,6 +41,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String payerObjType;
 
     private String objCount;
+    private String normalCount;
 
 
     private Date createTime;
@@ -312,5 +313,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setImportFeeName(String importFeeName) {
         this.importFeeName = importFeeName;
+    }
+
+    public String getNormalCount() {
+        return normalCount;
+    }
+
+    public void setNormalCount(String normalCount) {
+        this.normalCount = normalCount;
     }
 }

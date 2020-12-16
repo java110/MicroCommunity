@@ -231,10 +231,25 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     public ResponseEntity<String> queryOwePaymentCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
+        List<ReportFeeMonthStatisticsDto> reportAllFeeMonthStatisticsDtos = null;
 
         reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryOwePaymentCount(reportFeeMonthStatisticsDto);
 
-        ResultVo resultVo = new ResultVo(reportFeeMonthStatisticsDtos);
+        reportAllFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryAllPaymentCount(reportFeeMonthStatisticsDto);
+        int normalFee = 0;
+        for (ReportFeeMonthStatisticsDto aReportFeeMonthStatisticsDto : reportAllFeeMonthStatisticsDtos) {
+            for (ReportFeeMonthStatisticsDto oweReportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+                String objCount = aReportFeeMonthStatisticsDto.getObjCount();
+                if (aReportFeeMonthStatisticsDto.getFeeName().equals(oweReportFeeMonthStatisticsDto.getFeeName())) {
+                    aReportFeeMonthStatisticsDto.setObjCount(oweReportFeeMonthStatisticsDto.getObjCount());
+                    normalFee = Integer.parseInt(objCount) - Integer.parseInt(oweReportFeeMonthStatisticsDto.getObjCount());
+                    aReportFeeMonthStatisticsDto.setNormalCount(normalFee + "");
+                }
+            }
+        }
+
+
+        ResultVo resultVo = new ResultVo(reportAllFeeMonthStatisticsDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

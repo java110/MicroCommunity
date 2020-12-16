@@ -218,6 +218,13 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOwePaymentCount", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryOwePaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
-
+    /**
+     * 查询预付费户数
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryAllPaymentCount", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryAllPaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
 }
