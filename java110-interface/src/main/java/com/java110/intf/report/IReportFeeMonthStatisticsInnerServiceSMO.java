@@ -1,5 +1,6 @@
 package com.java110.intf.report;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
@@ -164,7 +165,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      * @return
      */
     @RequestMapping(value = "/queryPayFeeDetailCount", method = RequestMethod.POST)
-    int queryPayFeeDetailCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+    JSONObject queryPayFeeDetailCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
      * 查询费用汇总表

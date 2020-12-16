@@ -768,7 +768,7 @@
         </if>
     </select>
     <select id="queryPayFeeDetailCount" parameterType="Map" resultType="Map">
-        select count(1) count
+        select count(1) count,SUM(receivedAmount) totalReceivedAmount,SUM(receivableAmount) totalReceivableAmount
         from (
         select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,oc.car_num carNum,
         pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,

@@ -147,7 +147,7 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @return 费用月统计数量
      */
     int queryOweFeeDetailCount(Map info);
-    int queryPayFeeDetailCount(Map info);
+    Map queryPayFeeDetailCount(Map info);
     int queryDeadlineFeeCount(Map info);
     /**
      * 查询费用月统计信息（instance过程）

@@ -1,6 +1,7 @@
 package com.java110.report.smo.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -152,6 +154,7 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
 
         return reportFeeMonthStatisticss;
     }
+
     @Override
     public int queryPrePaymentNewCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         return reportFeeMonthStatisticsServiceDaoImpl.queryPrePaymentNewCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
@@ -193,8 +196,10 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     }
 
     @Override
-    public int queryPayFeeDetailCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
-        return reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+    public JSONObject queryPayFeeDetailCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        Map info = reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+
+        return JSONObject.parseObject(JSONObject.toJSONString(info));
     }
 
     @Override
@@ -211,6 +216,7 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
 
         return reportFeeMonthStatisticss;
     }
+
     @Override
     public int queryDeadlineFeeCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         return reportFeeMonthStatisticsServiceDaoImpl.queryDeadlineFeeCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));

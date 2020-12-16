@@ -1,11 +1,13 @@
 package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.FeeDetailResultVo;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,7 +146,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Override
     public ResponseEntity<String> queryPayFeeDetail(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
-        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetailCount(reportFeeMonthStatisticsDto);
+        JSONObject countInfo = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetailCount(reportFeeMonthStatisticsDto);
+
+        int count = Integer.parseInt(countInfo.get("count").toString());
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
         if (count > 0) {
@@ -167,7 +171,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
+        FeeDetailResultVo resultVo = new FeeDetailResultVo(countInfo.getDouble("totalReceivableAmount"), countInfo.getDouble("totalReceivedAmount"),
+                (int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

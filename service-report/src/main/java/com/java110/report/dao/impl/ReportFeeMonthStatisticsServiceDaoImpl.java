@@ -212,16 +212,17 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
         return businessReportFeeMonthStatisticsInfos;
     }
+
     @Override
-    public int queryPayFeeDetailCount(Map info) {
+    public Map queryPayFeeDetailCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
         List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailCount", info);
         if (businessReportFeeMonthStatisticsInfos.size() < 1) {
-            return 0;
+            return null;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return businessReportFeeMonthStatisticsInfos.get(0);
     }
 
     @Override
@@ -309,7 +310,8 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
         List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFinishOweFee", info);
 
-        return businessReportFeeMonthStatisticsInfos;    }
+        return businessReportFeeMonthStatisticsInfos;
+    }
 
 
 }
