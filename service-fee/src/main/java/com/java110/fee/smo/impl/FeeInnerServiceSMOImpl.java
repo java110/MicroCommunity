@@ -348,7 +348,6 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         config.put("feeName", tmpFeeConfigDto.getFeeName());
         data.add(config);
-
     }
 
 
