@@ -59,7 +59,7 @@ public class CommonUtil extends LoggerEngine {
 
         String result = "";
         for (int i = 0; i < 6; i++) {
-            result += random.nextInt(10);
+            result += (random.nextInt(9) + 1);;
         }
 
         return result;
