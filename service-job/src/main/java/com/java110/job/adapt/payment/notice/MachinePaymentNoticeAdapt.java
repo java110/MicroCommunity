@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
@@ -16,6 +18,7 @@ import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
@@ -72,48 +75,70 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        if (data.containsKey(PayFeeDetailPo.class.getSimpleName())) {
+        JSONArray businessPayFeeDetails = null;
+        if (data == null) {
+            FeeDetailDto feeDetailDto = new FeeDetailDto();
+            feeDetailDto.setbId(business.getbId());
+            List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+            Assert.listOnlyOne(feeDetailDtos, "未查询到缴费记录");
+            businessPayFeeDetails = JSONArray.parseArray(JSONArray.toJSONString(feeDetailDtos));
+        } else if (data.containsKey(PayFeeDetailPo.class.getSimpleName())) {
             Object bObj = data.get(PayFeeDetailPo.class.getSimpleName());
-            JSONArray businessMachines = null;
+
             if (bObj instanceof JSONObject) {
-                businessMachines = new JSONArray();
-                businessMachines.add(bObj);
+                businessPayFeeDetails = new JSONArray();
+                businessPayFeeDetails.add(bObj);
             } else if (bObj instanceof Map) {
-                businessMachines = new JSONArray();
-                businessMachines.add(JSONObject.parseObject(JSONObject.toJSONString(bObj)));
+                businessPayFeeDetails = new JSONArray();
+                businessPayFeeDetails.add(JSONObject.parseObject(JSONObject.toJSONString(bObj)));
             } else if (bObj instanceof List) {
-                businessMachines = JSONArray.parseArray(JSONObject.toJSONString(bObj));
+                businessPayFeeDetails = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
-                businessMachines = (JSONArray) bObj;
+                businessPayFeeDetails = (JSONArray) bObj;
             }
-            //JSONObject businessMachine = data.getJSONObject("businessMachine");
-            for (int bMachineIndex = 0; bMachineIndex < businessMachines.size(); bMachineIndex++) {
-                JSONObject businessMachine = businessMachines.getJSONObject(bMachineIndex);
-                doSendPayFeeDetail(business, businessMachine);
-            }
+        } else {
+            return;
+        }
+
+        //JSONObject businessPayFeeDetail = data.getJSONObject("businessPayFeeDetail");
+        for (int bPayFeeDetailIndex = 0; bPayFeeDetailIndex < businessPayFeeDetails.size(); bPayFeeDetailIndex++) {
+            JSONObject businessPayFeeDetail = businessPayFeeDetails.getJSONObject(bPayFeeDetailIndex);
+            doSendPayFeeDetail(business, businessPayFeeDetail);
         }
     }
 
-    private void doSendPayFeeDetail(Business business, JSONObject businessMachine) {
+    private void doSendPayFeeDetail(Business business, JSONObject businessPayFeeDetail) {
         //查询缴费明细
-        PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessMachine, PayFeeDetailPo.class);
+        PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessPayFeeDetail, PayFeeDetailPo.class);
         //拿到员工信息
-        UserDto userDto = new UserDto();
-        List<UserDto> users = userInnerServiceSMO.getUsers(userDto);
+//        UserDto userDto = new UserDto();
+//        List<UserDto> users = userInnerServiceSMO.getUsers(userDto);
         //查询小区信息
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(payFeeDetailPo.getCommunityId());
         List<CommunityDto> communityDtos = communityInnerServiceSMO.queryCommunitys(communityDto);
+
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(payFeeDetailPo.getFeeId());
+        feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        Assert.listOnlyOne(feeDtos, "未查询到费用信息");
         //获取费用类型
-        String feeTypeCdName = businessMachine.get("feeTypeCdName").toString();
+        String feeTypeCdName = feeDtos.get(0).getFeeTypeCdName();
         //获取缴费用户楼栋单元房间号
-        String payerObjName = businessMachine.get("payerObjName").toString();
+        String payerObjName = computeFeeSMOImpl.getFeeObjName(feeDtos.get(0));
         //获得用户缴费开始时间
         String startTime = payFeeDetailPo.getStartTime();
         //获取用户缴费到期时间

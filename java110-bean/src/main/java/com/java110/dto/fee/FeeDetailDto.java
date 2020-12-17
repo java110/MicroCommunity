@@ -23,6 +23,7 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String receivedAmount;
     private String communityId;
     private String feeId;
+    private String bId;
 
 
     private Date createTime;
@@ -145,5 +146,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

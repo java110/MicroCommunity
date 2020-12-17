@@ -280,7 +280,7 @@ public class OrderProcessServiceSMOImpl extends AbstractOrderServiceSMOImpl impl
 
             notifyInstanceOrder(dataFlow, headers);
             // 业务调用完成
-            DataFlowEventPublishing.invokeFinishBusinessSystem(dataFlow);
+            DataFlowEventPublishing.invokeConfirmFinishBusinessSystem(dataFlow);
         } catch (Exception e) {
             LoggerEngine.error("确认提交订单失败", e);
             //10.0 成功的情况下通知下游系统失败将状态改为NE，人工处理。
