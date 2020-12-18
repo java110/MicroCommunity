@@ -11,6 +11,7 @@ import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IGeneratorFeeMonthStatisticsInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
@@ -52,6 +53,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Override
     public int generatorData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
@@ -219,7 +223,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 && receivedAmount == 0) {
             return;
         }
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto, null, tmpReportCarDto); //应收
+        double receivableAmount = getReceivableAmountByCar(tmpReportFeeDto, null, tmpReportCarDto); //应收
         double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
         FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
         OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(tmpReportCarDto, OwnerCarDto.class);
@@ -402,6 +406,59 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         double receivedAmount = reportFeeServiceDaoImpl.getFeeReceivedAmount(feeDetailDto);
 
         return receivedAmount;
+    }
+
+    /**
+     * 获取当月应收
+     *
+     * @param tmpReportFeeDto
+     * @return
+     */
+    private double getReceivableAmountByCar(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto) {
+
+        double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, reportCarDto);
+        BigDecimal feePriceDec = new BigDecimal(feePrice);
+
+        if (DateUtil.getCurrentDate().getTime() < tmpReportFeeDto.getStartTime().getTime()) {
+            return 0.0;
+        }
+
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeTypeCd())) {
+            return feePrice;
+        }
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(tmpReportFeeDto.getCommunityId());
+        ownerCarDto.setCarId(tmpReportFeeDto.getCarId());
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        if(ownerCarDtos == null || ownerCarDtos.size() < 1){
+            return 0.0;
+        }
+        Date endTime = ownerCarDtos.get(0).getEndTime();
+
+        //1.0 费用到期时间和费用结束时间 都不在当月
+        if (!belongCurMonth(tmpReportFeeDto.getEndTime())
+                && !belongCurMonth(endTime)
+                && tmpReportFeeDto.getEndTime().getTime() < DateUtil.getFirstDate().getTime()) {
+            return feePrice;
+        }
+
+        //2.0 费用到期时间 在当月，费用结束时间不在当月
+        if (belongCurMonth(tmpReportFeeDto.getEndTime())
+                && !belongCurMonth(endTime)) {
+            //算天数
+            double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), DateUtil.getNextMonthFirstDate());
+            BigDecimal curDegree = new BigDecimal(month);
+            return curDegree.multiply(feePriceDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        }
+        //3.0 费用到期时间 不在当月，费用结束时间在当月
+        if (!belongCurMonth(tmpReportFeeDto.getEndTime())
+                && belongCurMonth(endTime)) {
+            //算天数
+            double month = computeFeeSMOImpl.dayCompare(DateUtil.getFirstDate(), tmpReportFeeDto.getConfigEndTime());
+            BigDecimal curDegree = new BigDecimal(month);
+            return curDegree.multiply(feePriceDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        }
+        return 0.0;
     }
 
     /**

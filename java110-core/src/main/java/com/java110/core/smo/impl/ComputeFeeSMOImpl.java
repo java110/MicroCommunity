@@ -774,9 +774,15 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Calendar newFrom = Calendar.getInstance();
         newFrom.setTime(fromDate);
         newFrom.add(Calendar.MONTH, result);
+        //如果加月份后 大于了到期时间 默认加 月份 -1 情况 12-19  21-01-10
+        if (newFrom.getTime().getTime() > toDate.getTime()) {
+            newFrom.setTime(fromDate);
+            result = result - 1;
+            newFrom.add(Calendar.MONTH, result);
+        }
 
-        long t1 = newFrom.getTimeInMillis();
-        long t2 = to.getTimeInMillis();
+        long t1 = newFrom.getTime().getTime();
+        long t2 = to.getTime().getTime();
         double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
         BigDecimal tmpDays = new BigDecimal(days);
         BigDecimal monthDay = null;
@@ -792,7 +798,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         days = (newFromMaxDay.getTimeInMillis() - t1) * 1.00 / (24 * 60 * 60 * 1000);
         tmpDays = new BigDecimal(days);
         monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
-        BigDecimal preRresMonth = tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result));
+        BigDecimal preRresMonth = tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP);
 
         //下月天数
         days = (t2 - newFromMaxDay.getTimeInMillis()) * 1.00 / (24 * 60 * 60 * 1000);
@@ -822,4 +828,32 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         return endDate.getTime();
     }
 
+    public static void main(String[] args) {
+        ComputeFeeSMOImpl computeFeeSMO = new ComputeFeeSMOImpl();
+        try {
+            double month = computeFeeSMO.dayCompare(
+
+                    DateUtil.getDateFromString("2020-12-19 00:00:00", DateUtil.DATE_FORMATE_STRING_A),
+                    DateUtil.getDateFromString("2021-1-10 00:00:00", DateUtil.DATE_FORMATE_STRING_A)
+            );
+
+            System.out.println(month);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public static void main(String[] args) {
+//        ComputeFeeSMOImpl computeFeeSMO = new ComputeFeeSMOImpl();
+//        try {
+//            Date startTime = DateUtil.getDateFromString("2020-12-31 00:00:00", DateUtil.DATE_FORMATE_STRING_A);
+//            Date endTime = DateUtil.getDateFromString("2021-1-2 00:00:00", DateUtil.DATE_FORMATE_STRING_A);
+//            double day = (endTime.getTime() - startTime.getTime()) * 1.00 / (24 * 60 * 60 * 1000);
+//
+//            System.out.println(day);
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
