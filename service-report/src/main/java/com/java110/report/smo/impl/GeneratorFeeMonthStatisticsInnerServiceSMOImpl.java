@@ -387,8 +387,8 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      */
     private double getOweAmount(ReportFeeDto tmpReportFeeDto, double receivableAmount, double receivedAmount) {
 
-        return receivableAmount;
 
+        return receivableAmount;
 
     }
 
@@ -423,14 +423,14 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             return 0.0;
         }
 
-        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeTypeCd())) {
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
             return feePrice;
         }
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(tmpReportFeeDto.getCommunityId());
         ownerCarDto.setCarId(tmpReportFeeDto.getCarId());
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        if(ownerCarDtos == null || ownerCarDtos.size() < 1){
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
             return 0.0;
         }
         Date endTime = ownerCarDtos.get(0).getEndTime();
@@ -476,7 +476,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             return 0.0;
         }
 
-        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeTypeCd())) {
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
             return feePrice;
         }
 
