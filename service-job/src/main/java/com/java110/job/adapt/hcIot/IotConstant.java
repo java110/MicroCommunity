@@ -17,6 +17,7 @@ package com.java110.job.adapt.hcIot;
 
 /**
  * HC 物联网常量类
+ * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
  * @desc add by 吴学文 9:49
  */
@@ -29,11 +30,22 @@ public class IotConstant {
 
     public static final String GET_TOKEN_URL = IOT_URL + " /extApi/auth/getAccessToken?appId=" + APP_ID + "&appSecret=" + APP_SECRET;
 
+    //添加小区
+    public static final String ADD_COMMUNITY_URL = IOT_URL + "/extApi/community/addCommunity";
+    //修改小区
+    public static final String UPDATE_COMMUNITY_URL = IOT_URL + "/extApi/community/updateCommunity";
+    //删除小区
+    public static final String DELETE_COMMUNITY_URL = IOT_URL + "/extApi/community/deleteCommunity";
+
     //添加设备
     public static final String ADD_MACHINE_URL = IOT_URL + "/extApi/machine/addMachine";
+    //修改设备
     public static final String UPDATE_MACHINE_URL = IOT_URL + "/extApi/machine/updateMachine";
+    //删除设备
     public static final String DELETE_MACHINE_URL = IOT_URL + "/extApi/machine/deleteMachine";
+    //开门接口
     public static final String OPEN_DOOR = IOT_URL + "/extApi/machine/openDoor";
+    //重启接口
     public static final String RESTART_MACHINE = IOT_URL + "/extApi/machine/restartMachine";
 
     public static final String HC_TOKEN = "HC_ACCESS_TOKEN";

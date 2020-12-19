@@ -25,6 +25,8 @@ import org.springframework.http.*;
 
 /**
  * 获取token
+ * <p>
+ * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
  * @desc add by 吴学文 9:46
  */
@@ -51,8 +53,8 @@ public class GetToken {
             throw new IllegalArgumentException("获取token失败" + tokenRes.getBody());
         }
 
-        token = tokenObj.getJSONObject("data").getString("accessToken");
-        int expiresIn = tokenObj.getJSONObject("data").getInteger("expiresIn");
+        token = tokenObj.getJSONObject("data").getString("access_token");
+        int expiresIn = tokenObj.getJSONObject("data").getInteger("expires_in");
 
         CommonCache.setValue(IotConstant.HC_TOKEN, token, expiresIn - 200);
 

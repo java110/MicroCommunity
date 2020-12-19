@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.hcIot;
+package com.java110.job.adapt.hcIot.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.RoomDto;
-import com.java110.dto.file.FileDto;
-import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +41,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * HC iot 添加业主同步iot
+ * HC  添加业主同步iot
+ * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "addOwnerToIotAdapt")
-public class AddOwnerToIotAdapt extends DatabusAdaptImpl {
+@Component(value = "ownerUnBindRoomToIotAdapt")
+public class OwnerUnBindRoomToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcMachineAsynImpl;
@@ -60,6 +62,9 @@ public class AddOwnerToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     /**
      * accessToken={access_token}
@@ -96,31 +101,28 @@ public class AddOwnerToIotAdapt extends DatabusAdaptImpl {
 
     private void doSendMachine(Business business, JSONObject businessOwner) {
 
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(businessOwner, OwnerRoomRelPo.class);
 
-        FileRelDto fileRelDto = new FileRelDto();
-        fileRelDto.setObjId(ownerPo.getMemberId());
-        fileRelDto.setRelTypeCd("10000");
-        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-        if (fileRelDtos == null || fileRelDtos.size() != 1) {
-            return;
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(ownerRoomRelPo.getOwnerId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        for (OwnerDto tOwnerDto : ownerDtos) {
+            dealOwnerData(tOwnerDto, ownerRoomRelPo);
         }
-        FileDto fileDto = new FileDto();
-        fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
-        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
-        fileDto.setCommunityId(ownerPo.getCommunityId());
-        List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
-        if (fileDtos == null || fileDtos.size() != 1) {
-            return;
-        }
+
+
+    }
+
+    private void dealOwnerData(OwnerDto tOwnerDto, OwnerRoomRelPo ownerRoomRelPo) {
 
         RoomDto roomDto = new RoomDto();
-        roomDto.setOwnerId(ownerPo.getOwnerId());
+        roomDto.setRoomId(ownerRoomRelPo.getRoomId());
+        roomDto.setCommunityId(tOwnerDto.getCommunityId());
         //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
         List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
 
         //拿到小区ID
-        String communityId = ownerPo.getCommunityId();
+        String communityId = tOwnerDto.getCommunityId();
         //根据小区ID查询现有设备
         MachineDto machineDto = new MachineDto();
         machineDto.setCommunityId(communityId);
@@ -141,13 +143,9 @@ public class AddOwnerToIotAdapt extends DatabusAdaptImpl {
             }
             MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
 
-            postParameters.add("extCommunityUuid", ownerPo.getCommunityId());
-            postParameters.add("addAuthorizationDevSn", tmpMachineDto.getMachineCode());
-            postParameters.add("uuid", ownerPo.getMemberId());
-            postParameters.add("name", ownerPo.getName());
-            postParameters.add("faceFileBase64Array", fileDtos.get(0).getContext());
-            hcMachineAsynImpl.sendOwner(postParameters);
+            postParameters.add("extCommunityUuid", tOwnerDto.getCommunityId());
+            postParameters.add("uuids", tOwnerDto.getMemberId());
+            hcMachineAsynImpl.sendDeleteOwner(postParameters);
         }
-
     }
 }

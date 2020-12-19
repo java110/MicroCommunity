@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * 开门适配器
+ * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
  * @desc add by 吴学文 15:29
  */

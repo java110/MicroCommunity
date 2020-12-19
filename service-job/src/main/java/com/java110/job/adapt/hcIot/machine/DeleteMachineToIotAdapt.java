@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.hcIot;
+package com.java110.job.adapt.hcIot.machine;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -33,6 +33,8 @@ import java.util.List;
 
 /**
  * HC iot 设备同步适配器
+ * <p>
+ * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
  * @desc add by 吴学文 18:58
  */

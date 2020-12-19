@@ -20,6 +20,13 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
+/**
+ * IOT信息异步同步处理接口类
+ * <p>
+ * add by wuxw 2020-12-19
+ * <p>
+ * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
+ */
 public interface IIotSendAsyn {
 
     /**
@@ -29,9 +36,34 @@ public interface IIotSendAsyn {
      */
     public void addCommunity(JSONObject postParameters);
 
+    /**
+     * 编辑小区信息
+     *
+     * @param postParameters
+     */
+    public void editCommunity(JSONObject postParameters);
+
+    /**
+     * 删除小区信息
+     *
+     * @param postParameters
+     */
+    public void deleteCommunity(JSONObject postParameters);
+
+    /**
+     * 添加 设备 至 HC IOT
+     *
+     * @param postParameters
+     * @param ownerDtos
+     */
     public void addMachine(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos);
 
-    void updateSend(MultiValueMap<String, Object> postParameters);
+    /**
+     * 修改 设备 至 HC IOT
+     *
+     * @param postParameters
+     */
+    void updateMachine(MultiValueMap<String, Object> postParameters);
 
     void deleteSend(MultiValueMap<String, Object> postParameters);
 

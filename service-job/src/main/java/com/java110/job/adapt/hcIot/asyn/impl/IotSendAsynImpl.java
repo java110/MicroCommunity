@@ -37,6 +37,10 @@ import org.springframework.util.MultiValueMap;
 import java.util.List;
 
 /**
+ * IOT信息异步同步处理实现类
+ * <p>
+ * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
+ *
  * @desc add by 吴学文 11:55
  */
 @Service
@@ -53,29 +57,55 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Autowired
     private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
 
-
-    @Override
-    @Async
-    public void addCommunity(JSONObject postParameters) {
-        postParameters.put("accessToken", GetToken.get(outRestTemplate));
+    /**
+     * 封装头信息
+     *
+     * @return
+     */
+    private HttpHeaders getHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+        httpHeaders.add("access_token", GetToken.get(outRestTemplate));
+        //httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
-        logger.debug("调用吸墨信息：" + responseEntity);
+        return httpHeaders;
     }
 
     @Override
     @Async
-    public void addMachine(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
+    public void addCommunity(JSONObject postParameters) {
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+        logger.debug("调用HC IOT信息：" + responseEntity);
+    }
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+    @Override
+    @Async
+    public void editCommunity(JSONObject postParameters) {
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+        logger.debug("调用HC IOT信息：" + responseEntity);
+    }
+
+    @Override
+    @Async
+    public void deleteCommunity(JSONObject postParameters) {
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+        logger.debug("调用HC IOT信息：" + responseEntity);
+    }
+
+    /**
+     * 添加设备
+     * @param postParameters
+     * @param ownerDtos
+     */
+    @Override
+    @Async
+    public void addMachine(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos) {
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用吸墨信息：" + responseEntity);
+        logger.debug("调用HC IOT信息：" + responseEntity);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return;
@@ -111,62 +141,47 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     @Async
-    public void updateSend(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
+    public void updateMachine(MultiValueMap<String, Object> postParameters) {
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用吸墨信息：" + responseEntity);
+        logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     @Override
     public void deleteSend(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用吸墨信息：" + responseEntity);
+        logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     @Override
     public void sendOwner(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用吸墨信息：" + responseEntity);
+        logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     @Override
     public void sendUpdateOwner(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用吸墨信息：" + responseEntity);
+        logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     @Override
     public void sendDeleteOwner(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用吸墨信息：" + responseEntity);
+        logger.debug("调用HC IOT信息：" + responseEntity);
     }
 }

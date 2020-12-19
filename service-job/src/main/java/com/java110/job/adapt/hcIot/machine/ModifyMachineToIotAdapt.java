@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.hcIot;
+package com.java110.job.adapt.hcIot.machine;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -22,7 +22,7 @@ import com.java110.entity.order.Business;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.owner.OwnerPo;
+import com.java110.po.machine.MachinePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,22 +30,22 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * HC  添加业主同步iot
+ * HC iot 设备同步适配器
+ * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "hcDeleteOwnerTransactionIotAdapt")
-public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
+@Component(value = "modifyMachineToIotAdapt")
+public class ModifyMachineToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcMachineAsynImpl;
+
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
-
 
     /**
      * accessToken={access_token}
@@ -62,8 +62,8 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        if (data.containsKey(OwnerPo.class.getSimpleName())) {
-            Object bObj = data.get(OwnerPo.class.getSimpleName());
+        if (data.containsKey(MachinePo.class.getSimpleName())) {
+            Object bObj = data.get(MachinePo.class.getSimpleName());
             JSONArray businessMachines = null;
             if (bObj instanceof JSONObject) {
                 businessMachines = new JSONArray();
@@ -73,38 +73,31 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
             } else {
                 businessMachines = (JSONArray) bObj;
             }
-            for (int bOwnerIndex = 0; bOwnerIndex < businessMachines.size(); bOwnerIndex++) {
-                JSONObject businessOwner = businessMachines.getJSONObject(bOwnerIndex);
-                doSendMachine(business, businessOwner);
+            //JSONObject businessMachine = data.getJSONObject("businessMachine");
+            for (int bMachineIndex = 0; bMachineIndex < businessMachines.size(); bMachineIndex++) {
+                JSONObject businessMachine = businessMachines.getJSONObject(bMachineIndex);
+                doSendMachine(business, businessMachine);
             }
         }
     }
 
-    private void doSendMachine(Business business, JSONObject businessOwner) {
+    private void doSendMachine(Business business, JSONObject businessMachine) {
 
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
-
-        //拿到小区ID
-        String communityId = ownerPo.getCommunityId();
-        //根据小区ID查询现有设备
+        MachinePo machinePo = BeanConvertUtil.covertBean(businessMachine, MachinePo.class);
         MachineDto machineDto = new MachineDto();
-        machineDto.setCommunityId(communityId);
-        //String[] locationObjIds = new String[]{communityId};
-        List<String> locationObjIds = new ArrayList<>();
-        locationObjIds.add(communityId);
-        machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
+        machineDto.setMachineId(machinePo.getMachineId());
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+
         Assert.listOnlyOne(machineDtos, "未找到设备");
-        for (MachineDto tmpMachineDto : machineDtos) {
-            if (!"9999".equals(tmpMachineDto.getMachineTypeCd())) {
-                continue;
-            }
-            MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
 
-            postParameters.add("extCommunityUuid", ownerPo.getCommunityId());
-            postParameters.add("uuids", ownerPo.getMemberId());
-            hcMachineAsynImpl.sendDeleteOwner(postParameters);
-        }
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
 
+        postParameters.add("extCommunityUuid", machineDtos.get(0).getCommunityId());
+        postParameters.add("devSn", machinePo.getMachineCode());
+        //postParameters.add("uuid", machinePo.getMachineId());
+        postParameters.add("name", machinePo.getMachineName());
+        postParameters.add("positionType", "0");
+        postParameters.add("positionUuid", machinePo.getCommunityId());
+        hcMachineAsynImpl.updateMachine(postParameters);
     }
 }
