@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.ximoIot;
+package com.java110.job.adapt.hcIot;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
@@ -33,8 +33,8 @@ import java.util.List;
  *
  * @desc add by 吴学文 15:29
  */
-@Component(value = "ximoOpenDoorAdapt")
-public class XimoOpenDoorAdapt extends DatabusAdaptImpl {
+@Component(value = "openDoorAdapt")
+public class OpenDoorAdapt extends DatabusAdaptImpl {
 
     @Autowired
     RestTemplate outRestTemplate;
@@ -59,7 +59,7 @@ public class XimoOpenDoorAdapt extends DatabusAdaptImpl {
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(XimoIotConstant.OPEN_DOOR, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.OPEN_DOOR, HttpMethod.POST, httpEntity, String.class);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());

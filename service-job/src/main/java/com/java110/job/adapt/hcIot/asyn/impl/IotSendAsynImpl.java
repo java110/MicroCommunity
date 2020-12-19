@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.ximoIot.asyn.impl;
+package com.java110.job.adapt.hcIot.asyn.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
@@ -21,9 +21,9 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.machine.MachineDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.job.adapt.ximoIot.GetToken;
-import com.java110.job.adapt.ximoIot.XimoIotConstant;
-import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
+import com.java110.job.adapt.hcIot.GetToken;
+import com.java110.job.adapt.hcIot.IotConstant;
+import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.machine.MachineAttrPo;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -40,12 +40,12 @@ import java.util.List;
  * @desc add by 吴学文 11:55
  */
 @Service
-public class XimoMachineAsynImpl implements IXimoMachineAsyn {
-    private static final Logger logger = LoggerFactory.getLogger(XimoMachineAsynImpl.class);
+public class IotSendAsynImpl implements IIotSendAsyn {
+    private static final Logger logger = LoggerFactory.getLogger(IotSendAsynImpl.class);
 
 
     @Autowired
-    private RestTemplate formRestTemplate;
+    private RestTemplate outRestTemplate;
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
@@ -53,15 +53,27 @@ public class XimoMachineAsynImpl implements IXimoMachineAsyn {
     @Autowired
     private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
 
+
     @Override
     @Async
-    public void send(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos) {
-        postParameters.add("accessToken", GetToken.get(formRestTemplate));
+    public void addCommunity(JSONObject postParameters) {
+        postParameters.put("accessToken", GetToken.get(outRestTemplate));
+        HttpHeaders httpHeaders = new HttpHeaders();
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+
+        logger.debug("调用吸墨信息：" + responseEntity);
+    }
+
+    @Override
+    @Async
+    public void addMachine(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos) {
+        postParameters.add("accessToken", GetToken.get(outRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
 
@@ -100,60 +112,60 @@ public class XimoMachineAsynImpl implements IXimoMachineAsyn {
     @Override
     @Async
     public void updateSend(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(formRestTemplate));
+        postParameters.add("accessToken", GetToken.get(outRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }
 
     @Override
     public void deleteSend(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(formRestTemplate));
+        postParameters.add("accessToken", GetToken.get(outRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }
 
     @Override
     public void sendOwner(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(formRestTemplate));
+        postParameters.add("accessToken", GetToken.get(outRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }
 
     @Override
     public void sendUpdateOwner(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(formRestTemplate));
+        postParameters.add("accessToken", GetToken.get(outRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }
 
     @Override
     public void sendDeleteOwner(MultiValueMap<String, Object> postParameters) {
-        postParameters.add("accessToken", GetToken.get(formRestTemplate));
+        postParameters.add("accessToken", GetToken.get(outRestTemplate));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = formRestTemplate.exchange(XimoIotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用吸墨信息：" + responseEntity);
     }

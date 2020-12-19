@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.ximoIot;
+package com.java110.job.adapt.hcIot;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -21,8 +21,9 @@ import com.java110.dto.machine.MachineDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
+import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.machine.MachinePo;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,11 +37,11 @@ import java.util.List;
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "ximoDeleteMachineTransactionIotAdapt")
-public class XimoDeleteMachineTransactionIotAdapt extends DatabusAdaptImpl {
+@Component(value = "modifyMachineToIotAdapt")
+public class ModifyMachineToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
-    private IXimoMachineAsyn ximoMachineAsynImpl;
+    private IIotSendAsyn hcMachineAsynImpl;
 
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
@@ -84,15 +85,18 @@ public class XimoDeleteMachineTransactionIotAdapt extends DatabusAdaptImpl {
         MachinePo machinePo = BeanConvertUtil.covertBean(businessMachine, MachinePo.class);
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineId(machinePo.getMachineId());
-//        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
-//
-//        Assert.listOnlyOne(machineDtos, "未找到设备");
+        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+
+        Assert.listOnlyOne(machineDtos, "未找到设备");
 
         MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
 
-        postParameters.add("extCommunityUuid", machinePo.getCommunityId());
-        postParameters.add("devSns", machinePo.getMachineCode());
-        //postParameters.add("uuids", machinePo.getMachineId());
-        ximoMachineAsynImpl.deleteSend(postParameters);
+        postParameters.add("extCommunityUuid", machineDtos.get(0).getCommunityId());
+        postParameters.add("devSn", machinePo.getMachineCode());
+        //postParameters.add("uuid", machinePo.getMachineId());
+        postParameters.add("name", machinePo.getMachineName());
+        postParameters.add("positionType", "0");
+        postParameters.add("positionUuid", machinePo.getCommunityId());
+        hcMachineAsynImpl.updateSend(postParameters);
     }
 }

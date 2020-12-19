@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.ximoIot;
+package com.java110.job.adapt.hcIot;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Synchronized;
@@ -32,15 +32,15 @@ import org.springframework.http.*;
 public class GetToken {
 
 
-    @Java110Synchronized(value = "ximo_get_token")
+    @Java110Synchronized(value = "hc_get_token")
     public static String get(RestTemplate restTemplate) {
-        String token = CommonCache.getValue(XimoIotConstant.XI_MO_TOKEN);
+        String token = CommonCache.getValue(IotConstant.HC_TOKEN);
         if (!StringUtil.isEmpty(token)) {
             return token;
         }
         HttpHeaders headers = new HttpHeaders();
         HttpEntity httpEntity = new HttpEntity(headers);
-        ResponseEntity<String> tokenRes = restTemplate.exchange(XimoIotConstant.GET_TOKEN_URL, HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<String> tokenRes = restTemplate.exchange(IotConstant.GET_TOKEN_URL, HttpMethod.GET, httpEntity, String.class);
 
         if (tokenRes.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("获取token失败" + tokenRes.getBody());
@@ -54,7 +54,7 @@ public class GetToken {
         token = tokenObj.getJSONObject("data").getString("accessToken");
         int expiresIn = tokenObj.getJSONObject("data").getInteger("expiresIn");
 
-        CommonCache.setValue(XimoIotConstant.XI_MO_TOKEN, token, expiresIn - 200);
+        CommonCache.setValue(IotConstant.HC_TOKEN, token, expiresIn - 200);
 
         return token;
     }

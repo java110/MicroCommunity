@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.ximoIot;
+package com.java110.job.adapt.hcIot;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -31,7 +31,7 @@ import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
+import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.machine.MachinePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,11 +48,11 @@ import java.util.List;
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "ximoAddMachineTransactionIotAdapt")
-public class XimoAddMachineTransactionIotAdapt extends DatabusAdaptImpl {
+@Component(value = "addMachineToIotAdapt")
+public class AddMachineToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
-    private IXimoMachineAsyn ximoMachineAsynImpl;
+    private IIotSendAsyn hcMachineAsynImpl;
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
@@ -130,7 +130,7 @@ public class XimoAddMachineTransactionIotAdapt extends DatabusAdaptImpl {
         postParameters.add("name", machinePo.getMachineName());
         postParameters.add("positionType", "0");
         postParameters.add("positionUuid", machinePo.getCommunityId());
-        ximoMachineAsynImpl.send(postParameters, ownerDtos);
+        hcMachineAsynImpl.addMachine(postParameters, ownerDtos);
     }
 
     private List<MultiValueMap<String, Object>> getOwners(MachinePo machinePo) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.ximoIot;
+package com.java110.job.adapt.hcIot;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -21,14 +21,17 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
+import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +43,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * HC iot 添加业主同步细末
+ * HC  添加业主同步iot
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "ximoAddOwnerTransactionIotAdapt")
-public class XimoAddOwnerTransactionIotAdapt extends DatabusAdaptImpl {
+@Component(value = "ownerBindRoomToIotAdapt")
+public class OwnerBindRoomToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
-    private IXimoMachineAsyn ximoMachineAsynImpl;
+    private IIotSendAsyn hcMachineAsynImpl;
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
@@ -60,6 +63,9 @@ public class XimoAddOwnerTransactionIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     /**
      * accessToken={access_token}
@@ -96,10 +102,22 @@ public class XimoAddOwnerTransactionIotAdapt extends DatabusAdaptImpl {
 
     private void doSendMachine(Business business, JSONObject businessOwner) {
 
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(businessOwner, OwnerRoomRelPo.class);
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(ownerRoomRelPo.getOwnerId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        for (OwnerDto tOwnerDto : ownerDtos) {
+            dealOwnerData(tOwnerDto, ownerRoomRelPo);
+        }
+
+
+    }
+
+    private void dealOwnerData(OwnerDto tOwnerDto, OwnerRoomRelPo ownerRoomRelPo) {
 
         FileRelDto fileRelDto = new FileRelDto();
-        fileRelDto.setObjId(ownerPo.getMemberId());
+        fileRelDto.setObjId(tOwnerDto.getMemberId());
         fileRelDto.setRelTypeCd("10000");
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         if (fileRelDtos == null || fileRelDtos.size() != 1) {
@@ -108,19 +126,20 @@ public class XimoAddOwnerTransactionIotAdapt extends DatabusAdaptImpl {
         FileDto fileDto = new FileDto();
         fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
         fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
-        fileDto.setCommunityId(ownerPo.getCommunityId());
+        fileDto.setCommunityId(tOwnerDto.getCommunityId());
         List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
         if (fileDtos == null || fileDtos.size() != 1) {
             return;
         }
 
         RoomDto roomDto = new RoomDto();
-        roomDto.setOwnerId(ownerPo.getOwnerId());
+        roomDto.setRoomId(ownerRoomRelPo.getRoomId());
+        roomDto.setCommunityId(tOwnerDto.getCommunityId());
         //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
         List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
 
         //拿到小区ID
-        String communityId = ownerPo.getCommunityId();
+        String communityId = tOwnerDto.getCommunityId();
         //根据小区ID查询现有设备
         MachineDto machineDto = new MachineDto();
         machineDto.setCommunityId(communityId);
@@ -141,13 +160,12 @@ public class XimoAddOwnerTransactionIotAdapt extends DatabusAdaptImpl {
             }
             MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
 
-            postParameters.add("extCommunityUuid", ownerPo.getCommunityId());
+            postParameters.add("extCommunityUuid", tOwnerDto.getCommunityId());
             postParameters.add("addAuthorizationDevSn", tmpMachineDto.getMachineCode());
-            postParameters.add("uuid", ownerPo.getMemberId());
-            postParameters.add("name", ownerPo.getName());
+            postParameters.add("uuid", tOwnerDto.getMemberId());
+            postParameters.add("name", tOwnerDto.getName());
             postParameters.add("faceFileBase64Array", fileDtos.get(0).getContext());
-            ximoMachineAsynImpl.sendOwner(postParameters);
+            hcMachineAsynImpl.sendOwner(postParameters);
         }
-
     }
 }

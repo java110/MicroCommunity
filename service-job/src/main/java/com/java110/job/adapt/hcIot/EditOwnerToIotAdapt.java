@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.ximoIot;
+package com.java110.job.adapt.hcIot;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -27,7 +27,7 @@ import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
+import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.OwnerPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -40,15 +40,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * HC iot 添加业主同步细末
+ * HC iot 添加业主同步iot
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "ximoEditOwnerTransactionIotAdapt")
-public class XimoEditOwnerTransactionIotAdapt extends DatabusAdaptImpl {
+@Component(value = "editOwnerToIotAdapt")
+public class EditOwnerToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
-    private IXimoMachineAsyn ximoMachineAsynImpl;
+    private IIotSendAsyn hcMachineAsynImpl;
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
@@ -146,7 +146,7 @@ public class XimoEditOwnerTransactionIotAdapt extends DatabusAdaptImpl {
             postParameters.add("uuid", ownerPo.getMemberId());
             postParameters.add("name", ownerPo.getName());
             postParameters.add("faceFileBase64Array", fileDtos.get(0).getContext());
-            ximoMachineAsynImpl.sendUpdateOwner(postParameters);
+            hcMachineAsynImpl.sendUpdateOwner(postParameters);
         }
 
     }

@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.ximoIot;
+package com.java110.job.adapt.hcIot;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.RoomDto;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.job.adapt.ximoIot.asyn.IXimoMachineAsyn;
+import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +41,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * HC iot 添加业主同步细末
+ * HC  添加业主同步iot
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "ximoDeleteOwnerTransactionIotAdapt")
-public class XimoDeleteOwnerTransactionIotAdapt extends DatabusAdaptImpl {
+@Component(value = "ownerUnBindRoomToIotAdapt")
+public class OwnerUnBindRoomToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
-    private IXimoMachineAsyn ximoMachineAsynImpl;
+    private IIotSendAsyn hcMachineAsynImpl;
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     /**
      * accessToken={access_token}
@@ -82,16 +100,39 @@ public class XimoDeleteOwnerTransactionIotAdapt extends DatabusAdaptImpl {
 
     private void doSendMachine(Business business, JSONObject businessOwner) {
 
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(businessOwner, OwnerRoomRelPo.class);
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(ownerRoomRelPo.getOwnerId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        for (OwnerDto tOwnerDto : ownerDtos) {
+            dealOwnerData(tOwnerDto, ownerRoomRelPo);
+        }
+
+
+    }
+
+    private void dealOwnerData(OwnerDto tOwnerDto, OwnerRoomRelPo ownerRoomRelPo) {
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(ownerRoomRelPo.getRoomId());
+        roomDto.setCommunityId(tOwnerDto.getCommunityId());
+        //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
+        List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
 
         //拿到小区ID
-        String communityId = ownerPo.getCommunityId();
+        String communityId = tOwnerDto.getCommunityId();
         //根据小区ID查询现有设备
         MachineDto machineDto = new MachineDto();
         machineDto.setCommunityId(communityId);
         //String[] locationObjIds = new String[]{communityId};
         List<String> locationObjIds = new ArrayList<>();
         locationObjIds.add(communityId);
+        for (RoomDto tRoomDto : rooms) {
+            locationObjIds.add(tRoomDto.getUnitId());
+            locationObjIds.add(tRoomDto.getRoomId());
+        }
+
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         Assert.listOnlyOne(machineDtos, "未找到设备");
@@ -101,10 +142,9 @@ public class XimoDeleteOwnerTransactionIotAdapt extends DatabusAdaptImpl {
             }
             MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
 
-            postParameters.add("extCommunityUuid", ownerPo.getCommunityId());
-            postParameters.add("uuids", ownerPo.getMemberId());
-            ximoMachineAsynImpl.sendDeleteOwner(postParameters);
+            postParameters.add("extCommunityUuid", tOwnerDto.getCommunityId());
+            postParameters.add("uuids", tOwnerDto.getMemberId());
+            hcMachineAsynImpl.sendDeleteOwner(postParameters);
         }
-
     }
 }
