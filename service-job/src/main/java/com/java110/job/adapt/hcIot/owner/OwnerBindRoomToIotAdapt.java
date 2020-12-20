@@ -34,6 +34,7 @@ import com.java110.po.owner.OwnerPo;
 import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -159,14 +160,16 @@ public class OwnerBindRoomToIotAdapt extends DatabusAdaptImpl {
             if (!"9999".equals(tmpMachineDto.getMachineTypeCd())) {
                 continue;
             }
-            MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+            JSONObject postParameters = new JSONObject();
 
-            postParameters.add("extCommunityUuid", tOwnerDto.getCommunityId());
-            postParameters.add("addAuthorizationDevSn", tmpMachineDto.getMachineCode());
-            postParameters.add("uuid", tOwnerDto.getMemberId());
-            postParameters.add("name", tOwnerDto.getName());
-            postParameters.add("faceFileBase64Array", fileDtos.get(0).getContext());
-            hcMachineAsynImpl.sendOwner(postParameters);
+            postParameters.put("userId", tOwnerDto.getMemberId());
+            postParameters.put("faceBase64", fileDtos.get(0).getContext());
+            postParameters.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            postParameters.put("endTime", DateUtil.LAST_TIME);
+            postParameters.put("name", tOwnerDto.getName());
+            postParameters.put("idNumber", tOwnerDto.getIdCard());
+            postParameters.put("machineCode", tmpMachineDto.getMachineCode());
+            hcMachineAsynImpl.addOwner(postParameters);
         }
     }
 }

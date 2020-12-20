@@ -27,8 +27,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +48,10 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
 
 
     /**
-     * accessToken={access_token}
-     * &extCommunityUuid=01000
-     * &extCommunityId=1
-     * &devSn=111111111
-     * &name=设备名称
-     * &positionType=0
-     * &positionUuid=1
+     * {
+     * "userId": "702020042194860037",
+     * "machineCode": "101010"
+     * }
      *
      * @param business   当前处理业务
      * @param businesses 所有业务信息
@@ -101,10 +96,10 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
             if (!"9999".equals(tmpMachineDto.getMachineTypeCd())) {
                 continue;
             }
-            MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+            JSONObject postParameters = new JSONObject();
 
-            postParameters.add("extCommunityUuid", ownerPo.getCommunityId());
-            postParameters.add("uuids", ownerPo.getMemberId());
+            postParameters.put("machineCode", tmpMachineDto.getMachineCode());
+            postParameters.put("userId", ownerPo.getMemberId());
             hcMachineAsynImpl.sendDeleteOwner(postParameters);
         }
 

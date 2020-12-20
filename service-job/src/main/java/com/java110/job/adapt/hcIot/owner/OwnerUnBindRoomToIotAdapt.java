@@ -34,8 +34,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,10 +139,9 @@ public class OwnerUnBindRoomToIotAdapt extends DatabusAdaptImpl {
             if (!"9999".equals(tmpMachineDto.getMachineTypeCd())) {
                 continue;
             }
-            MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-
-            postParameters.add("extCommunityUuid", tOwnerDto.getCommunityId());
-            postParameters.add("uuids", tOwnerDto.getMemberId());
+            JSONObject postParameters = new JSONObject();
+            postParameters.put("machineCode", tmpMachineDto.getMachineCode());
+            postParameters.put("userId", tOwnerDto.getMemberId());
             hcMachineAsynImpl.sendDeleteOwner(postParameters);
         }
     }

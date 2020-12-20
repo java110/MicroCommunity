@@ -26,8 +26,6 @@ import com.java110.po.machine.MachinePo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
@@ -48,13 +46,9 @@ public class DeleteMachineToIotAdapt extends DatabusAdaptImpl {
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
     /**
-     * accessToken={access_token}
-     * &extCommunityUuid=01000
-     * &extCommunityId=1
-     * &devSn=111111111
-     * &name=设备名称
-     * &positionType=0
-     * &positionUuid=1
+     * {
+     *     "extMachineId": "702020042194860037"
+     * }
      *
      * @param business   当前处理业务
      * @param businesses 所有业务信息
@@ -82,19 +76,11 @@ public class DeleteMachineToIotAdapt extends DatabusAdaptImpl {
     }
 
     private void doSendMachine(Business business, JSONObject businessMachine) {
-
         MachinePo machinePo = BeanConvertUtil.covertBean(businessMachine, MachinePo.class);
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineId(machinePo.getMachineId());
-//        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
-//
-//        Assert.listOnlyOne(machineDtos, "未找到设备");
-
-        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-
-        postParameters.add("extCommunityUuid", machinePo.getCommunityId());
-        postParameters.add("devSns", machinePo.getMachineCode());
-        //postParameters.add("uuids", machinePo.getMachineId());
+        JSONObject postParameters = new JSONObject();
+        postParameters.put("extMachineId", machinePo.getMachineId());
         hcMachineAsynImpl.deleteSend(postParameters);
     }
 }

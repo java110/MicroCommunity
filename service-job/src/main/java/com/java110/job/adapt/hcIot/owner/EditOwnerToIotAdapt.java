@@ -31,6 +31,7 @@ import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.OwnerPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -141,13 +142,15 @@ public class EditOwnerToIotAdapt extends DatabusAdaptImpl {
             if (!"9999".equals(tmpMachineDto.getMachineTypeCd())) {
                 continue;
             }
-            MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+            JSONObject postParameters = new JSONObject();
 
-            postParameters.add("extCommunityUuid", ownerPo.getCommunityId());
-            postParameters.add("addAuthorizationDevSn", tmpMachineDto.getMachineCode());
-            postParameters.add("uuid", ownerPo.getMemberId());
-            postParameters.add("name", ownerPo.getName());
-            postParameters.add("faceFileBase64Array", fileDtos.get(0).getContext());
+            postParameters.put("userId", ownerPo.getMemberId());
+            postParameters.put("faceBase64", fileDtos.get(0).getContext());
+            postParameters.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            postParameters.put("endTime", DateUtil.LAST_TIME);
+            postParameters.put("name", ownerPo.getName());
+            postParameters.put("idNumber", ownerPo.getIdCard());
+            postParameters.put("machineCode", tmpMachineDto.getMachineCode());
             hcMachineAsynImpl.sendUpdateOwner(postParameters);
         }
 

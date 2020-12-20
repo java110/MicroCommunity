@@ -17,14 +17,12 @@ package com.java110.job.adapt.hcIot.asyn.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.machine.MachineDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.job.adapt.hcIot.GetToken;
 import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.machine.MachineAttrPo;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +71,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void addCommunity(JSONObject postParameters) {
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
         logger.debug("调用HC IOT信息：" + responseEntity);
     }
@@ -81,7 +79,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void editCommunity(JSONObject postParameters) {
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
         logger.debug("调用HC IOT信息：" + responseEntity);
     }
@@ -89,20 +87,21 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void deleteCommunity(JSONObject postParameters) {
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
         logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     /**
      * 添加设备
+     *
      * @param postParameters
      * @param ownerDtos
      */
     @Override
     @Async
-    public void addMachine(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos) {
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+    public void addMachine(JSONObject postParameters, List<JSONObject> ownerDtos) {
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用HC IOT信息：" + responseEntity);
@@ -116,70 +115,58 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             return;
         }
 
-        JSONObject data = tokenObj.getJSONObject("data");
-        String devMac = data.getString("devMac");
-        String appEkey = data.getString("appEkey");
-
         MachineDto machinePo = new MachineDto();
-        machinePo.setMachineId(data.getString("uuid"));
+        machinePo.setMachineId(postParameters.getString("extMachineId"));
+        machinePo.setCommunityId(postParameters.getString("extCommunityId"));
         machinePo.setState("1700");
-        machinePo.setMachineMac(devMac);
         machineInnerServiceSMOImpl.updateMachineState(machinePo);
 
-        MachineAttrPo machineAttrPo = new MachineAttrPo();
-        machineAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
-        machineAttrPo.setCommunityId(postParameters.get("extCommunityUuid").get(0).toString());
-        machineAttrPo.setSpecCd("7127015495");
-        machineAttrPo.setMachineId(data.getString("uuid"));
-        machineAttrPo.setValue(appEkey);
-        machineAttrInnerServiceSMOImpl.saveMachineAttrs(machineAttrPo);
-
-        for (MultiValueMap<String, Object> owner : ownerDtos) {
-            sendOwner(owner);
+        for (JSONObject owner : ownerDtos) {
+            addOwner(owner);
         }
     }
 
     @Override
     @Async
-    public void updateMachine(MultiValueMap<String, Object> postParameters) {
+    public void updateMachine(JSONObject postParameters) {
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     @Override
-    public void deleteSend(MultiValueMap<String, Object> postParameters) {
+    public void deleteSend(JSONObject postParameters) {
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     @Override
-    public void sendOwner(MultiValueMap<String, Object> postParameters) {
+    public void addOwner(JSONObject postParameters) {
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     @Override
-    public void sendUpdateOwner(MultiValueMap<String, Object> postParameters) {
+    public void sendUpdateOwner(JSONObject postParameters) {
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用HC IOT信息：" + responseEntity);
     }
 
     @Override
-    public void sendDeleteOwner(MultiValueMap<String, Object> postParameters) {
+    public void sendDeleteOwner(JSONObject postParameters) {
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders());
+        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("调用HC IOT信息：" + responseEntity);

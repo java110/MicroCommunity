@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class MachineAttrDto extends PageDto implements Serializable {
 
+    //硬件协议
+    public static final String SPEC_HM = "7127015495";
+
     private String machineId;
     private String[] machineIds;
     private String attrId;

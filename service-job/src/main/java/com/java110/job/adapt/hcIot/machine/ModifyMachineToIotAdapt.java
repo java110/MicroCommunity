@@ -17,8 +17,10 @@ package com.java110.job.adapt.hcIot.machine;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.machine.MachineAttrDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.entity.order.Business;
+import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
@@ -46,6 +48,9 @@ public class ModifyMachineToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
 
     /**
      * accessToken={access_token}
@@ -89,15 +94,29 @@ public class ModifyMachineToIotAdapt extends DatabusAdaptImpl {
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
 
         Assert.listOnlyOne(machineDtos, "未找到设备");
+        String hmId = getHmId(machineDtos.get(0));
+        JSONObject postParameters = new JSONObject();
 
-        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-
-        postParameters.add("extCommunityUuid", machineDtos.get(0).getCommunityId());
-        postParameters.add("devSn", machinePo.getMachineCode());
-        //postParameters.add("uuid", machinePo.getMachineId());
-        postParameters.add("name", machinePo.getMachineName());
-        postParameters.add("positionType", "0");
-        postParameters.add("positionUuid", machinePo.getCommunityId());
+        postParameters.put("machineCode", machinePo.getMachineCode());
+        postParameters.put("machineName", machinePo.getMachineName());
+        postParameters.put("machineTypeCd", machinePo.getMachineTypeCd());
+        postParameters.put("extMachineId", machineDtos.get(0).getMachineId());
+        postParameters.put("extCommunityId", machinePo.getCommunityId());
+        postParameters.put("hmId", hmId);
         hcMachineAsynImpl.updateMachine(postParameters);
+    }
+
+    private String getHmId(MachineDto machineDto) {
+        MachineAttrDto machineAttrDto = new MachineAttrDto();
+        machineAttrDto.setCommunityId(machineDto.getCommunityId());
+        machineAttrDto.setMachineId(machineDto.getMachineId());
+        List<MachineAttrDto> machineAttrDtos = machineAttrInnerServiceSMOImpl.queryMachineAttrs(machineAttrDto);
+
+        for (MachineAttrDto tmpMachineAttrDto : machineAttrDtos) {
+            if (MachineAttrDto.SPEC_HM.equals(tmpMachineAttrDto.getSpecCd())) {
+                return tmpMachineAttrDto.getValue();
+            }
+        }
+        return "";
     }
 }

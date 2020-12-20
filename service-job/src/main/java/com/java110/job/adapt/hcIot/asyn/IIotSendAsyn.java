@@ -56,30 +56,30 @@ public interface IIotSendAsyn {
      * @param postParameters
      * @param ownerDtos
      */
-    public void addMachine(MultiValueMap<String, Object> postParameters, List<MultiValueMap<String, Object>> ownerDtos);
+    public void addMachine(JSONObject postParameters, List<JSONObject> ownerDtos);
 
     /**
      * 修改 设备 至 HC IOT
      *
      * @param postParameters
      */
-    void updateMachine(MultiValueMap<String, Object> postParameters);
+    void updateMachine(JSONObject postParameters);
 
-    void deleteSend(MultiValueMap<String, Object> postParameters);
+    void deleteSend(JSONObject postParameters);
 
-    public void sendOwner(MultiValueMap<String, Object> postParameters);
+    public void addOwner(JSONObject postParameters);
 
     /**
      * 修改业主
      *
      * @param postParameters
      */
-    void sendUpdateOwner(MultiValueMap<String, Object> postParameters);
+    void sendUpdateOwner(JSONObject postParameters);
 
     /**
      * 删除业主
      *
      * @param postParameters
      */
-    void sendDeleteOwner(MultiValueMap<String, Object> postParameters);
+    void sendDeleteOwner(JSONObject postParameters);
 }

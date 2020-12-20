@@ -21,11 +21,13 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.communityLocation.CommunityLocationDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.machine.MachineAttrDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -35,10 +37,9 @@ import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.machine.MachinePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,9 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
     private IIotSendAsyn hcMachineAsynImpl;
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
 
     @Autowired
     private ICommunityLocationInnerServiceSMO communityLocationInnerServiceSMOImpl;
@@ -118,28 +122,40 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
 
         Assert.listOnlyOne(machineDtos, "未找到设备");
 
-        if (!"9999".equals(machineDtos.get(0).getMachineTypeCd())) {
-            return;
-        }
+        String hmId = getHmId(machineDtos.get(0));
 
-        List<MultiValueMap<String, Object>> ownerDtos = getOwners(machinePo);
+        List<JSONObject> ownerDtos = getOwners(machinePo);
 
-        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        JSONObject postParameters = new JSONObject();
 
-        postParameters.add("extCommunityUuid", machinePo.getCommunityId());
-        postParameters.add("devSn", machinePo.getMachineCode());
-        postParameters.add("uuid", machineDtos.get(0).getMachineId());
-        postParameters.add("name", machinePo.getMachineName());
-        postParameters.add("positionType", "0");
-        postParameters.add("positionUuid", machinePo.getCommunityId());
+        postParameters.put("machineCode", machinePo.getMachineCode());
+        postParameters.put("machineName", machinePo.getMachineName());
+        postParameters.put("machineTypeCd", machinePo.getMachineTypeCd());
+        postParameters.put("extMachineId", machineDtos.get(0).getMachineId());
+        postParameters.put("extCommunityId", machinePo.getCommunityId());
+        postParameters.put("hmId", hmId);
         hcMachineAsynImpl.addMachine(postParameters, ownerDtos);
     }
 
-    private List<MultiValueMap<String, Object>> getOwners(MachinePo machinePo) {
+    private String getHmId(MachineDto machineDto) {
+        MachineAttrDto machineAttrDto = new MachineAttrDto();
+        machineAttrDto.setCommunityId(machineDto.getCommunityId());
+        machineAttrDto.setMachineId(machineDto.getMachineId());
+        List<MachineAttrDto> machineAttrDtos = machineAttrInnerServiceSMOImpl.queryMachineAttrs(machineAttrDto);
+
+        for (MachineAttrDto tmpMachineAttrDto : machineAttrDtos) {
+            if (MachineAttrDto.SPEC_HM.equals(tmpMachineAttrDto.getSpecCd())) {
+                return tmpMachineAttrDto.getValue();
+            }
+        }
+        return "";
+    }
+
+    private List<JSONObject> getOwners(MachinePo machinePo) {
         //拿到小区ID
         String communityId = machinePo.getCommunityId();
 
-        List<MultiValueMap<String, Object>> ownerDtos = new ArrayList<>();
+        List<JSONObject> ownerDtos = new ArrayList<>();
 
         List<OwnerDto> owners = null;
         //根据小区ID查询现有设备
@@ -190,13 +206,14 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
             if (fileDtos == null || fileDtos.size() != 1) {
                 continue;
             }
-            MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-
-            postParameters.add("extCommunityUuid", tOwnerDto.getCommunityId());
-            postParameters.add("addAuthorizationDevSn", machinePo.getMachineCode());
-            postParameters.add("uuid", tOwnerDto.getMemberId());
-            postParameters.add("name", tOwnerDto.getName());
-            postParameters.add("faceFileBase64Array", fileDtos.get(0).getContext());
+            JSONObject postParameters = new JSONObject();
+            postParameters.put("userId", tOwnerDto.getMemberId());
+            postParameters.put("faceBase64", fileDtos.get(0).getContext());
+            postParameters.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            postParameters.put("endTime", DateUtil.LAST_TIME);
+            postParameters.put("name", tOwnerDto.getName());
+            postParameters.put("idNumber", tOwnerDto.getIdCard());
+            postParameters.put("machineCode", machinePo.getMachineCode());
 
             ownerDtos.add(postParameters);
         }
