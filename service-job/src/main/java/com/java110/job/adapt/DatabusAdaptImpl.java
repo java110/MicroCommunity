@@ -38,7 +38,6 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("access_token", GetToken.get(outRestTemplate));
         //httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
-
         return httpHeaders;
     }
 
