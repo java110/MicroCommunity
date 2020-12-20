@@ -21,9 +21,11 @@ import com.java110.entity.order.Business;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
@@ -47,26 +49,16 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
 
     @Override
     public ResultVo openDoor(JSONObject paramIn) {
-        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-
-        postParameters.add("extCommunityUuid", paramIn.getString("communityId"));
-        //postParameters.add("devSn", machinePo.getMachineCode());
-        postParameters.add("devSn", paramIn.getString("machineCode"));
-        postParameters.add("empType", paramIn.getString("userType"));
-        postParameters.add("empUuid", paramIn.getString("userId"));
-
-        postParameters.add("accessToken", GetToken.get(outRestTemplate));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
-
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+        JSONObject postParameters = new JSONObject();
+        postParameters.put("machineCode", paramIn.getString("machineCode"));
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.OPEN_DOOR, HttpMethod.POST, httpEntity, String.class);
-
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
         }
-
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
         return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
     }
+
+
 }

@@ -16,8 +16,11 @@
 package com.java110.job.adapt;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.client.RestTemplate;
 import com.java110.entity.order.Business;
+import com.java110.job.adapt.hcIot.GetToken;
 import com.java110.vo.ResultVo;
+import org.springframework.http.HttpHeaders;
 
 import java.util.List;
 
@@ -25,6 +28,19 @@ import java.util.List;
  * @desc add by 吴学文 15:21
  */
 public abstract class DatabusAdaptImpl implements IDatabusAdapt {
+
+    /**
+     * 封装头信息
+     *
+     * @return
+     */
+    protected HttpHeaders getHeaders(RestTemplate outRestTemplate) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("access_token", GetToken.get(outRestTemplate));
+        //httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
+
+        return httpHeaders;
+    }
 
 
     @Override
