@@ -85,6 +85,7 @@ public class DeleteCommunityToIotAdapt extends DatabusAdaptImpl {
         CommunityPo communityPo = BeanConvertUtil.covertBean(businessCommunity, CommunityPo.class);
         JSONObject postParameters = new JSONObject();
         postParameters.put("extCommunityId", communityPo.getCommunityId());
+        postParameters.put("name", communityPo.getName());
         iotSendAsynImpl.deleteCommunity(postParameters);
     }
 

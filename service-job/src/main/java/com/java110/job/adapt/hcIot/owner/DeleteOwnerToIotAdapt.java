@@ -18,8 +18,10 @@ package com.java110.job.adapt.hcIot.owner;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.OwnerPo;
@@ -81,6 +83,7 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
 
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
 
+
         //拿到小区ID
         String communityId = ownerPo.getCommunityId();
         //根据小区ID查询现有设备
@@ -97,9 +100,11 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
                 continue;
             }
             JSONObject postParameters = new JSONObject();
-
             postParameters.put("machineCode", tmpMachineDto.getMachineCode());
             postParameters.put("userId", ownerPo.getMemberId());
+            postParameters.put("name", ownerPo.getName());
+            postParameters.put("extMachineId", tmpMachineDto.getMachineId());
+            postParameters.put("extCommunityId", tmpMachineDto.getCommunityId());
             hcMachineAsynImpl.sendDeleteOwner(postParameters);
         }
 

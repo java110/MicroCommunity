@@ -214,7 +214,8 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
             postParameters.put("name", tOwnerDto.getName());
             postParameters.put("idNumber", tOwnerDto.getIdCard());
             postParameters.put("machineCode", machinePo.getMachineCode());
-
+            postParameters.put("extMachineId", machinePo.getMachineId());
+            postParameters.put("extCommunityId", machinePo.getCommunityId());
             ownerDtos.add(postParameters);
         }
 

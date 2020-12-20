@@ -17,12 +17,16 @@ package com.java110.job.adapt.hcIot.asyn.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.job.adapt.hcIot.GetToken;
 import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
@@ -55,6 +58,9 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Autowired
     private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
 
+    @Autowired
+    private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
+
     /**
      * 封装头信息
      *
@@ -71,25 +77,97 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void addCommunity(JSONObject postParameters) {
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
-        logger.debug("调用HC IOT信息：" + responseEntity);
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_COMMUNITY);
+        machineTranslateDto.setMachineCode("-");
+        machineTranslateDto.setMachineId("-");
+        machineTranslateDto.setObjId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setObjName(postParameters.getString("name"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            logger.debug("调用HC IOT信息：" + responseEntity);
+            JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+
+            if (paramOut.getInteger("code") != ResultVo.CODE_OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(paramOut.getString("msg"));
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+        }
     }
 
     @Override
     @Async
     public void editCommunity(JSONObject postParameters) {
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
-        logger.debug("调用HC IOT信息：" + responseEntity);
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_COMMUNITY);
+        machineTranslateDto.setMachineCode("-");
+        machineTranslateDto.setMachineId("-");
+        machineTranslateDto.setObjId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setObjName(postParameters.getString("name"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            logger.debug("调用HC IOT信息：" + responseEntity);
+            JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+            if (paramOut.getInteger("code") != ResultVo.CODE_OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(paramOut.getString("msg"));
+                //保存 失败报文
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+        }
     }
 
     @Override
     @Async
     public void deleteCommunity(JSONObject postParameters) {
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
-        logger.debug("调用HC IOT信息：" + responseEntity);
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_COMMUNITY);
+        machineTranslateDto.setMachineCode("-");
+        machineTranslateDto.setMachineId("-");
+        machineTranslateDto.setObjId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setObjName(postParameters.getString("name"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            logger.debug("调用HC IOT信息：" + responseEntity);
+            JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+            if (paramOut.getInteger("code") != ResultVo.CODE_OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(paramOut.getString("msg"));
+                //保存 失败报文
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+        }
     }
 
     /**
@@ -101,18 +179,42 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void addMachine(JSONObject postParameters, List<JSONObject> ownerDtos) {
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_MACHINE);
+        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
+        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjName(postParameters.getString("machineName"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用HC IOT信息：" + responseEntity);
+            logger.debug("调用HC IOT信息：" + responseEntity);
 
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
             return;
-        }
-        JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
-
-        if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
-            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
         }
 
         MachineDto machinePo = new MachineDto();
@@ -129,46 +231,212 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void updateMachine(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_MACHINE);
+        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
+        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjName(postParameters.getString("machineName"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            logger.debug("调用HC IOT信息：" + responseEntity);
 
-        logger.debug("调用HC IOT信息：" + responseEntity);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+        }
     }
 
     @Override
-    public void deleteSend(JSONObject postParameters) {
+    public void deleteMachine(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_MACHINE);
+        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
+        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjName(postParameters.getString("machineName"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            logger.debug("调用HC IOT信息：" + responseEntity);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
 
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
 
-        logger.debug("调用HC IOT信息：" + responseEntity);
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+        }
     }
 
     @Override
     public void addOwner(JSONObject postParameters) {
 
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_OWNER_FACE);
+        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
+        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjId(postParameters.getString("userId"));
+        machineTranslateDto.setObjName(postParameters.getString("name"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用HC IOT信息：" + responseEntity);
+            logger.debug("调用HC IOT信息：" + responseEntity);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+        }
     }
 
     @Override
     public void sendUpdateOwner(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_OWNER_FACE);
+        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
+        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjId(postParameters.getString("userId"));
+        machineTranslateDto.setObjName(postParameters.getString("name"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
+            logger.debug("调用HC IOT信息：" + responseEntity);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
 
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
 
-        logger.debug("调用HC IOT信息：" + responseEntity);
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+        }
     }
 
     @Override
     public void sendDeleteOwner(JSONObject postParameters) {
 
-        HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_OWNER_FACE);
+        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
+        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
+        machineTranslateDto.setObjId(postParameters.getString("userId"));
+        machineTranslateDto.setObjName(postParameters.getString("name"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        try {
+            HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
 
-        logger.debug("调用HC IOT信息：" + responseEntity);
+            logger.debug("调用HC IOT信息：" + responseEntity);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+        }
     }
+
+    /**
+     * 存储交互 记录
+     *
+     * @param machineTranslateDto
+     */
+    public void saveTranslateLog(MachineTranslateDto machineTranslateDto) {
+        machineTranslateDto.setbId("-1");
+        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        machineTranslateDto.setObjBId("-1");
+        machineTranslateDto.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
+    }
+
+
 }

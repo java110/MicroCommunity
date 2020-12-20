@@ -142,6 +142,9 @@ public class OwnerUnBindRoomToIotAdapt extends DatabusAdaptImpl {
             JSONObject postParameters = new JSONObject();
             postParameters.put("machineCode", tmpMachineDto.getMachineCode());
             postParameters.put("userId", tOwnerDto.getMemberId());
+            postParameters.put("name", tOwnerDto.getName());
+            postParameters.put("extMachineId", tmpMachineDto.getMachineId());
+            postParameters.put("extCommunityId", tmpMachineDto.getCommunityId());
             hcMachineAsynImpl.sendDeleteOwner(postParameters);
         }
     }

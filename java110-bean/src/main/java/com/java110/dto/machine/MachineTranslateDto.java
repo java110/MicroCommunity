@@ -1,6 +1,7 @@
 package com.java110.dto.machine;
 
 import com.java110.dto.PageDto;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +15,39 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class MachineTranslateDto extends PageDto implements Serializable {
+
+    /**
+     * 301	添加设备
+     * 302	编辑设备
+     * 303	删除设备
+     * 401	添加小区
+     * 402	编辑小区
+     * 403	删除小区
+     * 501	添加业主人脸
+     * 502	编辑业主人脸
+     * 503	删除业主人脸
+     */
+    public static final String CMD_ADD_MACHINE = "301";
+    public static final String CMD_UPDATE_MACHINE = "302";
+    public static final String CMD_DELETE_MACHINE = "303";
+    public static final String CMD_ADD_COMMUNITY = "401";
+    public static final String CMD_UPDATE_COMMUNITY = "402";
+    public static final String CMD_DELETE_COMMUNITY = "403";
+    public static final String CMD_ADD_OWNER_FACE = "501";
+    public static final String CMD_UPDATE_OWNER_FACE = "502";
+    public static final String CMD_DELETE_OWNER_FACE = "503";
+
+    //小区信息
+    public static final String TYPE_COMMUNITY = "9988";
+    public static final String TYPE_MACHINE = "3344";
+    public static final String TYPE_OWNER = "8899";
+
+    //同步状态
+    public static final String STATE_SUCCESS = "20000";
+
+    //同步失败
+    public static final String STATE_ERROR = "60000";
+
 
     private String machineId;
     private String machineCode;
@@ -175,6 +209,9 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     }
 
     public void setRemark(String remark) {
+        if (!StringUtils.isEmpty(remark) && remark.length() > 190) {
+            remark = remark.substring(0, 190);
+        }
         this.remark = remark;
     }
 }

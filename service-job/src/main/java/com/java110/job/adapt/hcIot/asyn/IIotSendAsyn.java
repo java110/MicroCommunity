@@ -65,7 +65,7 @@ public interface IIotSendAsyn {
      */
     void updateMachine(JSONObject postParameters);
 
-    void deleteSend(JSONObject postParameters);
+    void deleteMachine(JSONObject postParameters);
 
     public void addOwner(JSONObject postParameters);
 

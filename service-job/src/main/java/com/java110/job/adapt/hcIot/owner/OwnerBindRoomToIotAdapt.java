@@ -169,6 +169,8 @@ public class OwnerBindRoomToIotAdapt extends DatabusAdaptImpl {
             postParameters.put("name", tOwnerDto.getName());
             postParameters.put("idNumber", tOwnerDto.getIdCard());
             postParameters.put("machineCode", tmpMachineDto.getMachineCode());
+            postParameters.put("extMachineId", tmpMachineDto.getMachineId());
+            postParameters.put("extCommunityId", tmpMachineDto.getCommunityId());
             hcMachineAsynImpl.addOwner(postParameters);
         }
     }

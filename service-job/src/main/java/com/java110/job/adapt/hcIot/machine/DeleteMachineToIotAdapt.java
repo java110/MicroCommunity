@@ -23,6 +23,7 @@ import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.machine.MachinePo;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,7 +48,7 @@ public class DeleteMachineToIotAdapt extends DatabusAdaptImpl {
 
     /**
      * {
-     *     "extMachineId": "702020042194860037"
+     * "extMachineId": "702020042194860037"
      * }
      *
      * @param business   当前处理业务
@@ -79,8 +80,13 @@ public class DeleteMachineToIotAdapt extends DatabusAdaptImpl {
         MachinePo machinePo = BeanConvertUtil.covertBean(businessMachine, MachinePo.class);
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineId(machinePo.getMachineId());
+        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+        Assert.listOnlyOne(machineDtos, "未找到设备");
         JSONObject postParameters = new JSONObject();
         postParameters.put("extMachineId", machinePo.getMachineId());
-        hcMachineAsynImpl.deleteSend(postParameters);
+        postParameters.put("machineCode", machineDtos.get(0).getMachineCode());
+        postParameters.put("machineName", machineDtos.get(0).getMachineName());
+        postParameters.put("extCommunityId", machineDtos.get(0).getCommunityId());
+        hcMachineAsynImpl.deleteMachine(postParameters);
     }
 }
