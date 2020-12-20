@@ -6,15 +6,14 @@ import com.java110.common.bmo.attrValue.IGetAttrValueBMO;
 import com.java110.common.bmo.attrValue.ISaveAttrValueBMO;
 import com.java110.common.bmo.attrValue.IUpdateAttrValueBMO;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
+import com.java110.common.bmo.machineTranslateError.IGetMachineTranslateErrorBMO;
+import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
 import com.java110.po.attrValue.AttrValuePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -23,6 +22,9 @@ public class MachineApi {
 
     @Autowired
     private IMachineOpenDoorBMO machineOpenDoorBMOImpl;
+
+    @Autowired
+    private IGetMachineTranslateErrorBMO getMachineTranslateErrorBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -43,5 +45,23 @@ public class MachineApi {
         return machineOpenDoorBMOImpl.openDoor(reqJson);
     }
 
+
+    /**
+     * 微信删除消息模板
+     * @serviceCode /machine/queryMachineTranslateError
+     * @path /app/machine/queryMachineTranslateError
+     * @param communityId 小区ID
+     * @return
+     */
+    @RequestMapping(value = "/queryMachineTranslateError", method = RequestMethod.GET)
+    public ResponseEntity<String> queryMachineTranslateError(@RequestParam(value = "communityId") String communityId,
+                                                             @RequestParam(value = "page") int page,
+                                                             @RequestParam(value = "row") int row) {
+        MachineTranslateErrorDto machineTranslateErrorDto = new MachineTranslateErrorDto();
+        machineTranslateErrorDto.setPage(page);
+        machineTranslateErrorDto.setRow(row);
+        machineTranslateErrorDto.setCommunityId(communityId);
+        return getMachineTranslateErrorBMOImpl.get(machineTranslateErrorDto);
+    }
 
 }

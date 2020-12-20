@@ -1,30 +1,25 @@
 {
   "autoMove": true,
-  "id": "auId",
-  "name": "staffAppAuth",
-  "desc": "员工微信认证",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "user",
-  "tableName": "staff_app_auth",
+  "id": "logId",
+  "name": "machineTranslateError",
+  "desc": "IOT同步错误日志记录",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "common",
+  "tableName": "machine_translate_error",
   "param": {
-    "auId": "au_id",
-    "staffId": "staff_id",
-    "storeId": "store_id",
-    "appType": "app_type",
-    "openId": "open_id",
-    "state": "state",
-    "openName": "open_name",
+    "logId": "log_id",
+    "machineTranslateId": "machine_translate_id",
+    "communityId": "community_id",
+    "reqHeader": "req_header",
+    "reqBody": "req_body",
+    "resBody": "res_body",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "staffId",
-      "msg": "员工不能为空"
-    },
-    {
-      "code": "appType",
-      "msg": "应用类型不能为空"
+      "code": "logId",
+      "msg": "ID不能为空"
     }
   ]
 }

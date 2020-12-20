@@ -22,11 +22,14 @@ import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.job.adapt.hcIot.GetToken;
 import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
+import com.java110.po.machineTranslateError.MachineTranslateErrorPo;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +64,9 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
 
+    @Autowired
+    private IMachineTranslateErrorInnerServiceSMO machineTranslateErrorInnerServiceSMOImpl;
+
     /**
      * 封装头信息
      *
@@ -87,9 +93,10 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.ADD_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
 
@@ -101,6 +108,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
         } finally {
             saveTranslateLog(machineTranslateDto);
         }
@@ -119,20 +127,24 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
             if (paramOut.getInteger("code") != ResultVo.CODE_OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(paramOut.getString("msg"));
                 //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
         } finally {
             saveTranslateLog(machineTranslateDto);
         }
@@ -151,20 +163,23 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.DELETE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
             if (paramOut.getInteger("code") != ResultVo.CODE_OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(paramOut.getString("msg"));
                 //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
         } finally {
             saveTranslateLog(machineTranslateDto);
         }
@@ -189,15 +204,17 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
             logger.debug("调用HC IOT信息：" + responseEntity);
 
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
                 return;
             }
             JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
@@ -206,12 +223,16 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(tokenObj.getString("msg"));
                 //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
                 return;
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
             return;
         } finally {
             saveTranslateLog(machineTranslateDto);
@@ -241,15 +262,18 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
 
             logger.debug("调用HC IOT信息：" + responseEntity);
 
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
                 return;
             }
             JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
@@ -258,12 +282,14 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(tokenObj.getString("msg"));
                 //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
-
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
         } finally {
             saveTranslateLog(machineTranslateDto);
         }
@@ -281,13 +307,16 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
                 return;
             }
             JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
@@ -296,12 +325,14 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(tokenObj.getString("msg"));
                 //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
-
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
         } finally {
             saveTranslateLog(machineTranslateDto);
         }
@@ -320,14 +351,16 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
 
             logger.debug("调用HC IOT信息：" + responseEntity);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
                 return;
             }
             JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
@@ -335,12 +368,16 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
                 //保存 失败报文
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
 
         } finally {
             saveTranslateLog(machineTranslateDto);
@@ -359,13 +396,16 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
                 return;
             }
             JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
@@ -374,11 +414,14 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(tokenObj.getString("msg"));
                 //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
 
         } finally {
             saveTranslateLog(machineTranslateDto);
@@ -398,14 +441,17 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
         machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
         machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
 
             logger.debug("调用HC IOT信息：" + responseEntity);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
                 return;
             }
             JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
@@ -414,11 +460,15 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
                 machineTranslateDto.setRemark(tokenObj.getString("msg"));
                 //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
+
 
         } finally {
             saveTranslateLog(machineTranslateDto);
@@ -432,10 +482,24 @@ public class IotSendAsynImpl implements IIotSendAsyn {
      */
     public void saveTranslateLog(MachineTranslateDto machineTranslateDto) {
         machineTranslateDto.setbId("-1");
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        if (StringUtil.isEmpty(machineTranslateDto.getMachineTranslateId())) {
+            machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        }
         machineTranslateDto.setObjBId("-1");
         machineTranslateDto.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
+    }
+
+    public void saveTranslateError(MachineTranslateDto machineTranslateDto, String reqJson, String resJson) {
+        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        MachineTranslateErrorPo machineTranslateErrorPo = new MachineTranslateErrorPo();
+        machineTranslateErrorPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
+        machineTranslateErrorPo.setCommunityId(machineTranslateDto.getCommunityId());
+        machineTranslateErrorPo.setMachineTranslateId(machineTranslateDto.getMachineTranslateId());
+        machineTranslateErrorPo.setReqBody(reqJson);
+        machineTranslateErrorPo.setReqHeader("");
+        machineTranslateErrorPo.setResBody(resJson);
+        machineTranslateErrorInnerServiceSMOImpl.saveMachineTranslateError(machineTranslateErrorPo);
     }
 
 
