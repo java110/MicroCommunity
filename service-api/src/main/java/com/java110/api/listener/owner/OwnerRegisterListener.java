@@ -9,20 +9,21 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.msg.SmsDto;
+import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.community.CommunityDto;
-import com.java110.dto.msg.SmsDto;
-import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,7 +145,7 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
             String val = MappingCache.getValue(DOMAIN_COMMON, ID_CARD_SWITCH);
             //取出身份证
             String idCard = reqJson.getString("idCard");
-            if (val.equals("1") && idCard != null) {
+            if ("1".equals(val) && !StringUtil.isEmpty(idCard)) {
                 ownerDto.setIdCard(idCard);
             }
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
