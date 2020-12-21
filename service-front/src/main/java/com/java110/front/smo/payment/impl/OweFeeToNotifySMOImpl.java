@@ -1,6 +1,5 @@
 package com.java110.front.smo.payment.impl;
 
-import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.payment.IOweFeeToNotifySMO;
 import com.java110.front.smo.payment.adapt.IRentingToNotifyAdapt;
 import com.java110.utils.cache.MappingCache;
@@ -9,11 +8,9 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,11 +22,6 @@ public class OweFeeToNotifySMOImpl implements IOweFeeToNotifySMO {
 
     private static final String DEFAULT_OWE_FEE_TO_NOTIFY_ADAPT = "wechatOweFeeToNotifyAdapt";// 默认微信通用支付
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private WechatAuthProperties wechatAuthProperties;
 
     @Override
     public ResponseEntity<String> toNotify(String param, HttpServletRequest request) {

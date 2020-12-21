@@ -54,7 +54,7 @@ import java.util.UUID;
  * @desc add by 吴学文 15:33
  */
 
-@Component(value = "fuiouPayNotifyAdapt")
+@Component(value = "fuiouRentingToNotifyAdapt")
 public class FuiouRentingToNotifyAdapt implements IPayNotifyAdapt {
 
     private static final Logger logger = LoggerFactory.getLogger(FuiouRentingToNotifyAdapt.class);
