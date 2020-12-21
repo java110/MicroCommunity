@@ -34,7 +34,7 @@ import java.util.Map;
 public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
     private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
 
-    private static final String DEFAULT_PAY_ADAPT = "wechatPayAdapt";// 默认微信通用支付
+
 
 
     @Autowired

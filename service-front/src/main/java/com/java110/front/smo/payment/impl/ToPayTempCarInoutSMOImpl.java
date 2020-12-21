@@ -2,15 +2,20 @@ package com.java110.front.smo.payment.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.payment.IToPayTempCarInoutSMO;
-import com.java110.core.context.IPageData;
+import com.java110.front.smo.payment.adapt.IPayAdapt;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,12 +97,12 @@ public class ToPayTempCarInoutSMOImpl extends AppAbstractComponentSMO implements
         JSONObject realUserInfo = userResult.getJSONArray("users").getJSONObject(0);
 
         String openId = realUserInfo.getString("openId");
-//        String payAppId = orderInfo.getString("payAppId");
-//        String payMchId = orderInfo.getString("payMchId");
-
-        //微信下单PayUtil
-        Map result = super.java110Payment(restTemplate,paramIn.getString("feeName"),paramIn.getString("tradeType"),
-                orderId, money, openId,smallWeChatDto);
+        String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_ADAPT);
+        payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAY_ADAPT : payAdapt;
+        //支付适配器
+        IPayAdapt tPayAdapt = ApplicationContextFactory.getBean(payAdapt, IPayAdapt.class);
+        Map result = tPayAdapt.java110Payment(restTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"),
+                orderId, money, openId, smallWeChatDto);
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
 
         return responseEntity;
@@ -126,7 +131,6 @@ public class ToPayTempCarInoutSMOImpl extends AppAbstractComponentSMO implements
 
         return BeanConvertUtil.covertBean(smallWeChats.get(0), SmallWeChatDto.class);
     }
-
 
 
 }

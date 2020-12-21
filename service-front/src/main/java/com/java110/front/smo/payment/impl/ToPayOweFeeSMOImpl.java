@@ -13,10 +13,15 @@ import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.payment.IToPayOweFeeSMO;
+import com.java110.front.smo.payment.adapt.IPayAdapt;
 import com.java110.utils.cache.CommonCache;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,8 +130,11 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
         JSONObject realUserInfo = userResult.getJSONArray("data").getJSONObject(0);
 
         String openId = realUserInfo.getString("openId");
-
-        Map result = super.java110Payment(outRestTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"),
+        String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_ADAPT);
+        payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAY_ADAPT : payAdapt;
+        //支付适配器
+        IPayAdapt tPayAdapt = ApplicationContextFactory.getBean(payAdapt, IPayAdapt.class);
+        Map result = tPayAdapt.java110Payment(outRestTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"),
                 orderId, money, openId, smallWeChatDto,wechatAuthProperties.getOweFeeNotifyUrl());
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
         if (!"0".equals(result.get("code"))) {

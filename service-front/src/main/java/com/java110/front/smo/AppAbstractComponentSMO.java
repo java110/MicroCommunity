@@ -25,6 +25,7 @@ import java.util.TreeMap;
 public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
 
     private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
+    protected static final String DEFAULT_PAY_ADAPT = "wechatPayAdapt";// 默认微信通用支付
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
 
