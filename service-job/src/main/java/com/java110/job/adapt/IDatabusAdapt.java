@@ -37,10 +37,18 @@ public interface IDatabusAdapt {
     public void execute(Business business, List<Business> businesses);
 
     /**
-     * 业务处理
+     * 开门接口
      *
-     * @param paramIn   业务信息
+     * @param paramIn 业务信息
      */
-    public ResultVo openDoor(JSONObject paramIn);
+    ResultVo openDoor(JSONObject paramIn);
 
+    /**
+     * 重启设备
+     *
+     * @param reqJson {
+     *                "machineCode":""
+     * }
+     */
+    ResultVo restartMachine(JSONObject reqJson);
 }

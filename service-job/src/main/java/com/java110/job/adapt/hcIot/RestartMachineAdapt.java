@@ -33,23 +33,22 @@ import org.springframework.util.MultiValueMap;
  *
  * @desc add by 吴学文 15:29
  */
-@Component(value = "openDoorAdapt")
-public class OpenDoorAdapt extends DatabusAdaptImpl {
+@Component(value = "restartMachineAdapt")
+public class RestartMachineAdapt extends DatabusAdaptImpl {
 
     @Autowired
     RestTemplate outRestTemplate;
 
     @Override
-    public ResultVo openDoor(JSONObject paramIn) {
+    public ResultVo restartMachine(JSONObject paramIn) {
         JSONObject postParameters = new JSONObject();
         postParameters.put("machineCode", paramIn.getString("machineCode"));
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders(outRestTemplate));
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.OPEN_DOOR, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.RESTART_MACHINE, HttpMethod.POST, httpEntity, String.class);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
         }
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
         return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
     }
-
 }

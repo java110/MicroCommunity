@@ -42,11 +42,36 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     }
 
 
+    /**
+     * 开门
+     *
+     * @param paramIn 业务信息
+     * @return
+     */
     @Override
     public ResultVo openDoor(JSONObject paramIn) {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 
+    /**
+     * 重启设备
+     *
+     * @param paramIn
+     * @return
+     */
     @Override
-    public abstract void execute(Business business, List<Business> businesses);
+    public ResultVo restartMachine(JSONObject paramIn) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+    /**
+     * 业主处理执行
+     *
+     * @param business   当前处理业务
+     * @param businesses 所有业务信息
+     */
+    @Override
+    public void execute(Business business, List<Business> businesses) {
+
+    }
 }

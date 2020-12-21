@@ -29,7 +29,8 @@ import java.util.List;
 public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataBusInnerServiceSMO {
     private static final Logger logger = LoggerFactory.getLogger(DataBusInnerServiceSMOImpl.class);
 
-    public static final String DEFAULT_OPEN_DOOR_PROTOCOL = "ximoOpenDoorAdapt";//吸墨门禁
+    public static final String DEFAULT_OPEN_DOOR_PROTOCOL = "openDoorAdapt";//吸墨门禁
+    public static final String DEFAULT_START_MACHINE_PROTOCOL = "restartMachineAdapt";//吸墨门禁
 
 
     @Override
@@ -45,6 +46,13 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     public ResultVo openDoor(@RequestBody JSONObject reqJson) {
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.openDoor(reqJson);
+
+    }
+
+    @Override
+    public ResultVo restartMachine(@RequestBody JSONObject reqJson) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_START_MACHINE_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.restartMachine(reqJson);
 
     }
 

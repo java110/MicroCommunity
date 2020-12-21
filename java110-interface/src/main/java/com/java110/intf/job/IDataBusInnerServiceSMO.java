@@ -42,4 +42,12 @@ public interface IDataBusInnerServiceSMO {
     @RequestMapping(value = "/openDoor", method = RequestMethod.POST)
     ResultVo openDoor(@RequestBody JSONObject reqJson);
 
+    /**
+     * <p>重启设备</p>
+     *
+     * @param reqJson 请求信息
+     * @return TaskDto 对象数据
+     */
+    @RequestMapping(value = "/restartMachine", method = RequestMethod.POST)
+    ResultVo restartMachine(@RequestBody JSONObject reqJson);
 }

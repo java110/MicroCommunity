@@ -46,4 +46,16 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
         ResultVo resultVo = dataBusInnerServiceSMOImpl.openDoor(reqJson);
         return ResultVo.createResponseEntity(resultVo);
     }
+
+    /**
+     * 重启设备
+     *
+     * @param reqJson 请求报文信息
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> restartMachine(JSONObject reqJson) {
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.restartMachine(reqJson);
+        return ResultVo.createResponseEntity(resultVo);
+    }
 }
