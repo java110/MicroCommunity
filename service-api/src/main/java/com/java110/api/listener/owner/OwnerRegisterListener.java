@@ -9,6 +9,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
+import com.java110.dto.app.AppDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
@@ -159,9 +160,9 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
             String paramIn = dataFlowContext.getReqData();
             JSONObject paramObj = JSONObject.parseObject(paramIn);
             String appId = context.getAppId();
-            if ("992020061452450002".equals(appId)) { //公众号
+            if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) { //公众号
                 paramObj.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT);
-            } else if ("992019111758490006".equals(appId)) { //小程序
+            } else if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) { //小程序
                 paramObj.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
             } else {//app
                 paramObj.put("appType", OwnerAppUserDto.APP_TYPE_APP);
