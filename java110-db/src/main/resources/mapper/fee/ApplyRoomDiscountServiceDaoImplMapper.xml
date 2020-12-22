@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="applyRoomDiscountServiceDaoImpl">
+
+
+    <!-- 保存房屋折扣申请信息 add by wuxw 2018-07-03 -->
+    <insert id="saveApplyRoomDiscountInfo" parameterType="Map">
+        insert into apply_room_discount(
+        apply_type,ard_id,create_user_name,create_user_tel,create_remark,check_user_id,check_remark,room_id,room_name,review_user_id,review_remark,start_time,end_time,state,community_id,discount_id
+        ) values (
+        #{applyType},#{ardId},#{createUserName},#{createUserTel},#{createRemark},#{checkUserId},#{checkRemark},#{roomId},#{roomName},#{reviewUserId},#{reviewRemark},#{startTime},#{endTime},#{state},#{communityId},#{discountId}
+        )
+    </insert>
+
+
+    <!-- 查询房屋折扣申请信息 add by wuxw 2018-07-03 -->
+    <select id="getApplyRoomDiscountInfo" parameterType="Map" resultType="Map">
+        select t.apply_type,t.apply_type applyType,t.ard_id,t.ard_id ardId,t.create_user_id,t.create_user_name
+        createUserName,t.create_user_tel createUserTel,t.create_remark createRemark,t.check_user_id,t.check_user_id
+        checkUserId,t.status_cd,t.status_cd
+        statusCd,t.check_remark,t.check_remark checkRemark,t.room_id,t.room_id roomId,t.room_name,t.room_name
+        roomName,t.review_user_id,t.review_user_id reviewUserId,t.review_remark,t.review_remark
+        reviewRemark,t.start_time,t.start_time startTime,t.end_time,t.end_time
+        endTime,t.state,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId
+        from apply_room_discount t
+        where 1 =1
+        <if test="applyType !=null and applyType != ''">
+            and t.apply_type= #{applyType}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="createUserTel !=null and createUserTel != ''">
+            and t.create_user_Tel= #{createUserTel}
+        </if>
+        <if test="checkUserId !=null and checkUserId != ''">
+            and t.check_user_id= #{checkUserId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="checkRemark !=null and checkRemark != ''">
+            and t.check_remark= #{checkRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="reviewUserId !=null and reviewUserId != ''">
+            and t.review_user_id= #{reviewUserId}
+        </if>
+        <if test="reviewRemark !=null and reviewRemark != ''">
+            and t.review_remark= #{reviewRemark}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改房屋折扣申请信息 add by wuxw 2018-07-03 -->
+    <update id="updateApplyRoomDiscountInfo" parameterType="Map">
+        update apply_room_discount t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="applyType !=null and applyType != ''">
+            , t.apply_type= #{applyType}
+        </if>
+        <if test="createUserTel !=null and createUserTel != ''">
+            , t.create_user_tel = #{createUserTel}
+        </if>
+        <if test="checkUserId !=null and checkUserId != ''">
+            , t.check_user_id= #{checkUserId}
+        </if>
+        <if test="checkRemark !=null and checkRemark != ''">
+            , t.check_remark= #{checkRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        <if test="reviewUserId !=null and reviewUserId != ''">
+            , t.review_user_id= #{reviewUserId}
+        </if>
+        <if test="reviewRemark !=null and reviewRemark != ''">
+            , t.review_remark= #{reviewRemark}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            , t.discount_id= #{discountId}
+        </if>
+        where 1=1
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+
+    </update>
+
+    <!-- 查询房屋折扣申请数量 add by wuxw 2018-07-03 -->
+    <select id="queryApplyRoomDiscountsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from apply_room_discount t
+        where 1 =1
+        <if test="applyType !=null and applyType != ''">
+            and t.apply_type= #{applyType}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="createUserTel !=null and createUserTel != ''">
+            and t.create_user_Tel= #{createUserTel}
+        </if>
+        <if test="checkUserId !=null and checkUserId != ''">
+            and t.check_user_id= #{checkUserId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="checkRemark !=null and checkRemark != ''">
+            and t.check_remark= #{checkRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="reviewUserId !=null and reviewUserId != ''">
+            and t.review_user_id= #{reviewUserId}
+        </if>
+        <if test="reviewRemark !=null and reviewRemark != ''">
+            and t.review_remark= #{reviewRemark}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+
+
+    </select>
+
+</mapper>

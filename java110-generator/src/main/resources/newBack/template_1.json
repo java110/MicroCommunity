@@ -1,25 +1,53 @@
 {
   "autoMove": true,
-  "id": "logId",
-  "name": "machineTranslateError",
-  "desc": "IOT同步错误日志记录",
+  "id": "ardId",
+  "name": "applyRoomDiscount",
+  "desc": "房屋折扣申请",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "shareName": "common",
-  "tableName": "machine_translate_error",
+  "shareName": "fee",
+  "tableName": "apply_room_discount",
   "param": {
-    "logId": "log_id",
-    "machineTranslateId": "machine_translate_id",
+    "ardId": "ard_id",
     "communityId": "community_id",
-    "reqHeader": "req_header",
-    "reqBody": "req_body",
-    "resBody": "res_body",
+    "roomId": "room_id",
+    "roomName": "room_name",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "createUserId": "create_user_id",
+    "checkUserId": "check_user_id",
+    "reviewUserId": "review_user_id",
+    "state": "state",
+    "discountId": "discount_id",
+    "checkRemark": "check_remark",
+    "reviewRemark": "review_remark",
+    "applyType": "apply_type",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "logId",
-      "msg": "ID不能为空"
+      "code": "communityId",
+      "msg": "小区信息不能为空"
+    },
+    {
+      "code": "roomId",
+      "msg": "房屋信息不能为空"
+    },
+    {
+      "code": "roomName",
+      "msg": "房屋名称不能为空"
+    },
+    {
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
+    },
+    {
+      "code": "applyType",
+      "msg": "申请类型不能为空"
     }
   ]
 }

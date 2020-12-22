@@ -1,33 +1,136 @@
 {
-  "templateName": "staffAppAuth",
+  "templateName": "房屋折扣申请",
   "directories": "property",
-  "templateCode": "staffAppAuth",
-  "templateKey": "auId",
-  "templateKeyName": "认证ID",
-  "searchCode": "auId",
-  "searchName": "认证ID",
+  "templateCode": "applyRoomDiscount",
+  "templateKey": "ardId",
+  "templateKeyName": "申请ID",
+  "searchCode": "ardId",
+  "searchName": "申请ID",
   "conditions": [
     {
-      "name": "业务类型",
+      "name": "房屋名称",
       "inputType": "input",
-      "code": "businessTypeCd",
+      "code": "roomName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "申请类型",
+      "inputType": "select",
+      "selectValue": "3333,4444,5555",
+      "selectValueName": "空置房,采暖不热,房屋质量问题",
+      "code": "roomName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "状态",
+      "inputType": "select",
+      "selectValue": "1,2,3,4,5",
+      "selectValueName": "申请验房,验房通过,验房不通过,审批通过,审批不通过",
+      "code": "state",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "appType",
-      "cnCode": "认证方式",
+      "code": "roomName",
+      "cnCode": "房屋",
+      "desc": "必填，请填写房屋",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "64",
+      "limitErrInfo": "房屋格式错误",
+      "show": true
+    },
+    {
+      "code": "discountId",
+      "cnCode": "折扣",
+      "desc": "必填，请选择折扣",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue": "1",
+      "selectValueName": "折扣",
+      "limit": "maxLength",
+      "limitParam": "12",
+      "limitErrInfo": "折扣错误",
+      "show": true
+    },
+    {
+      "code": "applyType",
+      "cnCode": "申请类型",
       "desc": "必填，请选择认证方式",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "select",
-      "selectValue": "WECHAT",
-      "selectValueName": "微信",
-      "limit": "maxLength",
-      "limitParam": "12",
-      "limitErrInfo": "认证方式错误",
+      "selectValue": "3333,4444,5555",
+      "selectValueName": "空置房,采暖不热,房屋质量问题",
+      "limit": "num",
+      "limitParam": "",
+      "limitErrInfo": "申请类型错误",
       "show": true
+    },
+
+    {
+      "code": "createUserName",
+      "cnCode": "申请人",
+      "desc": "必填，请填写申请人",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "64",
+      "limitErrInfo": "申请人错误",
+      "show": true
+    },
+    {
+      "code": "createUserTel",
+      "cnCode": "申请电话",
+      "desc": "必填，请填写申请电话",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "phone",
+      "limitParam": "",
+      "limitErrInfo": "申请电话错误",
+      "show": true
+    },
+    {
+      "code": "startTime",
+      "cnCode": "开始时间",
+      "desc": "必填，请选择开始时间",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "datetime",
+      "limitParam": "",
+      "limitErrInfo": "开始时间错误",
+      "show": true
+    },
+    {
+      "code": "endTime",
+      "cnCode": "结束时间",
+      "desc": "必填，请选择结束时间",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "datetime",
+      "limitParam": "",
+      "limitErrInfo": "结束时间错误",
+      "show": true
+    },
+    {
+      "code": "createRemark",
+      "cnCode": "申请说明",
+      "desc": "必填，请填写申请说明",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "512",
+      "limitErrInfo": "申请申请说明",
+      "show": false
     }
   ]
 }
