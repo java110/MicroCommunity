@@ -17,14 +17,15 @@
 
     <!-- 查询房屋折扣申请信息 add by wuxw 2018-07-03 -->
     <select id="getApplyRoomDiscountInfo" parameterType="Map" resultType="Map">
-        select t.apply_type,t.apply_type applyType,t.ard_id,t.ard_id ardId,t.create_user_id,t.create_user_name
+        select t.apply_type,t.apply_type applyType,t.ard_id,t.ard_id ardId,t.create_user_name
         createUserName,t.create_user_tel createUserTel,t.create_remark createRemark,t.check_user_id,t.check_user_id
         checkUserId,t.status_cd,t.status_cd
         statusCd,t.check_remark,t.check_remark checkRemark,t.room_id,t.room_id roomId,t.room_name,t.room_name
         roomName,t.review_user_id,t.review_user_id reviewUserId,t.review_remark,t.review_remark
         reviewRemark,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId
+        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId
         from apply_room_discount t
+        left join t_dict td on t.state = td.status_cd and td.table_name='apply_room_discount' and td.table_columns = 'state'
         where 1 =1
         <if test="applyType !=null and applyType != ''">
             and t.apply_type= #{applyType}
