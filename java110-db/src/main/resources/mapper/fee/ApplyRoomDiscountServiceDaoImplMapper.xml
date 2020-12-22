@@ -23,9 +23,11 @@
         statusCd,t.check_remark,t.check_remark checkRemark,t.room_id,t.room_id roomId,t.room_name,t.room_name
         roomName,t.review_user_id,t.review_user_id reviewUserId,t.review_remark,t.review_remark
         reviewRemark,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId
+        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId,
+        ardt.type_name applyTypeName
         from apply_room_discount t
         left join t_dict td on t.state = td.status_cd and td.table_name='apply_room_discount' and td.table_columns = 'state'
+        left join apply_room_discount_type ardt on t.apply_type = ardt.apply_type and t.community_id = ardt.community_id and ardt.status_cd = '0'
         where 1 =1
         <if test="applyType !=null and applyType != ''">
             and t.apply_type= #{applyType}

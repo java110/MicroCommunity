@@ -18,6 +18,7 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
     public static final String STATE_APPLY = "1";//申请验房
 
     private String applyType;
+    private String applyTypeName;
     private String ardId;
     private String createUserName;
     private String createUserTel;
@@ -193,5 +194,13 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getApplyTypeName() {
+        return applyTypeName;
+    }
+
+    public void setApplyTypeName(String applyTypeName) {
+        this.applyTypeName = applyTypeName;
     }
 }
