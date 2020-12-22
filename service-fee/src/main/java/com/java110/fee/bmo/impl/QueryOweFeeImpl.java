@@ -66,6 +66,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     //键
     public static final String TOTAL_FEE_PRICE = "TOTAL_FEE_PRICE";
 
+    //键
+    public static final String RECEIVED_AMOUNT_SWITCH = "RECEIVED_AMOUNT_SWITCH";
+
     @Override
     public ResponseEntity<String> query(FeeDto feeDto) {
 
@@ -150,10 +153,16 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
         double feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(feePrice);
-        //取出开关映射的值
+        //应收款取值
         String val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
         feeDto.setVal(val);
-        return ResultVo.createResponseEntity(feeDto);
+        String received_amount_switch = MappingCache.getValue(DOMAIN_COMMON, RECEIVED_AMOUNT_SWITCH);
+        if(StringUtil.isEmpty(received_amount_switch)){
+            feeDto.setReceivedAmountSwitch("1");//默认启用实收款输入框
+        }else {
+            feeDto.setReceivedAmountSwitch(received_amount_switch);
+        }
+         return ResultVo.createResponseEntity(feeDto);
     }
 
     private boolean freshFeeDtoParam(FeeDto feeDto) {

@@ -8,16 +8,15 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeDiscountInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -57,13 +56,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Autowired
-    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
-    @Autowired
-    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
-
-    @Autowired
     private IFeeDiscountInnerServiceSMO feeDiscountInnerServiceSMOImpl;
-
 
     @Autowired
     private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
@@ -96,6 +89,16 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
         //判断是否有折扣情况
         judgeDiscount(paramObj);
+
+        String appId = event.getDataFlowContext().getAppId();
+
+        if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) {  //微信小程序支付
+            paramObj.put("primeRate", "5");
+            paramObj.put("remark", "线上小程序支付");
+        } else if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {  //微信公众号支付
+            paramObj.put("primeRate", "6");
+            paramObj.put("remark", "线上公众号支付");
+        }
 
         //添加单元信息
         businesses.add(feeBMOImpl.addFeePreDetail(paramObj, dataFlowContext));

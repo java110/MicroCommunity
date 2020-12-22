@@ -45,6 +45,9 @@ public class FeeDto extends PageDto implements Serializable {
     //映射关系开关值
     private String val;
 
+    //实收金额映射开关值
+    private String receivedAmountSwitch;
+
     private String squarePrice;
     private String additionalAmount;
     private String state;
@@ -526,5 +529,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setVal(String value) {
         this.val = value;
+    }
+
+    public String getReceivedAmountSwitch() {
+        return receivedAmountSwitch;
+    }
+
+    public void setReceivedAmountSwitch(String receivedAmountSwitch) {
+        this.receivedAmountSwitch = receivedAmountSwitch;
     }
 }

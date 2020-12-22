@@ -131,6 +131,8 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_PROPERTY_FEE);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String remark = paramIn.getString("remark");
+        paramIn.put("remark", "现场收银台支付-" + remark);
         String communityId = paramIn.getString("communityId");
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

@@ -1,6 +1,5 @@
 package com.java110.api.bmo.fee.impl;
 
-
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.fee.IFeeBMO;
@@ -54,7 +53,6 @@ import java.util.Map;
 @Service("feeBMOImpl")
 public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
-
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
@@ -66,9 +64,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
     @Autowired
     private ICarInoutInnerServiceSMO carInoutInnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
@@ -106,29 +101,23 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
     public void updateFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         PayFeePo payFeePo = BeanConvertUtil.covertBean(paramInJson, PayFeePo.class);
-
         super.update(dataFlowContext, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
     }
 
     private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
         if (StringUtil.isInteger(cycles.toString())) {
             endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
-
             return endCalender;
         }
-
         if (cycles >= 1) {
             endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
             cycles = cycles - Math.floor(cycles);
         }
-        //int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
         int futureDay = endCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
         int hours = new Double(cycles * futureDay * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
-
         return endCalender;
     }
-
 
     /**
      * 添加费用明细信息
@@ -138,15 +127,12 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addSimpleFeeDetail(PayFeeDetailPo payFeeDetailPo, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeDetail = JSONObject.parseObject(JSONObject.toJSONString(payFeeDetailPo));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
-
         return business;
     }
 
@@ -158,8 +144,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext, FeeReceiptDetailPo feeReceiptDetailPo, FeeReceiptPo feeReceiptPo) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
@@ -167,13 +151,13 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        businessFeeDetail.put("primeRate", "1.00");
+        //支付方式
+        businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
         //计算 应收金额
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(paramInJson.getString("feeId"));
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
@@ -203,10 +187,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
         }
-
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
         paramInJson.put("feeInfo", feeDto);
-
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
         paramInJson.put("detailId", businessFeeDetail.getString("detailId"));
         feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivedAmount"));
@@ -238,8 +220,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
     public JSONObject addOweFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext,
                                       List<FeeReceiptDetailPo> feeReceiptDetailPos,
                                       List<FeeReceiptPo> feeReceiptPos) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
@@ -247,13 +227,12 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        businessFeeDetail.put("primeRate", "1.00");
+        businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
         //计算 应收金额
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(paramInJson.getString("feeId"));
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
@@ -275,10 +254,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessFeeDetail.put("endTime", paramInJson.getString("endTime"));
         paramInJson.put("feeInfo", feeDto);
         paramInJson.put("cycles", cycles.doubleValue());
-
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
         paramInJson.put("detailId", businessFeeDetail.getString("detailId"));
-
         FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
         FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
         feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivedAmount"));
@@ -298,7 +275,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeReceiptPo.setObjType(feeDto.getPayerObjType());
         feeReceiptPo.setObjId(feeDto.getPayerObjId());
         feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
-
         feeReceiptPos.add(feeReceiptPo);
         return business;
     }
@@ -311,8 +287,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject modifyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
@@ -324,9 +298,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         endCalender.setTime(endTime);
         int hours = 0;
         if ("-101".equals(paramInJson.getString("cycles"))) {
-//            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
-//            endCalender.add(Calendar.HOUR, hours);
-
             endCalender = getTargetEndTime(endCalender, Double.parseDouble(paramInJson.getString("tmpCycles")));
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
@@ -337,16 +308,12 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeMap.put("cycles", paramInJson.getString("cycles"));
         feeMap.put("configEndTime", feeInfo.getConfigEndTime());
-
         businessFee.putAll(feeMap);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
-
         //为停车费单独处理
         paramInJson.put("carFeeEndTime", feeInfo.getEndTime());
         paramInJson.put("carPayerObjType", feeInfo.getPayerObjType());
         paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
-
-
         return business;
     }
 
@@ -358,8 +325,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject modifyOweFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_ONLY_UPDATE_FEE_INFO); //这里走only
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
@@ -385,7 +350,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         }
         businessFee.putAll(feeMap);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
-
         return business;
     }
 
@@ -397,8 +361,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addFeePreDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
@@ -406,8 +368,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        businessFeeDetail.put("primeRate", "1.00");
-
+        businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
         if (!businessFeeDetail.containsKey("state")) {
             businessFeeDetail.put("state", "1400");
         }
@@ -416,11 +377,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeDto.setFeeId(paramInJson.getString("feeId"));
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-
         feeDto = feeDtos.get(0);
         paramInJson.put("feeInfo", feeDto);
         businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
@@ -529,7 +488,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         }
-
         BigDecimal receivableAmount = feePrice;
         BigDecimal cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
         double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
@@ -544,7 +502,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         return business;
     }
 
-
     /**
      * 修改费用信息
      *
@@ -553,8 +510,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject modifyPreFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
@@ -571,20 +526,16 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         businessFee.putAll(feeMap);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
-
         return business;
     }
 
     public JSONObject modifyTempCarInout(JSONObject reqJson, DataFlowContext context) {
-
         FeeDto feeDto = (FeeDto) reqJson.get("feeInfo");
         CarInoutDto tempCarInoutDto = new CarInoutDto();
         tempCarInoutDto.setCommunityId(reqJson.getString("communityId"));
         tempCarInoutDto.setInoutId(feeDto.getPayerObjId());
         List<CarInoutDto> carInoutDtos = carInoutInnerServiceSMOImpl.queryCarInouts(tempCarInoutDto);
-
         Assert.listOnlyOne(carInoutDtos, "根据费用信息反差车辆进场记录未查到 或查到多条");
-
         CarInoutDto carInoutDto = carInoutDtos.get(0);
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
@@ -606,8 +557,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addFeeTempDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
@@ -615,7 +564,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", "-1");
-        businessFeeDetail.put("primeRate", "1.00");
+        businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
         if (!businessFeeDetail.containsKey("state")) {
             businessFeeDetail.put("state", "1400");
         }
@@ -663,15 +612,12 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
             money = squarePrice.multiply(lastHour).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
-
         double receivableAmount = money;
-
         businessFeeDetail.put("receivableAmount", receivableAmount);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
         paramInJson.put("receivableAmount", receivableAmount);
         return business;
     }
-
 
     /**
      * 修改费用信息
@@ -681,8 +627,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject modifyTempFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
@@ -696,7 +640,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("state", "2009001");
         businessFee.putAll(feeMap);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
-
         return business;
     }
 
@@ -708,8 +651,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public void addFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         paramInJson.put("configId", "-1");
         paramInJson.put("isDefault", "F");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(paramInJson, PayFeeConfigPo.class);
@@ -724,13 +665,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addFee(OwnerCarDto ownerCarDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
         String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
-
         if (paramInJson.containsKey("startTime")) {
             time = paramInJson.getString("startTime");
         }
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
@@ -750,7 +688,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
-
         return business;
     }
 
@@ -762,8 +699,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addSimpleFee(PayFeePo payFeePo, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
@@ -772,7 +707,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit = JSONObject.parseObject(JSONObject.toJSONString(payFeePo));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
-
         return business;
     }
 
@@ -784,9 +718,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addRoomFee(RoomDto roomDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
         String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
-
         if (paramInJson.containsKey("feeEndDate")) {
             time = paramInJson.getString("feeEndDate");
         } else if (paramInJson.containsKey("startTime")) {
@@ -811,7 +743,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
-
         return business;
     }
 
@@ -828,12 +759,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeConfigDto.setConfigId(paramInJson.getString("configId"));
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         Assert.listOnlyOne(feeConfigDtos, "未找到该费用项");
-
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("isDefault", feeConfigDtos.get(0).getIsDefault());
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
-
         super.update(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_CONFIG);
     }
 
