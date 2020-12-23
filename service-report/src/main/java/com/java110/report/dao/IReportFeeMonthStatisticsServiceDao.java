@@ -147,8 +147,11 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @return 费用月统计数量
      */
     int queryOweFeeDetailCount(Map info);
+
     Map queryPayFeeDetailCount(Map info);
+
     int queryDeadlineFeeCount(Map info);
+
     /**
      * 查询费用月统计信息（instance过程）
      * 根据bId 查询费用月统计信息
@@ -178,7 +181,9 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> queryOweFeeDetail(Map info) throws DAOException;
+
     List<Map> queryPayFeeDetail(Map info) throws DAOException;
+
     List<Map> queryDeadlineFee(Map info) throws DAOException;
 
     /**
@@ -190,7 +195,9 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> queryPrePaymentCount(Map info) throws DAOException;
+
     List<Map> queryDeadlinePaymentCount(Map info) throws DAOException;
+
     /**
      * 查询预交费
      * 根据bId 查询费用月统计信息
@@ -214,4 +221,21 @@ public interface IReportFeeMonthStatisticsServiceDao {
 
 
     List<Map> queryAllPaymentCount(Map beanCovertMap);
+
+    /**
+     * 查询费用汇总表总金额
+     *
+     * @param beanCovertMap
+     * @return
+     */
+    List<Map> queryAllFeeDetail(Map beanCovertMap);
+
+    /**
+     * 查询费用配置信息（instance过程）
+     * 根据bId 查询费用配置信息
+     * @param info bId 信息
+     * @return 费用配置信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getFeeConfigInfo(Map info) throws DAOException;
 }

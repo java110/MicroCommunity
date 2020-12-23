@@ -2,6 +2,7 @@ package com.java110.intf.report;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -116,6 +117,15 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     int queryFeeDetailCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
+     * 查询费用汇总表总费用
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryAllFeeDetail", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryAllFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
      * 查询费用汇总表
      *
      * @param reportFeeMonthStatisticsDto
@@ -123,6 +133,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeeDetail", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询费用汇总表个数
      *
@@ -158,6 +169,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOweFeeDetail", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryOweFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询费用汇总表个数
      *
@@ -175,6 +187,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryPayFeeDetail", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryPayFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询费用汇总表个数
      *
@@ -210,6 +223,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryDeadlinePaymentCount", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryDeadlinePaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询预付费户数
      *
@@ -218,6 +232,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOwePaymentCount", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryOwePaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询预付费户数
      *
@@ -226,5 +241,15 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAllPaymentCount", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryAllPaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param feeConfigDto 数据对象分享
+     * @return FeeConfigDto 对象数据
+     */
+    @RequestMapping(value = "/queryFeeConfigs", method = RequestMethod.POST)
+    List<FeeConfigDto> queryFeeConfigs(@RequestBody FeeConfigDto feeConfigDto);
 
 }

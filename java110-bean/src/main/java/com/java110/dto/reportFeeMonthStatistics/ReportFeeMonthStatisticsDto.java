@@ -1,9 +1,11 @@
 package com.java110.dto.reportFeeMonthStatistics;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.fee.FeeConfigDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -55,8 +57,19 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String importFeeName;
 
+    //应收总金额(小计)
+    private String totalReceivableAmount;
 
+    //实收总金额(小计)
+    private String totalReceivedAmount;
 
+    //应收总金额(大计)
+    private String allReceivableAmount;
+
+    //实收总金额(大计)
+    private String allReceivedAmount;
+
+    private List<FeeConfigDto> FeeConfigDtos;
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -321,5 +334,45 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setNormalCount(String normalCount) {
         this.normalCount = normalCount;
+    }
+
+    public String getTotalReceivableAmount() {
+        return totalReceivableAmount;
+    }
+
+    public void setTotalReceivableAmount(String totalReceivableAmount) {
+        this.totalReceivableAmount = totalReceivableAmount;
+    }
+
+    public String getTotalReceivedAmount() {
+        return totalReceivedAmount;
+    }
+
+    public void setTotalReceivedAmount(String totalReceivedAmount) {
+        this.totalReceivedAmount = totalReceivedAmount;
+    }
+
+    public String getAllReceivableAmount() {
+        return allReceivableAmount;
+    }
+
+    public void setAllReceivableAmount(String allReceivableAmount) {
+        this.allReceivableAmount = allReceivableAmount;
+    }
+
+    public String getAllReceivedAmount() {
+        return allReceivedAmount;
+    }
+
+    public void setAllReceivedAmount(String allReceivedAmount) {
+        this.allReceivedAmount = allReceivedAmount;
+    }
+
+    public List<FeeConfigDto> getFeeConfigDtos() {
+        return FeeConfigDtos;
+    }
+
+    public void setFeeConfigDtos(List<FeeConfigDto> feeConfigDtoS) {
+        FeeConfigDtos = feeConfigDtoS;
     }
 }

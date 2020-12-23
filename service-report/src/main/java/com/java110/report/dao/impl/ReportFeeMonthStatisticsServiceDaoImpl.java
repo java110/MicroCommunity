@@ -319,7 +319,29 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
         List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllPaymentCount", info);
 
-        return businessReportFeeMonthStatisticsInfos;    }
+        return businessReportFeeMonthStatisticsInfos;
+    }
 
+    @Override
+    public List<Map> queryAllFeeDetail(Map info) {
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllFeeDetail", info);
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
+    /**
+     * 查询费用配置信息（instance）
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getFeeConfigInfo(Map info) throws DAOException {
+        logger.debug("查询费用配置信息 入参 info : {}", info);
+
+        List<Map> businessFeeConfigInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getFeeConfigInfo", info);
+
+        return businessFeeConfigInfos;
+    }
 
 }
