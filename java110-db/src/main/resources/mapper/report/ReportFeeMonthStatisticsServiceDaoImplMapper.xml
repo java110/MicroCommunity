@@ -1122,7 +1122,7 @@
     </select>
 
     <select id="queryOwePaymentCount" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,count(t.obj_id) objCount
+        select t.fee_name feeName,count( distinct t.obj_id) objCount
         from report_fee_month_statistics t
         where t.community_id = #{communityId}
         and t.owe_amount > 0
@@ -1131,7 +1131,7 @@
     </select>
 
     <select id="queryAllPaymentCount" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,count(t.obj_id) objCount
+        select t.fee_name feeName,count(distinct .obj_id) objCount
         from report_fee_month_statistics t
         where t.community_id = #{communityId}
         group by t.config_id,t.fee_name
