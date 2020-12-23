@@ -162,6 +162,7 @@ public class WechatOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
                 fee.put("startTime",fee.getString("endTime"));
                 fee.put("endTime",fee.getString("deadlineTime"));
                 fee.put("receivedAmount",fee.getString("feePrice"));
+                fee.put("state","");
             }
         }
     }
