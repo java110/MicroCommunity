@@ -22,6 +22,8 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
+import com.java110.front.smo.payment.IOweFeeToNotifySMO;
+import com.java110.front.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.front.smo.payment.adapt.IPayNotifyAdapt;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
@@ -38,6 +40,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -48,7 +51,7 @@ import java.util.*;
  */
 
 @Component(value = "wechatOweFeeToNotifyAdapt")
-public class WechatOweFeeToNotifyAdapt implements IPayNotifyAdapt {
+public class WechatOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
 
     private static final Logger logger = LoggerFactory.getLogger(WechatOweFeeToNotifyAdapt.class);
 
@@ -201,5 +204,6 @@ public class WechatOweFeeToNotifyAdapt implements IPayNotifyAdapt {
 
         return BeanConvertUtil.covertBean(smallWeChats.get(0), SmallWeChatDto.class);
     }
+
 
 }

@@ -21,7 +21,7 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
-import com.java110.front.smo.payment.adapt.IPayNotifyAdapt;
+import com.java110.front.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceConstant;
@@ -58,7 +58,7 @@ import java.util.UUID;
  */
 
 @Component(value = "fuiouOweFeeToNotifyAdapt")
-public class FuiouOweFeeToNotifyAdapt implements IPayNotifyAdapt {
+public class FuiouOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
 
     private static final Logger logger = LoggerFactory.getLogger(FuiouOweFeeToNotifyAdapt.class);
 
