@@ -230,6 +230,8 @@ public class ReportFeeMonthStatisticsApi {
                                                  @RequestParam(value = "roomNum", required = false) String roomNum,
                                                  @RequestParam(value = "startTime", required = false) String startTime,
                                                  @RequestParam(value = "endTime", required = false) String endTime,
+                                                 @RequestParam(value = "feeName", required = false) String feeName,
+                                                 @RequestParam(value = "configId",required = false) String configId,
                                                  @RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -242,6 +244,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
+        reportFeeMonthStatisticsDto.setFeeName(feeName);
+        reportFeeMonthStatisticsDto.setConfigId(configId);
         reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
         reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
         return getReportFeeMonthStatisticsBMOImpl.queryFeeDetail(reportFeeMonthStatisticsDto);
@@ -281,6 +285,7 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
         return getReportFeeMonthStatisticsBMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
     }
+
     /**
      * 缴费明细表
      *
@@ -370,6 +375,7 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         return getReportFeeMonthStatisticsBMOImpl.queryPrePaymentCount(reportFeeMonthStatisticsDto);
     }
+
     /**
      * 查询到期提醒
      *

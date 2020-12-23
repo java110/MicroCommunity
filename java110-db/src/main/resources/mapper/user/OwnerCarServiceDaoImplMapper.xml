@@ -123,7 +123,7 @@
         t.community_id
         where 1=1
         <if test="statusCd !=null and statusCd != ''">
-            and  t.status_cd = #{statusCd}
+            and t.status_cd = #{statusCd}
         </if>
         <if test="carColor !=null and carColor != ''">
             and t.car_color= #{carColor}
@@ -162,7 +162,7 @@
             and t.owner_id= #{ownerId}
         </if>
         <if test="ownerName !=null and ownerName != ''">
-            and bow.name= #{ownerName}
+            and bow.name like '%${ownerName}%'
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -251,10 +251,11 @@
         from owner_car t
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
-        left join building_owner bow on t.owner_id = bow.member_id and bow.status_cd = '0' and bow.community_id = t.community_id
+        left join building_owner bow on t.owner_id = bow.member_id and bow.status_cd = '0' and bow.community_id =
+        t.community_id
         where 1=1
         <if test="statusCd !=null and statusCd != ''">
-            and  t.status_cd = #{statusCd}
+            and t.status_cd = #{statusCd}
         </if>
         <if test="carColor !=null and carColor != ''">
             and t.car_color= #{carColor}
@@ -287,7 +288,7 @@
             and t.owner_id= #{ownerId}
         </if>
         <if test="ownerName !=null and ownerName != ''">
-            and bow.name= #{ownerName}
+            and bow.name like '%${ownerName}%'
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

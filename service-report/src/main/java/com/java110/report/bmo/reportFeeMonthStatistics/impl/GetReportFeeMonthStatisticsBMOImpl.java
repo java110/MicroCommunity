@@ -1,6 +1,7 @@
 package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
@@ -111,13 +112,48 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeDetailCount(reportFeeMonthStatisticsDto);
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
+        //应收总金额(大计)
+        Double allReceivableAmount = 0.0;
+        //实收金额(大计)
+        Double allReceivedAmount = 0.0;
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeDetail(reportFeeMonthStatisticsDto);
+            List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryAllFeeDetail(reportFeeMonthStatisticsDto);
+            allReceivableAmount = Double.valueOf(reportFeeMonthStatisticsList.get(0).getAllReceivableAmount());
+            allReceivedAmount = Double.valueOf(reportFeeMonthStatisticsList.get(0).getAllReceivedAmount());
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
+        //应收总金额(小计)
+        Double totalReceivableAmount = 0.0;
+        //实收总金额(小计)
+        Double totalReceivedAmount = 0.0;
+        List<ReportFeeMonthStatisticsDto> reportList = new ArrayList<>();
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
+            //应收金额
+            Double receivableAmount = Double.valueOf(reportFeeMonthStatistics.getReceivableAmount());
+            //实收金额
+            Double receivedAmount = Double.valueOf(reportFeeMonthStatistics.getReceivedAmount());
+            totalReceivableAmount = totalReceivableAmount + receivableAmount;
+            totalReceivedAmount = totalReceivedAmount + receivedAmount;
+        }
+
+        //查询该小区下的费用项目
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(reportFeeMonthStatisticsDto.getCommunityId());
+        List<FeeConfigDto> feeConfigDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
+            reportFeeMonthStatistics.setTotalReceivableAmount(String.format("%.2f", totalReceivableAmount));
+            reportFeeMonthStatistics.setTotalReceivedAmount(String.format("%.2f", totalReceivedAmount));
+            reportFeeMonthStatistics.setAllReceivableAmount(String.format("%.2f", allReceivableAmount));
+            reportFeeMonthStatistics.setAllReceivedAmount(String.format("%.2f", allReceivedAmount));
+            reportFeeMonthStatistics.setFeeConfigDtos(feeConfigDtos);
+            reportList.add(reportFeeMonthStatistics);
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
