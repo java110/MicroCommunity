@@ -31,6 +31,8 @@ public class CommunityDto extends PageDto implements Serializable {
     private String auditStatusCd;
     private String areaCode;
     private String areaName;
+    private String cityName;
+    private String provName;
     private String parentAreaCode;
     private String parentAreaName;
 
@@ -212,5 +214,21 @@ public class CommunityDto extends PageDto implements Serializable {
 
     public void setCommunityAttrDtos(List<CommunityAttrDto> communityAttrDtos) {
         this.communityAttrDtos = communityAttrDtos;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getProvName() {
+        return provName;
+    }
+
+    public void setProvName(String provName) {
+        this.provName = provName;
     }
 }
