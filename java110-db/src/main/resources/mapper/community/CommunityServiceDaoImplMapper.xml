@@ -631,14 +631,14 @@
         AND sc.`status_cd` = '0'
         and sc.city_code = ca.area_code
         and ca.parent_area_code = ca1.area_code
-        AND scm.`member_id` = #memberId#
-        AND scm.`member_type_cd` = #memberTypeCd#
+        AND scm.`member_id` = #{memberId}
+        AND scm.`member_type_cd` = #{memberTypeCd}
         AND scm.`status_cd` = '0'
         <if test="auditStatusCd ==null or auditStatusCd ==''">
             and scm.audit_status_cd in ('1000', '1100','1200')
         </if>
         <if test="auditStatusCd !=null and auditStatusCd !=''">
-            and scm.audit_status_cd = #auditStatusCd#
+            and scm.audit_status_cd = #{auditStatusCd}
         </if>
         group by sc.community_id
     </select>
