@@ -179,9 +179,9 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObject = fees.getJSONObject(feeIndex);
             Assert.hasKeyAndValue(feeObject, "feeId", "未包含费用信息");
-            Assert.hasKeyAndValue(feeObject, "startTime", "未包含费用信息");
-            Assert.hasKeyAndValue(feeObject, "endTime", "未包含费用信息");
-            Assert.hasKeyAndValue(feeObject, "receivedAmount", "未包含费用信息");
+            Assert.hasKeyAndValue(feeObject, "startTime", "未包含开始时间");
+            Assert.hasKeyAndValue(feeObject, "endTime", "未包含结束时间");
+            Assert.hasKeyAndValue(feeObject, "receivedAmount", "未包含实收金额");
         }
 
     }

@@ -19,12 +19,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
-import com.java110.front.smo.payment.IOweFeeToNotifySMO;
 import com.java110.front.smo.payment.adapt.IOweFeeToNotifyAdapt;
-import com.java110.front.smo.payment.adapt.IPayNotifyAdapt;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceConstant;
@@ -40,7 +37,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -143,6 +139,7 @@ public class WechatOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
         //查询用户ID
         JSONObject paramIn = JSONObject.parseObject(order);
         paramIn.put("oId", orderId);
+        freshFees(paramIn);
         String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payOweFee";
         responseEntity = this.callCenterService(restTemplate, "-1", paramIn.toJSONString(), url, HttpMethod.POST);
 
@@ -150,6 +147,23 @@ public class WechatOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
             return 0;
         }
         return 1;
+    }
+
+    private void freshFees(JSONObject paramIn) {
+        if (!paramIn.containsKey("fees")) {
+            return;
+        }
+
+        JSONArray fees = paramIn.getJSONArray("fees");
+        JSONObject fee = null;
+        for(int feeIndex = 0; feeIndex < fees.size();feeIndex ++){
+            fee = fees.getJSONObject(feeIndex);
+            if(fee.containsKey("deadlineTime")){
+                fee.put("startTime",fee.getString("endTime"));
+                fee.put("endTime",fee.getString("deadlineTime"));
+                fee.put("receivedAmount",fee.getString("feePrice"));
+            }
+        }
     }
 
 
