@@ -15,8 +15,20 @@
  */
 package com.java110.community.api;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
+ * 小区相关对外提供接口类
+ *
+ * 功能包括：
+ * 商户小区查询接口
+ *
  * @desc add by 吴学文 8:30
+ *
+ * 文档参考 ： http://www.homecommunity.cn/
  */
+@RestController
+@RequestMapping(value = "/communitys")
 public class CommunitysApi {
 }

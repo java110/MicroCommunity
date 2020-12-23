@@ -143,7 +143,7 @@ public class WechatOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
         //查询用户ID
         JSONObject paramIn = JSONObject.parseObject(order);
         paramIn.put("oId", orderId);
-        String url = ServiceConstant.SERVICE_API_URL + "/api/feeApi/payOweFee";
+        String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payOweFee";
         responseEntity = this.callCenterService(restTemplate, "-1", paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
