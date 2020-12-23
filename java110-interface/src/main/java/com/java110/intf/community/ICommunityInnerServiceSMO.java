@@ -28,7 +28,6 @@ public interface ICommunityInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param communityDto 数据对象分享
      * @return CommunityDto 对象数据
      */
@@ -53,6 +52,16 @@ public interface ICommunityInnerServiceSMO {
     @RequestMapping(value = "/getCommunityMembers", method = RequestMethod.POST)
     List<CommunityMemberDto> getCommunityMembers(@RequestBody CommunityMemberDto communityMemberDto);
 
+
+    /**
+     * 查询商户入驻小区
+     *
+     * @param communityMemberDto 小区成员数据封装
+     * @return CommunityMemberDto 数据
+     */
+    @RequestMapping(value = "/getStoreCommunitys", method = RequestMethod.POST)
+    List<CommunityDto> getStoreCommunitys(@RequestBody CommunityMemberDto communityMemberDto);
+
     /**
      * 查询小区成员数量
      *
@@ -64,7 +73,6 @@ public interface ICommunityInnerServiceSMO {
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param communityAttrDto 数据对象分享
      * @return CommunityDto 对象数据
@@ -80,5 +88,6 @@ public interface ICommunityInnerServiceSMO {
      */
     @RequestMapping(value = "/getCommunityAttrsCount", method = RequestMethod.POST)
     int getCommunityAttrsCount(@RequestBody CommunityAttrDto communityAttrDto);
+
 
 }

@@ -264,4 +264,5 @@ public interface ICommunityServiceDao {
     int getCommunityAttrsCount(Map info);
 
 
+    List<Map> getStoreCommunitys(Map beanCovertMap);
 }

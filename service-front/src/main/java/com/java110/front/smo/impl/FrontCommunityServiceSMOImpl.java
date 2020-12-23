@@ -60,14 +60,19 @@ public class FrontCommunityServiceSMOImpl extends BaseComponentSMO implements IC
         paramIn.put("memberId", storeId);
         paramIn.put("memberTypeCd", MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd));
         paramIn.putAll(_paramObj);
+//        responseEntity = this.callCenterService(restTemplate, pd, "",
+//                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember" + mapToUrlParam(paramIn),
+//                HttpMethod.GET);
+
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember" + mapToUrlParam(paramIn),
+                ServiceConstant.SERVICE_API_URL + "/api/communitys/queryStoreCommunitys" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
-        JSONArray tmpCommunitys = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("communitys");
+        //JSONArray tmpCommunitys = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("communitys");
+        JSONArray tmpCommunitys = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("data");
         freshCommunityAttr(tmpCommunitys);
         responseEntity = new ResponseEntity<String>(tmpCommunitys.toJSONString(),
                 HttpStatus.OK);

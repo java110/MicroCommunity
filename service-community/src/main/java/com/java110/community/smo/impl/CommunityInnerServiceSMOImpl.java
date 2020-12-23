@@ -50,6 +50,38 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
     }
 
     @Override
+    public List<CommunityDto> getStoreCommunitys(CommunityMemberDto communityMemberDto) {
+        List<Map> communityMembers = communityServiceDaoImpl.getStoreCommunitys(BeanConvertUtil.beanCovertMap(communityMemberDto));
+        List<CommunityDto> communitys = BeanConvertUtil.covertBeanList(communityMembers, CommunityDto.class);
+
+        List<String> communityIds = new ArrayList<>();
+
+        if (communitys == null || communitys.size() < 1) {
+            return communitys;
+        }
+        for (CommunityDto tmpCommunityDto : communitys) {
+            communityIds.add(tmpCommunityDto.getCommunityId());
+        }
+        Map info = new HashMap();
+        info.put("communityIds", communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityAttrDto> communityAttrDtos = BeanConvertUtil.covertBeanList(communityServiceDaoImpl.getCommunityAttrs(info), CommunityAttrDto.class);
+
+        if (communityAttrDtos == null || communityAttrDtos.size() < 1) {
+            return communitys;
+        }
+        for (CommunityDto tmpCommunityDto : communitys) {
+            List<CommunityAttrDto> tmpCommunityAttrDtos = new ArrayList<>();
+            for (CommunityAttrDto communityAttrDto : communityAttrDtos) {
+                if (tmpCommunityDto.getCommunityId().equals(communityAttrDto.getCommunityId())) {
+                    tmpCommunityAttrDtos.add(communityAttrDto);
+                }
+            }
+            tmpCommunityDto.setCommunityAttrDtos(tmpCommunityAttrDtos);
+        }
+        return communitys;
+    }
+
+    @Override
     public int getCommunityMemberCount(@RequestBody CommunityMemberDto communityMemberDto) {
         logger.debug("getCommunityMemberCount：{}", JSONObject.toJSONString(communityMemberDto));
 
