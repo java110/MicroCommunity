@@ -46,7 +46,6 @@ public class OssUploadTemplate {
         try {
             ossClient = OSSUtil.getOSSClient();
             fileName = UUID.randomUUID().toString();
-            ftpPath = ftpPath + IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
             if (imageBase64.contains("data:image/png;base64,")) {
                 imageBase64 = imageBase64.replace("data:image/png;base64,", "");
                 fileName += ".png";
@@ -62,6 +61,7 @@ public class OssUploadTemplate {
             } else {
                 fileName += ".jpg";
             }
+            ftpPath = ftpPath + IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
 
             byte[] context = Base64Convert.base64ToByte(imageBase64);
             is = new ByteArrayInputStream(context);
@@ -78,7 +78,7 @@ public class OssUploadTemplate {
                 }
             }
         }
-        return ftpPath;
+        return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
     }
 
 
@@ -187,9 +187,6 @@ public class OssUploadTemplate {
         ByteArrayInputStream fis = null;
         try {
             ossClient = OSSUtil.getOSSClient();
-            String f = new String(
-                    (remotePath + fileName).getBytes("GBK"),
-                    FTP.DEFAULT_CONTROL_ENCODING);
             is = OSSUtil.getInputStreamByOSS(ossClient, "java110", remotePath + fileName);
             if (null == is) {
                 throw new FileNotFoundException(remotePath);
