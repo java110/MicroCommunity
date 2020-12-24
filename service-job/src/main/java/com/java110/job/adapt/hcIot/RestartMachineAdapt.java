@@ -43,7 +43,7 @@ public class RestartMachineAdapt extends DatabusAdaptImpl {
     public ResultVo restartMachine(JSONObject paramIn) {
         JSONObject postParameters = new JSONObject();
         postParameters.put("machineCode", paramIn.getString("machineCode"));
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders(outRestTemplate));
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.RESTART_MACHINE), HttpMethod.POST, httpEntity, String.class);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());

@@ -43,7 +43,7 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
     public ResultVo openDoor(JSONObject paramIn) {
         JSONObject postParameters = new JSONObject();
         postParameters.put("machineCode", paramIn.getString("machineCode"));
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, getHeaders(outRestTemplate));
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.OPEN_DOOR), HttpMethod.POST, httpEntity, String.class);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
