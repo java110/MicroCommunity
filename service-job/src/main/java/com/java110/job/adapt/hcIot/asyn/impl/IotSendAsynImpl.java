@@ -90,7 +90,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
 
-        if (paramOut.getInteger("code") == ResultVo.CODE_UNAUTHORIZED) {
+        if (paramOut.getIntValue("code") == ResultVo.CODE_UNAUTHORIZED) {
             //删除token
             GetToken.get(outRestTemplate, true);
         }
