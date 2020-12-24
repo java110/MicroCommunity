@@ -35,9 +35,9 @@ public class GetToken {
 
 
     @Java110Synchronized(value = "hc_get_token")
-    public static String get(RestTemplate restTemplate) {
+    public static String get(RestTemplate restTemplate,boolean refreshAccessToken) {
         String token = CommonCache.getValue(IotConstant.HC_TOKEN);
-        if (!StringUtil.isEmpty(token)) {
+        if (!StringUtil.isEmpty(token) && !refreshAccessToken) {
             return token;
         }
         HttpHeaders headers = new HttpHeaders();

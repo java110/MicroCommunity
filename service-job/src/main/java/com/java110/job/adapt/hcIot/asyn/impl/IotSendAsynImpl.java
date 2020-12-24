@@ -74,7 +74,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
      */
     private HttpHeaders getHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("access_token", GetToken.get(outRestTemplate));
+        httpHeaders.add("access_token", GetToken.get(outRestTemplate, false));
         //httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
         return httpHeaders;
     }
@@ -91,8 +91,8 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
 
         if (paramOut.getInteger("code") == ResultVo.CODE_UNAUTHORIZED) {
-            //重新刷新token
-            GetToken.get(outRestTemplate);
+            //删除token
+            GetToken.get(outRestTemplate, true);
         }
     }
 
