@@ -72,6 +72,7 @@
         <zookeeper.version>3.4.14</zookeeper.version>
         <swagger.version>2.5.0</swagger.version>
         <pinyin4j.version>2.5.0</pinyin4j.version>
+        <oss.aliyun>2.8.2</oss.aliyun>
     </properties>
 
     <dependencyManagement>
@@ -336,17 +337,6 @@
                 <version>${httpclient.verion}</version>
             </dependency>
 
-            <!--<dependency>
-                <groupId>io.shardingsphere</groupId>
-                <artifactId>sharding-jdbc</artifactId>
-                <version>3.0.0.M3</version>
-            </dependency>-->
-
-            <!--<dependency>
-                <groupId>io.shardingsphere</groupId>
-                <artifactId>sharding-jdbc-core</artifactId>
-                <version>3.1.0</version>
-            </dependency>-->
 
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
@@ -354,30 +344,6 @@
                 <version>4.0.0-RC1</version>
             </dependency>
 
-
-            <!-- https://mvnrepository.com/artifact/org.apache.axis2/axis2
-            <dependency>
-                <groupId>org.apache.axis</groupId>
-                <artifactId>axis</artifactId>
-                <version>${axis.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.axis</groupId>
-                <artifactId>axis-jaxrpc</artifactId>
-                <version>${axis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.axis</groupId>
-                <artifactId>axis-saaj</artifactId>
-                <version>${axis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>wsdl4j</groupId>
-                <artifactId>wsdl4j</artifactId>
-                <version>${axis.version}</version>
-            </dependency>
-            -->
 
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
@@ -392,11 +358,6 @@
             </dependency>
 
 
-            <!-- <dependency>
-                 <groupId>org.quartz-scheduler</groupId>
-                 <artifactId>quartz</artifactId>
-                 <version>2.3.0</version>
-             </dependency>-->
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
@@ -504,12 +465,6 @@
                 <version>6.0.0.RC1</version>
             </dependency>
 
-            <!--<dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-modeler</artifactId>
-                <version>6.0.0</version>
-            </dependency>-->
-
             <dependency>
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-spring-boot-starter-basic</artifactId>
@@ -530,18 +485,12 @@
                 <version>3.0.112</version>
             </dependency>
 
-            <!--<dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-modeler</artifactId>
-                <version>5.22.0</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.activiti</groupId>
-                        <artifactId>activiti-bpmn-model</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>-->
-
+            <!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${oss.aliyun}</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>

@@ -26,22 +26,18 @@
             <groupId>com.java110</groupId>
             <artifactId>java110-service</artifactId>
         </dependency>
-       <!-- <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-spring</artifactId>
-        </dependency>-->
+
         <dependency>
             <groupId>org.activiti</groupId>
             <artifactId>activiti-bpmn-layout</artifactId>
         </dependency>
-       <!-- <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-modeler</artifactId>
-        </dependency>-->
+
         <dependency>
             <groupId>org.activiti</groupId>
             <artifactId>activiti-spring-boot-starter-basic</artifactId>
         </dependency>
+
+
     </dependencies>
 
     <build>
