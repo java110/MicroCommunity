@@ -4,8 +4,6 @@ import com.aliyun.oss.OSSClient;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.OSSUtil;
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -43,6 +41,7 @@ public class OssUploadTemplate {
         String fileName = "";
         OSSClient ossClient = null;
         ByteArrayInputStream is = null;
+        String urlPath = "";
         try {
             ossClient = OSSUtil.getOSSClient();
             fileName = UUID.randomUUID().toString();
@@ -61,11 +60,10 @@ public class OssUploadTemplate {
             } else {
                 fileName += ".jpg";
             }
-            ftpPath = ftpPath + IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
-
+            urlPath = IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
             byte[] context = Base64Convert.base64ToByte(imageBase64);
             is = new ByteArrayInputStream(context);
-            OSSUtil.uploadByInputStream(ossClient, is, "java110", ftpPath);
+            OSSUtil.uploadByInputStream(ossClient, is, "java110", ftpPath + urlPath);
         } catch (Exception e) {
             logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
@@ -78,7 +76,7 @@ public class OssUploadTemplate {
                 }
             }
         }
-        return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
+        return urlPath;
     }
 
 

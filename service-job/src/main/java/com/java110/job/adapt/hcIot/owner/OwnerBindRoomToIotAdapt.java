@@ -155,7 +155,6 @@ public class OwnerBindRoomToIotAdapt extends DatabusAdaptImpl {
 
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
-        Assert.listOnlyOne(machineDtos, "未找到设备");
         for (MachineDto tmpMachineDto : machineDtos) {
             if (!"9999".equals(tmpMachineDto.getMachineTypeCd())) {
                 continue;
