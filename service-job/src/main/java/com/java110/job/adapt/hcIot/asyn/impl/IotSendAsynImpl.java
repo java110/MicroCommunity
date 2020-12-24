@@ -76,8 +76,24 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("access_token", GetToken.get(outRestTemplate));
         //httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
-
         return httpHeaders;
+    }
+
+    private void refreshAccessToken(ResponseEntity<String> responseEntity) {
+        if (responseEntity == null) {
+            return;
+        }
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return;
+        }
+
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+
+        if (paramOut.getInteger("code") == ResultVo.CODE_UNAUTHORIZED) {
+            //重新刷新token
+            GetToken.get(outRestTemplate);
+        }
     }
 
     @Override
@@ -111,6 +127,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
     }
 
@@ -147,6 +164,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
     }
 
@@ -182,6 +200,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
     }
 
@@ -236,6 +255,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             return;
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
 
         MachineDto machinePo = new MachineDto();
@@ -292,6 +312,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
     }
 
@@ -335,6 +356,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
     }
 
@@ -381,6 +403,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
     }
 
@@ -425,6 +448,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
     }
 
@@ -472,6 +496,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
         } finally {
             saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
         }
     }
 

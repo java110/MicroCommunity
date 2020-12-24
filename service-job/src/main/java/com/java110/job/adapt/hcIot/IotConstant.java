@@ -31,12 +31,12 @@ public class IotConstant {
     public static final String IOT_APP_ID = "APP_ID"; // 物联网域
     public static final String IOT_APP_SECRET = "APP_SECRET"; // 物联网域
 
-    private static final String DEFAULT_IOT_URL = "https://things.homecommunity.cn/";
+    private static final String DEFAULT_IOT_URL = "https://things.homecommunity.cn";
 
     private static final String DEFAULT_APP_ID = "e86a6a373c354927bea5fd21a0bec617";
     private static final String DEFAULT_APP_SECRET = "ead9a2f67f96e2b8ed2fe38cc9709463";
 
-    public static final String GET_TOKEN_URL = " /extApi/auth/getAccessToken?appId=APP_ID&appSecret=APP_SECRET";
+    public static final String GET_TOKEN_URL = "/extApi/auth/getAccessToken?appId=APP_ID&appSecret=APP_SECRET";
 
     //添加小区
     public static final String ADD_COMMUNITY_URL = "/extApi/community/addCommunity";
