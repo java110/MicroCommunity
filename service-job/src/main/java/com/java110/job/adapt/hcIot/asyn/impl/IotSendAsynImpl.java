@@ -96,7 +96,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.ADD_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.ADD_COMMUNITY_URL), HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
 
@@ -130,7 +130,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.UPDATE_COMMUNITY_URL), HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
             if (paramOut.getInteger("code") != ResultVo.CODE_OK) {
@@ -166,7 +166,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.DELETE_COMMUNITY_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.DELETE_COMMUNITY_URL), HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
             if (paramOut.getInteger("code") != ResultVo.CODE_OK) {
@@ -207,7 +207,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.ADD_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.ADD_MACHINE_URL), HttpMethod.POST, httpEntity, String.class);
 
             logger.debug("调用HC IOT信息：" + responseEntity);
 
@@ -265,7 +265,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.UPDATE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.UPDATE_MACHINE_URL), HttpMethod.POST, httpEntity, String.class);
 
             logger.debug("调用HC IOT信息：" + responseEntity);
 
@@ -310,7 +310,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.DELETE_MACHINE_URL, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.DELETE_MACHINE_URL), HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
@@ -354,7 +354,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.ADD_OWNER, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.ADD_OWNER), HttpMethod.POST, httpEntity, String.class);
 
             logger.debug("调用HC IOT信息：" + responseEntity);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -399,7 +399,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.EDIT_OWNER, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.EDIT_OWNER), HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
@@ -444,7 +444,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpEntity httpEntity = new HttpEntity(postParameters, getHeaders());
-            responseEntity = outRestTemplate.exchange(IotConstant.DELETE_OWNER, HttpMethod.POST, httpEntity, String.class);
+            responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.DELETE_OWNER), HttpMethod.POST, httpEntity, String.class);
 
             logger.debug("调用HC IOT信息：" + responseEntity);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {

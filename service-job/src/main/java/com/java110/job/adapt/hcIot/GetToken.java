@@ -42,7 +42,8 @@ public class GetToken {
         }
         HttpHeaders headers = new HttpHeaders();
         HttpEntity httpEntity = new HttpEntity(headers);
-        ResponseEntity<String> tokenRes = restTemplate.exchange(IotConstant.GET_TOKEN_URL, HttpMethod.GET, httpEntity, String.class);
+        String url = IotConstant.getUrl(IotConstant.GET_TOKEN_URL.replace("APP_ID", IotConstant.getAppId()).replace("APP_SECRET", IotConstant.getAppSecret()));
+        ResponseEntity<String> tokenRes = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
 
         if (tokenRes.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("获取token失败" + tokenRes.getBody());
