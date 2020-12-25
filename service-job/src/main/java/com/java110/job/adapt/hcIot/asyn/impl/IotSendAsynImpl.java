@@ -466,7 +466,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
         MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
         machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_OWNER_FACE);
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_OWNER_FACE);
         machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
         machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
         machineTranslateDto.setObjId(postParameters.getString("userId"));
