@@ -25,6 +25,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.OwnerPo;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,9 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
     private IIotSendAsyn hcMachineAsynImpl;
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
 
     /**
@@ -83,7 +87,12 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
 
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
 
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+        ownerDto.setMemberId(ownerPo.getMemberId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
+        Assert.listOnlyOne(ownerDtos, "未找到删除的业主信息");
         //拿到小区ID
         String communityId = ownerPo.getCommunityId();
         //根据小区ID查询现有设备
@@ -101,7 +110,7 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
             JSONObject postParameters = new JSONObject();
             postParameters.put("machineCode", tmpMachineDto.getMachineCode());
             postParameters.put("userId", ownerPo.getMemberId());
-            postParameters.put("name", ownerPo.getName());
+            postParameters.put("name", ownerDtos.get(0).getName());
             postParameters.put("extMachineId", tmpMachineDto.getMachineId());
             postParameters.put("extCommunityId", tmpMachineDto.getCommunityId());
             hcMachineAsynImpl.sendDeleteOwner(postParameters);
