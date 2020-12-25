@@ -6,6 +6,7 @@ public class ApiMachineTranslateDataVo implements Serializable {
 
     private String machineTranslateId;
     private String machineCode;
+    private String machineName;
     private String machineId;
     private String typeCd;
     private String typeCdName;
@@ -140,5 +141,13 @@ public class ApiMachineTranslateDataVo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getMachineName() {
+        return machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
     }
 }

@@ -51,6 +51,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     private String machineId;
     private String machineCode;
+    private String machineName;
     private String typeCd;
     private String typeCdName;
     private String machineTranslateId;
@@ -222,5 +223,13 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     public void setMachineCmdName(String machineCmdName) {
         this.machineCmdName = machineCmdName;
+    }
+
+    public String getMachineName() {
+        return machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
     }
 }
