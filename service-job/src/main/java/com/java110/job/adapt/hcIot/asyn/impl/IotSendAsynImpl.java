@@ -121,7 +121,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 machineTranslateDto.setRemark(paramOut.getString("msg"));
             }
         } catch (Exception e) {
-            logger.error("保存小区异常",e);
+            logger.error("保存小区异常", e);
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
@@ -158,7 +158,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
             }
         } catch (Exception e) {
-            logger.error("修改小区异常",e);
+            logger.error("修改小区异常", e);
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
@@ -196,7 +196,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
             }
         } catch (Exception e) {
-            logger.error("删除小区异常",e);
+            logger.error("删除小区异常", e);
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
             //保存 失败报文
@@ -306,7 +306,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 machineTranslateDto.setRemark(tokenObj.getString("msg"));
                 //保存 失败报文
                 saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "");
-
+                return;
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
@@ -317,6 +317,12 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             saveTranslateLog(machineTranslateDto);
             refreshAccessToken(responseEntity);
         }
+
+        MachineDto machinePo = new MachineDto();
+        machinePo.setMachineId(postParameters.getString("extMachineId"));
+        machinePo.setCommunityId(postParameters.getString("extCommunityId"));
+        machinePo.setState("1700");
+        machineInnerServiceSMOImpl.updateMachineState(machinePo);
     }
 
     @Override
