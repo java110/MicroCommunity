@@ -142,8 +142,8 @@
         typeCd,t.machine_translate_id,t.machine_translate_id machineTranslateId,t.obj_id,t.obj_id
         objId,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name objName,t.state,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,td.name typeCdName,td1.name stateName,t.create_time createTime,t.update_time
-        updateTime,t.machine_cmd,t.obj_b_id,t.machine_cmd machineCmd,t.obj_b_id objBId,t.remark
-        from machine_translate t,t_dict td,t_dict td1
+        updateTime,t.machine_cmd,t.obj_b_id,t.machine_cmd machineCmd,td2.`name` machineCmdName,t.obj_b_id objBId,t.remark
+        from machine_translate t,t_dict td,t_dict td1,t_dict td2
         where 1 =1
         and t.type_cd=td.status_cd
         and td.table_name='machine_translate'
@@ -151,6 +151,9 @@
         and t.state=td1.status_cd
         and td1.table_name='machine_translate'
         and td1.table_columns='state'
+        and t.machine_cmd = td2.status_cd
+        and td2.table_name='machine_translate'
+        and td2.table_columns='machine_cmd'
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
         </if>

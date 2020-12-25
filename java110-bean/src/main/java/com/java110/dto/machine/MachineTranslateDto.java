@@ -64,6 +64,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     private String bId;
 
     private String machineCmd;
+    private String machineCmdName;
 
     private String objBId;
 
@@ -213,5 +214,13 @@ public class MachineTranslateDto extends PageDto implements Serializable {
             remark = remark.substring(0, 190);
         }
         this.remark = remark;
+    }
+
+    public String getMachineCmdName() {
+        return machineCmdName;
+    }
+
+    public void setMachineCmdName(String machineCmdName) {
+        this.machineCmdName = machineCmdName;
     }
 }
