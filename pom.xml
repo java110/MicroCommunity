@@ -42,7 +42,6 @@
         <maven.compile.target>1.8</maven.compile.target>
         <sourceEncoding>UTF-8</sourceEncoding>
         <spring-boot>2.0.4.RELEASE</spring-boot>
-        <shiro.version>1.2.4</shiro.version>
         <mybatis.version>3.3.0</mybatis.version>
         <microcommunity.version>1.0-SNAPSHOT</microcommunity.version>
         <dubbo.version>2.5.4-SNAPSHOT</dubbo.version>
