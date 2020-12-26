@@ -65,6 +65,18 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     }
 
     /**
+     * 失败重新送IOT
+     *
+     * @param paramIn
+     * @return
+     */
+    @Override
+    public ResultVo reSendToIot(JSONObject paramIn) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+
+    /**
      * 业主处理执行
      *
      * @param business   当前处理业务

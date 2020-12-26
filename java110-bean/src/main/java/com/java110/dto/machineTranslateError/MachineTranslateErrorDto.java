@@ -15,12 +15,17 @@ import java.util.Date;
  **/
 public class MachineTranslateErrorDto extends PageDto implements Serializable {
 
+    public static final String REQ_TYPE_URL = "2222";
+
     private String reqHeader;
     private String machineTranslateId;
     private String resBody;
     private String reqBody;
     private String logId;
     private String communityId;
+
+    private String reqPath;
+    private String reqType;
 
 
     private Date createTime;
@@ -91,5 +96,21 @@ public class MachineTranslateErrorDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getReqPath() {
+        return reqPath;
+    }
+
+    public void setReqPath(String reqPath) {
+        this.reqPath = reqPath;
+    }
+
+    public String getReqType() {
+        return reqType;
+    }
+
+    public void setReqType(String reqType) {
+        this.reqType = reqType;
     }
 }

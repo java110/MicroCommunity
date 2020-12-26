@@ -11,6 +11,8 @@ public class MachineTranslateErrorPo implements Serializable {
     private String logId;
     private String statusCd = "0";
     private String communityId;
+    private String reqPath;
+    private String reqType;
 
     public String getReqHeader() {
         return reqHeader;
@@ -68,5 +70,19 @@ public class MachineTranslateErrorPo implements Serializable {
         this.communityId = communityId;
     }
 
+    public String getReqPath() {
+        return reqPath;
+    }
 
+    public void setReqPath(String reqPath) {
+        this.reqPath = reqPath;
+    }
+
+    public String getReqType() {
+        return reqType;
+    }
+
+    public void setReqType(String reqType) {
+        this.reqType = reqType;
+    }
 }

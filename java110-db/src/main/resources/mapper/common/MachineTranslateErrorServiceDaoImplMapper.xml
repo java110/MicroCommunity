@@ -8,9 +8,9 @@
     <!-- 保存IOT同步错误日志记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveMachineTranslateErrorInfo" parameterType="Map">
         insert into machine_translate_error(
-        req_header,machine_translate_id,res_body,req_body,log_id,community_id
+        req_header,machine_translate_id,res_body,req_body,log_id,community_id,req_path,req_type
         ) values (
-        #{reqHeader},#{machineTranslateId},#{resBody},#{reqBody},#{logId},#{communityId}
+        #{reqHeader},#{machineTranslateId},#{resBody},#{reqBody},#{logId},#{communityId},#{reqPath},#{reqType}
         )
     </insert>
 
@@ -19,7 +19,8 @@
     <select id="getMachineTranslateErrorInfo" parameterType="Map" resultType="Map">
         select t.req_header,t.req_header reqHeader,t.machine_translate_id,t.machine_translate_id
         machineTranslateId,t.res_body,t.res_body resBody,t.req_body,t.req_body reqBody,t.log_id,t.log_id
-        logId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId
+        logId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,
+        t.req_path reqPath,t.req_type reqType
         from machine_translate_error t
         where 1 =1
         <if test="reqHeader !=null and reqHeader != ''">

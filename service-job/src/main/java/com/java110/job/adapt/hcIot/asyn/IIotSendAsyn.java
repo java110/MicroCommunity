@@ -16,7 +16,6 @@
 package com.java110.job.adapt.hcIot.asyn;
 
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
@@ -82,4 +81,11 @@ public interface IIotSendAsyn {
      * @param postParameters
      */
     void sendDeleteOwner(JSONObject postParameters);
+
+    /**
+     * 重新同步
+     *
+     * @param reqJson
+     */
+    void reSendIot(JSONObject reqJson);
 }

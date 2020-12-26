@@ -51,4 +51,6 @@ public interface IDatabusAdapt {
      * }
      */
     ResultVo restartMachine(JSONObject reqJson);
+
+    ResultVo reSendToIot(JSONObject reqJson);
 }
