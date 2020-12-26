@@ -31,6 +31,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
 
     public static final String DEFAULT_OPEN_DOOR_PROTOCOL = "openDoorAdapt";//吸墨门禁
     public static final String DEFAULT_START_MACHINE_PROTOCOL = "restartMachineAdapt";//吸墨门禁
+    public static final String DEFAULT_RESEND_IOT_PROTOCOL = "reSendIotAdapt";//重新送数据
 
 
     @Override
@@ -58,7 +59,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
 
     @Override
     public ResultVo resendIot(@RequestBody JSONObject reqJson) {
-        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_START_MACHINE_PROTOCOL, IDatabusAdapt.class);
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_RESEND_IOT_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.reSendToIot(reqJson);
 
     }
