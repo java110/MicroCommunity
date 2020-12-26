@@ -23,6 +23,7 @@ import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.machine.MachinePo;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,7 @@ public class DeleteMachineToIotAdapt extends DatabusAdaptImpl {
         MachinePo machinePo = BeanConvertUtil.covertBean(businessMachine, MachinePo.class);
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineId(machinePo.getMachineId());
+        machineDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         Assert.listOnlyOne(machineDtos, "未找到设备");
         JSONObject postParameters = new JSONObject();
