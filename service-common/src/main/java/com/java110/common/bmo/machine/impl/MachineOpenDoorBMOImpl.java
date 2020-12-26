@@ -58,4 +58,10 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
         ResultVo resultVo = dataBusInnerServiceSMOImpl.restartMachine(reqJson);
         return ResultVo.createResponseEntity(resultVo);
     }
+
+    @Override
+    public ResponseEntity<String> resendIot(JSONObject reqJson) {
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.resendIot(reqJson);
+        return ResultVo.createResponseEntity(resultVo);
+    }
 }

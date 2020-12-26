@@ -52,6 +52,21 @@ public class MachineApi {
 
 
     /**
+     * 重新送物联网系统
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /machine/resendIot
+     * @path /app/machine/resendIot
+     */
+    @RequestMapping(value = "/resendIot", method = RequestMethod.POST)
+    public ResponseEntity<String> resendIot(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "machineTranslateId", "未包含同步ID");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
+        return machineOpenDoorBMOImpl.resendIot(reqJson);
+    }
+
+    /**
      * 微信删除消息模板
      *
      * @param communityId 小区ID

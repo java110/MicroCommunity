@@ -56,6 +56,13 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
 
     }
 
+    @Override
+    public ResultVo resendIot(@RequestBody JSONObject reqJson) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_START_MACHINE_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.reSendToIot(reqJson);
+
+    }
+
     /**
      * 处理业务类
      *

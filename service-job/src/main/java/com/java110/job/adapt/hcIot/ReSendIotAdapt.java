@@ -26,11 +26,15 @@ import org.springframework.stereotype.Component;
 /**
  * 重新同步
  *
+ * 当设备信息失败是可以重新送HC物联系统
+ *
+ * 物联网系统 代码地址 https://gitee.com/java110/MicroCommunityThings
+ *
  * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
  * @desc add by 吴学文 15:29
  */
-@Component(value = "openDoorAdapt")
+@Component(value = "reSendIotAdapt")
 public class ReSendIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
