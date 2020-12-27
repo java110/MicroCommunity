@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.common.bmo.machineRecord;
+package com.java110.common.bmo.machine;
 
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.po.machine.MachineRecordPo;

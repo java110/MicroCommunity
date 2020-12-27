@@ -20,6 +20,7 @@ public class MachineTranslatePo implements Serializable {
     private String objName;
     private String state;
     private String updateTime;
+    private String remark;
 
 
     public String getMachineTranslateId() {
@@ -92,5 +93,13 @@ public class MachineTranslatePo implements Serializable {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

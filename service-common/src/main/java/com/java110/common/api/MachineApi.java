@@ -2,9 +2,11 @@ package com.java110.common.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
-import com.java110.common.bmo.machineRecord.ISaveMachineRecordBMO;
+import com.java110.common.bmo.machine.ISaveMachineRecordBMO;
+import com.java110.common.bmo.machine.IUpdateMachineTransactionStateBMO;
 import com.java110.common.bmo.machineTranslateError.IGetMachineTranslateErrorBMO;
 import com.java110.dto.machine.MachineRecordDto;
+import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -17,7 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * 设备相关接口类
+ * <p>
+ * add by 吴学文 2020-12-28
+ */
 @RestController
 @RequestMapping(value = "/machine")
 public class MachineApi {
@@ -31,6 +37,9 @@ public class MachineApi {
 
     @Autowired
     private ISaveMachineRecordBMO saveMachineRecordBMOImpl;
+
+    @Autowired
+    private IUpdateMachineTransactionStateBMO updateMachineTransactionStateBMOImpl;
 
     /**
      * 设备开门功能
@@ -126,6 +135,27 @@ public class MachineApi {
         machineRecordDto.setCommunityId(reqJson.getString("extCommunityId"));
         machineRecordDto.setName(reqJson.getString("userName"));
         return saveMachineRecordBMOImpl.saveRecord(machineRecordDto);
+    }
+
+    /**
+     * 物联网系统指令执行情况
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /machine/cmdResult
+     * @path /app/machine/cmdResult
+     */
+    @RequestMapping(value = "/cmdResult", method = RequestMethod.POST)
+    public ResponseEntity<String> cmdResult(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "taskId", "未包含任务信息");
+        Assert.hasKeyAndValue(reqJson, "code", "未包含结果编码");
+        Assert.hasKeyAndValue(reqJson, "msg", "未包含结果说明");
+        MachineTranslateDto machineRecordDto = new MachineTranslateDto();
+        machineRecordDto.setMachineTranslateId(reqJson.getString("taskId"));
+        machineRecordDto.setState(reqJson.getIntValue("code") == 0
+                ? MachineTranslateDto.STATE_SUCCESS : MachineTranslateDto.STATE_ERROR);
+        machineRecordDto.setRemark(reqJson.getString("msg"));
+        return updateMachineTransactionStateBMOImpl.update(machineRecordDto);
     }
 
 }

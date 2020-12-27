@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.common.bmo.machineRecord.impl;
+package com.java110.common.bmo.machine.impl;
 
-import com.java110.common.bmo.machineRecord.ISaveMachineRecordBMO;
+import com.java110.common.bmo.machine.ISaveMachineRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.MachineRecordDto;
