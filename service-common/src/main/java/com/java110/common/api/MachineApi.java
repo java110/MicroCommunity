@@ -2,9 +2,12 @@ package com.java110.common.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
+import com.java110.common.bmo.machineRecord.ISaveMachineRecordBMO;
 import com.java110.common.bmo.machineTranslateError.IGetMachineTranslateErrorBMO;
+import com.java110.dto.machine.MachineRecordDto;
 import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,9 @@ public class MachineApi {
 
     @Autowired
     private IGetMachineTranslateErrorBMO getMachineTranslateErrorBMOImpl;
+
+    @Autowired
+    private ISaveMachineRecordBMO saveMachineRecordBMOImpl;
 
     /**
      * 设备开门功能
@@ -83,6 +89,31 @@ public class MachineApi {
         machineTranslateErrorDto.setRow(row);
         machineTranslateErrorDto.setCommunityId(communityId);
         return getMachineTranslateErrorBMOImpl.get(machineTranslateErrorDto);
+    }
+
+    /**
+     * 重新送物联网系统
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /machine/openDoorLog
+     * @path /app/machine/openDoorLog
+     */
+    @RequestMapping(value = "/openDoorLog", method = RequestMethod.POST)
+    public ResponseEntity<String> openDoorLog(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "userId", "未包含用户信息");
+        Assert.hasKeyAndValue(reqJson, "userName", "未包含用户名称");
+        Assert.hasKeyAndValue(reqJson, "machineCode", "未包含设备编码");
+        Assert.hasKeyAndValue(reqJson, "openTypeCd", "未包含开门方式");
+        Assert.hasKeyAndValue(reqJson, "similar", "未包含开门相似度");
+        Assert.hasKeyAndValue(reqJson, "photo", "未包含抓拍照片");
+        Assert.hasKeyAndValue(reqJson, "dateTime", "未包含开门时间");
+        Assert.hasKeyAndValue(reqJson, "extCommunityId", "未包含小区信息");
+        Assert.hasKeyAndValue(reqJson, "recordTypeCd", "未包含记录类型");
+        MachineRecordDto machineRecordDto = BeanConvertUtil.covertBean(reqJson, MachineRecordDto.class);
+        machineRecordDto.setCommunityId(reqJson.getString("extCommunityId"));
+        machineRecordDto.setName(reqJson.getString("userName"));
+        return saveMachineRecordBMOImpl.saveRecord(machineRecordDto);
     }
 
 }
