@@ -15,19 +15,24 @@
  */
 package com.java110.common.bmo.machineRecord.impl;
 
-import com.google.protobuf.GeneratedMessage;
 import com.java110.common.bmo.machineRecord.ISaveMachineRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.common.IMachineRecordInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 保存 开门记录
@@ -39,9 +44,16 @@ public class SaveMachineRecordBMOImpl implements ISaveMachineRecordBMO {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineRecordInnerServiceSMO machineRecordInnerServiceSMOImpl;
+
     @Override
     public ResponseEntity<String> saveRecord(MachineRecordDto machineRecordDto) {
-
+        machineRecordDto.setMachineRecordId(GenerateCodeFactory.CODE_PREFIX_machineRecordId);
         if (StringUtil.isEmpty(machineRecordDto.getPhoto())) {
             FileDto fileDto = new FileDto();
             fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
@@ -55,18 +67,21 @@ public class SaveMachineRecordBMOImpl implements ISaveMachineRecordBMO {
             fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
             fileRelPo.setRelTypeCd("60000");
             fileRelPo.setSaveWay("table");
-//            fileRelPo.set
-//            businessUnit.put("saveWay", "table");
-//            businessUnit.put("objId", paramInJson.getString("machineRecordId"));
-//            businessUnit.put("fileRealName", paramInJson.getString("photoId"));
-//            businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-//             BeanConvertUtil.covertBean(businessUnit, MachineRecordPo.class);
-//            reqJson.put("photoId", fileDto.getFileId());
-//            reqJson.put("fileSaveName", fileName);
-//
-//            machineRecordBMOImpl.addPhoto(reqJson, context);
-
+            fileRelPo.setObjId(machineRecordDto.getMachineRecordId());
+            fileRelPo.setFileRealName(fileName);
+            fileRelPo.setFileSaveName(fileName);
+            fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
         }
-        return null;
+
+        List<MachineRecordPo> machineRecordPos = new ArrayList<>();
+        MachineRecordPo machineRecordPo = BeanConvertUtil.covertBean(machineRecordDto, MachineRecordPo.class);
+        machineRecordPos.add(machineRecordPo);
+
+        int count = machineRecordInnerServiceSMOImpl.saveMachineRecords(machineRecordPos);
+
+        if (count > 0) {
+            return ResultVo.success();
+        }
+        return ResultVo.error("上传记录失败");
     }
 }
