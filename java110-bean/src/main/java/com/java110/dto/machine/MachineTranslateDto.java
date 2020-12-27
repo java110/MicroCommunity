@@ -36,6 +36,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     public static final String CMD_ADD_OWNER_FACE = "501";
     public static final String CMD_UPDATE_OWNER_FACE = "502";
     public static final String CMD_DELETE_OWNER_FACE = "503";
+    public static final String CMD_OPEN_DOOR = "5";
 
     //小区信息
     public static final String TYPE_COMMUNITY = "9988";

@@ -10,13 +10,19 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @RequestMapping(value = "/machine")
 public class MachineApi {
 
+    private static final String USER_ROLE_OWNER = "owner";
     @Autowired
     private IMachineOpenDoorBMO machineOpenDoorBMOImpl;
 
@@ -35,9 +41,15 @@ public class MachineApi {
      * @path /app/machine/openDoor
      */
     @RequestMapping(value = "/openDoor", method = RequestMethod.POST)
-    public ResponseEntity<String> openDoor(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> openDoor(@RequestBody JSONObject reqJson,
+                                           @RequestHeader(value = "user-id", required = false) String userId) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备信息");
+        Assert.hasKeyAndValue(reqJson, "userRole", "请求报文中未包含用户角色");
+        if (!USER_ROLE_OWNER.equals(reqJson.getString("userRole"))) { //这种为 员工的情况呢
+            reqJson.put("userId", userId);
+        }
+        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含设备信息");
         return machineOpenDoorBMOImpl.openDoor(reqJson);
     }
 
