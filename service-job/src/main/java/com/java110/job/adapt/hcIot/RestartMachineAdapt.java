@@ -17,6 +17,7 @@ package com.java110.job.adapt.hcIot;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class RestartMachineAdapt extends DatabusAdaptImpl {
     @Override
     public ResultVo restartMachine(JSONObject paramIn) {
         JSONObject postParameters = new JSONObject();
+        postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
         postParameters.put("machineCode", paramIn.getString("machineCode"));
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.RESTART_MACHINE), HttpMethod.POST, httpEntity, String.class);
