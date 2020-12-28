@@ -57,7 +57,7 @@ public class ConfirmTransactionOrderInfoToDataBusListener implements DataFlowLis
     @Override
     public void soService(InvokeConfirmFinishBusinessSystemEvent event) {
         IOrderDataFlowContext dataFlow = event.getDataFlow();
-        if (dataFlow == null || dataFlow.getBusinessList() == null || dataFlow.getBusinessList().size() == 0) {
+        if (dataFlow == null ) {
             return;
         }
 
