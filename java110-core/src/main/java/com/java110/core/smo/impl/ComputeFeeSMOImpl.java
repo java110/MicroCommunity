@@ -140,9 +140,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         feeDto.setDeadlineTime(targetEndDate);
 
         //动态费用
-        if ("4004".equals(computingFormula)) {
+        if ("4004".equals(computingFormula) && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
-            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+            //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
         }
 
     }
@@ -175,9 +175,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         feeDto.setDeadlineTime(targetEndDate);
 
         //动态费用
-        if ("4004".equals(computingFormula)) {
+        if ("4004".equals(computingFormula) && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
-            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+            //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
         }
     }
 
