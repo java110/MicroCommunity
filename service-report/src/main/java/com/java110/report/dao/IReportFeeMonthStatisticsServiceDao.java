@@ -184,6 +184,8 @@ public interface IReportFeeMonthStatisticsServiceDao {
 
     List<Map> queryPayFeeDetail(Map info) throws DAOException;
 
+    List<Map> queryAllPayFeeDetail(Map info) throws DAOException;
+
     List<Map> queryDeadlineFee(Map info) throws DAOException;
 
     /**
@@ -233,6 +235,7 @@ public interface IReportFeeMonthStatisticsServiceDao {
     /**
      * 查询费用配置信息（instance过程）
      * 根据bId 查询费用配置信息
+     *
      * @param info bId 信息
      * @return 费用配置信息
      * @throws DAOException DAO异常

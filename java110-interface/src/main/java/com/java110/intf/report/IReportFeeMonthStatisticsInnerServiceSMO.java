@@ -189,6 +189,15 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     List<ReportFeeMonthStatisticsDto> queryPayFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
+     * 查询费用汇总表总费用
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryAllPayFeeDetail", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryAllPayFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
      * 查询费用汇总表个数
      *
      * @param reportFeeMonthStatisticsDto
