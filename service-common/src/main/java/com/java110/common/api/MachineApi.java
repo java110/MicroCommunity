@@ -12,12 +12,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 设备相关接口类
@@ -134,6 +129,11 @@ public class MachineApi {
         MachineRecordDto machineRecordDto = BeanConvertUtil.covertBean(reqJson, MachineRecordDto.class);
         machineRecordDto.setCommunityId(reqJson.getString("extCommunityId"));
         machineRecordDto.setName(reqJson.getString("userName"));
+        if (reqJson.containsKey("idNumber")) {
+            machineRecordDto.setIdCard(reqJson.getString("idNumber"));
+        } else {
+            machineRecordDto.setIdCard("-1");
+        }
         return saveMachineRecordBMOImpl.saveRecord(machineRecordDto);
     }
 
