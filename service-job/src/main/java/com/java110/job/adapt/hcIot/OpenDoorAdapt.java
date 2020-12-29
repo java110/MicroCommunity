@@ -74,7 +74,7 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
     public ResultVo openDoor(JSONObject paramIn) {
 
         MachineDto machineDto = new MachineDto();
-        machineDto.setMachineId(paramIn.getString("machineCode"));
+        machineDto.setMachineCode(paramIn.getString("machineCode"));
         machineDto.setCommunityId(paramIn.getString("communityId"));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
 
