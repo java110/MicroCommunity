@@ -61,7 +61,7 @@ public class SaveMachineRecordBMOImpl implements ISaveMachineRecordBMO {
     @Override
     public ResponseEntity<String> saveRecord(MachineRecordDto machineRecordDto) {
         machineRecordDto.setMachineRecordId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId));
-        if (StringUtil.isEmpty(machineRecordDto.getPhoto())) {
+        if (!StringUtil.isEmpty(machineRecordDto.getPhoto())) {
             FileDto fileDto = new FileDto();
             fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
             fileDto.setFileName(fileDto.getFileId());
