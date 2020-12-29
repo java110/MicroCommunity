@@ -134,6 +134,11 @@ public class MachineApi {
         } else {
             machineRecordDto.setIdCard("-1");
         }
+        if (reqJson.containsKey("tel")) {
+            machineRecordDto.setTel(reqJson.getString("tel"));
+        } else {
+            machineRecordDto.setTel("-1");
+        }
         return saveMachineRecordBMOImpl.saveRecord(machineRecordDto);
     }
 
