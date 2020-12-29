@@ -28,6 +28,7 @@ import com.java110.po.file.FileRelPo;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,9 @@ public class SaveMachineRecordBMOImpl implements ISaveMachineRecordBMO {
             fileRelPo.setFileRealName(fileName);
             fileRelPo.setFileSaveName(fileName);
             fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+
+            machineRecordDto.setFileId(fileDto.getFileId());
+            machineRecordDto.setFileTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         }
 
         MachineDto machineDto = new MachineDto();
