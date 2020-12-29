@@ -18,12 +18,15 @@ package com.java110.common.bmo.machine.impl;
 import com.java110.common.bmo.machine.ISaveMachineRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineRecordInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.machine.MachineRecordPo;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -51,6 +54,9 @@ public class SaveMachineRecordBMOImpl implements ISaveMachineRecordBMO {
     @Autowired
     private IMachineRecordInnerServiceSMO machineRecordInnerServiceSMOImpl;
 
+    @Autowired
+    private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
     @Override
     public ResponseEntity<String> saveRecord(MachineRecordDto machineRecordDto) {
         machineRecordDto.setMachineRecordId(GenerateCodeFactory.CODE_PREFIX_machineRecordId);
@@ -73,6 +79,14 @@ public class SaveMachineRecordBMOImpl implements ISaveMachineRecordBMO {
             fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
         }
 
+        MachineDto machineDto = new MachineDto();
+        machineDto.setMachineCode(machineRecordDto.getMachineCode());
+        machineDto.setCommunityId(machineRecordDto.getCommunityId());
+        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+
+        Assert.listOnlyOne(machineDtos, "设备不存在");
+
+        machineRecordDto.setMachineId(machineDtos.get(0).getMachineId());
         List<MachineRecordPo> machineRecordPos = new ArrayList<>();
         MachineRecordPo machineRecordPo = BeanConvertUtil.covertBean(machineRecordDto, MachineRecordPo.class);
         machineRecordPos.add(machineRecordPo);
