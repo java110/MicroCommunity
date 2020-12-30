@@ -201,7 +201,7 @@
         ) values
         <foreach collection="importFeeDetailPos" item="item" separator=",">
           (#{item.amount},#{item.unitNum},#{item.feeId},#{item.floorNum},#{item.roomId},#{item.roomNum},#{item.ifdId},#{item.feeName},
-            #{item.startTime},#{item.endTime},#{item.state},#{item.communityId},#{item.importFeeId},#{item.remark}),
+            #{item.startTime},#{item.endTime},#{item.state},#{item.communityId},#{item.importFeeId},#{item.remark},
             #{item.objId},#{item.objName},#{item.objType})
         </foreach>
     </insert>
