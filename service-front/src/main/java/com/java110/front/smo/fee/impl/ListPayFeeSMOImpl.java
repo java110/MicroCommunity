@@ -48,7 +48,7 @@ public class ListPayFeeSMOImpl extends AbstractComponentSMO implements IListPayF
         int row = paramIn.getInteger("row");
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("page", (page - 1) * row);
-        paramIn.put("row", page * row);
+        paramIn.put("row", row);
 
         String apiUrl = "";
         if (!paramIn.containsKey("payObjType") || "3333".equals(paramIn.getString("payObjType"))) {
@@ -56,7 +56,7 @@ public class ListPayFeeSMOImpl extends AbstractComponentSMO implements IListPayF
         } else if ("6666".equals(paramIn.getString("payObjType"))) {
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
         } else {
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getListPayFee" + mapToUrlParam(paramIn);
         }
 
 

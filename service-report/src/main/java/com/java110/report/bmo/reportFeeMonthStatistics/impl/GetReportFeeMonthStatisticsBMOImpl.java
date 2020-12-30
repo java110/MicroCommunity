@@ -187,9 +187,28 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         int count = Integer.parseInt(countInfo.get("count").toString());
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
+        List<ReportFeeMonthStatisticsDto> reportList = new ArrayList<>();
+        //应收总金额(大计)
+        Double allReceivableAmount = 0.0;
+        //实收金额(大计)
+        Double allReceivedAmount = 0.0;
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
-
+            List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryAllPayFeeDetail(reportFeeMonthStatisticsDto);
+            allReceivableAmount = Double.valueOf(reportFeeMonthStatisticsList.get(0).getAllReceivableAmount());
+            allReceivedAmount = Double.valueOf(reportFeeMonthStatisticsList.get(0).getAllReceivedAmount());
+            //应收总金额(小计)
+            Double totalReceivableAmount = 0.0;
+            //实收总金额(小计)
+            Double totalReceivedAmount = 0.0;
+            for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
+                //应收金额
+                Double receivableAmount = Double.valueOf(reportFeeMonthStatistics.getReceivableAmount());
+                //实收金额
+                Double receivedAmount = Double.valueOf(reportFeeMonthStatistics.getReceivedAmount());
+                totalReceivableAmount = totalReceivableAmount + receivableAmount;
+                totalReceivedAmount = totalReceivedAmount + receivedAmount;
+            }
             for (ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
                 if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(tmpReportFeeMonthStatisticsDto.getPayerObjType())) {
                     tmpReportFeeMonthStatisticsDto.setObjName(tmpReportFeeMonthStatisticsDto.getFloorNum()
@@ -202,13 +221,25 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 if (!StringUtil.isEmpty(tmpReportFeeMonthStatisticsDto.getImportFeeName())) {
                     tmpReportFeeMonthStatisticsDto.setFeeName(tmpReportFeeMonthStatisticsDto.getImportFeeName());
                 }
+                //应收金额(小计)
+                tmpReportFeeMonthStatisticsDto.setTotalReceivableAmount(String.format("%.2f", totalReceivableAmount));
+                //实收金额(小计)
+                tmpReportFeeMonthStatisticsDto.setTotalReceivedAmount(String.format("%.2f", totalReceivedAmount));
+                //应收金额(大计)
+                tmpReportFeeMonthStatisticsDto.setAllReceivableAmount(String.format("%.2f", allReceivableAmount));
+                //实收金额(大计)
+                tmpReportFeeMonthStatisticsDto.setAllReceivedAmount(String.format("%.2f", allReceivedAmount));
+                reportList.add(tmpReportFeeMonthStatisticsDto);
             }
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
+            reportList.addAll(reportFeeMonthStatisticsDtos);
         }
 
-        FeeDetailResultVo resultVo = new FeeDetailResultVo(countInfo.getDouble("totalReceivableAmount"), countInfo.getDouble("totalReceivedAmount"),
-                (int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
+        /*FeeDetailResultVo resultVo = new FeeDetailResultVo(countInfo.getDouble("totalReceivableAmount"), countInfo.getDouble("totalReceivedAmount"),
+                (int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList);*/
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

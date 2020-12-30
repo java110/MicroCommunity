@@ -57,6 +57,9 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String importFeeName;
 
+    //支付方式
+    private String primeRate;
+
     //应收总金额(小计)
     private String totalReceivableAmount;
 
@@ -374,5 +377,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setFeeConfigDtos(List<FeeConfigDto> feeConfigDtoS) {
         FeeConfigDtos = feeConfigDtoS;
+    }
+
+    public String getPrimeRate() {
+        return primeRate;
+    }
+
+    public void setPrimeRate(String primeRate) {
+        this.primeRate = primeRate;
     }
 }

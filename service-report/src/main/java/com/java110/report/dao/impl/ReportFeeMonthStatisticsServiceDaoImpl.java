@@ -235,6 +235,15 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     }
 
     @Override
+    public List<Map> queryAllPayFeeDetail(Map info) throws DAOException {
+        logger.debug("查询费用总数月统计信息 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllPayFeeDetail", info);
+
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
+    @Override
     public int queryDeadlineFeeCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 

@@ -137,8 +137,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
-        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
+        reportFeeMonthStatisticsDto.setStartTime(startTime);
+        reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
     }
 
@@ -172,8 +172,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
-        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
+        reportFeeMonthStatisticsDto.setStartTime(startTime);
+        reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryReportFloorUnitFeeSummary(reportFeeMonthStatisticsDto);
     }
 
@@ -207,8 +207,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
-        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
+        reportFeeMonthStatisticsDto.setStartTime(startTime);
+        reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryFeeBreakdown(reportFeeMonthStatisticsDto);
     }
 
@@ -231,7 +231,7 @@ public class ReportFeeMonthStatisticsApi {
                                                  @RequestParam(value = "startTime", required = false) String startTime,
                                                  @RequestParam(value = "endTime", required = false) String endTime,
                                                  @RequestParam(value = "feeName", required = false) String feeName,
-                                                 @RequestParam(value = "configId",required = false) String configId,
+                                                 @RequestParam(value = "configId", required = false) String configId,
                                                  @RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -246,8 +246,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
         reportFeeMonthStatisticsDto.setFeeName(feeName);
         reportFeeMonthStatisticsDto.setConfigId(configId);
-        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
-        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
+        reportFeeMonthStatisticsDto.setStartTime(startTime);
+        reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryFeeDetail(reportFeeMonthStatisticsDto);
     }
 
@@ -281,8 +281,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
-        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
+        reportFeeMonthStatisticsDto.setStartTime(startTime);
+        reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
     }
 
@@ -302,6 +302,7 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "unitId", required = false) String unitId,
                                                     @RequestParam(value = "roomId", required = false) String roomId,
                                                     @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                    @RequestParam(value = "primeRate", required = false) String primeRate,
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
                                                     @RequestParam(value = "page") int page,
@@ -316,8 +317,9 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setStartTime(StringUtil.isEmpty(startTime) ? null : startTime + "-01");
-        reportFeeMonthStatisticsDto.setEndTime(StringUtil.isEmpty(endTime) ? null : endTime + "-01");
+        reportFeeMonthStatisticsDto.setPrimeRate(primeRate);
+        reportFeeMonthStatisticsDto.setStartTime(startTime);
+        reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
     }
 
