@@ -115,7 +115,7 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
         //查询楼栋信息
         JSONArray cars = this.getExistsCars(pd, result);
         if (cars == null) {
-            CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+            CellRangeAddress region = new CellRangeAddress(0, 0, 0, 4);
             sheet.addMergedRegion(region);
             return;
         }
@@ -128,7 +128,7 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
             row.createCell(4).setCellValue("");
         }
 
-        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 4);
         sheet.addMergedRegion(region);
     }
 
