@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.fee.FeeDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetExport.IExportRoomSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -47,13 +47,21 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
 
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
+        Assert.hasKeyAndValue(paramIn, "objType", "请求中未包含费用对象");
 
         Workbook workbook = null;  //工作簿
         //工作表
         workbook = new XSSFWorkbook();
-        //获取楼信息
-        getRooms(pd, result, workbook);
+
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(paramIn.getString("objType"))) {
+            //获取楼信息
+            getRooms(pd, result, workbook);
+        } else {
+            getCars(pd, result, workbook);
+        }
 
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -77,6 +85,16 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
         }
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
+    }
+
+    /**
+     * 查询车辆
+     *
+     * @param pd
+     * @param result
+     * @param workbook
+     */
+    private void getCars(IPageData pd, ComponentValidateResult result, Workbook workbook) {
     }
 
 

@@ -74,7 +74,7 @@ public class FuiouRentingToNotifyAdapt implements IPayNotifyAdapt {
      * @return
      * @throws Exception
      */
-    public String confirmPayFee(String param) {
+    public String confirmPayFee(String param,String wId) {
         JSONObject resJson = new JSONObject();
         resJson.put("result_code", "010002");
         resJson.put("result_msg", "失败");

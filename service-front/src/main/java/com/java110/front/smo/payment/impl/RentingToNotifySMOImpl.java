@@ -36,11 +36,12 @@ public class RentingToNotifySMOImpl implements IRentingToNotifySMO {
 
     @Override
     public ResponseEntity<String> toNotify(String param, HttpServletRequest request) {
+        String wId = request.getParameter("wId");
         String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_NOTIFY_ADAPT);
         payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_RENTING_TO_NOTIFY_ADAPT : payNotifyAdapt;
         //支付适配器
         IRentingToNotifyAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IRentingToNotifyAdapt.class);
-        String resXml = tPayNotifyAdapt.confirmPayFee(param);
+        String resXml = tPayNotifyAdapt.confirmPayFee(param,wId);
         logger.info("【小程序支付回调响应】 响应内容：\n" + resXml);
         return new ResponseEntity<String>(resXml, HttpStatus.OK);
     }

@@ -28,8 +28,7 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -121,12 +120,8 @@ public class FuiouPayAdapt implements IPayAdapt {
 
         if ("000000".equals(resMap.getString("result_code"))) {
             if (WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
-                resultMap.put("appId", smallWeChatDto.getAppId());
-                resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
-                resultMap.put("nonceStr", PayUtil.makeUUID(32));
-                resultMap.put("package", "prepay_id=" + resMap.get("session_id"));
-                resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
+                resultMap.putAll(JSONObject.toJavaObject(JSONObject.parseObject(resMap.getString("reserved_pay_info")), Map.class));
+                resultMap.put("sign",resultMap.get("paySign"));
             } else if (WechatAuthProperties.TRADE_TYPE_APP.equals(tradeType)) {
                 resultMap.put("appId", smallWeChatDto.getAppId());
                 resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
@@ -173,7 +168,7 @@ public class FuiouPayAdapt implements IPayAdapt {
         paramMap.put("mchnt_cd", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
         paramMap.put("random_str", PayUtil.makeUUID(32));
         paramMap.put("order_amt", PayUtil.moneyToIntegerStr(payAmount));
-        paramMap.put("mchnt_order_no", orderNum);
+        paramMap.put("mchnt_order_no", "9457" + orderNum);
         paramMap.put("txn_begin_ts", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
         paramMap.put("goods_des", systemName + feeName);
         paramMap.put("term_id", "abcdefgh");
@@ -186,9 +181,11 @@ public class FuiouPayAdapt implements IPayAdapt {
         paramMap.put("sign", createSign(paramMap, smallWeChatDto.getPayPassword()));
 
         logger.debug("调用支付统一下单接口" + paramMap.toJSONString());
-
-        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(
-                PAY_UNIFIED_ORDER_URL, paramMap.toJSONString(), String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        HttpEntity httpEntity = new HttpEntity(paramMap.toJSONString(), headers);
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(
+                PAY_UNIFIED_ORDER_URL, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("统一下单返回" + responseEntity);
 

@@ -22,7 +22,6 @@ import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.payment.adapt.IPayNotifyAdapt;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -75,7 +74,7 @@ public class FuiouPayNotifyAdapt implements IPayNotifyAdapt {
      * @return
      * @throws Exception
      */
-    public String confirmPayFee(String param) {
+    public String confirmPayFee(String param,String wId) {
         JSONObject resJson = new JSONObject();
         resJson.put("result_code", "010002");
         resJson.put("result_msg", "失败");
@@ -85,7 +84,7 @@ public class FuiouPayNotifyAdapt implements IPayNotifyAdapt {
             String resultCode = map.getString("result_code");
             if ("000000".equals(resultCode)) {
                 //更新数据
-                int result = confirmPayFee(map);
+                int result = confirmPayFee(map,wId);
                 if (result > 0) {
                     //支付成功
                     resJson.put("result_code", "000000");
@@ -101,8 +100,7 @@ public class FuiouPayNotifyAdapt implements IPayNotifyAdapt {
     }
 
 
-    public int confirmPayFee(JSONObject map) {
-        String wId = map.getString("wId");
+    public int confirmPayFee(JSONObject map,String wId) {
         wId = wId.replace(" ", "+");
 
         ResponseEntity<String> responseEntity = null;
@@ -127,7 +125,7 @@ public class FuiouPayNotifyAdapt implements IPayNotifyAdapt {
 
         //查询用户ID
         JSONObject paramIn = new JSONObject();
-        paramIn.put("oId", outTradeNo);
+        paramIn.put("oId", outTradeNo.substring(4));
         String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payFeeConfirm";
         responseEntity = this.callCenterService(restTemplate, "-1", paramIn.toJSONString(), url, HttpMethod.POST);
 

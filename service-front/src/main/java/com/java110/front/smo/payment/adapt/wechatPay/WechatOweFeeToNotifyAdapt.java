@@ -66,7 +66,7 @@ public class WechatOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
      * @return
      * @throws Exception
      */
-    public String confirmPayFee(String param) {
+    public String confirmPayFee(String param,String wId) {
         String resXml = "";
         try {
             Map<String, Object> map = PayUtil.getMapFromXML(param);

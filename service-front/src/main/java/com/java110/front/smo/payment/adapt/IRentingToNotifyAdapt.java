@@ -27,7 +27,7 @@ public interface IRentingToNotifyAdapt {
      * @return
      * @throws Exception
      */
-    String confirmPayFee(String param);
+    String confirmPayFee(String param,String wId);
 
 
 }
