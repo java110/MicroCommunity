@@ -11,6 +11,10 @@ public class ImportRoomFee {
 
     private String roomNum;
 
+    private String carNum;
+
+    private String carId;
+
     private String feeName;
 
     private String startTime;
@@ -123,5 +127,21 @@ public class ImportRoomFee {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
     }
 }

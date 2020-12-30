@@ -95,6 +95,41 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
      * @param workbook
      */
     private void getCars(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+        Sheet sheet = workbook.createSheet("车位费用信息");
+        Row row = sheet.createRow(0);
+        Cell cell0 = row.createCell(0);
+        cell0.setCellValue("费用名称: 请填写系统中费用类型，如停车费等 ；\n开始时间: " +
+                "收费开始时间，格式为YYYY-MM-DD；\n结束时间: 费用结束时间，格式为YYYY-MM-DD； \n收费金额: 本次收取金额 单位元； " +
+                "\n注意：所有单元格式为文本");
+        CellStyle cs = workbook.createCellStyle();
+        cs.setWrapText(true);  //关键
+        cell0.setCellStyle(cs);
+        row.setHeight((short) (200 * 10));
+        row = sheet.createRow(1);
+        row.createCell(0).setCellValue("车牌号");
+        row.createCell(1).setCellValue("费用名称");
+        row.createCell(2).setCellValue("开始时间");
+        row.createCell(3).setCellValue("结束时间");
+        row.createCell(4).setCellValue("收费金额");
+
+        //查询楼栋信息
+        JSONArray cars = this.getExistsCars(pd, result);
+        if (cars == null) {
+            CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+            sheet.addMergedRegion(region);
+            return;
+        }
+        for (int carIndex = 0; carIndex < cars.size(); carIndex++) {
+            row = sheet.createRow(carIndex + 2);
+            row.createCell(0).setCellValue(cars.getJSONObject(carIndex).getString("carNum"));
+            row.createCell(1).setCellValue("");
+            row.createCell(2).setCellValue("");
+            row.createCell(3).setCellValue("");
+            row.createCell(4).setCellValue("");
+        }
+
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+        sheet.addMergedRegion(region);
     }
 
 
@@ -125,6 +160,36 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
 
 
         return savedRoomInfoResults.getJSONArray("rooms");
+
+    }
+
+    /**
+     * 查询存在的房屋信息
+     * room.queryRooms
+     *
+     * @param pd
+     * @param result
+     * @return
+     */
+    private JSONArray getExistsCars(IPageData pd, ComponentValidateResult result) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.queryOwnerCars?page=1&row=10000&communityId=" + result.getCommunityId();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedCarInfoResults = JSONObject.parseObject(responseEntity.getBody());
+
+
+        if (!savedCarInfoResults.containsKey("data")) {
+            return null;
+        }
+
+
+        return savedCarInfoResults.getJSONArray("data");
 
     }
 

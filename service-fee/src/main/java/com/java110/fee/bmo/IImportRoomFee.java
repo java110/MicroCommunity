@@ -14,4 +14,11 @@ public interface IImportRoomFee {
      * @return
      */
     ResponseEntity<String> importFee(JSONObject reqJson);
+
+    /**
+     * 车辆费用导入
+     * @param reqJson
+     * @return
+     */
+    ResponseEntity<String> importCarFee(JSONObject reqJson);
 }

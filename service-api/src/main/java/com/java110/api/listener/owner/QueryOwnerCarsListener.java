@@ -97,9 +97,11 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
         if (total > 0) {
             ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class));
 
-            freshPs(ownerCarDtoList);
-
-            freshRoomInfo(ownerCarDtoList);
+            //小区20条时刷房屋和车位信息
+            if (row < 20) {
+                freshPs(ownerCarDtoList);
+                freshRoomInfo(ownerCarDtoList);
+            }
         } else {
             ownerCarDtoList = new ArrayList<>();
         }

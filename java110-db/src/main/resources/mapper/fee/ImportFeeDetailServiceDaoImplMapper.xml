@@ -9,10 +9,10 @@
     <insert id="saveImportFeeDetailInfo" parameterType="Map">
         insert into import_fee_detail(
         amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,
-        end_time,state,community_id,import_fee_id,remark
+        end_time,state,community_id,import_fee_id,remark,obj_id,obj_name,obj_type
         ) values (
         #{amount},#{unitNum},#{feeId},#{floorNum},#{roomId},#{roomNum},#{ifdId},#{feeName},#{startTime},
-        #{endTime},#{state},#{communityId},#{importFeeId},#{remark}
+        #{endTime},#{state},#{communityId},#{importFeeId},#{remark},#{objId},#{objName},#{objType}
         )
     </insert>
 
@@ -23,7 +23,7 @@
         feeId,t.floor_num,t.floor_num floorNum,t.room_id,t.room_id roomId,t.room_num,t.room_num
         roomNum,t.ifd_id,t.ifd_id ifdId,t.fee_name,t.fee_name feeName,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,
-        t.remark
+        t.remark,t.obj_id objId,t.obj_name objName,t.obj_type objType
         from import_fee_detail t
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -67,6 +67,15 @@
         </if>
         <if test="importFeeId !=null and importFeeId != ''">
             and t.import_fee_id= #{importFeeId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -169,6 +178,15 @@
         <if test="importFeeId !=null and importFeeId != ''">
             and t.import_fee_id= #{importFeeId}
         </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
 
 
     </select>
@@ -179,11 +197,12 @@
     <insert id="saveImportFeeDetails" parameterType="Map">
         insert into import_fee_detail(
         amount,unit_num,fee_id,floor_num,room_id,room_num,ifd_id,fee_name,start_time,
-        end_time,state,community_id,import_fee_id,remark
+        end_time,state,community_id,import_fee_id,remark,obj_id,obj_name,obj_type
         ) values
         <foreach collection="importFeeDetailPos" item="item" separator=",">
           (#{item.amount},#{item.unitNum},#{item.feeId},#{item.floorNum},#{item.roomId},#{item.roomNum},#{item.ifdId},#{item.feeName},
-            #{item.startTime},#{item.endTime},#{item.state},#{item.communityId},#{item.importFeeId},#{item.remark})
+            #{item.startTime},#{item.endTime},#{item.state},#{item.communityId},#{item.importFeeId},#{item.remark}),
+            #{item.objId},#{item.objName},#{item.objType})
         </foreach>
     </insert>
 
