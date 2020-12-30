@@ -107,7 +107,7 @@ public class OwnerCarInnerServiceSMOImpl extends BaseServiceSMO implements IOwne
 
         for (OwnerCarDto ownerCarDto : ownerCarDtos) {
             for (ImportRoomFee importRoomFee : tmpImportCarFees) {
-                if (ownerCarDto.getNum().equals(importRoomFee.getCarNum())) {
+                if (ownerCarDto.getCarNum().equals(importRoomFee.getCarNum())) {
                     importRoomFee.setCarId(ownerCarDto.getCarId());
                 }
             }
