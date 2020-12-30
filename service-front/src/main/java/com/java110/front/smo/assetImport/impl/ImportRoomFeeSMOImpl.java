@@ -178,7 +178,7 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
         }
         if (tmpImportCarFees != null && tmpImportCarFees.size() > 0) {
 
-            createRoomFee(pd, tmpImportCarFees, data, paramOut);
+            createCarFee(pd, tmpImportCarFees, data, paramOut);
         }
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "成功：" + paramOut.getString("successCount") + ",失败：" + paramOut.getString("errorCount"));
     }
