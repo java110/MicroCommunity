@@ -1,10 +1,12 @@
 package com.java110.common.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.bmo.machine.IMachineHeartbeatBMO;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
 import com.java110.common.bmo.machine.ISaveMachineRecordBMO;
 import com.java110.common.bmo.machine.IUpdateMachineTransactionStateBMO;
 import com.java110.common.bmo.machineTranslateError.IGetMachineTranslateErrorBMO;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
@@ -35,6 +37,9 @@ public class MachineApi {
 
     @Autowired
     private IUpdateMachineTransactionStateBMO updateMachineTransactionStateBMOImpl;
+
+    @Autowired
+    private IMachineHeartbeatBMO machineHeartbeatBMOImpl;
 
     /**
      * 设备开门功能
@@ -161,6 +166,28 @@ public class MachineApi {
                 ? MachineTranslateDto.STATE_SUCCESS : MachineTranslateDto.STATE_ERROR);
         machineRecordDto.setRemark(reqJson.getString("msg"));
         return updateMachineTransactionStateBMOImpl.update(machineRecordDto);
+    }
+
+    /**
+     * 物联网系统设备心跳
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /machine/heartbeat
+     * @path /app/machine/heartbeat
+     */
+    @RequestMapping(value = "/heartbeat", method = RequestMethod.POST)
+    public ResponseEntity<String> heartbeat(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "taskId", "未包含任务信息");
+        Assert.hasKeyAndValue(reqJson, "machineCode", "未包含设备编码");
+        Assert.hasKeyAndValue(reqJson, "heartbeatTime", "未包含心跳时间");
+        Assert.hasKeyAndValue(reqJson, "extCommunityId", "未包含小区ID");
+        MachineDto machineDto = new MachineDto();
+        machineDto.setMachineCode(reqJson.getString("machineCode"));
+        machineDto.setCommunityId(reqJson.getString("extCommunityId"));
+        machineDto.setHeartbeatTime(reqJson.getString("heartbeatTime"));
+
+        return machineHeartbeatBMOImpl.heartbeat(machineDto);
     }
 
 }

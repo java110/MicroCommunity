@@ -11,6 +11,7 @@ import com.java110.po.machine.MachinePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +163,8 @@ public class SaveMachineInfoListener extends AbstractMachineBusinessServiceDataF
             businessMachine.put("machineId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineId));
 
         }
+
+        businessMachine.put("heartbeatTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
         businessMachine.put("bId", business.getbId());
         businessMachine.put("operate", StatusConstant.OPERATE_ADD);

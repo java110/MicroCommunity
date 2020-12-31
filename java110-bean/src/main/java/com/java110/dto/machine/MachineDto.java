@@ -54,6 +54,7 @@ public class MachineDto extends PageDto implements Serializable {
     private String createTime;
 
     private String statusCd = "0";
+    private String heartbeatTime;
 
 
     public String getMachineMac() {
@@ -295,5 +296,13 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setMachineAttrs(List<MachineAttrDto> machineAttrs) {
         this.machineAttrs = machineAttrs;
+    }
+
+    public String getHeartbeatTime() {
+        return heartbeatTime;
+    }
+
+    public void setHeartbeatTime(String heartbeatTime) {
+        this.heartbeatTime = heartbeatTime;
     }
 }
