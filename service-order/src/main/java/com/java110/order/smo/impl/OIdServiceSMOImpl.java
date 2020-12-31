@@ -174,6 +174,9 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
             sql = "insert into " + orderItemDto.getActionObj() + " ";
             param = new JSONObject();
             JSONObject keyValue = preValues.getJSONObject(preValueIndex);
+            if (keyValue.isEmpty()) {
+                continue;
+            }
             String keySql = "( ";
             String valueSql = " values (";
             for (String key : keyValue.keySet()) {
@@ -209,6 +212,9 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
             param = new JSONObject();
             JSONObject keyValue = preValues.getJSONObject(preValueIndex);
             JSONObject afterKeyValue = afterValues.getJSONObject(preValueIndex);
+            if (keyValue.isEmpty() || afterKeyValue.isEmpty()) {
+                continue;
+            }
             String whereSql = " where 1=1 ";
             for (String key : keyValue.keySet()) {
                 sql += (key + "=" + keyValue.getString(key) + ",");
@@ -247,11 +253,15 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
             sql = "delete from " + orderItemDto.getActionObj() + " where 1=1 ";
             param = new JSONObject();
             JSONObject keyValue = afterValues.getJSONObject(preValueIndex);
+            if (keyValue.isEmpty()) {
+                continue;
+            }
             for (String key : keyValue.keySet()) {
                 if (!StringUtil.isEmpty(keyValue.getString(key))) {
                     sql += (" and " + key + "=" + keyValue.getString(key));
                 }
             }
+            sql +=" limit 1";//防止程序异常删除 尴尬 根据业务场景 没有需要删除多余 1条的场景
             param.put("fallBackSql", sql);
             params.add(param);
         }
