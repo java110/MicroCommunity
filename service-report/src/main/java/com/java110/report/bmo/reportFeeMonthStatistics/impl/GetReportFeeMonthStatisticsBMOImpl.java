@@ -100,7 +100,18 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
+        //查询该小区下的费用项目
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(reportFeeMonthStatisticsDto.getCommunityId());
+        List<FeeConfigDto> feeConfigDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        List<ReportFeeMonthStatisticsDto> reportList = new ArrayList<>();
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
+            reportFeeMonthStatistics.setFeeConfigDtos(feeConfigDtos);
+            reportList.add(reportFeeMonthStatistics);
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
@@ -188,6 +199,10 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
         List<ReportFeeMonthStatisticsDto> reportList = new ArrayList<>();
+        //查询该小区下的费用项目
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(reportFeeMonthStatisticsDto.getCommunityId());
+        List<FeeConfigDto> feeConfigDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         //应收总金额(大计)
         Double allReceivableAmount = 0.0;
         //实收金额(大计)
@@ -229,6 +244,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 tmpReportFeeMonthStatisticsDto.setAllReceivableAmount(String.format("%.2f", allReceivableAmount));
                 //实收金额(大计)
                 tmpReportFeeMonthStatisticsDto.setAllReceivedAmount(String.format("%.2f", allReceivedAmount));
+                //费用项目
+                tmpReportFeeMonthStatisticsDto.setFeeConfigDtos(feeConfigDtos);
                 reportList.add(tmpReportFeeMonthStatisticsDto);
             }
         } else {
