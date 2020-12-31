@@ -91,7 +91,7 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
             userName = userDtos.get(0).getUserName();
         } else {
             OwnerDto ownerDto = new OwnerDto();
-            ownerDto.setMemberId(userId);
+            ownerDto.setMemberId(paramIn.getString("userId"));
             ownerDto.setCommunityId(paramIn.getString("communityId"));
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
             Assert.listOnlyOne(ownerDtos, "业主不存在");
