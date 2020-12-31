@@ -35,6 +35,7 @@ public class ApiMachineDataVo implements Serializable {
 
 
     private String createTime;
+    private String heartbeatTime;
 
     public String getMachineId() {
         return machineId;
@@ -226,5 +227,13 @@ public class ApiMachineDataVo implements Serializable {
 
     public void setMachineAttrs(List<MachineAttrDto> machineAttrs) {
         this.machineAttrs = machineAttrs;
+    }
+
+    public String getHeartbeatTime() {
+        return heartbeatTime;
+    }
+
+    public void setHeartbeatTime(String heartbeatTime) {
+        this.heartbeatTime = heartbeatTime;
     }
 }
