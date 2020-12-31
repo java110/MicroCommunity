@@ -12,6 +12,7 @@ import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -185,7 +186,8 @@ public class MachineApi {
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(reqJson.getString("machineCode"));
         machineDto.setCommunityId(reqJson.getString("extCommunityId"));
-        machineDto.setHeartbeatTime(reqJson.getString("heartbeatTime"));
+        //machineDto.setHeartbeatTime(reqJson.getString("heartbeatTime"));
+        machineDto.setHeartbeatTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));//这里自己生成 不获取传递时间 因为可能时钟不一致 导致前台状态显示不正常
 
         return machineHeartbeatBMOImpl.heartbeat(machineDto);
     }
