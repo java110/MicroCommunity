@@ -49,6 +49,7 @@ public class MachineHeartbeatBMOImpl implements IMachineHeartbeatBMO {
         Assert.listOnlyOne(machineDtos, "设备不存在");
 
         machineDto.setMachineId(machineDtos.get(0).getMachineId());
+        machineDto.setMachineCode("");
 
         int count = machineInnerServiceSMO.updateMachineState(machineDto);
         if (count > 0) {
