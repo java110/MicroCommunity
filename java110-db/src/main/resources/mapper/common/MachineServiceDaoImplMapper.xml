@@ -254,7 +254,7 @@
         <if test="direction !=null and direction != ''">
             , t.direction = #{direction}
         </if>
-        <if test="heartbeatTime !=null and heartbeatTime != ''">
+        <if test="heartbeatTime !=null ">
             , t.heartbeat_time = #{heartbeatTime}
         </if>
         where 1=1
