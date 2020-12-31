@@ -277,11 +277,12 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         Sheet sheet = workbook.createSheet("费用分项表");
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("费用编号");
-        row.createCell(1).setCellValue("费用项");
-        row.createCell(2).setCellValue("费用开始时间");
-        row.createCell(3).setCellValue("应收金额");
-        row.createCell(4).setCellValue("实收金额");
-        row.createCell(5).setCellValue("欠费金额");
+        row.createCell(1).setCellValue("费用类型");
+        row.createCell(2).setCellValue("费用项");
+        row.createCell(3).setCellValue("费用开始时间");
+        row.createCell(4).setCellValue("应收金额");
+        row.createCell(5).setCellValue("实收金额");
+        row.createCell(6).setCellValue("欠费金额");
 
 
         //查询楼栋信息
@@ -292,11 +293,12 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             dataObj = rooms.getJSONObject(roomIndex);
 
             row.createCell(0).setCellValue(roomIndex + 1);
-            row.createCell(1).setCellValue(dataObj.getString("feeName"));
-            row.createCell(2).setCellValue(dataObj.getString("feeCreateTime"));
-            row.createCell(3).setCellValue(dataObj.getString("receivableAmount"));
-            row.createCell(4).setCellValue(dataObj.getString("receivedAmount"));
-            row.createCell(5).setCellValue(dataObj.getString("oweAmount"));
+            row.createCell(1).setCellValue(dataObj.getString("feeTypeCd"));
+            row.createCell(2).setCellValue(dataObj.getString("feeName"));
+            row.createCell(3).setCellValue(dataObj.getString("feeCreateTime"));
+            row.createCell(4).setCellValue(dataObj.getString("receivableAmount"));
+            row.createCell(5).setCellValue(dataObj.getString("receivedAmount"));
+            row.createCell(6).setCellValue(dataObj.getString("oweAmount"));
 
         }
     }

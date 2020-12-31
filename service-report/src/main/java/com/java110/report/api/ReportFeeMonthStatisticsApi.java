@@ -193,6 +193,8 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "unitId", required = false) String unitId,
                                                     @RequestParam(value = "roomId", required = false) String roomId,
                                                     @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                    @RequestParam(value = "configId", required = false) String configId,
+                                                    @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
                                                     @RequestParam(value = "page") int page,
@@ -207,6 +209,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setUnitNum(unitNum);
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
+        reportFeeMonthStatisticsDto.setConfigId(configId);
+        reportFeeMonthStatisticsDto.setFeeTypeCd(feeTypeCd);
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryFeeBreakdown(reportFeeMonthStatisticsDto);
@@ -303,6 +307,7 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "roomId", required = false) String roomId,
                                                     @RequestParam(value = "roomNum", required = false) String roomNum,
                                                     @RequestParam(value = "primeRate", required = false) String primeRate,
+                                                    @RequestParam(value = "configId", required = false) String configId,
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
                                                     @RequestParam(value = "page") int page,
@@ -318,6 +323,7 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
         reportFeeMonthStatisticsDto.setPrimeRate(primeRate);
+        reportFeeMonthStatisticsDto.setConfigId(configId);
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);

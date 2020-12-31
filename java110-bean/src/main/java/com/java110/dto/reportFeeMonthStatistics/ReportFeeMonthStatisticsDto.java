@@ -74,6 +74,9 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private List<FeeConfigDto> FeeConfigDtos;
 
+    //费用类型
+    private String feeTypeCd;
+
     public String getReceivableAmount() {
         return receivableAmount;
     }
@@ -385,5 +388,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setPrimeRate(String primeRate) {
         this.primeRate = primeRate;
+    }
+
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
     }
 }

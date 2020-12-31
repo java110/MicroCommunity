@@ -438,12 +438,14 @@
     <select id="queryFeeBreakdownCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select t.fee_name,pfc.start_time
+        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,pfc.start_time feeCreateTime,t.create_time createTime,SUM(t.receivable_amount)
+        receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name="pay_fee_config" and td.table_columns="fee_type_cd"
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -467,13 +469,16 @@
             and t.fee_id= #{feeId}
         </if>
         <if test="configId !=null and configId != ''">
-            and t.config_id= #{configId}
+            and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -490,13 +495,14 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeBreakdown" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,pfc.start_time feeCreateTime,t.create_time createTime,SUM(t.receivable_amount)
+        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,pfc.start_time feeCreateTime,t.create_time createTime,SUM(t.receivable_amount)
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name="pay_fee_config" and td.table_columns="fee_type_cd"
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -520,13 +526,16 @@
             and t.fee_id= #{feeId}
         </if>
         <if test="configId !=null and configId != ''">
-            and t.config_id= #{configId}
+            and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -851,7 +860,7 @@
             and t.fee_id= #{feeId}
         </if>
         <if test="configId !=null and configId != ''">
-            and t.config_id= #{configId}
+            and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
@@ -913,7 +922,7 @@
             and t.fee_id= #{feeId}
         </if>
         <if test="configId !=null and configId != ''">
-            and t.config_id= #{configId}
+            and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
@@ -972,7 +981,7 @@
             and t.fee_id= #{feeId}
         </if>
         <if test="configId !=null and configId != ''">
-            and t.config_id= #{configId}
+            and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
