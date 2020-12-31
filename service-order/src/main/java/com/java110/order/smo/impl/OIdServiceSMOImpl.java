@@ -227,6 +227,10 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
                 sql = sql.substring(0, sql.length() - 1);
             }
 
+            if (sql.endsWith(whereSql)) { // 说明没有条件 不做回退 回退整个表是有问题的
+                continue;
+            }
+
             sql += whereSql;
 
             param.put("fallBackSql", sql);
@@ -249,8 +253,9 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
         JSONObject logTextObj = JSONObject.parseObject(logText);
         JSONArray afterValues = logTextObj.getJSONArray("afterValue");
+        String whereSql = " where 1=1 ";
         for (int preValueIndex = 0; preValueIndex < afterValues.size(); preValueIndex++) {
-            sql = "delete from " + orderItemDto.getActionObj() + " where 1=1 ";
+            sql = "delete from " + orderItemDto.getActionObj() + whereSql;
             param = new JSONObject();
             JSONObject keyValue = afterValues.getJSONObject(preValueIndex);
             if (keyValue.isEmpty()) {
@@ -261,7 +266,10 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
                     sql += (" and " + key + "=" + keyValue.getString(key));
                 }
             }
-            sql +=" limit 1";//防止程序异常删除 尴尬 根据业务场景 没有需要删除多余 1条的场景
+            if (sql.endsWith(whereSql)) { // 说明没有条件 不做回退 回退整个表是有问题的
+                continue;
+            }
+            sql += " limit 1";//防止程序异常删除 尴尬 根据业务场景 没有需要删除多余 1条的场景
             param.put("fallBackSql", sql);
             params.add(param);
         }
