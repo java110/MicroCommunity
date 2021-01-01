@@ -16,6 +16,8 @@ public class StoreUserDto extends PageDto implements Serializable {
     //商户id
     private String storeId;
 
+    private String storeName;
+
     //业务id
     private String bId;
 
@@ -25,11 +27,15 @@ public class StoreUserDto extends PageDto implements Serializable {
     //商户名称
     private String name;
 
+    private String staffName;
+
     //商户地址
     private String address;
 
     //商户电话
     private String tel;
+
+    private String staffTel;
 
     private String storeTypeCd;
 
@@ -164,5 +170,29 @@ public class StoreUserDto extends PageDto implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStaffTel() {
+        return staffTel;
+    }
+
+    public void setStaffTel(String staffTel) {
+        this.staffTel = staffTel;
     }
 }
