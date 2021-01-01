@@ -4,9 +4,134 @@
 
 文档说明设备相关接口协议
 
+HC小区管理系统源码获取 https://gitee.com/wuxw7/MicroCommunity
+
 ## 业主获取对应设备
 
+说明：查询业主可以开门设备
+
+请求方式： GET
+
+请求地址：/api/owner.listOwnerMachines
+
+请求参数：
+
+| 名称 | 类型 | 是否必填 | 示例值 | 描述 |
+| :----:| :----: | :----: | :----: | :----: |
+| memberId | String | 是 | 772020123183100051 | 业主ID |
+| communityId | String | 是 | 2020122471920846 | 小区ID |
+
+请求示例：
+```url
+
+http://ip:port/api/owner.listOwnerMachines?memberId=772020123183100051&communityId=2020122471920846
+
+```
+
+返回参数：
+
+| 名称 | 类型 | 是否必填 | 示例值 | 描述 |
+| :----:| :----: | :----: | :----: | :----: |
+| direction | String | 是 | 3306 | 进场 |
+| directionName | String | 是 | 进场 | 中文描述 |
+| heartbeatTime | String | 是 | 2020-12-31 18:06:40 | 设备最近心跳时间 |
+| locationObjId | String | 是 | 2020122471920846 | 位置ID |
+| locationObjName | String | 是 | iot_小区 位置3 | 位置说明 |
+| machineCode | String | 是 | 1368371 | 设备编码 |
+| machineId | String | 是 | 892020122872730977 | 设备ID |
+| machineIp | String | 否 | 192.168.1.1 | 设备IP |
+| machineMac | String | 否 | 11:11:11:11 | 设备mac |
+| machineName | String | 是 | 厦门集美2 | 设备名称 |
+| machineTypeCd | String | 是 | 9999 | 表示门禁 |
+| machineTypeCdName | String | 是 | 门禁 | 设备类型说明 |
+
+返回示例：
+```json
+{
+	"machines": [{
+		"direction": "3306",
+		"directionName": "进场",
+		"heartbeatTime": "2020-12-31 18:06:40",
+		"locationObjId": "2020122471920846",
+		"locationObjName": "iot_小区 位置3",
+		"machineCode": "1368371",
+		"machineId": "892020122872730977",
+		"machineIp": "",
+		"machineMac": "",
+		"machineName": "厦门集美2",
+		"machineTypeCd": "9999",
+		"machineTypeCdName": "门禁"
+	}],
+	"page": 1,
+	"records": 1,
+	"rows": 1,
+	"total": 0
+}
+```
+
 ## 物业查询所有设备
+
+说明：查询业主可以开门设备
+
+请求方式： GET
+
+请求地址：/api/machine.listMachines
+
+请求参数：
+
+| 名称 | 类型 | 是否必填 | 示例值 | 描述 |
+| :----:| :----: | :----: | :----: | :----: |
+| page | Integer | 是 | 1 | 页数 |
+| row | Integer | 是 | 10 | 每页显示数量 |
+| communityId | String | 是 | 2020122471920846 | 小区ID |
+
+请求示例：
+```url
+
+http://ip:port/api/machine.listMachines?communityId=2020122471920846&page=1&row=10
+
+```
+
+返回参数：
+
+| 名称 | 类型 | 是否必填 | 示例值 | 描述 |
+| :----:| :----: | :----: | :----: | :----: |
+| direction | String | 是 | 3306 | 进场 |
+| directionName | String | 是 | 进场 | 中文描述 |
+| heartbeatTime | String | 是 | 2020-12-31 18:06:40 | 设备最近心跳时间 |
+| locationObjId | String | 是 | 2020122471920846 | 位置ID |
+| locationObjName | String | 是 | iot_小区 位置3 | 位置说明 |
+| machineCode | String | 是 | 1368371 | 设备编码 |
+| machineId | String | 是 | 892020122872730977 | 设备ID |
+| machineIp | String | 否 | 192.168.1.1 | 设备IP |
+| machineMac | String | 否 | 11:11:11:11 | 设备mac |
+| machineName | String | 是 | 厦门集美2 | 设备名称 |
+| machineTypeCd | String | 是 | 9999 | 表示门禁 |
+| machineTypeCdName | String | 是 | 门禁 | 设备类型说明 |
+
+返回示例：
+```json
+{
+	"machines": [{
+		"direction": "3306",
+		"directionName": "进场",
+		"heartbeatTime": "2020-12-31 18:06:40",
+		"locationObjId": "2020122471920846",
+		"locationObjName": "iot_小区 位置3",
+		"machineCode": "1368371",
+		"machineId": "892020122872730977",
+		"machineIp": "",
+		"machineMac": "",
+		"machineName": "厦门集美2",
+		"machineTypeCd": "9999",
+		"machineTypeCdName": "门禁"
+	}],
+	"page": 1,
+	"records": 1,
+	"rows": 1,
+	"total": 0
+}
+```
 
 ## 远程开门
 

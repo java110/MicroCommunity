@@ -267,6 +267,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
         feeReceiptDetailPo.setStartTime(businessFeeDetail.getString("startTime"));
         feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
+
         computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
         feeReceiptDetailPos.add(feeReceiptDetailPo);
         feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
