@@ -40,6 +40,8 @@ public class StoreStaffApi {
      *
      * @param
      * @return
+     * @serviceCode /storeStaff/getStoreStaffs
+     * @path /app/storeStaff/getStoreStaffs
      */
     @RequestMapping(value = "/getStoreStaffs", method = RequestMethod.GET)
     public ResponseEntity<String> getStoreStaffs(@RequestParam(value = "page") int page,

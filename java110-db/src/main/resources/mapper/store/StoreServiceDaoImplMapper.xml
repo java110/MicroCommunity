@@ -579,7 +579,7 @@
         select t.name storeName,t.address,su.user_id staffId , t.store_id storeId
         from s_store t
         inner join s_store_user su on t.store_id = su.store_id and su.status_cd = '0'
-        <if test="">
+        <if test="relCd != null and relCd != ''">
             and su.rel_cd = #{relCd}
         </if>
         where
@@ -597,7 +597,7 @@
         select count(1) count
         from s_store t
         inner join s_store_user su on t.store_id = su.store_id and su.status_cd = '0'
-        <if test="">
+        <if test="relCd != null and relCd != ''">
             and su.rel_cd = #{relCd}
         </if>
         where
