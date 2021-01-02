@@ -591,6 +591,9 @@
             t.store_id = #{storeId}
         </if>
         and t.status_cd = '0'
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
     </select>
 
     <select id="getStoreStaffCount" parameterType="Map" resultType="Map">
