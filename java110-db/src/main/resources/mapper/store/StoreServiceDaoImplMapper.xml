@@ -576,7 +576,7 @@
 
 
     <select id="getStoreStaffs" parameterType="Map" resultType="Map">
-        select t.name storeName,t.address,su.user_id staffId , t.store_id storeId
+        select t.name storeName,t.address,su.user_id staffId , t.store_id storeId,t.create_time createTime
         from s_store t
         inner join s_store_user su on t.store_id = su.store_id and su.status_cd = '0'
         <if test="relCd != null and relCd != ''">

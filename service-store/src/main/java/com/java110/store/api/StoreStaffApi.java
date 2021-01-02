@@ -15,6 +15,7 @@
  */
 package com.java110.store.api;
 
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.store.bmo.store.IGetStoreStaffBMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,20 +41,19 @@ public class StoreStaffApi {
      *
      * @param
      * @return
-     * @serviceCode /storeStaff/getStoreStaffs
-     * @path /app/storeStaff/getStoreStaffs
+     * @serviceCode /storeStaff/getPropertyStaffs
+     * @path /app/storeStaff/getPropertyStaffs
      */
-    @RequestMapping(value = "/getStoreStaffs", method = RequestMethod.GET)
-    public ResponseEntity<String> getStoreStaffs(@RequestParam(value = "page") int page,
+    @RequestMapping(value = "/getPropertyStaffs", method = RequestMethod.GET)
+    public ResponseEntity<String> getPropertyStaffs(@RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row,
-                                                 @RequestParam(value = "storeTypeCd", required = false) String storeTypeCd,
                                                  @RequestParam(value = "storeId", required = false) String storeId,
                                                  @RequestParam(value = "roleCd", required = false) String roleCd
     ) {
         StoreUserDto storeUserDto = new StoreUserDto();
         storeUserDto.setPage(page);
         storeUserDto.setRow(row);
-        storeUserDto.setStoreTypeCd(storeTypeCd);
+        storeUserDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
         storeUserDto.setStoreId(storeId);
         storeUserDto.setRelCd(roleCd);
         return getStoreStaffBMOImpl.getStoreStaffs(storeUserDto);

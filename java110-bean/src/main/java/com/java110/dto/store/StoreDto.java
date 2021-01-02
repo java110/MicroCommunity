@@ -24,6 +24,7 @@ public class StoreDto extends PageDto implements Serializable {
     public static final String STORE_DEV = "400000000000000002";
 
     public static final String STORE_TYPE_ADMIN = "800900000001";
+    public static final String STORE_TYPE_PROPERTY = "800900000003";
 
     private String storeId;
     private String[] storeIds;
