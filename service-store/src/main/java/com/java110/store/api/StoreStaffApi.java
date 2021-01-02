@@ -48,14 +48,14 @@ public class StoreStaffApi {
     public ResponseEntity<String> getPropertyStaffs(@RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row,
                                                  @RequestParam(value = "storeId", required = false) String storeId,
-                                                 @RequestParam(value = "roleCd", required = false) String roleCd
+                                                 @RequestParam(value = "relCd", required = false) String relCd
     ) {
         StoreUserDto storeUserDto = new StoreUserDto();
         storeUserDto.setPage(page);
         storeUserDto.setRow(row);
         storeUserDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
         storeUserDto.setStoreId(storeId);
-        storeUserDto.setRelCd(roleCd);
+        storeUserDto.setRelCd(relCd);
         return getStoreStaffBMOImpl.getStoreStaffs(storeUserDto);
     }
 
