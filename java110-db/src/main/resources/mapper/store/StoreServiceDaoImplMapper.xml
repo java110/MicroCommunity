@@ -585,10 +585,10 @@
         where
         1=1
         <if test="storeTypeCd != null and storeTypeCd != ''">
-            t.store_type_cd = #{storeTypeCd}
+            and t.store_type_cd = #{storeTypeCd}
         </if>
         <if test="storeId != null and storeId != ''">
-            t.store_id = #{storeId}
+            and t.store_id = #{storeId}
         </if>
         and t.status_cd = '0'
         <if test="page != -1 and page != null ">
@@ -606,10 +606,10 @@
         where
         1=1
         <if test="storeTypeCd != null and storeTypeCd != ''">
-            t.store_type_cd = #{storeTypeCd}
+            and t.store_type_cd = #{storeTypeCd}
         </if>
         <if test="storeId != null and storeId != ''">
-            t.store_id = #{storeId}
+            and t.store_id = #{storeId}
         </if>
         and t.status_cd = '0'
     </select>
