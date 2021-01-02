@@ -29,6 +29,8 @@ public class StoreUserDto extends PageDto implements Serializable {
 
     private String staffName;
 
+    private String staffId;
+
     //商户地址
     private String address;
 
@@ -194,5 +196,13 @@ public class StoreUserDto extends PageDto implements Serializable {
 
     public void setStaffTel(String staffTel) {
         this.staffTel = staffTel;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 }

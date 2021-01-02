@@ -561,4 +561,10 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
         List<Map> storeUserInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreUserInfo", info);
         return storeUserInfos;
     }
+
+    @Override
+    public List<Map> getStoreStaffs(Map info) throws DAOException {
+        List<Map> storeUserInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreStaffs", info);
+        return storeUserInfos;
+    }
 }
