@@ -37,8 +37,19 @@ public interface IStoreInnerServiceSMO {
     @RequestMapping(value = "/getStoreUserInfo", method = RequestMethod.POST)
     public List<StoreUserDto> getStoreUserInfo(@RequestBody StoreUserDto storeUserDto);
 
+
+    /**
+     * 查询商户员工数量
+     *
+     * @param storeUserDto
+     * @return
+     */
+    @RequestMapping(value = "/getStoreStaffCount", method = RequestMethod.POST)
+    int getStoreStaffCount(@RequestBody StoreUserDto storeUserDto);
+
     /**
      * 查询商户员工
+     *
      * @param storeUserDto
      * @return
      */

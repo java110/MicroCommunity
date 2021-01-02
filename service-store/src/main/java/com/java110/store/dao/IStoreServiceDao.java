@@ -294,8 +294,17 @@ public interface IStoreServiceDao {
 
     /**
      * 查询商户员工
+     *
      * @param beanCovertMap
      * @return
      */
     List<Map> getStoreStaffs(Map beanCovertMap) throws DAOException;
+
+    /**
+     * 查询商户员工数
+     *
+     * @param beanCovertMap
+     * @return
+     */
+    int getStoreStaffCount(Map beanCovertMap) throws DAOException;
 }

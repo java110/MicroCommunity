@@ -83,6 +83,9 @@ public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreIn
         return storeUserInfos;
     }
 
+    public int getStoreStaffCount(@RequestBody StoreUserDto storeUserDto) {
+        return storeServiceDaoImpl.getStoreStaffCount(BeanConvertUtil.beanCovertMap(storeUserDto));
+    }
     /**
      * 查询商户员工信息
      *
