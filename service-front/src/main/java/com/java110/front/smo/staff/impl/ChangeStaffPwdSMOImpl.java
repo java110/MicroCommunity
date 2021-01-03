@@ -4,11 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
+import com.java110.front.smo.staff.IChangeStaffPwdServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.front.smo.staff.IChangeStaffPwdServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,10 @@ public class ChangeStaffPwdSMOImpl extends AbstractComponentSMO implements IChan
         Assert.hasKeyAndValue(paramIn, "oldPwd", "必填，请填写原始密码");
         Assert.hasKeyAndValue(paramIn, "newPwd", "必填，请填写新密码");
 
-        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_CARINOUT);
+        String env = MappingCache.getValue("HC_ENV");
+        if (!"PROD".equals(env)) {
+            throw new IllegalArgumentException("演示环境，不允许操作");
+        }
     }
 
     @Override
