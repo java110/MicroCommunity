@@ -1,7 +1,7 @@
 package com.java110.front.components.serviceRegister;
 
 import com.java110.core.context.IPageData;
-import com.java110.front.smo.serviceRegister.IDeleteServiceRegisterSMO;
+import com.java110.front.smo.service.IDeleteServiceRegisterSMO;
 import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.http.ResponseEntity;
         import org.springframework.stereotype.Component;

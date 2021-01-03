@@ -16,7 +16,7 @@
 package com.java110.front.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.front.smo.propertyLogin.impl.wxLogin.IPropertyAppLoginSMO;
+import com.java110.front.smo.login.IPropertyAppLoginSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;

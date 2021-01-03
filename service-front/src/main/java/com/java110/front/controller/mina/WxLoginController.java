@@ -20,7 +20,7 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.WechatFactory;
-import com.java110.front.smo.wxLogin.IWxLoginSMO;
+import com.java110.front.smo.login.IWxLoginSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;

@@ -2,7 +2,7 @@ package com.java110.front.components.ownerRepair;
 
 import com.java110.core.context.IPageData;
 import com.java110.front.smo.ownerRepair.IListOwnerRepairsSMO;
-import com.java110.front.smo.repairDispatchStep.ICloseRepairDispatchSMO;
+import com.java110.front.smo.ownerRepair.ICloseRepairDispatchSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

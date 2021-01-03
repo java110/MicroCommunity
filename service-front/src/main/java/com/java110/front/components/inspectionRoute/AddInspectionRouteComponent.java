@@ -1,7 +1,7 @@
 package com.java110.front.components.inspectionRoute;
 
 import com.java110.core.context.IPageData;
-import com.java110.front.smo.inspectionRoute.IAddInspectionRouteSMO;
+import com.java110.front.smo.inspection.IAddInspectionRouteSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,7 @@ package com.java110.front.components.fee;
 
 
 import com.java110.core.context.IPageData;
-import com.java110.front.smo.feeConfig.IListFeeConfigsSMO;
+import com.java110.front.smo.fee.IListFeeConfigsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
