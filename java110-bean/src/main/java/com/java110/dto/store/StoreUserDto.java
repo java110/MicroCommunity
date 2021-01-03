@@ -59,6 +59,8 @@ public class StoreUserDto extends PageDto implements Serializable {
     //用户和代理商关系
     private String relCd;
 
+    private String state;
+
     //创建时间
     private Date createTime;
 
@@ -204,5 +206,13 @@ public class StoreUserDto extends PageDto implements Serializable {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

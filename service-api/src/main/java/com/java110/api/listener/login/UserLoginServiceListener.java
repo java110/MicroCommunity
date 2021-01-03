@@ -8,8 +8,10 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.userLogin.UserLoginDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.po.userLogin.UserLoginPo;
 import com.java110.utils.constant.CommonConstant;
@@ -21,15 +23,12 @@ import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,6 +43,9 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
 
     @Autowired
     private IUserLoginInnerServiceSMO userLoginInnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -126,6 +128,21 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }
+
+        //检查商户状态
+        StoreUserDto storeUserDto = new StoreUserDto();
+        storeUserDto.setUserId(userInfo.getString("userId"));
+        List<StoreUserDto> storeUserDtos = storeInnerServiceSMOImpl.getStoreUserInfo(storeUserDto);
+
+        if (storeUserDtos != null && storeUserDtos.size() > 0) {
+            String state = storeUserDtos.get(0).getState();
+            if ("48002".equals(state)) {
+                responseEntity = new ResponseEntity<String>("当前商户限制登录，请联系管理员", HttpStatus.UNAUTHORIZED);
+                dataFlowContext.setResponseEntity(responseEntity);
+                return;
+            }
+        }
+
 
         try {
             Map userMap = new HashMap();

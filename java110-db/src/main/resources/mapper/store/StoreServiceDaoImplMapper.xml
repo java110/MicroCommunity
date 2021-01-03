@@ -564,7 +564,7 @@
     <!--查询员工和商户信息-->
     <select id="getStoreUserInfo" parameterType="Map" resultType="Map">
         select s.store_id,s.store_id storeId,s.b_id,s.user_id,s.user_id userId,s.name,s.address,s.tel,s.store_type_cd,s.store_type_cd storeTypeCd,
-        s.nearby_landmarks,s.map_x,s.map_y,s.create_time,su.store_user_id,su.rel_cd
+        s.nearby_landmarks,s.map_x,s.map_y,s.create_time,su.store_user_id,su.rel_cd,s.state
         from s_store s
         left join s_store_user su on s.store_id=su.store_id and su.status_cd = '0'
         where
