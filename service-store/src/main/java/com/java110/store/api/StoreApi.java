@@ -22,10 +22,12 @@ import com.java110.core.factory.DataTransactionFactory;
 import com.java110.po.store.StorePo;
 import com.java110.store.bmo.store.IUpdateStoreStateBMO;
 import com.java110.store.smo.IStoreServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.InitConfigDataException;
 import com.java110.utils.exception.InitDataFlowContextException;
 import com.java110.utils.util.Assert;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,6 +139,12 @@ public class StoreApi extends BaseController {
      */
     @RequestMapping(value = "/storeApi/updateStoreState", method = RequestMethod.POST)
     public ResponseEntity<String> updateStoreState(@RequestBody JSONObject reqJson) {
+
+        String env = MappingCache.getValue("HC_ENV");
+
+        if (!"PROD".equals(env)) {
+            return ResultVo.error("演示环境，不允许操作");
+        }
 
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户信息");
         Assert.hasKeyAndValue(reqJson, "state", "未包含商户状态");
