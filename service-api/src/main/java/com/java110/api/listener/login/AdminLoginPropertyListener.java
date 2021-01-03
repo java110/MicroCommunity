@@ -35,6 +35,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +51,10 @@ import java.util.Map;
  * 用户注册 侦听
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("adminLoginPropertyServiceListener")
-public class AdminLoginPropertyServiceListener extends AbstractServiceApiDataFlowListener {
+@Java110Listener("adminLoginPropertyListener")
+public class AdminLoginPropertyListener extends AbstractServiceApiDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(AdminLoginPropertyServiceListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(AdminLoginPropertyListener.class);
 
 
     @Autowired
@@ -117,15 +118,18 @@ public class AdminLoginPropertyServiceListener extends AbstractServiceApiDataFlo
         storeUserDto.setUserId(userDtos.get(0).getUserId());
         List<StoreUserDto> storeUserDtos = storeInnerServiceSMOImpl.getStoreUserInfo(storeUserDto);
 
-        Assert.listOnlyOne(storeUserDtos, "当前用户不是运营团队 不能免登录");
-
+        if (storeUserDtos == null || storeUserDtos.size() < 1) {
+            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_UNAUTHORIZED, "当前用户不是运营团队 不能免登录"));
+            return;
+        }
 
         // 校验 需要登录的物业账号是否存在
         userDto = new UserDto();
         userDto.setUserId(paramIn.getString("userId"));
         userDto.setUserName(paramIn.getString("username"));
         userDtos = userInnerServiceSMOImpl.getUsers(userDto);
-        Assert.listOnlyOne(userDtos, "需要登录的物业账号不存在");
+
+        Assert.listOnlyOne(userDtos, "物业账号不存在");
 
         //校验当前账户商户是不是 管理员商户
         storeUserDto = new StoreUserDto();
@@ -133,7 +137,10 @@ public class AdminLoginPropertyServiceListener extends AbstractServiceApiDataFlo
         storeUserDto.setUserId(userDtos.get(0).getUserId());
         storeUserDtos = storeInnerServiceSMOImpl.getStoreUserInfo(storeUserDto);
 
-        Assert.listOnlyOne(storeUserDtos, "需要免密登录的账号不是物业账号");
+        if (storeUserDtos == null || storeUserDtos.size() < 1) {
+            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_UNAUTHORIZED, "需要免密登录的账号不是物业账号"));
+            return;
+        }
 
         userDto = userDtos.get(0);
         JSONObject userInfo = JSONObject.parseObject(JSONObject.toJSONString(userDto));
