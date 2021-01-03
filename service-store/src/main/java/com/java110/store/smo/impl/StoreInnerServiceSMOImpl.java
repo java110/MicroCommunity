@@ -9,6 +9,7 @@ import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.store.StorePo;
 import com.java110.store.dao.IStoreServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,11 @@ public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreIn
 
     public int getStoreCount(@RequestBody StoreDto storeDto) {
         return storeServiceDaoImpl.getStoreCount(BeanConvertUtil.beanCovertMap(storeDto));
+    }
+
+    @Override
+    public int updateStore(@RequestBody StorePo storePo) {
+        return storeServiceDaoImpl.updateStore(BeanConvertUtil.beanCovertMap(storePo));
     }
 
     /**

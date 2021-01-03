@@ -307,4 +307,12 @@ public interface IStoreServiceDao {
      * @return
      */
     int getStoreStaffCount(Map beanCovertMap) throws DAOException;
+
+    /**
+     * 修改商户信息
+     *
+     * @param info
+     * @return
+     */
+    int updateStore(Map info) throws DAOException;
 }

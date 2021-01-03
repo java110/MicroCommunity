@@ -576,4 +576,17 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
         }
         return Integer.parseInt(storeUserInfos.get(0).get("count").toString());
     }
+
+    /**
+     * 修改 商户信息
+     *
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public int updateStore(Map info) throws DAOException {
+        int saveFlag = sqlSessionTemplate.update("storeServiceDaoImpl.updateStore", info);
+        return saveFlag;
+    }
 }

@@ -4,6 +4,7 @@ import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.store.StoreUserDto;
+import com.java110.po.store.StorePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,14 @@ public interface IStoreInnerServiceSMO {
 
     @RequestMapping(value = "/getStoreCount", method = RequestMethod.POST)
     public int getStoreCount(@RequestBody StoreDto storeDto);
+
+    /**
+     * 修改商户信息
+     * @param storePo
+     * @return
+     */
+    @RequestMapping(value = "/updateStore", method = RequestMethod.POST)
+    public int updateStore(@RequestBody StorePo storePo);
 
     /**
      * 查询员工和员工所属商户信息
