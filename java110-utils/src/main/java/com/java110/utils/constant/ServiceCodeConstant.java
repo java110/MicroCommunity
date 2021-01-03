@@ -260,6 +260,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_USER_SERVICE_LOGIN = "user.service.login";
 
     /**
+     * 管理员免密登录
+     */
+    public static final String SERVICE_CODE_ADMIN_LOGIN_PROPERTY = "login.adminLoginProperty";
+
+    /**
      * 用户登录服务处理
      */
     public static final String SERVICE_CODE_USER_LOGIN = "user.userLogin";

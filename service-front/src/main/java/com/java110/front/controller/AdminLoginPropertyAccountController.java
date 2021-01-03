@@ -15,8 +15,12 @@
  */
 package com.java110.front.controller;
 
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.front.smo.login.IAdminLoginPropertyAccountServiceSMO;
+import com.java110.utils.constant.CommonConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,14 +38,23 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(path = "/app")
 public class AdminLoginPropertyAccountController {
 
+    @Autowired
+    private IAdminLoginPropertyAccountServiceSMO adminLoginPropertyAccountServiceSMOImpl;
+
     /**
      * 管理员免密登录至 执行的物业账户下
      *
-     * @param postInfo
      * @param request
      */
     @RequestMapping(path = "/adminLoginPropertyAccount", method = RequestMethod.POST)
-    public ResponseEntity<String> adminLoginPropertyAccount(@RequestBody String postInfo, HttpServletRequest request) {
-        return null;
+    public ResponseEntity<String> adminLoginPropertyAccount(HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), pd.getReqData(),
+                "login", "", "", pd.getSessionId(),
+                pd.getAppId());
+        ResponseEntity<String> responseEntity = adminLoginPropertyAccountServiceSMOImpl.doLogin(newPd);
+        request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, newPd);
+        return responseEntity;
     }
 }

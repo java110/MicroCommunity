@@ -1,4 +1,4 @@
-package com.java110.front.smo.carInout;
+package com.java110.front.smo.carBlackWhite;
 
 import com.java110.utils.exception.SMOException;
 import com.java110.core.context.IPageData;
