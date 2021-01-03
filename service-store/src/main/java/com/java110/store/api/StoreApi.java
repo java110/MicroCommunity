@@ -135,7 +135,7 @@ public class StoreApi extends BaseController {
      * @param reqJson 请求对象
      * @return
      */
-    @RequestMapping(value = "/storeApi/updateStoreState", method = RequestMethod.GET)
+    @RequestMapping(value = "/storeApi/updateStoreState", method = RequestMethod.POST)
     public ResponseEntity<String> updateStoreState(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户信息");
