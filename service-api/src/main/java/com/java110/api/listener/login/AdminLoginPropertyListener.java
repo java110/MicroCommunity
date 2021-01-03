@@ -107,8 +107,7 @@ public class AdminLoginPropertyListener extends AbstractServiceApiDataFlowListen
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
         if (userDtos == null || userDtos.size() < 1) {
-            responseEntity = new ResponseEntity<String>("用户或密码错误", HttpStatus.UNAUTHORIZED);
-            dataFlowContext.setResponseEntity(responseEntity);
+            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_UNAUTHORIZED, "用户或密码错误"));
             return;
         }
 
