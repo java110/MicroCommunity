@@ -296,6 +296,7 @@
         left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
         WHERE 1 =1
         AND t.`community_id` = #{communityId}
+        and t.status_cd ='0'
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
