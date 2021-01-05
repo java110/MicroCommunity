@@ -96,7 +96,7 @@ public class ModifyParkingAreaToIotAdapt extends DatabusAdaptImpl {
         ParkingAreaPo parkingAreaPo = BeanConvertUtil.covertBean(businessParkingArea, ParkingAreaPo.class);
 
         ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
-        parkingAreaDto.setNum(parkingAreaPo.getPaId());
+        parkingAreaDto.setPaId(parkingAreaPo.getPaId());
         parkingAreaDto.setCommunityId(parkingAreaPo.getCommunityId());
         List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
 
