@@ -52,7 +52,7 @@ public class ResultVo implements Serializable {
     // 总记录数
     private int total;
 
-    //状态嘛
+    //状态
     private int code;
 
     //错误提示
@@ -60,6 +60,9 @@ public class ResultVo implements Serializable {
 
     //数据对象
     private Object data;
+
+    //用来存放大计、小计金额
+    private Object sumTotal;
 
     public ResultVo() {
     }
@@ -81,6 +84,15 @@ public class ResultVo implements Serializable {
         this.records = records;
         this.total = total;
         this.data = data;
+    }
+
+    public ResultVo(int records, int total, Object data, Object sumTotal) {
+        this.code = CODE_OK;
+        this.msg = MSG_OK;
+        this.records = records;
+        this.total = total;
+        this.data = data;
+        this.sumTotal = sumTotal;
     }
 
     public ResultVo(int code, String msg, Object data) {
@@ -153,6 +165,14 @@ public class ResultVo implements Serializable {
         this.data = data;
     }
 
+    public Object getSumTotal() {
+        return sumTotal;
+    }
+
+    public void setSumTotal(Object sumTotal) {
+        this.sumTotal = sumTotal;
+    }
+
     @Override
     public String toString() {
         return JSONObject.toJSONString(this, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteDateUseDateFormat);
@@ -184,6 +204,7 @@ public class ResultVo implements Serializable {
 
     /**
      * 成功通用回复
+     *
      * @return
      */
     public static ResponseEntity<String> success() {
@@ -194,6 +215,7 @@ public class ResultVo implements Serializable {
 
     /**
      * 成功通用回复
+     *
      * @return
      */
     public static ResponseEntity<String> error(String msg) {
@@ -212,6 +234,21 @@ public class ResultVo implements Serializable {
      */
     public static ResponseEntity<String> createResponseEntity(int records, int total, Object data) {
         ResultVo resultVo = new ResultVo(records, total, data);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * 创建ResponseEntity对象
+     *
+     * @param records
+     * @param total
+     * @param data
+     * @param sumTotal
+     * @return
+     */
+    public static ResponseEntity<String> createResponseEntity(int records, int total, Object data, Object sumTotal) {
+        ResultVo resultVo = new ResultVo(records, total, data, sumTotal);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         return responseEntity;
     }

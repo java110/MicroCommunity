@@ -337,6 +337,12 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return businessReportFeeMonthStatisticsInfos;
     }
 
+    @Override
+    public List<Map> queryPayFeeDetailSum(Map info) {
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailSum", info);
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
     /**
      * 查询费用配置信息（instance）
      *

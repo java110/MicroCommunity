@@ -198,6 +198,14 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     List<ReportFeeMonthStatisticsDto> queryAllPayFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
+     * 查询(优惠、减免、滞纳金、空置房打折、空置房减免等)总金额
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryPayFeeDetailSum",method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryPayFeeDetailSum(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
      * 查询费用汇总表个数
      *
      * @param reportFeeMonthStatisticsDto

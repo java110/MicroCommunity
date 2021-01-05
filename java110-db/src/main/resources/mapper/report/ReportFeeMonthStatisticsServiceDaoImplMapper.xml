@@ -438,14 +438,16 @@
     <select id="queryFeeBreakdownCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,pfc.start_time feeCreateTime,t.create_time createTime,SUM(t.receivable_amount)
+        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,pfc.start_time feeCreateTime,t.create_time
+        createTime,SUM(t.receivable_amount)
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name="pay_fee_config" and td.table_columns="fee_type_cd"
+        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name="pay_fee_config" and
+        td.table_columns="fee_type_cd"
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -495,14 +497,16 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeBreakdown" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,pfc.start_time feeCreateTime,t.create_time createTime,SUM(t.receivable_amount)
+        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,pfc.start_time feeCreateTime,t.create_time
+        createTime,SUM(t.receivable_amount)
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name="pay_fee_config" and td.table_columns="fee_type_cd"
+        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name="pay_fee_config" and
+        td.table_columns="fee_type_cd"
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -835,6 +839,10 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'
+        left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
+        left join pay_fee_detail_discount pfdd on t.detail_id = pfdd.detail_id and pfdd.status_cd = '0'
+        left join fee_discount fd on pfdd.discount_id = fd.discount_id and fd.status_cd = '0'
+        left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'
         left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and
         d.table_columns="prime_rate"
         where t.status_cd = '0'
@@ -888,7 +896,8 @@
         select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,oc.car_num carNum,
         pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,
         t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfa.`value`
-        importFeeName,t.prime_rate,d.name primeRate
+        importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name
+        ruleName,pfdd.discount_price discountPrice
         from pay_fee_detail t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -897,6 +906,9 @@
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
+        left join pay_fee_detail_discount pfdd on t.detail_id = pfdd.detail_id and pfdd.status_cd = '0'
+        left join fee_discount fd on pfdd.discount_id = fd.discount_id and fd.status_cd = '0'
+        left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'
         left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and
         d.table_columns="prime_rate"
         where t.status_cd = '0'
@@ -1001,6 +1013,72 @@
         <if test="endTime !=null">
             and t.create_time &lt;= #{endTime}
         </if>
+    </select>
+
+    <select id="queryPayFeeDetailSum" parameterType="Map" resultType="Map">
+        select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,oc.car_num carNum,
+        pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,
+        t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfa.`value`
+        importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name ruleName,pfdd.discount_price,
+        SUM(pfdd.discount_price) discountPrice
+        from pay_fee_detail t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'
+        left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
+        left join pay_fee_detail_discount pfdd on t.detail_id = pfdd.detail_id and pfdd.status_cd = '0'
+        left join fee_discount fd on pfdd.discount_id = fd.discount_id and fd.status_cd = '0'
+        left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'
+        left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and
+        d.table_columns="prime_rate"
+        where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and bu.unit_id= #{unitId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="feeYear !=null and feeYear != ''">
+            and t.fee_year= #{feeYear}
+        </if>
+        <if test="feeMonth !=null and feeMonth != ''">
+            and t.fee_month= #{feeMonth}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and pfc.config_id= #{configId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="primeRate != null and primeRate != ''">
+            and t.prime_rate = #{primeRate}
+        </if>
+        <if test="startTime !=null">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        group by fdr.discount_small_type
+        order by t.create_time desc
     </select>
 
     <select id="queryDeadlineFeeCount" parameterType="Map" resultType="Map">

@@ -233,6 +233,14 @@ public interface IReportFeeMonthStatisticsServiceDao {
     List<Map> queryAllFeeDetail(Map beanCovertMap);
 
     /**
+     * 查询(优惠、减免、滞纳金、空置房打折、空置房减免等)总金额
+     *
+     * @param beanCovertMap
+     * @return
+     */
+    List<Map> queryPayFeeDetailSum(Map beanCovertMap);
+
+    /**
      * 查询费用配置信息（instance过程）
      * 根据bId 查询费用配置信息
      *

@@ -77,6 +77,27 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     //费用类型
     private String feeTypeCd;
 
+    //打折金额（包括打折、减免、滞纳金、空置房打折、空置房减免金额等）
+    private String discountPrice;
+
+    //1:打折 2:减免 3:滞纳金 4:空置房打折 5:空置房减免
+    private String discountSmallType;
+
+    //优惠金额
+    private String preferentialAmount;
+
+    //减免金额
+    private String deductionAmount;
+
+    //滞纳金
+    private String lateFee;
+
+    //空置房打折金额
+    private String vacantHousingDiscount;
+
+    //空置房减免金额
+    private String vacantHousingReduction;
+
     public String getReceivableAmount() {
         return receivableAmount;
     }
@@ -204,7 +225,6 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     public void setObjType(String objType) {
         this.objType = objType;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -396,5 +416,61 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
+    }
+
+    public String getPreferentialAmount() {
+        return preferentialAmount;
+    }
+
+    public void setPreferentialAmount(String preferentialAmount) {
+        this.preferentialAmount = preferentialAmount;
+    }
+
+    public String getDeductionAmount() {
+        return deductionAmount;
+    }
+
+    public void setDeductionAmount(String deductionAmount) {
+        this.deductionAmount = deductionAmount;
+    }
+
+    public String getLateFee() {
+        return lateFee;
+    }
+
+    public void setLateFee(String lateFee) {
+        this.lateFee = lateFee;
+    }
+
+    public String getDiscountSmallType() {
+        return discountSmallType;
+    }
+
+    public void setDiscountSmallType(String discountSmallType) {
+        this.discountSmallType = discountSmallType;
+    }
+
+    public String getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public void setDiscountPrice(String discountPrice) {
+        this.discountPrice = discountPrice;
+    }
+
+    public String getVacantHousingDiscount() {
+        return vacantHousingDiscount;
+    }
+
+    public void setVacantHousingDiscount(String vacantHousingDiscount) {
+        this.vacantHousingDiscount = vacantHousingDiscount;
+    }
+
+    public String getVacantHousingReduction() {
+        return vacantHousingReduction;
+    }
+
+    public void setVacantHousingReduction(String vacantHousingReduction) {
+        this.vacantHousingReduction = vacantHousingReduction;
     }
 }
