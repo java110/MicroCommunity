@@ -30,7 +30,6 @@ import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.machineTranslateError.MachineTranslateErrorPo;
 import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +113,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_COMMUNITY_URL);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
@@ -153,7 +152,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.UPDATE_COMMUNITY_URL);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
@@ -194,7 +193,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_COMMUNITY_URL);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
@@ -240,7 +239,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_MACHINE_URL);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.ADD_MACHINE_URL), HttpMethod.POST, httpEntity, String.class);
 
@@ -302,7 +301,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.UPDATE_MACHINE_URL);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
@@ -357,7 +356,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_MACHINE_URL);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
@@ -405,7 +404,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_OWNER);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
@@ -454,7 +453,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.EDIT_OWNER);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
             logger.debug("调用HC IOT信息：" + responseEntity);
@@ -503,7 +502,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_OWNER);
         try {
-            postParameters.put("taskId",machineTranslateDto.getMachineTranslateId());
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
             responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
@@ -571,6 +570,159 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             machineTranslateDto.setRemark("同步物联网系统成功");
         }
         machineTranslateInnerServiceSMOImpl.updateMachineTranslateState(machineTranslateDto);
+    }
+
+    @Override
+    public void addParkingArea(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_PARKING_AREA);
+        machineTranslateDto.setMachineCode("-");
+        machineTranslateDto.setMachineId("-");
+        machineTranslateDto.setObjId(postParameters.getString("extPaId"));
+        machineTranslateDto.setObjName(postParameters.getString("num"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_PARKING_AREA);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.ADD_PARKING_AREA_URL);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+    }
+
+    @Override
+    public void updateParkingArea(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_PARKING_AREA);
+        machineTranslateDto.setMachineCode("-");
+        machineTranslateDto.setMachineId("-");
+        machineTranslateDto.setObjId(postParameters.getString("extPaId"));
+        machineTranslateDto.setObjName(postParameters.getString("num"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_PARKING_AREA);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.UPDATE_PARKING_AREA_URL);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+    }
+
+    @Override
+    public void deleteParkingArea(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_PARKING_AREA);
+        machineTranslateDto.setMachineCode("-");
+        machineTranslateDto.setMachineId("-");
+        machineTranslateDto.setObjId(postParameters.getString("extPaId"));
+        machineTranslateDto.setObjName(postParameters.getString("num"));
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_PARKING_AREA);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.DELETE_PARKING_AREA_URL);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
     }
 
     /**

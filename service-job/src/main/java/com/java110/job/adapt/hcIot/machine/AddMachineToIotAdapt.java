@@ -77,6 +77,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
+
     /**
      * accessToken={access_token}
      * &extCommunityUuid=01000
@@ -122,6 +123,13 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
 
         Assert.listOnlyOne(machineDtos, "未找到设备");
 
+        CommunityLocationDto communityLocationDto = new CommunityLocationDto();
+        communityLocationDto.setLocationId(machineDtos.get(0).getLocationTypeCd());
+        communityLocationDto.setCommunityId(machineDtos.get(0).getCommunityId());
+        List<CommunityLocationDto> communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+
+        Assert.listOnlyOne(communityLocationDtos, "设备位置不存在");
+
         String hmId = getHmId(machineDtos.get(0));
 
         List<JSONObject> ownerDtos = getOwners(machinePo);
@@ -132,6 +140,8 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("machineName", machinePo.getMachineName());
         postParameters.put("machineVersion", machinePo.getMachineVersion());
         postParameters.put("machineTypeCd", machinePo.getMachineTypeCd());
+        postParameters.put("locationType", communityLocationDtos.get(0).getLocationType());
+        postParameters.put("locationObjId", machineDtos.get(0).getLocationObjId());
         postParameters.put("extMachineId", machineDtos.get(0).getMachineId());
         postParameters.put("extCommunityId", machinePo.getCommunityId());
         postParameters.put("machineIp", machinePo.getMachineIp());

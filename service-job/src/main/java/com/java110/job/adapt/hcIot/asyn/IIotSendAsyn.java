@@ -88,4 +88,15 @@ public interface IIotSendAsyn {
      * @param reqJson
      */
     void reSendIot(JSONObject reqJson);
+
+    /**
+     * 添加 停车场
+     *
+     * @param postParameters
+     */
+    void addParkingArea(JSONObject postParameters);
+
+    void updateParkingArea(JSONObject postParameters);
+
+    void deleteParkingArea(JSONObject postParameters);
 }

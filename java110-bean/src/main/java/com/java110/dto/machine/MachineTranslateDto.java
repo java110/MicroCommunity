@@ -36,12 +36,16 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     public static final String CMD_ADD_OWNER_FACE = "501";
     public static final String CMD_UPDATE_OWNER_FACE = "502";
     public static final String CMD_DELETE_OWNER_FACE = "503";
+    public static final String CMD_ADD_PARKING_AREA = "601";
+    public static final String CMD_UPDATE_PARKING_AREA = "602";
+    public static final String CMD_DELETE_PARKING_AREA = "603";
     public static final String CMD_OPEN_DOOR = "5";
 
     //小区信息
     public static final String TYPE_COMMUNITY = "9988";
     public static final String TYPE_MACHINE = "3344";
     public static final String TYPE_OWNER = "8899";
+    public static final String TYPE_PARKING_AREA = "2233";
 
     //同步状态
     public static final String STATE_SUCCESS = "20000";
