@@ -132,7 +132,12 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
 
         String hmId = getHmId(machineDtos.get(0));
 
-        List<JSONObject> ownerDtos = getOwners(machinePo);
+        List<JSONObject> ownerDtos = null;
+        if (MachineDto.MACHINE_TYPE_ACCESS_CONTROL.equals(machineDtos.get(0).getMachineTypeCd())) {
+            ownerDtos = getOwners(machinePo);
+        } else {
+            ownerDtos = new ArrayList<>();
+        }
 
         JSONObject postParameters = new JSONObject();
 
@@ -201,6 +206,9 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         } else if ("3000".equals(communityLocationDto.getLocationType())) {// 3000 房屋门
             ownerDto.setRoomId(machinePo.getLocationObjId());
             owners = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+        }
+        if (owners == null) {
+            return ownerDtos;
         }
 
         for (OwnerDto tOwnerDto : owners) {

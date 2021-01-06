@@ -16,6 +16,7 @@ import java.util.List;
 public class MachineDto extends PageDto implements Serializable {
 
     public static final String MACHINE_TYPE_CAR = "9996";
+    public static final String MACHINE_TYPE_ACCESS_CONTROL = "9999";
     public static final String MACHINE_STATE_ON = "1200";
     public static final String MACHINE_STATE_OFF = "1300";
 
