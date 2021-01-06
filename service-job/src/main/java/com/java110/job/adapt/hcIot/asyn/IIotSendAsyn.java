@@ -99,4 +99,15 @@ public interface IIotSendAsyn {
     void updateParkingArea(JSONObject postParameters);
 
     void deleteParkingArea(JSONObject postParameters);
+
+    /**
+     * 添加 车辆
+     *
+     * @param postParameters
+     */
+    void addOwnerCar(JSONObject postParameters);
+
+    void updateOwnerCar(JSONObject postParameters);
+
+    void deleteOwnerCar(JSONObject postParameters);
 }
