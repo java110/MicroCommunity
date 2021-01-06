@@ -87,6 +87,7 @@ public class DeleteParkingAreaToIotAdapt extends DatabusAdaptImpl {
         JSONObject postParameters = new JSONObject();
         postParameters.put("extPaId", parkingAreaDtos.get(0).getPaId());
         postParameters.put("extCommunityId", parkingAreaDtos.get(0).getCommunityId());
+        postParameters.put("num", parkingAreaDtos.get(0).getNum());
         hcParkingAreaAsynImpl.deleteParkingArea(postParameters);
     }
 }

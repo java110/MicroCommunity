@@ -104,7 +104,9 @@ public class DeleteCarToIotAdapt extends DatabusAdaptImpl {
 
         JSONObject postParameters = new JSONObject();
         postParameters.put("extCarId", ownerCarDtos.get(0).getCarId());
+        postParameters.put("carNum", ownerCarDtos.get(0).getCarNum());
         postParameters.put("extPaId", parkingSpaceDtos.get(0).getPaId());
+        postParameters.put("extCommunityId", ownerCarDtos.get(0).getCommunityId());
         hcOwnerCarAsynImpl.deleteOwnerCar(postParameters);
     }
 }
