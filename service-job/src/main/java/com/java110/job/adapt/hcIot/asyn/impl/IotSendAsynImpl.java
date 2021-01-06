@@ -374,7 +374,6 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 machineTranslateDto.setRemark(tokenObj.getString("msg"));
                 //保存 失败报文
                 saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
-
             }
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
