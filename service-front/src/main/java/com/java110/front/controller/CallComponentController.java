@@ -23,6 +23,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -73,6 +74,7 @@ public class CallComponentController extends BaseController {
         ResponseEntity<String> responseEntity = null;
         String componentCode = "api";
         String componentMethod = "callApi";
+        long startTime = DateUtil.getCurrentDate().getTime();
         try {
             Assert.hasLength(api, "参数错误，未传入api编码");
 
@@ -113,6 +115,8 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("api调用返回信息为{}", responseEntity);
+            logger.debug(componentCode+"::"+componentCode+ "back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
+
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 return responseEntity;
             }
@@ -139,6 +143,8 @@ public class CallComponentController extends BaseController {
             //@RequestBody String info,
             HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
+        long startTime = DateUtil.getCurrentDate().getTime();
+
         try {
             Assert.hasLength(componentCode, "参数错误，未传入组件编码");
             Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
@@ -179,6 +185,7 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
+            logger.debug(componentCode+"::"+componentCode+ "back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 return responseEntity;
             }
