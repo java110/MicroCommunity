@@ -1,44 +1,61 @@
 {
   "autoMove": true,
-  "id": "detailDiscountId",
-  "name": "payFeeDetailDiscount",
-  "desc": "缴费优惠",
+  "id": "configId",
+  "name": "tempCarFeeConfig",
+  "desc": "临时车收费标准",
   "shareParam": "community_id",
   "shareColumn": "communityId",
   "shareName": "fee",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_DETAIL_DISCOUNT_INFO",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_DETAIL_DISCOUNT_INFO",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_DETAIL_DISCOUNT_INFO",
-  "newBusinessTypeCdValue": "641100030001",
-  "updateBusinessTypeCdValue": "641100040001",
-  "deleteBusinessTypeCdValue": "641100050001",
-  "businessTableName": "business_pay_fee_detail_discount",
-  "tableName": "pay_fee_detail_discount",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_TEMP_CAR_FEE_CONFIG_INFO",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_TEMP_CAR_FEE_CONFIG_INFO",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_TEMP_CAR_FEE_CONFIG_INFO",
+  "newBusinessTypeCdValue": "651100030001",
+  "updateBusinessTypeCdValue": "651100040001",
+  "deleteBusinessTypeCdValue": "651100050001",
+  "businessTableName": "business_temp_car_fee_config",
+  "tableName": "temp_car_fee_config",
   "param": {
-    "detailDiscountId": "detail_discount_id",
+    "configId": "config_id",
     "bId": "b_id",
-    "feeId": "fee_id",
-    "detailId": "detail_id",
-    "communityId": "community_id",
+    "feeName": "fee_name",
+    "paId": "pa_id",
+    "areaNum": "area_num",
     "statusCd": "status_cd",
-    "createTime": "create_time",
-    "discountId": "discount_id",
-    "discountPrice": "discount_price",
-    "remark": "remark",
+    "carType": "car_type",
+    "ruleId": "rule_id",
+    "communityId": "community_id",
+    "startTime": "start_time",
+    "endTime": "end_time",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "detailId",
-      "msg": "缴费明细不能为空"
+      "code": "feeName",
+      "msg": "费用名称不能为空"
     },
     {
-      "code": "feeId",
-      "msg": "费用不能为空"
+      "code": "paId",
+      "msg": "停车场不能为空"
     },
     {
-      "code": "discountId",
-      "msg": "优惠不能为空"
+      "code": "carType",
+      "msg": "车辆类型不能为空"
+    },
+    {
+      "code": "ruleId",
+      "msg": "规则不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
     }
   ]
 }

@@ -186,7 +186,7 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
-            logger.debug(componentCode + "::" + componentMethod + "back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
+            logger.debug(componentCode + "::" + componentMethod + "调用back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 return responseEntity;
             }
