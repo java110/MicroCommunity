@@ -41,9 +41,14 @@ public class GetCommunityStoreInfoSMOImpl implements IGetCommunityStoreInfoSMO {
     @Cacheable(value = "getStoreEnterCommunitys" + Java110RedisConfig.GET_STORE_ENTER_COMMUNITYS_EXPIRE_TIME_KEY, key = "#storeId")
     public ResultVo getStoreEnterCommunitys(IPageData pd, String storeId, String storeTypeCd, RestTemplate restTemplate) {
         ResponseEntity<String> responseEntity = null;
+//        responseEntity = CallApiServiceFactory.callCenterService(restTemplate, pd, "",
+//                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember?memberId=" + storeId + "&memberTypeCd="
+//                        + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd), HttpMethod.GET);
+
         responseEntity = CallApiServiceFactory.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember?memberId=" + storeId + "&memberTypeCd="
+                ServiceConstant.SERVICE_API_URL + "/api/communitys/queryStoreCommunitys?memberId=" + storeId + "&memberTypeCd="
                         + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd), HttpMethod.GET);
+
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException(responseEntity.getBody());
         }

@@ -186,11 +186,11 @@ public class BaseComponentSMO extends BaseServiceSMO {
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "还未入驻小区，请先入驻小区");
         }
 
-        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "communitys", "还未入驻小区，请先入驻小区");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "data", "还未入驻小区，请先入驻小区");
 
         JSONObject community = JSONObject.parseObject(responseEntity.getBody().toString());
 
-        JSONArray communitys = community.getJSONArray("communitys");
+        JSONArray communitys = community.getJSONArray("data");
 
         if (communitys == null || communitys.size() == 0) {
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "还未入驻小区，请先入驻小区");
