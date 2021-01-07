@@ -13,11 +13,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.login.IOwnerAppLoginSMO;
 import com.java110.utils.cache.CommonCache;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.constant.*;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -200,7 +196,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
 
         ResponseEntity<String> paramOut = outRestTemplate.getForEntity(url, String.class);
 
-        logger.debug("调用微信换去openId ", paramOut);
+        logger.debug("调用微信换去openId " + paramOut);
         if (paramOut.getStatusCode() != HttpStatus.OK) {
             return ResultVo.redirectPage(errorUrl);
 
