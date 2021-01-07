@@ -2,7 +2,7 @@ package com.java110.fee.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.fee.ITempCarFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
 import com.java110.dto.user.UserDto;

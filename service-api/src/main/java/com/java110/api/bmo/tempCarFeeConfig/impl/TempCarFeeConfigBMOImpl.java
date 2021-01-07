@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.tempCarFeeConfig.ITempCarFeeConfigBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.fee.ITempCarFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.po.tempCarFeeConfig.TempCarFeeConfigPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;

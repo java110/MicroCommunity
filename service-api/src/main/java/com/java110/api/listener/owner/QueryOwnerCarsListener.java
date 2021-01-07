@@ -88,7 +88,7 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
             }
 
             reqJson.put("psId", parkingSpaceDtos.get(0).getPsId());
-        }
+        }ITempCarFeeConfigInnerServiceSMO
 
         //查询总记录数
         int total = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class));
