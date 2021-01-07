@@ -203,6 +203,7 @@ public class CallApiServiceFactory {
     public static ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
         ResponseEntity<String> responseEntity = null;
         long startTime = DateUtil.getCurrentDate().getTime();
+        logger.debug(url + "调用api开始：" + (startTime));
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), StringUtil.isEmpty(pd.getAppId()) ? AppDto.WEB_APP_ID : pd.getAppId());
         header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
@@ -219,7 +220,7 @@ public class CallApiServiceFactory {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);
-            logger.debug(url+ "调用api耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
+            logger.debug(url + "调用api耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
 
             return responseEntity;
         }

@@ -115,7 +115,7 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("api调用返回信息为{}", responseEntity);
-            logger.debug(componentCode+"::"+componentCode+ "back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
+            logger.debug(componentCode + "::" + componentCode + "back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 return responseEntity;
@@ -144,6 +144,7 @@ public class CallComponentController extends BaseController {
             HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
         long startTime = DateUtil.getCurrentDate().getTime();
+        logger.debug(componentCode + "::" + componentMethod + "调用back开始：" + (startTime));
 
         try {
             Assert.hasLength(componentCode, "参数错误，未传入组件编码");
@@ -185,7 +186,7 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
-            logger.debug(componentCode+"::"+componentCode+ "back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
+            logger.debug(componentCode + "::" + componentMethod + "back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 return responseEntity;
             }
