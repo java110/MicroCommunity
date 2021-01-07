@@ -1,5 +1,8 @@
 package com.java110.utils.cache;
 
+import com.java110.utils.util.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -7,6 +10,7 @@ import redis.clients.jedis.Jedis;
  */
 public class CommonCache extends BaseCache {
 
+    private final static Logger logger = LoggerFactory.getLogger(MappingCache.class);
 
     public final static int defaultExpireTime = 5 * 60;
     public final static int RESEND_DEFAULT_EXPIRETIME = 1 * 60;
@@ -23,6 +27,8 @@ public class CommonCache extends BaseCache {
      */
     public static String getValue(String key) {
         Jedis redis = null;
+        long startTime = DateUtil.getCurrentDate().getTime();
+
         try {
             redis = getJedis();
             return redis.get(key);
@@ -30,6 +36,7 @@ public class CommonCache extends BaseCache {
             if (redis != null) {
                 redis.close();
             }
+            logger.debug( key + " redis 耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
         }
     }
 
@@ -41,6 +48,8 @@ public class CommonCache extends BaseCache {
     public static String getAndRemoveValue(String key) {
         Jedis redis = null;
         String value = "";
+        long startTime = DateUtil.getCurrentDate().getTime();
+
         try {
             redis = getJedis();
             value = redis.get(key);
@@ -49,6 +58,8 @@ public class CommonCache extends BaseCache {
             if (redis != null) {
                 redis.close();
             }
+            logger.debug( key + "getAndRemoveValue redis 耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
+
         }
         return value;
     }
