@@ -57,14 +57,14 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        FeeDetailDto feeDetailDto = (FeeDetailDto)reqJson.get("feeDetailDto");
+        FeeDetailDto feeDetailDto = (FeeDetailDto) reqJson.get("feeDetailDto");
         returnPayFeeBMOImpl.updateReturnPayFee(reqJson, context);
 
         //退费审核通过
         if ("1100".equals(reqJson.getString("state"))) {
             reqJson.put("state", "1300");
-            reqJson.put("startTime", DateUtil.getFormatTimeString(feeDetailDto.getStartTime(),DateUtil.DATE_FORMATE_STRING_A));
-            reqJson.put("endTime",DateUtil.getFormatTimeString(feeDetailDto.getEndTime(),DateUtil.DATE_FORMATE_STRING_A));
+            reqJson.put("startTime", DateUtil.getFormatTimeString(feeDetailDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+            reqJson.put("endTime", DateUtil.getFormatTimeString(feeDetailDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
             returnPayFeeBMOImpl.addFeeDetail(reqJson, context);
 
             reqJson.put("state", "1100");
@@ -80,6 +80,8 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
             FeeDto feeDto = new FeeDto();
             feeDto.setFeeId((String) reqJson.get("feeId"));
             List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+            Assert.listOnlyOne(feeDtos, "费用不存在");
             FeeDto feeDto1 = feeDtos.get(0);
             Calendar endCalender = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
