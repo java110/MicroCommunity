@@ -3,6 +3,7 @@ package com.java110.job.adapt.payment.notice;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
@@ -116,7 +117,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             feeDetailDto.setbId(business.getbId());
             List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
             Assert.listOnlyOne(feeDetailDtos, "未查询到缴费记录");
-            businessPayFeeDetails = JSONArray.parseArray(JSONArray.toJSONString(feeDetailDtos));
+            businessPayFeeDetails = JSONArray.parseArray(JSONArray.toJSONString(feeDetailDtos, SerializerFeature.WriteDateUseDateFormat));
         } else if (data.containsKey(PayFeeDetailPo.class.getSimpleName())) {
             Object bObj = data.get(PayFeeDetailPo.class.getSimpleName());
             if (bObj instanceof JSONObject) {
@@ -205,7 +206,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         }
         String templateId = smallWechatAttrDtos.get(0).getValue();
         String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
-        if (accessToken == null || accessToken == "") {
+        if (StringUtil.isEmpty(accessToken)) {
             logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
             return;
         }
