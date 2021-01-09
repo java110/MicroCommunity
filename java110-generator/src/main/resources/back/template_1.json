@@ -1,11 +1,11 @@
 {
   "autoMove": true,
   "id": "attrId",
-  "name": "taskAttr",
-  "desc": "定时任务属性",
-  "shareParam": "task_id",
-  "shareColumn": "taskId",
-  "shareName": "job",
+  "name": "tempCarFeeConfigAttr",
+  "desc": "临时车收费标准属性",
+  "shareParam": "config_id",
+  "shareColumn": "configId",
+  "shareName": "fee",
   "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
   "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
   "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
@@ -32,11 +32,11 @@
     },
     {
       "code": "specCd",
-      "msg": "任务属性不能为空"
+      "msg": "属性不能为空"
     },
     {
       "code": "value",
-      "msg": "任务属性值不能为空"
+      "msg": "属性值不能为空"
     }
   ]
 }
