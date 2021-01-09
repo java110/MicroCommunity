@@ -1,61 +1,42 @@
 {
   "autoMove": true,
-  "id": "configId",
-  "name": "tempCarFeeConfig",
-  "desc": "临时车收费标准",
-  "shareParam": "community_id",
-  "shareColumn": "communityId",
-  "shareName": "fee",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_TEMP_CAR_FEE_CONFIG_INFO",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_TEMP_CAR_FEE_CONFIG_INFO",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_TEMP_CAR_FEE_CONFIG_INFO",
-  "newBusinessTypeCdValue": "651100030001",
-  "updateBusinessTypeCdValue": "651100040001",
-  "deleteBusinessTypeCdValue": "651100050001",
-  "businessTableName": "business_temp_car_fee_config",
-  "tableName": "temp_car_fee_config",
+  "id": "attrId",
+  "name": "taskAttr",
+  "desc": "定时任务属性",
+  "shareParam": "task_id",
+  "shareColumn": "taskId",
+  "shareName": "job",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
+  "newBusinessTypeCdValue": "651100030002",
+  "updateBusinessTypeCdValue": "651100040002",
+  "deleteBusinessTypeCdValue": "651100050002",
+  "businessTableName": "business_temp_car_fee_config_attr",
+  "tableName": "temp_car_fee_config_attr",
   "param": {
-    "configId": "config_id",
+    "attrId": "attr_id",
     "bId": "b_id",
-    "feeName": "fee_name",
-    "paId": "pa_id",
-    "areaNum": "area_num",
+    "configId": "config_id",
+    "specCd": "spec_cd",
+    "value": "value",
     "statusCd": "status_cd",
-    "carType": "car_type",
-    "ruleId": "rule_id",
-    "communityId": "community_id",
-    "startTime": "start_time",
-    "endTime": "end_time",
+    "createTime": "create_time",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "feeName",
-      "msg": "费用名称不能为空"
+
+      "code": "configId",
+      "msg": "标准ID不能为空"
     },
     {
-      "code": "paId",
-      "msg": "停车场不能为空"
+      "code": "specCd",
+      "msg": "任务属性不能为空"
     },
     {
-      "code": "carType",
-      "msg": "车辆类型不能为空"
-    },
-    {
-      "code": "ruleId",
-      "msg": "规则不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "小区不能为空"
-    },
-    {
-      "code": "startTime",
-      "msg": "开始时间不能为空"
-    },
-    {
-      "code": "endTime",
-      "msg": "结束时间不能为空"
+      "code": "value",
+      "msg": "任务属性值不能为空"
     }
   ]
 }
