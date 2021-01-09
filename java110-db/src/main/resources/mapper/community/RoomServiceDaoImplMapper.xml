@@ -681,6 +681,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        order by f.floor_num ,u.unit_num,t.room_num
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
