@@ -272,6 +272,7 @@
     <select id="queryFeeReceiptsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from fee_receipt t
+        left join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
