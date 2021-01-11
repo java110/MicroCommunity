@@ -5,9 +5,10 @@ import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IUnitInnerServiceSMO;
-import com.java110.dto.UnitDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.RoomDto;
+import com.java110.dto.UnitDto;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -86,6 +87,7 @@ public class SaveRoomListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        reqJson.put("roomType", RoomDto.ROOM_TYPE_ROOM);
         roomBMOImpl.addRoom(reqJson, context);
     }
 

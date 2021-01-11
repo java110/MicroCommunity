@@ -48,7 +48,7 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("floorId", paramInJson.getString("floorId"));
         businessUnit.put("layerCount", paramInJson.getString("layerCount"));
-        businessUnit.put("unitId", "-1");
+        businessUnit.put("unitId", !paramInJson.containsKey("unitId") ? "-1" : paramInJson.getString("unitId"));
         businessUnit.put("unitNum", paramInJson.getString("unitNum"));
         businessUnit.put("lift", paramInJson.getString("lift"));
         businessUnit.put("remark", paramInJson.getString("remark"));

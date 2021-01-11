@@ -18,6 +18,9 @@ public class RoomDto extends PageDto implements Serializable {
     public static final String STATE_FREE = "2002"; //未入住
     public static final String STATE_DELIVERY = "2003";//已交房
     public static final String STATE_RENOVATION = "2005";//已装修
+    public static final String STATE_SHOP_FIRE = "2006";//已经租
+    public static final String STATE_SHOP_SELL = "2007";//已售
+    public static final String STATE_SHOP_FREE = "2008";//空闲
     public static final String ROOM_TYPE_ROOM = "1010301";//普通房屋
     public static final String ROOM_TYPE_SHOPS = "2020602";//商铺
 

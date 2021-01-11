@@ -439,6 +439,10 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SAVE_ROOM = "room.saveRoom";
 
 
+    //保存商铺
+    public static final String SERVICE_CODE_SAVE_SHOPS = "room.saveShops";
+
+
     //售卖房屋
     public static final String SERVICE_CODE_SELL_ROOM = "room.sellRoom";
     //退房
