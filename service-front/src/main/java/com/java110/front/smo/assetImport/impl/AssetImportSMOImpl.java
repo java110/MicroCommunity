@@ -362,7 +362,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaces?page=1&row=1&communityId=" + result.getCommunityId()
-                + "&num=" + parkingSpace.getPsNum()+"&areaNum="+parkingSpace.getPaNum();
+                + "&num=" + parkingSpace.getPsNum() + "&areaNum=" + parkingSpace.getPaNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -702,7 +702,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importParkingSpace.setPsNum(os[1].toString());
             importParkingSpace.setTypeCd(os[2].toString());
             importParkingSpace.setArea(Double.parseDouble(os[3].toString()));
-            if (StringUtil.isNullOrNone(os[4])) {
+            if (os.length < 3 || StringUtil.isNullOrNone(os[4])) {
                 parkingSpaces.add(importParkingSpace);
                 continue;
             }
@@ -909,7 +909,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 owners.add(importOwner);
             } catch (Exception e) {
                 logger.error("第" + (osIndex + 1) + "行数据出现问题", e);
-                throw new IllegalArgumentException("第" + (osIndex + 1) + "行数据出现问题"+e.getLocalizedMessage(),e);
+                throw new IllegalArgumentException("第" + (osIndex + 1) + "行数据出现问题" + e.getLocalizedMessage(), e);
             }
         }
     }
