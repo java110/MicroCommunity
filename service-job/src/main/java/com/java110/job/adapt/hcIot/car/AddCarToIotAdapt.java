@@ -105,6 +105,12 @@ public class AddCarToIotAdapt extends DatabusAdaptImpl {
             return;
         }
 
+        //电动车
+        //三轮车 不同步物联网系统
+        if ("9904,9905".contains(ownerCarDtos.get(0).getCarType())) {
+            return;
+        }
+
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
         parkingSpaceDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
