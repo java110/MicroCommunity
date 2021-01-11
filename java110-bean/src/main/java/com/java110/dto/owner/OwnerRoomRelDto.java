@@ -27,6 +27,9 @@ public class OwnerRoomRelDto extends PageDto implements Serializable {
     private String bId;
     private boolean byOwnerInfo = false;
 
+    private Date startTime;
+    private Date endTime;
+
 
     private Date createTime;
 
@@ -136,5 +139,21 @@ public class OwnerRoomRelDto extends PageDto implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

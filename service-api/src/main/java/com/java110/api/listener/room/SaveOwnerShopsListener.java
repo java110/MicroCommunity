@@ -1,16 +1,20 @@
 package com.java110.api.listener.room;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.po.owner.OwnerPo;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +28,15 @@ import org.springframework.http.HttpMethod;
  * @Version 1.0
  * add by wuxw 2019/5/3
  **/
-@Java110Listener("sellRoomListener")
-public class SellRoomListener extends AbstractServiceApiPlusListener {
-    private static Logger logger = LoggerFactory.getLogger(SellRoomListener.class);
+@Java110Listener("saveOwnerShopsListener")
+public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
+    private static Logger logger = LoggerFactory.getLogger(SaveOwnerShopsListener.class);
 
     @Autowired
     private IRoomBMO roomBMOImpl;
+
+    @Autowired
+    private IOwnerBMO ownerBMOImpl;
 
     @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
@@ -39,7 +46,7 @@ public class SellRoomListener extends AbstractServiceApiPlusListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SELL_ROOM;
+        return ServiceCodeConstant.SERVICE_CODE_SAVE_OWNER_SHOPS;
     }
 
     @Override
@@ -51,31 +58,39 @@ public class SellRoomListener extends AbstractServiceApiPlusListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求报文中未包含ownerId节点");
         Assert.jsonObjectHaveKey(reqJson, "roomId", "请求报文中未包含roomId节点");
-        Assert.jsonObjectHaveKey(reqJson, "state", "请求报文中未包含state节点");
-        Assert.jsonObjectHaveKey(reqJson, "storeId", "请求报文中未包含storeId节点");
-
-        Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
-        Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
-        Assert.hasLength(reqJson.getString("roomId"), "roomId不能为空");
-        Assert.hasLength(reqJson.getString("state"), "state不能为空");
-
-        super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
+        Assert.jsonObjectHaveKey(reqJson, "ownerName", "请求报文中未包含ownerName节点");
+        Assert.jsonObjectHaveKey(reqJson, "tel", "请求报文中未包含tel节点");
+        Assert.jsonObjectHaveKey(reqJson, "startTime", "请求报文中未包含tel节点");
+        Assert.jsonObjectHaveKey(reqJson, "endTime", "请求报文中未包含tel节点");
+        Assert.jsonObjectHaveKey(reqJson, "shopsState", "请求报文中未包含状态节点");
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        if (!reqJson.containsKey("startTime")) {
-            reqJson.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+
+        if (!reqJson.containsKey("ownerId") || reqJson.getString("ownerId").startsWith("-")) {
+            OwnerPo ownerPo = new OwnerPo();
+            ownerPo.setUserId(context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+            ownerPo.setAge("1");
+            ownerPo.setCommunityId(reqJson.getString("communityId"));
+            ownerPo.setIdCard("");
+            ownerPo.setLink(reqJson.getString("tel"));
+            ownerPo.setMemberId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
+            ownerPo.setName(reqJson.getString("ownerName"));
+            ownerPo.setOwnerId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
+            ownerPo.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
+            ownerPo.setRemark(reqJson.getString("remark"));
+            ownerBMOImpl.addOwner(JSONObject.parseObject(JSONObject.toJSONString(ownerPo)), context);
+            reqJson.put("ownerId", ownerPo.getOwnerId());
         }
-        if (!reqJson.containsKey("endTime")) {
-            reqJson.put("endTime", "2037-01-01 00:00:00");
-        }
-        //添加单元信息
+
+        //添加房屋关系
+        reqJson.put("state", "2001");
         roomBMOImpl.sellRoom(reqJson, context);
 
         //更新房屋信息为售出
+        reqJson.put("state", reqJson.getString("shopsState"));
         roomBMOImpl.updateShellRoom(reqJson, context);
 
         //添加物业费用信息

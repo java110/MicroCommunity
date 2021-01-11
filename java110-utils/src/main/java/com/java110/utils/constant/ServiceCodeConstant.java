@@ -445,6 +445,8 @@ public class ServiceCodeConstant {
 
     //售卖房屋
     public static final String SERVICE_CODE_SELL_ROOM = "room.sellRoom";
+    //绑定业主（租客） 和商铺关系
+    public static final String SERVICE_CODE_SAVE_OWNER_SHOPS = "room.saveOwnerShops";
     //退房
     public static final String SERVICE_CODE_EXIT_ROOM = "room.exitRoom";
 
