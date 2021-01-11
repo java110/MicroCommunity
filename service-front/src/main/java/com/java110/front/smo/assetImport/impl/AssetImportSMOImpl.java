@@ -702,7 +702,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importParkingSpace.setPsNum(os[1].toString());
             importParkingSpace.setTypeCd(os[2].toString());
             importParkingSpace.setArea(Double.parseDouble(os[3].toString()));
-            if (os.length < 3 || StringUtil.isNullOrNone(os[4])) {
+            if (os.length < 5 || StringUtil.isNullOrNone(os[4])) {
                 parkingSpaces.add(importParkingSpace);
                 continue;
             }
