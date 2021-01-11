@@ -18,6 +18,8 @@ public class RoomDto extends PageDto implements Serializable {
     public static final String STATE_FREE = "2002"; //未入住
     public static final String STATE_DELIVERY = "2003";//已交房
     public static final String STATE_RENOVATION = "2005";//已装修
+    public static final String ROOM_TYPE_ROOM = "1010301";//普通房屋
+    public static final String ROOM_TYPE_SHOPS = "2020602";//商铺
 
 
     private String feeCoefficient;
@@ -42,6 +44,7 @@ public class RoomDto extends PageDto implements Serializable {
     private String ownerName;
     private String idCard;
     private String link;
+    private String roomType;
 
 
     private String state;
@@ -290,5 +293,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
     }
 }
