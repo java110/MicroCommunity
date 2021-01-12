@@ -22,6 +22,7 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
     private String endTime;
     private String communityId;
     private String bwId;
+    private String paId;
 
 
     private Date createTime;
@@ -100,5 +101,13 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
 
     public void setBlackWhiteName(String blackWhiteName) {
         this.blackWhiteName = blackWhiteName;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
     }
 }
