@@ -5,23 +5,19 @@ import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.RoomDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.dto.fee.FeeDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -41,6 +37,9 @@ public class ExitRoomListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -107,7 +106,17 @@ public class ExitRoomListener extends AbstractServiceApiPlusListener {
 //添加单元信息
         roomBMOImpl.exitRoom(reqJson, context);
 
-        reqJson.put("state", "2002");
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(reqJson.getString("roomId"));
+        roomDto.setCommunityId(reqJson.getString("communityId"));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        Assert.listOnlyOne(roomDtos, "房屋或商铺不存在");
+        if (RoomDto.ROOM_TYPE_SHOPS.equals(roomDtos.get(0).getRoomType())) {
+            reqJson.put("state", RoomDto.STATE_SHOP_FREE);
+        } else {
+            reqJson.put("state", "2002");
+        }
         //修改房屋状态
         roomBMOImpl.updateRoom(reqJson, context);
 
