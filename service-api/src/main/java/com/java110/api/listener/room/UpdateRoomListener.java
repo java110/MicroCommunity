@@ -52,31 +52,19 @@ public class UpdateRoomListener extends AbstractServiceApiPlusListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "roomId", "请求报文中未包含roomId节点");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(reqJson, "unitId", "请求报文中未包含unitId节点");
         Assert.jsonObjectHaveKey(reqJson, "roomNum", "请求报文中未包含roomNum节点");
         Assert.jsonObjectHaveKey(reqJson, "layer", "请求报文中未包含layer节点");
         /*Assert.jsonObjectHaveKey(paramIn, "section", "请求报文中未包含section节点");*/
-        Assert.jsonObjectHaveKey(reqJson, "apartment", "请求报文中未包含apartment节点");
         Assert.jsonObjectHaveKey(reqJson, "builtUpArea", "请求报文中未包含builtUpArea节点");
-        Assert.jsonObjectHaveKey(reqJson, "state", "请求报文中未包含state节点");
-        /* Assert.jsonObjectHaveKey(paramIn, "feeCoefficient", "请求报文中未包含feeCoefficient节点");*/
 
-        Assert.isInteger(reqJson.getString("section"), "房间数不是有效数字");
-        Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
-        Assert.isMoney(reqJson.getString("feeCoefficient"), "算费系数数据格式错误");
-
-        /*if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
-            throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
-        }*/
-
-        if (!"2001".equals(reqJson.getString("state"))
-                && !"2002".equals(reqJson.getString("state"))
-                && !"2003".equals(reqJson.getString("state"))
-                && !"2004".equals(reqJson.getString("state"))
-                && !"2005".equals(reqJson.getString("state"))
-        ) {
-            throw new IllegalArgumentException("不是有效房屋状态 传入数据错误");
+        if (reqJson.containsKey("builtUpArea")) {
+            Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         }
+        if (reqJson.containsKey("feeCoefficient")) {
+            Assert.isMoney(reqJson.getString("feeCoefficient"), "算费系数数据格式错误");
+        }
+
+
 
         UnitDto unitDto = new UnitDto();
         unitDto.setCommunityId(reqJson.getString("communityId"));
