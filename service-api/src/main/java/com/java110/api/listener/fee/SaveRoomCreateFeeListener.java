@@ -6,12 +6,12 @@ import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -83,12 +83,17 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         //判断收费范围
         RoomDto roomDto = new RoomDto();
-        if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
-            roomDto.setState(RoomDto.STATE_SELL);
-        }
+
+//        if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
+//            roomDto.setState(RoomDto.STATE_SELL);
+//        }
         if (reqJson.containsKey("roomState") && reqJson.getString("roomState").contains(",")) {
             String states = reqJson.getString("roomState");
             roomDto.setStates(states.split(","));
+        }
+        //如果区分了 房屋类型则设置
+        if (reqJson.containsKey("roomType")) {
+            roomDto.setRoomType(reqJson.getString("roomType"));
         }
         if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
 
