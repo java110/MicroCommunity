@@ -61,7 +61,7 @@ public class SellRoomListener extends AbstractServiceApiPlusListener {
         Assert.hasLength(reqJson.getString("roomId"), "roomId不能为空");
         Assert.hasLength(reqJson.getString("state"), "state不能为空");
 
-        super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
+        //super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
     }
 
     @Override
