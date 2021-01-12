@@ -34,7 +34,11 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +54,9 @@ import java.util.List;
 @Service
 public class IotSendAsynImpl implements IIotSendAsyn {
     private static final Logger logger = LoggerFactory.getLogger(IotSendAsynImpl.class);
+
+    private static final String DEFAULT_MACHINE_CODE = "-";
+    private static final String DEFAULT_MACHINE_ID = "-";
 
 
     @Autowired
@@ -99,17 +106,10 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void addCommunity(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_COMMUNITY);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setObjName(postParameters.getString("name"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_ADD_COMMUNITY,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID, "extCommunityId", "name", MachineTranslateDto.TYPE_COMMUNITY);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_COMMUNITY_URL);
         try {
@@ -138,17 +138,9 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void editCommunity(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_COMMUNITY);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setObjName(postParameters.getString("name"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_UPDATE_COMMUNITY,
+                DEFAULT_MACHINE_CODE, DEFAULT_MACHINE_ID, "extCommunityId", "name", MachineTranslateDto.TYPE_COMMUNITY);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.UPDATE_COMMUNITY_URL);
         try {
@@ -179,17 +171,10 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void deleteCommunity(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_COMMUNITY);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setObjName(postParameters.getString("name"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_DELETE_COMMUNITY,
+                DEFAULT_MACHINE_CODE, DEFAULT_MACHINE_ID,
+                "extCommunityId", "name", MachineTranslateDto.TYPE_COMMUNITY);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_COMMUNITY_URL);
         try {
@@ -225,17 +210,9 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void addMachine(JSONObject postParameters, List<JSONObject> ownerDtos) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_MACHINE);
-        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
-        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjName(postParameters.getString("machineName"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_ADD_MACHINE,
+                postParameters.getString("machineCode"), postParameters.getString("extMachineId"),
+                "extMachineId", "machineName", MachineTranslateDto.TYPE_MACHINE);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_MACHINE_URL);
         try {
@@ -287,17 +264,10 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     @Async
     public void updateMachine(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_MACHINE);
-        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
-        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjName(postParameters.getString("machineName"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_UPDATE_MACHINE,
+                postParameters.getString("machineCode"),
+                postParameters.getString("extMachineId"),
+                "extMachineId", "machineName", MachineTranslateDto.TYPE_MACHINE);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.UPDATE_MACHINE_URL);
         try {
@@ -342,17 +312,12 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     public void deleteMachine(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_MACHINE);
-        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
-        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjName(postParameters.getString("machineName"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_MACHINE);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_DELETE_MACHINE,
+                postParameters.getString("machineCode"),
+                postParameters.getString("extMachineId"),
+                "extMachineId",
+                "machineName",
+                MachineTranslateDto.TYPE_MACHINE);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_MACHINE_URL);
         try {
@@ -389,17 +354,12 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     public void addOwner(JSONObject postParameters) {
 
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_OWNER_FACE);
-        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
-        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjId(postParameters.getString("userId"));
-        machineTranslateDto.setObjName(postParameters.getString("name"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_ADD_OWNER_FACE,
+                postParameters.getString("machineCode"),
+                postParameters.getString("extMachineId"),
+                "userId",
+                "name",
+                MachineTranslateDto.TYPE_OWNER);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_OWNER);
         try {
@@ -438,17 +398,11 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     public void sendUpdateOwner(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_OWNER_FACE);
-        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
-        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjId(postParameters.getString("userId"));
-        machineTranslateDto.setObjName(postParameters.getString("name"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_UPDATE_OWNER_FACE,
+                postParameters.getString("machineCode"),
+                postParameters.getString("extMachineId"),
+                "userId", "name",
+                MachineTranslateDto.TYPE_OWNER);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.EDIT_OWNER);
         try {
@@ -487,17 +441,13 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     public void sendDeleteOwner(JSONObject postParameters) {
 
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_OWNER_FACE);
-        machineTranslateDto.setMachineCode(postParameters.getString("machineCode"));
-        machineTranslateDto.setMachineId(postParameters.getString("extMachineId"));
-        machineTranslateDto.setObjId(postParameters.getString("userId"));
-        machineTranslateDto.setObjName(postParameters.getString("name"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_DELETE_OWNER_FACE,
+                postParameters.getString("machineCode"),
+                postParameters.getString("extMachineId"),
+                "userId",
+                "name",
+                MachineTranslateDto.TYPE_OWNER);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_OWNER);
         try {
@@ -573,17 +523,12 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     public void addParkingArea(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_PARKING_AREA);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extPaId"));
-        machineTranslateDto.setObjName(postParameters.getString("num"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_PARKING_AREA);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_ADD_PARKING_AREA,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extPaId",
+                "num",
+                MachineTranslateDto.TYPE_PARKING_AREA);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_PARKING_AREA_URL);
         try {
@@ -624,17 +569,12 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     public void updateParkingArea(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_PARKING_AREA);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extPaId"));
-        machineTranslateDto.setObjName(postParameters.getString("num"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_PARKING_AREA);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_UPDATE_PARKING_AREA,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extPaId",
+                "num",
+                MachineTranslateDto.TYPE_PARKING_AREA);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.UPDATE_PARKING_AREA_URL);
         try {
@@ -675,17 +615,12 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     public void deleteParkingArea(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_PARKING_AREA);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extPaId"));
-        machineTranslateDto.setObjName(postParameters.getString("num"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_PARKING_AREA);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_DELETE_PARKING_AREA,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extPaId",
+                "num",
+                MachineTranslateDto.TYPE_PARKING_AREA);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_PARKING_AREA_URL);
         try {
@@ -726,17 +661,13 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     public void addOwnerCar(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_ADD_OWNER_CAR);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extCarId"));
-        machineTranslateDto.setObjName(postParameters.getString("carNum"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER_CAR);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_ADD_OWNER_CAR,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extCarId",
+                "carNum",
+                MachineTranslateDto.TYPE_OWNER_CAR);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_OWNER_CAR_URL);
         try {
@@ -777,17 +708,12 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     public void updateOwnerCar(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_UPDATE_OWNER_CAR);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extCarId"));
-        machineTranslateDto.setObjName(postParameters.getString("carNum"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER_CAR);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_UPDATE_OWNER_CAR,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extCarId",
+                "carNum",
+                MachineTranslateDto.TYPE_OWNER_CAR);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.UPDATE_OWNER_CAR_URL);
         try {
@@ -828,17 +754,12 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     public void deleteOwnerCar(JSONObject postParameters) {
-        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
-        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
-        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
-        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_DELETE_OWNER_CAR);
-        machineTranslateDto.setMachineCode("-");
-        machineTranslateDto.setMachineId("-");
-        machineTranslateDto.setObjId(postParameters.getString("extCarId"));
-        machineTranslateDto.setObjName(postParameters.getString("carNum"));
-        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER_CAR);
-        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
-        machineTranslateDto.setRemark("同步物联网系统成功");
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_DELETE_OWNER_CAR,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extCarId",
+                "carNum",
+                MachineTranslateDto.TYPE_OWNER_CAR);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_OWNER_CAR_URL);
         try {
@@ -875,6 +796,120 @@ public class IotSendAsynImpl implements IIotSendAsyn {
             saveTranslateLog(machineTranslateDto);
             refreshAccessToken(responseEntity);
         }
+    }
+
+    @Override
+    public void addCarBlackWhite(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_ADD_CAR_BLACK_WHITE,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extBwId",
+                "carNum",
+                MachineTranslateDto.TYPE_OWNER_CAR);
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.ADD_CAR_BLACK_WHITE_URL);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+    }
+
+    @Override
+    public void deleteCarBlackWhite(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_DELETE_CAR_BLACK_WHITE,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extCarId",
+                "carNum",
+                MachineTranslateDto.TYPE_OWNER_CAR);
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.DELETE_CAR_BLACK_WHITE_URL);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+    }
+
+    private MachineTranslateDto getMachineTranslateDto(JSONObject postParameters, String cmd,
+                                                       String machineCode,
+                                                       String machineId,
+                                                       String objId,
+                                                       String objName,
+                                                       String typeCd) {
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        machineTranslateDto.setCommunityId(postParameters.getString("extCommunityId"));
+        machineTranslateDto.setMachineCmd(cmd);
+        machineTranslateDto.setMachineCode(machineCode);
+        machineTranslateDto.setMachineId(machineId);
+        machineTranslateDto.setObjId(postParameters.getString(objId));
+        machineTranslateDto.setObjName(postParameters.getString(objName));
+        machineTranslateDto.setTypeCd(typeCd);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+        return machineTranslateDto;
     }
 
 

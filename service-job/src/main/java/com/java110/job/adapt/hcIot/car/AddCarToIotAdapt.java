@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * HC iot 停车场同步适配器
+ * HC iot 车辆同步适配器
  * <p>
  * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
