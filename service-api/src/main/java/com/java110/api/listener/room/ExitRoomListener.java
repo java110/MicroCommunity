@@ -74,7 +74,7 @@ public class ExitRoomListener extends AbstractServiceApiPlusListener {
         Assert.hasLength(reqJson.getString("storeId"), "storeId不能为空");
         //
 
-        super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
+        //super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
 
         //校验物业费是否已经交清
 //        FeeDto feeDto = new FeeDto();
