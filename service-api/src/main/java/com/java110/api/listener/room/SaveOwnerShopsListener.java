@@ -95,6 +95,7 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
             ownerPo.setCommunityId(reqJson.getString("communityId"));
             ownerPo.setIdCard("");
             ownerPo.setLink(reqJson.getString("tel"));
+            ownerPo.setSex("1");
             ownerPo.setMemberId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
             ownerPo.setName(reqJson.getString("ownerName"));
             ownerPo.setOwnerId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
@@ -121,7 +122,7 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
         ownerRoomRelDto.setRoomId(reqJson.getString("roomId"));
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if(ownerRoomRelDtos != null && ownerRoomRelDtos.size()> 0){
+        if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
             JSONObject businessUnit = new JSONObject();
             businessUnit.put("relId", ownerRoomRelDtos.get(0).getRelId());
             OwnerRoomRelPo roomPo = BeanConvertUtil.covertBean(businessUnit, OwnerRoomRelPo.class);
