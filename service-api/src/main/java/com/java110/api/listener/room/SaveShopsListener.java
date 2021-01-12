@@ -86,6 +86,7 @@ public class SaveShopsListener extends AbstractServiceApiPlusListener {
         //判断 楼栋下是否存在 0单元 如果存在 不插入 不存在插入
         UnitDto unitDto = new UnitDto();
         unitDto.setCommunityId(reqJson.getString("communityId"));
+        unitDto.setFloorId(reqJson.getString("floorId"));
         unitDto.setUnitNum("0");
         //校验小区楼ID和小区是否有对应关系
         List<UnitDto> units = unitInnerServiceSMOImpl.queryUnitsByCommunityId(unitDto);

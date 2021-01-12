@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.RoomDto;
 import com.java110.entity.assetImport.*;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
@@ -280,6 +281,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("state", "2002");
             paramIn.put("builtUpArea", room.getBuiltUpArea());
             paramIn.put("feeCoefficient", "1.00");
+            paramIn.put("roomType", "0".equals(room.getFloor().getUnitNum()) ? RoomDto.ROOM_TYPE_SHOPS : RoomDto.ROOM_TYPE_SHOPS);
 
 
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
