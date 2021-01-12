@@ -1,13 +1,6 @@
 package com.java110.job.task.fee;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.*;
@@ -15,6 +8,13 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.task.TaskDto;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.TaskTemplateException;
@@ -359,8 +359,13 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
 
         RoomDto tmpRoomDto = roomDtos.get(0);
 
-        billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
+        //billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
 
+        if (RoomDto.ROOM_TYPE_ROOM.equals(tmpRoomDto.getRoomType())) {
+            billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
+        } else {
+            billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getRoomNum() + "室");
+        }
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setByOwnerInfo(true);
         ownerRoomRelDto.setRoomId(tmpRoomDto.getRoomId());
@@ -519,7 +524,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
 
         long t1 = from.getTimeInMillis();
         long t2 = to.getTimeInMillis();
-        double days = (t2 - t1) *1.00/ (24 * 60 * 60 * 1000);
+        double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
 
         BigDecimal tmpDays = new BigDecimal(days);
         BigDecimal monthDay = new BigDecimal(30);

@@ -290,7 +290,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 return objName;
             }
             roomDto = roomDtos.get(0);
-            objName = roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室";
+            if(RoomDto.ROOM_TYPE_ROOM.equals(roomDto.getRoomType())) {
+                objName = roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室";
+            }else{
+                objName = roomDto.getFloorNum() + "栋" + roomDto.getRoomNum() + "室";
+            }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
 
             OwnerCarDto ownerCarDto = new OwnerCarDto();

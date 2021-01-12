@@ -3,6 +3,7 @@ package com.java110.report.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.report.ReportCarDto;
@@ -355,7 +356,11 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setObjId(reportRoomDto.getRoomId());
             reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
             reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
-            reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
+            if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
+                reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
+            } else {
+                reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋"  + reportRoomDto.getRoomNum() + "室");
+            }
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         }

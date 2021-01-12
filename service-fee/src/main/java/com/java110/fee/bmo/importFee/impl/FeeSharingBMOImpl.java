@@ -12,12 +12,7 @@ import com.java110.dto.feeFormula.FeeFormulaDto;
 import com.java110.fee.bmo.importFee.IFeeSharingBMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeFormulaInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IImportFeeInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeePo;
@@ -90,7 +85,10 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
             String[] states = reqJson.getString("roomState").split(",");
             roomDto.setStates(states);
         } else {
-            roomDto.setState(RoomDto.STATE_SELL); // 已经入住
+            roomDto.setStates(new String[]{RoomDto.STATE_SELL, RoomDto.STATE_SHOP_SELL}); // 已经入住
+        }
+        if (reqJson.containsKey("roomType")) {
+            roomDto.setRoomType(reqJson.getString("roomType"));
         }
         List<RoomDto> roomDtos = null;
         if ("1001".equals(scope)) {//小区

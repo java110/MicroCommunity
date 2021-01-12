@@ -12,12 +12,7 @@ import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.IImportRoomFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IImportFeeInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
@@ -173,7 +168,10 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             importFeeDetailPo.setRoomId(importRoomFee.getRoomId());
             importFeeDetailPo.setObjId(importRoomFee.getRoomId());
             importFeeDetailPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-            importFeeDetailPo.setObjName(importRoomFee.getFloorNum() + "栋" + importRoomFee.getUnitNum() + "单元" + importRoomFee.getRoomNum() + "室");
+            importFeeDetailPo.setObjName(!"0".equals(importRoomFee.getUnitNum())
+                    ? importRoomFee.getFloorNum() + "栋" + importRoomFee.getUnitNum() + "单元" + importRoomFee.getRoomNum() + "室" :
+                    importRoomFee.getFloorNum() + "栋" + importRoomFee.getRoomNum() + "室"
+            );
             importFeeDetailPo.setStartTime(importRoomFee.getStartTime());
             importFeeDetailPo.setIfdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_IfdId));
             importFeeDetailPo.setState("1000");
