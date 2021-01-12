@@ -449,7 +449,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         RoomDto roomDto = new RoomDto();
         roomDto.setFloorNum(values[0]);
         roomDto.setUnitNum("0");
-        roomDto.setRoomNum(values[2]);
+        roomDto.setRoomNum(values[1]);
         roomDto.setCommunityId(communityId);
 
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
