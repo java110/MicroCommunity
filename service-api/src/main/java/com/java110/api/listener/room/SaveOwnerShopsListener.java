@@ -8,17 +8,27 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+
+import java.util.List;
 
 /**
  * @ClassName SaveUnitListener
@@ -43,6 +53,12 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -69,7 +85,10 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        if (!reqJson.containsKey("ownerId") || reqJson.getString("ownerId").startsWith("-")) {
+        if (!reqJson.containsKey("ownerId")
+                || reqJson.getString("ownerId").startsWith("-")
+                || StringUtil.isEmpty(reqJson.getString("ownerId"))
+        ) {
             OwnerPo ownerPo = new OwnerPo();
             ownerPo.setUserId(context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             ownerPo.setAge("1");
@@ -83,6 +102,30 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
             ownerPo.setRemark(reqJson.getString("remark"));
             ownerBMOImpl.addOwner(JSONObject.parseObject(JSONObject.toJSONString(ownerPo)), context);
             reqJson.put("ownerId", ownerPo.getOwnerId());
+        }
+
+        //查询商铺是否为 出租 或者空闲
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(reqJson.getString("roomId"));
+        roomDto.setCommunityId(reqJson.getString("communityId"));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        Assert.listOnlyOne(roomDtos, "商铺不存在");
+
+        if (!"2006,2008".contains(roomDtos.get(0).getState())) {
+            throw new IllegalArgumentException("当前商铺状态不允许操作");
+        }
+
+        //判断房屋是有租客
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setRoomId(reqJson.getString("roomId"));
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+        if(ownerRoomRelDtos != null && ownerRoomRelDtos.size()> 0){
+            JSONObject businessUnit = new JSONObject();
+            businessUnit.put("relId", ownerRoomRelDtos.get(0).getRelId());
+            OwnerRoomRelPo roomPo = BeanConvertUtil.covertBean(businessUnit, OwnerRoomRelPo.class);
+            super.delete(context, roomPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL);
         }
 
         //添加房屋关系
