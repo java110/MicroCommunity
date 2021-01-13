@@ -331,6 +331,10 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         importFeeDetailPo.setState("1000");
         importFeeDetailPo.setImportFeeId(importFeeId);
         importFeeDetailPo.setRemark("公摊用量：" + value);
+        importFeeDetailPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        importFeeDetailPo.setObjId(roomDto.getRoomId());
+        importFeeDetailPo.setObjName(RoomDto.ROOM_TYPE_ROOM.equals(roomDto.getRoomType()) ? roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum() :
+                roomDto.getFloorNum() + "-" + roomDto.getRoomNum());
         importFeeDetailPos.add(importFeeDetailPo);
     }
 
