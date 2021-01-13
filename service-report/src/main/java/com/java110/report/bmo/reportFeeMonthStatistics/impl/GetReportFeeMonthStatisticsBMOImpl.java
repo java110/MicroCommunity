@@ -279,6 +279,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalPreferentialAmount = totalPreferentialAmount + discountPrice;
                     //优惠金额
                     reportFeeMonthStatistics.setPreferentialAmount(reportFeeMonthStatistics.getDiscountPrice());
+                }else{
+                    reportFeeMonthStatistics.setPreferentialAmount("0");
+
                 }
                 //减免金额
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("2")) {
@@ -287,6 +290,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalDeductionAmount = totalDeductionAmount + discountPrice;
                     //减免金额
                     reportFeeMonthStatistics.setDeductionAmount(reportFeeMonthStatistics.getDiscountPrice());
+                }else{
+                    reportFeeMonthStatistics.setDeductionAmount("0");
                 }
                 //滞纳金
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("3")) {
@@ -295,6 +300,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalLateFee = totalLateFee + discountPrice;
                     //滞纳金
                     reportFeeMonthStatistics.setLateFee(reportFeeMonthStatistics.getDiscountPrice());
+                }else{
+                    reportFeeMonthStatistics.setLateFee("0");
                 }
                 //空置房打折
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("4")) {
@@ -303,6 +310,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalVacantHousingDiscount = totalVacantHousingDiscount + discountPrice;
                     //空置房打折
                     reportFeeMonthStatistics.setVacantHousingDiscount(reportFeeMonthStatistics.getDiscountPrice());
+                }else{
+                    reportFeeMonthStatistics.setVacantHousingDiscount("0");
                 }
                 //空置房减免
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("5")) {
@@ -311,6 +320,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalVacantHousingReduction = totalVacantHousingReduction + discountPrice;
                     //空置房减免
                     reportFeeMonthStatistics.setVacantHousingReduction(reportFeeMonthStatistics.getDiscountPrice());
+                }else{
+                    reportFeeMonthStatistics.setVacantHousingReduction("0");
                 }
 
                 if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(reportFeeMonthStatistics.getPayerObjType())) {
