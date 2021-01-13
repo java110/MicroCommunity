@@ -84,6 +84,8 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String ownerTel;
 
+    private String ownerId;
+
 
     private Date createTime;
 
@@ -537,5 +539,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setReceivedAmountSwitch(String receivedAmountSwitch) {
         this.receivedAmountSwitch = receivedAmountSwitch;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }
