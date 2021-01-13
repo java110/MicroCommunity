@@ -851,7 +851,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 MachineTranslateDto.CMD_DELETE_CAR_BLACK_WHITE,
                 DEFAULT_MACHINE_CODE,
                 DEFAULT_MACHINE_ID,
-                "extCarId",
+                "extBwId",
                 "carNum",
                 MachineTranslateDto.TYPE_OWNER_CAR);
         ResponseEntity<String> responseEntity = null;
