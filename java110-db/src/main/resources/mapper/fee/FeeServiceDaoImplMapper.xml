@@ -157,14 +157,14 @@
         left join import_fee_detail ifd on t.fee_id = ifd.fee_id and ifd.status_cd = '0' and t.fee_flag = '2006012'
         LEFT JOIN meter_water mw on t.fee_id = mw.fee_id and mw.status_cd = '0' and mw.community_id = t.community_id
         <if test="ownerId != null and ownerId != ''">
-            LEFT JOIN pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
+            LEFT JOIN pay_fee_attrs pfao on t.fee_id = pfao.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
         </if>
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
         <if test="ownerId !=null and ownerId != ''">
-            and pfa.value= #{ownerId}
+            and pfao.value= #{ownerId}
         </if>
         <if test="incomeObjId !=null and incomeObjId != ''">
             and t.income_obj_id= #{incomeObjId}
@@ -283,7 +283,7 @@
         select count(1) count
         from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3,t_dict td4
         <if test="ownerId != null and ownerId != ''">
-            ,pay_fee_attrs pfa
+            ,pay_fee_attrs pfao
         </if>
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
@@ -302,10 +302,10 @@
         and td4.table_name = 'pay_fee_config'
         and td4.table_columns = 'bill_type'
         <if test="ownerId != null and ownerId != ''">
-            and t.fee_id = pfa.fee_id
-            and pfa.spec_cd = '390007'
-            and pfa.status_cd = '0'
-            and pfa.value= #{ownerId}
+            and t.fee_id = pfao.fee_id
+            and pfao.spec_cd = '390007'
+            and pfao.status_cd = '0'
+            and pfao.value= #{ownerId}
         </if>
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
