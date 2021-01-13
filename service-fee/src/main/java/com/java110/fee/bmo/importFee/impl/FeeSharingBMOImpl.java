@@ -9,10 +9,12 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeFormula.FeeFormulaDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.fee.bmo.importFee.IFeeSharingBMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeePo;
@@ -21,6 +23,7 @@ import com.java110.po.importFeeDetail.ImportFeeDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +65,9 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -106,6 +112,25 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
 
         if (roomDtos == null || roomDtos.size() < 1) {
             throw new IllegalArgumentException("未找到相应房屋公摊费用");
+        }
+
+        //房屋刷入业主信息
+        List<String> roomIds = new ArrayList<>();
+        for (RoomDto tmpRoomDto : roomDtos) {
+            roomIds.add(tmpRoomDto.getRoomId());
+        }
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(roomDtos.get(0).getCommunityId());
+        ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
+        for (RoomDto tmpRoomDto : roomDtos) {
+            for (OwnerDto tmpOwnerDto : ownerDtos) {
+                if (tmpRoomDto.getRoomId().equals(tmpOwnerDto.getRoomId())) {
+                    tmpRoomDto.setOwnerId(tmpOwnerDto.getOwnerId());
+                    tmpRoomDto.setOwnerName(tmpOwnerDto.getName());
+                    tmpRoomDto.setLink(tmpOwnerDto.getLink());
+                }
+            }
         }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
@@ -298,6 +323,32 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         feeAttrPo.setValue(reqJson.getString("totalDegrees"));
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
+
+        if (!StringUtil.isEmpty(roomDto.getOwnerId())) {
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
+            feeAttrPo.setValue(roomDto.getOwnerId());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPos.add(feeAttrPo);
+
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME);
+            feeAttrPo.setValue(roomDto.getOwnerName());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPos.add(feeAttrPo);
+
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
+            feeAttrPo.setValue(roomDto.getLink());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPos.add(feeAttrPo);
+        }
 
         String formulaValueRemark = orgFormulaValue.replace("T", reqJson.getString("totalDegrees") + "<总用量>")
                 .replace("F", roomDto.getFloorArea() + "<" + roomDto.getFloorNum() + "栋面积>")

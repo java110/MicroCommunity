@@ -23,6 +23,9 @@ public class FeeAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_TOTAL_DEGREES = "390004";//公摊总用量
     public static final String SPEC_CD_SHARE_FORMULA = "390005";//公摊公式
     public static final String SPEC_CD_PROXY_CONSUMPTION = "390006";//用量
+    public static final String SPEC_CD_OWNER_ID = "390007";//业主ID
+    public static final String SPEC_CD_OWNER_NAME = "390008";//业主名称
+    public static final String SPEC_CD_OWNER_LINK = "390009";//业主联系方式
 
     private String attrId;
     private String specCd;
@@ -101,4 +104,6 @@ public class FeeAttrDto extends PageDto implements Serializable {
     public void setSpecCdName(String specCdName) {
         this.specCdName = specCdName;
     }
+
+
 }

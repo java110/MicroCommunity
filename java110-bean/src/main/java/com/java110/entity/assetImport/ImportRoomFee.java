@@ -31,6 +31,9 @@ public class ImportRoomFee {
 
     private String cycle;
     private String remark;
+    private String ownerId;
+    private String ownerName;
+    private String ownerLink;
 
 
     public String getFloorNum() {
@@ -143,5 +146,29 @@ public class ImportRoomFee {
 
     public void setCarId(String carId) {
         this.carId = carId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerLink() {
+        return ownerLink;
+    }
+
+    public void setOwnerLink(String ownerLink) {
+        this.ownerLink = ownerLink;
     }
 }

@@ -8,13 +8,17 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,6 +52,9 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -131,6 +139,25 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
 
+        List<String> roomIds = new ArrayList<>();
+        for (RoomDto roomDto : roomDtos) {
+            roomIds.add(roomDto.getRoomId());
+        }
+
+        //房屋刷入业主信息
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(roomDtos.get(0).getCommunityId());
+        ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
+        for (RoomDto roomDto : roomDtos) {
+            for (OwnerDto tmpOwnerDto : ownerDtos) {
+                if (roomDto.getRoomId().equals(tmpOwnerDto.getRoomId())) {
+                    roomDto.setOwnerId(tmpOwnerDto.getOwnerId());
+                    roomDto.setOwnerName(tmpOwnerDto.getName());
+                    roomDto.setLink(tmpOwnerDto.getLink());
+                }
+            }
+        }
 
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
@@ -142,7 +169,11 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
 
             businesses.add(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context));
-
+            if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
+            }
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
 
                 responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
