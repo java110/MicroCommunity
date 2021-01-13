@@ -5,12 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IImportRoomFeeSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ImportExcelUtils;
 import com.java110.utils.util.StringUtil;
@@ -80,6 +82,16 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
             logger.error("导入失败 ", e);
             return new ResponseEntity<String>("非常抱歉，您填写的模板数据有误：" + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public ResponseEntity<String> importTempData(IPageData pd) {
+        ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        ImportRoomFee importRoomFee = BeanConvertUtil.covertBean(paramIn,ImportRoomFee.class);
+        List<ImportRoomFee> rooms = new ArrayList<ImportRoomFee>();
+        rooms.add(importRoomFee);
+        return dealExcelData(pd, rooms, result);
     }
 
     /**
