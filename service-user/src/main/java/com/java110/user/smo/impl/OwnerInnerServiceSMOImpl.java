@@ -280,6 +280,11 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
     @Override
     public List<OwnerDto> queryOwnerLogsByRoom(@RequestBody OwnerDto ownerDto) {
+        int page = ownerDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerDto.setPage((page - 1) * ownerDto.getRow());
+        }
         return BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.queryOwnerLogsByRoom(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
     }
 
