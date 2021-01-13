@@ -7,7 +7,6 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
-import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
@@ -695,7 +694,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
     }
 
     @Override
-    public JSONObject addFeeAttr(JSONObject paramInJson, DataFlowContext dataFlowContext,String specCd,String value) {
+    public JSONObject addFeeAttr(JSONObject paramInJson, DataFlowContext dataFlowContext, String specCd, String value) {
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
@@ -750,7 +749,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
-        businessUnit.put("feeId", "-1");
+        businessUnit.put("feeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         businessUnit.put("configId", paramInJson.getString("configId"));
         businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
@@ -764,6 +763,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
+        paramInJson.put("feeId", businessUnit.getString("feeId"));
         return business;
     }
 

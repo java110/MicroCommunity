@@ -166,8 +166,10 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = null;
         int failRooms = 0;
         //添加单元信息
+        int curFailRoomCount = 0;
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
 
+            curFailRoomCount++;
             businesses.add(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context));
             if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
                 businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
@@ -179,7 +181,9 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
                 responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
 
                 if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                    failRooms += businesses.size();
+                    failRooms += curFailRoomCount;
+                } else {
+                    curFailRoomCount = 0;
                 }
 
                 businesses = new JSONArray();
