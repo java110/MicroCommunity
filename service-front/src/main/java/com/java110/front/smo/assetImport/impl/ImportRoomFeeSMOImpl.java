@@ -89,6 +89,7 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         ImportRoomFee importRoomFee = BeanConvertUtil.covertBean(paramIn,ImportRoomFee.class);
+        importRoomFee.setRoomId(paramIn.getString("objId"));
         List<ImportRoomFee> rooms = new ArrayList<ImportRoomFee>();
         rooms.add(importRoomFee);
         return dealExcelData(pd, rooms, result);
