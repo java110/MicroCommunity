@@ -184,7 +184,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         //查询费用信息arrearsEndTime
         List<RoomDto> tmpRoomDtos = new ArrayList<>();
         List<RoomDto> tempRooms = new ArrayList<>();
-        int threadNum = 20;
+        int threadNum = Java110ThreadPoolFactory.JAVA110_DEFAULT_THREAD_NUM;
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
             tempRooms.add(roomDtos.get(roomIndex));
             if (roomIndex % threadNum == 0 && roomIndex != 0) {
