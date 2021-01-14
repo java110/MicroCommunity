@@ -167,13 +167,13 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
     }
 
     private int generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line) {
-        sheet.setColumnWidth(0, 8 * 256 * 3);
-        sheet.setColumnWidth(1, 8 * 256 * 2);
-        sheet.setColumnWidth(2, 8 * 256 * 2);
-        sheet.setColumnWidth(3, 8 * 256 * 3);
-        sheet.setColumnWidth(4, 8 * 256 * 2);
-        sheet.setColumnWidth(5, 8 * 256 * 2);
-        sheet.setColumnWidth(6, 8 * 256 * 2);
+        sheet.setColumnWidth(0, 8 * 256 * 2);
+        sheet.setColumnWidth(1, 8 * 256 * 1);
+        sheet.setColumnWidth(2, 8 * 256 * 1);
+        sheet.setColumnWidth(3, 8 * 256 * 1);
+        sheet.setColumnWidth(4, 8 * 256 * 1);
+        sheet.setColumnWidth(5, 8 * 256 * 1);
+        sheet.setColumnWidth(6, 8 * 256 * 1);
 
         //通用样式
         CellStyle cellStyle = workbook.createCellStyle();
