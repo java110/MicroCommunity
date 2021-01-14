@@ -170,7 +170,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
 
         String computingFormula = feeDto.getComputingFormula();
-        double feePrice = getFeePrice(feeDto);
+        double feePrice = getFeePrice(feeDto,roomDto);
         feeDto.setFeePrice(feePrice);
         //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());

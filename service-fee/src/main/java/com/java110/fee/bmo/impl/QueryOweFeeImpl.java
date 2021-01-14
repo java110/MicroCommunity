@@ -225,7 +225,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
         for (FeeDto tempFeeDto : feeDtos) {
 
-            computeFeeSMOImpl.computeEveryOweFee(tempFeeDto);//计算欠费金额
+            computeFeeSMOImpl.computeEveryOweFee(tempFeeDto, tmpRoomDto);//计算欠费金额
             //如果金额为0 就排除
             if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
                 tmpFeeDtos.add(tempFeeDto);
