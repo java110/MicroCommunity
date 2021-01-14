@@ -1,6 +1,8 @@
 package com.java110.dto.fee;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerCarDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -113,6 +115,10 @@ public class FeeDto extends PageDto implements Serializable {
     private Date curReadingTime;
 
     private List<FeeAttrDto> feeAttrDtos;
+
+    private List<RoomDto> cacheRooms;
+
+    private List<OwnerCarDto> cacheOwnerCars;
 
 
     public String getAmount() {
@@ -547,5 +553,21 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public List<RoomDto> getCacheRooms() {
+        return cacheRooms;
+    }
+
+    public void setCacheRooms(List<RoomDto> cacheRooms) {
+        this.cacheRooms = cacheRooms;
+    }
+
+    public List<OwnerCarDto> getCacheOwnerCars() {
+        return cacheOwnerCars;
+    }
+
+    public void setCacheOwnerCars(List<OwnerCarDto> cacheOwnerCars) {
+        this.cacheOwnerCars = cacheOwnerCars;
     }
 }

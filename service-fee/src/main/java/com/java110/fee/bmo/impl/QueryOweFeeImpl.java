@@ -171,6 +171,10 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         roomDto.setCommunityId(feeDto.getCommunityId());
         roomDto.setRoomId(feeDto.getPayerObjId());
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        if (roomDtos == null || roomDtos.size() < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_OK, "成功", new JSONArray());
+        }
         //查询费用信息arrearsEndTime
         FeeDto tmpFeeDto = null;
         List<RoomDto> tmpRoomDtos = new ArrayList<>();
@@ -186,8 +190,12 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                 feeDtos = new ArrayList<>();
                 return ResultVo.createResponseEntity(feeDtos);
             }
+
             List<FeeDto> tmpFeeDtos = new ArrayList<>();
             for (FeeDto tempFeeDto : feeDtos) {
+                List<RoomDto> tmpCacheRoomDtos = new ArrayList<>();
+                tmpCacheRoomDtos.add(tmpRoomDto);
+                tempFeeDto.setCacheRooms(tmpCacheRoomDtos);
                 computeFeeSMOImpl.computeEveryOweFee(tempFeeDto);//计算欠费金额
                 //如果金额为0 就排除
                 if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {

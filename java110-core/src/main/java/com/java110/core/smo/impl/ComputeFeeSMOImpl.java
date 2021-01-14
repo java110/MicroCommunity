@@ -159,7 +159,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(feeDto.getCommunityId());
         roomDto.setRoomId(feeDto.getPayerObjId());
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        List<RoomDto> roomDtos = feeDto.getCacheRooms();
+        if(roomDtos == null || roomDtos.size() < 1) {
+            roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        }
 
         if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
             return;
@@ -588,7 +591,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             RoomDto roomDto = new RoomDto();
             roomDto.setRoomId(feeDto.getPayerObjId());
             roomDto.setCommunityId(feeDto.getCommunityId());
-            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            List<RoomDto> roomDtos = feeDto.getCacheRooms();
+            if(roomDtos == null || roomDtos.size() < 1) {
+                roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            }
             if (roomDtos == null || roomDtos.size() != 1) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
             }
