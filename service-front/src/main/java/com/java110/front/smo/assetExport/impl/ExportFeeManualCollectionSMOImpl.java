@@ -15,6 +15,7 @@ import com.java110.utils.util.Money2ChineseUtil;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -164,19 +165,27 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
     }
 
     private int generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line) {
+        sheet.setColumnWidth(0, 200 * 3);
+        sheet.setColumnWidth(1, 200 * 2);
+        sheet.setColumnWidth(2, 200 * 2);
+        sheet.setColumnWidth(3, 200 * 3);
+        sheet.setColumnWidth(4, 200 * 2);
+        sheet.setColumnWidth(5, 200 * 2);
+        sheet.setColumnWidth(6, 200 * 2);
         CellStyle cellStyle = workbook.createCellStyle();
 //设置样式对象，这里仅设置了边框属性
         cellStyle.setBorderBottom(BorderStyle.THIN); //下边框
         cellStyle.setBorderLeft(BorderStyle.THIN);//左边框
         cellStyle.setBorderTop(BorderStyle.THIN);//上边框
         cellStyle.setBorderRight(BorderStyle.THIN);//右边框
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
         Row row = sheet.createRow(0 + line);
         Cell cell0 = row.createCell(0);
         cell0.setCellValue("缴费通知单");
         CellStyle cs = workbook.createCellStyle();
         cs.setWrapText(true);  //关键
         cell0.setCellStyle(cs);
-        row.setHeight((short) (200 * 10));
+        row.setHeight((short) (200 * 5));
         //第一行
         row = sheet.createRow(1 + line);
         row.createCell(0).setCellValue("收费二维码");
@@ -185,6 +194,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
                 + "-" + room.getString("roomNum"));
         row.createCell(2).setCellValue("");
         row.createCell(3).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        row.setHeight((short) (200 * 5));
 
         row = sheet.createRow(2 + line);
         cell0 = row.createCell(0);
