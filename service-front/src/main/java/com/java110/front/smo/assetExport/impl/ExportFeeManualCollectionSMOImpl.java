@@ -12,6 +12,7 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.Money2ChineseUtil;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -163,6 +164,12 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
     }
 
     private int generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line) {
+        CellStyle cellStyle = workbook.createCellStyle();
+//设置样式对象，这里仅设置了边框属性
+        cellStyle.setBorderBottom(BorderStyle.THIN); //下边框
+        cellStyle.setBorderLeft(BorderStyle.THIN);//左边框
+        cellStyle.setBorderTop(BorderStyle.THIN);//上边框
+        cellStyle.setBorderRight(BorderStyle.THIN);//右边框
         Row row = sheet.createRow(0 + line);
         Cell cell0 = row.createCell(0);
         cell0.setCellValue("缴费通知单");
@@ -180,13 +187,28 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.createCell(3).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
 
         row = sheet.createRow(2 + line);
-        row.createCell(0).setCellValue("收费名称");
-        row.createCell(1).setCellValue("收费标准");
-        row.createCell(2).setCellValue("数量/面积");
-        row.createCell(3).setCellValue("欠费时间");
-        row.createCell(4).setCellValue("应缴金额（元）");
-        row.createCell(5).setCellValue("违约金（元）");
-        row.createCell(6).setCellValue("备注");
+        cell0 = row.createCell(0);
+        cell0.setCellValue("收费名称");
+        cell0.setCellStyle(cellStyle);
+        Cell cell1 = row.createCell(1);
+        cell1.setCellValue("收费标准");
+        cell1.setCellStyle(cellStyle);
+        Cell cell2 = row.createCell(2);
+        cell2.setCellValue("数量/面积");
+        cell2.setCellStyle(cellStyle);
+        Cell cell3 = row.createCell(3);
+        cell3.setCellValue("欠费时间");
+        cell3.setCellStyle(cellStyle);
+        Cell cell4 = row.createCell(4);
+        cell4.setCellValue("应缴金额（元）");
+        cell4.setCellStyle(cellStyle);
+        Cell cell5 = row.createCell(5);
+        cell5.setCellValue("违约金（元）");
+        cell5.setCellStyle(cellStyle);
+        Cell cell6 = row.createCell(6);
+        cell6.setCellValue("备注");
+        cell6.setCellStyle(cellStyle);
+
 
         JSONArray fees = room.getJSONArray("fees");
         BigDecimal totalPrice = new BigDecimal(0);
@@ -195,33 +217,63 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             JSONObject feeObj = fees.getJSONObject(feeIndex);
             row = sheet.createRow(line + feeIndex + 3);
-            row.createCell(0).setCellValue(feeObj.getString("feeName"));
-            row.createCell(1).setCellValue(feeObj.getString("squarePrice"));
-            row.createCell(2).setCellValue(room.getString("builtUpArea"));
-            startTime= feeObj.getString("endTime").length()>10?feeObj.getString("endTime").substring(0,10):feeObj.getString("endTime");
-            endTime= feeObj.getString("deadlineTime").length()>10?feeObj.getString("deadlineTime").substring(0,10):feeObj.getString("deadlineTime");
-            row.createCell(3).setCellValue(startTime + "至" + endTime);
-            row.createCell(4).setCellValue(feeObj.getString("feePrice"));
-            row.createCell(5).setCellValue("0");
-            row.createCell(6).setCellValue("");
-            totalPrice.add(new BigDecimal(feeObj.getString("squarePrice")));
+            startTime = feeObj.getString("endTime").length() > 10 ? feeObj.getString("endTime").substring(0, 10) : feeObj.getString("endTime");
+            endTime = feeObj.getString("deadlineTime").length() > 10 ? feeObj.getString("deadlineTime").substring(0, 10) : feeObj.getString("deadlineTime");
+
+            cell0 = row.createCell(0);
+            cell0.setCellValue(feeObj.getString("feeName"));
+            cell0.setCellStyle(cellStyle);
+            cell1 = row.createCell(1);
+            cell1.setCellValue(feeObj.getString("squarePrice"));
+            cell1.setCellStyle(cellStyle);
+            cell2 = row.createCell(2);
+            cell2.setCellValue(room.getString("builtUpArea"));
+            cell2.setCellStyle(cellStyle);
+            cell3 = row.createCell(3);
+            cell3.setCellValue(startTime + "至" + endTime);
+            cell3.setCellStyle(cellStyle);
+            cell4 = row.createCell(4);
+            cell4.setCellValue(feeObj.getString("feePrice"));
+            cell4.setCellStyle(cellStyle);
+            cell5 = row.createCell(5);
+            cell5.setCellValue("0");
+            cell5.setCellStyle(cellStyle);
+            cell6 = row.createCell(6);
+            cell6.setCellValue("");
+            cell6.setCellStyle(cellStyle);
+            totalPrice = totalPrice.add(new BigDecimal(feeObj.getString("feePrice")));
         }
 
         row = sheet.createRow(line + fees.size() + 3);
-        row.createCell(0).setCellValue("合计（大写）：");
-        row.createCell(1).setCellValue(Money2ChineseUtil.toChineseChar(totalPrice.doubleValue()));
-        row.createCell(2).setCellValue("");
-        row.createCell(3).setCellValue("");
-        row.createCell(4).setCellValue(totalPrice.doubleValue());
-        row.createCell(5).setCellValue("");
-        row.createCell(6).setCellValue("");
+
+        cell0 = row.createCell(0);
+        cell0.setCellValue("合计（大写）：");
+        cell0.setCellStyle(cellStyle);
+        cell1 = row.createCell(1);
+        cell1.setCellValue(Money2ChineseUtil.toChineseChar(totalPrice.doubleValue()));
+        cell1.setCellStyle(cellStyle);
+        cell2 = row.createCell(2);
+        cell2.setCellValue("");
+        cell2.setCellStyle(cellStyle);
+        cell3 = row.createCell(3);
+        cell3.setCellValue("");
+        cell3.setCellStyle(cellStyle);
+        cell4 = row.createCell(4);
+        cell4.setCellValue(totalPrice.doubleValue());
+        cell4.setCellStyle(cellStyle);
+        cell5 = row.createCell(5);
+        cell5.setCellValue("");
+        cell5.setCellStyle(cellStyle);
+        cell6 = row.createCell(6);
+        cell6.setCellValue("");
+        cell6.setCellStyle(cellStyle);
 
         row = sheet.createRow(line + fees.size() + 4);
         row.createCell(0).setCellValue("1、请收到通知单5日内到物业处或微信支付");
         row = sheet.createRow(line + fees.size() + 5);
         row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
 
-        return line + fees.size() + 4;
+        return line + fees.size() + 5;
     }
 
 
