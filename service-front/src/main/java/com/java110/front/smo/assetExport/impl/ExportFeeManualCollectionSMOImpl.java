@@ -174,6 +174,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         sheet.setColumnWidth(4, 8 * 256 * 2);
         sheet.setColumnWidth(5, 8 * 256 * 2);
         sheet.setColumnWidth(6, 8 * 256 * 2);
+
+        //通用样式
         CellStyle cellStyle = workbook.createCellStyle();
 //设置样式对象，这里仅设置了边框属性
         cellStyle.setBorderBottom(BorderStyle.THIN); //下边框
@@ -181,6 +183,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         cellStyle.setBorderTop(BorderStyle.THIN);//上边框
         cellStyle.setBorderRight(BorderStyle.THIN);//右边框
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        // 标题
         Row row = sheet.createRow(0 + line);
         Cell cell0 = row.createCell(0);
         cell0.setCellValue("缴费通知单");
@@ -192,15 +196,13 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         titleCellStyle.setFont(font);
         titleCellStyle.setAlignment(HorizontalAlignment.CENTER);
         cell0.setCellStyle(titleCellStyle);
+        row.setHeight((short) (200 * 5));
 
         //合并标题
         CellRangeAddress region = new CellRangeAddress(0 + line, 0 + line, 0, 6);
         sheet.addMergedRegion(region);
 
-        CellStyle cs = workbook.createCellStyle();
-        cs.setWrapText(true);  //关键
-        cell0.setCellStyle(cs);
-        row.setHeight((short) (200 * 5));
+
         //第一行
         row = sheet.createRow(1 + line);
         row.createCell(0).setCellValue("收费二维码");
@@ -213,14 +215,15 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.createCell(4).setCellValue("");
         row.createCell(5).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         row.setHeight((short) (200 * 5));
+        CellStyle rowCellStyle = workbook.createCellStyle();
+        rowCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
+        row.setRowStyle(rowCellStyle);
 
         //设置表头之上
         region = new CellRangeAddress(1 + line, 1 + line, 1, 2);
         sheet.addMergedRegion(region);
 
-        CellStyle rowCellStyle = workbook.createCellStyle();
-        rowCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
-        row.setRowStyle(rowCellStyle);
+
 
         row = sheet.createRow(2 + line);
         cell0 = row.createCell(0);
