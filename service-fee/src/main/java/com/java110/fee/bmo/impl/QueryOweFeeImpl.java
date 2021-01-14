@@ -1,6 +1,7 @@
 package com.java110.fee.bmo.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.java110.core.factory.Java110ThreadPoolFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
@@ -30,7 +31,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class QueryOweFeeImpl implements IQueryOweFee {
@@ -176,39 +182,61 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "成功", new JSONArray());
         }
         //查询费用信息arrearsEndTime
-        FeeDto tmpFeeDto = null;
         List<RoomDto> tmpRoomDtos = new ArrayList<>();
-        for (RoomDto tmpRoomDto : roomDtos) {
-            tmpFeeDto = new FeeDto();
-            tmpFeeDto.setArrearsEndTime(DateUtil.getCurrentDate());
-            tmpFeeDto.setState(FeeDto.STATE_DOING);
-            tmpFeeDto.setPayerObjId(tmpRoomDto.getRoomId());
-            tmpFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-            if (feeDtos == null || feeDtos.size() < 1) {
-                feeDtos = new ArrayList<>();
-                return ResultVo.createResponseEntity(feeDtos);
+        List<RoomDto> tempRooms = new ArrayList<>();
+        int threadNum = 20;
+        for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
+            tempRooms.add(roomDtos.get(roomIndex));
+            if (roomIndex % threadNum == 0 && roomIndex != 0) {
+                tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, threadNum));
+                tempRooms = new ArrayList();
             }
-
-            List<FeeDto> tmpFeeDtos = new ArrayList<>();
-            for (FeeDto tempFeeDto : feeDtos) {
-
-                computeFeeSMOImpl.computeEveryOweFee(tempFeeDto);//计算欠费金额
-                //如果金额为0 就排除
-                if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
-                    tmpFeeDtos.add(tempFeeDto);
-                }
-            }
-
-            if (tmpFeeDtos.size() < 1) {
-                continue;
-            }
-            tmpRoomDto.setFees(tmpFeeDtos);
-            tmpRoomDtos.add(tmpRoomDto);
+        }
+        if (tempRooms.size() > 0) {
+            tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, tempRooms.size()));
         }
 
         return ResultVo.createResponseEntity(tmpRoomDtos);
+    }
+
+    private List<RoomDto> doGetTmpRoomDto(List<RoomDto> roomDtos, FeeDto feeDto, int threadNum) {
+        Java110ThreadPoolFactory java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(threadNum);
+        for (RoomDto roomDto1 : roomDtos) {
+            java110ThreadPoolFactory.submit(() -> {
+                return getTmpRoomDtos(roomDto1, feeDto);
+            });
+        }
+        return java110ThreadPoolFactory.get();
+    }
+
+    private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto, FeeDto feeDto) {
+        FeeDto tmpFeeDto = null;
+        tmpFeeDto = new FeeDto();
+        tmpFeeDto.setArrearsEndTime(DateUtil.getCurrentDate());
+        tmpFeeDto.setState(FeeDto.STATE_DOING);
+        tmpFeeDto.setPayerObjId(tmpRoomDto.getRoomId());
+        tmpFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        if (feeDtos == null || feeDtos.size() < 1) {
+            return null;
+        }
+
+        List<FeeDto> tmpFeeDtos = new ArrayList<>();
+        for (FeeDto tempFeeDto : feeDtos) {
+
+            computeFeeSMOImpl.computeEveryOweFee(tempFeeDto);//计算欠费金额
+            //如果金额为0 就排除
+            if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+                tmpFeeDtos.add(tempFeeDto);
+            }
+        }
+
+        if (tmpFeeDtos.size() < 1) {
+            return null;
+        }
+        tmpRoomDto.setFees(tmpFeeDtos);
+        return tmpRoomDto;
     }
 
     private boolean freshFeeDtoParam(FeeDto feeDto) {
