@@ -15,9 +15,11 @@ import com.java110.utils.util.Money2ChineseUtil;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -165,13 +167,13 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
     }
 
     private int generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line) {
-        sheet.setColumnWidth(0, 8*256 * 3);
-        sheet.setColumnWidth(1, 8*256 * 2);
-        sheet.setColumnWidth(2, 8*256 * 2);
-        sheet.setColumnWidth(3, 8*256 * 3);
-        sheet.setColumnWidth(4, 8*256 * 2);
-        sheet.setColumnWidth(5, 8*256 * 2);
-        sheet.setColumnWidth(6, 8*256 * 2);
+        sheet.setColumnWidth(0, 8 * 256 * 3);
+        sheet.setColumnWidth(1, 8 * 256 * 2);
+        sheet.setColumnWidth(2, 8 * 256 * 2);
+        sheet.setColumnWidth(3, 8 * 256 * 3);
+        sheet.setColumnWidth(4, 8 * 256 * 2);
+        sheet.setColumnWidth(5, 8 * 256 * 2);
+        sheet.setColumnWidth(6, 8 * 256 * 2);
         CellStyle cellStyle = workbook.createCellStyle();
 //设置样式对象，这里仅设置了边框属性
         cellStyle.setBorderBottom(BorderStyle.THIN); //下边框
@@ -182,6 +184,19 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         Row row = sheet.createRow(0 + line);
         Cell cell0 = row.createCell(0);
         cell0.setCellValue("缴费通知单");
+        //标题设置字体
+        Font font = workbook.createFont();
+        font.setFontName("黑体");
+        font.setFontHeightInPoints((short) 28);
+        CellStyle titleCellStyle = workbook.createCellStyle();
+        titleCellStyle.setFont(font);
+        titleCellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cell0.setCellStyle(titleCellStyle);
+
+        //合并标题
+        CellRangeAddress region = new CellRangeAddress(0 + line, 0 + line, 0, 6);
+        sheet.addMergedRegion(region);
+
         CellStyle cs = workbook.createCellStyle();
         cs.setWrapText(true);  //关键
         cell0.setCellStyle(cs);
@@ -192,11 +207,20 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.createCell(1).setCellValue("房号：" + room.getString("floorNum")
                 + "-" + room.getString("unitNum")
                 + "-" + room.getString("roomNum"));
+
         row.createCell(2).setCellValue("");
         row.createCell(3).setCellValue("");
         row.createCell(4).setCellValue("");
         row.createCell(5).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         row.setHeight((short) (200 * 5));
+
+        //设置表头之上
+        region = new CellRangeAddress(1 + line, 1 + line, 1, 2);
+        sheet.addMergedRegion(region);
+
+        CellStyle rowCellStyle = workbook.createCellStyle();
+        rowCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
+        row.setRowStyle(rowCellStyle);
 
         row = sheet.createRow(2 + line);
         cell0 = row.createCell(0);
@@ -259,7 +283,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row = sheet.createRow(line + fees.size() + 3);
 
         cell0 = row.createCell(0);
-        cell0.setCellValue("合计（大写）：");
+        cell0.setCellValue("合计（大写）");
         cell0.setCellStyle(cellStyle);
         cell1 = row.createCell(1);
         cell1.setCellValue(Money2ChineseUtil.toChineseChar(totalPrice.doubleValue()));
@@ -279,6 +303,11 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         cell6 = row.createCell(6);
         cell6.setCellValue("");
         cell6.setCellStyle(cellStyle);
+
+        //合计 合并
+        region = new CellRangeAddress(line + fees.size() + 3, line + fees.size() + 3, 1, 3);
+        sheet.addMergedRegion(region);
+
 
         row = sheet.createRow(line + fees.size() + 4);
         row.createCell(0).setCellValue("1、请收到通知单5日内到物业处或微信支付");
