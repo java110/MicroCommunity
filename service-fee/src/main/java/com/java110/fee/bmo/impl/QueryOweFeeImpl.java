@@ -225,7 +225,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         tmpFeeDto.setState(FeeDto.STATE_DOING);
         tmpFeeDto.setPayerObjId(tmpRoomDto.getRoomId());
         tmpFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.querySimpleFees(feeDto);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.querySimpleFees(tmpFeeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
             return null;
