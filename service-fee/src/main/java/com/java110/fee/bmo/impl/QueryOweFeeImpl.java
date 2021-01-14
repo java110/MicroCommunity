@@ -183,18 +183,20 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
         //查询费用信息arrearsEndTime
         List<RoomDto> tmpRoomDtos = new ArrayList<>();
-        List<RoomDto> tempRooms = new ArrayList<>();
+        //List<RoomDto> tempRooms = new ArrayList<>();
         int threadNum = Java110ThreadPoolFactory.JAVA110_DEFAULT_THREAD_NUM;
-        for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
-            tempRooms.add(roomDtos.get(roomIndex));
-            if (roomIndex % threadNum == 0 && roomIndex != 0) {
-                tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, threadNum));
-                tempRooms = new ArrayList();
-            }
-        }
-        if (tempRooms.size() > 0) {
-            tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, tempRooms.size()));
-        }
+        //for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
+        // tempRooms.add(roomDtos.get(roomIndex));
+        //if (roomIndex % threadNum == 0 && roomIndex != 0) {
+        //    tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, threadNum));
+        //   tempRooms = new ArrayList();
+        // }
+        // }
+//        if (tempRooms.size() > 0) {
+//            tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, tempRooms.size()));
+//        }
+
+        tmpRoomDtos.addAll(doGetTmpRoomDto(roomDtos, feeDto, threadNum));
 
         return ResultVo.createResponseEntity(tmpRoomDtos);
     }
@@ -209,8 +211,8 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                 });
             }
             return java110ThreadPoolFactory.get();
-        }finally {
-            if(java110ThreadPoolFactory != null){
+        } finally {
+            if (java110ThreadPoolFactory != null) {
                 java110ThreadPoolFactory.stop();
             }
         }
