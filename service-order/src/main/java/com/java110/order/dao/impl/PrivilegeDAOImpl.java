@@ -45,9 +45,9 @@ public class PrivilegeDAOImpl extends BaseServiceDao implements IPrivilegeDAO {
     public boolean deleteUserAllPrivilege(Map info) {
         logger.debug("用户默认权限保存入参：{}", info);
         int saveFlag = sqlSessionTemplate.insert("privilegeDAOImpl.deleteUserAllPrivilege", info);
-        if (saveFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "删除权限信息失败：" + JSONObject.toJSONString(info));
-        }
+//        if (saveFlag < 1) {
+//            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "删除权限信息失败：" + JSONObject.toJSONString(info));
+//        }
         return true;
     }
 

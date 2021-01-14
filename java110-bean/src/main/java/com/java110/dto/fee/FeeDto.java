@@ -116,9 +116,7 @@ public class FeeDto extends PageDto implements Serializable {
 
     private List<FeeAttrDto> feeAttrDtos;
 
-    private List<RoomDto> cacheRooms;
 
-    private List<OwnerCarDto> cacheOwnerCars;
 
 
     public String getAmount() {
@@ -555,19 +553,5 @@ public class FeeDto extends PageDto implements Serializable {
         this.ownerId = ownerId;
     }
 
-    public List<RoomDto> getCacheRooms() {
-        return cacheRooms;
-    }
 
-    public void setCacheRooms(List<RoomDto> cacheRooms) {
-        this.cacheRooms = cacheRooms;
-    }
-
-    public List<OwnerCarDto> getCacheOwnerCars() {
-        return cacheOwnerCars;
-    }
-
-    public void setCacheOwnerCars(List<OwnerCarDto> cacheOwnerCars) {
-        this.cacheOwnerCars = cacheOwnerCars;
-    }
 }

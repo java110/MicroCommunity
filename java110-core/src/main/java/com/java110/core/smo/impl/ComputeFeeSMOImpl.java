@@ -156,17 +156,17 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
         double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-        RoomDto roomDto = new RoomDto();
-        roomDto.setCommunityId(feeDto.getCommunityId());
-        roomDto.setRoomId(feeDto.getPayerObjId());
-        List<RoomDto> roomDtos = feeDto.getCacheRooms();
-        if(roomDtos == null || roomDtos.size() < 1) {
-            roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-        }
-
-        if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
-            return;
-        }
+//        RoomDto roomDto = new RoomDto();
+//        roomDto.setCommunityId(feeDto.getCommunityId());
+//        roomDto.setRoomId(feeDto.getPayerObjId());
+//        List<RoomDto> roomDtos = feeDto.getCacheRooms();
+//        if(roomDtos == null || roomDtos.size() < 1) {
+//            roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+//        }
+//
+//        if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
+//            return;
+//        }
 
         String computingFormula = feeDto.getComputingFormula();
         double feePrice = getFeePrice(feeDto);
@@ -293,9 +293,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 return objName;
             }
             roomDto = roomDtos.get(0);
-            if(RoomDto.ROOM_TYPE_ROOM.equals(roomDto.getRoomType())) {
+            if (RoomDto.ROOM_TYPE_ROOM.equals(roomDto.getRoomType())) {
                 objName = roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室";
-            }else{
+            } else {
                 objName = roomDto.getFloorNum() + "栋" + roomDto.getRoomNum() + "室";
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
@@ -591,10 +591,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             RoomDto roomDto = new RoomDto();
             roomDto.setRoomId(feeDto.getPayerObjId());
             roomDto.setCommunityId(feeDto.getCommunityId());
-            List<RoomDto> roomDtos = feeDto.getCacheRooms();
-            if(roomDtos == null || roomDtos.size() < 1) {
-                roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            }
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
             if (roomDtos == null || roomDtos.size() != 1) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
             }
