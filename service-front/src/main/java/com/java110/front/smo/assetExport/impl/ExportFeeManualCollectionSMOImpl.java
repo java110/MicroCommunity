@@ -34,7 +34,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -177,7 +176,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.createCell(1).setCellValue("房号：" + room.getString("floorNum")
                 + "-" + room.getString("unitNum")
                 + "-" + room.getString("roomNum"));
-        row.createCell(2).setCellValue("业主：" + room.getString("ownerName"));
+        row.createCell(2).setCellValue("");
         row.createCell(3).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
 
         row = sheet.createRow(2 + line);
@@ -191,14 +190,18 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
         JSONArray fees = room.getJSONArray("fees");
         BigDecimal totalPrice = new BigDecimal(0);
+        String startTime = "";
+        String endTime = "";
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             JSONObject feeObj = fees.getJSONObject(feeIndex);
             row = sheet.createRow(line + feeIndex + 3);
             row.createCell(0).setCellValue(feeObj.getString("feeName"));
             row.createCell(1).setCellValue(feeObj.getString("squarePrice"));
             row.createCell(2).setCellValue(room.getString("builtUpArea"));
-            row.createCell(3).setCellValue(feeObj.getString("endTime") + "至" + feeObj.getString("deadlineTime"));
-            row.createCell(4).setCellValue(room.getString("feePrice"));
+            startTime= feeObj.getString("endTime").length()>10?feeObj.getString("endTime").substring(0,10):feeObj.getString("endTime");
+            endTime= feeObj.getString("deadlineTime").length()>10?feeObj.getString("deadlineTime").substring(0,10):feeObj.getString("deadlineTime");
+            row.createCell(3).setCellValue(startTime + "至" + endTime);
+            row.createCell(4).setCellValue(feeObj.getString("feePrice"));
             row.createCell(5).setCellValue("0");
             row.createCell(6).setCellValue("");
             totalPrice.add(new BigDecimal(feeObj.getString("squarePrice")));
@@ -215,7 +218,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
         row = sheet.createRow(line + fees.size() + 4);
         row.createCell(0).setCellValue("1、请收到通知单5日内到物业处或微信支付");
-        row = sheet.createRow(fees.size() + 5);
+        row = sheet.createRow(line + fees.size() + 5);
         row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
 
         return line + fees.size() + 4;
@@ -327,7 +330,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
     }
 
     public static void main(String[] args) {
-        Java110ThreadPoolFactory<String> pool =Java110ThreadPoolFactory.getInstance().createThreadPool(20);
+        Java110ThreadPoolFactory<String> pool = Java110ThreadPoolFactory.getInstance().createThreadPool(20);
         for (int i = 21; i > 0; i--) {
             Integer data = i;
             pool.submit(() -> {
@@ -335,7 +338,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
                 System.out.println("网络操作开始" + data);
                 Thread.sleep(data * 1000);
                 System.out.println("网络操作结束" + data);
-                return data+"";
+                return data + "";
             });
         }
         List<String> users = pool.get();

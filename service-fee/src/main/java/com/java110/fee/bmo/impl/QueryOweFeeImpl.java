@@ -185,16 +185,6 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         List<RoomDto> tmpRoomDtos = new ArrayList<>();
         List<RoomDto> tempRooms = new ArrayList<>();
         int threadNum = Java110ThreadPoolFactory.JAVA110_DEFAULT_THREAD_NUM;
-        //for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
-        // tempRooms.add(roomDtos.get(roomIndex));
-        //if (roomIndex % threadNum == 0 && roomIndex != 0) {
-        //    tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, threadNum));
-        //   tempRooms = new ArrayList();
-        // }
-        // }
-//        if (tempRooms.size() > 0) {
-//            tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, tempRooms.size()));
-//        }
 
         tempRooms.addAll(doGetTmpRoomDto(roomDtos, feeDto, threadNum));
         for(RoomDto tmpRoomDto:tempRooms){
