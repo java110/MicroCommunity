@@ -183,7 +183,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
         //查询费用信息arrearsEndTime
         List<RoomDto> tmpRoomDtos = new ArrayList<>();
-        //List<RoomDto> tempRooms = new ArrayList<>();
+        List<RoomDto> tempRooms = new ArrayList<>();
         int threadNum = Java110ThreadPoolFactory.JAVA110_DEFAULT_THREAD_NUM;
         //for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
         // tempRooms.add(roomDtos.get(roomIndex));
@@ -196,7 +196,13 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 //            tmpRoomDtos.addAll(doGetTmpRoomDto(tempRooms, feeDto, tempRooms.size()));
 //        }
 
-        tmpRoomDtos.addAll(doGetTmpRoomDto(roomDtos, feeDto, threadNum));
+        tempRooms.addAll(doGetTmpRoomDto(roomDtos, feeDto, threadNum));
+        for(RoomDto tmpRoomDto:tempRooms){
+            if(tmpRoomDto == null){
+                continue;
+            }
+            tmpRoomDtos.add(tmpRoomDto);
+        }
 
         return ResultVo.createResponseEntity(tmpRoomDtos);
     }
