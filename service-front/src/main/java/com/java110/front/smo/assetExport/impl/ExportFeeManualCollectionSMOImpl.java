@@ -165,13 +165,13 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
     }
 
     private int generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line) {
-        sheet.setColumnWidth(0, 200 * 3);
-        sheet.setColumnWidth(1, 200 * 2);
-        sheet.setColumnWidth(2, 200 * 2);
-        sheet.setColumnWidth(3, 200 * 3);
-        sheet.setColumnWidth(4, 200 * 2);
-        sheet.setColumnWidth(5, 200 * 2);
-        sheet.setColumnWidth(6, 200 * 2);
+        sheet.setColumnWidth(0, 8*256 * 3);
+        sheet.setColumnWidth(1, 8*256 * 2);
+        sheet.setColumnWidth(2, 8*256 * 2);
+        sheet.setColumnWidth(3, 8*256 * 3);
+        sheet.setColumnWidth(4, 8*256 * 2);
+        sheet.setColumnWidth(5, 8*256 * 2);
+        sheet.setColumnWidth(6, 8*256 * 2);
         CellStyle cellStyle = workbook.createCellStyle();
 //设置样式对象，这里仅设置了边框属性
         cellStyle.setBorderBottom(BorderStyle.THIN); //下边框
@@ -193,7 +193,9 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
                 + "-" + room.getString("unitNum")
                 + "-" + room.getString("roomNum"));
         row.createCell(2).setCellValue("");
-        row.createCell(3).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        row.createCell(3).setCellValue("");
+        row.createCell(4).setCellValue("");
+        row.createCell(5).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         row.setHeight((short) (200 * 5));
 
         row = sheet.createRow(2 + line);
