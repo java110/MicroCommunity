@@ -34,6 +34,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -325,22 +326,5 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         this.restTemplate = restTemplate;
     }
 
-    public static void main(String[] args) {
-        Java110ThreadPoolFactory<String> pool =Java110ThreadPoolFactory.getInstance().createThreadPool(20);
-        for (int i = 20; i > 0; i--) {
-            Integer data = i;
-            pool.submit(() -> {
-//这个地方可以写一个函数，参数可以从外层传入
-                System.out.println("网络操作开始" + data);
-                Thread.sleep(data * 1000);
-                System.out.println("网络操作结束" + data);
-                return data+"";
-            });
-        }
-        List<String> users = pool.get();
-        for (String u : users) {
-            System.out.println(u);
-        }
-        pool.stop();
-    }
+
 }
