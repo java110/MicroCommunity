@@ -191,7 +191,6 @@ public class FeeApi extends BaseController {
     @RequestMapping(value = "/listAllRoomOweFees", method = RequestMethod.GET)
     public ResponseEntity<String> listAllRoomOweFees(
             @RequestParam(value = "roomId",required = false) String roomId,
-            @RequestParam(value = "payObjType") String payObjType,
             @RequestParam(value = "communityId") String communityId) {
         FeeDto feeDto = new FeeDto();
         feeDto.setPayerObjId(roomId);
