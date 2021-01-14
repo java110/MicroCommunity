@@ -200,13 +200,20 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     }
 
     private List<RoomDto> doGetTmpRoomDto(List<RoomDto> roomDtos, FeeDto feeDto, int threadNum) {
-        Java110ThreadPoolFactory java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(threadNum);
-        for (RoomDto roomDto1 : roomDtos) {
-            java110ThreadPoolFactory.submit(() -> {
-                return getTmpRoomDtos(roomDto1, feeDto);
-            });
+        Java110ThreadPoolFactory java110ThreadPoolFactory = null;
+        try {
+            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(threadNum);
+            for (RoomDto roomDto1 : roomDtos) {
+                java110ThreadPoolFactory.submit(() -> {
+                    return getTmpRoomDtos(roomDto1, feeDto);
+                });
+            }
+            return java110ThreadPoolFactory.get();
+        }finally {
+            if(java110ThreadPoolFactory != null){
+                java110ThreadPoolFactory.stop();
+            }
         }
-        return java110ThreadPoolFactory.get();
     }
 
     private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto, FeeDto feeDto) {

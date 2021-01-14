@@ -5,13 +5,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.factory.Java110ThreadPoolFactory;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetExport.IExportFeeManualCollectionSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.Money2ChineseUtil;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -28,6 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -317,5 +323,24 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+    public static void main(String[] args) {
+        Java110ThreadPoolFactory<String> pool =Java110ThreadPoolFactory.getInstance().createThreadPool(20);
+        for (int i = 20; i > 0; i--) {
+            Integer data = i;
+            pool.submit(() -> {
+//这个地方可以写一个函数，参数可以从外层传入
+                System.out.println("网络操作开始" + data);
+                Thread.sleep(data * 1000);
+                System.out.println("网络操作结束" + data);
+                return data+"";
+            });
+        }
+        List<String> users = pool.get();
+        for (String u : users) {
+            System.out.println(u);
+        }
+        pool.stop();
     }
 }
