@@ -10,6 +10,7 @@ import com.java110.front.smo.assetExport.IExportFeeManualCollectionSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.Money2ChineseUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -26,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -77,6 +79,139 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         }
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> downloadCollectionLetterOrder(IPageData pd) {
+        ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+
+        Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
+
+        Workbook workbook = null;  //工作簿
+        //工作表
+        workbook = new XSSFWorkbook();
+        //获取楼信息
+        getRoomOweFees(pd, result, workbook);
+
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        MultiValueMap headers = new HttpHeaders();
+        headers.add("content-type", "application/octet-stream;charset=UTF-8");
+        headers.add("Content-Disposition", "attachment;filename=downloadCollectionLetterOrder_" + DateUtil.getyyyyMMddhhmmssDateString() + ".xlsx");
+        headers.add("Pargam", "no-cache");
+        headers.add("Cache-Control", "no-cache");
+        //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
+        headers.add("Accept-Ranges", "bytes");
+        byte[] context = null;
+        try {
+            workbook.write(os);
+            context = os.toByteArray();
+            os.close();
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 保存数据
+            return new ResponseEntity<Object>("导出失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        // 保存数据
+        return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
+    }
+
+    /**
+     * 查询房屋欠费
+     *
+     * @param pd
+     * @param result
+     * @param workbook
+     */
+    private void getRoomOweFees(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/listAllRoomOweFees?communityId=" + result.getCommunityId();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return;
+        }
+
+        JSONObject savedRoomInfoResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
+
+
+        if (!savedRoomInfoResults.containsKey("data")) {
+            return;
+        }
+
+
+        JSONArray rooms = savedRoomInfoResults.getJSONArray("data");
+
+        if (rooms == null || rooms.size() < 1) {
+            return;
+        }
+
+        Sheet sheet = workbook.createSheet("催缴单");
+        int line = 0;
+        for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
+            line = generatorRoomOweFee(sheet, workbook, rooms.getJSONObject(roomIndex), line + 1);
+        }
+    }
+
+    private int generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line) {
+        Row row = sheet.createRow(0 + line);
+        Cell cell0 = row.createCell(0);
+        cell0.setCellValue("缴费通知单");
+        CellStyle cs = workbook.createCellStyle();
+        cs.setWrapText(true);  //关键
+        cell0.setCellStyle(cs);
+        row.setHeight((short) (200 * 10));
+        //第一行
+        row = sheet.createRow(1 + line);
+        row.createCell(0).setCellValue("收费二维码");
+        row.createCell(1).setCellValue("房号：" + room.getString("floorNum")
+                + "-" + room.getString("unitNum")
+                + "-" + room.getString("roomNum"));
+        row.createCell(2).setCellValue("业主：" + room.getString("ownerName"));
+        row.createCell(3).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+
+        row = sheet.createRow(2 + line);
+        row.createCell(0).setCellValue("收费名称");
+        row.createCell(1).setCellValue("收费标准");
+        row.createCell(2).setCellValue("数量/面积");
+        row.createCell(3).setCellValue("欠费时间");
+        row.createCell(4).setCellValue("应缴金额（元）");
+        row.createCell(5).setCellValue("违约金（元）");
+        row.createCell(6).setCellValue("备注");
+
+        JSONArray fees = room.getJSONArray("fees");
+        BigDecimal totalPrice = new BigDecimal(0);
+        for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
+            JSONObject feeObj = fees.getJSONObject(feeIndex);
+            row = sheet.createRow(line + feeIndex + 3);
+            row.createCell(0).setCellValue(feeObj.getString("feeName"));
+            row.createCell(1).setCellValue(feeObj.getString("squarePrice"));
+            row.createCell(2).setCellValue(room.getString("builtUpArea"));
+            row.createCell(3).setCellValue(feeObj.getString("endTime") + "至" + feeObj.getString("deadlineTime"));
+            row.createCell(4).setCellValue(room.getString("feePrice"));
+            row.createCell(5).setCellValue("0");
+            row.createCell(6).setCellValue("");
+            totalPrice.add(new BigDecimal(feeObj.getString("squarePrice")));
+        }
+
+        row = sheet.createRow(line + fees.size() + 3);
+        row.createCell(0).setCellValue("合计（大写）：");
+        row.createCell(1).setCellValue(Money2ChineseUtil.toChineseChar(totalPrice.doubleValue()));
+        row.createCell(2).setCellValue("");
+        row.createCell(3).setCellValue("");
+        row.createCell(4).setCellValue(totalPrice.doubleValue());
+        row.createCell(5).setCellValue("");
+        row.createCell(6).setCellValue("");
+
+        row = sheet.createRow(line + fees.size() + 4);
+        row.createCell(0).setCellValue("1、请收到通知单5日内到物业处或微信支付");
+        row = sheet.createRow(fees.size() + 5);
+        row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
+
+        return line + fees.size() + 4;
     }
 
 

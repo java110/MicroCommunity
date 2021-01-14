@@ -1,4 +1,4 @@
-package com.java110.front.components.inspectionPlan;
+package com.java110.front.components.inspectionPoint;
 
 import com.java110.core.context.IPageData;
 import com.java110.front.smo.inspection.IInspectionPlanStateSMO;

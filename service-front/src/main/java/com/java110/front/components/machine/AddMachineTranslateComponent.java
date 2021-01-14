@@ -1,4 +1,4 @@
-package com.java110.front.components.machineTranslate;
+package com.java110.front.components.machine;
 
 import com.java110.core.context.IPageData;
 import com.java110.front.smo.machine.IAddMachineTranslateSMO;

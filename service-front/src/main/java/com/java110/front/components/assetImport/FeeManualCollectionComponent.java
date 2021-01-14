@@ -34,5 +34,16 @@ public class FeeManualCollectionComponent {
         return exportFeeManualCollectionSMOImpl.exportExcelData(pd);
     }
 
+    /**
+     * 添加应用数据
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
+    public ResponseEntity<Object> downloadCollectionLetterOrder(IPageData pd) throws Exception {
+
+        return exportFeeManualCollectionSMOImpl.downloadCollectionLetterOrder(pd);
+    }
+
 
 }

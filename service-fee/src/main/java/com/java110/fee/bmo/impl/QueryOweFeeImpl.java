@@ -157,12 +157,52 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         String val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
         feeDto.setVal(val);
         String received_amount_switch = MappingCache.getValue(DOMAIN_COMMON, RECEIVED_AMOUNT_SWITCH);
-        if(StringUtil.isEmpty(received_amount_switch)){
+        if (StringUtil.isEmpty(received_amount_switch)) {
             feeDto.setReceivedAmountSwitch("1");//默认启用实收款输入框
-        }else {
+        } else {
             feeDto.setReceivedAmountSwitch(received_amount_switch);
         }
-         return ResultVo.createResponseEntity(feeDto);
+        return ResultVo.createResponseEntity(feeDto);
+    }
+
+    @Override
+    public ResponseEntity<String> querys(FeeDto feeDto) {
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(feeDto.getCommunityId());
+        roomDto.setRoomId(feeDto.getPayerObjId());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        //查询费用信息arrearsEndTime
+        FeeDto tmpFeeDto = null;
+        List<RoomDto> tmpRoomDtos = new ArrayList<>();
+        for (RoomDto tmpRoomDto : roomDtos) {
+            tmpFeeDto = new FeeDto();
+            tmpFeeDto.setArrearsEndTime(DateUtil.getCurrentDate());
+            tmpFeeDto.setState(FeeDto.STATE_DOING);
+            tmpFeeDto.setPayerObjId(tmpRoomDto.getRoomId());
+            tmpFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+            if (feeDtos == null || feeDtos.size() < 1) {
+                feeDtos = new ArrayList<>();
+                return ResultVo.createResponseEntity(feeDtos);
+            }
+            List<FeeDto> tmpFeeDtos = new ArrayList<>();
+            for (FeeDto tempFeeDto : feeDtos) {
+                computeFeeSMOImpl.computeEveryOweFee(tempFeeDto);//计算欠费金额
+                //如果金额为0 就排除
+                if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+                    tmpFeeDtos.add(tmpFeeDto);
+                }
+            }
+
+            if (tmpFeeDtos.size() < 1) {
+                continue;
+            }
+            tmpRoomDto.setFees(tmpFeeDtos);
+            tmpRoomDtos.add(tmpRoomDto);
+        }
+
+        return ResultVo.createResponseEntity(tmpRoomDtos);
     }
 
     private boolean freshFeeDtoParam(FeeDto feeDto) {

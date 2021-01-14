@@ -1,5 +1,7 @@
 package com.java110.dto;
 
+import com.java110.dto.fee.FeeDto;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +58,8 @@ public class RoomDto extends PageDto implements Serializable {
     private String unitNum;
 
     private List<RoomAttrDto> roomAttrDto;
+
+    private List<FeeDto> fees;
 
 
     private Date createTime;
@@ -304,5 +308,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public List<FeeDto> getFees() {
+        return fees;
+    }
+
+    public void setFees(List<FeeDto> fees) {
+        this.fees = fees;
     }
 }
