@@ -170,7 +170,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         sheet.setColumnWidth(0, 8 * 256 * 2);
         sheet.setColumnWidth(1, 8 * 256 * 1);
         sheet.setColumnWidth(2, 8 * 256 * 1);
-        sheet.setColumnWidth(3, 8 * 256 * 1);
+        sheet.setColumnWidth(3, 8 * 256 * 3);
         sheet.setColumnWidth(4, 8 * 256 * 1);
         sheet.setColumnWidth(5, 8 * 256 * 1);
         sheet.setColumnWidth(6, 8 * 256 * 1);
@@ -317,7 +317,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row = sheet.createRow(line + fees.size() + 5);
         row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
 
-        return line + fees.size() + 5;
+        return line + fees.size() + 6;
     }
 
 
