@@ -193,11 +193,19 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
     private Map<String, Object> generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line, double totalPageHeight, Drawing patriarch, JSONObject feePrint) {
         JSONArray fees = room.getJSONArray("fees");
+        String[] feePrintRemarks = null;
+        if (feePrint != null) {
+            feePrintRemarks = feePrint.getString("content").toLowerCase().replace("</br>", "").split("\n");
+        }
         int defaultRowHeight = 280;
         //计算当前单子的高度
         int titleHeight = defaultRowHeight * 3;
-        int subTitleHeight = defaultRowHeight * 3;
-        int totalHeight = titleHeight + subTitleHeight + defaultRowHeight * 5 + fees.size() * defaultRowHeight;
+        int subTitleHeight = defaultRowHeight * 4;
+        int totalHeight = titleHeight + subTitleHeight + defaultRowHeight * 3 + fees.size() * defaultRowHeight;
+        //备注，加上打印配置内容
+        if (feePrintRemarks != null && feePrintRemarks.length > 0) {
+            totalHeight += (feePrintRemarks.length * defaultRowHeight);
+        }
         double A4_lengthways_pageSize = defaultRowHeight * 57;//15960
 
         //当前页 已经占用的高度
@@ -254,7 +262,10 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
             XSSFClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) 0, 1 + line, (short) 1, 1 + line + 1);
             anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);//设置图片随单元移动调整大小
             try {
-                patriarch.createPicture(anchor, workbook.addPicture(Base64Convert.base64ToByte(feePrint.getString("qrImg").replace("data:image/png;base64,", "")), XSSFWorkbook.PICTURE_TYPE_JPEG));
+                String qrImg = feePrint.getString("qrImg").replace("data:image/webp;base64,", "")
+                        .replace("data:image/png;base64,", "")
+                        .replace("data:image/jpeg;base64,", "");
+                patriarch.createPicture(anchor, workbook.addPicture(Base64Convert.base64ToByte(qrImg), XSSFWorkbook.PICTURE_TYPE_JPEG));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -380,19 +391,18 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         region = new CellRangeAddress(line + fees.size() + 3, line + fees.size() + 3, 1, 3);
         sheet.addMergedRegion(region);
 
-
-        row = sheet.createRow(line + fees.size() + 4);
-        row.createCell(0).setCellValue("1、请收到通知单5日内到物业处或微信支付");
-        row.setHeight((short) (defaultRowHeight));
-        row = sheet.createRow(line + fees.size() + 5);
-        row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
-        row.setHeight((short) (defaultRowHeight));
-        row = sheet.createRow(line + fees.size() + 6);
+        if (feePrintRemarks != null && feePrintRemarks.length > 0) {
+            for(int remarkIndex = 0 ;remarkIndex < feePrintRemarks.length; remarkIndex++) {
+                row = sheet.createRow(line + fees.size() + 4 + remarkIndex);
+                row.createCell(0).setCellValue(feePrintRemarks[remarkIndex]);
+                row.setHeight((short) (defaultRowHeight));
+            }
+        }
+        row = sheet.createRow(line + fees.size() + 4 + feePrintRemarks.length);
         row.createCell(0).setCellValue("");
         row.setHeight((short) (defaultRowHeight));
-
         Map info = new HashMap();
-        info.put("line", line + fees.size() + 6);
+        info.put("line", line + fees.size() + 4 + feePrintRemarks.length);
         info.put("totalPageHeight", totalPageHeight);
         return info;
     }
