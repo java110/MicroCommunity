@@ -12,15 +12,7 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.Money2ChineseUtil;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -37,7 +29,9 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -116,12 +110,22 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         try {
             workbook.write(os);
             context = os.toByteArray();
-            os.close();
-            workbook.close();
+
         } catch (IOException e) {
             e.printStackTrace();
             // 保存数据
             return new ResponseEntity<Object>("导出失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            try {
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
@@ -161,12 +165,34 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
         Sheet sheet = workbook.createSheet("催缴单");
         int line = 0;
+        double totalPageHeight = 0;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
-            line = generatorRoomOweFee(sheet, workbook, rooms.getJSONObject(roomIndex), line + 1);
+            Map info = generatorRoomOweFee(sheet, workbook, rooms.getJSONObject(roomIndex), line + 1, totalPageHeight);
+            line = Integer.parseInt(info.get("line").toString());
+            totalPageHeight = Double.parseDouble(info.get("totalPageHeight").toString());
         }
     }
 
-    private int generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line) {
+    private Map<String,Object> generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line, double totalPageHeight) {
+        JSONArray fees = room.getJSONArray("fees");
+        //计算当前单子的高度
+        int titleHeight = 200 * 5;
+        int subTitleHeight = 200 * 5;
+        int totalHeight = titleHeight + subTitleHeight + 256 * 5 + fees.size() * 256;
+        double A4_lengthways_pageSize = 828;
+
+        //当前页 已经占用的高度
+        double curPageHeight = totalPageHeight % A4_lengthways_pageSize;
+        //当前页空闲高度
+        double freePageHeight = A4_lengthways_pageSize - curPageHeight;
+        if (freePageHeight < totalHeight) {
+            line += Math.ceil(freePageHeight / 256);
+            totalPageHeight += Math.ceil(freePageHeight / 256);
+        }
+
+        totalPageHeight += totalHeight;
+
+
         sheet.setColumnWidth(0, 8 * 256 * 2);
         sheet.setColumnWidth(1, 8 * 256 * 1);
         sheet.setColumnWidth(2, 8 * 256 * 1);
@@ -196,7 +222,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         titleCellStyle.setFont(font);
         titleCellStyle.setAlignment(HorizontalAlignment.CENTER);
         cell0.setCellStyle(titleCellStyle);
-        row.setHeight((short) (200 * 5));
+        row.setHeight((short) (titleHeight));
 
         //合并标题
         CellRangeAddress region = new CellRangeAddress(0 + line, 0 + line, 0, 6);
@@ -214,7 +240,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.createCell(3).setCellValue("");
         row.createCell(4).setCellValue("");
         row.createCell(5).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
-        row.setHeight((short) (200 * 5));
+        row.setHeight((short) (subTitleHeight));
         CellStyle rowCellStyle = workbook.createCellStyle();
         rowCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         row.setRowStyle(rowCellStyle);
@@ -222,7 +248,6 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         //设置表头之上
         region = new CellRangeAddress(1 + line, 1 + line, 1, 2);
         sheet.addMergedRegion(region);
-
 
 
         row = sheet.createRow(2 + line);
@@ -249,7 +274,6 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         cell6.setCellStyle(cellStyle);
 
 
-        JSONArray fees = room.getJSONArray("fees");
         BigDecimal totalPrice = new BigDecimal(0);
         String startTime = "";
         String endTime = "";
@@ -317,7 +341,10 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row = sheet.createRow(line + fees.size() + 5);
         row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
 
-        return line + fees.size() + 6;
+        Map info = new HashMap();
+        info.put("line",line + fees.size() + 6);
+        info.put("totalPageHeight",totalPageHeight);
+        return info;
     }
 
 
