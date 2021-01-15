@@ -170,10 +170,14 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feePrintSpec/queryFeePrintSpec?page=1&row=1&specCd=1010&communityId=" + result.getCommunityId();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            JSONArray feePrints = savedRoomInfoResults.getJSONArray("data");
-            if (feePrints != null && feePrints.size() > 0) {
-                feePrint = feePrints.getJSONObject(0);
+            JSONObject feePrintResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
+            if (feePrintResults.containsKey("data")) {
+                JSONArray feePrints = feePrintResults.getJSONArray("data");
+                if (feePrints != null && feePrints.size() > 0) {
+                    feePrint = feePrints.getJSONObject(0);
+                }
             }
+
         }
 
         Sheet sheet = workbook.createSheet("催缴单");
