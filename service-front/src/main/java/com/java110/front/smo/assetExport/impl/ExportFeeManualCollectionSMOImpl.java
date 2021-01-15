@@ -213,7 +213,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         // 标题
         Row row = sheet.createRow(0 + line);
         Cell cell0 = row.createCell(0);
-        cell0.setCellValue("缴费通知单");
+        cell0.setCellValue("缴费通知单totalHeight:"+totalHeight+"-totalPageHeight:"+totalPageHeight+"-curPageHeight:"+curPageHeight+"-freePageHeight:"+freePageHeight+"-line:"+line);
         //标题设置字体
         Font font = workbook.createFont();
         font.setFontName("黑体");
