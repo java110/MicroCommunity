@@ -141,7 +141,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
      * @param workbook
      */
     private void getRoomOweFees(IPageData pd, ComponentValidateResult result, Workbook workbook) {
-
+        Sheet sheet = workbook.createSheet("催缴单");
+        Drawing patriarch = sheet.createDrawingPatriarch();
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
@@ -181,8 +182,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
         }
 
-        Sheet sheet = workbook.createSheet("催缴单");
-        Drawing patriarch = sheet.createDrawingPatriarch();
+
         int line = 0;
         double totalPageHeight = 0;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
