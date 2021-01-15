@@ -1,12 +1,12 @@
 package com.java110.community.listener.room;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.dao.IRoomServiceDao;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.community.dao.IRoomServiceDao;
-import com.java110.entity.center.Business;
-import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractRoomBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private  static Logger logger = LoggerFactory.getLogger(AbstractRoomBusinessServiceDataFlowListener.class);
+    private static Logger logger = LoggerFactory.getLogger(AbstractRoomBusinessServiceDataFlowListener.class);
 
 
     /**
@@ -50,6 +50,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
         businessRoomInfo.put("unitId", businessRoomInfo.get("unit_id"));
         businessRoomInfo.put("apartment", businessRoomInfo.get("apartment"));
         businessRoomInfo.put("communityId", businessRoomInfo.get("community_id"));
+        businessRoomInfo.put("roomType", businessRoomInfo.get("room_type"));
         businessRoomInfo.remove("bId");
         businessRoomInfo.put("statusCd", statusCd);
     }
@@ -60,7 +61,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
      *
      * @param businessRoom 小区房屋信息
      */
-    protected Map<String,String> autoSaveDelBusinessRoom(Business business, JSONObject businessRoom) {
+    protected Map<String, String> autoSaveDelBusinessRoom(Business business, JSONObject businessRoom) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("roomId", businessRoom.getString("roomId"));
@@ -87,6 +88,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
         currentRoomInfo.put("unitId", currentRoomInfo.get("unit_id"));
         currentRoomInfo.put("apartment", currentRoomInfo.get("apartment"));
         currentRoomInfo.put("communityId", currentRoomInfo.get("community_id"));
+        currentRoomInfo.put("roomType", currentRoomInfo.get("room_type"));
 
         currentRoomInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRoomServiceDaoImpl().saveBusinessRoomInfo(currentRoomInfo);

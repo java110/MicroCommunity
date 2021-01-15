@@ -44,6 +44,17 @@ public class ImportRoomFeeComponent {
      * @param pd 页面数据封装
      * @return ResponseEntity 对象
      */
+    public ResponseEntity<String> importTempData(IPageData pd) throws Exception {
+
+        return importRoomFeeSMOImpl.importTempData(pd);
+    }
+
+    /**
+     * 添加应用数据
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
     public ResponseEntity<Object> exportData(IPageData pd) throws Exception {
 
         return exportRoomSMOImpl.exportExcelData(pd);

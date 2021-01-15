@@ -7,9 +7,9 @@
     <!-- 保存黑白名单信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCarBlackWhiteInfo" parameterType="Map">
         insert into business_car_black_white(
-        black_white,operate,car_num,start_time,end_time,community_id,b_id,bw_id
+        black_white,operate,car_num,start_time,end_time,community_id,b_id,bw_id,pa_id
         ) values (
-        #{blackWhite},#{operate},#{carNum},#{startTime},#{endTime},#{communityId},#{bId},#{bwId}
+        #{blackWhite},#{operate},#{carNum},#{startTime},#{endTime},#{communityId},#{bId},#{bwId},#{paId}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getBusinessCarBlackWhiteInfo" parameterType="Map" resultType="Map">
         select t.black_white,t.black_white blackWhite,t.operate,t.car_num,t.car_num carNum,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,t.bw_id,t.bw_id bwId
+        bId,t.bw_id,t.bw_id bwId,t.pa_id,t.pa_id paId
         from business_car_black_white t
         where 1 =1
         <if test="blackWhite !=null and blackWhite != ''">
@@ -39,6 +39,9 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -52,8 +55,9 @@
     <!-- 保存黑白名单信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCarBlackWhiteInfoInstance" parameterType="Map">
         insert into car_black_white(
-        black_white,car_num,start_time,status_cd,end_time,community_id,b_id,bw_id
-        ) select t.black_white,t.car_num,t.start_time,'0',t.end_time,t.community_id,t.b_id,t.bw_id from
+        black_white,car_num,start_time,status_cd,end_time,community_id,b_id,bw_id,pa_id
+        ) select t.black_white,t.car_num,t.start_time,'0',t.end_time,t.community_id,t.b_id,t.bw_id,t.pa_id
+        from
         business_car_black_white t where 1=1
         <if test="blackWhite !=null and blackWhite != ''">
             and t.black_white= #{blackWhite}
@@ -85,7 +89,7 @@
     <select id="getCarBlackWhiteInfo" parameterType="Map" resultType="Map">
         select t.black_white,t.black_white blackWhite,t.car_num,t.car_num carNum,t.start_time,t.start_time
         startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.bw_id,t.bw_id bwId,td1.name blackWhiteName
+        communityId,t.b_id,t.b_id bId,t.bw_id,t.bw_id bwId,td1.name blackWhiteName,t.pa_id,t.pa_id paId
         from car_black_white t,t_dict td1
         where 1 =1
         and t.black_white = td1.status_cd
@@ -114,6 +118,9 @@
         </if>
         <if test="bwId !=null and bwId != ''">
             and t.bw_id= #{bwId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -179,6 +186,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

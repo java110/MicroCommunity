@@ -19,4 +19,11 @@ public interface IExportFeeManualCollectionSMO {
      * @return ResponseEntity
      */
     public ResponseEntity<Object> exportExcelData(IPageData pd) throws Exception;
+
+    /**
+     * 导出催缴单
+     * @param pd
+     * @return
+     */
+    ResponseEntity<Object> downloadCollectionLetterOrder(IPageData pd);
 }

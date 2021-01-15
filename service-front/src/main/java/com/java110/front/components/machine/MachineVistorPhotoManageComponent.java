@@ -1,4 +1,4 @@
-package com.java110.front.components.machineRecord;
+package com.java110.front.components.machine;
 
 
 import com.alibaba.fastjson.JSONObject;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
  *
  * 2019-06-29
  */
-@Component("machineRecordManage")
-public class MachineRecordManageComponent {
+@Component("machineVistorPhotoManage")
+public class MachineVistorPhotoManageComponent {
 
     @Autowired
     private IListMachineRecordsSMO listMachineRecordsSMOImpl;
@@ -30,12 +30,13 @@ public class MachineRecordManageComponent {
      */
     public ResponseEntity<String> list(IPageData pd){
         JSONObject reqParam = JSONObject.parseObject(pd.getReqData());
-        reqParam.put("recordTypeCd", "8888");
+        reqParam.put("recordTypeCd", "6666");
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(),pd.getUserName(), pd.getToken(),
                 reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
 
         return listMachineRecordsSMOImpl.listMachineRecords(newPd);
+
     }
 
     public IListMachineRecordsSMO getListMachineRecordsSMOImpl() {

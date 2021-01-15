@@ -28,4 +28,11 @@ public interface IQueryOweFee {
      * @return
      */
     ResponseEntity<String> listFeeObj(FeeDto feeDto);
+
+    /**
+     * 查询所有房屋的欠费
+     * @param feeDto
+     * @return
+     */
+    ResponseEntity<String> querys(FeeDto feeDto);
 }

@@ -1,11 +1,9 @@
 package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.po.owner.OwnerPo;
-import com.java110.user.bmo.owner.IChangeOwnerPhone;
-import com.java110.user.bmo.owner.IComprehensiveQuery;
-import com.java110.user.bmo.owner.IQueryTenants;
-import com.java110.user.bmo.owner.IVisitorRecord;
+import com.java110.user.bmo.owner.*;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +25,9 @@ public class OwnerApi {
 
     @Autowired
     private IComprehensiveQuery comprehensiveQueryImpl;
+
+    @Autowired
+    private IQueryShopsHireLog queryShopsHireLogImpl;
 
     @RequestMapping(value = "/tenants")
     public ResponseEntity<String> tenants(@RequestBody JSONObject reqJson) {
@@ -76,6 +77,27 @@ public class OwnerApi {
                                                      @RequestParam(value = "searchValue") String searchValue,
                                                      @RequestParam(value = "searchType") String searchType,
                                                      @RequestHeader(value = "user-id") String userId) {
-        return comprehensiveQueryImpl.query(communityId, searchValue, searchType,userId);
+        return comprehensiveQueryImpl.query(communityId, searchValue, searchType, userId);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /ownerApi/queryShopsHireLog
+     * @path /app/ownerApi/queryShopsHireLog
+     */
+    @RequestMapping(value = "/queryShopsHireLog", method = RequestMethod.GET)
+    public ResponseEntity<String> queryShopsHireLog(@RequestParam(value = "communityId") String communityId,
+                                                    @RequestParam(value = "roomId") String roomId,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setPage(page);
+        ownerDto.setRow(row);
+        ownerDto.setCommunityId(communityId);
+        ownerDto.setRoomId(roomId);
+        return queryShopsHireLogImpl.query(ownerDto);
     }
 }

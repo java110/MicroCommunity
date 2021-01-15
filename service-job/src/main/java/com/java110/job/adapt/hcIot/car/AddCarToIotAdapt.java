@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * HC iot 停车场同步适配器
+ * HC iot 车辆同步适配器
  * <p>
  * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
@@ -102,6 +102,12 @@ public class AddCarToIotAdapt extends DatabusAdaptImpl {
 
         //没有车位就不同步了
         if (StringUtil.isEmpty(ownerCarDtos.get(0).getPsId()) || "-1".equals(ownerCarDtos.get(0).getPsId())) {
+            return;
+        }
+
+        //电动车
+        //三轮车 不同步物联网系统
+        if ("9904,9905".contains(ownerCarDtos.get(0).getCarType())) {
             return;
         }
 

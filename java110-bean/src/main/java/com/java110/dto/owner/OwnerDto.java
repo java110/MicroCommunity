@@ -47,6 +47,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String floorId;
     private String unitId;
     private String state;
+    private String startTime;
+    private String endTime;
 
     private String bId;
 
@@ -294,5 +296,21 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

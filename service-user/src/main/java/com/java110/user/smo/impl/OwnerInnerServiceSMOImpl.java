@@ -273,6 +273,21 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         return 1;
     }
 
+    @Override
+    public int queryOwnerLogsCountByRoom(@RequestBody OwnerDto ownerDto) {
+        return ownerServiceDaoImpl.queryOwnerLogsCountByRoom(BeanConvertUtil.beanCovertMap(ownerDto));
+    }
+
+    @Override
+    public List<OwnerDto> queryOwnerLogsByRoom(@RequestBody OwnerDto ownerDto) {
+        int page = ownerDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerDto.setPage((page - 1) * ownerDto.getRow());
+        }
+        return BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.queryOwnerLogsByRoom(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
+    }
+
     public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
         return userInnerServiceSMOImpl;
     }

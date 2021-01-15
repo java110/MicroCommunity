@@ -18,6 +18,7 @@ public class ParkingAreaDto extends PageDto implements Serializable {
     private String typeCd;
     private String num;
     private String paId;
+    private String[] paIds;
     private String remark;
     private String communityId;
 
@@ -81,5 +82,13 @@ public class ParkingAreaDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getPaIds() {
+        return paIds;
+    }
+
+    public void setPaIds(String[] paIds) {
+        this.paIds = paIds;
     }
 }

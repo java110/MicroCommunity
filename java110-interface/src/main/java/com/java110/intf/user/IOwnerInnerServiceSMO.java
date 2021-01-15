@@ -109,4 +109,19 @@ public interface IOwnerInnerServiceSMO {
     @RequestMapping(value = "/updateOwnerMember", method = RequestMethod.POST)
     int updateOwnerMember(@RequestBody OwnerPo ownerPo);
 
+    /**
+     * 查询 商铺租房记录 数量
+     * @param ownerDto
+     * @return
+     */
+    @RequestMapping(value = "/queryOwnerLogsCountByRoom", method = RequestMethod.POST)
+    int queryOwnerLogsCountByRoom(@RequestBody OwnerDto ownerDto);
+
+    /**
+     * 查询 商铺租房记录
+     * @param ownerDto
+     * @return
+     */
+    @RequestMapping(value = "/queryOwnerLogsByRoom", method = RequestMethod.POST)
+    List<OwnerDto> queryOwnerLogsByRoom(@RequestBody OwnerDto ownerDto);
 }

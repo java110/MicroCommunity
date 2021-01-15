@@ -44,6 +44,7 @@ public abstract class AbstractCarBlackWhiteBusinessServiceDataFlowListener exten
         businessCarBlackWhiteInfo.put("endTime", businessCarBlackWhiteInfo.get("end_time"));
         businessCarBlackWhiteInfo.put("communityId", businessCarBlackWhiteInfo.get("community_id"));
         businessCarBlackWhiteInfo.put("bwId", businessCarBlackWhiteInfo.get("bw_id"));
+        businessCarBlackWhiteInfo.put("paId", businessCarBlackWhiteInfo.get("pa_id"));
         businessCarBlackWhiteInfo.remove("bId");
         businessCarBlackWhiteInfo.put("statusCd", statusCd);
     }
@@ -75,6 +76,7 @@ public abstract class AbstractCarBlackWhiteBusinessServiceDataFlowListener exten
         currentCarBlackWhiteInfo.put("endTime", currentCarBlackWhiteInfo.get("end_time"));
         currentCarBlackWhiteInfo.put("communityId", currentCarBlackWhiteInfo.get("community_id"));
         currentCarBlackWhiteInfo.put("bwId", currentCarBlackWhiteInfo.get("bw_id"));
+        currentCarBlackWhiteInfo.put("paId", currentCarBlackWhiteInfo.get("pa_id"));
 
 
         currentCarBlackWhiteInfo.put("operate", StatusConstant.OPERATE_DEL);

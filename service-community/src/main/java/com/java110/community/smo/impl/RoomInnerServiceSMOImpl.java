@@ -284,12 +284,24 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
     @Override
     public List<ImportRoomFee> freshRoomIds(@RequestBody List<ImportRoomFee> importRoomFees) {
         for (ImportRoomFee importRoomFee : importRoomFees) {
-            List<Map> infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
+            List<Map> infos = null;
+            if(!StringUtil.isEmpty(importRoomFee.getRoomId()) && !importRoomFee.getRoomId().startsWith("-")){
+                Map paramIn = new HashMap();
+                paramIn.put("communityId",importRoomFee.getCommunityId());
+                paramIn.put("roomId",importRoomFee.getRoomId());
+                infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
+            }else{
+                infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
+            }
 
             if (infos == null || infos.size() < 1) {
                 continue;
             }
             importRoomFee.setRoomId(infos.get(0).get("roomId").toString());
+            importRoomFee.setFloorNum(infos.get(0).get("floorNum").toString());
+            importRoomFee.setUnitNum(infos.get(0).get("unitNum").toString());
+            importRoomFee.setRoomNum(infos.get(0).get("roomNum").toString());
+
         }
         return importRoomFees;
     }

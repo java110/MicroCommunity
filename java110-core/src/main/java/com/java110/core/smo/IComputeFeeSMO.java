@@ -1,5 +1,6 @@
 package com.java110.core.smo;
 
+import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.report.ReportCarDto;
@@ -114,6 +115,9 @@ public interface IComputeFeeSMO {
      */
     double getFeePrice(FeeDto feeDto);
 
+
+    public double getFeePrice(FeeDto feeDto, RoomDto roomDto);
+
     /**
      * 时间差 按天折算
      *
@@ -126,4 +130,5 @@ public interface IComputeFeeSMO {
     double getReportFeePrice(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto);
 
     void computeEveryOweFee(FeeDto tmpFeeDto);
+    void computeEveryOweFee(FeeDto tmpFeeDto, RoomDto roomDto);
 }

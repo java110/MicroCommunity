@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.RoomDto;
 import com.java110.entity.assetImport.*;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
@@ -280,6 +281,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("state", "2002");
             paramIn.put("builtUpArea", room.getBuiltUpArea());
             paramIn.put("feeCoefficient", "1.00");
+            paramIn.put("roomType", "0".equals(room.getFloor().getUnitNum()) ? RoomDto.ROOM_TYPE_SHOPS : RoomDto.ROOM_TYPE_SHOPS);
 
 
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
@@ -362,7 +364,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaces?page=1&row=1&communityId=" + result.getCommunityId()
-                + "&num=" + parkingSpace.getPsNum()+"&areaNum="+parkingSpace.getPaNum();
+                + "&num=" + parkingSpace.getPsNum() + "&areaNum=" + parkingSpace.getPaNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -702,7 +704,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importParkingSpace.setPsNum(os[1].toString());
             importParkingSpace.setTypeCd(os[2].toString());
             importParkingSpace.setArea(Double.parseDouble(os[3].toString()));
-            if (StringUtil.isNullOrNone(os[4])) {
+            if (os.length < 5 || StringUtil.isNullOrNone(os[4])) {
                 parkingSpaces.add(importParkingSpace);
                 continue;
             }
@@ -909,7 +911,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 owners.add(importOwner);
             } catch (Exception e) {
                 logger.error("第" + (osIndex + 1) + "行数据出现问题", e);
-                throw new IllegalArgumentException("第" + (osIndex + 1) + "行数据出现问题"+e.getLocalizedMessage(),e);
+                throw new IllegalArgumentException("第" + (osIndex + 1) + "行数据出现问题" + e.getLocalizedMessage(), e);
             }
         }
     }

@@ -11,6 +11,8 @@ public class ApiCarBlackWhiteDataVo implements Serializable {
     private String carNum;
     private String startTime;
     private String endTime;
+    private String paId;
+    private String paNum;
 
     public String getBwId() {
         return bwId;
@@ -58,5 +60,21 @@ public class ApiCarBlackWhiteDataVo implements Serializable {
 
     public void setBlackWhiteName(String blackWhiteName) {
         this.blackWhiteName = blackWhiteName;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
+
+    public String getPaNum() {
+        return paNum;
+    }
+
+    public void setPaNum(String paNum) {
+        this.paNum = paNum;
     }
 }

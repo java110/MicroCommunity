@@ -7,20 +7,22 @@
     <!-- 保存小区房屋信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRoomInfo" parameterType="Map">
         insert into business_building_room(
-        fee_coefficient,section,remark,user_id,room_id,layer,built_up_area,operate,room_num,unit_id,b_id,apartment,state,community_id
+        fee_coefficient,section,remark,user_id,room_id,layer,built_up_area,operate,room_num,unit_id,b_id,apartment,state,community_id,
+        room_type
         ) values (
         #{feeCoefficient},#{section},#{remark},#{userId},#{roomId},#{layer},#{builtUpArea},#{operate},#{roomNum},#{unitId},#{bId},#{apartment},#{state},
-        #{communityId}
+        #{communityId},#{roomType}
         )
     </insert>
 
 
     <!-- 查询小区房屋信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessRoomInfo" parameterType="Map" resultType="Map">
-        select t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id
+        select t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.remark,t.user_id,t.user_id
+        userId,t.room_id,t.room_id
         roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.operate,t.room_num,t.room_num
         roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,t.community_id,t.community_id
-        communityId
+        communityId,t.room_type,t.room_type roomType
         from business_building_room t
         where 1 =1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
@@ -62,6 +64,9 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -72,9 +77,11 @@
     <!-- 保存小区房屋信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRoomInfoInstance" parameterType="Map">
         insert into building_room(
-        fee_coefficient,section,status_cd,remark,user_id,room_id,layer,built_up_area,room_num,unit_id,b_id,apartment,state,community_id
+        fee_coefficient,section,status_cd,remark,user_id,room_id,layer,built_up_area,room_num,unit_id,b_id,apartment,state,community_id,
+        room_type
         ) select
-        t.fee_coefficient,t.section,'0',t.remark,t.user_id,t.room_id,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state,t.community_id
+        t.fee_coefficient,t.section,'0',t.remark,t.user_id,t.room_id,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state,t.community_id,
+        t.room_type
         from business_building_room t where 1=1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
             and t.fee_coefficient= #{feeCoefficient}
@@ -113,6 +120,9 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -125,7 +135,7 @@
         select t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
         statusCd,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area
         builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id
-        bId,t.apartment,t.state,t.community_id,t.community_id communityId
+        bId,t.apartment,t.state,t.community_id,t.community_id communityId,t.room_type,t.room_type roomType
         from building_room t
         where 1 =1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
@@ -173,6 +183,9 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -282,6 +295,9 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
+        </if>
 
 
     </select>
@@ -292,7 +308,8 @@
         select count(1) count
         FROM building_room t
         inner join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` = '0'
+        inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` =
+        '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
         WHERE 1 =1
         AND t.`community_id` = #{communityId}
@@ -338,6 +355,9 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
+        </if>
         <if test="states != null">
             and t.state in
             <foreach collection="states" item="item" open="(" close=")" separator=",">
@@ -365,7 +385,8 @@
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` =
+        '0'
         LEFT JOIN building_owner_room_rel borr on borr.`room_id` = t.`room_id` and borr.`status_cd` = '0'
         WHERE 1 =1
         AND t.`community_id` = #{communityId}
@@ -410,6 +431,9 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -426,7 +450,8 @@
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` =
+        '0'
         LEFT JOIN building_owner_room_rel borr on borr.`room_id` = t.`room_id` and borr.`status_cd` = '0'
         WHERE 1 =1
         AND t.`community_id` = #{communityId}
@@ -471,6 +496,9 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -482,13 +510,16 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfoWithOutSellByCommunityId" parameterType="Map" resultType="Map">
-        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
+        statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
-        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
+        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
+        t.room_type roomType,t.room_type
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` =
+        '0'
         LEFT JOIN building_owner_room_rel borr on borr.`room_id` = t.`room_id` and borr.`status_cd` = '0'
         WHERE 1 =1
         AND t.`community_id` = #{communityId}
@@ -533,6 +564,9 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -546,13 +580,16 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfoWithSellByCommunityId" parameterType="Map" resultType="Map">
-        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
+        statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
-        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
+        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
+        t.room_type roomType,t.room_type
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` =
+        '0'
         LEFT JOIN building_owner_room_rel borr on borr.`room_id` = t.`room_id` and borr.`status_cd` = '0'
         WHERE 1 =1
         AND t.`community_id` = #{communityId}
@@ -597,6 +634,9 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -611,13 +651,16 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfoByCommunityId" parameterType="Map" resultType="Map">
-        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
+        statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
-        u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum,f.floor_area floorArea,u.unit_area unitArea,td.name stateName
+        u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum,f.floor_area floorArea,u.unit_area unitArea,td.name
+        stateName,t.room_type roomType,t.room_type
         FROM building_room t
         inner join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` = '0'
+        inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` =
+        '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
         WHERE 1 =1
         AND t.`community_id` = #{communityId}
@@ -672,6 +715,9 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
+        </if>
         <if test="states != null">
             and t.state in
             <foreach collection="states" item="item" open="(" close=")" separator=",">
@@ -691,10 +737,11 @@
     <!-- 根据业主查询房屋信息 -->
     <select id="getRoomInfoByOwner" parameterType="Map" resultType="Map">
         SELECT
-        t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
+        statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num`
-        unitNum,f.`floor_num` floorNum
+        unitNum,f.`floor_num` floorNum,t.room_type roomType,t.room_type
         FROM
         building_owner bo,building_room t,building_owner_room_rel borr,building_unit u,f_floor f
         WHERE
@@ -707,6 +754,9 @@
         AND t.`status_cd` = '0'
         AND bo.`status_cd` = '0'
         AND bo.`owner_type_cd` = '1001'
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and borr.`status_cd` = #{statusCd}
         </if>
@@ -748,13 +798,16 @@
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfos" parameterType="Map" resultType="Map">
-        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
+        statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
-        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
+        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
+        t.room_type roomType,t.room_type,f.floor_num floorNum
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` =
+        '0'
         WHERE t.status_cd= '0'
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
@@ -782,6 +835,9 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="roomType !=null and roomType != ''">
+            and t.room_type= #{roomType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

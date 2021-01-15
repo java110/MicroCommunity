@@ -59,12 +59,19 @@ public class IotConstant {
     //删除停车场
     public static final String DELETE_PARKING_AREA_URL = "/extApi/parkingArea/deleteParkingArea";
 
-    //添加停车场
+    //添加车辆
     public static final String ADD_OWNER_CAR_URL = "/extApi/car/addCar";
-    //修改停车场
+    //修改车辆
     public static final String UPDATE_OWNER_CAR_URL = "/extApi/car/updateCar";
-    //删除停车场
+    //删除车辆
     public static final String DELETE_OWNER_CAR_URL = "/extApi/car/deleteCar";
+
+    //添加车辆
+    public static final String ADD_CAR_BLACK_WHITE_URL = "/extApi/car/addBlackWhite";
+
+    //删除车辆
+    public static final String DELETE_CAR_BLACK_WHITE_URL = "/extApi/car/deleteBlackWhite";
+
     //开门接口
     public static final String OPEN_DOOR = "/extApi/machine/openDoor";
     //重启接口

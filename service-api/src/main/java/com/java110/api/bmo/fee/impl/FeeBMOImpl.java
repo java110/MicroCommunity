@@ -17,8 +17,8 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.CarInoutPo;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
@@ -675,7 +675,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
-        businessUnit.put("feeId", "-1");
+        businessUnit.put("feeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         businessUnit.put("configId", paramInJson.getString("configId"));
         businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
@@ -689,7 +689,26 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
+        paramInJson.put("feeId", businessUnit.getString("feeId"));
         return business;
+    }
+
+    @Override
+    public JSONObject addFeeAttr(JSONObject paramInJson, DataFlowContext dataFlowContext, String specCd, String value) {
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        FeeAttrPo feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(paramInJson.getString("communityId"));
+        feeAttrPo.setSpecCd(specCd);
+        feeAttrPo.setValue(value);
+        feeAttrPo.setFeeId(paramInJson.getString("feeId"));
+        feeAttrPo.setAttrId("-1");
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(FeeAttrPo.class.getSimpleName(), JSONObject.parseObject(JSONObject.toJSONString(feeAttrPo)));
+        return business;
+
     }
 
     /**
@@ -730,7 +749,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
-        businessUnit.put("feeId", "-1");
+        businessUnit.put("feeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         businessUnit.put("configId", paramInJson.getString("configId"));
         businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
@@ -744,6 +763,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
+        paramInJson.put("feeId", businessUnit.getString("feeId"));
         return business;
     }
 

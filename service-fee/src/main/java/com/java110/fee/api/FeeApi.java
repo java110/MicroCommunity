@@ -180,6 +180,24 @@ public class FeeApi extends BaseController {
         feeDto.setCommunityId(communityId);
         return queryOweFeeImpl.query(feeDto);
     }
+    /**
+     * 查询欠费费用
+     *
+     * @param roomId    房屋ID
+     * @param communityId 小区ID
+     * @return
+     * @path /app/feeApi/listAllRoomOweFees
+     */
+    @RequestMapping(value = "/listAllRoomOweFees", method = RequestMethod.GET)
+    public ResponseEntity<String> listAllRoomOweFees(
+            @RequestParam(value = "roomId",required = false) String roomId,
+            @RequestParam(value = "communityId") String communityId) {
+        FeeDto feeDto = new FeeDto();
+        feeDto.setPayerObjId(roomId);
+        feeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        feeDto.setCommunityId(communityId);
+        return queryOweFeeImpl.querys(feeDto);
+    }
 
     /**
      * 查询欠费费用

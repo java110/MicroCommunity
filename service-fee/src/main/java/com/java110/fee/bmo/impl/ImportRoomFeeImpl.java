@@ -8,17 +8,14 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.importFee.ImportFeeDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.IImportRoomFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IImportFeeInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeePo;
@@ -75,6 +72,9 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
     /**
      * 欠费缴费
      *
@@ -122,6 +122,24 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
 
         tmpImportRoomFees = roomInnerServiceSMOImpl.freshRoomIds(tmpImportRoomFees);
 
+        List<String> roomIds = new ArrayList<>();
+        for (ImportRoomFee importRoomFee : tmpImportRoomFees) {
+            roomIds.add(importRoomFee.getRoomId());
+        }
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(tmpImportRoomFees.get(0).getCommunityId());
+        ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
+        for (ImportRoomFee importRoomFee : tmpImportRoomFees) {
+            for (OwnerDto tmpOwnerDto : ownerDtos) {
+                if (importRoomFee.getRoomId().equals(tmpOwnerDto.getRoomId())) {
+                    importRoomFee.setOwnerId(tmpOwnerDto.getOwnerId());
+                    importRoomFee.setOwnerName(tmpOwnerDto.getName());
+                    importRoomFee.setOwnerLink(tmpOwnerDto.getLink());
+                }
+            }
+        }
+
         List<PayFeePo> payFeePos = new ArrayList<>();
         List<FeeAttrPo> feeAttrPos = new ArrayList<>();
         List<ImportFeeDetailPo> importFeeDetailPos = new ArrayList<>();
@@ -161,6 +179,33 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setValue(importRoomFee.getFeeName());
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
+
+            if (!StringUtil.isEmpty(importRoomFee.getOwnerId())) {
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(communityId);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
+                feeAttrPo.setValue(importRoomFee.getOwnerId());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPos.add(feeAttrPo);
+
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(communityId);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME);
+                feeAttrPo.setValue(importRoomFee.getOwnerName());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPos.add(feeAttrPo);
+
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(communityId);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
+                feeAttrPo.setValue(importRoomFee.getOwnerLink());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPos.add(feeAttrPo);
+            }
+
             importFeeDetailPo = new ImportFeeDetailPo();
             importFeeDetailPo.setAmount(importRoomFee.getAmount());
             importFeeDetailPo.setCommunityId(communityId);
@@ -173,7 +218,10 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             importFeeDetailPo.setRoomId(importRoomFee.getRoomId());
             importFeeDetailPo.setObjId(importRoomFee.getRoomId());
             importFeeDetailPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-            importFeeDetailPo.setObjName(importRoomFee.getFloorNum() + "栋" + importRoomFee.getUnitNum() + "单元" + importRoomFee.getRoomNum() + "室");
+            importFeeDetailPo.setObjName(!"0".equals(importRoomFee.getUnitNum())
+                    ? importRoomFee.getFloorNum() + "栋" + importRoomFee.getUnitNum() + "单元" + importRoomFee.getRoomNum() + "室" :
+                    importRoomFee.getFloorNum() + "栋" + importRoomFee.getRoomNum() + "室"
+            );
             importFeeDetailPo.setStartTime(importRoomFee.getStartTime());
             importFeeDetailPo.setIfdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_IfdId));
             importFeeDetailPo.setState("1000");
@@ -296,6 +344,33 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setValue(importCarFee.getFeeName());
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
+
+            if (!StringUtil.isEmpty(importCarFee.getOwnerId())) {
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(communityId);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
+                feeAttrPo.setValue(importCarFee.getOwnerId());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPos.add(feeAttrPo);
+
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(communityId);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME);
+                feeAttrPo.setValue(importCarFee.getOwnerName());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPos.add(feeAttrPo);
+
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(communityId);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
+                feeAttrPo.setValue(importCarFee.getOwnerLink());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPos.add(feeAttrPo);
+            }
+
             importFeeDetailPo = new ImportFeeDetailPo();
             importFeeDetailPo.setAmount(importCarFee.getAmount());
             importFeeDetailPo.setCommunityId(communityId);

@@ -30,8 +30,9 @@
     <select id="getFeeReceiptInfo" parameterType="Map" resultType="Map">
         select t.amount,t.obj_id,t.obj_id objId,t.remark,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name
         objName,t.community_id,t.community_id communityId,t.receipt_id,t.receipt_id receiptId,t.obj_type,t.obj_type
-        objType,t.create_time createTime
+        objType,t.create_time createTime,frd.fee_name feeName
         from fee_receipt t
+        left join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
@@ -271,6 +272,7 @@
     <select id="queryFeeReceiptsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from fee_receipt t
+        left join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}

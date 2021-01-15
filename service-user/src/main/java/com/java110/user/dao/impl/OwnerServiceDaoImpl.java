@@ -1,11 +1,11 @@
 package com.java110.user.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.user.dao.IOwnerServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
-import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.user.dao.IOwnerServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -113,7 +113,6 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
     }
 
 
-
     /**
      * 修改业主信息
      *
@@ -210,7 +209,29 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
 
         List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersByParkingSpace", info);
 
-        return businessOwnerInfos;    }
+        return businessOwnerInfos;
+    }
+
+    @Override
+    public int queryOwnerLogsCountByRoom(Map info) {
+        logger.debug("查询业主数据 入参 info : {}", info);
+
+        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnerLogsCountByRoom", info);
+        if (businessOwnerInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryOwnerLogsByRoom(Map info) {
+        logger.debug("queryOwnerLogsByRoom 入参 info : {}", info);
+
+        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnerLogsByRoom", info);
+
+        return businessOwnerInfos;
+    }
 
 
 }

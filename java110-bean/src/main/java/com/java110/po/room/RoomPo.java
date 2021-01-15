@@ -25,6 +25,7 @@ public class RoomPo implements Serializable {
     private String remark;
     private String state;
     private String communityId;
+    private String roomType;
 
 
     public String getRoomId() {
@@ -84,7 +85,6 @@ public class RoomPo implements Serializable {
     }
 
 
-
     public String getUserId() {
         return userId;
     }
@@ -123,5 +123,13 @@ public class RoomPo implements Serializable {
 
     public void setFeeCoefficient(String feeCoefficient) {
         this.feeCoefficient = feeCoefficient;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
     }
 }

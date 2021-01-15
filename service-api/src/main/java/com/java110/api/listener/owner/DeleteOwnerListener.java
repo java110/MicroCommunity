@@ -102,9 +102,7 @@ public class DeleteOwnerListener extends AbstractServiceApiPlusListener {
                 throw new IllegalArgumentException("删除失败,删除前请先解绑车位信息");
             }
             //小区楼添加到小区中
-            ownerBMOImpl.exitCommunityMember(reqJson, context);
-
-
+            //ownerBMOImpl.exitCommunityMember(reqJson, context);
         }
     }
 

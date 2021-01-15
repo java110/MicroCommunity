@@ -5,8 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.fee.*;
-import com.java110.dto.user.UserDto;
+import com.java110.dto.fee.BillDto;
+import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.fee.dao.IFeeAttrServiceDao;
 import com.java110.fee.dao.IFeeServiceDao;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -65,12 +68,12 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
             return fees;
         }
 
-        String[] userIds = getUserIds(fees);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+//        String[] userIds = getUserIds(fees);
+//        //根据 userId 查询用户信息
+//        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
         for (FeeDto fee : fees) {
-            refreshFee(fee, users);
+            refreshFee(fee);
         }
 
         List<String> feeIds = new ArrayList<>();
@@ -100,6 +103,21 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     }
 
     @Override
+    public List<FeeDto> querySimpleFees(@RequestBody FeeDto feeDto) {
+
+        //校验是否传了 分页信息
+        int page = feeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDto.setPage((page - 1) * feeDto.getRow());
+        }
+
+        List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.getFeeInfo(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
+
+        return fees;
+    }
+
+    @Override
     public List<FeeDto> queryBusinessFees(@RequestBody FeeDto feeDto) {
 
         List<Map> fees = feeServiceDaoImpl.getBusinessFeeInfo(BeanConvertUtil.beanCovertMap(feeDto));
@@ -111,15 +129,15 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
-     * @param fee   小区费用信息
-     * @param users 用户列表
+     * @param fee 小区费用信息
+     *            //@param users 用户列表
      */
-    private void refreshFee(FeeDto fee, List<UserDto> users) {
-        for (UserDto user : users) {
-            if (fee.getUserId().equals(user.getUserId())) {
-                BeanConvertUtil.covertBean(user, fee);
-            }
-        }
+    private void refreshFee(FeeDto fee) {
+//        for (UserDto user : users) {
+//            if (fee.getUserId().equals(user.getUserId())) {
+//                BeanConvertUtil.covertBean(user, fee);
+//            }
+//        }
 
         if (!StringUtil.isEmpty(fee.getImportFeeName())) {
             //fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");

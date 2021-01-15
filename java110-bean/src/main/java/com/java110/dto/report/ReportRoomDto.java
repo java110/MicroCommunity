@@ -37,6 +37,7 @@ public class ReportRoomDto extends PageDto implements Serializable {
     private String state;
     private String stateName;
     private String unitNum;
+    private String roomType;
 
     public String getFeeCoefficient() {
         return feeCoefficient;
@@ -228,5 +229,13 @@ public class ReportRoomDto extends PageDto implements Serializable {
 
     public void setUnitNum(String unitNum) {
         this.unitNum = unitNum;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
     }
 }

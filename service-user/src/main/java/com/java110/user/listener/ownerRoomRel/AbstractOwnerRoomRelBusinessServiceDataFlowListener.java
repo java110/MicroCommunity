@@ -44,6 +44,8 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
         businessOwnerRoomRelInfo.put("ownerId", businessOwnerRoomRelInfo.get("owner_id"));
         businessOwnerRoomRelInfo.put("userId", businessOwnerRoomRelInfo.get("user_id"));
         businessOwnerRoomRelInfo.put("roomId", businessOwnerRoomRelInfo.get("room_id"));
+        businessOwnerRoomRelInfo.put("startTime", businessOwnerRoomRelInfo.get("start_time"));
+        businessOwnerRoomRelInfo.put("endTime", businessOwnerRoomRelInfo.get("end_time"));
         businessOwnerRoomRelInfo.remove("bId");
         businessOwnerRoomRelInfo.put("statusCd", statusCd);
     }
@@ -73,6 +75,8 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
         currentOwnerRoomRelInfo.put("ownerId", currentOwnerRoomRelInfo.get("owner_id"));
         currentOwnerRoomRelInfo.put("userId", currentOwnerRoomRelInfo.get("user_id"));
         currentOwnerRoomRelInfo.put("roomId", currentOwnerRoomRelInfo.get("room_id"));
+        currentOwnerRoomRelInfo.put("startTime", currentOwnerRoomRelInfo.get("start_time"));
+        currentOwnerRoomRelInfo.put("endTime", currentOwnerRoomRelInfo.get("end_time"));
         currentOwnerRoomRelInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOwnerRoomRelServiceDaoImpl().saveBusinessOwnerRoomRelInfo(currentOwnerRoomRelInfo);
 

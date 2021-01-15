@@ -110,4 +110,8 @@ public interface IIotSendAsyn {
     void updateOwnerCar(JSONObject postParameters);
 
     void deleteOwnerCar(JSONObject postParameters);
+
+    void addCarBlackWhite(JSONObject postParameters);
+
+    void deleteCarBlackWhite(JSONObject postParameters);
 }

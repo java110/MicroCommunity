@@ -1,6 +1,7 @@
 package com.java110.job.task.fee;
 
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.*;
@@ -15,7 +16,6 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.TaskTemplateException;
 import com.java110.utils.util.DateUtil;
@@ -331,8 +331,11 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         }
 
         RoomDto tmpRoomDto = roomDtos.get(0);
-
-        billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
+        if (RoomDto.ROOM_TYPE_ROOM.equals(tmpRoomDto.getRoomType())) {
+            billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
+        } else {
+            billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getRoomNum() + "室");
+        }
 
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setByOwnerInfo(true);

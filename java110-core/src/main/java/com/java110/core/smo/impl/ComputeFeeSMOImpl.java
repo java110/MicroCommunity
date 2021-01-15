@@ -2,7 +2,11 @@ package com.java110.core.smo.impl;
 
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
-import com.java110.dto.fee.*;
+import com.java110.dto.fee.BillDto;
+import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.report.ReportCarDto;
@@ -25,7 +29,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 费用计算 服务类
@@ -63,9 +72,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
      * @param tmpFeeDto
      */
     public void computeEveryOweFee(FeeDto tmpFeeDto) {
+        computeEveryOweFee(tmpFeeDto, null);
+    }
 
-        computeFeePrice(tmpFeeDto);
-
+    @Override
+    public void computeEveryOweFee(FeeDto tmpFeeDto, RoomDto roomDto) {
+        computeFeePrice(tmpFeeDto, roomDto);
     }
 
     /**
@@ -77,7 +89,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         String billType = tmpFeeDto.getBillType();
 
         if (FeeConfigDto.BILL_TYPE_EVERY.equals(billType)) {
-            computeFeePrice(tmpFeeDto);
+            computeFeePrice(tmpFeeDto, null);
             return;
         }
         BillDto billDto = new BillDto();
@@ -107,10 +119,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         tmpFeeDto.setFeePrice(Double.parseDouble(billOweFeeDtos.get(0).getAmountOwed()));
     }
 
-    private void computeFeePrice(FeeDto feeDto) {
+    private void computeFeePrice(FeeDto feeDto, RoomDto roomDto) {
 
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
-            computeFeePriceByRoom(feeDto);
+            computeFeePriceByRoom(feeDto, roomDto);
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
             computeFeePriceByParkingSpace(feeDto);
         }
@@ -152,21 +164,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
      *
      * @param feeDto
      */
-    private void computeFeePriceByRoom(FeeDto feeDto) {
+    private void computeFeePriceByRoom(FeeDto feeDto, RoomDto roomDto) {
         Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
         double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-        RoomDto roomDto = new RoomDto();
-        roomDto.setCommunityId(feeDto.getCommunityId());
-        roomDto.setRoomId(feeDto.getPayerObjId());
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
-        if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
-            return;
-        }
 
         String computingFormula = feeDto.getComputingFormula();
-        double feePrice = getFeePrice(feeDto);
+        double feePrice = getFeePrice(feeDto,roomDto);
         feeDto.setFeePrice(feePrice);
         //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
@@ -290,7 +294,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 return objName;
             }
             roomDto = roomDtos.get(0);
-            objName = roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室";
+            if (RoomDto.ROOM_TYPE_ROOM.equals(roomDto.getRoomType())) {
+                objName = roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室";
+            } else {
+                objName = roomDto.getFloorNum() + "栋" + roomDto.getRoomNum() + "室";
+            }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
 
             OwnerCarDto ownerCarDto = new OwnerCarDto();
@@ -578,21 +586,28 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Override
     public double getFeePrice(FeeDto feeDto) {
+        return getFeePrice(feeDto, null);
+    }
+
+    @Override
+    public double getFeePrice(FeeDto feeDto, RoomDto roomDto) {
         BigDecimal feePrice = new BigDecimal(0.0);
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
             String computingFormula = feeDto.getComputingFormula();
-            RoomDto roomDto = new RoomDto();
-            roomDto.setRoomId(feeDto.getPayerObjId());
-            roomDto.setCommunityId(feeDto.getCommunityId());
-            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            if (roomDtos == null || roomDtos.size() != 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
+            if(roomDto == null) {
+                roomDto = new RoomDto();
+                roomDto.setRoomId(feeDto.getPayerObjId());
+                roomDto.setCommunityId(feeDto.getCommunityId());
+                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+                if (roomDtos == null || roomDtos.size() != 1) {
+                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
+                }
+                roomDto = roomDtos.get(0);
             }
-            roomDto = roomDtos.get(0);
             if ("1001".equals(computingFormula)) { //面积*单价+附加费
                 //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
+                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDto.getBuiltUpArea()));
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
                 feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(3, BigDecimal.ROUND_HALF_EVEN);
             } else if ("2002".equals(computingFormula)) { // 固定费用

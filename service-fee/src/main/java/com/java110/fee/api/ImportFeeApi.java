@@ -167,8 +167,9 @@ public class ImportFeeApi {
         Assert.hasKeyAndValue(reqObj, "endTime", "未包含结束时间");
         Assert.hasKeyAndValue(reqObj, "objId", "未包含公摊对象");
         Assert.hasKeyAndValue(reqObj, "feeTypeCd", "未包含费用类型");
-        reqObj.put("storeId",storeId);
-        reqObj.put("userId",userId);
+        Assert.hasKeyAndValue(reqObj, "roomType", "未包含房屋类型");
+        reqObj.put("storeId", storeId);
+        reqObj.put("userId", userId);
 
         return feeSharingBMOImpl.share(reqObj);
     }

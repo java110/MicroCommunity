@@ -123,4 +123,7 @@ public interface IOwnerServiceDao {
      */
     List<Map> queryOwnersByParkingSpace(Map info) throws DAOException;
 
+    int queryOwnerLogsCountByRoom(Map info);
+
+    List<Map> queryOwnerLogsByRoom(Map info);
 }

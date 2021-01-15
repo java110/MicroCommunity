@@ -7,9 +7,9 @@
     <!-- 保存业主房屋信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerRoomRelInfo" parameterType="Map">
         insert into business_building_owner_room_rel(
-        rel_id,operate,remark,state,owner_id,b_id,user_id,room_id
+        rel_id,operate,remark,state,owner_id,b_id,user_id,room_id,start_time,end_time
         ) values (
-        #{relId},#{operate},#{remark},#{state},#{ownerId},#{bId},#{userId},#{roomId}
+        #{relId},#{operate},#{remark},#{state},#{ownerId},#{bId},#{userId},#{roomId},#{startTime},#{endTime}
         )
     </insert>
 
@@ -17,7 +17,7 @@
     <!-- 查询业主房屋信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessOwnerRoomRelInfo" parameterType="Map" resultType="Map">
         select t.rel_id,t.rel_id relId,t.operate,t.remark,t.state,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id
-        bId,t.user_id,t.user_id userId,t.room_id,t.room_id roomId
+        bId,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime
         from business_building_owner_room_rel t
         where 1 =1
         <if test="relId !=null and relId != ''">
@@ -51,8 +51,10 @@
     <!-- 保存业主房屋信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerRoomRelInfoInstance" parameterType="Map">
         insert into building_owner_room_rel(
-        rel_id,status_cd,remark,state,owner_id,b_id,user_id,room_id
-        ) select t.rel_id,'0',t.remark,t.state,t.owner_id,t.b_id,t.user_id,t.room_id from
+        rel_id,status_cd,remark,state,owner_id,b_id,user_id,room_id,start_time,end_time
+        )
+        select t.rel_id,'0',t.remark,t.state,t.owner_id,t.b_id,t.user_id,t.room_id,t.start_time,t.end_time
+        from
         business_building_owner_room_rel t where 1=1
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
@@ -83,7 +85,8 @@
     <!-- 查询业主房屋信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerRoomRelInfo" parameterType="Map" resultType="Map">
         select t.rel_id,t.rel_id relId,t.status_cd,t.status_cd statusCd,t.remark,t.state,t.owner_id,t.owner_id
-        ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.room_id,t.room_id roomId
+        ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,
+        t.start_time,t.end_time,t.start_time startTime,t.end_time endTime
         <if test="byOwnerInfo == true">
             ,bow.name ownerName,bow.id_card idCard,bow.link
         </if>
@@ -154,6 +157,12 @@
         </if>
         <if test="roomId !=null and roomId != ''">
             , t.room_id= #{roomId}
+        </if>
+        <if test="startTime !=null">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            , t.end_time= #{endTime}
         </if>
         where 1=1
         <if test="relId !=null and relId != ''">
