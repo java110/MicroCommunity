@@ -180,7 +180,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         int titleHeight = defaultRowHeight * 3;
         int subTitleHeight = defaultRowHeight * 3;
         int totalHeight = titleHeight + subTitleHeight + defaultRowHeight * 5 + fees.size() * defaultRowHeight;
-        double A4_lengthways_pageSize = defaultRowHeight * 54;//15120
+        double A4_lengthways_pageSize = defaultRowHeight * 57;//15120
 
         //当前页 已经占用的高度
         double curPageHeight = totalPageHeight % A4_lengthways_pageSize;
