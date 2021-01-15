@@ -257,7 +257,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         sheet.addMergedRegion(region);
 
 
-        //第一行
+        //子标题
         if (feePrint != null) {
             XSSFClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) 0, 1 + line, (short) 1, 1 + line + 1);
             anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);//设置图片随单元移动调整大小
@@ -274,9 +274,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         subTitleCellStyle.setAlignment(HorizontalAlignment.CENTER);
         subTitleCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         row = sheet.createRow(1 + line);
-//        cell0 = row.createCell(0);
-//        cell0.setCellValue("收费二维码");
-//        cell0.setCellStyle(subTitleCellStyle);
+
         Cell cell1 = row.createCell(1);
         cell1.setCellValue("房号：" + room.getString("floorNum")
                 + "-" + room.getString("unitNum")
@@ -289,7 +287,6 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         Cell cell5 = row.createCell(5);
         cell5.setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         cell5.setCellStyle(subTitleCellStyle);
-        row.setHeight((short) (subTitleHeight));
         CellStyle rowCellStyle = workbook.createCellStyle();
         rowCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         row.setRowStyle(rowCellStyle);
@@ -299,7 +296,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         sheet.addMergedRegion(region);
         region = new CellRangeAddress(1 + line, 1 + line, 5, 6);
         sheet.addMergedRegion(region);
-        row.setHeight((short) (titleHeight));
+        //子标题高度
+        row.setHeight((short) (subTitleHeight));
 
 
         row = sheet.createRow(2 + line);
