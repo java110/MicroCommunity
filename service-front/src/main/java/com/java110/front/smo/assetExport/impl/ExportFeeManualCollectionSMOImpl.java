@@ -188,7 +188,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         double freePageHeight = A4_lengthways_pageSize - curPageHeight;
         if (freePageHeight < totalHeight && curPageHeight != 0) {
             line += Math.ceil(freePageHeight / defaultRowHeight);
-            totalPageHeight += Math.ceil(freePageHeight / defaultRowHeight);
+            totalPageHeight += freePageHeight;
         }
 
         totalPageHeight += totalHeight;
@@ -214,7 +214,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         // 标题
         Row row = sheet.createRow(0 + line);
         Cell cell0 = row.createCell(0);
-        cell0.setCellValue("缴费通知单totalHeight:"+totalHeight+"-totalPageHeight:"+totalPageHeight+"-curPageHeight:"+curPageHeight+"-freePageHeight:"+freePageHeight+"-line:"+line);
+        cell0.setCellValue("缴费通知单totalHeight:" + totalHeight + "-totalPageHeight:" + totalPageHeight + "-curPageHeight:" + curPageHeight + "-freePageHeight:" + freePageHeight + "-line:" + line);
         //标题设置字体
         Font font = workbook.createFont();
         font.setFontName("黑体");
@@ -250,7 +250,6 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         region = new CellRangeAddress(1 + line, 1 + line, 1, 2);
         sheet.addMergedRegion(region);
         row.setHeight((short) (titleHeight));
-
 
 
         row = sheet.createRow(2 + line);
