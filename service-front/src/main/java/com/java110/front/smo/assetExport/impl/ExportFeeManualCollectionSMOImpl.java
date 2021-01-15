@@ -200,7 +200,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         int defaultRowHeight = 280;
         //计算当前单子的高度
         int titleHeight = defaultRowHeight * 3;
-        int subTitleHeight = defaultRowHeight * 4;
+        int subTitleHeight = defaultRowHeight * 5;
         int totalHeight = titleHeight + subTitleHeight + defaultRowHeight * 3 + fees.size() * defaultRowHeight;
         //备注，加上打印配置内容
         if (feePrintRemarks != null && feePrintRemarks.length > 0) {
