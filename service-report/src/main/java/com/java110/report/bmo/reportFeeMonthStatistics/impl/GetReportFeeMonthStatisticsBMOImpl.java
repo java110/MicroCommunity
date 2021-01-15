@@ -291,7 +291,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 //滞纳金
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("3")) {
                     //获取滞纳金金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPrice());
+                    Double discountPrice = (Double.valueOf(reportFeeMonthStatistics.getDiscountPrice()))*(-1);
                     totalLateFee = totalLateFee + discountPrice;
                     //滞纳金
                     reportFeeMonthStatistics.setLateFee(reportFeeMonthStatistics.getDiscountPrice());

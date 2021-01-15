@@ -80,8 +80,7 @@ public class PaymentController extends BaseController {
         }
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
-                "", "", "", pd.getSessionId(),
-                appId);
+                "", "", "", pd.getSessionId(), appId, pd.getPayerObjId(), pd.getPayerObjType(), pd.getEndTime());
         return toPaySMOImpl.toPay(newPd);
     }
 
@@ -173,8 +172,9 @@ public class PaymentController extends BaseController {
     public ResponseEntity<String> oweFeeNotify(@RequestBody String postInfo, HttpServletRequest request) {
         logger.debug("微信支付回调报文" + postInfo);
 
-        return oweFeeToNotifySMOImpl.toNotify(postInfo,request);
+        return oweFeeToNotifySMOImpl.toNotify(postInfo, request);
     }
+
     /**
      * <p>支付回调Api</p>
      *

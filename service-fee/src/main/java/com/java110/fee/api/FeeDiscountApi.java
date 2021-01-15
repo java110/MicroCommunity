@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 
 @RestController
 @RequestMapping(value = "/feeDiscount")
@@ -179,9 +181,12 @@ public class FeeDiscountApi {
     public ResponseEntity<String> computeFeeDiscount(@RequestParam(value = "feeId") String feeId,
                                                      @RequestParam(value = "communityId") String communityId,
                                                      @RequestParam(value = "cycles") double cycles,
+                                                     @RequestParam(value = "payerObjId") String payerObjId,
+                                                     @RequestParam(value = "payerObjType") String payerObjType,
+                                                     @RequestParam(value = "endTime") String endTime,
                                                      @RequestParam(value = "page") int page,
-                                                     @RequestParam(value = "row") int row) {
-        return computeFeeDiscountBMOImpl.compute(feeId, communityId, cycles, page, row);
+                                                     @RequestParam(value = "row") int row) throws ParseException {
+        return computeFeeDiscountBMOImpl.compute(feeId, communityId, cycles, payerObjId, payerObjType, endTime, page, row);
     }
 
 

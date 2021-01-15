@@ -24,7 +24,8 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String communityId;
     private String feeId;
     private String bId;
-
+    private String payerObjId;
+    private String payerObjType;
 
     private Date createTime;
     private Date startTime;
@@ -154,5 +155,21 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getPayerObjId() {
+        return payerObjId;
+    }
+
+    public void setPayerObjId(String payerObjId) {
+        this.payerObjId = payerObjId;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
     }
 }

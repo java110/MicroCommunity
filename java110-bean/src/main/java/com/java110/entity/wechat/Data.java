@@ -20,6 +20,7 @@ public class Data {
     private Content keyword2;
     private Content keyword3;
     private Content keyword4;
+    private Content keyword5;
     private Content remark;
 
     public Content getFirst() {
@@ -60,6 +61,14 @@ public class Data {
 
     public void setKeyword4(Content keyword4) {
         this.keyword4 = keyword4;
+    }
+
+    public Content getKeyword5() {
+        return keyword5;
+    }
+
+    public void setKeyword5(Content keyword5) {
+        this.keyword5 = keyword5;
     }
 
     public Content getRemark() {

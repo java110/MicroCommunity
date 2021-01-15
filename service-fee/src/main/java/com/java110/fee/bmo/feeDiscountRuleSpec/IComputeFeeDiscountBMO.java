@@ -1,5 +1,8 @@
 package com.java110.fee.bmo.feeDiscountRuleSpec;
+
 import org.springframework.http.ResponseEntity;
+
+import java.text.ParseException;
 
 public interface IComputeFeeDiscountBMO {
 
@@ -9,6 +12,6 @@ public interface IComputeFeeDiscountBMO {
      *
      * @return
      */
-    ResponseEntity<String> compute(String feeId, String communityId, double cycles, int page, int row);
+    ResponseEntity<String> compute(String feeId, String communityId, double cycles, String payerObjId, String payerObjType, String endTime, int page, int row) throws ParseException;
 
 }

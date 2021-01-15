@@ -25,37 +25,51 @@ public class ApplyRoomDiscountServiceDaoImpl extends BaseServiceDao implements I
     private static Logger logger = LoggerFactory.getLogger(ApplyRoomDiscountServiceDaoImpl.class);
 
 
-
-
-
     /**
      * 保存房屋折扣申请信息 到 instance
-     * @param info   bId 信息
+     *
+     * @param info bId 信息
      * @throws DAOException DAO异常
      */
     @Override
     public void saveApplyRoomDiscountInfo(Map info) throws DAOException {
-        logger.debug("保存房屋折扣申请信息Instance 入参 info : {}",info);
+        logger.debug("保存房屋折扣申请信息Instance 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.insert("applyRoomDiscountServiceDaoImpl.saveApplyRoomDiscountInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("applyRoomDiscountServiceDaoImpl.saveApplyRoomDiscountInfo", info);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存房屋折扣申请信息Instance数据失败："+ JSONObject.toJSONString(info));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存房屋折扣申请信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
 
     /**
      * 查询房屋折扣申请信息（instance）
+     *
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getApplyRoomDiscountInfo(Map info) throws DAOException {
-        logger.debug("查询房屋折扣申请信息 入参 info : {}",info);
+        logger.debug("查询房屋折扣申请信息 入参 info : {}", info);
 
-        List<Map> businessApplyRoomDiscountInfos = sqlSessionTemplate.selectList("applyRoomDiscountServiceDaoImpl.getApplyRoomDiscountInfo",info);
+        List<Map> businessApplyRoomDiscountInfos = sqlSessionTemplate.selectList("applyRoomDiscountServiceDaoImpl.getApplyRoomDiscountInfo", info);
+
+        return businessApplyRoomDiscountInfos;
+    }
+
+    /**
+     * 查询最新的符合条件的优惠申请信息
+     *
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryFirstApplyRoomDiscounts(Map info) {
+        logger.debug("查询房屋折扣申请信息 入参 info : {}", info);
+
+        List<Map> businessApplyRoomDiscountInfos = sqlSessionTemplate.selectList("applyRoomDiscountServiceDaoImpl.getFirstApplyRoomDiscounts", info);
 
         return businessApplyRoomDiscountInfos;
     }
@@ -63,28 +77,30 @@ public class ApplyRoomDiscountServiceDaoImpl extends BaseServiceDao implements I
 
     /**
      * 修改房屋折扣申请信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
     public void updateApplyRoomDiscountInfo(Map info) throws DAOException {
-        logger.debug("修改房屋折扣申请信息Instance 入参 info : {}",info);
+        logger.debug("修改房屋折扣申请信息Instance 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.update("applyRoomDiscountServiceDaoImpl.updateApplyRoomDiscountInfo",info);
+        int saveFlag = sqlSessionTemplate.update("applyRoomDiscountServiceDaoImpl.updateApplyRoomDiscountInfo", info);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改房屋折扣申请信息Instance数据失败："+ JSONObject.toJSONString(info));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改房屋折扣申请信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
-     /**
+    /**
      * 查询房屋折扣申请数量
+     *
      * @param info 房屋折扣申请信息
      * @return 房屋折扣申请数量
      */
     @Override
     public int queryApplyRoomDiscountsCount(Map info) {
-        logger.debug("查询房屋折扣申请数据 入参 info : {}",info);
+        logger.debug("查询房屋折扣申请数据 入参 info : {}", info);
 
         List<Map> businessApplyRoomDiscountInfos = sqlSessionTemplate.selectList("applyRoomDiscountServiceDaoImpl.queryApplyRoomDiscountsCount", info);
         if (businessApplyRoomDiscountInfos.size() < 1) {

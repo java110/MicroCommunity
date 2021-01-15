@@ -91,6 +91,60 @@ public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
             smallWechatAttrPo.setWechatId(wechatId);
             super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
 
+            //空置房验房申请流程、审批流程通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_PROCESS_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写流程通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //空置房验房状态（通过和不通过）、审批状态（通过和不通过） 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_ROOM_STATE_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写空置房状态通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //报修工单提醒 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_WORK_ORDER_REMIND_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写报修工单通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //报修工单派单和转单提醒给维修师傅 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_DISPATCH_REMIND_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写报修工单派单和转单通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //报修工单派单和抢单提醒给业主，安排师傅维修（进度提醒） 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_SCHEDULE_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写报修工单派单和抢单提醒给业主，安排师傅维修（进度提醒）通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //报修工单维修完成提醒给业主 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_WORK_ORDER_END_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写报修工单维修完成提醒给业主通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
         }
     }
 

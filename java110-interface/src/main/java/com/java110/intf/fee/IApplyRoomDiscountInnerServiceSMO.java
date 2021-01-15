@@ -27,20 +27,29 @@ public interface IApplyRoomDiscountInnerServiceSMO {
     public int saveApplyRoomDiscount(@RequestBody ApplyRoomDiscountPo applyRoomDiscountPo);
 
     @RequestMapping(value = "/updateApplyRoomDiscount", method = RequestMethod.POST)
-    public int updateApplyRoomDiscount(@RequestBody  ApplyRoomDiscountPo applyRoomDiscountPo);
+    public int updateApplyRoomDiscount(@RequestBody ApplyRoomDiscountPo applyRoomDiscountPo);
 
     @RequestMapping(value = "/deleteApplyRoomDiscount", method = RequestMethod.POST)
-    public int deleteApplyRoomDiscount(@RequestBody  ApplyRoomDiscountPo applyRoomDiscountPo);
+    public int deleteApplyRoomDiscount(@RequestBody ApplyRoomDiscountPo applyRoomDiscountPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param applyRoomDiscountDto 数据对象分享
      * @return ApplyRoomDiscountDto 对象数据
      */
     @RequestMapping(value = "/queryApplyRoomDiscounts", method = RequestMethod.POST)
     List<ApplyRoomDiscountDto> queryApplyRoomDiscounts(@RequestBody ApplyRoomDiscountDto applyRoomDiscountDto);
+
+    /**
+     * 查询最新添加的符合条件的优惠申请信息
+     *
+     * @param applyRoomDiscountDto
+     * @return
+     * @author fqz
+     */
+    @RequestMapping(value = "/queryFirstApplyRoomDiscounts", method = RequestMethod.POST)
+    List<ApplyRoomDiscountDto> queryFirstApplyRoomDiscounts(@RequestBody ApplyRoomDiscountDto applyRoomDiscountDto);
 
     /**
      * 查询<p>小区楼</p>总记录数
