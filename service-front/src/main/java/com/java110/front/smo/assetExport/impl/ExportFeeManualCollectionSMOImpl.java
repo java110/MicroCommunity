@@ -173,7 +173,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         }
     }
 
-    private Map<String,Object> generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line, double totalPageHeight) {
+    private Map<String, Object> generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line, double totalPageHeight) {
         JSONArray fees = room.getJSONArray("fees");
         //计算当前单子的高度
         int titleHeight = 200 * 5;
@@ -185,7 +185,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         double curPageHeight = totalPageHeight % A4_lengthways_pageSize;
         //当前页空闲高度
         double freePageHeight = A4_lengthways_pageSize - curPageHeight;
-        if (freePageHeight < totalHeight) {
+        if (freePageHeight < totalHeight && curPageHeight != 0) {
             line += Math.ceil(freePageHeight / 256);
             totalPageHeight += Math.ceil(freePageHeight / 256);
         }
@@ -342,8 +342,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
 
         Map info = new HashMap();
-        info.put("line",line + fees.size() + 6);
-        info.put("totalPageHeight",totalPageHeight);
+        info.put("line", line + fees.size() + 6);
+        info.put("totalPageHeight", totalPageHeight);
         return info;
     }
 
