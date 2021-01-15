@@ -177,10 +177,10 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         JSONArray fees = room.getJSONArray("fees");
         int defaultRowHeight = 280;
         //计算当前单子的高度
-        int titleHeight = 200 * 5;
-        int subTitleHeight = 200 * 5;
+        int titleHeight = defaultRowHeight * 3;
+        int subTitleHeight = defaultRowHeight * 3;
         int totalHeight = titleHeight + subTitleHeight + defaultRowHeight * 5 + fees.size() * defaultRowHeight;
-        double A4_lengthways_pageSize = defaultRowHeight * 54;
+        double A4_lengthways_pageSize = defaultRowHeight * 54;//15120
 
         //当前页 已经占用的高度
         double curPageHeight = totalPageHeight % A4_lengthways_pageSize;
