@@ -214,11 +214,12 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         // 标题
         Row row = sheet.createRow(0 + line);
         Cell cell0 = row.createCell(0);
-        cell0.setCellValue("缴费通知单totalHeight:" + totalHeight + "-totalPageHeight:" + totalPageHeight + "-curPageHeight:" + curPageHeight + "-freePageHeight:" + freePageHeight + "-line:" + line);
+        //cell0.setCellValue("缴费通知单totalHeight:" + totalHeight + "-totalPageHeight:" + totalPageHeight + "-curPageHeight:" + curPageHeight + "-freePageHeight:" + freePageHeight + "-line:" + line);
+        cell0.setCellValue("缴费通知单");
         //标题设置字体
         Font font = workbook.createFont();
         font.setFontName("黑体");
-        font.setFontHeightInPoints((short) 12);
+        font.setFontHeightInPoints((short) 26);
         CellStyle titleCellStyle = workbook.createCellStyle();
         titleCellStyle.setFont(font);
         titleCellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -231,16 +232,25 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
 
         //第一行
+        CellStyle subTitleCellStyle = workbook.createCellStyle();
+        subTitleCellStyle.setAlignment(HorizontalAlignment.CENTER);
+        subTitleCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         row = sheet.createRow(1 + line);
-        row.createCell(0).setCellValue("收费二维码");
-        row.createCell(1).setCellValue("房号：" + room.getString("floorNum")
+        cell0 = row.createCell(0);
+        cell0.setCellValue("收费二维码");
+        cell0.setCellStyle(subTitleCellStyle);
+        Cell cell1 = row.createCell(1);
+        cell1.setCellValue("房号：" + room.getString("floorNum")
                 + "-" + room.getString("unitNum")
                 + "-" + room.getString("roomNum"));
+        cell1.setCellStyle(subTitleCellStyle);
 
         row.createCell(2).setCellValue("");
         row.createCell(3).setCellValue("");
         row.createCell(4).setCellValue("");
-        row.createCell(5).setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        Cell cell5 = row.createCell(5);
+        cell5.setCellValue(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        cell5.setCellStyle(subTitleCellStyle);
         row.setHeight((short) (subTitleHeight));
         CellStyle rowCellStyle = workbook.createCellStyle();
         rowCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
@@ -256,7 +266,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         cell0 = row.createCell(0);
         cell0.setCellValue("收费名称");
         cell0.setCellStyle(cellStyle);
-        Cell cell1 = row.createCell(1);
+        cell1 = row.createCell(1);
         cell1.setCellValue("收费标准");
         cell1.setCellStyle(cellStyle);
         Cell cell2 = row.createCell(2);
@@ -268,7 +278,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         Cell cell4 = row.createCell(4);
         cell4.setCellValue("应缴金额（元）");
         cell4.setCellStyle(cellStyle);
-        Cell cell5 = row.createCell(5);
+        cell5 = row.createCell(5);
         cell5.setCellValue("违约金（元）");
         cell5.setCellStyle(cellStyle);
         Cell cell6 = row.createCell(6);
