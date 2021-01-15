@@ -10,10 +10,12 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetExport.IExportFeeManualCollectionSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.Money2ChineseUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,17 +165,29 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
             return;
         }
 
+        //查询催缴单二维码
+        JSONObject feePrint = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feePrintSpec/queryFeePrintSpec?page=1&row=1&specCd=1010&communityId=" + result.getCommunityId();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            JSONArray feePrints = savedRoomInfoResults.getJSONArray("data");
+            if (feePrints != null && feePrints.size() > 0) {
+                feePrint = feePrints.getJSONObject(0);
+            }
+        }
+
         Sheet sheet = workbook.createSheet("催缴单");
+        Drawing patriarch = sheet.createDrawingPatriarch();
         int line = 0;
         double totalPageHeight = 0;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
-            Map info = generatorRoomOweFee(sheet, workbook, rooms.getJSONObject(roomIndex), line, totalPageHeight);
+            Map info = generatorRoomOweFee(sheet, workbook, rooms.getJSONObject(roomIndex), line, totalPageHeight, patriarch, feePrint);
             line = Integer.parseInt(info.get("line").toString()) + 1;
             totalPageHeight = Double.parseDouble(info.get("totalPageHeight").toString());
         }
     }
 
-    private Map<String, Object> generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line, double totalPageHeight) {
+    private Map<String, Object> generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line, double totalPageHeight, Drawing patriarch, JSONObject feePrint) {
         JSONArray fees = room.getJSONArray("fees");
         int defaultRowHeight = 280;
         //计算当前单子的高度
@@ -232,13 +246,22 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
 
         //第一行
+        if (feePrint != null) {
+            XSSFClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) 0, 1 + line, (short) 1, 1 + line + 1);
+            anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);//设置图片随单元移动调整大小
+            try {
+                patriarch.createPicture(anchor, workbook.addPicture(Base64Convert.base64ToByte(feePrint.getString("qrImg").replace("data:image/png;base64,", "")), XSSFWorkbook.PICTURE_TYPE_JPEG));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         CellStyle subTitleCellStyle = workbook.createCellStyle();
         subTitleCellStyle.setAlignment(HorizontalAlignment.CENTER);
         subTitleCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         row = sheet.createRow(1 + line);
-        cell0 = row.createCell(0);
-        cell0.setCellValue("收费二维码");
-        cell0.setCellStyle(subTitleCellStyle);
+//        cell0 = row.createCell(0);
+//        cell0.setCellValue("收费二维码");
+//        cell0.setCellStyle(subTitleCellStyle);
         Cell cell1 = row.createCell(1);
         cell1.setCellValue("房号：" + room.getString("floorNum")
                 + "-" + room.getString("unitNum")
@@ -257,7 +280,9 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.setRowStyle(rowCellStyle);
 
         //设置表头之上
-        region = new CellRangeAddress(1 + line, 1 + line, 1, 2);
+        region = new CellRangeAddress(1 + line, 1 + line, 1, 3);
+        sheet.addMergedRegion(region);
+        region = new CellRangeAddress(1 + line, 1 + line, 5, 6);
         sheet.addMergedRegion(region);
         row.setHeight((short) (titleHeight));
 
