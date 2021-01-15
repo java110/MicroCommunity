@@ -175,19 +175,20 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
     private Map<String, Object> generatorRoomOweFee(Sheet sheet, Workbook workbook, JSONObject room, int line, double totalPageHeight) {
         JSONArray fees = room.getJSONArray("fees");
+        int defaultRowHeight = 280;
         //计算当前单子的高度
         int titleHeight = 200 * 5;
         int subTitleHeight = 200 * 5;
-        int totalHeight = titleHeight + subTitleHeight + 256 * 5 + fees.size() * 256;
-        double A4_lengthways_pageSize = 256 * 54;
+        int totalHeight = titleHeight + subTitleHeight + defaultRowHeight * 5 + fees.size() * defaultRowHeight;
+        double A4_lengthways_pageSize = defaultRowHeight * 54;
 
         //当前页 已经占用的高度
         double curPageHeight = totalPageHeight % A4_lengthways_pageSize;
         //当前页空闲高度
         double freePageHeight = A4_lengthways_pageSize - curPageHeight;
         if (freePageHeight < totalHeight && curPageHeight != 0) {
-            line += Math.ceil(freePageHeight / 256);
-            totalPageHeight += Math.ceil(freePageHeight / 256);
+            line += Math.ceil(freePageHeight / defaultRowHeight);
+            totalPageHeight += Math.ceil(freePageHeight / defaultRowHeight);
         }
 
         totalPageHeight += totalHeight;
@@ -217,7 +218,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         //标题设置字体
         Font font = workbook.createFont();
         font.setFontName("黑体");
-        font.setFontHeightInPoints((short) 28);
+        font.setFontHeightInPoints((short) 12);
         CellStyle titleCellStyle = workbook.createCellStyle();
         titleCellStyle.setFont(font);
         titleCellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -248,6 +249,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         //设置表头之上
         region = new CellRangeAddress(1 + line, 1 + line, 1, 2);
         sheet.addMergedRegion(region);
+        row.setHeight((short) (titleHeight));
+
 
 
         row = sheet.createRow(2 + line);
@@ -272,6 +275,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         Cell cell6 = row.createCell(6);
         cell6.setCellValue("备注");
         cell6.setCellStyle(cellStyle);
+        row.setHeight((short) (defaultRowHeight));
 
 
         BigDecimal totalPrice = new BigDecimal(0);
@@ -304,6 +308,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
             cell6 = row.createCell(6);
             cell6.setCellValue("");
             cell6.setCellStyle(cellStyle);
+            row.setHeight((short) (defaultRowHeight));
             totalPrice = totalPrice.add(new BigDecimal(feeObj.getString("feePrice")));
         }
 
@@ -330,6 +335,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         cell6 = row.createCell(6);
         cell6.setCellValue("");
         cell6.setCellStyle(cellStyle);
+        row.setHeight((short) (defaultRowHeight));
+
 
         //合计 合并
         region = new CellRangeAddress(line + fees.size() + 3, line + fees.size() + 3, 1, 3);
@@ -338,8 +345,10 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
         row = sheet.createRow(line + fees.size() + 4);
         row.createCell(0).setCellValue("1、请收到通知单5日内到物业处或微信支付");
+        row.setHeight((short) (defaultRowHeight));
         row = sheet.createRow(line + fees.size() + 5);
         row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
+        row.setHeight((short) (defaultRowHeight));
 
         Map info = new HashMap();
         info.put("line", line + fees.size() + 6);
