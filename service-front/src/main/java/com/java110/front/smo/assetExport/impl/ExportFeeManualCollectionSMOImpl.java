@@ -180,7 +180,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         int titleHeight = defaultRowHeight * 3;
         int subTitleHeight = defaultRowHeight * 3;
         int totalHeight = titleHeight + subTitleHeight + defaultRowHeight * 5 + fees.size() * defaultRowHeight;
-        double A4_lengthways_pageSize = defaultRowHeight * 57;//15120
+        double A4_lengthways_pageSize = defaultRowHeight * 57;//15960
 
         //当前页 已经占用的高度
         double curPageHeight = totalPageHeight % A4_lengthways_pageSize;
@@ -348,6 +348,9 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.setHeight((short) (defaultRowHeight));
         row = sheet.createRow(line + fees.size() + 5);
         row.createCell(0).setCellValue("2、逾期未缴，将按规定收取违约金，会给您照成不必要的损失");
+        row.setHeight((short) (defaultRowHeight));
+        row = sheet.createRow(line + fees.size() + 6);
+        row.createCell(0).setCellValue("");
         row.setHeight((short) (defaultRowHeight));
 
         Map info = new HashMap();
