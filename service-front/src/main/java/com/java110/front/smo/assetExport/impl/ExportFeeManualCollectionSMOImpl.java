@@ -144,7 +144,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
 
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/listAllRoomOweFees?communityId=" + result.getCommunityId();
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/listAllRoomOweFees" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -390,7 +391,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         sheet.addMergedRegion(region);
 
         if (feePrintRemarks != null && feePrintRemarks.length > 0) {
-            for(int remarkIndex = 0 ;remarkIndex < feePrintRemarks.length; remarkIndex++) {
+            for (int remarkIndex = 0; remarkIndex < feePrintRemarks.length; remarkIndex++) {
                 row = sheet.createRow(line + fees.size() + 4 + remarkIndex);
                 row.createCell(0).setCellValue(feePrintRemarks[remarkIndex]);
                 row.setHeight((short) (defaultRowHeight));
