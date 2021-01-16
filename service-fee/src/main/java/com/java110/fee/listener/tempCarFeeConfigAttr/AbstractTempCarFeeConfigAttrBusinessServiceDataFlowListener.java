@@ -43,6 +43,7 @@ public abstract class AbstractTempCarFeeConfigAttrBusinessServiceDataFlowListene
         businessTempCarFeeConfigAttrInfo.put("configId", businessTempCarFeeConfigAttrInfo.get("config_id"));
         businessTempCarFeeConfigAttrInfo.put("specCd", businessTempCarFeeConfigAttrInfo.get("spec_cd"));
         businessTempCarFeeConfigAttrInfo.put("value", businessTempCarFeeConfigAttrInfo.get("value"));
+        businessTempCarFeeConfigAttrInfo.put("communityId", businessTempCarFeeConfigAttrInfo.get("community_id"));
         businessTempCarFeeConfigAttrInfo.remove("bId");
         businessTempCarFeeConfigAttrInfo.put("statusCd", statusCd);
     }
@@ -73,6 +74,7 @@ public abstract class AbstractTempCarFeeConfigAttrBusinessServiceDataFlowListene
         currentTempCarFeeConfigAttrInfo.put("configId", currentTempCarFeeConfigAttrInfo.get("config_id"));
         currentTempCarFeeConfigAttrInfo.put("specCd", currentTempCarFeeConfigAttrInfo.get("spec_cd"));
         currentTempCarFeeConfigAttrInfo.put("value", currentTempCarFeeConfigAttrInfo.get("value"));
+        currentTempCarFeeConfigAttrInfo.put("communityId", currentTempCarFeeConfigAttrInfo.get("community_id"));
 
 
         currentTempCarFeeConfigAttrInfo.put("operate", StatusConstant.OPERATE_DEL);

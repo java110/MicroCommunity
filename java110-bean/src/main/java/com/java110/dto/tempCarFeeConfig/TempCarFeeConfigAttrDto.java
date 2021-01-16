@@ -1,6 +1,7 @@
 package com.java110.dto.tempCarFeeConfig;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,10 @@ import java.util.Date;
 public class TempCarFeeConfigAttrDto extends PageDto implements Serializable {
 
     private String attrId;
-private String configId;
-private String specCd;
-private String value;
+    private String configId;
+    private String specCd;
+    private String value;
+    private String communityId;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String value;
     public String getAttrId() {
         return attrId;
     }
-public void setAttrId(String attrId) {
+
+    public void setAttrId(String attrId) {
         this.attrId = attrId;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getSpecCd() {
+
+    public String getSpecCd() {
         return specCd;
     }
-public void setSpecCd(String specCd) {
+
+    public void setSpecCd(String specCd) {
         this.specCd = specCd;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -65,5 +74,13 @@ public void setValue(String value) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
