@@ -23,6 +23,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +89,7 @@ public class MachineHeartbeatListener extends BaseMachineListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
 
         Map<String, String> reqHeader = context.getRequestHeaders();
 

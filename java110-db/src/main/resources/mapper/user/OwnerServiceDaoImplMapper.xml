@@ -156,7 +156,7 @@
             and t.sex= #{sex}
         </if>
         <if test="name !=null and name != ''">
-            and t.name like concat('%',#{name},'%')
+            and t.name = #{name}
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}

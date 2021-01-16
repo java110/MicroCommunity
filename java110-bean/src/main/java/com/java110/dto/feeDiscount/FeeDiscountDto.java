@@ -17,9 +17,10 @@ import java.util.List;
  **/
 public class FeeDiscountDto extends PageDto implements Serializable {
 
-    //类型 1001 优惠  2002 违约
+    //类型 1001 优惠  2002 违约  3003 优惠(需要申请)
     public static final String DISCOUNT_TYPE_D = "1001"; //优惠
     public static final String DISCOUNT_TYPE_V = "2002"; //违约
+    public static final String DISCOUNT_TYPE_DV = "3003"; //优惠(需要申请)
 
     private String discountName;
     private String discountDesc;

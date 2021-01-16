@@ -3,6 +3,7 @@ package com.java110.core.event.service.api;
 import com.java110.core.event.app.order.Ordered;
 import org.springframework.http.HttpMethod;
 
+import java.text.ParseException;
 import java.util.EventListener;
 
 /**
@@ -23,5 +24,5 @@ public interface ServiceDataFlowListener extends EventListener,Ordered {
      */
     public HttpMethod getHttpMethod();
 
-    public void soService(ServiceDataFlowEvent event);
+    public void soService(ServiceDataFlowEvent event) throws ParseException;
 }

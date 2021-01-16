@@ -67,6 +67,12 @@ public class ApplyRoomDiscountInnerServiceSMOImpl extends BaseServiceSMO impleme
         return applyRoomDiscounts;
     }
 
+    @Override
+    public List<ApplyRoomDiscountDto> queryFirstApplyRoomDiscounts(ApplyRoomDiscountDto applyRoomDiscountDto) {
+        List<ApplyRoomDiscountDto> applyRoomDiscounts = BeanConvertUtil.covertBeanList(applyRoomDiscountServiceDaoImpl.queryFirstApplyRoomDiscounts(BeanConvertUtil.beanCovertMap(applyRoomDiscountDto)), ApplyRoomDiscountDto.class);
+        return applyRoomDiscounts;
+    }
+
 
     @Override
     public int queryApplyRoomDiscountsCount(@RequestBody ApplyRoomDiscountDto applyRoomDiscountDto) {

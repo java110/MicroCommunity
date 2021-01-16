@@ -28,6 +28,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -72,7 +74,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
     }
 
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    public void soService(ServiceDataFlowEvent event) throws ParseException {
 
         logger.debug("ServiceDataFlowEvent : {}", event);
 
@@ -125,11 +127,17 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
-    private void judgeDiscount(JSONObject paramObj) {
+    private void judgeDiscount(JSONObject paramObj) throws ParseException {
         FeeDetailDto feeDetailDto = new FeeDetailDto();
         feeDetailDto.setCommunityId(paramObj.getString("communityId"));
         feeDetailDto.setFeeId(paramObj.getString("feeId"));
         feeDetailDto.setCycles(paramObj.getString("cycles"));
+        feeDetailDto.setPayerObjId(paramObj.getString("payerObjId"));
+        feeDetailDto.setPayerObjType(paramObj.getString("payerObjType"));
+        String endTime = paramObj.getString("endTime");  //获取缴费到期时间
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        feeDetailDto.setStartTime(simpleDateFormat.parse(endTime));
+
         feeDetailDto.setRow(20);
         feeDetailDto.setPage(1);
         List<ComputeDiscountDto> computeDiscountDtos = feeDiscountInnerServiceSMOImpl.computeDiscount(feeDetailDto);
@@ -142,7 +150,6 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
             discountPrice = discountPrice.add(new BigDecimal(computeDiscountDto.getDiscountPrice()));
         }
-
         paramObj.put("discountPrice", discountPrice.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
         paramObj.put("computeDiscountDtos", computeDiscountDtos);
     }

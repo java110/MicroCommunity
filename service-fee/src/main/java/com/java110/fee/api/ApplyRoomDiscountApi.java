@@ -12,17 +12,19 @@ import com.java110.fee.bmo.applyRoomDiscountType.IDeleteApplyRoomDiscountTypeBMO
 import com.java110.fee.bmo.applyRoomDiscountType.IGetApplyRoomDiscountTypeBMO;
 import com.java110.fee.bmo.applyRoomDiscountType.ISaveApplyRoomDiscountTypeBMO;
 import com.java110.fee.bmo.applyRoomDiscountType.IUpdateApplyRoomDiscountTypeBMO;
+import com.java110.intf.fee.IApplyRoomDiscountInnerServiceSMO;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/applyRoomDiscount")
@@ -30,8 +32,10 @@ public class ApplyRoomDiscountApi {
 
     @Autowired
     private ISaveApplyRoomDiscountBMO saveApplyRoomDiscountBMOImpl;
+
     @Autowired
     private IUpdateApplyRoomDiscountBMO updateApplyRoomDiscountBMOImpl;
+
     @Autowired
     private IDeleteApplyRoomDiscountBMO deleteApplyRoomDiscountBMOImpl;
 
@@ -43,13 +47,18 @@ public class ApplyRoomDiscountApi {
 
     @Autowired
     private ISaveApplyRoomDiscountTypeBMO saveApplyRoomDiscountTypeBMOImpl;
+
     @Autowired
     private IUpdateApplyRoomDiscountTypeBMO updateApplyRoomDiscountTypeBMOImpl;
+
     @Autowired
     private IDeleteApplyRoomDiscountTypeBMO deleteApplyRoomDiscountTypeBMOImpl;
 
     @Autowired
     private IGetApplyRoomDiscountTypeBMO getApplyRoomDiscountTypeBMOImpl;
+
+    @Autowired
+    private IApplyRoomDiscountInnerServiceSMO applyRoomDiscountInnerServiceSMOImpl;
 
     /**
      * 优惠申请
@@ -60,18 +69,36 @@ public class ApplyRoomDiscountApi {
      * @path /app/applyRoomDiscount/saveApplyRoomDiscount
      */
     @RequestMapping(value = "/saveApplyRoomDiscount", method = RequestMethod.POST)
-    public ResponseEntity<String> saveApplyRoomDiscount(@RequestBody JSONObject reqJson) {
-
+    public ResponseEntity<String> saveApplyRoomDiscount(@RequestBody JSONObject reqJson) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "roomId", "请求报文中未包含roomId");
         Assert.hasKeyAndValue(reqJson, "roomName", "请求报文中未包含roomName");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "applyType", "请求报文中未包含applyType");
-
-
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
-        return saveApplyRoomDiscountBMOImpl.save(applyRoomDiscountPo);
+        ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
+        applyRoomDiscountDto.setCommunityId(applyRoomDiscountPo.getCommunityId());
+        applyRoomDiscountDto.setRoomId(applyRoomDiscountPo.getRoomId());
+        //查询折扣申请表中该房屋下符合条件的最新的一条数据
+        List<ApplyRoomDiscountDto> applyRoomDiscountDtos = applyRoomDiscountInnerServiceSMOImpl.queryFirstApplyRoomDiscounts(applyRoomDiscountDto);
+        //获取本次填写的开始时间
+        Date startDate = simpleDateFormat.parse(applyRoomDiscountPo.getStartTime());
+        if (applyRoomDiscountDtos.size() == 0) {
+            return saveApplyRoomDiscountBMOImpl.save(applyRoomDiscountPo);
+        } else if (applyRoomDiscountDtos.size() > 0) {
+            //取出结束时间
+            String endTime = applyRoomDiscountDtos.get(0).getEndTime();
+            Date finishTime = simpleDateFormat.parse(endTime);
+            if (startDate.getTime() - finishTime.getTime() >= 0) {
+                return saveApplyRoomDiscountBMOImpl.save(applyRoomDiscountPo);
+            } else {
+                throw new UnsupportedOperationException("该时间段已经申请过空置房，请重新输入空置房申请开始和结束时间");
+            }
+        } else {
+            throw new UnsupportedOperationException("信息错误");
+        }
     }
 
     /**
@@ -83,17 +110,36 @@ public class ApplyRoomDiscountApi {
      * @path /app/applyRoomDiscount/updateApplyRoomDiscount
      */
     @RequestMapping(value = "/updateApplyRoomDiscount", method = RequestMethod.POST)
-    public ResponseEntity<String> updateApplyRoomDiscount(@RequestBody JSONObject reqJson) {
-
+    public ResponseEntity<String> updateApplyRoomDiscount(@RequestBody JSONObject reqJson,@RequestHeader(value = "user-id") String userId) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含验房状态");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含结束时间");
         Assert.hasKeyAndValue(reqJson, "checkRemark", "请求报文中未包含验房说明");
-        Assert.hasKeyAndValue(reqJson, "discountId", "请求报文中未包含折扣");
         Assert.hasKeyAndValue(reqJson, "ardId", "ardId不能为空");
+        reqJson.put("checkUserId", userId);
+        ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
+        return updateApplyRoomDiscountBMOImpl.update(applyRoomDiscountPo);
+    }
 
-
+    /**
+     * 审批接口
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /applyRoomDiscount/updateReviewApplyRoomDiscount
+     * @path /app/applyRoomDiscount/updateReviewApplyRoomDiscount
+     */
+    @RequestMapping(value = "/updateReviewApplyRoomDiscount", method = RequestMethod.POST)
+    public ResponseEntity<String> updateReviewApplyRoomDiscount(@RequestBody JSONObject reqJson, @RequestHeader(value = "user-id") String userId) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含验房状态");
+        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
+        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含结束时间");
+        Assert.hasKeyAndValue(reqJson, "reviewRemark", "请求报文中未包含验房说明");
+//        Assert.hasKeyAndValue(reqJson, "discountId", "请求报文中未包含折扣");
+        Assert.hasKeyAndValue(reqJson, "ardId", "ardId不能为空");
+        reqJson.put("reviewUserId", userId);
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
         return updateApplyRoomDiscountBMOImpl.update(applyRoomDiscountPo);
     }
@@ -108,13 +154,10 @@ public class ApplyRoomDiscountApi {
      */
     @RequestMapping(value = "/auditApplyRoomDiscount", method = RequestMethod.POST)
     public ResponseEntity<String> auditApplyRoomDiscount(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含验房状态");
         Assert.hasKeyAndValue(reqJson, "reviewRemark", "请求报文中未包含审核说明");
         Assert.hasKeyAndValue(reqJson, "ardId", "ardId不能为空");
-
-
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
         return auditApplyRoomDiscountBMOImpl.audit(applyRoomDiscountPo);
     }
@@ -130,10 +173,7 @@ public class ApplyRoomDiscountApi {
     @RequestMapping(value = "/deleteApplyRoomDiscount", method = RequestMethod.POST)
     public ResponseEntity<String> deleteApplyRoomDiscount(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
         Assert.hasKeyAndValue(reqJson, "ardId", "ardId不能为空");
-
-
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
         return deleteApplyRoomDiscountBMOImpl.delete(applyRoomDiscountPo);
     }
@@ -165,7 +205,6 @@ public class ApplyRoomDiscountApi {
         return getApplyRoomDiscountBMOImpl.get(applyRoomDiscountDto);
     }
 
-
     /**
      * 微信保存消息模板
      *
@@ -176,11 +215,8 @@ public class ApplyRoomDiscountApi {
      */
     @RequestMapping(value = "/saveApplyRoomDiscountType", method = RequestMethod.POST)
     public ResponseEntity<String> saveApplyRoomDiscountType(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
-
-
         ApplyRoomDiscountTypePo applyRoomDiscountTypePo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountTypePo.class);
         return saveApplyRoomDiscountTypeBMOImpl.save(applyRoomDiscountTypePo);
     }
@@ -195,12 +231,9 @@ public class ApplyRoomDiscountApi {
      */
     @RequestMapping(value = "/updateApplyRoomDiscountType", method = RequestMethod.POST)
     public ResponseEntity<String> updateApplyRoomDiscountType(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
         Assert.hasKeyAndValue(reqJson, "applyType", "applyType不能为空");
-
-
         ApplyRoomDiscountTypePo applyRoomDiscountTypePo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountTypePo.class);
         return updateApplyRoomDiscountTypeBMOImpl.update(applyRoomDiscountTypePo);
     }
@@ -216,10 +249,7 @@ public class ApplyRoomDiscountApi {
     @RequestMapping(value = "/deleteApplyRoomDiscountType", method = RequestMethod.POST)
     public ResponseEntity<String> deleteApplyRoomDiscountType(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
         Assert.hasKeyAndValue(reqJson, "applyType", "applyType不能为空");
-
-
         ApplyRoomDiscountTypePo applyRoomDiscountTypePo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountTypePo.class);
         return deleteApplyRoomDiscountTypeBMOImpl.delete(applyRoomDiscountTypePo);
     }

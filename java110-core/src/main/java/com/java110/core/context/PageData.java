@@ -51,6 +51,21 @@ public class PageData implements IPageData, Serializable {
 
     private HttpMethod method;
 
+    /**
+     * 付款方id
+     */
+    private String payerObjId;
+
+    /**
+     * 付款方类型
+     */
+    private String payerObjType;
+
+    /**
+     * 缴费到期时间
+     */
+    private String endTime;
+
     private ResponseEntity responseEntity;
 
     public String getUserId() {
@@ -178,6 +193,35 @@ public class PageData implements IPageData, Serializable {
                 "");
     }
 
+    @Override
+    public IPageData builder(String userId,
+                             String userName,
+                             String token,
+                             String reqData,
+                             String componentCode,
+                             String componentMethod,
+                             String url,
+                             String sessionId,
+                             String appId,
+                             String payerObjId,
+                             String payerObjType,
+                             String endTime) throws IllegalArgumentException {
+        this.setComponentCode(componentCode);
+        this.setComponentMethod(componentMethod);
+        this.setReqData(reqData);
+        this.setRequestTime(DateUtil.getyyyyMMddhhmmssDateString());
+        this.setUserId(userId);
+        this.setUserName(userName);
+        this.setToken(token);
+        this.setUrl(url);
+        this.setSessionId(sessionId);
+        this.setAppId(appId);
+        this.setPayerObjId(payerObjId);
+        this.setPayerObjType(payerObjType);
+        this.setEndTime(endTime);
+        return this;
+    }
+
     public IPageData builder(String userId,
                              String userName,
                              String token,
@@ -237,5 +281,29 @@ public class PageData implements IPageData, Serializable {
 
     public void setMethod(HttpMethod method) {
         this.method = method;
+    }
+
+    public String getPayerObjId() {
+        return payerObjId;
+    }
+
+    public void setPayerObjId(String payerObjId) {
+        this.payerObjId = payerObjId;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
