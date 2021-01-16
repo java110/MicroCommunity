@@ -243,7 +243,8 @@
 
     <!-- 查询临时车 收费规则 -->
     <select id="queryTempCarFeeRuleSpecs" parameterType="Map" resultType="Map">
-        select t.rule_id ruleId,t.spec_id specId,t.spec_name specName,t.seq from
+        select t.rule_id ruleId,t.spec_id specId,t.spec_name specName,t.seq,t.remark
+        from
         temp_car_fee_rule_spec t
         where t.status_cd = '0'
         <if test="ruleId !=null and ruleId != ''">
