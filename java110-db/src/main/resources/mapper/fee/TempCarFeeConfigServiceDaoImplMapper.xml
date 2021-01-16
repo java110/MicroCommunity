@@ -246,9 +246,11 @@
         select t.rule_id ruleId,t.spec_id specId,t.spec_name specName,t.seq from
         temp_car_fee_rule_spec t
         where t.status_cd = '0'
-        and t.rule_id = #{ruleId}
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
         <if test="specId !=null and specId != ''">
-        and t.spec_id = #{specId}
+            and t.spec_id = #{specId}
         </if>
         <if test="ruleIds !=null">
             and t.rule_id in
