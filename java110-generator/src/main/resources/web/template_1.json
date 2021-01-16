@@ -1,48 +1,108 @@
 {
-  "templateName": "优惠申请类型",
+  "templateName": "临时车收费标准",
   "directories": "property",
-  "templateCode": "applyRoomDiscountType",
-  "templateKey": "applyType",
-  "templateKeyName": "类型",
-  "searchCode": "applyType",
-  "searchName": "类型",
+  "templateCode": "tempCarFeeConfig",
+  "templateKey": "configId",
+  "templateKeyName": "标准ID",
+  "searchCode": "configId",
+  "searchName": "标准ID",
   "conditions": [
     {
-      "name": "类型名称",
+      "name": "标准名称",
       "inputType": "input",
-      "code": "typeName",
+      "code": "feeName",
       "whereCondition": "equal"
     },
     {
-      "name": "类型",
+      "name": "停车场",
       "inputType": "input",
-      "code": "applyType",
+      "code": "paId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "车辆类型",
+      "inputType": "select",
+      "selectValue":"9901,9904,9905",
+      "selectValueName":"家用小汽车,电动车,三轮车",
+      "code": "carType",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "typeName",
-      "cnCode": "类型名称",
-      "desc": "必填，请填写类型名称",
+      "code": "feeName",
+      "cnCode": "标准名称",
+      "desc": "必填，请填写标准名称",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
       "limitParam": "64",
-      "limitErrInfo": "类型名称格式错误",
+      "limitErrInfo": "标准名称格式错误",
       "show": true
     },
     {
-      "code": "typeDesc",
-      "cnCode": "类型描述",
-      "desc": "选填，请填写类型描述",
-      "required": false,
+      "code": "paId",
+      "cnCode": "停车场",
+      "desc": "选填，请选择停车场",
+      "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
       "limitParam": "512",
-      "limitErrInfo": "类型描述错误",
+      "limitErrInfo": "停车场错误",
+      "show": true
+    },
+    {
+      "code": "carType",
+      "cnCode": "车辆类型",
+      "desc": "选填，请选择车辆类型",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue":"9901,9904,9905",
+      "selectValueName":"家用小汽车,电动车,三轮车",
+      "limit": "maxLength",
+      "limitParam": "512",
+      "limitErrInfo": "车辆类型错误",
+      "show": true
+    },
+    {
+      "code": "ruleId",
+      "cnCode": "收费规则",
+      "desc": "选填，请选择收费规则",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue":"9901,9904,9905",
+      "selectValueName":"规则1,规则2,规则3",
+      "limit": "maxLength",
+      "limitParam": "512",
+      "limitErrInfo": "收费规则错误",
+      "show": true
+    },
+    {
+      "code": "startTime",
+      "cnCode": "开始时间",
+      "desc": "选填，请选择开始时间",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "date",
+      "limitParam": "",
+      "limitErrInfo": "开始时间错误",
+      "show": true
+    },
+    {
+      "code": "endTime",
+      "cnCode": "结束时间",
+      "desc": "选填，请选择结束时间",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "date",
+      "limitParam": "",
+      "limitErrInfo": "结束时间错误",
       "show": true
     }
   ]

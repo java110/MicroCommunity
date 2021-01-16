@@ -1,4 +1,4 @@
-package com.java110.dto.tempCarFeeConfigAttr;
+package com.java110.dto.tempCarFeeConfig;
 
 import com.java110.dto.PageDto;
 import java.io.Serializable;

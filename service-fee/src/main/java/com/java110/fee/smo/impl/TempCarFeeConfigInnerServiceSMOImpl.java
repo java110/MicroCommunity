@@ -2,11 +2,13 @@ package com.java110.fee.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleSpecDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.dao.ITempCarFeeConfigServiceDao;
+import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,24 +62,43 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
         }
     }
 
-    /**
-     * 获取批量userId
-     *
-     * @param tempCarFeeConfigs 小区楼信息
-     * @return 批量userIds 信息
-     */
-    private String[] getUserIds(List<TempCarFeeConfigDto> tempCarFeeConfigs) {
-        List<String> userIds = new ArrayList<String>();
-        for (TempCarFeeConfigDto tempCarFeeConfig : tempCarFeeConfigs) {
-            userIds.add(tempCarFeeConfig.getConfigId());
-        }
-
-        return userIds.toArray(new String[userIds.size()]);
-    }
-
     @Override
     public int queryTempCarFeeConfigsCount(@RequestBody TempCarFeeConfigDto tempCarFeeConfigDto) {
         return tempCarFeeConfigServiceDaoImpl.queryTempCarFeeConfigsCount(BeanConvertUtil.beanCovertMap(tempCarFeeConfigDto));
+    }
+
+    @Override
+    public List<TempCarFeeRuleDto> queryTempCarFeeRules(@RequestBody TempCarFeeRuleDto tempCarFeeRuleDto) {
+
+        List<TempCarFeeRuleDto> tempCarFeeRuleDtos = BeanConvertUtil.covertBeanList(tempCarFeeConfigServiceDaoImpl.queryTempCarFeeRules(BeanConvertUtil.beanCovertMap(tempCarFeeRuleDto)), TempCarFeeRuleDto.class);
+        freshRuleSpecs(tempCarFeeRuleDtos);
+        return tempCarFeeRuleDtos;
+    }
+
+    private void freshRuleSpecs(List<TempCarFeeRuleDto> tempCarFeeRuleDtos) {
+        if (tempCarFeeRuleDtos == null || tempCarFeeRuleDtos.size() < 1) {
+            return;
+        }
+        List<String> ruleIds = new ArrayList<>();
+        for (TempCarFeeRuleDto tempCarFeeRuleDto : tempCarFeeRuleDtos) {
+            ruleIds.add(tempCarFeeRuleDto.getRuleId());
+        }
+
+        TempCarFeeRuleSpecDto tempCarFeeRuleSpecDto = new TempCarFeeRuleSpecDto();
+        tempCarFeeRuleSpecDto.setRuleIds(ruleIds.toArray(new String[ruleIds.size()]));
+        List<TempCarFeeRuleSpecDto> tempCarFeeRuleSpecDtos = BeanConvertUtil.covertBeanList(
+                tempCarFeeConfigServiceDaoImpl.queryTempCarFeeRuleSpecs(
+                        BeanConvertUtil.beanCovertMap(tempCarFeeRuleSpecDto)), TempCarFeeRuleSpecDto.class);
+        List<TempCarFeeRuleSpecDto> tCarFeeRuleSpecDtos = null;
+        for (TempCarFeeRuleDto tempCarFeeRuleDto : tempCarFeeRuleDtos) {
+            tCarFeeRuleSpecDtos = new ArrayList<>();
+            for (TempCarFeeRuleSpecDto tCarFeeRuleSpecDto : tempCarFeeRuleSpecDtos) {
+                if (tempCarFeeRuleDto.getRuleId().equals(tCarFeeRuleSpecDto.getRuleId())) {
+                    tCarFeeRuleSpecDtos.add(tCarFeeRuleSpecDto);
+                }
+            }
+            tempCarFeeRuleDto.setTempCarFeeRuleSpecs(tCarFeeRuleSpecDtos);
+        }
     }
 
     public ITempCarFeeConfigServiceDao getTempCarFeeConfigServiceDaoImpl() {

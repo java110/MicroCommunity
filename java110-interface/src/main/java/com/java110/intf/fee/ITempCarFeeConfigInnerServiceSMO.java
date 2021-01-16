@@ -2,6 +2,7 @@ package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,6 @@ public interface ITempCarFeeConfigInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param tempCarFeeConfigDto 数据对象分享
      * @return TempCarFeeConfigDto 对象数据
      */
@@ -39,4 +39,13 @@ public interface ITempCarFeeConfigInnerServiceSMO {
      */
     @RequestMapping(value = "/queryTempCarFeeConfigsCount", method = RequestMethod.POST)
     int queryTempCarFeeConfigsCount(@RequestBody TempCarFeeConfigDto tempCarFeeConfigDto);
+
+    /**
+     * 查询临时车收费规则
+     *
+     * @param tempCarFeeRuleDto
+     * @return
+     */
+    @RequestMapping(value = "/queryTempCarFeeRules", method = RequestMethod.POST)
+    List<TempCarFeeRuleDto> queryTempCarFeeRules(@RequestBody TempCarFeeRuleDto tempCarFeeRuleDto);
 }
