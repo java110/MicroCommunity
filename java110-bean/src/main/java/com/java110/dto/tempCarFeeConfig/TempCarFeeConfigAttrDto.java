@@ -17,6 +17,7 @@ public class TempCarFeeConfigAttrDto extends PageDto implements Serializable {
 
     private String attrId;
     private String configId;
+    private String[] configIds;
     private String specCd;
     private String value;
     private String communityId;
@@ -82,5 +83,13 @@ public class TempCarFeeConfigAttrDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String[] getConfigIds() {
+        return configIds;
+    }
+
+    public void setConfigIds(String[] configIds) {
+        this.configIds = configIds;
     }
 }

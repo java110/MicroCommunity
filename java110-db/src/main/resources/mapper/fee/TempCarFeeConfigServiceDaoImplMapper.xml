@@ -106,8 +106,10 @@
         select t.car_type,t.car_type carType,t.config_id,t.config_id configId,t.fee_name,t.fee_name
         feeName,t.pa_id,t.pa_id paId,t.area_num,t.area_num areaNum,t.status_cd,t.status_cd
         statusCd,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.b_id,t.b_id bId,t.rule_id,t.rule_id
-        ruleId,t.community_id,t.community_id communityId
+        ruleId,t.community_id,t.community_id communityId,tcfr.rule_name ruleName,td.name carTypeName
         from temp_car_fee_config t
+        left join temp_car_fee_rule tcfr on t.rule_id = tcfr.rule_id and tcfr.status_cd = '0'
+        left join t_dict td on t.car_type = td.status_cd and td.table_name = 'temp_car_fee_config' and td.table_columns = 'car_type'
         where 1 =1
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
