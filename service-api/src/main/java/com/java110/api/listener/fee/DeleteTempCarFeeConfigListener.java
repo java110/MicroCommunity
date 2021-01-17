@@ -42,8 +42,8 @@ public class DeleteTempCarFeeConfigListener extends AbstractServiceApiPlusListen
 
         tempCarFeeConfigBMOImpl.deleteTempCarFeeConfig(reqJson, context);
 
-        JSONArray attrs = reqJson.getJSONArray("attrs");
-        if (attrs.size() < 1) {
+        JSONArray attrs = reqJson.getJSONArray("tempCarFeeConfigAttrs");
+        if (attrs == null || attrs.size() < 1) {
             return;
         }
 

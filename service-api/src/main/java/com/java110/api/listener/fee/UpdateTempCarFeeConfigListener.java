@@ -47,7 +47,7 @@ public class UpdateTempCarFeeConfigListener extends AbstractServiceApiPlusListen
         tempCarFeeConfigBMOImpl.updateTempCarFeeConfig(reqJson, context);
 
         JSONArray attrs = reqJson.getJSONArray("attrs");
-        if (attrs.size() < 1) {
+        if (attrs == null || attrs.size() < 1) {
             return;
         }
 
