@@ -36,7 +36,11 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.user.*;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.cache.MappingCache;
@@ -224,27 +228,31 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String url = sendMsgUrl + accessToken;
         for (UserDto userDto : userDtos) {
             //根据 userId 查询到openId
-            StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
-            staffAppAuthDto.setStaffId(userDto.getUserId());
-            staffAppAuthDto.setAppType("WECHAT");
-            List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
-            String openId = staffAppAuthDtos.get(0).getOpenId();
-            Data data = new Data();
-            PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-            templateMessage.setTemplate_id(templateId);
-            templateMessage.setTouser(openId);
-            data.setFirst(new Content("本次缴费已到账"));
-            data.setKeyword1(new Content(paramIn.getString("payFeeRoom")));
-            data.setKeyword2(new Content(paramIn.getString("feeTypeCdName")));
-            data.setKeyword3(new Content(paramIn.getString("payFeeTime")));
-            data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
-            data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
-            templateMessage.setData(data);
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-            templateMessage.setUrl(wechatUrl);
-            logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-            ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-            logger.info("微信模板返回内容:{}", responseEntity);
+            try {
+                StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
+                staffAppAuthDto.setStaffId(userDto.getUserId());
+                staffAppAuthDto.setAppType("WECHAT");
+                List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+                String openId = staffAppAuthDtos.get(0).getOpenId();
+                Data data = new Data();
+                PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+                templateMessage.setTemplate_id(templateId);
+                templateMessage.setTouser(openId);
+                data.setFirst(new Content("本次缴费已到账"));
+                data.setKeyword1(new Content(paramIn.getString("payFeeRoom")));
+                data.setKeyword2(new Content(paramIn.getString("feeTypeCdName")));
+                data.setKeyword3(new Content(paramIn.getString("payFeeTime")));
+                data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
+                data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
+                templateMessage.setData(data);
+                String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                templateMessage.setUrl(wechatUrl);
+                logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+                ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+                logger.info("微信模板返回内容:{}", responseEntity);
+            } catch (Exception e) {
+                logger.error("发送缴费信息失败", e);
+            }
         }
     }
 
