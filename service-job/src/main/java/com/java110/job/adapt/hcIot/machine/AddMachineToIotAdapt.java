@@ -151,6 +151,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("extCommunityId", machinePo.getCommunityId());
         postParameters.put("machineIp", machinePo.getMachineIp());
         postParameters.put("machineMac", machinePo.getMachineMac());
+        postParameters.put("direction", machinePo.getDirection());
         postParameters.put("hmId", hmId);
         hcMachineAsynImpl.addMachine(postParameters, ownerDtos);
     }

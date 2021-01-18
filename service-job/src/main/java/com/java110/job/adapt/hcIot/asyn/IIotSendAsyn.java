@@ -114,4 +114,20 @@ public interface IIotSendAsyn {
     void addCarBlackWhite(JSONObject postParameters);
 
     void deleteCarBlackWhite(JSONObject postParameters);
+
+    /**
+     * 同步临时车费用
+     *
+     * @param postParameters
+     */
+    void addTempCarFeeConfig(JSONObject postParameters);
+
+    /**
+     * 同步临时车费用
+     *
+     * @param postParameters
+     */
+    void updateTempCarFeeConfig(JSONObject postParameters);
+
+    void deleteTempCarFeeConfig(JSONObject postParameters);
 }

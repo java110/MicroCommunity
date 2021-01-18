@@ -77,6 +77,13 @@ public class IotConstant {
     //重启接口
     public static final String RESTART_MACHINE = "/extApi/machine/restartMachine";
 
+    //添加车辆
+    public static final String ADD_TEAM_CAR_FEE_CONFIG = "/extApi/fee/addTempCarFee";
+    //修改车辆
+    public static final String UPDATE_TEAM_CAR_FEE_CONFIG = "/extApi/fee/updateTempCarFee";
+    //删除车辆
+    public static final String DELETE_TEAM_CAR_FEE_CONFIG = "/extApi/fee/deleteTempCarFee";
+
     public static final String HC_TOKEN = "HC_ACCESS_TOKEN";
 
     //单位为秒

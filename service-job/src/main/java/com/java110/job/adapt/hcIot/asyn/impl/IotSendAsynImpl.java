@@ -34,11 +34,7 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -856,6 +852,148 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 MachineTranslateDto.TYPE_OWNER_CAR);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.DELETE_CAR_BLACK_WHITE_URL);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+    }
+
+
+    @Override
+    public void addTempCarFeeConfig(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_ADD_TEAM_CAR_FEE_CONFIG,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extConfigId",
+                "feeName",
+                MachineTranslateDto.TYPE_TEAM_CAR_FEE_CONFIG);
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.ADD_TEAM_CAR_FEE_CONFIG);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+    }
+
+    @Override
+    public void updateTempCarFeeConfig(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_UPDATE_TEAM_CAR_FEE_CONFIG,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extConfigId",
+                "feeName",
+                MachineTranslateDto.TYPE_TEAM_CAR_FEE_CONFIG);
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.UPDATE_TEAM_CAR_FEE_CONFIG);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+    }
+
+    @Override
+    public void deleteTempCarFeeConfig(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_DELETE_TEAM_CAR_FEE_CONFIG,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extBwId",
+                "carNum",
+                MachineTranslateDto.TYPE_TEAM_CAR_FEE_CONFIG);
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.DELETE_TEAM_CAR_FEE_CONFIG);
         try {
             postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
