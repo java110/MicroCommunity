@@ -208,12 +208,18 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         String openId = paramObj.getString("openid");
 
         int loginFlag = paramIn.getInteger("loginFlag");
+
         //说明是登录页面，下发code 就可以，不需要下发key 之类
         if (loginFlag == LOGIN_PAGE) {
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage(errorUrl + "?code=" + code);
+            if(errorUrl.indexOf("?")> 0){
+                errorUrl +=("&code=" + code);
+            }else{
+                errorUrl +=("?code=" + code);
+            }
+            return ResultVo.redirectPage(errorUrl);
         }
 
         //判断当前openId 是否绑定了业主
@@ -228,7 +234,12 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage(errorUrl + "?code=" + code);
+            if(errorUrl.indexOf("?")> 0){
+                errorUrl +=("&code=" + code);
+            }else{
+                errorUrl +=("?code=" + code);
+            }
+            return ResultVo.redirectPage(errorUrl );
         }
 
         // String accessToken = paramObj.getString("access_token");//暂时不用
@@ -250,7 +261,12 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         if (StringUtil.isEmpty(tmpUserDto.getKey())) {
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage(errorUrl + "?code=" + code);
+            if(errorUrl.indexOf("?")> 0){
+                errorUrl +=("&code=" + code);
+            }else{
+                errorUrl +=("?code=" + code);
+            }
+            return ResultVo.redirectPage(errorUrl);
         }
         redirectUrl = redirectUrl + (redirectUrl.indexOf("?") > 0 ? "&key=" + tmpUserDto.getKey() : "?key=" + tmpUserDto.getKey());
         return ResultVo.redirectPage(redirectUrl);
