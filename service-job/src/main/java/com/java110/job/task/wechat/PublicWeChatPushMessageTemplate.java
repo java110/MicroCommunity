@@ -19,6 +19,7 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,8 +162,8 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(fee.getFeeEndTime());
                     Calendar now = Calendar.getInstance();
                     now.setTime(date);
-                    int year = now.get(Calendar.YEAR);
-                    int month = now.get(Calendar.MONTH);
+//                    int year = now.get(Calendar.YEAR);
+//                    int month = now.get(Calendar.MONTH);
                     Data data = new Data();
                     PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
                     templateMessage.setTemplate_id(templateId);
@@ -170,8 +171,8 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     /*data.setFirst(new Content("物业费缴费提醒"));*/
                     data.setFirst(new Content(fee.getFeeTypeName() + "提醒"));
                     data.setKeyword1(new Content(fee.getPayerObjName()));
-                    data.setKeyword2(new Content(fee.getAmountOwed()));
-                    data.setKeyword3(new Content(year + "年-" + (month + 1) + "月"));
+                    data.setKeyword2(new Content(DateUtil.dateTimeToDate(fee.getFeeEndTime()) + "-" + DateUtil.dateTimeToDate(fee.getDeadlineTime())));
+                    data.setKeyword3(new Content(fee.getBillAmountOwed()));
                     data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
                     if (!StringUtil.isEmpty(oweUrl)) {
                         if (miniprogram == null) {
