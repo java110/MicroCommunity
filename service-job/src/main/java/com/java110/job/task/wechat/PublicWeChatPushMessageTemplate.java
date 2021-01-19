@@ -176,9 +176,9 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
                     if (!StringUtil.isEmpty(oweUrl)) {
                         if (miniprogram == null) {
-                            templateMessage.setUrl(oweUrl + fee.getPayObjId());
+                            templateMessage.setUrl(oweUrl + fee.getPayObjId() + "&wAppId=" + weChatDto.getAppId());
                         } else {
-                            miniprogram.setPagepath(oweUrl.split("@@")[1] + fee.getPayObjId());
+                            miniprogram.setPagepath(oweUrl.split("@@")[1] + fee.getPayObjId() + "&wAppId=" + weChatDto.getAppId());
                             templateMessage.setMiniprogram(miniprogram);
                         }
                     }

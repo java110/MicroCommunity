@@ -141,7 +141,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
 
         for (NoticeDto tmpNotice : noticeDtos) {
             try {
-                doSentWechat(tmpNotice, templateId, accessToken);
+                doSentWechat(tmpNotice, templateId, accessToken, weChatDto);
             } catch (Exception e) {
                 logger.error("通知异常", e);
             }
@@ -149,7 +149,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
 
     }
 
-    private void doSentWechat(NoticeDto noticeDto, String templateId, String accessToken) throws Exception {
+    private void doSentWechat(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) throws Exception {
 
         Date startTime = DateUtil.getDateFromString(noticeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A);
         Date nowTime = DateUtil.getCurrentDate();
@@ -162,16 +162,16 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
 
         switch (objType) {
             case NoticeDto.OBJ_TYPE_COMMUNITY:
-                sendAllOwner(noticeDto, templateId, accessToken);
+                sendAllOwner(noticeDto, templateId, accessToken, weChatDto);
                 break;
             case NoticeDto.OBJ_TYPE_FLOOR:
-                sendFloorOwner(noticeDto, templateId, accessToken);
+                sendFloorOwner(noticeDto, templateId, accessToken, weChatDto);
                 break;
             case NoticeDto.OBJ_TYPE_UNIT:
-                sendUnitOwner(noticeDto, templateId, accessToken);
+                sendUnitOwner(noticeDto, templateId, accessToken, weChatDto);
                 break;
             case NoticeDto.OBJ_TYPE_ROOM:
-                sendRoomOwner(noticeDto, templateId, accessToken);
+                sendRoomOwner(noticeDto, templateId, accessToken, weChatDto);
                 break;
         }
 
@@ -182,7 +182,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
 
     }
 
-    private void sendFloorOwner(NoticeDto noticeDto, String templateId, String accessToken) {
+    private void sendFloorOwner(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
 
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(noticeDto.getCommunityId());
@@ -204,11 +204,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
             ownerAppUserDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
             List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-            doSend(ownerAppUserDtos, noticeDto, templateId, accessToken);
+            doSend(ownerAppUserDtos, noticeDto, templateId, accessToken, weChatDto);
         }
     }
 
-    private void sendUnitOwner(NoticeDto noticeDto, String templateId, String accessToken) {
+    private void sendUnitOwner(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
 
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(noticeDto.getCommunityId());
@@ -230,11 +230,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
             ownerAppUserDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
             List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-            doSend(ownerAppUserDtos, noticeDto, templateId, accessToken);
+            doSend(ownerAppUserDtos, noticeDto, templateId, accessToken, weChatDto);
         }
     }
 
-    private void sendRoomOwner(NoticeDto noticeDto, String templateId, String accessToken) {
+    private void sendRoomOwner(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
 
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(noticeDto.getCommunityId());
@@ -256,15 +256,15 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
             ownerAppUserDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
             List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-            doSend(ownerAppUserDtos, noticeDto, templateId, accessToken);
+            doSend(ownerAppUserDtos, noticeDto, templateId, accessToken, weChatDto);
         }
     }
 
-    private void sendAllOwner(NoticeDto noticeDto, String templateId, String accessToken) {
-        doSendToOpenId(noticeDto, templateId, accessToken, "");
+    private void sendAllOwner(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
+        doSendToOpenId(noticeDto, templateId, accessToken, "", weChatDto);
     }
 
-    private void doSend(List<OwnerAppUserDto> ownerAppUserDtos, NoticeDto noticeDto, String templateId, String accessToken) {
+    private void doSend(List<OwnerAppUserDto> ownerAppUserDtos, NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
         String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/#/pages/notice/detail/detail?noticeId=";
         for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
             Data data = new Data();
@@ -277,14 +277,14 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             data.setKeyword3(new Content(StringUtil.delHtmlTag(noticeDto.getContext())));
             data.setRemark(new Content("如有疑问请联系相关物业人员"));
             templateMessage.setData(data);
-            templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId());
+            templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId());
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(sendMsgUrl + accessToken, JSON.toJSONString(templateMessage), String.class);
             logger.info("微信模板返回内容:{}", responseEntity);
         }
     }
 
-    private void doSendToOpenId(NoticeDto noticeDto, String templateId, String accessToken, String nextOpenid) {
+    private void doSendToOpenId(NoticeDto noticeDto, String templateId, String accessToken, String nextOpenid, SmallWeChatDto weChatDto) {
         String url = getUser.replace("ACCESS_TOKEN", accessToken);
         if (!StringUtil.isEmpty(nextOpenid)) {
             url += ("&next_openid=" + nextOpenid);
@@ -330,9 +330,9 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             templateMessage.setData(data);
             if (!StringUtil.isEmpty(wechatUrl)) {
                 if (miniprogram == null) {
-                    templateMessage.setUrl(wechatUrl + "/#/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId());
+                    templateMessage.setUrl(wechatUrl + "/#/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId());
                 } else {
-                    miniprogram.setPagepath("/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId());
+                    miniprogram.setPagepath("/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId());
                     templateMessage.setMiniprogram(miniprogram);
                 }
             }
@@ -343,7 +343,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
 
         //（关注者列表已返回完时，返回next_openid为空）
         if (!StringUtil.isEmpty(nextOpenid)) {
-            doSendToOpenId(noticeDto, templateId, accessToken, nextOpenid);
+            doSendToOpenId(noticeDto, templateId, accessToken, nextOpenid, weChatDto);
         }
     }
 
