@@ -33,7 +33,7 @@ import java.util.concurrent.Future;
  **/
 public class Java110ThreadPoolFactory<T> {
 
-    public static final int JAVA110_DEFAULT_THREAD_NUM = 2;
+    public static final int JAVA110_DEFAULT_THREAD_NUM = 5;
     private Vector<Future<T>> futureList = null;
     ExecutorService executor = null;
 
