@@ -314,7 +314,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
                 ReportFeeMonthStatisticsDto.class);
         //上个月有数据 不处理
-        if (statistics != null && statistics.size() > 1) {
+        if (statistics != null || statistics.size() > 1) {
             return;
         }
         double receivableAmount = 0.0;
@@ -503,7 +503,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
                 ReportFeeMonthStatisticsDto.class);
         //上个月有数据 不处理
-        if (statistics != null && statistics.size() > 1) {
+        if (statistics != null || statistics.size() > 1) {
             return;
         }
 
