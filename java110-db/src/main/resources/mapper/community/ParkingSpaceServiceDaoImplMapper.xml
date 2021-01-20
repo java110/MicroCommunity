@@ -184,6 +184,9 @@
         <if test="num !=null and num != ''">
             , t.num= #{num}
         </if>
+        <if test="paId !=null and paId != ''">
+            , t.pa_id= #{paId}
+        </if>
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
