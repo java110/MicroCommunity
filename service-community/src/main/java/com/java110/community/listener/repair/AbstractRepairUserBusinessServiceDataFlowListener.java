@@ -47,6 +47,7 @@ public abstract class AbstractRepairUserBusinessServiceDataFlowListener extends 
         businessRepairUserInfo.put("staffName", businessRepairUserInfo.get("staff_name"));
         businessRepairUserInfo.put("preStaffId", businessRepairUserInfo.get("pre_staff_id"));
         businessRepairUserInfo.put("preStaffName", businessRepairUserInfo.get("pre_staff_name"));
+        businessRepairUserInfo.put("preRuId", businessRepairUserInfo.get("pre_ru_id"));
         businessRepairUserInfo.put("startTime", businessRepairUserInfo.get("start_time"));
         businessRepairUserInfo.put("endTime", businessRepairUserInfo.get("end_time"));
         businessRepairUserInfo.put("repairEvent", businessRepairUserInfo.get("repair_event"));
@@ -88,6 +89,7 @@ public abstract class AbstractRepairUserBusinessServiceDataFlowListener extends 
         currentRepairUserInfo.put("startTime", currentRepairUserInfo.get("start_time"));
         currentRepairUserInfo.put("endTime", currentRepairUserInfo.get("end_time"));
         currentRepairUserInfo.put("repairEvent", currentRepairUserInfo.get("repair_event"));
+        currentRepairUserInfo.put("preRuId", currentRepairUserInfo.get("pre_ru_id"));
 
 
         currentRepairUserInfo.put("operate", StatusConstant.OPERATE_DEL);

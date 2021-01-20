@@ -22,6 +22,7 @@ public class RepairUserPo implements Serializable {
     private String staffName;
     private String preStaffId;
     private String preStaffName;
+    private String preRuId;
     private String startTime;
     private String endTime;
     private String repairEvent;
@@ -128,5 +129,13 @@ public class RepairUserPo implements Serializable {
 
     public void setRepairEvent(String repairEvent) {
         this.repairEvent = repairEvent;
+    }
+
+    public String getPreRuId() {
+        return preRuId;
+    }
+
+    public void setPreRuId(String preRuId) {
+        this.preRuId = preRuId;
     }
 }
