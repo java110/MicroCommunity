@@ -327,6 +327,11 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (statistics != null && statistics.size() > 0) {
             return;
         }
+
+        if (tmpReportFeeDto.getDeadlineTime().getTime() < curMonthDate.getTime().getTime()) {
+            curMonthDate.setTime(tmpReportFeeDto.getDeadlineTime());
+        }
+
         double receivableAmount = 0.0;
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
             receivableAmount = tmpReportFeeDto.getFeePrice();
@@ -503,6 +508,10 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             return;
         }
 
+        if (tmpReportFeeDto.getDeadlineTime().getTime() < curMonthDate.getTime().getTime()) {
+            curMonthDate.setTime(tmpReportFeeDto.getDeadlineTime());
+        }
+
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setCommunityId(reportRoomDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
@@ -666,11 +675,11 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         BigDecimal feePriceDec = new BigDecimal(feePrice);
 
         if (DateUtil.getCurrentDate().getTime() < tmpReportFeeDto.getStartTime().getTime()) {
-            return computeOnceFee(tmpReportFeeDto);
+            return 0.0;
         }
 
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
-            return feePrice;
+            return computeOnceFee(tmpReportFeeDto);
         }
 
         //1.0 费用到期时间和费用结束时间 都不在当月
