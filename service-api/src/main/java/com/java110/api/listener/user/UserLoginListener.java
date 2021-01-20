@@ -87,6 +87,7 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
             errorInfo = "临时票据错误";
         }
 
+
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
         if (userDtos == null || userDtos.size() < 1) {

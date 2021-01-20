@@ -78,6 +78,7 @@ public class RepairDto extends PageDto implements Serializable {
     private List<PhotoVo> photos;
 
     private String returnVisitFlag;
+    private String userState;
 
 
     public String getRepairName() {
@@ -304,5 +305,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setReturnVisitFlag(String returnVisitFlag) {
         this.returnVisitFlag = returnVisitFlag;
+    }
+
+    public String getUserState() {
+        return userState;
+    }
+
+    public void setUserState(String userState) {
+        this.userState = userState;
     }
 }
