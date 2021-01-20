@@ -308,7 +308,7 @@
         d.name stateName,
         rs.repair_type_name repairTypeName,rs.repair_way repairWay,
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,t.repair_obj_name repairObjName,
-        sru.staff_id startStaffId
+        sru.ru_id startRuId,ru.ru_id ruId
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'

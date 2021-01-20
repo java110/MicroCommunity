@@ -78,7 +78,8 @@ public class RepairDto extends PageDto implements Serializable {
     private List<PhotoVo> photos;
 
     private String returnVisitFlag;
-    private String startStaffId;
+    private String startRuId;
+    private String preRuId;
 
 
     public String getRepairName() {
@@ -307,11 +308,19 @@ public class RepairDto extends PageDto implements Serializable {
         this.returnVisitFlag = returnVisitFlag;
     }
 
-    public String getStartStaffId() {
-        return startStaffId;
+    public String getStartRuId() {
+        return startRuId;
     }
 
-    public void setStartStaffId(String startStaffId) {
-        this.startStaffId = startStaffId;
+    public void setStartRuId(String startRuId) {
+        this.startRuId = startRuId;
+    }
+
+    public String getPreRuId() {
+        return preRuId;
+    }
+
+    public void setPreRuId(String preRuId) {
+        this.preRuId = preRuId;
     }
 }
