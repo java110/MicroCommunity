@@ -17,7 +17,11 @@ import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.report.dao.IReportFeeServiceDao;
-import com.java110.utils.util.*;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +30,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName GeneratorFeeMonthStatisticsInnerServiceSMOImpl
@@ -224,15 +232,17 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 && receivedAmount == 0) {
             return;
         }
-        double receivableAmount = getReceivableAmountByCar(tmpReportFeeDto, null, tmpReportCarDto); //应收
-
-        dealBeforeUploadCarFee(tmpReportFeeDto, tmpReportCarDto);
-        double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
         FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
         OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(tmpReportCarDto, OwnerCarDto.class);
         Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto, ownerCarDto);
 
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        tmpReportFeeDto.setDeadlineTime(targetEndDate);
+        double receivableAmount = getReceivableAmountByCar(tmpReportFeeDto, null, tmpReportCarDto); //应收
+
+        dealBeforeUploadCarFee(tmpReportFeeDto, tmpReportCarDto);
+        double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
+
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         reportFeeMonthStatisticsPo.setDeadlineTime(DateUtil.getFormatTimeString(targetEndDate, DateUtil.DATE_FORMATE_STRING_A));
@@ -314,7 +324,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
                 ReportFeeMonthStatisticsDto.class);
         //上个月有数据 不处理
-        if (statistics != null || statistics.size() > 1) {
+        if (statistics != null && statistics.size() > 0) {
             return;
         }
         double receivableAmount = 0.0;
@@ -398,16 +408,18 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 && receivedAmount == 0) {
             return;
         }
+        FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
+        Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto, null);
+
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        tmpReportFeeDto.setDeadlineTime(targetEndDate);
         double receivableAmount = getReceivableAmount(tmpReportFeeDto, reportRoomDto, null); //应收
 
         //解决上线时 之前欠费没有刷入导致费用金额对不上问题处理
         dealBeforeUploadRoomFee(reportRoomDto, tmpReportFeeDto, receivableAmount);
 
         double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
-        FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
-        Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto, null);
 
-        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         reportFeeMonthStatisticsPo.setDeadlineTime(DateUtil.getFormatTimeString(targetEndDate, DateUtil.DATE_FORMATE_STRING_A));
@@ -503,7 +515,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
                 ReportFeeMonthStatisticsDto.class);
         //上个月有数据 不处理
-        if (statistics != null || statistics.size() > 1) {
+        if (statistics != null && statistics.size() > 0) {
             return;
         }
 
@@ -590,7 +602,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         }
 
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
-            return feePrice;
+            return computeOnceFee(tmpReportFeeDto);
         }
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(tmpReportFeeDto.getCommunityId());
@@ -627,6 +639,20 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         return 0.0;
     }
 
+    private double computeOnceFee(ReportFeeDto tmpReportFeeDto) {
+        Date nowTime = DateUtil.getCurrentDate();
+        if (tmpReportFeeDto.getEndTime().getTime() > nowTime.getTime()
+                || tmpReportFeeDto.getDeadlineTime().getTime() < nowTime.getTime()) {
+            return 0.0;
+        }
+        double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getDeadlineTime(), tmpReportFeeDto.getEndTime());
+        month = Math.ceil(month);
+
+        BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
+        double money = feePriceDec.divide(new BigDecimal(month)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        return money;
+    }
+
     /**
      * 获取当月应收
      *
@@ -640,7 +666,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         BigDecimal feePriceDec = new BigDecimal(feePrice);
 
         if (DateUtil.getCurrentDate().getTime() < tmpReportFeeDto.getStartTime().getTime()) {
-            return 0.0;
+            return computeOnceFee(tmpReportFeeDto);
         }
 
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
