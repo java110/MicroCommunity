@@ -2,15 +2,15 @@ package com.java110.core.base.smo;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.util.ProtocolUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.core.base.AppBase;
 import com.java110.core.context.AppContext;
 import com.java110.intf.code.IPrimaryKeyInnerServiceSMO;
-
+import com.java110.utils.util.ProtocolUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -53,8 +53,6 @@ public class BaseServiceSMO extends AppBase {
     }
 
 
-
-
     /**
      * 创建上下文对象
      *
@@ -80,7 +78,7 @@ public class BaseServiceSMO extends AppBase {
         urlParam += "?";
 
         for (Object key : info.keySet()) {
-            if (StringUtil.isNullOrNone(info.get(key) )) {
+            if (StringUtil.isNullOrNone(info.get(key))) {
                 continue;
             }
 
@@ -90,5 +88,30 @@ public class BaseServiceSMO extends AppBase {
         urlParam = urlParam.endsWith("&") ? urlParam.substring(0, urlParam.length() - 1) : urlParam;
 
         return urlParam;
+    }
+
+    /**
+     * @param urlparam 带分隔的url参数
+     * @return
+     */
+    public static Map<String, String> urlToMap(String urlparam) {
+        if (urlparam.indexOf("?") < 0) {
+            return new HashMap<>();
+        }
+        urlparam = urlparam.substring(urlparam.indexOf("?")+1);
+        Map<String, String> map = new HashMap<String, String>();
+        String[] param = urlparam.split("&");
+        for (String keyvalue : param) {
+            String[] pair = keyvalue.split("=");
+            if (pair.length == 2) {
+                map.put(pair[0], pair[1]);
+            }
+        }
+        return map;
+    }
+
+    public static void main(String[] args) {
+        String url = "https://www.xx.com";
+        System.out.println(url.substring(0,url.indexOf("?")));
     }
 }

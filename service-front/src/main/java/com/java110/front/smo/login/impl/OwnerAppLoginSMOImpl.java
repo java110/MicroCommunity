@@ -214,10 +214,10 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            if(errorUrl.indexOf("?")> 0){
-                errorUrl +=("&code=" + code);
-            }else{
-                errorUrl +=("?code=" + code);
+            if (errorUrl.indexOf("?") > 0) {
+                errorUrl += ("&code=" + code);
+            } else {
+                errorUrl += ("?code=" + code);
             }
             return ResultVo.redirectPage(errorUrl);
         }
@@ -234,12 +234,12 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            if(errorUrl.indexOf("?")> 0){
-                errorUrl +=("&code=" + code);
-            }else{
-                errorUrl +=("?code=" + code);
+            if (errorUrl.indexOf("?") > 0) {
+                errorUrl += ("&code=" + code);
+            } else {
+                errorUrl += ("?code=" + code);
             }
-            return ResultVo.redirectPage(errorUrl );
+            return ResultVo.redirectPage(errorUrl);
         }
 
         // String accessToken = paramObj.getString("access_token");//暂时不用
@@ -261,14 +261,22 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         if (StringUtil.isEmpty(tmpUserDto.getKey())) {
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            if(errorUrl.indexOf("?")> 0){
-                errorUrl +=("&code=" + code);
-            }else{
-                errorUrl +=("?code=" + code);
+            if (errorUrl.indexOf("?") > 0) {
+                errorUrl += ("&code=" + code);
+            } else {
+                errorUrl += ("?code=" + code);
             }
             return ResultVo.redirectPage(errorUrl);
         }
-        redirectUrl = redirectUrl + (redirectUrl.indexOf("?") > 0 ? "&key=" + tmpUserDto.getKey() : "?key=" + tmpUserDto.getKey());
+        //如果参数中有key 直接用新的覆盖
+        Map tempRedirectParam = super.urlToMap(redirectUrl);
+        tempRedirectParam.put("key", tmpUserDto.getKey());
+        if (redirectUrl.indexOf("?") > -1) {
+            redirectUrl = redirectUrl.substring(0, redirectUrl.indexOf("?")) + super.mapToUrlParam(tempRedirectParam);
+        } else {
+            redirectUrl = redirectUrl + super.mapToUrlParam(tempRedirectParam);
+        }
+        //redirectUrl = redirectUrl + (redirectUrl.indexOf("?") > 0 ? "&key=" + tmpUserDto.getKey() : "?key=" + tmpUserDto.getKey());
         return ResultVo.redirectPage(redirectUrl);
 
     }
