@@ -8,6 +8,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.RoomDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeAddRoomBindingConstant;
 import com.java110.utils.util.Assert;
@@ -83,6 +84,7 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
             addRoomView.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
             addRoomView.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             addRoomView.put("unitId", viewUnitInfo.getString("unitId"));
+            addRoomView.put("roomType", RoomDto.ROOM_TYPE_ROOM);
             roomBMOImpl.addBusinessRoom(addRoomView, context);
             //处理房屋属性
             dealRoomAttr(addRoomView, context);
