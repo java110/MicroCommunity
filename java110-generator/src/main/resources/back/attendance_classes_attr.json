@@ -1,5 +1,4 @@
 {
-  "autoMove": true,
   "id": "attrId",
   "name": "attendanceClassesAttr",
   "desc": "考勤班组属性",
@@ -21,6 +20,7 @@
     "attrId": "attr_id",
     "specCd": "spec_cd",
     "value": "value",
+    "createTime": "create_time",
     "statusCd": "status_cd",
     "operate": "operate"
   },

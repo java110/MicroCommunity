@@ -1290,5 +1290,23 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_ATTENDANCE_CLASSES="651100050003";
 
+    /**
+     *  保存工作流节点 处理员工 ORDER_COMMON_SERVICE_URL
+     *  3保存 commonServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_ATTENDANCE_CLASSES_ATTR="651100030004";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ATTENDANCE_CLASSES_ATTR="651100040004";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ATTENDANCE_CLASSES_ATTR="651100050004";
+
 
 }
