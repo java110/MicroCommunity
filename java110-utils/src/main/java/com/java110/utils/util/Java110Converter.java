@@ -17,7 +17,7 @@ import java.util.Date;
  * add by wuxw 2020/1/28
  **/
 public class Java110Converter implements Converter {
-    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     @Override
     public Object convert(Object value, Class target, Object context) {
@@ -26,7 +26,7 @@ public class Java110Converter implements Converter {
     }
 
     public static Object getValue(Object value, Class target) {
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (value == null) {
             return value;
         }
