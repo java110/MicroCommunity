@@ -307,6 +307,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void deleteMachine(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_DELETE_MACHINE,
                 postParameters.getString("machineCode"),
@@ -348,6 +349,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void addOwner(JSONObject postParameters) {
 
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_ADD_OWNER_FACE,
@@ -393,6 +395,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void sendUpdateOwner(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_UPDATE_OWNER_FACE,
                 postParameters.getString("machineCode"),
@@ -435,6 +438,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void sendDeleteOwner(JSONObject postParameters) {
 
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
@@ -487,6 +491,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
      * @param reqJson
      */
     @Override
+    @Async
     public void reSendIot(JSONObject reqJson) {
         MachineTranslateErrorDto machineTranslateErrorDto = new MachineTranslateErrorDto();
         machineTranslateErrorDto.setCommunityId(reqJson.getString("communityId"));
@@ -518,6 +523,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void addParkingArea(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_ADD_PARKING_AREA,
                 DEFAULT_MACHINE_CODE,
@@ -564,6 +570,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void updateParkingArea(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_UPDATE_PARKING_AREA,
                 DEFAULT_MACHINE_CODE,
@@ -610,6 +617,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void deleteParkingArea(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_DELETE_PARKING_AREA,
                 DEFAULT_MACHINE_CODE,
@@ -656,6 +664,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void addOwnerCar(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_ADD_OWNER_CAR,
@@ -703,6 +712,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void updateOwnerCar(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_UPDATE_OWNER_CAR,
                 DEFAULT_MACHINE_CODE,
@@ -749,6 +759,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void deleteOwnerCar(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_DELETE_OWNER_CAR,
                 DEFAULT_MACHINE_CODE,
@@ -795,6 +806,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void addCarBlackWhite(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_ADD_CAR_BLACK_WHITE,
@@ -842,6 +854,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void deleteCarBlackWhite(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_DELETE_CAR_BLACK_WHITE,
@@ -890,6 +903,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
 
     @Override
+    @Async
     public void addTempCarFeeConfig(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_ADD_TEAM_CAR_FEE_CONFIG,
@@ -937,6 +951,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void updateTempCarFeeConfig(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_UPDATE_TEAM_CAR_FEE_CONFIG,
@@ -984,6 +999,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void deleteTempCarFeeConfig(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_DELETE_TEAM_CAR_FEE_CONFIG,

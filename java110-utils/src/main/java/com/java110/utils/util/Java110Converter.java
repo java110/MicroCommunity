@@ -26,7 +26,9 @@ public class Java110Converter implements Converter {
     }
 
     public static Object getValue(Object value, Class target) {
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         if (value == null) {
             return value;
         }
