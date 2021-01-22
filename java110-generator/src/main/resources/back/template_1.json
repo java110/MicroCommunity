@@ -1,42 +1,72 @@
 {
   "autoMove": true,
-  "id": "attrId",
-  "name": "tempCarFeeConfigAttr",
-  "desc": "临时车收费标准属性",
-  "shareParam": "config_id",
-  "shareColumn": "configId",
-  "shareName": "fee",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_TEMP_CAR_FEE_CONFIG_ATTR_INFO",
-  "newBusinessTypeCdValue": "651100030002",
-  "updateBusinessTypeCdValue": "651100040002",
-  "deleteBusinessTypeCdValue": "651100050002",
-  "businessTableName": "business_temp_car_fee_config_attr",
-  "tableName": "temp_car_fee_config_attr",
+  "id": "classesId",
+  "name": "attendanceClasses",
+  "desc": "考勤班次",
+  "shareParam": "store_id",
+  "shareColumn": "storeId",
+  "shareName": "common",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_ATTENDANCE_CLASSES",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_ATTENDANCE_CLASSES",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_ATTENDANCE_CLASSES",
+  "newBusinessTypeCdValue": "651100030003",
+  "updateBusinessTypeCdValue": "651100040003",
+  "deleteBusinessTypeCdValue": "651100050003",
+  "businessTableName": "business_attendance_classes",
+  "tableName": "attendance_classes",
   "param": {
-    "attrId": "attr_id",
+    "classesId": "classes_id",
     "bId": "b_id",
-    "configId": "config_id",
-    "specCd": "spec_cd",
-    "value": "value",
+    "storeId": "store_id",
+    "classesName": "classes_name",
+    "timeOffset": "time_offset",
     "statusCd": "status_cd",
-    "createTime": "create_time",
+    "clockCount": "clock_count",
+    "clockType": "clock_type",
+    "clockTypeValue": "clock_type_value",
+    "lateOffset": "late_offset",
+    "leaveOffset": "leave_offset",
+    "classesObjType": "classes_obj_type",
+    "classesObjId": "classes_obj_id",
     "operate": "operate"
   },
   "required": [
     {
 
-      "code": "configId",
-      "msg": "标准ID不能为空"
+      "code": "classesName",
+      "msg": "班次名称不能为空"
     },
     {
-      "code": "specCd",
-      "msg": "属性不能为空"
+      "code": "timeOffset",
+      "msg": "允许打卡范围不能为空"
     },
     {
-      "code": "value",
-      "msg": "属性值不能为空"
+      "code": "clockCount",
+      "msg": "打卡次数不能为空"
+    },
+    {
+      "code": "clockType",
+      "msg": "打卡类型不能为空"
+    },
+    {
+      "code": "clockTypeValue",
+      "msg": "打卡规则不能为空"
+    },
+    {
+      "code": "lateOffset",
+      "msg": "迟到时间范围不能为空"
+    },
+    {
+      "code": "leaveOffset",
+      "msg": "早退时间范围不能为空"
+    },
+    {
+      "code": "classesObjType",
+      "msg": "考勤对象类型不能为空"
+    },
+    {
+      "code": "classesObjId",
+      "msg": "考勤对象不能为空"
     }
   ]
 }

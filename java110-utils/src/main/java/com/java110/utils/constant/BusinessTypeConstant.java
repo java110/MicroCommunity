@@ -1272,5 +1272,23 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_TEMP_CAR_FEE_CONFIG_ATTR_INFO="651100050002";
 
+    /**
+     *  保存工作流节点 处理员工 ORDER_FEE_SERVICE_URL
+     *  3保存 feeServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_ATTENDANCE_CLASSES="651100030003";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ATTENDANCE_CLASSES="651100040003";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ATTENDANCE_CLASSES="651100050003";
+
 
 }
