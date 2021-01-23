@@ -64,7 +64,7 @@
         ps.num,pa.pa_id paId,pa.num areaNum,ps.state,t.start_time startTime,t.end_time endTime
         from owner_car t
         INNER JOIN building_owner bo on t.owner_id = bo.member_id and t.status_cd = '0'
-        left join parking_space ps on t.ps_id = t.ps_id and ps.status_cd = '0'
+        left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
         left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         where t.status_cd = '0'
         <if test="state !=null and state != ''">

@@ -17,6 +17,8 @@ import java.util.List;
  **/
 public class AttendanceClassesDto extends PageDto implements Serializable {
 
+    public static final String CLASSES_OBJ_TYPE_PARTMENT = "1003";
+
     private String timeOffset;
     private String clockCount;
     private String classesObjType;

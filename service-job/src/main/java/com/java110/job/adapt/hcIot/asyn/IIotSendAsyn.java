@@ -130,4 +130,11 @@ public interface IIotSendAsyn {
     void updateTempCarFeeConfig(JSONObject postParameters);
 
     void deleteTempCarFeeConfig(JSONObject postParameters);
+
+    /**
+     * 考勤班组同步
+     * @param postParameters
+     * @param staffs
+     */
+    void addAttendance(JSONObject postParameters, List<JSONObject> staffs);
 }
