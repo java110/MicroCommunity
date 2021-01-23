@@ -1,9 +1,11 @@
 package com.java110.dto.attendanceClasses;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.attendanceClassesAttr.AttendanceClassesAttrDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -27,6 +29,7 @@ public class AttendanceClassesDto extends PageDto implements Serializable {
     private String lateOffset;
     private String clockTypeValue;
     private String classesObjName;
+    private List<AttendanceClassesAttrDto> attrs;
 
 
     private Date createTime;
@@ -145,5 +148,13 @@ public class AttendanceClassesDto extends PageDto implements Serializable {
 
     public void setClassesObjName(String classesObjName) {
         this.classesObjName = classesObjName;
+    }
+
+    public List<AttendanceClassesAttrDto> getAttrs() {
+        return attrs;
+    }
+
+    public void setAttrs(List<AttendanceClassesAttrDto> attrs) {
+        this.attrs = attrs;
     }
 }
