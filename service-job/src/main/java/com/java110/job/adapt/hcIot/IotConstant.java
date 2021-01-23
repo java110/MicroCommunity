@@ -84,6 +84,16 @@ public class IotConstant {
     //删除车辆
     public static final String DELETE_TEAM_CAR_FEE_CONFIG = "/extApi/fee/deleteTempCarFee";
 
+    //添加考勤班次
+    public static final String ADD_ATTENDANCE_CLASSES_STAFFS = "/extApi/attendance/addAttendanceClassStaffs";
+
+    //添加考勤班次
+    public static final String ADD_ATTENDANCE_CLASSES = "/extApi/attendance/addAttendanceClass";
+    //修改考勤班次
+    public static final String UPDATE_ATTENDANCE_CLASSES = "/extApi/attendance/updateAttendanceClass";
+    //删除考勤班次
+    public static final String DELETE_ATTENDANCE_CLASSES = "/extApi/attendance/deleteAttendanceClass";
+
     public static final String HC_TOKEN = "HC_ACCESS_TOKEN";
 
     //单位为秒

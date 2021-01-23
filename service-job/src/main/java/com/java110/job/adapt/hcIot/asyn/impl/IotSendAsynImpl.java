@@ -15,6 +15,7 @@
  */
 package com.java110.job.adapt.hcIot.asyn.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -34,7 +35,11 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -1049,14 +1054,14 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     @Override
     public void addAttendance(JSONObject postParameters, List<JSONObject> staffs) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
-                MachineTranslateDto.CMD_DELETE_TEAM_CAR_FEE_CONFIG,
+                MachineTranslateDto.CMD_ADD_ATTENDANCE_CLASSES,
                 DEFAULT_MACHINE_CODE,
                 DEFAULT_MACHINE_ID,
-                "extBwId",
-                "carNum",
-                MachineTranslateDto.TYPE_TEAM_CAR_FEE_CONFIG);
+                "extClassesId",
+                "classesName",
+                MachineTranslateDto.TYPE_ATTENDANCE);
         ResponseEntity<String> responseEntity = null;
-        String url = IotConstant.getUrl(IotConstant.DELETE_TEAM_CAR_FEE_CONFIG);
+        String url = IotConstant.getUrl(IotConstant.ADD_ATTENDANCE_CLASSES);
         try {
             postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
@@ -1080,6 +1085,16 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
                 return;
             }
+
+            url = IotConstant.getUrl(IotConstant.ADD_ATTENDANCE_CLASSES_STAFFS);
+            for (JSONObject staff : staffs) {
+                staff.put("taskId", machineTranslateDto.getMachineTranslateId());
+            }
+
+            httpEntity = new HttpEntity(JSONArray.toJSONString(staffs), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+
         } catch (Exception e) {
             machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
             machineTranslateDto.setRemark(e.getLocalizedMessage());
