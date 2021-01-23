@@ -19,6 +19,7 @@ public class AttendanceClassesAttrDto extends PageDto implements Serializable {
     private String[] classesIds;
     private String attrId;
     private String specCd;
+    private String name;
     private String storeId;
     private String value;
 
@@ -91,5 +92,13 @@ public class AttendanceClassesAttrDto extends PageDto implements Serializable {
 
     public void setClassesIds(String[] classesIds) {
         this.classesIds = classesIds;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

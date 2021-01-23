@@ -77,8 +77,10 @@
     <!-- 查询考勤班组属性信息 add by wuxw 2018-07-03 -->
     <select id="getAttendanceClassesAttrInfo" parameterType="Map" resultType="Map">
         select t.classes_id,t.classes_id classesId,t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd
-        specCd,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.value
+        specCd,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.value,
+        td.name
         from attendance_classes_attr t
+        LEFT JOIN t_dict td on t.spec_cd = td.status_cd and td.table_name = 'attendance_classes_attr' and td.table_columns = 'spec_cd'
         where 1 =1
         <if test="classesId !=null and classesId != ''">
             and t.classes_id= #{classesId}
