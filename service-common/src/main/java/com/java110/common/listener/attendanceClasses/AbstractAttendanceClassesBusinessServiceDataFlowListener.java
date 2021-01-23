@@ -43,6 +43,7 @@ public abstract class AbstractAttendanceClassesBusinessServiceDataFlowListener e
         businessAttendanceClassesInfo.put("storeId", businessAttendanceClassesInfo.get("store_id"));
         businessAttendanceClassesInfo.put("clockType", businessAttendanceClassesInfo.get("clock_type"));
         businessAttendanceClassesInfo.put("classesObjId", businessAttendanceClassesInfo.get("classes_obj_id"));
+        businessAttendanceClassesInfo.put("classesObjName", businessAttendanceClassesInfo.get("classes_obj_name"));
         businessAttendanceClassesInfo.put("classesName", businessAttendanceClassesInfo.get("classes_name"));
         businessAttendanceClassesInfo.put("classesId", businessAttendanceClassesInfo.get("classes_id"));
         businessAttendanceClassesInfo.put("operate", businessAttendanceClassesInfo.get("operate"));
@@ -85,6 +86,7 @@ public abstract class AbstractAttendanceClassesBusinessServiceDataFlowListener e
         currentAttendanceClassesInfo.put("leaveOffset", currentAttendanceClassesInfo.get("leave_offset"));
         currentAttendanceClassesInfo.put("lateOffset", currentAttendanceClassesInfo.get("late_offset"));
         currentAttendanceClassesInfo.put("clockTypeValue", currentAttendanceClassesInfo.get("clock_type_value"));
+        currentAttendanceClassesInfo.put("classesObjName", currentAttendanceClassesInfo.get("classes_obj_name"));
 
 
         currentAttendanceClassesInfo.put("operate", StatusConstant.OPERATE_DEL);

@@ -7,9 +7,11 @@
     <!-- 保存考勤班次信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAttendanceClassesInfo" parameterType="Map">
         insert into business_attendance_classes(
-        time_offset,clock_count,classes_obj_type,store_id,clock_type,classes_obj_id,classes_name,classes_id,operate,leave_offset,late_offset,b_id,clock_type_value
+        time_offset,clock_count,classes_obj_type,store_id,clock_type,classes_obj_id,classes_name,classes_id,operate,
+        leave_offset,late_offset,b_id,clock_type_value,classes_obj_name
         ) values (
-        #{timeOffset},#{clockCount},#{classesObjType},#{storeId},#{clockType},#{classesObjId},#{classesName},#{classesId},#{operate},#{leaveOffset},#{lateOffset},#{bId},#{clockTypeValue}
+        #{timeOffset},#{clockCount},#{classesObjType},#{storeId},#{clockType},#{classesObjId},#{classesName},#{classesId},#{operate},
+        #{leaveOffset},#{lateOffset},#{bId},#{clockTypeValue},#{classesObjName}
         )
     </insert>
 
@@ -21,7 +23,8 @@
         storeId,t.clock_type,t.clock_type clockType,t.classes_obj_id,t.classes_obj_id
         classesObjId,t.classes_name,t.classes_name classesName,t.classes_id,t.classes_id
         classesId,t.operate,t.leave_offset,t.leave_offset leaveOffset,t.late_offset,t.late_offset
-        lateOffset,t.b_id,t.b_id bId,t.clock_type_value,t.clock_type_value clockTypeValue
+        lateOffset,t.b_id,t.b_id bId,t.clock_type_value,t.clock_type_value clockTypeValue,
+        t.classes_obj_name,t.classes_obj_name classesObjName
         from business_attendance_classes t
         where 1 =1
         <if test="timeOffset !=null and timeOffset != ''">
@@ -70,9 +73,11 @@
     <!-- 保存考勤班次信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAttendanceClassesInfoInstance" parameterType="Map">
         insert into attendance_classes(
-        time_offset,status_cd,clock_count,classes_obj_type,store_id,clock_type,classes_obj_id,classes_name,classes_id,leave_offset,late_offset,b_id,clock_type_value
+        time_offset,status_cd,clock_count,classes_obj_type,store_id,clock_type,classes_obj_id,classes_name,classes_id,
+        leave_offset,late_offset,b_id,clock_type_value,classes_obj_name
         ) select
-        t.time_offset,'0',t.clock_count,t.classes_obj_type,t.store_id,t.clock_type,t.classes_obj_id,t.classes_name,t.classes_id,t.leave_offset,t.late_offset,t.b_id,t.clock_type_value
+        t.time_offset,'0',t.clock_count,t.classes_obj_type,t.store_id,t.clock_type,t.classes_obj_id,t.classes_name,t.classes_id,
+        t.leave_offset,t.late_offset,t.b_id,t.clock_type_value,t.classes_obj_name
         from business_attendance_classes t where 1=1
         <if test="timeOffset !=null and timeOffset != ''">
             and t.time_offset= #{timeOffset}
@@ -122,7 +127,8 @@
         storeId,t.clock_type,t.clock_type clockType,t.classes_obj_id,t.classes_obj_id
         classesObjId,t.classes_name,t.classes_name classesName,t.classes_id,t.classes_id
         classesId,t.leave_offset,t.leave_offset leaveOffset,t.late_offset,t.late_offset lateOffset,t.b_id,t.b_id
-        bId,t.clock_type_value,t.clock_type_value clockTypeValue
+        bId,t.clock_type_value,t.clock_type_value clockTypeValue,
+        t.classes_obj_name,t.classes_obj_name classesObjName
         from attendance_classes t
         where 1 =1
         <if test="timeOffset !=null and timeOffset != ''">

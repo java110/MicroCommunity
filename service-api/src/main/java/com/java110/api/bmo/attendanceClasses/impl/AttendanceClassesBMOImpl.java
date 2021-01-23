@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.attendanceClasses.IAttendanceClassesBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.po.attendanceClasses.AttendanceClassesPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -26,7 +27,7 @@ public class AttendanceClassesBMOImpl extends ApiBaseBMO implements IAttendanceC
      */
     public void addAttendanceClasses(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        paramInJson.put("classesId", "-1");
+        paramInJson.put("classesId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_classesId));
         AttendanceClassesPo attendanceClassesPo = BeanConvertUtil.covertBean(paramInJson, AttendanceClassesPo.class);
         super.insert(dataFlowContext, attendanceClassesPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ATTENDANCE_CLASSES);
     }
