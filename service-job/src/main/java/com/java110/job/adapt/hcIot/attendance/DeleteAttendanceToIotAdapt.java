@@ -24,6 +24,7 @@ import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.attendanceClasses.AttendanceClassesPo;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,7 @@ public class DeleteAttendanceToIotAdapt extends DatabusAdaptImpl {
         AttendanceClassesDto ownerAttendanceDto = new AttendanceClassesDto();
         ownerAttendanceDto.setClassesId(ownerAttendancePo.getClassesId());
         ownerAttendanceDto.setStoreId(ownerAttendancePo.getStoreId());
+        ownerAttendanceDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
         List<AttendanceClassesDto> attendanceDtos = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassess(ownerAttendanceDto);
 
         Assert.listOnlyOne(attendanceDtos, "未找到考勤班组");
