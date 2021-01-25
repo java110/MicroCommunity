@@ -8,9 +8,9 @@
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMenuGroupInfo" parameterType="Map">
         insert into m_menu_group(
-        g_id,name,icon,label,seq,description
+        g_id,name,icon,label,seq,description,group_type
         ) values (
-        #{gId},#{name},#{icon},#{label},#{seq},#{description}
+        #{gId},#{name},#{icon},#{label},#{seq},#{description},#{groupType}
         )
 
     </insert>
@@ -18,7 +18,7 @@
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getMenuGroupInfo" parameterType="Map" resultType="Map">
-        select t.g_id,t.name,t.icon,t.label,t.seq,t.description,t.g_id gId
+        select t.g_id,t.name,t.icon,t.label,t.seq,t.description,t.g_id gId,t.group_type groupType
         from m_menu_group t
         where t.status_cd= '0'
         <if test="gId !=null and gId != ''">
@@ -33,9 +33,13 @@
         <if test="label !=null and label != ''">
             and t.label= #{label}
         </if>
+        <if test="groupType !=null and groupType != ''">
+            and t.group_type= #{groupType}
+        </if>
         <if test="seq !=null">
             and t.seq= #{seq}
         </if>
+
         <if test="description !=null and description != ''">
             and t.description= #{description}
         </if>
@@ -59,6 +63,9 @@
             </if>
             <if test="icon !=null and icon != ''">
                 t.icon= #{icon},
+            </if>
+            <if test="groupType !=null and groupType != ''">
+                t.group_type= #{groupType},
             </if>
             <if test="label !=null ">
                 t.label= #{label},
@@ -87,6 +94,9 @@
         </if>
         <if test="icon !=null and icon != ''">
             and t.icon= #{icon}
+        </if>
+        <if test="groupType !=null and groupType != ''">
+            and t.group_type= #{groupType}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
