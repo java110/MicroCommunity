@@ -161,6 +161,7 @@ public class QueryMenuServiceListener extends AbstractServiceApiDataFlowListener
             childMenu.put("href", tMenu.getString("url"));
             childMenu.put("seq", tMenu.getString("menuSeq"));
             childMenu.put("isShow", tMenu.getString("isShow"));
+            childMenu.put("description", tMenu.getString("description"));
             childs.add(childMenu);
         }
         return new ResponseEntity<String>(tempMenus.toJSONString(), HttpStatus.OK);
