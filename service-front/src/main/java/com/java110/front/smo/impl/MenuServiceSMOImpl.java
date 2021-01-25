@@ -37,7 +37,7 @@ public class MenuServiceSMOImpl extends BaseComponentSMO implements IMenuService
         Assert.hasLength(pd.getUserId(), "用户还没有登录");
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.menu.info?userId=" + pd.getUserId(), HttpMethod.GET);
+                ServiceConstant.SERVICE_API_URL + "/api/query.menu.info?userId=" + pd.getUserId()+"&groupType=P_WEB", HttpMethod.GET);
         return responseEntity;
     }
 

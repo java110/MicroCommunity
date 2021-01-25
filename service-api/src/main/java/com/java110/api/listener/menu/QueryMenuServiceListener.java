@@ -3,16 +3,20 @@ package com.java110.api.listener.menu;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.DataFlowFactory;
+import com.java110.entity.center.AppService;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.DataFlowFactory;
-import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
@@ -49,13 +53,15 @@ public class QueryMenuServiceListener extends AbstractServiceApiDataFlowListener
         //get 方式下 请求参数会转化到header 中
         Map<String, String> requestHeaders = dataFlowContext.getRequestHeaders();
         Assert.hasKey(requestHeaders, "userId", "请求信息中未包含userId信息");
+        Assert.hasKey(requestHeaders, "groupType", "请求信息中未包含组类型");
 
         String userId = requestHeaders.get("userId");
+        String groupType = requestHeaders.get("groupType");
         //根据用户查询 商户类
         String domain = queryStoreTypeCd(dataFlowContext, userId);
         domain = StringUtil.isEmpty(domain) ? "-1" : domain;
         ResponseEntity responseEntity = null;
-        String requestUrl = service.getUrl() + "?userId=" + userId + "&domain=" + domain;
+        String requestUrl = service.getUrl() + "?userId=" + userId + "&domain=" + domain+"&groupType="+groupType;
         dataFlowContext.getRequestHeaders().put("REQUEST_URL", requestUrl);
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(), ServiceCodeConstant.SERVICE_CODE_QUERY_MENU_INFO);
