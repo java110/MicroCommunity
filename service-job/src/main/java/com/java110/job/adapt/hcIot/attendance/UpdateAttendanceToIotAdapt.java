@@ -18,18 +18,19 @@ package com.java110.job.adapt.hcIot.attendance;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.attendanceClasses.AttendanceClassesPo;
-import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,8 +40,8 @@ import java.util.List;
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "deleteAttendanceToIotAdapt")
-public class DeleteAttendanceToIotAdapt extends DatabusAdaptImpl {
+@Component(value = "updateAttendanceToIotAdapt")
+public class UpdateAttendanceToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcOwnerAttendanceAsynImpl;
@@ -94,15 +95,21 @@ public class DeleteAttendanceToIotAdapt extends DatabusAdaptImpl {
         AttendanceClassesDto ownerAttendanceDto = new AttendanceClassesDto();
         ownerAttendanceDto.setClassesId(ownerAttendancePo.getClassesId());
         ownerAttendanceDto.setStoreId(ownerAttendancePo.getStoreId());
-        ownerAttendanceDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
         List<AttendanceClassesDto> attendanceDtos = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassess(ownerAttendanceDto);
 
         Assert.listOnlyOne(attendanceDtos, "未找到考勤班组");
 
         JSONObject postParameters = new JSONObject();
-        postParameters.put("extClassesId", attendanceDtos.get(0).getClassesId());
         postParameters.put("classesName", attendanceDtos.get(0).getClassesName());
+        postParameters.put("timeOffset", attendanceDtos.get(0).getTimeOffset());
+        postParameters.put("clockCount", attendanceDtos.get(0).getClockCount());
+        postParameters.put("clockType", attendanceDtos.get(0).getClockType());
+        postParameters.put("clockTypeValue", attendanceDtos.get(0).getClockTypeValue());
+        postParameters.put("lateOffset", attendanceDtos.get(0).getLateOffset());
+        postParameters.put("leaveOffset", attendanceDtos.get(0).getLeaveOffset());
+        postParameters.put("extClassesId", attendanceDtos.get(0).getClassesId());
         postParameters.put("extCommunityId", "-1");
-        hcOwnerAttendanceAsynImpl.deleteAttendance(postParameters);
+        postParameters.put("attrs", JSONArray.parseArray(JSONArray.toJSONString(attendanceDtos.get(0).getAttrs())));
+        hcOwnerAttendanceAsynImpl.updateAttendance(postParameters);
     }
 }
