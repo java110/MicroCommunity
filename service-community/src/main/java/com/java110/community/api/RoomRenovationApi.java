@@ -11,7 +11,11 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -46,10 +50,11 @@ public class RoomRenovationApi {
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
         Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
-        Assert.hasKeyAndValue(reqJson, "isViolation", "请求报文中未包含isViolation");
-
+        //Assert.hasKeyAndValue(reqJson, "isViolation", "请求报文中未包含isViolation");
 
         RoomRenovationPo roomRenovationPo = BeanConvertUtil.covertBean(reqJson, RoomRenovationPo.class);
+        roomRenovationPo.setState("1000");
+        roomRenovationPo.setIsViolation("N");
         return saveRoomRenovationBMOImpl.save(roomRenovationPo);
     }
 
