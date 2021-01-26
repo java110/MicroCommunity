@@ -75,7 +75,7 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
         repairTypeUserDto.setStaffId(reqJson.getString("userId"));
         int count = repairTypeUserInnerServiceSMOImpl.queryRepairTypeUsersCount(repairTypeUserDto);
         if (count < 1) {
-            throw new IllegalArgumentException("您没有权限强该类型报修单");
+            throw new IllegalArgumentException("您没有权限抢该类型报修单");
         }
 
     }

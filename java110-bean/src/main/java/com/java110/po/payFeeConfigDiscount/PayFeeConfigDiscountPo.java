@@ -13,39 +13,51 @@ public class PayFeeConfigDiscountPo implements Serializable {
     private String startTime;
     private String endTime;
     private String payMaxEndTime;
+
     public String getConfigDiscountId() {
-            return configDiscountId;
-        }
+        return configDiscountId;
+    }
+
     public void setConfigDiscountId(String configDiscountId) {
-            this.configDiscountId = configDiscountId;
-        }
+        this.configDiscountId = configDiscountId;
+    }
+
     public String getConfigId() {
-            return configId;
-        }
+        return configId;
+    }
+
     public void setConfigId(String configId) {
-            this.configId = configId;
-        }
+        this.configId = configId;
+    }
+
     public String getStatusCd() {
-            return statusCd;
-        }
+        return statusCd;
+    }
+
     public void setStatusCd(String statusCd) {
-            this.statusCd = statusCd;
-        }
+        this.statusCd = statusCd;
+    }
+
     public String getDiscountId() {
-            return discountId;
-        }
+        return discountId;
+    }
+
     public void setDiscountId(String discountId) {
-            this.discountId = discountId;
-        }
+        this.discountId = discountId;
+    }
+
     public String getCommunityId() {
-            return communityId;
-        }
+        return communityId;
+    }
+
     public void setCommunityId(String communityId) {
-            this.communityId = communityId;
-        }
+        this.communityId = communityId;
+    }
+
     public String getStartTime() {
         return startTime;
     }
+
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }

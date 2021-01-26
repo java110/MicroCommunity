@@ -150,7 +150,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
             discountPrice = discountPrice.add(new BigDecimal(computeDiscountDto.getDiscountPrice()));
         }
-        paramObj.put("discountPrice", discountPrice.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+        paramObj.put("discountPrice", discountPrice);
         paramObj.put("computeDiscountDtos", computeDiscountDtos);
     }
 

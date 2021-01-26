@@ -108,8 +108,8 @@
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
         </if>
-        <if test="relId !=null and relId != ''">
-            and t.rel_id= #{relId}
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

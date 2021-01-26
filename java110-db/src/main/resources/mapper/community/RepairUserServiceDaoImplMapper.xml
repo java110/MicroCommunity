@@ -93,7 +93,7 @@
         t.b_id bId,t.staff_id,t.staff_id staffId,t.staff_name,t.staff_name staffName,
         t.pre_staff_id,t.pre_staff_id preStaffId,t.pre_staff_name,t.pre_staff_name preStaffName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,d.name stateName,
-        t.repair_event,t.repair_event repairEvent, t.pre_ru_id,t.pre_ru_id preRuId
+        t.repair_event,t.repair_event repairEvent, t.pre_ru_id,t.pre_ru_id preRuId,t.create_time createTime
         from r_repair_user t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_user' and d.table_columns = 'state'
         where 1 =1
@@ -118,7 +118,6 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-
         <if test="states !=null ">
             and t.state in
             <foreach collection="states" item="item" open="(" close=")" separator=",">
@@ -147,7 +146,6 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 
