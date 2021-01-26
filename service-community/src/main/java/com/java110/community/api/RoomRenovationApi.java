@@ -55,6 +55,7 @@ public class RoomRenovationApi {
         RoomRenovationPo roomRenovationPo = BeanConvertUtil.covertBean(reqJson, RoomRenovationPo.class);
         roomRenovationPo.setState("1000");
         roomRenovationPo.setIsViolation("N");
+
         return saveRoomRenovationBMOImpl.save(roomRenovationPo);
     }
 
