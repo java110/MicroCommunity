@@ -15,7 +15,6 @@
  */
 package com.java110.front;
 
-import com.java110.core.smo.impl.ComputeFeeSMOImpl;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,20 +44,21 @@ import java.nio.charset.Charset;
  * @auther com.java110.wuxw
  * @mail 928255095@qq.com
  * @date 2016年8月6日
- * @tag
- *
- * , excludeFilters =
- *         {
- *                 @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.java110.core.smo.*")
- *         }
+ * @tag , excludeFilters =
+ * {
+ * @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.java110.core.smo.*")
+ * }
  */
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.java110.service.configuration",
+@ComponentScan(basePackages = {"com.java110.service.configuration",
         "com.java110.service.init",
         "com.java110.front",
         "com.java110.core",
         "com.java110.config.properties.code",
-        "com.java110.report"})
+        "com.java110.report"}, excludeFilters =
+        {
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.java110.core.smo.*")
+        })
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})

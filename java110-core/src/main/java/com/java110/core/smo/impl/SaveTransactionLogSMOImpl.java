@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaveTransactionLogSMOImpl implements ISaveTransactionLogSMO {
 
-    @Autowired
+    @Autowired(required = false)
     private ITransactionLogInnerServiceSMO transactionLogInnerServiceSMOImpl;
 
     @Override
