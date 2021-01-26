@@ -1,4 +1,4 @@
-package com.java110.api.smo;
+package com.java110.core.smo;
 
 import com.java110.po.transactionLog.TransactionLogPo;
 

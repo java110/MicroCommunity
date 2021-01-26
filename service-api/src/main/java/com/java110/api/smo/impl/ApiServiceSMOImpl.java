@@ -3,7 +3,7 @@ package com.java110.api.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
-import com.java110.api.smo.ISaveTransactionLogSMO;
+import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;

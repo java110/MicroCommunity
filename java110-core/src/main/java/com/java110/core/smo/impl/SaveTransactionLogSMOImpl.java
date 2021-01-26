@@ -1,6 +1,6 @@
-package com.java110.api.smo.impl;
+package com.java110.core.smo.impl;
 
-import com.java110.api.smo.ISaveTransactionLogSMO;
+import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.intf.common.ITransactionLogInnerServiceSMO;
 import com.java110.po.transactionLog.TransactionLogPo;
 import org.springframework.beans.factory.annotation.Autowired;
