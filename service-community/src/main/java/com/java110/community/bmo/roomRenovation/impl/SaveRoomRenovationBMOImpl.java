@@ -25,7 +25,7 @@ public class SaveRoomRenovationBMOImpl implements ISaveRoomRenovationBMO {
     @Java110Transactional
     public ResponseEntity<String> save(RoomRenovationPo roomRenovationPo) {
 
-        roomRenovationPo.setRId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rId));
+        roomRenovationPo.setrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rId));
         int flag = roomRenovationInnerServiceSMOImpl.saveRoomRenovation(roomRenovationPo);
 
         if (flag > 0) {
