@@ -1,6 +1,5 @@
 package com.java110.fee.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
@@ -144,6 +143,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
      */
     public List<ComputeDiscountDto> computeDiscount(@RequestBody FeeDetailDto feeDetailDto) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
         List<ComputeDiscountDto> computeDiscountDtos = new ArrayList<>();
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(feeDetailDto.getFeeId());
@@ -156,6 +156,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         payFeeConfigDiscountDto.setRow(feeDetailDto.getRow());
         payFeeConfigDiscountDto.setPage(feeDetailDto.getPage());
         payFeeConfigDiscountDto.setCommunityId(feeDetailDto.getCommunityId());
+        payFeeConfigDiscountDto.setStatusCd("0");
         Date currentTime = new Date();
         payFeeConfigDiscountDto.setCurrentTime(currentTime);
         //根据费用查询折扣
@@ -164,8 +165,21 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         if (payFeeConfigDiscountDtos == null || payFeeConfigDiscountDtos.size() < 1) {
             return computeDiscountDtos;
         }
+        c.setTime(feeDetailDto.getStartTime());
+        double mon = Double.parseDouble(feeDetailDto.getCycles());
+        c.add(Calendar.MONTH, (int) mon);
+        //获取缴费结束时间
+        Date finishTime = c.getTime();
         for (PayFeeConfigDiscountDto tmpPayFeeConfigDiscountDto : payFeeConfigDiscountDtos) {
-            doCompute(tmpPayFeeConfigDiscountDto, Double.parseDouble(feeDetailDto.getCycles()), computeDiscountDtos, feeDetailDto.getFeeId());
+            //获取缴费最大截止时间
+            Date payMaxEndTime = tmpPayFeeConfigDiscountDto.getPayMaxEndTime();
+            if (payMaxEndTime == null) {
+                doCompute(tmpPayFeeConfigDiscountDto, Double.parseDouble(feeDetailDto.getCycles()), computeDiscountDtos, feeDetailDto.getFeeId());
+            } else if (payMaxEndTime.getTime() >= finishTime.getTime()) {
+                doCompute(tmpPayFeeConfigDiscountDto, Double.parseDouble(feeDetailDto.getCycles()), computeDiscountDtos, feeDetailDto.getFeeId());
+            } else {
+                continue;
+            }
         }
         if (!StringUtil.isEmpty(feeDetailDto.getPayerObjType()) && feeDetailDto.getPayerObjType().equals("3333")) {
             //根据房屋ID,去折扣申请表查询是否有折扣
@@ -179,7 +193,6 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             //开始时间
             applyRoomDiscountDto.setStartTime(simpleDateFormat.format(feeDetailDto.getStartTime()));
             //结束时间
-            Calendar c = Calendar.getInstance();
             c.setTime(feeDetailDto.getStartTime());
             double month = Double.parseDouble(feeDetailDto.getCycles());
             c.add(Calendar.MONTH, (int) month);

@@ -423,7 +423,14 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
                 BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                //获取支付方式
+                String primeRate = paramInJson.getString("primeRate");
+                //判断是否是线上支付
+                if (primeRate.equals("5") || primeRate.equals("6")) {
+                    feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount);
+                } else {
+                    feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
             } else if ("2002".equals(computingFormula)) { // 固定费用
                 //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));

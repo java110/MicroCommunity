@@ -22,12 +22,11 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public static final String REPAIR_EVENT_PAY_USER = "payUser";
 
-    public  static final String STATE_DOING = "10001";// 处理中
-    public  static final String STATE_CLOSE = "10002";// 结单
-    public  static final String STATE_BACK = "10003";// 退单
-    public  static final String STATE_TRANSFER = "10004";// 转单
-    public  static final String STATE_SUBMIT = "10005";// 提交
-
+    public static final String STATE_DOING = "10001";// 处理中
+    public static final String STATE_CLOSE = "10002";// 结单
+    public static final String STATE_BACK = "10003";// 退单
+    public static final String STATE_TRANSFER = "10004";// 转单
+    public static final String STATE_SUBMIT = "10005";// 提交
 
 
     private String context;
@@ -40,6 +39,7 @@ public class RepairUserDto extends PageDto implements Serializable {
     private String communityId;
     private String userId;
     private String userName;
+    private String bId;
 
     private String staffId;
     private String staffName;
@@ -223,5 +223,12 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setPreRuId(String preRuId) {
         this.preRuId = preRuId;
+    }
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

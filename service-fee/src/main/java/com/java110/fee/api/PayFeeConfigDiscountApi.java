@@ -9,6 +9,7 @@ import com.java110.fee.bmo.payFeeConfigDiscount.IUpdatePayFeeConfigDiscountBMO;
 import com.java110.po.payFeeConfigDiscount.PayFeeConfigDiscountPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +46,11 @@ public class PayFeeConfigDiscountApi {
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
 
-
         PayFeeConfigDiscountPo payFeeConfigDiscountPo = BeanConvertUtil.covertBean(reqJson, PayFeeConfigDiscountPo.class);
+        String paymaxEndTime = reqJson.getString("payMaxEndTime");
+        if(StringUtil.isEmpty(paymaxEndTime)){
+            payFeeConfigDiscountPo.setPayMaxEndTime(null);
+        }
         return savePayFeeConfigDiscountBMOImpl.save(payFeeConfigDiscountPo);
     }
 
