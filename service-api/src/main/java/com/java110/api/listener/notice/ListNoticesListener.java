@@ -10,7 +10,11 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.notice.NoticeDto;
 import com.java110.dto.unit.FloorAndUnitDto;
-import com.java110.intf.community.*;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IFloorInnerServiceSMO;
+import com.java110.intf.community.INoticeInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.notice.ApiNoticeDataVo;
@@ -105,6 +109,7 @@ public class ListNoticesListener extends AbstractServiceApiListener {
 
     private void refreshNotice(List<ApiNoticeDataVo> notices) {
 
+        refreshWechats(notices);
         //批量处理 小区
         refreshCommunitys(notices);
 
@@ -118,6 +123,21 @@ public class ListNoticesListener extends AbstractServiceApiListener {
         refreshRooms(notices);
 
 
+    }
+
+    /**
+     * 获取批量小区
+     *
+     * @param notices 设备信息
+     * @return 批量userIds 信息
+     */
+    private void refreshWechats(List<ApiNoticeDataVo> notices) {
+
+        for (ApiNoticeDataVo noticeDto : notices) {
+            if (NoticeDto.OBJ_TYPE_ALL.equals(noticeDto.getObjType())) {
+                noticeDto.setObjName("关注用户");
+            }
+        }
     }
 
     /**
