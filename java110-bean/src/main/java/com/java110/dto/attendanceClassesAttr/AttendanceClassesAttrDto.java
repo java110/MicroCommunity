@@ -1,6 +1,7 @@
 package com.java110.dto.attendanceClassesAttr;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,12 @@ import java.util.Date;
 public class AttendanceClassesAttrDto extends PageDto implements Serializable {
 
     private String classesId;
-private String attrId;
-private String specCd;
-private String storeId;
-private String value;
+    private String[] classesIds;
+    private String attrId;
+    private String specCd;
+    private String name;
+    private String storeId;
+    private String value;
 
 
     private Date createTime;
@@ -29,31 +32,40 @@ private String value;
     public String getClassesId() {
         return classesId;
     }
-public void setClassesId(String classesId) {
+
+    public void setClassesId(String classesId) {
         this.classesId = classesId;
     }
-public String getAttrId() {
+
+    public String getAttrId() {
         return attrId;
     }
-public void setAttrId(String attrId) {
+
+    public void setAttrId(String attrId) {
         this.attrId = attrId;
     }
-public String getSpecCd() {
+
+    public String getSpecCd() {
         return specCd;
     }
-public void setSpecCd(String specCd) {
+
+    public void setSpecCd(String specCd) {
         this.specCd = specCd;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -72,5 +84,21 @@ public void setValue(String value) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getClassesIds() {
+        return classesIds;
+    }
+
+    public void setClassesIds(String[] classesIds) {
+        this.classesIds = classesIds;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

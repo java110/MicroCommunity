@@ -170,7 +170,7 @@ public class WechatGatewayController extends BaseController {
             IPageData pd = PageData.newInstance().builder("-1", "", "", paramIn.toJSONString(),
                     "", "", "", "",
                     java110AppId);
-            responseEntity = wechatGatewaySMOImpl.gateway(pd);
+            responseEntity = wechatGatewaySMOImpl.gateway(pd,wId);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block

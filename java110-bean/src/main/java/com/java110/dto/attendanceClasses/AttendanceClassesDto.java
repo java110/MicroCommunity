@@ -1,8 +1,11 @@
 package com.java110.dto.attendanceClasses;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.attendanceClassesAttr.AttendanceClassesAttrDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -14,17 +17,21 @@ import java.util.Date;
  **/
 public class AttendanceClassesDto extends PageDto implements Serializable {
 
+    public static final String CLASSES_OBJ_TYPE_PARTMENT = "1003";
+
     private String timeOffset;
-private String clockCount;
-private String classesObjType;
-private String storeId;
-private String clockType;
-private String classesObjId;
-private String classesName;
-private String classesId;
-private String leaveOffset;
-private String lateOffset;
-private String clockTypeValue;
+    private String clockCount;
+    private String classesObjType;
+    private String storeId;
+    private String clockType;
+    private String classesObjId;
+    private String classesName;
+    private String classesId;
+    private String leaveOffset;
+    private String lateOffset;
+    private String clockTypeValue;
+    private String classesObjName;
+    private List<AttendanceClassesAttrDto> attrs;
 
 
     private Date createTime;
@@ -35,67 +42,88 @@ private String clockTypeValue;
     public String getTimeOffset() {
         return timeOffset;
     }
-public void setTimeOffset(String timeOffset) {
+
+    public void setTimeOffset(String timeOffset) {
         this.timeOffset = timeOffset;
     }
-public String getClockCount() {
+
+    public String getClockCount() {
         return clockCount;
     }
-public void setClockCount(String clockCount) {
+
+    public void setClockCount(String clockCount) {
         this.clockCount = clockCount;
     }
-public String getClassesObjType() {
+
+    public String getClassesObjType() {
         return classesObjType;
     }
-public void setClassesObjType(String classesObjType) {
+
+    public void setClassesObjType(String classesObjType) {
         this.classesObjType = classesObjType;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getClockType() {
+
+    public String getClockType() {
         return clockType;
     }
-public void setClockType(String clockType) {
+
+    public void setClockType(String clockType) {
         this.clockType = clockType;
     }
-public String getClassesObjId() {
+
+    public String getClassesObjId() {
         return classesObjId;
     }
-public void setClassesObjId(String classesObjId) {
+
+    public void setClassesObjId(String classesObjId) {
         this.classesObjId = classesObjId;
     }
-public String getClassesName() {
+
+    public String getClassesName() {
         return classesName;
     }
-public void setClassesName(String classesName) {
+
+    public void setClassesName(String classesName) {
         this.classesName = classesName;
     }
-public String getClassesId() {
+
+    public String getClassesId() {
         return classesId;
     }
-public void setClassesId(String classesId) {
+
+    public void setClassesId(String classesId) {
         this.classesId = classesId;
     }
-public String getLeaveOffset() {
+
+    public String getLeaveOffset() {
         return leaveOffset;
     }
-public void setLeaveOffset(String leaveOffset) {
+
+    public void setLeaveOffset(String leaveOffset) {
         this.leaveOffset = leaveOffset;
     }
-public String getLateOffset() {
+
+    public String getLateOffset() {
         return lateOffset;
     }
-public void setLateOffset(String lateOffset) {
+
+    public void setLateOffset(String lateOffset) {
         this.lateOffset = lateOffset;
     }
-public String getClockTypeValue() {
+
+    public String getClockTypeValue() {
         return clockTypeValue;
     }
-public void setClockTypeValue(String clockTypeValue) {
+
+    public void setClockTypeValue(String clockTypeValue) {
         this.clockTypeValue = clockTypeValue;
     }
 
@@ -114,5 +142,21 @@ public void setClockTypeValue(String clockTypeValue) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getClassesObjName() {
+        return classesObjName;
+    }
+
+    public void setClassesObjName(String classesObjName) {
+        this.classesObjName = classesObjName;
+    }
+
+    public List<AttendanceClassesAttrDto> getAttrs() {
+        return attrs;
+    }
+
+    public void setAttrs(List<AttendanceClassesAttrDto> attrs) {
+        this.attrs = attrs;
     }
 }

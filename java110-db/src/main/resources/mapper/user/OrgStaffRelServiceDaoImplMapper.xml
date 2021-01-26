@@ -76,9 +76,12 @@
     <!-- 查询组织员工关系信息 add by wuxw 2018-07-03 -->
     <select id="getOrgStaffRelInfo" parameterType="Map" resultType="Map">
         select t.rel_id,t.rel_id relId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id
-        bId,t.org_id,t.org_id orgId,t.staff_id,t.staff_id staffId,t.rel_cd,t.rel_cd relCd,uo.parent_org_id parentOrgId
-        from u_org_staff_rel t,u_org uo
+        bId,t.org_id,t.org_id orgId,t.staff_id,t.staff_id staffId,t.rel_cd,t.rel_cd relCd,uo.parent_org_id parentOrgId,
+        uu.name staffName
+        from u_org_staff_rel t,u_org uo,u_user uu
         where t.org_id = uo.org_id
+        and t.staff_id = uu.user_id
+        and uu.status_cd = '0'
         and uo.status_cd = '0'
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}

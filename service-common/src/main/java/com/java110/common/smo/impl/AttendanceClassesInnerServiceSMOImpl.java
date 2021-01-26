@@ -5,7 +5,9 @@ import com.java110.common.dao.IAttendanceClassesServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
+import com.java110.dto.attendanceClassesAttr.AttendanceClassesAttrDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IAttendanceClassesAttrInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class AttendanceClassesInnerServiceSMOImpl extends BaseServiceSMO impleme
     @Autowired
     private IAttendanceClassesServiceDao attendanceClassesServiceDaoImpl;
 
+    @Autowired
+    private IAttendanceClassesAttrInnerServiceSMO attendanceClassesAttrInnerServiceSMOImpl;
+
 
     @Override
     public List<AttendanceClassesDto> queryAttendanceClassess(@RequestBody AttendanceClassesDto attendanceClassesDto) {
@@ -43,7 +48,35 @@ public class AttendanceClassesInnerServiceSMOImpl extends BaseServiceSMO impleme
 
         List<AttendanceClassesDto> attendanceClassess = BeanConvertUtil.covertBeanList(attendanceClassesServiceDaoImpl.getAttendanceClassesInfo(BeanConvertUtil.beanCovertMap(attendanceClassesDto)), AttendanceClassesDto.class);
 
+        refreshAttrs(attendanceClassess);
         return attendanceClassess;
+    }
+
+    private void refreshAttrs(List<AttendanceClassesDto> attendanceClassess) {
+        if (attendanceClassess == null || attendanceClassess.size() < 1 || attendanceClassess.size() > 20) {
+            return;
+        }
+
+        List<String> classesIds = new ArrayList<>();
+        for (AttendanceClassesDto attendanceClassesDto : attendanceClassess) {
+            classesIds.add(attendanceClassesDto.getClassesId());
+        }
+
+
+        AttendanceClassesAttrDto attendanceClassesAttrDto = new AttendanceClassesAttrDto();
+        attendanceClassesAttrDto.setClassesIds(classesIds.toArray(new String[classesIds.size()]));
+        attendanceClassesAttrDto.setStoreId(attendanceClassess.get(0).getStoreId());
+        List<AttendanceClassesAttrDto> attendanceClassesAttrDtos = attendanceClassesAttrInnerServiceSMOImpl.queryAttendanceClassesAttrs(attendanceClassesAttrDto);
+
+        List<AttendanceClassesAttrDto> tmpAttendanceClassesAttrDto = null;
+        for (AttendanceClassesDto attendanceClassesDto : attendanceClassess) {
+            tmpAttendanceClassesAttrDto = new ArrayList<>();
+            for (AttendanceClassesAttrDto attendanceClassesAttrDto1 : attendanceClassesAttrDtos) {
+                tmpAttendanceClassesAttrDto.add(attendanceClassesAttrDto1);
+            }
+            attendanceClassesDto.setAttrs(tmpAttendanceClassesAttrDto);
+        }
+
     }
 
     /**

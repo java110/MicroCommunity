@@ -1,7 +1,9 @@
 package com.java110.api.listener.attendanceClasses;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.attendanceClasses.IAttendanceClassesBMO;
+import com.java110.api.bmo.attendanceClassesAttr.IAttendanceClassesAttrBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -20,6 +22,9 @@ public class SaveAttendanceClassesListener extends AbstractServiceApiPlusListene
 
     @Autowired
     private IAttendanceClassesBMO attendanceClassesBMOImpl;
+
+    @Autowired
+    private IAttendanceClassesAttrBMO attendanceClassesAttrBMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -40,6 +45,31 @@ public class SaveAttendanceClassesListener extends AbstractServiceApiPlusListene
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         attendanceClassesBMOImpl.addAttendanceClasses(reqJson, context);
+
+        //处理房屋属性
+        dealAttr(reqJson, context);
+    }
+
+    private void dealAttr(JSONObject reqJson, DataFlowContext context) {
+
+        if (!reqJson.containsKey("attrs")) {
+            return;
+        }
+
+        JSONArray attrs = reqJson.getJSONArray("attrs");
+        if (attrs == null || attrs.size() < 1) {
+            return;
+        }
+
+
+        JSONObject attr = null;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = attrs.getJSONObject(attrIndex);
+            attr.put("classesId", reqJson.getString("classesId"));
+            attr.put("storeId", reqJson.getString("storeId"));
+            attendanceClassesAttrBMOImpl.addAttendanceClassesAttr(attr, context);
+        }
+
     }
 
     @Override
