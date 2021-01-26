@@ -1,32 +1,59 @@
 {
   "autoMove": true,
-  "id": "attrId",
-  "name": "attendanceClassesAttr",
-  "desc": "考勤班组属性",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "common",
-  "tableName": "contract_attr",
+  "id": "rId",
+  "name": "roomRenovation",
+  "desc": "装修申请",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "tableName": "room_renovation",
   "param": {
-    "storeId": "store_id",
-    "contractId": "contract_id",
-    "attrId": "attr_id",
-    "specCd": "spec_cd",
-    "value": "value",
-    "statusCd": "status_cd"
+    "rId": "r_id",
+    "roomId": "room_id",
+    "roomName": "room_name",
+    "communityId": "community_id",
+    "statusCd": "status_cd",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "personName": "person_name",
+    "personTel": "person_tel",
+    "state": "state",
+    "isViolation": "is_violation",
+    "violationDesc": "violation_desc",
+    "remark": "remark"
   },
   "required": [
     {
-      "code": "contractId",
-      "msg": "合同ID不能为空"
+      "code": "roomId",
+      "msg": "房屋不能为空"
     },
     {
-      "code": "storeId",
-      "msg": "商户ID不能为空"
+      "code": "roomName",
+      "msg": "房屋不能为空"
     },
     {
-      "code": "specCd",
-      "msg": "用户规格不能为空"
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "startTime",
+      "msg": "装修时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
+    },
+    {
+      "code": "personName",
+      "msg": "联系人不能为空"
+    },
+    {
+      "code": "personTel",
+      "msg": "联系电话不能为空"
+    },
+    {
+      "code": "isViolation",
+      "msg": "是否违规不能为空"
     }
   ]
 }

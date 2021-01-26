@@ -179,6 +179,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_ardId = "14";
     public static final String CODE_PREFIX_applyType = "15";
     public static final String CODE_PREFIX_classesId = "16";
+    public static final String CODE_PREFIX_rId = "17";
 
 
     /**
