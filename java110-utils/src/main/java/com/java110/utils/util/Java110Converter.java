@@ -102,6 +102,15 @@ public class Java110Converter implements Converter {
             return String.valueOf(value).split(",");
         }
 
+        //1.0 String 转 Date
+        if (value instanceof String && target == boolean.class) {
+            String bl = (String) value;
+            if ("true".equals(bl)) {
+                return true;
+            }
+            return false;
+        }
+
         return value;
     }
 }
