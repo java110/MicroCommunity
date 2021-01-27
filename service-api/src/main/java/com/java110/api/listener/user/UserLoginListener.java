@@ -6,8 +6,10 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.dto.msg.SmsDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.userAttr.UserAttrPo;
 import com.java110.utils.cache.CommonCache;
@@ -42,6 +44,9 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
 
 
     @Override
@@ -83,9 +88,11 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
             }
             //验证码登录
             if (reqJson.containsKey("loginByPhone") && reqJson.getBoolean("loginByPhone")) {
-                String code = CommonCache.getValue(reqJson.getString("userName") + "_validateTel");
-
-                if (!reqJson.getString("password").equals(code)) {
+                SmsDto smsDto = new SmsDto();
+                smsDto.setTel(reqJson.getString("userName"));
+                smsDto.setCode(reqJson.getString("password"));
+                smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
+                if (!smsDto.isSuccess()) {
                     throw new SMOException("验证码错误");
                 }
 
