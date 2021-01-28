@@ -119,6 +119,7 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
             postParameters.put("classesName", tmpAttendanceClassesDto.getClassesName());
             postParameters.put("extClassesId", tmpAttendanceClassesDto.getClassesId());
             postParameters.put("extStaffId", orgStaffRelDtos.get(0).getStaffId());
+            postParameters.put("deleteStaff", "1");
             postParameters.put("extCommunityId", "-1");
             hcStoreUserAsynImpl.deleteAttendanceStaff(postParameters);
         }
