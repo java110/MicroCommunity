@@ -81,8 +81,10 @@
         from u_org_staff_rel t,u_org uo,u_user uu
         where t.org_id = uo.org_id
         and t.staff_id = uu.user_id
-        and uu.status_cd = '0'
-        and uo.status_cd = '0'
+        <if test="statusCd ==null or relId != '1'">
+            and uu.status_cd = '0'
+            and uo.status_cd = '0'
+        </if>
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
         </if>
