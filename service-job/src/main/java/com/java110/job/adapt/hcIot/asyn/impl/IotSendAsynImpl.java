@@ -1048,6 +1048,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void addAttendance(JSONObject postParameters, List<JSONObject> staffs) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_ADD_ATTENDANCE_CLASSES,
@@ -1109,6 +1110,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void addAttendanceStaff(JSONObject postParameters, List<JSONObject> staffs) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_ADD_ATTENDANCE_CLASSES,
@@ -1160,6 +1162,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
 
     @Override
+    @Async
     public void deleteAttendanceStaff(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_DELETE_ATTENDANCE_CLASSES,
@@ -1208,6 +1211,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void updateAttendance(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_UPDATE_ATTENDANCE_CLASSES,
@@ -1256,6 +1260,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    @Async
     public void deleteAttendance(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_DELETE_ATTENDANCE_CLASSES,

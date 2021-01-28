@@ -116,7 +116,7 @@ public class AddStaffToIotAdapt extends DatabusAdaptImpl {
             storeUserObj = new JSONObject();
             storeUserObj.put("extClassesId", tmpAttendanceClassesDto.getClassesId());
             storeUserObj.put("extStaffId", orgStaffRelDtos.get(0).getStaffId());
-            storeUserObj.put("StaffName", orgStaffRelDtos.get(0).getStaffName());
+            storeUserObj.put("staffName", orgStaffRelDtos.get(0).getStaffName());
             storeUserObj.put("departmentId", orgStaffRelDtos.get(0).getDepartmentId());
             storeUserObj.put("departmentName", orgStaffRelDtos.get(0).getDepartmentName());
             storeUserObjs.add(storeUserObj);
