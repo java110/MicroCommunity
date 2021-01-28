@@ -98,6 +98,7 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
         OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
         orgStaffRelDto.setStaffId(storeUserPo.getUserId());
         orgStaffRelDto.setStoreId(storeUserPo.getStoreId());
+        orgStaffRelDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
         List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
 
         Assert.listOnlyOne(orgStaffRelDtos, "未包含员工信息");
