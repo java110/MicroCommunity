@@ -139,6 +139,13 @@ public interface IIotSendAsyn {
     void addAttendance(JSONObject postParameters, List<JSONObject> staffs);
 
     /**
+     * 考勤员工同步
+     * @param postParameters
+     * @param staffs
+     */
+    void addAttendanceStaff(JSONObject postParameters, List<JSONObject> staffs);
+
+    /**
      * 编辑考勤 同步
      * @param postParameters
      */
@@ -149,4 +156,6 @@ public interface IIotSendAsyn {
      * @param postParameters
      */
     void deleteAttendance(JSONObject postParameters);
+
+    void deleteAttendanceStaff(JSONObject postParameters);
 }
