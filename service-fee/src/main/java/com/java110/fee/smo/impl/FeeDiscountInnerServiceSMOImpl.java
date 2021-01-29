@@ -163,6 +163,14 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         List<PayFeeConfigDiscountDto> payFeeConfigDiscountDtos =
                 payFeeConfigDiscountInnerServiceSMOImpl.queryPayFeeConfigDiscounts(payFeeConfigDiscountDto);
         if (payFeeConfigDiscountDtos == null || payFeeConfigDiscountDtos.size() < 1) {
+            computeApplyRoomDiscount(feeDetailDto, simpleDateFormat, c, computeDiscountDtos);
+            //取出开关映射的值
+            String value = MappingCache.getValue(DOMAIN_COMMON, DISCOUNT_MODE);
+            List<ComputeDiscountDto> computeDiscountDtoList = new ArrayList<>();
+            for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+                computeDiscountDto.setValue(value);
+                computeDiscountDtoList.add(computeDiscountDto);
+            }
             return computeDiscountDtos;
         }
         c.setTime(feeDetailDto.getStartTime());
@@ -181,7 +189,19 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
                 continue;
             }
         }
-        if (!StringUtil.isEmpty(feeDetailDto.getPayerObjType()) && feeDetailDto.getPayerObjType().equals("3333")) {
+        computeApplyRoomDiscount(feeDetailDto, simpleDateFormat, c, computeDiscountDtos);
+        //取出开关映射的值
+        String value = MappingCache.getValue(DOMAIN_COMMON, DISCOUNT_MODE);
+        List<ComputeDiscountDto> computeDiscountDtoList = new ArrayList<>();
+        for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+            computeDiscountDto.setValue(value);
+            computeDiscountDtoList.add(computeDiscountDto);
+        }
+        return computeDiscountDtoList;
+    }
+
+    private void computeApplyRoomDiscount(@RequestBody FeeDetailDto feeDetailDto, SimpleDateFormat simpleDateFormat, Calendar c, List<ComputeDiscountDto> computeDiscountDtos) {
+        if (!StringUtil.isEmpty(feeDetailDto.getPayerObjType()) && FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDetailDto.getPayerObjType())) {
             //根据房屋ID,去折扣申请表查询是否有折扣
             ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
             //审核已通过
@@ -201,7 +221,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             //查询折扣申请表
             List<ApplyRoomDiscountDto> applyRoomDiscountDtos = applyRoomDiscountInnerServiceSMOImpl.queryApplyRoomDiscounts(applyRoomDiscountDto);
             //判断查询的折扣申请表是否有数据
-            if (applyRoomDiscountDtos.size() > 0) {
+            if (applyRoomDiscountDtos != null && applyRoomDiscountDtos.size() > 0) {
                 //获取优惠id
                 String discountId = applyRoomDiscountDtos.get(0).getDiscountId();
                 PayFeeConfigDiscountDto payFeeConfigDiscount = new PayFeeConfigDiscountDto();
@@ -210,14 +230,6 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
                 doCompute(payFeeConfigDiscount, Double.parseDouble(feeDetailDto.getCycles()), computeDiscountDtos, feeDetailDto.getFeeId());
             }
         }
-        //取出开关映射的值
-        String value = MappingCache.getValue(DOMAIN_COMMON, DISCOUNT_MODE);
-        List<ComputeDiscountDto> computeDiscountDtoList = new ArrayList<>();
-        for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
-            computeDiscountDto.setValue(value);
-            computeDiscountDtoList.add(computeDiscountDto);
-        }
-        return computeDiscountDtoList;
     }
 
     private void doCompute(PayFeeConfigDiscountDto tmpPayFeeConfigDiscountDto, double cycles, List<ComputeDiscountDto> computeDiscountDtos, String feeId) {
