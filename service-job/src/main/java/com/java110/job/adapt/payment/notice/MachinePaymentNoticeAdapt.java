@@ -46,6 +46,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,9 +163,9 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         //获取缴费用户楼栋单元房间号
         String payerObjName = computeFeeSMOImpl.getFeeObjName(feeDtos.get(0));
         //获得用户缴费开始时间
-        String startTime = payFeeDetailPo.getStartTime();
+        String startTime = DateUtil.dateTimeToDate(payFeeDetailPo.getStartTime());
         //获取用户缴费到期时间
-        String endTime = payFeeDetailPo.getEndTime();
+        String endTime = DateUtil.dateTimeToDate(payFeeDetailPo.getEndTime());
         //获取用户缴费金额
         String receivedAmount = payFeeDetailPo.getReceivedAmount();
         //获取社区名称
