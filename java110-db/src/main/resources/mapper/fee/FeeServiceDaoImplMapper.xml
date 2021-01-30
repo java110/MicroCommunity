@@ -190,6 +190,9 @@
         <if test="arrearsEndTime != null">
             and t.end_time &lt; #{arrearsEndTime}
         </if>
+        <if test="nowDate != null">
+            and t.end_time &gt; #{nowDate}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
             and pfc.community_id in (#{communityId},'9999')

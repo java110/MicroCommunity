@@ -81,6 +81,7 @@ public class RepairDto extends PageDto implements Serializable {
     private String returnVisitFlag;
     private String startRuId;
     private String preRuId;
+    private String ruId;
 
 
     public String getRepairName() {
@@ -330,5 +331,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getRuId() {
+        return ruId;
+    }
+
+    public void setRuId(String ruId) {
+        this.ruId = ruId;
     }
 }

@@ -478,7 +478,7 @@
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
         </if>
-        where 1 =1
+        where t.status_cd = '0'
         and t.city_code = ca.area_code
         and ca.status_cd = '0'
         <if test="address !=null and address != ''">
@@ -535,7 +535,6 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 

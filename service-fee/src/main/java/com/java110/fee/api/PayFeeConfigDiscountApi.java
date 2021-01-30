@@ -48,8 +48,9 @@ public class PayFeeConfigDiscountApi {
 
         PayFeeConfigDiscountPo payFeeConfigDiscountPo = BeanConvertUtil.covertBean(reqJson, PayFeeConfigDiscountPo.class);
         String paymaxEndTime = reqJson.getString("payMaxEndTime");
-        if(StringUtil.isEmpty(paymaxEndTime)){
-            payFeeConfigDiscountPo.setPayMaxEndTime(null);
+        if (StringUtil.isEmpty(paymaxEndTime)) {
+            //如果优惠最大时间为空，就默认为2037-12-31 00:00:00
+            payFeeConfigDiscountPo.setPayMaxEndTime("2037-12-31 00:00:00");
         }
         return savePayFeeConfigDiscountBMOImpl.save(payFeeConfigDiscountPo);
     }

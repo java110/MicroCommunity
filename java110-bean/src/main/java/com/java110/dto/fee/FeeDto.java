@@ -1,8 +1,6 @@
 package com.java110.dto.fee;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.RoomDto;
-import com.java110.dto.owner.OwnerCarDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -116,7 +114,11 @@ public class FeeDto extends PageDto implements Serializable {
 
     private List<FeeAttrDto> feeAttrDtos;
 
+    //当前时间
+    private Date nowDate;
 
+    //查询出的数量
+    private int count;
 
 
     public String getAmount() {
@@ -207,7 +209,6 @@ public class FeeDto extends PageDto implements Serializable {
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
-
 
     public Date getArrearsEndTime() {
         return arrearsEndTime;
@@ -553,5 +554,19 @@ public class FeeDto extends PageDto implements Serializable {
         this.ownerId = ownerId;
     }
 
+    public Date getNowDate() {
+        return nowDate;
+    }
 
+    public void setNowDate(Date nowDate) {
+        this.nowDate = nowDate;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

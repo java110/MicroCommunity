@@ -41,15 +41,14 @@ import java.util.List;
 @Java110Listener("repairDispatchListener")
 public class RepairDispatchListener extends AbstractServiceApiPlusListener {
 
-
     //派单
     public static final String ACTION_DISPATCH = "DISPATCH";
 
     //转单
     public static final String ACTION_TRANSFER = "TRANSFER";
+
     //退单
     public static final String ACTION_BACK = "BACK";
-
 
     private static Logger logger = LoggerFactory.getLogger(RepairDispatchListener.class);
 
@@ -98,13 +97,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
             case ACTION_BACK:
                 backRepair(context, reqJson);
                 break;
-
         }
-
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
-
-        context.setResponseEntity(responseEntity);
-
     }
 
     private void backRepair(DataFlowContext context, JSONObject reqJson) {
@@ -146,6 +139,10 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
                 super.delete(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
 
             }
+
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+
+            context.setResponseEntity(responseEntity);
         }
 
 
@@ -246,6 +243,9 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
         ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TRANSFER);
 
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+
+        context.setResponseEntity(responseEntity);
     }
 
     /**
@@ -255,43 +255,65 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
      * @param reqJson
      */
     private void dispacthRepair(DataFlowContext context, JSONObject reqJson) {
-        String userId = reqJson.getString("userId");
-        String userName = reqJson.getString("userName");
+        //获取报修id
+        String repairId = reqJson.getString("repairId");
+        RepairDto repairDto = new RepairDto();
+        repairDto.setRepairId(repairId);
+        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
+        if (repairDtos == null || repairDtos.size() < 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "数据错误！");
+            context.setResponseEntity(responseEntity);
+        } else {
+            //获取状态
+            String state = repairDtos.get(0).getState();
+            if (state.equals("1000")) {   //1000表示未派单
+                String userId = reqJson.getString("userId");
+                String userName = reqJson.getString("userName");
 
-        String ruId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId);
-        // 自己的单子状态修改为转单
-        RepairUserPo repairUserPo = new RepairUserPo();
-        repairUserPo.setRuId(ruId);
-        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setState(RepairUserDto.STATE_TRANSFER);
-        repairUserPo.setRepairId(reqJson.getString("repairId"));
-        repairUserPo.setStaffId(userId);
-        repairUserPo.setStaffName(userName);
-        freshPreStaff(reqJson, repairUserPo);
-        repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
-        repairUserPo.setContext(reqJson.getString("context"));
-        repairUserPo.setCommunityId(reqJson.getString("communityId"));
-        super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
-        //处理人信息
-        repairUserPo = new RepairUserPo();
-        repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.SECOND, 30);
-        repairUserPo.setStartTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setState(RepairUserDto.STATE_DOING);
-        repairUserPo.setRepairId(reqJson.getString("repairId"));
-        repairUserPo.setStaffId(reqJson.getString("staffId"));
-        repairUserPo.setStaffName(reqJson.getString("staffName"));
-        repairUserPo.setPreStaffId(userId);
-        repairUserPo.setPreStaffName(userName);
-        repairUserPo.setPreRuId(ruId);
-        repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
-        repairUserPo.setContext("");
-        repairUserPo.setCommunityId(reqJson.getString("communityId"));
-        super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
-        ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
+                String ruId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId);
+                // 自己的单子状态修改为转单
+                RepairUserPo repairUserPo = new RepairUserPo();
+                repairUserPo.setRuId(ruId);
+                repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setState(RepairUserDto.STATE_TRANSFER);
+                repairUserPo.setRepairId(reqJson.getString("repairId"));
+                repairUserPo.setStaffId(userId);
+                repairUserPo.setStaffName(userName);
+                freshPreStaff(reqJson, repairUserPo);
+                repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
+                repairUserPo.setContext(reqJson.getString("context"));
+                repairUserPo.setCommunityId(reqJson.getString("communityId"));
+                super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+                //处理人信息
+                repairUserPo = new RepairUserPo();
+                repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.SECOND, 30);
+                repairUserPo.setStartTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setState(RepairUserDto.STATE_DOING);
+                repairUserPo.setRepairId(reqJson.getString("repairId"));
+                repairUserPo.setStaffId(reqJson.getString("staffId"));
+                repairUserPo.setStaffName(reqJson.getString("staffName"));
+                repairUserPo.setPreStaffId(userId);
+                repairUserPo.setPreStaffName(userName);
+                repairUserPo.setPreRuId(ruId);
+                repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
+                repairUserPo.setContext("");
+                repairUserPo.setCommunityId(reqJson.getString("communityId"));
+                super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+                context.setResponseEntity(responseEntity);
+            } else if (state.equals("1100")) {   //1100表示接单
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "该订单处于接单状态，无法进行派单！");
+                context.setResponseEntity(responseEntity);
+            } else {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "状态异常！");
+                context.setResponseEntity(responseEntity);
+            }
+        }
     }
 
     /**
