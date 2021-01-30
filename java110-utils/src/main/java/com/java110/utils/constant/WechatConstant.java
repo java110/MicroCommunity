@@ -30,6 +30,8 @@ public class WechatConstant {
 
     public static final String OWE_FEE_PAGE = "OWE_FEE_PAGE";
 
+    public static final String OWE_CAR_FEE_PAGE = "OWE_CAR_FEE_PAGE";
+
 
     public static final String MSG_TYPE_TEXT = "text";
     public static final String MSG_TYPE_LOCATION = "location";

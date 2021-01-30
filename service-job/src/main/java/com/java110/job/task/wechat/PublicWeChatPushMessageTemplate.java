@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
@@ -150,13 +151,22 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
 
         String url = sendMsgUrl + accessToken;
-        String oweUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
+        String oweRoomUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
+        String oweCarUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
         Miniprogram miniprogram = null;
-        if (oweUrl.contains("@@")) {
+        if (oweRoomUrl.contains("@@")) {
             miniprogram = new Miniprogram();
-            miniprogram.setAppid(oweUrl.split("@@")[0]);
+            miniprogram.setAppid(oweRoomUrl.split("@@")[0]);
         }
+        //车辆费用
+        if (oweCarUrl.contains("@@")) {
+            miniprogram = new Miniprogram();
+            miniprogram.setAppid(oweCarUrl.split("@@")[0]);
+        }
+
+        String oweUrl = "";
         for (BillOweFeeDto fee : billOweFeeDtos) {
+            oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(fee.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
             for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
                 if (fee.getOwnerId().equals(appUserDto.getMemberId())) {
                     Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(fee.getFeeEndTime());
@@ -171,7 +181,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     /*data.setFirst(new Content("物业费缴费提醒"));*/
                     data.setFirst(new Content(fee.getFeeTypeName() + "提醒"));
                     data.setKeyword1(new Content(fee.getPayerObjName()));
-                    data.setKeyword2(new Content(DateUtil.dateTimeToDate(fee.getFeeEndTime()) + "-" + DateUtil.dateTimeToDate(fee.getDeadlineTime())));
+                    data.setKeyword2(new Content(DateUtil.dateTimeToDate(fee.getFeeEndTime()) + "至" + DateUtil.dateTimeToDate(fee.getDeadlineTime())));
                     data.setKeyword3(new Content(fee.getBillAmountOwed()));
                     data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
                     if (!StringUtil.isEmpty(oweUrl)) {

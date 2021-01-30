@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.acl.Owner;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -132,12 +133,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
         double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-        parkingSpaceDto.setPsId(feeDto.getPayerObjId());
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(feeDto.getCommunityId());
+        ownerCarDto.setCarId(feeDto.getPayerObjId());
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) { //数据有问题
             return;
         }
 
@@ -145,7 +146,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         double feePrice = getFeePrice(feeDto);
 
         feeDto.setFeePrice(feePrice);
-        double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(oweMonth));
         feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
