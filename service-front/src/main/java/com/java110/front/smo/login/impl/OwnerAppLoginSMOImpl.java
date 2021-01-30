@@ -67,11 +67,16 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         ResponseEntity<String> responseEntity;
 
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
+        boolean loginByPhone = false;
+        if (paramIn.containsKey("loginByPhone")) {
+            loginByPhone = paramIn.getBoolean("loginByPhone");
+        }
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("password")));
         UserDto userDto = new UserDto();
         userDto.setUserName(loginInfo.getString("username"));
         userDto.setPassword(loginInfo.getString("password"));
+        userDto.setLoginByPhone(loginByPhone);
         userDto = super.postForApi(pd, userDto, ServiceCodeConstant.SERVICE_CODE_USER_LOGIN, UserDto.class);
 
         if (userDto == null) {

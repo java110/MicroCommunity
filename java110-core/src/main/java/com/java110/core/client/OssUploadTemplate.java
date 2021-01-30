@@ -92,7 +92,7 @@ public class OssUploadTemplate {
             ossClient = OSSUtil.getOSSClient();
             fileName = UUID.randomUUID().toString() + "." + uploadFile.getOriginalFilename().substring(uploadFile.getOriginalFilename().lastIndexOf(".") + 1);
             is = uploadFile.getInputStream();
-            OSSUtil.uploadByInputStream(ossClient, is, "java110", ftpPath);
+            OSSUtil.uploadByInputStream(ossClient, is, ftpPath);
         } catch (Exception e) {
             // logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
@@ -119,7 +119,7 @@ public class OssUploadTemplate {
         ByteArrayInputStream fis = null;
         try {
             ossClient = OSSUtil.getOSSClient();
-            OSSUtil.getInputStreamByOSS(ossClient, "java110", remotePath + fileName);
+            OSSUtil.getInputStreamByOSS(ossClient, remotePath + fileName);
             byteOut = new ByteArrayOutputStream();
             byte[] buf = new byte[2048];
             int bufsize = 0;
@@ -185,7 +185,7 @@ public class OssUploadTemplate {
         ByteArrayInputStream fis = null;
         try {
             ossClient = OSSUtil.getOSSClient();
-            is = OSSUtil.getInputStreamByOSS(ossClient, "java110", remotePath + fileName);
+            is = OSSUtil.getInputStreamByOSS(ossClient,  remotePath + fileName);
             if (null == is) {
                 throw new FileNotFoundException(remotePath);
             }

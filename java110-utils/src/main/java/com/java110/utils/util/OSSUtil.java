@@ -21,6 +21,7 @@ public class OSSUtil {
     public static final String ENDPOINT = "endpoint";
     public static final String ACCESS_KEY_ID = "accessKeyId";
     public static final String ACCESS_KEY_SECRET = "accessKeySecret";
+    public static final String BUCKET_NAME = "bucketName";
 
     /**
      * @return OSSClient oss客户端
@@ -59,6 +60,22 @@ public class OSSUtil {
                 ossClient.shutdown();
             }
         }
+    }
+
+    /**
+     * @param ossClient   oss客户端
+     * @param inputStream 输入流
+     * @param objectName  上传文件目录和（包括文件名） 例如“test/a.jpg”
+     * @return void        返回类型
+     * @throws
+     * @Title: uploadByInputStream
+     * @Description: 通过输入流上传文件
+     */
+    public static void uploadByInputStream(OSSClient ossClient, InputStream inputStream,
+                                           String objectName) {
+
+        String bucketName = MappingCache.getValue(DOMAIN, BUCKET_NAME);
+        uploadByInputStream(ossClient, inputStream, bucketName, objectName);
     }
 
     /**
@@ -119,6 +136,21 @@ public class OSSUtil {
     public static void deleteFile(OSSClient ossClient, String bucketName, String key) {
         ossClient.deleteObject(bucketName, key);
     }
+
+    /**
+     * @param ossClient oss客户端
+     * @param key       文件路径和名称
+     * @return InputStream    文件输入流
+     * @throws
+     * @Title: getInputStreamByOSS
+     * @Description:根据key获取服务器上的文件的输入流
+     */
+    public static InputStream getInputStreamByOSS(OSSClient ossClient, String key) {
+        String bucketName = MappingCache.getValue(DOMAIN, BUCKET_NAME);
+        return getInputStreamByOSS(ossClient,bucketName,key);
+
+    }
+
 
     /**
      * @param ossClient  oss客户端

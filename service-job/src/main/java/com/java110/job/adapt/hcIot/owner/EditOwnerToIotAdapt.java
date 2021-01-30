@@ -21,11 +21,13 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.OwnerPo;
@@ -63,6 +65,9 @@ public class EditOwnerToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     /**
      * accessToken={access_token}
@@ -122,6 +127,12 @@ public class EditOwnerToIotAdapt extends DatabusAdaptImpl {
         //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
         List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
 
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(ownerPo.getMemberId());
+        ownerDto.setCommunityId(ownerPo.getCommunityId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+        Assert.listOnlyOne(ownerDtos,"业主不存在");
+
         //拿到小区ID
         String communityId = ownerPo.getCommunityId();
         //根据小区ID查询现有设备
@@ -152,6 +163,7 @@ public class EditOwnerToIotAdapt extends DatabusAdaptImpl {
             postParameters.put("machineCode", tmpMachineDto.getMachineCode());
             postParameters.put("extMachineId", tmpMachineDto.getMachineId());
             postParameters.put("extCommunityId", tmpMachineDto.getCommunityId());
+            postParameters.put("attrs",ownerDtos.get(0).getOwnerAttrDtos());
             hcMachineAsynImpl.sendUpdateOwner(postParameters);
         }
 

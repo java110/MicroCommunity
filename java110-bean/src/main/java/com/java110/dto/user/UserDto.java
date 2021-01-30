@@ -65,6 +65,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String belongCommunityId;
 
+    private boolean loginByPhone;
+
 
 
     public String getUserId() {
@@ -265,5 +267,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isLoginByPhone() {
+        return loginByPhone;
+    }
+
+    public void setLoginByPhone(boolean loginByPhone) {
+        this.loginByPhone = loginByPhone;
     }
 }

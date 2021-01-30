@@ -184,7 +184,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         String objType = noticeDto.getObjType();
 
         switch (objType) {
-            case NoticeDto.OBJ_TYPE_COMMUNITY:
+            case NoticeDto.OBJ_TYPE_ALL:
                 sendAllOwner(noticeDto, templateId, accessToken, weChatDto);
                 break;
             case NoticeDto.OBJ_TYPE_FLOOR:
@@ -196,6 +196,9 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             case NoticeDto.OBJ_TYPE_ROOM:
                 sendRoomOwner(noticeDto, templateId, accessToken, weChatDto);
                 break;
+            case NoticeDto.OBJ_TYPE_COMMUNITY:
+                sendCommunityOwner(noticeDto, templateId, accessToken, weChatDto);
+                break;
         }
 
         NoticeDto tmpNoticeDto = new NoticeDto();
@@ -203,6 +206,14 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         tmpNoticeDto.setState(NoticeDto.STATE_FINISH);
         noticeInnerServiceSMOImpl.updateNotice(tmpNoticeDto);
 
+    }
+
+    private void sendCommunityOwner(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
+        ownerAppUserDto.setCommunityId(noticeDto.getCommunityId());
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+        doSend(ownerAppUserDtos, noticeDto, templateId, accessToken, weChatDto);
     }
 
     private void sendFloorOwner(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {

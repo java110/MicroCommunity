@@ -23,6 +23,7 @@ public class NoticeDto extends PageDto implements Serializable {
     public static final String OBJ_TYPE_FLOOR = "002";//楼栋
     public static final String OBJ_TYPE_UNIT = "003";//单元
     public static final String OBJ_TYPE_ROOM = "004";//单元
+    public static final String OBJ_TYPE_ALL = "005";//单元
 
     public static final String NOTICE_TYPE_OWNER_WECHAT = "1003";//发送给业主微信
 

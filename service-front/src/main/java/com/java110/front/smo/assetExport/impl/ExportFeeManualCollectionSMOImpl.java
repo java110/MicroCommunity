@@ -197,6 +197,8 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         String[] feePrintRemarks = null;
         if (feePrint != null) {
             feePrintRemarks = feePrint.getString("content").toLowerCase().replace("</br>", "").split("\n");
+        }else{
+            feePrintRemarks = new String[]{""};
         }
         int defaultRowHeight = 280;
         //计算当前单子的高度

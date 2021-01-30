@@ -6,10 +6,13 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.AuthenticationFactory;
-import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.dto.msg.SmsDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.userAttr.UserAttrPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -41,6 +44,9 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
 
 
     @Override
@@ -80,7 +86,19 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
             } else {
                 userDto.setUserName(reqJson.getString("userName"));
             }
-            userDto.setPassword(AuthenticationFactory.passwdMd5(reqJson.getString("password")));
+            //验证码登录
+            if (reqJson.containsKey("loginByPhone") && reqJson.getBoolean("loginByPhone")) {
+                SmsDto smsDto = new SmsDto();
+                smsDto.setTel(reqJson.getString("userName"));
+                smsDto.setCode(reqJson.getString("password"));
+                smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
+                if (!smsDto.isSuccess()) {
+                    throw new SMOException("验证码错误");
+                }
+
+            } else {
+                userDto.setPassword(AuthenticationFactory.passwdMd5(reqJson.getString("password")));
+            }
             errorInfo = "用户名或密码错误";
         } else {
             userDto.setKey(reqJson.getString("key"));
@@ -91,7 +109,7 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
         if (userDtos == null || userDtos.size() < 1) {
-            throw new SMOException("登录失败，" + errorInfo);
+            throw new SMOException(errorInfo);
         }
 
         //表名登录成功

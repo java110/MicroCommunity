@@ -28,7 +28,7 @@ public class GeneratorApiListener extends BaseGenerator {
 
 
     private void genneratorPo(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/Po.java").getFile());
+        StringBuffer sb = readFile(this.getClass().getResource("/newTemplate/Po.txt").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
@@ -76,7 +76,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     private void genneratorISaveBmo(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/ISaveBMO.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/ISaveBMO.txt").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
@@ -98,7 +98,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     private void genneratorSaveBmoImpl(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/SaveBMOImpl.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/SaveBMOImpl.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("@@shareName@@", data.getShareName())
                 .replace("@@ShareName@@", toUpperCaseFirstOne(data.getShareName()));
@@ -123,7 +123,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     private void genneratorIUpdateBmo(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/IUpdateBMO.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/IUpdateBMO.txt").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
@@ -145,7 +145,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     private void genneratorUpdateBmoImpl(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/UpdateBMOImpl.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/UpdateBMOImpl.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("@@shareName@@", data.getShareName())
                 .replace("@@ShareName@@", toUpperCaseFirstOne(data.getShareName()));
@@ -169,7 +169,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     private void genneratorIDeleteBmo(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/IDeleteBMO.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/IDeleteBMO.txt").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
@@ -191,7 +191,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     private void genneratorDeleteBmoImpl(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/DeleteBMOImpl.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/DeleteBMOImpl.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("@@shareName@@", data.getShareName())
                 .replace("@@ShareName@@", toUpperCaseFirstOne(data.getShareName()));
@@ -215,7 +215,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     private void genneratorIGetBmo(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/IGetBMO.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/IGetBMO.txt").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
@@ -237,7 +237,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     private void genneratorGetBmoImpl(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/GetBMOImpl.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/GetBMOImpl.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("@@shareName@@", data.getShareName())
                 .replace("@@ShareName@@", toUpperCaseFirstOne(data.getShareName()));
@@ -256,7 +256,7 @@ public class GeneratorApiListener extends BaseGenerator {
     }
 
     private void genneratorApi(Data data) throws Exception {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/Api.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/newTemplate/Api.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("@@shareName@@", data.getShareName())
                 .replace("@@ShareName@@", toUpperCaseFirstOne(data.getShareName()));
