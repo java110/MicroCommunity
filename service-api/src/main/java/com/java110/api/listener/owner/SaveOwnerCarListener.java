@@ -6,9 +6,10 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -42,6 +43,9 @@ public class SaveOwnerCarListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_OWNER_CAR;
@@ -65,6 +69,7 @@ public class SaveOwnerCarListener extends AbstractServiceApiPlusListener {
      * {"flowComponent":"addCar","carNum":"青AGK916","carBrand":"传祺","carType":"9901","carColor":"白色","carRemark":"",
      * "startTime":"2020-08-29 14:55:04","endTime":"2021-08-29 14:55:04","carNumType":"H","index":2}
      * ]}
+     *
      * @param event   事件对象
      * @param reqJson 请求报文数据
      */
@@ -87,6 +92,16 @@ public class SaveOwnerCarListener extends AbstractServiceApiPlusListener {
         if (!"H".equals(reqJson.getString("carNumType"))
                 && !"S".equals(reqJson.getString("carNumType"))) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "请求报文中sellOrFire值错误 ，出售为S 出租为H");
+        }
+
+        //校验车牌号是否存在
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setCarNum(reqJson.getString("carNum"));
+        int count = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(ownerCarDto);
+
+        if (count > 0) {
+            throw new IllegalArgumentException("车辆已存在");
         }
     }
 
