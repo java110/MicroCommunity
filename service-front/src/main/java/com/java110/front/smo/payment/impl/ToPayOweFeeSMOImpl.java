@@ -80,9 +80,14 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
 
+        String payObjType = "3333";
+        if(paramIn.containsKey("payObjType")){
+            payObjType = paramIn.getString("payObjType");
+        }
+
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = ServiceConstant.SERVICE_API_URL + "/api/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&payObjId=" + paramIn.getString("roomId") + "&payObjType=3333";
+        String url = ServiceConstant.SERVICE_API_URL + "/api/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&payObjId=" + paramIn.getString("roomId") + "&payObjType="+payObjType;
         responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
