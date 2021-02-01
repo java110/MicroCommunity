@@ -1,6 +1,7 @@
 package com.java110.dto.attendanceClassesTaskDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,16 @@ import java.util.Date;
 public class AttendanceClassesTaskDetailDto extends PageDto implements Serializable {
 
     private String checkTime;
-private String detailId;
-private String specCd;
-private String remark;
-private String facePath;
-private String state;
-private String storeId;
-private String value;
-private String taskId;
+    private String detailId;
+    private String specCd;
+    private String remark;
+    private String facePath;
+    private String state;
+    private String storeId;
+    private String value;
+    private String taskId;
+
+    private String[] taskIds;
 
 
     private Date createTime;
@@ -33,55 +36,72 @@ private String taskId;
     public String getCheckTime() {
         return checkTime;
     }
-public void setCheckTime(String checkTime) {
+
+    public void setCheckTime(String checkTime) {
         this.checkTime = checkTime;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getSpecCd() {
+
+    public String getSpecCd() {
         return specCd;
     }
-public void setSpecCd(String specCd) {
+
+    public void setSpecCd(String specCd) {
         this.specCd = specCd;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getFacePath() {
+
+    public String getFacePath() {
         return facePath;
     }
-public void setFacePath(String facePath) {
+
+    public void setFacePath(String facePath) {
         this.facePath = facePath;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
-public String getTaskId() {
+
+    public String getTaskId() {
         return taskId;
     }
-public void setTaskId(String taskId) {
+
+    public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
 
@@ -100,5 +120,13 @@ public void setTaskId(String taskId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getTaskIds() {
+        return taskIds;
+    }
+
+    public void setTaskIds(String[] taskIds) {
+        this.taskIds = taskIds;
     }
 }

@@ -5,13 +5,18 @@ import com.java110.common.dao.IAttendanceClassesTaskServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.attendanceClassesTask.AttendanceClassesTaskDto;
+import com.java110.dto.attendanceClassesTaskDetail.AttendanceClassesTaskDetailDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +32,12 @@ public class AttendanceClassesTaskInnerServiceSMOImpl extends BaseServiceSMO imp
 
     @Autowired
     private IAttendanceClassesTaskServiceDao attendanceClassesTaskServiceDaoImpl;
+
+    @Autowired
+    private IAttendanceClassesTaskDetailInnerServiceSMO attendanceClassesTaskDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
 
     @Override
@@ -64,7 +75,70 @@ public class AttendanceClassesTaskInnerServiceSMOImpl extends BaseServiceSMO imp
 
         List<AttendanceClassesTaskDto> attendanceClassesTasks = BeanConvertUtil.covertBeanList(attendanceClassesTaskServiceDaoImpl.getAttendanceClassesTaskInfo(BeanConvertUtil.beanCovertMap(attendanceClassesTaskDto)), AttendanceClassesTaskDto.class);
 
+        //输入员工名称
+        refreshAttendanceClassesTasks(attendanceClassesTasks);
         return attendanceClassesTasks;
+    }
+
+    /**
+     * 输入 员工 和 明细
+     *
+     * @param attendanceClassesTasks
+     */
+    private void refreshAttendanceClassesTasks(List<AttendanceClassesTaskDto> attendanceClassesTasks) {
+
+        if (attendanceClassesTasks == null || attendanceClassesTasks.size() < 1) {
+            return;
+        }
+
+        if (attendanceClassesTasks.size() > 20) {
+            return;
+        }
+
+        List<String> staffIds = new ArrayList<>();
+
+        for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
+            staffIds.add(attendanceClassesTaskDto.getStaffId());
+        }
+
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUserInfo(staffIds.toArray(new String[staffIds.size()]));
+
+        if (userDtos != null && userDtos.size() > 0) {
+            for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
+                for (UserDto userDto : userDtos) {
+                    if (attendanceClassesTaskDto.getStaffId().equals(userDto.getUserId())) {
+                        attendanceClassesTaskDto.setStaffName(userDto.getName());
+                        continue;
+                    }
+                }
+            }
+        }
+
+        List<String> taskIds = new ArrayList<>();
+
+        for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
+            taskIds.add(attendanceClassesTaskDto.getStaffId());
+        }
+
+        AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
+        attendanceClassesTaskDetailDto.setTaskIds(taskIds.toArray(new String[taskIds.size()]));
+        attendanceClassesTaskDetailDto.setStoreId(attendanceClassesTasks.get(0).getStoreId());
+        List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos
+                = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
+
+        if (attendanceClassesTaskDetailDtos == null || attendanceClassesTaskDetailDtos.size() < 1) {
+            return;
+        }
+        List<AttendanceClassesTaskDetailDto> tmpAttendanceClassesTaskDetailDtos = null;
+        for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
+            tmpAttendanceClassesTaskDetailDtos = new ArrayList<>();
+            for (AttendanceClassesTaskDetailDto tmpAttendanceClassesTaskDetailDto : attendanceClassesTaskDetailDtos) {
+                if (attendanceClassesTaskDto.getTaskId().equals(tmpAttendanceClassesTaskDetailDto.getTaskId())) {
+                    tmpAttendanceClassesTaskDetailDtos.add(tmpAttendanceClassesTaskDetailDto);
+                }
+            }
+            attendanceClassesTaskDto.setAttendanceClassesTaskDetails(tmpAttendanceClassesTaskDetailDtos);
+        }
     }
 
 

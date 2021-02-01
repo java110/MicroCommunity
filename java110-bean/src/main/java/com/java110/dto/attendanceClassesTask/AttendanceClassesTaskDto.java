@@ -1,8 +1,11 @@
 package com.java110.dto.attendanceClassesTask;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.attendanceClassesTaskDetail.AttendanceClassesTaskDetailDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,66 +18,86 @@ import java.util.Date;
 public class AttendanceClassesTaskDto extends PageDto implements Serializable {
 
     private String classId;
-private String taskMonth;
-private String taskDay;
-private String state;
-private String storeId;
-private String taskYear;
-private String taskId;
-private String staffId;
+    private String taskMonth;
+    private String taskDay;
+    private String state;
+    private String storeId;
+    private String taskYear;
+    private String taskId;
+    private String staffId;
+    private String staffName;
+    private String classesName;
+    private String classObjName;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetails;
+
 
     public String getClassId() {
         return classId;
     }
-public void setClassId(String classId) {
+
+    public void setClassId(String classId) {
         this.classId = classId;
     }
-public String getTaskMonth() {
+
+    public String getTaskMonth() {
         return taskMonth;
     }
-public void setTaskMonth(String taskMonth) {
+
+    public void setTaskMonth(String taskMonth) {
         this.taskMonth = taskMonth;
     }
-public String getTaskDay() {
+
+    public String getTaskDay() {
         return taskDay;
     }
-public void setTaskDay(String taskDay) {
+
+    public void setTaskDay(String taskDay) {
         this.taskDay = taskDay;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getTaskYear() {
+
+    public String getTaskYear() {
         return taskYear;
     }
-public void setTaskYear(String taskYear) {
+
+    public void setTaskYear(String taskYear) {
         this.taskYear = taskYear;
     }
-public String getTaskId() {
+
+    public String getTaskId() {
         return taskId;
     }
-public void setTaskId(String taskId) {
+
+    public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -93,5 +116,37 @@ public void setStaffId(String staffId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getClassesName() {
+        return classesName;
+    }
+
+    public void setClassesName(String classesName) {
+        this.classesName = classesName;
+    }
+
+    public String getClassObjName() {
+        return classObjName;
+    }
+
+    public void setClassObjName(String classObjName) {
+        this.classObjName = classObjName;
+    }
+
+    public List<AttendanceClassesTaskDetailDto> getAttendanceClassesTaskDetails() {
+        return attendanceClassesTaskDetails;
+    }
+
+    public void setAttendanceClassesTaskDetails(List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetails) {
+        this.attendanceClassesTaskDetails = attendanceClassesTaskDetails;
     }
 }

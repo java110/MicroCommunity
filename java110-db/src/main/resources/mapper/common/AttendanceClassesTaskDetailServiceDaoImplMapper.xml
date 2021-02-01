@@ -5,138 +5,141 @@
 <mapper namespace="attendanceClassesTaskDetailServiceDaoImpl">
 
 
-
-
-
     <!-- 保存考勤任务明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveAttendanceClassesTaskDetailInfo" parameterType="Map">
         insert into attendance_classes_task_detail(
-check_time,detail_id,spec_cd,remark,face_path,state,store_id,value,task_id
-) values (
-#{checkTime},#{detailId},#{specCd},#{remark},#{facePath},#{state},#{storeId},#{value},#{taskId}
-)
+        check_time,detail_id,spec_cd,remark,face_path,state,store_id,value,task_id
+        ) values (
+        #{checkTime},#{detailId},#{specCd},#{remark},#{facePath},#{state},#{storeId},#{value},#{taskId}
+        )
     </insert>
-
 
 
     <!-- 查询考勤任务明细信息 add by wuxw 2018-07-03 -->
     <select id="getAttendanceClassesTaskDetailInfo" parameterType="Map" resultType="Map">
-        select  t.check_time,t.check_time checkTime,t.detail_id,t.detail_id detailId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.remark,t.face_path,t.face_path facePath,t.state,t.store_id,t.store_id storeId,t.value,t.task_id,t.task_id taskId 
-from attendance_classes_task_detail t 
-where 1 =1 
-<if test="checkTime !=null and checkTime != ''">
-   and t.check_time= #{checkTime}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="facePath !=null and facePath != ''">
-   and t.face_path= #{facePath}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="taskId !=null and taskId != ''">
-   and t.task_id= #{taskId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.check_time,t.check_time checkTime,t.detail_id,t.detail_id detailId,t.spec_cd,t.spec_cd
+        specCd,t.status_cd,t.status_cd statusCd,t.remark,t.face_path,t.face_path facePath,t.state,t.store_id,t.store_id
+        storeId,t.value,t.task_id,t.task_id taskId
+        from attendance_classes_task_detail t
+        where 1 =1
+        <if test="checkTime !=null and checkTime != ''">
+            and t.check_time= #{checkTime}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="facePath !=null and facePath != ''">
+            and t.face_path= #{facePath}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="taskIds != null">
+            and t.task_id in
+            <foreach collection="taskIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改考勤任务明细信息 add by wuxw 2018-07-03 -->
     <update id="updateAttendanceClassesTaskDetailInfo" parameterType="Map">
-        update  attendance_classes_task_detail t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="checkTime !=null and checkTime != ''">
-, t.check_time= #{checkTime}
-</if> 
-<if test="specCd !=null and specCd != ''">
-, t.spec_cd= #{specCd}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="facePath !=null and facePath != ''">
-, t.face_path= #{facePath}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="value !=null and value != ''">
-, t.value= #{value}
-</if> 
-<if test="taskId !=null and taskId != ''">
-, t.task_id= #{taskId}
-</if> 
- where 1=1 <if test="detailId !=null and detailId != ''">
-and t.detail_id= #{detailId}
-</if> 
+        update attendance_classes_task_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="checkTime !=null and checkTime != ''">
+            , t.check_time= #{checkTime}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="facePath !=null and facePath != ''">
+            , t.face_path= #{facePath}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            , t.task_id= #{taskId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
 
     </update>
 
     <!-- 查询考勤任务明细数量 add by wuxw 2018-07-03 -->
-     <select id="queryAttendanceClassesTaskDetailsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from attendance_classes_task_detail t 
-where 1 =1 
-<if test="checkTime !=null and checkTime != ''">
-   and t.check_time= #{checkTime}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="facePath !=null and facePath != ''">
-   and t.face_path= #{facePath}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="taskId !=null and taskId != ''">
-   and t.task_id= #{taskId}
-</if> 
+    <select id="queryAttendanceClassesTaskDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from attendance_classes_task_detail t
+        where 1 =1
+        <if test="checkTime !=null and checkTime != ''">
+            and t.check_time= #{checkTime}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="facePath !=null and facePath != ''">
+            and t.face_path= #{facePath}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
