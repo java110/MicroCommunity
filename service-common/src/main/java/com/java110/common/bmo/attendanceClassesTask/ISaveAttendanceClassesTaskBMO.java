@@ -1,7 +1,11 @@
 package com.java110.common.bmo.attendanceClassesTask;
 
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
+import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 public interface ISaveAttendanceClassesTaskBMO {
 
 
@@ -11,7 +15,8 @@ public interface ISaveAttendanceClassesTaskBMO {
      * @param attendanceClassesTaskPo
      * @return
      */
-    ResponseEntity<String> save(AttendanceClassesTaskPo attendanceClassesTaskPo);
+    ResponseEntity<String> save(AttendanceClassesTaskPo attendanceClassesTaskPo,
+                                List<AttendanceClassesTaskDetailPo> attendanceClassesTaskDetailPos);
 
 
 }

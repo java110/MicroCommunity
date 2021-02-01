@@ -15,6 +15,7 @@
  */
 package com.java110.common.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.attendanceClassesTask.IDeleteAttendanceClassesTaskBMO;
 import com.java110.common.bmo.attendanceClassesTask.IGetAttendanceClassesTaskBMO;
@@ -33,6 +34,8 @@ import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @ClassName AttendanceClassApi
@@ -79,11 +82,15 @@ public class AttendanceClassApi {
     public ResponseEntity<String> saveAttendanceClassesTask(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "classId", "请求报文中未包含classId");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+
+        JSONArray attendanceClassesTaskDetails = reqJson.getJSONArray("attendanceClassesTaskDetails");
+
+        List<AttendanceClassesTaskDetailPo> attendanceClassesTaskDetailPos
+                = JSONArray.parseArray(attendanceClassesTaskDetails.toJSONString(), AttendanceClassesTaskDetailPo.class);
 
 
         AttendanceClassesTaskPo attendanceClassesTaskPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesTaskPo.class);
-        return saveAttendanceClassesTaskBMOImpl.save(attendanceClassesTaskPo);
+        return saveAttendanceClassesTaskBMOImpl.save(attendanceClassesTaskPo,attendanceClassesTaskDetailPos);
     }
 
     /**
