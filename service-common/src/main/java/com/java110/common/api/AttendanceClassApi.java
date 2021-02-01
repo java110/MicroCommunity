@@ -20,8 +20,14 @@ import com.java110.common.bmo.attendanceClassesTask.IDeleteAttendanceClassesTask
 import com.java110.common.bmo.attendanceClassesTask.IGetAttendanceClassesTaskBMO;
 import com.java110.common.bmo.attendanceClassesTask.ISaveAttendanceClassesTaskBMO;
 import com.java110.common.bmo.attendanceClassesTask.IUpdateAttendanceClassesTaskBMO;
+import com.java110.common.bmo.attendanceClassesTaskDetail.IDeleteAttendanceClassesTaskDetailBMO;
+import com.java110.common.bmo.attendanceClassesTaskDetail.IGetAttendanceClassesTaskDetailBMO;
+import com.java110.common.bmo.attendanceClassesTaskDetail.ISaveAttendanceClassesTaskDetailBMO;
+import com.java110.common.bmo.attendanceClassesTaskDetail.IUpdateAttendanceClassesTaskDetailBMO;
 import com.java110.dto.attendanceClassesTask.AttendanceClassesTaskDto;
+import com.java110.dto.attendanceClassesTaskDetail.AttendanceClassesTaskDetailDto;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
+import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +55,17 @@ public class AttendanceClassApi {
 
     @Autowired
     private IGetAttendanceClassesTaskBMO getAttendanceClassesTaskBMOImpl;
+
+
+    @Autowired
+    private ISaveAttendanceClassesTaskDetailBMO saveAttendanceClassesTaskDetailBMOImpl;
+    @Autowired
+    private IUpdateAttendanceClassesTaskDetailBMO updateAttendanceClassesTaskDetailBMOImpl;
+    @Autowired
+    private IDeleteAttendanceClassesTaskDetailBMO deleteAttendanceClassesTaskDetailBMOImpl;
+
+    @Autowired
+    private IGetAttendanceClassesTaskDetailBMO getAttendanceClassesTaskDetailBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -125,6 +142,84 @@ public class AttendanceClassApi {
         attendanceClassesTaskDto.setRow(row);
         attendanceClassesTaskDto.setStoreId(storeId);
         return getAttendanceClassesTaskBMOImpl.get(attendanceClassesTaskDto);
+    }
+
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /attendanceClass/saveAttendanceClassesTaskDetail
+     * @path /app/attendanceClass/saveAttendanceClassesTaskDetail
+     */
+    @RequestMapping(value = "/saveAttendanceClassesTaskDetail", method = RequestMethod.POST)
+    public ResponseEntity<String> saveAttendanceClassesTaskDetail(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "taskId", "请求报文中未包含taskId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+
+
+        AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesTaskDetailPo.class);
+        return saveAttendanceClassesTaskDetailBMOImpl.save(attendanceClassesTaskDetailPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /attendanceClass/updateAttendanceClassesTaskDetail
+     * @path /app/attendanceClass/updateAttendanceClassesTaskDetail
+     */
+    @RequestMapping(value = "/updateAttendanceClassesTaskDetail", method = RequestMethod.POST)
+    public ResponseEntity<String> updateAttendanceClassesTaskDetail(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "taskId", "请求报文中未包含taskId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "detailId", "detailId不能为空");
+
+
+        AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesTaskDetailPo.class);
+        return updateAttendanceClassesTaskDetailBMOImpl.update(attendanceClassesTaskDetailPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /attendanceClass/deleteAttendanceClassesTaskDetail
+     * @path /app/attendanceClass/deleteAttendanceClassesTaskDetail
+     */
+    @RequestMapping(value = "/deleteAttendanceClassesTaskDetail", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteAttendanceClassesTaskDetail(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "detailId", "detailId不能为空");
+
+
+        AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesTaskDetailPo.class);
+        return deleteAttendanceClassesTaskDetailBMOImpl.delete(attendanceClassesTaskDetailPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 商户ID
+     * @return
+     * @serviceCode /attendanceClass/queryAttendanceClassesTaskDetail
+     * @path /app/attendanceClass/queryAttendanceClassesTaskDetail
+     */
+    @RequestMapping(value = "/queryAttendanceClassesTaskDetail", method = RequestMethod.GET)
+    public ResponseEntity<String> queryAttendanceClassesTaskDetail(@RequestHeader(value = "store-id") String storeId,
+                                                                   @RequestParam(value = "page") int page,
+                                                                   @RequestParam(value = "row") int row) {
+        AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
+        attendanceClassesTaskDetailDto.setPage(page);
+        attendanceClassesTaskDetailDto.setRow(row);
+        attendanceClassesTaskDetailDto.setStoreId(storeId);
+        return getAttendanceClassesTaskDetailBMOImpl.get(attendanceClassesTaskDetailDto);
     }
 
 }
