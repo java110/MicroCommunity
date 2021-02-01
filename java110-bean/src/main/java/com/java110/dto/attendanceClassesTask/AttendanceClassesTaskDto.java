@@ -21,6 +21,7 @@ public class AttendanceClassesTaskDto extends PageDto implements Serializable {
     private String taskMonth;
     private String taskDay;
     private String state;
+    private String stateName;
     private String storeId;
     private String taskYear;
     private String taskId;
@@ -148,5 +149,13 @@ public class AttendanceClassesTaskDto extends PageDto implements Serializable {
 
     public void setAttendanceClassesTaskDetails(List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetails) {
         this.attendanceClassesTaskDetails = attendanceClassesTaskDetails;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
