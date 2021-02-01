@@ -49,6 +49,7 @@ public class SaveAttendanceClassesTaskBMOImpl implements ISaveAttendanceClassesT
         int flag = attendanceClassesTaskInnerServiceSMOImpl.saveAttendanceClassesTask(attendanceClassesTaskPo);
 
         for (AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo : attendanceClassesTaskDetailPos) {
+            attendanceClassesTaskDetailPo.setStoreId(attendanceClassesDtos.get(0).getStoreId());
             attendanceClassesTaskDetailInnerServiceSMOImpl.saveAttendanceClassesTaskDetail(attendanceClassesTaskDetailPo);
         }
 
