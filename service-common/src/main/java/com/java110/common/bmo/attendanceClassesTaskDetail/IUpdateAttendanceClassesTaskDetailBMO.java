@@ -13,7 +13,7 @@ public interface IUpdateAttendanceClassesTaskDetailBMO {
      * @param attendanceClassesTaskDetailPo
      * @return
      */
-    ResponseEntity<String> update(AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo);
+    ResponseEntity<String> update(AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo,boolean finishAllTaskDetail);
 
 
 }

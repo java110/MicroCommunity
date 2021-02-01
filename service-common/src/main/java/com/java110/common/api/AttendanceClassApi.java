@@ -183,12 +183,17 @@ public class AttendanceClassApi {
     public ResponseEntity<String> updateAttendanceClassesTaskDetail(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "taskId", "请求报文中未包含taskId");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
         Assert.hasKeyAndValue(reqJson, "detailId", "detailId不能为空");
+
+        boolean finishAllTaskDetail = false;
+
+        if(reqJson.containsKey("finishAllTaskDetail") && reqJson.getBoolean("finishAllTaskDetail")){
+            finishAllTaskDetail = true;
+        }
 
 
         AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesTaskDetailPo.class);
-        return updateAttendanceClassesTaskDetailBMOImpl.update(attendanceClassesTaskDetailPo);
+        return updateAttendanceClassesTaskDetailBMOImpl.update(attendanceClassesTaskDetailPo,finishAllTaskDetail);
     }
 
     /**
