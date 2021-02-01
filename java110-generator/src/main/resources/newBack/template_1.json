@@ -1,43 +1,31 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "roomRenovationDetail",
-  "desc": "装修明细",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "community",
-  "tableName": "room_renovation_detail",
+  "id": "taskId",
+  "name": "attendanceClassesTask",
+  "desc": "考勤任务",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "common",
+  "tableName": "attendance_classes_task",
   "param": {
-    "rId": "r_id",
-    "detailId": "detail_id",
-    "communityId": "community_id",
-    "statusCd": "status_cd",
-    "detailType": "detail_type",
+    "taskId": "task_id",
+    "classId": "class_id",
     "staffId": "staff_id",
-    "staffName": "staff_name",
+    "statusCd": "status_cd",
+    "taskYear": "task_year",
+    "taskMonth": "task_month",
+    "taskDay": "task_day",
     "state": "state",
-    "remark": "remark"
+    "storeId": "store_id"
   },
   "required": [
     {
-      "code": "rId",
-      "msg": "装修ID不能为空"
+      "code": "classId",
+      "msg": "班次不能为空"
     },
     {
-      "code": "communityId",
-      "msg": "小区不能为空"
-    },
-    {
-      "code": "detailType",
-      "msg": "类型不能为空"
-    },
-    {
-      "code": "state",
-      "msg": "状态不能为空"
-    },
-    {
-      "code": "remark",
-      "msg": "说明不能为空"
+      "code": "storeId",
+      "msg": "商户不能为空"
     }
   ]
 }

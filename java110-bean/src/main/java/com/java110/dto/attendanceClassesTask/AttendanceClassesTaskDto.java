@@ -1,0 +1,97 @@
+package com.java110.dto.attendanceClassesTask;
+
+import com.java110.dto.PageDto;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @ClassName FloorDto
+ * @Description 考勤任务数据层封装
+ * @Author wuxw
+ * @Date 2019/4/24 8:52
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+public class AttendanceClassesTaskDto extends PageDto implements Serializable {
+
+    private String classId;
+private String taskMonth;
+private String taskDay;
+private String state;
+private String storeId;
+private String taskYear;
+private String taskId;
+private String staffId;
+
+
+    private Date createTime;
+
+    private String statusCd = "0";
+
+
+    public String getClassId() {
+        return classId;
+    }
+public void setClassId(String classId) {
+        this.classId = classId;
+    }
+public String getTaskMonth() {
+        return taskMonth;
+    }
+public void setTaskMonth(String taskMonth) {
+        this.taskMonth = taskMonth;
+    }
+public String getTaskDay() {
+        return taskDay;
+    }
+public void setTaskDay(String taskDay) {
+        this.taskDay = taskDay;
+    }
+public String getState() {
+        return state;
+    }
+public void setState(String state) {
+        this.state = state;
+    }
+public String getStoreId() {
+        return storeId;
+    }
+public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+public String getTaskYear() {
+        return taskYear;
+    }
+public void setTaskYear(String taskYear) {
+        this.taskYear = taskYear;
+    }
+public String getTaskId() {
+        return taskId;
+    }
+public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+public String getStaffId() {
+        return staffId;
+    }
+public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+}
