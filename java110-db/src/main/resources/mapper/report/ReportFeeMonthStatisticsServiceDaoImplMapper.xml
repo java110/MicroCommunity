@@ -25,6 +25,7 @@
         oweAmount,t.community_id,t.community_id communityId,t.fee_create_time,t.fee_create_time
         feeCreateTime,t.obj_type,t.obj_type objType
         from report_fee_month_statistics t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where 1 =1
         <if test="receivableAmount !=null and receivableAmount != ''">
             and t.receivable_amount= #{receivableAmount}
@@ -166,6 +167,7 @@
     <select id="queryReportFeeMonthStatisticssCount" parameterType="Map" resultType="Map">
         select count(1) count
         from report_fee_month_statistics t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where 1 =1
         <if test="receivableAmount !=null and receivableAmount != ''">
             and t.receivable_amount= #{receivableAmount}
@@ -229,6 +231,7 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -282,6 +285,8 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -336,6 +341,7 @@
         INNER JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -389,6 +395,8 @@
         INNER JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -446,8 +454,9 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name="pay_fee_config" and
-        td.table_columns="fee_type_cd"
+        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name='pay_fee_config' and td.table_columns='fee_type_cd'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -507,6 +516,8 @@
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name='pay_fee_config' and
         td.table_columns='fee_type_cd'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -565,6 +576,8 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -619,6 +632,7 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -673,6 +687,7 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -724,6 +739,7 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -779,6 +795,8 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -1094,6 +1112,8 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -1149,6 +1169,8 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -1264,6 +1286,7 @@
         count(t.obj_id) objCount
         FROM
         report_fee_month_statistics t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         WHERE
         1 = 1
         AND t.status_cd = '0'
@@ -1277,6 +1300,7 @@
     <select id="queryOwePaymentCount" parameterType="Map" resultType="Map">
         select t.fee_name feeName,count( distinct t.obj_id) objCount
         from report_fee_month_statistics t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.community_id = #{communityId}
         and t.owe_amount > 0
         group by t.config_id,t.fee_name
@@ -1286,6 +1310,7 @@
     <select id="queryAllPaymentCount" parameterType="Map" resultType="Map">
         select t.fee_name feeName,count(distinct t.obj_id) objCount
         from report_fee_month_statistics t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.community_id = #{communityId}
         group by t.config_id,t.fee_name
         order by objCount desc

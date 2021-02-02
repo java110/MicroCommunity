@@ -51,7 +51,7 @@
         </if>
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
-        </if>
+        </if>reportFeeMonthStatistics
         <if test="taskIds != null">
             and t.task_id in
             <foreach collection="taskIds" item="item" open="(" close=")" separator=",">
