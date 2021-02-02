@@ -68,16 +68,21 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
         int ownerCount = ownerInnerServiceSMOImpl.queryOwnersCount(ownerDto);
         int noEnterRoomOwnerCount = ownerInnerServiceSMOImpl.queryNoEnterRoomOwnerCount(ownerDto);
         // 查询房屋 总数量
-        int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(BeanConvertUtil.covertBean(reqJson, RoomDto.class));
-        int freeRoomCount = roomInnerServiceSMOImpl.queryRoomsWithOutSellCount(BeanConvertUtil.covertBean(reqJson, RoomDto.class));
+        RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
+        roomDto.setRoomType(RoomDto.ROOM_TYPE_ROOM);
+        int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
+        int freeRoomCount = roomInnerServiceSMOImpl.queryRoomsWithOutSellCount(roomDto);
         // 查询停车位 总数量
         int parkingSpaceCount = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class));
         ParkingSpaceDto parkingSpaceDto = BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class);
         parkingSpaceDto.setState("F");
         int freeParkingSpaceCount = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(parkingSpaceDto);
         // 查询商铺 总数量
-        int shopCount = 0;
-        int freeShopCount = 0;
+        roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
+        roomDto.setRoomType(RoomDto.ROOM_TYPE_SHOPS);
+        int shopCount = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
+        int freeShopCount = roomInnerServiceSMOImpl.queryRoomsWithOutSellCount(roomDto);
+
 
 
         apiIndexStatisticVo.setOwnerCount(ownerCount + "");
