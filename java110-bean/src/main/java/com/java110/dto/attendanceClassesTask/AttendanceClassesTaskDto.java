@@ -35,6 +35,13 @@ public class AttendanceClassesTaskDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String departmentName;
+    private String noClockIn;
+    private String clockIn;
+    private String late;
+    private String early;
+    private String free;
+
     List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetails;
 
 
@@ -157,5 +164,53 @@ public class AttendanceClassesTaskDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getNoClockIn() {
+        return noClockIn;
+    }
+
+    public void setNoClockIn(String noClockIn) {
+        this.noClockIn = noClockIn;
+    }
+
+    public String getClockIn() {
+        return clockIn;
+    }
+
+    public void setClockIn(String clockIn) {
+        this.clockIn = clockIn;
+    }
+
+    public String getLate() {
+        return late;
+    }
+
+    public void setLate(String late) {
+        this.late = late;
+    }
+
+    public String getEarly() {
+        return early;
+    }
+
+    public void setEarly(String early) {
+        this.early = early;
+    }
+
+    public String getFree() {
+        return free;
+    }
+
+    public void setFree(String free) {
+        this.free = free;
     }
 }
