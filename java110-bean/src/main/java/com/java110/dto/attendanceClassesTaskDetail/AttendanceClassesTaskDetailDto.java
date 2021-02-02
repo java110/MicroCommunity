@@ -22,6 +22,7 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
     private String remark;
     private String facePath;
     private String state;
+    private String stateName;
     private String storeId;
     private String value;
     private String taskId;
@@ -137,5 +138,13 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     public void setSpecName(String specName) {
         this.specName = specName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
