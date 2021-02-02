@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="reportFeeServiceDaoImpl">
+<mapper namespace="reportAttendanceServiceDaoImpl">
 
     <!-- 查询实收金额 -->
     <select id="getMonthAttendanceCount" parameterType="Map" resultType="Map">
