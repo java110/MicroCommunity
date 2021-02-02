@@ -31,10 +31,19 @@ import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
 import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,7 +99,7 @@ public class AttendanceClassApi {
 
 
         AttendanceClassesTaskPo attendanceClassesTaskPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesTaskPo.class);
-        return saveAttendanceClassesTaskBMOImpl.save(attendanceClassesTaskPo,attendanceClassesTaskDetailPos);
+        return saveAttendanceClassesTaskBMOImpl.save(attendanceClassesTaskPo, attendanceClassesTaskDetailPos);
     }
 
     /**
@@ -143,11 +152,24 @@ public class AttendanceClassApi {
     @RequestMapping(value = "/queryAttendanceClassesTask", method = RequestMethod.GET)
     public ResponseEntity<String> queryAttendanceClassesTask(@RequestHeader(value = "store-id") String storeId,
                                                              @RequestParam(value = "page") int page,
-                                                             @RequestParam(value = "row") int row) {
+                                                             @RequestParam(value = "row") int row,
+                                                             @RequestParam(value = "classId", required = false) String classId,
+                                                             @RequestParam(value = "staffId", required = false) String staffId,
+                                                             @RequestParam(name = "date", required = false) String date) throws Exception {
         AttendanceClassesTaskDto attendanceClassesTaskDto = new AttendanceClassesTaskDto();
         attendanceClassesTaskDto.setPage(page);
         attendanceClassesTaskDto.setRow(row);
         attendanceClassesTaskDto.setStoreId(storeId);
+        attendanceClassesTaskDto.setClassId(classId);
+        if (!StringUtil.isEmpty(date)) {
+            Date reqDate = DateUtil.getDateFromString(date, DateUtil.DATE_FORMATE_STRING_B);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(reqDate);
+            attendanceClassesTaskDto.setTaskYear(calendar.get(Calendar.YEAR) + "");
+            attendanceClassesTaskDto.setTaskMonth((calendar.get(Calendar.MONTH) + 1) + "");
+            attendanceClassesTaskDto.setTaskDay(calendar.get(Calendar.DAY_OF_MONTH) + "");
+        }
         return getAttendanceClassesTaskBMOImpl.get(attendanceClassesTaskDto);
     }
 
@@ -187,13 +209,13 @@ public class AttendanceClassApi {
 
         boolean finishAllTaskDetail = false;
 
-        if(reqJson.containsKey("finishAllTaskDetail") && reqJson.getBoolean("finishAllTaskDetail")){
+        if (reqJson.containsKey("finishAllTaskDetail") && reqJson.getBoolean("finishAllTaskDetail")) {
             finishAllTaskDetail = true;
         }
 
 
         AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesTaskDetailPo.class);
-        return updateAttendanceClassesTaskDetailBMOImpl.update(attendanceClassesTaskDetailPo,finishAllTaskDetail);
+        return updateAttendanceClassesTaskDetailBMOImpl.update(attendanceClassesTaskDetailPo, finishAllTaskDetail);
     }
 
     /**

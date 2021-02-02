@@ -117,7 +117,7 @@ public class AttendanceClassesTaskInnerServiceSMOImpl extends BaseServiceSMO imp
         List<String> taskIds = new ArrayList<>();
 
         for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
-            taskIds.add(attendanceClassesTaskDto.getStaffId());
+            taskIds.add(attendanceClassesTaskDto.getTaskId());
         }
 
         AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();

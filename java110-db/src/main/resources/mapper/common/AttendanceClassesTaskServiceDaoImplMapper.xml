@@ -19,9 +19,11 @@
     <select id="getAttendanceClassesTaskInfo" parameterType="Map" resultType="Map">
         select t.class_id,t.class_id classId,t.task_month,t.task_month taskMonth,t.task_day,t.task_day
         taskDay,t.status_cd,t.status_cd statusCd,t.state,t.store_id,t.store_id storeId,t.task_year,t.task_year
-        taskYear,t.task_id,t.task_id taskId,t.staff_id,t.staff_id staffId,ac.classes_name classesName,ac.classes_obj_name classObjName
+        taskYear,t.task_id,t.task_id taskId,t.staff_id,t.staff_id staffId,ac.classes_name classesName,ac.classes_obj_name classObjName,
+        td.name stateName
         from attendance_classes_task t
         LEFT JOIN attendance_classes ac on t.class_id = ac.classes_id and ac.status_cd = '0'
+        left join t_dict td on td.table_name = 'attendance_classes_task' and td.table_columns = 'state' and t.state = td.status_cd
         where 1 =1
         <if test="classId !=null and classId != ''">
             and t.class_id= #{classId}
