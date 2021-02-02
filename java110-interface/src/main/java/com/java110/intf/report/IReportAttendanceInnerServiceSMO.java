@@ -22,8 +22,8 @@ import java.util.List;
  * add by wuxw 2019/4/24
  **/
 @FeignClient(name = "report-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/attendanceInnerServiceApi")
-public interface IAttendanceInnerServiceSMO {
+@RequestMapping("/reportAttendanceInnerServiceApi")
+public interface IReportAttendanceInnerServiceSMO {
 
 
 
@@ -35,16 +35,16 @@ public interface IAttendanceInnerServiceSMO {
      * @return FeeConfigDto 对象数据
      */
     @RequestMapping(value = "/getMonthAttendanceCount", method = RequestMethod.POST)
-    long getMonthAttendanceCount(@RequestBody AttendanceClassesTaskDto attendanceClassesTaskDto);
+    int getMonthAttendanceCount(@RequestBody AttendanceClassesTaskDto attendanceClassesTaskDto);
 
     /**
-     * <p>查询小区楼信息</p>
+     * <p>查询月考勤数量</p>
      *
      *
      * @param attendanceClassesTaskDto 数据对象分享
      * @return FeeConfigDto 对象数据
      */
     @RequestMapping(value = "/getMonthAttendance", method = RequestMethod.POST)
-    List<FeeConfigDto> getMonthAttendance(@RequestBody AttendanceClassesTaskDto attendanceClassesTaskDto);
+    List<AttendanceClassesTaskDto> getMonthAttendance(@RequestBody AttendanceClassesTaskDto attendanceClassesTaskDto);
 
 }

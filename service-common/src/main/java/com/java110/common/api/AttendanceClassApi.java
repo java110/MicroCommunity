@@ -253,7 +253,8 @@ public class AttendanceClassApi {
 
     /**
      * 添加设备接口类
-     *
+     * @serviceCode /attendanceClass/getMonthAttendance
+     * @path /app/attendanceClass/getMonthAttendance
      * @return 成功或者失败
      * @throws Exception
      */

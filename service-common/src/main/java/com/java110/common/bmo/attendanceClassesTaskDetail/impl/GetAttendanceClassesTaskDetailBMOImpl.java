@@ -4,6 +4,7 @@ import com.java110.common.bmo.attendanceClassesTaskDetail.IGetAttendanceClassesT
 import com.java110.dto.attendanceClassesTask.AttendanceClassesTaskDto;
 import com.java110.dto.attendanceClassesTaskDetail.AttendanceClassesTaskDetailDto;
 import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
+import com.java110.intf.report.IReportAttendanceInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class GetAttendanceClassesTaskDetailBMOImpl implements IGetAttendanceClas
 
     @Autowired
     private IAttendanceClassesTaskDetailInnerServiceSMO attendanceClassesTaskDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IReportAttendanceInnerServiceSMO reportAttendanceInnerServiceSMOImpl;
 
     /**
      * @param attendanceClassesTaskDetailDto
@@ -44,7 +48,20 @@ public class GetAttendanceClassesTaskDetailBMOImpl implements IGetAttendanceClas
 
     @Override
     public ResponseEntity<String> getMonthAttendance(AttendanceClassesTaskDto attendanceClassesTaskDto) {
-        return null;
+        int count = reportAttendanceInnerServiceSMOImpl.getMonthAttendanceCount(attendanceClassesTaskDto);
+
+        List<AttendanceClassesTaskDto> attendanceClassesTaskDtos = null;
+        if (count > 0) {
+            attendanceClassesTaskDtos = reportAttendanceInnerServiceSMOImpl.getMonthAttendance(attendanceClassesTaskDto);
+        } else {
+            attendanceClassesTaskDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) attendanceClassesTaskDto.getRow()), count, attendanceClassesTaskDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
     }
 
 }
