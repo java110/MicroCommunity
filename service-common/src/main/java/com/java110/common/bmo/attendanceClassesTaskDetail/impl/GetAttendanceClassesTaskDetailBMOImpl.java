@@ -1,6 +1,7 @@
 package com.java110.common.bmo.attendanceClassesTaskDetail.impl;
 
 import com.java110.common.bmo.attendanceClassesTaskDetail.IGetAttendanceClassesTaskDetailBMO;
+import com.java110.dto.attendanceClassesTask.AttendanceClassesTaskDto;
 import com.java110.dto.attendanceClassesTaskDetail.AttendanceClassesTaskDetailDto;
 import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;
@@ -39,6 +40,11 @@ public class GetAttendanceClassesTaskDetailBMOImpl implements IGetAttendanceClas
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> getMonthAttendance(AttendanceClassesTaskDto attendanceClassesTaskDto) {
+        return null;
     }
 
 }
