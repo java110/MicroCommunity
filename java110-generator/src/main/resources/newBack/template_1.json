@@ -1,28 +1,26 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "attendanceClassesTaskDetail",
-  "desc": "考勤任务明细",
+  "id": "logId",
+  "name": "attendanceLog",
+  "desc": "考勤日志",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "common",
-  "tableName": "attendance_classes_task_detail",
+  "tableName": "attendance_log",
   "param": {
-    "taskId": "task_id",
-    "detailId": "detail_id",
-    "specCd": "spec_cd",
+    "logId": "log_id",
+    "staffId": "staff_id",
+    "staffName": "staff_name",
     "statusCd": "status_cd",
-    "value": "value",
-    "checkTime": "check_time",
-    "facePath": "face_path",
-    "state": "state",
-    "remark": "remark",
+    "departmentId": "department_id",
+    "departmentName": "department_name",
+    "clockTime": "clock_time",
     "storeId": "store_id"
   },
   "required": [
     {
-      "code": "taskId",
-      "msg": "任务不能为空"
+      "code": "staffId",
+      "msg": "员工不能为空"
     },
     {
       "code": "storeId",
