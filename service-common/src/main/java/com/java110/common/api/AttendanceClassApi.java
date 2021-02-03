@@ -316,7 +316,6 @@ public class AttendanceClassApi {
     public ResponseEntity<String> saveAttendanceLog(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
 
 
         AttendanceLogPo attendanceLogPo = BeanConvertUtil.covertBean(reqJson, AttendanceLogPo.class);
