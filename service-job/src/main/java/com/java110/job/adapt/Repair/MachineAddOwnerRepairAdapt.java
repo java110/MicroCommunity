@@ -140,6 +140,9 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             staffAppAuthDto.setStaffId(userDto.getUserId());
             staffAppAuthDto.setAppType("WECHAT");
             List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+            if(staffAppAuthDtos == null || staffAppAuthDtos.size()<1){
+                continue;
+            }
             String openId = staffAppAuthDtos.get(0).getOpenId();
             Data data = new Data();
             PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
