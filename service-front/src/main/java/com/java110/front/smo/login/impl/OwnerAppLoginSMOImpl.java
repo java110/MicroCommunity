@@ -77,6 +77,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         userDto.setUserName(loginInfo.getString("username"));
         userDto.setPassword(loginInfo.getString("password"));
         userDto.setLoginByPhone(loginByPhone);
+        userDto.setLevelCd("02");
         userDto = super.postForApi(pd, userDto, ServiceCodeConstant.SERVICE_CODE_USER_LOGIN, UserDto.class);
 
         if (userDto == null) {

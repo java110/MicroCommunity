@@ -596,6 +596,9 @@
         <if test="tel !=null and tel != ''">
             and u.tel= #{tel}
         </if>
+        <if test="levelCd !=null and levelCd != ''">
+            and u.level_cd= #{levelCd}
+        </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

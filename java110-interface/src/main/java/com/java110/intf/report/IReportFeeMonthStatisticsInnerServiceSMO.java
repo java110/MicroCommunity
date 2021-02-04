@@ -3,6 +3,7 @@ package com.java110.intf.report;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -199,10 +200,11 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询(优惠、减免、滞纳金、空置房打折、空置房减免等)总金额
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
-    @RequestMapping(value = "/queryPayFeeDetailSum",method = RequestMethod.POST)
+    @RequestMapping(value = "/queryPayFeeDetailSum", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryPayFeeDetailSum(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
@@ -262,11 +264,37 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param feeConfigDto 数据对象分享
      * @return FeeConfigDto 对象数据
      */
     @RequestMapping(value = "/queryFeeConfigs", method = RequestMethod.POST)
     List<FeeConfigDto> queryFeeConfigs(@RequestBody FeeConfigDto feeConfigDto);
+
+    /**
+     * 查询维修师傅报修信息
+     *
+     * @param repairUserDto
+     * @return
+     */
+    @RequestMapping(value = "/queryRepair", method = RequestMethod.POST)
+    List<RepairUserDto> queryRepair(@RequestBody RepairUserDto repairUserDto);
+
+    /**
+     * 查询报修信息
+     *
+     * @param repairUserDto
+     * @return
+     */
+    @RequestMapping(value = "/queryRepairWithOutPage", method = RequestMethod.POST)
+    List<RepairUserDto> queryRepairWithOutPage(@RequestBody RepairUserDto repairUserDto);
+
+    /**
+     * 查询员工报修表员工信息
+     *
+     * @param repairUserDto
+     * @return
+     */
+    @RequestMapping(value = "/queryRepairForStaff", method = RequestMethod.POST)
+    List<RepairUserDto> queryRepairForStaff(@RequestBody RepairUserDto repairUserDto);
 
 }

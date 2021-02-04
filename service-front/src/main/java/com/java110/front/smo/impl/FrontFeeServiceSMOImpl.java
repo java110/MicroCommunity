@@ -132,7 +132,10 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         String remark = paramIn.getString("remark");
-        paramIn.put("remark", "现场收银台支付-" + remark);
+        if(!StringUtil.isEmpty(remark)){
+            remark="-"+remark;
+        }
+        paramIn.put("remark", "现场收银台支付" + remark);
         String communityId = paramIn.getString("communityId");
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

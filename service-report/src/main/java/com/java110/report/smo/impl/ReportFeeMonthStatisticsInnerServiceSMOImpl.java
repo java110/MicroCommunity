@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
@@ -298,6 +299,49 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     public List<FeeConfigDto> queryFeeConfigs(FeeConfigDto feeConfigDto) {
         List<FeeConfigDto> feeConfigs = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.getFeeConfigInfo(BeanConvertUtil.beanCovertMap(feeConfigDto)), FeeConfigDto.class);
         return feeConfigs;
+    }
+
+    /**
+     * 查询报修信息
+     *
+     * @param repairUserDto
+     * @return
+     */
+    @Override
+    public List<RepairUserDto> queryRepair(RepairUserDto repairUserDto) {
+        //校验是否传了 分页信息
+
+        int page = repairUserDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            repairUserDto.setPage((page - 1) * repairUserDto.getRow());
+        }
+        List<RepairUserDto> repairUserDtoList = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.getRepairUserInfo(BeanConvertUtil.beanCovertMap(repairUserDto)), RepairUserDto.class);
+        return repairUserDtoList;
+    }
+
+    /**
+     * 查询报修信息
+     *
+     * @param repairUserDto
+     * @return
+     */
+    @Override
+    public List<RepairUserDto> queryRepairWithOutPage(RepairUserDto repairUserDto) {
+        List<RepairUserDto> repairUserDtoList = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.getRepairWithOutPage(BeanConvertUtil.beanCovertMap(repairUserDto)), RepairUserDto.class);
+        return repairUserDtoList;
+    }
+
+    /**
+     * 查询员工报修表员工信息
+     *
+     * @param repairUserDto
+     * @return
+     */
+    @Override
+    public List<RepairUserDto> queryRepairForStaff(RepairUserDto repairUserDto) {
+        List<RepairUserDto> repairUserDtoList = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.getRepairStaff(BeanConvertUtil.beanCovertMap(repairUserDto)), RepairUserDto.class);
+        return repairUserDtoList;
     }
 
 

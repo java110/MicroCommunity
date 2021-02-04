@@ -3,6 +3,7 @@ package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsTotalDto;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
@@ -279,7 +280,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalPreferentialAmount = totalPreferentialAmount + discountPrice;
                     //优惠金额
                     reportFeeMonthStatistics.setPreferentialAmount(reportFeeMonthStatistics.getDiscountPrice());
-                }else{
+                } else {
                     reportFeeMonthStatistics.setPreferentialAmount("0");
 
                 }
@@ -290,17 +291,17 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalDeductionAmount = totalDeductionAmount + discountPrice;
                     //减免金额
                     reportFeeMonthStatistics.setDeductionAmount(reportFeeMonthStatistics.getDiscountPrice());
-                }else{
+                } else {
                     reportFeeMonthStatistics.setDeductionAmount("0");
                 }
                 //滞纳金
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("3")) {
                     //获取滞纳金金额
-                    Double discountPrice = (Double.valueOf(reportFeeMonthStatistics.getDiscountPrice()))*(-1);
+                    Double discountPrice = (Double.valueOf(reportFeeMonthStatistics.getDiscountPrice())) * (-1);
                     totalLateFee = totalLateFee + discountPrice;
                     //滞纳金
                     reportFeeMonthStatistics.setLateFee(reportFeeMonthStatistics.getDiscountPrice());
-                }else{
+                } else {
                     reportFeeMonthStatistics.setLateFee("0");
                 }
                 //空置房打折
@@ -310,7 +311,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalVacantHousingDiscount = totalVacantHousingDiscount + discountPrice;
                     //空置房打折
                     reportFeeMonthStatistics.setVacantHousingDiscount(reportFeeMonthStatistics.getDiscountPrice());
-                }else{
+                } else {
                     reportFeeMonthStatistics.setVacantHousingDiscount("0");
                 }
                 //空置房减免
@@ -320,7 +321,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     totalVacantHousingReduction = totalVacantHousingReduction + discountPrice;
                     //空置房减免
                     reportFeeMonthStatistics.setVacantHousingReduction(reportFeeMonthStatistics.getDiscountPrice());
-                }else{
+                } else {
                     reportFeeMonthStatistics.setVacantHousingReduction("0");
                 }
 
@@ -455,6 +456,99 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
 
         ResultVo resultVo = new ResultVo(reportAllFeeMonthStatisticsDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    /**
+     * 查询报修信息
+     *
+     * @param repairUserDto
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> queryRepair(RepairUserDto repairUserDto) {
+        //查询员工报修表员工信息
+        List<RepairUserDto> repairUsers = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRepairForStaff(repairUserDto);
+        int count = repairUsers.size();
+        //获取员工id和姓名集合
+        List<RepairUserDto> staffs;
+        if (StringUtil.isEmpty(repairUserDto.getStaffId())) {
+            staffs = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRepairForStaff(repairUserDto);
+        } else {
+            repairUserDto.setStaffId(null);
+            staffs = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRepairForStaff(repairUserDto);
+        }
+        List<RepairUserDto> repairUserList = new ArrayList<>();
+        if (count > 0) {
+            for (RepairUserDto repairUser : repairUsers) {
+                RepairUserDto repairUserInfo = new RepairUserDto();
+                //员工id
+                repairUserDto.setStaffId(repairUser.getStaffId());
+                List<RepairUserDto> repairUserDtoList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRepairWithOutPage(repairUserDto);
+                if (repairUserDtoList != null && repairUserDtoList.size() > 0) {
+                    //处理中数量
+                    int dealAmount = 0;
+                    //结单数量
+                    int statementAmount = 0;
+                    //退单数量
+                    int chargebackAmount = 0;
+                    //转单数量
+                    int transferOrderAmount = 0;
+                    //派单数量
+                    int dispatchAmount = 0;
+                    for (RepairUserDto repair : repairUserDtoList) {
+                        //处理中状态
+                        if (repair.getState().equals("10001")) {
+                            //获取数量
+                            int amount = Integer.parseInt(repair.getAmount());
+                            dealAmount = dealAmount + amount;
+                        } else if (repair.getState().equals("10002")) {  //结单状态
+                            //获取数量
+                            int amount = Integer.parseInt(repair.getAmount());
+                            statementAmount = statementAmount + amount;
+                        } else if (repair.getState().equals("10003")) {  //退单状态
+                            //获取数量
+                            int amount = Integer.parseInt(repair.getAmount());
+                            chargebackAmount = chargebackAmount + amount;
+                        } else if (repair.getState().equals("10004")) {  //转单状态
+                            //获取数量
+                            int amount = Integer.parseInt(repair.getAmount());
+                            transferOrderAmount = transferOrderAmount + amount;
+                        } else if (repair.getState().equals("10006")) {  //派单状态
+                            int amount = Integer.parseInt(repair.getAmount());
+                            dispatchAmount = dispatchAmount + amount;
+                        }
+                    }
+                    //员工id
+                    repairUserInfo.setStaffId(repairUser.getStaffId());
+                    //员工姓名
+                    repairUserInfo.setStaffName(repairUser.getStaffName());
+                    //处理中报修数量
+                    repairUserInfo.setDealAmount(Integer.toString(dealAmount));
+                    //结单报修数量
+                    repairUserInfo.setStatementAmount(Integer.toString(statementAmount));
+                    //退单报修数量
+                    repairUserInfo.setChargebackAmount(Integer.toString(chargebackAmount));
+                    //转单报修数量
+                    repairUserInfo.setTransferOrderAmount(Integer.toString(transferOrderAmount));
+                    //派单报修数量
+                    repairUserInfo.setDispatchAmount(Integer.toString(dispatchAmount));
+                    //员工id和姓名信息集合
+                    repairUserInfo.setRepairList(staffs);
+                    repairUserList.add(repairUserInfo);
+                } else {
+                    continue;
+                }
+            }
+        } else {
+            repairUserList = new ArrayList<>();
+        }
+
+        int size = repairUserList.size();
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) size / (double) repairUserDto.getRow()), size, repairUserList, staffs);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

@@ -454,7 +454,8 @@
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name='pay_fee_config' and td.table_columns='fee_type_cd'
+        left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name='pay_fee_config' and
+        td.table_columns='fee_type_cd'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
 
         where t.status_cd = '0'
@@ -1037,7 +1038,8 @@
         select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,oc.car_num carNum,
         pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,
         t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfa.`value`
-        importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name ruleName,pfdd.discount_price,
+        importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name
+        ruleName,pfdd.discount_price,
         SUM(pfdd.discount_price) discountPrice
         from pay_fee_detail t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -1402,6 +1404,137 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+    </select>
+
+    <select id="getRepairInfo" parameterType="Map" resultType="Map">
+        select r.staff_id staffId,r.staff_name staffName,r.state, t.name stateName, count(*) amount from r_repair_user r
+        left join t_dict t on t.table_name="r_repair_user" and t.table_columns="state" and t.status_cd=r.state
+        where r.state != "10005" and r.status_cd = "0"
+        <if test="ruId != null and ruId != ''">
+            and r.ru_id = #{ruId}
+        </if>
+        <if test="repairId != null and repairId != ''">
+            and r.repair_id = #{repairId}
+        </if>
+        <if test="communityId != null and communityId !=''">
+            and r.community_id = #{communityId}
+        </if>
+        <if test="bId != null and bId !=''">
+            and r.b_id = #{bId}
+        </if>
+        <if test="state != null and state != ''">
+            and r.state = #{state}
+        </if>
+        <if test="context != null and context !=''">
+            and r.context = #{context}
+        </if>
+        <if test="statusCd != null and statusCd != ''">
+            and r.status_cd = #{statusCd}
+        </if>
+        <if test="staffId != null and staffId !=''">
+            and r.staff_id = #{staffId}
+        </if>
+        <if test="staffName != null and staffName !=''">
+            and r.staff_name = #{staffName}
+        </if>
+        <if test="preStaffId != null and preStaffId !=''">
+            and r.pre_staff_id = #{preStaffId}
+        </if>
+        <if test="preStaffName != null and preStaffName !=''">
+            and r.pre_staff_name = #{preStaffName}
+        </if>
+        <if test="beginStartTime != null and beginStartTime !=''">
+            and r.start_time &gt;= #{beginStartTime}
+        </if>
+        <if test="beginEndTime != null and beginEndTime !=''">
+            and r.start_time &lt;= #{beginEndTime}
+        </if>
+        <if test="finishStartTime != null and finishStartTime !=''">
+            and r.end_time &gt;= #{finishStartTime}
+        </if>
+        <if test="finishEndTime != null and finishEndTime !=''">
+            and r.end_time &lt;= #{finishEndTime}
+        </if>
+        <if test="createTime != null and createTime !=''">
+            and r.create_time = #{createTime}
+        </if>
+        group by r.staff_id,r.state
+        order by r.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <select id="getRepairWithOutPage" parameterType="Map" resultType="Map">
+        select r.staff_id staffId,r.staff_name staffName,r.state, t.name stateName, count(*) amount from r_repair_user r
+        left join t_dict t on t.table_name="r_repair_user" and t.table_columns="state" and t.status_cd=r.state
+        where r.state != "10005" and r.status_cd = "0"
+        <if test="ruId != null and ruId != ''">
+            and r.ru_id = #{ruId}
+        </if>
+        <if test="repairId != null and repairId != ''">
+            and r.repair_id = #{repairId}
+        </if>
+        <if test="communityId != null and communityId !=''">
+            and r.community_id = #{communityId}
+        </if>
+        <if test="bId != null and bId !=''">
+            and r.b_id = #{bId}
+        </if>
+        <if test="state != null and state != ''">
+            and r.state = #{state}
+        </if>
+        <if test="context != null and context !=''">
+            and r.context = #{context}
+        </if>
+        <if test="statusCd != null and statusCd != ''">
+            and r.status_cd = #{statusCd}
+        </if>
+        <if test="staffId != null and staffId !=''">
+            and r.staff_id = #{staffId}
+        </if>
+        <if test="staffName != null and staffName !=''">
+            and r.staff_name = #{staffName}
+        </if>
+        <if test="preStaffId != null and preStaffId !=''">
+            and r.pre_staff_id = #{preStaffId}
+        </if>
+        <if test="preStaffName != null and preStaffName !=''">
+            and r.pre_staff_name = #{preStaffName}
+        </if>
+        <if test="beginStartTime != null and beginStartTime !=''">
+            and r.start_time &gt;= #{beginStartTime}
+        </if>
+        <if test="beginEndTime != null and beginEndTime !=''">
+            and r.start_time &lt;= #{beginEndTime}
+        </if>
+        <if test="finishStartTime != null and finishStartTime !=''">
+            and r.end_time &gt;= #{finishStartTime}
+        </if>
+        <if test="finishEndTime != null and finishEndTime !=''">
+            and r.end_time &lt;= #{finishEndTime}
+        </if>
+        <if test="createTime != null and createTime !=''">
+            and r.create_time = #{createTime}
+        </if>
+        group by r.staff_id,r.state
+        order by r.create_time desc
+    </select>
+
+    <select id="queryRepairForStaff" parameterType="Map" resultType="Map">
+        /*select r.staff_id staffId,r.staff_name staffName from r_repair_user r
+        where r.state != "10005" and r.status_cd = "0"*/
+        SELECT r.staff_id staffId,r.staff_name staffName FROM r_repair_user r
+        WHERE r.state!='10005' AND
+        (r.state!='10001' AND r.repair_event!='payUser') AND r.repair_event!="startUser"
+        <if test="communityId != null and communityId !=''">
+            and r.community_id = #{communityId}
+        </if>
+        <if test="staffId != null and staffId != ''">
+            and r.staff_id = #{staffId}
+        </if>
+        group by r.staff_id
+        order by r.create_time desc
     </select>
 
 </mapper>

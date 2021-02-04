@@ -359,4 +359,25 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return businessFeeConfigInfos;
     }
 
+    @Override
+    public List<Map> getRepairUserInfo(Map info) {
+        logger.debug("查询报修配置信息 入参 info : {}", info);
+        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getRepairInfo", info);
+        return businessRepairUserInfos;
+    }
+
+    @Override
+    public List<Map> getRepairWithOutPage(Map info) {
+        logger.debug("查询报修配置信息 入参 info : {}", info);
+        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getRepairWithOutPage", info);
+        return businessRepairUserInfos;
+    }
+
+    @Override
+    public List<Map> getRepairStaff(Map info) {
+        logger.debug("查询报修配置信息 入参 info : {}", info);
+        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryRepairForStaff", info);
+        return businessRepairUserInfos;
+    }
+
 }

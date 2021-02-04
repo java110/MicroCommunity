@@ -249,4 +249,28 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getFeeConfigInfo(Map info) throws DAOException;
+
+    /**
+     * 查询维修师傅报修信息
+     *
+     * @param info
+     * @return
+     */
+    List<Map> getRepairUserInfo(Map info);
+
+    /**
+     * 查询报修信息
+     *
+     * @param info
+     * @return
+     */
+    List<Map> getRepairWithOutPage(Map info);
+
+    /**
+     * 获取报修员工表员工信息
+     *
+     * @param info
+     * @return
+     */
+    List<Map> getRepairStaff(Map info);
 }

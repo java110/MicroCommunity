@@ -1,6 +1,7 @@
 package com.java110.report.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.bmo.reportFeeMonthStatistics.IDeleteReportFeeMonthStatisticsBMO;
@@ -15,8 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 
 @RestController
 @RequestMapping(value = "/reportFeeMonthStatistics")
@@ -24,8 +26,10 @@ public class ReportFeeMonthStatisticsApi {
 
     @Autowired
     private ISaveReportFeeMonthStatisticsBMO saveReportFeeMonthStatisticsBMOImpl;
+
     @Autowired
     private IUpdateReportFeeMonthStatisticsBMO updateReportFeeMonthStatisticsBMOImpl;
+
     @Autowired
     private IDeleteReportFeeMonthStatisticsBMO deleteReportFeeMonthStatisticsBMOImpl;
 
@@ -327,6 +331,53 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
+    }
+
+    /**
+     * 报修统计表
+     *
+     * @param communityId 小区id
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryRepair
+     * @path /app/reportFeeMonthStatistics/queryRepair
+     */
+    @RequestMapping(value = "/queryRepair", method = RequestMethod.GET)
+    public ResponseEntity<String> queryRepair(@RequestParam(value = "communityId") String communityId,
+                                              @RequestParam(value = "repairId", required = false) String repairId,
+                                              @RequestParam(value = "state", required = false) String state,
+                                              @RequestParam(value = "staffId", required = false) String staffId,
+                                              @RequestParam(value = "staffName", required = false) String staffName,
+                                              @RequestParam(value = "preStaffId", required = false) String preStaffId,
+                                              @RequestParam(value = "preStaffName", required = false) String preStaffName,
+                                              @RequestParam(value = "beginStartTime", required = false) String beginStartTime,
+                                              @RequestParam(value = "beginEndTime", required = false) String beginEndTime,
+                                              @RequestParam(value = "finishStartTime", required = false) String finishStartTime,
+                                              @RequestParam(value = "finishEndTime", required = false) String finishEndTime,
+                                              @RequestParam(value = "page") int page,
+                                              @RequestParam(value = "row") int row) {
+        RepairUserDto repairUserDto = new RepairUserDto();
+        repairUserDto.setCommunityId(communityId);
+        repairUserDto.setRepairId(repairId);
+        repairUserDto.setState(state);
+        repairUserDto.setStaffId(staffId);
+        repairUserDto.setStaffName(staffName);
+        repairUserDto.setPreStaffId(preStaffId);
+        repairUserDto.setPreStaffName(preStaffName);
+        if (!StringUtil.isEmpty(beginStartTime)) {
+            repairUserDto.setBeginStartTime(beginStartTime + " 00:00:00");
+        }
+        if (!StringUtil.isEmpty(beginEndTime)) {
+            repairUserDto.setBeginEndTime(beginEndTime + " 23:59:59");
+        }
+        if (!StringUtil.isEmpty(finishStartTime)) {
+            repairUserDto.setFinishStartTime(finishStartTime + " 00:00:00");
+        }
+        if (!StringUtil.isEmpty(finishEndTime)) {
+            repairUserDto.setFinishEndTime(finishEndTime + " 23:59:59");
+        }
+        repairUserDto.setPage(page);
+        repairUserDto.setRow(row);
+        return getReportFeeMonthStatisticsBMOImpl.queryRepair(repairUserDto);
     }
 
     /**

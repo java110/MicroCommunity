@@ -276,7 +276,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
                 repairUserPo.setRuId(ruId);
                 repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                 repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-                repairUserPo.setState(RepairUserDto.STATE_TRANSFER);
+                repairUserPo.setState(RepairUserDto.STATE_DISPATCH);
                 repairUserPo.setRepairId(reqJson.getString("repairId"));
                 repairUserPo.setStaffId(userId);
                 repairUserPo.setStaffName(userName);

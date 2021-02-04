@@ -20,6 +20,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.ValidatorUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -80,6 +81,9 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
         //1.0 优先用 手机号登录
         UserDto userDto = new UserDto();
         String errorInfo = "";
+        if (reqJson.containsKey("levelCd")) {
+            userDto.setLevelCd(reqJson.getString("levelCd"));
+        }
         if (reqJson.containsKey("userName")) {
             if (ValidatorUtil.isMobile(reqJson.getString("userName"))) {//用户临时秘钥登录
                 userDto.setTel(reqJson.getString("userName"));

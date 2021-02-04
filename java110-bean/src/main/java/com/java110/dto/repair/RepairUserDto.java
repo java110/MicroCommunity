@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -27,6 +28,7 @@ public class RepairUserDto extends PageDto implements Serializable {
     public static final String STATE_BACK = "10003";// 退单
     public static final String STATE_TRANSFER = "10004";// 转单
     public static final String STATE_SUBMIT = "10005";// 提交
+    public static final String STATE_DISPATCH = "10006";//派单
 
 
     private String context;
@@ -54,6 +56,25 @@ public class RepairUserDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    //报修数量
+    private String amount;
+    //处理中的报修数量
+    private String dealAmount;
+    //结单的报修数量
+    private String statementAmount;
+    //退单的报修数量
+    private String chargebackAmount;
+    //转单的报修数量
+    private String transferOrderAmount;
+    //派单的报修数量
+    private String dispatchAmount;
+    private String beginStartTime;
+    private String beginEndTime;
+    private String finishStartTime;
+    private String finishEndTime;
+    //员工报修表员工信息
+    private List<RepairUserDto> repairList;
 
 
     public String getContext() {
@@ -224,11 +245,100 @@ public class RepairUserDto extends PageDto implements Serializable {
     public void setPreRuId(String preRuId) {
         this.preRuId = preRuId;
     }
+
     public String getbId() {
         return bId;
     }
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getBeginStartTime() {
+        return beginStartTime;
+    }
+
+    public void setBeginStartTime(String beginStartTime) {
+        this.beginStartTime = beginStartTime;
+    }
+
+    public String getBeginEndTime() {
+        return beginEndTime;
+    }
+
+    public void setBeginEndTime(String beginEndTime) {
+        this.beginEndTime = beginEndTime;
+    }
+
+    public String getFinishStartTime() {
+        return finishStartTime;
+    }
+
+    public void setFinishStartTime(String finishStartTime) {
+        this.finishStartTime = finishStartTime;
+    }
+
+    public String getFinishEndTime() {
+        return finishEndTime;
+    }
+
+    public void setFinishEndTime(String finishEndTime) {
+        this.finishEndTime = finishEndTime;
+    }
+
+    public String getDealAmount() {
+        return dealAmount;
+    }
+
+    public void setDealAmount(String dealAmount) {
+        this.dealAmount = dealAmount;
+    }
+
+    public String getStatementAmount() {
+        return statementAmount;
+    }
+
+    public void setStatementAmount(String statementAmount) {
+        this.statementAmount = statementAmount;
+    }
+
+    public String getChargebackAmount() {
+        return chargebackAmount;
+    }
+
+    public void setChargebackAmount(String chargebackAmount) {
+        this.chargebackAmount = chargebackAmount;
+    }
+
+    public String getTransferOrderAmount() {
+        return transferOrderAmount;
+    }
+
+    public void setTransferOrderAmount(String transferOrderAmount) {
+        this.transferOrderAmount = transferOrderAmount;
+    }
+
+    public String getDispatchAmount() {
+        return dispatchAmount;
+    }
+
+    public void setDispatchAmount(String dispatchAmount) {
+        this.dispatchAmount = dispatchAmount;
+    }
+
+    public List<RepairUserDto> getRepairList() {
+        return repairList;
+    }
+
+    public void setRepairList(List<RepairUserDto> repairList) {
+        this.repairList = repairList;
     }
 }
