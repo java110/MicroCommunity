@@ -3,8 +3,10 @@ package com.java110.user.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.dto.questionAnswerTitle.QuestionAnswerTitleDto;
+import com.java110.dto.questionAnswerTitleValue.QuestionAnswerTitleValueDto;
 import com.java110.po.questionAnswer.QuestionAnswerPo;
 import com.java110.po.questionAnswerTitle.QuestionAnswerTitlePo;
+import com.java110.po.questionAnswerTitleValue.QuestionAnswerTitleValuePo;
 import com.java110.user.bmo.questionAnswer.IDeleteQuestionAnswerBMO;
 import com.java110.user.bmo.questionAnswer.IGetQuestionAnswerBMO;
 import com.java110.user.bmo.questionAnswer.ISaveQuestionAnswerBMO;
@@ -13,6 +15,10 @@ import com.java110.user.bmo.questionAnswerTitle.IDeleteQuestionAnswerTitleBMO;
 import com.java110.user.bmo.questionAnswerTitle.IGetQuestionAnswerTitleBMO;
 import com.java110.user.bmo.questionAnswerTitle.ISaveQuestionAnswerTitleBMO;
 import com.java110.user.bmo.questionAnswerTitle.IUpdateQuestionAnswerTitleBMO;
+import com.java110.user.bmo.questionAnswerTitleValue.IDeleteQuestionAnswerTitleValueBMO;
+import com.java110.user.bmo.questionAnswerTitleValue.IGetQuestionAnswerTitleValueBMO;
+import com.java110.user.bmo.questionAnswerTitleValue.ISaveQuestionAnswerTitleValueBMO;
+import com.java110.user.bmo.questionAnswerTitleValue.IUpdateQuestionAnswerTitleValueBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +49,17 @@ public class QuestionAnswerApi {
 
     @Autowired
     private IGetQuestionAnswerTitleBMO getQuestionAnswerTitleBMOImpl;
+
+    @Autowired
+    private ISaveQuestionAnswerTitleValueBMO saveQuestionAnswerTitleValueBMOImpl;
+    @Autowired
+    private IUpdateQuestionAnswerTitleValueBMO updateQuestionAnswerTitleValueBMOImpl;
+    @Autowired
+    private IDeleteQuestionAnswerTitleValueBMO deleteQuestionAnswerTitleValueBMOImpl;
+
+    @Autowired
+    private IGetQuestionAnswerTitleValueBMO getQuestionAnswerTitleValueBMOImpl;
+
 
     /**
      * 微信保存消息模板
@@ -215,5 +232,85 @@ public class QuestionAnswerApi {
         questionAnswerTitleDto.setObjType(objType);
         questionAnswerTitleDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.endsWith(objType) ? communityId : storeId);
         return getQuestionAnswerTitleBMOImpl.get(questionAnswerTitleDto);
+    }
+
+    /**
+     * 微信保存消息模板
+     * @serviceCode /questionAnswer/saveQuestionAnswerTitleValue
+     * @path /app/questionAnswer/saveQuestionAnswerTitleValue
+     * @param reqJson
+     * @return
+     */
+    @RequestMapping(value = "/saveQuestionAnswerTitleValue", method = RequestMethod.POST)
+    public ResponseEntity<String> saveQuestionAnswerTitleValue(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "titleId", "请求报文中未包含titleId");
+        Assert.hasKeyAndValue(reqJson, "qaValue", "请求报文中未包含qaValue");
+        Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
+        Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
+
+
+        QuestionAnswerTitleValuePo questionAnswerTitleValuePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitleValuePo.class);
+        return saveQuestionAnswerTitleValueBMOImpl.save(questionAnswerTitleValuePo);
+    }
+
+    /**
+     * 微信修改消息模板
+     * @serviceCode /questionAnswer/updateQuestionAnswerTitleValue
+     * @path /app/questionAnswer/updateQuestionAnswerTitleValue
+     * @param reqJson
+     * @return
+     */
+    @RequestMapping(value = "/updateQuestionAnswerTitleValue", method = RequestMethod.POST)
+    public ResponseEntity<String> updateQuestionAnswerTitleValue(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "titleId", "请求报文中未包含titleId");
+        Assert.hasKeyAndValue(reqJson, "qaValue", "请求报文中未包含qaValue");
+        Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
+        Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
+        Assert.hasKeyAndValue(reqJson, "valueId", "valueId不能为空");
+
+
+        QuestionAnswerTitleValuePo questionAnswerTitleValuePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitleValuePo.class);
+        return updateQuestionAnswerTitleValueBMOImpl.update(questionAnswerTitleValuePo);
+    }
+
+    /**
+     * 微信删除消息模板
+     * @serviceCode /questionAnswer/deleteQuestionAnswerTitleValue
+     * @path /app/questionAnswer/deleteQuestionAnswerTitleValue
+     * @param reqJson
+     * @return
+     */
+    @RequestMapping(value = "/deleteQuestionAnswerTitleValue", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteQuestionAnswerTitleValue(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "valueId", "valueId不能为空");
+
+
+        QuestionAnswerTitleValuePo questionAnswerTitleValuePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitleValuePo.class);
+        return deleteQuestionAnswerTitleValueBMOImpl.delete(questionAnswerTitleValuePo);
+    }
+
+    /**
+     * 微信删除消息模板
+     * @serviceCode /questionAnswer/queryQuestionAnswerTitleValue
+     * @path /app/questionAnswer/queryQuestionAnswerTitleValue
+     * @param communityId 小区ID
+     * @return
+     */
+    @RequestMapping(value = "/queryQuestionAnswerTitleValue", method = RequestMethod.GET)
+    public ResponseEntity<String> queryQuestionAnswerTitleValue(@RequestHeader(value = "store-id") String storeId,
+                                                                @RequestParam(value = "communityId", required = false) String communityId,
+                                                                @RequestParam(value = "objType") String objType,
+                                                                @RequestParam(value = "page") int page,
+                                                                @RequestParam(value = "row") int row) {
+        QuestionAnswerTitleValueDto questionAnswerTitleValueDto = new QuestionAnswerTitleValueDto();
+        questionAnswerTitleValueDto.setPage(page);
+        questionAnswerTitleValueDto.setRow(row);
+        questionAnswerTitleValueDto.setObjType(objType);
+        questionAnswerTitleValueDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.endsWith(objType) ? communityId : storeId);
+        return getQuestionAnswerTitleValueBMOImpl.get(questionAnswerTitleValueDto);
     }
 }
