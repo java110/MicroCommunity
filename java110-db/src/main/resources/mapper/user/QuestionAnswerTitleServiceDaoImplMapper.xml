@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="questionAnswerTitleServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存答卷信息 add by wuxw 2018-07-03 -->
+    <insert id="saveQuestionAnswerTitleInfo" parameterType="Map">
+        insert into question_answer_title(
+title_type,title_id,obj_id,obj_type,seq,qa_id,qa_title
+) values (
+#{titleType},#{titleId},#{objId},#{objType},#{seq},#{qaId},#{qaTitle}
+)
+    </insert>
+
+
+
+    <!-- 查询答卷信息 add by wuxw 2018-07-03 -->
+    <select id="getQuestionAnswerTitleInfo" parameterType="Map" resultType="Map">
+        select  t.title_type,t.title_type titleType,t.title_id,t.title_id titleId,t.obj_id,t.obj_id objId,t.status_cd,t.status_cd statusCd,t.obj_type,t.obj_type objType,t.seq,t.qa_id,t.qa_id qaId,t.qa_title,t.qa_title qaTitle 
+from question_answer_title t 
+where 1 =1 
+<if test="titleType !=null and titleType != ''">
+   and t.title_type= #{titleType}
+</if> 
+<if test="titleId !=null and titleId != ''">
+   and t.title_id= #{titleId}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+<if test="qaId !=null and qaId != ''">
+   and t.qa_id= #{qaId}
+</if> 
+<if test="qaTitle !=null and qaTitle != ''">
+   and t.qa_title= #{qaTitle}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改答卷信息 add by wuxw 2018-07-03 -->
+    <update id="updateQuestionAnswerTitleInfo" parameterType="Map">
+        update  question_answer_title t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="titleType !=null and titleType != ''">
+, t.title_type= #{titleType}
+</if> 
+<if test="objId !=null and objId != ''">
+, t.obj_id= #{objId}
+</if> 
+<if test="objType !=null and objType != ''">
+, t.obj_type= #{objType}
+</if> 
+<if test="seq !=null and seq != ''">
+, t.seq= #{seq}
+</if> 
+<if test="qaId !=null and qaId != ''">
+, t.qa_id= #{qaId}
+</if> 
+<if test="qaTitle !=null and qaTitle != ''">
+, t.qa_title= #{qaTitle}
+</if> 
+ where 1=1 <if test="titleId !=null and titleId != ''">
+and t.title_id= #{titleId}
+</if> 
+
+    </update>
+
+    <!-- 查询答卷数量 add by wuxw 2018-07-03 -->
+     <select id="queryQuestionAnswerTitlesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from question_answer_title t 
+where 1 =1 
+<if test="titleType !=null and titleType != ''">
+   and t.title_type= #{titleType}
+</if> 
+<if test="titleId !=null and titleId != ''">
+   and t.title_id= #{titleId}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+<if test="qaId !=null and qaId != ''">
+   and t.qa_id= #{qaId}
+</if> 
+<if test="qaTitle !=null and qaTitle != ''">
+   and t.qa_title= #{qaTitle}
+</if> 
+
+
+     </select>
+
+</mapper>

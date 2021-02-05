@@ -15,7 +15,7 @@
     "objType": "obj_type",
     "objId": "obj_id",
     "titleType": "title_type",
-    "storeId": "seq"
+    "seq": "seq"
   },
   "required": [
     {
@@ -33,6 +33,10 @@
     {
       "code": "objType",
       "msg": "问卷对象不能为空"
+    },
+    {
+      "code": "seq",
+      "msg": "序号不能为空"
     }
   ]
 }
