@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="questionAnswerServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存答卷信息 add by wuxw 2018-07-03 -->
+    <insert id="saveQuestionAnswerInfo" parameterType="Map">
+        insert into question_answer(
+qa_name,qa_type,start_time,end_time,remark,obj_type,obj_id,qa_id
+) values (
+#{qaName},#{qaType},#{startTime},#{endTime},#{storeId},#{objType},#{objTd},#{qaId}
+)
+    </insert>
+
+
+
+    <!-- 查询答卷信息 add by wuxw 2018-07-03 -->
+    <select id="getQuestionAnswerInfo" parameterType="Map" resultType="Map">
+        select  t.qa_name,t.qa_name qaName,t.qa_type,t.qa_type qaType,t.status_cd,t.status_cd statusCd,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.remark,t.remark storeId,t.obj_type,t.obj_type objType,t.obj_id,t.obj_id objTd,t.qa_id,t.qa_id qaId 
+from question_answer t 
+where 1 =1 
+<if test="qaName !=null and qaName != ''">
+   and t.qa_name= #{qaName}
+</if> 
+<if test="qaType !=null and qaType != ''">
+   and t.qa_type= #{qaType}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.remark= #{storeId}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+<if test="objTd !=null and objTd != ''">
+   and t.obj_id= #{objTd}
+</if> 
+<if test="qaId !=null and qaId != ''">
+   and t.qa_id= #{qaId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改答卷信息 add by wuxw 2018-07-03 -->
+    <update id="updateQuestionAnswerInfo" parameterType="Map">
+        update  question_answer t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="qaName !=null and qaName != ''">
+, t.qa_name= #{qaName}
+</if> 
+<if test="qaType !=null and qaType != ''">
+, t.qa_type= #{qaType}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.remark= #{storeId}
+</if> 
+<if test="objType !=null and objType != ''">
+, t.obj_type= #{objType}
+</if> 
+<if test="objTd !=null and objTd != ''">
+, t.obj_id= #{objTd}
+</if> 
+ where 1=1 <if test="qaId !=null and qaId != ''">
+and t.qa_id= #{qaId}
+</if> 
+
+    </update>
+
+    <!-- 查询答卷数量 add by wuxw 2018-07-03 -->
+     <select id="queryQuestionAnswersCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from question_answer t 
+where 1 =1 
+<if test="qaName !=null and qaName != ''">
+   and t.qa_name= #{qaName}
+</if> 
+<if test="qaType !=null and qaType != ''">
+   and t.qa_type= #{qaType}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.remark= #{storeId}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+<if test="objTd !=null and objTd != ''">
+   and t.obj_id= #{objTd}
+</if> 
+<if test="qaId !=null and qaId != ''">
+   and t.qa_id= #{qaId}
+</if> 
+
+
+     </select>
+
+</mapper>

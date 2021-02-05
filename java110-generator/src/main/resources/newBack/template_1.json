@@ -1,30 +1,38 @@
 {
   "autoMove": true,
-  "id": "logId",
-  "name": "attendanceLog",
-  "desc": "考勤日志",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "common",
-  "tableName": "attendance_log",
+  "id": "titleId",
+  "name": "questionAnswerTitle",
+  "desc": "答卷",
+  "shareParam": "objId",
+  "shareColumn": "obj_id",
+  "shareName": "user",
+  "tableName": "question_answer_title",
   "param": {
-    "logId": "log_id",
-    "staffId": "staff_id",
-    "staffName": "staff_name",
+    "titleId": "title_id",
+    "qaId": "qa_id",
+    "qaTitle": "qa_title",
     "statusCd": "status_cd",
-    "departmentId": "department_id",
-    "departmentName": "department_name",
-    "clockTime": "clock_time",
-    "storeId": "store_id"
+    "objType": "obj_type",
+    "objId": "obj_id",
+    "titleType": "title_type",
+    "storeId": "seq"
   },
   "required": [
     {
-      "code": "staffId",
-      "msg": "员工不能为空"
+      "code": "qaId",
+      "msg": "问答ID不能为空"
     },
     {
-      "code": "storeId",
-      "msg": "商户不能为空"
+      "code": "qaTitle",
+      "msg": "题目不能为空"
+    },
+    {
+      "code": "titleType",
+      "msg": "题目类型不能为空"
+    },
+    {
+      "code": "objType",
+      "msg": "问卷对象不能为空"
     }
   ]
 }
