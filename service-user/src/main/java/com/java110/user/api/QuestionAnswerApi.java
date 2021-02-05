@@ -70,7 +70,8 @@ public class QuestionAnswerApi {
      * @path /app/questionAnswer/saveQuestionAnswer
      */
     @RequestMapping(value = "/saveQuestionAnswer", method = RequestMethod.POST)
-    public ResponseEntity<String> saveQuestionAnswer(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveQuestionAnswer(@RequestHeader(value = "store-id", required = false) String storeId,
+                                                     @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "qaType", "请求报文中未包含qaType");
         Assert.hasKeyAndValue(reqJson, "qaName", "请求报文中未包含qaName");
@@ -78,6 +79,10 @@ public class QuestionAnswerApi {
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
 
+        if (QuestionAnswerDto.QA_TYPE_STORE.equals(reqJson.getString("objType"))) {
+            reqJson.put("objId", storeId);
+        }
+        Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
 
         QuestionAnswerPo questionAnswerPo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerPo.class);
         return saveQuestionAnswerBMOImpl.save(questionAnswerPo);
@@ -137,7 +142,7 @@ public class QuestionAnswerApi {
     public ResponseEntity<String> queryQuestionAnswer(
             @RequestHeader(value = "store-id") String storeId,
             @RequestParam(value = "communityId", required = false) String communityId,
-            @RequestParam(value = "objType") String objType,
+            @RequestParam(value = "objType", required = false) String objType,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row) {
         QuestionAnswerDto questionAnswerDto = new QuestionAnswerDto();
@@ -236,10 +241,11 @@ public class QuestionAnswerApi {
 
     /**
      * 微信保存消息模板
-     * @serviceCode /questionAnswer/saveQuestionAnswerTitleValue
-     * @path /app/questionAnswer/saveQuestionAnswerTitleValue
+     *
      * @param reqJson
      * @return
+     * @serviceCode /questionAnswer/saveQuestionAnswerTitleValue
+     * @path /app/questionAnswer/saveQuestionAnswerTitleValue
      */
     @RequestMapping(value = "/saveQuestionAnswerTitleValue", method = RequestMethod.POST)
     public ResponseEntity<String> saveQuestionAnswerTitleValue(@RequestBody JSONObject reqJson) {
@@ -256,10 +262,11 @@ public class QuestionAnswerApi {
 
     /**
      * 微信修改消息模板
-     * @serviceCode /questionAnswer/updateQuestionAnswerTitleValue
-     * @path /app/questionAnswer/updateQuestionAnswerTitleValue
+     *
      * @param reqJson
      * @return
+     * @serviceCode /questionAnswer/updateQuestionAnswerTitleValue
+     * @path /app/questionAnswer/updateQuestionAnswerTitleValue
      */
     @RequestMapping(value = "/updateQuestionAnswerTitleValue", method = RequestMethod.POST)
     public ResponseEntity<String> updateQuestionAnswerTitleValue(@RequestBody JSONObject reqJson) {
@@ -277,10 +284,11 @@ public class QuestionAnswerApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /questionAnswer/deleteQuestionAnswerTitleValue
-     * @path /app/questionAnswer/deleteQuestionAnswerTitleValue
+     *
      * @param reqJson
      * @return
+     * @serviceCode /questionAnswer/deleteQuestionAnswerTitleValue
+     * @path /app/questionAnswer/deleteQuestionAnswerTitleValue
      */
     @RequestMapping(value = "/deleteQuestionAnswerTitleValue", method = RequestMethod.POST)
     public ResponseEntity<String> deleteQuestionAnswerTitleValue(@RequestBody JSONObject reqJson) {
@@ -295,10 +303,11 @@ public class QuestionAnswerApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /questionAnswer/queryQuestionAnswerTitleValue
-     * @path /app/questionAnswer/queryQuestionAnswerTitleValue
+     *
      * @param communityId 小区ID
      * @return
+     * @serviceCode /questionAnswer/queryQuestionAnswerTitleValue
+     * @path /app/questionAnswer/queryQuestionAnswerTitleValue
      */
     @RequestMapping(value = "/queryQuestionAnswerTitleValue", method = RequestMethod.GET)
     public ResponseEntity<String> queryQuestionAnswerTitleValue(@RequestHeader(value = "store-id") String storeId,
