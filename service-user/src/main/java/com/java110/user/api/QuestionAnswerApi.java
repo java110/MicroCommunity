@@ -149,7 +149,7 @@ public class QuestionAnswerApi {
         questionAnswerDto.setPage(page);
         questionAnswerDto.setRow(row);
         questionAnswerDto.setObjType(objType);
-        questionAnswerDto.setObjTd(QuestionAnswerDto.QA_TYPE_COMMUNITY.endsWith(objType) ? communityId : storeId);
+        questionAnswerDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.endsWith(objType) ? communityId : storeId);
         return getQuestionAnswerBMOImpl.get(questionAnswerDto);
     }
 

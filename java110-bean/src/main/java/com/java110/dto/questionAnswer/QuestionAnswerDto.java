@@ -24,7 +24,7 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     private String endTime;
     private String storeId;
     private String objType;
-    private String objTd;
+    private String objId;
     private String qaId;
 
 
@@ -81,12 +81,12 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
         this.objType = objType;
     }
 
-    public String getObjTd() {
-        return objTd;
+    public String getObjId() {
+        return objId;
     }
 
-    public void setObjTd(String objTd) {
-        this.objTd = objTd;
+    public void setObjId(String objId) {
+        this.objId = objId;
     }
 
     public String getQaId() {
