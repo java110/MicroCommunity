@@ -25,6 +25,7 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     private String storeId;
     private String objType;
     private String objId;
+    private String[] objIds;
     private String qaId;
 
 
@@ -112,5 +113,13 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getObjIds() {
+        return objIds;
+    }
+
+    public void setObjIds(String[] objIds) {
+        this.objIds = objIds;
     }
 }

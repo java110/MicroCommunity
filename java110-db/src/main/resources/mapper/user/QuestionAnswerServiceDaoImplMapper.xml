@@ -46,6 +46,12 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
+        <if test="objIds !=null">
+            and t.obj_id in
+            <foreach collection="objIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="qaId !=null and qaId != ''">
             and t.qa_id= #{qaId}
         </if>
@@ -119,6 +125,12 @@
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
+        </if>
+        <if test="objIds !=null">
+            and t.obj_id in
+            <foreach collection="objIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="qaId !=null and qaId != ''">
             and t.qa_id= #{qaId}
