@@ -19,8 +19,9 @@
     <select id="getQuestionAnswerInfo" parameterType="Map" resultType="Map">
         select t.qa_name,t.qa_name qaName,t.qa_type,t.qa_type qaType,t.status_cd,t.status_cd
         statusCd,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.remark,t.remark
-        storeId,t.obj_type,t.obj_type objType,t.obj_id,t.obj_id objId,t.qa_id,t.qa_id qaId
+        storeId,t.obj_type,t.obj_type objType,t.obj_id,t.obj_id objId,t.qa_id,t.qa_id qaId,td.`name` qaTypeName
         from question_answer t
+        LEFT JOIN t_dict td on td.status_cd = t.qa_type and td.table_name = 'question_answer' and td.table_columns = 'qa_type'
         where 1 =1
         <if test="qaName !=null and qaName != ''">
             and t.qa_name= #{qaName}

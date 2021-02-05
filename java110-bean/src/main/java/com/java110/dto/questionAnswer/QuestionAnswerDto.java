@@ -20,6 +20,7 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     private String qaName;
     private String qaType;
+    private String qaTypeName;
     private String startTime;
     private String endTime;
     private String storeId;
@@ -121,5 +122,13 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setObjIds(String[] objIds) {
         this.objIds = objIds;
+    }
+
+    public String getQaTypeName() {
+        return qaTypeName;
+    }
+
+    public void setQaTypeName(String qaTypeName) {
+        this.qaTypeName = qaTypeName;
     }
 }
