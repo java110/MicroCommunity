@@ -1,5 +1,6 @@
 package com.java110.user.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.dto.questionAnswerTitle.QuestionAnswerTitleDto;
@@ -24,7 +25,12 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -140,7 +146,7 @@ public class QuestionAnswerApi {
      */
     @RequestMapping(value = "/queryQuestionAnswer", method = RequestMethod.GET)
     public ResponseEntity<String> queryQuestionAnswer(
-            @RequestHeader(value = "store-id",required = false) String storeId,
+            @RequestHeader(value = "store-id", required = false) String storeId,
             @RequestParam(value = "communityId", required = false) String communityId,
             @RequestParam(value = "objType", required = false) String objType,
             @RequestParam(value = "page") int page,
@@ -171,12 +177,22 @@ public class QuestionAnswerApi {
         Assert.hasKeyAndValue(reqJson, "qaId", "请求报文中未包含qaId");
         Assert.hasKeyAndValue(reqJson, "qaTitle", "请求报文中未包含qaTitle");
         Assert.hasKeyAndValue(reqJson, "titleType", "请求报文中未包含titleType");
+        Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
 
+        JSONArray titleValues = null;
+        if (!QuestionAnswerTitleDto.TITLE_TYPE_QUESTIONS.equals(reqJson.getString("titleType"))) {
+            titleValues = reqJson.getJSONArray("titleValues");
+
+            if (titleValues.size() < 1) {
+                throw new IllegalArgumentException("未包含选项");
+            }
+        }
+
 
         QuestionAnswerTitlePo questionAnswerTitlePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitlePo.class);
-        return saveQuestionAnswerTitleBMOImpl.save(questionAnswerTitlePo);
+        return saveQuestionAnswerTitleBMOImpl.save(questionAnswerTitlePo,titleValues);
     }
 
     /**
@@ -230,16 +246,23 @@ public class QuestionAnswerApi {
      * @path /app/questionAnswer/queryQuestionAnswerTitle
      */
     @RequestMapping(value = "/queryQuestionAnswerTitle", method = RequestMethod.GET)
-    public ResponseEntity<String> queryQuestionAnswerTitle(@RequestHeader(value = "store-id") String storeId,
+    public ResponseEntity<String> queryQuestionAnswerTitle(@RequestHeader(value = "store-id", required = false) String storeId,
                                                            @RequestParam(value = "communityId", required = false) String communityId,
                                                            @RequestParam(value = "objType") String objType,
+                                                           @RequestParam(value = "qaId") String qaId,
                                                            @RequestParam(value = "page") int page,
                                                            @RequestParam(value = "row") int row) {
         QuestionAnswerTitleDto questionAnswerTitleDto = new QuestionAnswerTitleDto();
         questionAnswerTitleDto.setPage(page);
         questionAnswerTitleDto.setRow(row);
-        questionAnswerTitleDto.setObjType(objType);
-        questionAnswerTitleDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
+        questionAnswerTitleDto.setQaId(qaId);
+        if (!StringUtil.isEmpty(objType)) {
+            questionAnswerTitleDto.setObjType(objType);
+            questionAnswerTitleDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
+        } else {
+            questionAnswerTitleDto.setObjIds(new String[]{storeId, communityId});
+        }
+
         return getQuestionAnswerTitleBMOImpl.get(questionAnswerTitleDto);
     }
 

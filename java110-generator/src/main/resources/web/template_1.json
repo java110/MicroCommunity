@@ -1,95 +1,71 @@
 {
-  "templateName": "问卷信息",
+  "templateName": "问卷题目",
   "directories": "property",
-  "templateCode": "questionAnswer",
-  "templateKey": "qaId",
-  "templateKeyName": "问卷ID",
-  "searchCode": "qaId",
-  "searchName": "问卷ID",
+  "templateCode": "questionAnswerTitle",
+  "templateKey": "titleId",
+  "templateKeyName": "题目ID",
+  "searchCode": "titleId",
+  "searchName": "题目ID",
   "conditions": [
     {
-      "name": "问卷类型",
+      "name": "题目类型",
       "inputType": "select",
-      "selectValue": "1001,2002,3003,4004",
-      "selectValueName": "业主问卷,员工自评,业主投票,员工投票",
-      "code": "qaType",
+      "selectValue": "1001,2002,3003",
+      "selectValueName": "单选,多选,简答题",
+      "code": "titleType",
       "whereCondition": "equal"
     },
     {
       "name": "问卷名称",
       "inputType": "input",
-      "code": "qaName",
+      "code": "qaTitle",
       "whereCondition": "equal"
     },
     {
-      "name": "问卷ID",
+      "name": "题目ID",
       "inputType": "input",
-      "code": "qaId",
+      "code": "titleId",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "qaType",
-      "cnCode": "问卷类型",
-      "desc": "必填，请选择问卷类型",
+      "code": "titleType",
+      "cnCode": "题目类型",
+      "desc": "必填，请选择题目类型",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "select",
-      "selectValue": "1001,2002,3003,4004",
-      "selectValueName": "业主问卷,员工自评,业主投票,员工投票",
+      "selectValue": "1001,2002,3003",
+      "selectValueName": "单选,多选,简答题",
       "limit": "num",
       "limitParam": "",
-      "limitErrInfo": "问卷类型格式错误",
+      "limitErrInfo": "题目类型格式错误",
       "show": true
     },
     {
-      "code": "qaName",
-      "cnCode": "问卷名称",
-      "desc": "必填，请填写问卷名称",
+      "code": "qaTitle",
+      "cnCode": "问卷题目",
+      "desc": "必填，请填写问卷题目",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
       "limitParam": "256",
-      "limitErrInfo": "问卷名称太长",
+      "limitErrInfo": "问卷题目太长",
       "show": true
     },
     {
-      "code": "startTime",
-      "cnCode": "开始时间",
-      "desc": "选填，请填写开始时间",
+      "code": "seq",
+      "cnCode": "顺序",
+      "desc": "必填，请填写顺序",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
-      "limit": "datetime",
+      "limit": "num",
       "limitParam": "",
-      "limitErrInfo": "开始时间错误",
+      "limitErrInfo": "顺序必须是数字",
       "show": true
-    },
-    {
-      "code": "endTime",
-      "cnCode": "结束时间",
-      "desc": "选填，请选择结束时间",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "datetime",
-      "limitParam": "",
-      "limitErrInfo": "结束时间错误",
-      "show": true
-    },
-    {
-      "code": "remark",
-      "cnCode": "备注",
-      "desc": "必填，请选择备注",
-      "required": false,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "512",
-      "limitErrInfo": "备注太长",
-      "show": false
     }
   ]
 }
