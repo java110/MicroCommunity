@@ -104,7 +104,6 @@ public class QuestionAnswerApi {
         Assert.hasKeyAndValue(reqJson, "qaName", "请求报文中未包含qaName");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
-        Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "qaId", "qaId不能为空");
 
 
