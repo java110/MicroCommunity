@@ -20,6 +20,7 @@ public class UserQuestionAnswerDto extends PageDto implements Serializable {
     private String objId;
     private String userQaId;
     private String personId;
+    private String personName;
     private String state;
     private String objType;
     private String qaId;
@@ -162,5 +163,13 @@ public class UserQuestionAnswerDto extends PageDto implements Serializable {
 
     public void setQaTypes(String[] qaTypes) {
         this.qaTypes = qaTypes;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 }

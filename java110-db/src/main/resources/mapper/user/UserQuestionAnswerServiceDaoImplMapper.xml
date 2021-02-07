@@ -31,10 +31,12 @@
             uqa.evaluation_score evaluationScore,
             uqa.user_qa_id userQaId,
             uqa.person_id personId,
+            uu.name personName,
             uqa.state
         FROM
             question_answer t
             LEFT JOIN user_question_answer uqa ON t.qa_id = uqa.qa_id AND t.obj_type = uqa.obj_type AND t.obj_id = uqa.obj_id AND uqa.status_cd = '0'
+            left join u_user uu on uqa.person_id = uu.user_id and uu.status_cd = '0'
             LEFT JOIN t_dict td ON td.status_cd = t.qa_type AND td.table_name = 'question_answer' AND td.table_columns = 'qa_type'
         WHERE
         <if test="personId !=null and personId != ''">

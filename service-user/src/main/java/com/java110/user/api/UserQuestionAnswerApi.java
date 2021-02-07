@@ -114,11 +114,13 @@ public class UserQuestionAnswerApi {
                                                           @RequestHeader(value = "user-id") String userId,
                                                           @RequestParam(value = "communityId", required = false) String communityId,
                                                           @RequestParam(value = "roleCd") String roleCd,
+                                                          @RequestParam(value = "state") String state,
                                                           @RequestParam(value = "page") int page,
                                                           @RequestParam(value = "row") int row) {
         UserQuestionAnswerDto userQuestionAnswerDto = new UserQuestionAnswerDto();
         userQuestionAnswerDto.setPage(page);
         userQuestionAnswerDto.setRow(row);
+        userQuestionAnswerDto.setState(state);
         if ("owner".equals(roleCd)) {
             userQuestionAnswerDto.setObjType(QuestionAnswerDto.QA_TYPE_COMMUNITY);
             userQuestionAnswerDto.setObjId(communityId);
