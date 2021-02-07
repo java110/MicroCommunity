@@ -1,48 +1,38 @@
 {
   "autoMove": true,
-  "id": "ruleId",
-  "name": "activitiesRule",
+  "id": "beId",
+  "name": "activitiesBeautifulStaff",
   "desc": "活动规则",
-  "shareParam": "objId",
-  "shareColumn": "obj_id",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
   "shareName": "user",
-  "tableName": "activities_rule",
+  "tableName": "activities_beautiful_staff",
   "param": {
+    "beId": "be_id",
     "ruleId": "rule_id",
-    "ruleName": "rule_name",
-    "ruleType": "rule_type",
-    "startTime": "start_time",
-    "endTime": "end_time",
-    "activitiesObj": "activities_obj",
-    "remark": "remark",
-    "objType": "obj_type",
-    "objId": "obj_id",
+    "staffId": "staff_id",
+    "activitiesNum": "activities_num",
+    "storeId": "store_id",
+    "workContent": "work_content",
+    "poll": "poll",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "ruleName",
-      "msg": "规则名称不能为空"
+      "code": "staffId",
+      "msg": "员工不能为空"
     },
     {
-      "code": "ruleType",
-      "msg": "规则类型不能为空"
+      "code": "activitiesNum",
+      "msg": "员工编号不能为空"
     },
     {
-      "code": "startTime",
-      "msg": "开始时间不能为空"
+      "code": "workContent",
+      "msg": "工作内容不能为空"
     },
     {
-      "code": "endTime",
-      "msg": "结束时间不能为空"
-    },
-    {
-      "code": "activitiesObj",
-      "msg": "活动对象不能为空"
-    },
-    {
-      "code": "remark",
-      "msg": "活动说明不能为空"
+      "code": "ruleId",
+      "msg": "活动规则不能为空"
     }
   ]
 }

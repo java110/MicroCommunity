@@ -184,6 +184,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_titleId = "19";
     public static final String CODE_PREFIX_userQaId = "20";
     public static final String CODE_PREFIX_userTitleId = "21";
+    public static final String CODE_PREFIX_beId = "22";
 
 
     /**
