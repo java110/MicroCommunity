@@ -12,7 +12,7 @@
         )
         values
         <foreach collection="userQuestionAnswerValuePos" item="item" separator=",">
-            (#{item.score},'0',#{item.valueId},#{item.titleId},#{item.answerType},#{item.objId},#{item.userQaId},
+            (#{item.score},#{item.valueId},#{item.titleId},#{item.answerType},#{item.objId},#{item.userQaId},
             #{item.valueContent},#{item.personId},#{item.objType},#{item.userTitleId},#{item.qaId})
         </foreach>
     </insert>
