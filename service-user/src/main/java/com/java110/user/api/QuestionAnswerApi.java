@@ -206,7 +206,7 @@ public class QuestionAnswerApi {
     @RequestMapping(value = "/updateQuestionAnswerTitle", method = RequestMethod.POST)
     public ResponseEntity<String> updateQuestionAnswerTitle(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "qaId", "请求报文中未包含qaId");
+//        Assert.hasKeyAndValue(reqJson, "qaId", "请求报文中未包含qaId");
         Assert.hasKeyAndValue(reqJson, "qaTitle", "请求报文中未包含qaTitle");
         Assert.hasKeyAndValue(reqJson, "titleType", "请求报文中未包含titleType");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
