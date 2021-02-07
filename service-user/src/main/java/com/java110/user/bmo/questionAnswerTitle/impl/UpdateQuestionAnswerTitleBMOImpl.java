@@ -1,5 +1,6 @@
 package com.java110.user.bmo.questionAnswerTitle.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.user.IQuestionAnswerTitleInnerServiceSMO;
 import com.java110.po.questionAnswerTitle.QuestionAnswerTitlePo;
@@ -20,7 +21,7 @@ public class UpdateQuestionAnswerTitleBMOImpl implements IUpdateQuestionAnswerTi
      * @return 订单服务能够接受的报文
      */
     @Java110Transactional
-    public ResponseEntity<String> update(QuestionAnswerTitlePo questionAnswerTitlePo) {
+    public ResponseEntity<String> update(QuestionAnswerTitlePo questionAnswerTitlePo, JSONArray titleValues) {
 
         int flag = questionAnswerTitleInnerServiceSMOImpl.updateQuestionAnswerTitle(questionAnswerTitlePo);
 

@@ -212,10 +212,17 @@ public class QuestionAnswerApi {
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
         Assert.hasKeyAndValue(reqJson, "titleId", "titleId不能为空");
+        JSONArray titleValues = null;
+        if (!QuestionAnswerTitleDto.TITLE_TYPE_QUESTIONS.equals(reqJson.getString("titleType"))) {
+            titleValues = reqJson.getJSONArray("titleValues");
 
+            if (titleValues.size() < 1) {
+                throw new IllegalArgumentException("未包含选项");
+            }
+        }
 
         QuestionAnswerTitlePo questionAnswerTitlePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitlePo.class);
-        return updateQuestionAnswerTitleBMOImpl.update(questionAnswerTitlePo);
+        return updateQuestionAnswerTitleBMOImpl.update(questionAnswerTitlePo,titleValues);
     }
 
     /**
