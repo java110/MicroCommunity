@@ -12,6 +12,7 @@ import com.java110.po.userQuestionAnswer.UserQuestionAnswerPo;
 import com.java110.po.userQuestionAnswerValue.UserQuestionAnswerValuePo;
 import com.java110.user.bmo.userQuestionAnswerValue.ISaveUserQuestionAnswerValueBMO;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,11 @@ public class SaveUserQuestionAnswerValueBMOImpl implements ISaveUserQuestionAnsw
         UserQuestionAnswerValuePo tmpUserUserQuestionAnswerValue = null;
         List<UserQuestionAnswerValuePo> tmpUserUserQuestionAnswerValues = new ArrayList<>();
         UserQuestionAnswerPo userQuestionAnswerPo = new UserQuestionAnswerPo();
-        userQuestionAnswerPo.setUserQaId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_userQaId));
+        if(StringUtil.isEmpty(userQuestionAnswerValuePo.getUserQaId()) || userQuestionAnswerValuePo.getUserQaId().startsWith("-")){
+            userQuestionAnswerPo.setUserQaId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_userQaId));
+        }else{
+            userQuestionAnswerPo.setUserQaId(userQuestionAnswerValuePo.getUserQaId());
+        }
         for (int questionAnswerTitleIndex = 0; questionAnswerTitleIndex < questionAnswerTitles.size(); questionAnswerTitleIndex++) {
             titleObj = questionAnswerTitles.getJSONObject(questionAnswerTitleIndex);
             tmpUserUserQuestionAnswerValue = new UserQuestionAnswerValuePo();
@@ -85,6 +90,8 @@ public class SaveUserQuestionAnswerValueBMOImpl implements ISaveUserQuestionAnsw
         String answerType = userQuestionAnswerValuePo.getAnswerType();
 
         if("2003".equals(answerType)){
+            userQuestionAnswerPo.setState("1202");
+            userQuestionAnswerInnerServiceSMOImpl.updateUserQuestionAnswer(userQuestionAnswerPo);
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
         }
 
