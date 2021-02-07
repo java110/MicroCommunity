@@ -1,30 +1,48 @@
 {
   "autoMove": true,
-  "id": "userTitleId",
-  "name": "userQuestionAnswerValue",
-  "desc": "答卷答案",
+  "id": "ruleId",
+  "name": "activitiesRule",
+  "desc": "活动规则",
   "shareParam": "objId",
   "shareColumn": "obj_id",
   "shareName": "user",
-  "tableName": "user_question_answer_value",
+  "tableName": "activities_rule",
   "param": {
-    "userTitleId": "user_title_id",
-    "userQaId": "user_qa_id",
-    "qaId": "qa_id",
-    "titleId": "title_id",
-    "answerType": "answer_type",
-    "valueId": "value_id",
-    "valueContent": "value_content",
+    "ruleId": "rule_id",
+    "ruleName": "rule_name",
+    "ruleType": "rule_type",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "activitiesObj": "activities_obj",
+    "remark": "remark",
     "objType": "obj_type",
     "objId": "obj_id",
-    "score": "score",
-    "personId": "person_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "qaId",
-      "msg": "问卷ID不能为空"
+      "code": "ruleName",
+      "msg": "规则名称不能为空"
+    },
+    {
+      "code": "ruleType",
+      "msg": "规则类型不能为空"
+    },
+    {
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
+    },
+    {
+      "code": "activitiesObj",
+      "msg": "活动对象不能为空"
+    },
+    {
+      "code": "remark",
+      "msg": "活动说明不能为空"
     }
   ]
 }
