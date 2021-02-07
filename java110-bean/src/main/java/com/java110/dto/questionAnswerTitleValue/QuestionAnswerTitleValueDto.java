@@ -1,6 +1,7 @@
 package com.java110.dto.questionAnswerTitleValue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,12 @@ import java.util.Date;
 public class QuestionAnswerTitleValueDto extends PageDto implements Serializable {
 
     private String valueId;
-private String titleId;
-private String objId;
-private String objType;
-private String qaValue;
-private String seq;
+    private String titleId;
+    private String[] titleIds;
+    private String objId;
+    private String objType;
+    private String qaValue;
+    private String seq;
 
 
     private Date createTime;
@@ -30,37 +32,48 @@ private String seq;
     public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getTitleId() {
+
+    public String getTitleId() {
         return titleId;
     }
-public void setTitleId(String titleId) {
+
+    public void setTitleId(String titleId) {
         this.titleId = titleId;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getObjType() {
+
+    public String getObjType() {
         return objType;
     }
-public void setObjType(String objType) {
+
+    public void setObjType(String objType) {
         this.objType = objType;
     }
-public String getQaValue() {
+
+    public String getQaValue() {
         return qaValue;
     }
-public void setQaValue(String qaValue) {
+
+    public void setQaValue(String qaValue) {
         this.qaValue = qaValue;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 
@@ -79,5 +92,13 @@ public void setSeq(String seq) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getTitleIds() {
+        return titleIds;
+    }
+
+    public void setTitleIds(String[] titleIds) {
+        this.titleIds = titleIds;
     }
 }

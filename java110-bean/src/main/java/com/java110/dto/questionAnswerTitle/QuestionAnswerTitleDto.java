@@ -1,9 +1,11 @@
 package com.java110.dto.questionAnswerTitle;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.questionAnswerTitleValue.QuestionAnswerTitleValueDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -20,7 +22,6 @@ public class QuestionAnswerTitleDto extends PageDto implements Serializable {
     public static final String TITLE_TYPE_QUESTIONS = "3003"; // 简答题
 
 
-
     private String titleType;
     private String titleId;
     private String objId;
@@ -34,6 +35,8 @@ public class QuestionAnswerTitleDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<QuestionAnswerTitleValueDto> questionAnswerTitleValues;
 
 
     public String getTitleType() {
@@ -115,5 +118,13 @@ public class QuestionAnswerTitleDto extends PageDto implements Serializable {
 
     public void setObjIds(String[] objIds) {
         this.objIds = objIds;
+    }
+
+    public List<QuestionAnswerTitleValueDto> getQuestionAnswerTitleValues() {
+        return questionAnswerTitleValues;
+    }
+
+    public void setQuestionAnswerTitleValues(List<QuestionAnswerTitleValueDto> questionAnswerTitleValues) {
+        this.questionAnswerTitleValues = questionAnswerTitleValues;
     }
 }
