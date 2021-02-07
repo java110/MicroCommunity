@@ -52,7 +52,7 @@
         <if test="qaTitle !=null and qaTitle != ''">
             and t.qa_title= #{qaTitle}
         </if>
-        order by t.create_time desc
+        order by t.seq
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
