@@ -1,22 +1,25 @@
 {
   "autoMove": true,
-  "id": "userQaId",
-  "name": "userQuestionAnswer",
-  "desc": "答卷",
+  "id": "userTitleId",
+  "name": "userQuestionAnswerValue",
+  "desc": "答卷答案",
   "shareParam": "objId",
   "shareColumn": "obj_id",
   "shareName": "user",
-  "tableName": "user_question_answer",
+  "tableName": "user_question_answer_value",
   "param": {
+    "userTitleId": "user_title_id",
     "userQaId": "user_qa_id",
     "qaId": "qa_id",
-    "personId": "person_id",
-    "statusCd": "status_cd",
+    "titleId": "title_id",
+    "answerType": "answer_type",
+    "valueId": "value_id",
+    "valueContent": "value_content",
     "objType": "obj_type",
     "objId": "obj_id",
     "score": "score",
-    "evaluationScore": "evaluation_score",
-    "state": "state"
+    "personId": "person_id",
+    "statusCd": "status_cd"
   },
   "required": [
     {
