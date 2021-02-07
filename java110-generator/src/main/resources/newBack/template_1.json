@@ -1,37 +1,27 @@
 {
   "autoMove": true,
-  "id": "valueId",
-  "name": "questionAnswerTitleValue",
-  "desc": "答卷选项",
+  "id": "userQaId",
+  "name": "userQuestionAnswer",
+  "desc": "答卷",
   "shareParam": "objId",
   "shareColumn": "obj_id",
   "shareName": "user",
-  "tableName": "question_answer_title_value",
+  "tableName": "user_question_answer",
   "param": {
-    "valueId": "value_id",
-    "titleId": "title_id",
-    "qaValue": "qa_value",
+    "userQaId": "user_qa_id",
+    "qaId": "qa_id",
+    "personId": "person_id",
     "statusCd": "status_cd",
     "objType": "obj_type",
     "objId": "obj_id",
-    "seq": "seq"
+    "score": "score",
+    "evaluationScore": "evaluation_score",
+    "state": "state"
   },
   "required": [
     {
-      "code": "titleId",
-      "msg": "标题不能为空"
-    },
-    {
-      "code": "qaValue",
-      "msg": "选项值不能为空"
-    },
-    {
-      "code": "objType",
-      "msg": "问卷对象不能为空"
-    },
-    {
-      "code": "seq",
-      "msg": "序号不能为空"
+      "code": "qaId",
+      "msg": "问卷ID不能为空"
     }
   ]
 }

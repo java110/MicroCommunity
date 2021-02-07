@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userQuestionAnswerServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存答卷信息 add by wuxw 2018-07-03 -->
+    <insert id="saveUserQuestionAnswerInfo" parameterType="Map">
+        insert into user_question_answer(
+score,evaluation_score,obj_id,user_qa_id,person_id,state,obj_type,qa_id
+) values (
+#{score},#{evaluationScore},#{objId},#{userQaId},#{personId},#{state},#{objType},#{qaId}
+)
+    </insert>
+
+
+
+    <!-- 查询答卷信息 add by wuxw 2018-07-03 -->
+    <select id="getUserQuestionAnswerInfo" parameterType="Map" resultType="Map">
+        select  t.score,t.evaluation_score,t.evaluation_score evaluationScore,t.obj_id,t.obj_id objId,t.user_qa_id,t.user_qa_id userQaId,t.person_id,t.person_id personId,t.status_cd,t.status_cd statusCd,t.state,t.obj_type,t.obj_type objType,t.qa_id,t.qa_id qaId 
+from user_question_answer t 
+where 1 =1 
+<if test="score !=null and score != ''">
+   and t.score= #{score}
+</if> 
+<if test="evaluationScore !=null and evaluationScore != ''">
+   and t.evaluation_score= #{evaluationScore}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="userQaId !=null and userQaId != ''">
+   and t.user_qa_id= #{userQaId}
+</if> 
+<if test="personId !=null and personId != ''">
+   and t.person_id= #{personId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+<if test="qaId !=null and qaId != ''">
+   and t.qa_id= #{qaId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改答卷信息 add by wuxw 2018-07-03 -->
+    <update id="updateUserQuestionAnswerInfo" parameterType="Map">
+        update  user_question_answer t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="score !=null and score != ''">
+, t.score= #{score}
+</if> 
+<if test="evaluationScore !=null and evaluationScore != ''">
+, t.evaluation_score= #{evaluationScore}
+</if> 
+<if test="objId !=null and objId != ''">
+, t.obj_id= #{objId}
+</if> 
+<if test="personId !=null and personId != ''">
+, t.person_id= #{personId}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="objType !=null and objType != ''">
+, t.obj_type= #{objType}
+</if> 
+<if test="qaId !=null and qaId != ''">
+, t.qa_id= #{qaId}
+</if> 
+ where 1=1 <if test="userQaId !=null and userQaId != ''">
+and t.user_qa_id= #{userQaId}
+</if> 
+
+    </update>
+
+    <!-- 查询答卷数量 add by wuxw 2018-07-03 -->
+     <select id="queryUserQuestionAnswersCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from user_question_answer t 
+where 1 =1 
+<if test="score !=null and score != ''">
+   and t.score= #{score}
+</if> 
+<if test="evaluationScore !=null and evaluationScore != ''">
+   and t.evaluation_score= #{evaluationScore}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="userQaId !=null and userQaId != ''">
+   and t.user_qa_id= #{userQaId}
+</if> 
+<if test="personId !=null and personId != ''">
+   and t.person_id= #{personId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+<if test="qaId !=null and qaId != ''">
+   and t.qa_id= #{qaId}
+</if> 
+
+
+     </select>
+
+</mapper>
