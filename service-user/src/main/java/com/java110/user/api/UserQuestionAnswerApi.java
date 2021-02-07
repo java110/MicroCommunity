@@ -1,5 +1,6 @@
 package com.java110.user.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.dto.userQuestionAnswer.UserQuestionAnswerDto;
@@ -141,13 +142,34 @@ public class UserQuestionAnswerApi {
      * @path /app/userQuestionAnswer/saveUserQuestionAnswerValue
      */
     @RequestMapping(value = "/saveUserQuestionAnswerValue", method = RequestMethod.POST)
-    public ResponseEntity<String> saveUserQuestionAnswerValue(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveUserQuestionAnswerValue(
+            @RequestHeader(value = "user-id") String userId,
+            @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "qaId", "请求报文中未包含qaId");
+        Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
+        Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
+        Assert.hasKeyAndValue(reqJson, "answerType", "请求报文中未包含answerType");
+        Assert.hasKey(reqJson, "questionAnswerTitles", "未包含答案");
 
+        JSONArray questionAnswerTitles = reqJson.getJSONArray("questionAnswerTitles");
+
+        if (questionAnswerTitles == null || questionAnswerTitles.size() < 1) {
+            throw new IllegalArgumentException("未包含答案");
+        }
+
+        JSONObject titleObj = null;
+        for (int questionAnswerTitleIndex = 0; questionAnswerTitleIndex < questionAnswerTitles.size(); questionAnswerTitleIndex++) {
+            titleObj = questionAnswerTitles.getJSONObject(questionAnswerTitleIndex);
+            Assert.hasKeyAndValue(titleObj, "valueContent", titleObj.getString("qaTitle") + ",未填写答案");
+        }
 
         UserQuestionAnswerValuePo userQuestionAnswerValuePo = BeanConvertUtil.covertBean(reqJson, UserQuestionAnswerValuePo.class);
-        return saveUserQuestionAnswerValueBMOImpl.save(userQuestionAnswerValuePo);
+
+        userQuestionAnswerValuePo.setPersonId(userId);
+
+
+        return saveUserQuestionAnswerValueBMOImpl.save(userQuestionAnswerValuePo, questionAnswerTitles);
     }
 
     /**

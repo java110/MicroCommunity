@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -30,9 +33,16 @@ public class UserQuestionAnswerValueInnerServiceSMOImpl extends BaseServiceSMO i
 
 
     @Override
-    public int saveUserQuestionAnswerValue(@RequestBody UserQuestionAnswerValuePo userQuestionAnswerValuePo) {
+    public int saveUserQuestionAnswerValue(@RequestBody List<UserQuestionAnswerValuePo> userQuestionAnswerValuePos) {
         int saveFlag = 1;
-        userQuestionAnswerValueServiceDaoImpl.saveUserQuestionAnswerValueInfo(BeanConvertUtil.beanCovertMap(userQuestionAnswerValuePo));
+        List<Map> fees = new ArrayList<>();
+        for (UserQuestionAnswerValuePo payFeePo : userQuestionAnswerValuePos) {
+            fees.add(BeanConvertUtil.beanCovertMap(payFeePo));
+        }
+
+        Map info = new HashMap();
+        info.put("userQuestionAnswerValuePos", fees);
+        userQuestionAnswerValueServiceDaoImpl.saveUserQuestionAnswerValueInfo(info);
         return saveFlag;
     }
 

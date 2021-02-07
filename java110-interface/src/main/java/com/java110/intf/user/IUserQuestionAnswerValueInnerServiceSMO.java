@@ -24,7 +24,7 @@ public interface IUserQuestionAnswerValueInnerServiceSMO {
 
 
     @RequestMapping(value = "/saveUserQuestionAnswerValue", method = RequestMethod.POST)
-    public int saveUserQuestionAnswerValue(@RequestBody UserQuestionAnswerValuePo userQuestionAnswerValuePo);
+    public int saveUserQuestionAnswerValue(@RequestBody List<UserQuestionAnswerValuePo> userQuestionAnswerValuePos);
 
     @RequestMapping(value = "/updateUserQuestionAnswerValue", method = RequestMethod.POST)
     public int updateUserQuestionAnswerValue(@RequestBody  UserQuestionAnswerValuePo userQuestionAnswerValuePo);
