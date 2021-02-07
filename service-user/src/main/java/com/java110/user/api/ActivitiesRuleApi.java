@@ -2,6 +2,7 @@ package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.activitiesRule.ActivitiesRuleDto;
+import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.po.activitiesRule.ActivitiesRulePo;
 import com.java110.user.bmo.activitiesRule.IDeleteActivitiesRuleBMO;
 import com.java110.user.bmo.activitiesRule.IGetActivitiesRuleBMO;
@@ -11,7 +12,12 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/activitiesRule")
@@ -36,7 +42,10 @@ public class ActivitiesRuleApi {
      * @path /app/activitiesRule/saveActivitiesRule
      */
     @RequestMapping(value = "/saveActivitiesRule", method = RequestMethod.POST)
-    public ResponseEntity<String> saveActivitiesRule(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveActivitiesRule(
+            @RequestHeader(value = "store-id", required = false) String storeId,
+            @RequestParam(value = "communityId", required = false) String communityId,
+            @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "ruleName", "请求报文中未包含ruleName");
         Assert.hasKeyAndValue(reqJson, "ruleType", "请求报文中未包含ruleType");
@@ -45,8 +54,17 @@ public class ActivitiesRuleApi {
         Assert.hasKeyAndValue(reqJson, "activitiesObj", "请求报文中未包含activitiesObj");
         Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含remark");
 
+        String activitiesObj = reqJson.getString("activitiesObj");
+
 
         ActivitiesRulePo activitiesRulePo = BeanConvertUtil.covertBean(reqJson, ActivitiesRulePo.class);
+        if ("4444".equals(activitiesObj)) {
+            activitiesRulePo.setObjType(QuestionAnswerDto.QA_TYPE_STORE);
+            activitiesRulePo.setObjId(storeId);
+        } else {
+            activitiesRulePo.setObjType(QuestionAnswerDto.QA_TYPE_COMMUNITY);
+            activitiesRulePo.setObjId(communityId);
+        }
         return saveActivitiesRuleBMOImpl.save(activitiesRulePo);
     }
 
