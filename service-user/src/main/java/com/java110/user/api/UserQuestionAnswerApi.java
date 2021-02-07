@@ -108,42 +108,27 @@ public class UserQuestionAnswerApi {
      * @serviceCode /userQuestionAnswer/queryUserQuestionAnswer
      * @path /app/userQuestionAnswer/queryUserQuestionAnswer
      */
-    @RequestMapping(value = "/queryStaffQuestionAnswer", method = RequestMethod.GET)
-    public ResponseEntity<String> queryStaffQuestionAnswer(@RequestHeader(value = "store-id") String storeId,
-                                                           @RequestHeader(value = "user-id") String userId,
-                                                           @RequestParam(value = "page") int page,
-                                                           @RequestParam(value = "row") int row) {
+    @RequestMapping(value = "/queryUserQuestionAnswer", method = RequestMethod.GET)
+    public ResponseEntity<String> queryUserQuestionAnswer(@RequestHeader(value = "store-id") String storeId,
+                                                          @RequestHeader(value = "user-id") String userId,
+                                                          @RequestParam(value = "communityId", required = false) String communityId,
+                                                          @RequestParam(value = "roleCd") String roleCd,
+                                                          @RequestParam(value = "page") int page,
+                                                          @RequestParam(value = "row") int row) {
         UserQuestionAnswerDto userQuestionAnswerDto = new UserQuestionAnswerDto();
         userQuestionAnswerDto.setPage(page);
         userQuestionAnswerDto.setRow(row);
-        userQuestionAnswerDto.setObjType(QuestionAnswerDto.QA_TYPE_STORE);
-        userQuestionAnswerDto.setObjId(storeId);
-        userQuestionAnswerDto.setPersonId(userId);
-        userQuestionAnswerDto.setQaTypes(new String[]{"2002","4004"});
-        return getUserQuestionAnswerBMOImpl.get(userQuestionAnswerDto);
-    }
-
-    /**
-     * 微信删除消息模板
-     *
-     * @param communityId 小区ID
-     * @return
-     * @serviceCode /userQuestionAnswer/queryUserQuestionAnswer
-     * @path /app/userQuestionAnswer/queryUserQuestionAnswer
-     */
-    @RequestMapping(value = "/queryOwnerQuestionAnswer", method = RequestMethod.GET)
-    public ResponseEntity<String> queryOwnerQuestionAnswer(
-            @RequestHeader(value = "user-id") String userId,
-            @RequestParam(value = "communityId") String communityId,
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "row") int row) {
-        UserQuestionAnswerDto userQuestionAnswerDto = new UserQuestionAnswerDto();
-        userQuestionAnswerDto.setPage(page);
-        userQuestionAnswerDto.setRow(row);
-        userQuestionAnswerDto.setObjType(QuestionAnswerDto.QA_TYPE_COMMUNITY);
-        userQuestionAnswerDto.setObjId(communityId);
-        userQuestionAnswerDto.setPersonId(userId);
-        userQuestionAnswerDto.setQaTypes(new String[]{"1001","3003"});
+        if ("owner".equals(roleCd)) {
+            userQuestionAnswerDto.setObjType(QuestionAnswerDto.QA_TYPE_COMMUNITY);
+            userQuestionAnswerDto.setObjId(communityId);
+            userQuestionAnswerDto.setPersonId(userId);
+            userQuestionAnswerDto.setQaTypes(new String[]{"1001", "3003"});
+        } else {
+            userQuestionAnswerDto.setObjType(QuestionAnswerDto.QA_TYPE_STORE);
+            userQuestionAnswerDto.setObjId(storeId);
+            userQuestionAnswerDto.setPersonId(userId);
+            userQuestionAnswerDto.setQaTypes(new String[]{"2002", "4004"});
+        }
         return getUserQuestionAnswerBMOImpl.get(userQuestionAnswerDto);
     }
 
