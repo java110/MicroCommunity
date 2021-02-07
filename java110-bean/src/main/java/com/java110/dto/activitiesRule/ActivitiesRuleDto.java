@@ -1,6 +1,7 @@
 package com.java110.dto.activitiesRule;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,15 @@ import java.util.Date;
 public class ActivitiesRuleDto extends PageDto implements Serializable {
 
     private String ruleType;
-private String objId;
-private String ruleName;
-private String activitiesObj;
-private String startTime;
-private String remark;
-private String endTime;
-private String ruleId;
-private String objType;
+    private String objId;
+    private String[] objIds;
+    private String ruleName;
+    private String activitiesObj;
+    private String startTime;
+    private String remark;
+    private String endTime;
+    private String ruleId;
+    private String objType;
 
 
     private Date createTime;
@@ -33,55 +35,72 @@ private String objType;
     public String getRuleType() {
         return ruleType;
     }
-public void setRuleType(String ruleType) {
+
+    public void setRuleType(String ruleType) {
         this.ruleType = ruleType;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getRuleName() {
+
+    public String getRuleName() {
         return ruleName;
     }
-public void setRuleName(String ruleName) {
+
+    public void setRuleName(String ruleName) {
         this.ruleName = ruleName;
     }
-public String getActivitiesObj() {
+
+    public String getActivitiesObj() {
         return activitiesObj;
     }
-public void setActivitiesObj(String activitiesObj) {
+
+    public void setActivitiesObj(String activitiesObj) {
         this.activitiesObj = activitiesObj;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getObjType() {
+
+    public String getObjType() {
         return objType;
     }
-public void setObjType(String objType) {
+
+    public void setObjType(String objType) {
         this.objType = objType;
     }
 
@@ -100,5 +119,13 @@ public void setObjType(String objType) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getObjIds() {
+        return objIds;
+    }
+
+    public void setObjIds(String[] objIds) {
+        this.objIds = objIds;
     }
 }

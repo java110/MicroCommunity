@@ -44,7 +44,6 @@ public class ActivitiesRuleApi {
     @RequestMapping(value = "/saveActivitiesRule", method = RequestMethod.POST)
     public ResponseEntity<String> saveActivitiesRule(
             @RequestHeader(value = "store-id", required = false) String storeId,
-            @RequestParam(value = "communityId", required = false) String communityId,
             @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "ruleName", "请求报文中未包含ruleName");
@@ -62,8 +61,9 @@ public class ActivitiesRuleApi {
             activitiesRulePo.setObjType(QuestionAnswerDto.QA_TYPE_STORE);
             activitiesRulePo.setObjId(storeId);
         } else {
+            Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
             activitiesRulePo.setObjType(QuestionAnswerDto.QA_TYPE_COMMUNITY);
-            activitiesRulePo.setObjId(communityId);
+            activitiesRulePo.setObjId(reqJson.getString("communityId"));
         }
         return saveActivitiesRuleBMOImpl.save(activitiesRulePo);
     }
@@ -120,13 +120,15 @@ public class ActivitiesRuleApi {
      * @path /app/activitiesRule/queryActivitiesRule
      */
     @RequestMapping(value = "/queryActivitiesRule", method = RequestMethod.GET)
-    public ResponseEntity<String> queryActivitiesRule(@RequestParam(value = "communityId") String communityId,
-                                                      @RequestParam(value = "page") int page,
-                                                      @RequestParam(value = "row") int row) {
+    public ResponseEntity<String> queryActivitiesRule(
+            @RequestHeader(value = "store-id", required = false) String storeId,
+            @RequestParam(value = "communityId") String communityId,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "row") int row) {
         ActivitiesRuleDto activitiesRuleDto = new ActivitiesRuleDto();
         activitiesRuleDto.setPage(page);
         activitiesRuleDto.setRow(row);
-        activitiesRuleDto.setObjId(communityId);
+        activitiesRuleDto.setObjIds(new String[]{storeId, communityId});
         return getActivitiesRuleBMOImpl.get(activitiesRuleDto);
     }
 }
