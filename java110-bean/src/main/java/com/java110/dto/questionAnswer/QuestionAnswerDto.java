@@ -18,6 +18,8 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     public static final String QA_TYPE_COMMUNITY = "3306";//小区
     public static final String QA_TYPE_STORE = "3307";//商户ID
 
+
+
     private String qaName;
     private String qaType;
     private String qaTypeName;

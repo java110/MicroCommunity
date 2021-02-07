@@ -1,6 +1,7 @@
 package com.java110.dto.userQuestionAnswer;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,19 @@ import java.util.Date;
 public class UserQuestionAnswerDto extends PageDto implements Serializable {
 
     private String score;
-private String evaluationScore;
-private String objId;
-private String userQaId;
-private String personId;
-private String state;
-private String objType;
-private String qaId;
-
+    private String evaluationScore;
+    private String objId;
+    private String userQaId;
+    private String personId;
+    private String state;
+    private String objType;
+    private String qaId;
+    private String qaType;
+    private String[] qaTypes;
+    private String startTime;
+    private String qaName;
+    private String endTime;
+    private String qaTypeName;
 
     private Date createTime;
 
@@ -32,49 +38,64 @@ private String qaId;
     public String getScore() {
         return score;
     }
-public void setScore(String score) {
+
+    public void setScore(String score) {
         this.score = score;
     }
-public String getEvaluationScore() {
+
+    public String getEvaluationScore() {
         return evaluationScore;
     }
-public void setEvaluationScore(String evaluationScore) {
+
+    public void setEvaluationScore(String evaluationScore) {
         this.evaluationScore = evaluationScore;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getUserQaId() {
+
+    public String getUserQaId() {
         return userQaId;
     }
-public void setUserQaId(String userQaId) {
+
+    public void setUserQaId(String userQaId) {
         this.userQaId = userQaId;
     }
-public String getPersonId() {
+
+    public String getPersonId() {
         return personId;
     }
-public void setPersonId(String personId) {
+
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getObjType() {
+
+    public String getObjType() {
         return objType;
     }
-public void setObjType(String objType) {
+
+    public void setObjType(String objType) {
         this.objType = objType;
     }
-public String getQaId() {
+
+    public String getQaId() {
         return qaId;
     }
-public void setQaId(String qaId) {
+
+    public void setQaId(String qaId) {
         this.qaId = qaId;
     }
 
@@ -93,5 +114,53 @@ public void setQaId(String qaId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getQaType() {
+        return qaType;
+    }
+
+    public void setQaType(String qaType) {
+        this.qaType = qaType;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getQaName() {
+        return qaName;
+    }
+
+    public void setQaName(String qaName) {
+        this.qaName = qaName;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getQaTypeName() {
+        return qaTypeName;
+    }
+
+    public void setQaTypeName(String qaTypeName) {
+        this.qaTypeName = qaTypeName;
+    }
+
+    public String[] getQaTypes() {
+        return qaTypes;
+    }
+
+    public void setQaTypes(String[] qaTypes) {
+        this.qaTypes = qaTypes;
     }
 }
