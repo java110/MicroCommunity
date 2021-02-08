@@ -19,10 +19,10 @@
     <select id="getActivitiesBeautifulStaffInfo" parameterType="Map" resultType="Map">
         select t.be_id,t.be_id beId,t.work_content,t.work_content workContent,t.activities_num,t.activities_num
         activitiesNum,t.status_cd,t.status_cd statusCd,t.poll,t.rule_id,t.rule_id ruleId,t.store_id,t.store_id
-        storeId,t.staff_id,t.staff_id staffId,uu.name staffName,ar.rule_name ruleName
+        storeId,t.staff_id,t.staff_id staffId,uu.name staffName,ar.rule_name ruleName,t.create_time createTime
         from activities_beautiful_staff t
         left join u_user uu on t.staff_id = uu.user_id and uu.status_cd = '0'
-        left join activities_rule ar on t.rule_id = ar.rule_id and ar.status_cd = '0' and ar.obj_type = '3307' and ar.obj_id = t.store_id;
+        left join activities_rule ar on t.rule_id = ar.rule_id and ar.status_cd = '0' and ar.obj_type = '3307' and ar.obj_id = t.store_id
 
         where 1 =1
         <if test="beId !=null and beId != ''">
