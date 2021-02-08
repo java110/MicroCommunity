@@ -1,6 +1,7 @@
 package com.java110.dto.activitiesBeautifulStaff;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,12 +16,14 @@ import java.util.Date;
 public class ActivitiesBeautifulStaffDto extends PageDto implements Serializable {
 
     private String beId;
-private String workContent;
-private String activitiesNum;
-private String poll;
-private String ruleId;
-private String storeId;
-private String staffId;
+    private String workContent;
+    private String activitiesNum;
+    private String poll;
+    private String ruleId;
+    private String ruleName;
+    private String storeId;
+    private String staffId;
+    private String staffName;
 
 
     private Date createTime;
@@ -31,43 +34,56 @@ private String staffId;
     public String getBeId() {
         return beId;
     }
-public void setBeId(String beId) {
+
+    public void setBeId(String beId) {
         this.beId = beId;
     }
-public String getWorkContent() {
+
+    public String getWorkContent() {
         return workContent;
     }
-public void setWorkContent(String workContent) {
+
+    public void setWorkContent(String workContent) {
         this.workContent = workContent;
     }
-public String getActivitiesNum() {
+
+    public String getActivitiesNum() {
         return activitiesNum;
     }
-public void setActivitiesNum(String activitiesNum) {
+
+    public void setActivitiesNum(String activitiesNum) {
         this.activitiesNum = activitiesNum;
     }
-public String getPoll() {
+
+    public String getPoll() {
         return poll;
     }
-public void setPoll(String poll) {
+
+    public void setPoll(String poll) {
         this.poll = poll;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -86,5 +102,21 @@ public void setStaffId(String staffId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
     }
 }
