@@ -26,6 +26,7 @@ public class SaveActivitiesBeautifulStaffBMOImpl implements ISaveActivitiesBeaut
     public ResponseEntity<String> save(ActivitiesBeautifulStaffPo activitiesBeautifulStaffPo) {
 
         activitiesBeautifulStaffPo.setBeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_beId));
+        activitiesBeautifulStaffPo.setPoll("0");
         int flag = activitiesBeautifulStaffInnerServiceSMOImpl.saveActivitiesBeautifulStaff(activitiesBeautifulStaffPo);
 
         if (flag > 0) {

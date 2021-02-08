@@ -169,6 +169,7 @@ public class ActivitiesRuleApi {
 
 
         ActivitiesBeautifulStaffPo activitiesBeautifulStaffPo = BeanConvertUtil.covertBean(reqJson, ActivitiesBeautifulStaffPo.class);
+
         return saveActivitiesBeautifulStaffBMOImpl.save(activitiesBeautifulStaffPo);
     }
 
