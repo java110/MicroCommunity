@@ -150,7 +150,6 @@ public class ActivitiesRuleApi {
     }
 
 
-
     /**
      * 微信保存消息模板
      *
@@ -160,7 +159,9 @@ public class ActivitiesRuleApi {
      * @path /app/activitiesRule/saveActivitiesBeautifulStaff
      */
     @RequestMapping(value = "/saveActivitiesBeautifulStaff", method = RequestMethod.POST)
-    public ResponseEntity<String> saveActivitiesBeautifulStaff(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveActivitiesBeautifulStaff(
+            @RequestHeader(value = "store-id") String storeId,
+            @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "activitiesNum", "请求报文中未包含activitiesNum");
@@ -169,7 +170,7 @@ public class ActivitiesRuleApi {
 
 
         ActivitiesBeautifulStaffPo activitiesBeautifulStaffPo = BeanConvertUtil.covertBean(reqJson, ActivitiesBeautifulStaffPo.class);
-
+        activitiesBeautifulStaffPo.setStoreId(storeId);
         return saveActivitiesBeautifulStaffBMOImpl.save(activitiesBeautifulStaffPo);
     }
 
