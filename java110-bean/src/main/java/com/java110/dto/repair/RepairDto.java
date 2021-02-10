@@ -83,6 +83,13 @@ public class RepairDto extends PageDto implements Serializable {
     private String preRuId;
     private String ruId;
 
+    //业主上传维修图片
+    private List<PhotoVo> repairPhotos;
+    //维修前图片
+    private List<PhotoVo> beforePhotos;
+    //维修后图片
+    private List<PhotoVo> afterPhotos;
+
 
     public String getRepairName() {
         return repairName;
@@ -325,6 +332,7 @@ public class RepairDto extends PageDto implements Serializable {
     public void setPreRuId(String preRuId) {
         this.preRuId = preRuId;
     }
+
     public String getbId() {
         return bId;
     }
@@ -339,5 +347,29 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRuId(String ruId) {
         this.ruId = ruId;
+    }
+
+    public List<PhotoVo> getRepairPhotos() {
+        return repairPhotos;
+    }
+
+    public void setRepairPhotos(List<PhotoVo> repairPhotos) {
+        this.repairPhotos = repairPhotos;
+    }
+
+    public List<PhotoVo> getBeforePhotos() {
+        return beforePhotos;
+    }
+
+    public void setBeforePhotos(List<PhotoVo> beforePhotos) {
+        this.beforePhotos = beforePhotos;
+    }
+
+    public List<PhotoVo> getAfterPhotos() {
+        return afterPhotos;
+    }
+
+    public void setAfterPhotos(List<PhotoVo> afterPhotos) {
+        this.afterPhotos = afterPhotos;
     }
 }

@@ -74,6 +74,12 @@ public class ListAuditAppUserBindingOwnersListener extends AbstractServiceApiLis
             auditAppUserBindingOwners = BeanConvertUtil.covertBeanList(ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto), ApiAuditAppUserBindingOwnerDataVo.class);
             List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
             for (ApiAuditAppUserBindingOwnerDataVo owner : auditAppUserBindingOwners) {
+                //区分小程序和和公众号
+                if (owner.getAppType().equals("WECHAT")) {
+                    owner.setAppTypeName("公众号");
+                } else if (owner.getAppType().equals("WECHAT_MINA")) {
+                    owner.setAppTypeName("小程序");
+                }
                 //对业主身份证号隐藏处理
                 String idCard = owner.getIdCard();
                 if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {

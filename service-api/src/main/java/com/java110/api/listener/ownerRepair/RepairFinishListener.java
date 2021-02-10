@@ -1,5 +1,6 @@
 package com.java110.api.listener.ownerRepair;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ownerRepair.IOwnerRepairBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
@@ -10,20 +11,27 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +61,12 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMO;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -108,6 +122,58 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         repairUserPo.setContext("");
         repairUserPo.setCommunityId(reqJson.getString("communityId"));
         super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+
+        //维修前图片处理
+        if (reqJson.containsKey("beforeRepairPhotos") && !StringUtils.isEmpty(reqJson.getString("beforeRepairPhotos"))) {
+            JSONArray beforeRepairPhotos = reqJson.getJSONArray("beforeRepairPhotos");
+            for (int _photoIndex = 0; _photoIndex < beforeRepairPhotos.size(); _photoIndex++) {
+                FileDto fileDto = new FileDto();
+                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                fileDto.setFileName(fileDto.getFileId());
+                fileDto.setContext(beforeRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
+                fileDto.setSuffix("jpeg");
+                fileDto.setCommunityId(reqJson.getString("communityId"));
+                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+                reqJson.put("ownerPhotoId", fileDto.getFileId());
+                reqJson.put("fileSaveName", fileName);
+                JSONObject businessUnit = new JSONObject();
+                businessUnit.put("fileRelId", "-" + (_photoIndex + 1));
+                businessUnit.put("relTypeCd", FileRelDto.BEFORE_REPAIR_PHOTOS);
+                businessUnit.put("saveWay", "ftp");
+                businessUnit.put("objId", reqJson.getString("repairId"));
+                businessUnit.put("fileRealName", fileName);
+                businessUnit.put("fileSaveName", fileName);
+                FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+                fileRelInnerServiceSMO.saveFileRel(fileRelPo);
+//                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            }
+        }
+
+        //维修后图片处理
+        if (reqJson.containsKey("afterRepairPhotos") && !StringUtils.isEmpty(reqJson.getString("afterRepairPhotos"))) {
+            JSONArray afterRepairPhotos = reqJson.getJSONArray("afterRepairPhotos");
+            for (int _photoIndex = 0; _photoIndex < afterRepairPhotos.size(); _photoIndex++) {
+                FileDto fileDto = new FileDto();
+                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                fileDto.setFileName(fileDto.getFileId());
+                fileDto.setContext(afterRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
+                fileDto.setSuffix("jpeg");
+                fileDto.setCommunityId(reqJson.getString("communityId"));
+                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+                reqJson.put("ownerFinishPhotoId", fileDto.getFileId());
+                reqJson.put("fileFinishSaveName", fileName);
+                JSONObject businessUnit = new JSONObject();
+                businessUnit.put("fileRelId", "-" + (_photoIndex + 1));
+                businessUnit.put("relTypeCd", FileRelDto.AFTER_REPAIR_PHOTOS);
+                businessUnit.put("saveWay", "ftp");
+                businessUnit.put("objId", reqJson.getString("repairId"));
+                businessUnit.put("fileRealName", fileName);
+                businessUnit.put("fileSaveName", fileName);
+                FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+                fileRelInnerServiceSMO.saveFileRel(fileRelPo);
+//                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            }
+        }
 
         if ("200".equals(reqJson.getString("feeFlag"))) { // 没有费用
             ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_APPRAISE);

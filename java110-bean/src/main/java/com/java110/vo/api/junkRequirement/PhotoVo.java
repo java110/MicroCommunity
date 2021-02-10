@@ -13,11 +13,21 @@ import java.io.Serializable;
 public class PhotoVo implements Serializable {
     private String url;
 
+    private String relTypeCd;
+
     public String getUrl() {
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getRelTypeCd() {
+        return relTypeCd;
+    }
+
+    public void setRelTypeCd(String relTypeCd) {
+        this.relTypeCd = relTypeCd;
     }
 }

@@ -1522,11 +1522,9 @@
     </select>
 
     <select id="queryRepairForStaff" parameterType="Map" resultType="Map">
-        /*select r.staff_id staffId,r.staff_name staffName from r_repair_user r
-        where r.state != "10005" and r.status_cd = "0"*/
         SELECT r.staff_id staffId,r.staff_name staffName FROM r_repair_user r
         WHERE r.state!='10005' AND
-        (r.state!='10001' AND r.repair_event!='payUser') AND r.repair_event!="startUser"
+        r.repair_event!='payUser' AND r.repair_event!="startUser"
         <if test="communityId != null and communityId !=''">
             and r.community_id = #{communityId}
         </if>
@@ -1535,6 +1533,9 @@
         </if>
         group by r.staff_id
         order by r.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
     </select>
 
 </mapper>

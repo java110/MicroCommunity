@@ -51,6 +51,8 @@ public abstract class AbstractOwnerAppUserBusinessServiceDataFlowListener extend
         businessOwnerAppUserInfo.put("memberId", businessOwnerAppUserInfo.get("member_id"));
         businessOwnerAppUserInfo.put("userId", businessOwnerAppUserInfo.get("user_id"));
         businessOwnerAppUserInfo.put("appType", businessOwnerAppUserInfo.get("app_type"));
+        businessOwnerAppUserInfo.put("nickName", businessOwnerAppUserInfo.get("nickname"));
+        businessOwnerAppUserInfo.put("headImgUrl", businessOwnerAppUserInfo.get("headimgurl"));
         businessOwnerAppUserInfo.remove("bId");
         businessOwnerAppUserInfo.put("statusCd", statusCd);
     }
@@ -89,6 +91,8 @@ public abstract class AbstractOwnerAppUserBusinessServiceDataFlowListener extend
         currentOwnerAppUserInfo.put("memberId", currentOwnerAppUserInfo.get("member_id"));
         currentOwnerAppUserInfo.put("userId", currentOwnerAppUserInfo.get("user_id"));
         currentOwnerAppUserInfo.put("appType", currentOwnerAppUserInfo.get("app_type"));
+        currentOwnerAppUserInfo.put("nickName", currentOwnerAppUserInfo.get("nickname"));
+        currentOwnerAppUserInfo.put("headImgUrl", currentOwnerAppUserInfo.get("headimgurl"));
 
 
         currentOwnerAppUserInfo.put("operate", StatusConstant.OPERATE_DEL);

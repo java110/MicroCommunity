@@ -375,9 +375,6 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             reportFeeMonthStatisticsTotalDto = new ReportFeeMonthStatisticsTotalDto();
         }
 
-        /*FeeDetailResultVo resultVo = new FeeDetailResultVo(countInfo.getDouble("totalReceivableAmount"), countInfo.getDouble("totalReceivedAmount"),
-                (int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList);*/
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList, reportFeeMonthStatisticsTotalDto);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
@@ -476,12 +473,24 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         //获取员工id和姓名集合
         List<RepairUserDto> staffs;
         if (StringUtil.isEmpty(repairUserDto.getStaffId())) {
+            repairUserDto.setPage(-1);
             staffs = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRepairForStaff(repairUserDto);
         } else {
+            repairUserDto.setPage(-1);
             repairUserDto.setStaffId(null);
             staffs = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRepairForStaff(repairUserDto);
         }
         List<RepairUserDto> repairUserList = new ArrayList<>();
+        //处理中总数量
+        int dealNumber = 0;
+        //结单总数量
+        int statementNumber = 0;
+        //退单总数量
+        int chargebackNumber = 0;
+        //转单总数量
+        int transferOrderNumber = 0;
+        //派单总数量
+        int dispatchNumber = 0;
         if (count > 0) {
             for (RepairUserDto repairUser : repairUsers) {
                 RepairUserDto repairUserInfo = new RepairUserDto();
@@ -528,27 +537,51 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     repairUserInfo.setStaffName(repairUser.getStaffName());
                     //处理中报修数量
                     repairUserInfo.setDealAmount(Integer.toString(dealAmount));
+                    //处理中报修总数量
+                    repairUserInfo.setDealNumber(Integer.toString(dealNumber));
                     //结单报修数量
                     repairUserInfo.setStatementAmount(Integer.toString(statementAmount));
+                    //结单报修总数量
+                    repairUserInfo.setStatementNumber(Integer.toString(statementNumber));
                     //退单报修数量
                     repairUserInfo.setChargebackAmount(Integer.toString(chargebackAmount));
+                    //退单报修总数量
+                    repairUserInfo.setChargebackNumber(Integer.toString(chargebackNumber));
                     //转单报修数量
                     repairUserInfo.setTransferOrderAmount(Integer.toString(transferOrderAmount));
+                    //转单报修总数量
+                    repairUserInfo.setTransferOrderNumber(Integer.toString(transferOrderNumber));
                     //派单报修数量
                     repairUserInfo.setDispatchAmount(Integer.toString(dispatchAmount));
+                    //派单报修总数量
+                    repairUserInfo.setDispatchNumber(Integer.toString(dispatchNumber));
                     //员工id和姓名信息集合
                     repairUserInfo.setRepairList(staffs);
                     repairUserList.add(repairUserInfo);
                 } else {
                     continue;
                 }
+                dealNumber = Integer.parseInt(repairUserInfo.getDealAmount()) + dealNumber;
+                statementNumber = Integer.parseInt(repairUserInfo.getStatementAmount()) + statementNumber;
+                chargebackNumber = Integer.parseInt(repairUserInfo.getChargebackAmount()) + chargebackNumber;
+                transferOrderNumber = Integer.parseInt(repairUserInfo.getTransferOrderAmount()) + transferOrderNumber;
+                dispatchNumber = Integer.parseInt(repairUserInfo.getDispatchAmount()) + dispatchNumber;
             }
         } else {
             repairUserList = new ArrayList<>();
         }
 
-        int size = repairUserList.size();
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) size / (double) repairUserDto.getRow()), size, repairUserList, staffs);
+        RepairUserDto repairUser = new RepairUserDto();
+        repairUser.setDealNumber(Integer.toString(dealNumber));
+        repairUser.setStatementNumber(Integer.toString(statementNumber));
+        repairUser.setChargebackNumber(Integer.toString(chargebackNumber));
+        repairUser.setTransferOrderNumber(Integer.toString(transferOrderNumber));
+        repairUser.setDispatchNumber(Integer.toString(dispatchNumber));
+
+        //获取总条数
+        int size = staffs.size();
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) size / (double) repairUserDto.getRow()), repairUserList.size(), repairUserList, staffs, repairUser);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

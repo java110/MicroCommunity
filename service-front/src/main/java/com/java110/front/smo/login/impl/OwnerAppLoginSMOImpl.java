@@ -212,6 +212,16 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
 
         //获取 openId
         String openId = paramObj.getString("openid");
+        String userinfo_url = WechatConstant.APP_GET_USER_INFO_URL
+                .replace("ACCESS_TOKEN", paramObj.getString("access_token"))
+                .replace("OPENID", openId);
+
+        ResponseEntity<String> userinfo_paramOut = outRestTemplate.getForEntity(userinfo_url, String.class);
+        logger.debug("调用微信换去openId ", userinfo_paramOut);
+        if (userinfo_paramOut.getStatusCode() != HttpStatus.OK) {
+            return ResultVo.redirectPage("/");
+        }
+        JSONObject userinfo_paramObj = JSONObject.parseObject(userinfo_paramOut.getBody());
 
         int loginFlag = paramIn.getInteger("loginFlag");
 
@@ -220,6 +230,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
+            CommonCache.setValue(code+"-nickname",  userinfo_paramObj.getString("nickname"), expireTime);
+            CommonCache.setValue(code+"-headimgurl",  userinfo_paramObj.getString("headimgurl"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -240,6 +252,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
+            CommonCache.setValue(code+"-nickname",  userinfo_paramObj.getString("nickname"), expireTime);
+            CommonCache.setValue(code+"-headimgurl",  userinfo_paramObj.getString("headimgurl"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -267,6 +281,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         if (StringUtil.isEmpty(tmpUserDto.getKey())) {
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
+            CommonCache.setValue(code+"-nickname",  userinfo_paramObj.getString("nickname"), expireTime);
+            CommonCache.setValue(code+"-headimgurl",  userinfo_paramObj.getString("headimgurl"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -335,7 +351,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
 
             openUrl = WechatConstant.OPEN_AUTH
                     .replace("APPID", smallWeChatDto.getAppId())
-                    .replace("SCOPE", "snsapi_base")
+                    .replace("SCOPE", "snsapi_userinfo")
                     .replace(
                             "REDIRECT_URL",
                             URLEncoder
@@ -379,6 +395,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         String code = paramIn.getString("code");
 
         String openId = CommonCache.getValue(code);
+        String nickname = CommonCache.getValue(code+"-nickname");
+        String headimgurl = CommonCache.getValue(code+"-headimgurl");
 
         if (StringUtil.isEmpty(openId)) {
             responseEntity = new ResponseEntity<>("页面失效，请刷新后重试", HttpStatus.UNAUTHORIZED);
@@ -395,6 +413,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         JSONObject userOwnerInfo = new JSONObject();
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setOpenId(openId);
+        ownerAppUserDto.setNickName(nickname);
+        ownerAppUserDto.setHeadImgUrl(headimgurl);
         ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
         if (curOwnerApp != null) {
             ownerAppUserDto.setAppUserId(curOwnerApp.getAppUserId());

@@ -100,9 +100,6 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         } else if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {  //微信公众号支付
             paramObj.put("primeRate", "6");
             paramObj.put("remark", "线上公众号支付");
-        }else{ // 默认 小程序支付
-            paramObj.put("primeRate", "5");
-            paramObj.put("remark", "其他支付");
         }
 
         //添加单元信息

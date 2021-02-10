@@ -53,6 +53,9 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String nickName;
+    private String headImgUrl;
+
 
     public String getIdCard() {
         return idCard;
@@ -245,5 +248,21 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
     }
 }

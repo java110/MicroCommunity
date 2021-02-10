@@ -21,6 +21,8 @@ public class FileRelDto extends PageDto implements Serializable {
     public static final String REL_TYPE_CD_GOODS_COVER = "17000";//商品封面
     public static final String REL_TYPE_CD_GOODS_CAROUSEL_FIGURE = "18000";//商品轮播
     public static final String SAVE_WAY_FTP = "ftp";//租赁图片
+    public static final String BEFORE_REPAIR_PHOTOS = "19000";  //维修前图片
+    public static final String AFTER_REPAIR_PHOTOS = "200000";  //维修后图片
 
     private String relTypeCd;
     private String[] relTypeCds;

@@ -340,6 +340,13 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
      */
     @Override
     public List<RepairUserDto> queryRepairForStaff(RepairUserDto repairUserDto) {
+        //校验是否传了 分页信息
+
+        int page = repairUserDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            repairUserDto.setPage((page - 1) * repairUserDto.getRow());
+        }
         List<RepairUserDto> repairUserDtoList = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.getRepairStaff(BeanConvertUtil.beanCovertMap(repairUserDto)), RepairUserDto.class);
         return repairUserDtoList;
     }

@@ -61,6 +61,8 @@ public class RefreshAppUserBindingOwnerOpenIdListener extends AbstractServiceApi
             ownerAppUserPo.setAppUserId("-1");
             ownerAppUserPo.setAppType(reqJson.getString("appType"));
             ownerAppUserPo.setOpenId(reqJson.getString("openId"));
+            ownerAppUserPo.setNickName(reqJson.getString("nickName"));
+            ownerAppUserPo.setHeadImgUrl(reqJson.getString("headImgUrl"));
             super.insert(context, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_APP_USER);
 
             return;
@@ -70,6 +72,8 @@ public class RefreshAppUserBindingOwnerOpenIdListener extends AbstractServiceApi
         ownerAppUserPo.setAppUserId(appUserId);
         ownerAppUserPo.setCommunityId(reqJson.getString("communityId"));
         ownerAppUserPo.setOpenId(reqJson.getString("openId"));
+        ownerAppUserPo.setNickName(reqJson.getString("nickName"));
+        ownerAppUserPo.setHeadImgUrl(reqJson.getString("headImgUrl"));
         super.update(context, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_APP_USER);
     }
 

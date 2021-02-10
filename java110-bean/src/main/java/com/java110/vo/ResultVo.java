@@ -64,6 +64,9 @@ public class ResultVo implements Serializable {
     //用来存放大计、小计金额
     private Object sumTotal;
 
+    //所需数据
+    private Object rep;
+
     public ResultVo() {
     }
 
@@ -93,6 +96,16 @@ public class ResultVo implements Serializable {
         this.total = total;
         this.data = data;
         this.sumTotal = sumTotal;
+    }
+
+    public ResultVo(int records, int total, Object data, Object sumTotal, Object rep) {
+        this.code = CODE_OK;
+        this.msg = MSG_OK;
+        this.records = records;
+        this.total = total;
+        this.data = data;
+        this.sumTotal = sumTotal;
+        this.rep = rep;
     }
 
     public ResultVo(int code, String msg, Object data) {
@@ -171,6 +184,14 @@ public class ResultVo implements Serializable {
 
     public void setSumTotal(Object sumTotal) {
         this.sumTotal = sumTotal;
+    }
+
+    public Object getRep() {
+        return rep;
+    }
+
+    public void setRep(Object rep) {
+        this.rep = rep;
     }
 
     @Override

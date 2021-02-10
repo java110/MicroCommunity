@@ -1,6 +1,7 @@
 package com.java110.dto.repair;
 
 import com.java110.dto.PageDto;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -75,6 +76,20 @@ public class RepairUserDto extends PageDto implements Serializable {
     private String finishEndTime;
     //员工报修表员工信息
     private List<RepairUserDto> repairList;
+
+    //业主上传图片
+    private List<PhotoVo> photoVos;
+
+    //处理中报修总条数
+    private String dealNumber;
+    //结单报修总条数
+    private String statementNumber;
+    //退单报修总数
+    private String chargebackNumber;
+    //转单报修总数
+    private String transferOrderNumber;
+    //派单报修总数
+    private String dispatchNumber;
 
 
     public String getContext() {
@@ -340,5 +355,53 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setRepairList(List<RepairUserDto> repairList) {
         this.repairList = repairList;
+    }
+
+    public List<PhotoVo> getPhotoVos() {
+        return photoVos;
+    }
+
+    public void setPhotoVos(List<PhotoVo> photoVos) {
+        this.photoVos = photoVos;
+    }
+
+    public String getDealNumber() {
+        return dealNumber;
+    }
+
+    public void setDealNumber(String dealNumber) {
+        this.dealNumber = dealNumber;
+    }
+
+    public String getStatementNumber() {
+        return statementNumber;
+    }
+
+    public void setStatementNumber(String statementNumber) {
+        this.statementNumber = statementNumber;
+    }
+
+    public String getChargebackNumber() {
+        return chargebackNumber;
+    }
+
+    public void setChargebackNumber(String chargebackNumber) {
+        this.chargebackNumber = chargebackNumber;
+    }
+
+    public String getTransferOrderNumber() {
+        return transferOrderNumber;
+    }
+
+    public void setTransferOrderNumber(String transferOrderNumber) {
+        this.transferOrderNumber = transferOrderNumber;
+    }
+
+    public String getDispatchNumber() {
+        return dispatchNumber;
+    }
+
+    public void setDispatchNumber(String dispatchNumber) {
+        this.dispatchNumber = dispatchNumber;
     }
 }
