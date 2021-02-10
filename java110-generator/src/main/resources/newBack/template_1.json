@@ -1,21 +1,21 @@
 {
   "autoMove": true,
-  "id": "logId",
-  "name": "attendanceLog",
-  "desc": "考勤日志",
+  "id": "beId",
+  "name": "activitiesBeautifulStaff",
+  "desc": "活动规则",
   "shareParam": "storeId",
   "shareColumn": "store_id",
-  "shareName": "common",
-  "tableName": "attendance_log",
+  "shareName": "user",
+  "tableName": "activities_beautiful_staff",
   "param": {
-    "logId": "log_id",
+    "beId": "be_id",
+    "ruleId": "rule_id",
     "staffId": "staff_id",
-    "staffName": "staff_name",
-    "statusCd": "status_cd",
-    "departmentId": "department_id",
-    "departmentName": "department_name",
-    "clockTime": "clock_time",
-    "storeId": "store_id"
+    "activitiesNum": "activities_num",
+    "storeId": "store_id",
+    "workContent": "work_content",
+    "poll": "poll",
+    "statusCd": "status_cd"
   },
   "required": [
     {
@@ -23,8 +23,16 @@
       "msg": "员工不能为空"
     },
     {
-      "code": "storeId",
-      "msg": "商户不能为空"
+      "code": "activitiesNum",
+      "msg": "员工编号不能为空"
+    },
+    {
+      "code": "workContent",
+      "msg": "工作内容不能为空"
+    },
+    {
+      "code": "ruleId",
+      "msg": "活动规则不能为空"
     }
   ]
 }

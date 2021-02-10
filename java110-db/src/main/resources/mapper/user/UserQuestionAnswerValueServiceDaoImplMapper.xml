@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userQuestionAnswerValueServiceDaoImpl">
+
+
+    <!-- 保存答卷答案信息 add by wuxw 2018-07-03 -->
+    <insert id="saveUserQuestionAnswerValueInfo" parameterType="Map">
+        insert into user_question_answer_value(
+        score,value_id,title_id,answer_type,obj_id,user_qa_id,value_content,person_id,obj_type,user_title_id,qa_id
+        )
+        values
+        <foreach collection="userQuestionAnswerValuePos" item="item" separator=",">
+            (#{item.score},#{item.valueId},#{item.titleId},#{item.answerType},#{item.objId},#{item.userQaId},
+            #{item.valueContent},#{item.personId},#{item.objType},#{item.userTitleId},#{item.qaId})
+        </foreach>
+    </insert>
+
+
+    <!-- 查询答卷答案信息 add by wuxw 2018-07-03 -->
+    <select id="getUserQuestionAnswerValueInfo" parameterType="Map" resultType="Map">
+        select t.score,t.value_id,t.value_id valueId,t.title_id,t.title_id titleId,t.answer_type,t.answer_type
+        answerType,t.obj_id,t.obj_id objId,t.user_qa_id,t.user_qa_id userQaId,t.value_content,t.value_content
+        valueContent,t.person_id,t.person_id personId,t.status_cd,t.status_cd statusCd,t.obj_type,t.obj_type
+        objType,t.user_title_id,t.user_title_id userTitleId,t.qa_id,t.qa_id qaId
+        from user_question_answer_value t
+        where 1 =1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="answerType !=null and answerType != ''">
+            and t.answer_type= #{answerType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and t.value_content= #{valueContent}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="userTitleId !=null and userTitleId != ''">
+            and t.user_title_id= #{userTitleId}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改答卷答案信息 add by wuxw 2018-07-03 -->
+    <update id="updateUserQuestionAnswerValueInfo" parameterType="Map">
+        update user_question_answer_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="score !=null and score != ''">
+            , t.score= #{score}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            , t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            , t.title_id= #{titleId}
+        </if>
+        <if test="answerType !=null and answerType != ''">
+            , t.answer_type= #{answerType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            , t.user_qa_id= #{userQaId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            , t.value_content= #{valueContent}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            , t.qa_id= #{qaId}
+        </if>
+        where 1=1
+        <if test="userTitleId !=null and userTitleId != ''">
+            and t.user_title_id= #{userTitleId}
+        </if>
+
+    </update>
+
+    <!-- 查询答卷答案数量 add by wuxw 2018-07-03 -->
+    <select id="queryUserQuestionAnswerValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from user_question_answer_value t
+        where 1 =1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="answerType !=null and answerType != ''">
+            and t.answer_type= #{answerType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and t.value_content= #{valueContent}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="userTitleId !=null and userTitleId != ''">
+            and t.user_title_id= #{userTitleId}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+
+
+    </select>
+
+</mapper>

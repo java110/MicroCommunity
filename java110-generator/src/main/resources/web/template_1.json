@@ -1,103 +1,83 @@
 {
-  "templateName": "房屋装修",
+  "templateName": "最美员工",
   "directories": "property",
-  "templateCode": "roomRenovation",
-  "templateKey": "rId",
-  "templateKeyName": "装修ID",
-  "searchCode": "rId",
-  "searchName": "装修ID",
+  "templateCode": "activitiesBeautifulStaff",
+  "templateKey": "beId",
+  "templateKeyName": "ID",
+  "searchCode": "beId",
+  "searchName": "ID",
   "conditions": [
     {
-      "name": "房屋名称",
-      "inputType": "input",
-      "code": "roomName",
+      "name": "活动规则",
+      "inputType": "select",
+      "selectValue": "6666",
+      "selectValueName": "最美员工",
+      "code": "ruleId",
       "whereCondition": "equal"
     },
     {
-      "name": "联系人",
+      "name": "员工名称",
       "inputType": "input",
-      "code": "personName",
+      "code": "staffName",
       "whereCondition": "equal"
     },
     {
-      "name": "联系电话",
+      "name": "员工编号",
       "inputType": "input",
-      "code": "personTel",
+      "code": "activitiesNum",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "roomName",
-      "cnCode": "房屋",
-      "desc": "必填，请填写房屋",
+      "code": "ruleId",
+      "cnCode": "活动规则",
+      "desc": "必填，请选择活动规则",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue": "6666",
+      "selectValueName": "最美员工",
+      "limit": "num",
+      "limitParam": "",
+      "limitErrInfo": "活动规则格式错误",
+      "show": true
+    },
+    {
+      "code": "staffId",
+      "cnCode": "员工",
+      "desc": "必填，请填写员工",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
-      "limitParam": "64",
-      "limitErrInfo": "房屋格式错误",
+      "limitParam": "128",
+      "limitErrInfo": "员工名称太长",
       "show": true
     },
     {
-      "code": "personName",
-      "cnCode": "联系人",
-      "desc": "必填，请填写联系人",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "64",
-      "limitErrInfo": "联系人格式错误",
-      "show": true
-    },
-    {
-      "code": "personTel",
-      "cnCode": "联系电话",
-      "desc": "选填，请填写联系电话",
+      "code": "activitiesNum",
+      "cnCode": "员工编号",
+      "desc": "必填，请填写员工编号",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "num",
       "limitParam": "",
-      "limitErrInfo": "联系电话错误",
+      "limitErrInfo": "编号必须为数字",
       "show": true
     },
     {
-      "code": "startTime",
-      "cnCode": "装修时间",
-      "desc": "选填，请选择装修时间",
+      "code": "workContent",
+      "cnCode": "工作简介",
+      "desc": "必填，请填写工作简介",
       "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "date",
-      "limitParam": "",
-      "limitErrInfo": "装修时间错误",
-      "show": true
-    },
-    {
-      "code": "endTime",
-      "cnCode": "结束时间",
-      "desc": "必填，请选择结束时间",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "date",
-      "limitParam": "",
-      "limitErrInfo": "结束时间错误",
-      "show": true
-    },
-    {
-      "code": "remark",
-      "cnCode": "备注",
-      "desc": "必填，请选择备注",
-      "required": false,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
-      "limitParam": "512",
-      "limitErrInfo": "备注太长",
-      "show": false
+      "limitParam": "1024",
+      "limitErrInfo": "工作简介说明太长",
+      "show": true
     }
   ]
 }

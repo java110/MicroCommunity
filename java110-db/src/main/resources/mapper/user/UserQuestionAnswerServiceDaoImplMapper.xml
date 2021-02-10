@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userQuestionAnswerServiceDaoImpl">
+
+
+    <!-- 保存答卷信息 add by wuxw 2018-07-03 -->
+    <insert id="saveUserQuestionAnswerInfo" parameterType="Map">
+        insert into user_question_answer(
+        score,evaluation_score,obj_id,user_qa_id,person_id,state,obj_type,qa_id
+        ) values (
+        #{score},#{evaluationScore},#{objId},#{userQaId},#{personId},#{state},#{objType},#{qaId}
+        )
+    </insert>
+
+
+    <!-- 查询答卷信息 add by wuxw 2018-07-03 -->
+    <select id="getUserQuestionAnswerInfo" parameterType="Map" resultType="Map">
+        SELECT
+            t.qa_name qaName,
+            t.qa_type qaType,
+            t.start_time startTime,
+            t.end_time endTime,
+            t.remark,
+            t.obj_type objType,
+            t.obj_id objId,
+            t.qa_id qaId,
+            td.`name` qaTypeName,
+            uqa.score,
+            uqa.evaluation_score evaluationScore,
+            uqa.user_qa_id userQaId,
+            uqa.person_id personId,
+            uu.name personName,
+            uqa.state
+        FROM
+            question_answer t
+            LEFT JOIN user_question_answer uqa ON t.qa_id = uqa.qa_id AND t.obj_type = uqa.obj_type AND t.obj_id = uqa.obj_id AND uqa.status_cd = '0'
+            left join u_user uu on uqa.person_id = uu.user_id and uu.status_cd = '0'
+            LEFT JOIN t_dict td ON td.status_cd = t.qa_type AND td.table_name = 'question_answer' AND td.table_columns = 'qa_type'
+        WHERE
+        <if test="personId !=null and personId != ''">
+            (
+            uqa.person_id IS NULL
+            OR uqa.person_id = #{personId}
+            )
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and uqa.user_qa_id= #{userQaId}
+        </if>
+        <if test="state !=null and state != ''">
+            and uqa.state= #{state}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+        <if test="qaName !=null and qaName != ''">
+            and t.qa_name= #{qaName}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="qaTypes !=null ">
+            and t.qa_type in
+            <foreach collection="qaTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改答卷信息 add by wuxw 2018-07-03 -->
+    <update id="updateUserQuestionAnswerInfo" parameterType="Map">
+        update user_question_answer t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="score !=null and score != ''">
+            , t.score= #{score}
+        </if>
+        <if test="evaluationScore !=null and evaluationScore != ''">
+            , t.evaluation_score= #{evaluationScore}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            , t.qa_id= #{qaId}
+        </if>
+        where 1=1
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+
+    </update>
+
+    <!-- 查询答卷数量 add by wuxw 2018-07-03 -->
+    <select id="queryUserQuestionAnswersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        FROM
+        question_answer t
+        LEFT JOIN user_question_answer uqa ON t.qa_id = uqa.qa_id AND t.obj_type = uqa.obj_type AND t.obj_id = uqa.obj_id AND uqa.status_cd = '0'
+        LEFT JOIN t_dict td ON td.status_cd = t.qa_type AND td.table_name = 'question_answer' AND td.table_columns = 'qa_type'
+        WHERE
+        <if test="personId !=null and personId != ''">
+            (
+            uqa.person_id IS NULL
+            OR uqa.person_id = #{personId}
+            )
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and uqa.user_qa_id= #{userQaId}
+        </if>
+        <if test="state !=null and state != ''">
+            and uqa.state= #{state}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+        <if test="qaName !=null and qaName != ''">
+            and t.qa_name= #{qaName}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="qaTypes !=null ">
+            and t.qa_type in
+            <foreach collection="qaTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+
+    </select>
+
+</mapper>
