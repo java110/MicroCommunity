@@ -66,6 +66,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     //同步状态
     public static final String STATE_SUCCESS = "20000";
+    public static final String STATE_DOING = "30000";
 
     //同步失败
     public static final String STATE_ERROR = "60000";

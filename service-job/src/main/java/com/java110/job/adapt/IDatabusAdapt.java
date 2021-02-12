@@ -34,7 +34,7 @@ public interface IDatabusAdapt {
      * @param business   当前处理业务
      * @param businesses 所有业务信息
      */
-    public void execute(Business business, List<Business> businesses);
+    public void execute(Business business, List<Business> businesses) throws Exception;
 
     /**
      * 开门接口

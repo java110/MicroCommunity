@@ -83,7 +83,7 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
      * @param businesses 所有业务信息
      */
     @Override
-    public void execute(Business business, List<Business> businesses) {
+    public void execute(Business business, List<Business> businesses) throws Exception {
 
     }
 }

@@ -33,7 +33,7 @@ public interface IIotSendAsyn {
      *
      * @param postParameters
      */
-    public void addCommunity(JSONObject postParameters);
+    public void addCommunity(JSONObject postParameters) throws Exception;
 
     /**
      * 编辑小区信息
