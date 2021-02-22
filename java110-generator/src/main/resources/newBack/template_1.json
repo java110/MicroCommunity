@@ -1,38 +1,38 @@
 {
   "autoMove": true,
-  "id": "beId",
-  "name": "activitiesBeautifulStaff",
-  "desc": "活动规则",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "user",
-  "tableName": "activities_beautiful_staff",
+  "id": "detailId",
+  "name": "reportFeeYearCollectionDetail",
+  "desc": "费用年收费明细",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "report",
+  "tableName": "report_fee_year_collection_detail",
   "param": {
-    "beId": "be_id",
-    "ruleId": "rule_id",
-    "staffId": "staff_id",
-    "activitiesNum": "activities_num",
-    "storeId": "store_id",
-    "workContent": "work_content",
-    "poll": "poll",
+    "detailId": "detail_id",
+    "collectionId": "collection_id",
+    "collectionYear": "collection_year",
+    "receivableAmount": "receivable_amount",
+    "receivedAmount": "received_amount",
+    "communityId": "community_id",
+    "relationYear": "relation_year",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "staffId",
-      "msg": "员工不能为空"
+      "code": "communityId",
+      "msg": "小区不能为空"
     },
     {
-      "code": "activitiesNum",
-      "msg": "员工编号不能为空"
+      "code": "collectionId",
+      "msg": "年收费ID不能为空"
     },
     {
-      "code": "workContent",
-      "msg": "工作内容不能为空"
+      "code": "receivedAmount",
+      "msg": "实收金额不能为空"
     },
     {
-      "code": "ruleId",
-      "msg": "活动规则不能为空"
+      "code": "receivableAmount",
+      "msg": "应收金额不能为空"
     }
   ]
 }

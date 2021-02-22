@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportFeeYearCollectionDetailServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存费用年收费明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportFeeYearCollectionDetailInfo" parameterType="Map">
+        insert into report_fee_year_collection_detail(
+collection_year,relation_year,detail_id,receivable_amount,received_amount,community_id,collection_id
+) values (
+#{collectionYear},#{relationYear},#{detailId},#{receivableAmount},#{receivedAmount},#{communityId},#{collectionId}
+)
+    </insert>
+
+
+
+    <!-- 查询费用年收费明细信息 add by wuxw 2018-07-03 -->
+    <select id="getReportFeeYearCollectionDetailInfo" parameterType="Map" resultType="Map">
+        select  t.collection_year,t.collection_year collectionYear,t.relation_year,t.relation_year relationYear,t.detail_id,t.detail_id detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,t.community_id,t.community_id communityId,t.collection_id,t.collection_id collectionId 
+from report_fee_year_collection_detail t 
+where 1 =1 
+<if test="collectionYear !=null and collectionYear != ''">
+   and t.collection_year= #{collectionYear}
+</if> 
+<if test="relationYear !=null and relationYear != ''">
+   and t.relation_year= #{relationYear}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+   and t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+   and t.received_amount= #{receivedAmount}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="collectionId !=null and collectionId != ''">
+   and t.collection_id= #{collectionId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改费用年收费明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportFeeYearCollectionDetailInfo" parameterType="Map">
+        update  report_fee_year_collection_detail t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="collectionYear !=null and collectionYear != ''">
+, t.collection_year= #{collectionYear}
+</if> 
+<if test="relationYear !=null and relationYear != ''">
+, t.relation_year= #{relationYear}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+, t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+, t.received_amount= #{receivedAmount}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="collectionId !=null and collectionId != ''">
+, t.collection_id= #{collectionId}
+</if> 
+ where 1=1 <if test="detailId !=null and detailId != ''">
+and t.detail_id= #{detailId}
+</if> 
+
+    </update>
+
+    <!-- 查询费用年收费明细数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportFeeYearCollectionDetailsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_fee_year_collection_detail t 
+where 1 =1 
+<if test="collectionYear !=null and collectionYear != ''">
+   and t.collection_year= #{collectionYear}
+</if> 
+<if test="relationYear !=null and relationYear != ''">
+   and t.relation_year= #{relationYear}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+   and t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+   and t.received_amount= #{receivedAmount}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="collectionId !=null and collectionId != ''">
+   and t.collection_id= #{collectionId}
+</if> 
+
+
+     </select>
+
+</mapper>

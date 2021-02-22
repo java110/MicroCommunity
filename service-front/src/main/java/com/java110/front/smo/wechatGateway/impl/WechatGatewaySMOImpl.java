@@ -48,8 +48,7 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
     private WechatAuthProperties wechatAuthProperties;
 
     @Override
-    public ResponseEntity<String>
-    gateway(IPageData pd, String wId) throws Exception {
+    public ResponseEntity<String> gateway(IPageData pd, String wId) throws Exception {
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasKeyAndValue(paramIn, "fromUserName", "请求报文中未包含fromUserName");
