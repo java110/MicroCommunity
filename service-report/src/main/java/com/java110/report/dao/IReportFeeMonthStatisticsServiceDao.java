@@ -273,4 +273,25 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @return
      */
     List<Map> getRepairStaff(Map info);
+
+    /**
+     * 计算应收 信息
+     * @param beanCovertMap
+     * @return
+     */
+    Map getReceivableInformation(Map beanCovertMap);
+
+    /**
+     * 计算应收 信息
+     * @param beanCovertMap
+     * @return
+     */
+    List<Map> getFloorReceivableInformation(Map beanCovertMap);
+
+    /**
+     * 计算应收 信息
+     * @param beanCovertMap
+     * @return
+     */
+    List<Map> getFeeConfigReceivableInformation(Map beanCovertMap);
 }

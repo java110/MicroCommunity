@@ -47,6 +47,13 @@ public interface IGetReportFeeMonthStatisticsBMO {
     ResponseEntity<String> queryOwePaymentCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
+     * 查询报表专家
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    ResponseEntity<String> queryReportProficientCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
      * 查询报修信息
      *
      * @param repairUserDto

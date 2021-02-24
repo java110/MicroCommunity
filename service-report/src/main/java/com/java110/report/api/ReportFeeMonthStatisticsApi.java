@@ -492,4 +492,20 @@ public class ReportFeeMonthStatisticsApi {
         return getReportFeeMonthStatisticsBMOImpl.queryOwePaymentCount(reportFeeMonthStatisticsDto);
     }
 
+
+    /**
+     * 查询费用分项表
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryReportProficientCount
+     * @path /app/reportFeeMonthStatistics/queryReportProficientCount
+     */
+    @RequestMapping(value = "/queryReportProficientCount", method = RequestMethod.GET)
+    public ResponseEntity<String> queryReportProficientCount(@RequestParam(value = "communityId") String communityId) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setCommunityId(communityId);
+        return getReportFeeMonthStatisticsBMOImpl.queryReportProficientCount(reportFeeMonthStatisticsDto);
+    }
+
 }

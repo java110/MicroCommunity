@@ -1,6 +1,7 @@
 package com.java110.report.smo.impl;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
@@ -11,10 +12,12 @@ import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -293,6 +296,38 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryAllPaymentCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
 
         return reportFeeMonthStatisticss;
+    }
+
+    @Override
+    public JSONObject queryReportProficientCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+
+        JSONObject result = new JSONObject();
+        Map info = reportFeeMonthStatisticsServiceDaoImpl.getReceivableInformation(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+        result.put("receivableInformation", info);
+
+        List<Map> infos = reportFeeMonthStatisticsServiceDaoImpl.getFloorReceivableInformation(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+        result.put("floorReceivableInformations", JSONArray.parseArray(JSONArray.toJSONString(infos)));
+
+        List<Map> tempInfos = reportFeeMonthStatisticsServiceDaoImpl.getFeeConfigReceivableInformation(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+        result.put("feeConfigReceivableInformations", JSONArray.parseArray(JSONArray.toJSONString(tempInfos)));
+
+
+        reportFeeMonthStatisticsDto.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+
+        int deadlineFeeCount = reportFeeMonthStatisticsServiceDaoImpl.queryDeadlineFeeCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+        int  prePaymentCount = reportFeeMonthStatisticsServiceDaoImpl.queryPrePaymentNewCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+
+
+        JSONObject remindInfomation = new JSONObject();
+        remindInfomation.put("deadlineFeeCount", deadlineFeeCount);
+        remindInfomation.put("prePaymentCount", prePaymentCount);
+
+        result.put("remindInfomation", remindInfomation);
+
+        return result;
     }
 
     @Override

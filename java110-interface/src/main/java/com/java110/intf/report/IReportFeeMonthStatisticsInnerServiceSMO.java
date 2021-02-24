@@ -261,6 +261,8 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     @RequestMapping(value = "/queryAllPaymentCount", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryAllPaymentCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
+    @RequestMapping(value = "/queryReportProficientCount", method = RequestMethod.POST)
+    JSONObject queryReportProficientCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
     /**
      * <p>查询小区楼信息</p>
      *

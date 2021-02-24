@@ -1538,4 +1538,28 @@
         </if>
     </select>
 
+    <select id="getReceivableInformation" parameterType="Map" resultType="Map">
+        select sum(t.receivable_amount) receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount)
+        oweAmount
+        from report_fee_month_statistics t
+        where t.community_id = #{communityId}
+    </select>
+
+    <select id="getFloorReceivableInformation" parameterType="Map" resultType="Map">
+        select f.floor_num floorNum,f.`name`,sum(t.receivable_amount) receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
+        from report_fee_month_statistics t
+        inner join building_room br on br.room_id = t.obj_id and t.obj_type = '3333' and br.community_id = t.community_id and br.status_cd = '0'
+        inner join building_unit bu on bu.unit_id = br.unit_id and bu.status_cd = '0'
+        inner join f_floor f on f.floor_id = bu.floor_id and f.status_cd = '0'
+        where t.community_id = #{communityId}
+        group by f.floor_num ,f.`name`
+    </select>
+
+    <select id="getFeeConfigReceivableInformation" parameterType="Map" resultType="Map">
+        select t.fee_name feeName,sum(t.receivable_amount) receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
+        from report_fee_month_statistics t
+        where t.community_id =  #{communityId}
+        group by t.fee_name
+    </select>
+
 </mapper>

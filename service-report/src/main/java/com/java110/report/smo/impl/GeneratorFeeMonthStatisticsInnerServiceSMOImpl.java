@@ -238,10 +238,10 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
         tmpReportFeeDto.setDeadlineTime(targetEndDate);
-        double receivableAmount = getReceivableAmountByCar(tmpReportFeeDto, null, tmpReportCarDto); //应收
+        double oweAmount = getOweAmountByCar(tmpReportFeeDto, null, tmpReportCarDto); //应收
 
         dealBeforeUploadCarFee(tmpReportFeeDto, tmpReportCarDto);
-        double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
+        double receivableAmount = getReceivableAmount(tmpReportFeeDto,receivedAmount); //欠费
 
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
@@ -418,12 +418,12 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
         tmpReportFeeDto.setDeadlineTime(targetEndDate);
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto, reportRoomDto, null); //应收
+        double oweAmount = getOweAmount(tmpReportFeeDto, reportRoomDto, null); //欠费
 
+        double receivableAmount = getReceivableAmount(tmpReportFeeDto, receivedAmount); //应收
         //解决上线时 之前欠费没有刷入导致费用金额对不上问题处理
         dealBeforeUploadRoomFee(reportRoomDto, tmpReportFeeDto, receivableAmount);
 
-        double oweAmount = getOweAmount(tmpReportFeeDto, receivableAmount, receivedAmount); //欠费
 
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
@@ -567,14 +567,16 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      * 当月欠费
      *
      * @param tmpReportFeeDto
-     * @param receivableAmount
      * @param receivedAmount
      * @return
      */
-    private double getOweAmount(ReportFeeDto tmpReportFeeDto, double receivableAmount, double receivedAmount) {
+    private double getReceivableAmount(ReportFeeDto tmpReportFeeDto, double receivedAmount) {
 
-
-        return receivableAmount;
+        //一次性费用 除以月份 平均
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
+            return computeOnceFee(tmpReportFeeDto);
+        }
+        return tmpReportFeeDto.getFeePrice();
 
     }
 
@@ -600,7 +602,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      * @param tmpReportFeeDto
      * @return
      */
-    private double getReceivableAmountByCar(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto) {
+    private double getOweAmountByCar(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto) {
 
         double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, reportCarDto);
         tmpReportFeeDto.setFeePrice(feePrice);
@@ -668,7 +670,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      * @param tmpReportFeeDto
      * @return
      */
-    private double getReceivableAmount(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto) {
+    private double getOweAmount(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto) {
 
         double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, reportCarDto);
         tmpReportFeeDto.setFeePrice(feePrice);

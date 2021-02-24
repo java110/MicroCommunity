@@ -460,6 +460,19 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     }
 
     /**
+     * 查询报表专家 统计信息
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> queryReportProficientCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        JSONObject result = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportProficientCount(reportFeeMonthStatisticsDto);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    /**
      * 查询报修信息
      *
      * @param repairUserDto

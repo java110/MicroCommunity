@@ -380,4 +380,27 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return businessRepairUserInfos;
     }
 
+    @Override
+    public Map getReceivableInformation(Map beanCovertMap) {
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getReceivableInformation", beanCovertMap);
+        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+            return null;
+        }
+
+        return businessReportFeeMonthStatisticsInfos.get(0);
+    }
+
+    @Override
+    public List<Map> getFloorReceivableInformation(Map beanCovertMap) {
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getFloorReceivableInformation", beanCovertMap);
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
+    @Override
+    public List<Map> getFeeConfigReceivableInformation(Map beanCovertMap) {
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getFeeConfigReceivableInformation", beanCovertMap);
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
+
 }
