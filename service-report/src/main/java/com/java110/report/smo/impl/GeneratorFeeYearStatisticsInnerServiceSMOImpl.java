@@ -213,7 +213,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
             reportFeeYearCollectionPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
             reportFeeYearCollectionPo.setObjName(tmpReportCarDto.getCarNum() + "(" + tmpReportCarDto.getAreaNum() + "停车场" + tmpReportCarDto.getNum() + "车位)");
             reportFeeYearCollectionPo.setOwnerId(tmpReportCarDto.getOwnerId());
-            reportFeeYearCollectionPo.setObjName(tmpReportCarDto.getOwnerName());
+            reportFeeYearCollectionPo.setOwnerName(tmpReportCarDto.getOwnerName());
             reportFeeYearCollectionPo.setOwnerLink(tmpReportCarDto.getLink());
 
             //reportFeeYearCollectionPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -302,7 +302,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
                 reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
             }
             reportFeeYearCollectionPo.setOwnerId(reportRoomDto.getOwnerId());
-            reportFeeYearCollectionPo.setObjName(reportRoomDto.getOwnerName());
+            reportFeeYearCollectionPo.setOwnerName(reportRoomDto.getOwnerName());
             reportFeeYearCollectionPo.setOwnerLink(reportRoomDto.getLink());
 
             //reportFeeYearCollectionPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));

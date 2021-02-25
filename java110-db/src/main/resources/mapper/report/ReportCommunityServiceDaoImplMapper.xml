@@ -23,7 +23,7 @@
         select t.apartment,t.built_up_area builtUpArea,t.community_id communityId,t.create_time createTime,
         t.fee_coefficient feeCoefficient,t.layer,t.room_id roomId,t.room_num roomNum,t.section,
         t.state,bu.unit_id unitId,bu.unit_num unitNum,ff.floor_id floorId,ff.floor_num floorNum,
-        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.owner_id ownerId,t.room_type roomType
+        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.`name` ownerName,bo.owner_id ownerId,t.room_type roomType
         from building_room t
         INNER JOIN building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
