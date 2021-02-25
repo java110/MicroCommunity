@@ -498,11 +498,11 @@ public class ReportFeeMonthStatisticsApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /reportFeeMonthStatistics/queryReportProficientCount
-     * @path /app/reportFeeMonthStatistics/queryReportProficientCount
+     * @serviceCode /reportFeeMonthStatistics/queryReportProficient
+     * @path /app/reportFeeMonthStatistics/queryReportProficient
      */
-    @RequestMapping(value = "/queryReportProficientCount", method = RequestMethod.GET)
-    public ResponseEntity<String> queryReportProficientCount(@RequestParam(value = "communityId") String communityId) {
+    @RequestMapping(value = "/queryReportProficient", method = RequestMethod.GET)
+    public ResponseEntity<String> queryReportProficient(@RequestParam(value = "communityId") String communityId) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setCommunityId(communityId);
         return getReportFeeMonthStatisticsBMOImpl.queryReportProficientCount(reportFeeMonthStatisticsDto);
