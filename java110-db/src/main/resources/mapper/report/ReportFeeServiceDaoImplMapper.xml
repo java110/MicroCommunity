@@ -15,6 +15,12 @@
         <if test="endTime != null">
             and t.create_time &lt; #{endTime}
         </if>
+        <if test="curStartYear != null and curStartYear != ''">
+            and DATE_FORMAT(t.start_time,'%Y') = #{curStartYear}
+        </if>
+        <if test="curEndYear != null and curEndYear != ''">
+            and DATE_FORMAT(t.end_time,'%Y') = #{curEndYear}
+        </if>
     </select>
 
     <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
@@ -60,6 +66,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="feeFlag !=null and feeFlag != ''">
+            and t.fee_flag= #{feeFlag}
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
