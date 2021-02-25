@@ -47,7 +47,7 @@
         <if test="collectionId !=null and collectionId != ''">
             and t.collection_id= #{collectionId}
         </if>
-        order by t.create_time desc
+        order by t.collection_year
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
