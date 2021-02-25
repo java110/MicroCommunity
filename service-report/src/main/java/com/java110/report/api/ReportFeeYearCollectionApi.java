@@ -111,26 +111,31 @@ public class ReportFeeYearCollectionApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /reportFeeYearCollection/queryReportFeeYearCollection
-     * @path /app/reportFeeYearCollection/queryReportFeeYearCollection
+     * @serviceCode /reportFeeYearCollection/queryReportFeeYear
+     * @path /app/reportFeeYearCollection/queryReportFeeYear
      */
-    @RequestMapping(value = "/queryReportFeeYearCollection", method = RequestMethod.GET)
-    public ResponseEntity<String> queryReportFeeYearCollection(@RequestParam(value = "communityId") String communityId,
-                                                               @RequestParam(value = "page") int page,
-                                                               @RequestParam(value = "row") int row) {
+    @RequestMapping(value = "/queryReportFeeYear", method = RequestMethod.GET)
+    public ResponseEntity<String> queryReportFeeYear(@RequestParam(value = "communityId") String communityId,
+                                                     @RequestParam(value = "objType") String objType,
+                                                     @RequestParam(value = "objName",required = false) String objName,
+                                                     @RequestParam(value = "page") int page,
+                                                     @RequestParam(value = "row") int row) {
         ReportFeeYearCollectionDto reportFeeYearCollectionDto = new ReportFeeYearCollectionDto();
         reportFeeYearCollectionDto.setPage(page);
         reportFeeYearCollectionDto.setRow(row);
         reportFeeYearCollectionDto.setCommunityId(communityId);
+        reportFeeYearCollectionDto.setObjType(objType);
+        reportFeeYearCollectionDto.setObjName(objName);
         return getReportFeeYearCollectionBMOImpl.get(reportFeeYearCollectionDto);
     }
 
     /**
      * 微信保存消息模板
-     * @serviceCode /reportFeeYearCollectionDetail/saveReportFeeYearCollectionDetail
-     * @path /app/reportFeeYearCollectionDetail/saveReportFeeYearCollectionDetail
+     *
      * @param reqJson
      * @return
+     * @serviceCode /reportFeeYearCollectionDetail/saveReportFeeYearCollectionDetail
+     * @path /app/reportFeeYearCollectionDetail/saveReportFeeYearCollectionDetail
      */
     @RequestMapping(value = "/saveReportFeeYearCollectionDetail", method = RequestMethod.POST)
     public ResponseEntity<String> saveReportFeeYearCollectionDetail(@RequestBody JSONObject reqJson) {
@@ -147,10 +152,11 @@ public class ReportFeeYearCollectionApi {
 
     /**
      * 微信修改消息模板
-     * @serviceCode /reportFeeYearCollection/updateReportFeeYearCollectionDetail
-     * @path /app/reportFeeYearCollection/updateReportFeeYearCollectionDetail
+     *
      * @param reqJson
      * @return
+     * @serviceCode /reportFeeYearCollection/updateReportFeeYearCollectionDetail
+     * @path /app/reportFeeYearCollection/updateReportFeeYearCollectionDetail
      */
     @RequestMapping(value = "/updateReportFeeYearCollectionDetail", method = RequestMethod.POST)
     public ResponseEntity<String> updateReportFeeYearCollectionDetail(@RequestBody JSONObject reqJson) {
@@ -168,10 +174,11 @@ public class ReportFeeYearCollectionApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /reportFeeYearCollection/deleteReportFeeYearCollectionDetail
-     * @path /app/reportFeeYearCollection/deleteReportFeeYearCollectionDetail
+     *
      * @param reqJson
      * @return
+     * @serviceCode /reportFeeYearCollection/deleteReportFeeYearCollectionDetail
+     * @path /app/reportFeeYearCollection/deleteReportFeeYearCollectionDetail
      */
     @RequestMapping(value = "/deleteReportFeeYearCollectionDetail", method = RequestMethod.POST)
     public ResponseEntity<String> deleteReportFeeYearCollectionDetail(@RequestBody JSONObject reqJson) {
@@ -186,10 +193,11 @@ public class ReportFeeYearCollectionApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /reportFeeYearCollection/queryReportFeeYearCollectionDetail
-     * @path /app/reportFeeYearCollection/queryReportFeeYearCollectionDetail
+     *
      * @param communityId 小区ID
      * @return
+     * @serviceCode /reportFeeYearCollection/queryReportFeeYearCollectionDetail
+     * @path /app/reportFeeYearCollection/queryReportFeeYearCollectionDetail
      */
     @RequestMapping(value = "/queryReportFeeYearCollectionDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportFeeYearCollectionDetail(@RequestParam(value = "communityId") String communityId,

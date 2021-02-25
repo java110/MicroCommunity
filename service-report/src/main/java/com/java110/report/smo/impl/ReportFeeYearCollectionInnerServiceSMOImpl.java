@@ -4,6 +4,8 @@ package com.java110.report.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.reportFeeYearCollection.ReportFeeYearCollectionDto;
+import com.java110.dto.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailDto;
+import com.java110.intf.report.IReportFeeYearCollectionDetailInnerServiceSMO;
 import com.java110.intf.report.IReportFeeYearCollectionInnerServiceSMO;
 import com.java110.po.reportFeeYearCollection.ReportFeeYearCollectionPo;
 import com.java110.report.dao.IReportFeeYearCollectionServiceDao;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +30,9 @@ public class ReportFeeYearCollectionInnerServiceSMOImpl extends BaseServiceSMO i
 
     @Autowired
     private IReportFeeYearCollectionServiceDao reportFeeYearCollectionServiceDaoImpl;
+
+    @Autowired
+    private IReportFeeYearCollectionDetailInnerServiceSMO reportFeeYearCollectionDetailInnerServiceSMOImpl;
 
 
     @Override
@@ -64,7 +70,35 @@ public class ReportFeeYearCollectionInnerServiceSMOImpl extends BaseServiceSMO i
 
         List<ReportFeeYearCollectionDto> reportFeeYearCollections = BeanConvertUtil.covertBeanList(reportFeeYearCollectionServiceDaoImpl.getReportFeeYearCollectionInfo(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionDto)), ReportFeeYearCollectionDto.class);
 
+        freshDetails(reportFeeYearCollections);
         return reportFeeYearCollections;
+    }
+
+    private void freshDetails(List<ReportFeeYearCollectionDto> reportFeeYearCollections) {
+        if (reportFeeYearCollections == null || reportFeeYearCollections.size() < 1 || reportFeeYearCollections.size() > 20) {
+            return;
+        }
+
+        List<String> collectionIds = new ArrayList<>();
+        for (ReportFeeYearCollectionDto reportFeeYearCollectionDto : reportFeeYearCollections) {
+            collectionIds.add(reportFeeYearCollectionDto.getCollectionId());
+        }
+        ReportFeeYearCollectionDetailDto reportFeeYearCollectionDetailDto = new ReportFeeYearCollectionDetailDto();
+        reportFeeYearCollectionDetailDto.setCommunityId(reportFeeYearCollections.get(0).getCommunityId());
+        reportFeeYearCollectionDetailDto.setCollectionIds(collectionIds.toArray(new String[collectionIds.size()]));
+        List<ReportFeeYearCollectionDetailDto> reportFeeYearCollectionDetailDtos
+                = reportFeeYearCollectionDetailInnerServiceSMOImpl.queryReportFeeYearCollectionDetails(reportFeeYearCollectionDetailDto);
+
+        List<ReportFeeYearCollectionDetailDto> tmpReportFeeYearCollectionDetailDtos = null;
+        for (ReportFeeYearCollectionDto reportFeeYearCollectionDto : reportFeeYearCollections) {
+            tmpReportFeeYearCollectionDetailDtos = new ArrayList<>();
+            for (ReportFeeYearCollectionDetailDto tmpReportFeeYearCollectionDetailDto : reportFeeYearCollectionDetailDtos) {
+                if (reportFeeYearCollectionDto.getCollectionId().equals(tmpReportFeeYearCollectionDetailDto.getCollectionId())) {
+                    tmpReportFeeYearCollectionDetailDtos.add(tmpReportFeeYearCollectionDetailDto);
+                }
+            }
+            reportFeeYearCollectionDto.setReportFeeYearCollectionDetailDtos(tmpReportFeeYearCollectionDetailDtos);
+        }
     }
 
 

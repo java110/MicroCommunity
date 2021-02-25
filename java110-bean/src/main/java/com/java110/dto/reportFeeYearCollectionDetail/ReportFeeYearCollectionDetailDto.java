@@ -1,6 +1,7 @@
 package com.java110.dto.reportFeeYearCollectionDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,12 +16,13 @@ import java.util.Date;
 public class ReportFeeYearCollectionDetailDto extends PageDto implements Serializable {
 
     private String collectionYear;
-private String relationYear;
-private String detailId;
-private String receivableAmount;
-private String receivedAmount;
-private String communityId;
-private String collectionId;
+    private String relationYear;
+    private String detailId;
+    private String receivableAmount;
+    private String receivedAmount;
+    private String communityId;
+    private String collectionId;
+    private String[] collectionIds;
 
 
     private Date createTime;
@@ -31,43 +33,56 @@ private String collectionId;
     public String getCollectionYear() {
         return collectionYear;
     }
-public void setCollectionYear(String collectionYear) {
+
+    public void setCollectionYear(String collectionYear) {
         this.collectionYear = collectionYear;
     }
-public String getRelationYear() {
+
+    public String getRelationYear() {
         return relationYear;
     }
-public void setRelationYear(String relationYear) {
+
+    public void setRelationYear(String relationYear) {
         this.relationYear = relationYear;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getReceivableAmount() {
+
+    public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCollectionId() {
+
+    public String getCollectionId() {
         return collectionId;
     }
-public void setCollectionId(String collectionId) {
+
+    public void setCollectionId(String collectionId) {
         this.collectionId = collectionId;
     }
 
@@ -86,5 +101,13 @@ public void setCollectionId(String collectionId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getCollectionIds() {
+        return collectionIds;
+    }
+
+    public void setCollectionIds(String[] collectionIds) {
+        this.collectionIds = collectionIds;
     }
 }
