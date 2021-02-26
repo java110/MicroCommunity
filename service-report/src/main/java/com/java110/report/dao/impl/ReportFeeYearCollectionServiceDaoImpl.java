@@ -59,6 +59,20 @@ public class ReportFeeYearCollectionServiceDaoImpl extends BaseServiceDao implem
 
         return businessReportFeeYearCollectionInfos;
     }
+    /**
+     * 查询费用年收费信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getReportFeeYearCollectionInfos(Map info) throws DAOException {
+        logger.debug("查询费用年收费信息 入参 info : {}",info);
+
+        List<Map> businessReportFeeYearCollectionInfos = sqlSessionTemplate.selectList("reportFeeYearCollectionServiceDaoImpl.getReportFeeYearCollectionInfos",info);
+
+        return businessReportFeeYearCollectionInfos;
+    }
 
 
     /**

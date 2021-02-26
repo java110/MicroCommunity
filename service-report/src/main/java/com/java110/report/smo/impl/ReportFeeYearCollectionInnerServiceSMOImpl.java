@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -63,15 +64,68 @@ public class ReportFeeYearCollectionInnerServiceSMOImpl extends BaseServiceSMO i
         //校验是否传了 分页信息
 
         int page = reportFeeYearCollectionDto.getPage();
+        List<ReportFeeYearCollectionDto> reportFeeYearCollections = null;
+
+        //不分页直接查全量数据
+        if (reportFeeYearCollectionDto.getRow() > 10000) {
+            List<Map> reportFeeYearCollectionMaps =
+                    reportFeeYearCollectionServiceDaoImpl.getReportFeeYearCollectionInfos(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionDto));
+
+            reportFeeYearCollections = doCreateReportFeeYearCollections(reportFeeYearCollectionMaps);
+            return reportFeeYearCollections;
+        }
 
         if (page != PageDto.DEFAULT_PAGE) {
             reportFeeYearCollectionDto.setPage((page - 1) * reportFeeYearCollectionDto.getRow());
         }
 
-        List<ReportFeeYearCollectionDto> reportFeeYearCollections = BeanConvertUtil.covertBeanList(reportFeeYearCollectionServiceDaoImpl.getReportFeeYearCollectionInfo(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionDto)), ReportFeeYearCollectionDto.class);
+        reportFeeYearCollections = BeanConvertUtil.covertBeanList(reportFeeYearCollectionServiceDaoImpl.getReportFeeYearCollectionInfo(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionDto)), ReportFeeYearCollectionDto.class);
 
         freshDetails(reportFeeYearCollections);
         return reportFeeYearCollections;
+    }
+
+    /**
+     * 创建对象
+     *
+     * @param reportFeeYearCollectionMaps
+     * @return
+     */
+    private List<ReportFeeYearCollectionDto> doCreateReportFeeYearCollections(List<Map> reportFeeYearCollectionMaps) {
+        List<ReportFeeYearCollectionDto> reportFeeYearCollectionDtos = new ArrayList<>();
+        ReportFeeYearCollectionDto reportFeeYearCollectionDto = null;
+
+        for (Map reportFeeYearCollectionMap : reportFeeYearCollectionMaps) {
+            if (!hasReportFeeYearCollectionDto(reportFeeYearCollectionMap, reportFeeYearCollectionDtos)) {
+                reportFeeYearCollectionDto = BeanConvertUtil.covertBean(reportFeeYearCollectionMap, ReportFeeYearCollectionDto.class);
+                reportFeeYearCollectionDtos.add(reportFeeYearCollectionDto);
+            }
+        }
+        List<ReportFeeYearCollectionDetailDto> reportFeeYearCollectionDetailDtos = null;
+        ReportFeeYearCollectionDetailDto reportFeeYearCollectionDetailDto = null;
+        for (ReportFeeYearCollectionDto tmpReportFeeYearCollectionDto : reportFeeYearCollectionDtos) {
+            reportFeeYearCollectionDetailDtos = new ArrayList<>();
+            for (Map reportFeeYearCollectionMap : reportFeeYearCollectionMaps) {
+                if (tmpReportFeeYearCollectionDto.getCollectionId().equals(reportFeeYearCollectionMap.get("collectionId"))) {
+                    reportFeeYearCollectionDetailDto = BeanConvertUtil.covertBean(reportFeeYearCollectionMap, ReportFeeYearCollectionDetailDto.class);
+                    reportFeeYearCollectionDetailDtos.add(reportFeeYearCollectionDetailDto);
+                }
+            }
+            tmpReportFeeYearCollectionDto.setReportFeeYearCollectionDetailDtos(reportFeeYearCollectionDetailDtos);
+        }
+
+        return reportFeeYearCollectionDtos;
+    }
+
+    private boolean hasReportFeeYearCollectionDto(Map reportFeeYearCollectionMap, List<ReportFeeYearCollectionDto> reportFeeYearCollectionDtos) {
+
+        for (ReportFeeYearCollectionDto reportFeeYearCollectionDto : reportFeeYearCollectionDtos) {
+            if (reportFeeYearCollectionDto.getCollectionId().equals(reportFeeYearCollectionMap.get("collectionId"))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void freshDetails(List<ReportFeeYearCollectionDto> reportFeeYearCollections) {

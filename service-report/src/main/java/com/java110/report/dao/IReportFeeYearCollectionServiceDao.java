@@ -39,6 +39,7 @@ public interface IReportFeeYearCollectionServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getReportFeeYearCollectionInfo(Map info) throws DAOException;
+    List<Map> getReportFeeYearCollectionInfos(Map info) throws DAOException;
 
 
 

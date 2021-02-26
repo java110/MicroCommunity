@@ -131,6 +131,8 @@ public class ReportFeeYearCollectionApi {
         return getReportFeeYearCollectionBMOImpl.get(reportFeeYearCollectionDto);
     }
 
+
+
     /**
      * 微信保存消息模板
      *

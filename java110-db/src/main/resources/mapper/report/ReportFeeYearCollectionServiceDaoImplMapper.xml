@@ -14,6 +14,58 @@
         )
     </insert>
 
+    <select id="getReportFeeYearCollectionInfos" parameterType="Map" resultType="Map">
+        select t.owner_link,t.owner_link ownerLink,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name
+        objName,t.owner_id,t.owner_id ownerId,t.fee_id,t.fee_id feeId,t.built_up_area,t.built_up_area
+        builtUpArea,t.owner_name,t.owner_name ownerName,t.config_id,t.config_id configId,t.obj_id,t.obj_id
+        objId,t.fee_name,t.fee_name feeName,t.community_id,t.community_id communityId,t.collection_id,t.collection_id
+        collectionId,t.obj_type,t.obj_type objType,rd.collection_year collectionYear,rd.receivable_amount receivableAmount,
+        rd.relation_year relationYear
+        from report_fee_year_collection t
+        left join report_fee_year_collection_detail rd on t.collection_id = rd.collection_id and rd.status_cd = '0' and rd.community_id = t.community_id
+        where 1 =1
+        <if test="ownerLink !=null and ownerLink != ''">
+            and t.owner_link= #{ownerLink}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="builtUpArea !=null and builtUpArea != ''">
+            and t.built_up_area= #{builtUpArea}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        order by rd.collectionYear
+
+    </select>
 
     <!-- 查询费用年收费信息 add by wuxw 2018-07-03 -->
     <select id="getReportFeeYearCollectionInfo" parameterType="Map" resultType="Map">
