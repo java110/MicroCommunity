@@ -211,7 +211,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
             reportFeeYearCollectionPo.setObjId(tmpReportCarDto.getCarId());
             reportFeeYearCollectionPo.setObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
             reportFeeYearCollectionPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
-            reportFeeYearCollectionPo.setObjName(tmpReportCarDto.getCarNum() + "(" + tmpReportCarDto.getAreaNum() + "停车场" + tmpReportCarDto.getNum() + "车位)");
+            reportFeeYearCollectionPo.setObjName(tmpReportCarDto.getCarNum());
             reportFeeYearCollectionPo.setOwnerId(tmpReportCarDto.getOwnerId());
             reportFeeYearCollectionPo.setOwnerName(tmpReportCarDto.getOwnerName());
             reportFeeYearCollectionPo.setOwnerLink(tmpReportCarDto.getLink());
@@ -297,9 +297,9 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
             reportFeeYearCollectionPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
             reportFeeYearCollectionPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
             if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
-                reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
+                reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum() );
             } else {
-                reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
+                reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum() );
             }
             reportFeeYearCollectionPo.setOwnerId(reportRoomDto.getOwnerId());
             reportFeeYearCollectionPo.setOwnerName(reportRoomDto.getOwnerName());

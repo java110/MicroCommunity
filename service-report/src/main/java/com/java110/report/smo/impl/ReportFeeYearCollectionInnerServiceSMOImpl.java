@@ -97,6 +97,11 @@ public class ReportFeeYearCollectionInnerServiceSMOImpl extends BaseServiceSMO i
                     tmpReportFeeYearCollectionDetailDtos.add(tmpReportFeeYearCollectionDetailDto);
                 }
             }
+            if (tmpReportFeeYearCollectionDetailDtos.size() > 0) {
+                reportFeeYearCollectionDto.setReceivableAmount(tmpReportFeeYearCollectionDetailDtos.get(0).getReceivableAmount());
+            } else {
+                reportFeeYearCollectionDto.setReceivableAmount("0");
+            }
             reportFeeYearCollectionDto.setReportFeeYearCollectionDetailDtos(tmpReportFeeYearCollectionDetailDtos);
         }
     }

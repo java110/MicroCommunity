@@ -29,6 +29,7 @@ public class ReportFeeYearCollectionDto extends PageDto implements Serializable 
     private String communityId;
     private String collectionId;
     private String objType;
+    private String receivableAmount;
 
     private List<ReportFeeYearCollectionDetailDto> reportFeeYearCollectionDetailDtos;
 
@@ -157,5 +158,13 @@ public class ReportFeeYearCollectionDto extends PageDto implements Serializable 
 
     public void setReportFeeYearCollectionDetailDtos(List<ReportFeeYearCollectionDetailDto> reportFeeYearCollectionDetailDtos) {
         this.reportFeeYearCollectionDetailDtos = reportFeeYearCollectionDetailDtos;
+    }
+
+    public String getReceivableAmount() {
+        return receivableAmount;
+    }
+
+    public void setReceivableAmount(String receivableAmount) {
+        this.receivableAmount = receivableAmount;
     }
 }
