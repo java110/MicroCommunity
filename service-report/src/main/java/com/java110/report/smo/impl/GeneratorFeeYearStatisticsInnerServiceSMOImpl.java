@@ -422,9 +422,9 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         feeDetailDto.setFeeId(tmpReportFeeDto.getFeeId());
         String flag = CommonCache.getValue(RECEIVED_TIME);
         if (RECEIVED_TIME_START.equals(flag)) {
-            feeDetailDto.setStartTime(year + "");
+            feeDetailDto.setCurStartYear(year + "");
         } else {
-            feeDetailDto.setEndTime(year + "");
+            feeDetailDto.setCurEndYear(year + "");
         }
         double receivedAmount = reportFeeServiceDaoImpl.getFeeReceivedAmount(feeDetailDto);
 

@@ -74,15 +74,16 @@
             , t.received_amount= #{receivedAmount}
         </if>
 
-        <if test="collectionId !=null and collectionId != ''">
-            , t.collection_id= #{collectionId}
-        </if>
+
         where 1=1
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
         </if>
 
     </update>
