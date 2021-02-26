@@ -34,6 +34,7 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String statusCd = "0";
     private String state;
     private String stateName;
+    private String curYear;
 
 
     public String getPrimeRate() {
@@ -171,5 +172,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
+    }
+
+    public String getCurYear() {
+        return curYear;
+    }
+
+    public void setCurYear(String curYear) {
+        this.curYear = curYear;
     }
 }
