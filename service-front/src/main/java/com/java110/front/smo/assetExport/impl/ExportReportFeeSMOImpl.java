@@ -187,7 +187,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             row.createCell(4).setCellValue(dataObj.getString("feeName"));
             row.createCell(5).setCellValue(dataObj.getString("receivableAmount"));
 
-            reportFeeYearCollectionDetailDtos = rooms.getJSONObject(roomIndex).getJSONArray("reportFeeYearCollectionDetailDtos");
+            reportFeeYearCollectionDetailDtos = dataObj.getJSONArray("reportFeeYearCollectionDetailDtos");
             for (int detailIndex = 0; detailIndex < reportFeeYearCollectionDetailDtos.size(); detailIndex++) {
                 row.createCell(6 + detailIndex).setCellValue(reportFeeYearCollectionDetailDtos.getJSONObject(detailIndex).getString("receivedAmount"));
             }
