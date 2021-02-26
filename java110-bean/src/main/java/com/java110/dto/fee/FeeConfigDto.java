@@ -62,6 +62,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+    private String computingFormulaText;
 
 
     public String getFeeTypeCd() {
@@ -232,5 +233,13 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setValid(String valid) {
         this.valid = valid;
+    }
+
+    public String getComputingFormulaText() {
+        return computingFormulaText;
+    }
+
+    public void setComputingFormulaText(String computingFormulaText) {
+        this.computingFormulaText = computingFormulaText;
     }
 }

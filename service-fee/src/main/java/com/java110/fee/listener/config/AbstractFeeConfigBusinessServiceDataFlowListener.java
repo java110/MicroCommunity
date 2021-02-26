@@ -39,6 +39,7 @@ public abstract class AbstractFeeConfigBusinessServiceDataFlowListener extends A
         businessFeeConfigInfo.put("newBId", businessFeeConfigInfo.get("b_id"));
         businessFeeConfigInfo.put("feeTypeCd", businessFeeConfigInfo.get("fee_type_cd"));
         businessFeeConfigInfo.put("computingFormula", businessFeeConfigInfo.get("computing_formula"));
+        businessFeeConfigInfo.put("computingFormulaText", businessFeeConfigInfo.get("computing_formula_text"));
         businessFeeConfigInfo.put("additionalAmount", businessFeeConfigInfo.get("additional_amount"));
         businessFeeConfigInfo.put("squarePrice", businessFeeConfigInfo.get("square_price"));
         businessFeeConfigInfo.put("isDefault", businessFeeConfigInfo.get("is_default"));
@@ -78,6 +79,7 @@ public abstract class AbstractFeeConfigBusinessServiceDataFlowListener extends A
 
         currentFeeConfigInfo.put("feeTypeCd", currentFeeConfigInfo.get("fee_type_cd"));
         currentFeeConfigInfo.put("computingFormula", currentFeeConfigInfo.get("computing_formula"));
+        currentFeeConfigInfo.put("computingFormulaText", currentFeeConfigInfo.get("computing_formula_text"));
         currentFeeConfigInfo.put("additionalAmount", currentFeeConfigInfo.get("additional_amount"));
         currentFeeConfigInfo.put("squarePrice", currentFeeConfigInfo.get("square_price"));
         currentFeeConfigInfo.put("isDefault", currentFeeConfigInfo.get("is_default"));
