@@ -63,7 +63,7 @@
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
-        order by rd.collectionYear
+        order by rd.relation_year
 
     </select>
 
