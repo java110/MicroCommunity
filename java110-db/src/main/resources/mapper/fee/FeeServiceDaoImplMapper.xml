@@ -137,7 +137,7 @@
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
         additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
         pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula
-        computingFormula,
+        computingFormula,pfc.computing_formula_text computingFormulaText,
         pfc.bill_type billType,t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name
         billTypeName,pfa.value importFeeName,ifd.end_time importFeeEndTime,mw.cur_degrees curDegrees,mw.pre_degrees
@@ -690,7 +690,7 @@
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
         additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
         pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula
-        computingFormula,
+        computingFormula,pfc.computing_formula_text computingFormulaText,
         t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle
         from pay_fee t
@@ -849,7 +849,8 @@
     <select id="computeEveryOweFee" parameterType="Map" resultType="Map">
         select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,pf.payer_obj_id payerObjId,pf.payer_obj_type
         payerObjType,
-        pf.community_id communityId,pfc.computing_formula computingFormula,pfc.square_price
+        pf.community_id communityId,pfc.computing_formula computingFormula,pfc.computing_formula_text computingFormulaText,
+        pfc.square_price
         squarePrice,pfc.additional_amount additionalAmount
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type = '004' and pfc.status_cd = '0'

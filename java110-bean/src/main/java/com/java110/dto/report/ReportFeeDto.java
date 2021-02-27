@@ -29,6 +29,7 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     private String squarePrice;
     private String additionalAmount;
+    private String additionalAmountText;
     private String state;
     private String stateName;
     private String feeFlag;
@@ -491,5 +492,13 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     public void setStoreTypeCd(String storeTypeCd) {
         this.storeTypeCd = storeTypeCd;
+    }
+
+    public String getAdditionalAmountText() {
+        return additionalAmountText;
+    }
+
+    public void setAdditionalAmountText(String additionalAmountText) {
+        this.additionalAmountText = additionalAmountText;
     }
 }

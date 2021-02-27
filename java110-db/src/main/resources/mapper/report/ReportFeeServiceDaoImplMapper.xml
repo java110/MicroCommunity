@@ -40,7 +40,8 @@
     <select id="getFees" parameterType="com.java110.dto.report.ReportFeeDto"
             resultType="com.java110.dto.report.ReportFeeDto">
                 select pfc.fee_name feeName,pfc.start_time configStartTime,pfc.end_time configEndTime,pfc.config_id configId,pfc.fee_type_cd feeTypeCd,
-        pfc.additional_amount additionalAmount,pfc.bill_type billType,pfc.computing_formula computingFormula,pfc.payment_cd paymentCd,
+        pfc.additional_amount additionalAmount,pfc.bill_type billType,pfc.computing_formula computingFormula,pfc.computing_formula_text computingFormulaText,
+        pfc.payment_cd paymentCd,
         pfc.payment_cycle paymentCycle,pfc.square_price squarePrice,pfc.fee_flag feeFlag,t.payer_obj_id payerObjId,t.payer_obj_type payerObjType,
         t.amount,t.create_time createTime,t.end_time endTime,t.fee_id feeId,t.income_obj_id incomeObjId,t.start_time startTime,t.state,
         br.room_id roomId,br.room_num roomNum,oc.car_num carNum,ss.store_id storeId,ss.`name` storeName,ss.store_type_cd storeTypeCd,

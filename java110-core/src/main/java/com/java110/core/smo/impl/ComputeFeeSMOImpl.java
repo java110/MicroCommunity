@@ -2,6 +2,7 @@ package com.java110.core.smo.impl;
 
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
@@ -12,6 +13,7 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -20,6 +22,7 @@ import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -27,8 +30,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
-import java.security.acl.Owner;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,6 +65,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Autowired(required = false)
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Override
     public Date getFeeEndTime() {
@@ -170,7 +177,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
 
         String computingFormula = feeDto.getComputingFormula();
-        double feePrice = getFeePrice(feeDto,roomDto);
+        double feePrice = getFeePrice(feeDto, roomDto);
         feeDto.setFeePrice(feePrice);
         //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
@@ -229,6 +236,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
                 feeReceiptDetailPo.setArea(value);
                 feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+            } else if ("7007".equals(computingFormula)) { //自定义公式
+                feeReceiptDetailPo.setArea(roomDtos.get(0).getBuiltUpArea());
+                feeReceiptDetailPo.setSquarePrice(feeDto.getComputingFormulaText());
             } else {
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
@@ -271,6 +281,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
                 feeReceiptDetailPo.setArea(value);
                 feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+            }else if ("7007".equals(computingFormula)) { //自定义公式
+                ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+                parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
+                parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
+                List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+                if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+                    return;
+                }
+                feeReceiptDetailPo.setArea(parkingSpaceDtos.get(0).getArea());
+                feeReceiptDetailPo.setSquarePrice(feeDto.getComputingFormulaText());
             } else {
             }
         }
@@ -545,7 +565,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
             } else if ("6006".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
-            } else {
+            }else if ("7007".equals(computingFormula)) { //自定义公式
+                feePrice = computeRoomCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto,FeeDto.class), BeanConvertUtil.covertBean(reportRoomDto,RoomDto.class));
+            }  else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(tmpReportFeeDto.getPayerObjType())) {//车位相关
@@ -577,7 +599,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
             } else if ("6006".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
-            } else {
+            }else if ("7007".equals(computingFormula)) { //自定义公式
+                feePrice = computeCarCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto,FeeDto.class), BeanConvertUtil.covertBean(reportCarDto,OwnerCarDto.class));
+            }  else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         }
@@ -594,7 +618,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         BigDecimal feePrice = new BigDecimal(0.0);
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
             String computingFormula = feeDto.getComputingFormula();
-            if(roomDto == null) {
+            if (roomDto == null) {
                 roomDto = new RoomDto();
                 roomDto.setRoomId(feeDto.getPayerObjId());
                 roomDto.setCommunityId(feeDto.getCommunityId());
@@ -631,6 +655,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
             } else if ("6006".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            } else if ("7007".equals(computingFormula)) { //自定义公式
+                feePrice = computeRoomCustomizeFormula(feeDto, roomDto);
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -675,11 +701,118 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
             } else if ("6006".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            }else if ("7007".equals(computingFormula)) { //自定义公式
+                feePrice = computeCarCustomizeFormula(feeDto, ownerCarDtos.get(0));
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         }
         return feePrice.setScale(3, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+    }
+
+    /**
+     *  C 代表房屋对应小区面积
+
+     *  R 代表房屋面积
+     * @param feeDto
+     * @param ownerCarDto
+     * @return
+     */
+    private BigDecimal computeCarCustomizeFormula(FeeDto feeDto, OwnerCarDto ownerCarDto) {
+        String value = feeDto.getComputingFormulaText();
+        value = value.replace("\n", "")
+                .replace("\r", "")
+                .trim();
+
+        if (value.contains("C")) { //处理小区面积
+            CommunityDto communityDto = new CommunityDto();
+            communityDto.setCommunityId(feeDto.getCommunityId());
+            List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+            if (communityDtos == null || communityDtos.size() < 1) {
+                value = value.replace("C", "0");
+            } else {
+                value = value.replace("C", communityDtos.get(0).getCommunityArea());
+            }
+        } else if (value.contains("R")) { //处理 房屋面积
+            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
+            parkingSpaceDto.setPsId(ownerCarDto.getPsId());
+            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+            if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+                //throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到停车位信息，查询多条数据");
+                value = value.replace("R", "0");
+            }else {
+                value = value.replace("R", parkingSpaceDtos.get(0).getArea());
+            }
+        }
+
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        BigDecimal valueObj = null;
+        try {
+            value = engine.eval(value).toString();
+            valueObj = new BigDecimal(Double.parseDouble(value));
+        } catch (Exception e) {
+            //throw new IllegalArgumentException("公式计算异常，公式为【" + feeDto.getComputingFormulaText() + "】,计算 【" + value + "】异常");
+            valueObj = new BigDecimal(0);
+        }
+
+        return valueObj;
+    }
+
+    /**
+     * 自定义公式计算
+     *
+     * @param feeDto
+     * @param roomDto
+     * @return C 代表房屋对应小区面积
+     * F 代表房屋对应楼栋面积
+     * U 代表房屋对应单元面积
+     * R 代表房屋面积
+     * X 代表房屋收费系数（房屋管理中配置）
+     * L 代表房屋层数
+     */
+    private BigDecimal computeRoomCustomizeFormula(FeeDto feeDto, RoomDto roomDto) {
+
+        String value = feeDto.getComputingFormulaText();
+        value = value.replace("\n", "")
+                .replace("\r", "")
+                .trim();
+
+        if (value.contains("C")) { //处理小区面积
+            CommunityDto communityDto = new CommunityDto();
+            communityDto.setCommunityId(feeDto.getCommunityId());
+            List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+            if (communityDtos == null || communityDtos.size() < 1) {
+                value = value.replace("C", "0");
+            } else {
+                value = value.replace("C", communityDtos.get(0).getCommunityArea());
+            }
+        } else if (value.contains("F")) { //处理楼栋
+            value = value.replace("F", roomDto.getFloorArea());
+        } else if (value.contains("U")) { //处理单元
+            value = value.replace("U", roomDto.getUnitArea());
+        } else if (value.contains("R")) { //处理 房屋面积
+            value = value.replace("R", roomDto.getBuiltUpArea());
+        } else if (value.contains("X")) {// 处理 房屋系数
+            value = value.replace("X", roomDto.getFeeCoefficient());
+        } else if (value.contains("L")) {//处理房屋层数
+            value = value.replace("L", roomDto.getLayer());
+        }
+
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        BigDecimal valueObj = null;
+        try {
+            value = engine.eval(value).toString();
+            valueObj = new BigDecimal(Double.parseDouble(value));
+        } catch (Exception e) {
+            //throw new IllegalArgumentException("公式计算异常，公式为【" + feeDto.getComputingFormulaText() + "】,计算 【" + value + "】异常");
+            valueObj = new BigDecimal(0);
+        }
+
+        return valueObj;
+
     }
 
     public Map getTargetEndDateAndOweMonth(FeeDto feeDto, OwnerCarDto ownerCarDto) {

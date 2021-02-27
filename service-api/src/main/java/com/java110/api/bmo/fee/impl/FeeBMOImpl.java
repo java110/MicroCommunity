@@ -406,97 +406,11 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         }
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
 
-        BigDecimal feePrice = new BigDecimal("0.00");
+        double feePrice = 0.0;
 
-        if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
-            String computingFormula = feeDto.getComputingFormula();
-            if ("1001".equals(computingFormula)) { //面积*单价+附加费
-                RoomDto roomDto = new RoomDto();
-                roomDto.setRoomId(feeDto.getPayerObjId());
-                roomDto.setCommunityId(feeDto.getCommunityId());
-                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-                if (roomDtos == null || roomDtos.size() != 1) {
-                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
-                }
-                roomDto = roomDtos.get(0);
-                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
-                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                //获取支付方式
-                String primeRate = paramInJson.getString("primeRate");
-                //判断是否是线上支付
-                if (primeRate.equals("5") || primeRate.equals("6")) {
-                    feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount);
-                } else {
-                    feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-                }
-            } else if ("2002".equals(computingFormula)) { // 固定费用
-                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-            } else if ("4004".equals(computingFormula)) {
-                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            } else if ("5005".equals(computingFormula)) {
-                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
-                    //throw new IllegalArgumentException("抄表数据异常");
-                } else {
-                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
-                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
-                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                    BigDecimal sub = curDegree.subtract(preDegree);
-                    feePrice = sub.multiply(squarePrice)
-                            .add(additionalAmount)
-                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
-                }
-            } else if ("6006".equals(computingFormula)) {
-                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            } else {
-                throw new IllegalArgumentException("暂不支持该类公式");
-            }
-        } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
-            String computingFormula = feeDto.getComputingFormula();
-            if ("1001".equals(computingFormula)) { //面积*单价+附加费
-                ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-                parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-                parkingSpaceDto.setPsId(feeDto.getPayerObjId());
-                List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
 
-                if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
-                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到停车位信息，查询多条数据");
-                }
-                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(parkingSpaceDtos.get(0).getArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
-                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(parkingSpaceDtos.get(0).getArea()));
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-            } else if ("2002".equals(computingFormula)) { // 固定费用
-                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
-                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-            } else if ("5005".equals(computingFormula)) {
-                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
-                    throw new IllegalArgumentException("抄表数据异常");
-                } else {
-                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
-                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
-                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                    BigDecimal sub = curDegree.subtract(preDegree);
-                    feePrice = sub.multiply(squarePrice)
-                            .add(additionalAmount)
-                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
-                }
-            } else if ("6006".equals(computingFormula)) {
-                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            } else if ("4004".equals(computingFormula)) {
-                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            } else {
-                throw new IllegalArgumentException("暂不支持该类公式");
-            }
-        }
-        BigDecimal receivableAmount = feePrice;
+        BigDecimal receivableAmount = new BigDecimal(feePrice);
         BigDecimal cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
         double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         double discountPrice = paramInJson.getDouble("discountPrice");
