@@ -757,6 +757,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             valueObj = new BigDecimal(0);
         }
 
+        if(valueObj.doubleValue() < 0){
+            return new BigDecimal(0);
+        }
+
         return valueObj;
     }
 
@@ -809,6 +813,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         } catch (Exception e) {
             //throw new IllegalArgumentException("公式计算异常，公式为【" + feeDto.getComputingFormulaText() + "】,计算 【" + value + "】异常");
             valueObj = new BigDecimal(0);
+        }
+
+        if(valueObj.doubleValue() < 0){
+            return new BigDecimal(0);
         }
 
         return valueObj;

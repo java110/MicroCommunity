@@ -40,6 +40,7 @@ public abstract class AbstractOwnerCarBusinessServiceDataFlowListener extends Ab
         businessOwnerCarInfo.put("carColor", businessOwnerCarInfo.get("car_color"));
         businessOwnerCarInfo.put("carBrand", businessOwnerCarInfo.get("car_brand"));
         businessOwnerCarInfo.put("carType", businessOwnerCarInfo.get("car_type"));
+        businessOwnerCarInfo.put("carTypeCd", businessOwnerCarInfo.get("car_type_cd"));
         businessOwnerCarInfo.put("operate", businessOwnerCarInfo.get("operate"));
         businessOwnerCarInfo.put("carNum", businessOwnerCarInfo.get("car_num"));
         businessOwnerCarInfo.put("psId", businessOwnerCarInfo.get("ps_id"));
@@ -47,6 +48,8 @@ public abstract class AbstractOwnerCarBusinessServiceDataFlowListener extends Ab
         businessOwnerCarInfo.put("ownerId", businessOwnerCarInfo.get("owner_id"));
         businessOwnerCarInfo.put("userId", businessOwnerCarInfo.get("user_id"));
         businessOwnerCarInfo.put("carId", businessOwnerCarInfo.get("car_id"));
+        businessOwnerCarInfo.put("memberId", businessOwnerCarInfo.get("member_id"));
+
         businessOwnerCarInfo.remove("bId");
         businessOwnerCarInfo.put("statusCd", statusCd);
     }
@@ -74,6 +77,7 @@ public abstract class AbstractOwnerCarBusinessServiceDataFlowListener extends Ab
         currentOwnerCarInfo.put("carColor", currentOwnerCarInfo.get("car_color"));
         currentOwnerCarInfo.put("carBrand", currentOwnerCarInfo.get("car_brand"));
         currentOwnerCarInfo.put("carType", currentOwnerCarInfo.get("car_type"));
+        currentOwnerCarInfo.put("carTypeCd", currentOwnerCarInfo.get("car_type_cd"));
         currentOwnerCarInfo.put("operate", currentOwnerCarInfo.get("operate"));
         currentOwnerCarInfo.put("carNum", currentOwnerCarInfo.get("car_num"));
         currentOwnerCarInfo.put("psId", currentOwnerCarInfo.get("ps_id"));
@@ -81,6 +85,7 @@ public abstract class AbstractOwnerCarBusinessServiceDataFlowListener extends Ab
         currentOwnerCarInfo.put("ownerId", currentOwnerCarInfo.get("owner_id"));
         currentOwnerCarInfo.put("userId", currentOwnerCarInfo.get("user_id"));
         currentOwnerCarInfo.put("carId", currentOwnerCarInfo.get("car_id"));
+        currentOwnerCarInfo.put("memberId", currentOwnerCarInfo.get("member_id"));
 
 
         currentOwnerCarInfo.put("operate", StatusConstant.OPERATE_DEL);

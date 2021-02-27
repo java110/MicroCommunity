@@ -23,6 +23,9 @@ public class ApiOwnerCarDataVo extends Vo {
     private String ownerId;
     private String userId;
     private String carId;
+    private String carTypeCd;
+    private String memberId;
+
 
 
     private String createTime;
@@ -113,5 +116,21 @@ public class ApiOwnerCarDataVo extends Vo {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getCarTypeCd() {
+        return carTypeCd;
+    }
+
+    public void setCarTypeCd(String carTypeCd) {
+        this.carTypeCd = carTypeCd;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 }

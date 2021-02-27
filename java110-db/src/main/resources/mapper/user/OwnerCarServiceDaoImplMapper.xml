@@ -7,10 +7,11 @@
     <!-- 保存车辆管理信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerCarInfo" parameterType="Map">
         insert into business_owner_car(
-        car_color,car_brand,car_type,operate,car_num,ps_id,remark,owner_id,b_id,user_id,car_id,community_id,start_time,end_time,state
+        car_color,car_brand,car_type,operate,car_num,ps_id,remark,owner_id,b_id,user_id,car_id,community_id,start_time,
+        end_time,state,car_type_cd,member_id
         ) values (
         #{carColor},#{carBrand},#{carType},#{operate},#{carNum},#{psId},#{remark},#{ownerId},#{bId},#{userId},#{carId},#{communityId},
-        #{startTime},#{endTime},#{state}
+        #{startTime},#{endTime},#{state},#{carTypeCd},#{memberId}
         )
     </insert>
 
@@ -20,7 +21,8 @@
         select t.car_color,t.car_color carColor,t.car_brand,t.car_brand carBrand,t.car_type,t.car_type
         carType,t.operate,t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.owner_id,t.owner_id
         ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId,t.community_id,t.community_id
-        communityId,t.start_time,t.end_time,t.state,t.start_time startTime,t.end_time endTime
+        communityId,t.start_time,t.end_time,t.state,t.start_time startTime,t.end_time endTime,t.car_type_cd,
+        t.car_type_cd carTypeCd,t.member_id,t.member_id memberId
         from business_owner_car t
         where 1 =1
         <if test="carColor !=null and carColor != ''">
@@ -31,6 +33,9 @@
         </if>
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
+        </if>
+        <if test="carTypeCd !=null and carTypeCd != ''">
+            and t.car_type_cd= #{carTypeCd}
         </if>
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
@@ -56,6 +61,9 @@
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -66,9 +74,11 @@
     <!-- 保存车辆管理信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerCarInfoInstance" parameterType="Map">
         insert into owner_car(
-        car_color,car_brand,car_type,car_num,ps_id,remark,status_cd,owner_id,b_id,user_id,car_id,community_id,start_time,end_time,state
+        car_color,car_brand,car_type,car_num,ps_id,remark,status_cd,owner_id,b_id,user_id,car_id,community_id,
+        start_time,end_time,state,car_type_cd,member_id
         ) select
-        t.car_color,t.car_brand,t.car_type,t.car_num,t.ps_id,t.remark,'0',t.owner_id,t.b_id,t.user_id,t.car_id,t.community_id,t.start_time,t.end_time,t.state
+        t.car_color,t.car_brand,t.car_type,t.car_num,t.ps_id,t.remark,'0',t.owner_id,t.b_id,t.user_id,t.car_id,t.community_id,
+        t.start_time,t.end_time,t.state,  t.car_type_cd,t.member_id
         from business_owner_car t where 1=1
         <if test="carColor !=null and carColor != ''">
             and t.car_color= #{carColor}
@@ -78,6 +88,9 @@
         </if>
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
+        </if>
+        <if test="carTypeCd !=null and carTypeCd != ''">
+            and t.car_type_cd= #{carTypeCd}
         </if>
         and t.operate= 'ADD'
         <if test="carNum !=null and carNum != ''">
@@ -101,6 +114,9 @@
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -115,7 +131,8 @@
         t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,
         t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId ,t.create_time
         createTime,t.community_id communityId,bow.name ownerName,bow.id_card idCard,bow.link,t2.name stateName,
-        t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state
+        t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state,
+        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId
         from owner_car t
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
@@ -133,6 +150,9 @@
         </if>
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
+        </if>
+        <if test="carTypeCd !=null and carTypeCd != ''">
+            and t.car_type_cd= #{carTypeCd}
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
@@ -169,6 +189,15 @@
         </if>
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+        <if test="memberIds !=null">
+            and t.member_id in
+            <foreach collection="memberIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="carIds !=null">
             and t.car_id in
@@ -239,8 +268,14 @@
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="carTypeCd !=null and carTypeCd != ''">
+            and t.car_type_cd= #{carTypeCd}
         </if>
 
     </update>
@@ -265,6 +300,9 @@
         </if>
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
+        </if>
+        <if test="carTypeCd !=null and carTypeCd != ''">
+            and t.car_type_cd= #{carTypeCd}
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
@@ -295,6 +333,15 @@
         </if>
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+        <if test="memberIds !=null">
+            and t.member_id in
+            <foreach collection="memberIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="carIds !=null">
             and t.car_id in
