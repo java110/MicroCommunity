@@ -16,6 +16,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +111,8 @@ public class SaveOwnerCarMemberListener extends AbstractServiceApiPlusListener {
 
         JSONObject tmpOwnerCar = JSONObject.parseObject(JSONObject.toJSONString(ownerCarDtos.get(0)));
         tmpOwnerCar.putAll(reqJson);
+        tmpOwnerCar.put("startTime", DateUtil.getFormatTimeString(ownerCarDtos.get(0).getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+        tmpOwnerCar.put("endTime", DateUtil.getFormatTimeString(ownerCarDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         tmpOwnerCar.put("memberId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_carId));
 
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(tmpOwnerCar, OwnerCarPo.class);
