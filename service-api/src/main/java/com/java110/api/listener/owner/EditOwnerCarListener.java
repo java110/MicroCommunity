@@ -67,7 +67,7 @@ public class EditOwnerCarListener extends AbstractServiceApiPlusListener {
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
 
         OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCarId(reqJson.getString("carId"));
+        ownerCarDto.setMemberId(reqJson.getString("memberId"));
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 

@@ -117,7 +117,7 @@ public class SaveOwnerCarMemberListener extends AbstractServiceApiPlusListener {
 
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(tmpOwnerCar, OwnerCarPo.class);
         ownerCarPo.setState(OwnerCarDto.STATE_NORMAL);
-        ownerCarPo.setCarTypeCd(OwnerCarDto.CAR_TYPE_PRIMARY);
+        ownerCarPo.setCarTypeCd(OwnerCarDto.CAR_TYPE_MEMBER);
         super.insert(context, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
 
     }

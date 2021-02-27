@@ -83,8 +83,10 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
             return;
         }
         //释放车位
-        reqJson.put("carNumType", ParkingSpaceDto.STATE_FREE);//修改为空闲
-        parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
+        if (reqJson.getString("carId").equals(reqJson.getString("memberId"))) {
+            reqJson.put("carNumType", ParkingSpaceDto.STATE_FREE);//修改为空闲
+            parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
+        }
     }
 
     @Override
