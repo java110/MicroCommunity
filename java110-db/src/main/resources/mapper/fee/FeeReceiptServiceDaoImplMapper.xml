@@ -161,7 +161,7 @@
         FROM
         fee_receipt t
         LEFT JOIN fee_receipt_detail tt ON t.receipt_id = tt.receipt_id
-        LEFT JOIN owner_car oc ON oc.car_id = t.obj_id
+        LEFT JOIN owner_car oc ON oc.car_id = t.obj_id and oc.car_type_cd='1001'
         LEFT JOIN building_owner bo ON bo.member_id = oc.owner_id
         LEFT JOIN building_owner_room_rel borr ON bo.owner_id = borr.owner_id
         LEFT JOIN building_room b ON borr.room_id = b.room_id

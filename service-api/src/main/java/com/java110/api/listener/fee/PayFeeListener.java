@@ -142,16 +142,20 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             ownerCarDto.setCarId(paramObj.getString("carPayerObjId"));
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
             //车位费用续租
-            if (ownerCarDtos != null && ownerCarDtos.size() == 1 && ownerCarDtos.get(0).getEndTime().getTime() < feeEndTime.getTime()) {
-                JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-                business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR);
-                business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-                business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-                OwnerCarPo ownerCarPo = new OwnerCarPo();
-                ownerCarPo.setCarId(ownerCarDtos.get(0).getCarId());
-                ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
-                business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(OwnerCarPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(ownerCarPo));
-                businesses.add(business);
+            if (ownerCarDtos != null) {
+                for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+                    if (tmpOwnerCarDto.getEndTime().getTime() < feeEndTime.getTime()) {
+                        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+                        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR);
+                        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+                        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+                        OwnerCarPo ownerCarPo = new OwnerCarPo();
+                        ownerCarPo.setMemberId(tmpOwnerCarDto.getMemberId());
+                        ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
+                        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(OwnerCarPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(ownerCarPo));
+                        businesses.add(business);
+                    }
+                }
             }
         }
 

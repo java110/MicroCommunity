@@ -548,6 +548,7 @@
         and oc.owner_id = t.owner_id
         AND oc.`status_cd` = '0'
         AND ps.`status_cd` = '0'
+        and oc.car_type_cd='1001'
         AND t.`status_cd` = '0'
         <if test="psIds != null ">
             and ps.ps_id in
