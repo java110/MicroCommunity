@@ -34,6 +34,7 @@ public class RoomDto extends PageDto implements Serializable {
     private String roomId;
     private String[] roomIds;
     private String layer;
+    private String[] layers;
     private String builtUpArea;
     private String roomNum;
     private String unitId;
@@ -316,5 +317,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setFees(List<FeeDto> fees) {
         this.fees = fees;
+    }
+
+    public String[] getLayers() {
+        return layers;
+    }
+
+    public void setLayers(String[] layers) {
+        this.layers = layers;
     }
 }

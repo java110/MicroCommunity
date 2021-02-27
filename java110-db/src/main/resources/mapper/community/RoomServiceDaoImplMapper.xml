@@ -694,6 +694,12 @@
         <if test="layer !=null and layer != ''">
             and t.layer= #{layer}
         </if>
+        <if test="layers != null">
+            and t.layer in
+            <foreach collection="layers" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="builtUpArea !=null and builtUpArea != ''">
             and t.built_up_area= #{builtUpArea}
         </if>

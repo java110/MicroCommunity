@@ -96,6 +96,10 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         if (reqJson.containsKey("roomType")) {
             roomDto.setRoomType(reqJson.getString("roomType"));
         }
+        if(reqJson.containsKey("feeLayer") && !"全部".equals(reqJson.getString("feeLayer"))){
+            String[] layers = reqJson.getString("feeLayer").split("#");
+            roomDto.setLayers(layers);
+        }
         List<RoomDto> roomDtos = null;
         if ("1001".equals(scope)) {//小区
             roomDto.setCommunityId(reqJson.getString("objId"));

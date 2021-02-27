@@ -104,6 +104,10 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         if (reqJson.containsKey("roomType")) {
             roomDto.setRoomType(reqJson.getString("roomType"));
         }
+        if(reqJson.containsKey("feeLayer") && !"全部".equals(reqJson.getString("feeLayer"))){
+            String[] layers = reqJson.getString("feeLayer").split("#");
+            roomDto.setLayers(layers);
+        }
         if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
 
             roomDto.setCommunityId(reqJson.getString("communityId"));
