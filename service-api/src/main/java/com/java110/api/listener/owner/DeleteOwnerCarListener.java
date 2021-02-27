@@ -44,6 +44,7 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "carId", "carId不能为空");
+        Assert.hasKeyAndValue(reqJson, "memberId", "memberId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         FeeDto feeDto = new FeeDto();
@@ -59,7 +60,7 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
         }
 
         OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCarId(reqJson.getString("carId"));
+        ownerCarDto.setMemberId(reqJson.getString("memberId"));
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
 
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
@@ -75,6 +76,7 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
         OwnerCarPo ownerCarPo = new OwnerCarPo();
         ownerCarPo.setCommunityId(reqJson.getString("communityId"));
         ownerCarPo.setCarId(reqJson.getString("carId"));
+        ownerCarPo.setMemberId(reqJson.getString("memberId"));
         super.delete(context, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR);
 
         if (StringUtil.isEmpty(reqJson.getString("psId")) || "-1".equals(reqJson.getString("psId"))) {

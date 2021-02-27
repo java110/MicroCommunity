@@ -60,6 +60,7 @@ public class EditOwnerCarListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
         Assert.jsonObjectHaveKey(reqJson, "carNum", "请求报文中未包含carNum");
         Assert.jsonObjectHaveKey(reqJson, "carId", "请求报文中未包含carId");
+        Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(reqJson, "carBrand", "请求报文中未包含carBrand");
         Assert.jsonObjectHaveKey(reqJson, "carType", "请求报文中未包含carType");
         Assert.jsonObjectHaveKey(reqJson, "carColor", "未包含carColor");
