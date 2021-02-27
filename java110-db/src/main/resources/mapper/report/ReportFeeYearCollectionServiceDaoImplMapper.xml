@@ -22,6 +22,7 @@
         collectionId,t.obj_type,t.obj_type objType,rd.collection_year collectionYear,rd.receivable_amount receivableAmount,
         rd.relation_year relationYear,rd.received_amount receivedAmount
         from report_fee_year_collection t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join report_fee_year_collection_detail rd on t.collection_id = rd.collection_id and rd.status_cd = '0' and rd.community_id = t.community_id
         where 1 =1
         <if test="ownerLink !=null and ownerLink != ''">
@@ -75,6 +76,7 @@
         objId,t.fee_name,t.fee_name feeName,t.community_id,t.community_id communityId,t.collection_id,t.collection_id
         collectionId,t.obj_type,t.obj_type objType
         from report_fee_year_collection t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
         <if test="ownerLink !=null and ownerLink != ''">
             and t.owner_link= #{ownerLink}
