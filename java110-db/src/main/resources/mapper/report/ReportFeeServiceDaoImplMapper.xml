@@ -19,7 +19,7 @@
             and DATE_FORMAT(t.start_time,'%Y') = #{curStartYear}
         </if>
         <if test="curEndYear != null and curEndYear != ''">
-            and DATE_FORMAT(t.end_time,'%Y') = #{curEndYear}
+            and DATE_FORMAT(DATE_SUB(t.end_time,INTERVAL 1 DAY),'%Y') = #{curEndYear}
         </if>
     </select>
 
