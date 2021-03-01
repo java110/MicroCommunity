@@ -243,7 +243,7 @@
             and t.create_time &lt;= #{endTime}
         </if>
         <if test="curYear != null and curYear != ''">
-            and DATE_FORMAT(t.end_time,'%Y') = #{curYear}
+            and DATE_FORMAT(DATE_SUB(t.end_time,INTERVAL 1 DAY),'%Y') = #{curYear}
         </if>
 
 
