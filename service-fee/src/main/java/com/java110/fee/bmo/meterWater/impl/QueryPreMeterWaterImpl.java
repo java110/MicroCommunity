@@ -78,10 +78,12 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             meterWaterDto.setObjId(tmpRoomDto.getRoomId());
             List<MeterWaterDto> meterWaterDtos = meterWaterInnerServiceSMOImpl.queryMeterWaters(meterWaterDto);
             importExportMeterWaterDto = BeanConvertUtil.covertBean(tmpRoomDto, ImportExportMeterWaterDto.class);
-            String preDegree = meterWaterDtos == null ? "0" : meterWaterDtos.get(0).getCurDegrees();
-            String preReadTime = meterWaterDtos == null ? DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A)
-                    : meterWaterDtos.get(0).getCurReadingTime();
-
+            String preDegree = "0" ;
+            String preReadTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B);
+            if(meterWaterDtos != null && meterWaterDtos.size()> 0){
+                preDegree = meterWaterDtos.get(0).getCurDegrees();
+                preReadTime = DateUtil.dateTimeToDate(meterWaterDtos.get(0).getCurReadingTime());
+            }
             importExportMeterWaterDto.setPreDegrees(preDegree);
             importExportMeterWaterDto.setPreReadingTime(preReadTime);
             importExportMeterWaterDtos.add(importExportMeterWaterDto);
