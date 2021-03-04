@@ -96,7 +96,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         if (reqJson.containsKey("roomType")) {
             roomDto.setRoomType(reqJson.getString("roomType"));
         }
-        if(reqJson.containsKey("feeLayer") && !"全部".equals(reqJson.getString("feeLayer"))){
+        if (reqJson.containsKey("feeLayer") && !"全部".equals(reqJson.getString("feeLayer"))) {
             String[] layers = reqJson.getString("feeLayer").split("#");
             roomDto.setLayers(layers);
         }
@@ -279,6 +279,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
             BigDecimal priceObj = new BigDecimal(price);
             priceObj = valueObj.multiply(priceObj).setScale(2, BigDecimal.ROUND_HALF_EVEN);
             amount = priceObj.doubleValue();
+            value = valueObj.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue() + "";
         } catch (Exception e) {
             throw new IllegalArgumentException("公式计算异常，公式为【" + orgFormulaValue + "】,计算 【" + formulaValue + "】异常");
         }
