@@ -1,10 +1,10 @@
 package com.java110.front.smo.impl;
 
+import com.java110.core.component.BaseComponentSMO;
+import com.java110.core.context.IPageData;
+import com.java110.front.smo.IMenuServiceSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
-import com.java110.core.context.IPageData;
-import com.java110.core.component.BaseComponentSMO;
-import com.java110.front.smo.IMenuServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class MenuServiceSMOImpl extends BaseComponentSMO implements IMenuService
         Assert.hasLength(pd.getUserId(), "用户还没有登录");
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.menu.info?userId=" + pd.getUserId()+"&groupType=P_WEB", HttpMethod.GET);
+                ServiceConstant.SERVICE_API_URL + "/api/query.menu.info?userId=" + pd.getUserId() + "&groupType=P_WEB", HttpMethod.GET);
         return responseEntity;
     }
 
