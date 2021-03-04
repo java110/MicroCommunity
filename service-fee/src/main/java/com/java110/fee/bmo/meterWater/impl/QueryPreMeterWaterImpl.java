@@ -75,6 +75,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             meterWaterDto = new MeterWaterDto();
             meterWaterDto.setMeterType(meterType);
             meterWaterDto.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            meterWaterDto.setObjId(tmpRoomDto.getRoomId());
             List<MeterWaterDto> meterWaterDtos = meterWaterInnerServiceSMOImpl.queryMeterWaters(meterWaterDto);
             importExportMeterWaterDto = BeanConvertUtil.covertBean(tmpRoomDto, ImportExportMeterWaterDto.class);
             String preDegree = meterWaterDtos == null ? "0" : meterWaterDtos.get(0).getCurDegrees();
