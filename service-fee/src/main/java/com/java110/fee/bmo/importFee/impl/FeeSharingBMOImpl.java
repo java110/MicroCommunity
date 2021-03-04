@@ -87,8 +87,9 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
 
         String scope = reqJson.getString("scope");
         RoomDto roomDto = new RoomDto();
+        String[] states = null;
         if (reqJson.containsKey("roomState") && reqJson.getString("roomState").split(",").length > 0) {
-            String[] states = reqJson.getString("roomState").split(",");
+            states = reqJson.getString("roomState").split(",");
             roomDto.setStates(states);
         } else {
             roomDto.setStates(new String[]{RoomDto.STATE_SELL, RoomDto.STATE_SHOP_SELL}); // 已经入住
@@ -115,7 +116,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         }
 
         if (roomDtos == null || roomDtos.size() < 1) {
-            throw new IllegalArgumentException("未找到相应房屋公摊费用");
+            throw new IllegalArgumentException("未找到相应房屋");
         }
 
         //房屋刷入业主信息
@@ -162,7 +163,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         String formulaValue = deakFormula(feeFormulaDtos.get(0));
 
         //公摊费用到房屋
-        sharingFeeToRoom(formulaValue, Double.parseDouble(feeFormulaDtos.get(0).getPrice()), roomDtos, reqJson, feeConfigDto, communityDtos.get(0));
+        sharingFeeToRoom(formulaValue, Double.parseDouble(feeFormulaDtos.get(0).getPrice()), roomDtos, reqJson, feeConfigDto, communityDtos.get(0),states);
 
 
         return ResultVo.success();
@@ -175,7 +176,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
      * @param roomDtos
      */
     private void sharingFeeToRoom(String formulaValue, double price, List<RoomDto> roomDtos,
-                                  JSONObject reqJson, FeeConfigDto feeConfigDto, CommunityDto communityDto) {
+                                  JSONObject reqJson, FeeConfigDto feeConfigDto, CommunityDto communityDto,String[] states) {
 
 
         List<PayFeePo> payFeePos = new ArrayList<>();
@@ -186,7 +187,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         Map<String, Integer> unitRooms = new HashMap();
         for (RoomDto roomDto : roomDtos) {
             doSharingFeeToRoom(formulaValue, price, roomDto, reqJson, payFeePos, feeConfigDto, feeAttrPos,
-                    importFeeId, importFeeDetailPos, floorRooms, unitRooms, communityDto);
+                    importFeeId, importFeeDetailPos, floorRooms, unitRooms, communityDto,states);
         }
 
         feeInnerServiceSMOImpl.saveFee(payFeePos);
@@ -234,22 +235,23 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
                                     List<ImportFeeDetailPo> importFeeDetailPos,
                                     Map<String, Integer> floorRooms,
                                     Map<String, Integer> unitRooms,
-                                    CommunityDto communityDto) {
+                                    CommunityDto communityDto,
+                                    String[] states) {
 
         if (!floorRooms.containsKey(roomDto.getFloorId())) {
             RoomDto tmpRoomDto = new RoomDto();
-            tmpRoomDto.setCommunityId(roomDto.getCommunityId());
+            tmpRoomDto.setCommunityId(communityDto.getCommunityId());
             tmpRoomDto.setFloorId(roomDto.getFloorId());
-            tmpRoomDto.setState(RoomDto.STATE_SELL);
+            tmpRoomDto.setStates(states);
             int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(tmpRoomDto);
             floorRooms.put(roomDto.getFloorId(), roomCount);
         }
 
         if (!unitRooms.containsKey(roomDto.getUnitId())) {
             RoomDto tmpRoomDto = new RoomDto();
-            tmpRoomDto.setCommunityId(roomDto.getCommunityId());
+            tmpRoomDto.setCommunityId(communityDto.getCommunityId());
             tmpRoomDto.setUnitId(roomDto.getUnitId());
-            tmpRoomDto.setState(RoomDto.STATE_SELL);
+            tmpRoomDto.setStates(states);
             int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(tmpRoomDto);
             unitRooms.put(roomDto.getUnitId(), roomCount);
         }
@@ -259,14 +261,14 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
 
 
         String orgFormulaValue = formulaValue;
-        formulaValue = formulaValue.replace("T", reqJson.getString("totalDegrees"))
-                .replace("F", roomDto.getFloorArea())
-                .replace("U", roomDto.getUnitArea())
-                .replace("R", roomDto.getBuiltUpArea())
-                .replace("X", roomDto.getFeeCoefficient())
-                .replace("L", floorRoomCount + "")
-                .replace("D", unitRoomCount + "")
-                .replace("C", communityDto.getCommunityArea());
+        formulaValue = formulaValue.replaceAll("T", reqJson.getString("totalDegrees"))
+                .replaceAll("F", roomDto.getFloorArea())
+                .replaceAll("U", roomDto.getUnitArea())
+                .replaceAll("R", roomDto.getBuiltUpArea())
+                .replaceAll("X", roomDto.getFeeCoefficient())
+                .replaceAll("L", floorRoomCount + "")
+                .replaceAll("D", unitRoomCount + "")
+                .replaceAll("C", communityDto.getCommunityArea());
 
 
         ScriptEngineManager manager = new ScriptEngineManager();
