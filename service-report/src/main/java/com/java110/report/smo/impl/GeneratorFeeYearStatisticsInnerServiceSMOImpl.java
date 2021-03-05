@@ -255,7 +255,8 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         reportFeeDto.setPayerObjId(reportRoomDto.getRoomId());
         reportFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
         //reportFeeDto.setState(FeeDto.STATE_DOING);
-        reportFeeDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
+        //reportFeeDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
+
         List<ReportFeeDto> feeDtos = reportFeeServiceDaoImpl.getFees(reportFeeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
@@ -280,7 +281,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         reportFeeYearCollectionDto.setCommunityId(reportRoomDto.getCommunityId());
         reportFeeYearCollectionDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeYearCollectionDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        reportFeeYearCollectionDto.setFeeId(tmpReportFeeDto.getFeeId());
+        //reportFeeYearCollectionDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeYearCollectionDto.setObjType(tmpReportFeeDto.getPayerObjType());
         List<ReportFeeYearCollectionDto> statistics = BeanConvertUtil.covertBeanList(
                 reportFeeYearCollectionServiceDaoImpl.getReportFeeYearCollectionInfo(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionDto)),
@@ -297,9 +298,9 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
             reportFeeYearCollectionPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
             reportFeeYearCollectionPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
             if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
-                reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum() );
+                reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum());
             } else {
-                reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum() );
+                reportFeeYearCollectionPo.setObjName(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum());
             }
             reportFeeYearCollectionPo.setOwnerId(reportRoomDto.getOwnerId());
             reportFeeYearCollectionPo.setOwnerName(reportRoomDto.getOwnerName());
@@ -398,6 +399,10 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         int curYear = Calendar.getInstance().get(Calendar.YEAR);
         double cycleMonth = 12;
 
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) { // 一次性费用没有应收 所以写成0
+            return 0;
+        }
+
         if (endYear == curYear) {
             try {
                 cycleMonth = computeFeeSMOImpl.dayCompare(DateUtil.getDateFromString(curYear + "-01-01", DateUtil.DATE_FORMATE_STRING_B), tmpReportFeeDto.getConfigEndTime());
@@ -419,7 +424,8 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
      */
     private double getReceivedAmount(ReportFeeDto tmpReportFeeDto, int year) {
         ReportFeeDetailDto feeDetailDto = new ReportFeeDetailDto();
-        feeDetailDto.setFeeId(tmpReportFeeDto.getFeeId());
+        feeDetailDto.setConfigId(tmpReportFeeDto.getConfigId());
+        feeDetailDto.setPayerObjId(tmpReportFeeDto.getPayerObjId());
         String flag = CommonCache.getValue(RECEIVED_TIME);
         if (RECEIVED_TIME_START.equals(flag)) {
             feeDetailDto.setCurStartYear(year + "");

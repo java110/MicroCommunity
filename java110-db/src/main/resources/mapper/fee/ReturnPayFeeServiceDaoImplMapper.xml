@@ -172,6 +172,7 @@
         d.name feeTypeCdName,
         c.name stateName
         from return_pay_fee t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
         inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
         where 1 =1
@@ -250,6 +251,7 @@
     <select id="queryReturnPayFeesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from return_pay_fee t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
         <if test="reason !=null and reason != ''">
             and t.reason= #{reason}

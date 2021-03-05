@@ -32,7 +32,8 @@
         objName,t.community_id,t.community_id communityId,t.receipt_id,t.receipt_id receiptId,t.obj_type,t.obj_type
         objType,t.create_time createTime,frd.fee_name feeName
         from fee_receipt t
-        left join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
+        inner join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
+        inner join pay_fee pf on frd.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
@@ -272,7 +273,8 @@
     <select id="queryFeeReceiptsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from fee_receipt t
-        left join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
+        inner join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
+        inner join pay_fee pf on frd.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}

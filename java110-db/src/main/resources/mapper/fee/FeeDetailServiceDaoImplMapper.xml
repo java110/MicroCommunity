@@ -111,8 +111,15 @@
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId ,t.create_time createTime,
         t.state,d.name stateName,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime
         from pay_fee_detail t
+        <if test="configId != null and configId != ''">
+            inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        </if>
         left join t_dict d on t.state = d.status_cd and d.table_name = 'pay_fee_detail' and d.table_columns = 'state'
         where 1 =1
+        <if test="configId != null and configId != ''">
+            and pf.configId = #{configId}
+            and pf.payerObjId = #{payerObjId}
+        </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
         </if>
@@ -205,7 +212,14 @@
     <select id="queryFeeDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee_detail t
+        <if test="configId != null and configId != ''">
+            inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="configId != null and configId != ''">
+            and pf.configId = #{configId}
+            and pf.payerObjId = #{payerObjId}
+        </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
         </if>

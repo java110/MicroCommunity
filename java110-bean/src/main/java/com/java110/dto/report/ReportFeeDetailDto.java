@@ -27,6 +27,8 @@ public class ReportFeeDetailDto extends PageDto implements Serializable {
     private String state;
     private String curStartYear;
     private String curEndYear;
+    private String configId;
+    private String payerObjId;
 
     public String getDetailId() {
         return detailId;
@@ -138,5 +140,21 @@ public class ReportFeeDetailDto extends PageDto implements Serializable {
 
     public void setCurEndYear(String curEndYear) {
         this.curEndYear = curEndYear;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+
+    public String getPayerObjId() {
+        return payerObjId;
+    }
+
+    public void setPayerObjId(String payerObjId) {
+        this.payerObjId = payerObjId;
     }
 }

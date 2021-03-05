@@ -126,6 +126,7 @@
         objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
         communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName
         from meter_water t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -227,6 +228,7 @@
     <select id="queryMeterWatersCount" parameterType="Map" resultType="Map">
         select count(1) count
         from meter_water t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
