@@ -117,8 +117,8 @@
         left join t_dict d on t.state = d.status_cd and d.table_name = 'pay_fee_detail' and d.table_columns = 'state'
         where 1 =1
         <if test="configId != null and configId != ''">
-            and pf.configId = #{configId}
-            and pf.payerObjId = #{payerObjId}
+            and pf.config_id = #{configId}
+            and pf.payer_obj_id = #{payerObjId}
         </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
@@ -217,8 +217,8 @@
         </if>
         where 1 =1
         <if test="configId != null and configId != ''">
-            and pf.configId = #{configId}
-            and pf.payerObjId = #{payerObjId}
+            and pf.config_id = #{configId}
+            and pf.payer_obj_id = #{payerObjId}
         </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
