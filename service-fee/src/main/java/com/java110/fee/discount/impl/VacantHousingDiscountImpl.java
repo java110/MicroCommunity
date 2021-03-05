@@ -82,7 +82,9 @@ public class VacantHousingDiscountImpl implements IComputeDiscount {
 
         BigDecimal priceDec = new BigDecimal(price);
 
-        BigDecimal cycleDec = new BigDecimal(month);
+        //BigDecimal cycleDec = new BigDecimal(month);
+        //2021-03-05 根据缴费 时长来算 不应该按 至少缴费来算
+        BigDecimal cycleDec = new BigDecimal(feeDiscountDto.getCycles());
 
         double discountPrice = priceDec.multiply(cycleDec).multiply(new BigDecimal(1.0 - rate)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 
