@@ -114,7 +114,7 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
      */
     private void validateFeeConfigData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "feeId", "请求中未包含feeId信息");
+       // Assert.jsonObjectHaveKey(reqJson, "feeId", "请求中未包含feeId信息");
 
 
     }

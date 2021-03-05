@@ -410,11 +410,11 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
 
     private void validateLoadFeeDetail(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "feeId", "请求报文中未包含roomId节点");
+        //Assert.jsonObjectHaveKey(pd.getReqData(), "feeId", "请求报文中未包含feeId节点");
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
-        Assert.hasLength(paramIn.getString("feeId"), "费用ID不能为空");
+        //Assert.hasLength(paramIn.getString("feeId"), "费用ID不能为空");
     }
 
     /**
