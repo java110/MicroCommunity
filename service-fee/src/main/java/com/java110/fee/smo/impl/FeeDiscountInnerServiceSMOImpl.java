@@ -216,6 +216,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             c.setTime(feeDetailDto.getStartTime());
             double month = Double.parseDouble(feeDetailDto.getCycles());
             c.add(Calendar.MONTH, (int) month);
+            c.add(Calendar.DAY_OF_MONTH, -5);//这里根据设置时间荣誉5天
             Date endTime = c.getTime();
             applyRoomDiscountDto.setEndTime(simpleDateFormat.format(endTime));
             //查询折扣申请表
