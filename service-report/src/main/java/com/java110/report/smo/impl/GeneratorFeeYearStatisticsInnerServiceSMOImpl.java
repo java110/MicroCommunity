@@ -173,7 +173,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         reportFeeDto.setPayerObjId(tmpReportCarDto.getCarId());
         reportFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
         //reportFeeDto.setState(FeeDto.STATE_DOING);
-        reportFeeDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
+        //reportFeeDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
         List<ReportFeeDto> feeDtos = reportFeeServiceDaoImpl.getFees(reportFeeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
@@ -195,7 +195,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         reportFeeYearCollectionDto.setCommunityId(tmpReportCarDto.getCommunityId());
         reportFeeYearCollectionDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeYearCollectionDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        reportFeeYearCollectionDto.setFeeId(tmpReportFeeDto.getFeeId());
+        //reportFeeYearCollectionDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeYearCollectionDto.setObjType(tmpReportFeeDto.getPayerObjType());
         List<ReportFeeYearCollectionDto> statistics = BeanConvertUtil.covertBeanList(
                 reportFeeYearCollectionServiceDaoImpl.getReportFeeYearCollectionInfo(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionDto)),
