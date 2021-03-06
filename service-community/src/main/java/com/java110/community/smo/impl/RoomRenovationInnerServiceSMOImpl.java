@@ -1,9 +1,9 @@
 package com.java110.community.smo.impl;
 
-
 import com.java110.community.dao.IRoomRenovationServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.RoomDto;
 import com.java110.dto.roomRenovation.RoomRenovationDto;
 import com.java110.intf.IRoomRenovationInnerServiceSMO;
 import com.java110.po.roomRenovation.RoomRenovationPo;
@@ -40,6 +40,13 @@ public class RoomRenovationInnerServiceSMOImpl extends BaseServiceSMO implements
     public int updateRoomRenovation(@RequestBody RoomRenovationPo roomRenovationPo) {
         int saveFlag = 1;
         roomRenovationServiceDaoImpl.updateRoomRenovationInfo(BeanConvertUtil.beanCovertMap(roomRenovationPo));
+        return saveFlag;
+    }
+
+    @Override
+    public int updateRoom(RoomDto roomDto) {
+        int saveFlag = 1;
+        roomRenovationServiceDaoImpl.updateRoom(BeanConvertUtil.beanCovertMap(roomDto));
         return saveFlag;
     }
 

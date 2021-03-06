@@ -24,38 +24,36 @@ public class RoomRenovationDetailServiceDaoImpl extends BaseServiceDao implement
 
     private static Logger logger = LoggerFactory.getLogger(RoomRenovationDetailServiceDaoImpl.class);
 
-
-
-
-
     /**
      * 保存装修明细信息 到 instance
-     * @param info   bId 信息
+     *
+     * @param info bId 信息
      * @throws DAOException DAO异常
      */
     @Override
     public void saveRoomRenovationDetailInfo(Map info) throws DAOException {
-        logger.debug("保存装修明细信息Instance 入参 info : {}",info);
+        logger.debug("保存装修明细信息Instance 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.insert("roomRenovationDetailServiceDaoImpl.saveRoomRenovationDetailInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("roomRenovationDetailServiceDaoImpl.saveRoomRenovationDetailInfo", info);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存装修明细信息Instance数据失败："+ JSONObject.toJSONString(info));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存装修明细信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
 
     /**
      * 查询装修明细信息（instance）
+     *
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getRoomRenovationDetailInfo(Map info) throws DAOException {
-        logger.debug("查询装修明细信息 入参 info : {}",info);
+        logger.debug("查询装修明细信息 入参 info : {}", info);
 
-        List<Map> businessRoomRenovationDetailInfos = sqlSessionTemplate.selectList("roomRenovationDetailServiceDaoImpl.getRoomRenovationDetailInfo",info);
+        List<Map> businessRoomRenovationDetailInfos = sqlSessionTemplate.selectList("roomRenovationDetailServiceDaoImpl.getRoomRenovationDetailInfo", info);
 
         return businessRoomRenovationDetailInfos;
     }
@@ -63,28 +61,30 @@ public class RoomRenovationDetailServiceDaoImpl extends BaseServiceDao implement
 
     /**
      * 修改装修明细信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
     public void updateRoomRenovationDetailInfo(Map info) throws DAOException {
-        logger.debug("修改装修明细信息Instance 入参 info : {}",info);
+        logger.debug("修改装修明细信息Instance 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.update("roomRenovationDetailServiceDaoImpl.updateRoomRenovationDetailInfo",info);
+        int saveFlag = sqlSessionTemplate.update("roomRenovationDetailServiceDaoImpl.updateRoomRenovationDetailInfo", info);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改装修明细信息Instance数据失败："+ JSONObject.toJSONString(info));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改装修明细信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
-     /**
+    /**
      * 查询装修明细数量
+     *
      * @param info 装修明细信息
      * @return 装修明细数量
      */
     @Override
     public int queryRoomRenovationDetailsCount(Map info) {
-        logger.debug("查询装修明细数据 入参 info : {}",info);
+        logger.debug("查询装修明细数据 入参 info : {}", info);
 
         List<Map> businessRoomRenovationDetailInfos = sqlSessionTemplate.selectList("roomRenovationDetailServiceDaoImpl.queryRoomRenovationDetailsCount", info);
         if (businessRoomRenovationDetailInfos.size() < 1) {

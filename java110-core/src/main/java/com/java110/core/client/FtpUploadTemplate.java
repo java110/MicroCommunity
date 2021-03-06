@@ -73,6 +73,9 @@ public class FtpUploadTemplate {
             } else if (imageBase64.contains("data:application/octet-stream;base64,")) {
                 imageBase64 = imageBase64.replace("data:application/octet-stream;base64,", "");
                 fileName += ".jpg";
+            } else if (imageBase64.contains("mp4") || imageBase64.contains("MP4") || imageBase64.contains("AVI") || imageBase64.contains("avi")
+                    || imageBase64.contains("WMV") || imageBase64.contains("wmv")) {
+                fileName += ".mp4";
             } else {
                 fileName += ".jpg";
             }
@@ -149,7 +152,7 @@ public class FtpUploadTemplate {
                 throw new IllegalArgumentException("存储文件失败");
             }
         } catch (Exception e) {
-            // logger.error("上传文件失败", e);
+            logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
         } finally {
             try {
@@ -266,27 +269,27 @@ public class FtpUploadTemplate {
         } catch (Exception e) {
             logger.error("ftp通过文件名称获取远程文件流", e);
         } finally {
-                if (bos != null) {
-                    try {
-                        bos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                if(fis != null){
-                    try {
-                        fis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            }
             try {
                 closeConnect(ftpClient);
             } catch (Exception e) {

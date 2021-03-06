@@ -1,6 +1,7 @@
 package com.java110.intf;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.RoomDto;
 import com.java110.dto.roomRenovation.RoomRenovationDto;
 import com.java110.po.roomRenovation.RoomRenovationPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -22,19 +23,20 @@ import java.util.List;
 @RequestMapping("/roomRenovationApi")
 public interface IRoomRenovationInnerServiceSMO {
 
-
     @RequestMapping(value = "/saveRoomRenovation", method = RequestMethod.POST)
     public int saveRoomRenovation(@RequestBody RoomRenovationPo roomRenovationPo);
 
     @RequestMapping(value = "/updateRoomRenovation", method = RequestMethod.POST)
-    public int updateRoomRenovation(@RequestBody  RoomRenovationPo roomRenovationPo);
+    public int updateRoomRenovation(@RequestBody RoomRenovationPo roomRenovationPo);
+
+    @RequestMapping(value = "/updateRoom", method = RequestMethod.POST)
+    public int updateRoom(@RequestBody RoomDto roomDto);
 
     @RequestMapping(value = "/deleteRoomRenovation", method = RequestMethod.POST)
-    public int deleteRoomRenovation(@RequestBody  RoomRenovationPo roomRenovationPo);
+    public int deleteRoomRenovation(@RequestBody RoomRenovationPo roomRenovationPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param roomRenovationDto 数据对象分享
      * @return RoomRenovationDto 对象数据

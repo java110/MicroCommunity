@@ -1,6 +1,8 @@
 package com.java110.community.bmo.roomRenovation;
 import com.java110.dto.roomRenovation.RoomRenovationDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
 public interface IGetRoomRenovationBMO {
 
 
@@ -10,7 +12,7 @@ public interface IGetRoomRenovationBMO {
      * @param  roomRenovationDto
      * @return
      */
-    ResponseEntity<String> get(RoomRenovationDto roomRenovationDto);
+    ResponseEntity<String> get(@RequestBody RoomRenovationDto roomRenovationDto);
 
 
 }

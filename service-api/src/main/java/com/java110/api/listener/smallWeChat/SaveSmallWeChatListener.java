@@ -145,6 +145,42 @@ public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
             smallWechatAttrPo.setWechatId(wechatId);
             super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
 
+            //装修申请提醒给业主缴纳装修押金等信息 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_HOUSE_DECORATION_APPLY_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写装修申请提醒给业主进行缴纳装修押金和确认装修信息通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //装修申请提醒给物业人员进行审核操作 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_HOUSE_DECORATION_CHECK_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写装修申请提醒给物业人员进行审核操作通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //装修申请审核结果提醒给业主 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_HOUSE_DECORATION_CHECK_RESULT_TEMPLATE);
+            smallWechatAttrPo.setValue("这里请填写装修申请审核结果提醒给业主,通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
+            //装修验收结果提醒给业主 通知--模板ID
+            smallWechatAttrPo = new SmallWechatAttrPo();
+            smallWechatAttrPo.setAttrId("-3");
+            smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+            smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_HOUSE_DECORATION_COMPLETED_TEMPLATE);
+            smallWechatAttrPo.setValue("这里装修验收结果提醒给业主,通知模板ID");
+            smallWechatAttrPo.setWechatId(wechatId);
+            super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
+
         }
     }
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +23,18 @@ public class GetRoomRenovationBMOImpl implements IGetRoomRenovationBMO {
      * @param roomRenovationDto
      * @return 订单服务能够接受的报文
      */
-    public ResponseEntity<String> get(RoomRenovationDto roomRenovationDto) {
+    public ResponseEntity<String> get(@RequestBody RoomRenovationDto roomRenovationDto) {
 
 
         int count = roomRenovationInnerServiceSMOImpl.queryRoomRenovationsCount(roomRenovationDto);
 
-        List<RoomRenovationDto> roomRenovationDtos = null;
+        List<RoomRenovationDto> roomRenovationDtos = new ArrayList<>();
         if (count > 0) {
-            roomRenovationDtos = roomRenovationInnerServiceSMOImpl.queryRoomRenovations(roomRenovationDto);
+            List<RoomRenovationDto> roomRenovationDtoList = roomRenovationInnerServiceSMOImpl.queryRoomRenovations(roomRenovationDto);
+            for (RoomRenovationDto renovationDto : roomRenovationDtoList) {
+                renovationDto.setUserId(roomRenovationDto.getUserId());
+                roomRenovationDtos.add(renovationDto);
+            }
         } else {
             roomRenovationDtos = new ArrayList<>();
         }

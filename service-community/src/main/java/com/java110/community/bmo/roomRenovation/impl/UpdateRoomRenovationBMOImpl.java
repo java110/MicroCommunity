@@ -2,6 +2,7 @@ package com.java110.community.bmo.roomRenovation.impl;
 
 import com.java110.community.bmo.roomRenovation.IUpdateRoomRenovationBMO;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.dto.RoomDto;
 import com.java110.intf.IRoomRenovationInnerServiceSMO;
 import com.java110.po.roomRenovation.RoomRenovationPo;
 import com.java110.vo.ResultVo;
@@ -28,6 +29,21 @@ public class UpdateRoomRenovationBMOImpl implements IUpdateRoomRenovationBMO {
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
         }
 
+        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+    }
+
+    /**
+     * 修改房屋状态
+     *
+     * @param roomDto
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> updateRoom(RoomDto roomDto) {
+        int flag = roomRenovationInnerServiceSMOImpl.updateRoom(roomDto);
+        if (flag > 0) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+        }
         return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
     }
 

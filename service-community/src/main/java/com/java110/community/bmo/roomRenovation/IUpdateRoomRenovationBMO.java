@@ -1,4 +1,5 @@
 package com.java110.community.bmo.roomRenovation;
+import com.java110.dto.RoomDto;
 import com.java110.po.roomRenovation.RoomRenovationPo;
 import org.springframework.http.ResponseEntity;
 
@@ -13,5 +14,12 @@ public interface IUpdateRoomRenovationBMO {
      */
     ResponseEntity<String> update(RoomRenovationPo roomRenovationPo);
 
+    /**
+     * 修改房屋状态
+     * add by wuxw
+     * @param roomDto
+     * @return
+     */
+    ResponseEntity<String> updateRoom(RoomDto roomDto);
 
 }

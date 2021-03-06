@@ -1,6 +1,7 @@
 package com.java110.po.file;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @ClassName FileRelPo
@@ -18,6 +19,7 @@ public class FileRelPo implements Serializable {
     private String objId;
     private String fileRealName;
     private String fileSaveName;
+    private Date createTime;
 
     public String getFileRelId() {
         return fileRelId;
@@ -65,5 +67,13 @@ public class FileRelPo implements Serializable {
 
     public void setFileSaveName(String fileSaveName) {
         this.fileSaveName = fileSaveName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

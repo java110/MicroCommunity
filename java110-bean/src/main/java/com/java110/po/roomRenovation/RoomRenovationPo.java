@@ -1,6 +1,7 @@
 package com.java110.po.roomRenovation;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class RoomRenovationPo implements Serializable {
 
@@ -17,6 +18,9 @@ public class RoomRenovationPo implements Serializable {
     private String state;
     private String communityId;
     private String personTel;
+    private String examineRemark;
+    private List<String> photos;
+    private String videoName;
 
     public String getStatusCd() {
         return statusCd;
@@ -122,5 +126,27 @@ public class RoomRenovationPo implements Serializable {
         this.personTel = personTel;
     }
 
+    public String getExamineRemark() {
+        return examineRemark;
+    }
 
+    public void setExamineRemark(String examineRemark) {
+        this.examineRemark = examineRemark;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
+    }
 }

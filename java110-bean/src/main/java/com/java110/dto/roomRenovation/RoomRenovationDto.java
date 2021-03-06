@@ -25,8 +25,11 @@ public class RoomRenovationDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
     private String state;
+    private String stateName;
     private String communityId;
     private String personTel;
+    //当前用户id
+    private String userId;
 
 
     private Date createTime;
@@ -145,5 +148,21 @@ public class RoomRenovationDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
