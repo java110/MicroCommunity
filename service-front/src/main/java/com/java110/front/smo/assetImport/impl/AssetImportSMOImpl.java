@@ -343,6 +343,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("configId", ttFee.getString("configId"));
                 paramIn.put("storeId", result.getStoreId());
                 paramIn.put("feeEndDate", room.getFeeEndDate().split("#")[feeIndex]);
+                paramIn.put("startTime", paramIn.getString("feeEndDate"));
+
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             }
 
