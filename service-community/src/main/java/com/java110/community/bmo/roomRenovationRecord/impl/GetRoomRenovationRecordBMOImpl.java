@@ -38,9 +38,11 @@ public class GetRoomRenovationRecordBMOImpl implements IGetRoomRenovationRecordB
         if (count > 0) {
             List<RoomRenovationRecordPo> roomRenovationRecordList = roomRenovationRecordInnerServiceSMOImpl.queryRoomRenovationRecords(roomRenovationRecordPo);
             for (RoomRenovationRecordPo renovationRecordPo : roomRenovationRecordList) {
-                if (!StringUtil.isEmpty(renovationRecordPo.getFileRealName())) {
+                if (!StringUtil.isEmpty(renovationRecordPo.getFileRealName()) && renovationRecordPo.getRelTypeCd().equals("19000")) {
                     renovationRecordPo.setUrl("/callComponent/download/getFile/file?fileId=" +
                             renovationRecordPo.getFileRealName() + "&communityId=-1");
+                } else if (!StringUtil.isEmpty(renovationRecordPo.getFileRealName()) && renovationRecordPo.getRelTypeCd().equals("21000")) {
+                    renovationRecordPo.setUrl("/video/" + renovationRecordPo.getFileRealName());
                 }
                 roomRenovationRecordPos.add(renovationRecordPo);
             }

@@ -153,15 +153,23 @@ public class RoomRenovationApi {
         RoomRenovationPo roomRenovationPo = BeanConvertUtil.covertBean(reqJson, RoomRenovationPo.class);
         roomRenovationPo.setStartTime(roomRenovationPo.getStartTime() + " 00:00:00");
         roomRenovationPo.setEndTime(roomRenovationPo.getEndTime() + " 23:59:59");
-        //如果状态为装修中，则房屋状态改为装修中；如果状态为验收成功，则房屋状态改为已装修
-        if (roomRenovationPo.getState().equals("3000")) {
+        //如果状态为装修中、待验收，则房屋状态改为装修中；如果状态为验收成功，则房屋状态改为已装修；如果为待审核、审核失败、验收失败，则房屋状态改为已交房
+        if (roomRenovationPo.getState().equals("3000") || roomRenovationPo.getState().equals("4000")) {
             RoomDto roomDto = new RoomDto();
             roomDto.setRoomId(roomRenovationPo.getRoomId());
             //房屋状态变为装修中
             roomDto.setState("2009");
             updateRoomRenovationBMOImpl.update(roomRenovationPo);
             return updateRoomRenovationBMOImpl.updateRoom(roomDto);
-        } else if (roomRenovationPo.getState().equals("")) {
+        } else if (roomRenovationPo.getState().equals("1000") || roomRenovationPo.getState().equals("2000")
+                || roomRenovationPo.getState().equals("5000")) {
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(roomRenovationPo.getRoomId());
+            //房屋状态变为已交房
+            roomDto.setState("2003");
+            updateRoomRenovationBMOImpl.update(roomRenovationPo);
+            return updateRoomRenovationBMOImpl.updateRoom(roomDto);
+        } else if (roomRenovationPo.getState().equals("6000")) {
             RoomDto roomDto = new RoomDto();
             roomDto.setRoomId(roomRenovationPo.getRoomId());
             //房屋状态变为已装修
@@ -319,15 +327,8 @@ public class RoomRenovationApi {
         if (!StringUtil.isEmpty(videoName)) {
             //21000表示装修视频
             fileRelPo.setRelTypeCd("21000");
-            FileDto fileDto = new FileDto();
-            fileDto.setCommunityId("-1");
-            fileDto.setContext(videoName);
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setSuffix("mp4");
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-            fileRelPo.setFileRealName(fileName);
-            fileRelPo.setFileSaveName(fileName);
+            fileRelPo.setFileRealName(videoName);
+            fileRelPo.setFileSaveName(videoName);
             fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
         }
         RoomRenovationRecordPo roomRenovationRecord = new RoomRenovationRecordPo();
@@ -352,6 +353,14 @@ public class RoomRenovationApi {
             roomDto.setRoomId(roomRenovationPo.getRoomId());
             //房屋状态变为装修中
             roomDto.setState("2009");
+            //更新装修信息
+            updateRoomRenovationBMOImpl.update(roomRenovationPo);
+            return updateRoomRenovationBMOImpl.updateRoom(roomDto);
+        } else if (roomRenovationPo.getState().equals("2000")) {
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(roomRenovationPo.getRoomId());
+            //房屋状态变为已交房
+            roomDto.setState("2003");
             //更新装修信息
             updateRoomRenovationBMOImpl.update(roomRenovationPo);
             return updateRoomRenovationBMOImpl.updateRoom(roomDto);
@@ -436,6 +445,13 @@ public class RoomRenovationApi {
             roomDto.setRoomId(reqJson.getString("roomId"));
             //状态变为已装修
             roomDto.setState("2005");
+            saveRoomRenovationDetailBMOImpl.save(roomRenovationDetailPo);
+            return updateRoomRenovationBMOImpl.updateRoom(roomDto);
+        } else if (roomRenovationDetailPo.getState().equals("6000")) {
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(reqJson.getString("roomId"));
+            //状态变为已交房
+            roomDto.setState("2003");
             saveRoomRenovationDetailBMOImpl.save(roomRenovationDetailPo);
             return updateRoomRenovationBMOImpl.updateRoom(roomDto);
         } else {

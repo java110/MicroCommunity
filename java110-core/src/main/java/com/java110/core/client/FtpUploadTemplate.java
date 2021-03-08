@@ -34,6 +34,8 @@ public class FtpUploadTemplate {
 
     private final static String IMAGE_DEFAULT_PATH = "img/";
 
+    private final static String VIDEO_PATH = "video/";
+
     /*
      *图片上传工具方法
      * 默认上传至 img 文件下的当前日期下
@@ -52,7 +54,12 @@ public class FtpUploadTemplate {
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpPath = ftpPath + IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/";
+            if (imageBase64.contains("mp4") || imageBase64.contains("MP4") || imageBase64.contains("AVI") || imageBase64.contains("avi")
+                    || imageBase64.contains("WMV") || imageBase64.contains("wmv")) {
+                ftpPath = ftpPath + VIDEO_PATH + DateUtil.getNowII() + "/";
+            } else {
+                ftpPath = ftpPath + IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/";
+            }
             mkDir(ftpClient, ftpPath);// 创建目录
             // 设置上传目录 must
             ftpClient.changeWorkingDirectory(ftpPath);
@@ -109,7 +116,12 @@ public class FtpUploadTemplate {
                 logger.error("关闭ftpClient 失败", e);
             }
         }
-        return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
+        if (imageBase64.contains("mp4") || imageBase64.contains("MP4") || imageBase64.contains("AVI") || imageBase64.contains("avi")
+                || imageBase64.contains("WMV") || imageBase64.contains("wmv")) {
+            return VIDEO_PATH + DateUtil.getNowII() + "/" + fileName;
+        } else {
+            return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
+        }
     }
 
 
