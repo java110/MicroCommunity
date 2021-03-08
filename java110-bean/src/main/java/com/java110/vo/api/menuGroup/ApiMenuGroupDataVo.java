@@ -13,16 +13,15 @@ public class ApiMenuGroupDataVo implements Serializable {
     private String groupType;
 
 
-    private String storeTypeCd;
+    private String storeType;
 
-    public String getStoreTypeCd() {
-        return storeTypeCd;
+    public String getStoreType() {
+        return storeType;
     }
 
-    public void setStoreTypeCd(String storeTypeCd) {
-        this.storeTypeCd = storeTypeCd;
+    public void setStoreType(String storeType) {
+        this.storeType = storeType;
     }
-
 
     public String getGId() {
         return gId;

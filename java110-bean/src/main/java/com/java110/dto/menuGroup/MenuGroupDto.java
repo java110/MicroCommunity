@@ -14,7 +14,7 @@ public class MenuGroupDto extends PageDto implements Serializable {
     private String description;
     private String statusCd;
     private String groupType;
-    private String storeTypeCd;
+    private String storeType;
 
     public String getGId() {
         return gId;
@@ -88,11 +88,12 @@ public class MenuGroupDto extends PageDto implements Serializable {
         this.groupType = groupType;
     }
 
-    public String getStoreTypeCd() {
-        return storeTypeCd;
+
+    public String getStoreType() {
+        return storeType;
     }
 
-    public void setStoreTypeCd(String storeTypeCd) {
-        this.storeTypeCd = storeTypeCd;
+    public void setStoreType(String storeType) {
+        this.storeType = storeType;
     }
 }
