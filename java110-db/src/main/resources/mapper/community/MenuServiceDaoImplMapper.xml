@@ -8,9 +8,9 @@
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMenuGroupInfo" parameterType="Map">
         insert into m_menu_group(
-        g_id,name,icon,label,seq,description,group_type,store_type_cd
+        g_id,name,icon,label,seq,description,group_type,store_type
         ) values (
-        #{gId},#{name},#{icon},#{label},#{seq},#{description},#{groupType},#{storeTypeCd}
+        #{gId},#{name},#{icon},#{label},#{seq},#{description},#{groupType},#{storeType}
         )
 
     </insert>
@@ -18,7 +18,7 @@
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getMenuGroupInfo" parameterType="Map" resultType="Map">
-        select t.g_id,t.name,t.icon,t.label,t.seq,t.description,t.g_id gId,t.group_type groupType,t.store_type_cd storeTypeCd
+        select t.g_id,t.name,t.icon,t.label,t.seq,t.description,t.g_id gId,t.group_type groupType,t.store_type storeType
         from m_menu_group t
         where t.status_cd= '0'
         <if test="gId !=null and gId != ''">
@@ -36,8 +36,8 @@
         <if test="groupType !=null and groupType != ''">
             and t.group_type= #{groupType}
         </if>
-        <if test="storeTypeCd !=null and storeTypeCd != ''">
-            and t.store_type_cd= #{storeTypeCd}
+        <if test="storeType !=null and storeType != ''">
+            and t.store_type= #{storeType}
         </if>
         <if test="seq !=null">
             and t.seq= #{seq}
@@ -76,8 +76,8 @@
             <if test="seq !=null ">
                 t.seq= #{seq},
             </if>
-            <if test="storeTypeCd !=null and storeTypeCd != ''">
-                t.store_type_cd= #{storeTypeCd},
+            <if test="storeType !=null and storeType != ''">
+                t.store_type= #{storeType},
             </if>
             <if test="description !=null and description != ''">
                 t.description= #{description}
@@ -113,8 +113,8 @@
         <if test="seq !=null">
             and t.seq= #{seq}
         </if>
-        <if test="storeTypeCd !=null and storeTypeCd != ''">
-            and t.store_type_cd= #{storeTypeCd}
+        <if test="storeType !=null and storeType != ''">
+            and t.store_type= #{storeType}
         </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}
