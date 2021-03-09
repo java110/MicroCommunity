@@ -91,7 +91,7 @@
             and t.black_list_ip= #{blackListIp}
         </if>
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="securityCode !=null and securityCode != ''">
             and t.security_code= #{securityCode}
