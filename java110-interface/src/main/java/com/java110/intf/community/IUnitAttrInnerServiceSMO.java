@@ -2,6 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.unitAttr.UnitAttrDto;
+import com.java110.po.unitAttr.UnitAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,9 +44,9 @@ public interface IUnitAttrInnerServiceSMO {
     /**
      * 保存单元属性
      *
-     * @param unitAttrDto 数据对象分享
+     * @param unitAttrPo 数据对象分享
      * @return 小区下的小区楼记录数
      */
     @RequestMapping(value = "/saveUnitAttr", method = RequestMethod.POST)
-    int saveUnitAttr(@RequestBody UnitAttrDto unitAttrDto);
+    int saveUnitAttr(@RequestBody UnitAttrPo unitAttrPo);
 }

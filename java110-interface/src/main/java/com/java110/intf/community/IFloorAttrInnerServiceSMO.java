@@ -2,6 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.floorAttr.FloorAttrDto;
+import com.java110.po.floorAttr.FloorAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,9 +45,9 @@ public interface IFloorAttrInnerServiceSMO {
     /**
      * 保存 楼栋属性
      *
-     * @param floorAttrDto 数据对象分享
+     * @param floorAttrPo 数据对象分享
      * @return 小区下的小区楼记录数
      */
     @RequestMapping(value = "/saveFloorAttr", method = RequestMethod.POST)
-    int saveFloorAttr(@RequestBody FloorAttrDto floorAttrDto);
+    int saveFloorAttr(@RequestBody FloorAttrPo floorAttrPo);
 }

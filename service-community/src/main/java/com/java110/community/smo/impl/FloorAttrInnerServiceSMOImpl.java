@@ -6,6 +6,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.community.IFloorAttrInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.floorAttr.FloorAttrDto;
+import com.java110.po.floorAttr.FloorAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,8 +52,8 @@ public class FloorAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFlo
     }
 
     @Override
-    public int saveFloorAttr(@RequestBody FloorAttrDto floorAttrDto) {
-        return floorAttrServiceDaoImpl.saveFloorAttr(BeanConvertUtil.beanCovertMap(floorAttrDto));
+    public int saveFloorAttr(@RequestBody FloorAttrPo floorAttrPo) {
+        return floorAttrServiceDaoImpl.saveFloorAttr(BeanConvertUtil.beanCovertMap(floorAttrPo));
     }
 
     public IFloorAttrServiceDao getFloorAttrServiceDaoImpl() {
