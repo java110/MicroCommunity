@@ -78,4 +78,10 @@ public interface IUnitAttrServiceDao {
      */
     int queryUnitAttrsCount(Map info);
 
+    /**
+     * 保存但愿你属性
+     * @param beanCovertMap
+     * @return
+     */
+    int saveUnitAttr(Map beanCovertMap);
 }

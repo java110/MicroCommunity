@@ -1,4 +1,4 @@
-package com.java110.core.smo.community;
+package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.unitAttr.UnitAttrDto;
@@ -24,7 +24,6 @@ public interface IUnitAttrInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param unitAttrDto 数据对象分享
      * @return UnitAttrDto 对象数据
      */
@@ -39,4 +38,14 @@ public interface IUnitAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/queryUnitAttrsCount", method = RequestMethod.POST)
     int queryUnitAttrsCount(@RequestBody UnitAttrDto unitAttrDto);
+
+
+    /**
+     * 保存单元属性
+     *
+     * @param unitAttrDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/saveUnitAttr", method = RequestMethod.POST)
+    int saveUnitAttr(@RequestBody UnitAttrDto unitAttrDto);
 }

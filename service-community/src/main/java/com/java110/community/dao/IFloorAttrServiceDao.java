@@ -78,4 +78,5 @@ public interface IFloorAttrServiceDao {
      */
     int queryFloorAttrsCount(Map info);
 
+    int saveFloorAttr(Map info);
 }

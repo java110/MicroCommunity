@@ -5,168 +5,173 @@
 <mapper namespace="floorAttrServiceDaoImpl">
 
     <!-- 保存考勤班组属性信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessFloorAttrInfo" parameterType="Map">
-           insert into business_floor_attr(
-floor_id,attr_id,operate,spec_cd,community_id,b_id,value
-) values (
-#{floorId},#{attrId},#{operate},#{specCd},#{communityId},#{bId},#{value}
-)
-       </insert>
+    <insert id="saveBusinessFloorAttrInfo" parameterType="Map">
+        insert into business_floor_attr(
+        floor_id,attr_id,operate,spec_cd,community_id,b_id,value
+        ) values (
+        #{floorId},#{attrId},#{operate},#{specCd},#{communityId},#{bId},#{value}
+        )
+    </insert>
 
+    <!--保存楼栋属性-->
+    <insert id="saveFloorAttr" parameterType="Map">
+        insert into f_floor_attr(
+            floor_id,attr_id,spec_cd,community_id,b_id,value
+        ) values (
+            #{floorId},#{attrId},#{specCd},#{communityId},'-1',#{value}
+        )
+    </insert>
 
-       <!-- 查询考勤班组属性信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessFloorAttrInfo" parameterType="Map" resultType="Map">
-           select  t.floor_id,t.floor_id floorId,t.attr_id,t.attr_id attrId,t.operate,t.spec_cd,t.spec_cd specCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value 
-from business_floor_attr t 
-where 1 =1 
-<if test="floorId !=null and floorId != ''">
-   and t.floor_id= #{floorId}
-</if> 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
+    <!-- 查询考勤班组属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessFloorAttrInfo" parameterType="Map" resultType="Map">
+        select t.floor_id,t.floor_id floorId,t.attr_id,t.attr_id attrId,t.operate,t.spec_cd,t.spec_cd
+        specCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value
+        from business_floor_attr t
+        where 1 =1
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存考勤班组属性信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFloorAttrInfoInstance" parameterType="Map">
         insert into f_floor_attr(
-floor_id,attr_id,spec_cd,status_cd,community_id,b_id,value
-) select t.floor_id,t.attr_id,t.spec_cd,'0',t.community_id,t.b_id,t.value from business_floor_attr t where 1=1
-<if test="floorId !=null and floorId != ''">
-   and t.floor_id= #{floorId}
-</if> 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-   and t.operate= 'ADD'
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
+        floor_id,attr_id,spec_cd,status_cd,community_id,b_id,value
+        ) select t.floor_id,t.attr_id,t.spec_cd,'0',t.community_id,t.b_id,t.value from business_floor_attr t where 1=1
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询考勤班组属性信息 add by wuxw 2018-07-03 -->
     <select id="getFloorAttrInfo" parameterType="Map" resultType="Map">
-        select  t.floor_id,t.floor_id floorId,t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value 
-from f_floor_attr t 
-where 1 =1 
-<if test="floorId !=null and floorId != ''">
-   and t.floor_id= #{floorId}
-</if> 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.floor_id,t.floor_id floorId,t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd
+        specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value
+        from f_floor_attr t
+        where 1 =1
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改考勤班组属性信息 add by wuxw 2018-07-03 -->
     <update id="updateFloorAttrInfoInstance" parameterType="Map">
-        update  f_floor_attr t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="floorId !=null and floorId != ''">
-, t.floor_id= #{floorId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-, t.spec_cd= #{specCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="value !=null and value != ''">
-, t.value= #{value}
-</if> 
- where 1=1 <if test="attrId !=null and attrId != ''">
-and t.attr_id= #{attrId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update f_floor_attr t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            , t.floor_id= #{floorId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询考勤班组属性数量 add by wuxw 2018-07-03 -->
-     <select id="queryFloorAttrsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from f_floor_attr t 
-where 1 =1 
-<if test="floorId !=null and floorId != ''">
-   and t.floor_id= #{floorId}
-</if> 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
+    <select id="queryFloorAttrsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from f_floor_attr t
+        where 1 =1
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

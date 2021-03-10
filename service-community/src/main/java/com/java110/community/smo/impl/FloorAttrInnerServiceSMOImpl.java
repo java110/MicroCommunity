@@ -3,7 +3,7 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IFloorAttrServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.community.IFloorAttrInnerServiceSMO;
+import com.java110.intf.community.IFloorAttrInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.floorAttr.FloorAttrDto;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +48,11 @@ public class FloorAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFlo
     @Override
     public int queryFloorAttrsCount(@RequestBody FloorAttrDto floorAttrDto) {
         return floorAttrServiceDaoImpl.queryFloorAttrsCount(BeanConvertUtil.beanCovertMap(floorAttrDto));
+    }
+
+    @Override
+    public int saveFloorAttr(@RequestBody FloorAttrDto floorAttrDto) {
+        return floorAttrServiceDaoImpl.saveFloorAttr(BeanConvertUtil.beanCovertMap(floorAttrDto));
     }
 
     public IFloorAttrServiceDao getFloorAttrServiceDaoImpl() {

@@ -1,4 +1,4 @@
-package com.java110.core.smo.community;
+package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.floorAttr.FloorAttrDto;
@@ -39,4 +39,14 @@ public interface IFloorAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFloorAttrsCount", method = RequestMethod.POST)
     int queryFloorAttrsCount(@RequestBody FloorAttrDto floorAttrDto);
+
+
+    /**
+     * 保存 楼栋属性
+     *
+     * @param floorAttrDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/saveFloorAttr", method = RequestMethod.POST)
+    int saveFloorAttr(@RequestBody FloorAttrDto floorAttrDto);
 }

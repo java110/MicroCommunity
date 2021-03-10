@@ -3,16 +3,14 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IUnitAttrServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.community.IUnitAttrInnerServiceSMO;
+import com.java110.intf.community.IUnitAttrInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.unitAttr.UnitAttrDto;
-import com.java110.dto.user.UserDto;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,6 +50,11 @@ public class UnitAttrInnerServiceSMOImpl extends BaseServiceSMO implements IUnit
     @Override
     public int queryUnitAttrsCount(@RequestBody UnitAttrDto unitAttrDto) {
         return unitAttrServiceDaoImpl.queryUnitAttrsCount(BeanConvertUtil.beanCovertMap(unitAttrDto));
+    }
+
+    @Override
+    public int saveUnitAttr(@RequestBody UnitAttrDto unitAttrDto) {
+        return unitAttrServiceDaoImpl.saveUnitAttr(BeanConvertUtil.beanCovertMap(unitAttrDto));
     }
 
     public IUnitAttrServiceDao getUnitAttrServiceDaoImpl() {
