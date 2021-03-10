@@ -55,6 +55,11 @@ public class RoomAttrInnerServiceSMOImpl extends BaseServiceSMO implements IRoom
         return roomAttrServiceDaoImpl.queryRoomAttrsCount(BeanConvertUtil.beanCovertMap(roomAttrDto));
     }
 
+    @Override
+    public int saveRoomAttr(@RequestBody RoomAttrDto roomAttrDto) {
+        return roomAttrServiceDaoImpl.saveRoomAttr(BeanConvertUtil.beanCovertMap(roomAttrDto));
+    }
+
     public IRoomAttrServiceDao getRoomAttrServiceDaoImpl() {
         return roomAttrServiceDaoImpl;
     }
