@@ -2,6 +2,7 @@
 package com.java110.community.smo.impl;
 
 
+import com.java110.po.room.RoomAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IRoomAttrServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -56,8 +57,8 @@ public class RoomAttrInnerServiceSMOImpl extends BaseServiceSMO implements IRoom
     }
 
     @Override
-    public int saveRoomAttr(@RequestBody RoomAttrDto roomAttrDto) {
-        return roomAttrServiceDaoImpl.saveRoomAttr(BeanConvertUtil.beanCovertMap(roomAttrDto));
+    public int saveRoomAttr(@RequestBody RoomAttrPo roomAttrPo) {
+        return roomAttrServiceDaoImpl.saveRoomAttr(BeanConvertUtil.beanCovertMap(roomAttrPo));
     }
 
     public IRoomAttrServiceDao getRoomAttrServiceDaoImpl() {
