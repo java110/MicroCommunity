@@ -78,4 +78,5 @@ public interface IParkingAreaAttrServiceDao {
      */
     int queryParkingAreaAttrsCount(Map info);
 
+    int saveParkingAreaAttr(Map beanCovertMap);
 }

@@ -126,5 +126,11 @@ public class ParkingAreaAttrServiceDaoImpl extends BaseServiceDao implements IPa
         return Integer.parseInt(businessParkingAreaAttrInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int saveParkingAreaAttr(Map beanCovertMap) {
+        int saveFlag = sqlSessionTemplate.insert("parkingAreaAttrServiceDaoImpl.saveParkingAreaAttr",beanCovertMap);
+        return 0;
+    }
+
 
 }

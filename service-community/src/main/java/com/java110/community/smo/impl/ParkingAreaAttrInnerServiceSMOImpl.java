@@ -7,6 +7,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
+import com.java110.po.parkingAreaAttr.ParkingAreaAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,6 +53,11 @@ public class ParkingAreaAttrInnerServiceSMOImpl extends BaseServiceSMO implement
     @Override
     public int queryParkingAreaAttrsCount(@RequestBody ParkingAreaAttrDto parkingAreaAttrDto) {
         return parkingAreaAttrServiceDaoImpl.queryParkingAreaAttrsCount(BeanConvertUtil.beanCovertMap(parkingAreaAttrDto));
+    }
+
+    @Override
+    public int saveParkingAreaAttr(@RequestBody ParkingAreaAttrPo parkingAreaAttrPo) {
+        return parkingAreaAttrServiceDaoImpl.saveParkingAreaAttr(BeanConvertUtil.beanCovertMap(parkingAreaAttrPo));
     }
 
     public IParkingAreaAttrServiceDao getParkingAreaAttrServiceDaoImpl() {
