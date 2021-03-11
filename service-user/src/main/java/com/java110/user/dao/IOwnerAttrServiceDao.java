@@ -78,4 +78,5 @@ public interface IOwnerAttrServiceDao {
      */
     int queryOwnerAttrsCount(Map info);
 
+    int saveOwnerAttr(Map beanCovertMap);
 }
