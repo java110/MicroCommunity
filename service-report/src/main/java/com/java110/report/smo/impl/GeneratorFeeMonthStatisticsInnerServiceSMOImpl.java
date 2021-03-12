@@ -660,7 +660,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         month = Math.ceil(month);
 
         BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
-        double money = feePriceDec.divide(new BigDecimal(month)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        double money = feePriceDec.divide(new BigDecimal(month),2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         return money;
     }
 
