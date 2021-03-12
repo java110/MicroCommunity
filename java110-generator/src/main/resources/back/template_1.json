@@ -1,33 +1,53 @@
 {
   "autoMove": true,
-  "id": "attrId",
-  "name": "parkingAreaAttr",
-  "desc": "单元属性",
+  "id": "authId",
+  "name": "machineAuth",
+  "desc": "设备权限",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "shareName": "community",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_PARKING_AREA_ATTR",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_PARKING_AREA_ATTR",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_PARKING_AREA_ATTR",
-  "newBusinessTypeCdValue": "541100030002",
-  "updateBusinessTypeCdValue": "541100040002",
-  "deleteBusinessTypeCdValue": "541100050002",
-  "businessTableName": "business_parking_area_attr",
-  "tableName": "parking_area_attr",
+  "shareName": "common",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_MACHINE_AUTH",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_MACHINE_AUTH",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_MACHINE_AUTH",
+  "newBusinessTypeCdValue": "661100030004",
+  "updateBusinessTypeCdValue": "661100040004",
+  "deleteBusinessTypeCdValue": "661100050004",
+  "businessTableName": "business_machine_auth",
+  "tableName": "machine_auth",
   "param": {
-    "paId": "pa_id",
+    "authId": "auth_id",
     "communityId": "community_id",
     "bId": "b_id",
-    "attrId": "attr_id",
-    "specCd": "spec_cd",
-    "value": "value",
+    "machineId": "machine_id",
+    "personId": "person_id",
+    "personName": "person_name",
+    "personType": "person_type",
+    "state": "state",
+    "startTime": "start_time",
+    "endTime": "end_time",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "specCd",
-      "msg": "属性不能为空"
+      "code": "machineId",
+      "msg": "设备不能为空"
+    },
+    {
+      "code": "personId",
+      "msg": "人员不能为空"
+    },
+    {
+      "code": "personName",
+      "msg": "人员名称不能为空"
+    },
+    {
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
     }
   ]
 }
