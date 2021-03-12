@@ -88,7 +88,7 @@ public class SaveNoticeListener extends AbstractServiceApiPlusListener {
 
         List<ApiCommunityDataVo> communitys = null;
         if ("9999".equals(orgDtos.get(0).getBelongCommunityId())) {
-            CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
+            CommunityDto communityDto = new CommunityDto();
             communityDto.setMemberId(reqJson.getString("storeId"));
             communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
             communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
