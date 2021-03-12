@@ -592,6 +592,8 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         feeDetailDto.setStartTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
         feeDetailDto.setEndTime(DateUtil.getFormatTimeString(DateUtil.getNextMonthFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
         feeDetailDto.setConfigId(tmpReportFeeDto.getConfigId());
+        feeDetailDto.setPayerObjId(tmpReportFeeDto.getPayerObjId());
+
         double receivedAmount = reportFeeServiceDaoImpl.getFeeReceivedAmount(feeDetailDto);
 
         return receivedAmount;
