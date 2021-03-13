@@ -47,23 +47,12 @@ public class FrontCommunityServiceSMOImpl extends BaseComponentSMO implements IC
             return responseEntity;
         }
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
-
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
-
-        //修改用户信息
-       /* responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember?memberId=" + storeId +
-                        "&memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd),
-                HttpMethod.GET);*/
         Map paramIn = new HashMap();
         paramIn.put("memberId", storeId);
         paramIn.put("memberTypeCd", MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd));
         paramIn.putAll(_paramObj);
-//        responseEntity = this.callCenterService(restTemplate, pd, "",
-//                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember" + mapToUrlParam(paramIn),
-//                HttpMethod.GET);
-
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/communitys/queryStoreCommunitys" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
@@ -71,7 +60,6 @@ public class FrontCommunityServiceSMOImpl extends BaseComponentSMO implements IC
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
-        //JSONArray tmpCommunitys = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("communitys");
         JSONArray tmpCommunitys = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("data");
         freshCommunityAttr(tmpCommunitys);
         responseEntity = new ResponseEntity<String>(tmpCommunitys.toJSONString(),

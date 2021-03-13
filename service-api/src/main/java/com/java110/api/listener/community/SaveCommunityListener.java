@@ -44,8 +44,6 @@ public class SaveCommunityListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-
         communityBMOImpl.addCommunity(reqJson, context);
         communityBMOImpl.addCommunityMembers(reqJson, context);
         //产生物业费配置信息

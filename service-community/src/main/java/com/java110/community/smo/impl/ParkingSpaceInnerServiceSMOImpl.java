@@ -1,6 +1,7 @@
 package com.java110.community.smo.impl;
 
 
+import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IParkingSpaceServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -32,7 +33,7 @@ public class ParkingSpaceInnerServiceSMOImpl extends BaseServiceSMO implements I
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<ParkingSpaceDto> queryParkingSpaces(@RequestBody  ParkingSpaceDto parkingSpaceDto) {
+    public List<ParkingSpaceDto> queryParkingSpaces(@RequestBody ParkingSpaceDto parkingSpaceDto) {
 
         //校验是否传了 分页信息
 
@@ -49,7 +50,18 @@ public class ParkingSpaceInnerServiceSMOImpl extends BaseServiceSMO implements I
 
     @Override
     public int queryParkingSpacesCount(@RequestBody ParkingSpaceDto parkingSpaceDto) {
-        return parkingSpaceServiceDaoImpl.queryParkingSpacesCount(BeanConvertUtil.beanCovertMap(parkingSpaceDto));    }
+        return parkingSpaceServiceDaoImpl.queryParkingSpacesCount(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
+    }
+
+    @Override
+    public int saveParkingSpace(@RequestBody ParkingSpacePo parkingSpacePo) {
+        return parkingSpaceServiceDaoImpl.saveParkingSpace(BeanConvertUtil.beanCovertMap(parkingSpacePo));
+    }
+
+    @Override
+    public void updateParkingSpace(@RequestBody ParkingSpacePo parkingSpacePo) {
+        parkingSpaceServiceDaoImpl.updateParkingSpaceInfoInstance(BeanConvertUtil.beanCovertMap(parkingSpacePo));
+    }
 
     public IParkingSpaceServiceDao getParkingSpaceServiceDaoImpl() {
         return parkingSpaceServiceDaoImpl;

@@ -31,8 +31,10 @@ public class ActivitiesRuleApi {
 
     @Autowired
     private ISaveActivitiesRuleBMO saveActivitiesRuleBMOImpl;
+
     @Autowired
     private IUpdateActivitiesRuleBMO updateActivitiesRuleBMOImpl;
+
     @Autowired
     private IDeleteActivitiesRuleBMO deleteActivitiesRuleBMOImpl;
 
@@ -41,8 +43,10 @@ public class ActivitiesRuleApi {
 
     @Autowired
     private ISaveActivitiesBeautifulStaffBMO saveActivitiesBeautifulStaffBMOImpl;
+
     @Autowired
     private IUpdateActivitiesBeautifulStaffBMO updateActivitiesBeautifulStaffBMOImpl;
+
     @Autowired
     private IDeleteActivitiesBeautifulStaffBMO deleteActivitiesBeautifulStaffBMOImpl;
 
@@ -62,17 +66,13 @@ public class ActivitiesRuleApi {
     public ResponseEntity<String> saveActivitiesRule(
             @RequestHeader(value = "store-id", required = false) String storeId,
             @RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "ruleName", "请求报文中未包含ruleName");
         Assert.hasKeyAndValue(reqJson, "ruleType", "请求报文中未包含ruleType");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "activitiesObj", "请求报文中未包含activitiesObj");
         Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含remark");
-
         String activitiesObj = reqJson.getString("activitiesObj");
-
-
         ActivitiesRulePo activitiesRulePo = BeanConvertUtil.covertBean(reqJson, ActivitiesRulePo.class);
         if ("4444".equals(activitiesObj)) {
             activitiesRulePo.setObjType(QuestionAnswerDto.QA_TYPE_STORE);
@@ -95,7 +95,6 @@ public class ActivitiesRuleApi {
      */
     @RequestMapping(value = "/updateActivitiesRule", method = RequestMethod.POST)
     public ResponseEntity<String> updateActivitiesRule(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "ruleName", "请求报文中未包含ruleName");
         Assert.hasKeyAndValue(reqJson, "ruleType", "请求报文中未包含ruleType");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
@@ -103,8 +102,6 @@ public class ActivitiesRuleApi {
         Assert.hasKeyAndValue(reqJson, "activitiesObj", "请求报文中未包含activitiesObj");
         Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含remark");
         Assert.hasKeyAndValue(reqJson, "ruleId", "ruleId不能为空");
-
-
         ActivitiesRulePo activitiesRulePo = BeanConvertUtil.covertBean(reqJson, ActivitiesRulePo.class);
         return updateActivitiesRuleBMOImpl.update(activitiesRulePo);
     }
@@ -120,10 +117,7 @@ public class ActivitiesRuleApi {
     @RequestMapping(value = "/deleteActivitiesRule", method = RequestMethod.POST)
     public ResponseEntity<String> deleteActivitiesRule(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
         Assert.hasKeyAndValue(reqJson, "ruleId", "ruleId不能为空");
-
-
         ActivitiesRulePo activitiesRulePo = BeanConvertUtil.covertBean(reqJson, ActivitiesRulePo.class);
         return deleteActivitiesRuleBMOImpl.delete(activitiesRulePo);
     }
@@ -162,13 +156,10 @@ public class ActivitiesRuleApi {
     public ResponseEntity<String> saveActivitiesBeautifulStaff(
             @RequestHeader(value = "store-id") String storeId,
             @RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "activitiesNum", "请求报文中未包含activitiesNum");
         Assert.hasKeyAndValue(reqJson, "workContent", "请求报文中未包含workContent");
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
-
-
         ActivitiesBeautifulStaffPo activitiesBeautifulStaffPo = BeanConvertUtil.covertBean(reqJson, ActivitiesBeautifulStaffPo.class);
         activitiesBeautifulStaffPo.setStoreId(storeId);
         return saveActivitiesBeautifulStaffBMOImpl.save(activitiesBeautifulStaffPo);
@@ -184,14 +175,11 @@ public class ActivitiesRuleApi {
      */
     @RequestMapping(value = "/updateActivitiesBeautifulStaff", method = RequestMethod.POST)
     public ResponseEntity<String> updateActivitiesBeautifulStaff(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "activitiesNum", "请求报文中未包含activitiesNum");
         Assert.hasKeyAndValue(reqJson, "workContent", "请求报文中未包含workContent");
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
         Assert.hasKeyAndValue(reqJson, "beId", "beId不能为空");
-
-
         ActivitiesBeautifulStaffPo activitiesBeautifulStaffPo = BeanConvertUtil.covertBean(reqJson, ActivitiesBeautifulStaffPo.class);
         return updateActivitiesBeautifulStaffBMOImpl.update(activitiesBeautifulStaffPo);
     }
@@ -207,10 +195,7 @@ public class ActivitiesRuleApi {
     @RequestMapping(value = "/deleteActivitiesBeautifulStaff", method = RequestMethod.POST)
     public ResponseEntity<String> deleteActivitiesBeautifulStaff(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
         Assert.hasKeyAndValue(reqJson, "beId", "beId不能为空");
-
-
         ActivitiesBeautifulStaffPo activitiesBeautifulStaffPo = BeanConvertUtil.covertBean(reqJson, ActivitiesBeautifulStaffPo.class);
         return deleteActivitiesBeautifulStaffBMOImpl.delete(activitiesBeautifulStaffPo);
     }

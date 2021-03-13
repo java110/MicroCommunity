@@ -41,6 +41,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String ownerName;
     private String idCard;
     private String link;
+    private String parkingType;
 
     private String roomName;
 
@@ -312,5 +313,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
+    }
+
+    public String getParkingType() {
+        return parkingType;
+    }
+
+    public void setParkingType(String parkingType) {
+        this.parkingType = parkingType;
     }
 }

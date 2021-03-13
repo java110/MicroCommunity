@@ -11,18 +11,27 @@
         values(#{communityId},#{bId},#{name},#{address},#{cityCode},
         #{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate},#{communityArea})
     </insert>
+
+    <!-- 保存小区信息 -->
+    <insert id="saveCommunity" parameterType="Map">
+        insert into s_community(community_id,b_id,name,address,city_code,
+        nearby_landmarks,map_x,map_y,create_time,state,tel,community_area)
+        values(#{communityId},#{bId},#{name},#{address},#{cityCode},
+        #{nearbyLandmarks},#{mapX},#{mapY},#{createTime},#{state},#{tel},#{communityArea})
+    </insert>
+
     <!-- 保存小区属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityAttr" parameterType="Map">
         insert into business_community_attr(b_id,attr_id,community_id,spec_cd,value,month,operate)
         values(#{bId},#{attrId},#{communityId},#{specCd},#{value},#{month},#{operate})
     </insert>
+
     <!-- 保存小区照片信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityPhoto" parameterType="Map">
         insert into
         business_community_photo(community_photo_id,b_id,community_id,community_photo_type_cd,photo,month,operate)
         values(#{communityPhotoId},#{bId},#{communityId},#{communityPhotoTypeCd},#{photo},#{month},#{operate})
     </insert>
-
 
     <!-- 查询小区信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCommunityInfo" parameterType="Map" resultType="Map">
@@ -39,7 +48,6 @@
             and s.community_id = #{communityId}
         </if>
     </select>
-
 
     <!-- 查询小区属性信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCommunityAttrs" parameterType="Map" resultType="Map">
@@ -74,7 +82,6 @@
         </if>
     </select>
 
-
     <!-- 保存小区信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityInfoInstance" parameterType="Map">
         insert into
@@ -104,7 +111,6 @@
         </if>
     </insert>
 
-
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityInfo" parameterType="Map" resultType="Map">
         select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd,s.state
@@ -113,7 +119,6 @@
         <if test="statusCd != null and statusCd != ''">
             and s.status_cd = #{statusCd}
         </if>
-
         <if test="bId != null and bId !=''">
             and s.b_id = #{bId}
         </if>
@@ -150,7 +155,6 @@
                 #{item}
             </foreach>
         </if>
-
         <if test="attrId != null and attrId != ''">
             and sa.attr_id = #{attrId}
         </if>
@@ -172,14 +176,12 @@
         </if>
     </select>
 
-
     <!-- 修改小区信息 add by wuxw 2018-07-03 -->
     <update id="updateCommunityInfoInstance" parameterType="Map">
         update s_community s set s.status_cd = #{statusCd}
         <if test="newBId != null and newBId != ''">
             ,s.b_id = #{newBId}
         </if>
-
         <if test="name != null and name != ''">
             ,s.name = #{name}
         </if>
@@ -201,10 +203,10 @@
         <if test="state != null and state != ''">
             ,s.state = #{state}
         </if>
+        ,s.tel = #{tel}
         <if test="communityArea != null and communityArea != ''">
             ,s.community_area = #{communityArea}
         </if>
-
         where 1=1
         <if test="bId != null and bId !=''">
             and s.b_id = #{bId}
@@ -611,6 +613,7 @@
         sc.`city_code` cityCode,
         sc.`map_x` mapX,
         sc.`map_y` mapY,
+        sc.tel,
         scm.`community_member_id` communityMemberId,
         scm.`member_id` memberId,
         scm.`member_type_cd` memberTypeCd,

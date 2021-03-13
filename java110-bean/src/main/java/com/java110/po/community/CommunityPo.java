@@ -20,8 +20,13 @@ public class CommunityPo implements Serializable {
     private String mapX;
     private String mapY;
     private String state;
+    private String tel;
+    private String createTime;
+    private String bId;
 
     private String communityArea;
+
+    private String statusCd = "0";
 
     public String getCommunityId() {
         return communityId;
@@ -93,5 +98,37 @@ public class CommunityPo implements Serializable {
 
     public void setCommunityArea(String communityArea) {
         this.communityArea = communityArea;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

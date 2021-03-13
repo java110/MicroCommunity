@@ -8,6 +8,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.po.community.CommunityPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,6 +149,16 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
     @Override
     public int queryCommunitysCount(@RequestBody CommunityDto communityDto) {
         return communityServiceDaoImpl.queryCommunitysCount(BeanConvertUtil.beanCovertMap(communityDto));
+    }
+
+    @Override
+    public int saveCommunity(@RequestBody CommunityPo communityPo) {
+        return communityServiceDaoImpl.saveCommunity(BeanConvertUtil.beanCovertMap(communityPo));
+    }
+
+    @Override
+    public int updateCommunity(@RequestBody CommunityPo communityPo) {
+        return communityServiceDaoImpl.updateCommunity(BeanConvertUtil.beanCovertMap(communityPo));
     }
 
     public ICommunityServiceDao getCommunityServiceDaoImpl() {

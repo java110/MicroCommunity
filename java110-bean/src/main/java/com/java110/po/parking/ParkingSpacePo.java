@@ -11,7 +11,6 @@ import java.io.Serializable;
  * add by wuxw 2020/5/29
  **/
 public class ParkingSpacePo implements Serializable {
-
     private String psId;
     private String communityId;
     private String num;
@@ -19,7 +18,11 @@ public class ParkingSpacePo implements Serializable {
     private String state;
     private String area;
     private String remark;
-
+    private String parkingType;
+    private String parkingTypeName;
+    private String createTime;
+    private String statusCd = "0";
+    private String bId;
 
     public String getPsId() {
         return psId;
@@ -75,5 +78,45 @@ public class ParkingSpacePo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getParkingType() {
+        return parkingType;
+    }
+
+    public void setParkingType(String parkingType) {
+        this.parkingType = parkingType;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getParkingTypeName() {
+        return parkingTypeName;
+    }
+
+    public void setParkingTypeName(String parkingTypeName) {
+        this.parkingTypeName = parkingTypeName;
     }
 }

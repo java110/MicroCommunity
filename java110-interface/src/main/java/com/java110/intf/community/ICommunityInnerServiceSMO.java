@@ -1,10 +1,10 @@
 package com.java110.intf.community;
 
-
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.po.community.CommunityPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +24,6 @@ import java.util.List;
 @RequestMapping("/communityApi")
 public interface ICommunityInnerServiceSMO {
 
-
     /**
      * <p>查询小区楼信息</p>
      *
@@ -42,6 +41,24 @@ public interface ICommunityInnerServiceSMO {
      */
     @RequestMapping(value = "/queryCommunitysCount", method = RequestMethod.POST)
     int queryCommunitysCount(@RequestBody CommunityDto communityDto);
+
+    /**
+     * 保存小区信息
+     *
+     * @param communityPo
+     * @return
+     */
+    @RequestMapping(value = "/saveCommunity", method = RequestMethod.POST)
+    int saveCommunity(@RequestBody CommunityPo communityPo);
+
+    /**
+     * 修改小区信息
+     *
+     * @param communityPo
+     * @return
+     */
+    @RequestMapping(value = "/updateCommunity", method = RequestMethod.POST)
+    int updateCommunity(@RequestBody CommunityPo communityPo);
 
     /**
      * 查询小区成员表
@@ -88,6 +105,4 @@ public interface ICommunityInnerServiceSMO {
      */
     @RequestMapping(value = "/getCommunityAttrsCount", method = RequestMethod.POST)
     int getCommunityAttrsCount(@RequestBody CommunityAttrDto communityAttrDto);
-
-
 }

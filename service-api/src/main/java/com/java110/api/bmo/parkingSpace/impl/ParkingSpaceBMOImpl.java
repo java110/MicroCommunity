@@ -42,11 +42,12 @@ import java.util.List;
 @Service("parkingSpaceBMOImpl")
 public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO {
 
-
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
@@ -87,7 +88,7 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         businessParkingSpace.putAll(paramInJson);
         businessParkingSpace.put("state", parkingSpaceDto.getState());
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
-        super.update(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
+        parkingSpaceInnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
     }
 
     /**
@@ -188,13 +189,14 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
      * @return 订单服务能够接受的报文
      */
     public void addParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
         JSONObject businessParkingSpace = new JSONObject();
         businessParkingSpace.putAll(paramInJson);
         businessParkingSpace.put("state", "F");
-        businessParkingSpace.put("psId", "-1");
+        businessParkingSpace.put("psId", GenerateCodeFactory.getPsId(GenerateCodeFactory.CODE_PREFIX_psId));
+        businessParkingSpace.put("bId", "-1");
+        businessParkingSpace.put("createTime", new Date());
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
-        super.delete(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_SPACE);
+        parkingSpaceInnerServiceSMOImpl.saveParkingSpace(parkingSpacePo);
     }
 
 

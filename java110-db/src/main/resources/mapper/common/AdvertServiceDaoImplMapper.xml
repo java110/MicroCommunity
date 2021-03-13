@@ -6,13 +6,17 @@
 
     <!-- 保存广告信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAdvertInfo" parameterType="Map">
-           insert into business_advert(
-classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,end_time,community_id,b_id,location_obj_id,seq
-) values (
-#{classify},#{adName},#{locationTypeCd},#{adTypeCd},#{advertId},#{operate},#{startTime},#{state},#{endTime},#{communityId},#{bId},#{locationObjId},#{seq}
-)
-       </insert>
+    insert into business_advert(classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,end_time,community_id,b_id,location_obj_id,seq)
+    values
+    (#{classify},#{adName},#{locationTypeCd},#{adTypeCd},#{advertId},#{operate},#{startTime},#{state},#{endTime},#{communityId},#{bId},#{locationObjId},#{seq})
+    </insert>
 
+    <!-- 保存广告信息 -->
+    <insert id="saveAdverts" parameterType="Map">
+    insert into advert(advert_id,b_id,ad_name,ad_type_cd,classify,community_id,location_type_cd,location_obj_id,state,seq,start_time,end_time,create_time)
+    values
+    (#{advertId},#{bId},#{adName},#{adTypeCd},#{classify},#{communityId},#{locationTypeCd},#{locationObjId},#{state},#{seq},#{startTime},#{endTime},#{createTime})
+    </insert>
 
     <!-- 查询广告信息信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAdvertInfo" parameterType="Map" resultType="Map">
@@ -62,9 +66,7 @@ classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-
     </select>
-
 
     <!-- 保存广告信息信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAdvertInfoInstance" parameterType="Map">
@@ -110,16 +112,60 @@ classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-
     </insert>
 
+    <!-- 修改广告信息 -->
+    <update id="updateAdvert" parameterType="Map">
+        update advert t set t.status_cd = #{statusCd}
+        <if test="bId != null and bId != ''">
+            ,t.b_id = #{bId}
+        </if>
+        <if test="classify !=null and classify != ''">
+            , t.classify= #{classify}
+        </if>
+        <if test="adName !=null and adName != ''">
+            , t.ad_name= #{adName}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            , t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="adTypeCd !=null and adTypeCd != ''">
+            , t.ad_type_cd= #{adTypeCd}
+        </if>
+        <if test="startTime !=null ">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="endTime !=null ">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            , t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="advertId !=null and advertId != ''">
+            and t.advert_id= #{advertId}
+        </if>
+        <!--<if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>-->
+    </update>
 
     <!-- 查询广告信息信息 add by wuxw 2018-07-03 -->
     <select id="getAdvertInfo" parameterType="Map" resultType="Map">
         select t.classify,t.ad_name,t.ad_name adName,t.location_type_cd,t.location_type_cd
         locationTypeCd,t.status_cd,t.status_cd statusCd,t.ad_type_cd,t.ad_type_cd adTypeCd,t.advert_id,t.advert_id
         advertId,t.start_time,t.start_time startTime,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.location_obj_id,t.location_obj_id locationObjId,t.seq,td1.name classifyName,td2.name stateName
+        communityId,t.b_id,t.b_id bId,t.location_obj_id,t.location_obj_id locationObjId,t.seq,td1.name
+        classifyName,td2.name stateName,t.create_time createTime
         from advert t,t_dict td1,t_dict td2
         where 1 =1
         and t.classify = td1.status_cd
@@ -167,12 +213,14 @@ classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
+        <if test="createTime != null and createTime != ''">
+            and t.create_Time = #{createTime}
+        </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改广告信息信息 add by wuxw 2018-07-03 -->
     <update id="updateAdvertInfoInstance" parameterType="Map">
@@ -217,7 +265,6 @@ classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询广告信息数量 add by wuxw 2018-07-03 -->
@@ -270,8 +317,5 @@ classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-
-
     </select>
-
 </mapper>

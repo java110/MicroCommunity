@@ -35,6 +35,7 @@ public class CommunityDto extends PageDto implements Serializable {
     private String provName;
     private String parentAreaCode;
     private String parentAreaName;
+    private String tel;
 
     private String communityArea;
 
@@ -230,5 +231,13 @@ public class CommunityDto extends PageDto implements Serializable {
 
     public void setProvName(String provName) {
         this.provName = provName;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 }

@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @Component
 public class FtpUploadTemplate {
+
     private static Logger logger = LoggerFactory.getLogger(FtpUploadTemplate.class);
 
     /*
@@ -24,17 +25,12 @@ public class FtpUploadTemplate {
      * private static String userPassword ="MXUsssMjhssE+*=a3C4\\0";//密码
      */
     private static String ftpPath = "uploadFiles"; // 文件上传目录
-
     private static String LOCAL_CHARSET = "GBK";
     private static String SERVER_CHARSET = "ISO-8859-1";
     private final static String localpath = "F:/";//下载到F盘下
     private final static String fileSeparator = System.getProperty("file.separator");
-
     private final static String DEFAULT_IMG_SUFFIX = ".jpg";
-
     private final static String IMAGE_DEFAULT_PATH = "img/";
-
-    private final static String VIDEO_PATH = "video/";
 
     /*
      *图片上传工具方法
@@ -54,12 +50,7 @@ public class FtpUploadTemplate {
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            if (imageBase64.contains("mp4") || imageBase64.contains("MP4") || imageBase64.contains("AVI") || imageBase64.contains("avi")
-                    || imageBase64.contains("WMV") || imageBase64.contains("wmv")) {
-                ftpPath = ftpPath + VIDEO_PATH + DateUtil.getNowII() + "/";
-            } else {
-                ftpPath = ftpPath + IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/";
-            }
+            ftpPath = ftpPath + IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/";
             mkDir(ftpClient, ftpPath);// 创建目录
             // 设置上传目录 must
             ftpClient.changeWorkingDirectory(ftpPath);
@@ -67,7 +58,6 @@ public class FtpUploadTemplate {
                 LOCAL_CHARSET = "UTF-8";
             }
             fileName = UUID.randomUUID().toString();
-
             if (imageBase64.contains("data:image/png;base64,")) {
                 imageBase64 = imageBase64.replace("data:image/png;base64,", "");
                 fileName += ".png";
@@ -93,12 +83,9 @@ public class FtpUploadTemplate {
                 System.out.println("this file exist ftp");
                 ftpClient.deleteFile(fs[0].getName());
             }
-
-
             byte[] context = Base64Convert.base64ToByte(imageBase64);
             is = new ByteArrayInputStream(context);
             boolean saveFlag = ftpClient.storeFile(fileName, is);
-
             if (!saveFlag) {
                 throw new IllegalArgumentException("存储文件失败");
             }
@@ -116,14 +103,8 @@ public class FtpUploadTemplate {
                 logger.error("关闭ftpClient 失败", e);
             }
         }
-        if (imageBase64.contains("mp4") || imageBase64.contains("MP4") || imageBase64.contains("AVI") || imageBase64.contains("avi")
-                || imageBase64.contains("WMV") || imageBase64.contains("wmv")) {
-            return VIDEO_PATH + DateUtil.getNowII() + "/" + fileName;
-        } else {
-            return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
-        }
+        return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
     }
-
 
     /*
      *文件上传工具方法
@@ -232,7 +213,6 @@ public class FtpUploadTemplate {
         FtpUploadTemplate ftpUploadTemplate = new FtpUploadTemplate();
         String img = ftpUploadTemplate.download("/hc/img/20200518/", "ed05abae-2eca-40ff-81a8-b586ff2e6a36.jpg",
                 "118.89.243.11", 617, "hcdemo", "45j74jpWTf7bNhnC");
-
         System.out.printf("img=" + img);
     }
 
@@ -360,5 +340,4 @@ public class FtpUploadTemplate {
             return false;
         }
     }
-
 }

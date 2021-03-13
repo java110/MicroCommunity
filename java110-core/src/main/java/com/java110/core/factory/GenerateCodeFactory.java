@@ -312,6 +312,20 @@ public class GenerateCodeFactory {
     }
 
     /**
+     * 获取车位ID
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getPsId(String prefix) throws GenerateCodeException {
+        if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+        }
+        //调用服务
+        return getCode(prefix);
+    }
+
+    /**
      * 规格ID
      *
      * @return
@@ -489,7 +503,6 @@ public class GenerateCodeFactory {
         //调用服务
         return getCode(prefixMap.get("agentId"));
     }
-
 
     /**
      * 获取小区照片ID

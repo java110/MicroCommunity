@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,10 +41,8 @@ import java.util.Map;
 @Service("communityBMOImpl")
 public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
-
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
-
 
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
@@ -521,10 +520,12 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         paramInJson.put("communityId", GenerateCodeFactory.getCommunityId());
         paramInJson.put("state", "1000");
         paramInJson.put("communityArea", "0");
+        paramInJson.put("createTime", new Date());
+        paramInJson.put("bId", "-1");
         CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
-        super.insert(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
-
+        communityInnerServiceSMOImpl.saveCommunity(communityPo);
     }
+
     /**
      * 添加小区信息
      *
@@ -539,6 +540,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         super.insert(dataFlowContext, communityAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
 
     }
+
     /**
      * 添加小区信息
      *
@@ -561,10 +563,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @return 订单服务能够接受的报文
      */
     public void updateCommunityOne(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
         CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
-
-        super.update(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
-
+        communityInnerServiceSMOImpl.updateCommunity(communityPo);
     }
 }

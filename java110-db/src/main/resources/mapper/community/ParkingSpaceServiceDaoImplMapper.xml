@@ -13,6 +13,14 @@
         )
     </insert>
 
+    <!-- 保存车位信息 -->
+    <insert id="saveParkingSpace" parameterType="Map">
+        insert into parking_space(
+        area,num,ps_id,pa_id,remark,state,community_id,b_id,parking_type,create_time
+        ) values (
+        #{area},#{num},#{psId},#{paId},#{remark},#{state},#{communityId},#{bId},#{parkingType},#{createTime}
+        )
+    </insert>
 
     <!-- 查询停车位信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessParkingSpaceInfo" parameterType="Map" resultType="Map">
@@ -50,8 +58,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
     </select>
 
 
@@ -65,7 +71,6 @@
             and t.area= #{area}
         </if>
         and t.operate= 'ADD'
-
         <if test="num !=null and num != ''">
             and t.num= #{num}
         </if>
@@ -87,40 +92,42 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
     </insert>
 
 
     <!-- 查询停车位信息 add by wuxw 2018-07-03 -->
     <select id="getParkingSpaceInfo" parameterType="Map" resultType="Map">
         SELECT
-            t.area,
-            t.num,
-            t.ps_id psId,
-            t.ps_id,
-            t.pa_id paId,
-            t.pa_id,
-            t.remark,
-            t.status_cd statusCd,
-            t.status_cd,
-            t.`state`,
-            t.community_id,
-            t.community_id communityId,
-            t.b_id,
-            t.b_id bId,
-            td.name stateName,
-            pa.num areaNum,
-            pa.type_cd typeCd
+        t.area,
+        t.num,
+        t.ps_id psId,
+        t.ps_id,
+        t.pa_id paId,
+        t.pa_id,
+        t.remark,
+        t.status_cd statusCd,
+        t.status_cd,
+        t.`state`,
+        t.community_id,
+        t.community_id communityId,
+        t.b_id,
+        t.b_id bId,
+        t.parking_type parkingType,
+        td2. NAME parkingTypeName,
+        td1. NAME stateName,
+        pa.num areaNum,
+        pa.type_cd typeCd
         FROM
-          parking_space t,t_dict td,parking_area pa
-
+        parking_space t
+        LEFT JOIN t_dict td1 ON t.state = td1.status_cd
+        AND td1.table_name = 'parking_space'
+        AND td1.table_columns = 'state'
+        LEFT JOIN t_dict td2 ON t.parking_type = td2.status_cd
+        AND td2.table_name = 'parking_space'
+        AND td2.table_columns = 'parking_type'
+        LEFT JOIN parking_area pa ON t.pa_id = pa.pa_id
+        AND pa.status_cd = '0'
         <where>
-            t.state = td.status_cd
-            and td.table_name='parking_space'
-            and td.table_columns='state'
-            and t.pa_id = pa.pa_id
-            and pa.status_cd ='0'
             <if test="area !=null and area != ''">
                 and t.area= #{area}
             </if>
@@ -138,6 +145,9 @@
             </if>
             <if test="remark !=null and remark != ''">
                 and t.remark= #{remark}
+            </if>
+            <if test="parkingType !=null and parkingType != ''">
+                and t.parking_type= #{parkingType}
             </if>
             <if test="statusCd !=null and statusCd != ''">
                 and t.status_cd= #{statusCd}
@@ -164,7 +174,6 @@
                 and t.b_id= #{bId}
             </if>
             order by t.create_time desc
-
             <if test="page != -1 and page != null ">
                 limit #{page}, #{row}
             </if>
@@ -196,6 +205,9 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
+        <if test="parkingType != null and parkingType != ''">
+            ,t.parking_type = #{parkingType}
+        </if>
         where 1=1
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
@@ -203,14 +215,13 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询停车位数量 add by wuxw 2018-07-03 -->
     <select id="queryParkingSpacesCount" parameterType="Map" resultType="Map">
         select count(1) count
         FROM
-            parking_space t,t_dict td,parking_area pa
+        parking_space t,t_dict td,parking_area pa
         where
         t.state = td.status_cd
         and td.table_name='parking_space'
@@ -253,7 +264,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
 
 
     </select>

@@ -76,30 +76,21 @@ public class ListCommunitysListener extends AbstractServiceApiListener {
         if (count > 0) {
             communitys = new ArrayList<>();
             List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-
             for (CommunityDto tmpCommunityDto : communityDtos) {
                 apiCommunityDataVo = BeanConvertUtil.covertBean(tmpCommunityDto, ApiCommunityDataVo.class);
                 apiCommunityDataVo.setCommunityAttrDtos(tmpCommunityDto.getCommunityAttrDtos());
                 communitys.add(apiCommunityDataVo);
             }
-
-
             refreshCommunityCity(communitys);
         } else {
             communitys = new ArrayList<>();
         }
-
-
         ApiCommunityVo apiCommunityVo = new ApiCommunityVo();
-
         apiCommunityVo.setTotal(count);
         apiCommunityVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiCommunityVo.setCommunitys(communitys);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiCommunityVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 
     /**

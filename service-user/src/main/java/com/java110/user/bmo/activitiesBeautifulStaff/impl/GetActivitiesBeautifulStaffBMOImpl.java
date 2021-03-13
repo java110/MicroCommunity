@@ -19,28 +19,19 @@ public class GetActivitiesBeautifulStaffBMOImpl implements IGetActivitiesBeautif
     private IActivitiesBeautifulStaffInnerServiceSMO activitiesBeautifulStaffInnerServiceSMOImpl;
 
     /**
-     *
-     *
-     * @param  activitiesBeautifulStaffDto
+     * @param activitiesBeautifulStaffDto
      * @return 订单服务能够接受的报文
      */
     public ResponseEntity<String> get(ActivitiesBeautifulStaffDto activitiesBeautifulStaffDto) {
-
-
         int count = activitiesBeautifulStaffInnerServiceSMOImpl.queryActivitiesBeautifulStaffsCount(activitiesBeautifulStaffDto);
-
         List<ActivitiesBeautifulStaffDto> activitiesBeautifulStaffDtos = null;
         if (count > 0) {
             activitiesBeautifulStaffDtos = activitiesBeautifulStaffInnerServiceSMOImpl.queryActivitiesBeautifulStaffs(activitiesBeautifulStaffDto);
         } else {
             activitiesBeautifulStaffDtos = new ArrayList<>();
         }
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) activitiesBeautifulStaffDto.getRow()), count, activitiesBeautifulStaffDtos);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         return responseEntity;
     }
-
 }

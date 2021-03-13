@@ -134,6 +134,7 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
                 if (tmpParkingSpaceDto.getPsId().equals(ownerCarDto.getPsId())) {
                     ownerCarDto.setAreaNum(tmpParkingSpaceDto.getAreaNum());
                     ownerCarDto.setNum(tmpParkingSpaceDto.getNum());
+                    ownerCarDto.setParkingType(tmpParkingSpaceDto.getParkingType());
                 }
             }
         }

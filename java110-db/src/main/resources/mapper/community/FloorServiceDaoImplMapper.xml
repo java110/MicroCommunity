@@ -43,7 +43,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </select>
 
 
@@ -75,8 +74,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
-
     </insert>
 
 
@@ -115,7 +112,6 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 
@@ -189,9 +185,10 @@
         </if>
         AND f.`status_cd` = '0'
     </select>
+
+
     <!-- 查询小区 内的楼 -->
     <select id="queryFloors" parameterType="Map" resultType="Map">
-
         SELECT
         f.`floor_id` floorId,
         f.`floor_num` floorNum,
@@ -239,6 +236,5 @@
             LIMIT #{page}, #{row}
         </if>
     </select>
-
 
 </mapper>
