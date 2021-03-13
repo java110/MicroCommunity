@@ -354,6 +354,22 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_FLOOR_INFO = "510100050001";
 
+    /**
+     * 增加小区楼属性
+     */
+    public static final String BUSINESS_TYPE_SAVE_FLOOR_ATTR_INFO = "510100030002";
+
+    /**
+     * 修改小区楼属性
+     */
+    public static final String BUSINESS_TYPE_UPDATE_FLOOR_ATTR_INFO = "510100040002";
+
+
+    /**
+     * 删除小区楼属性
+     */
+    public static final String BUSINESS_TYPE_DELETE_FLOOR_ATTR_INFO = "510100050002";
+
 
     /**
      * 增加小区单元
@@ -370,6 +386,23 @@ public class BusinessTypeConstant {
      * 删除小区单元
      */
     public static final String BUSINESS_TYPE_DELETE_UNIT_INFO = "520100050001";
+
+
+    /**
+     * 增加小区单元 属性
+     */
+    public static final String BUSINESS_TYPE_SAVE_UNIT_ATTR_INFO = "520100030002";
+
+    /**
+     * 修改小区单元 属性
+     */
+    public static final String BUSINESS_TYPE_UPDATE_UNIT_ATTR_INFO = "520100040002";
+
+
+    /**
+     * 删除小区单元 属性
+     */
+    public static final String BUSINESS_TYPE_DELETE_UNIT_ATTR_INFO = "520100050002";
 
     /**
      * 增加房屋
@@ -402,6 +435,22 @@ public class BusinessTypeConstant {
      * 删除车位
      */
     public static final String BUSINESS_TYPE_DELETE_PARKING_AREA = "541100050001";
+
+    /**
+     * 增加停车场
+     */
+    public static final String BUSINESS_TYPE_SAVE_PARKING_AREA_ATTR = "541100030002";
+
+    /**
+     * 修改车位
+     */
+    public static final String BUSINESS_TYPE_UPDATE_PARKING_AREA_ATTR = "541100040002";
+
+
+    /**
+     * 删除车位
+     */
+    public static final String BUSINESS_TYPE_DELETE_PARKING_AREA_ATTR = "541100050002";
 
     /**
      * 增加车位
@@ -1307,6 +1356,26 @@ public class BusinessTypeConstant {
      * 删除工作流节点 处理员工
      */
     public static final String BUSINESS_TYPE_DELETE_ATTENDANCE_CLASSES_ATTR="651100050004";
+
+
+    /**
+     *  保存工作流节点 处理员工 ORDER_COMMON_SERVICE_URL
+     *  3保存 commonServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_MACHINE_AUTH="661100030004";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_MACHINE_AUTH="661100040004";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_MACHINE_AUTH="661100050004";
+
 
 
 }

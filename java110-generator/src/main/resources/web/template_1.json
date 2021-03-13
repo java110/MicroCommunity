@@ -1,38 +1,38 @@
 {
-  "templateName": "最美员工",
+  "templateName": "员工门禁授权",
   "directories": "property",
-  "templateCode": "activitiesBeautifulStaff",
-  "templateKey": "beId",
+  "templateCode": "machineAuth",
+  "templateKey": "authId",
   "templateKeyName": "ID",
-  "searchCode": "beId",
+  "searchCode": "authId",
   "searchName": "ID",
   "conditions": [
     {
-      "name": "活动规则",
+      "name": "设备",
       "inputType": "select",
       "selectValue": "6666",
       "selectValueName": "最美员工",
-      "code": "ruleId",
+      "code": "machineId",
       "whereCondition": "equal"
     },
     {
       "name": "员工名称",
       "inputType": "input",
-      "code": "staffName",
+      "code": "personName",
       "whereCondition": "equal"
     },
     {
-      "name": "员工编号",
+      "name": "员工编码",
       "inputType": "input",
-      "code": "activitiesNum",
+      "code": "personId",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "ruleId",
-      "cnCode": "活动规则",
-      "desc": "必填，请选择活动规则",
+      "code": "machineId",
+      "cnCode": "设备",
+      "desc": "必填，请选择设备",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "select",
@@ -40,43 +40,45 @@
       "selectValueName": "最美员工",
       "limit": "num",
       "limitParam": "",
-      "limitErrInfo": "活动规则格式错误",
+      "limitErrInfo": "设备格式错误",
       "show": true
     },
     {
-      "code": "staffId",
+      "code": "personId",
       "cnCode": "员工",
       "desc": "必填，请填写员工",
       "required": true,
       "hasDefaultValue": false,
-      "inputType": "input",
+      "inputType": "select",
+      "selectValue": "6666",
+      "selectValueName": "最美员工",
       "limit": "maxLength",
       "limitParam": "128",
       "limitErrInfo": "员工名称太长",
       "show": true
     },
     {
-      "code": "activitiesNum",
-      "cnCode": "员工编号",
-      "desc": "必填，请填写员工编号",
+      "code": "startTime",
+      "cnCode": "开始时间",
+      "desc": "必填，请填写开始时间",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
-      "limit": "num",
+      "limit": "datetime",
       "limitParam": "",
-      "limitErrInfo": "编号必须为数字",
+      "limitErrInfo": "开始时间格式错误",
       "show": true
     },
     {
-      "code": "workContent",
-      "cnCode": "工作简介",
-      "desc": "必填，请填写工作简介",
+      "code": "endTime",
+      "cnCode": "结束时间",
+      "desc": "必填，请填写结束时间",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "1024",
-      "limitErrInfo": "工作简介说明太长",
+      "limit": "datetime",
+      "limitParam": "",
+      "limitErrInfo": "结束时间格式错误",
       "show": true
     }
   ]

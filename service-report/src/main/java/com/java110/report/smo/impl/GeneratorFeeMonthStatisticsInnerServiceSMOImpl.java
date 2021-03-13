@@ -434,6 +434,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             //reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
             reportFeeMonthStatisticsPo.setReceivedAmount(receivedAmount + "");
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
+            reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
             reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
@@ -590,7 +591,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         ReportFeeDetailDto feeDetailDto = new ReportFeeDetailDto();
         feeDetailDto.setStartTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
         feeDetailDto.setEndTime(DateUtil.getFormatTimeString(DateUtil.getNextMonthFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
-        feeDetailDto.setFeeId(tmpReportFeeDto.getFeeId());
+        feeDetailDto.setConfigId(tmpReportFeeDto.getConfigId());
+        feeDetailDto.setPayerObjId(tmpReportFeeDto.getPayerObjId());
+
         double receivedAmount = reportFeeServiceDaoImpl.getFeeReceivedAmount(feeDetailDto);
 
         return receivedAmount;
@@ -660,7 +663,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         month = Math.ceil(month);
 
         BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
-        double money = feePriceDec.divide(new BigDecimal(month)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        double money = feePriceDec.divide(new BigDecimal(month),2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         return money;
     }
 

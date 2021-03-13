@@ -131,4 +131,19 @@ public class RoomAttrServiceDaoImpl extends BaseServiceDao implements IRoomAttrS
     }
 
 
+    /**
+     * 保存小区房屋属性信息 到 instance
+     *
+     * @param info bId 信息
+     * @throws DAOException
+     */
+    @Override
+    public int saveRoomAttr(Map info) throws DAOException {
+        logger.debug("保存小区房屋属性saveRoomAttr入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.insert("roomAttrServiceDaoImpl.saveRoomAttr", info);
+
+        return saveFlag;
+    }
+
 }

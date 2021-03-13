@@ -14,6 +14,14 @@
     </insert>
 
 
+    <insert id="saveRoomAttr" parameterType="Map">
+        insert into building_room_attr(
+        attr_id,spec_cd,b_id,value,room_id
+        ) values (
+        #{attrId},#{specCd},'-1',#{value},#{roomId}
+        )
+    </insert>
+
     <!-- 查询小区房屋属性信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessRoomAttrInfo" parameterType="Map" resultType="Map">
         select t.attr_id,t.attr_id attrId,t.operate,t.spec_cd,t.spec_cd specCd,t.b_id,t.b_id

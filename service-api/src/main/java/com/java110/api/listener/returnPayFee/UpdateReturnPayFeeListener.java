@@ -71,9 +71,9 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
             String cycles = (String) reqJson.get("cycles");
             String receivableAmount = (String) reqJson.get("receivableAmount");
             String receivedAmount = (String) reqJson.get("receivedAmount");
-            reqJson.put("cycles", cycles.split("-")[1]);
-            reqJson.put("receivableAmount", receivableAmount.split("-")[1]);
-            reqJson.put("receivedAmount", receivedAmount.split("-")[1]);
+            reqJson.put("cycles", unum(cycles));
+            reqJson.put("receivableAmount", unum(receivableAmount));
+            reqJson.put("receivedAmount", unum(receivedAmount));
             reqJson.put("createTime", reqJson.get("payTime"));
             returnPayFeeBMOImpl.updateFeeDetail(reqJson, context);
             //修改pay_fee 费用到期时间  以及如果是押金则修改状态为结束收费
@@ -118,14 +118,20 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
             String cycles = (String) reqJson.get("cycles");
             String receivableAmount = (String) reqJson.get("receivableAmount");
             String receivedAmount = (String) reqJson.get("receivedAmount");
-            reqJson.put("cycles", cycles.split("-")[1]);
-            reqJson.put("receivableAmount", receivableAmount.split("-")[1]);
-            reqJson.put("receivedAmount", receivedAmount.split("-")[1]);
+            reqJson.put("cycles", unum(cycles));
+            reqJson.put("receivableAmount", unum(receivableAmount));
+            reqJson.put("receivedAmount", unum(receivedAmount));
             reqJson.put("createTime", reqJson.get("payTime"));
             returnPayFeeBMOImpl.updateFeeDetail(reqJson, context);
         }
 
 
+    }
+
+    private double unum(String value) {
+        double dValue = Double.parseDouble(value);
+
+        return dValue * -1;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.RoomAttrDto;
+import com.java110.po.room.RoomAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,4 +41,13 @@ public interface IRoomAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/queryRoomAttrsCount", method = RequestMethod.POST)
     int queryRoomAttrsCount(@RequestBody RoomAttrDto roomAttrDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param roomAttrPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/saveRoomAttr", method = RequestMethod.POST)
+    int saveRoomAttr(@RequestBody RoomAttrPo roomAttrPo);
 }
