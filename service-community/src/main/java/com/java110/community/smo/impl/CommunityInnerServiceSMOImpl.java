@@ -151,15 +151,11 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
         return communityServiceDaoImpl.queryCommunitysCount(BeanConvertUtil.beanCovertMap(communityDto));
     }
 
-    @Override
-    public int saveCommunity(@RequestBody CommunityPo communityPo) {
-        return communityServiceDaoImpl.saveCommunity(BeanConvertUtil.beanCovertMap(communityPo));
-    }
+//    @Override
+//    public int saveCommunity(@RequestBody CommunityPo communityPo) {
+//        return communityServiceDaoImpl.saveCommunity(BeanConvertUtil.beanCovertMap(communityPo));
+//    }
 
-    @Override
-    public int updateCommunity(@RequestBody CommunityPo communityPo) {
-        return communityServiceDaoImpl.updateCommunity(BeanConvertUtil.beanCovertMap(communityPo));
-    }
 
     public ICommunityServiceDao getCommunityServiceDaoImpl() {
         return communityServiceDaoImpl;

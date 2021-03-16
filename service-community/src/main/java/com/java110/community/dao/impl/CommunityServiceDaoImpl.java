@@ -489,24 +489,5 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
         return businessCommunityInfos;
     }
 
-    @Override
-    public int saveCommunity(Map info) {
-        logger.debug("保存小区信息 入参 info : {}", info);
-        int saveFlag = sqlSessionTemplate.insert("communityServiceDaoImpl.saveCommunity", info);
-        if (saveFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存小区信息Instance数据失败：" + JSONObject.toJSONString(info));
-        }
-        return saveFlag;
-    }
-
-    @Override
-    public int updateCommunity(Map info) {
-        logger.debug("修改小区信息 入参 info : {}", info);
-        int saveFlag = sqlSessionTemplate.update("communityServiceDaoImpl.updateCommunityInfoInstance", info);
-        if (saveFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改小区信息Instance数据失败：" + JSONObject.toJSONString(info));
-        }
-        return saveFlag;
-    }
 
 }

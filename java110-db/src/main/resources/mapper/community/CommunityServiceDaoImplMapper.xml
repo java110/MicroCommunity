@@ -7,18 +7,12 @@
     <!-- 保存小区信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityInfo" parameterType="Map">
         insert into business_community(community_id,b_id,name,address,city_code,
-        nearby_landmarks,map_x,map_y,month,state,operate,community_area)
+        nearby_landmarks,map_x,map_y,month,state,operate,community_area,tel)
         values(#{communityId},#{bId},#{name},#{address},#{cityCode},
-        #{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate},#{communityArea})
+        #{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate},#{communityArea},#{tel})
     </insert>
 
-    <!-- 保存小区信息 -->
-    <insert id="saveCommunity" parameterType="Map">
-        insert into s_community(community_id,b_id,name,address,city_code,
-        nearby_landmarks,map_x,map_y,create_time,state,tel,community_area)
-        values(#{communityId},#{bId},#{name},#{address},#{cityCode},
-        #{nearbyLandmarks},#{mapX},#{mapY},#{createTime},#{state},#{tel},#{communityArea})
-    </insert>
+
 
     <!-- 保存小区属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityAttr" parameterType="Map">
