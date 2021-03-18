@@ -21,10 +21,12 @@ import com.java110.dto.communityLocation.CommunityLocationDto;
 import com.java110.dto.machine.MachineAttrDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.parking.ParkingAreaDto;
+import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
+import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
@@ -53,6 +55,9 @@ public class ModifyParkingAreaToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingAreaAttrInnerServiceSMO parkingAreaAttrInnerServiceSMOImpl;
 
 
 
@@ -102,11 +107,18 @@ public class ModifyParkingAreaToIotAdapt extends DatabusAdaptImpl {
 
         Assert.listOnlyOne(parkingAreaDtos, "未找到停车场");
 
+        //查询属性
+        ParkingAreaAttrDto parkingAreaAttrDto = new ParkingAreaAttrDto();
+        parkingAreaAttrDto.setPaId(parkingAreaDtos.get(0).getPaId());
+        parkingAreaAttrDto.setCommunityId(parkingAreaDtos.get(0).getCommunityId());
+        List<ParkingAreaAttrDto> parkingAreaAttrDtos = parkingAreaAttrInnerServiceSMOImpl.queryParkingAreaAttrs(parkingAreaAttrDto);
+
         JSONObject postParameters = new JSONObject();
 
         postParameters.put("num", parkingAreaDtos.get(0).getNum());
         postParameters.put("extPaId", parkingAreaDtos.get(0).getPaId());
         postParameters.put("extCommunityId", parkingAreaDtos.get(0).getCommunityId());
+        postParameters.put("attrs", parkingAreaAttrDtos);
         hcParkingAreaAsynImpl.updateParkingArea(postParameters);
     }
 }
