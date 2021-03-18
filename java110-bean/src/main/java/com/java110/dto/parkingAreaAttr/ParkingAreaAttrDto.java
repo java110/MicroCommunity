@@ -23,6 +23,7 @@ public class ParkingAreaAttrDto extends PageDto implements Serializable {
     private String specName;
     private String valueName;
     private String listShow;
+    private String specType;
 
 
     private Date createTime;
@@ -109,5 +110,13 @@ public class ParkingAreaAttrDto extends PageDto implements Serializable {
 
     public void setListShow(String listShow) {
         this.listShow = listShow;
+    }
+
+    public String getSpecType() {
+        return specType;
+    }
+
+    public void setSpecType(String specType) {
+        this.specType = specType;
     }
 }

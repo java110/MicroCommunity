@@ -89,7 +89,8 @@
         statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value,
         s.spec_name specName,
         v.value_name valueName,
-        s.list_show listShow
+        s.list_show listShow,
+        s.spec_type specType
         from parking_area_attr t
         left join attr_spec s on t.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name =
         'parking_area_attr'
