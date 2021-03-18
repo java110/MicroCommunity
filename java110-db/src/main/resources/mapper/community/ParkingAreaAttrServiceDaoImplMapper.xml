@@ -95,6 +95,12 @@
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
         </if>
+        <if test="paIds !=null">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="specCd !=null and specCd != ''">
             and t.spec_cd= #{specCd}
         </if>
