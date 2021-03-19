@@ -3,7 +3,7 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IInspectionServiceDao;
 import com.java110.intf.community.IInspectionInnerServiceSMO;
-import com.java110.dto.inspectionPoint.InspectionDto;
+import com.java110.dto.inspectionPlan.InspectionDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;

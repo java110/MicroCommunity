@@ -7,7 +7,7 @@ import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
-import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
+import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
 import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
 import com.java110.fee.dao.IFeeDiscountServiceDao;
 import com.java110.fee.discount.IComputeDiscount;

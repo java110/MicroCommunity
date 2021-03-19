@@ -2,7 +2,7 @@ package com.java110.intf.community;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.inspectionTask.InspectionTaskDto;
+import com.java110.dto.inspectionPlan.InspectionTaskDto;
 import com.java110.po.inspection.InspectionTaskDetailPo;
 import com.java110.po.inspection.InspectionTaskPo;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -4,7 +4,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IAttrValueServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.attrValue.AttrValueDto;
+import com.java110.dto.attrSpec.AttrValueDto;
 import com.java110.intf.common.IAttrValueInnerServiceSMO;
 import com.java110.po.attrValue.AttrValuePo;
 import com.java110.utils.util.BeanConvertUtil;

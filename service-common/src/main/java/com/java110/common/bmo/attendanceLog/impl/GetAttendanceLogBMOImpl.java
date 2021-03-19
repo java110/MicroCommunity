@@ -1,7 +1,7 @@
 package com.java110.common.bmo.attendanceLog.impl;
 
 import com.java110.common.bmo.attendanceLog.IGetAttendanceLogBMO;
-import com.java110.dto.attendanceLog.AttendanceLogDto;
+import com.java110.dto.attendanceClasses.AttendanceLogDto;
 import com.java110.intf.common.IAttendanceLogInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

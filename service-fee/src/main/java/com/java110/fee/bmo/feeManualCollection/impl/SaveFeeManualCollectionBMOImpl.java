@@ -6,7 +6,7 @@ import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeManualCollection.FeeManualCollectionDto;
-import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
+import com.java110.dto.feeManualCollection.FeeManualCollectionDetailDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.fee.bmo.feeManualCollection.ISaveFeeManualCollectionBMO;

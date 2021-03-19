@@ -2,6 +2,7 @@ package com.java110.intf.job;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
 import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -59,4 +60,16 @@ public interface IDataBusInnerServiceSMO {
      */
     @RequestMapping(value = "/resendIot", method = RequestMethod.POST)
     ResultVo resendIot(@RequestBody JSONObject reqJson);
+
+    /**
+     * <p>查询待支付订单</p>
+     *
+     * @param tempCarPayOrderDto 请求信息
+     * @return TaskDto 对象数据
+     */
+    @RequestMapping(value = "/getTempCarFeeOrder", method = RequestMethod.POST)
+    ResultVo getTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto);
+
+    @RequestMapping(value = "/notifyTempCarFeeOrder", method = RequestMethod.POST)
+    ResultVo notifyTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto);
 }

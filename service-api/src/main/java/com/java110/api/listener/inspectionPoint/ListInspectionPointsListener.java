@@ -8,7 +8,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.inspectionPoint.InspectionDto;
+import com.java110.dto.inspectionPlan.InspectionDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IInspectionInnerServiceSMO;

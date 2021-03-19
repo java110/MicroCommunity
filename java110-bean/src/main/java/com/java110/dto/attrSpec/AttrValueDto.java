@@ -1,4 +1,4 @@
-package com.java110.dto.attrValue;
+package com.java110.dto.attrSpec;
 
 import com.java110.dto.PageDto;
 

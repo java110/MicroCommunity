@@ -1,4 +1,4 @@
-package com.java110.dto.communityLocation;
+package com.java110.dto.community;
 
 import com.java110.dto.PageDto;
 

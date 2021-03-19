@@ -1,7 +1,7 @@
 package com.java110.common.bmo.attendanceClassesTask.impl;
 
 import com.java110.common.bmo.attendanceClassesTask.IGetAttendanceClassesTaskBMO;
-import com.java110.dto.attendanceClassesTask.AttendanceClassesTaskDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
 import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

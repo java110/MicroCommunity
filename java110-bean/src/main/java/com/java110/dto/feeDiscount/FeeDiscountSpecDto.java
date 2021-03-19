@@ -1,4 +1,4 @@
-package com.java110.dto.feeDiscountSpec;
+package com.java110.dto.feeDiscount;
 
 import com.java110.dto.PageDto;
 

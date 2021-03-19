@@ -1,4 +1,4 @@
-package com.java110.dto.attendanceClassesTaskDetail;
+package com.java110.dto.attendanceClasses;
 
 import com.java110.dto.PageDto;
 

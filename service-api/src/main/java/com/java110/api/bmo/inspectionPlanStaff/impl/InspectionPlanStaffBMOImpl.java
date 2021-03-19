@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.inspectionPlanStaff.IInspectionPlanStaffBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.community.IInspectionPlanStaffInnerServiceSMO;
-import com.java110.dto.inspectionPlanStaff.InspectionPlanStaffDto;
+import com.java110.dto.inspectionPlan.InspectionPlanStaffDto;
 import com.java110.po.inspection.InspectionPlanStaffPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;

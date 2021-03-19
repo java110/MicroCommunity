@@ -15,6 +15,7 @@ package com.java110.fee.bmo.tempCarFee;/*
  */
 
 import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
+import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -29,4 +30,14 @@ public interface IGetTempCarFeeRules {
      * @return 收费规则及规则规格
      */
     ResponseEntity<String> queryRules(TempCarFeeRuleDto tempCarFeeRuleDto);
+
+    /**
+     * 查询临时车支付订单
+     *
+     * @param tempCarPayOrderDto
+     * @return
+     */
+    ResponseEntity<String> getTempCarFeeOrder(TempCarPayOrderDto tempCarPayOrderDto);
+
+    ResponseEntity<String> notifyTempCarFeeOrder(TempCarPayOrderDto tempCarPayOrderDto);
 }

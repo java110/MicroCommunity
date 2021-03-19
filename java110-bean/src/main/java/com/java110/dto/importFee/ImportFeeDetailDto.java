@@ -1,4 +1,4 @@
-package com.java110.dto.importFeeDetail;
+package com.java110.dto.importFee;
 
 import com.java110.dto.PageDto;
 

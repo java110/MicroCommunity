@@ -1,4 +1,4 @@
-package com.java110.dto.inspectionTask;
+package com.java110.dto.inspectionPlan;
 
 import com.java110.dto.PageDto;
 

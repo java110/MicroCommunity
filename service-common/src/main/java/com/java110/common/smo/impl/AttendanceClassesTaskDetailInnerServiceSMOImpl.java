@@ -4,7 +4,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IAttendanceClassesTaskDetailServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.attendanceClassesTaskDetail.AttendanceClassesTaskDetailDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
 import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
 import com.java110.utils.util.BeanConvertUtil;

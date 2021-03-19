@@ -1,4 +1,4 @@
-package com.java110.dto.feeManualCollectionDetail;
+package com.java110.dto.feeManualCollection;
 
 import com.java110.dto.PageDto;
 

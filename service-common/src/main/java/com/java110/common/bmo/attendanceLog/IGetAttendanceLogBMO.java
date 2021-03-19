@@ -1,5 +1,5 @@
 package com.java110.common.bmo.attendanceLog;
-import com.java110.dto.attendanceLog.AttendanceLogDto;
+import com.java110.dto.attendanceClasses.AttendanceLogDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetAttendanceLogBMO {
 

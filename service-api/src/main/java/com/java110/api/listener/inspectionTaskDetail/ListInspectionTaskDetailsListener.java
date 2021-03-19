@@ -7,7 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskDetailInnerServiceSMO;
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.inspectionTaskDetail.InspectionTaskDetailDto;
+import com.java110.dto.inspectionPlan.InspectionTaskDetailDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeInspectionTaskDetailConstant;
 import com.java110.utils.util.BeanConvertUtil;

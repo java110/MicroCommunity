@@ -1,7 +1,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.attendanceLog.AttendanceLogDto;
+import com.java110.dto.attendanceClasses.AttendanceLogDto;
 import com.java110.po.attendanceLog.AttendanceLogPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

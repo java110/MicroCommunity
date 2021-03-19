@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.community.IInspectionPlanStaffInnerServiceSMO;
-import com.java110.dto.inspectionPlanStaff.InspectionPlanStaffDto;
+import com.java110.dto.inspectionPlan.InspectionPlanStaffDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeInspectionPlanStaffConstant;
 import com.java110.utils.util.BeanConvertUtil;

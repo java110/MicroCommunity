@@ -1,4 +1,4 @@
-package com.java110.dto.feeReceiptDetail;
+package com.java110.dto.feeReceipt;
 
 import com.java110.dto.PageDto;
 

@@ -1,7 +1,6 @@
-package com.java110.dto.feeDiscountRule;
+package com.java110.dto.feeDiscount;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.feeDiscountRuleSpec.FeeDiscountRuleSpecDto;
 
 import java.io.Serializable;
 import java.util.Date;
