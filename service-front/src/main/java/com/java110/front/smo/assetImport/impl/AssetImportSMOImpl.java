@@ -184,6 +184,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("typeCd", parkingSpace.getTypeCd());
                 paramIn.put("num", parkingSpace.getPaNum());
+
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
                 savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
             }
@@ -204,6 +205,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("num", parkingSpace.getPsNum());
             paramIn.put("area", parkingSpace.getArea());
             paramIn.put("typeCd", parkingSpace.getTypeCd());
+            paramIn.put("parkingType", "1");
 
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {

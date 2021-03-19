@@ -10,6 +10,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -18,6 +19,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,6 +94,21 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         Assert.listOnlyOne(feeConfigDtos, "当前费用项ID不存在或存在多条" + reqJson.getString("configId"));
         reqJson.put("feeTypeCd", feeConfigDtos.get(0).getFeeTypeCd());
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
+        reqJson.put("configEndTime", feeConfigDtos.get(0).getEndTime());
+
+        if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
+            Date endTime = null;
+            Date configEndTime = null;
+            try {
+                endTime = DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
+                configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
+                if (endTime.getTime() > configEndTime.getTime()) {
+                    throw new IllegalArgumentException("结束时间不能超过费用项时间");
+                }
+            } catch (ParseException e) {
+                throw new IllegalArgumentException("结束时间错误" + reqJson.getString("endTime"));
+            }
+        }
         //判断收费范围
         RoomDto roomDto = new RoomDto();
         /*if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
@@ -166,6 +185,10 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
             curFailRoomCount++;
             businesses.add(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context));
             if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
+                if (FeeDto.FEE_FLAG_ONCE.equals(reqJson.getString("feeFlag"))) {
+                    businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                            reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
+                }
                 businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
                 businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
                 businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));

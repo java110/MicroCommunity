@@ -331,6 +331,15 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
 
+
+        feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
+        feeAttrPo.setValue(reqJson.getString("endTime"));
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPos.add(feeAttrPo);
+
         if (!StringUtil.isEmpty(roomDto.getOwnerId())) {
             feeAttrPo = new FeeAttrPo();
             feeAttrPo.setCommunityId(reqJson.getString("communityId"));

@@ -46,6 +46,8 @@ public class SaveProxyFeeListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "amount", "请求报文中未包含amount");
         Assert.hasKeyAndValue(reqJson, "consumption", "请求报文中未包含consumption");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
+        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含结束时间");
 
     }
 
@@ -57,8 +59,8 @@ public class SaveProxyFeeListener extends AbstractServiceApiPlusListener {
         payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         payFeePo.setIncomeObjId(reqJson.getString("storeId"));
         //payFeePo.setAmount("-1");
-        payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        payFeePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        payFeePo.setStartTime(reqJson.getString("startTime"));
+        payFeePo.setEndTime(reqJson.getString("startTime"));
         payFeePo.setPayerObjId(reqJson.getString("objId"));
         payFeePo.setPayerObjType(reqJson.getString("objType"));
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
@@ -73,6 +75,14 @@ public class SaveProxyFeeListener extends AbstractServiceApiPlusListener {
         feeAttrPo.setValue(reqJson.getString("consumption"));
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPo.setAttrId("-1");
+        super.insert(context,feeAttrPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+
+        feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+        feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
+        feeAttrPo.setValue(reqJson.getString("endTime"));
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPo.setAttrId("-2");
         super.insert(context,feeAttrPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
 
     }
