@@ -1,4 +1,4 @@
-package com.java110.core.smo.community;
+package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.parkingSpaceAttr.ParkingSpaceAttrDto;

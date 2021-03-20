@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.smo.community.IParkingSpaceAttrInnerServiceSMO;
+import com.java110.intf.community.IParkingSpaceAttrInnerServiceSMO;
 import com.java110.dto.parkingSpaceAttr.ParkingSpaceAttrDto;
 import com.java110.utils.constant.ServiceCodeParkingSpaceAttrConstant;
 import com.java110.utils.util.BeanConvertUtil;
