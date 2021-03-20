@@ -485,6 +485,22 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE = "540100050001";
 
     /**
+     * 增加车位
+     */
+    public static final String BUSINESS_TYPE_SAVE_PARKING_SPACE_ATTR = "540100030002";
+
+    /**
+     * 修改车位
+     */
+    public static final String BUSINESS_TYPE_UPDATE_PARKING_SPACE_ATTR = "540100040002";
+
+
+    /**
+     * 删除车位
+     */
+    public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE_ATTR = "540100050002";
+
+    /**
      * 添加进场记录
      */
     public static final String BUSINESS_TYPE_SAVE_CAR_INOUT = "541110030001";
