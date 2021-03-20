@@ -6,6 +6,7 @@ import com.java110.core.smo.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 import com.java110.dto.user.UserDto;
+import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import com.java110.user.dao.IOwnerCarAttrServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,11 @@ public class OwnerCarAttrInnerServiceSMOImpl extends BaseServiceSMO implements I
     @Override
     public int queryOwnerCarAttrsCount(@RequestBody OwnerCarAttrDto ownerCarAttrDto) {
         return ownerCarAttrServiceDaoImpl.queryOwnerCarAttrsCount(BeanConvertUtil.beanCovertMap(ownerCarAttrDto));
+    }
+
+    @Override
+    public int saveOwnerCarAttr(@RequestBody OwnerCarAttrPo ownerCarAttrPo) {
+        return ownerCarAttrServiceDaoImpl.saveOwnerCarAttr(BeanConvertUtil.beanCovertMap(ownerCarAttrPo));
     }
 
     public IOwnerCarAttrServiceDao getOwnerCarAttrServiceDaoImpl() {

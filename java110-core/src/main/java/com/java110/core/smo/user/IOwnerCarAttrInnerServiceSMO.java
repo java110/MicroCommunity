@@ -2,6 +2,8 @@ package com.java110.core.smo.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
+import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
+import com.java110.po.parkingAreaAttr.ParkingAreaAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,4 +41,13 @@ public interface IOwnerCarAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOwnerCarAttrsCount", method = RequestMethod.POST)
     int queryOwnerCarAttrsCount(@RequestBody OwnerCarAttrDto ownerCarAttrDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param ownerCarAttrPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/saveOwnerCarAttr", method = RequestMethod.POST)
+    int saveOwnerCarAttr(@RequestBody OwnerCarAttrPo ownerCarAttrPo);
 }
