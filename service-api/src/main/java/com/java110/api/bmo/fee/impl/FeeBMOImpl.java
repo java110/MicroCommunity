@@ -395,7 +395,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
             if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-                if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                if(feeDto.getDeadlineTime() != null){
+                    endCalender.setTime(feeDto.getDeadlineTime());
+                }else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                     endCalender.setTime(feeDto.getCurReadingTime());
                 } else if (feeDto.getImportFeeEndTime() == null) {
                     endCalender.setTime(feeDto.getConfigEndTime());
