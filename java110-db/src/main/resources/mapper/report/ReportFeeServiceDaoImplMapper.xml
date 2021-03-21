@@ -71,7 +71,7 @@
         oc.car_type_cd='1001'
         left join s_store ss on t.income_obj_id = ss.store_id and ss.status_cd = '0'
         LEFT JOIN pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002' and pfa.status_cd = '0'
-        LEFT JOIN pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa.spec_cd = '390010' and pfa.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.spec_cd = '390010' and pfa1.status_cd = '0'
         left join import_fee_detail ifd on t.fee_id = ifd.fee_id and ifd.status_cd = '0' and t.fee_flag = '2006012'
         LEFT JOIN meter_water mw on t.fee_id = mw.fee_id and mw.status_cd = '0' and mw.community_id = t.community_id
         where t.status_cd = '0'
