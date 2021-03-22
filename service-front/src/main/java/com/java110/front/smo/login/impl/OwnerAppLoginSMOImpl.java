@@ -413,7 +413,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         JSONObject userOwnerInfo = new JSONObject();
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setOpenId(openId);
-        ownerAppUserDto.setNickName(StringUtil.encodeEmoji(nickname));
+        // ownerAppUserDto.setNickName(StringUtil.encodeEmoji(nickname));
+        ownerAppUserDto.setNickName(nickname);
         ownerAppUserDto.setHeadImgUrl(headimgurl);
         ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
         if (curOwnerApp != null) {
