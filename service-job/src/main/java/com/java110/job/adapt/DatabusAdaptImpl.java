@@ -17,9 +17,11 @@ package com.java110.job.adapt;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
 import com.java110.job.adapt.hcIot.GetToken;
+import com.java110.po.machine.MachineRecordPo;
 import com.java110.vo.ResultVo;
 import org.springframework.http.HttpHeaders;
 
@@ -86,6 +88,7 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     public ResultVo getTempCarFeeOrder(TempCarPayOrderDto tempCarPayOrderDto) {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
+
     /**
      * 查询 临时车待支付订单
      *
@@ -106,6 +109,13 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
      */
     @Override
     public void execute(Business business, List<Business> businesses) throws Exception {
+
+    }
+    /**
+     * 手工 送数据
+     * @param customBusinessDatabusDto
+     */
+    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto){
 
     }
 }

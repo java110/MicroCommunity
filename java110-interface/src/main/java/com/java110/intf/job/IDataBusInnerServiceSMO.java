@@ -2,8 +2,10 @@ package com.java110.intf.job;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
+import com.java110.po.machine.MachineRecordPo;
 import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -72,4 +74,13 @@ public interface IDataBusInnerServiceSMO {
 
     @RequestMapping(value = "/notifyTempCarFeeOrder", method = RequestMethod.POST)
     ResultVo notifyTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto);
+
+
+    /**
+     * 自定义databus 数据 传输
+     * @param customBusinessDatabusDto
+     * @return
+     */
+    @RequestMapping(value = "/customExchange", method = RequestMethod.POST)
+    void customExchange(@RequestBody CustomBusinessDatabusDto customBusinessDatabusDto);
 }

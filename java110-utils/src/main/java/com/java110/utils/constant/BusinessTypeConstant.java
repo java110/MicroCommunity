@@ -1427,6 +1427,9 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_MACHINE_AUTH="661100050004";
 
-
+    /**
+     * 开门记录 送databus
+     */
+    public static final String BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG = "990000060001";
 
 }
