@@ -22,6 +22,7 @@ public class OrgStaffRelDto extends PageDto implements Serializable {
     private String staffName;
     private String[] staffIds;
     private String relCd;
+    private String relCdName;
     private String departmentId;
     private String departmentName;
     private String companyId;
@@ -145,5 +146,13 @@ public class OrgStaffRelDto extends PageDto implements Serializable {
 
     public void setStaffName(String staffName) {
         this.staffName = staffName;
+    }
+
+    public String getRelCdName() {
+        return relCdName;
+    }
+
+    public void setRelCdName(String relCdName) {
+        this.relCdName = relCdName;
     }
 }
