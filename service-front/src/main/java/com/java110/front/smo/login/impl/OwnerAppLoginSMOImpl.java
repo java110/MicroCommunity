@@ -230,8 +230,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            CommonCache.setValue(code+"-nickname",  userinfo_paramObj.getString("nickname"), expireTime);
-            CommonCache.setValue(code+"-headimgurl",  userinfo_paramObj.getString("headimgurl"), expireTime);
+            CommonCache.setValue(code + "-nickname", userinfo_paramObj.getString("nickname"), expireTime);
+            CommonCache.setValue(code + "-headimgurl", userinfo_paramObj.getString("headimgurl"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -252,8 +252,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            CommonCache.setValue(code+"-nickname",  userinfo_paramObj.getString("nickname"), expireTime);
-            CommonCache.setValue(code+"-headimgurl",  userinfo_paramObj.getString("headimgurl"), expireTime);
+            CommonCache.setValue(code + "-nickname", userinfo_paramObj.getString("nickname"), expireTime);
+            CommonCache.setValue(code + "-headimgurl", userinfo_paramObj.getString("headimgurl"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -281,8 +281,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         if (StringUtil.isEmpty(tmpUserDto.getKey())) {
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            CommonCache.setValue(code+"-nickname",  userinfo_paramObj.getString("nickname"), expireTime);
-            CommonCache.setValue(code+"-headimgurl",  userinfo_paramObj.getString("headimgurl"), expireTime);
+            CommonCache.setValue(code + "-nickname", userinfo_paramObj.getString("nickname"), expireTime);
+            CommonCache.setValue(code + "-headimgurl", userinfo_paramObj.getString("headimgurl"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -395,8 +395,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         String code = paramIn.getString("code");
 
         String openId = CommonCache.getValue(code);
-        String nickname = CommonCache.getValue(code+"-nickname");
-        String headimgurl = CommonCache.getValue(code+"-headimgurl");
+        String nickname = CommonCache.getValue(code + "-nickname");
+        String headimgurl = CommonCache.getValue(code + "-headimgurl");
 
         if (StringUtil.isEmpty(openId)) {
             responseEntity = new ResponseEntity<>("页面失效，请刷新后重试", HttpStatus.UNAUTHORIZED);
@@ -413,7 +413,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         JSONObject userOwnerInfo = new JSONObject();
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setOpenId(openId);
-        ownerAppUserDto.setNickName(nickname);
+        ownerAppUserDto.setNickName(StringUtil.encodeEmoji(nickname));
         ownerAppUserDto.setHeadImgUrl(headimgurl);
         ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
         if (curOwnerApp != null) {
