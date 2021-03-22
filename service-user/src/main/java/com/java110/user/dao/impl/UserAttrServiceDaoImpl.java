@@ -126,5 +126,16 @@ public class UserAttrServiceDaoImpl extends BaseServiceDao implements IUserAttrS
         return Integer.parseInt(businessUserAttrInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 保存用户属性
+     * @param info
+     * @return
+     */
+    @Override
+    public int saveUserAttr(Map info) {
+        int saveFlag = sqlSessionTemplate.insert("userAttrServiceDaoImpl.saveUserAttr",info);
+        return saveFlag;
+    }
+
 
 }

@@ -78,4 +78,10 @@ public interface IUserAttrServiceDao {
      */
     int queryUserAttrsCount(Map info);
 
+    /**
+     * 保存用户属性
+     * @param beanCovertMap
+     * @return
+     */
+    int saveUserAttr(Map beanCovertMap);
 }
