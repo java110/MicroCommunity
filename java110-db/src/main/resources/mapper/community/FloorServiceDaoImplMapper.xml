@@ -154,7 +154,10 @@
         COUNT(1) count
         FROM
         f_floor f
-        where f.`community_id` = #{communityId}
+        where 1=1
+        <if test="communityId !=null and communityId != ''">
+            and f.`community_id` = #{communityId}
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id= #{floorId}
         </if>
