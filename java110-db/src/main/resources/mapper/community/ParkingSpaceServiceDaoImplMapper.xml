@@ -113,9 +113,10 @@
         t.community_id communityId,
         t.b_id,
         t.b_id bId,
+        t.parking_type,
         t.parking_type parkingType,
-        td2. NAME parkingTypeName,
-        td1. NAME stateName,
+        td2.NAME parkingTypeName,
+        td1.NAME stateName,
         pa.num areaNum,
         pa.type_cd typeCd
         FROM
