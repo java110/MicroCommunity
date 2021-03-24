@@ -1,38 +1,42 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "reportFeeYearCollectionDetail",
-  "desc": "费用年收费明细",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "report",
-  "tableName": "report_fee_year_collection_detail",
+  "id": "auditId",
+  "name": "workflowAuditMessage",
+  "desc": "流程审核表",
+  "shareParam": "shareId",
+  "shareColumn": "share_id",
+  "shareName": "common",
+  "tableName": "workflow_audit_message",
   "param": {
-    "detailId": "detail_id",
-    "collectionId": "collection_id",
-    "collectionYear": "collection_year",
-    "receivableAmount": "receivable_amount",
-    "receivedAmount": "received_amount",
-    "communityId": "community_id",
-    "relationYear": "relation_year",
+    "auditId": "audit_id",
+    "businessType": "business_type",
+    "businessKey": "business_key",
+    "auditPerson": "audit_person",
+    "auditPersonId": "audit_person_id",
+    "auditLink": "audit_link",
+    "state": "state",
+    "message": "message",
+    "shareId": "share_id",
+    "shareType": "share_type",
+    "preAuditId": "pre_audit_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "communityId",
-      "msg": "小区不能为空"
+      "code": "businessKey",
+      "msg": "业务不能为空"
     },
     {
-      "code": "collectionId",
-      "msg": "年收费ID不能为空"
+      "code": "auditPersonId",
+      "msg": "审核人不能为空"
     },
     {
-      "code": "receivedAmount",
-      "msg": "实收金额不能为空"
+      "code": "state",
+      "msg": "审核状态不能为空"
     },
     {
-      "code": "receivableAmount",
-      "msg": "应收金额不能为空"
+      "code": "message",
+      "msg": "审核意见不能为空"
     }
   ]
 }
