@@ -196,7 +196,9 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         businessParkingSpace.put("bId", "-1");
         businessParkingSpace.put("createTime", new Date());
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
-        parkingSpaceInnerServiceSMOImpl.saveParkingSpace(parkingSpacePo);
+        super.insert(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_SPACE);
+
+        //parkingSpaceInnerServiceSMOImpl.saveParkingSpace(parkingSpacePo);
     }
 
 

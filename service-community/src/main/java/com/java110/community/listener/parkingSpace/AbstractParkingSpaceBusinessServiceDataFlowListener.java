@@ -47,6 +47,7 @@ public abstract class AbstractParkingSpaceBusinessServiceDataFlowListener extend
         businessParkingSpaceInfo.put("state", businessParkingSpaceInfo.get("state"));
         businessParkingSpaceInfo.put("communityId", businessParkingSpaceInfo.get("community_id"));
         businessParkingSpaceInfo.put("userId", businessParkingSpaceInfo.get("user_id"));
+        businessParkingSpaceInfo.put("parkingType", businessParkingSpaceInfo.get("parking_type"));
         businessParkingSpaceInfo.remove("bId");
         businessParkingSpaceInfo.put("statusCd", statusCd);
     }
@@ -81,6 +82,7 @@ public abstract class AbstractParkingSpaceBusinessServiceDataFlowListener extend
         currentParkingSpaceInfo.put("state", currentParkingSpaceInfo.get("state"));
         currentParkingSpaceInfo.put("communityId", currentParkingSpaceInfo.get("community_id"));
         currentParkingSpaceInfo.put("userId", currentParkingSpaceInfo.get("user_id"));
+        currentParkingSpaceInfo.put("parkingType", currentParkingSpaceInfo.get("parking_type"));
 
 
         currentParkingSpaceInfo.put("operate", StatusConstant.OPERATE_DEL);
