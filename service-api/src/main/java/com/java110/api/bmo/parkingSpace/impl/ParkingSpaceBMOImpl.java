@@ -88,7 +88,8 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         businessParkingSpace.putAll(paramInJson);
         businessParkingSpace.put("state", parkingSpaceDto.getState());
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
-        parkingSpaceInnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
+        //parkingSpaceInnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
+        super.update(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
     }
 
     /**
