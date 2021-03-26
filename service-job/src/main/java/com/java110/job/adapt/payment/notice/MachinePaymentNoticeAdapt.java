@@ -36,11 +36,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
+import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.cache.MappingCache;
@@ -287,7 +283,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         }
         String templateId = smallWechatAttrDtos.get(0).getValue();
         String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
-        if (accessToken == null || accessToken == "") {
+        if (StringUtil.isEmpty(accessToken)) {
             logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
             return;
         }

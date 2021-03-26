@@ -52,9 +52,12 @@ public class TransactionOrderInfoToDataBusListener implements DataFlowListener<I
     @Override
     public void soService(InvokeFinishBusinessSystemEvent event) {
         IOrderDataFlowContext dataFlow = event.getDataFlow();
-        if (dataFlow == null || dataFlow.getBusinessList() == null || dataFlow.getBusinessList().size() == 0) {
+        if (dataFlow == null
+                || dataFlow.getBusinessList() == null
+                || dataFlow.getBusinessList().size() == 0) {
             return;
         }
+
 
         String databusSwitch = MappingCache.getValue(DomainContant.COMMON_DOMAIN, DATABUS_SWITCH);
 
