@@ -1,60 +1,33 @@
 package com.java110.job.adapt.payment.receipt;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.aliyuncs.CommonRequest;
-import com.aliyuncs.CommonResponse;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.IComputeFeeSMO;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.owner.OwnerRoomRelDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
-import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
-import com.java110.dto.staffAppAuth.StaffAppAuthDto;
-import com.java110.dto.user.UserDto;
 import com.java110.entity.order.Business;
-import com.java110.entity.wechat.Content;
-import com.java110.entity.wechat.Data;
-import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
-import com.java110.intf.order.IPrivilegeInnerServiceSMO;
-import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
-import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.user.*;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
-import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -151,6 +124,8 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         Assert.listOnlyOne(feeDtos, "未查询到费用信息");
+
+        feeDto = feeDtos.get(0);
 
         //添加单元信息
         FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
