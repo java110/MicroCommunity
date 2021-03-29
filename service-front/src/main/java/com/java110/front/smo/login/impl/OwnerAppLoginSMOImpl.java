@@ -561,5 +561,5 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
+    
 }
