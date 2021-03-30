@@ -9,11 +9,11 @@
     <insert id="saveContractChangePlanDetailInfo" parameterType="Map">
         insert into contract_change_plan_detail(
         a_link,a_contacts,amount,contract_type,detail_id,store_id,operator,signing_time,b_contacts,party_a,b_link,
-        party_b,contract_id,obj_id,plan_id,contract_name,start_time,end_time,state,contract_code,obj_type,operator_link,operate
+        party_b,contract_id,obj_id,plan_id,contract_name,start_time,end_time,contract_code,obj_type,operator_link,operate
         ) values (
         #{aLink},#{aContacts},#{amount},#{contractType},#{detailId},#{storeId},#{operator},#{signingTime},#{bContacts},
         #{partyA},#{bLink},#{partyB},#{contractId},#{objId},#{planId},#{contractName},#{startTime},#{endTime},
-        #{state},#{contractCode},#{objType},#{operatorLink},#{operate}
+        #{contractCode},#{objType},#{operatorLink},#{operate}
         )
     </insert>
 
@@ -26,7 +26,7 @@
         bContacts,t.party_a,t.party_a partyA,t.b_link,t.b_link bLink,t.party_b,t.party_b
         partyB,t.contract_id,t.contract_id contractId,t.obj_id,t.obj_id objId,t.plan_id,t.plan_id
         planId,t.contract_name,t.contract_name contractName,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
+        endTime,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
         objType,t.operator_link,t.operator_link operatorLink,t.operate
         from contract_change_plan_detail t
         where 1 =1
@@ -84,9 +84,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
-        <if test="state !=null and state != ''">
-            and t.state= #{state}
-        </if>
+
         <if test="contractCode !=null and contractCode != ''">
             and t.contract_code= #{contractCode}
         </if>
@@ -164,9 +162,7 @@
         <if test="endTime !=null and endTime != ''">
             , t.end_time= #{endTime}
         </if>
-        <if test="state !=null and state != ''">
-            , t.state= #{state}
-        </if>
+
         <if test="contractCode !=null and contractCode != ''">
             , t.contract_code= #{contractCode}
         </if>
@@ -242,9 +238,8 @@
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
-        <if test="state !=null and state != ''">
-            and t.state= #{state}
-        </if>
+
+
         <if test="contractCode !=null and contractCode != ''">
             and t.contract_code= #{contractCode}
         </if>
