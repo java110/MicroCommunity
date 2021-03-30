@@ -66,7 +66,7 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
         oldContractChangePlanDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         oldContractChangePlanDetailPo.setPlanId(contractChangePlanPo.getPlanId());
         oldContractChangePlanDetailPo.setOperate("DEL");
-        flag = contractChangePlanDetailInnerServiceSMOImpl.saveContractChangePlanDetail(contractChangePlanDetailPo);
+        flag = contractChangePlanDetailInnerServiceSMOImpl.saveContractChangePlanDetail(oldContractChangePlanDetailPo);
         if (flag < 1) {
             throw new IllegalArgumentException("保存变更记录失败");
         }
