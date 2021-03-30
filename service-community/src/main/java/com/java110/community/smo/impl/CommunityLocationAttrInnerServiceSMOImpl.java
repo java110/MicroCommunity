@@ -82,7 +82,7 @@ public class CommunityLocationAttrInnerServiceSMOImpl extends BaseServiceSMO imp
     }
 
     @Override
-    public int saveCommunityLocationAttr(CommunityLocationAttrPo communityLocationAttrPo) {
+    public int saveCommunityLocationAttr( @RequestBody CommunityLocationAttrPo communityLocationAttrPo) {
         return communityLocationAttrServiceDaoImpl.saveCommunityLocationAttr(BeanConvertUtil.beanCovertMap(communityLocationAttrPo));
     }
 
