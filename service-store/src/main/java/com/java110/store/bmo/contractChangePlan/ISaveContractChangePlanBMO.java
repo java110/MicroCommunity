@@ -1,6 +1,7 @@
 package com.java110.store.bmo.contractChangePlan;
 
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
+import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveContractChangePlanBMO {
 
@@ -11,7 +12,7 @@ public interface ISaveContractChangePlanBMO {
      * @param contractChangePlanPo
      * @return
      */
-    ResponseEntity<String> save(ContractChangePlanPo contractChangePlanPo);
+    ResponseEntity<String> save(ContractChangePlanPo contractChangePlanPo, ContractChangePlanDetailPo contractChangePlanDetailPo);
 
 
 }

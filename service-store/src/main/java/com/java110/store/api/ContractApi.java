@@ -605,6 +605,10 @@ public class ContractApi {
 
     /**
      * 微信保存消息模板
+     * {"index":0,"contractName":"测试合同","contractCode":"1","contractType":"812021030474360091","partyA":"吴学文","partyB":"吴学文","aContacts":"吴学文",
+     * "bContacts":"吴学文11","aLink":"18909711443","bLink":"18909711443","operator":"1","operatorLink":"13789876589","amount":"100.00",
+     * "startTime":"2021-03-10 00:00:50","endTime":"2021-03-03 01:05:50","signingTime":"2021-03-02 00:00:50","param":"contractChangeMainBody",
+     * "planType":"1001","changeRemark":"菜单"}
      *
      * @param reqJson
      * @return
@@ -613,17 +617,19 @@ public class ContractApi {
      */
     @RequestMapping(value = "/saveContractChangePlan", method = RequestMethod.POST)
     public ResponseEntity<String> saveContractChangePlan(@RequestHeader(value = "store-id") String storeId,
+                                                         @RequestHeader(value = "user-id") String userId,
                                                          @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "planType", "请求报文中未包含planType");
-        Assert.hasKeyAndValue(reqJson, "changePerson", "请求报文中未包含changePerson");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
-
 
         ContractChangePlanPo contractChangePlanPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanPo.class);
         contractChangePlanPo.setStoreId(storeId);
-        return saveContractChangePlanBMOImpl.save(contractChangePlanPo);
+        contractChangePlanPo.setChangePerson(userId);
+        contractChangePlanPo.setState(ContractChangePlanDto.STATE_W);
+
+        ContractChangePlanDetailPo contractChangePlanDetailPo = BeanConvertUtil.covertBean(reqJson,ContractChangePlanDetailPo.class);
+        contractChangePlanDetailPo.setStoreId(storeId);
+        return saveContractChangePlanBMOImpl.save(contractChangePlanPo,contractChangePlanDetailPo);
     }
 
     /**
@@ -682,7 +688,7 @@ public class ContractApi {
                                                           @RequestParam(value = "contractId") String contractId,
                                                           @RequestParam(value = "contractName") String contractName,
                                                           @RequestParam(value = "planId") String planId
-                                                          ) {
+    ) {
         ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
         contractChangePlanDto.setPage(page);
         contractChangePlanDto.setRow(row);
