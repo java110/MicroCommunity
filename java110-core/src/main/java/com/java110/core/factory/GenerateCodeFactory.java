@@ -187,6 +187,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_beId = "22";
     public static final String CODE_PREFIX_collectionId = "23";
     public static final String CODE_PREFIX_authId = "23";
+    public static final String CODE_PREFIX_planId = "24";
 
 
 

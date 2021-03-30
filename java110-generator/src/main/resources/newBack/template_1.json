@@ -1,42 +1,38 @@
 {
   "autoMove": true,
-  "id": "auditId",
-  "name": "workflowAuditMessage",
-  "desc": "流程审核表",
-  "shareParam": "shareId",
-  "shareColumn": "share_id",
-  "shareName": "common",
-  "tableName": "workflow_audit_message",
+  "id": "planId",
+  "name": "contractChangePlan",
+  "desc": "合同变更计划",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "tableName": "contract_change_plan",
   "param": {
-    "auditId": "audit_id",
-    "businessType": "business_type",
-    "businessKey": "business_key",
-    "auditPerson": "audit_person",
-    "auditPersonId": "audit_person_id",
-    "auditLink": "audit_link",
+    "planId": "plan_id",
+    "contractId": "contract_id",
+    "planType": "plan_type",
+    "changePerson": "change_person",
+    "remark": "remark",
     "state": "state",
-    "message": "message",
-    "shareId": "share_id",
-    "shareType": "share_type",
-    "preAuditId": "pre_audit_id",
+    "storeId": "store_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "businessKey",
-      "msg": "业务不能为空"
+      "code": "planType",
+      "msg": "变更类型不能为空"
     },
     {
-      "code": "auditPersonId",
-      "msg": "审核人不能为空"
+      "code": "changePerson",
+      "msg": "变更人不能为空"
     },
     {
       "code": "state",
       "msg": "审核状态不能为空"
     },
     {
-      "code": "message",
-      "msg": "审核意见不能为空"
+      "code": "storeId",
+      "msg": "商户不能为空"
     }
   ]
 }
