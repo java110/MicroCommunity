@@ -626,6 +626,7 @@ public class ContractApi {
         contractChangePlanPo.setStoreId(storeId);
         contractChangePlanPo.setChangePerson(userId);
         contractChangePlanPo.setState(ContractChangePlanDto.STATE_W);
+        contractChangePlanPo.setRemark(reqJson.getString("changeRemark"));
 
         ContractChangePlanDetailPo contractChangePlanDetailPo = BeanConvertUtil.covertBean(reqJson,ContractChangePlanDetailPo.class);
         contractChangePlanDetailPo.setStoreId(storeId);
