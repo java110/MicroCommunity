@@ -685,9 +685,9 @@ public class ContractApi {
     public ResponseEntity<String> queryContractChangePlan(@RequestHeader(value = "store-id") String storeId,
                                                           @RequestParam(value = "page") int page,
                                                           @RequestParam(value = "row") int row,
-                                                          @RequestParam(value = "contractId") String contractId,
-                                                          @RequestParam(value = "contractName") String contractName,
-                                                          @RequestParam(value = "planId") String planId
+                                                          @RequestParam(value = "contractId",required = false) String contractId,
+                                                          @RequestParam(value = "contractName",required = false) String contractName,
+                                                          @RequestParam(value = "planId",required = false) String planId
     ) {
         ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
         contractChangePlanDto.setPage(page);
