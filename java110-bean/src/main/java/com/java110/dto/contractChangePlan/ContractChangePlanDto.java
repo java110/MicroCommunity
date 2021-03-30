@@ -1,6 +1,8 @@
 package com.java110.dto.contractChangePlan;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.contract.ContractDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,15 +14,15 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class ContractChangePlanDto extends PageDto implements Serializable {
+public class ContractChangePlanDto extends ContractDto implements Serializable {
 
     private String planType;
-private String contractId;
-private String planId;
-private String remark;
-private String changePerson;
-private String state;
-private String storeId;
+    private String contractId;
+    private String planId;
+    private String remark;
+    private String changePerson;
+    private String state;
+    private String storeId;
 
 
     private Date createTime;
@@ -31,43 +33,56 @@ private String storeId;
     public String getPlanType() {
         return planType;
     }
-public void setPlanType(String planType) {
+
+    public void setPlanType(String planType) {
         this.planType = planType;
     }
-public String getContractId() {
+
+    public String getContractId() {
         return contractId;
     }
-public void setContractId(String contractId) {
+
+    public void setContractId(String contractId) {
         this.contractId = contractId;
     }
-public String getPlanId() {
+
+    public String getPlanId() {
         return planId;
     }
-public void setPlanId(String planId) {
+
+    public void setPlanId(String planId) {
         this.planId = planId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getChangePerson() {
+
+    public String getChangePerson() {
         return changePerson;
     }
-public void setChangePerson(String changePerson) {
+
+    public void setChangePerson(String changePerson) {
         this.changePerson = changePerson;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 

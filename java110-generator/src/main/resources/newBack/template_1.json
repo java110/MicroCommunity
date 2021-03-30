@@ -1,38 +1,37 @@
 {
   "autoMove": true,
-  "id": "planId",
-  "name": "contractChangePlan",
-  "desc": "合同变更计划",
+  "id": "attrId",
+  "name": "contractChangePlanDetailAttr",
+  "desc": "合同变更属性",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "store",
-  "tableName": "contract_change_plan",
+  "tableName": "contract_change_plan_detail_attr",
   "param": {
-    "planId": "plan_id",
-    "contractId": "contract_id",
-    "planType": "plan_type",
-    "changePerson": "change_person",
-    "remark": "remark",
-    "state": "state",
     "storeId": "store_id",
+    "detailId": "detail_id",
+    "contractId": "contract_id",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
+    "value": "value",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "planType",
-      "msg": "变更类型不能为空"
+      "code": "contractId",
+      "msg": "合同ID不能为空"
     },
     {
-      "code": "changePerson",
-      "msg": "变更人不能为空"
-    },
-    {
-      "code": "state",
-      "msg": "审核状态不能为空"
+      "code": "detailId",
+      "msg": "变更明细不能为空"
     },
     {
       "code": "storeId",
-      "msg": "商户不能为空"
+      "msg": "商户ID不能为空"
+    },
+    {
+      "code": "specCd",
+      "msg": "用户规格不能为空"
     }
   ]
 }
