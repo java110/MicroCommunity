@@ -41,22 +41,19 @@ public class ContractChangePlanDetailDto extends PageDto implements Serializable
 
     private Date createTime;
 
-    private String statusCd = "0";
-
-
-    public String getALink() {
+    public String getaLink() {
         return aLink;
     }
 
-    public void setALink(String aLink) {
+    public void setaLink(String aLink) {
         this.aLink = aLink;
     }
 
-    public String getAContacts() {
+    public String getaContacts() {
         return aContacts;
     }
 
-    public void setAContacts(String aContacts) {
+    public void setaContacts(String aContacts) {
         this.aContacts = aContacts;
     }
 
@@ -108,11 +105,11 @@ public class ContractChangePlanDetailDto extends PageDto implements Serializable
         this.signingTime = signingTime;
     }
 
-    public String getBContacts() {
+    public String getbContacts() {
         return bContacts;
     }
 
-    public void setBContacts(String bContacts) {
+    public void setbContacts(String bContacts) {
         this.bContacts = bContacts;
     }
 
@@ -124,11 +121,11 @@ public class ContractChangePlanDetailDto extends PageDto implements Serializable
         this.partyA = partyA;
     }
 
-    public String getBLink() {
+    public String getbLink() {
         return bLink;
     }
 
-    public void setBLink(String bLink) {
+    public void setbLink(String bLink) {
         this.bLink = bLink;
     }
 
@@ -220,6 +217,13 @@ public class ContractChangePlanDetailDto extends PageDto implements Serializable
         this.operatorLink = operatorLink;
     }
 
+    public String getOperate() {
+        return operate;
+    }
+
+    public void setOperate(String operate) {
+        this.operate = operate;
+    }
 
     public Date getCreateTime() {
         return createTime;
@@ -227,21 +231,5 @@ public class ContractChangePlanDetailDto extends PageDto implements Serializable
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public String getStatusCd() {
-        return statusCd;
-    }
-
-    public void setStatusCd(String statusCd) {
-        this.statusCd = statusCd;
-    }
-
-    public String getOperate() {
-        return operate;
-    }
-
-    public void setOperate(String operate) {
-        this.operate = operate;
     }
 }

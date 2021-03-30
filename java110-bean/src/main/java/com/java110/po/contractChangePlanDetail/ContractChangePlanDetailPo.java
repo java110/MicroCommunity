@@ -29,19 +29,19 @@ public class ContractChangePlanDetailPo implements Serializable {
 
     private String operate;
 
-    public String getALink() {
+    public String getaLink() {
         return aLink;
     }
 
-    public void setALink(String aLink) {
+    public void setaLink(String aLink) {
         this.aLink = aLink;
     }
 
-    public String getAContacts() {
+    public String getaContacts() {
         return aContacts;
     }
 
-    public void setAContacts(String aContacts) {
+    public void setaContacts(String aContacts) {
         this.aContacts = aContacts;
     }
 
@@ -93,11 +93,11 @@ public class ContractChangePlanDetailPo implements Serializable {
         this.signingTime = signingTime;
     }
 
-    public String getBContacts() {
+    public String getbContacts() {
         return bContacts;
     }
 
-    public void setBContacts(String bContacts) {
+    public void setbContacts(String bContacts) {
         this.bContacts = bContacts;
     }
 
@@ -109,11 +109,11 @@ public class ContractChangePlanDetailPo implements Serializable {
         this.partyA = partyA;
     }
 
-    public String getBLink() {
+    public String getbLink() {
         return bLink;
     }
 
-    public void setBLink(String bLink) {
+    public void setbLink(String bLink) {
         this.bLink = bLink;
     }
 
