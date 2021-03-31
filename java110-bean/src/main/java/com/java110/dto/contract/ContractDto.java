@@ -47,6 +47,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String contractCode;
     private String objType;
     private String operatorLink;
+    private String contractParentId;
 
 
     private Date createTime;
@@ -271,5 +272,13 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setNoStates(String[] noStates) {
         this.noStates = noStates;
+    }
+
+    public String getContractParentId() {
+        return contractParentId;
+    }
+
+    public void setContractParentId(String contractParentId) {
+        this.contractParentId = contractParentId;
     }
 }

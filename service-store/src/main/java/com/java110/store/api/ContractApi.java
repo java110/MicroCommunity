@@ -171,6 +171,9 @@ public class ContractApi {
 
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
         contractPo.setStoreId(storeId);
+        if (reqJson.containsKey("contractParentId") || "-1".equals(reqJson.getString("contractParentId"))) {
+            contractPo.setContractParentId("-1");
+        }
         return saveContractBMOImpl.save(contractPo, reqJson);
     }
 

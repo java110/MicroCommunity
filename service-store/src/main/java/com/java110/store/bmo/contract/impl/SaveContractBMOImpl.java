@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
@@ -64,6 +65,15 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
         } else {
             contractPo.setState("11");
         }
+        //校验合同编号是否重复
+        ContractDto contractDto = new ContractDto();
+        contractDto.setStoreId(contractPo.getStoreId());
+        contractDto.setContractCode(contractPo.getContractCode());
+        List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
+
+        if (contractDtos != null && contractDtos.size() > 0) {
+            throw new IllegalArgumentException("合同" + "[" + contractPo.getContractCode() + "]已存在");
+        }
 
         contractPo.setContractId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractId));
         int flag = contractInnerServiceSMOImpl.saveContract(contractPo);
@@ -74,7 +84,7 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
         }
 
         if (StoreDto.STORE_ADMIN.equals(contractPo.getStoreId())) {
-            noticeRentUpdateState(contractPo,audit);
+            noticeRentUpdateState(contractPo, audit);
         }
 
 
@@ -102,7 +112,7 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
      *
      * @param contractPo
      */
-    private void noticeRentUpdateState(ContractPo contractPo,String audit) {
+    private void noticeRentUpdateState(ContractPo contractPo, String audit) {
 
         if (!contractPo.getObjType().equals(FeeDto.PAYER_OBJ_TYPE_ROOM)
                 || StringUtil.isEmpty(contractPo.getObjId())

@@ -8,9 +8,11 @@
     <!-- 保存合同管理信息 add by wuxw 2018-07-03 -->
     <insert id="saveContractInfo" parameterType="Map">
         insert into contract(
-        a_link,a_contacts,amount,contract_type,store_id,operator,signing_time,b_contacts,party_a,b_link,party_b,contract_id,obj_id,contract_name,start_time,end_time,state,contract_code,obj_type,operator_link
+        a_link,a_contacts,amount,contract_type,store_id,operator,signing_time,b_contacts,party_a,b_link,party_b,
+        contract_id,obj_id,contract_name,start_time,end_time,state,contract_code,obj_type,operator_link,contract_parent_id
         ) values (
-        #{aLink},#{aContacts},#{amount},#{contractType},#{storeId},#{operator},#{signingTime},#{bContacts},#{partyA},#{bLink},#{partyB},#{contractId},#{objId},#{contractName},#{startTime},#{endTime},#{state},#{contractCode},#{objType},#{operatorLink}
+        #{aLink},#{aContacts},#{amount},#{contractType},#{storeId},#{operator},#{signingTime},#{bContacts},#{partyA},#{bLink},#{partyB},
+        #{contractId},#{objId},#{contractName},#{startTime},#{endTime},#{state},#{contractCode},#{objType},#{operatorLink},#{contractParentId}
         )
     </insert>
 
@@ -25,7 +27,7 @@
         contractName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.state,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
         objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name`
-        stateName,t.state_desc stateDesc
+        stateName,t.state_desc stateDesc,t.contract_parent_id contractParentId
         from contract t
         LEFT JOIN contract_type ct on t.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id =
         t.store_id
@@ -99,6 +101,9 @@
         </if>
         <if test="operatorLink !=null and operatorLink != ''">
             and t.operator_link= #{operatorLink}
+        </if>
+        <if test="contractParentId !=null and contractParentId != ''">
+            and t.contract_parent_id= #{contractParentId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -254,6 +259,9 @@
         </if>
         <if test="operatorLink !=null and operatorLink != ''">
             and t.operator_link= #{operatorLink}
+        </if>
+        <if test="contractParentId !=null and contractParentId != ''">
+            and t.contract_parent_id= #{contractParentId}
         </if>
 
 
