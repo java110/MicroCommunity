@@ -23,6 +23,7 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
     private String planTypeName;
     private String contractId;
     private String planId;
+    private String[] planIds;
     private String remark;
     private String changePerson;
     private String changePersonName;
@@ -33,6 +34,8 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+
 
 
     public String getPlanType() {
@@ -122,5 +125,13 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
 
     public void setChangePersonName(String changePersonName) {
         this.changePersonName = changePersonName;
+    }
+
+    public String[] getPlanIds() {
+        return planIds;
+    }
+
+    public void setPlanIds(String[] planIds) {
+        this.planIds = planIds;
     }
 }

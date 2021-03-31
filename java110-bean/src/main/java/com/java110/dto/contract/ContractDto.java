@@ -37,6 +37,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String bLink;
     private String partyB;
     private String contractId;
+    private String[] contractIds;
     private String objId;
     private String contractName;
     private String startTime;
@@ -58,6 +59,17 @@ public class ContractDto extends PageDto implements Serializable {
 
     private String parentContractCode;
     private String parentContractName;
+
+
+    private String currentUserId;
+    private String processInstanceId;
+    private String taskId;
+    private String auditCode;
+    private String auditMessage;
+    private String staffId;
+    private String staffName;
+    private String staffTel;
+    private String startUserId;
 
     private List<ContractAttrDto> attrs;
 
@@ -299,5 +311,85 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setParentContractName(String parentContractName) {
         this.parentContractName = parentContractName;
+    }
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getAuditCode() {
+        return auditCode;
+    }
+
+    public void setAuditCode(String auditCode) {
+        this.auditCode = auditCode;
+    }
+
+    public String getAuditMessage() {
+        return auditMessage;
+    }
+
+    public void setAuditMessage(String auditMessage) {
+        this.auditMessage = auditMessage;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStaffTel() {
+        return staffTel;
+    }
+
+    public void setStaffTel(String staffTel) {
+        this.staffTel = staffTel;
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
+    }
+
+    public String[] getContractIds() {
+        return contractIds;
+    }
+
+    public void setContractIds(String[] contractIds) {
+        this.contractIds = contractIds;
     }
 }

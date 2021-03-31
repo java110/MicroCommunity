@@ -74,6 +74,12 @@
         <if test="contractId !=null and contractId != ''">
             and t.contract_id= #{contractId}
         </if>
+        <if test="contractIds !=null">
+            and t.contract_id in
+            <foreach collection="contractIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>

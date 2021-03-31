@@ -42,6 +42,12 @@
         <if test="planId !=null and planId != ''">
             and t.plan_id= #{planId}
         </if>
+        <if test="planIds !=null">
+            and t.plan_id in
+            <foreach collection="planIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>

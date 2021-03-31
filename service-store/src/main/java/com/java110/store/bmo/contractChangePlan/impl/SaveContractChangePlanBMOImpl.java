@@ -3,6 +3,8 @@ package com.java110.store.bmo.contractChangePlan.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.contract.ContractDto;
+import com.java110.dto.contractChangePlan.ContractChangePlanDto;
+import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
 import com.java110.intf.store.IContractChangePlanDetailInnerServiceSMO;
 import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
@@ -29,6 +31,9 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
 
     @Autowired
     private IContractInnerServiceSMO contractInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractChangeUserInnerServiceSMO contractChangeUserInnerServiceSMO;
 
     /**
      * 添加小区信息
@@ -70,6 +75,11 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
         if (flag < 1) {
             throw new IllegalArgumentException("保存变更记录失败");
         }
+
+        //提交流程
+        ContractChangePlanDto contractChangePlanDto = BeanConvertUtil.covertBean(contractChangePlanPo, ContractChangePlanDto.class);
+        contractChangePlanDto.setCurrentUserId(contractChangePlanPo.getChangePerson());
+        contractChangeUserInnerServiceSMO.startProcess(contractChangePlanDto);
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
     }

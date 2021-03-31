@@ -77,5 +77,4 @@ public class ContractChangePlanPo implements Serializable {
         this.storeId = storeId;
     }
 
-
 }

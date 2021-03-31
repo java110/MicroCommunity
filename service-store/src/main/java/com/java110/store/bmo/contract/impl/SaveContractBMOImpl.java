@@ -7,8 +7,10 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.store.StoreDto;
+import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.store.IContractTypeInnerServiceSMO;
@@ -18,6 +20,7 @@ import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.store.bmo.contract.ISaveContractBMO;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,9 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
     @Autowired
     private IRentingPoolInnerServiceSMO rentingPoolInnerServiceSMOImpl; // 房屋租赁
+
+    @Autowired
+    private IContractApplyUserInnerServiceSMO contractApplyUserInnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -75,13 +81,19 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             throw new IllegalArgumentException("合同" + "[" + contractPo.getContractCode() + "]已存在");
         }
 
+
+
         contractPo.setContractId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractId));
         int flag = contractInnerServiceSMOImpl.saveContract(contractPo);
 
         if (flag < 0) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
-
         }
+
+        //提交流程
+        ContractDto tmpContractDto = BeanConvertUtil.covertBean(contractPo, ContractDto.class);
+        tmpContractDto.setCurrentUserId(reqJson.getString("userId"));
+        contractApplyUserInnerServiceSMOImpl.startProcess(tmpContractDto);
 
         if (StoreDto.STORE_ADMIN.equals(contractPo.getStoreId())) {
             noticeRentUpdateState(contractPo, audit);

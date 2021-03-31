@@ -157,7 +157,9 @@ public class ContractApi {
      * @path /app/contract/saveContract
      */
     @RequestMapping(value = "/saveContract", method = RequestMethod.POST)
-    public ResponseEntity<String> saveContract(@RequestBody JSONObject reqJson, @RequestHeader(value = "store-id") String storeId) {
+    public ResponseEntity<String> saveContract(@RequestBody JSONObject reqJson,
+                                               @RequestHeader(value = "store-id") String storeId,
+                                               @RequestHeader(value = "user-id") String userId) {
 
         Assert.hasKeyAndValue(reqJson, "contractCode", "请求报文中未包含contractCode");
         Assert.hasKeyAndValue(reqJson, "contractName", "请求报文中未包含contractName");
@@ -179,6 +181,7 @@ public class ContractApi {
         if (!reqJson.containsKey("contractParentId") || "-1".equals(reqJson.getString("contractParentId"))) {
             contractPo.setContractParentId("-1");
         }
+        reqJson.put("userId",userId);
         return saveContractBMOImpl.save(contractPo, reqJson);
     }
 
@@ -657,6 +660,7 @@ public class ContractApi {
         ContractChangePlanPo contractChangePlanPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanPo.class);
         contractChangePlanPo.setStoreId(storeId);
         contractChangePlanPo.setChangePerson(userId);
+
         contractChangePlanPo.setState(ContractChangePlanDto.STATE_W);
         contractChangePlanPo.setRemark(reqJson.getString("changeRemark"));
 
