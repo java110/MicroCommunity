@@ -56,6 +56,9 @@ public class ContractDto extends PageDto implements Serializable {
     private String contractTypeName;
     private String stateName;
 
+    private String parentContractCode;
+    private String parentContractName;
+
     private List<ContractAttrDto> attrs;
 
     public String getaLink() {
@@ -280,5 +283,21 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setContractParentId(String contractParentId) {
         this.contractParentId = contractParentId;
+    }
+
+    public String getParentContractCode() {
+        return parentContractCode;
+    }
+
+    public void setParentContractCode(String parentContractCode) {
+        this.parentContractCode = parentContractCode;
+    }
+
+    public String getParentContractName() {
+        return parentContractName;
+    }
+
+    public void setParentContractName(String parentContractName) {
+        this.parentContractName = parentContractName;
     }
 }
