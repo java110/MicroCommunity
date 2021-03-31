@@ -795,12 +795,16 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContractChangePlanDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractChangePlanDetail(@RequestHeader(value = "store-id") String storeId,
+                                                                @RequestParam(value = "planId",required = false) String planId,
+                                                                @RequestParam(value = "contractId",required = false) String contractId,
                                                                 @RequestParam(value = "page") int page,
                                                                 @RequestParam(value = "row") int row) {
         ContractChangePlanDetailDto contractChangePlanDetailDto = new ContractChangePlanDetailDto();
         contractChangePlanDetailDto.setPage(page);
         contractChangePlanDetailDto.setRow(row);
         contractChangePlanDetailDto.setStoreId(storeId);
+        contractChangePlanDetailDto.setPlanId(planId);
+        contractChangePlanDetailDto.setContractId(contractId);
         return getContractChangePlanDetailBMOImpl.get(contractChangePlanDetailDto);
     }
 
