@@ -24,9 +24,11 @@
         partyB,t.contract_id,t.contract_id contractId,t.obj_id,t.obj_id objId,t.contract_name,t.contract_name
         contractName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.state,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
-        objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name` stateName,t.state_desc stateDesc
+        objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name`
+        stateName,t.state_desc stateDesc
         from contract t
-        LEFT JOIN contract_type ct on t.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id = t.store_id
+        LEFT JOIN contract_type ct on t.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id =
+        t.store_id
         LEFT JOIN t_dict td on td.status_cd = t.state and td.table_name = 'contract' and td.table_columns = 'state'
         where 1 =1
         <if test="aLink !=null and aLink != ''">
@@ -74,14 +76,20 @@
         <if test="contractName !=null and contractName != ''">
             and t.contract_name= #{contractName}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
-            and t.end_time= #{endTime}
+        <if test="endTime !=null ">
+            and t.end_time &lt;= #{endTime}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="noStates !=null ">
+            and t.state not in
+            <foreach collection="noStates" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="contractCode !=null and contractCode != ''">
             and t.contract_code= #{contractCode}
@@ -223,7 +231,7 @@
         <if test="contractName !=null and contractName != ''">
             and t.contract_name= #{contractName}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
         <if test="endTime !=null ">
