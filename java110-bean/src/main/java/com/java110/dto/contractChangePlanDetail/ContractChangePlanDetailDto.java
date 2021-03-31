@@ -30,6 +30,8 @@ public class ContractChangePlanDetailDto extends PageDto implements Serializable
     private String contractId;
     private String objId;
     private String planId;
+    private String planType;
+    private String planTypeName;
     private String contractName;
     private String startTime;
     private String endTime;
@@ -161,6 +163,14 @@ public class ContractChangePlanDetailDto extends PageDto implements Serializable
         this.planId = planId;
     }
 
+    public String getPlanTypeName() {
+        return planTypeName;
+    }
+
+    public void setPlanTypeName(String planTypeName) {
+        this.planTypeName = planTypeName;
+    }
+
     public String getContractName() {
         return contractName;
     }
@@ -231,5 +241,13 @@ public class ContractChangePlanDetailDto extends PageDto implements Serializable
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getPlanType() {
+        return planType;
+    }
+
+    public void setPlanType(String planType) {
+        this.planType = planType;
     }
 }

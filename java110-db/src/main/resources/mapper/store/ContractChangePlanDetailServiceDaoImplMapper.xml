@@ -27,8 +27,10 @@
         partyB,t.contract_id,t.contract_id contractId,t.obj_id,t.obj_id objId,t.plan_id,t.plan_id
         planId,t.contract_name,t.contract_name contractName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
-        objType,t.operator_link,t.operator_link operatorLink,t.operate
+        objType,t.operator_link,t.operator_link operatorLink,t.operate,td.`name` planTypeName,ccp.plan_type planType
         from contract_change_plan_detail t
+        inner join contract_change_plan ccp on t.plan_id = ccp.plan_id and ccp.status_cd = '0' and ccp.store_id = t.store_id
+        left join t_dict td on ccp.plan_type = td.status_cd and td.table_name = 'contract_change_plan' and td.table_columns = 'plan_type'
         where 1 =1
         <if test="aLink !=null and aLink != ''">
             and t.a_link= #{aLink}
