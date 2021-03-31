@@ -20,6 +20,7 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
     public static final String STATE_S = "22";//11 待审核 22 审核通过 33 审核失败
     public static final String STATE_F = "33";//11 待审核 22 审核通过 33 审核失败
     private String planType;
+    private String planTypeName;
     private String contractId;
     private String planId;
     private String remark;
@@ -104,5 +105,13 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPlanTypeName() {
+        return planTypeName;
+    }
+
+    public void setPlanTypeName(String planTypeName) {
+        this.planTypeName = planTypeName;
     }
 }
