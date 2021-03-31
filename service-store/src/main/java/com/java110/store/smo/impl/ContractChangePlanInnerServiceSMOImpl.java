@@ -4,7 +4,9 @@ package com.java110.store.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.store.dao.IContractChangePlanServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +30,9 @@ public class ContractChangePlanInnerServiceSMOImpl extends BaseServiceSMO implem
 
     @Autowired
     private IContractChangePlanServiceDao contractChangePlanServiceDaoImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
 
     @Override
@@ -64,7 +70,49 @@ public class ContractChangePlanInnerServiceSMOImpl extends BaseServiceSMO implem
 
         List<ContractChangePlanDto> contractChangePlans = BeanConvertUtil.covertBeanList(contractChangePlanServiceDaoImpl.getContractChangePlanInfo(BeanConvertUtil.beanCovertMap(contractChangePlanDto)), ContractChangePlanDto.class);
 
+        if (contractChangePlans == null || contractChangePlans.size() < 1) {
+            return contractChangePlans;
+        }
+        String[] userIds = getUserIds(contractChangePlans);
+
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (ContractChangePlanDto contractChangePlanDto1 : contractChangePlans) {
+            refreshContractChangePlan(contractChangePlanDto1, users);
+        }
         return contractChangePlans;
+    }
+
+
+    /**
+     * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
+     *
+     * @param users 用户列表
+     */
+    private void refreshContractChangePlan(ContractChangePlanDto contractChangePlanDto, List<UserDto> users) {
+        for (UserDto user : users) {
+            if (contractChangePlanDto.getChangePerson().equals(user.getUserId())) {
+                contractChangePlanDto.setChangePersonName(user.getUserName());
+            }
+        }
+    }
+
+    /**
+     * 获取批量userId
+     *
+     * @return 批量userIds 信息
+     */
+    private String[] getUserIds(List<ContractChangePlanDto> contractChangePlans) {
+        if (contractChangePlans == null || contractChangePlans.size() < 1) {
+            return null;
+        }
+        List<String> userIds = new ArrayList<String>();
+        for (ContractChangePlanDto contractChangePlanDto : contractChangePlans) {
+            userIds.add(contractChangePlanDto.getChangePerson());
+        }
+
+        return userIds.toArray(new String[userIds.size()]);
     }
 
 
