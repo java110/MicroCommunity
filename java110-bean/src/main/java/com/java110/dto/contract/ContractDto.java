@@ -17,6 +17,14 @@ import java.util.List;
  **/
 public class ContractDto extends PageDto implements Serializable {
 
+    /**
+     * 33	审核失败
+     * 44	合同终止
+     */
+    public static final String STATE_FAIL = "33";//33 44
+
+    public static final String STATE_COMPLAINT = "44"; //合同终止
+
     private String aLink;
     private String aContacts;
     private String amount;
@@ -34,6 +42,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
     private String state;
+    private String[] noStates;
     private String stateDesc;
     private String contractCode;
     private String objType;
@@ -254,5 +263,13 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setStateDesc(String stateDesc) {
         this.stateDesc = stateDesc;
+    }
+
+    public String[] getNoStates() {
+        return noStates;
+    }
+
+    public void setNoStates(String[] noStates) {
+        this.noStates = noStates;
     }
 }

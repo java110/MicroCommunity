@@ -51,14 +51,10 @@ import com.java110.store.bmo.contractTypeTemplate.ISaveContractTypeTemplateBMO;
 import com.java110.store.bmo.contractTypeTemplate.IUpdateContractTypeTemplateBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -251,7 +247,8 @@ public class ContractApi {
     /**
      * 微信删除消息模板
      *
-     * @param storeId 商户ID
+     * @param storeId    商户ID
+     * @param expiration 到期合同标记 1 到期合同
      * @return
      * @serviceCode /contract/queryContract
      * @path /app/contract/queryContract
@@ -259,6 +256,7 @@ public class ContractApi {
     @RequestMapping(value = "/queryContract", method = RequestMethod.GET)
     public ResponseEntity<String> queryContract(@RequestHeader(value = "store-id") String storeId,
                                                 @RequestParam(value = "state", required = false) String state,
+                                                @RequestParam(value = "expiration", required = false) String expiration,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         ContractDto contractDto = new ContractDto();
@@ -266,6 +264,11 @@ public class ContractApi {
         contractDto.setRow(row);
         contractDto.setStoreId(storeId);
         contractDto.setState(state);
+        //如果是到期合同
+        if ("1".equals(expiration)) {
+            contractDto.setNoStates(new String[]{ContractDto.STATE_COMPLAINT, ContractDto.STATE_FAIL});
+            contractDto.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        }
         return getContractBMOImpl.get(contractDto);
     }
 
@@ -628,9 +631,9 @@ public class ContractApi {
         contractChangePlanPo.setState(ContractChangePlanDto.STATE_W);
         contractChangePlanPo.setRemark(reqJson.getString("changeRemark"));
 
-        ContractChangePlanDetailPo contractChangePlanDetailPo = BeanConvertUtil.covertBean(reqJson,ContractChangePlanDetailPo.class);
+        ContractChangePlanDetailPo contractChangePlanDetailPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanDetailPo.class);
         contractChangePlanDetailPo.setStoreId(storeId);
-        return saveContractChangePlanBMOImpl.save(contractChangePlanPo,contractChangePlanDetailPo);
+        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo);
     }
 
     /**
@@ -686,9 +689,9 @@ public class ContractApi {
     public ResponseEntity<String> queryContractChangePlan(@RequestHeader(value = "store-id") String storeId,
                                                           @RequestParam(value = "page") int page,
                                                           @RequestParam(value = "row") int row,
-                                                          @RequestParam(value = "contractId",required = false) String contractId,
-                                                          @RequestParam(value = "contractName",required = false) String contractName,
-                                                          @RequestParam(value = "planId",required = false) String planId
+                                                          @RequestParam(value = "contractId", required = false) String contractId,
+                                                          @RequestParam(value = "contractName", required = false) String contractName,
+                                                          @RequestParam(value = "planId", required = false) String planId
     ) {
         ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
         contractChangePlanDto.setPage(page);
@@ -795,8 +798,8 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContractChangePlanDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractChangePlanDetail(@RequestHeader(value = "store-id") String storeId,
-                                                                @RequestParam(value = "planId",required = false) String planId,
-                                                                @RequestParam(value = "contractId",required = false) String contractId,
+                                                                @RequestParam(value = "planId", required = false) String planId,
+                                                                @RequestParam(value = "contractId", required = false) String contractId,
                                                                 @RequestParam(value = "page") int page,
                                                                 @RequestParam(value = "row") int row) {
         ContractChangePlanDetailDto contractChangePlanDetailDto = new ContractChangePlanDetailDto();

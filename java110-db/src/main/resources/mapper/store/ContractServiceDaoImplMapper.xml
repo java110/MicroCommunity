@@ -226,11 +226,17 @@
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
-            and t.end_time= #{endTime}
+        <if test="endTime !=null ">
+            and t.end_time &lt;= #{endTime}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="noStates !=null ">
+            and t.state not in
+            <foreach collection="noStates" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="contractCode !=null and contractCode != ''">
             and t.contract_code= #{contractCode}
