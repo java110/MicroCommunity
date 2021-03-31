@@ -79,6 +79,8 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         businesses.add(storeBMOImpl.addStaffOrg(paramObj));
         businesses.add(storeBMOImpl.addPurchase(paramObj));
         businesses.add(storeBMOImpl.addCollection(paramObj));
+        businesses.add(storeBMOImpl.contractApply(paramObj));
+        businesses.add(storeBMOImpl.contractChange(paramObj));
 
         //super.doResponse(dataFlowContext);
         ResponseEntity<String> responseEntity = storeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);

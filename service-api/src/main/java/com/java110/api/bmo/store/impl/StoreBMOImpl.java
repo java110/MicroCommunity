@@ -10,7 +10,11 @@ import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.po.org.OrgPo;
 import com.java110.po.org.OrgStaffRelPo;
-import com.java110.po.store.*;
+import com.java110.po.store.StoreAttrPo;
+import com.java110.po.store.StoreCerdentialPo;
+import com.java110.po.store.StorePhotoPo;
+import com.java110.po.store.StorePo;
+import com.java110.po.store.StoreUserPo;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -291,6 +295,57 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         workflowPo.setFlowId("-2");
         workflowPo.setFlowName("物品领用");
         workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
+        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+        workflowPo.setStoreId(paramInJson.getString("storeId"));
+        businessOrgStaffRels.add(JSONObject.parseObject(JSONObject.toJSONString(workflowPo)));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), businessOrgStaffRels);
+        return business;
+    }
+
+    /**
+     * 合同申请续签
+     *
+     * @param paramInJson
+     * @return
+     */
+    public JSONObject contractApply(JSONObject paramInJson) {
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 9);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONArray businessOrgStaffRels = new JSONArray();
+        WorkflowPo workflowPo = new WorkflowPo();
+        workflowPo.setCommunityId("9999"); //所有小区
+        workflowPo.setFlowId("-3");
+        workflowPo.setFlowName("合同申请续签");
+        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_CONTRACT_APPLY);
+        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+        workflowPo.setStoreId(paramInJson.getString("storeId"));
+        businessOrgStaffRels.add(JSONObject.parseObject(JSONObject.toJSONString(workflowPo)));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), businessOrgStaffRels);
+        return business;
+    }
+
+
+    /**
+     * 合同变更
+     *
+     * @param paramInJson
+     * @return
+     */
+    public JSONObject contractChange(JSONObject paramInJson) {
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 10);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONArray businessOrgStaffRels = new JSONArray();
+        WorkflowPo workflowPo = new WorkflowPo();
+        workflowPo.setCommunityId("9999"); //所有小区
+        workflowPo.setFlowId("-4");
+        workflowPo.setFlowName("合同变更");
+        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_CONTRACT_CHANGE);
         workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
         workflowPo.setStoreId(paramInJson.getString("storeId"));
         businessOrgStaffRels.add(JSONObject.parseObject(JSONObject.toJSONString(workflowPo)));
