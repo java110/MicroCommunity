@@ -1,6 +1,7 @@
 package com.java110.store.bmo.contract;
 
 import com.java110.dto.contract.ContractDto;
+import com.java110.entity.audit.AuditUser;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetContractBMO {
@@ -16,4 +17,7 @@ public interface IGetContractBMO {
     ResponseEntity<String> get(ContractDto contractDto);
 
 
+    ResponseEntity<String> queryContractTask(AuditUser auditUser);
+
+    ResponseEntity<String> queryContractHistoryTask(AuditUser auditUser);
 }

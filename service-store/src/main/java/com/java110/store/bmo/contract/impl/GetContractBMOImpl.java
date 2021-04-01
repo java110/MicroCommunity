@@ -1,11 +1,18 @@
 package com.java110.store.bmo.contract.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractAttr.ContractAttrDto;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.entity.audit.AuditUser;
+import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.store.bmo.contract.IGetContractBMO;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
+import com.java110.vo.api.resourceOrder.ApiResourceOrderDataVo;
+import com.java110.vo.api.resourceOrder.ApiResourceOrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +29,9 @@ public class GetContractBMOImpl implements IGetContractBMO {
 
     @Autowired
     private IContractAttrInnerServiceSMO contractAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractApplyUserInnerServiceSMO contractApplyUserInnerServiceSMOImpl;
 
     /**
      * @param contractDto
@@ -41,6 +51,45 @@ public class GetContractBMOImpl implements IGetContractBMO {
         }
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) contractDto.getRow()), count, contractDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> queryContractTask(AuditUser auditUser) {
+        long count = contractApplyUserInnerServiceSMOImpl.getUserTaskCount(auditUser);
+
+        List<ContractDto> contractDtos = null;
+
+        if (count > 0) {
+            List<ContractDto> purchaseApplyDtos = contractApplyUserInnerServiceSMOImpl.getUserTasks(auditUser);
+            contractDtos = BeanConvertUtil.covertBeanList(purchaseApplyDtos, ContractDto.class);
+        } else {
+            contractDtos = new ArrayList<>();
+        }
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) auditUser.getRow()), new Long(count).intValue(), contractDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> queryContractHistoryTask(AuditUser auditUser) {
+
+        long count = contractApplyUserInnerServiceSMOImpl.getUserHistoryTaskCount(auditUser);
+
+        List<ContractDto> contractDtos = null;
+
+        if (count > 0) {
+            List<ContractDto> purchaseApplyDtos = contractApplyUserInnerServiceSMOImpl.getUserHistoryTasks(auditUser);
+            contractDtos = BeanConvertUtil.covertBeanList(purchaseApplyDtos, ContractDto.class);
+        } else {
+            contractDtos = new ArrayList<>();
+        }
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) auditUser.getRow()), new Long(count).intValue(), contractDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

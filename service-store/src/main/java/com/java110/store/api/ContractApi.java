@@ -9,6 +9,7 @@ import com.java110.dto.contractChangePlanDetailAttr.ContractChangePlanDetailAttr
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.contractTypeSpec.ContractTypeSpecDto;
 import com.java110.dto.contractTypeTemplate.ContractTypeTemplateDto;
+import com.java110.entity.audit.AuditUser;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
@@ -54,12 +55,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -181,7 +177,7 @@ public class ContractApi {
         if (!reqJson.containsKey("contractParentId") || "-1".equals(reqJson.getString("contractParentId"))) {
             contractPo.setContractParentId("-1");
         }
-        reqJson.put("userId",userId);
+        reqJson.put("userId", userId);
         return saveContractBMOImpl.save(contractPo, reqJson);
     }
 
@@ -303,6 +299,54 @@ public class ContractApi {
         }
         return getContractBMOImpl.get(contractDto);
     }
+
+    /**
+     * 合同起草待办
+     *
+     * @param storeId    商户ID
+     * @return
+     * @serviceCode /contract/queryContractTask
+     * @path /app/contract/queryContractTask
+     */
+    @RequestMapping(value = "/queryContractTask", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractTask(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestHeader(value = "user-id") String userId,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(userId);
+        auditUser.setPage(page);
+        auditUser.setRow(row);
+        auditUser.setStoreId(storeId);
+
+        return getContractBMOImpl.queryContractTask(auditUser);
+    }
+
+    /**
+     * 合同起草已办
+     *
+     * @param storeId    商户ID
+     * @return
+     * @serviceCode /contract/queryContractHistoryTask
+     * @path /app/contract/queryContractHistoryTask
+     */
+    @RequestMapping(value = "/queryContractHistoryTask", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractHistoryTask(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestHeader(value = "user-id") String userId,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
+
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(userId);
+        auditUser.setPage(page);
+        auditUser.setRow(row);
+        auditUser.setStoreId(storeId);
+
+        return getContractBMOImpl.queryContractHistoryTask(auditUser);
+    }
+
+
 
     /**
      * 微信保存消息模板
