@@ -9,10 +9,12 @@
     <insert id="saveContractInfo" parameterType="Map">
         insert into contract(
         a_link,a_contacts,amount,contract_type,store_id,operator,signing_time,b_contacts,party_a,b_link,party_b,
-        contract_id,obj_id,contract_name,start_time,end_time,state,contract_code,obj_type,operator_link,contract_parent_id
+        contract_id,obj_id,contract_name,start_time,end_time,state,contract_code,obj_type,operator_link,contract_parent_id,
+        obj_name, obj_person_name, obj_person_id
         ) values (
         #{aLink},#{aContacts},#{amount},#{contractType},#{storeId},#{operator},#{signingTime},#{bContacts},#{partyA},#{bLink},#{partyB},
-        #{contractId},#{objId},#{contractName},#{startTime},#{endTime},#{state},#{contractCode},#{objType},#{operatorLink},#{contractParentId}
+        #{contractId},#{objId},#{contractName},#{startTime},#{endTime},#{state},#{contractCode},#{objType},#{operatorLink},#{contractParentId},
+        #{objName}, #{objPersonName}, #{objPersonId}
         )
     </insert>
 
@@ -28,7 +30,7 @@
         endTime,t.state,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
         objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name`
         stateName,t.state_desc stateDesc,t.contract_parent_id contractParentId,tt.contract_code parentContractCode,
-        tt.contract_name parentContractName
+        tt.contract_name parentContractName,t.obj_name objName, t.obj_person_name objPersonName, t.obj_person_id objPersonId
         from contract t
         LEFT JOIN contract_type ct on t.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id =
         t.store_id
@@ -82,6 +84,9 @@
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
+        </if>
+        <if test="objPersonId !=null and objPersonId != ''">
+            and t.obj_person_id= #{objPersonId}
         </if>
         <if test="contractName !=null and contractName != ''">
             and t.contract_name= #{contractName}
@@ -163,6 +168,15 @@
         <if test="objId !=null and objId != ''">
             , t.obj_id= #{objId}
         </if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="objPersonId !=null and objPersonId != ''">
+            , t.obj_person_id= #{objPersonId}
+        </if>
+        <if test="objPersonName !=null and objPersonName != ''">
+            , t.obj_person_name= #{objPersonName}
+        </if>
         <if test="contractName !=null and contractName != ''">
             , t.contract_name= #{contractName}
         </if>
@@ -240,6 +254,9 @@
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
+        </if>
+        <if test="objPersonId !=null and objPersonId != ''">
+            and t.obj_person_id= #{objPersonId}
         </if>
         <if test="contractName !=null and contractName != ''">
             and t.contract_name= #{contractName}
