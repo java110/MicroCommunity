@@ -567,7 +567,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
 
 
         ContractDto contractDto = new ContractDto();
-        contractDto.setContractId(searchValue);
+        contractDto.setContractCode(searchValue);
         contractDto.setStoreId(storeId);
         List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
         Assert.listOnlyOne(contractDtos, "未找到合同信息");
