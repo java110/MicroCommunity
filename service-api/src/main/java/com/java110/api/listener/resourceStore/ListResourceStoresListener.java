@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 查询小区侦听类
  */
@@ -40,12 +39,10 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
         return HttpMethod.GET;
     }
 
-
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
     public IResourceStoreInnerServiceSMO getResourceStoreInnerServiceSMOImpl() {
         return resourceStoreInnerServiceSMOImpl;
@@ -64,28 +61,27 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         ResourceStoreDto resourceStoreDto = BeanConvertUtil.covertBean(reqJson, ResourceStoreDto.class);
-
         int count = resourceStoreInnerServiceSMOImpl.queryResourceStoresCount(resourceStoreDto);
-
-        List<ApiResourceStoreDataVo> resourceStores = null;
-
+        List<ApiResourceStoreDataVo> resourceStores = new ArrayList<>();
         if (count > 0) {
-            resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
+            List<ApiResourceStoreDataVo> apiResourceStoreDataVos = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
+            for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
+                if (apiResourceStoreDataVo.getOutLowPrice().equals(apiResourceStoreDataVo.getOutHighPrice())) {
+                    apiResourceStoreDataVo.setOutPrice(apiResourceStoreDataVo.getOutLowPrice() + "元");
+                } else {
+                    apiResourceStoreDataVo.setOutPrice(apiResourceStoreDataVo.getOutLowPrice() + "元-" + apiResourceStoreDataVo.getOutHighPrice() + "元");
+                }
+                resourceStores.add(apiResourceStoreDataVo);
+            }
         } else {
             resourceStores = new ArrayList<>();
         }
-
         ApiResourceStoreVo apiResourceStoreVo = new ApiResourceStoreVo();
-
         apiResourceStoreVo.setTotal(count);
         apiResourceStoreVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiResourceStoreVo.setResourceStores(resourceStores);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiResourceStoreVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 }

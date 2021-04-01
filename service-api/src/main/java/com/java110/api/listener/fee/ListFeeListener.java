@@ -106,26 +106,18 @@ public class ListFeeListener extends AbstractServiceApiListener {
             computeFeePrice(feeDtos);
             fees = BeanConvertUtil.covertBeanList(feeDtos, ApiFeeDataVo.class);
             freshFeeAttrs(fees, feeDtos);
-
-
         } else {
             fees = new ArrayList<>();
         }
-
         ApiFeeVo apiFeeVo = new ApiFeeVo();
-
         apiFeeVo.setTotal(count);
         apiFeeVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiFeeVo.setFees(fees);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 
     private void freshFeeAttrs(List<ApiFeeDataVo> fees, List<FeeDto> feeDtos) {
-
         for (ApiFeeDataVo apiFeeDataVo : fees) {
             for (FeeDto feeDto : feeDtos) {
                 if (apiFeeDataVo.getFeeId().equals(feeDto.getFeeId())) {
@@ -136,7 +128,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
     }
 
     private void computeFeePrice(List<FeeDto> feeDtos) {
-
         for (FeeDto feeDto : feeDtos) {
             try {
                 // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
@@ -155,7 +146,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
             }
         }
     }
-
 
     private void computeFeePriceByCar(FeeDto feeDto, double oweMonth) {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
@@ -205,5 +195,4 @@ public class ListFeeListener extends AbstractServiceApiListener {
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
     }
-
 }

@@ -1,9 +1,10 @@
 package com.java110.store.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.purchase.ResourceStorePo;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,9 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Override
     public List<ResourceStoreDto> queryResourceStores(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
 
@@ -48,8 +53,26 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
         }
 
         List<ResourceStoreDto> resourceResourceStores = BeanConvertUtil.covertBeanList(resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto)), ResourceStoreDto.class);
-
-        return resourceResourceStores;
+        //获取图片地址
+        List<ResourceStoreDto> resourceStoreDtos = new ArrayList<>();
+        for (ResourceStoreDto resourceStoreDto : resourceResourceStores) {
+            //获取资源id
+            String resId = resourceStoreDto.getResId();
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(resId);
+            //查询文件表
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            if (fileRelDtos != null && fileRelDtos.size() > 0) {
+                List<String> fileUrls = new ArrayList<>();
+                for (FileRelDto fileRel : fileRelDtos) {
+                    String url = "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                    fileUrls.add(url);
+                }
+                resourceStoreDto.setFileUrls(fileUrls);
+            }
+            resourceStoreDtos.add(resourceStoreDto);
+        }
+        return resourceStoreDtos;
     }
 
 
@@ -86,7 +109,6 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             DistributedLock.releaseDistributedLock(requestId, key);
         }
     }
-
 
     public IResourceStoreServiceDao getResourceStoreServiceDaoImpl() {
         return resourceResourceStoreServiceDaoImpl;

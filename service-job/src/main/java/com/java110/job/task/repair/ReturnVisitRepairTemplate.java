@@ -38,10 +38,8 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
     @Override
     protected void process(TaskDto taskDto) {
         logger.debug("开始执行微信模板信息推送" + taskDto.toString());
-
         // 获取小区
         List<CommunityDto> communityDtos = getAllCommunity();
-
         for (CommunityDto communityDto : communityDtos) {
             try {
                 returnVisitRepair(taskDto, communityDto);
@@ -66,13 +64,9 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
         repairDto.setRow(100);
         //查询需要程序轮训派单 订单
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
-
         for (RepairDto tmpRepairDto : repairDtos) {
-
             doReturnVisitRepair(tmpRepairDto);
-
         }
-
     }
 
     /**
@@ -81,7 +75,6 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
      * @param tmpRepairDto
      */
     private void doReturnVisitRepair(RepairDto tmpRepairDto) {
-
         if ("001".equals(tmpRepairDto.getReturnVisitFlag())) {
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(tmpRepairDto.getRepairId());
@@ -90,7 +83,6 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
             repairInnerServiceSMOImpl.updateRepair(repairPoolPo);
             return;
         }
-
         if ("002".equals(tmpRepairDto.getReturnVisitFlag()) && RepairDto.STATE_APPRAISE.equals(tmpRepairDto.getState())) {
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(tmpRepairDto.getRepairId());
@@ -99,9 +91,5 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
             repairInnerServiceSMOImpl.updateRepair(repairPoolPo);
             return;
         }
-
-
     }
-
-
 }

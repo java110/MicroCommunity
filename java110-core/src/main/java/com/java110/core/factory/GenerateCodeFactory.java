@@ -190,7 +190,6 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_planId = "24";
 
 
-
     /**
      * 只有在不调用服务生成ID时有用
      */
@@ -320,6 +319,34 @@ public class GenerateCodeFactory {
      * @throws GenerateCodeException
      */
     public static String getPsId(String prefix) throws GenerateCodeException {
+        if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+        }
+        //调用服务
+        return getCode(prefix);
+    }
+
+    /**
+     * 获取资源ID
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getResId(String prefix) throws GenerateCodeException {
+        if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+        }
+        //调用服务
+        return getCode(prefix);
+    }
+
+    /**
+     * 生成费用id
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getFeeId(String prefix) throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
             return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
         }
@@ -840,7 +867,6 @@ public class GenerateCodeFactory {
         //调用服务
         return getCode(prefixMap.get("pgId"));
     }
-
 
     /**
      * 获取restTemplate

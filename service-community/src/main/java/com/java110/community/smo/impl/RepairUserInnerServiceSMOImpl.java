@@ -1,6 +1,5 @@
 package com.java110.community.smo.impl;
 
-
 import com.java110.community.dao.IRepairUserServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
@@ -8,6 +7,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +34,7 @@ public class RepairUserInnerServiceSMOImpl extends BaseServiceSMO implements IRe
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<RepairUserDto> queryRepairUsers(@RequestBody  RepairUserDto repairUserDto) {
+    public List<RepairUserDto> queryRepairUsers(@RequestBody RepairUserDto repairUserDto) {
 
         //校验是否传了 分页信息
 
@@ -64,7 +64,7 @@ public class RepairUserInnerServiceSMOImpl extends BaseServiceSMO implements IRe
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
      * @param repairUser 小区报修派单信息
-     * @param users 用户列表
+     * @param users      用户列表
      */
     private void refreshRepairUser(RepairUserDto repairUser, List<UserDto> users) {
         for (UserDto user : users) {
@@ -91,7 +91,13 @@ public class RepairUserInnerServiceSMOImpl extends BaseServiceSMO implements IRe
 
     @Override
     public int queryRepairUsersCount(@RequestBody RepairUserDto repairUserDto) {
-        return repairUserServiceDaoImpl.queryRepairUsersCount(BeanConvertUtil.beanCovertMap(repairUserDto));    }
+        return repairUserServiceDaoImpl.queryRepairUsersCount(BeanConvertUtil.beanCovertMap(repairUserDto));
+    }
+
+    @Override
+    public void saveRepairUser(RepairUserPo repairUserPo) {
+        repairUserServiceDaoImpl.saveRepairUserInfoInstance(BeanConvertUtil.beanCovertMap(repairUserPo));
+    }
 
     public IRepairUserServiceDao getRepairUserServiceDaoImpl() {
         return repairUserServiceDaoImpl;

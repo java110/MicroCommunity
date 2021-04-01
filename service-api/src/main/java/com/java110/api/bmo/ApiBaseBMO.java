@@ -261,6 +261,18 @@ public class ApiBaseBMO implements IApiBaseBMO{
     /**
      * 新增数据方法
      *
+     * {
+     *     HTTP_BUSINESS_TYPE_CD:''.
+     *    HTTP_SEQ:1,
+     *    HTTP_INVOKE_MODEL:'s',
+     *    data:[{
+     *        ps:Id
+     *        xxxxx
+     *        xxxx
+     *
+     *    }]
+     * }
+     *
      * @param context 上下文对象
      * @param param   po对象
      */
