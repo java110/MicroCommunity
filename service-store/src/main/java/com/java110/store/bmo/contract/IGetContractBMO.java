@@ -16,8 +16,12 @@ public interface IGetContractBMO {
      */
     ResponseEntity<String> get(ContractDto contractDto);
 
-
     ResponseEntity<String> queryContractTask(AuditUser auditUser);
 
     ResponseEntity<String> queryContractHistoryTask(AuditUser auditUser);
+
+    ResponseEntity<String> queryContractChangeTask(AuditUser auditUser);
+
+    ResponseEntity<String> queryContractChangeHistoryTask(AuditUser auditUser);
+
 }

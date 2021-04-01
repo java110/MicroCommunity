@@ -143,6 +143,7 @@ public class ContractApi {
 
     @Autowired
     private IPrintContractTemplateBMO printContractTemplateBMO;
+
     /**
      * 微信保存消息模板
      *
@@ -302,7 +303,7 @@ public class ContractApi {
     /**
      * 合同起草待办
      *
-     * @param storeId    商户ID
+     * @param storeId 商户ID
      * @return
      * @serviceCode /contract/queryContractTask
      * @path /app/contract/queryContractTask
@@ -324,16 +325,16 @@ public class ContractApi {
     /**
      * 合同起草已办
      *
-     * @param storeId    商户ID
+     * @param storeId 商户ID
      * @return
      * @serviceCode /contract/queryContractHistoryTask
      * @path /app/contract/queryContractHistoryTask
      */
     @RequestMapping(value = "/queryContractHistoryTask", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractHistoryTask(@RequestHeader(value = "store-id") String storeId,
-                                                    @RequestHeader(value = "user-id") String userId,
-                                                    @RequestParam(value = "page") int page,
-                                                    @RequestParam(value = "row") int row) {
+                                                           @RequestHeader(value = "user-id") String userId,
+                                                           @RequestParam(value = "page") int page,
+                                                           @RequestParam(value = "row") int row) {
 
 
         AuditUser auditUser = new AuditUser();
@@ -345,7 +346,50 @@ public class ContractApi {
         return getContractBMOImpl.queryContractHistoryTask(auditUser);
     }
 
+    /**
+     * 合同变更待办
+     *
+     * @param storeId 商户ID
+     * @return
+     * @serviceCode /contract/queryContractChangeTask
+     * @path /app/contract/queryContractChangeTask
+     */
+    @RequestMapping(value = "/queryContractChangeTask", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractChangeTask(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestHeader(value = "user-id") String userId,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(userId);
+        auditUser.setPage(page);
+        auditUser.setRow(row);
+        auditUser.setStoreId(storeId);
 
+        return getContractBMOImpl.queryContractChangeTask(auditUser);
+    }
+
+    /**
+     * 合同变更已办
+     *
+     * @param storeId 商户ID
+     * @return
+     * @serviceCode /contract/queryContractChangeHistoryTask
+     * @path /app/contract/queryContractChangeHistoryTask
+     */
+    @RequestMapping(value = "/queryContractChangeHistoryTask", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractChangeHistoryTask(@RequestHeader(value = "store-id") String storeId,
+                                                           @RequestHeader(value = "user-id") String userId,
+                                                           @RequestParam(value = "page") int page,
+                                                           @RequestParam(value = "row") int row) {
+
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(userId);
+        auditUser.setPage(page);
+        auditUser.setRow(row);
+        auditUser.setStoreId(storeId);
+        return getContractBMOImpl.queryContractChangeHistoryTask(auditUser);
+    }
 
     /**
      * 微信保存消息模板
@@ -1000,7 +1044,7 @@ public class ContractApi {
         contractTypeSpecDto.setStoreId(storeId);
         contractTypeSpecDto.setContractTypeId(contractTypeId);
 
-        return printContractTemplateBMO.get(contractTypeTemplateDto,contractDto,contractTypeSpecDto);
+        return printContractTemplateBMO.get(contractTypeTemplateDto, contractDto, contractTypeSpecDto);
     }
 
 
