@@ -46,10 +46,7 @@ import com.java110.store.bmo.contractTypeSpec.IDeleteContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.IGetContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.ISaveContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.IUpdateContractTypeSpecBMO;
-import com.java110.store.bmo.contractTypeTemplate.IDeleteContractTypeTemplateBMO;
-import com.java110.store.bmo.contractTypeTemplate.IGetContractTypeTemplateBMO;
-import com.java110.store.bmo.contractTypeTemplate.ISaveContractTypeTemplateBMO;
-import com.java110.store.bmo.contractTypeTemplate.IUpdateContractTypeTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.*;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -144,6 +141,8 @@ public class ContractApi {
     @Autowired
     private IGetContractChangePlanDetailAttrBMO getContractChangePlanDetailAttrBMOImpl;
 
+    @Autowired
+    private IPrintContractTemplateBMO printContractTemplateBMO;
     /**
      * 微信保存消息模板
      *
@@ -968,5 +967,41 @@ public class ContractApi {
         contractChangePlanDetailAttrDto.setStoreId(storeId);
         return getContractChangePlanDetailAttrBMOImpl.get(contractChangePlanDetailAttrDto);
     }
+
+    /**
+     * 合同打印
+     *
+     * @param storeId 商户ID
+     * @return
+     * @serviceCode /contract/printContractTemplate
+     * @path /app/contract/printContractTemplate
+     */
+    @RequestMapping(value = "/printContractTemplate", method = RequestMethod.GET)
+    public ResponseEntity<String> printContractTemplate(@RequestHeader(value = "store-id") String storeId,
+                                                        @RequestParam(value = "contractTypeId", required = false) String contractTypeId,
+                                                        @RequestParam(value = "contractId", required = false) String contractId,
+                                                        @RequestParam(value = "page") int page,
+                                                        @RequestParam(value = "row") int row) {
+        ContractTypeTemplateDto contractTypeTemplateDto = new ContractTypeTemplateDto();
+        contractTypeTemplateDto.setPage(page);
+        contractTypeTemplateDto.setRow(row);
+        contractTypeTemplateDto.setStoreId(storeId);
+        contractTypeTemplateDto.setContractTypeId(contractTypeId);
+
+        ContractDto contractDto = new ContractDto();
+        contractDto.setPage(page);
+        contractDto.setRow(row);
+        contractDto.setStoreId(storeId);
+        contractDto.setContractId(contractId);
+
+        ContractTypeSpecDto contractTypeSpecDto = new ContractTypeSpecDto();
+        contractTypeSpecDto.setPage(page);
+        contractTypeSpecDto.setRow(100);
+        contractTypeSpecDto.setStoreId(storeId);
+        contractTypeSpecDto.setContractTypeId(contractTypeId);
+
+        return printContractTemplateBMO.get(contractTypeTemplateDto,contractDto,contractTypeSpecDto);
+    }
+
 
 }
