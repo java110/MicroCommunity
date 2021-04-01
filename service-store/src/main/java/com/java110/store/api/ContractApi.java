@@ -6,6 +6,7 @@ import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
 import com.java110.dto.contractChangePlanDetail.ContractChangePlanDetailDto;
 import com.java110.dto.contractChangePlanDetailAttr.ContractChangePlanDetailAttrDto;
+import com.java110.dto.contractCollectionPlan.ContractCollectionPlanDto;
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.contractTypeSpec.ContractTypeSpecDto;
 import com.java110.dto.contractTypeTemplate.ContractTypeTemplateDto;
@@ -15,6 +16,7 @@ import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
 import com.java110.po.contractChangePlanDetailAttr.ContractChangePlanDetailAttrPo;
+import com.java110.po.contractCollectionPlan.ContractCollectionPlanPo;
 import com.java110.po.contractType.ContractTypePo;
 import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
 import com.java110.po.contractTypeTemplate.ContractTypeTemplatePo;
@@ -38,6 +40,10 @@ import com.java110.store.bmo.contractChangePlanDetailAttr.IDeleteContractChangeP
 import com.java110.store.bmo.contractChangePlanDetailAttr.IGetContractChangePlanDetailAttrBMO;
 import com.java110.store.bmo.contractChangePlanDetailAttr.ISaveContractChangePlanDetailAttrBMO;
 import com.java110.store.bmo.contractChangePlanDetailAttr.IUpdateContractChangePlanDetailAttrBMO;
+import com.java110.store.bmo.contractCollectionPlan.IDeleteContractCollectionPlanBMO;
+import com.java110.store.bmo.contractCollectionPlan.IGetContractCollectionPlanBMO;
+import com.java110.store.bmo.contractCollectionPlan.ISaveContractCollectionPlanBMO;
+import com.java110.store.bmo.contractCollectionPlan.IUpdateContractCollectionPlanBMO;
 import com.java110.store.bmo.contractType.IDeleteContractTypeBMO;
 import com.java110.store.bmo.contractType.IGetContractTypeBMO;
 import com.java110.store.bmo.contractType.ISaveContractTypeBMO;
@@ -46,13 +52,22 @@ import com.java110.store.bmo.contractTypeSpec.IDeleteContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.IGetContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.ISaveContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.IUpdateContractTypeSpecBMO;
-import com.java110.store.bmo.contractTypeTemplate.*;
+import com.java110.store.bmo.contractTypeTemplate.IDeleteContractTypeTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.IGetContractTypeTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.IPrintContractTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.ISaveContractTypeTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.IUpdateContractTypeTemplateBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -143,6 +158,17 @@ public class ContractApi {
 
     @Autowired
     private IPrintContractTemplateBMO printContractTemplateBMO;
+
+
+    @Autowired
+    private ISaveContractCollectionPlanBMO saveContractCollectionPlanBMOImpl;
+    @Autowired
+    private IUpdateContractCollectionPlanBMO updateContractCollectionPlanBMOImpl;
+    @Autowired
+    private IDeleteContractCollectionPlanBMO deleteContractCollectionPlanBMOImpl;
+
+    @Autowired
+    private IGetContractCollectionPlanBMO getContractCollectionPlanBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -285,7 +311,7 @@ public class ContractApi {
     public ResponseEntity<String> queryContract(@RequestHeader(value = "store-id") String storeId,
                                                 @RequestParam(value = "state", required = false) String state,
                                                 @RequestParam(value = "expiration", required = false) String expiration,
-                                                @RequestParam(value = "objId",required = false) String objId,
+                                                @RequestParam(value = "objId", required = false) String objId,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         ContractDto contractDto = new ContractDto();
@@ -358,9 +384,9 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContractChangeTask", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractChangeTask(@RequestHeader(value = "store-id") String storeId,
-                                                    @RequestHeader(value = "user-id") String userId,
-                                                    @RequestParam(value = "page") int page,
-                                                    @RequestParam(value = "row") int row) {
+                                                          @RequestHeader(value = "user-id") String userId,
+                                                          @RequestParam(value = "page") int page,
+                                                          @RequestParam(value = "row") int row) {
         AuditUser auditUser = new AuditUser();
         auditUser.setUserId(userId);
         auditUser.setPage(page);
@@ -380,9 +406,9 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContractChangeHistoryTask", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractChangeHistoryTask(@RequestHeader(value = "store-id") String storeId,
-                                                           @RequestHeader(value = "user-id") String userId,
-                                                           @RequestParam(value = "page") int page,
-                                                           @RequestParam(value = "row") int row) {
+                                                                 @RequestHeader(value = "user-id") String userId,
+                                                                 @RequestParam(value = "page") int page,
+                                                                 @RequestParam(value = "row") int row) {
 
 
         AuditUser auditUser = new AuditUser();
@@ -1047,6 +1073,94 @@ public class ContractApi {
         contractTypeSpecDto.setContractTypeId(contractTypeId);
 
         return printContractTemplateBMO.get(contractTypeTemplateDto, contractDto, contractTypeSpecDto);
+    }
+
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/saveContractCollectionPlan
+     * @path /app/contract/saveContractCollectionPlan
+     */
+    @RequestMapping(value = "/saveContractCollectionPlan", method = RequestMethod.POST)
+    public ResponseEntity<String> saveContractCollectionPlan(@RequestHeader(value = "store-id") String storeId,
+                                                             @RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "contractId", "请求报文中未包含contractId");
+        Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "planName", "请求报文中未包含planName");
+
+
+        ContractCollectionPlanPo contractCollectionPlanPo = BeanConvertUtil.covertBean(reqJson, ContractCollectionPlanPo.class);
+        contractCollectionPlanPo.setStoreId(storeId);
+        return saveContractCollectionPlanBMOImpl.save(contractCollectionPlanPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/updateContractCollectionPlan
+     * @path /app/contract/updateContractCollectionPlan
+     */
+    @RequestMapping(value = "/updateContractCollectionPlan", method = RequestMethod.POST)
+    public ResponseEntity<String> updateContractCollectionPlan(@RequestHeader(value = "store-id") String storeId,
+                                                               @RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "contractId", "请求报文中未包含contractId");
+        Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "planName", "请求报文中未包含planName");
+        Assert.hasKeyAndValue(reqJson, "planId", "planId不能为空");
+
+
+        ContractCollectionPlanPo contractCollectionPlanPo = BeanConvertUtil.covertBean(reqJson, ContractCollectionPlanPo.class);
+        contractCollectionPlanPo.setStoreId(storeId);
+        return updateContractCollectionPlanBMOImpl.update(contractCollectionPlanPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/deleteContractCollectionPlan
+     * @path /app/contract/deleteContractCollectionPlan
+     */
+    @RequestMapping(value = "/deleteContractCollectionPlan", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteContractCollectionPlan(@RequestHeader(value = "store-id") String storeId,
+                                                               @RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "planId", "planId不能为空");
+
+
+        ContractCollectionPlanPo contractCollectionPlanPo = BeanConvertUtil.covertBean(reqJson, ContractCollectionPlanPo.class);
+        contractCollectionPlanPo.setStoreId(storeId);
+        return deleteContractCollectionPlanBMOImpl.delete(contractCollectionPlanPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 商户ID
+     * @return
+     * @serviceCode /contract/queryContractCollectionPlan
+     * @path /app/contract/queryContractCollectionPlan
+     */
+    @RequestMapping(value = "/queryContractCollectionPlan", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractCollectionPlan(@RequestHeader(value = "store-id") String storeId,
+                                                              @RequestParam(value = "communityId") String communityId,
+                                                              @RequestParam(value = "page") int page,
+                                                              @RequestParam(value = "row") int row) {
+        ContractCollectionPlanDto contractCollectionPlanDto = new ContractCollectionPlanDto();
+        contractCollectionPlanDto.setPage(page);
+        contractCollectionPlanDto.setRow(row);
+        contractCollectionPlanDto.setStoreId(storeId);
+        return getContractCollectionPlanBMOImpl.get(contractCollectionPlanDto);
     }
 
 
