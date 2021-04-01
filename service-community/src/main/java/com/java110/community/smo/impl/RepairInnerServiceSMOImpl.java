@@ -1,6 +1,5 @@
 package com.java110.community.smo.impl;
 
-
 import com.java110.community.dao.IRepairServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
@@ -34,21 +33,14 @@ public class RepairInnerServiceSMOImpl extends BaseServiceSMO implements IRepair
 
     @Override
     public List<RepairDto> queryRepairs(@RequestBody RepairDto repairDto) {
-
         //校验是否传了 分页信息
-
         int page = repairDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             repairDto.setPage((page - 1) * repairDto.getRow());
         }
-
         List<RepairDto> repairs = BeanConvertUtil.covertBeanList(repairServiceDaoImpl.getRepairInfo(BeanConvertUtil.beanCovertMap(repairDto)), RepairDto.class);
-
-
         return repairs;
     }
-
 
     @Override
     public int queryRepairsCount(@RequestBody RepairDto repairDto) {
@@ -58,16 +50,11 @@ public class RepairInnerServiceSMOImpl extends BaseServiceSMO implements IRepair
     @Override
     public List<RepairDto> queryStaffRepairs(@RequestBody RepairDto repairDto) {
         //校验是否传了 分页信息
-
         int page = repairDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             repairDto.setPage((page - 1) * repairDto.getRow());
         }
-
         List<RepairDto> repairs = BeanConvertUtil.covertBeanList(repairServiceDaoImpl.getStaffRepairInfo(BeanConvertUtil.beanCovertMap(repairDto)), RepairDto.class);
-
-
         return repairs;
     }
 
@@ -78,16 +65,11 @@ public class RepairInnerServiceSMOImpl extends BaseServiceSMO implements IRepair
 
     @Override
     public List<RepairDto> queryStaffFinishRepairs(@RequestBody RepairDto repairDto) {
-
         int page = repairDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             repairDto.setPage((page - 1) * repairDto.getRow());
         }
-
         List<RepairDto> repairs = BeanConvertUtil.covertBeanList(repairServiceDaoImpl.getStaffFinishRepairInfo(BeanConvertUtil.beanCovertMap(repairDto)), RepairDto.class);
-
-
         return repairs;
     }
 

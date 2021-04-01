@@ -12,7 +12,6 @@ import com.java110.dto.roomRenovation.RoomRenovationDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.staffAppAuth.StaffAppAuthDto;
-import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.entity.order.Business;
 import com.java110.entity.wechat.Content;
@@ -74,9 +73,6 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
 
     @Autowired
     private IRoomRenovationsInnerServiceSMO roomRenovationsInnerServiceSMO;
-
-    @Autowired
-    private IStoreInnerServiceSMO storeInnerServiceSMO;
 
     private static Logger logger = LoggerFactory.getLogger(MachineSaveRoomRenovation.class);
 
@@ -190,6 +186,8 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
     }
 
     /**
+     * 给业主自己推送消息
+     *
      * @param paramIn
      * @param communityDto
      */
@@ -245,16 +243,16 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
         RoomRenovationDto roomRenovationDto = new RoomRenovationDto();
         roomRenovationDto.setRoomId(roomId);
         List<RoomRenovationDto> roomRenovationDtos = roomRenovationsInnerServiceSMO.queryRoomRenovations(roomRenovationDto);
-        //获取当前用户id
-        String userId = paramIn.getString("userId");
-        StoreUserDto storeUserDto = new StoreUserDto();
-        storeUserDto.setUserId(userId);
-        //查询商户员工信息
-        List<StoreUserDto> storeUsers = storeInnerServiceSMO.getStoreUserInfo(storeUserDto);
-        //获取商户手机号
+        //查询当前绑定业主所属小区
+        String communityId = ownerAppUserDtos.get(0).getCommunityId();
+        //通过小区id查询小区信息
+        CommunityDto community = new CommunityDto();
+        community.setCommunityId(communityId);
+        List<CommunityDto> communityDtos = communityInnerServiceSMO.queryCommunitys(community);
+        //获取物业联系方式
         String tel = null;
-        if (storeUsers != null && storeUsers.size() > 0) {
-            tel = storeUsers.get(0).getTel();
+        if (communityDtos != null && communityDtos.size() > 0) {
+            tel = communityDtos.get(0).getTel();
         }
         String[] roomName = paramIn.getString("roomName").split("-");
         if (ownerAppUserDtos.size() > 0) {

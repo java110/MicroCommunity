@@ -152,7 +152,6 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         feeDto.setFeeId(payFeeDetailPo.getFeeId());
         feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
         Assert.listOnlyOne(feeDtos, "未查询到费用信息");
         //获取费用类型
         String feeTypeCdName = feeDtos.get(0).getFeeTypeCdName();
@@ -164,6 +163,8 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String endTime = DateUtil.dateTimeToDate(payFeeDetailPo.getEndTime());
         //获取用户缴费金额
         String receivedAmount = payFeeDetailPo.getReceivedAmount();
+        //获取费用类型
+        String feeTypeCd = feeDtos.get(0).getFeeTypeCd();
         //获取社区名称
         String name = communityDtos.get(0).getName();
         JSONObject paramIn = new JSONObject();
@@ -173,8 +174,15 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         paramIn.put("receivedAmount", receivedAmount);
         paramIn.put("startTime", startTime);
         paramIn.put("endTime", endTime);
+        //给业主推送消息
         sendMessage(paramIn, communityDtos.get(0), payFeeDetailPo);
-        publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
+        if (feeTypeCd.equals("888800010012")) {
+            //给处理报修完结单的维修师傅推送消息
+            sendMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
+        } else {
+            //给员工推送消息
+            publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
+        }
     }
 
     /**
@@ -250,6 +258,77 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             } catch (Exception e) {
                 logger.error("发送缴费信息失败", e);
             }
+        }
+    }
+
+    /**
+     * 给完结订单的维修师傅推送信息
+     *
+     * @param paramIn
+     * @param communityDto
+     * @param payFeeDetailPo
+     */
+    private void sendMsg(JSONObject paramIn, CommunityDto communityDto, PayFeeDetailPo payFeeDetailPo) {
+        //查询公众号配置
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setWeChatType("1100");
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(communityDto.getCommunityId());
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
+            logger.info("未配置微信公众号信息,定时任务执行结束");
+            return;
+        }
+        SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
+        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
+        smallWechatAttrDto.setCommunityId(communityDto.getCommunityId());
+        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
+        smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_SUCCESS_TEMPLATE);
+        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
+        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
+            logger.info("未配置微信公众号消息模板");
+            return;
+        }
+        String templateId = smallWechatAttrDtos.get(0).getValue();
+        String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
+        if (StringUtil.isEmpty(accessToken)) {
+            logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
+            return;
+        }
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(payFeeDetailPo.getFeeId());
+        feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        Assert.listOnlyOne(feeDtos, "费用不存在");
+        //获取创建用户,即处理结单的维修维修师傅
+        String userId = feeDtos.get(0).getUserId();
+        String url = sendMsgUrl + accessToken;
+        //根据 userId 查询到openId
+        try {
+            StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
+            staffAppAuthDto.setStaffId(userId);
+            staffAppAuthDto.setAppType("WECHAT");
+            List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+            Assert.listOnlyOne(staffAppAuthDtos, "员工未认证");
+            String openId = staffAppAuthDtos.get(0).getOpenId();
+            Data data = new Data();
+            PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+            templateMessage.setTemplate_id(templateId);
+            templateMessage.setTouser(openId);
+            data.setFirst(new Content("业主已缴纳维修费，信息如下："));
+            data.setKeyword1(new Content(paramIn.getString("payFeeRoom")));
+            data.setKeyword2(new Content(paramIn.getString("feeTypeCdName")));
+            data.setKeyword3(new Content(paramIn.getString("payFeeTime")));
+            data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
+            data.setRemark(new Content("请与客服管家核实费用"));
+            templateMessage.setData(data);
+            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            templateMessage.setUrl(wechatUrl);
+            logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+            ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+            logger.info("微信模板返回内容:{}", responseEntity);
+        } catch (Exception e) {
+            logger.error("发送缴费信息失败", e);
         }
     }
 

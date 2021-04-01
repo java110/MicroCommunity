@@ -30,6 +30,11 @@ public class RepairUserDto extends PageDto implements Serializable {
     public static final String STATE_TRANSFER = "10004";// 转单
     public static final String STATE_SUBMIT = "10005";// 提交
     public static final String STATE_DISPATCH = "10006";//派单
+    public static final String STATE_FINISH = "10007";//评价完成
+    public static final String STATE_FINISH_VISIT = "10008";//已回访
+    public static final String STATE_PAY_FEE = "10009";//待支付
+    public static final String STATE_EVALUATE = "11000";//待评价
+    public static final String STATE_FINISH_PAY_FEE = "12000";//已支付
 
 
     private String context;

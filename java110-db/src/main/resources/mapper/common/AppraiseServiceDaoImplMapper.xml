@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="appraiseServiceDaoImpl">
 
-
     <!-- 保存评价信息 add by wuxw 2018-07-03 -->
     <insert id="saveAppraiseInfo" parameterType="Map">
         insert into appraise(
@@ -13,7 +12,6 @@
         #{parentAppraiseId},#{appraiseUserName},#{appraiseId},#{appraiseScore},#{appraiseType},#{context},#{objId},#{objType},#{appraiseUserId}
         )
     </insert>
-
 
     <!-- 查询评价信息 add by wuxw 2018-07-03 -->
     <select id="getAppraiseInfo" parameterType="Map" resultType="Map">
@@ -58,9 +56,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改评价信息 add by wuxw 2018-07-03 -->
     <update id="updateAppraiseInfo" parameterType="Map">
@@ -96,7 +92,6 @@
         <if test="appraiseId !=null and appraiseId != ''">
             and t.appraise_id= #{appraiseId}
         </if>
-
     </update>
 
     <!-- 查询评价数量 add by wuxw 2018-07-03 -->
@@ -134,8 +129,5 @@
         <if test="appraiseUserId !=null and appraiseUserId != ''">
             and t.appraise_user_id= #{appraiseUserId}
         </if>
-
-
     </select>
-
 </mapper>

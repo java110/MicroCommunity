@@ -2,6 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.po.owner.RepairUserPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,6 @@ public interface IRepairUserInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param repairUserDto 数据对象分享
      * @return RepairUserDto 对象数据
      */
@@ -39,4 +39,12 @@ public interface IRepairUserInnerServiceSMO {
      */
     @RequestMapping(value = "/queryRepairUsersCount", method = RequestMethod.POST)
     int queryRepairUsersCount(@RequestBody RepairUserDto repairUserDto);
+
+    /**
+     * 保存报修派单信息
+     *
+     * @param repairUserPo
+     */
+    @RequestMapping(value = "/saveRepairUser", method = RequestMethod.POST)
+    void saveRepairUser(@RequestBody RepairUserPo repairUserPo);
 }

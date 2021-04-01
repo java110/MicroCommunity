@@ -4,7 +4,7 @@ package com.java110.utils.constant;
  * @author wux
  * @create 2019-02-05 下午11:28
  * @desc 业务类型
- *
+ * <p>
  * 用户为1001 开头
  * 商户为2001 开头
  * 商品为3001 开头
@@ -28,11 +28,9 @@ public class FeeTypeConstant {
     public static final String FEE_TYPE_CAR = "888800010008";
 
     /**
-     * 保修费费
+     * 维修费
      */
     public static final String FEE_TYPE_REPAIR = "888800010012";
-
-
 
 
     /**
@@ -72,12 +70,6 @@ public class FeeTypeConstant {
      * 停车费 地上 临时车费用
      */
 //    public static final String FEE_TYPE_TEMP_UP_PARKING_SPACE = "888800010008";
-
-
-
-
-
-
 
 
 }

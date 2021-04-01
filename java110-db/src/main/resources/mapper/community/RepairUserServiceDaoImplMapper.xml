@@ -158,18 +158,18 @@
         <if test="context !=null and context != ''">
             , t.context= #{context}
         </if>
-
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-
-        <if test="end_time !=null ">
-            , t.end_time= #{end_time}
+        <if test="endTime !=null ">
+            , t.end_time= #{endTime}
         </if>
-
+        <if test="startTime !=null ">
+            , t.start_time= #{startTime}
+        </if>
         where 1=1
         <if test="ruId !=null and ruId != ''">
             and t.ru_id= #{ruId}
@@ -177,16 +177,15 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-<!--        <if test="state !=null and state != ''">-->
-<!--            and t.state= #{state}-->
-<!--        </if>-->
+        <!--<if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>-->
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
         <if test="repairId !=null and repairId != ''">
             and t.repair_id= #{repairId}
         </if>
-
     </update>
 
     <!-- 查询报修派单数量 add by wuxw 2018-07-03 -->
@@ -240,8 +239,6 @@
         <if test="preRuId !=null and preRuId != ''">
             and t.pre_ru_id= #{preRuId}
         </if>
-
-
     </select>
 
 </mapper>

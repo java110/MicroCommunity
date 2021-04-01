@@ -27,7 +27,6 @@ public class UpdateResourceStoreListener extends AbstractServiceApiPlusListener 
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "resId", "物品ID不能为空");
         Assert.hasKeyAndValue(reqJson, "resName", "必填，请填写物品名称");
         //Assert.hasKeyAndValue(reqJson, "resCode", "必填，请填写物品编码");
@@ -35,12 +34,10 @@ public class UpdateResourceStoreListener extends AbstractServiceApiPlusListener 
         //Assert.hasKeyAndValue(reqJson, "stock", "必填，请填写物品库存");
         //Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
         Assert.hasKeyAndValue(reqJson, "storeId", "商户信息不能为空");
-
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         resourceStoreBMOImpl.updateResourceStore(reqJson, context);
     }
 
