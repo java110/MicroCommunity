@@ -25,9 +25,10 @@ public class RepairPoolPo implements Serializable {
     private String repairObjId;
     private String repairObjName;
     private String maintenanceType;
-    private String statusCd = "0";
     private String repairChannel;
     private String bId;
+    private String statusCd ;
+
 
     public String getRepairId() {
         return repairId;
@@ -141,6 +142,7 @@ public class RepairPoolPo implements Serializable {
         this.statusCd = statusCd;
     }
 
+
     public String getRepairChannel() {
         return repairChannel;
     }
@@ -156,4 +158,5 @@ public class RepairPoolPo implements Serializable {
     public void setbId(String bId) {
         this.bId = bId;
     }
+
 }

@@ -8,8 +8,10 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -73,6 +75,14 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         payFeePo.setUserId(context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
 
         super.insert(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+
+        FeeAttrPo feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+        feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
+        feeAttrPo.setValue(reqJson.getString("curReadingTime"));
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPo.setAttrId("-1");
+        super.insert(context,feeAttrPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
 
         reqJson.put("feeId",payFeePo.getFeeId());
 

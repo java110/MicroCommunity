@@ -16,7 +16,6 @@
 package com.java110.dto.feeDiscount;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
 
 import java.io.Serializable;
 import java.util.List;

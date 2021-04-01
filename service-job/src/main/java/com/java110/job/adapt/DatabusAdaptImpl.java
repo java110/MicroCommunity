@@ -17,8 +17,11 @@ package com.java110.job.adapt;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
 import com.java110.job.adapt.hcIot.GetToken;
+import com.java110.po.machine.MachineRecordPo;
 import com.java110.vo.ResultVo;
 import org.springframework.http.HttpHeaders;
 
@@ -36,7 +39,7 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
      */
     protected HttpHeaders getHeaders(RestTemplate outRestTemplate) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("access_token", GetToken.get(outRestTemplate,false));
+        httpHeaders.add("access_token", GetToken.get(outRestTemplate, false));
         //httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
         return httpHeaders;
     }
@@ -75,6 +78,28 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 
+    /**
+     * 查询 临时车待支付订单
+     *
+     * @param tempCarPayOrderDto
+     * @return
+     */
+    @Override
+    public ResultVo getTempCarFeeOrder(TempCarPayOrderDto tempCarPayOrderDto) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+    /**
+     * 查询 临时车待支付订单
+     *
+     * @param tempCarPayOrderDto
+     * @return
+     */
+    @Override
+    public ResultVo notifyTempCarFeeOrder(TempCarPayOrderDto tempCarPayOrderDto) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
 
     /**
      * 业主处理执行
@@ -84,6 +109,13 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
      */
     @Override
     public void execute(Business business, List<Business> businesses) throws Exception {
+
+    }
+    /**
+     * 手工 送数据
+     * @param customBusinessDatabusDto
+     */
+    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto){
 
     }
 }

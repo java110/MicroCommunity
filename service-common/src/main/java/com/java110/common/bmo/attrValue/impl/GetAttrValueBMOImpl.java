@@ -1,7 +1,7 @@
 package com.java110.common.bmo.attrValue.impl;
 
 import com.java110.common.bmo.attrValue.IGetAttrValueBMO;
-import com.java110.dto.attrValue.AttrValueDto;
+import com.java110.dto.attrSpec.AttrValueDto;
 import com.java110.intf.common.IAttrValueInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

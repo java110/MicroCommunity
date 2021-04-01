@@ -7,9 +7,9 @@
     <!-- 保存停车位信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessParkingSpaceInfo" parameterType="Map">
         insert into business_parking_space(
-        area,operate,num,ps_id,pa_id, remark,state,community_id,b_id
+        area,operate,num,ps_id,pa_id, remark,state,community_id,b_id,parking_type
         ) values (
-        #{area},#{operate},#{num},#{psId},#{paId},#{remark},#{state},#{communityId},#{bId}
+        #{area},#{operate},#{num},#{psId},#{paId},#{remark},#{state},#{communityId},#{bId},#{parkingType}
         )
     </insert>
 
@@ -64,8 +64,9 @@
     <!-- 保存停车位信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveParkingSpaceInfoInstance" parameterType="Map">
         insert into parking_space(
-        area,num,ps_id,pa_id,remark,status_cd,state,community_id,b_id
-        ) select t.area,t.num,t.ps_id,t.pa_id,t.remark,'0',t.state,t.community_id,t.b_id from
+        area,num,ps_id,pa_id,remark,status_cd,state,community_id,b_id,parking_type
+        ) select t.area,t.num,t.ps_id,t.pa_id,t.remark,'0',t.state,t.community_id,t.b_id,t.parking_type
+        from
         business_parking_space t where 1=1
         <if test="area !=null and area != ''">
             and t.area= #{area}
@@ -112,9 +113,10 @@
         t.community_id communityId,
         t.b_id,
         t.b_id bId,
+        t.parking_type,
         t.parking_type parkingType,
-        td2. NAME parkingTypeName,
-        td1. NAME stateName,
+        td2.NAME parkingTypeName,
+        td1.NAME stateName,
         pa.num areaNum,
         pa.type_cd typeCd
         FROM

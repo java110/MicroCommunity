@@ -4,6 +4,8 @@ package com.java110.job.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
+import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.job.adapt.IDatabusAdapt;
@@ -32,6 +34,9 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     public static final String DEFAULT_OPEN_DOOR_PROTOCOL = "openDoorAdapt";//吸墨门禁
     public static final String DEFAULT_START_MACHINE_PROTOCOL = "restartMachineAdapt";//吸墨门禁
     public static final String DEFAULT_RESEND_IOT_PROTOCOL = "reSendIotAdapt";//重新送数据
+    public static final String DEFAULT_GET_TEMP_CAR_FEE_ORDER_PROTOCOL = "getTempCarFeeOrderAdapt";//重新送数据
+    public static final String DEFAULT_NOTIFY_TEMP_CAR_FEE_ORDER_PROTOCOL = "notifyTempCarFeeOrderAdapt";//重新送数据
+    public static final String DEFAULT_DEFAULT_SEND_MACHINE_RECORD = "defaultSendMachineRecordAdapt";//默认设备记录适配器
 
 
     @Override
@@ -62,6 +67,40 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_RESEND_IOT_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.reSendToIot(reqJson);
 
+    }
+
+    @Override
+    public ResultVo getTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_GET_TEMP_CAR_FEE_ORDER_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.getTempCarFeeOrder(tempCarPayOrderDto);
+    }
+
+    @Override
+    public ResultVo notifyTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_NOTIFY_TEMP_CAR_FEE_ORDER_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
+    }
+
+    /**
+     * 门禁开门记录
+     *
+     * @param customBusinessDatabusDto
+     * @return
+     */
+    @Override
+    public void customExchange(@RequestBody CustomBusinessDatabusDto customBusinessDatabusDto) {
+        IDatabusAdapt databusAdaptImpl = null;
+        List<BusinessDatabusDto> databusDtos = DatabusCache.getDatabuss();
+        for (BusinessDatabusDto databusDto : databusDtos) {
+            try {
+                if (customBusinessDatabusDto.getBusinessTypeCd().equals(databusDto.getBusinessTypeCd())) {
+                    databusAdaptImpl = ApplicationContextFactory.getBean(databusDto.getBeanName(), IDatabusAdapt.class);
+                    databusAdaptImpl.customExchange(customBusinessDatabusDto);
+                }
+            } catch (Exception e) {
+                logger.error("执行databus失败", e);
+            }
+        }
     }
 
     /**

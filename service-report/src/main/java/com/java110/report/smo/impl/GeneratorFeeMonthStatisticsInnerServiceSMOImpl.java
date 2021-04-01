@@ -1,5 +1,6 @@
 package com.java110.report.smo.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
@@ -196,7 +197,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         ReportFeeDto reportFeeDto = new ReportFeeDto();
         reportFeeDto.setPayerObjId(tmpReportCarDto.getCarId());
         reportFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
-        reportFeeDto.setState(FeeDto.STATE_DOING);
+        //reportFeeDto.setState(FeeDto.STATE_DOING);
         List<ReportFeeDto> feeDtos = reportFeeServiceDaoImpl.getFees(reportFeeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
@@ -214,11 +215,16 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
     private void doDealCarFee(ReportCarDto tmpReportCarDto, ReportFeeDto tmpReportFeeDto) {
 
+        //费用已经结束 并且当月实收为0 那就是 之前就结束了 无需处理  && ListUtil.isNull(statistics)
+        if (FeeDto.STATE_FINISH.equals(tmpReportFeeDto.getState())
+                && getCurFeeReceivedAmount(tmpReportFeeDto) == 0) {
+            return;
+        }
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setCommunityId(tmpReportCarDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
+        //reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
@@ -227,11 +233,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 ReportFeeMonthStatisticsDto.class);
 
         double receivedAmount = getReceivedAmount(tmpReportFeeDto); //实收
-        //费用已经结束 并且当月实收为0 那就是 之前就结束了 无需处理  && ListUtil.isNull(statistics)
-        if (FeeDto.STATE_FINISH.equals(tmpReportFeeDto.getState())
-                && receivedAmount == 0) {
-            return;
-        }
+
         FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
         OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(tmpReportCarDto, OwnerCarDto.class);
         Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto, ownerCarDto);
@@ -374,7 +376,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         ReportFeeDto reportFeeDto = new ReportFeeDto();
         reportFeeDto.setPayerObjId(reportRoomDto.getRoomId());
         reportFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-        reportFeeDto.setState(FeeDto.STATE_DOING);
+        //reportFeeDto.setState(FeeDto.STATE_DOING);
         List<ReportFeeDto> feeDtos = reportFeeServiceDaoImpl.getFees(reportFeeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
@@ -394,11 +396,17 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
     private void doDealRoomFee(ReportRoomDto reportRoomDto, ReportFeeDto tmpReportFeeDto) {
 
+        //费用已经结束 并且当月实收为0 那就是 之前就结束了 无需处理  && ListUtil.isNull(statistics)
+        if (FeeDto.STATE_FINISH.equals(tmpReportFeeDto.getState())
+                && getCurFeeReceivedAmount(tmpReportFeeDto) == 0) {
+            return;
+        }
+
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
         reportFeeMonthStatisticsDto.setCommunityId(reportRoomDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
+        //reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
@@ -408,11 +416,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
 
         double receivedAmount = getReceivedAmount(tmpReportFeeDto); //实收
-        //费用已经结束 并且当月实收为0 那就是 之前就结束了 无需处理  && ListUtil.isNull(statistics)
-        if (FeeDto.STATE_FINISH.equals(tmpReportFeeDto.getState())
-                && receivedAmount == 0) {
-            return;
-        }
+
         FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
         Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto, null);
 
@@ -479,11 +483,11 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
     }
 
     public static void main(String[] args) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_MONTH, 1);
-        c.add(Calendar.DAY_OF_MONTH, -1);
+        ReportFeeDetailDto feeDetailDto = new ReportFeeDetailDto();
+        feeDetailDto.setStartTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
+        feeDetailDto.setEndTime(DateUtil.getFormatTimeString(DateUtil.getNextMonthFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
 
-        System.out.println(DateUtil.getFormatTimeString(c.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+        System.out.println(JSONObject.toJSONString(feeDetailDto));
     }
 
     /**
@@ -579,6 +583,23 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         }
         return tmpReportFeeDto.getFeePrice();
 
+    }
+
+    /**
+     * 获取当月实收
+     *
+     * @param tmpReportFeeDto
+     * @return
+     */
+    private double getCurFeeReceivedAmount(ReportFeeDto tmpReportFeeDto) {
+        ReportFeeDetailDto feeDetailDto = new ReportFeeDetailDto();
+        feeDetailDto.setStartTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
+        feeDetailDto.setEndTime(DateUtil.getFormatTimeString(DateUtil.getNextMonthFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
+        feeDetailDto.setFeeId(tmpReportFeeDto.getFeeId());
+
+        double receivedAmount = reportFeeServiceDaoImpl.getFeeReceivedAmount(feeDetailDto);
+
+        return receivedAmount;
     }
 
     /**

@@ -45,6 +45,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         businessCommunityInfo.put("mapY", businessCommunityInfo.get("map_y"));
         businessCommunityInfo.put("state", businessCommunityInfo.get("state"));
         businessCommunityInfo.put("communityArea", businessCommunityInfo.get("community_area"));
+        businessCommunityInfo.put("tel", businessCommunityInfo.get("tel"));
         businessCommunityInfo.put("statusCd", statusCd);
     }
 
@@ -116,6 +117,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         currentCommunityInfo.put("mapY", currentCommunityInfo.get("map_y"));
         currentCommunityInfo.put("state", currentCommunityInfo.get("state"));
         currentCommunityInfo.put("communityArea", currentCommunityInfo.get("community_area"));
+        currentCommunityInfo.put("tel", currentCommunityInfo.get("tel"));
 
         currentCommunityInfo.put("operate", StatusConstant.OPERATE_DEL);
         getCommunityServiceDaoImpl().saveBusinessCommunityInfo(currentCommunityInfo);

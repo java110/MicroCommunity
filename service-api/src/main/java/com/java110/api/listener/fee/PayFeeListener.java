@@ -11,6 +11,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
@@ -22,7 +23,6 @@ import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
@@ -78,14 +78,12 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
-    @Autowired
-    private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
-
-    @Autowired
-    private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
 
     @Autowired
     private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
+
+    @Autowired
+    private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMO;
@@ -239,10 +237,16 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             return;
         }
 
-        //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
-        feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
-        feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
+        //根据明细ID 查询收据信息
+        FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
+        feeReceiptDetailDto.setDetailId(paramObj.getString("detailId"));
+        feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
+        List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
+        if(feeReceiptDetailDtos != null || feeReceiptDetailDtos.size()> 0){
+            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos.get(0)));
+            return ;
+        }
         dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailPo));
     }
 

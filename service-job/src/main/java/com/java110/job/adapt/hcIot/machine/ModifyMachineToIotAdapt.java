@@ -17,7 +17,7 @@ package com.java110.job.adapt.hcIot.machine;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.communityLocation.CommunityLocationDto;
+import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.machine.MachineAttrDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.entity.order.Business;
@@ -31,8 +31,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 

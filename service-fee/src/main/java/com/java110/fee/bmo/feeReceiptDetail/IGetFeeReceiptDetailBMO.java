@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.feeReceiptDetail;
-import com.java110.dto.feeReceiptDetail.FeeReceiptDetailDto;
+import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetFeeReceiptDetailBMO {
 

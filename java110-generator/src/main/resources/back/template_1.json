@@ -1,53 +1,34 @@
 {
   "autoMove": true,
-  "id": "authId",
-  "name": "machineAuth",
-  "desc": "设备权限",
+  "id": "attrId",
+  "name": "communityLocationAttr",
+  "desc": "位置属性",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "shareName": "common",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_MACHINE_AUTH",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_MACHINE_AUTH",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_MACHINE_AUTH",
-  "newBusinessTypeCdValue": "661100030004",
-  "updateBusinessTypeCdValue": "661100040004",
-  "deleteBusinessTypeCdValue": "661100050004",
-  "businessTableName": "business_machine_auth",
-  "tableName": "machine_auth",
+  "shareName": "community",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_LOCATION_ATTR",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_LOCATION_ATTR",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_LOCATION_ATTR",
+  "newBusinessTypeCdValue": "570100030002",
+  "updateBusinessTypeCdValue": "570100040002",
+  "deleteBusinessTypeCdValue": "570100050002",
+  "businessTableName": "business_community_location_attr",
+  "tableName": "community_location_attr",
   "param": {
-    "authId": "auth_id",
     "communityId": "community_id",
+    "locationId": "location_id",
     "bId": "b_id",
-    "machineId": "machine_id",
-    "personId": "person_id",
-    "personName": "person_name",
-    "personType": "person_type",
-    "state": "state",
-    "startTime": "start_time",
-    "endTime": "end_time",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
+    "value": "value",
+    "createTime": "create_time",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "machineId",
-      "msg": "设备不能为空"
-    },
-    {
-      "code": "personId",
-      "msg": "人员不能为空"
-    },
-    {
-      "code": "personName",
-      "msg": "人员名称不能为空"
-    },
-    {
-      "code": "startTime",
-      "msg": "开始时间不能为空"
-    },
-    {
-      "code": "endTime",
-      "msg": "结束时间不能为空"
+      "code": "specCd",
+      "msg": "属性不能为空"
     }
   ]
 }

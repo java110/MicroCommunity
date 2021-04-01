@@ -1,7 +1,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.feeDiscountRuleSpec.FeeDiscountRuleSpecDto;
+import com.java110.dto.feeDiscount.FeeDiscountRuleSpecDto;
 import com.java110.po.feeDiscountRuleSpec.FeeDiscountRuleSpecPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

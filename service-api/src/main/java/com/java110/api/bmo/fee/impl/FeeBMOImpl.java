@@ -191,22 +191,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         paramInJson.put("feeInfo", feeDto);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
         paramInJson.put("detailId", businessFeeDetail.getString("detailId"));
-        feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivedAmount"));
-        feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
-        feeReceiptDetailPo.setCycle(businessFeeDetail.getString("cycles"));
-        feeReceiptDetailPo.setDetailId(businessFeeDetail.getString("detailId"));
-        feeReceiptDetailPo.setEndTime(businessFeeDetail.getString("endTime"));
-        feeReceiptDetailPo.setFeeId(feeDto.getFeeId());
-        feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
-        feeReceiptDetailPo.setStartTime(businessFeeDetail.getString("startTime"));
-        feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
-        computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
-        feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
-        feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
-        feeReceiptPo.setReceiptId(feeReceiptDetailPo.getReceiptId());
-        feeReceiptPo.setObjType(feeDto.getPayerObjType());
-        feeReceiptPo.setObjId(feeDto.getPayerObjId());
-        feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
+
         return business;
     }
 
@@ -395,7 +380,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
             if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-                if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                if(feeDto.getDeadlineTime() != null){
+                    endCalender.setTime(feeDto.getDeadlineTime());
+                }else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                     endCalender.setTime(feeDto.getCurReadingTime());
                 } else if (feeDto.getImportFeeEndTime() == null) {
                     endCalender.setTime(feeDto.getConfigEndTime());

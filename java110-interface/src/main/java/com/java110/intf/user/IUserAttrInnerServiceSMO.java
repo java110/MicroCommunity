@@ -2,6 +2,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.user.UserAttrDto;
+import com.java110.po.userAttr.UserAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,4 +39,13 @@ public interface IUserAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/queryUserAttrsCount", method = RequestMethod.POST)
     int queryUserAttrsCount(@RequestBody UserAttrDto userAttrDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param userAttrPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/saveUserAttr", method = RequestMethod.POST)
+    int saveUserAttr(@RequestBody UserAttrPo userAttrPo);
 }

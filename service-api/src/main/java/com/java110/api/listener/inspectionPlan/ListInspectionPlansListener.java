@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.intf.community.IInspectionRouteInnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
-import com.java110.dto.inspectionRoute.InspectionRouteDto;
+import com.java110.dto.inspectionPlan.InspectionRouteDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.utils.constant.ServiceCodeInspectionPlanConstant;
 import com.java110.utils.util.Assert;

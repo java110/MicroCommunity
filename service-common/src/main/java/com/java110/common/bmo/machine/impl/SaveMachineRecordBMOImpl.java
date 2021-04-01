@@ -15,8 +15,10 @@
  */
 package com.java110.common.bmo.machine.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.ISaveMachineRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineRecordDto;
@@ -24,8 +26,10 @@ import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineRecordInnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.machine.MachineRecordPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -57,6 +61,10 @@ public class SaveMachineRecordBMOImpl implements ISaveMachineRecordBMO {
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
 
     @Override
     public ResponseEntity<String> saveRecord(MachineRecordDto machineRecordDto) {
@@ -97,9 +105,12 @@ public class SaveMachineRecordBMOImpl implements ISaveMachineRecordBMO {
 
         int count = machineRecordInnerServiceSMOImpl.saveMachineRecords(machineRecordPos);
 
-        if (count > 0) {
-            return ResultVo.success();
+        if (count < 1) {
+            return ResultVo.error("上传记录失败");
         }
-        return ResultVo.error("上传记录失败");
+        //传送databus
+        dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                BusinessTypeConstant.BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG, BeanConvertUtil.beanCovertJson(machineRecordPo)));
+        return ResultVo.success();
     }
 }

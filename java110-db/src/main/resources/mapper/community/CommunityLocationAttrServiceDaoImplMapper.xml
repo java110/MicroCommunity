@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="communityLocationAttrServiceDaoImpl">
+
+    <!-- 保存位置属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessCommunityLocationAttrInfo" parameterType="Map">
+        insert into business_community_location_attr(
+        attr_id,operate,create_time,location_id,spec_cd,community_id,b_id,value
+        ) values (
+        #{attrId},#{operate},#{createTime},#{locationId},#{specCd},#{communityId},#{bId},#{value}
+        )
+    </insert>
+
+
+    <insert id="saveCommunityLocationAttr" parameterType="Map">
+        insert into community_location_attr(
+        attr_id,location_id,spec_cd,community_id,b_id,value
+        ) values (
+        #{attrId},#{locationId},#{specCd},#{communityId},'-1',#{value}
+        )
+    </insert>
+
+
+    <!-- 查询位置属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessCommunityLocationAttrInfo" parameterType="Map" resultType="Map">
+        select t.attr_id,t.attr_id attrId,t.operate,t.create_time,t.create_time createTime,t.location_id,t.location_id
+        locationId,t.spec_cd,t.spec_cd specCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value
+        from business_community_location_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="locationId !=null and locationId != ''">
+            and t.location_id= #{locationId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+    </select>
+
+
+    <!-- 保存位置属性信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunityLocationAttrInfoInstance" parameterType="Map">
+        insert into community_location_attr(
+        attr_id,create_time,location_id,spec_cd,status_cd,community_id,b_id,value
+        ) select t.attr_id,t.create_time,t.location_id,t.spec_cd,'0',t.community_id,t.b_id,t.value from
+        business_community_location_attr t where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="locationId !=null and locationId != ''">
+            and t.location_id= #{locationId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询位置属性信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunityLocationAttrInfo" parameterType="Map" resultType="Map">
+        select t.attr_id,t.attr_id attrId,t.create_time,t.create_time createTime,t.location_id,t.location_id
+        locationId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId,t.value
+        from community_location_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="locationId !=null and locationId != ''">
+            and t.location_id= #{locationId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改位置属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateCommunityLocationAttrInfoInstance" parameterType="Map">
+        update community_location_attr t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="locationId !=null and locationId != ''">
+            , t.location_id= #{locationId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询位置属性数量 add by wuxw 2018-07-03 -->
+    <select id="queryCommunityLocationAttrsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from community_location_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="locationId !=null and locationId != ''">
+            and t.location_id= #{locationId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -1,6 +1,7 @@
 package com.java110.utils.util;
 
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
@@ -167,6 +168,17 @@ public final class BeanConvertUtil {
             throw new RuntimeException("bean转换Map失败", e);
         }
         return map;
+    }
+
+    /**
+     * bean转换为map对象
+     *
+     * @param orgBean 原始bean
+     * @return map对象
+     */
+    public static JSONObject beanCovertJson(Object orgBean) {
+
+        return JSONObject.parseObject(JSONObject.toJSONString(orgBean));
     }
 
 

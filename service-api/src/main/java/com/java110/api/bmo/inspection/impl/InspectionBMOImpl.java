@@ -7,7 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.intf.community.IInspectionPlanInnerServiceSMO;
 import com.java110.intf.community.IInspectionRoutePointRelInnerServiceSMO;
 import com.java110.dto.inspectionPlan.InspectionPlanDto;
-import com.java110.dto.inspectionRoute.InspectionRoutePointRelDto;
+import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
 import com.java110.po.inspection.InspectionPlanPo;
 import com.java110.po.inspection.InspectionPointPo;
 import com.java110.po.inspection.InspectionRoutePo;

@@ -1,7 +1,7 @@
 package com.java110.fee.bmo.feeDiscountRule.impl;
 
-import com.java110.dto.feeDiscountRule.FeeDiscountRuleDto;
-import com.java110.dto.feeDiscountRuleSpec.FeeDiscountRuleSpecDto;
+import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
+import com.java110.dto.feeDiscount.FeeDiscountRuleSpecDto;
 import com.java110.fee.bmo.feeDiscountRule.IGetFeeDiscountRuleBMO;
 import com.java110.intf.fee.IFeeDiscountRuleInnerServiceSMO;
 import com.java110.intf.fee.IFeeDiscountRuleSpecInnerServiceSMO;

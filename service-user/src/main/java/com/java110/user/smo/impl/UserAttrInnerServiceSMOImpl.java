@@ -7,6 +7,7 @@ import com.java110.intf.user.IUserAttrInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
+import com.java110.po.userAttr.UserAttrPo;
 import com.java110.user.dao.IUserAttrServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,11 @@ public class UserAttrInnerServiceSMOImpl extends BaseServiceSMO implements IUser
     @Override
     public int queryUserAttrsCount(@RequestBody UserAttrDto userAttrDto) {
         return userAttrServiceDaoImpl.queryUserAttrsCount(BeanConvertUtil.beanCovertMap(userAttrDto));
+    }
+
+    @Override
+    public int saveUserAttr(@RequestBody UserAttrPo userAttrPo) {
+        return userAttrServiceDaoImpl.saveUserAttr(BeanConvertUtil.beanCovertMap(userAttrPo));
     }
 
     public IUserAttrServiceDao getUserAttrServiceDaoImpl() {

@@ -3,7 +3,7 @@ package com.java110.fee.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.feeReceipt.FeeReceiptDto;
 import com.java110.dto.feeReceipt.FeeReceiptDtoNew;
-import com.java110.dto.feeReceiptDetail.FeeReceiptDetailDto;
+import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.fee.bmo.feeReceipt.IDeleteFeeReceiptBMO;
 import com.java110.fee.bmo.feeReceipt.IGetFeeReceiptBMO;

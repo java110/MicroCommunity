@@ -184,6 +184,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("typeCd", parkingSpace.getTypeCd());
                 paramIn.put("num", parkingSpace.getPaNum());
+
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
                 savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
             }
@@ -204,6 +205,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("num", parkingSpace.getPsNum());
             paramIn.put("area", parkingSpace.getArea());
             paramIn.put("typeCd", parkingSpace.getTypeCd());
+            paramIn.put("parkingType", "1");
 
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -737,39 +739,43 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
         ImportRoom importRoom = null;
         for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
-            Object[] os = oList.get(osIndex);
-            if (osIndex == 0) { // 第一行是 头部信息 直接跳过
-                continue;
-            }
-            if (StringUtil.isNullOrNone(os[0])) {
-                continue;
-            }
-            Assert.hasValue(os[1], "房屋信息选项中" + (osIndex + 1) + "行楼栋编号为空");
-            Assert.hasValue(os[2], "房屋信息选项中" + (osIndex + 1) + "行单元编号为空");
-            Assert.hasValue(os[3], "房屋信息选项中" + (osIndex + 1) + "行房屋楼层为空");
-            Assert.hasValue(os[4], "房屋信息选项中" + (osIndex + 1) + "行房屋户型为空");
-            Assert.hasValue(os[5], "房屋信息选项中" + (osIndex + 1) + "行建筑面积为空");
-            if (!StringUtil.isNullOrNone(os[6])) {
-                Assert.hasValue(os[7], "房屋信息选项中" + (osIndex + 1) + "行房屋费用为空");
-                Assert.hasValue(os[8], "房屋信息选项中" + (osIndex + 1) + "行费用到期时间为空");
-            }
-            importRoom = new ImportRoom();
-            importRoom.setRoomNum(os[0].toString());
-            importRoom.setFloor(getImportFloor(floors, os[1].toString(), os[2].toString()));
-            importRoom.setLayer(Integer.parseInt(os[3].toString()));
-            importRoom.setSection(os[4].toString());
-            importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
+            try {
+                Object[] os = oList.get(osIndex);
+                if (osIndex == 0) { // 第一行是 头部信息 直接跳过
+                    continue;
+                }
+                if (StringUtil.isNullOrNone(os[0])) {
+                    continue;
+                }
+                Assert.hasValue(os[1], "房屋信息选项中" + (osIndex + 1) + "行楼栋编号为空");
+                Assert.hasValue(os[2], "房屋信息选项中" + (osIndex + 1) + "行单元编号为空");
+                Assert.hasValue(os[3], "房屋信息选项中" + (osIndex + 1) + "行房屋楼层为空");
+                Assert.hasValue(os[4], "房屋信息选项中" + (osIndex + 1) + "行房屋户型为空");
+                Assert.hasValue(os[5], "房屋信息选项中" + (osIndex + 1) + "行建筑面积为空");
+                if (!StringUtil.isNullOrNone(os[6])) {
+                    Assert.hasValue(os[7], "房屋信息选项中" + (osIndex + 1) + "行房屋费用为空");
+                    Assert.hasValue(os[8], "房屋信息选项中" + (osIndex + 1) + "行费用到期时间为空");
+                }
+                importRoom = new ImportRoom();
+                importRoom.setRoomNum(os[0].toString());
+                importRoom.setFloor(getImportFloor(floors, os[1].toString(), os[2].toString()));
+                importRoom.setLayer(Integer.parseInt(os[3].toString()));
+                importRoom.setSection(os[4].toString());
+                importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
 
-            if (!StringUtil.isNullOrNone(os[6])) {
-                importRoom.setRoomFeeId(os[7].toString());
-                importRoom.setFeeEndDate(os[8].toString());
-            }
-            if (StringUtil.isNullOrNone(os[6])) {
+                if (!StringUtil.isNullOrNone(os[6])) {
+                    importRoom.setRoomFeeId(os[7].toString());
+                    importRoom.setFeeEndDate(os[8].toString());
+                }
+                if (StringUtil.isNullOrNone(os[6])) {
+                    rooms.add(importRoom);
+                    continue;
+                }
+                importRoom.setImportOwner(getImportOwner(owners, os[6].toString()));
                 rooms.add(importRoom);
-                continue;
+            } catch (Exception e) {
+                throw new IllegalArgumentException("房屋信息sheet中第" + (osIndex + 1) + "行数据错误，请检查" + e.getLocalizedMessage());
             }
-            importRoom.setImportOwner(getImportOwner(owners, os[6].toString()));
-            rooms.add(importRoom);
         }
     }
 

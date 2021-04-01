@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.dto.attendanceClassesAttr.AttendanceClassesAttrDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesAttrDto;
 import com.java110.intf.common.IAttendanceClassesAttrInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeAttendanceClassesAttrConstant;
 import com.java110.utils.util.BeanConvertUtil;

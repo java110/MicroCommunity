@@ -7,6 +7,8 @@ import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairTypeUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.owner.RepairPoolPo;
+import com.java110.utils.constant.StateConstant;
+import com.java110.utils.constant.StatusConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,7 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
         repairDto.setStatess(new String[]{RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_APPRAISE});
         repairDto.setReturnVisitFlag("001,002");
         repairDto.setPage(1);
-        repairDto.setRow(1000);
+        repairDto.setRow(100);
         //查询需要程序轮训派单 订单
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
         for (RepairDto tmpRepairDto : repairDtos) {
@@ -77,6 +79,7 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(tmpRepairDto.getRepairId());
             repairPoolPo.setState(RepairDto.STATE_COMPLATE);
+            repairPoolPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
             repairInnerServiceSMOImpl.updateRepair(repairPoolPo);
             return;
         }
@@ -84,6 +87,7 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(tmpRepairDto.getRepairId());
             repairPoolPo.setState(RepairDto.STATE_COMPLATE);
+            repairPoolPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
             repairInnerServiceSMOImpl.updateRepair(repairPoolPo);
             return;
         }

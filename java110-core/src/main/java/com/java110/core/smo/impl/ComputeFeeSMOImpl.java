@@ -510,7 +510,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         int hours = new Double((cycle - Math.floor(cycle)) * futureDay * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-            if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+            if(feeDto.getDeadlineTime() != null){
+               endCalender.setTime(feeDto.getDeadlineTime());
+            }else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 endCalender.setTime(feeDto.getCurReadingTime());
             } else if (feeDto.getImportFeeEndTime() == null) {
                 endCalender.setTime(feeDto.getConfigEndTime());
@@ -839,7 +841,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             return targetEndDateAndOweMonth;
         }
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-            if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+            //先取 deadlineTime
+            if(feeDto.getDeadlineTime() != null){
+                targetEndDate = feeDto.getDeadlineTime();
+            }else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 targetEndDate = feeDto.getCurReadingTime();
             } else if (feeDto.getImportFeeEndTime() == null) {
                 targetEndDate = feeDto.getConfigEndTime();
@@ -909,6 +914,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
     public Map getTargetEndDateAndOweMonth(FeeDto feeDto) {
+
         if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
             ownerCarDto.setCommunityId(feeDto.getCommunityId());

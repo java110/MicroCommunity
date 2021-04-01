@@ -1,7 +1,6 @@
 package com.java110.dto.attendanceClasses;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.attendanceClassesAttr.AttendanceClassesAttrDto;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,8 +1,8 @@
 package com.java110.common.bmo.attendanceClassesTaskDetail.impl;
 
 import com.java110.common.bmo.attendanceClassesTaskDetail.IGetAttendanceClassesTaskDetailBMO;
-import com.java110.dto.attendanceClassesTask.AttendanceClassesTaskDto;
-import com.java110.dto.attendanceClassesTaskDetail.AttendanceClassesTaskDetailDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
 import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.intf.report.IReportAttendanceInnerServiceSMO;
 import com.java110.vo.ResultVo;

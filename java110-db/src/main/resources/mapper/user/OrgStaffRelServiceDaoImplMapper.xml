@@ -77,10 +77,12 @@
     <select id="getOrgStaffRelInfo" parameterType="Map" resultType="Map">
         select t.rel_id,t.rel_id relId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id
         bId,t.org_id,t.org_id orgId,t.staff_id,t.staff_id staffId,t.rel_cd,t.rel_cd relCd,uo.parent_org_id parentOrgId,
-        uu.name staffName,uo.org_name departmentName,uo.org_id departmentId
-        from u_org_staff_rel t,u_org uo,u_user uu
-        where t.org_id = uo.org_id
-        and t.staff_id = uu.user_id
+        uu.name staffName,uo.org_name departmentName,uo.org_id departmentId,td.`name` relCdName
+        from u_org_staff_rel t
+        inner join u_org uo on t.org_id = uo.org_id and uo.status_cd = '0'
+        inner join u_user uu on t.staff_id = uu.user_id
+        left join t_dict td on t.rel_cd = td.status_cd and td.table_name = 'u_org_staff_rel' and td.table_columns = 'rel_cd'
+        where 1=1
 
         <if test='statusCd ==null or statusCd != "1"'>
             and uu.status_cd = '0'

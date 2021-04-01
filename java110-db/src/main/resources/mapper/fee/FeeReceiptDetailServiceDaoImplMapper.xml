@@ -51,6 +51,12 @@
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
         </if>
+        <if test="detailIds !=null ">
+            and t.detail_id in
+            <foreach collection="detailIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
         </if>

@@ -4,7 +4,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IAttendanceLogServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.attendanceLog.AttendanceLogDto;
+import com.java110.dto.attendanceClasses.AttendanceLogDto;
 import com.java110.intf.common.IAttendanceLogInnerServiceSMO;
 import com.java110.po.attendanceLog.AttendanceLogPo;
 import com.java110.utils.util.BeanConvertUtil;

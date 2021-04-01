@@ -16,8 +16,10 @@
 package com.java110.fee.bmo.tempCarFee.impl;
 
 import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
+import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +36,33 @@ public class GetTempCarFeeRulesImpl implements IGetTempCarFeeRules {
     @Autowired
     private ITempCarFeeConfigInnerServiceSMO tempCarFeeConfigInnerServiceSMOImpl;
 
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
     @Override
     public ResponseEntity<String> queryRules(TempCarFeeRuleDto tempCarFeeRuleDto) {
 
         List<TempCarFeeRuleDto> tempCarFeeRuleDtos = tempCarFeeConfigInnerServiceSMOImpl.queryTempCarFeeRules(tempCarFeeRuleDto);
 
         return ResultVo.createResponseEntity(tempCarFeeRuleDtos);
+    }
+
+    /**
+     * 查询是临时车支付订单
+     *
+     * @param tempCarPayOrderDto
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> getTempCarFeeOrder(TempCarPayOrderDto tempCarPayOrderDto) {
+
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.getTempCarFeeOrder(tempCarPayOrderDto);
+        return ResultVo.createResponseEntity(resultVo);
+    }
+
+    @Override
+    public ResponseEntity<String> notifyTempCarFeeOrder(TempCarPayOrderDto tempCarPayOrderDto) {
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
+        return ResultVo.createResponseEntity(resultVo);
     }
 }

@@ -579,7 +579,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             return targetEndDateAndOweMonth;
         }
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-            if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+            if(feeDto.getDeadlineTime() != null){
+                targetEndDate = feeDto.getDeadlineTime();
+            }else if(!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 targetEndDate = feeDto.getCurReadingTime();
             } else if (feeDto.getImportFeeEndTime() == null) {
                 targetEndDate = feeDto.getConfigEndTime();

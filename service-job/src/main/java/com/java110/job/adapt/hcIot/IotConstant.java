@@ -77,6 +77,12 @@ public class IotConstant {
     //重启接口
     public static final String RESTART_MACHINE = "/extApi/machine/restartMachine";
 
+    //查询临时停车费订单
+    public static final String GET_TEMP_CAR_FEE_ORDER = "/extApi/fee/getTempCarFeeOrder";
+
+    //查询临时停车费订单
+    public static final String NOTIFY_TEMP_CAR_FEE_ORDER = "/extApi/fee/notifyTempCarFeeOrder";
+
     //添加车辆
     public static final String ADD_TEAM_CAR_FEE_CONFIG = "/extApi/fee/addTempCarFee";
     //修改车辆

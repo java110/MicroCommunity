@@ -3,15 +3,13 @@ package com.java110.fee.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.feeManualCollectionDetail.FeeManualCollectionDetailDto;
+import com.java110.dto.feeManualCollection.FeeManualCollectionDetailDto;
 import com.java110.fee.dao.IFeeManualCollectionDetailServiceDao;
 import com.java110.intf.fee.IFeeManualCollectionDetailInnerServiceSMO;
 import com.java110.po.feeManualCollectionDetail.FeeManualCollectionDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

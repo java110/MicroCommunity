@@ -2,7 +2,7 @@ package com.java110.fee.discount.impl;
 
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
-import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
+import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
 import com.java110.fee.discount.IComputeDiscount;
 import org.springframework.stereotype.Component;
 

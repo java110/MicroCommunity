@@ -4,7 +4,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IAttendanceClassesAttrServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.attendanceClassesAttr.AttendanceClassesAttrDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IAttendanceClassesAttrInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;

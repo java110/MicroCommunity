@@ -26,6 +26,8 @@ public class ContractPo implements Serializable {
     private String contractCode;
     private String objType;
     private String operatorLink;
+    private String contractParentId;
+
 
     public String getaLink() {
         return aLink;
@@ -202,4 +204,14 @@ public class ContractPo implements Serializable {
     public void setStateDesc(String stateDesc) {
         this.stateDesc = stateDesc;
     }
+
+    public String getContractParentId() {
+        return contractParentId;
+    }
+
+    public void setContractParentId(String contractParentId) {
+        this.contractParentId = contractParentId;
+    }
+
+
 }

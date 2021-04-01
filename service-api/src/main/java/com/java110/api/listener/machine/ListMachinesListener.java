@@ -7,7 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.communityLocation.CommunityLocationDto;
+import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.intf.common.IMachineInnerServiceSMO;

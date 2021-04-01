@@ -141,6 +141,22 @@ public class BusinessTypeConstant {
 
 
     /**
+     * 保存业主车辆
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_CAR_ATTR = "111200030002";
+
+    /**
+     * 修改业主车辆
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_CAR_ATTR = "111200040002";
+
+
+    /**
+     * 删除业主车辆
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_CAR_ATTR = "111200050002";
+
+    /**
      * 保存车辆黑白名单
      */
     public static final String BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE = "112200030001";
@@ -467,6 +483,22 @@ public class BusinessTypeConstant {
      * 删除车位
      */
     public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE = "540100050001";
+
+    /**
+     * 增加车位
+     */
+    public static final String BUSINESS_TYPE_SAVE_PARKING_SPACE_ATTR = "540100030002";
+
+    /**
+     * 修改车位
+     */
+    public static final String BUSINESS_TYPE_UPDATE_PARKING_SPACE_ATTR = "540100040002";
+
+
+    /**
+     * 删除车位
+     */
+    public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE_ATTR = "540100050002";
 
     /**
      * 添加进场记录
@@ -1215,6 +1247,25 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_LOCATION="570100050001";
 
     /**
+     *  保存任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_LOCATION_ATTR="570100030002";
+
+
+    /**
+     *  修改任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_LOCATION_ATTR="570100040002";
+
+    /**
+     * 删除任务
+     */
+    public static final String BUSINESS_TYPE_DELETE_LOCATION_ATTR="570100050002";
+
+
+    /**
      *  保存工作流
      *  3保存
      */
@@ -1376,6 +1427,9 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_MACHINE_AUTH="661100050004";
 
-
+    /**
+     * 开门记录 送databus
+     */
+    public static final String BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG = "990000060001";
 
 }

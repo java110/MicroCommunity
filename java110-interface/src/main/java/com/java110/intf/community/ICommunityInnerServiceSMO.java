@@ -42,23 +42,6 @@ public interface ICommunityInnerServiceSMO {
     @RequestMapping(value = "/queryCommunitysCount", method = RequestMethod.POST)
     int queryCommunitysCount(@RequestBody CommunityDto communityDto);
 
-    /**
-     * 保存小区信息
-     *
-     * @param communityPo
-     * @return
-     */
-    @RequestMapping(value = "/saveCommunity", method = RequestMethod.POST)
-    int saveCommunity(@RequestBody CommunityPo communityPo);
-
-    /**
-     * 修改小区信息
-     *
-     * @param communityPo
-     * @return
-     */
-    @RequestMapping(value = "/updateCommunity", method = RequestMethod.POST)
-    int updateCommunity(@RequestBody CommunityPo communityPo);
 
     /**
      * 查询小区成员表

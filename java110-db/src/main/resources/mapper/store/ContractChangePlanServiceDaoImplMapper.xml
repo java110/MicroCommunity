@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contractChangePlanServiceDaoImpl">
+
+
+    <!-- 保存合同变更计划信息 add by wuxw 2018-07-03 -->
+    <insert id="saveContractChangePlanInfo" parameterType="Map">
+        insert into contract_change_plan(
+        plan_type,contract_id,plan_id,remark,change_person,state,store_id
+        ) values (
+        #{planType},#{contractId},#{planId},#{remark},#{changePerson},#{state},#{storeId}
+        )
+    </insert>
+
+
+    <!-- 查询合同变更计划信息 add by wuxw 2018-07-03 -->
+    <select id="getContractChangePlanInfo" parameterType="Map" resultType="Map">
+        select t.plan_type,t.plan_type planType,t.contract_id,t.contract_id contractId,t.plan_id,t.plan_id
+        planId,t.remark,t.status_cd,t.status_cd statusCd,t.change_person,t.change_person
+        changePerson,t.state,t.store_id,t.store_id storeId,
+        c.a_link,c.a_link aLink,c.a_contacts,c.a_contacts aContacts,c.amount,c.contract_type,c.contract_type
+        contractType,c.operator,c.signing_time,c.signing_time signingTime,c.b_contacts,c.b_contacts
+        bContacts,c.party_a,c.party_a partyA,c.b_link,c.b_link bLink,c.party_b,c.party_b
+        partyB,c.contract_id,c.contract_id contractId,c.obj_id,c.obj_id objId,c.contract_name,c.contract_name
+        contractName,c.start_time,c.start_time startTime,c.end_time,c.end_time
+        endTime,c.contract_code,c.contract_code contractCode,c.obj_type,c.obj_type
+        objType,c.operator_link,c.operator_link operatorLink,ct.type_name contractTypeName,td.`name` stateName,td1.name planTypeName
+        from contract_change_plan t
+        inner join contract_change_plan_detail c on t.contract_id = c.contract_id  and c.store_id = t.store_id and c.operate = 'ADD'
+        inner JOIN contract_type ct on c.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id = c.store_id
+        left JOIN t_dict td on td.status_cd = t.state and td.table_name = 'contract_change_plan' and td.table_columns = 'state'
+        left JOIN t_dict td1 on td1.status_cd = t.plan_type and td1.table_name = 'contract_change_plan' and td1.table_columns = 'plan_type'
+        where 1 =1
+        <if test="planType !=null and planType != ''">
+            and t.plan_type= #{planType}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="planIds !=null">
+            and t.plan_id in
+            <foreach collection="planIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="changePerson !=null and changePerson != ''">
+            and t.change_person= #{changePerson}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改合同变更计划信息 add by wuxw 2018-07-03 -->
+    <update id="updateContractChangePlanInfo" parameterType="Map">
+        update contract_change_plan t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="planType !=null and planType != ''">
+            , t.plan_type= #{planType}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            , t.contract_id= #{contractId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="changePerson !=null and changePerson != ''">
+            , t.change_person= #{changePerson}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+
+    </update>
+
+    <!-- 查询合同变更计划数量 add by wuxw 2018-07-03 -->
+    <select id="queryContractChangePlansCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_change_plan t
+        inner join contract c on t.contract_id = c.contract_id and c.status_cd = '0' and c.store_id = t.store_id
+        inner JOIN contract_type ct on c.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id = c.store_id
+        left JOIN t_dict td on td.status_cd = t.state and td.table_name = 'contract_change_plan' and td.table_columns = 'state'
+        where 1 =1
+        <if test="planType !=null and planType != ''">
+            and t.plan_type= #{planType}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="changePerson !=null and changePerson != ''">
+            and t.change_person= #{changePerson}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+
+    </select>
+
+</mapper>

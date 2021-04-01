@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeReceiptDetail.impl;
 
-import com.java110.dto.feeReceiptDetail.FeeReceiptDetailDto;
+import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.fee.bmo.feeReceiptDetail.IGetFeeReceiptDetailBMO;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;

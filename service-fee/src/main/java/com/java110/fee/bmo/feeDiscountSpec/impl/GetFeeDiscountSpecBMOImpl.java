@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeDiscountSpec.impl;
 
-import com.java110.dto.feeDiscountSpec.FeeDiscountSpecDto;
+import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
 import com.java110.fee.bmo.feeDiscountSpec.IGetFeeDiscountSpecBMO;
 import com.java110.intf.fee.IFeeDiscountSpecInnerServiceSMO;
 import com.java110.vo.ResultVo;

@@ -16,7 +16,6 @@
 package com.java110.common.bmo.machine;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.attrValue.AttrValueDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IMachineOpenDoorBMO {

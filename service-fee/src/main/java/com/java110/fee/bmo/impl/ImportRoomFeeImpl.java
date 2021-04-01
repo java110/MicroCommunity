@@ -13,7 +13,12 @@ import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.IImportRoomFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.*;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -94,10 +99,15 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String feeTypeCd = reqJson.getString("feeTypeCd");//费用大类
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
+        String feeName = reqJson.getString("feeName");
+
+        if (StringUtil.isEmpty(feeName)) {
+            feeName = IMPORT_FEE_NAME;
+        }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setFeeName(IMPORT_FEE_NAME);
+        feeConfigDto.setFeeName(feeName);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         // 根据费用大类 判断是否有存在 费用导入收入项
@@ -179,6 +189,15 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setValue(importRoomFee.getFeeName());
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
+
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(communityId);
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
+            feeAttrPo.setValue(importRoomFee.getEndTime());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPos.add(feeAttrPo);
+
 
             if (!StringUtil.isEmpty(importRoomFee.getOwnerId())) {
                 feeAttrPo = new FeeAttrPo();
@@ -278,10 +297,14 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String feeTypeCd = reqJson.getString("feeTypeCd");//费用大类
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
+        String feeName = reqJson.getString("feeName");
 
+        if (StringUtil.isEmpty(feeName)) {
+            feeName = IMPORT_FEE_NAME;
+        }
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setFeeName(IMPORT_FEE_NAME);
+        feeConfigDto.setFeeName(feeName);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         // 根据费用大类 判断是否有存在 费用导入收入项
@@ -344,6 +367,16 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setValue(importCarFee.getFeeName());
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
+
+
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(communityId);
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
+            feeAttrPo.setValue(importCarFee.getEndTime());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPos.add(feeAttrPo);
+
 
             if (!StringUtil.isEmpty(importCarFee.getOwnerId())) {
                 feeAttrPo = new FeeAttrPo();

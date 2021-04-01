@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -555,6 +556,71 @@ public class StringUtil {
         newstr = str.replaceAll("<[.[^>]]*>","");
         newstr = newstr.replaceAll(" ", "");
         return newstr;
+    }
+
+
+
+    public static String encodeEmoji(String orgStr)
+    {
+        if (StringUtil.isEmpty(orgStr))
+        {
+            return orgStr;
+        }
+        String temp = orgStr;
+        Pattern pattern = Pattern.compile("[^\u0000-\uffff]", Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(orgStr);
+        while (matcher.find())
+        {
+            StringBuilder sb = new StringBuilder("[em:");
+            String mStr = matcher.group();
+            for (int i = 0; i < mStr.length(); i++)
+            {
+                int emoji = mStr.charAt(i);
+                if (i < mStr.length() - 1)
+                {
+                    sb.append(emoji).append('-');
+                }
+                else
+                {
+                    sb.append(emoji).append(']');
+                }
+            }
+            temp = temp.replaceAll(mStr, sb.toString());
+        }
+        return temp;
+    }
+
+    public static String decodeEmoji(String orgStr)
+    {
+        if (StringUtil.isEmpty(orgStr))
+        {
+            return orgStr;
+        }
+        String temp = orgStr;
+        Pattern pattern = Pattern.compile("\\[em:[\\d\\-]+\\]", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(orgStr);
+        while (matcher.find())
+        {
+            StringBuilder sb = new StringBuilder("\\[em:");
+            StringBuilder emojiSb = new StringBuilder();
+            String mStr = matcher.group();
+            String[] emojis = mStr.substring(4, mStr.length() - 1).split("-");
+            for (int i = 0; i < emojis.length; i++)
+            {
+                int emoji = Integer.parseInt(emojis[i]);
+                emojiSb.append((char)emoji);
+                if (i < emojis.length - 1)
+                {
+                    sb.append(emoji).append("\\-");
+                }
+                else
+                {
+                    sb.append(emoji).append("\\]");
+                }
+            }
+            temp = temp.replaceAll(sb.toString(), emojiSb.toString());
+        }
+        return temp;
     }
 
 }

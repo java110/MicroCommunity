@@ -18,7 +18,7 @@ package com.java110.job.adapt.hcIot.machine;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.RoomDto;
-import com.java110.dto.communityLocation.CommunityLocationDto;
+import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.MachineAttrDto;
