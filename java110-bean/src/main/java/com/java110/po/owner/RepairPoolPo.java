@@ -20,13 +20,14 @@ public class RepairPoolPo implements Serializable {
     private String roomId;
     private String appointmentTime;
     private String context;
-
     private String state;
-
     private String repairObjType;
     private String repairObjId;
     private String repairObjName;
-
+    private String maintenanceType;
+    private String statusCd = "0";
+    private String repairChannel;
+    private String bId;
 
     public String getRepairId() {
         return repairId;
@@ -122,5 +123,37 @@ public class RepairPoolPo implements Serializable {
 
     public void setRepairObjName(String repairObjName) {
         this.repairObjName = repairObjName;
+    }
+
+    public String getMaintenanceType() {
+        return maintenanceType;
+    }
+
+    public void setMaintenanceType(String maintenanceType) {
+        this.maintenanceType = maintenanceType;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getRepairChannel() {
+        return repairChannel;
+    }
+
+    public void setRepairChannel(String repairChannel) {
+        this.repairChannel = repairChannel;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

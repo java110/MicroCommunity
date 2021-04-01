@@ -38,6 +38,4 @@ public class ServiceCodeRepairDispatchStepConstant {
      */
     public static final String BINDING_APPRAISE_REPAIR = "ownerRepair.appraiseRepair";
 
-
-
 }

@@ -738,16 +738,16 @@ public class BusinessTypeConstant {
 
 
     /**
-     * 保修派单信息
+     * 报修派单信息
      * 11开头  3保存
      */
     public static final String BUSINESS_TYPE_SAVE_REPAIR_USER="130200030001";
     /**
-     *  保修派单变更 11开头  4修改
+     *  报修派单变更 11开头  4修改
      */
     public static final String BUSINESS_TYPE_UPDATE_REPAIR_USER="130200040001";
     /**
-     *  作废保修派单信息  11开头  5修改
+     *  作废报修派单信息  11开头  5修改
      */
     public static final String BUSINESS_TYPE_DELETE_REPAIR_USER ="130200050001";
 

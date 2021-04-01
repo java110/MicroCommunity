@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -24,8 +25,23 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String resId;
     //10000 采购 20000出库
     private String resOrderType;
-
-
+    //物品类型
+    private String goodsType;
+    //物品类型名称
+    private String goodsTypeName;
+    //单位
+    private String unitCode;
+    //备注
+    private String remark;
+    //对外售价最低价格
+    private String outLowPrice;
+    //对外收集最高价格
+    private String outHighPrice;
+    //对外售价
+    private String outPrice;
+    //手机端是否显示(N否 Y是)
+    private String showMobile;
+    private List<String> fileUrls;
     private Date createTime;
 
     private String statusCd = "0";
@@ -110,5 +126,77 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setResOrderType(String resOrderType) {
         this.resOrderType = resOrderType;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
+    }
+
+    public String getUnitCode() {
+        return unitCode;
+    }
+
+    public void setUnitCode(String unitCode) {
+        this.unitCode = unitCode;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getOutLowPrice() {
+        return outLowPrice;
+    }
+
+    public void setOutLowPrice(String outLowPrice) {
+        this.outLowPrice = outLowPrice;
+    }
+
+    public String getOutHighPrice() {
+        return outHighPrice;
+    }
+
+    public void setOutHighPrice(String outHighPrice) {
+        this.outHighPrice = outHighPrice;
+    }
+
+    public String getOutPrice() {
+        return outPrice;
+    }
+
+    public void setOutPrice(String outPrice) {
+        this.outPrice = outPrice;
+    }
+
+    public String getShowMobile() {
+        return showMobile;
+    }
+
+    public void setShowMobile(String showMobile) {
+        this.showMobile = showMobile;
+    }
+
+    public String getGoodsTypeName() {
+        return goodsTypeName;
+    }
+
+    public void setGoodsTypeName(String goodsTypeName) {
+        this.goodsTypeName = goodsTypeName;
+    }
+
+    public List<String> getFileUrls() {
+        return fileUrls;
+    }
+
+    public void setFileUrls(List<String> fileUrls) {
+        this.fileUrls = fileUrls;
     }
 }

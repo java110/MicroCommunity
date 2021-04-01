@@ -281,7 +281,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
                 feeReceiptDetailPo.setArea(value);
                 feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
-            }else if ("7007".equals(computingFormula)) { //自定义公式
+            } else if ("7007".equals(computingFormula)) { //自定义公式
                 ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
                 parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
                 parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
@@ -565,9 +565,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
             } else if ("6006".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
-            }else if ("7007".equals(computingFormula)) { //自定义公式
-                feePrice = computeRoomCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto,FeeDto.class), BeanConvertUtil.covertBean(reportRoomDto,RoomDto.class));
-            }  else {
+            } else if ("7007".equals(computingFormula)) { //自定义公式
+                feePrice = computeRoomCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class), BeanConvertUtil.covertBean(reportRoomDto, RoomDto.class));
+            } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(tmpReportFeeDto.getPayerObjType())) {//车位相关
@@ -599,9 +599,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
             } else if ("6006".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
-            }else if ("7007".equals(computingFormula)) { //自定义公式
-                feePrice = computeCarCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto,FeeDto.class), BeanConvertUtil.covertBean(reportCarDto,OwnerCarDto.class));
-            }  else {
+            } else if ("7007".equals(computingFormula)) { //自定义公式
+                feePrice = computeCarCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class), BeanConvertUtil.covertBean(reportCarDto, OwnerCarDto.class));
+            } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         }
@@ -657,6 +657,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeRoomCustomizeFormula(feeDto, roomDto);
+            } else if ("8008".equals(computingFormula)) {  //手动动态费用
+                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -701,7 +703,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
             } else if ("6006".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
-            }else if ("7007".equals(computingFormula)) { //自定义公式
+            } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeCarCustomizeFormula(feeDto, ownerCarDtos.get(0));
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
@@ -711,9 +713,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
     /**
-     *  C 代表房屋对应小区面积
-
-     *  R 代表房屋面积
+     * C 代表房屋对应小区面积
+     * <p>
+     * R 代表房屋面积
+     *
      * @param feeDto
      * @param ownerCarDto
      * @return
@@ -741,7 +744,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
                 //throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到停车位信息，查询多条数据");
                 value = value.replace("R", "0");
-            }else {
+            } else {
                 value = value.replace("R", parkingSpaceDtos.get(0).getArea());
             }
         }
@@ -757,7 +760,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             valueObj = new BigDecimal(0);
         }
 
-        if(valueObj.doubleValue() < 0){
+        if (valueObj.doubleValue() < 0) {
             return new BigDecimal(0);
         }
 
@@ -815,7 +818,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             valueObj = new BigDecimal(0);
         }
 
-        if(valueObj.doubleValue() < 0){
+        if (valueObj.doubleValue() < 0) {
             return new BigDecimal(0);
         }
 

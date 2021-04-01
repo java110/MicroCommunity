@@ -7,17 +7,21 @@
     <!-- 保存资源信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceStoreInfo" parameterType="Map">
         insert into business_resource_store(
-        res_name,operate,price,res_code,description,store_id,stock,b_id,res_id
+        res_name,operate,price,res_code,description,store_id,stock,b_id,res_id,goods_type,
+        unit_code,remark,out_low_price,out_high_price,show_mobile,create_time
         ) values (
-        #{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{bId},#{resId}
+        #{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{bId},#{resId},
+        #{goodsType},#{unitCode},#{remark},#{outLowPrice},#{outHighPrice},#{showMobile},#{createTime}
         )
     </insert>
-
 
     <!-- 查询资源信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessResourceStoreInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.operate,t.price,t.res_code,t.res_code
-        resCode,t.description,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId
+        resCode,t.description,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,
+        t.goods_type,t.goods_type goodsType,t.unit_code,t.unit_code unitCode,t.remark,
+        t.out_low_price,t.out_low_price outLowPrice,t.out_high_price,t.out_high_price outHighPrice,
+        t.show_mobile,t.show_mobile showMobile,t.create_time,t.create_time createTime
         from business_resource_store t
         where 1 =1
         <if test="resName !=null and resName != ''">
@@ -47,15 +51,36 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
-
+        <if test="goodsType !=null and goodsType != ''">
+            and t.goods_type= #{goodsType}
+        </if>
+        <if test="unitCode !=null and unitCode != ''">
+            and t.unit_code= #{unitCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="outLowPrice !=null and outLowPrice != ''">
+            and t.out_low_price= #{outLowPrice}
+        </if>
+        <if test="outHighPrice !=null and outHighPrice != ''">
+            and t.out_high_price= #{outHighPrice}
+        </if>
+        <if test="showMobile !=null and showMobile != ''">
+            and t.show_mobile= #{showMobile}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
     </select>
-
 
     <!-- 保存资源信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreInfoInstance" parameterType="Map">
         insert into resource_store(
-        res_name,price,res_code,description,status_cd,store_id,stock,b_id,res_id
-        ) select t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.b_id,t.res_id from
+        res_name,price,res_code,description,status_cd,store_id,stock,b_id,res_id,goods_type,unit_code,remark,
+        out_low_price,out_high_price,show_mobile,create_time
+        ) select t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.b_id,t.res_id,t.goods_type,
+        t.unit_code,t.remark,t.out_low_price,t.out_high_price,t.show_mobile,t.create_time from
         business_resource_store t where 1=1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
@@ -82,21 +107,60 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
-
+        <if test="goodsType !=null and goodsType != ''">
+            and t.goods_type= #{goodsType}
+        </if>
+        <if test="unitCode !=null and unitCode != ''">
+            and t.unit_code= #{unitCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="outLowPrice !=null and outLowPrice != ''">
+            and t.out_low_price= #{outLowPrice}
+        </if>
+        <if test="outHighPrice !=null and outHighPrice != ''">
+            and t.out_high_price= #{outHighPrice}
+        </if>
+        <if test="showMobile !=null and showMobile != ''">
+            and t.show_mobile= #{showMobile}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
     </insert>
-
 
     <!-- 查询资源信息 add by wuxw 2018-07-03 -->
     <select id="getResourceStoreInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.price,t.res_code,t.res_code resCode,t.description,t.status_cd,t.status_cd
-        statusCd,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId
+        statusCd,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,t.out_low_price,
+        t.out_low_price outLowPrice,td.name goodsTypeName,t.out_high_price,t.out_high_price outHighPrice,t.goods_type,
+        t.goods_type goodsType,t.unit_code,t.unit_code unitCode,t.remark,t.show_mobile,t.show_mobile showMobile,
+        t.create_time,t.create_time createTime
         from resource_store t
+        left join t_dict td on t.goods_type = td.status_cd
+        and td.table_name = 'resource_store' and td.table_columns ='goods_type'
         where 1 =1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
         </if>
         <if test="price !=null and price != ''">
             and t.price= #{price}
+        </if>
+        <if test="outLowPrice !=null and outLowPrice != ''">
+            and t.out_low_price = #{outLowPrice}
+        </if>
+        <if test="outHighPrice != null and outHighPrice != ''">
+            and t.out_high_price = #{outHighPrice}
+        </if>
+        <if test="goodsType != null and goodsType != ''">
+            and t.goods_type = #{goodsType}
+        </if>
+        <if test="unitCode != null and unitCode != ''">
+            and t.unit_code = #{unitCode}
+        </if>
+        <if test="remark != null and remark != ''">
+            and t.remark = #{remark}
         </if>
         <if test="resCode !=null and resCode != ''">
             and t.res_code= #{resCode}
@@ -119,15 +183,17 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="showMobile != null and showMobile != ''">
+            and t.show_mobile = #{showMobile}
+        </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改资源信息 add by wuxw 2018-07-03 -->
     <update id="updateResourceStoreInfoInstance" parameterType="Map">
@@ -140,6 +206,24 @@
         </if>
         <if test="price !=null and price != ''">
             , t.price= #{price}
+        </if>
+        <if test="outLowPrice !=null and outLowPrice != ''">
+            , t.out_low_price= #{outLowPrice}
+        </if>
+        <if test="outHighPrice !=null and outHighPrice != ''">
+            , t.out_high_price= #{outHighPrice}
+        </if>
+        <if test="goodsType !=null and goodsType != ''">
+            , t.goods_type= #{goodsType}
+        </if>
+        <if test="unitCode !=null and unitCode != ''">
+            , t.unit_code= #{unitCode}
+        </if>
+        <if test="showMobile !=null and showMobile != ''">
+            , t.show_mobile= #{showMobile}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
         </if>
         <if test="resCode !=null and resCode != ''">
             , t.res_code= #{resCode}
@@ -160,7 +244,6 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
-
     </update>
 
     <!-- 查询资源数量 add by wuxw 2018-07-03 -->
@@ -195,11 +278,26 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="goodsType !=null and goodsType != ''">
+            and t.goods_type= #{goodsType}
+        </if>
+        <if test="unitCode !=null and unitCode != ''">
+            and t.unit_code= #{unitCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="outLowPrice !=null and outLowPrice != ''">
+            and t.out_low_price= #{outLowPrice}
+        </if>
+        <if test="outHighPrice !=null and outHighPrice != ''">
+            and t.out_high_price= #{outHighPrice}
+        </if>
+        <if test="showMobile !=null and showMobile != ''">
+            and t.show_mobile= #{showMobile}
+        </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
-
-
     </select>
-
 </mapper>

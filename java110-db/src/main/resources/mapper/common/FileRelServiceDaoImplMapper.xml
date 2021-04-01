@@ -77,7 +77,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </insert>
 
     <insert id="saveFileRel" parameterType="Map">
@@ -89,7 +88,7 @@
         )
     </insert>
 
-    <insert id="deleteFileRel" parameterType="Map">
+    <update id="deleteFileRel" parameterType="Map">
         update file_rel t set t.status_cd = '1'
         where 1=1
         <if test="relTypeCd !=null and relTypeCd != ''">
@@ -107,9 +106,7 @@
         <if test="fileRelId !=null and fileRelId != ''">
             and t.file_rel_id= #{fileRelId}
         </if>
-
-    </insert>
-
+    </update>
 
     <!-- 查询文件存放信息 add by wuxw 2018-07-03 -->
     <select id="getFileRelInfo" parameterType="Map" resultType="Map">
@@ -159,9 +156,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改文件存放信息 add by wuxw 2018-07-03 -->
     <update id="updateFileRelInfoInstance" parameterType="Map">
@@ -191,7 +186,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询文件存放数量 add by wuxw 2018-07-03 -->
@@ -230,8 +224,5 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
     </select>
-
 </mapper>
