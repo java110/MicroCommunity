@@ -9,5 +9,5 @@ public interface IComprehensiveQuery {
      *
      * @return
      */
-    ResponseEntity<String> query(String communityId, String searchValue, String searchType, String userId);
+    ResponseEntity<String> query(String communityId, String searchValue, String searchType, String userId,String storeId);
 }

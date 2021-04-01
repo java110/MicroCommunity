@@ -76,8 +76,9 @@ public class OwnerApi {
     public ResponseEntity<String> comprehensiveQuery(@RequestParam(value = "communityId") String communityId,
                                                      @RequestParam(value = "searchValue") String searchValue,
                                                      @RequestParam(value = "searchType") String searchType,
-                                                     @RequestHeader(value = "user-id") String userId) {
-        return comprehensiveQueryImpl.query(communityId, searchValue, searchType, userId);
+                                                     @RequestHeader(value = "user-id") String userId,
+                                                     @RequestHeader(value = "store-id") String storeId) {
+        return comprehensiveQueryImpl.query(communityId, searchValue, searchType, userId,storeId);
     }
 
     /**
