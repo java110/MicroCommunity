@@ -27,6 +27,9 @@ public class ContractPo implements Serializable {
     private String objType;
     private String operatorLink;
     private String contractParentId;
+    private String objName;
+    private String objPersonName;
+    private String objPersonId;
 
 
     public String getaLink() {
@@ -213,5 +216,27 @@ public class ContractPo implements Serializable {
         this.contractParentId = contractParentId;
     }
 
+    public String getObjName() {
+        return objName;
+    }
 
+    public void setObjName(String objName) {
+        this.objName = objName;
+    }
+
+    public String getObjPersonName() {
+        return objPersonName;
+    }
+
+    public void setObjPersonName(String objPersonName) {
+        this.objPersonName = objPersonName;
+    }
+
+    public String getObjPersonId() {
+        return objPersonId;
+    }
+
+    public void setObjPersonId(String objPersonId) {
+        this.objPersonId = objPersonId;
+    }
 }

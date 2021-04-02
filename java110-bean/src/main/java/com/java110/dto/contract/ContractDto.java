@@ -49,6 +49,12 @@ public class ContractDto extends PageDto implements Serializable {
     private String objType;
     private String operatorLink;
     private String contractParentId;
+    //
+    //obj_person_name
+    //obj_person_id
+    private String objName;
+    private String objPersonName;
+    private String objPersonId;
 
 
     private Date createTime;
@@ -391,5 +397,29 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setContractIds(String[] contractIds) {
         this.contractIds = contractIds;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
+    }
+
+    public String getObjPersonName() {
+        return objPersonName;
+    }
+
+    public void setObjPersonName(String objPersonName) {
+        this.objPersonName = objPersonName;
+    }
+
+    public String getObjPersonId() {
+        return objPersonId;
+    }
+
+    public void setObjPersonId(String objPersonId) {
+        this.objPersonId = objPersonId;
     }
 }

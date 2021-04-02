@@ -322,7 +322,9 @@
         </if>
     </select>
 
-    <!-- 查询报修信息信息 add by wuxw 2018-07-03 -->
+    <!-- 查询报修信息信息 add by wuxw 2018-07-03
+     将状态先调整  and ru.state in ('10001','10002')
+     -->
     <select id="getStaffRepairInfo" parameterType="Map" resultType="Map">
         select distinct t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
@@ -342,8 +344,8 @@
         left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
         td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.state in ('10001','10002') and t.state
-        in('1000','1100','1200','1300','1400','1700','1800')
+        and ru.state = '10001'
+        and t.state in('1000','1100','1200','1300','1400','1700','1800')
         <if test="staffId !=null and staffId != ''">
             and ru.staff_id = #{staffId}
         </if>
@@ -389,7 +391,8 @@
         </if>
     </select>
 
-    <!-- 查询报修信息数量 add by wuxw 2018-07-03 -->
+    <!-- 查询报修信息数量 add by wuxw 2018-07-03
+     in ('10001','10002')-->
     <select id="queryStaffRepairsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from r_repair_pool t
@@ -399,8 +402,8 @@
         left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
         td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.state in ('10001','10002') and t.state
-        in('1000','1100','1200','1300','1400','1700','1800')
+        and ru.state = '10001'
+        and t.state in('1000','1100','1200','1300','1400','1700','1800')
         <if test="staffId !=null and staffId != ''">
             and ru.staff_id = #{staffId}
         </if>
