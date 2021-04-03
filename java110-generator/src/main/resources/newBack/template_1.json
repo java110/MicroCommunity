@@ -1,38 +1,38 @@
 {
   "autoMove": true,
-  "id": "planId",
-  "name": "contractCollectionPlan",
-  "desc": "合同收款计划",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "store",
-  "tableName": "contract_collection_plan",
+  "id": "visitId",
+  "name": "repairReturnVisit",
+  "desc": "报修回访",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "tableName": "r_repair_return_visit",
   "param": {
-    "storeId": "store_id",
-    "planId": "plan_id",
-    "contractId": "contract_id",
-    "planName": "plan_name",
-    "feeId": "fee_id",
-    "feeName": "fee_name",
-    "remark": "remark",
+    "visitId": "visit_id",
+    "repairId": "repair_id",
+    "communityId": "community_id",
+    "visitPersonId": "visit_person_id",
+    "visitPersonName": "visit_person_name",
+    "visitType": "visit_type",
+    "context": "context",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "contractId",
-      "msg": "合同ID不能为空"
+      "code": "repairId",
+      "msg": "报修单不能为空"
     },
     {
-      "code": "feeId",
-      "msg": "费用不能为空"
+      "code": "visitPersonId",
+      "msg": "回访人不能为空"
     },
     {
-      "code": "storeId",
-      "msg": "商户ID不能为空"
+      "code": "communityId",
+      "msg": "小区不能为空"
     },
     {
-      "code": "planName",
-      "msg": "收款计划名称不能为空"
+      "code": "context",
+      "msg": "回访内容不能为空"
     }
   ]
 }
