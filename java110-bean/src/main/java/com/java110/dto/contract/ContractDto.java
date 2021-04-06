@@ -22,6 +22,7 @@ public class ContractDto extends PageDto implements Serializable {
      * 44	合同终止
      */
     public static final String STATE_FAIL = "33";//33 44
+    public static final String STATE_AUDIT_FINISH = "22";//33 44
 
     public static final String STATE_COMPLAINT = "44"; //合同终止
 

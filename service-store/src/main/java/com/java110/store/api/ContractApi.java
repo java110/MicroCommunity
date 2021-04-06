@@ -52,22 +52,13 @@ import com.java110.store.bmo.contractTypeSpec.IDeleteContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.IGetContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.ISaveContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeSpec.IUpdateContractTypeSpecBMO;
-import com.java110.store.bmo.contractTypeTemplate.IDeleteContractTypeTemplateBMO;
-import com.java110.store.bmo.contractTypeTemplate.IGetContractTypeTemplateBMO;
-import com.java110.store.bmo.contractTypeTemplate.IPrintContractTemplateBMO;
-import com.java110.store.bmo.contractTypeTemplate.ISaveContractTypeTemplateBMO;
-import com.java110.store.bmo.contractTypeTemplate.IUpdateContractTypeTemplateBMO;
+import com.java110.store.bmo.contractTypeTemplate.*;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -200,6 +191,7 @@ public class ContractApi {
 
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
         contractPo.setStoreId(storeId);
+        contractPo.setStartUserId(userId);
         if (!reqJson.containsKey("contractParentId") || "-1".equals(reqJson.getString("contractParentId"))) {
             contractPo.setContractParentId("-1");
         }
@@ -256,6 +248,31 @@ public class ContractApi {
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
         contractPo.setState(ContractDto.STATE_COMPLAINT);
         return updateContractBMOImpl.update(contractPo, reqJson);
+    }
+
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/needAuditContract
+     * @path /app/contract/needAuditContract
+     */
+    @RequestMapping(value = "/needAuditContract", method = RequestMethod.POST)
+    public ResponseEntity<String> needAuditContract(
+            @RequestHeader(value = "store-id") String storeId,
+            @RequestHeader(value = "user-id") String userId,
+            @RequestBody JSONObject reqJson) {
+        ContractDto contractDto = new ContractDto();
+        contractDto.setTaskId(reqJson.getString("taskId"));
+        contractDto.setContractId(reqJson.getString("contractId"));
+        contractDto.setStoreId(storeId);
+        contractDto.setAuditCode(reqJson.getString("state"));
+        contractDto.setAuditMessage(reqJson.getString("remark"));
+        contractDto.setCurrentUserId(userId);
+
+        return updateContractBMOImpl.needAuditContract(contractDto, reqJson);
     }
 
     /**

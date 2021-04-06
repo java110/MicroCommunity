@@ -30,6 +30,7 @@ public class ContractPo implements Serializable {
     private String objName;
     private String objPersonName;
     private String objPersonId;
+    private String startUserId;
 
 
     public String getaLink() {
@@ -238,5 +239,13 @@ public class ContractPo implements Serializable {
 
     public void setObjPersonId(String objPersonId) {
         this.objPersonId = objPersonId;
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
     }
 }

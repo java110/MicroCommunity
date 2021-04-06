@@ -8,6 +8,7 @@ import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.store.StoreDto;
+import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
@@ -15,6 +16,7 @@ import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.store.bmo.contract.IUpdateContractBMO;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -35,6 +37,9 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
 
     @Autowired
     private IRentingPoolInnerServiceSMO rentingPoolInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractApplyUserInnerServiceSMO contractApplyUserInnerServiceSMOImpl;
 
     /**
      * @param contractPo
@@ -69,6 +74,27 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
 
+    }
+
+    @Override
+    public ResponseEntity<String> needAuditContract(ContractDto contractDto, JSONObject reqJson) {
+
+        ContractDto tmpContractDto = new ContractDto();
+        tmpContractDto.setContractId(contractDto.getContractId());
+        tmpContractDto.setStoreId(contractDto.getStoreId());
+        List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(tmpContractDto);
+        Assert.listOnlyOne(contractDtos, "合同不存在");
+        contractDto.setStartUserId(contractDtos.get(0).getStartUserId());
+
+        boolean isLastTask = contractApplyUserInnerServiceSMOImpl.completeTask(contractDto);
+        if (isLastTask) {
+            ContractPo contractPo = new ContractPo();
+            contractPo.setContractId(contractDto.getContractId());
+            contractPo.setState(ContractDto.STATE_AUDIT_FINISH);
+            contractPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
+            contractInnerServiceSMOImpl.updateContract(contractPo);
+        }
+        return ResultVo.success();
     }
 
     private void updateContractAttr(JSONObject jsonObject, ContractPo contractPo) {
