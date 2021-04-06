@@ -97,7 +97,8 @@ public class RepairForceFinishListener extends AbstractServiceApiPlusListener {
             repairUserPo = new RepairUserPo();
             repairUserPo.setRuId("-1");
             repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            repairUserPo.setState(RepairUserDto.STATE_EVALUATE);
+            repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            repairUserPo.setState(RepairUserDto.STATE_CLOSE);
             repairUserPo.setRepairId(reqJson.getString("repairId"));
             repairUserPo.setPreStaffId(repairUserDtos.get(0).getStaffId());
             repairUserPo.setPreStaffName(repairUserDtos.get(0).getStaffName());
@@ -105,7 +106,7 @@ public class RepairForceFinishListener extends AbstractServiceApiPlusListener {
             repairUserPo.setStaffName(userName);
             repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId());
             repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
-            repairUserPo.setContext("");
+            repairUserPo.setContext(reqJson.getString("context"));
             repairUserPo.setCommunityId(reqJson.getString("communityId"));
             super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
         }
