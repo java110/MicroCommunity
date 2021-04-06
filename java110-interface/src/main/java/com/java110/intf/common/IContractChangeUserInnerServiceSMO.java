@@ -1,6 +1,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
 import com.java110.entity.audit.AuditUser;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/contractChangeUserApi")
@@ -84,5 +87,7 @@ public interface IContractChangeUserInnerServiceSMO {
      */
     @RequestMapping(value = "/getUserHistoryTasks", method = RequestMethod.POST)
     public List<ContractChangePlanDto> getUserHistoryTasks(@RequestBody AuditUser user);
+
+    public boolean completeTask(@RequestBody ContractChangePlanDto contractChangePlanDto);
 
 }
