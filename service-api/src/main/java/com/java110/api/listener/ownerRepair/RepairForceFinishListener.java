@@ -81,7 +81,7 @@ public class RepairForceFinishListener extends AbstractServiceApiPlusListener {
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(reqJson.getString("repairId"));
         repairUserDto.setCommunityId(reqJson.getString("communityId"));
-        repairUserDto.setState(RepairDto.STATE_TAKING);
+        repairUserDto.setState(RepairUserDto.STATE_DOING);
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
 
         if (repairUserDtos != null && repairUserDtos.size() > 0) {
