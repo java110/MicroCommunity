@@ -60,6 +60,15 @@
         <if test="visitType !=null and visitType != ''">
             and t.visit_type= #{visitType}
         </if>
+        <if test="repairType !=null and repairType != ''">
+            and rrp.repair_type= #{repairType}
+        </if>
+        <if test="repairName !=null and repairName != ''">
+            and rrp.repair_name like '%${repairName}%'
+        </if>
+        <if test="tel !=null and tel != ''">
+            and rrp.tel= #{tel}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -122,7 +131,7 @@
             and t.context= #{context}
         </if>
         <if test="repairId !=null and repairId != ''">
-            and t.repair_id= #{repairId}
+            and rrp.repair_id= #{repairId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and rrp.status_cd= #{statusCd}
@@ -138,6 +147,15 @@
         </if>
         <if test="visitType !=null and visitType != ''">
             and t.visit_type= #{visitType}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and rrp.repair_type= #{repairType}
+        </if>
+        <if test="repairName !=null and repairName != ''">
+            and rrp.repair_name like '%${repairName}%'
+        </if>
+        <if test="tel !=null and tel != ''">
+            and rrp.tel= #{tel}
         </if>
 
 

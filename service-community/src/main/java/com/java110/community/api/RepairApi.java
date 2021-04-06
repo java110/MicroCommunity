@@ -127,6 +127,8 @@ public class RepairApi {
     public ResponseEntity<String> queryRepairReturnVisit(@RequestParam(value = "communityId") String communityId,
                                                          @RequestParam(value = "repairId",required = false) String repairId,
                                                          @RequestParam(value = "repairName",required = false) String repairName,
+                                                         @RequestParam(value = "tel",required = false) String tel,
+                                                         @RequestParam(value = "repairType",required = false) String repairType,
                                                          @RequestParam(value = "state") String state,
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {
@@ -135,6 +137,9 @@ public class RepairApi {
         repairReturnVisitDto.setRow(row);
         repairReturnVisitDto.setCommunityId(communityId);
         repairReturnVisitDto.setRepairId(repairId);
+        repairReturnVisitDto.setRepairName(repairName);
+        repairReturnVisitDto.setTel(tel);
+        repairReturnVisitDto.setRepairType(repairType);
         repairReturnVisitDto.setState(state);
 
         return getRepairReturnVisitBMOImpl.get(repairReturnVisitDto);
