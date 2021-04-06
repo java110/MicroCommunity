@@ -45,10 +45,10 @@
             and rrp.repair_id= #{repairId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
+            and rrp.status_cd= #{statusCd}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+            and rrp.community_id= #{communityId}
         </if>
         <if test="visitPersonName !=null and visitPersonName != ''">
             and t.visit_person_name= #{visitPersonName}
@@ -124,10 +124,10 @@
             and t.repair_id= #{repairId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
+            and rrp.status_cd= #{statusCd}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+            and rrp.community_id= #{communityId}
         </if>
         <if test="visitPersonName !=null and visitPersonName != ''">
             and t.visit_person_name= #{visitPersonName}
