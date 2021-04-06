@@ -41,6 +41,8 @@ public class SaveRepairReturnVisitBMOImpl implements ISaveRepairReturnVisitBMO {
         RepairPoolPo repairPoolPo = new RepairPoolPo();
         repairPoolPo.setRepairId(repairReturnVisitPo.getRepairId());
         repairPoolPo.setState(RepairDto.STATE_COMPLATE);
+        repairPoolPo.setCommunityId(repairReturnVisitPo.getCommunityId());
+        repairPoolPo.setStatusCd("0");
         flag = repairInnerServiceSMOImpl.updateRepair(repairPoolPo);
 
         if (flag < 0) {
