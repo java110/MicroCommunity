@@ -88,6 +88,7 @@ public interface IContractChangeUserInnerServiceSMO {
     @RequestMapping(value = "/getUserHistoryTasks", method = RequestMethod.POST)
     public List<ContractChangePlanDto> getUserHistoryTasks(@RequestBody AuditUser user);
 
+    @RequestMapping(value = "/completeTask", method = RequestMethod.POST)
     public boolean completeTask(@RequestBody ContractChangePlanDto contractChangePlanDto);
 
 }
