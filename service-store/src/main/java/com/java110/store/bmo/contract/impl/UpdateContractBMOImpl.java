@@ -93,6 +93,12 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             contractPo.setState(ContractDto.STATE_AUDIT_FINISH);
             contractPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
             contractInnerServiceSMOImpl.updateContract(contractPo);
+        }else{ //修改为审核中
+            ContractPo contractPo = new ContractPo();
+            contractPo.setContractId(contractDto.getContractId());
+            contractPo.setState(ContractDto.STATE_AUDIT_DOING);
+            contractPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
+            contractInnerServiceSMOImpl.updateContract(contractPo);
         }
         return ResultVo.success();
     }

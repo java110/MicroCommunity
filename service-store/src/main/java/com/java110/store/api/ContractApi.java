@@ -338,7 +338,7 @@ public class ContractApi {
         contractDto.setStoreId(storeId);
         contractDto.setState(state);
         contractDto.setObjId(objId);
-        contractDto.setObjId(contractId);
+        contractDto.setContractId(contractId);
         //如果是到期合同
         if ("1".equals(expiration)) {
             contractDto.setNoStates(new String[]{ContractDto.STATE_COMPLAINT, ContractDto.STATE_FAIL});
