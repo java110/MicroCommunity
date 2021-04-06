@@ -92,6 +92,8 @@ public class RepairDto extends PageDto implements Serializable {
     private String repairChannel;
     private String maintenanceType;
     private String reqSource;
+    private String visitType;
+    private String visitContext;
     private List<String> repairChannels;
 
     //业主上传维修图片
@@ -431,5 +433,21 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRepairChannels(List<String> repairChannels) {
         this.repairChannels = repairChannels;
+    }
+
+    public String getVisitType() {
+        return visitType;
+    }
+
+    public void setVisitType(String visitType) {
+        this.visitType = visitType;
+    }
+
+    public String getVisitContext() {
+        return visitContext;
+    }
+
+    public void setVisitContext(String visitContext) {
+        this.visitContext = visitContext;
     }
 }
