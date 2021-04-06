@@ -57,15 +57,20 @@ public class RepairApi {
      * @path /app/repair/saveRepairReturnVisit
      */
     @RequestMapping(value = "/saveRepairReturnVisit", method = RequestMethod.POST)
-    public ResponseEntity<String> saveRepairReturnVisit(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveRepairReturnVisit(
+            @RequestHeader(value = "user-id") String userId,
+            @RequestHeader(value = "user-name") String userName,
+            @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "repairId", "请求报文中未包含repairId");
-        Assert.hasKeyAndValue(reqJson, "visitPersonId", "请求报文中未包含visitPersonId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "visitType", "请求报文中未包含满意度");
         Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
 
 
         RepairReturnVisitPo repairReturnVisitPo = BeanConvertUtil.covertBean(reqJson, RepairReturnVisitPo.class);
+        repairReturnVisitPo.setVisitPersonId(userId);
+        repairReturnVisitPo.setVisitPersonName(userName);
         return saveRepairReturnVisitBMOImpl.save(repairReturnVisitPo);
     }
 
