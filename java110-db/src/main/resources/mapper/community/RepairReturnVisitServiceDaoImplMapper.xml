@@ -5,120 +5,130 @@
 <mapper namespace="repairReturnVisitServiceDaoImpl">
 
 
-
-
-
     <!-- 保存报修回访信息 add by wuxw 2018-07-03 -->
     <insert id="saveRepairReturnVisitInfo" parameterType="Map">
         insert into r_repair_return_visit(
-visit_id,context,repair_id,community_id,visit_person_name,visit_person_id,visit_type
-) values (
-#{visitId},#{context},#{repairId},#{communityId},#{visitPersonName},#{visitPersonId},#{visitType}
-)
+        visit_id,context,repair_id,community_id,visit_person_name,visit_person_id,visit_type
+        ) values (
+        #{visitId},#{context},#{repairId},#{communityId},#{visitPersonName},#{visitPersonId},#{visitType}
+        )
     </insert>
-
 
 
     <!-- 查询报修回访信息 add by wuxw 2018-07-03 -->
     <select id="getRepairReturnVisitInfo" parameterType="Map" resultType="Map">
-        select  t.visit_id,t.visit_id visitId,t.context,t.repair_id,t.repair_id repairId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.visit_person_name,t.visit_person_name visitPersonName,t.visit_person_id,t.visit_person_id visitPersonId,t.visit_type,t.visit_type visitType 
-from r_repair_return_visit t 
-where 1 =1 
-<if test="visitId !=null and visitId != ''">
-   and t.visit_id= #{visitId}
-</if> 
-<if test="context !=null and context != ''">
-   and t.context= #{context}
-</if> 
-<if test="repairId !=null and repairId != ''">
-   and t.repair_id= #{repairId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="visitPersonName !=null and visitPersonName != ''">
-   and t.visit_person_name= #{visitPersonName}
-</if> 
-<if test="visitPersonId !=null and visitPersonId != ''">
-   and t.visit_person_id= #{visitPersonId}
-</if> 
-<if test="visitType !=null and visitType != ''">
-   and t.visit_type= #{visitType}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.visit_id,t.visit_id visitId,t.context,t.repair_id
+        statusCd,t.community_id,t.community_id communityId,t.visit_person_name,t.visit_person_name
+        visitPersonName,t.visit_person_id,t.visit_person_id visitPersonId,t.visit_type,t.visit_type visitType,
+        rrp.repair_id repairId,rrp.repair_obj_name repairObjName,rs.repair_type_name repairTypeName,rrp.tel,rrp.repair_name repairName,
+        rrp.appointment_time appointmentTime
+        from r_repair_pool rrp
+        LEFT JOIN r_repair_return_visit t on t.repair_id = rrp.repair_id and t.community_id = rrp.community_id and t.status_cd = '0'
+        left join t_dict d on rrp.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
+        left join r_repair_setting rs on rs.repair_type = rrp.repair_type and rs.status_cd = '0'
+        where 1 = 1
+        and rrp.state = '1800'
+        and rs.return_visit_flag in ('002','003')
+        <if test="state ==null or visitId == ''">
+            and t.repair_id is null
+        </if>
+        <if test="state !=null and visitId != ''">
+            and t.repair_id is not null
+        </if>
+        <if test="visitId !=null and visitId != ''">
+            and t.visit_id= #{visitId}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and rrp.repair_id= #{repairId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="visitPersonName !=null and visitPersonName != ''">
+            and t.visit_person_name= #{visitPersonName}
+        </if>
+        <if test="visitPersonId !=null and visitPersonId != ''">
+            and t.visit_person_id= #{visitPersonId}
+        </if>
+        <if test="visitType !=null and visitType != ''">
+            and t.visit_type= #{visitType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改报修回访信息 add by wuxw 2018-07-03 -->
     <update id="updateRepairReturnVisitInfo" parameterType="Map">
-        update  r_repair_return_visit t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="context !=null and context != ''">
-, t.context= #{context}
-</if> 
-<if test="repairId !=null and repairId != ''">
-, t.repair_id= #{repairId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="visitPersonName !=null and visitPersonName != ''">
-, t.visit_person_name= #{visitPersonName}
-</if> 
-<if test="visitPersonId !=null and visitPersonId != ''">
-, t.visit_person_id= #{visitPersonId}
-</if> 
-<if test="visitType !=null and visitType != ''">
-, t.visit_type= #{visitType}
-</if> 
- where 1=1 <if test="visitId !=null and visitId != ''">
-and t.visit_id= #{visitId}
-</if> 
+        update r_repair_return_visit t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="context !=null and context != ''">
+            , t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            , t.repair_id= #{repairId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="visitPersonName !=null and visitPersonName != ''">
+            , t.visit_person_name= #{visitPersonName}
+        </if>
+        <if test="visitPersonId !=null and visitPersonId != ''">
+            , t.visit_person_id= #{visitPersonId}
+        </if>
+        <if test="visitType !=null and visitType != ''">
+            , t.visit_type= #{visitType}
+        </if>
+        where 1=1
+        <if test="visitId !=null and visitId != ''">
+            and t.visit_id= #{visitId}
+        </if>
 
     </update>
 
     <!-- 查询报修回访数量 add by wuxw 2018-07-03 -->
-     <select id="queryRepairReturnVisitsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from r_repair_return_visit t 
-where 1 =1 
-<if test="visitId !=null and visitId != ''">
-   and t.visit_id= #{visitId}
-</if> 
-<if test="context !=null and context != ''">
-   and t.context= #{context}
-</if> 
-<if test="repairId !=null and repairId != ''">
-   and t.repair_id= #{repairId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="visitPersonName !=null and visitPersonName != ''">
-   and t.visit_person_name= #{visitPersonName}
-</if> 
-<if test="visitPersonId !=null and visitPersonId != ''">
-   and t.visit_person_id= #{visitPersonId}
-</if> 
-<if test="visitType !=null and visitType != ''">
-   and t.visit_type= #{visitType}
-</if> 
+    <select id="queryRepairReturnVisitsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from r_repair_return_visit t
+        where 1 =1
+        <if test="visitId !=null and visitId != ''">
+            and t.visit_id= #{visitId}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="visitPersonName !=null and visitPersonName != ''">
+            and t.visit_person_name= #{visitPersonName}
+        </if>
+        <if test="visitPersonId !=null and visitPersonId != ''">
+            and t.visit_person_id= #{visitPersonId}
+        </if>
+        <if test="visitType !=null and visitType != ''">
+            and t.visit_type= #{visitType}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

@@ -13,11 +13,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 报修 控制类
@@ -124,12 +120,18 @@ public class RepairApi {
      */
     @RequestMapping(value = "/queryRepairReturnVisit", method = RequestMethod.GET)
     public ResponseEntity<String> queryRepairReturnVisit(@RequestParam(value = "communityId") String communityId,
+                                                         @RequestParam(value = "repairId") String repairId,
+                                                         @RequestParam(value = "repairName") String repairName,
+                                                         @RequestParam(value = "state") String state,
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {
         RepairReturnVisitDto repairReturnVisitDto = new RepairReturnVisitDto();
         repairReturnVisitDto.setPage(page);
         repairReturnVisitDto.setRow(row);
         repairReturnVisitDto.setCommunityId(communityId);
+        repairReturnVisitDto.setRepairId(repairId);
+        repairReturnVisitDto.setState(state);
+
         return getRepairReturnVisitBMOImpl.get(repairReturnVisitDto);
     }
 }

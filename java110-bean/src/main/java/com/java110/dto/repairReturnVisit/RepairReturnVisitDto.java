@@ -1,6 +1,8 @@
 package com.java110.dto.repairReturnVisit;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.repair.RepairDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,16 +14,17 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class RepairReturnVisitDto extends PageDto implements Serializable {
+public class RepairReturnVisitDto extends RepairDto implements Serializable {
 
     private String visitId;
-private String context;
-private String repairId;
-private String communityId;
-private String visitPersonName;
-private String visitPersonId;
-private String visitType;
+    private String context;
+    private String repairId;
+    private String communityId;
+    private String visitPersonName;
+    private String visitPersonId;
+    private String visitType;
 
+    private String state;
 
     private Date createTime;
 
@@ -31,43 +34,56 @@ private String visitType;
     public String getVisitId() {
         return visitId;
     }
-public void setVisitId(String visitId) {
+
+    public void setVisitId(String visitId) {
         this.visitId = visitId;
     }
-public String getContext() {
+
+    public String getContext() {
         return context;
     }
-public void setContext(String context) {
+
+    public void setContext(String context) {
         this.context = context;
     }
-public String getRepairId() {
+
+    public String getRepairId() {
         return repairId;
     }
-public void setRepairId(String repairId) {
+
+    public void setRepairId(String repairId) {
         this.repairId = repairId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getVisitPersonName() {
+
+    public String getVisitPersonName() {
         return visitPersonName;
     }
-public void setVisitPersonName(String visitPersonName) {
+
+    public void setVisitPersonName(String visitPersonName) {
         this.visitPersonName = visitPersonName;
     }
-public String getVisitPersonId() {
+
+    public String getVisitPersonId() {
         return visitPersonId;
     }
-public void setVisitPersonId(String visitPersonId) {
+
+    public void setVisitPersonId(String visitPersonId) {
         this.visitPersonId = visitPersonId;
     }
-public String getVisitType() {
+
+    public String getVisitType() {
         return visitType;
     }
-public void setVisitType(String visitType) {
+
+    public void setVisitType(String visitType) {
         this.visitType = visitType;
     }
 
@@ -86,5 +102,13 @@ public void setVisitType(String visitType) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
