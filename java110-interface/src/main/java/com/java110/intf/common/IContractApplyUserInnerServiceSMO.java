@@ -83,4 +83,12 @@ public interface IContractApplyUserInnerServiceSMO {
     @RequestMapping(value = "/getUserHistoryTasks", method = RequestMethod.POST)
     public List<ContractDto> getUserHistoryTasks(@RequestBody AuditUser user);
 
+    /**
+     * 处理任务
+     * @return true 为流程结束 false 为流程没有结束
+     */
+    @RequestMapping(value = "/completeTask", method = RequestMethod.POST)
+    public boolean completeTask(@RequestBody ContractDto contractDto);
+
+
 }
