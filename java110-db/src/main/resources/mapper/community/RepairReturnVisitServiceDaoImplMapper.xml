@@ -29,10 +29,10 @@
         where 1 = 1
         and rrp.state = '1800'
         and rs.return_visit_flag in ('002','003')
-        <if test="state ==null or visitId == ''">
+        <if test="state == 'waiting'">
             and t.repair_id is null
         </if>
-        <if test="state !=null and visitId != ''">
+        <if test="state == 'finish'">
             and t.repair_id is not null
         </if>
         <if test="visitId !=null and visitId != ''">

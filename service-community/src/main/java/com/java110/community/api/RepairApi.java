@@ -120,8 +120,8 @@ public class RepairApi {
      */
     @RequestMapping(value = "/queryRepairReturnVisit", method = RequestMethod.GET)
     public ResponseEntity<String> queryRepairReturnVisit(@RequestParam(value = "communityId") String communityId,
-                                                         @RequestParam(value = "repairId") String repairId,
-                                                         @RequestParam(value = "repairName") String repairName,
+                                                         @RequestParam(value = "repairId",required = false) String repairId,
+                                                         @RequestParam(value = "repairName",required = false) String repairName,
                                                          @RequestParam(value = "state") String state,
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {
