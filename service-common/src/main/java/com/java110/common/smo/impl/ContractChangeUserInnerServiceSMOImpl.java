@@ -3,6 +3,7 @@ package com.java110.common.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
@@ -18,6 +19,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.query.Query;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -60,9 +62,10 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("contractChangePlanDto", contractChangePlanDto);
-
+        variables.put("userId", contractChangePlanDto.getCurrentUserId());
+        variables.put("startUserId", contractChangePlanDto.getCurrentUserId());
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(contractChangePlanDto.getStoreId()), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(contractChangePlanDto.getStoreId()),contractChangePlanDto.getPlanId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
@@ -257,6 +260,26 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
             tmpContractChangePlanDto.setTaskId(taskBusinessKeyMap.get(tmpContractChangePlanDto.getContractId()));
         }
         return tmpContractChangePlanDtos;
+    }
+
+    public boolean completeTask(@RequestBody ContractChangePlanDto contractChangePlanDto) {
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(contractChangePlanDto.getTaskId()).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        Authentication.setAuthenticatedUserId(contractChangePlanDto.getCurrentUserId());
+        taskService.addComment(contractChangePlanDto.getTaskId(), processInstanceId, contractChangePlanDto.getAuditMessage());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("auditCode", contractChangePlanDto.getAuditCode());
+        variables.put("currentUserId", contractChangePlanDto.getCurrentUserId());
+        variables.put("flag", "1200".equals(contractChangePlanDto.getAuditCode()) ? "false" : "true");
+        variables.put("startUserId", contractChangePlanDto.getStartUserId());
+        taskService.complete(contractChangePlanDto.getTaskId(), variables);
+
+        ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        if (pi == null) {
+            return true;
+        }
+        return false;
     }
 
 }
