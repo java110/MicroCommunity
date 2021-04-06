@@ -101,8 +101,19 @@
     <!-- 查询报修回访数量 add by wuxw 2018-07-03 -->
     <select id="queryRepairReturnVisitsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from r_repair_return_visit t
-        where 1 =1
+        from r_repair_pool rrp
+        LEFT JOIN r_repair_return_visit t on t.repair_id = rrp.repair_id and t.community_id = rrp.community_id and t.status_cd = '0'
+        left join t_dict d on rrp.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
+        left join r_repair_setting rs on rs.repair_type = rrp.repair_type and rs.status_cd = '0'
+        where 1 = 1
+        and rrp.state = '1800'
+        and rs.return_visit_flag in ('002','003')
+        <if test="state == 'waiting'">
+            and t.repair_id is null
+        </if>
+        <if test="state == 'finish'">
+            and t.repair_id is not null
+        </if>
         <if test="visitId !=null and visitId != ''">
             and t.visit_id= #{visitId}
         </if>
