@@ -76,7 +76,7 @@ public class DeleteAllocationStorehouseInfoListener extends AbstractAllocationSt
                     JSONObject businessAllocationStorehouse = businessAllocationStorehouses.getJSONObject(_allocationAllocationStorehousehouseIndex);
                     doBusinessAllocationStorehouse(business, businessAllocationStorehouse);
                     if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("allocationAllocationStorehousehouseId", businessAllocationStorehouse.getString("allocationAllocationStorehousehouseId"));
+                        dataFlowContext.addParamOut("asId", businessAllocationStorehouse.getString("asId"));
                     }
                 }
 
@@ -107,7 +107,7 @@ public class DeleteAllocationStorehouseInfoListener extends AbstractAllocationSt
                 Map businessAllocationStorehouseInfo = businessAllocationStorehouseInfos.get(_allocationAllocationStorehousehouseIndex);
                 flushBusinessAllocationStorehouseInfo(businessAllocationStorehouseInfo,StatusConstant.STATUS_CD_INVALID);
                 allocationAllocationStorehousehouseServiceDaoImpl.updateAllocationStorehouseInfoInstance(businessAllocationStorehouseInfo);
-                dataFlowContext.addParamOut("allocationAllocationStorehousehouseId",businessAllocationStorehouseInfo.get("allocationAllocationStorehousehouse_id"));
+                dataFlowContext.addParamOut("asId",businessAllocationStorehouseInfo.get("as_id"));
             }
         }
 
@@ -157,10 +157,10 @@ public class DeleteAllocationStorehouseInfoListener extends AbstractAllocationSt
      */
     private void doBusinessAllocationStorehouse(Business business,JSONObject businessAllocationStorehouse){
 
-        Assert.jsonObjectHaveKey(businessAllocationStorehouse,"allocationAllocationStorehousehouseId","businessAllocationStorehouse 节点下没有包含 allocationAllocationStorehousehouseId 节点");
+        Assert.jsonObjectHaveKey(businessAllocationStorehouse,"asId","businessAllocationStorehouse 节点下没有包含 asId 节点");
 
-        if(businessAllocationStorehouse.getString("allocationAllocationStorehousehouseId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"allocationAllocationStorehousehouseId 错误，不能自动生成（必须已经存在的allocationAllocationStorehousehouseId）"+businessAllocationStorehouse);
+        if(businessAllocationStorehouse.getString("asId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"asId 错误，不能自动生成（必须已经存在的asId）"+businessAllocationStorehouse);
         }
         //自动插入DEL
         autoSaveDelBusinessAllocationStorehouse(business,businessAllocationStorehouse);

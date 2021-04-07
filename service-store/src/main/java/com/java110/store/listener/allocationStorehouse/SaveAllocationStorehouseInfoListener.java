@@ -68,7 +68,7 @@ public class SaveAllocationStorehouseInfoListener extends AbstractAllocationStor
                 JSONObject businessAllocationStorehouse = businessAllocationStorehouses.getJSONObject(bAllocationStorehouseIndex);
                 doBusinessAllocationStorehouse(business, businessAllocationStorehouse);
                 if(bObj instanceof JSONObject) {
-                    dataFlowContext.addParamOut("allocationAllocationStorehousehouseId", businessAllocationStorehouse.getString("allocationAllocationStorehousehouseId"));
+                    dataFlowContext.addParamOut("asId", businessAllocationStorehouse.getString("asId"));
                 }
             }
         }
@@ -93,7 +93,7 @@ public class SaveAllocationStorehouseInfoListener extends AbstractAllocationStor
             reFreshShareColumn(info, businessAllocationStorehouseInfo.get(0));
             allocationAllocationStorehousehouseServiceDaoImpl.saveAllocationStorehouseInfoInstance(info);
             if(businessAllocationStorehouseInfo.size() == 1) {
-                dataFlowContext.addParamOut("allocationAllocationStorehousehouseId", businessAllocationStorehouseInfo.get(0).get("allocationAllocationStorehousehouse_id"));
+                dataFlowContext.addParamOut("asId", businessAllocationStorehouseInfo.get(0).get("as_id"));
             }
         }
     }
@@ -149,13 +149,13 @@ public class SaveAllocationStorehouseInfoListener extends AbstractAllocationStor
      */
     private void doBusinessAllocationStorehouse(Business business,JSONObject businessAllocationStorehouse){
 
-        Assert.jsonObjectHaveKey(businessAllocationStorehouse,"allocationAllocationStorehousehouseId","businessAllocationStorehouse 节点下没有包含 allocationAllocationStorehousehouseId 节点");
+        Assert.jsonObjectHaveKey(businessAllocationStorehouse,"asId","asId 节点下没有包含 asId 节点");
 
-        if(businessAllocationStorehouse.getString("allocationAllocationStorehousehouseId").startsWith("-")){
+        if(businessAllocationStorehouse.getString("asId").startsWith("-")){
             //刷新缓存
             //flushAllocationStorehouseId(business.getDatas());
 
-            businessAllocationStorehouse.put("allocationAllocationStorehousehouseId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
+            businessAllocationStorehouse.put("asId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
 
         }
 

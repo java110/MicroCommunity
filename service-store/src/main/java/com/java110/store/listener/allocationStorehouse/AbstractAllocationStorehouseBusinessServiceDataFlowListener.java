@@ -62,7 +62,7 @@ public abstract class AbstractAllocationStorehouseBusinessServiceDataFlowListene
     protected void autoSaveDelBusinessAllocationStorehouse(Business business, JSONObject businessAllocationStorehouse) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("allocationAllocationStorehousehouseId", businessAllocationStorehouse.getString("allocationAllocationStorehousehouseId"));
+        info.put("asId", businessAllocationStorehouse.getString("asId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentAllocationStorehouseInfos = getAllocationStorehouseServiceDaoImpl().getAllocationStorehouseInfo(info);
         if (currentAllocationStorehouseInfos == null || currentAllocationStorehouseInfos.size() != 1) {
