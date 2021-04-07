@@ -33,6 +33,7 @@ public class SaveStorehouseListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+
         storehouseBMOImpl.addStorehouse(reqJson, context);
     }
 

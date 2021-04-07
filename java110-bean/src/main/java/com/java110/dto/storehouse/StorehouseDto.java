@@ -1,6 +1,7 @@
 package com.java110.dto.storehouse;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,12 +15,15 @@ import java.util.Date;
  **/
 public class StorehouseDto extends PageDto implements Serializable {
 
+    public static final String SH_TYPE_GROUP = "2806";
+    public static final String SH_TYPE_COMMUNITY = "2807";
+
     private String shDesc;
-private String shType;
-private String shObjId;
-private String shId;
-private String shName;
-private String storeId;
+    private String shType;
+    private String shObjId;
+    private String shId;
+    private String shName;
+    private String storeId;
 
 
     private Date createTime;
@@ -30,37 +34,48 @@ private String storeId;
     public String getShDesc() {
         return shDesc;
     }
-public void setShDesc(String shDesc) {
+
+    public void setShDesc(String shDesc) {
         this.shDesc = shDesc;
     }
-public String getShType() {
+
+    public String getShType() {
         return shType;
     }
-public void setShType(String shType) {
+
+    public void setShType(String shType) {
         this.shType = shType;
     }
-public String getShObjId() {
+
+    public String getShObjId() {
         return shObjId;
     }
-public void setShObjId(String shObjId) {
+
+    public void setShObjId(String shObjId) {
         this.shObjId = shObjId;
     }
-public String getShId() {
+
+    public String getShId() {
         return shId;
     }
-public void setShId(String shId) {
+
+    public void setShId(String shId) {
         this.shId = shId;
     }
-public String getShName() {
+
+    public String getShName() {
         return shName;
     }
-public void setShName(String shName) {
+
+    public void setShName(String shName) {
         this.shName = shName;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 
