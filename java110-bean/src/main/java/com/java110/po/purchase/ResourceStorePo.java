@@ -28,6 +28,7 @@ public class ResourceStorePo implements Serializable {
     private String outHighPrice;
     private String showMobile;
     private String createTime;
+    private String shId;
     private String bId;
     private List<String> photos;
     private List<String> fileUrls;
@@ -174,5 +175,13 @@ public class ResourceStorePo implements Serializable {
 
     public void setFileUrls(List<String> fileUrls) {
         this.fileUrls = fileUrls;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }

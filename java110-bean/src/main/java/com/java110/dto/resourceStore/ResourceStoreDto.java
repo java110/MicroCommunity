@@ -41,6 +41,9 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String outPrice;
     //手机端是否显示(N否 Y是)
     private String showMobile;
+
+    private String shId;
+
     private List<String> fileUrls;
     private Date createTime;
 
@@ -198,5 +201,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setFileUrls(List<String> fileUrls) {
         this.fileUrls = fileUrls;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }

@@ -1,0 +1,81 @@
+package com.java110.po.allocationStorehouse;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class AllocationStorehousePo implements Serializable {
+
+    private String asId;
+private String storeId;
+private String resId;
+private String shIdz;
+private String resName;
+private String startUserId;
+private String shIda;
+private String startUserName;
+private String state;
+private String stock;
+public String getAsId() {
+        return asId;
+    }
+public void setAsId(String asId) {
+        this.asId = asId;
+    }
+public String getStoreId() {
+        return storeId;
+    }
+public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+public String getResId() {
+        return resId;
+    }
+public void setResId(String resId) {
+        this.resId = resId;
+    }
+public String getShIdz() {
+        return shIdz;
+    }
+public void setShIdz(String shIdz) {
+        this.shIdz = shIdz;
+    }
+public String getResName() {
+        return resName;
+    }
+public void setResName(String resName) {
+        this.resName = resName;
+    }
+public String getStartUserId() {
+        return startUserId;
+    }
+public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
+    }
+public String getShIda() {
+        return shIda;
+    }
+public void setShIda(String shIda) {
+        this.shIda = shIda;
+    }
+public String getStartUserName() {
+        return startUserName;
+    }
+public void setStartUserName(String startUserName) {
+        this.startUserName = startUserName;
+    }
+public String getState() {
+        return state;
+    }
+public void setState(String state) {
+        this.state = state;
+    }
+public String getStock() {
+        return stock;
+    }
+public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+
+
+}
