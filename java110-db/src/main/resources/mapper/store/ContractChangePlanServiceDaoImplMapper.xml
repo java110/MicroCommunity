@@ -26,7 +26,8 @@
         partyB,c.contract_id,c.contract_id contractId,c.obj_id,c.obj_id objId,c.contract_name,c.contract_name
         contractName,c.start_time,c.start_time startTime,c.end_time,c.end_time
         endTime,c.contract_code,c.contract_code contractCode,c.obj_type,c.obj_type
-        objType,c.operator_link,c.operator_link operatorLink,ct.type_name contractTypeName,td.`name` stateName,td1.name planTypeName
+        objType,c.operator_link,c.operator_link operatorLink,ct.type_name contractTypeName,td.`name` stateName,td1.name planTypeName,
+        t.create_time createTime
         from contract_change_plan t
         inner join contract_change_plan_detail c on t.contract_id = c.contract_id  and c.store_id = t.store_id and c.operate = 'ADD'
         inner JOIN contract_type ct on c.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id = c.store_id
