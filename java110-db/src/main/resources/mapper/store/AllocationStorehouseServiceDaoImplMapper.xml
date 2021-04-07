@@ -111,8 +111,11 @@
         select t.as_id,t.as_id asId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.res_id,t.res_id
         resId,t.sh_id_z,t.sh_id_z shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id
         startUserId,t.sh_id_a,t.sh_id_a shIda,t.start_user_name,t.start_user_name startUserName,t.state,t.b_id,t.b_id
-        bId,t.stock,t.remark
+        bId,t.stock,t.remark,t.create_time createTime,td.name stateName,a.sh_name shaName,z.sh_name shzName
         from allocation_storehouse t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse' and td.table_columns = 'state'
+        left join storehouse a on t.sh_id_a = a.sh_id and a.store_id = t.store_id and a.status_cd = '0'
+        left join storehouse z on t.sh_id_z = z.sh_id and z.store_id = t.store_id and z.status_cd = '0'
         where 1 =1
         <if test="asId !=null and asId != ''">
             and t.as_id= #{asId}

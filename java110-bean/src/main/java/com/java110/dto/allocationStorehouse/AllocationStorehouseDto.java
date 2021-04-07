@@ -29,6 +29,9 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String state;
     private String stock;
     private String remark;
+    private String stateName;
+    private String shaName;
+    private String shzName;
 
 
     private Date createTime;
@@ -139,5 +142,29 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getShaName() {
+        return shaName;
+    }
+
+    public void setShaName(String shaName) {
+        this.shaName = shaName;
+    }
+
+    public String getShzName() {
+        return shzName;
+    }
+
+    public void setShzName(String shzName) {
+        this.shzName = shzName;
     }
 }
