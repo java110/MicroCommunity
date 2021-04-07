@@ -9,23 +9,23 @@ public class ServiceCodeAllocationStorehouseConstant {
     /**
      * 添加 仓库调拨
      */
-    public static final String ADD_ALLOCATIONSTOREHOUSE = "allocationStorehouse.saveAllocationStorehouse";
+    public static final String ADD_ALLOCATIONSTOREHOUSE = "resourceStore.saveAllocationStorehouse";
 
 
     /**
      * 修改 仓库调拨
      */
-    public static final String UPDATE_ALLOCATIONSTOREHOUSE = "allocationStorehouse.updateAllocationStorehouse";
+    public static final String UPDATE_ALLOCATIONSTOREHOUSE = "resourceStore.updateAllocationStorehouse";
     /**
      * 删除 仓库调拨
      */
-    public static final String DELETE_ALLOCATIONSTOREHOUSE = "allocationStorehouse.deleteAllocationStorehouse";
+    public static final String DELETE_ALLOCATIONSTOREHOUSE = "resourceStore.deleteAllocationStorehouse";
 
 
     /**
      * 查询 仓库调拨
      */
-    public static final String LIST_ALLOCATIONSTOREHOUSES = "allocationStorehouse.listAllocationStorehouses";
+    public static final String LIST_ALLOCATIONSTOREHOUSES = "resourceStore.listAllocationStorehouses";
 
 
 }
