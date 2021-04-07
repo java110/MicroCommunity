@@ -872,6 +872,30 @@ public class ContractApi {
 
 
     /**
+     * 合同变更审核
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/needAuditContractPlan
+     * @path /app/contract/needAuditContractPlan
+     */
+    @RequestMapping(value = "/needAuditContractPlan", method = RequestMethod.POST)
+    public ResponseEntity<String> needAuditContractPlan(
+            @RequestHeader(value = "store-id") String storeId,
+            @RequestHeader(value = "user-id") String userId,
+            @RequestBody JSONObject reqJson) {
+        ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
+        contractChangePlanDto.setTaskId(reqJson.getString("taskId"));
+        contractChangePlanDto.setPlanId(reqJson.getString("planId"));
+        contractChangePlanDto.setStoreId(storeId);
+        contractChangePlanDto.setAuditCode(reqJson.getString("state"));
+        contractChangePlanDto.setAuditMessage(reqJson.getString("remark"));
+        contractChangePlanDto.setCurrentUserId(userId);
+
+        return updateContractBMOImpl.needAuditContractPlan(contractChangePlanDto, reqJson);
+    }
+
+    /**
      * 微信保存消息模板
      *
      * @param reqJson
