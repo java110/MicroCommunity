@@ -139,7 +139,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             ContractChangePlanDetailDto contractChangePlanDetailDto = new ContractChangePlanDetailDto();
             contractChangePlanDetailDto.setPlanId(contractChangePlanDto.getPlanId());
             contractChangePlanDetailDto.setStoreId(contractChangePlanDto.getStoreId());
-            contractChangePlanDetailDto.setState("ADD");
+            contractChangePlanDetailDto.setOperate("ADD");
             List<ContractChangePlanDetailDto> contractChangePlanDetailDtos =
                     contractChangePlanDetailInnerServiceSMOImpl.queryContractChangePlanDetails(contractChangePlanDetailDto);
 
