@@ -9,23 +9,23 @@ public class ServiceCodeStorehouseConstant {
     /**
      * 添加 仓库
      */
-    public static final String ADD_STOREHOUSE = "storehouse.saveStorehouse";
+    public static final String ADD_STOREHOUSE = "resourceStore.saveStorehouse";
 
 
     /**
      * 修改 仓库
      */
-    public static final String UPDATE_STOREHOUSE = "storehouse.updateStorehouse";
+    public static final String UPDATE_STOREHOUSE = "resourceStore.updateStorehouse";
     /**
      * 删除 仓库
      */
-    public static final String DELETE_STOREHOUSE = "storehouse.deleteStorehouse";
+    public static final String DELETE_STOREHOUSE = "resourceStore.deleteStorehouse";
 
 
     /**
      * 查询 仓库
      */
-    public static final String LIST_STOREHOUSES = "storehouse.listStorehouses";
+    public static final String LIST_STOREHOUSES = "resourceStore.listStorehouses";
 
 
 }
