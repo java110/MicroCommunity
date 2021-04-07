@@ -64,15 +64,14 @@ public class GetContractBMOImpl implements IGetContractBMO {
     public ResponseEntity<String> queryContractChangeTask(AuditUser auditUser) {
         long count = contractChangeUserInnerServiceSMO.getUserTaskCount(auditUser);
 
-        List<ContractDto> contractDtos = null;
+        List<ContractChangePlanDto> contractChangePlanDtos  = null;
 
         if (count > 0) {
-            List<ContractChangePlanDto> purchaseApplyDtos = contractChangeUserInnerServiceSMO.getUserTasks(auditUser);
-            contractDtos = BeanConvertUtil.covertBeanList(purchaseApplyDtos, ContractDto.class);
+             contractChangePlanDtos = contractChangeUserInnerServiceSMO.getUserTasks(auditUser);
         } else {
-            contractDtos = new ArrayList<>();
+            contractChangePlanDtos = new ArrayList<>();
         }
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) auditUser.getRow()), new Long(count).intValue(), contractDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) auditUser.getRow()), new Long(count).intValue(), contractChangePlanDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
