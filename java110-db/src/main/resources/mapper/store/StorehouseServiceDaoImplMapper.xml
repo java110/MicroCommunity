@@ -99,7 +99,7 @@
         </if>
         <if test="shObjIds !=null">
             and t.sh_obj_id in
-            <foreach collection="shObjIds" item="taskId" index="index" open="(" close=")" separator=",">
+            <foreach collection="shObjIds" item="item" index="index" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
