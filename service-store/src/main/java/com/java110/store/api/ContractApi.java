@@ -330,6 +330,7 @@ public class ContractApi {
                                                 @RequestParam(value = "expiration", required = false) String expiration,
                                                 @RequestParam(value = "objId", required = false) String objId,
                                                 @RequestParam(value = "contractId", required = false) String contractId,
+                                                @RequestParam(value = "contractCode", required = false) String contractCode,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         ContractDto contractDto = new ContractDto();
@@ -339,6 +340,7 @@ public class ContractApi {
         contractDto.setState(state);
         contractDto.setObjId(objId);
         contractDto.setContractId(contractId);
+        contractDto.setContractCode(contractCode);
         //如果是到期合同
         if ("1".equals(expiration)) {
             contractDto.setNoStates(new String[]{ContractDto.STATE_COMPLAINT, ContractDto.STATE_FAIL});
