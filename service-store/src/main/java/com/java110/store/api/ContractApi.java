@@ -836,13 +836,13 @@ public class ContractApi {
      * @path /app/contract/deleteContractChangePlan
      */
     @RequestMapping(value = "/deleteContractChangePlan", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteContractChangePlan(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+    public ResponseEntity<String> deleteContractChangePlan(@RequestHeader(value = "store-id") String storeId,
+                                                           @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "planId", "planId不能为空");
 
-
         ContractChangePlanPo contractChangePlanPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanPo.class);
+        contractChangePlanPo.setStoreId(storeId);
         return deleteContractChangePlanBMOImpl.delete(contractChangePlanPo);
     }
 
