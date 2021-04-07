@@ -28,6 +28,7 @@ public class SaveResourceStoreListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户信息");
         //Assert.hasKeyAndValue(reqJson, "resCode", "必填，请填写物品编码");
         Assert.hasKeyAndValue(reqJson, "price", "必填，请填写物品价格");
+        Assert.hasKeyAndValue(reqJson, "shId", "必填，请填写仓库");
         /*Assert.hasKeyAndValue(reqJson, "stock", "必填，请填写物品库存");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");*/
     }

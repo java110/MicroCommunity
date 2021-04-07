@@ -21,6 +21,7 @@ public class StorehouseDto extends PageDto implements Serializable {
     private String shDesc;
     private String shType;
     private String shObjId;
+    private String[] shObjIds;
     private String shId;
     private String shName;
     private String storeId;
@@ -94,5 +95,13 @@ public class StorehouseDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getShObjIds() {
+        return shObjIds;
+    }
+
+    public void setShObjIds(String[] shObjIds) {
+        this.shObjIds = shObjIds;
     }
 }

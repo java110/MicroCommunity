@@ -97,6 +97,12 @@
         <if test="shObjId !=null and shObjId != ''">
             and t.sh_obj_id= #{shObjId}
         </if>
+        <if test="shObjIds !=null">
+            and t.sh_obj_id in
+            <foreach collection="shObjIds" item="taskId" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
@@ -164,6 +170,12 @@
         </if>
         <if test="shObjId !=null and shObjId != ''">
             and t.sh_obj_id= #{shObjId}
+        </if>
+        <if test="shObjIds !=null">
+            and t.sh_obj_id in
+            <foreach collection="shObjIds" item="taskId" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}

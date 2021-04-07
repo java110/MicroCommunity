@@ -62,6 +62,8 @@ public class ListStorehousesListener extends AbstractServiceApiListener {
 
         StorehouseDto storehouseDto = BeanConvertUtil.covertBean(reqJson, StorehouseDto.class);
 
+        storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
+
         int count = storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
 
         List<StorehouseDto> storehouseDtos = null;
