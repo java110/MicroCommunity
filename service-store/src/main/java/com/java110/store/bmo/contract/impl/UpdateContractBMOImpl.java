@@ -6,12 +6,14 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
+import com.java110.dto.contractChangePlanDetail.ContractChangePlanDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
+import com.java110.intf.store.IContractChangePlanDetailInnerServiceSMO;
 import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
@@ -22,6 +24,7 @@ import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.store.bmo.contract.IUpdateContractBMO;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +53,9 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
 
     @Autowired
     private IContractChangePlanInnerServiceSMO contractChangePlanInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractChangePlanDetailInnerServiceSMO contractChangePlanDetailInnerServiceSMOImpl;
 
     /**
      * @param contractPo
@@ -103,7 +109,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             contractPo.setState(ContractDto.STATE_AUDIT_FINISH);
             contractPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
             contractInnerServiceSMOImpl.updateContract(contractPo);
-        }else{ //修改为审核中
+        } else { //修改为审核中
             ContractPo contractPo = new ContractPo();
             contractPo.setContractId(contractDto.getContractId());
             contractPo.setState(ContractDto.STATE_AUDIT_DOING);
@@ -129,7 +135,19 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             contractChangePlanPo.setState(ContractDto.STATE_AUDIT_FINISH);
             contractChangePlanPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
             contractChangePlanInnerServiceSMOImpl.updateContractChangePlan(contractChangePlanPo);
-        }else{ //修改为审核中
+            //修改合同信息
+            ContractChangePlanDetailDto contractChangePlanDetailDto = new ContractChangePlanDetailDto();
+            contractChangePlanDetailDto.setPlanId(contractChangePlanDto.getPlanId());
+            contractChangePlanDetailDto.setStoreId(contractChangePlanDto.getStoreId());
+            contractChangePlanDetailDto.setState("ADD");
+            List<ContractChangePlanDetailDto> contractChangePlanDetailDtos =
+                    contractChangePlanDetailInnerServiceSMOImpl.queryContractChangePlanDetails(contractChangePlanDetailDto);
+
+            Assert.listOnlyOne(contractChangePlanDetailDtos, "数据错误");
+            ContractPo contractPo = BeanConvertUtil.covertBean(contractChangePlanDetailDtos.get(0), ContractPo.class);
+
+            contractInnerServiceSMOImpl.updateContract(contractPo);
+        } else { //修改为审核中
             ContractChangePlanPo contractChangePlanPo = new ContractChangePlanPo();
             contractChangePlanPo.setPlanId(contractChangePlanDto.getPlanId());
             contractChangePlanPo.setState(ContractDto.STATE_AUDIT_DOING);
