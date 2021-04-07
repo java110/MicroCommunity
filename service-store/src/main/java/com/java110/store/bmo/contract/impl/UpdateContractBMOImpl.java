@@ -116,8 +116,8 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
     @Override
     public ResponseEntity<String> needAuditContractPlan(ContractChangePlanDto contractChangePlanDto, JSONObject reqJson) {
         ContractChangePlanDto tmpContractChangePlanDto = new ContractChangePlanDto();
-        tmpContractChangePlanDto.setPlanId(tmpContractChangePlanDto.getPlanId());
-        tmpContractChangePlanDto.setStoreId(tmpContractChangePlanDto.getStoreId());
+        tmpContractChangePlanDto.setPlanId(contractChangePlanDto.getPlanId());
+        tmpContractChangePlanDto.setStoreId(contractChangePlanDto.getStoreId());
         List<ContractChangePlanDto> contractChangePlanDtos = contractChangePlanInnerServiceSMOImpl.queryContractChangePlans(tmpContractChangePlanDto);
         Assert.listOnlyOne(contractChangePlanDtos, "合同计划不存在");
         contractChangePlanDto.setStartUserId(contractChangePlanDtos.get(0).getChangePerson());
