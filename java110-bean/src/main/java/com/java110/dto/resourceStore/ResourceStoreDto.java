@@ -49,6 +49,8 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String shName;
+
 
     public String getResName() {
         return resName;
@@ -209,5 +211,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public String getShName() {
+        return shName;
+    }
+
+    public void setShName(String shName) {
+        this.shName = shName;
     }
 }
