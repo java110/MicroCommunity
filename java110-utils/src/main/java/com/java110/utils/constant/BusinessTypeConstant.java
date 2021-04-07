@@ -1432,4 +1432,24 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG = "990000060001";
 
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_STOREHOUSE="671100030004";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_STOREHOUSE="671100040004";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_STOREHOUSE="671100050004";
+
+
 }

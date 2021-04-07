@@ -1,34 +1,42 @@
 {
   "autoMove": true,
-  "id": "attrId",
-  "name": "communityLocationAttr",
-  "desc": "位置属性",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "community",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_LOCATION_ATTR",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_LOCATION_ATTR",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_LOCATION_ATTR",
-  "newBusinessTypeCdValue": "570100030002",
-  "updateBusinessTypeCdValue": "570100040002",
-  "deleteBusinessTypeCdValue": "570100050002",
-  "businessTableName": "business_community_location_attr",
-  "tableName": "community_location_attr",
+  "id": "shId",
+  "name": "storehouse",
+  "desc": "仓库",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_STOREHOUSE",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_STOREHOUSE",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_STOREHOUSE",
+  "newBusinessTypeCdValue": "671100030004",
+  "updateBusinessTypeCdValue": "671100040004",
+  "deleteBusinessTypeCdValue": "671100050004",
+  "businessTableName": "business_storehouse",
+  "tableName": "storehouse",
   "param": {
-    "communityId": "community_id",
-    "locationId": "location_id",
+    "shId": "sh_id",
+    "shName": "sh_name",
+    "shDesc": "sh_desc",
     "bId": "b_id",
-    "attrId": "attr_id",
-    "specCd": "spec_cd",
-    "value": "value",
-    "createTime": "create_time",
+    "shType": "sh_type",
+    "shObjId": "sh_obj_id",
+    "storeId": "store_id",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "specCd",
-      "msg": "属性不能为空"
+      "code": "shName",
+      "msg": "名称不能为空"
+    },
+    {
+      "code": "shType",
+      "msg": "类型不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户不能为空"
     }
   ]
 }
