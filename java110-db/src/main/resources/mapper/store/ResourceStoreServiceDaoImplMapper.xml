@@ -186,6 +186,9 @@
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
+        <if test="shType !=null and shType != ''">
+            and sh.sh_type= #{shType}
+        </if>
         <if test="showMobile != null and showMobile != ''">
             and t.show_mobile = #{showMobile}
         </if>
@@ -304,6 +307,9 @@
         </if>
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
+        </if>
+        <if test="shType !=null and shType != ''">
+            and sh.sh_type= #{shType}
         </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0
