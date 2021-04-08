@@ -44,6 +44,7 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     private String shId;
     private String shType;
+    private String shObjId;
 
     private List<String> fileUrls;
     private Date createTime;
@@ -228,5 +229,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setShType(String shType) {
         this.shType = shType;
+    }
+
+    public String getShObjId() {
+        return shObjId;
+    }
+
+    public void setShObjId(String shObjId) {
+        this.shObjId = shObjId;
     }
 }

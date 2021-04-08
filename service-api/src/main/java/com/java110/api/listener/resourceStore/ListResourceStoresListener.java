@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.store.IResourceStoreInnerServiceSMO;
-import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.storehouse.StorehouseDto;
+import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeResourceStoreConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -62,6 +63,11 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         ResourceStoreDto resourceStoreDto = BeanConvertUtil.covertBean(reqJson, ResourceStoreDto.class);
+
+        if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType())) {
+            resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
+            resourceStoreDto.setShObjId(reqJson.getString("communityId"));
+        }
         int count = resourceStoreInnerServiceSMOImpl.queryResourceStoresCount(resourceStoreDto);
         List<ApiResourceStoreDataVo> resourceStores = new ArrayList<>();
         if (count > 0) {
