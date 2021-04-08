@@ -353,5 +353,31 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         return business;
     }
 
+    /**
+     * 调拨审核
+     *
+     * @param paramInJson
+     * @return
+     */
+    public JSONObject allocationStorehouse(JSONObject paramInJson) {
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 11);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONArray businessOrgStaffRels = new JSONArray();
+        WorkflowPo workflowPo = new WorkflowPo();
+        workflowPo.setCommunityId("9999"); //所有小区
+        workflowPo.setFlowId("-5");
+        workflowPo.setFlowName("物品调拨");
+        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE);
+        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+        workflowPo.setStoreId(paramInJson.getString("storeId"));
+        businessOrgStaffRels.add(JSONObject.parseObject(JSONObject.toJSONString(workflowPo)));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), businessOrgStaffRels);
+        return business;
+    }
+
+
 
 }

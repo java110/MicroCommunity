@@ -54,4 +54,10 @@ public class ServiceCodeAuditUserConstant {
     public static final String LIST_AUDIT_HISTORY_COMPLAINTS = "auditUser.listAuditHistoryComplaints";
 
 
+    /**
+     * 查询 审核订单
+     */
+    public static final String LIST_ALLOCATION_STORE_AUDITORDERS = "resourceStore.listAllocationStoreAuditOrders";
+
+
 }

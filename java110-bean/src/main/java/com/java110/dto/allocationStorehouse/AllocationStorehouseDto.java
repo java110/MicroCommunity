@@ -19,6 +19,7 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     public static final String STATE_SUCCESS = "1202";//状态，1201 调拨审核 1202 调拨完成 1202 调拨失败
     public static final String STATE_FAIL = "1203";//状态，1201 调拨审核 1202 调拨完成 1202 调拨失败
     private String asId;
+    private String[] asIds;
     private String storeId;
     private String resId;
     private String shIdz;
@@ -37,6 +38,16 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+
+    private String currentUserId;
+    private String processInstanceId;
+    private String taskId;
+    private String auditCode;
+    private String auditMessage;
+    private String staffId;
+    private String staffName;
+    private String staffTel;
 
 
     public String getAsId() {
@@ -166,5 +177,78 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setShzName(String shzName) {
         this.shzName = shzName;
+    }
+
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getAuditCode() {
+        return auditCode;
+    }
+
+    public void setAuditCode(String auditCode) {
+        this.auditCode = auditCode;
+    }
+
+    public String getAuditMessage() {
+        return auditMessage;
+    }
+
+    public void setAuditMessage(String auditMessage) {
+        this.auditMessage = auditMessage;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStaffTel() {
+        return staffTel;
+    }
+
+    public void setStaffTel(String staffTel) {
+        this.staffTel = staffTel;
+    }
+
+    public String[] getAsIds() {
+        return asIds;
+    }
+
+    public void setAsIds(String[] asIds) {
+        this.asIds = asIds;
     }
 }
