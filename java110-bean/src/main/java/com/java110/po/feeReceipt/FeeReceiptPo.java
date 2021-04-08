@@ -12,6 +12,8 @@ public class FeeReceiptPo implements Serializable {
     private String communityId;
     private String receiptId;
     private String objType;
+    private String payObjId;
+    private String payObjName;
 
     public String getAmount() {
         return amount;
@@ -77,5 +79,19 @@ public class FeeReceiptPo implements Serializable {
         this.objType = objType;
     }
 
+    public String getPayObjId() {
+        return payObjId;
+    }
 
+    public void setPayObjId(String payObjId) {
+        this.payObjId = payObjId;
+    }
+
+    public String getPayObjName() {
+        return payObjName;
+    }
+
+    public void setPayObjName(String payObjName) {
+        this.payObjName = payObjName;
+    }
 }

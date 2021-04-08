@@ -7,6 +7,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
@@ -127,6 +128,9 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
 
         feeDto = feeDtos.get(0);
 
+        //查询业主信息
+        OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
+
         //添加单元信息
         FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
         FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
@@ -147,6 +151,9 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
         feeReceiptPo.setObjType(feeDto.getPayerObjType());
         feeReceiptPo.setObjId(feeDto.getPayerObjId());
         feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
+        feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
+        feeReceiptPo.setPayObjName(ownerDto.getName());
+
         //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
         feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
         feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);

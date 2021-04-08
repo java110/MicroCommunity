@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.*;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.fee.bmo.IPayOweFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
@@ -99,6 +100,10 @@ public class PayOweFeeImpl implements IPayOweFee {
         FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
         feeReceiptPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
         feeReceiptPo.setAmount("0.0");
+
+        feeReceiptPo.setPayObjId("-1");
+        feeReceiptPo.setPayObjName("未知");
+
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObj = fees.getJSONObject(feeIndex);
             Assert.hasKeyAndValue(feeObj, "feeId", "未包含费用项ID");
@@ -264,5 +269,8 @@ public class PayOweFeeImpl implements IPayOweFee {
         if (StringUtil.isEmpty(feeReceiptPo.getObjName())) {
             feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
         }
+        OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
+        feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
+        feeReceiptPo.setPayObjName(ownerDto.getName());
     }
 }

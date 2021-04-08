@@ -3,6 +3,7 @@ package com.java110.core.smo;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
@@ -60,6 +61,13 @@ public interface IComputeFeeSMO {
      * @return
      */
     public String getFeeObjName(FeeDto feeDto);
+
+    /**
+     * 查询费用的业主信息
+     * @param feeDto
+     * @return
+     */
+    public OwnerDto getFeeOwnerDto(FeeDto feeDto);
 
     /**
      * 刷入 付费方名称

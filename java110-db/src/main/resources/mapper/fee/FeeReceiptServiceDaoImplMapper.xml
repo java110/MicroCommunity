@@ -8,9 +8,9 @@
     <!-- 保存收据信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeReceiptInfo" parameterType="Map">
         insert into fee_receipt(
-        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type
+        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name
         ) values (
-        #{amount},#{objId},#{remark},#{objName},#{communityId},#{receiptId},#{objType}
+        #{amount},#{objId},#{remark},#{objName},#{communityId},#{receiptId},#{objType},#{payObjId},#{payObjName}
         )
     </insert>
 
@@ -18,10 +18,10 @@
     <!-- 批量插入费用 -->
     <insert id="saveFeeReceipts" parameterType="Map">
         insert into fee_receipt(
-        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type
+        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name
         ) values
         <foreach collection="feeReceiptPos" item="item" separator=",">
-            (#{item.amount},#{item.objId},#{item.remark},#{item.objName},#{item.communityId},#{item.receiptId},#{item.objType})
+            (#{item.amount},#{item.objId},#{item.remark},#{item.objName},#{item.communityId},#{item.receiptId},#{item.objType},#{item.payObjId},#{item.payObjName})
         </foreach>
     </insert>
 
@@ -30,7 +30,7 @@
     <select id="getFeeReceiptInfo" parameterType="Map" resultType="Map">
         select t.amount,t.obj_id,t.obj_id objId,t.remark,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name
         objName,t.community_id,t.community_id communityId,t.receipt_id,t.receipt_id receiptId,t.obj_type,t.obj_type
-        objType,t.create_time createTime,frd.fee_name feeName
+        objType,t.create_time createTime,frd.fee_name feeName,t.pay_obj_id payObjId,t.pay_obj_name payObjName
         from fee_receipt t
         inner join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
         inner join pay_fee pf on frd.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -40,6 +40,12 @@
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
+        </if>
+        <if test="payObjId !=null and payObjId != ''">
+            and t.pay_obj_id= #{payObjId}
+        </if>
+        <if test="payObjName !=null and payObjName != ''">
+            and t.pay_obj_name= #{payObjName}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -281,6 +287,12 @@
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
+        </if>
+        <if test="payObjId !=null and payObjId != ''">
+            and t.pay_obj_id= #{payObjId}
+        </if>
+        <if test="payObjName !=null and payObjName != ''">
+            and t.pay_obj_name= #{payObjName}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
