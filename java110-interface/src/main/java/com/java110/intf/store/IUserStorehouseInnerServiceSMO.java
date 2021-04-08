@@ -2,6 +2,7 @@ package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
+import com.java110.po.userStorehouse.UserStorehousePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,4 +39,22 @@ public interface IUserStorehouseInnerServiceSMO {
      */
     @RequestMapping(value = "/queryUserStorehousesCount", method = RequestMethod.POST)
     int queryUserStorehousesCount(@RequestBody UserStorehouseDto userUserStorehousehouseDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param userStorehousePo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/saveUserStorehouses", method = RequestMethod.POST)
+    int saveUserStorehouses(@RequestBody UserStorehousePo userStorehousePo);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param userStorehousePo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/updateUserStorehouses", method = RequestMethod.POST)
+    int updateUserStorehouses(@RequestBody UserStorehousePo userStorehousePo);
 }

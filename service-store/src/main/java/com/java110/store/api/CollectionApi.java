@@ -128,6 +128,7 @@ public class CollectionApi {
 
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(reqJson.getString("applyOrderId"));
+
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
         return resourceOutBMOImpl.out(purchaseApplyPo);
     }

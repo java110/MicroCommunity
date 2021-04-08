@@ -78,4 +78,6 @@ public interface IUserStorehouseServiceDao {
      */
     int queryUserStorehousesCount(Map info);
 
+    int saveUserStorehouses(Map beanCovertMap);
+
 }

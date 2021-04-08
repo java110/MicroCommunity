@@ -6,6 +6,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
+import com.java110.po.userStorehouse.UserStorehousePo;
 import com.java110.store.dao.IUserStorehouseServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,6 @@ public class UserStorehouseInnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Autowired
     private IUserStorehouseServiceDao useStorehouseServiceDaoImpl;
-
 
 
     @Override
@@ -80,6 +80,18 @@ public class UserStorehouseInnerServiceSMOImpl extends BaseServiceSMO implements
     @Override
     public int queryUserStorehousesCount(@RequestBody UserStorehouseDto userUserStorehousehouseDto) {
         return useStorehouseServiceDaoImpl.queryUserStorehousesCount(BeanConvertUtil.beanCovertMap(userUserStorehousehouseDto));
+    }
+
+    @Override
+    public int saveUserStorehouses(@RequestBody UserStorehousePo userStorehousePo) {
+        return useStorehouseServiceDaoImpl.saveUserStorehouses(BeanConvertUtil.beanCovertMap(userStorehousePo));
+    }
+
+    @Override
+    public int updateUserStorehouses(@RequestBody UserStorehousePo userStorehousePo) {
+        int flag = 1;
+        useStorehouseServiceDaoImpl.updateUserStorehouseInfoInstance(BeanConvertUtil.beanCovertMap(userStorehousePo));
+        return flag;
     }
 
     public IUserStorehouseServiceDao getUserStorehouseServiceDaoImpl() {

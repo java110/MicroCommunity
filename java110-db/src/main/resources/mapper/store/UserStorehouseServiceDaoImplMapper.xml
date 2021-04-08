@@ -13,6 +13,14 @@
         )
     </insert>
 
+    <insert id="saveUserStorehouses" parameterType="Map">
+        insert into user_storehouse(
+        res_name,b_id,store_id,stock,res_id,user_id,us_id
+        ) values (
+        #{resName},'-1',#{storeId},#{stock},#{resId},#{userId},#{usId}
+        )
+    </insert>
+
 
     <!-- 查询个人物品信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessUserStorehouseInfo" parameterType="Map" resultType="Map">
