@@ -1,50 +1,42 @@
 {
   "autoMove": true,
-  "id": "asId",
-  "name": "allocationStorehouse",
-  "desc": "仓库调拨",
+  "id": "usId",
+  "name": "userStorehouse",
+  "desc": "个人物品",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "store",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_ALLOCATION_STOREHOUSE",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_ALLOCATION_STOREHOUSE",
-  "newBusinessTypeCdValue": "671100030005",
-  "updateBusinessTypeCdValue": "671100040005",
-  "deleteBusinessTypeCdValue": "671100050005",
-  "businessTableName": "business_allocation_storehouse",
-  "tableName": "allocation_storehouse",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_USER_STOREHOUSE",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_USER_STOREHOUSE",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_USER_STOREHOUSE",
+  "newBusinessTypeCdValue": "671100030006",
+  "updateBusinessTypeCdValue": "671100040006",
+  "deleteBusinessTypeCdValue": "671100050006",
+  "businessTableName": "business_user_storehouse",
+  "tableName": "user_storehouse",
   "param": {
-    "asId": "as_id",
-    "shIda": "sh_id_a",
-    "shIdz": "sh_id_z",
-    "bId": "b_id",
+    "usId": "us_id",
     "resId": "res_id",
     "resName": "res_name",
+    "bId": "b_id",
     "storeId": "store_id",
     "stock": "stock",
-    "state": "state",
-    "startUserId": "start_user_id",
-    "startUserName": "start_user_name",
+    "userId": "user_id",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
-    {
-      "code": "shIda",
-      "msg": "a端不能为空"
-    },
-    {
-      "code": "shIdz",
-      "msg": "z端不能为空"
-    },
     {
       "code": "resId",
       "msg": "物品不能为空"
     },
     {
       "code": "stock",
-      "msg": "数量不能为空"
+      "msg": "库存不能为空"
+    },
+    {
+      "code": "userId",
+      "msg": "用户不能为空"
     },
     {
       "code": "storeId",
