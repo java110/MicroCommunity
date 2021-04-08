@@ -173,7 +173,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         //开启流程
         //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
         WorkflowDto workflowDto = new WorkflowDto();
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_CONTRACT_APPLY);
+        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE);
         workflowDto.setStoreId(storeId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
         Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
