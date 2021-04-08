@@ -120,6 +120,12 @@
         <if test="asId !=null and asId != ''">
             and t.as_id= #{asId}
         </if>
+        <if test="asIds !=null ">
+            and t.as_id in
+            <foreach collection="asIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -211,6 +217,12 @@
         where 1 =1
         <if test="asId !=null and asId != ''">
             and t.as_id= #{asId}
+        </if>
+        <if test="asIds !=null ">
+            and t.as_id in
+            <foreach collection="asIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
