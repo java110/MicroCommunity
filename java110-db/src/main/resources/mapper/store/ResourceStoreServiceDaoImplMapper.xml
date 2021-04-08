@@ -259,6 +259,7 @@
     <select id="queryResourceStoresCount" parameterType="Map" resultType="Map">
         select count(1) count
         from resource_store t
+        left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
         where 1 =1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
