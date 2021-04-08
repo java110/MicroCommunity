@@ -77,7 +77,7 @@ public class DeleteUserStorehouseInfoListener extends AbstractUserStorehouseBusi
                     JSONObject businessUserStorehouse = businessUserStorehouses.getJSONObject(_userUserStorehousehouseIndex);
                     doBusinessUserStorehouse(business, businessUserStorehouse);
                     if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("userUserStorehousehouseId", businessUserStorehouse.getString("userUserStorehousehouseId"));
+                        dataFlowContext.addParamOut("usId", businessUserStorehouse.getString("usId"));
                     }
                 }
 
@@ -108,7 +108,7 @@ public class DeleteUserStorehouseInfoListener extends AbstractUserStorehouseBusi
                 Map businessUserStorehouseInfo = businessUserStorehouseInfos.get(_userUserStorehousehouseIndex);
                 flushBusinessUserStorehouseInfo(businessUserStorehouseInfo,StatusConstant.STATUS_CD_INVALID);
                 userUserStorehousehouseServiceDaoImpl.updateUserStorehouseInfoInstance(businessUserStorehouseInfo);
-                dataFlowContext.addParamOut("userUserStorehousehouseId",businessUserStorehouseInfo.get("userUserStorehousehouse_id"));
+                dataFlowContext.addParamOut("usId",businessUserStorehouseInfo.get("us_id"));
             }
         }
 
@@ -158,10 +158,10 @@ public class DeleteUserStorehouseInfoListener extends AbstractUserStorehouseBusi
      */
     private void doBusinessUserStorehouse(Business business,JSONObject businessUserStorehouse){
 
-        Assert.jsonObjectHaveKey(businessUserStorehouse,"userUserStorehousehouseId","businessUserStorehouse 节点下没有包含 userUserStorehousehouseId 节点");
+        Assert.jsonObjectHaveKey(businessUserStorehouse,"usId","businessUserStorehouse 节点下没有包含 usId 节点");
 
-        if(businessUserStorehouse.getString("userUserStorehousehouseId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"userUserStorehousehouseId 错误，不能自动生成（必须已经存在的userUserStorehousehouseId）"+businessUserStorehouse);
+        if(businessUserStorehouse.getString("usId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"usId 错误，不能自动生成（必须已经存在的usId）"+businessUserStorehouse);
         }
         //自动插入DEL
         autoSaveDelBusinessUserStorehouse(business,businessUserStorehouse);

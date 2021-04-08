@@ -57,7 +57,7 @@ public abstract class AbstractUserStorehouseBusinessServiceDataFlowListener exte
     protected void autoSaveDelBusinessUserStorehouse(Business business, JSONObject businessUserStorehouse) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("userUserStorehousehouseId", businessUserStorehouse.getString("userUserStorehousehouseId"));
+        info.put("usId", businessUserStorehouse.getString("usId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentUserStorehouseInfos = getUserStorehouseServiceDaoImpl().getUserStorehouseInfo(info);
         if (currentUserStorehouseInfos == null || currentUserStorehouseInfos.size() != 1) {

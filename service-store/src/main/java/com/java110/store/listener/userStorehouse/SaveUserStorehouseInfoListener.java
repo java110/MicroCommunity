@@ -68,7 +68,7 @@ public class SaveUserStorehouseInfoListener extends AbstractUserStorehouseBusine
                 JSONObject businessUserStorehouse = businessUserStorehouses.getJSONObject(bUserStorehouseIndex);
                 doBusinessUserStorehouse(business, businessUserStorehouse);
                 if(bObj instanceof JSONObject) {
-                    dataFlowContext.addParamOut("userUserStorehousehouseId", businessUserStorehouse.getString("userUserStorehousehouseId"));
+                    dataFlowContext.addParamOut("usId", businessUserStorehouse.getString("usId"));
                 }
             }
         }
@@ -93,7 +93,7 @@ public class SaveUserStorehouseInfoListener extends AbstractUserStorehouseBusine
             reFreshShareColumn(info, businessUserStorehouseInfo.get(0));
             userUserStorehousehouseServiceDaoImpl.saveUserStorehouseInfoInstance(info);
             if(businessUserStorehouseInfo.size() == 1) {
-                dataFlowContext.addParamOut("userUserStorehousehouseId", businessUserStorehouseInfo.get(0).get("userUserStorehousehouse_id"));
+                dataFlowContext.addParamOut("usId", businessUserStorehouseInfo.get(0).get("us_id"));
             }
         }
     }
@@ -149,13 +149,13 @@ public class SaveUserStorehouseInfoListener extends AbstractUserStorehouseBusine
      */
     private void doBusinessUserStorehouse(Business business,JSONObject businessUserStorehouse){
 
-        Assert.jsonObjectHaveKey(businessUserStorehouse,"userUserStorehousehouseId","businessUserStorehouse 节点下没有包含 userUserStorehousehouseId 节点");
+        Assert.jsonObjectHaveKey(businessUserStorehouse,"usId","businessUserStorehouse 节点下没有包含 usId 节点");
 
-        if(businessUserStorehouse.getString("userUserStorehousehouseId").startsWith("-")){
+        if(businessUserStorehouse.getString("usId").startsWith("-")){
             //刷新缓存
             //flushUserStorehouseId(business.getDatas());
 
-            businessUserStorehouse.put("userUserStorehousehouseId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
+            businessUserStorehouse.put("usId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
 
         }
 
