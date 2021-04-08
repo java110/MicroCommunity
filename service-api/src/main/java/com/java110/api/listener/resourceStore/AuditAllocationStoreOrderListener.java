@@ -140,6 +140,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
 
             resourceStorePo.setResId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId));
             resourceStorePo.setStock(allocationStorehouseDtos.get(0).getStock());
+            resourceStorePo.setShId(allocationStorehouseDtos.get(0).getShIdz());
 
             super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
         }
