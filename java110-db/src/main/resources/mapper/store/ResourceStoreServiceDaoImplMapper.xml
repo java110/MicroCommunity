@@ -190,7 +190,7 @@
             and sh.sh_type= #{shType}
         </if>
         <if test="shObjId !=null and shObjId != ''">
-            and sh.sh_ob_id= #{shObjId}
+            and sh.sh_obj_id= #{shObjId}
         </if>
         <if test="showMobile != null and showMobile != ''">
             and t.show_mobile = #{showMobile}
@@ -313,7 +313,7 @@
             and t.sh_id= #{shId}
         </if>
         <if test="shObjId !=null and shObjId != ''">
-            and sh.sh_ob_id= #{shObjId}
+            and sh.sh_obj_id= #{shObjId}
         </if>
         <if test="shType !=null and shType != ''">
             and sh.sh_type= #{shType}
