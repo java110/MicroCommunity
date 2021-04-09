@@ -71,7 +71,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     @Autowired(required = false)
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
-    @Autowired
+    @Autowired(required = false)
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Override
