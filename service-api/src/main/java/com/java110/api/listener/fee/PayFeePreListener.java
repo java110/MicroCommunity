@@ -8,6 +8,7 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDetailDto;
@@ -38,6 +39,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -160,11 +162,34 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
             Assert.listOnlyOne(repairUserDtoList, "信息错误！");
             RepairUserPo repairUserPo = new RepairUserPo();
             repairUserPo.setRuId(repairUserDtoList.get(0).getRuId());
-            repairUserPo.setState(RepairUserDto.STATE_EVALUATE);
-            //如果是待评价状态，就更新开始时间
-            repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            repairUserPo.setContext("待评价");
+            repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
+            //如果是待评价状态，就更新结束时间
+            repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            DecimalFormat df = new DecimalFormat("#.00");
+            BigDecimal payment_amount=new BigDecimal(paramObj.getString("receivableAmount"));
+            repairUserPo.setContext("已支付" + df.format(payment_amount) + "元");
+            //新增待评价状态
+            JSONObject object = JSONObject.parseObject("{\"datas\":{}}");
+            object.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+            object.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
+            object.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairUserPo repairUser = new RepairUserPo();
+            repairUser.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+            repairUser.setStartTime(repairUserPo.getEndTime());
+            repairUser.setState(RepairUserDto.STATE_EVALUATE);
+            repairUser.setContext("待评价");
+            repairUser.setCommunityId(paramObj.getString("communityId"));
+            repairUser.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            repairUser.setRepairId(repairUserDtoList.get(0).getRepairId());
+            repairUser.setStaffId(repairUserDtoList.get(0).getStaffId());
+            repairUser.setStaffName(repairUserDtoList.get(0).getStaffName());
+            repairUser.setPreStaffId(repairUserDtoList.get(0).getStaffId());
+            repairUser.setPreStaffName(repairUserDtoList.get(0).getStaffName());
+            repairUser.setPreRuId(repairUserDtoList.get(0).getRuId());
+            repairUser.setRepairEvent("auditUser");
+            object.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairUserPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairUser));
             business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairUserPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairUserPo));
+            businesses.add(object);
             businesses.add(business);
         }
 

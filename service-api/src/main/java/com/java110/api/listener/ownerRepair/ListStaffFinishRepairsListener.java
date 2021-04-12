@@ -85,7 +85,7 @@ public class ListStaffFinishRepairsListener extends AbstractServiceApiListener {
             ownerRepairDto.setStates(Arrays.asList(states));
         }else{
             //Pc WEB维修已办
-            String[] states={RepairDto.STATE_BACK, RepairDto.STATE_TRANSFER, RepairDto.STATE_PAY_ERROR, RepairDto.STATE_APPRAISE, RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_COMPLATE};
+            String[] states={RepairDto.STATE_BACK, RepairDto.STATE_TRANSFER,RepairDto.STATE_PAY, RepairDto.STATE_PAY_ERROR, RepairDto.STATE_APPRAISE, RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_COMPLATE};
             ownerRepairDto.setStates(Arrays.asList(states));
         }
         int count = repairInnerServiceSMOImpl.queryStaffFinishRepairsCount(ownerRepairDto);

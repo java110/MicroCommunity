@@ -67,14 +67,6 @@ public interface IAdvertServiceDao {
     int queryAdvertsCount(Map info);
 
     /**
-     * 保存广告属性
-     *
-     * @param info
-     * @return
-     */
-    int saveAdverts(Map info);
-
-    /**
      * 修改广告信息
      *
      * @param info 修改信息

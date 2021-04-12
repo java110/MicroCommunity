@@ -27,7 +27,9 @@ public class RepairPoolPo implements Serializable {
     private String maintenanceType;
     private String repairChannel;
     private String bId;
-    private String statusCd ;
+    private String statusCd;
+    private String repairMaterials;
+    private String repairFee;
 
 
     public String getRepairId() {
@@ -159,4 +161,19 @@ public class RepairPoolPo implements Serializable {
         this.bId = bId;
     }
 
+    public String getRepairMaterials() {
+        return repairMaterials;
+    }
+
+    public void setRepairMaterials(String repairMaterials) {
+        this.repairMaterials = repairMaterials;
+    }
+
+    public String getRepairFee() {
+        return repairFee;
+    }
+
+    public void setRepairFee(String repairFee) {
+        this.repairFee = repairFee;
+    }
 }

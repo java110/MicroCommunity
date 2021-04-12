@@ -103,6 +103,11 @@ public class RepairDto extends PageDto implements Serializable {
     //维修后图片
     private List<PhotoVo> afterPhotos;
 
+    //所需物料
+    private String repairMaterials;
+
+    //费用明细
+    private String repairFee;
 
     public String getRepairName() {
         return repairName;
@@ -449,5 +454,21 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setVisitContext(String visitContext) {
         this.visitContext = visitContext;
+    }
+
+    public String getRepairMaterials() {
+        return repairMaterials;
+    }
+
+    public void setRepairMaterials(String repairMaterials) {
+        this.repairMaterials = repairMaterials;
+    }
+
+    public String getRepairFee() {
+        return repairFee;
+    }
+
+    public void setRepairFee(String repairFee) {
+        this.repairFee = repairFee;
     }
 }

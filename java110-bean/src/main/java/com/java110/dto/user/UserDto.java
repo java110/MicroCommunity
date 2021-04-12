@@ -43,6 +43,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String parentOrgId;
 
+    private String departmentOrgId;
+
     private String orgId;
 
     private String staffName;
@@ -275,5 +277,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setLoginByPhone(boolean loginByPhone) {
         this.loginByPhone = loginByPhone;
+    }
+
+    public String getDepartmentOrgId() {
+        return departmentOrgId;
+    }
+
+    public void setDepartmentOrgId(String departmentOrgId) {
+        this.departmentOrgId = departmentOrgId;
     }
 }

@@ -44,7 +44,17 @@ public interface IRepairUserInnerServiceSMO {
      * 保存报修派单信息
      *
      * @param repairUserPo
+     * @author fqz
      */
     @RequestMapping(value = "/saveRepairUser", method = RequestMethod.POST)
     void saveRepairUser(@RequestBody RepairUserPo repairUserPo);
+
+    /**
+     * 修改报修派单信息
+     *
+     * @param repairUserPo
+     * @author fqz
+     */
+    @RequestMapping(value = "/updateRepairUser", method = RequestMethod.POST)
+    void updateRepairUser(@RequestBody RepairUserPo repairUserPo);
 }

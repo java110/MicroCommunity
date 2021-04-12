@@ -94,9 +94,22 @@ public class RepairUserInnerServiceSMOImpl extends BaseServiceSMO implements IRe
         return repairUserServiceDaoImpl.queryRepairUsersCount(BeanConvertUtil.beanCovertMap(repairUserDto));
     }
 
+    /**
+     * @param repairUserPo
+     * @author fqz
+     */
     @Override
-    public void saveRepairUser(RepairUserPo repairUserPo) {
-        repairUserServiceDaoImpl.saveRepairUserInfoInstance(BeanConvertUtil.beanCovertMap(repairUserPo));
+    public void saveRepairUser(@RequestBody RepairUserPo repairUserPo) {
+        repairUserServiceDaoImpl.saveRepairUser(BeanConvertUtil.beanCovertMap(repairUserPo));
+    }
+
+    /**
+     * @param repairUserPo
+     * @author fqz
+     */
+    @Override
+    public void updateRepairUser(@RequestBody RepairUserPo repairUserPo) {
+        repairUserServiceDaoImpl.updateRepairUserInfoInstance(BeanConvertUtil.beanCovertMap(repairUserPo));
     }
 
     public IRepairUserServiceDao getRepairUserServiceDaoImpl() {

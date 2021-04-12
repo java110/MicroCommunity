@@ -47,13 +47,6 @@ public class AdvertInnerServiceSMOImpl extends BaseServiceSMO implements IAdvert
     }
 
     @Override
-    public int saveAdverts(@RequestBody AdvertDto advertDto) {
-        int saveFlag = 1;
-        advertServiceDaoImpl.saveAdverts(BeanConvertUtil.beanCovertMap(advertDto));
-        return saveFlag;
-    }
-
-    @Override
     public int updateAdverts(@RequestBody AdvertDto advertDto) {
         int saveFlag = 1;
         advertServiceDaoImpl.updateAdverts(BeanConvertUtil.beanCovertMap(advertDto));

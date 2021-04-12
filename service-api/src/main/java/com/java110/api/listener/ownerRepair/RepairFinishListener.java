@@ -20,6 +20,7 @@ import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.intf.community.IResourceStoreServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
@@ -28,6 +29,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.po.purchase.ResourceStorePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
@@ -43,6 +45,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,6 +79,9 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMO;
 
+    @Autowired
+    private IResourceStoreServiceSMO resourceStoreServiceSMO;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
@@ -93,17 +100,59 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         String repairChannel = reqJson.getString("repairChannel");
         //获取维修类型
         String maintenanceType = reqJson.getString("maintenanceType");
-        if (!reqJson.getString("outLowPrice").equals(reqJson.getString("outHighPrice"))
-                && maintenanceType.equals("1001")) {
+        //获取商品资源res_id
+        String resId = reqJson.getString("resId");
+        //获取商品数量
+        String useNumber = reqJson.getString("useNumber");
+        String outLowPrice = "0";
+        String outHighPrice = "0";
+        List<ResourceStorePo> resourceStorePoList = new ArrayList<>();
+        //用料
+        String repairMaterials = "";
+        //单价
+        Double unitPrice = 0.0;
+        //数量
+        Double useNumber_s = 0.0;
+        //总价
+        String totalPrice = "";
+        DecimalFormat df = new DecimalFormat("#.00");
+        if (!StringUtil.isEmpty(reqJson.getString("price")) && !StringUtil.isEmpty(useNumber)) {
+            //支付费用 数量乘以单价
+            unitPrice = Double.parseDouble(reqJson.getString("price"));
+            useNumber_s = Double.parseDouble(useNumber);
+            //计算金额
+            totalPrice = df.format(unitPrice * useNumber_s);
+        }
+        if (!StringUtil.isEmpty(resId)) {
+            //查询库存并校验库存
+            ResourceStorePo resourceStorePo = new ResourceStorePo();
+            resourceStorePo.setResId(resId);
+            resourceStorePoList = resourceStoreServiceSMO.getResourceStores(resourceStorePo);
+            repairMaterials = resourceStorePoList.get(0).getResName() + "*" + useNumber;
+            outLowPrice = resourceStorePoList.get(0).getOutLowPrice();
+            outHighPrice = resourceStorePoList.get(0).getOutHighPrice();
+        }
+        if (!StringUtil.isEmpty(useNumber)) {
+            String nowStock = "0";
+            if (resourceStorePoList.size() == 1) {
+                nowStock = resourceStorePoList.get(0).getStock();
+            }
+            if (Integer.parseInt(nowStock) < Integer.parseInt(useNumber)) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "商品供料库存不足！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
+        }
+        if (maintenanceType.equals("1001")) {
             //获取价格
             Double price = Double.parseDouble(reqJson.getString("price"));
-            //获取最低价
-            Double outLowPrice = Double.parseDouble(reqJson.getString("outLowPrice"));
-            //获取最高价
-            Double outHighPrice = Double.parseDouble(reqJson.getString("outHighPrice"));
+            Double outLowPrices = Double.parseDouble(outLowPrice);
+            Double outHighPrices = Double.parseDouble(outHighPrice);
             //物品价格应该在最低价和最高价之间
-            if (price < outLowPrice || price > outHighPrice) {
-                throw new IllegalArgumentException("输入的价格不正确，请重新输入！");
+            if (price < outLowPrices || price > outHighPrices) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "输入的商品供料单价不正确，请重新输入！");
+                context.setResponseEntity(responseEntity);
+                return;
             }
         }
         RepairUserDto repairUserDto = new RepairUserDto();
@@ -112,7 +161,11 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         repairUserDto.setState(RepairUserDto.STATE_DOING);
         repairUserDto.setStaffId(userId);
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        Assert.listOnlyOne(repairUserDtos, "当前用户没有需要处理订单");
+        if (repairUserDtos.size() != 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         // 1.0 关闭自己订单
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
@@ -128,14 +181,20 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairUserDto.setCommunityId(reqJson.getString("communityId"));
             repairUserDto.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
             repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-            Assert.listOnlyOne(repairUserDtos, "数据错误 该订单没有发起人");
+            if (repairUserDtos.size() != 1) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "数据错误 该订单没有发起人！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
             repairUserPo = new RepairUserPo();
             repairUserPo.setRuId("-1");
             repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             if (maintenanceType.equals("1001")) { //如果是有偿的就走下面(业主报修有偿或者电话申请有偿或者员工报修有偿)
                 repairUserPo.setState(RepairUserDto.STATE_PAY_FEE);
+                repairUserPo.setContext("待支付" + totalPrice + "元");
             } else {
                 repairUserPo.setState(RepairUserDto.STATE_EVALUATE);
+                repairUserPo.setContext("待评价");
             }
             repairUserPo.setRepairId(reqJson.getString("repairId"));
             if (repairChannel.equals("Z")) {  //如果是业主端报修的走下面的方法
@@ -145,21 +204,33 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 RepairDto repairDto = new RepairDto();
                 repairDto.setRepairId(reqJson.getString("repairId"));
                 List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
-                Assert.listOnlyOne(repairDtos, "数据错误 该用户没有报修单");
+                if (repairDtos.size() != 1) {
+                    ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "数据错误，该用户没有报修单！");
+                    context.setResponseEntity(responseEntity);
+                    return;
+                }
                 //此时的报修对象ID即房屋ID
                 String roomId = repairDtos.get(0).getRepairObjId();
                 OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
                 ownerRoomRelDto.setRoomId(roomId);
                 //查询房屋业主关系表
                 List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMO.queryOwnerRoomRels(ownerRoomRelDto);
-                Assert.listOnlyOne(ownerRoomRelDtos, "信息错误");
+                if (ownerRoomRelDtos.size() != 1) {
+                    ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "信息错误，未找到房屋的业主！");
+                    context.setResponseEntity(responseEntity);
+                    return;
+                }
                 //获取业主id
                 String ownerId = ownerRoomRelDtos.get(0).getOwnerId();
                 OwnerDto ownerDto = new OwnerDto();
                 ownerDto.setOwnerId(ownerId);
                 //根据业主id查询业主信息
                 List<OwnerDto> ownerDtos = ownerInnerServiceSMO.queryOwners(ownerDto);
-                Assert.listOnlyOne(ownerDtos, "信息错误");
+                if (ownerDtos.size() != 1) {
+                    ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "未查询到业主信息！");
+                    context.setResponseEntity(responseEntity);
+                    return;
+                }
                 //获取业主姓名
                 String ownerName = ownerDtos.get(0).getName();
                 repairUserPo.setStaffId(ownerId);
@@ -169,7 +240,6 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairUserPo.setPreStaffName(userName);
             repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId());
             repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_PAY_USER);
-            repairUserPo.setContext("");
             repairUserPo.setCommunityId(reqJson.getString("communityId"));
             super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
         }
@@ -240,9 +310,13 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_REPAIR);
             feeConfigDto.setIsDefault(FeeConfigDto.DEFAULT_FEE_CONFIG);
             List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-            Assert.listOnlyOne(feeConfigDtos, "默认维修费用有多条或不存在");
+            if (feeConfigDtos.size() != 1) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "默认维修费用有多条或不存在！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
             PayFeePo feePo = new PayFeePo();
-            feePo.setAmount(reqJson.getString("price"));
+            feePo.setAmount(String.valueOf(totalPrice));
             feePo.setCommunityId(reqJson.getString("communityId"));
             feePo.setConfigId(feeConfigDtos.get(0).getConfigId());
             feePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -255,7 +329,11 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairDto.setCommunityId(reqJson.getString("communityId"));
             repairDto.setRepairId(reqJson.getString("repairId"));
             List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
-            Assert.listOnlyOne(repairDtos, "维修单有多条或不存在");
+            if (repairDtos.size() != 1) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修单有多条或不存在！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
             feePo.setPayerObjId(repairDtos.get(0).getRepairObjId());
             feePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             feePo.setState(FeeDto.STATE_DOING);
@@ -271,7 +349,12 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             //改变r_repair_pool表maintenance_type维修类型
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(reqJson.getString("repairId"));
+            //维修类型
             repairPoolPo.setMaintenanceType(reqJson.getString("maintenanceType"));
+            //用料
+            repairPoolPo.setRepairMaterials(repairMaterials);
+            //费用明细
+            repairPoolPo.setRepairFee(df.format(unitPrice) + " * " + useNumber + " = " + totalPrice);
             super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
             ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_PAY);
         } else if (publicArea.equals("T")) {  //公共区域走这里

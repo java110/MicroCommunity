@@ -116,12 +116,13 @@
         left join t_dict d on rrp.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = rrp.repair_type and rs.status_cd = '0'
         where 1 = 1
-        and rrp.state = '1800'
         and rs.return_visit_flag in ('002','003')
         <if test="state == 'waiting'">
+            and rrp.state = '1800'
             and t.repair_id is null
         </if>
         <if test="state == 'finish'">
+            and rrp.state = '1900'
             and t.repair_id is not null
         </if>
         <if test="visitId !=null and visitId != ''">

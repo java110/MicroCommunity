@@ -4,12 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.advert.AdvertDto;
-import com.java110.intf.common.IAdvertInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.po.advert.AdvertItemPo;
+import com.java110.po.advert.AdvertPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
@@ -32,9 +31,6 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
-    @Autowired
-    private IAdvertInnerServiceSMO advertInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -72,11 +68,12 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         reqJson.put("advertId", advertId);
         reqJson.put("state", "1000");
         reqJson.put("createTime", new Date());
-        reqJson.put("bId", "-1");
+        /*reqJson.put("bId", "-1");
         AdvertDto advertDto = BeanConvertUtil.covertBean(reqJson, AdvertDto.class);
         //保存广告信息
-        advertInnerServiceSMOImpl.saveAdverts(advertDto);
-//        super.insert(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT);
+        advertInnerServiceSMOImpl.saveAdverts(advertDto);*/
+        AdvertPo advertPo = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
+        super.insert(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT);
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {

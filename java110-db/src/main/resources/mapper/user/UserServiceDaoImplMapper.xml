@@ -458,6 +458,9 @@
         <if test="parentOrgId !=null and parentOrgId != ''">
             and uo.parent_org_id = #{parentOrgId}
         </if>
+        <if test="departmentOrgId !=null and departmentOrgId != ''">
+            and uosr.org_id = #{departmentOrgId}
+        </if>
         and a.status_cd = '0'
         and uo.status_cd = '0'
         and uosr.status_cd = '0'
@@ -502,6 +505,9 @@
         and uo.parent_org_id = puo.org_id
         <if test="parentOrgId !=null and parentOrgId != ''">
             and uo.parent_org_id = #{parentOrgId}
+        </if>
+        <if test="departmentOrgId !=null and departmentOrgId != ''">
+            and uosr.org_id = #{departmentOrgId}
         </if>
         and u.status_cd = '0'
         and uo.status_cd = '0'

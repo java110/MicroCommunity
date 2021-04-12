@@ -7,9 +7,9 @@
     <!-- 保存评价信息 add by wuxw 2018-07-03 -->
     <insert id="saveAppraiseInfo" parameterType="Map">
         insert into appraise(
-        parent_appraise_id,appraise_user_name,appraise_id,appraise_score,appraise_type,context,obj_id,obj_type,appraise_user_id
+        parent_appraise_id,appraise_user_name,appraise_id,appraise_score,appraise_type,context,obj_id,obj_type,appraise_user_id,door_speed_score,repairman_service_score
         ) values (
-        #{parentAppraiseId},#{appraiseUserName},#{appraiseId},#{appraiseScore},#{appraiseType},#{context},#{objId},#{objType},#{appraiseUserId}
+        #{parentAppraiseId},#{appraiseUserName},#{appraiseId},#{appraiseScore},#{appraiseType},#{context},#{objId},#{objType},#{appraiseUserId},#{doorSpeedScore},#{repairmanServiceScore}
         )
     </insert>
 
@@ -19,7 +19,7 @@
         appraiseUserName,t.appraise_id,t.appraise_id appraiseId,t.appraise_score,t.appraise_score
         appraiseScore,t.appraise_type,t.appraise_type appraiseType,t.context,t.obj_id,t.obj_id
         objId,t.status_cd,t.status_cd statusCd,t.obj_type,t.obj_type objType,t.appraise_user_id,t.appraise_user_id
-        appraiseUserId
+        appraiseUserId,t.door_speed_score doorSpeedScore,t.repairman_service_score repairmanServiceScore
         from appraise t
         where 1 =1
         <if test="parentAppraiseId !=null and parentAppraiseId != ''">

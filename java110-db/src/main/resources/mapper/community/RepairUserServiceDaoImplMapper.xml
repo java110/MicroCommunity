@@ -15,6 +15,17 @@
         )
     </insert>
 
+    <!-- 保存报修派单信息 add by fqz 2021-04-02 -->
+    <insert id="saveRepairUser" parameterType="Map">
+        insert into r_repair_user(
+        context,repair_id,ru_id,state,community_id,b_id,staff_id,staff_name,pre_staff_id,
+        pre_staff_name,repair_event,end_time,start_time,pre_ru_id,create_time
+        ) values (
+        #{context},#{repairId},#{ruId},#{state},#{communityId},#{bId},#{staffId},
+        #{staffName},#{preStaffId},#{preStaffName},#{repairEvent},#{endTime},#{startTime},#{preRuId},#{createTime}
+        )
+    </insert>
+
 
     <!-- 查询报修派单信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessRepairUserInfo" parameterType="Map" resultType="Map">
@@ -47,7 +58,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </select>
 
 
@@ -82,7 +92,6 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-
     </insert>
 
 
@@ -170,6 +179,9 @@
         <if test="startTime !=null ">
             , t.start_time= #{startTime}
         </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
         where 1=1
         <if test="ruId !=null and ruId != ''">
             and t.ru_id= #{ruId}
@@ -240,5 +252,4 @@
             and t.pre_ru_id= #{preRuId}
         </if>
     </select>
-
 </mapper>
