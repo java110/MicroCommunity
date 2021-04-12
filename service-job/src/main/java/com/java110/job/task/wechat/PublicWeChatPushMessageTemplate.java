@@ -120,7 +120,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
 
         String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
 
-        if (accessToken == null || accessToken == "") {
+        if (StringUtil.isEmpty(accessToken)) {
             logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
             return;
         }

@@ -125,6 +125,7 @@ public class FeeReceiptApi {
                                                   @RequestParam(value = "objType", required = false) String objType,
                                                   @RequestParam(value = "objId", required = false) String objId,
                                                   @RequestParam(value = "roomId", required = false) String roomId,
+                                                  @RequestParam(value = "payObjId", required = false) String payObjId,
                                                   @RequestParam(value = "receiptId", required = false) String receiptId,
                                                   @RequestParam(value = "receiptIds", required = false) String receiptIds,
                                                   @RequestParam(value = "page") int page,
@@ -150,6 +151,7 @@ public class FeeReceiptApi {
         feeReceiptDto.setObjName(roomId);
         feeReceiptDto.setObjId(objId);
         feeReceiptDto.setStoreName(storeName);
+        feeReceiptDto.setPayObjId(payObjId);
         return getFeeReceiptBMOImpl.get(feeReceiptDto);
     }
 

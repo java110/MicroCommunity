@@ -330,6 +330,7 @@ public class ContractApi {
                                                 @RequestParam(value = "expiration", required = false) String expiration,
                                                 @RequestParam(value = "objId", required = false) String objId,
                                                 @RequestParam(value = "contractId", required = false) String contractId,
+                                                @RequestParam(value = "contractCode", required = false) String contractCode,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         ContractDto contractDto = new ContractDto();
@@ -338,7 +339,8 @@ public class ContractApi {
         contractDto.setStoreId(storeId);
         contractDto.setState(state);
         contractDto.setObjId(objId);
-        contractDto.setObjId(contractId);
+        contractDto.setContractId(contractId);
+        contractDto.setContractCode(contractCode);
         //如果是到期合同
         if ("1".equals(expiration)) {
             contractDto.setNoStates(new String[]{ContractDto.STATE_COMPLAINT, ContractDto.STATE_FAIL});
@@ -834,13 +836,13 @@ public class ContractApi {
      * @path /app/contract/deleteContractChangePlan
      */
     @RequestMapping(value = "/deleteContractChangePlan", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteContractChangePlan(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+    public ResponseEntity<String> deleteContractChangePlan(@RequestHeader(value = "store-id") String storeId,
+                                                           @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "planId", "planId不能为空");
 
-
         ContractChangePlanPo contractChangePlanPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanPo.class);
+        contractChangePlanPo.setStoreId(storeId);
         return deleteContractChangePlanBMOImpl.delete(contractChangePlanPo);
     }
 
@@ -870,6 +872,30 @@ public class ContractApi {
         return getContractChangePlanBMOImpl.get(contractChangePlanDto);
     }
 
+
+    /**
+     * 合同变更审核
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contract/needAuditContractPlan
+     * @path /app/contract/needAuditContractPlan
+     */
+    @RequestMapping(value = "/needAuditContractPlan", method = RequestMethod.POST)
+    public ResponseEntity<String> needAuditContractPlan(
+            @RequestHeader(value = "store-id") String storeId,
+            @RequestHeader(value = "user-id") String userId,
+            @RequestBody JSONObject reqJson) {
+        ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
+        contractChangePlanDto.setTaskId(reqJson.getString("taskId"));
+        contractChangePlanDto.setPlanId(reqJson.getString("planId"));
+        contractChangePlanDto.setStoreId(storeId);
+        contractChangePlanDto.setAuditCode(reqJson.getString("state"));
+        contractChangePlanDto.setAuditMessage(reqJson.getString("remark"));
+        contractChangePlanDto.setCurrentUserId(userId);
+
+        return updateContractBMOImpl.needAuditContractPlan(contractChangePlanDto, reqJson);
+    }
 
     /**
      * 微信保存消息模板

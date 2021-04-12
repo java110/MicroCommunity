@@ -181,10 +181,10 @@
         <if test="contractName !=null and contractName != ''">
             , t.contract_name= #{contractName}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             , t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null">
             , t.end_time= #{endTime}
         </if>
         <if test="state !=null and state != ''">

@@ -131,7 +131,7 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
         List<ContractChangePlanDto> tmpContractChangePlanDtos = contractChangePlanInnerServiceSMOImpl.queryContractChangePlans(contractChangePlanDto);
 
         for (ContractChangePlanDto tmpContractChangePlanDto : tmpContractChangePlanDtos) {
-            tmpContractChangePlanDto.setTaskId(taskBusinessKeyMap.get(tmpContractChangePlanDto.getContractId()));
+            tmpContractChangePlanDto.setTaskId(taskBusinessKeyMap.get(tmpContractChangePlanDto.getPlanId()));
         }
         return tmpContractChangePlanDtos;
     }
@@ -257,7 +257,7 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
         List<ContractChangePlanDto> tmpContractChangePlanDtos = contractChangePlanInnerServiceSMOImpl.queryContractChangePlans(contractChangePlanDto);
 
         for (ContractChangePlanDto tmpContractChangePlanDto : tmpContractChangePlanDtos) {
-            tmpContractChangePlanDto.setTaskId(taskBusinessKeyMap.get(tmpContractChangePlanDto.getContractId()));
+            tmpContractChangePlanDto.setTaskId(taskBusinessKeyMap.get(tmpContractChangePlanDto.getPlanId()));
         }
         return tmpContractChangePlanDtos;
     }

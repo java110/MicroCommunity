@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storehouseServiceDaoImpl">
+
+    <!-- 保存仓库信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessStorehouseInfo" parameterType="Map">
+        insert into business_storehouse(
+        sh_desc,sh_type,sh_obj_id,operate,sh_id,sh_name,b_id,store_id
+        ) values (
+        #{shDesc},#{shType},#{shObjId},#{operate},#{shId},#{shName},#{bId},#{storeId}
+        )
+    </insert>
+
+
+    <!-- 查询仓库信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessStorehouseInfo" parameterType="Map" resultType="Map">
+        select t.sh_desc,t.sh_desc shDesc,t.sh_type,t.sh_type shType,t.sh_obj_id,t.sh_obj_id
+        shObjId,t.operate,t.sh_id,t.sh_id shId,t.sh_name,t.sh_name shName,t.b_id,t.b_id bId,t.store_id,t.store_id
+        storeId
+        from business_storehouse t
+        where 1 =1
+        <if test="shDesc !=null and shDesc != ''">
+            and t.sh_desc= #{shDesc}
+        </if>
+        <if test="shType !=null and shType != ''">
+            and t.sh_type= #{shType}
+        </if>
+        <if test="shObjId !=null and shObjId != ''">
+            and t.sh_obj_id= #{shObjId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="shName !=null and shName != ''">
+            and t.sh_name= #{shName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存仓库信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveStorehouseInfoInstance" parameterType="Map">
+        insert into storehouse(
+        sh_desc,sh_type,sh_obj_id,sh_id,status_cd,sh_name,b_id,store_id
+        ) select t.sh_desc,t.sh_type,t.sh_obj_id,t.sh_id,'0',t.sh_name,t.b_id,t.store_id from business_storehouse t
+        where 1=1
+        <if test="shDesc !=null and shDesc != ''">
+            and t.sh_desc= #{shDesc}
+        </if>
+        <if test="shType !=null and shType != ''">
+            and t.sh_type= #{shType}
+        </if>
+        <if test="shObjId !=null and shObjId != ''">
+            and t.sh_obj_id= #{shObjId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="shName !=null and shName != ''">
+            and t.sh_name= #{shName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询仓库信息 add by wuxw 2018-07-03 -->
+    <select id="getStorehouseInfo" parameterType="Map" resultType="Map">
+        select t.sh_desc,t.sh_desc shDesc,t.sh_type,t.sh_type shType,t.sh_obj_id,t.sh_obj_id shObjId,t.sh_id,t.sh_id
+        shId,t.status_cd,t.status_cd statusCd,t.sh_name,t.sh_name shName,t.b_id,t.b_id bId,t.store_id,t.store_id storeId,
+        t.create_time createTime
+        from storehouse t
+        where 1 =1
+        <if test="shDesc !=null and shDesc != ''">
+            and t.sh_desc= #{shDesc}
+        </if>
+        <if test="shType !=null and shType != ''">
+            and t.sh_type= #{shType}
+        </if>
+        <if test="shObjId !=null and shObjId != ''">
+            and t.sh_obj_id= #{shObjId}
+        </if>
+        <if test="shObjIds !=null">
+            and t.sh_obj_id in
+            <foreach collection="shObjIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shName !=null and shName != ''">
+            and t.sh_name= #{shName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改仓库信息 add by wuxw 2018-07-03 -->
+    <update id="updateStorehouseInfoInstance" parameterType="Map">
+        update storehouse t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="shDesc !=null and shDesc != ''">
+            , t.sh_desc= #{shDesc}
+        </if>
+        <if test="shType !=null and shType != ''">
+            , t.sh_type= #{shType}
+        </if>
+        <if test="shObjId !=null and shObjId != ''">
+            , t.sh_obj_id= #{shObjId}
+        </if>
+        <if test="shName !=null and shName != ''">
+            , t.sh_name= #{shName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询仓库数量 add by wuxw 2018-07-03 -->
+    <select id="queryStorehousesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from storehouse t
+        where 1 =1
+        <if test="shDesc !=null and shDesc != ''">
+            and t.sh_desc= #{shDesc}
+        </if>
+        <if test="shType !=null and shType != ''">
+            and t.sh_type= #{shType}
+        </if>
+        <if test="shObjId !=null and shObjId != ''">
+            and t.sh_obj_id= #{shObjId}
+        </if>
+        <if test="shObjIds !=null">
+            and t.sh_obj_id in
+            <foreach collection="shObjIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shName !=null and shName != ''">
+            and t.sh_name= #{shName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+
+    </select>
+
+</mapper>

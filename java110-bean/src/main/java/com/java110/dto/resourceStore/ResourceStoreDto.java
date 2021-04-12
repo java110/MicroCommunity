@@ -41,10 +41,17 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String outPrice;
     //手机端是否显示(N否 Y是)
     private String showMobile;
+
+    private String shId;
+    private String shType;
+    private String shObjId;
+
     private List<String> fileUrls;
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String shName;
 
 
     public String getResName() {
@@ -198,5 +205,37 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setFileUrls(List<String> fileUrls) {
         this.fileUrls = fileUrls;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
+    }
+
+    public String getShName() {
+        return shName;
+    }
+
+    public void setShName(String shName) {
+        this.shName = shName;
+    }
+
+    public String getShType() {
+        return shType;
+    }
+
+    public void setShType(String shType) {
+        this.shType = shType;
+    }
+
+    public String getShObjId() {
+        return shObjId;
+    }
+
+    public void setShObjId(String shObjId) {
+        this.shObjId = shObjId;
     }
 }

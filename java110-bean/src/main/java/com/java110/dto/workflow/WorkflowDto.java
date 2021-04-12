@@ -32,6 +32,10 @@ public class WorkflowDto extends PageDto implements Serializable {
     public static final String FLOW_TYPE_CONTRACT_CHANGE = "60006";//合同变更审核
 
 
+    //物品调拨
+    public static final String FLOW_TYPE_ALLOCATION_STOREHOUSE = "70007";//合同变更审核
+
+
 
     public static final String DEFAULT_SKIP_LEVEL = "1";
 

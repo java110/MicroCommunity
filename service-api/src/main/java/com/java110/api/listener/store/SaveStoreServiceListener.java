@@ -14,11 +14,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 /**
  * 保存商户信息
@@ -81,6 +77,8 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         businesses.add(storeBMOImpl.addCollection(paramObj));
         businesses.add(storeBMOImpl.contractApply(paramObj));
         businesses.add(storeBMOImpl.contractChange(paramObj));
+        //物品调拨流程
+        businesses.add(storeBMOImpl.allocationStorehouse(paramObj));
 
         //super.doResponse(dataFlowContext);
         ResponseEntity<String> responseEntity = storeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);

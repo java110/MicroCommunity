@@ -29,6 +29,8 @@ public class ApiResourceStoreDataVo implements Serializable {
     //手机端是否显示(N否 Y是)
     private String showMobile;
     private Date createTime;
+    private String shName;
+    private String shId;
     private List<String> fileUrls;
 
     public String getResId() {
@@ -157,5 +159,21 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setFileUrls(List<String> fileUrls) {
         this.fileUrls = fileUrls;
+    }
+
+    public String getShName() {
+        return shName;
+    }
+
+    public void setShName(String shName) {
+        this.shName = shName;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }
