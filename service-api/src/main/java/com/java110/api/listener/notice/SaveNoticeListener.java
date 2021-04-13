@@ -62,7 +62,7 @@ public class SaveNoticeListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        if (!reqJson.containsKey("isAll") || StringUtil.isEmpty(reqJson.getString("isAll"))) {
+        if (!reqJson.containsKey("isAll") || StringUtil.isEmpty(reqJson.getString("isAll"))|| "N".equals(reqJson.getString("isAll"))) {
             noticeBMOImpl.addNotice(reqJson, context);
             return;
         }
