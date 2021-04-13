@@ -97,14 +97,14 @@ public class SaveNoticeInfoListener extends AbstractNoticeBusinessServiceDataFlo
         if (businessNoticeInfo != null && businessNoticeInfo.size() > 1) {
             Map<String, List<Map>> maps = new HashMap<>();
             for (Map businessNotice : businessNoticeInfo) {
-                if (maps.containsKey(businessNotice.get("communityId"))) {
-                    List<Map> businessNoticeInfos = maps.get(businessNotice.get("communityId"));
+                if (maps.containsKey(businessNotice.get("community_id"))) {
+                    List<Map> businessNoticeInfos = maps.get(businessNotice.get("community_id"));
                     businessNoticeInfos.add(businessNotice);
-                    maps.put(businessNotice.get("communityId").toString(), businessNoticeInfos);
+                    maps.put(businessNotice.get("community_id").toString(), businessNoticeInfos);
                 } else {
                     List<Map> businessNoticeInfos = new ArrayList<>();
                     businessNoticeInfos.add(businessNotice);
-                    maps.put(businessNotice.get("communityId").toString(), businessNoticeInfos);
+                    maps.put(businessNotice.get("community_id").toString(), businessNoticeInfos);
                 }
             }
 
@@ -132,9 +132,9 @@ public class SaveNoticeInfoListener extends AbstractNoticeBusinessServiceDataFlo
      */
     private void reFreshShareColumn(Map info, Map businessInfo) {
 
-        if (info.containsKey("communityId")) {
-            return;
-        }
+//        if (info.containsKey("communityId")) {
+//            return;
+//        }
 
         if (!businessInfo.containsKey("community_id")) {
             return;
