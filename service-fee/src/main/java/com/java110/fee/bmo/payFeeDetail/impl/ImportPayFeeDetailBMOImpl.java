@@ -182,9 +182,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         //如果结束时间小于 缴费结束时间则延期
         PayFeePo payFeePo = new PayFeePo();
         payFeePo.setCommunityId(importRoomFee.getCommunityId());
-
-        payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
-        payFeePo.setPayerObjId(tmpFeeDto.getFeeId());
+        payFeePo.setFeeId(tmpFeeDto.getFeeId());
         payFeePo.setEndTime(importRoomFee.getEndTime());
         feeInnerServiceSMOImpl.updateFee(payFeePo);
     }
