@@ -15,6 +15,7 @@ import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -182,6 +183,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         //如果结束时间小于 缴费结束时间则延期
         PayFeePo payFeePo = new PayFeePo();
         payFeePo.setCommunityId(importRoomFee.getCommunityId());
+        payFeePo.setStatusCd(StatusConstant.STATUS_CD_VALID);
         payFeePo.setFeeId(tmpFeeDto.getFeeId());
         payFeePo.setEndTime(importRoomFee.getEndTime());
         feeInnerServiceSMOImpl.updateFee(payFeePo);
