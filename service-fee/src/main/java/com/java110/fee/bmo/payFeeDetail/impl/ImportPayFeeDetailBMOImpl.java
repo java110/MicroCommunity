@@ -6,14 +6,13 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.payFeeDetail.IImportPayFeeBMODetail;
-import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
@@ -77,9 +76,9 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         if (importRoomFees.size() < 1) {
             return ResultVo.success();
         }
-        if(FeeDto.PAYER_OBJ_TYPE_ROOM.equals(objType)) {
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(objType)) {
             importFeeDetails(storeId, userId, importRoomFees);
-        }else{
+        } else {
             importCarFeeDetails(storeId, userId, importRoomFees);
         }
 
@@ -128,24 +127,28 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
 
         List<PayFeePo> payFeePos = null;
         if (feeDtos == null || feeDtos.size() < 1) {
-            PayFeePo payFeePo = new PayFeePo();
-            payFeePo.setCommunityId(importRoomFee.getCommunityId());
-            payFeePo.setConfigId(feeDto.getConfigId());
-            payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
-            payFeePo.setStartTime(importRoomFee.getStartTime());
-            payFeePo.setEndTime(importRoomFee.getEndTime());
-            payFeePo.setAmount(importRoomFee.getAmount());
-            payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
-            payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
-            payFeePo.setIncomeObjId(storeId);
-            payFeePo.setState(FeeDto.STATE_DOING);
-            payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
-            payFeePo.setPayerObjId(importRoomFee.getCarId());
-            payFeePo.setUserId(userId);
-            payFeePo.setCreateTime(importRoomFee.getCreateTime());
-            payFeePos = new ArrayList<>();
-            payFeePos.add(payFeePo);
-            feeInnerServiceSMOImpl.saveFee(payFeePos);
+            try {
+                PayFeePo payFeePo = new PayFeePo();
+                payFeePo.setCommunityId(importRoomFee.getCommunityId());
+                payFeePo.setConfigId(feeDto.getConfigId());
+                payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
+                payFeePo.setStartTime(importRoomFee.getStartTime());
+                payFeePo.setEndTime(importRoomFee.getEndTime());
+                payFeePo.setAmount(importRoomFee.getAmount());
+                payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
+                payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
+                payFeePo.setIncomeObjId(storeId);
+                payFeePo.setState(FeeDto.STATE_DOING);
+                payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+                payFeePo.setPayerObjId(importRoomFee.getCarId());
+                payFeePo.setUserId(userId);
+                payFeePo.setCreateTime(importRoomFee.getCreateTime());
+                payFeePos = new ArrayList<>();
+                payFeePos.add(payFeePo);
+                feeInnerServiceSMOImpl.saveFee(payFeePos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
         }
 
@@ -184,24 +187,28 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
 
         List<PayFeePo> payFeePos = null;
         if (feeDtos == null || feeDtos.size() < 1) {
-            PayFeePo payFeePo = new PayFeePo();
-            payFeePo.setCommunityId(importRoomFee.getCommunityId());
-            payFeePo.setConfigId(feeDto.getConfigId());
-            payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-            payFeePo.setStartTime(importRoomFee.getStartTime());
-            payFeePo.setEndTime(importRoomFee.getEndTime());
-            payFeePo.setAmount(importRoomFee.getAmount());
-            payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
-            payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
-            payFeePo.setIncomeObjId(storeId);
-            payFeePo.setState(FeeDto.STATE_DOING);
-            payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
-            payFeePo.setPayerObjId(importRoomFee.getRoomId());
-            payFeePo.setUserId(userId);
-            payFeePo.setCreateTime(importRoomFee.getCreateTime());
-            payFeePos = new ArrayList<>();
-            payFeePos.add(payFeePo);
-            feeInnerServiceSMOImpl.saveFee(payFeePos);
+            try {
+                PayFeePo payFeePo = new PayFeePo();
+                payFeePo.setCommunityId(importRoomFee.getCommunityId());
+                payFeePo.setConfigId(feeDto.getConfigId());
+                payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+                payFeePo.setStartTime(importRoomFee.getStartTime());
+                payFeePo.setEndTime(importRoomFee.getEndTime());
+                payFeePo.setAmount(importRoomFee.getAmount());
+                payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
+                payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
+                payFeePo.setIncomeObjId(storeId);
+                payFeePo.setState(FeeDto.STATE_DOING);
+                payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+                payFeePo.setPayerObjId(importRoomFee.getRoomId());
+                payFeePo.setUserId(userId);
+                payFeePo.setCreateTime(importRoomFee.getCreateTime());
+                payFeePos = new ArrayList<>();
+                payFeePos.add(payFeePo);
+                feeInnerServiceSMOImpl.saveFee(payFeePos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
         }
 
