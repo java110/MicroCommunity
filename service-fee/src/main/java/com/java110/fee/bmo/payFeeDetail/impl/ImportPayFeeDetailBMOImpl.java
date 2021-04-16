@@ -6,6 +6,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.payFeeDetail.IImportPayFeeBMODetail;
 import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
@@ -13,6 +14,7 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.StatusConstant;
@@ -46,6 +48,9 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
     /**
      * @param reqJson
      * @return 订单服务能够接受的报文
@@ -57,6 +62,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         String communityId = reqJson.getString("communityId");
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
+        String objType = reqJson.getString("objType");
 
         JSONArray datas = reqJson.getJSONArray("importRoomFees");
 
@@ -71,8 +77,11 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         if (importRoomFees.size() < 1) {
             return ResultVo.success();
         }
-
-        importFeeDetails(storeId, userId, importRoomFees);
+        if(FeeDto.PAYER_OBJ_TYPE_ROOM.equals(objType)) {
+            importFeeDetails(storeId, userId, importRoomFees);
+        }else{
+            importCarFeeDetails(storeId, userId, importRoomFees);
+        }
 
         return ResultVo.success();
     }
@@ -80,10 +89,74 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
     private void importFeeDetails(String storeId, String userId, List<ImportRoomFee> importRoomFees) {
 
         importRoomFees = roomInnerServiceSMOImpl.freshRoomIds(importRoomFees);
-
         for (ImportRoomFee importRoomFee : importRoomFees) {
             importFeeDetail(importRoomFee, storeId, userId);
         }
+    }
+
+
+    private void importCarFeeDetails(String storeId, String userId, List<ImportRoomFee> importCarFees) {
+
+        importCarFees = ownerCarInnerServiceSMOImpl.freshCarIds(importCarFees);
+        for (ImportRoomFee importCarFee : importCarFees) {
+            importCarFeeDetail(importCarFee, storeId, userId);
+        }
+    }
+
+    /**
+     * 导入 费用历史
+     *
+     * @param importRoomFee
+     */
+    private void importCarFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId) {
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setFeeName(importRoomFee.getFeeName());
+        feeConfigDto.setCommunityId(importRoomFee.getCommunityId());
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        Assert.listOnlyOne(feeConfigDtos, "费用不存在或存在多条");
+
+        FeeConfigDto tmpFeeConfigDto = feeConfigDtos.get(0);
+
+        FeeDto feeDto = new FeeDto();
+        feeDto.setConfigId(tmpFeeConfigDto.getConfigId());
+        feeDto.setCommunityId(importRoomFee.getCommunityId());
+        feeDto.setPayerObjId(importRoomFee.getCarId());
+        feeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        List<PayFeePo> payFeePos = null;
+        if (feeDtos == null || feeDtos.size() < 1) {
+            PayFeePo payFeePo = new PayFeePo();
+            payFeePo.setCommunityId(importRoomFee.getCommunityId());
+            payFeePo.setConfigId(feeDto.getConfigId());
+            payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
+            payFeePo.setStartTime(importRoomFee.getStartTime());
+            payFeePo.setEndTime(importRoomFee.getEndTime());
+            payFeePo.setAmount(importRoomFee.getAmount());
+            payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
+            payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
+            payFeePo.setIncomeObjId(storeId);
+            payFeePo.setState(FeeDto.STATE_DOING);
+            payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+            payFeePo.setPayerObjId(importRoomFee.getCarId());
+            payFeePo.setUserId(userId);
+            payFeePo.setCreateTime(importRoomFee.getCreateTime());
+            payFeePos = new ArrayList<>();
+            payFeePos.add(payFeePo);
+            feeInnerServiceSMOImpl.saveFee(payFeePos);
+            feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        }
+
+        for (FeeDto tmpFeeDto : feeDtos) {
+            try {
+                doImportFeeDetail(tmpFeeDto, importRoomFee);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     /**
