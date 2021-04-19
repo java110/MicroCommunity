@@ -114,11 +114,17 @@
         <if test="configId != null and configId != ''">
             inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         </if>
+        <if test="ownerId != null and ownerId != ''">
+            left join pay_fee_attrs pfa on pfa.fee_id = t.fee_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
+        </if>
         left join t_dict d on t.state = d.status_cd and d.table_name = 'pay_fee_detail' and d.table_columns = 'state'
         where 1 =1
         <if test="configId != null and configId != ''">
             and pf.config_id = #{configId}
             and pf.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="ownerId != null and ownerId != ''">
+            pfa.value = #{ownerId}
         </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
@@ -215,10 +221,16 @@
         <if test="configId != null and configId != ''">
             inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         </if>
+        <if test="ownerId != null and ownerId != ''">
+            left join pay_fee_attrs pfa on pfa.fee_id = t.fee_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
+        </if>
         where 1 =1
         <if test="configId != null and configId != ''">
             and pf.config_id = #{configId}
             and pf.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="ownerId != null and ownerId != ''">
+            pfa.value = #{ownerId}
         </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
