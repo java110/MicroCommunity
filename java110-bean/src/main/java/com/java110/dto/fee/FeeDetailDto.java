@@ -36,6 +36,8 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String stateName;
     private String curYear;
     private String configId;
+    private String feeName;
+    private String importFeeName;
 
 
     public String getPrimeRate() {
@@ -189,5 +191,21 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setConfigId(String configId) {
         this.configId = configId;
+    }
+
+    public String getFeeName() {
+        return feeName;
+    }
+
+    public void setFeeName(String feeName) {
+        this.feeName = feeName;
+    }
+
+    public String getImportFeeName() {
+        return importFeeName;
+    }
+
+    public void setImportFeeName(String importFeeName) {
+        this.importFeeName = importFeeName;
     }
 }
