@@ -6,9 +6,14 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeAllocationStorehouseConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -17,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 查询小区侦听类
@@ -26,6 +32,9 @@ public class ListAllocationStorehousesListener extends AbstractServiceApiListene
 
     @Autowired
     private IAllocationStorehouseInnerServiceSMO allocationStorehouseInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -61,6 +70,21 @@ public class ListAllocationStorehousesListener extends AbstractServiceApiListene
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         AllocationStorehouseDto allocationStorehouseDto = BeanConvertUtil.covertBean(reqJson, AllocationStorehouseDto.class);
+        //获取用户id
+        String userId = reqJson.getString("userId");
+        //调拨记录（调拨记录所有权限查看所有数据）
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewlistAllocationStorehouses");
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges.size()==0) {
+            allocationStorehouseDto.setStartUserId(userId);
+        }
+        //调拨记录详情、调拨待办查看、调拨已办查看
+        if (!StringUtil.isEmpty(reqJson.getString("applyOrderId"))) {
+            allocationStorehouseDto.setAsId(reqJson.getString("applyOrderId"));
+            allocationStorehouseDto.setStartUserId("");
+        }
 
         int count = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehousesCount(allocationStorehouseDto);
 

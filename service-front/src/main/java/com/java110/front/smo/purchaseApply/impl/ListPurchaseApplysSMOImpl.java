@@ -44,6 +44,7 @@ public class ListPurchaseApplysSMOImpl extends AbstractComponentSMO implements I
         paramIn.put("storeId",result.getStoreId());
         paramIn.put("storeTypeCd",result.getStoreTypeCd());
         paramIn.put("communityId",result.getCommunityId());
+        paramIn.put("userId",result.getUserId());
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/purchaseApply.listPurchaseApplys" + mapToUrlParam(paramIn);
 

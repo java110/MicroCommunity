@@ -607,6 +607,8 @@
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
         </if>
-        group by ru.staff_id
+        <if test="staffId != null and staffId != ''">
+            group by ru.staff_id
+        </if>
     </select>
 </mapper>

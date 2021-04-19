@@ -23,13 +23,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service("resourceOutBMOImpl")
 public class ResourceOutBMOImpl implements IResourceOutBMO {
 
     @Autowired
     private IPurchaseApplyDetailInnerServiceSMO purchaseApplyDetailInnerServiceSMOImpl;
-
 
     @Autowired
     private IPurchaseApplyUserInnerServiceSMO purchaseApplyUserInnerServiceSMOImpl;
@@ -43,17 +41,13 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
-
     @Override
     @Java110Transactional
     public ResponseEntity<String> out(PurchaseApplyPo purchaseApplyPo) {
-
         PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
-        purchaseApplyDto.setApplyOrderId(purchaseApplyDto.getApplyOrderId());
+        purchaseApplyDto.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
         List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
-
         Assert.listOnlyOne(purchaseApplyDtos, "出库单不存在");
-
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = purchaseApplyPo.getPurchaseApplyDetailPos();
         for (PurchaseApplyDetailPo purchaseApplyDetailPo : purchaseApplyDetailPos) {
             purchaseApplyDetailInnerServiceSMOImpl.updatePurchaseApplyDetail(purchaseApplyDetailPo);
@@ -61,11 +55,9 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
             resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
             resourceStorePo.setStock("-" + purchaseApplyDetailPo.getPurchaseQuantity());
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
-
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
             resourceStoreDto.setResId(purchaseApplyDetailPo.getResId());
             List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-
             if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
                 continue;
             }
@@ -79,7 +71,7 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
             //查询物品 是否已经存在
             UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
             userStorehouseDto.setResId(resourceStoreDtos.get(0).getResId());
-            userStorehouseDto.setUserId(purchaseApplyPo.getUserId());
+            userStorehouseDto.setUserId(purchaseApplyDtos.get(0).getUserId());
             userStorehouseDto.setStoreId(resourceStoreDtos.get(0).getStoreId());
             List<UserStorehouseDto> userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
             if (userStorehouseDtos == null || userStorehouseDtos.size() < 1) {
@@ -92,7 +84,6 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
                 userStorehouseInnerServiceSMOImpl.updateUserStorehouses(userStorehousePo);
             }
         }
-
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "出库成功");
     }
 }

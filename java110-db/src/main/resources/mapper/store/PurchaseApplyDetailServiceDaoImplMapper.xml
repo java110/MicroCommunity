@@ -7,18 +7,17 @@
     <!-- 保存订单明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessPurchaseApplyDetailInfo" parameterType="Map">
         insert into business_purchase_apply_detail
-        (operate,apply_order_id,b_id,res_id,quantity,remark,status_cd) values
-        (#{operate},#{applyOrderId},#{bId},#{resId},#{quantity},#{remark},#{statusCd})
+        (id,operate,apply_order_id,b_id,res_id,quantity,remark,status_cd) values
+        (#{id},#{operate},#{applyOrderId},#{bId},#{resId},#{quantity},#{remark},#{statusCd})
     </insert>
-
 
     <!-- 查询订单明细信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
         select
         t.operate,t.apply_order_id,t.apply_order_id applyOrderId,
-        t.b_id,t.b_id bId,t.res_id,t.res_id resId
+        t.b_id,t.b_id bId,t.res_id,t.res_id resId,t.id,t.price
         from business_purchase_apply_detail t
-        where 1 =1
+        where 1 = 1
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
@@ -31,9 +30,7 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
-
     </select>
-
 
     <!-- 保存订单明细信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApplyDetailInfoInstance" parameterType="Map">
@@ -53,21 +50,21 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
-
     </insert>
-
 
     <!-- 查询订单明细信息 add by wuxw 2018-07-03 -->
     <select id="getPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
         select
+        t.id,
         t.apply_order_id applyOrderId,
         t.status_cd statusCd,
         t.b_id bId,
         t.res_id resId,
         t.remark remark,
-        t.quantity quantity
+        t.quantity quantity,
+        t.price
         from purchase_apply_detail t
-        where 1 =1
+        where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
         </if>
@@ -86,9 +83,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改订单明细信息 add by wuxw 2018-07-03 -->
     <update id="updatePurchaseApplyDetailInfoInstance" parameterType="Map">
@@ -120,7 +115,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询订单明细数量 add by wuxw 2018-07-03 -->
@@ -143,8 +137,5 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
-
-
     </select>
-
 </mapper>

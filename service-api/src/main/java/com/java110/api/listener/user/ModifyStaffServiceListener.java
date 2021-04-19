@@ -8,12 +8,15 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
+import com.java110.po.org.OrgStaffRelPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -21,6 +24,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +54,8 @@ public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+    @Autowired
+    private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -117,6 +123,18 @@ public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
     private void modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
         UserPo userPo = BeanConvertUtil.covertBean(builderStaffInfo(paramObj, dataFlowContext), UserPo.class);
         super.update(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
+        OrgStaffRelDto orgStaffRelDto = new  OrgStaffRelDto();
+        orgStaffRelDto.setStaffId(userPo.getUserId());
+        List<OrgStaffRelDto> orgStaffRelDtoList = orgStaffRelInnerServiceSMOImpl.queryOrgInfoByStaffIds(orgStaffRelDto);
+        if (orgStaffRelDtoList.size() != 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户在添加是没有初始化工作岗位职称！");
+            dataFlowContext.setResponseEntity(responseEntity);
+            return;
+        }
+        OrgStaffRelPo orgStaffRelPo = new OrgStaffRelPo();
+        orgStaffRelPo.setRelCd(paramObj.getString("relCd"));
+        orgStaffRelPo.setRelId(orgStaffRelDtoList.get(0).getRelId());
+        super.update(dataFlowContext, orgStaffRelPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ORG_STAFF_REL);
     }
 
     /**

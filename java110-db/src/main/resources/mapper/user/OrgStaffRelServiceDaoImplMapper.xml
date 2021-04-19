@@ -176,7 +176,7 @@
     <!-- 根据员工ID查询部门，公司信息 add by zc 2020-02-17 -->
     <select id="queryOrgInfoByStaffIds" parameterType="Map" resultType="Map">
         select
-        t.org_id departmentId,t.staff_id staffId,u.org_name departmentName,
+        t.rel_id relId,t.org_id departmentId,t.staff_id staffId,t.store_id storeId,u.org_name departmentName,
         u.parent_org_id companyId,o.org_name companyName
         from
         u_org_staff_rel t
@@ -188,6 +188,9 @@
             <foreach collection="staffIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+        <if test="staffId !=null and staffId !=''">
+            and t.staff_id =#{staffId}
         </if>
     </select>
 

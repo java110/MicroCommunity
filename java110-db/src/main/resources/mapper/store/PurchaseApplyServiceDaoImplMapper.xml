@@ -3,8 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="purchaseApplyServiceDaoImpl">
-
-
     <resultMap type="com.java110.dto.purchaseApply.PurchaseApplyDto" id="applyMap">
         <id column="applyOrderId" property="applyOrderId"/>
         <result column="description" property="description"/>
@@ -60,7 +58,6 @@
         </foreach>
     </insert>
 
-
     <!-- 保存采购明细表-->
     <insert id="savePurchaseApplyDetailInfo" parameterType="List">
         insert into purchase_apply_detail (id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd)
@@ -79,29 +76,28 @@
         </foreach>
     </insert>
 
-
     <!-- 查询采购申请信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPurchaseApplyInfo" parameterType="Map" resultType="Map">
         select
-            t.operate,
-            t.res_order_type,
-            t.res_order_type resOrderType,
-            t.description,
-            t.apply_order_id,
-            t.apply_order_id applyOrderId,
-            t.state,
-            t.store_id,
-            t.store_id storeId,
-            t.user_name userName,
-            t.b_id bId,
-            t.b_id,
-            t.user_id,
-            t.user_id userId,
-            t.status_cd statusCd,
-            t.end_user_name,
-            t.end_user_tel,
-            t.end_user_name endUserName,
-            t.end_user_tel endUserTel
+        t.operate,
+        t.res_order_type,
+        t.res_order_type resOrderType,
+        t.description,
+        t.apply_order_id,
+        t.apply_order_id applyOrderId,
+        t.state,
+        t.store_id,
+        t.store_id storeId,
+        t.user_name userName,
+        t.b_id bId,
+        t.b_id,
+        t.user_id,
+        t.user_id userId,
+        t.status_cd statusCd,
+        t.end_user_name,
+        t.end_user_tel,
+        t.end_user_name endUserName,
+        t.end_user_tel endUserTel
         from business_purchase_apply t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -134,7 +130,6 @@
         <if test="endUserTel !=null and endUserTel != ''">
             and t.end_user_tel= #{endUserTel}
         </if>
-
     </select>
 
     <select id="getBusinessPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
@@ -156,7 +151,6 @@
             and t.b_id= #{bId}
         </if>
     </select>
-
 
     <!-- 保存采购申请信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApplyInfoInstance" parameterType="Map">
@@ -187,9 +181,7 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-
     </insert>
-
 
     <!-- 查询采购申请信息 add by wuxw 2018-07-03 -->
     <select id="getPurchaseApplyInfo" parameterType="Map" resultType="Map">
@@ -205,7 +197,7 @@
         t.description
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
-        where 1 =1
+        where 1 = 1
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
         </if>
@@ -244,14 +236,14 @@
         <if test="endUserTel !=null and endUserTel != ''">
             and t.end_user_tel= #{endUserTel}
         </if>
-
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <select id="getPurchaseApplyInfo2" parameterType="Map" resultMap="applyMap">
         select
@@ -269,12 +261,10 @@
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         inner join purchase_apply_detail de on de.apply_order_id = t.apply_order_id
         inner join resource_store rs on de.res_id = rs.res_id
-
         where 1 =1
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
         </if>
-
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
         </if>
@@ -296,7 +286,6 @@
         <if test="endUserTel !=null and endUserTel != ''">
             and t.end_user_tel= #{endUserTel}
         </if>
-
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -331,7 +320,6 @@
             and p.operate= #{operate}
         </if>
     </select>
-
 
     <!-- 修改采购申请信息 add by wuxw 2018-07-03 -->
     <update id="updatePurchaseApplyInfoInstance" parameterType="Map">
@@ -370,7 +358,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询采购申请数量 add by wuxw 2018-07-03 -->
@@ -405,16 +392,16 @@
         <if test="endUserTel !=null and endUserTel != ''">
             and t.end_user_tel= #{endUserTel}
         </if>
-
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
     </select>
-
 
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApply" parameterType="Map">
         insert into purchase_apply
-        (status_cd,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel)
+        (status_cd,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel,create_time)
         values
-        ('0',#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},'-1',#{endUserName},#{endUserTel})
+        ('0',#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},'-1',#{endUserName},#{endUserTel},#{createTime})
     </insert>
-
 </mapper>

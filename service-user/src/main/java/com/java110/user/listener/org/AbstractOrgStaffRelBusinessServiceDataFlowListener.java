@@ -84,6 +84,32 @@ public abstract class AbstractOrgStaffRelBusinessServiceDataFlowListener extends
             }
         }
     }
+    /**
+     * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
+     * @param businessUser 商户信息
+     */
+    protected void autoSaveAddBusinessOrgStaffRel(Business business, JSONObject businessOrgStaffRel) {
+        Map info = new HashMap();
+        info.put("relId", businessOrgStaffRel.getString("relId"));
+        info.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        List<Map> currentOrgStaffRelInfos = getOrgStaffRelServiceDaoImpl().getOrgStaffRelInfo(info);
+        if (currentOrgStaffRelInfos == null || currentOrgStaffRelInfos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
+        }
+
+        Map currentOrgStaffRelInfo = currentOrgStaffRelInfos.get(0);
+
+        currentOrgStaffRelInfo.put("bId", business.getbId());
+
+        currentOrgStaffRelInfo.put("relId", currentOrgStaffRelInfo.get("rel_id"));
+        currentOrgStaffRelInfo.put("operate", currentOrgStaffRelInfo.get("operate"));
+        currentOrgStaffRelInfo.put("storeId", currentOrgStaffRelInfo.get("store_id"));
+        currentOrgStaffRelInfo.put("orgId", currentOrgStaffRelInfo.get("org_id"));
+        currentOrgStaffRelInfo.put("staffId", currentOrgStaffRelInfo.get("staff_id"));
+        currentOrgStaffRelInfo.put("relCd", currentOrgStaffRelInfo.get("rel_cd"));
+        currentOrgStaffRelInfo.put("operate",StatusConstant.OPERATE_ADD);
+        getOrgStaffRelServiceDaoImpl().saveBusinessOrgStaffRelInfo(currentOrgStaffRelInfo);
+    }
 
 
 }

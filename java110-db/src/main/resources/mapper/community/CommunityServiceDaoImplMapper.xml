@@ -528,9 +528,11 @@
             </foreach>
         </if>
         group by t.community_id
+        order by t.create_time ASC
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+
     </select>
 
 

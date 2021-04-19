@@ -21,7 +21,6 @@
         )
     </insert>
 
-
     <!-- 查询个人物品信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessUserStorehouseInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.operate,t.b_id,t.b_id bId,t.store_id,t.store_id
@@ -52,9 +51,7 @@
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}
         </if>
-
     </select>
-
 
     <!-- 保存个人物品信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveUserStorehouseInfoInstance" parameterType="Map">
@@ -84,16 +81,17 @@
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}
         </if>
-
     </insert>
-
 
     <!-- 查询个人物品信息 add by wuxw 2018-07-03 -->
     <select id="getUserStorehouseInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.store_id,t.store_id
-        storeId,t.stock,t.res_id,t.res_id resId,t.user_id,t.user_id userId,t.us_id,t.us_id usId
-        from user_storehouse t
-        where 1 =1
+        storeId,t.stock,t.res_id,t.res_id resId,t.user_id,t.user_id userId,t.us_id,t.us_id usId,rs.res_code resCode,
+        td.name goodsTypeName from user_storehouse t
+        left join resource_store rs on t.res_id = rs.res_id
+        left join t_dict td on td.table_name = 'resource_store' and table_columns = 'goods_type'
+        and rs.goods_type = td.status_cd
+        where 1 = 1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
         </if>
@@ -122,9 +120,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改个人物品信息 add by wuxw 2018-07-03 -->
     <update id="updateUserStorehouseInfoInstance" parameterType="Map">
@@ -154,7 +150,6 @@
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}
         </if>
-
     </update>
 
     <!-- 查询个人物品数量 add by wuxw 2018-07-03 -->
@@ -186,8 +181,5 @@
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}
         </if>
-
-
     </select>
-
 </mapper>

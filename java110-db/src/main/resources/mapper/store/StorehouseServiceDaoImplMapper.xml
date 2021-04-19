@@ -13,7 +13,6 @@
         )
     </insert>
 
-
     <!-- 查询仓库信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessStorehouseInfo" parameterType="Map" resultType="Map">
         select t.sh_desc,t.sh_desc shDesc,t.sh_type,t.sh_type shType,t.sh_obj_id,t.sh_obj_id
@@ -45,9 +44,7 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
     </select>
-
 
     <!-- 保存仓库信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveStorehouseInfoInstance" parameterType="Map">
@@ -77,9 +74,7 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
     </insert>
-
 
     <!-- 查询仓库信息 add by wuxw 2018-07-03 -->
     <select id="getStorehouseInfo" parameterType="Map" resultType="Map">
@@ -122,9 +117,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改仓库信息 add by wuxw 2018-07-03 -->
     <update id="updateStorehouseInfoInstance" parameterType="Map">
@@ -154,7 +147,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询仓库数量 add by wuxw 2018-07-03 -->
@@ -192,8 +184,5 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
-
     </select>
-
 </mapper>

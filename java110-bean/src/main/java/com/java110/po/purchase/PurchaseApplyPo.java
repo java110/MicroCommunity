@@ -24,6 +24,7 @@ public class PurchaseApplyPo implements Serializable {
     private String state;
     private String endUserName;
     private String endUserTel;
+    private String createTime;
 
     private ResourceStorePo[] resourceStores;
 
@@ -115,5 +116,13 @@ public class PurchaseApplyPo implements Serializable {
 
     public void setPurchaseApplyDetailPos(List<PurchaseApplyDetailPo> purchaseApplyDetailPos) {
         this.purchaseApplyDetailPos = purchaseApplyDetailPos;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

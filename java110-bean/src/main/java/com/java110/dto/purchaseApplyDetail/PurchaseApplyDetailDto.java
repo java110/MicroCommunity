@@ -14,16 +14,13 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class PurchaseApplyDetailDto extends PageDto implements Serializable {
-
     private String applyOrderId;
     private String id;
     private String resId;
-
-
     private Date createTime;
-
     private String statusCd = "0";
-
+    private String quantity;
+    private String price;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -49,7 +46,6 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
         this.resId = resId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -64,5 +60,21 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

@@ -5,7 +5,9 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.dto.repair.RepairDto;
 import com.java110.intf.user.IUserInnerServiceSMO;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 查询小区侦听类
@@ -30,7 +33,7 @@ public class ListStaffRepairsListener extends AbstractServiceApiListener {
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
 
     @Autowired
-    private IUserInnerServiceSMO userInnerServiceSMO;
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -69,10 +72,12 @@ public class ListStaffRepairsListener extends AbstractServiceApiListener {
         String userId = reqJson.getString("userId");
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
-        //查询用户信息
-        List<UserDto> users = userInnerServiceSMO.getUsers(userDto);
-        Assert.listOnlyOne(users, "数据异常未找到用户信息");
-        if (!users.get(0).getLevelCd().equals("00")) {  //当前用户不是管理员时放入staffId的值
+        //报修待办查看所有记录权限
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewListStaffRepairs");
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges.size()==0) {
             ownerRepairDto.setStaffId(reqJson.getString("userId"));
         }
         int count = repairInnerServiceSMOImpl.queryStaffRepairsCount(ownerRepairDto);
