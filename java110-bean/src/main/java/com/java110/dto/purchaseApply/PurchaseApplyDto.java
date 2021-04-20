@@ -19,7 +19,6 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public static final String RES_ORDER_TYPE_ENTER = "10000"; //采购入库
     public static final String RES_ORDER_TYPE_OUT = "20000"; //出库
-
     public static final String STATE_WAIT_DEAL = "1000"; // 等待处理
     public static final String STATE_DEALING = "1001"; // 审核中
 
@@ -36,11 +35,8 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String endUserName;
     private String endUserTel;
     private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
-
     private String createTime;
-
     private String statusCd = "0";
-
     private String currentUserId;
     private String processInstanceId;
     private String taskId;
@@ -50,9 +46,6 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String staffName;
     private String staffTel;
     private String startUserId;
-
-
-
 
     public String getResOrderType() {
         return resOrderType;
@@ -247,4 +240,5 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     public void setStartUserId(String startUserId) {
         this.startUserId = startUserId;
     }
+
 }

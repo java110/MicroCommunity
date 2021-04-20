@@ -63,7 +63,7 @@ public class ListAllocationStoreHisAuditOrders extends AbstractServiceApiListene
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
         auditUser.setStoreId(reqJson.getString("storeId"));
-
+        //调拨已办(（默认只查询和当前登录用户相关并且是参与流程审批或者自己提交已经结束的审批数据）)
         long count = allocationStorehouseUserInnerServiceSMOImpl.getUserHistoryTaskCount(auditUser);
 
         List<AllocationStorehouseDto> purchaseApplyDtos = null;

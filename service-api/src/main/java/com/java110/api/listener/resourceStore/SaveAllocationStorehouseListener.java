@@ -85,8 +85,7 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
         allocationStorehousePo.setState(AllocationStorehouseDto.STATE_AUDIT);
         super.insert(context, allocationStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ALLOCATION_STOREHOUSE);
 
-        // 前去库存
-
+        // 减去去库存
         ResourceStorePo resourceStorePo = new ResourceStorePo();
         resourceStorePo.setResId(reqJson.getString("resId"));
         resourceStorePo.setStoreId(reqJson.getString("storeId"));

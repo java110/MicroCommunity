@@ -28,6 +28,7 @@ public class ResourceStoreApi {
     public ResponseEntity<String> queryResourceStoreResName(@RequestParam(value = "goodsType", required = false) String goodsType) {
         ResourceStorePo resourceStorePo = new ResourceStorePo();
         resourceStorePo.setGoodsType(goodsType);
+        resourceStorePo.setShowMobile("Y");
         return getResourceStoreBMO.get(resourceStorePo);
     }
 

@@ -21,12 +21,12 @@ public class UserStorehouseDto extends PageDto implements Serializable {
     private String resId;
     private String userId;
     private String usId;
-
+    private String resCode;
+    private String goodsTypeName;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getResName() {
         return resName;
@@ -76,7 +76,6 @@ public class UserStorehouseDto extends PageDto implements Serializable {
         this.usId = usId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -91,5 +90,21 @@ public class UserStorehouseDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getResCode() {
+        return resCode;
+    }
+
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
+    }
+
+    public String getGoodsTypeName() {
+        return goodsTypeName;
+    }
+
+    public void setGoodsTypeName(String goodsTypeName) {
+        this.goodsTypeName = goodsTypeName;
     }
 }

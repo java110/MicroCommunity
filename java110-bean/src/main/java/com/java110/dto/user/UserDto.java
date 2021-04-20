@@ -69,6 +69,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private boolean loginByPhone;
 
+    private String relCd;
+
 
 
     public String getUserId() {
@@ -285,5 +287,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setDepartmentOrgId(String departmentOrgId) {
         this.departmentOrgId = departmentOrgId;
+    }
+
+    public String getRelCd() {
+        return relCd;
+    }
+
+    public void setRelCd(String relCd) {
+        this.relCd = relCd;
     }
 }

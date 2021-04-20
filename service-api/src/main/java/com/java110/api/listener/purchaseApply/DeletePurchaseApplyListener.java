@@ -1,10 +1,11 @@
 package com.java110.api.listener.purchaseApply;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.purchaseApply.IPurchaseApplyBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
+import com.java110.intf.store.IPurchaseApplyDetailInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
@@ -29,16 +30,17 @@ import java.util.List;
 public class DeletePurchaseApplyListener extends AbstractServiceApiPlusListener {
 
     @Autowired
-    private IPurchaseApplyBMO purchaseApplyBMOImpl;
+    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
     @Autowired
-    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
+    private IPurchaseApplyDetailInnerServiceSMO purchaseApplyDetailInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单号不能为空");
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDto.class);
         List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
-        if(!"1000".equals(purchaseApplyDtos.get(0).getState())){
+        if (!"1000".equals(purchaseApplyDtos.get(0).getState())) {
             throw new IllegalArgumentException("只能取消未审核的订单");
         }
     }
@@ -47,10 +49,8 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiPlusListener 
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-
         deletePurchaseApply(reqJson, context);
         deletePurchaseApplyDetail(reqJson, context);
-
     }
 
     @Override
@@ -68,24 +68,26 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiPlusListener 
         return DEFAULT_ORDER;
     }
 
-
     /**
-     *
      * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
     private void deletePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
         PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyPo.class);
         super.delete(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY);
     }
 
     //删除订单明细
     private void deletePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        PurchaseApplyDetailPo purchaseApplyPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyDetailPo.class);
-        super.delete(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
+        PurchaseApplyDetailDto purchaseApplyDetailDto = new PurchaseApplyDetailDto();
+        purchaseApplyDetailDto.setApplyOrderId(paramInJson.getString("applyOrderId"));
+        List<PurchaseApplyDetailDto> purchaseApplyDetailDtos = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetails(purchaseApplyDetailDto);
+        if(purchaseApplyDetailDtos.size() > 0) {
+            for(PurchaseApplyDetailDto purchaseApplyDetail : purchaseApplyDetailDtos) {
+                PurchaseApplyDetailPo purchaseApplyPo = BeanConvertUtil.covertBean(purchaseApplyDetail, PurchaseApplyDetailPo.class);
+                super.delete(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
+            }
+        }
     }
-
 }

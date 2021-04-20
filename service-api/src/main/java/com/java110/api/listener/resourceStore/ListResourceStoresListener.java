@@ -5,8 +5,10 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.dto.storehouse.StorehouseDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeResourceStoreConstant;
 import com.java110.utils.util.Assert;
@@ -20,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 查询小区侦听类
@@ -29,6 +32,9 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
 
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -63,8 +69,14 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         ResourceStoreDto resourceStoreDto = BeanConvertUtil.covertBean(reqJson, ResourceStoreDto.class);
-
-        if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType())) {
+        //采购2806集团仓库 物品领用2807小区仓库  默认查询当前小区所有商品
+        //是否具有查看集团仓库物品权限
+        String userId = reqJson.getString("userId");
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewGroupResource");
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size()==0) {
             resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
             resourceStoreDto.setShObjId(reqJson.getString("communityId"));
         }

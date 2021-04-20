@@ -489,8 +489,8 @@
     <select id="getStaffs" parameterType="Map" resultType="Map">
         select uo.org_id orgId,uo.org_name,uo.org_name orgName,u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd,u.b_id,puo.org_id parentOrgId,puo.org_name parentOrgName,puo.belong_community_id belongCommunityId,
-        uosr.store_id storeId
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,puo.org_id parentOrgId,puo.org_name parentOrgName,puo.belong_community_id belongCommunityId,
+        uosr.store_id storeId,uosr.rel_cd relCd
         from
         u_user u
         ,u_org uo

@@ -17,11 +17,13 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IResourceStoreServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -30,6 +32,7 @@ import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.userStorehouse.UserStorehousePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
@@ -82,6 +85,9 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IResourceStoreServiceSMO resourceStoreServiceSMO;
 
+    @Autowired
+    private IUserStorehouseInnerServiceSMO userStorehouseInnerServiceSMO;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
@@ -107,6 +113,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         String outLowPrice = "0";
         String outHighPrice = "0";
         List<ResourceStorePo> resourceStorePoList = new ArrayList<>();
+        List<UserStorehouseDto> userStorehouseDtoList = new ArrayList<>();
         //用料
         String repairMaterials = "";
         //单价
@@ -134,14 +141,28 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         }
         if (!StringUtil.isEmpty(useNumber)) {
             String nowStock = "0";
-            if (resourceStorePoList.size() == 1) {
-                nowStock = resourceStorePoList.get(0).getStock();
+            //（从我的物料中获取商品库存）
+            UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
+            userStorehouseDto.setResId(resId);
+            userStorehouseDto.setUserId(userId);
+            userStorehouseDtoList = userStorehouseInnerServiceSMO.queryUserStorehouses(userStorehouseDto);
+
+            if (userStorehouseDtoList.size() == 1) {
+                nowStock = userStorehouseDtoList.get(0).getStock();
             }
             if (Integer.parseInt(nowStock) < Integer.parseInt(useNumber)) {
-                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "商品供料库存不足！");
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修物料库存不足，请您先申领物品！");
                 context.setResponseEntity(responseEntity);
                 return;
             }
+            //库存减少
+            UserStorehousePo userStorehousePo = new UserStorehousePo();
+            Integer surplusStock = Integer.parseInt(nowStock) - Integer.parseInt(useNumber);
+            userStorehousePo.setStock(String.valueOf(surplusStock));
+            userStorehousePo.setUsId(userStorehouseDtoList.get(0).getUsId());
+            userStorehousePo.setResId(resId);
+            userStorehousePo.setUserId(userId);
+            super.update(context, userStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_STOREHOUSE);
         }
         if (maintenanceType.equals("1001")) {
             //获取价格
@@ -150,7 +171,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             Double outHighPrices = Double.parseDouble(outHighPrice);
             //物品价格应该在最低价和最高价之间
             if (price < outLowPrices || price > outHighPrices) {
-                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "输入的商品供料单价不正确，请重新输入！");
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "输入的维修物料单价不正确，请重新输入！");
                 context.setResponseEntity(responseEntity);
                 return;
             }

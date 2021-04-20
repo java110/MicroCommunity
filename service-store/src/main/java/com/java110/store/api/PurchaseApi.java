@@ -1,6 +1,5 @@
 package com.java110.store.api;
 
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -11,11 +10,13 @@ import com.java110.store.bmo.purchase.IPurchaseApplyBMO;
 import com.java110.store.bmo.purchase.IResourceEnterBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -43,11 +44,9 @@ public class PurchaseApi {
                                                 @RequestHeader(value = "user-id") String userId,
                                                 @RequestHeader(value = "user-name") String userName,
                                                 @RequestHeader(value = "store-id") String storeId) {
-
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
-
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         purchaseApplyPo.setDescription(reqJson.getString("description"));
@@ -57,12 +56,10 @@ public class PurchaseApi {
         purchaseApplyPo.setEndUserTel(reqJson.getString("endUserTel"));
         purchaseApplyPo.setStoreId(storeId);
         purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
-        purchaseApplyPo.setState(PurchaseApplyDto.STATE_DEALING);
-
+        purchaseApplyPo.setState(PurchaseApplyDto.STATE_WAIT_DEAL);
+        purchaseApplyPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
-
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
-
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
@@ -70,16 +67,13 @@ public class PurchaseApi {
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-
         return purchaseApplyBMOImpl.apply(purchaseApplyPo);
     }
 
     @RequestMapping(value = "/resourceEnter", method = RequestMethod.POST)
     public ResponseEntity<String> resourceEnter(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单ID为空");
-
         JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
-
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
         for (int detailIndex = 0; detailIndex < purchaseApplyDetails.size(); detailIndex++) {
             JSONObject purchaseApplyDetail = purchaseApplyDetails.getJSONObject(detailIndex);
@@ -88,9 +82,7 @@ public class PurchaseApi {
             Assert.hasKeyAndValue(purchaseApplyDetail, "id", "明细ID为空");
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(purchaseApplyDetail, PurchaseApplyDetailPo.class);
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
-
         }
-
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(reqJson.getString("applyOrderId"));
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);

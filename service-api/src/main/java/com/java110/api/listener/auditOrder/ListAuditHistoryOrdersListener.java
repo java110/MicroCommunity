@@ -74,7 +74,7 @@ public class ListAuditHistoryOrdersListener extends AbstractServiceApiListener {
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
         auditUser.setStoreId(reqJson.getString("storeId"));
-
+        //采购已办（默认只查询和当前登录用户相关并且是参与流程审批或者自己提交已经结束的审批数据）
         long count = resourceEntryStoreInnerServiceSMOImpl.getUserHistoryTaskCount(auditUser);
 
         List<ApiResourceOrderDataVo> auditOrders = null;

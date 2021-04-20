@@ -5,7 +5,9 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.storehouse.StorehouseDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IStorehouseInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeStorehouseConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 查询小区侦听类
@@ -26,6 +29,9 @@ public class ListStorehousesListener extends AbstractServiceApiListener {
 
     @Autowired
     private IStorehouseInnerServiceSMO storehouseInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -62,8 +68,17 @@ public class ListStorehousesListener extends AbstractServiceApiListener {
 
         StorehouseDto storehouseDto = BeanConvertUtil.covertBean(reqJson, StorehouseDto.class);
 
-        storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
-
+        //是否具有查看集团仓库权限
+        String userId = reqJson.getString("userId");
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewGroupWarehouse");
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges.size()==0) {
+            storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId")});
+        }else{
+            storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
+        }
         int count = storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
 
         List<StorehouseDto> storehouseDtos = null;
