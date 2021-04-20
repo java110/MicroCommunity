@@ -102,6 +102,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         String userId = reqJson.getString("userId");
         String userName = reqJson.getString("userName");
         String publicArea = reqJson.getString("publicArea");
+        String isCustom = reqJson.getString("isCustom");//是否自定义
         //获取报修渠道
         String repairChannel = reqJson.getString("repairChannel");
         //获取维修类型
@@ -139,7 +140,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             outLowPrice = resourceStorePoList.get(0).getOutLowPrice();
             outHighPrice = resourceStorePoList.get(0).getOutHighPrice();
         }
-        if (!StringUtil.isEmpty(useNumber)) {
+        if (!StringUtil.isEmpty(useNumber) && (!StringUtil.isEmpty(isCustom) &&  isCustom.equals("false"))) {
             String nowStock = "0";
             //（从我的物料中获取商品库存）
             UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
@@ -164,7 +165,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             userStorehousePo.setUserId(userId);
             super.update(context, userStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_STOREHOUSE);
         }
-        if (maintenanceType.equals("1001")) {
+        if (maintenanceType.equals("1001")  && (!StringUtil.isEmpty(isCustom) &&  isCustom.equals("false"))) {
             //获取价格
             Double price = Double.parseDouble(reqJson.getString("price"));
             Double outLowPrices = Double.parseDouble(outLowPrice);
