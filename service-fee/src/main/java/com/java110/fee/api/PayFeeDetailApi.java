@@ -31,6 +31,8 @@ public class PayFeeDetailApi {
     public ResponseEntity<String> saveImportFeeDetail(@RequestBody String reqJsonStr) {
         JSONObject reqJson = JSONObject.parseObject(reqJsonStr);
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
+        Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含费用对象");
+
 
 
 

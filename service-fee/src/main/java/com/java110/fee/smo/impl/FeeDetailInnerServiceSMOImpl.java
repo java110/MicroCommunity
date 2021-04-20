@@ -9,6 +9,7 @@ import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +46,20 @@ public class FeeDetailInnerServiceSMOImpl extends BaseServiceSMO implements IFee
 
         List<FeeDetailDto> feeDetails = BeanConvertUtil.covertBeanList(feeDetailServiceDaoImpl.getFeeDetailInfo(BeanConvertUtil.beanCovertMap(feeDetailDto)), FeeDetailDto.class);
 
+        refreshFeeDetail(feeDetails);
         return feeDetails;
+    }
+
+    private void refreshFeeDetail(List<FeeDetailDto> feeDetails) {
+        if(feeDetails == null || feeDetails.size() < 1){
+            return ;
+        }
+
+        for(FeeDetailDto feeDetailDto : feeDetails){
+            if(!StringUtil.isEmpty(feeDetailDto.getImportFeeName())){
+                feeDetailDto.setFeeName(feeDetailDto.getImportFeeName());
+            }
+        }
     }
 
 
