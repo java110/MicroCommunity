@@ -140,13 +140,22 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             outLowPrice = resourceStorePoList.get(0).getOutLowPrice();
             outHighPrice = resourceStorePoList.get(0).getOutHighPrice();
         }
-        if (!StringUtil.isEmpty(useNumber) && (!StringUtil.isEmpty(isCustom) &&  isCustom.equals("false"))) {
+
+        if (!StringUtil.isEmpty(useNumber)
+                && !"0".equals(useNumber)
+                && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
             String nowStock = "0";
             //（从我的物料中获取商品库存）
             UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
             userStorehouseDto.setResId(resId);
             userStorehouseDto.setUserId(userId);
             userStorehouseDtoList = userStorehouseInnerServiceSMO.queryUserStorehouses(userStorehouseDto);
+
+            if (userStorehouseDtoList == null || userStorehouseDtoList.size() < 1) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修物料库存不足，请您先申领物品！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
 
             if (userStorehouseDtoList.size() == 1) {
                 nowStock = userStorehouseDtoList.get(0).getStock();
@@ -165,7 +174,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             userStorehousePo.setUserId(userId);
             super.update(context, userStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_STOREHOUSE);
         }
-        if (maintenanceType.equals("1001")  && (!StringUtil.isEmpty(isCustom) &&  isCustom.equals("false"))) {
+        if (maintenanceType.equals("1001") && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
             //获取价格
             Double price = Double.parseDouble(reqJson.getString("price"));
             Double outLowPrices = Double.parseDouble(outLowPrice);
