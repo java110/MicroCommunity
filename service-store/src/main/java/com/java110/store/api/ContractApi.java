@@ -1,6 +1,12 @@
 package com.java110.store.api;
 
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.GenerateCodeFactory;
+
+import com.alibaba.fastjson.JSONObject;
+
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
@@ -17,9 +23,17 @@ import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
 import com.java110.po.contractChangePlanDetailAttr.ContractChangePlanDetailAttrPo;
 import com.java110.po.contractCollectionPlan.ContractCollectionPlanPo;
+
+import com.java110.po.contractFile.ContractFilePo;
 import com.java110.po.contractType.ContractTypePo;
 import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
 import com.java110.po.contractTypeTemplate.ContractTypeTemplatePo;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
+
+import com.java110.po.contractType.ContractTypePo;
+import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
+import com.java110.po.contractTypeTemplate.ContractTypeTemplatePo;
+
 import com.java110.store.bmo.contract.IDeleteContractBMO;
 import com.java110.store.bmo.contract.IGetContractBMO;
 import com.java110.store.bmo.contract.ISaveContractBMO;
@@ -59,6 +73,10 @@ import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 
 @RestController
@@ -196,6 +214,18 @@ public class ContractApi {
             contractPo.setContractParentId("-1");
         }
         reqJson.put("userId", userId);
+
+
+        JSONArray contractFiles = reqJson.getJSONArray("contractFilePo");
+        List<ContractFilePo> contractFilePos = new ArrayList<>();
+        for (int conFileIndex = 0; conFileIndex < contractFiles.size(); conFileIndex++) {
+            JSONObject resourceStore = contractFiles.getJSONObject(conFileIndex);
+            ContractFilePo contractFilePo = BeanConvertUtil.covertBean(resourceStore, ContractFilePo.class);
+            contractFilePo.setContractFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractFileId));
+            contractFilePos.add(contractFilePo);
+        }
+        contractPo.setContractFilePo(contractFilePos);
+
         return saveContractBMOImpl.save(contractPo, reqJson);
     }
 
@@ -228,6 +258,16 @@ public class ContractApi {
 
 
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
+
+        JSONArray contractFiles = reqJson.getJSONArray("contractFilePo");
+        List<ContractFilePo> contractFilePos = new ArrayList<>();
+        for (int conFileIndex = 0; conFileIndex < contractFiles.size(); conFileIndex++) {
+            JSONObject resourceStore = contractFiles.getJSONObject(conFileIndex);
+            ContractFilePo contractFilePo = BeanConvertUtil.covertBean(resourceStore, ContractFilePo.class);
+            contractFilePo.setContractFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractFileId));
+            contractFilePos.add(contractFilePo);
+        }
+        contractPo.setContractFilePo(contractFilePos);
         return updateContractBMOImpl.update(contractPo, reqJson);
     }
 
