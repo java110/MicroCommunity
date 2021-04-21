@@ -12,16 +12,15 @@ import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
-import com.java110.intf.store.IContractAttrInnerServiceSMO;
-import com.java110.intf.store.IContractChangePlanDetailInnerServiceSMO;
-import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
-import com.java110.intf.store.IContractInnerServiceSMO;
+import com.java110.intf.store.*;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
+import com.java110.po.contractFile.ContractFilePo;
 import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.store.bmo.contract.IUpdateContractBMO;
+import com.java110.store.bmo.contractFile.IDeleteContractFileBMO;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -57,6 +56,13 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
     @Autowired
     private IContractChangePlanDetailInnerServiceSMO contractChangePlanDetailInnerServiceSMOImpl;
 
+
+    @Autowired
+    private IContractFileInnerServiceSMO contractFileInnerServiceSMOImpl;
+
+    @Autowired
+    private IDeleteContractFileBMO deleteContractFileBMOImpl;
+
     /**
      * @param contractPo
      * @return 订单服务能够接受的报文
@@ -70,6 +76,20 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
 
         }
+
+        //附件保存--先删除原来所有的附件再进行保存
+        ContractFilePo contractFilePo = new ContractFilePo();
+        contractFilePo.setContractId(contractPo.getContractId());
+        deleteContractFileBMOImpl.delete(contractFilePo);
+
+        List<ContractFilePo> filePos = contractPo.getContractFilePo();
+        for (ContractFilePo file: filePos) {
+            if (file.getFileRealName().length() > 0 && file.getFileSaveName().length() > 0){
+                file.setContractId(contractPo.getContractId());
+                contractFileInnerServiceSMOImpl.saveContractFile(file);
+            }
+        }
+
 
         noticeRentUpdateState(contractPo);
 
