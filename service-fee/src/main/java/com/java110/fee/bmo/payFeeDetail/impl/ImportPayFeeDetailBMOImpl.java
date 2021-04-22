@@ -223,20 +223,20 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
     }
 
     private void doImportFeeDetail(FeeDto tmpFeeDto, ImportRoomFee importRoomFee) throws ParseException {
-        FeeDetailDto feeDetailDto = new FeeDetailDto();
-        feeDetailDto.setCommunityId(importRoomFee.getCommunityId());
-        feeDetailDto.setFeeId(tmpFeeDto.getFeeId());
-
-
-        feeDetailDto.setStartTime(DateUtil.getDateFromString(importRoomFee.getStartTime(), DateUtil.DATE_FORMATE_STRING_B));
-        feeDetailDto.setEndTime(DateUtil.getDateFromString(importRoomFee.getEndTime(), DateUtil.DATE_FORMATE_STRING_B));
-        feeDetailDto.setCreateTime(DateUtil.getDateFromString(importRoomFee.getCreateTime(), DateUtil.DATE_FORMATE_STRING_B));
-
-        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
-
-        if (feeDetailDtos != null && feeDetailDtos.size() > 0) {//说明已经导入过了
-            return;
-        }
+//        FeeDetailDto feeDetailDto = new FeeDetailDto();
+//        feeDetailDto.setCommunityId(importRoomFee.getCommunityId());
+//        feeDetailDto.setFeeId(tmpFeeDto.getFeeId());
+//
+//
+//        feeDetailDto.setStartTime(DateUtil.getDateFromString(importRoomFee.getStartTime(), DateUtil.DATE_FORMATE_STRING_B));
+//        feeDetailDto.setEndTime(DateUtil.getDateFromString(importRoomFee.getEndTime(), DateUtil.DATE_FORMATE_STRING_B));
+//        feeDetailDto.setCreateTime(DateUtil.getDateFromString(importRoomFee.getCreateTime(), DateUtil.DATE_FORMATE_STRING_B));
+//
+//        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+//
+//        if (feeDetailDtos != null && feeDetailDtos.size() > 0) {//说明已经导入过了
+//            return;
+//        }
 
         PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
         payFeeDetailPo.setCommunityId(importRoomFee.getCommunityId());
