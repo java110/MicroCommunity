@@ -25,6 +25,9 @@ public class PurchaseApplyPo implements Serializable {
     private String endUserName;
     private String endUserTel;
     private String createTime;
+    private String warehousingWay;
+    private String createUserId;
+    private String createUserName;
 
     private ResourceStorePo[] resourceStores;
 
@@ -124,5 +127,29 @@ public class PurchaseApplyPo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getWarehousingWay() {
+        return warehousingWay;
+    }
+
+    public void setWarehousingWay(String warehousingWay) {
+        this.warehousingWay = warehousingWay;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
     }
 }

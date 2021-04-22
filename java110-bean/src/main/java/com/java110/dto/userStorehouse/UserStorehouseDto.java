@@ -23,6 +23,7 @@ public class UserStorehouseDto extends PageDto implements Serializable {
     private String usId;
     private String resCode;
     private String goodsTypeName;
+    private String goodsType;
 
     private Date createTime;
 
@@ -106,5 +107,13 @@ public class UserStorehouseDto extends PageDto implements Serializable {
 
     public void setGoodsTypeName(String goodsTypeName) {
         this.goodsTypeName = goodsTypeName;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
     }
 }

@@ -60,7 +60,7 @@
 
     <!-- 保存采购明细表-->
     <insert id="savePurchaseApplyDetailInfo" parameterType="List">
-        insert into purchase_apply_detail (id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd)
+        insert into purchase_apply_detail (id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -71,7 +71,10 @@
             #{item.remark},
             '-1',
             'ADD',
-            '0'
+            '0',
+            #{item.price},
+            #{item.purchaseQuantity},
+            #{item.purchaseRemark}
             )
         </foreach>
     </insert>
@@ -194,7 +197,10 @@
         t.end_user_tel,
         t.end_user_name endUserName,
         t.end_user_tel endUserTel,
-        t.description
+        t.description,
+        t.create_user_id createUserId,
+        t.create_user_name createUserName,
+        t.warehousing_way warehousingWay
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 = 1
@@ -297,7 +303,7 @@
         select
         p.id,
         p.apply_order_id applyOrderId,
-        p.res_id resId,p.quantity,p.remark,
+        p.res_id resId,p.quantity,p.remark,p.purchase_quantity purchaseQuantity,p.purchase_remark purchaseRemark,p.price purchasePrice,
         r.res_name resName,r.res_code resCode,
         r.price,r.stock
         from
@@ -400,8 +406,8 @@
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApply" parameterType="Map">
         insert into purchase_apply
-        (status_cd,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel,create_time)
+        (status_cd,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel,create_time,create_user_id,create_user_name,warehousing_way)
         values
-        ('0',#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},'-1',#{endUserName},#{endUserTel},#{createTime})
+        ('0',#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},'-1',#{endUserName},#{endUserTel},#{createTime},#{createUserId},#{createUserName},#{warehousingWay})
     </insert>
 </mapper>

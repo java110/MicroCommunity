@@ -29,8 +29,6 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
     @Autowired
     private IPurchaseApplyDetailInnerServiceSMO purchaseApplyDetailInnerServiceSMOImpl;
 
-    @Autowired
-    private IPurchaseApplyUserInnerServiceSMO purchaseApplyUserInnerServiceSMOImpl;
 
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;

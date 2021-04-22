@@ -36,7 +36,10 @@ public class GoodsCollectionBMOImpl implements IGoodsCollectionBMO {
 
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(purchaseApplyPo, PurchaseApplyDto.class);
         purchaseApplyDto.setCurrentUserId(purchaseApplyPo.getUserId());
-        goodCollectionUserInnerServiceSMOImpl.startProcess(purchaseApplyDto);
+        if(!purchaseApplyPo.getWarehousingWay().equals(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT)){
+            goodCollectionUserInnerServiceSMOImpl.startProcess(purchaseApplyDto);
+        }
+
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "物品领用成功");
     }

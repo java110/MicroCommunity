@@ -112,6 +112,9 @@ public final class PrivilegeCodeConstant {
     //资源商品
     public static final String AGENT_HAS_LIST_RESOURCESTORE = "502019102151130004";
 
+    //物品类型
+    public static final String AGENT_HAS_LIST_RESOURCESTORE_TYPE = "502021041948240009";
+
 
     public static final String ITEMOUT = "5020191023000001";
 
@@ -151,8 +154,6 @@ public final class PrivilegeCodeConstant {
     public static final String AGENT_HAS_LIST_PURCHASE_APPLY = "500201906022";
     //审核采购申请
     public static final String AGENT_HAS_LIST_AUDIT_APPLY_ORDER = "502019110360380006";
-
-
 
 
 }

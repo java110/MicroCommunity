@@ -109,6 +109,7 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
                 if (applyDetailList.size() > 0) {
                     StringBuffer resNames = new StringBuffer();
                     BigDecimal totalPrice = new BigDecimal(0);
+                    BigDecimal purchaseTotalPrice = new BigDecimal(0);
                     Integer cursor = 0;
                     for (PurchaseApplyDetailVo purchaseApplyDetailVo : applyDetailList) {
                         cursor++;
@@ -120,9 +121,15 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
                         BigDecimal price = new BigDecimal(purchaseApplyDetailVo.getPrice());
                         BigDecimal quantity = new BigDecimal(purchaseApplyDetailVo.getQuantity());
                         totalPrice = totalPrice.add(price.multiply(quantity));
+                        if(!StringUtil.isEmpty(purchaseApplyDetailVo.getPurchasePrice()) && !StringUtil.isEmpty(purchaseApplyDetailVo.getPurchaseQuantity())){
+                            BigDecimal purchasePrice = new BigDecimal(purchaseApplyDetailVo.getPurchasePrice());
+                            BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailVo.getPurchaseQuantity());
+                            purchaseTotalPrice = purchaseTotalPrice.add(purchasePrice.multiply(purchaseQuantity));
+                        }
                     }
                     apiPurchaseApplyDataVo.setResourceNames(resNames.toString());
                     apiPurchaseApplyDataVo.setTotalPrice(totalPrice.toString());
+                    apiPurchaseApplyDataVo.setPurchaseTotalPrice(purchaseTotalPrice.toString());
                 }
             }
         } else {

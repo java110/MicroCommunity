@@ -4,9 +4,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.entity.audit.AuditUser;
+import com.java110.intf.store.IResourceStoreInnerServiceSMO;
+import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
+import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.userStorehouse.UserStorehousePo;
 import com.java110.store.bmo.collection.IGetCollectionAuditOrderBMO;
 import com.java110.store.bmo.collection.IGoodsCollectionBMO;
 import com.java110.store.bmo.collection.IResourceOutBMO;
@@ -37,6 +43,14 @@ public class CollectionApi {
     @Autowired
     private IResourceOutBMO resourceOutBMOImpl;
 
+    @Autowired
+    private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IUserStorehouseInnerServiceSMO userStorehouseInnerServiceSMOImpl;
+
+
     /**
      * 物品领用 接口类
      *
@@ -66,6 +80,9 @@ public class CollectionApi {
         purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_OUT);
         purchaseApplyPo.setState(PurchaseApplyDto.STATE_WAIT_DEAL);
         purchaseApplyPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        purchaseApplyPo.setCreateUserId(userId);
+        purchaseApplyPo.setCreateUserName(userName);
+        purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_APPLY);
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
@@ -122,5 +139,80 @@ public class CollectionApi {
         purchaseApplyPo.setApplyOrderId(reqJson.getString("applyOrderId"));
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
         return resourceOutBMOImpl.out(purchaseApplyPo);
+    }
+
+    /**
+     * 物品直接出库
+     *
+     */
+    @RequestMapping(value = "/goodsDelivery", method = RequestMethod.POST)
+    public ResponseEntity<String> goodsDelivery(@RequestBody JSONObject reqJson,
+                                                  @RequestHeader(value = "user-id") String userId,
+                                                  @RequestHeader(value = "user-name") String userName,
+                                                  @RequestHeader(value = "store-id") String storeId) {
+        Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写物品领用的物资");
+        Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
+        PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
+        purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
+        purchaseApplyPo.setDescription(reqJson.getString("description"));
+        purchaseApplyPo.setUserId(reqJson.getString("receiverUserId"));
+        purchaseApplyPo.setUserName(reqJson.getString("receiverUserName"));
+        purchaseApplyPo.setEndUserName(reqJson.getString("endUserName"));
+        purchaseApplyPo.setEndUserTel(reqJson.getString("endUserTel"));
+        purchaseApplyPo.setStoreId(storeId);
+        purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_OUT);
+        purchaseApplyPo.setState(PurchaseApplyDto.STATE_AUDITED);
+        purchaseApplyPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        purchaseApplyPo.setCreateUserId(userId);
+        purchaseApplyPo.setCreateUserName(userName);
+        purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT);
+        purchaseApplyPo.setDescription("直接出库操作");
+        JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
+        List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
+        for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
+            JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
+            PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
+            purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
+            purchaseApplyDetailPo.setQuantity(purchaseApplyDetailPo.getPurchaseQuantity());
+            purchaseApplyDetailPo.setRemark("直接出库");
+            purchaseApplyDetailPos.add(purchaseApplyDetailPo);
+
+            //调整总库存
+            ResourceStorePo resourceStorePo = new ResourceStorePo();
+            resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
+            resourceStorePo.setStock("-" + purchaseApplyDetailPo.getPurchaseQuantity());
+            resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+            //查询资源
+            ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
+            resourceStoreDto.setResId(purchaseApplyDetailPo.getResId());
+            List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+            if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
+                continue;
+            }
+            //入库到个人仓库中
+            UserStorehousePo userStorehousePo = new UserStorehousePo();
+            userStorehousePo.setUsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
+            userStorehousePo.setResId(resourceStoreDtos.get(0).getResId());
+            userStorehousePo.setResName(resourceStoreDtos.get(0).getResName());
+            userStorehousePo.setStoreId(resourceStoreDtos.get(0).getStoreId());
+            userStorehousePo.setUserId(purchaseApplyPo.getUserId());
+            //查询物品 是否已经存在
+            UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
+            userStorehouseDto.setResId(resourceStoreDtos.get(0).getResId());
+            userStorehouseDto.setUserId(purchaseApplyPo.getUserId());
+            userStorehouseDto.setStoreId(resourceStoreDtos.get(0).getStoreId());
+            List<UserStorehouseDto> userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
+            if (userStorehouseDtos == null || userStorehouseDtos.size() < 1) {
+                userStorehousePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
+                userStorehouseInnerServiceSMOImpl.saveUserStorehouses(userStorehousePo);
+            } else {
+                int total = Integer.parseInt(purchaseApplyDetailPo.getPurchaseQuantity()) + Integer.parseInt(userStorehouseDtos.get(0).getStock());
+                userStorehousePo.setStock(total + "");
+                userStorehousePo.setUsId(userStorehouseDtos.get(0).getUsId());
+                userStorehouseInnerServiceSMOImpl.updateUserStorehouses(userStorehousePo);
+            }
+        }
+        purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
+        return goodsCollectionBMOImpl.collection(purchaseApplyPo);
     }
 }
