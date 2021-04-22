@@ -1,30 +1,32 @@
 {
   "autoMove": true,
-  "id": "crId",
-  "name": "contractRoom",
+  "id": "partyaId",
+  "name": "contractPartya",
   "desc": "合同房屋",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "store",
-  "tableName": "contract_room",
+  "tableName": "contract_partya",
   "param": {
-    "crId": "cr_id",
-    "contractId": "contract_id",
-    "roomId": "room_id",
-    "roomName": "room_name",
-    "ownerId": "owner_id",
-    "ownerName": "owner_name",
+    "partyaId": "partya_id",
+    "partyA": "party_a",
+    "aContacts": "a_contacts",
+    "aLink": "a_link",
     "storeId": "store_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "contractId",
-      "msg": "合同不能为空"
+      "code": "partyA",
+      "msg": "甲方不能为空"
     },
     {
-      "code": "roomId",
-      "msg": "房屋不能为空"
+      "code": "aContacts",
+      "msg": "联系人不能为空"
+    },
+    {
+      "code": "aLink",
+      "msg": "联系电话不能为空"
     }
   ]
 }
