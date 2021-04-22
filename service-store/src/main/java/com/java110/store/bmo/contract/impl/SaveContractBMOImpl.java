@@ -106,7 +106,7 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
-        saveContractRoomRel(reqJson);
+        saveContractRoomRel(reqJson, contractPo);
 
 
         //提交流程
@@ -138,7 +138,7 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
     }
 
-    private void saveContractRoomRel(JSONObject reqJson) {
+    private void saveContractRoomRel(JSONObject reqJson, ContractPo contractPo) {
 
         //保存关联房屋
         if (!reqJson.containsKey("rooms")) {
@@ -149,6 +149,10 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             JSONObject resourceStore = rooms.getJSONObject(conFileIndex);
             ContractRoomPo contractRoomPo = BeanConvertUtil.covertBean(resourceStore, ContractRoomPo.class);
             contractRoomPo.setCrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_crId));
+            contractRoomPo.setContractId(contractPo.getContractId());
+            contractRoomPo.setRoomName(
+                    resourceStore.getString("floorNum") + "-"
+                            + resourceStore.getString("unitNum") + "-" + resourceStore.getString("roomNum"));
             contractRoomInnerServiceSMOImpl.saveContractRoom(contractRoomPo);
         }
         //刷业主
