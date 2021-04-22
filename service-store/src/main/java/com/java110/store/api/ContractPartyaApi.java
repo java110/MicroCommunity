@@ -36,7 +36,8 @@ public class ContractPartyaApi {
      * @path /app/contractPartya/saveContractPartya
      */
     @RequestMapping(value = "/saveContractPartya", method = RequestMethod.POST)
-    public ResponseEntity<String> saveContractPartya(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveContractPartya(@RequestHeader(value = "store-id") String storeId,
+                                                     @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "partyA", "请求报文中未包含partyA");
         Assert.hasKeyAndValue(reqJson, "aContacts", "请求报文中未包含aContacts");
@@ -44,6 +45,8 @@ public class ContractPartyaApi {
 
 
         ContractPartyaPo contractPartyaPo = BeanConvertUtil.covertBean(reqJson, ContractPartyaPo.class);
+        contractPartyaPo.setStoreId(storeId);
+
         return saveContractPartyaBMOImpl.save(contractPartyaPo);
     }
 
@@ -56,7 +59,8 @@ public class ContractPartyaApi {
      * @path /app/contractPartya/updateContractPartya
      */
     @RequestMapping(value = "/updateContractPartya", method = RequestMethod.POST)
-    public ResponseEntity<String> updateContractPartya(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> updateContractPartya(@RequestHeader(value = "store-id") String storeId,
+                                                       @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "partyA", "请求报文中未包含partyA");
         Assert.hasKeyAndValue(reqJson, "aContacts", "请求报文中未包含aContacts");
@@ -65,6 +69,8 @@ public class ContractPartyaApi {
 
 
         ContractPartyaPo contractPartyaPo = BeanConvertUtil.covertBean(reqJson, ContractPartyaPo.class);
+        contractPartyaPo.setStoreId(storeId);
+
         return updateContractPartyaBMOImpl.update(contractPartyaPo);
     }
 
@@ -77,13 +83,15 @@ public class ContractPartyaApi {
      * @path /app/contractPartya/deleteContractPartya
      */
     @RequestMapping(value = "/deleteContractPartya", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteContractPartya(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> deleteContractPartya(@RequestHeader(value = "store-id") String storeId,
+                                                       @RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "partyaId", "partyaId不能为空");
 
 
         ContractPartyaPo contractPartyaPo = BeanConvertUtil.covertBean(reqJson, ContractPartyaPo.class);
+        contractPartyaPo.setStoreId(storeId);
         return deleteContractPartyaBMOImpl.delete(contractPartyaPo);
     }
 

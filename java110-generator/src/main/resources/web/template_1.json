@@ -1,70 +1,66 @@
 {
-  "templateName": "仓库",
-  "directories": "property",
-  "templateCode": "storehouse",
-  "templateKey": "shId",
-  "templateKeyName": "仓库编号",
-  "searchCode": "shId",
-  "searchName": "仓库编号",
+  "templateName": "合同甲方",
+  "directories": "admin",
+  "templateCode": "contractPartya",
+  "templateKey": "partyaId",
+  "templateKeyName": "甲方编号",
+  "searchCode": "partyaId",
+  "searchName": "甲方编号",
   "conditions": [
     {
-      "name": "仓库名称",
+      "name": "甲方",
       "inputType": "input",
-      "code": "shName",
+      "code": "partyA",
       "whereCondition": "equal"
     },
     {
-      "name": "仓库类型",
-      "inputType": "select",
-      "selectValue": "2806,2807",
-      "selectValueName": "集团仓库,小区仓库",
-      "code": "shType",
+      "name": "甲方联系人",
+      "inputType": "input",
+      "code": "aContacts",
       "whereCondition": "equal"
     },
     {
-      "name": "仓库编号",
+      "name": "联系电话",
       "inputType": "input",
-      "code": "shId",
+      "code": "aLink",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "shName",
-      "cnCode": "仓库名称",
-      "desc": "必填，请填写仓库名称",
+      "code": "partyA",
+      "cnCode": "甲方",
+      "desc": "必填，请填写甲方",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "200",
+      "limitErrInfo": "甲方太长",
+      "show": true
+    },
+    {
+      "code": "aContacts",
+      "cnCode": "甲方联系人",
+      "desc": "必填，请填写甲方联系人",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
       "limitParam": "64",
-      "limitErrInfo": "仓库名称太长",
-      "show": true
-    },
-    {
-      "code": "shType",
-      "cnCode": "仓库类型",
-      "desc": "必填，请选择仓库类型",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "select",
-      "selectValue": "2806,2807",
-      "selectValueName": "集团仓库,小区仓库",
-      "limit": "num",
-      "limitParam": "",
       "limitErrInfo": "仓库类型格式错误",
       "show": true
     },
     {
-      "code": "shDesc",
-      "cnCode": "描述",
-      "desc": "必填，请填写描述",
+      "code": "aLink",
+      "cnCode": "联系电话",
+      "desc": "必填，请填写联系电话",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "512",
-      "limitErrInfo": "描述太长",
+      "limit": "phone",
+      "limitParam": "",
+      "limitErrInfo": "联系电话格式错误",
       "show": true
     }
   ]
