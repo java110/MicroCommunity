@@ -1,38 +1,30 @@
 {
   "autoMove": true,
-  "id": "visitId",
-  "name": "repairReturnVisit",
-  "desc": "报修回访",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "community",
-  "tableName": "r_repair_return_visit",
+  "id": "crId",
+  "name": "contractRoom",
+  "desc": "合同房屋",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "tableName": "contract_room",
   "param": {
-    "visitId": "visit_id",
-    "repairId": "repair_id",
-    "communityId": "community_id",
-    "visitPersonId": "visit_person_id",
-    "visitPersonName": "visit_person_name",
-    "visitType": "visit_type",
-    "context": "context",
+    "crId": "cr_id",
+    "contractId": "contract_id",
+    "roomId": "room_id",
+    "roomName": "room_name",
+    "ownerId": "owner_id",
+    "ownerName": "owner_name",
+    "storeId": "store_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "repairId",
-      "msg": "报修单不能为空"
+      "code": "contractId",
+      "msg": "合同不能为空"
     },
     {
-      "code": "visitPersonId",
-      "msg": "回访人不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "小区不能为空"
-    },
-    {
-      "code": "context",
-      "msg": "回访内容不能为空"
+      "code": "roomId",
+      "msg": "房屋不能为空"
     }
   ]
 }
