@@ -1,38 +1,32 @@
 {
   "autoMove": true,
-  "id": "visitId",
-  "name": "repairReturnVisit",
-  "desc": "报修回访",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "community",
-  "tableName": "r_repair_return_visit",
+  "id": "partyaId",
+  "name": "contractPartya",
+  "desc": "合同房屋",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "tableName": "contract_partya",
   "param": {
-    "visitId": "visit_id",
-    "repairId": "repair_id",
-    "communityId": "community_id",
-    "visitPersonId": "visit_person_id",
-    "visitPersonName": "visit_person_name",
-    "visitType": "visit_type",
-    "context": "context",
+    "partyaId": "partya_id",
+    "partyA": "party_a",
+    "aContacts": "a_contacts",
+    "aLink": "a_link",
+    "storeId": "store_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "repairId",
-      "msg": "报修单不能为空"
+      "code": "partyA",
+      "msg": "甲方不能为空"
     },
     {
-      "code": "visitPersonId",
-      "msg": "回访人不能为空"
+      "code": "aContacts",
+      "msg": "联系人不能为空"
     },
     {
-      "code": "communityId",
-      "msg": "小区不能为空"
-    },
-    {
-      "code": "context",
-      "msg": "回访内容不能为空"
+      "code": "aLink",
+      "msg": "联系电话不能为空"
     }
   ]
 }

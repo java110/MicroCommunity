@@ -1,12 +1,16 @@
 package com.java110.store.api;
 
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
 import com.java110.dto.contractChangePlanDetail.ContractChangePlanDetailDto;
 import com.java110.dto.contractChangePlanDetailAttr.ContractChangePlanDetailAttrDto;
 import com.java110.dto.contractCollectionPlan.ContractCollectionPlanDto;
+import com.java110.dto.contractRoom.ContractRoomDto;
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.contractTypeSpec.ContractTypeSpecDto;
 import com.java110.dto.contractTypeTemplate.ContractTypeTemplateDto;
@@ -17,6 +21,8 @@ import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
 import com.java110.po.contractChangePlanDetailAttr.ContractChangePlanDetailAttrPo;
 import com.java110.po.contractCollectionPlan.ContractCollectionPlanPo;
+import com.java110.po.contractFile.ContractFilePo;
+import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.po.contractType.ContractTypePo;
 import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
 import com.java110.po.contractTypeTemplate.ContractTypeTemplatePo;
@@ -44,6 +50,10 @@ import com.java110.store.bmo.contractCollectionPlan.IDeleteContractCollectionPla
 import com.java110.store.bmo.contractCollectionPlan.IGetContractCollectionPlanBMO;
 import com.java110.store.bmo.contractCollectionPlan.ISaveContractCollectionPlanBMO;
 import com.java110.store.bmo.contractCollectionPlan.IUpdateContractCollectionPlanBMO;
+import com.java110.store.bmo.contractRoom.IDeleteContractRoomBMO;
+import com.java110.store.bmo.contractRoom.IGetContractRoomBMO;
+import com.java110.store.bmo.contractRoom.ISaveContractRoomBMO;
+import com.java110.store.bmo.contractRoom.IUpdateContractRoomBMO;
 import com.java110.store.bmo.contractType.IDeleteContractTypeBMO;
 import com.java110.store.bmo.contractType.IGetContractTypeBMO;
 import com.java110.store.bmo.contractType.ISaveContractTypeBMO;
@@ -59,6 +69,9 @@ import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -161,6 +174,16 @@ public class ContractApi {
     @Autowired
     private IGetContractCollectionPlanBMO getContractCollectionPlanBMOImpl;
 
+    @Autowired
+    private ISaveContractRoomBMO saveContractRoomBMOImpl;
+    @Autowired
+    private IUpdateContractRoomBMO updateContractRoomBMOImpl;
+    @Autowired
+    private IDeleteContractRoomBMO deleteContractRoomBMOImpl;
+
+    @Autowired
+    private IGetContractRoomBMO getContractRoomBMOImpl;
+
     /**
      * 微信保存消息模板
      *
@@ -196,6 +219,18 @@ public class ContractApi {
             contractPo.setContractParentId("-1");
         }
         reqJson.put("userId", userId);
+
+
+        JSONArray contractFiles = reqJson.getJSONArray("contractFilePo");
+        List<ContractFilePo> contractFilePos = new ArrayList<>();
+        for (int conFileIndex = 0; conFileIndex < contractFiles.size(); conFileIndex++) {
+            JSONObject resourceStore = contractFiles.getJSONObject(conFileIndex);
+            ContractFilePo contractFilePo = BeanConvertUtil.covertBean(resourceStore, ContractFilePo.class);
+            contractFilePo.setContractFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractFileId));
+            contractFilePos.add(contractFilePo);
+        }
+        contractPo.setContractFilePo(contractFilePos);
+
         return saveContractBMOImpl.save(contractPo, reqJson);
     }
 
@@ -228,6 +263,16 @@ public class ContractApi {
 
 
         ContractPo contractPo = BeanConvertUtil.covertBean(reqJson, ContractPo.class);
+
+        JSONArray contractFiles = reqJson.getJSONArray("contractFilePo");
+        List<ContractFilePo> contractFilePos = new ArrayList<>();
+        for (int conFileIndex = 0; conFileIndex < contractFiles.size(); conFileIndex++) {
+            JSONObject resourceStore = contractFiles.getJSONObject(conFileIndex);
+            ContractFilePo contractFilePo = BeanConvertUtil.covertBean(resourceStore, ContractFilePo.class);
+            contractFilePo.setContractFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractFileId));
+            contractFilePos.add(contractFilePo);
+        }
+        contractPo.setContractFilePo(contractFilePos);
         return updateContractBMOImpl.update(contractPo, reqJson);
     }
 
@@ -1208,5 +1253,82 @@ public class ContractApi {
         return getContractCollectionPlanBMOImpl.get(contractCollectionPlanDto);
     }
 
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contractRoom/saveContractRoom
+     * @path /app/contractRoom/saveContractRoom
+     */
+    @RequestMapping(value = "/saveContractRoom", method = RequestMethod.POST)
+    public ResponseEntity<String> saveContractRoom(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "contractId", "请求报文中未包含contractId");
+        Assert.hasKeyAndValue(reqJson, "roomId", "请求报文中未包含roomId");
+
+
+        ContractRoomPo contractRoomPo = BeanConvertUtil.covertBean(reqJson, ContractRoomPo.class);
+        return saveContractRoomBMOImpl.save(contractRoomPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contractRoom/updateContractRoom
+     * @path /app/contractRoom/updateContractRoom
+     */
+    @RequestMapping(value = "/updateContractRoom", method = RequestMethod.POST)
+    public ResponseEntity<String> updateContractRoom(@RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "contractId", "请求报文中未包含contractId");
+        Assert.hasKeyAndValue(reqJson, "roomId", "请求报文中未包含roomId");
+        Assert.hasKeyAndValue(reqJson, "crId", "crId不能为空");
+
+
+        ContractRoomPo contractRoomPo = BeanConvertUtil.covertBean(reqJson, ContractRoomPo.class);
+        return updateContractRoomBMOImpl.update(contractRoomPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /contractRoom/deleteContractRoom
+     * @path /app/contractRoom/deleteContractRoom
+     */
+    @RequestMapping(value = "/deleteContractRoom", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteContractRoom(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "crId", "crId不能为空");
+
+
+        ContractRoomPo contractRoomPo = BeanConvertUtil.covertBean(reqJson, ContractRoomPo.class);
+        return deleteContractRoomBMOImpl.delete(contractRoomPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /contractRoom/queryContractRoom
+     * @path /app/contractRoom/queryContractRoom
+     */
+    @RequestMapping(value = "/queryContractRoom", method = RequestMethod.GET)
+    public ResponseEntity<String> queryContractRoom(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row) {
+        ContractRoomDto contractRoomDto = new ContractRoomDto();
+        contractRoomDto.setPage(page);
+        contractRoomDto.setRow(row);
+        contractRoomDto.setStoreId(storeId);
+        return getContractRoomBMOImpl.get(contractRoomDto);
+    }
 
 }

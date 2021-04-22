@@ -1,6 +1,9 @@
 package com.java110.po.contract;
 
+import com.java110.po.contractFile.ContractFilePo;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class ContractPo implements Serializable {
 
@@ -31,7 +34,7 @@ public class ContractPo implements Serializable {
     private String objPersonName;
     private String objPersonId;
     private String startUserId;
-
+    private List<ContractFilePo> contractFilePo;
 
     public String getaLink() {
         return aLink;
@@ -248,4 +251,12 @@ public class ContractPo implements Serializable {
     public void setStartUserId(String startUserId) {
         this.startUserId = startUserId;
     }
+    public List<ContractFilePo> getContractFilePo() {
+        return contractFilePo;
+    }
+
+    public void setContractFilePo(List<ContractFilePo> contractFilePo) {
+        this.contractFilePo = contractFilePo;
+    }
+
 }

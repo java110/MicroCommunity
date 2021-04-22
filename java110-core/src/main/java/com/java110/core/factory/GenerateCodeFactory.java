@@ -146,6 +146,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_appointmentId = "80";
     public static final String CODE_PREFIX_contractId = "81";
     public static final String CODE_PREFIX_contractTypeId = "81";
+    public static final String CODE_PREFIX_contractFileId = "89";
+
     public static final String CODE_PREFIX_specCd = "82";
     public static final String CODE_PREFIX_loginId = "82";
     public static final String CODE_PREFIX_templateId = "82";
@@ -193,6 +195,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_allocationStorehouseId = "26";
     public static final String CODE_PREFIX_usId = "27";
     public static final String CODE_PREFIX_rstId = "28";
+    public static final String CODE_PREFIX_crId = "28";
+    public static final String CODE_PREFIX_partyaId = "28";
 
 
     /**

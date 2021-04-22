@@ -22,5 +22,7 @@ public interface IImportRoomFeeSMO {
      */
     public ResponseEntity<String> importExcelData(IPageData pd,  MultipartFile uploadFile) throws Exception;
 
+    public ResponseEntity<String> importFile(MultipartFile uploadFile) throws Exception;
+
     ResponseEntity<String> importTempData(IPageData pd);
 }
