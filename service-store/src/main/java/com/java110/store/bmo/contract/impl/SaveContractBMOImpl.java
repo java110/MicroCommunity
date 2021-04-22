@@ -9,6 +9,7 @@ import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.store.StoreDto;
+import com.java110.intf.IContractRoomInnerServiceSMO;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
 import com.java110.intf.store.IContractFileInnerServiceSMO;
@@ -18,6 +19,7 @@ import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractFile.ContractFilePo;
+import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.store.bmo.contract.ISaveContractBMO;
 import com.java110.utils.util.Assert;
@@ -50,6 +52,9 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
     @Autowired
     private IContractFileInnerServiceSMO contractFileInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -89,17 +94,20 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
         //附件保存
         List<ContractFilePo> filePos = contractPo.getContractFilePo();
         int flag = contractInnerServiceSMOImpl.saveContract(contractPo);
-        for (ContractFilePo file: filePos) {
-             if (file.getFileRealName().length() > 0 && file.getFileSaveName().length() > 0){
-                 file.setContractId(contractPo.getContractId());
-                 contractFileInnerServiceSMOImpl.saveContractFile(file);
-             }
+        for (ContractFilePo file : filePos) {
+            if (file.getFileRealName().length() > 0 && file.getFileSaveName().length() > 0) {
+                file.setContractId(contractPo.getContractId());
+                contractFileInnerServiceSMOImpl.saveContractFile(file);
+            }
         }
 
         contractPo.setContractId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractId));
         if (flag < 0) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
+
+        saveContractRoomRel(reqJson);
+
 
         //提交流程
         ContractDto tmpContractDto = BeanConvertUtil.covertBean(contractPo, ContractDto.class);
@@ -128,6 +136,22 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
 
+    }
+
+    private void saveContractRoomRel(JSONObject reqJson) {
+
+        //保存关联房屋
+        if (!reqJson.containsKey("rooms")) {
+            return;
+        }
+        JSONArray rooms = reqJson.getJSONArray("rooms");
+        for (int conFileIndex = 0; conFileIndex < rooms.size(); conFileIndex++) {
+            JSONObject resourceStore = rooms.getJSONObject(conFileIndex);
+            ContractRoomPo contractRoomPo = BeanConvertUtil.covertBean(resourceStore, ContractRoomPo.class);
+            contractRoomPo.setCrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_crId));
+            contractRoomInnerServiceSMOImpl.saveContractRoom(contractRoomPo);
+        }
+        //刷业主
     }
 
     /**

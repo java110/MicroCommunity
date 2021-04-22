@@ -22,6 +22,7 @@ import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
 import com.java110.po.contractChangePlanDetailAttr.ContractChangePlanDetailAttrPo;
 import com.java110.po.contractCollectionPlan.ContractCollectionPlanPo;
 import com.java110.po.contractFile.ContractFilePo;
+import com.java110.po.contractPartya.ContractPartyaPo;
 import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.po.contractType.ContractTypePo;
 import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
@@ -221,15 +222,18 @@ public class ContractApi {
         reqJson.put("userId", userId);
 
 
-        JSONArray contractFiles = reqJson.getJSONArray("contractFilePo");
-        List<ContractFilePo> contractFilePos = new ArrayList<>();
-        for (int conFileIndex = 0; conFileIndex < contractFiles.size(); conFileIndex++) {
-            JSONObject resourceStore = contractFiles.getJSONObject(conFileIndex);
-            ContractFilePo contractFilePo = BeanConvertUtil.covertBean(resourceStore, ContractFilePo.class);
-            contractFilePo.setContractFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractFileId));
-            contractFilePos.add(contractFilePo);
+        if (reqJson.containsKey("contractFilePo")) {
+            JSONArray contractFiles = reqJson.getJSONArray("contractFilePo");
+            List<ContractFilePo> contractFilePos = new ArrayList<>();
+            for (int conFileIndex = 0; conFileIndex < contractFiles.size(); conFileIndex++) {
+                JSONObject resourceStore = contractFiles.getJSONObject(conFileIndex);
+                ContractFilePo contractFilePo = BeanConvertUtil.covertBean(resourceStore, ContractFilePo.class);
+                contractFilePo.setContractFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractFileId));
+                contractFilePos.add(contractFilePo);
+            }
+            contractPo.setContractFilePo(contractFilePos);
         }
-        contractPo.setContractFilePo(contractFilePos);
+
 
         return saveContractBMOImpl.save(contractPo, reqJson);
     }
