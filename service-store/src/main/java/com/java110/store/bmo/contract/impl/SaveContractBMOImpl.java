@@ -150,6 +150,7 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             ContractRoomPo contractRoomPo = BeanConvertUtil.covertBean(resourceStore, ContractRoomPo.class);
             contractRoomPo.setCrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_crId));
             contractRoomPo.setContractId(contractPo.getContractId());
+            contractRoomPo.setStoreId(contractPo.getStoreId());
             contractRoomPo.setRoomName(
                     resourceStore.getString("floorNum") + "-"
                             + resourceStore.getString("unitNum") + "-" + resourceStore.getString("roomNum"));
