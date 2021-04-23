@@ -101,7 +101,6 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             }
         }
 
-        contractPo.setContractId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractId));
         if (flag < 0) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }

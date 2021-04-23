@@ -1263,8 +1263,8 @@ public class ContractApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /contractRoom/saveContractRoom
-     * @path /app/contractRoom/saveContractRoom
+     * @serviceCode /contract/saveContractRoom
+     * @path /app/contract/saveContractRoom
      */
     @RequestMapping(value = "/saveContractRoom", method = RequestMethod.POST)
     public ResponseEntity<String> saveContractRoom(@RequestBody JSONObject reqJson) {
@@ -1282,8 +1282,8 @@ public class ContractApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /contractRoom/updateContractRoom
-     * @path /app/contractRoom/updateContractRoom
+     * @serviceCode /contract/updateContractRoom
+     * @path /app/contract/updateContractRoom
      */
     @RequestMapping(value = "/updateContractRoom", method = RequestMethod.POST)
     public ResponseEntity<String> updateContractRoom(@RequestBody JSONObject reqJson) {
@@ -1302,8 +1302,8 @@ public class ContractApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /contractRoom/deleteContractRoom
-     * @path /app/contractRoom/deleteContractRoom
+     * @serviceCode /contract/deleteContractRoom
+     * @path /app/contract/deleteContractRoom
      */
     @RequestMapping(value = "/deleteContractRoom", method = RequestMethod.POST)
     public ResponseEntity<String> deleteContractRoom(@RequestBody JSONObject reqJson) {
@@ -1321,8 +1321,8 @@ public class ContractApi {
      *
      * @param storeId 小区ID
      * @return
-     * @serviceCode /contractRoom/queryContractRoom
-     * @path /app/contractRoom/queryContractRoom
+     * @serviceCode /contract/queryContractRoom
+     * @path /app/contract/queryContractRoom
      */
     @RequestMapping(value = "/queryContractRoom", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractRoom(@RequestHeader(value = "store-id") String storeId,
