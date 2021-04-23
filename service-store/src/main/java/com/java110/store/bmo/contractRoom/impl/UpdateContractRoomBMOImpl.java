@@ -1,7 +1,7 @@
 package com.java110.store.bmo.contractRoom.impl;
 
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.intf.IContractRoomInnerServiceSMO;
+import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.store.bmo.contractRoom.IUpdateContractRoomBMO;
 import com.java110.vo.ResultVo;
