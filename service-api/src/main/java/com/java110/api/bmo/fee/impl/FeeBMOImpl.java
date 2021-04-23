@@ -7,6 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
@@ -673,6 +674,43 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", roomDto.getRoomId());
         businessUnit.put("payerObjType", "3333");
+        businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
+        businessUnit.put("state", "2008001");
+        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
+        paramInJson.put("feeId", businessUnit.getString("feeId"));
+        return business;
+    }
+
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addContractFee(ContractDto contractDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
+        if (paramInJson.containsKey("feeEndDate")) {
+            time = paramInJson.getString("feeEndDate");
+        } else if (paramInJson.containsKey("startTime")) {
+            time = paramInJson.getString("startTime");
+        }
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("feeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+        businessUnit.put("configId", paramInJson.getString("configId"));
+        businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
+        businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
+        businessUnit.put("amount", "-1.00");
+        businessUnit.put("startTime", time);
+        businessUnit.put("endTime", time);
+        businessUnit.put("communityId", paramInJson.getString("communityId"));
+        businessUnit.put("payerObjId", contractDto.getContractId());
+        businessUnit.put("payerObjType", FeeDto.PAYER_OBJ_TYPE_CONTRACT);
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));

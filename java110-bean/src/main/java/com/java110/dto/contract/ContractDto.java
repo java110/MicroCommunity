@@ -45,6 +45,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
     private String state;
+    private String[] states;
     private String[] noStates;
     private String stateDesc;
     private String contractCode;
@@ -78,6 +79,8 @@ public class ContractDto extends PageDto implements Serializable {
     private String staffName;
     private String staffTel;
     private String startUserId;
+
+    private String communityId;
 
     private List<ContractAttrDto> attrs;
 
@@ -423,5 +426,21 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setObjPersonId(String objPersonId) {
         this.objPersonId = objPersonId;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
