@@ -1,85 +1,57 @@
 {
-  "templateName": "员工门禁授权",
-  "directories": "property",
-  "templateCode": "machineAuth",
-  "templateKey": "authId",
-  "templateKeyName": "ID",
-  "searchCode": "authId",
-  "searchName": "ID",
+  "templateName": "版本构建",
+  "directories": "admin",
+  "templateCode": "appVersionJob",
+  "templateKey": "jobId",
+  "templateKeyName": "构建ID",
+  "searchCode": "jobId",
+  "searchName": "构建ID",
   "conditions": [
     {
-      "name": "设备",
+      "name": "名称",
+      "inputType": "input",
+      "code": "jobName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "状态",
       "inputType": "select",
-      "selectValue": "6666",
-      "selectValueName": "最美员工",
-      "code": "machineId",
+      "selectValue":"1001,2002,3003,4004",
+      "selectValueName":"未构建,构建中,构建失败,构建成功",
+      "code": "state",
       "whereCondition": "equal"
     },
     {
-      "name": "员工名称",
+      "name": "构建ID",
       "inputType": "input",
-      "code": "personName",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "员工编码",
-      "inputType": "input",
-      "code": "personId",
+      "code": "jobId",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "machineId",
-      "cnCode": "设备",
-      "desc": "必填，请选择设备",
+      "code": "jobName",
+      "cnCode": "名称",
+      "desc": "必填，请填写名称",
       "required": true,
       "hasDefaultValue": false,
-      "inputType": "select",
-      "selectValue": "6666",
-      "selectValueName": "最美员工",
-      "limit": "num",
-      "limitParam": "",
-      "limitErrInfo": "设备格式错误",
-      "show": true
-    },
-    {
-      "code": "personId",
-      "cnCode": "员工",
-      "desc": "必填，请填写员工",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "select",
-      "selectValue": "6666",
-      "selectValueName": "最美员工",
+      "inputType": "input",
       "limit": "maxLength",
       "limitParam": "128",
-      "limitErrInfo": "员工名称太长",
+      "limitErrInfo": "名称太长",
       "show": true
     },
     {
-      "code": "startTime",
-      "cnCode": "开始时间",
-      "desc": "必填，请填写开始时间",
+      "code": "jobShell",
+      "cnCode": "脚本",
+      "desc": "必填，请填写脚本",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
-      "limit": "datetime",
-      "limitParam": "",
-      "limitErrInfo": "开始时间格式错误",
-      "show": true
-    },
-    {
-      "code": "endTime",
-      "cnCode": "结束时间",
-      "desc": "必填，请填写结束时间",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "datetime",
-      "limitParam": "",
-      "limitErrInfo": "结束时间格式错误",
-      "show": true
+      "limit": "maxLength",
+      "limitParam": "1024",
+      "limitErrInfo": "脚本错误",
+      "show": false
     }
   ]
 }
