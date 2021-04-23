@@ -798,6 +798,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 for(ContractRoomDto tmpContractRoomDto: contractRoomDtos){
                     builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getBuiltUpArea())));
                 }
+                feeDto.setBuiltUpArea(builtUpArea.doubleValue()+"");
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
                 feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(3, BigDecimal.ROUND_HALF_EVEN);
             } else if ("2002".equals(computingFormula)) { // 固定费用
