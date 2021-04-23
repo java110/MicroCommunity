@@ -107,11 +107,14 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
         saveContractRoomRel(reqJson, contractPo);
 
+        //需要审核时才写 工作流
+        if (!ContractTypeDto.NO_AUDIT.equals(audit)) {
+            //提交流程
+            ContractDto tmpContractDto = BeanConvertUtil.covertBean(contractPo, ContractDto.class);
+            tmpContractDto.setCurrentUserId(reqJson.getString("userId"));
+            contractApplyUserInnerServiceSMOImpl.startProcess(tmpContractDto);
+        }
 
-        //提交流程
-        ContractDto tmpContractDto = BeanConvertUtil.covertBean(contractPo, ContractDto.class);
-        tmpContractDto.setCurrentUserId(reqJson.getString("userId"));
-        contractApplyUserInnerServiceSMOImpl.startProcess(tmpContractDto);
 
         if (StoreDto.STORE_ADMIN.equals(contractPo.getStoreId())) {
             noticeRentUpdateState(contractPo, audit);
