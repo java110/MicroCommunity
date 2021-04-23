@@ -572,19 +572,12 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
         Assert.listOnlyOne(contractDtos, "未找到合同信息");
 
-        RoomDto roomDto = new RoomDto();
-        roomDto.setRoomId(contractDtos.get(0).getObjId());
-        roomDto.setCommunityId(communityId);
-
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-        Assert.listOnlyOne(roomDtos, "未找到房屋信息");
-
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
-        ownerDto.setRoomId(roomDtos.get(0).getRoomId());
+        ownerDto.setMemberId(contractDtos.get(0).getObjId());
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-        Assert.listOnlyOne(ownerDtos, "未找到业主信息");
+        Assert.listOnlyOne(ownerDtos, "未找到业主信息或者查询到多条，请换其他条件查询");
         //查询是否有脱敏权限
         List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
         List<OwnerDto> ownerDtoList = new ArrayList<>();
@@ -603,11 +596,26 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
             owner.setLink(link);
             ownerDtoList.add(owner);
         }
-
         OwnerDto resOwnerDto = ownerDtoList.get(0);
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setOwnerId(ownerDtoList.get(0).getOwnerId());
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
+        //没有房屋
+        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+            return resOwnerDto;
+        }
+        List<String> roomIds = new ArrayList<>();
+        for (OwnerRoomRelDto tmpOwnerRoomRelDto : ownerRoomRelDtos) {
+            roomIds.add(tmpOwnerRoomRelDto.getRoomId());
+        }
+
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        roomDto.setCommunityId(communityId);
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
         resOwnerDto.setRooms(roomDtos);
-
         return resOwnerDto;
     }
 
