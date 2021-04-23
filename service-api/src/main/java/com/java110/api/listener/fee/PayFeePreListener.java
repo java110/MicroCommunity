@@ -8,18 +8,29 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
+import com.java110.dto.repair.RepairDto;
+import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
+import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeDiscountInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.po.owner.RepairPoolPo;
+import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +39,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -62,6 +74,12 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IRepairUserInnerServiceSMO repairUserInnerServiceSMO;
 
     @Override
     public String getServiceCode() {
@@ -111,6 +129,69 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
             addDiscount(paramObj, businesses, dataFlowContext);
         }
 
+        //判断是否有派单属性ID
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setCommunityId(paramObj.getString("communityId"));
+        feeAttrDto.setFeeId(paramObj.getString("feeId"));
+        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+        //修改 派单状态
+        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
+            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
+            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
+            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairPoolPo repairPoolPo = new RepairPoolPo();
+            repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
+            repairPoolPo.setCommunityId(paramObj.getString("communityId"));
+            repairPoolPo.setState(RepairDto.STATE_APPRAISE);
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairPoolPo));
+            businesses.add(business);
+        }
+        //修改报修派单状态
+        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
+            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
+            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
+            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairUserDto repairUserDto = new RepairUserDto();
+            repairUserDto.setRepairId(feeAttrDtos.get(0).getValue());
+            repairUserDto.setState(RepairUserDto.STATE_PAY_FEE);
+            //查询待支付状态的记录
+            List<RepairUserDto> repairUserDtoList = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
+            Assert.listOnlyOne(repairUserDtoList, "信息错误！");
+            RepairUserPo repairUserPo = new RepairUserPo();
+            repairUserPo.setRuId(repairUserDtoList.get(0).getRuId());
+            repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
+            //如果是待评价状态，就更新结束时间
+            repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            DecimalFormat df = new DecimalFormat("#.00");
+            BigDecimal payment_amount=new BigDecimal(paramObj.getString("receivableAmount"));
+            repairUserPo.setContext("已支付" + df.format(payment_amount) + "元");
+            //新增待评价状态
+            JSONObject object = JSONObject.parseObject("{\"datas\":{}}");
+            object.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+            object.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
+            object.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairUserPo repairUser = new RepairUserPo();
+            repairUser.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+            repairUser.setStartTime(repairUserPo.getEndTime());
+            repairUser.setState(RepairUserDto.STATE_EVALUATE);
+            repairUser.setContext("待评价");
+            repairUser.setCommunityId(paramObj.getString("communityId"));
+            repairUser.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            repairUser.setRepairId(repairUserDtoList.get(0).getRepairId());
+            repairUser.setStaffId(repairUserDtoList.get(0).getStaffId());
+            repairUser.setStaffName(repairUserDtoList.get(0).getStaffName());
+            repairUser.setPreStaffId(repairUserDtoList.get(0).getStaffId());
+            repairUser.setPreStaffName(repairUserDtoList.get(0).getStaffName());
+            repairUser.setPreRuId(repairUserDtoList.get(0).getRuId());
+            repairUser.setRepairEvent("auditUser");
+            object.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairUserPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairUser));
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairUserPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairUserPo));
+            businesses.add(object);
+            businesses.add(business);
+        }
 
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS, Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);

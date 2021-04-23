@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IImportFeeDetailSMO;
@@ -54,19 +55,75 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
         try {
             ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
+            JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+            Assert.hasKeyAndValue(paramIn, "communityId", "请求中未包含小区");
+            Assert.hasKeyAndValue(paramIn, "objType", "请求中未包含费用对象");
             //InputStream is = uploadFile.getInputStream();
 
             Workbook workbook = ImportExcelUtils.createWorkbook(uploadFile);  //工作簿
 
             List<ImportRoomFee> rooms = new ArrayList<ImportRoomFee>();
-
-            //获取楼信息
-            getRooms(workbook, rooms);
+            if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(paramIn.getString("objType"))) {
+                //获取楼信息
+                getRooms(workbook, rooms);
+            }else {
+                //获取楼信息
+                getCars(workbook, rooms);
+            }
             // 保存数据
             return dealExcelData(pd, rooms, result);
         } catch (Exception e) {
             logger.error("导入失败 ", e);
             return new ResponseEntity<String>("非常抱歉，您填写的模板数据有误：" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void getCars(Workbook workbook, List<ImportRoomFee> rooms) {
+        Sheet sheet = null;
+        sheet = ImportExcelUtils.getSheet(workbook, "车辆缴费历史");
+        List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
+        ImportRoomFee importRoomFee = null;
+        for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
+            Object[] os = oList.get(osIndex);
+            if (osIndex == 0) { // 第一行是 头部信息 直接跳过
+                continue;
+            }
+            if (StringUtil.isNullOrNone(os[0])) {
+                continue;
+            }
+
+            //费用名称没有填写，默认跳过
+            if (StringUtil.isNullOrNone(os[4])) {
+                continue;
+            }
+            Assert.hasValue(os[0], (osIndex + 1) + "行车牌号不能为空");
+            Assert.hasValue(os[1], (osIndex + 1) + "行收费项目不能为空");
+            Assert.hasValue(os[2], (osIndex + 1) + "行缴费周期不能为空");
+            Assert.hasValue(os[3], (osIndex + 1) + "行开始时间不能为空");
+            Assert.hasValue(os[4], (osIndex + 1) + "行结束时间不能为空");
+            Assert.hasValue(os[5], (osIndex + 1) + "行缴费时间不能为空");
+            Assert.hasValue(os[6], (osIndex + 1) + "行缴费金额不能为空");
+
+//
+
+            String startTime = excelDoubleToDate(os[3].toString());
+            String endTime = excelDoubleToDate(os[4].toString());
+            String createTime = excelDoubleToDate(os[5].toString());
+            Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
+            Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
+            Assert.isDate(createTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
+
+
+            importRoomFee = new ImportRoomFee();
+            importRoomFee.setCarNum(os[0].toString());
+            importRoomFee.setFeeName(os[1].toString());
+            importRoomFee.setCycle(os[2].toString());
+            importRoomFee.setStartTime(startTime);
+            importRoomFee.setEndTime(endTime);
+            importRoomFee.setCreateTime(createTime);
+            importRoomFee.setAmount(os[6].toString());
+            importRoomFee.setRemark(!StringUtil.isNullOrNone(os[7]) ? os[7].toString() : "");
+            rooms.add(importRoomFee);
         }
     }
 

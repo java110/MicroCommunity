@@ -10,7 +10,6 @@ import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.roomRenovation.RoomRenovationDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
-import com.java110.dto.store.StoreUserDto;
 import com.java110.entity.order.Business;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
@@ -18,7 +17,6 @@ import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
@@ -64,9 +62,6 @@ public class MachineRoomToExamine extends DatabusAdaptImpl {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMO;
-
-    @Autowired
-    private IStoreInnerServiceSMO storeInnerServiceSMO;
 
     @Autowired
     private RestTemplate outRestTemplate;
@@ -179,16 +174,16 @@ public class MachineRoomToExamine extends DatabusAdaptImpl {
         ownerAppUserDto.setAppType("WECHAT");
         //查询绑定业主
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMO.queryOwnerAppUsers(ownerAppUserDto);
-        //获取当前用户id
-        String userId = paramIn.getString("userId");
-        StoreUserDto storeUserDto = new StoreUserDto();
-        storeUserDto.setUserId(userId);
-        //查询商户员工信息
-        List<StoreUserDto> storeUsers = storeInnerServiceSMO.getStoreUserInfo(storeUserDto);
-        //获取商户手机号
+        //查询当前绑定业主所属小区
+        String communityId = ownerAppUserDtos.get(0).getCommunityId();
+        //通过小区id查询小区信息
+        CommunityDto community = new CommunityDto();
+        community.setCommunityId(communityId);
+        List<CommunityDto> communityDtos = communityInnerServiceSMO.queryCommunitys(community);
+        //获取物业联系方式
         String tel = null;
-        if (storeUsers != null && storeUsers.size() > 0) {
-            tel = storeUsers.get(0).getTel();
+        if (communityDtos != null && communityDtos.size() > 0) {
+            tel = communityDtos.get(0).getTel();
         }
         String[] roomNames = paramIn.getString("roomName").split("-");
         //获取状态
@@ -219,5 +214,4 @@ public class MachineRoomToExamine extends DatabusAdaptImpl {
             logger.info("微信模板返回内容:{}", responseEntity);
         }
     }
-
 }

@@ -146,6 +146,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_appointmentId = "80";
     public static final String CODE_PREFIX_contractId = "81";
     public static final String CODE_PREFIX_contractTypeId = "81";
+    public static final String CODE_PREFIX_contractFileId = "89";
+
     public static final String CODE_PREFIX_specCd = "82";
     public static final String CODE_PREFIX_loginId = "82";
     public static final String CODE_PREFIX_templateId = "82";
@@ -187,7 +189,13 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_beId = "22";
     public static final String CODE_PREFIX_collectionId = "23";
     public static final String CODE_PREFIX_authId = "23";
-
+    public static final String CODE_PREFIX_planId = "24";
+    public static final String CODE_PREFIX_visitId = "24";
+    public static final String CODE_PREFIX_shId = "25";
+    public static final String CODE_PREFIX_allocationStorehouseId = "26";
+    public static final String CODE_PREFIX_usId = "27";
+    public static final String CODE_PREFIX_crId = "28";
+    public static final String CODE_PREFIX_partyaId = "28";
 
 
     /**
@@ -319,6 +327,34 @@ public class GenerateCodeFactory {
      * @throws GenerateCodeException
      */
     public static String getPsId(String prefix) throws GenerateCodeException {
+        if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+        }
+        //调用服务
+        return getCode(prefix);
+    }
+
+    /**
+     * 获取资源ID
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getResId(String prefix) throws GenerateCodeException {
+        if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+        }
+        //调用服务
+        return getCode(prefix);
+    }
+
+    /**
+     * 生成费用id
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getFeeId(String prefix) throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
             return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
         }
@@ -839,7 +875,6 @@ public class GenerateCodeFactory {
         //调用服务
         return getCode(prefixMap.get("pgId"));
     }
-
 
     /**
      * 获取restTemplate

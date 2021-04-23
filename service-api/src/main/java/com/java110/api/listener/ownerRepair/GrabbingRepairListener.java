@@ -50,34 +50,38 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
-        //Assert.hasKeyAndValue(reqJson, "context", "未包含派单内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "userId", "未包含用户ID");
         Assert.hasKeyAndValue(reqJson, "userName", "未包含用户名称");
-        RepairDto repairDto = new RepairDto();
-        repairDto.setRepairId(reqJson.getString("repairId"));
-        repairDto.setCommunityId(reqJson.getString("communityId"));
-        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
 
-        Assert.listOnlyOne(repairDtos, "未找到工单信息或找到多条");
 
-        String repairType = repairDtos.get(0).getRepairType();
+    }
+
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+
+        RepairDto repairDtoData = new RepairDto();
+        repairDtoData.setRepairId(reqJson.getString("repairId"));
+        repairDtoData.setCommunityId(reqJson.getString("communityId"));
+        List<RepairDto> repairDtoList = repairInnerServiceSMOImpl.queryRepairs(repairDtoData);
+        if (repairDtoList.size()!= 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "未找到工单信息或找到多条！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        String repairType = repairDtoList.get(0).getRepairType();
         RepairTypeUserDto repairTypeUserDto = new RepairTypeUserDto();
         repairTypeUserDto.setCommunityId(reqJson.getString("communityId"));
         repairTypeUserDto.setRepairType(repairType);
         repairTypeUserDto.setStaffId(reqJson.getString("userId"));
         int count = repairTypeUserInnerServiceSMOImpl.queryRepairTypeUsersCount(repairTypeUserDto);
         if (count < 1) {
-            throw new IllegalArgumentException("您没有权限抢该类型报修单");
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您没有权限抢该类型报修单！");
+            context.setResponseEntity(responseEntity);
+            return;
         }
 
-    }
-
-    @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         //获取报修id
         String repairId = reqJson.getString("repairId");
         RepairDto repairDto = new RepairDto();

@@ -49,6 +49,10 @@ public abstract class AbstractRepairBusinessServiceDataFlowListener extends Abst
         businessRepairInfo.put("repairObjType", businessRepairInfo.get("repair_obj_type"));
         businessRepairInfo.put("repairObjId", businessRepairInfo.get("repair_obj_id"));
         businessRepairInfo.put("repairObjName", businessRepairInfo.get("repair_obj_name"));
+        businessRepairInfo.put("repairChannel", businessRepairInfo.get("repair_channel"));
+        businessRepairInfo.put("maintenanceType", businessRepairInfo.get("maintenance_type"));
+        businessRepairInfo.put("repairMaterials", businessRepairInfo.get("repair_materials"));
+        businessRepairInfo.put("repairFee", businessRepairInfo.get("repair_fee"));
         businessRepairInfo.remove("bId");
         businessRepairInfo.put("statusCd", statusCd);
     }
@@ -85,8 +89,10 @@ public abstract class AbstractRepairBusinessServiceDataFlowListener extends Abst
         currentRepairInfo.put("repairObjType", currentRepairInfo.get("repair_obj_type"));
         currentRepairInfo.put("repairObjId", currentRepairInfo.get("repair_obj_id"));
         currentRepairInfo.put("repairObjName", currentRepairInfo.get("repair_obj_name"));
-
-
+        currentRepairInfo.put("repairChannel", currentRepairInfo.get("repair_channel"));
+        currentRepairInfo.put("maintenanceType", currentRepairInfo.get("maintenance_type"));
+        currentRepairInfo.put("repairMaterials", currentRepairInfo.get("repair_materials"));
+        currentRepairInfo.put("repairFee", currentRepairInfo.get("repair_fee"));
         currentRepairInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRepairServiceDaoImpl().saveBusinessRepairInfo(currentRepairInfo);
 

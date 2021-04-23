@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 查询装修记录信息实体类
+ * 查询装修记录信息
  *
  * @author fqz
  * @date 2021-02-23 17:02

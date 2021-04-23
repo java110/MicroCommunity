@@ -45,6 +45,12 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         businessResourceStoreInfo.put("storeId", businessResourceStoreInfo.get("store_id"));
         businessResourceStoreInfo.put("stock", businessResourceStoreInfo.get("stock"));
         businessResourceStoreInfo.put("resId", businessResourceStoreInfo.get("res_id"));
+        businessResourceStoreInfo.put("goodsType", businessResourceStoreInfo.get("goods_type"));
+        businessResourceStoreInfo.put("unitCode", businessResourceStoreInfo.get("unit_code"));
+        businessResourceStoreInfo.put("remark", businessResourceStoreInfo.get("remark"));
+        businessResourceStoreInfo.put("outLowPrice", businessResourceStoreInfo.get("out_low_price"));
+        businessResourceStoreInfo.put("outHighPrice", businessResourceStoreInfo.get("out_high_price"));
+        businessResourceStoreInfo.put("shId", businessResourceStoreInfo.get("sh_id"));
         businessResourceStoreInfo.remove("bId");
         businessResourceStoreInfo.put("statusCd", statusCd);
     }
@@ -77,9 +83,13 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         currentResourceStoreInfo.put("storeId", currentResourceStoreInfo.get("store_id"));
         currentResourceStoreInfo.put("stock", currentResourceStoreInfo.get("stock"));
         currentResourceStoreInfo.put("resId", currentResourceStoreInfo.get("res_id"));
-
-
+        currentResourceStoreInfo.put("goodsType", currentResourceStoreInfo.get("goods_type"));
+        currentResourceStoreInfo.put("unitCode", currentResourceStoreInfo.get("unit_code"));
+        currentResourceStoreInfo.put("remark", currentResourceStoreInfo.get("remark"));
+        currentResourceStoreInfo.put("outLowPrice", currentResourceStoreInfo.get("out_low_price"));
+        currentResourceStoreInfo.put("outHighPrice", currentResourceStoreInfo.get("out_high_price"));
         currentResourceStoreInfo.put("operate", StatusConstant.OPERATE_DEL);
+        currentResourceStoreInfo.put("shId", currentResourceStoreInfo.get("sh_id"));
         getResourceStoreServiceDaoImpl().saveBusinessResourceStoreInfo(currentResourceStoreInfo);
 
         for (Object key : currentResourceStoreInfo.keySet()) {

@@ -458,7 +458,7 @@
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityInfoNew" parameterType="Map" resultType="Map">
         select t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,
-        t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,
+        t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,t.tel,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,
         t.map_x,t.map_x mapX,t.state,(CASE
         WHEN t.state='1000'
@@ -528,9 +528,11 @@
             </foreach>
         </if>
         group by t.community_id
+        order by t.create_time ASC
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+
     </select>
 
 

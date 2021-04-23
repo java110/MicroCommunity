@@ -224,7 +224,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setCommunityId(tmpReportCarDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
+        //reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
@@ -406,7 +406,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setCommunityId(reportRoomDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
+        //reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");

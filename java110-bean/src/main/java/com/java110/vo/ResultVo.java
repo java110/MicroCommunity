@@ -28,6 +28,7 @@ public class ResultVo implements Serializable {
 
     public static final int CODE_UNAUTHORIZED = 401; //认证失败
     public static final int CODE_WECHAT_UNAUTHORIZED = 1401; //认证失败
+    public static final int CODE_BUSINESS_VERIFICATION = 5010; //业务校验未通过
 
     public static final int ORDER_ERROR = 500; //订单调度异常
 

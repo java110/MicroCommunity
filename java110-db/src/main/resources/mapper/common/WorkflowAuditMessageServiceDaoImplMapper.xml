@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workflowAuditMessageServiceDaoImpl">
+
+
+    <!-- 保存流程审核表信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkflowAuditMessageInfo" parameterType="Map">
+        insert into workflow_audit_message(
+        audit_id,pre_audit_id,business_key,audit_person_id,audit_person,share_id,state,business_type,message,share_type,audit_link
+        ) values (
+        #{auditId},#{preAuditId},#{businessKey},#{auditPersonId},#{auditPerson},#{shareId},#{state},#{businessType},#{message},#{shareType},#{auditLink}
+        )
+    </insert>
+
+
+    <!-- 查询流程审核表信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkflowAuditMessageInfo" parameterType="Map" resultType="Map">
+        select t.audit_id,t.audit_id auditId,t.pre_audit_id,t.pre_audit_id preAuditId,t.business_key,t.business_key
+        businessKey,t.audit_person_id,t.audit_person_id auditPersonId,t.audit_person,t.audit_person
+        auditPerson,t.share_id,t.share_id shareId,t.status_cd,t.status_cd
+        statusCd,t.state,t.business_type,t.business_type businessType,t.message,t.share_type,t.share_type
+        shareType,t.audit_link,t.audit_link auditLink
+        from workflow_audit_message t
+        where 1 =1
+        <if test="auditId !=null and auditId != ''">
+            and t.audit_id= #{auditId}
+        </if>
+        <if test="preAuditId !=null and preAuditId != ''">
+            and t.pre_audit_id= #{preAuditId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            and t.business_key= #{businessKey}
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            and t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPerson !=null and auditPerson != ''">
+            and t.audit_person= #{auditPerson}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            and t.share_id= #{shareId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="businessType !=null and businessType != ''">
+            and t.business_type= #{businessType}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="shareType !=null and shareType != ''">
+            and t.share_type= #{shareType}
+        </if>
+        <if test="auditLink !=null and auditLink != ''">
+            and t.audit_link= #{auditLink}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改流程审核表信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkflowAuditMessageInfo" parameterType="Map">
+        update workflow_audit_message t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="preAuditId !=null and preAuditId != ''">
+            , t.pre_audit_id= #{preAuditId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            , t.business_key= #{businessKey}
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            , t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPerson !=null and auditPerson != ''">
+            , t.audit_person= #{auditPerson}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            , t.share_id= #{shareId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="businessType !=null and businessType != ''">
+            , t.business_type= #{businessType}
+        </if>
+        <if test="message !=null and message != ''">
+            , t.message= #{message}
+        </if>
+        <if test="shareType !=null and shareType != ''">
+            , t.share_type= #{shareType}
+        </if>
+        <if test="auditLink !=null and auditLink != ''">
+            , t.audit_link= #{auditLink}
+        </if>
+        where 1=1
+        <if test="auditId !=null and auditId != ''">
+            and t.audit_id= #{auditId}
+        </if>
+
+    </update>
+
+    <!-- 查询流程审核表数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkflowAuditMessagesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from workflow_audit_message t
+        where 1 =1
+        <if test="auditId !=null and auditId != ''">
+            and t.audit_id= #{auditId}
+        </if>
+        <if test="preAuditId !=null and preAuditId != ''">
+            and t.pre_audit_id= #{preAuditId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            and t.business_key= #{businessKey}
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            and t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPerson !=null and auditPerson != ''">
+            and t.audit_person= #{auditPerson}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            and t.share_id= #{shareId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="businessType !=null and businessType != ''">
+            and t.business_type= #{businessType}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="shareType !=null and shareType != ''">
+            and t.share_type= #{shareType}
+        </if>
+        <if test="auditLink !=null and auditLink != ''">
+            and t.audit_link= #{auditLink}
+        </if>
+
+
+    </select>
+
+</mapper>

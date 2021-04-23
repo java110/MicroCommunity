@@ -11,6 +11,7 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.common.ICarInoutInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
@@ -191,22 +192,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         paramInJson.put("feeInfo", feeDto);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
         paramInJson.put("detailId", businessFeeDetail.getString("detailId"));
-        feeReceiptDetailPo.setAmount(businessFeeDetail.getString("receivedAmount"));
-        feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
-        feeReceiptDetailPo.setCycle(businessFeeDetail.getString("cycles"));
-        feeReceiptDetailPo.setDetailId(businessFeeDetail.getString("detailId"));
-        feeReceiptDetailPo.setEndTime(businessFeeDetail.getString("endTime"));
-        feeReceiptDetailPo.setFeeId(feeDto.getFeeId());
-        feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
-        feeReceiptDetailPo.setStartTime(businessFeeDetail.getString("startTime"));
-        feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
-        computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
-        feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
-        feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
-        feeReceiptPo.setReceiptId(feeReceiptDetailPo.getReceiptId());
-        feeReceiptPo.setObjType(feeDto.getPayerObjType());
-        feeReceiptPo.setObjId(feeDto.getPayerObjId());
-        feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
+
         return business;
     }
 
@@ -269,6 +255,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
 
         computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
+        //查询业主信息
+        OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
+
         feeReceiptDetailPos.add(feeReceiptDetailPo);
         feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
         feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
@@ -276,6 +265,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeReceiptPo.setObjType(feeDto.getPayerObjType());
         feeReceiptPo.setObjId(feeDto.getPayerObjId());
         feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
+        feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
+        feeReceiptPo.setPayObjName(ownerDto.getName());
         feeReceiptPos.add(feeReceiptPo);
         return business;
     }

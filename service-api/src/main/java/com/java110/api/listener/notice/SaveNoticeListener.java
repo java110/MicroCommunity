@@ -62,7 +62,7 @@ public class SaveNoticeListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        if (!reqJson.containsKey("isAll") || StringUtil.isEmpty(reqJson.getString("isAll"))) {
+        if (!reqJson.containsKey("isAll") || StringUtil.isEmpty(reqJson.getString("isAll")) || "N".equals(reqJson.getString("isAll"))) {
             noticeBMOImpl.addNotice(reqJson, context);
             return;
         }
@@ -107,6 +107,9 @@ public class SaveNoticeListener extends AbstractServiceApiPlusListener {
 
         for (ApiCommunityDataVo apiCommunityDataVo : communitys) {
             reqJson.put("communityId", apiCommunityDataVo.getCommunityId());
+            if (reqJson.containsKey("objType") && "001".equals(reqJson.getString("objType"))) {
+                reqJson.put("objId", apiCommunityDataVo.getCommunityId());
+            }
             noticeBMOImpl.addNotice(reqJson, context);
         }
 

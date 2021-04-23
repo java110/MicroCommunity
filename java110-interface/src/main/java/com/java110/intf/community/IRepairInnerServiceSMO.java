@@ -25,7 +25,6 @@ public interface IRepairInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param repairDto 数据对象分享
      * @return RepairDto 对象数据
      */
@@ -41,11 +40,8 @@ public interface IRepairInnerServiceSMO {
     @RequestMapping(value = "/queryRepairsCount", method = RequestMethod.POST)
     int queryRepairsCount(@RequestBody RepairDto repairDto);
 
-
-
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param repairDto 数据对象分享
      * @return RepairDto 对象数据
@@ -62,11 +58,8 @@ public interface IRepairInnerServiceSMO {
     @RequestMapping(value = "/queryStaffRepairsCount", method = RequestMethod.POST)
     int queryStaffRepairsCount(@RequestBody RepairDto repairDto);
 
-
-
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param repairDto 数据对象分享
      * @return RepairDto 对象数据
@@ -85,4 +78,5 @@ public interface IRepairInnerServiceSMO {
 
     @RequestMapping(value = "/updateRepair", method = RequestMethod.POST)
     int updateRepair(@RequestBody RepairPoolPo repairPoolPo);
+
 }

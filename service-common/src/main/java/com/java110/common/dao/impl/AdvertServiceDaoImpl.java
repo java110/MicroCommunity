@@ -115,13 +115,6 @@ public class AdvertServiceDaoImpl extends BaseServiceDao implements IAdvertServi
     }
 
     @Override
-    public int saveAdverts(Map info) {
-        logger.debug("saveAdverts 入参 info : {}", info);
-        int saveFlag = sqlSessionTemplate.insert("advertServiceDaoImpl.saveAdverts", info);
-        return saveFlag;
-    }
-
-    @Override
     public void updateAdverts(Map info) {
         logger.debug("修改广告信息Instance 入参 info : {}", info);
 //        int saveFlag = sqlSessionTemplate.update("advertServiceDaoImpl.updateAdvertInfoInstance", info);

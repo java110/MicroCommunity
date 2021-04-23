@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.store.IResourceStoreInnerServiceSMO;
-import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.storehouse.StorehouseDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeResourceStoreConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -19,7 +22,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
 
 /**
  * 查询小区侦听类
@@ -29,6 +32,9 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
 
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -40,12 +46,10 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
         return HttpMethod.GET;
     }
 
-
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
     public IResourceStoreInnerServiceSMO getResourceStoreInnerServiceSMOImpl() {
         return resourceStoreInnerServiceSMOImpl;
@@ -64,28 +68,38 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         ResourceStoreDto resourceStoreDto = BeanConvertUtil.covertBean(reqJson, ResourceStoreDto.class);
-
+        //采购2806集团仓库 物品领用2807小区仓库  默认查询当前小区所有商品
+        //是否具有查看集团仓库物品权限
+        String userId = reqJson.getString("userId");
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewGroupResource");
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size()==0) {
+            resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
+            resourceStoreDto.setShObjId(reqJson.getString("communityId"));
+        }
         int count = resourceStoreInnerServiceSMOImpl.queryResourceStoresCount(resourceStoreDto);
-
-        List<ApiResourceStoreDataVo> resourceStores = null;
-
+        List<ApiResourceStoreDataVo> resourceStores = new ArrayList<>();
         if (count > 0) {
-            resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
+            List<ApiResourceStoreDataVo> apiResourceStoreDataVos = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
+            for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
+                if (apiResourceStoreDataVo.getOutLowPrice().equals(apiResourceStoreDataVo.getOutHighPrice())) {
+                    apiResourceStoreDataVo.setOutPrice(apiResourceStoreDataVo.getOutLowPrice() + "元");
+                } else {
+                    apiResourceStoreDataVo.setOutPrice(apiResourceStoreDataVo.getOutLowPrice() + "元-" + apiResourceStoreDataVo.getOutHighPrice() + "元");
+                }
+                resourceStores.add(apiResourceStoreDataVo);
+            }
         } else {
             resourceStores = new ArrayList<>();
         }
-
         ApiResourceStoreVo apiResourceStoreVo = new ApiResourceStoreVo();
-
         apiResourceStoreVo.setTotal(count);
         apiResourceStoreVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiResourceStoreVo.setResourceStores(resourceStores);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiResourceStoreVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 }

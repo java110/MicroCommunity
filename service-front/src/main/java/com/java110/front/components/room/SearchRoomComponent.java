@@ -33,8 +33,11 @@ public class SearchRoomComponent {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         if (paramIn.containsKey("roomFlag") && "1".equals(paramIn.getString("roomFlag"))) {
             return roomServiceSMOImpl.listRoomWithSell(pd);
+        } else if (paramIn.containsKey("roomFlag") && "2".equals(paramIn.getString("roomFlag"))) {
+            return roomServiceSMOImpl.listRoomWithOutSell(pd);
+        } else {
+            return roomServiceSMOImpl.listRoom(pd);
         }
-        return roomServiceSMOImpl.listRoomWithOutSell(pd);
     }
 
 

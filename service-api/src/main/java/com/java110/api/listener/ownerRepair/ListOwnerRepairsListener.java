@@ -21,6 +21,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -80,6 +81,17 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
             ownerRepairDto.setRoomIds(roomIds);
             ownerRepairDto.setRoomId("");
         }
+        //PC电话报修、PC工单池、H5工单池
+        //手机端员工单工单池 只返回未处理状态的数据
+        if (!StringUtil.isEmpty(ownerRepairDto.getReqSource()) && ownerRepairDto.getReqSource().equals("mobile")) {
+            ownerRepairDto.setState(RepairDto.STATE_WAIT);
+        }
+        //pc电话报修模块 只返回PC员工登记和手机端员工登记的数据
+        if (!StringUtil.isEmpty(ownerRepairDto.getReqSource()) && ownerRepairDto.getReqSource().equals("pc_mobile")) {
+            String[] repair_channel={RepairDto.REPAIR_CHANNEL_STAFF, RepairDto.REPAIR_CHANNEL_TEL};
+            ownerRepairDto.setRepairChannels(Arrays.asList(repair_channel));
+        }
+
 
         int count = repairInnerServiceSMOImpl.queryRepairsCount(ownerRepairDto);
 
@@ -142,17 +154,17 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
                 photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
                 photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                 photoVos.add(photoVo);
-                if (tmpFileRelDto.getRelTypeCd().equals("14000")) {  //维修图片
+                if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.REL_TYPE_CD_REPAIR)) {  //维修图片
                     photoVo = new PhotoVo();
                     photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     repairPhotos.add(photoVo);  //维修图片
-                } else if (tmpFileRelDto.getRelTypeCd().equals("19000")) {  //维修前图片
+                } else if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.BEFORE_REPAIR_PHOTOS)) {  //维修前图片
                     photoVo = new PhotoVo();
                     photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     beforePhotos.add(photoVo);  //维修前图片
-                } else if (tmpFileRelDto.getRelTypeCd().equals("200000")) {  //维修后图片
+                } else if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.AFTER_REPAIR_PHOTOS)) {  //维修后图片
                     photoVo = new PhotoVo();
                     photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());

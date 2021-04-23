@@ -2,7 +2,6 @@ package com.java110.api.listener.ownerRepair;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.ownerRepair.IOwnerRepairBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -33,15 +32,11 @@ import org.springframework.http.HttpMethod;
 public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
 
     @Autowired
-    private IOwnerRepairBMO ownerRepairBMOImpl;
-
-    @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "repairType", "必填，请选择报修类型");
         Assert.hasKeyAndValue(reqJson, "repairName", "必填，请填写报修人名称");
         Assert.hasKeyAndValue(reqJson, "tel", "必填，请填写报修人手机号");
@@ -53,12 +48,10 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写提交用户ID");
         Assert.hasKeyAndValue(reqJson, "userName", "必填，请填写提交用户名称");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
-
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         JSONObject businessOwnerRepair = new JSONObject();
         businessOwnerRepair.putAll(reqJson);
         businessOwnerRepair.put("repairId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_repairId));
@@ -80,8 +73,6 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setRuId("-1");
         super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
-
-
         if (reqJson.containsKey("photos") && !StringUtils.isEmpty(reqJson.getString("photos"))) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
@@ -94,7 +85,6 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
                 String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
                 reqJson.put("ownerPhotoId", fileDto.getFileId());
                 reqJson.put("fileSaveName", fileName);
-
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", "-" + (_photoIndex + 1));
                 businessUnit.put("relTypeCd", FileRelDto.REL_TYPE_CD_REPAIR);
@@ -106,8 +96,6 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
                 super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
             }
         }
-
-
     }
 
     @Override

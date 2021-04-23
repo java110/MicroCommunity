@@ -11,13 +11,6 @@
     (#{classify},#{adName},#{locationTypeCd},#{adTypeCd},#{advertId},#{operate},#{startTime},#{state},#{endTime},#{communityId},#{bId},#{locationObjId},#{seq})
     </insert>
 
-    <!-- 保存广告信息 -->
-    <insert id="saveAdverts" parameterType="Map">
-    insert into advert(advert_id,b_id,ad_name,ad_type_cd,classify,community_id,location_type_cd,location_obj_id,state,seq,start_time,end_time,create_time)
-    values
-    (#{advertId},#{bId},#{adName},#{adTypeCd},#{classify},#{communityId},#{locationTypeCd},#{locationObjId},#{state},#{seq},#{startTime},#{endTime},#{createTime})
-    </insert>
-
     <!-- 查询广告信息信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAdvertInfo" parameterType="Map" resultType="Map">
         select t.classify,t.ad_name,t.ad_name adName,t.location_type_cd,t.location_type_cd

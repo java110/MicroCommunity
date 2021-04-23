@@ -103,7 +103,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
-            throw new IllegalArgumentException("流程还未部署");
+            throw new IllegalArgumentException("采购流程还未部署");
         }
         return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
     }

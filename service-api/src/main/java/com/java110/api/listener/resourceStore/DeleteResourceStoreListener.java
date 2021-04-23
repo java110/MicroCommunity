@@ -24,15 +24,12 @@ public class DeleteResourceStoreListener extends AbstractServiceApiPlusListener 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "resId", "物品ID不能为空");
         Assert.hasKeyAndValue(reqJson, "storeId", "商户信息不能为空");
-
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         resourceStoreBMOImpl.deleteResourceStore(reqJson, context);
     }
 

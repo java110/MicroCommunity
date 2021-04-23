@@ -17,25 +17,24 @@ import org.springframework.http.HttpMethod;
  */
 @Java110Listener("saveResourceStoreListener")
 public class SaveResourceStoreListener extends AbstractServiceApiPlusListener {
+
     @Autowired
     private IResourceStoreBMO resourceStoreBMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "resName", "必填，请填写物品名称");
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户信息");
         //Assert.hasKeyAndValue(reqJson, "resCode", "必填，请填写物品编码");
         Assert.hasKeyAndValue(reqJson, "price", "必填，请填写物品价格");
+        Assert.hasKeyAndValue(reqJson, "shId", "必填，请填写仓库");
         /*Assert.hasKeyAndValue(reqJson, "stock", "必填，请填写物品库存");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");*/
-
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         resourceStoreBMOImpl.addResourceStore(reqJson, context);
     }
 

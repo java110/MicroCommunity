@@ -4,9 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="inspectionServiceDaoImpl">
 
-    <!-- 保存巡检点信息 add by wuxw 2018-07-03
-
-    -->
+    <!-- 保存巡检点信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionInfo" parameterType="Map">
         insert into business_inspection_point
         (inspection_id,operate,remark,inspection_name,community_id,b_id,point_obj_type,point_obj_id,point_obj_name)
@@ -14,10 +12,10 @@
         (#{inspectionId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId},#{pointObjType},#{pointObjId},#{pointObjName})
     </insert>
 
-
     <!-- 查询巡检点信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessInspectionInfo" parameterType="Map" resultType="Map">
-        select t.inspection_id,t.inspection_id inspectionId,t.operate,t.remark,t.inspection_name,t.inspection_name inspectionName,
+        select t.inspection_id,t.inspection_id inspectionId,t.operate,t.remark,t.inspection_name,t.inspection_name
+        inspectionName,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.point_obj_type,t.point_obj_id,t.point_obj_name,
         t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName
         from business_inspection_point t
@@ -40,9 +38,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </select>
-
 
     <!-- 保存巡检点信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionInfoInstance" parameterType="Map">
@@ -70,9 +66,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </insert>
-
 
     <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionInfo" parameterType="Map" resultType="Map">
@@ -115,9 +109,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改巡检点信息 add by wuxw 2018-07-03 -->
     <update id="updateInspectionInfoInstance" parameterType="Map">
@@ -183,10 +175,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
     </select>
-
 
     <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionRelationShipInfo" parameterType="Map" resultType="Map">
@@ -197,9 +186,9 @@
         t.point_obj_type,t.point_obj_id,t.point_obj_name,
         t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName
         from inspection_point t
-        left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and c.inspection_route_id = #{inspectionRouteId}
+        left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and
+        c.inspection_route_id = #{inspectionRouteId}
         where 1 =1
-
         <if test="relationship != null  and  relationship == 1">
             and c.inspection_id is not null
         </if>
@@ -237,9 +226,9 @@
     <select id="queryInspectionsRelationShipCount" parameterType="Map" resultType="Map">
         select count(1) count
         from inspection_point t
-        left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and c.inspection_route_id = #{inspectionRouteId}
+        left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and
+        c.inspection_route_id = #{inspectionRouteId}
         where 1 =1
-
         <if test="relationship != null  and  relationship == 1">
             and c.inspection_id is not null
         </if>
@@ -268,8 +257,6 @@
             and t.b_id= #{bId}
         </if>
     </select>
-
-
 
     <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
     <select id="queryInspectionsByPlan" parameterType="Map" resultType="Map">
@@ -316,5 +303,4 @@
         group by t.inspection_id
         order by t.create_time desc
     </select>
-
 </mapper>

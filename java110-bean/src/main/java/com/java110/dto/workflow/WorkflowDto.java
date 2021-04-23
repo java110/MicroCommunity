@@ -22,8 +22,21 @@ public class WorkflowDto extends PageDto implements Serializable {
     public static final String FLOW_TYPE_REPAIR= "20002";
     //采购
     public static final String FLOW_TYPE_PURCHASE= "30003";
-
+    //物品领用
     public static final String FLOW_TYPE_COLLECTION = "40004";//物品领用
+
+    //合同申请续签审核
+    public static final String FLOW_TYPE_CONTRACT_APPLY = "50005";//合同申请
+
+    //合同变更审核
+    public static final String FLOW_TYPE_CONTRACT_CHANGE = "60006";//合同变更审核
+
+
+    //物品调拨
+    public static final String FLOW_TYPE_ALLOCATION_STOREHOUSE = "70007";//合同变更审核
+
+
+
     public static final String DEFAULT_SKIP_LEVEL = "1";
 
     public static final String DEFAULT_PROCESS = "java110_" ;

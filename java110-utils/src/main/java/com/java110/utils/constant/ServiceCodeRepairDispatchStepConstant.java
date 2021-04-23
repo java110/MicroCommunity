@@ -28,6 +28,11 @@ public class ServiceCodeRepairDispatchStepConstant {
      */
     public static final String BINDING_REPAIR_FINISH = "ownerRepair.repairFinish";
 
+
+    /**
+     * 强制回单
+     */
+    public static final String BINDING_REPAIR_FORCE_FINISH = "ownerRepair.repairForceFinish";
     /**
      * 抢单
      */
@@ -37,7 +42,5 @@ public class ServiceCodeRepairDispatchStepConstant {
      * 评价
      */
     public static final String BINDING_APPRAISE_REPAIR = "ownerRepair.appraiseRepair";
-
-
 
 }

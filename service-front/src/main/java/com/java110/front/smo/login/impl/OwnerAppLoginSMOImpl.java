@@ -16,6 +16,7 @@ import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -222,6 +223,9 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             return ResultVo.redirectPage("/");
         }
         JSONObject userinfo_paramObj = JSONObject.parseObject(userinfo_paramOut.getBody());
+
+        //处理昵称有特殊符号导致 入库失败问题
+        userinfo_paramObj.put("nickname", Base64Convert.byteToBase64(userinfo_paramObj.getString("nickname").getBytes()));
 
         int loginFlag = paramIn.getInteger("loginFlag");
 
@@ -557,5 +561,5 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
+    
 }

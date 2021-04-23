@@ -770,16 +770,16 @@ public class BusinessTypeConstant {
 
 
     /**
-     * 保修派单信息
+     * 报修派单信息
      * 11开头  3保存
      */
     public static final String BUSINESS_TYPE_SAVE_REPAIR_USER="130200030001";
     /**
-     *  保修派单变更 11开头  4修改
+     *  报修派单变更 11开头  4修改
      */
     public static final String BUSINESS_TYPE_UPDATE_REPAIR_USER="130200040001";
     /**
-     *  作废保修派单信息  11开头  5修改
+     *  作废报修派单信息  11开头  5修改
      */
     public static final String BUSINESS_TYPE_DELETE_REPAIR_USER ="130200050001";
 
@@ -1431,5 +1431,61 @@ public class BusinessTypeConstant {
      * 开门记录 送databus
      */
     public static final String BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG = "990000060001";
+
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_STOREHOUSE="671100030004";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_STOREHOUSE="671100040004";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_STOREHOUSE="671100050004";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ALLOCATION_STOREHOUSE="671100030005";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE="671100040005";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ALLOCATION_STOREHOUSE="671100050005";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_USER_STOREHOUSE="671100030006";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_USER_STOREHOUSE="671100040006";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_USER_STOREHOUSE="671100050006";
+
 
 }

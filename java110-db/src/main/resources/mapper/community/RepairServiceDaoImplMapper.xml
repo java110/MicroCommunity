@@ -7,10 +7,11 @@
     <!-- 保存报修信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRepairInfo" parameterType="Map">
         insert into business_repair_pool(
-        operate,repair_name,appointment_time,repair_type,context,repair_id,tel,state,community_id,b_id,repair_obj_type,repair_obj_id,repair_obj_name
+        operate,repair_name,appointment_time,repair_type,context,repair_id,tel,state,community_id,b_id,repair_obj_type,repair_obj_id,
+        repair_obj_name, maintenance_type,repair_channel,repair_materials,repair_fee
         ) values (
         #{operate},#{repairName},#{appointmentTime},#{repairType},#{context},#{repairId},#{tel},#{state},#{communityId},#{bId},
-        #{repairObjType},#{repairObjId},#{repairObjName}
+        #{repairObjType},#{repairObjId},#{repairObjName},#{maintenanceType},#{repairChannel},#{repairMaterials},#{repairFee}
         )
     </insert>
 
@@ -20,7 +21,9 @@
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
         repairId,t.tel,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id
-        repairObjId,t.repair_obj_name repairObjName
+        repairObjId,t.repair_obj_name repairObjName,t.maintenance_type,t.maintenance_type maintenanceType,
+        t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
+        t.repair_fee,t.repair_fee repairFee
         from business_repair_pool t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -50,6 +53,18 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="maintenanceType !=null and maintenanceType != ''">
+            and t.maintenance_type= #{maintenanceType}
+        </if>
+        <if test="repairChannel !=null and repairChannel != ''">
+            and t.repair_channel= #{repairChannel}
+        </if>
+        <if test="repairMaterials !=null and repairMaterials != ''">
+            and t.repair_materials= #{repairMaterials}
+        </if>
+        <if test="repairFee !=null and repairFee != ''">
+            and t.repair_fee= #{repairFee}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -59,10 +74,11 @@
     <insert id="saveRepairInfoInstance" parameterType="Map">
         insert into r_repair_pool(
         repair_name,appointment_time,repair_type,context,repair_id,tel,status_cd,state,community_id,b_id,
-        repair_obj_type,repair_obj_id,repair_obj_name
+        repair_obj_type,repair_obj_id,repair_obj_name,repair_channel,maintenance_type,repair_materials,repair_fee
         ) select
         t.repair_name,t.appointment_time,t.repair_type,t.context,t.repair_id,t.tel,'0',t.state,t.community_id,t.b_id,
-        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name
+        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_channel,t.maintenance_type,t.repair_materials,
+        t.repair_fee
         from business_repair_pool t where 1=1
         and t.operate= 'ADD'
         <if test="repairName !=null and repairName != ''">
@@ -89,6 +105,18 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="repairChannel !=null and repairChannel != ''">
+            and t.repair_channel= #{repairChannel}
+        </if>
+        <if test="maintenanceType !=null and maintenanceType != ''">
+            and t.maintenance_type= #{maintenanceType}
+        </if>
+        <if test="repairMaterials !=null and repairMaterials != ''">
+            and t.repair_materials= #{repairMaterials}
+        </if>
+        <if test="repairFee !=null and repairFee != ''">
+            and t.repair_fee= #{repairFee}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -99,17 +127,19 @@
         select t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
         repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,
-        d.name stateName,
+        bId, d.name stateName,t.maintenance_type maintenanceType,t.repair_channel repairChannel,
+        t.repair_materials,t.repair_materials repairMaterials,t.repair_fee,t.repair_fee repairFee,
         rs.repair_type_name repairTypeName,rs.repair_way repairWay,rs.return_visit_flag returnVisitFlag,
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,
-        t.repair_obj_name repairObjName
+        t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
+        left join r_repair_return_visit rrv on t.repair_id = rrv.repair_id and rrv.community_id = t.community_id and
+        rrv.status_cd = '0'
         <if test="staffId != null and staffId != ''">
             ,r_repair_user rru
             ,t_dict td
@@ -126,8 +156,11 @@
         <if test="repairWay !=null and repairWay != ''">
             and rs.repair_way= #{repairWay}
         </if>
-        <if test="returnVisitFlag !=null and returnVisitFlag != ''">
+        <if test="returnVisitFlag != null and returnVisitFlag != '' and returnVisitFlag != '003'">
             and rs.return_visit_flag in ('001','002')
+        </if>
+        <if test="returnVisitFlag != null and returnVisitFlag != '' and returnVisitFlag == '003'">
+            and rs.return_visit_flag = '003'
         </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name like '%${repairName}%'
@@ -170,6 +203,24 @@
         </if>
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
+        </if>
+        <if test="repairChannel !=null and repairChannel != ''">
+            and t.repair_channel= #{repairChannel}
+        </if>
+        <if test="maintenanceType !=null and maintenanceType != ''">
+            and t.maintenance_type= #{maintenanceType}
+        </if>
+        <if test="repairMaterials !=null and repairMaterials != ''">
+            and t.repair_materials= #{repairMaterials}
+        </if>
+        <if test="repairFee !=null and repairFee != ''">
+            and t.repair_fee= #{repairFee}
+        </if>
+        <if test="repairChannels !=null">
+            and t.repair_channel in
+            <foreach collection="repairChannels" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -213,6 +264,15 @@
         <if test="repairObjName !=null and repairObjName != ''">
             , t.repair_obj_name= #{repairObjName}
         </if>
+        <if test="maintenanceType !=null and maintenanceType != ''">
+            , t.maintenance_type= #{maintenanceType}
+        </if>
+        <if test="repairMaterials !=null and repairMaterials != ''">
+            , t.repair_materials= #{repairMaterials}
+        </if>
+        <if test="repairFee !=null and repairFee != ''">
+            , t.repair_fee= #{repairFee}
+        </if>
         where 1=1
         <if test="repairId !=null and repairId != ''">
             and t.repair_id= #{repairId}
@@ -226,6 +286,7 @@
     <select id="queryRepairsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from r_repair_pool t
+        left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
         <if test="staffId != null and staffId != ''">
             ,r_repair_user rru
             ,t_dict td
@@ -284,27 +345,42 @@
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
         </if>
+        <if test="repairChannels !=null">
+            and t.repair_channel in
+            <foreach collection="repairChannels" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
-    <!-- 查询报修信息信息 add by wuxw 2018-07-03 -->
+    <!-- 查询报修信息信息 add by wuxw 2018-07-03
+     将状态先调整  and ru.state in ('10001','10002')
+     -->
     <select id="getStaffRepairInfo" parameterType="Map" resultType="Map">
         select distinct t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
         repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
         bId,ru.pre_staff_id preStaffId,ru.pre_staff_name preStaffName,
-        d.name stateName,
-        rs.repair_type_name repairTypeName,rs.repair_way repairWay,
-        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,t.repair_obj_name repairObjName,
-        sru.ru_id startRuId,ru.ru_id ruId,ru.pre_ru_id preRuId
+        d.name stateName,rs.return_visit_flag returnVisitFlag,td.name returnVisitFlagName,
+        rs.repair_type_name repairTypeName,rs.repair_way repairWay,rs.public_area publicArea,
+        t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id
+        repairObjId,t.repair_obj_name repairObjName,t.repair_channel repairChannel,
+        sru.ru_id startRuId,ru.ru_id ruId,ru.pre_ru_id preRuId,t.maintenance_type,t.maintenance_type maintenanceType,
+        t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
+        t.repair_fee,t.repair_fee repairFee
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
         left join r_repair_user ru on t.repair_id = ru.repair_id and ru.status_cd = 0
         left join r_repair_user sru on sru.repair_id = ru.repair_id and sru.status_cd = 0 and sru.state = '10005'
+        left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
+        td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.end_time is null
-        and ru.state = '10001'
-        and ru.staff_id = #{staffId}
+        and ru.state in ('10001','10009','11000')
+        and t.state in('1000','1100','1200','1300','1400','1700','1800')
+        <if test="staffId !=null and staffId != ''">
+            and ru.staff_id = #{staffId}
+        </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
@@ -341,23 +417,34 @@
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
         </if>
+        <if test="repairMaterials !=null and repairMaterials != ''">
+            and t.repair_materials= #{repairMaterials}
+        </if>
+        <if test="repairFee !=null and repairFee != ''">
+            and t.repair_fee= #{repairFee}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
     </select>
 
-    <!-- 查询报修信息数量 add by wuxw 2018-07-03 -->
+    <!-- 查询报修信息数量 add by wuxw 2018-07-03
+     in ('10001','10002')-->
     <select id="queryStaffRepairsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
         left join r_repair_user ru on t.repair_id = ru.repair_id and t.status_cd = 0
+        left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
+        td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.end_time is null
-        and ru.state = '10001'
-        and ru.staff_id = #{staffId}
+        and ru.state in ('10001','10009','11000')
+        and t.state in('1000','1100','1200','1300','1400','1700','1800')
+        <if test="staffId !=null and staffId != ''">
+            and ru.staff_id = #{staffId}
+        </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
@@ -401,18 +488,23 @@
         select distinct t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
         repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,
-        d.name stateName,
-        rs.repair_type_name repairTypeName,rs.repair_way repairWay,
+        bId,d.name stateName, rs.repair_type_name repairTypeName,rs.repair_way repairWay,
+        rs.return_visit_flag returnVisitFlag,td.name returnVisitFlagName,
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id
-        repairObjId,t.repair_obj_name repairObjName
+        repairObjId,t.repair_obj_name repairObjName,t.maintenance_type,t.maintenance_type maintenanceType,
+        t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
+        t.repair_fee,t.repair_fee repairFee
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
-        left join r_repair_user ru on t.repair_id = ru.repair_id and t.status_cd = 0
+        left join r_repair_user ru on t.repair_id = ru.repair_id and t.status_cd = '0'
+        left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
+        td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.state in ('10002','10003','10004','10005')
-        and ru.staff_id = #{staffId}
+        and ru.state in ('10002','10003','10004','10005','10009','11000','12000')
+        <if test="staffId !=null and staffId != ''">
+            and ru.staff_id = #{staffId}
+        </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
@@ -469,8 +561,10 @@
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
         left join r_repair_user ru on t.repair_id = ru.repair_id and t.status_cd = 0
         where 1 =1
-        and ru.state in ('10002','10003','10004','10005')
-        and ru.staff_id = #{staffId}
+        and ru.state in ('10002','10003','10004','10005','10009','11000','12000')
+        <if test="staffId != null and staffId != ''">
+            and ru.staff_id = #{staffId}
+        </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
@@ -507,13 +601,14 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
         <if test="repairObjType !=null and repairObjType != ''">
             and t.repair_obj_type= #{repairObjType}
         </if>
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
         </if>
-        group by ru.staff_id
+        <if test="staffId != null and staffId != ''">
+            group by ru.staff_id
+        </if>
     </select>
 </mapper>

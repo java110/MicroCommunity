@@ -2,6 +2,11 @@ package com.java110.front.smo.assetImport.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+
+import com.java110.config.properties.code.Java110Properties;
+import com.java110.core.client.FtpUploadTemplate;
+import com.java110.core.client.OssUploadTemplate;
+
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -10,12 +15,18 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IImportRoomFeeSMO;
+
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.*;
+
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ImportExcelUtils;
 import com.java110.utils.util.StringUtil;
+
 import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -51,6 +62,16 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private FtpUploadTemplate ftpUploadTemplate;
+
+    @Autowired
+    private Java110Properties java110Properties;
+
+    @Autowired
+    private OssUploadTemplate ossUploadTemplate;
+
+
     @Override
     public ResponseEntity<String> importExcelData(IPageData pd, MultipartFile uploadFile) throws Exception {
 
@@ -85,6 +106,31 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
     }
 
     @Override
+    public ResponseEntity<String> importFile(MultipartFile uploadFile) throws Exception {
+        try {
+            String fileName = "";
+            String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+            if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
+                fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
+                        java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+                        java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+            } else {
+                fileName = ossUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
+                        java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+                        java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+            }
+            ResponseEntity<String> responseEntity = new ResponseEntity<String>(fileName, HttpStatus.OK);
+            return responseEntity;
+        } catch (Exception e) {
+            logger.error("上传合同附件失败 ", e);
+            return new ResponseEntity<String>("非常抱歉，上传合同附件失败：" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
+    @Override
+
     public ResponseEntity<String> importTempData(IPageData pd) {
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
@@ -120,9 +166,9 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
      * @param roomFees 房屋费用
      */
     private ResponseEntity<String> dealExcelCarData(IPageData pd,
-                                                 List<ImportRoomFee> roomFees,
+                                                    List<ImportRoomFee> roomFees,
 
-                                                 ComponentValidateResult result) {
+                                                    ComponentValidateResult result) {
         ResponseEntity<String> responseEntity = null;
         //保存单元信息 和 楼栋信息
         responseEntity = savedCarFees(pd, roomFees, result);

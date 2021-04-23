@@ -2,6 +2,7 @@ package com.java110.user.bmo.owner.impl;
 
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
@@ -9,6 +10,7 @@ import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
@@ -35,6 +37,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
     public static final String SEARCH_TYPE_OWNER_MEMBER_TEL = "7"; //根据家庭成员电话
     public static final String SEARCH_TYPE_OWNER_MEMBER_IDCARD = "8"; //根据家庭成员身份证
     public static final String SEARCH_TYPE_SHOPS = "9"; //根据商铺号
+    public static final String SEARCH_TYPE_CONTRACT = "10"; //合同号
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
@@ -57,8 +60,11 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
+    @Autowired
+    private IContractInnerServiceSMO contractInnerServiceSMOImpl;
+
     @Override
-    public ResponseEntity<String> query(String communityId, String searchValue, String searchType, String userId) {
+    public ResponseEntity<String> query(String communityId, String searchValue, String searchType, String userId, String storeId) {
         OwnerDto ownerDto = null;
         switch (searchType) {
             case SEARCH_TYPE_ROOM:
@@ -87,6 +93,9 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
                 break;
             case SEARCH_TYPE_OWNER_MEMBER_IDCARD:
                 ownerDto = queryByOwnerMemberIdCard(communityId, searchValue, userId);
+                break;
+            case SEARCH_TYPE_CONTRACT:
+                ownerDto = queryByContract(communityId, searchValue, userId, storeId);
                 break;
         }
         return ResultVo.createResponseEntity(1, 1, ownerDto);
@@ -510,6 +519,61 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         roomDto.setFloorNum(values[0]);
         roomDto.setUnitNum(values[1]);
         roomDto.setRoomNum(values[2]);
+        roomDto.setCommunityId(communityId);
+
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        Assert.listOnlyOne(roomDtos, "未找到房屋信息");
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(communityId);
+        ownerDto.setRoomId(roomDtos.get(0).getRoomId());
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        Assert.listOnlyOne(ownerDtos, "未找到业主信息");
+        //查询是否有脱敏权限
+        List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+        List<OwnerDto> ownerDtoList = new ArrayList<>();
+        for (OwnerDto owner : ownerDtos) {
+            //对业主身份证号隐藏处理
+            String idCard = owner.getIdCard();
+            if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+            }
+            //对业主手机号隐藏处理
+            String link = owner.getLink();
+            if (mark.size() == 0 && link != null && !link.equals("")) {
+                link = link.substring(0, 3) + "****" + link.substring(7);
+            }
+            owner.setIdCard(idCard);
+            owner.setLink(link);
+            ownerDtoList.add(owner);
+        }
+
+        OwnerDto resOwnerDto = ownerDtoList.get(0);
+
+        resOwnerDto.setRooms(roomDtos);
+
+        return resOwnerDto;
+    }
+
+    /**
+     * 根据合同查询
+     *
+     * @param communityId
+     * @param searchValue
+     * @return
+     */
+    private OwnerDto queryByContract(String communityId, String searchValue, String userId, String storeId) {
+
+
+        ContractDto contractDto = new ContractDto();
+        contractDto.setContractCode(searchValue);
+        contractDto.setStoreId(storeId);
+        List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
+        Assert.listOnlyOne(contractDtos, "未找到合同信息");
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(contractDtos.get(0).getObjId());
         roomDto.setCommunityId(communityId);
 
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);

@@ -1,57 +1,112 @@
 {
-  "templateName": "版本构建",
-  "directories": "admin",
-  "templateCode": "appVersionJob",
-  "templateKey": "jobId",
-  "templateKeyName": "构建ID",
-  "searchCode": "jobId",
-  "searchName": "构建ID",
+  "templateName":"活动",
+  "templateCode":"activities",
+  "templateKey":"activitiesId",
+  "templateKeyName":"活动ID",
+  "searchCode": "title",
+  "searchName": "活动标题",
   "conditions": [
     {
-      "name": "名称",
+      "name": "活动标题",
       "inputType": "input",
-      "code": "jobName",
+      "code": "title",
       "whereCondition": "equal"
     },
     {
-      "name": "状态",
+      "name": "活动类型",
       "inputType": "select",
-      "selectValue":"1001,2002,3003,4004",
-      "selectValueName":"未构建,构建中,构建失败,构建成功",
-      "code": "state",
+      "selectValue":"10001,10002",
+      "selectValueName":"小区文化,其他",
+      "code": "typeCd",
       "whereCondition": "equal"
     },
     {
-      "name": "构建ID",
+      "name": "员工名称",
       "inputType": "input",
-      "code": "jobId",
+      "code": "userName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "活动ID",
+      "inputType": "input",
+      "code": "activitiesId",
       "whereCondition": "equal"
     }
   ],
-  "columns": [
+  "columns":[
     {
-      "code": "jobName",
-      "cnCode": "名称",
-      "desc": "必填，请填写名称",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "128",
-      "limitErrInfo": "名称太长",
+      "code":"title",
+      "cnCode":"活动标题",
+      "desc":"必填，请填写业活动标题",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"1,200",
+      "limitErrInfo":"活动标题不能超过200位",
       "show": true
     },
     {
-      "code": "jobShell",
-      "cnCode": "脚本",
-      "desc": "必填，请填写脚本",
-      "required": true,
-      "hasDefaultValue": false,
+      "code": "typeCd",
+      "cnCode":"活动类型",
+      "desc":"必填，请选择活动类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"10001,10002",
+      "selectValueName":"小区文化,其他",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"活动类型格式错误",
+      "show": true
+    },
+    {
+      "code": "headerImg",
+      "cnCode":"头部照片",
+      "desc":"必填，请选择头部照片",
+      "required":true,
+      "hasDefaultValue":false,
       "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "1024",
-      "limitErrInfo": "脚本错误",
-      "show": false
+      "limit":"maxin",
+      "limitParam":"1,200",
+      "limitErrInfo":"头部照片格式错误",
+      "show": true
+    },
+    {
+      "code": "context",
+      "cnCode":"活动内容",
+      "desc":"必填，请填写活动内容",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,4000",
+      "limitErrInfo":"活动内容太长",
+      "show": true
+    },
+    {
+      "code": "startTime",
+      "cnCode":"开始时间",
+      "desc":"必填，请选择开始时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"date",
+      "limitParam":"",
+      "limitErrInfo":"开始时间格式错误",
+      "show": true
+    },
+    {
+      "code": "endTime",
+      "cnCode":"结束时间",
+      "desc":"必填，请选择结束时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"date",
+      "limitParam":"",
+      "limitErrInfo":"结束时间格式错误",
+      "show": true
     }
   ]
 }

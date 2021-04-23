@@ -25,6 +25,7 @@ public class RepairUserServiceDaoImpl extends BaseServiceDao implements IRepairU
 
     /**
      * 报修派单信息封装
+     *
      * @param businessRepairUserInfo 报修派单信息 封装
      * @throws DAOException DAO异常
      */
@@ -32,98 +33,104 @@ public class RepairUserServiceDaoImpl extends BaseServiceDao implements IRepairU
     public void saveBusinessRepairUserInfo(Map businessRepairUserInfo) throws DAOException {
         businessRepairUserInfo.put("month", DateUtil.getCurrentMonth());
         // 查询business_user 数据是否已经存在
-        logger.debug("保存报修派单信息 入参 businessRepairUserInfo : {}",businessRepairUserInfo);
-        int saveFlag = sqlSessionTemplate.insert("repairUserServiceDaoImpl.saveBusinessRepairUserInfo",businessRepairUserInfo);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存报修派单数据失败："+ JSONObject.toJSONString(businessRepairUserInfo));
+        logger.debug("保存报修派单信息 入参 businessRepairUserInfo : {}", businessRepairUserInfo);
+        int saveFlag = sqlSessionTemplate.insert("repairUserServiceDaoImpl.saveBusinessRepairUserInfo", businessRepairUserInfo);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存报修派单数据失败：" + JSONObject.toJSONString(businessRepairUserInfo));
         }
     }
 
 
     /**
      * 查询报修派单信息
+     *
      * @param info bId 信息
      * @return 报修派单信息
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getBusinessRepairUserInfo(Map info) throws DAOException {
-
-        logger.debug("查询报修派单信息 入参 info : {}",info);
-
-        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("repairUserServiceDaoImpl.getBusinessRepairUserInfo",info);
-
+        logger.debug("查询报修派单信息 入参 info : {}", info);
+        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("repairUserServiceDaoImpl.getBusinessRepairUserInfo", info);
         return businessRepairUserInfos;
     }
 
 
-
     /**
      * 保存报修派单信息 到 instance
-     * @param info   bId 信息
+     *
+     * @param info bId 信息
      * @throws DAOException DAO异常
      */
     @Override
     public void saveRepairUserInfoInstance(Map info) throws DAOException {
-        logger.debug("保存报修派单信息Instance 入参 info : {}",info);
-
-        int saveFlag = sqlSessionTemplate.insert("repairUserServiceDaoImpl.saveRepairUserInfoInstance",info);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存报修派单信息Instance数据失败："+ JSONObject.toJSONString(info));
+        logger.debug("保存报修派单信息Instance 入参 info : {}", info);
+        int saveFlag = sqlSessionTemplate.insert("repairUserServiceDaoImpl.saveRepairUserInfoInstance", info);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存报修派单信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
 
     /**
      * 查询报修派单信息（instance）
+     *
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getRepairUserInfo(Map info) throws DAOException {
-        logger.debug("查询报修派单信息 入参 info : {}",info);
-
-        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("repairUserServiceDaoImpl.getRepairUserInfo",info);
-
+        logger.debug("查询报修派单信息 入参 info : {}", info);
+        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("repairUserServiceDaoImpl.getRepairUserInfo", info);
         return businessRepairUserInfos;
     }
 
 
     /**
      * 修改报修派单信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
     public void updateRepairUserInfoInstance(Map info) throws DAOException {
-        logger.debug("修改报修派单信息Instance 入参 info : {}",info);
-
-        int saveFlag = sqlSessionTemplate.update("repairUserServiceDaoImpl.updateRepairUserInfoInstance",info);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改报修派单信息Instance数据失败："+ JSONObject.toJSONString(info));
+        logger.debug("修改报修派单信息Instance 入参 info : {}", info);
+        int saveFlag = sqlSessionTemplate.update("repairUserServiceDaoImpl.updateRepairUserInfoInstance", info);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改报修派单信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
-     /**
+    /**
      * 查询报修派单数量
+     *
      * @param info 报修派单信息
      * @return 报修派单数量
      */
     @Override
     public int queryRepairUsersCount(Map info) {
-        logger.debug("查询报修派单数据 入参 info : {}",info);
-
+        logger.debug("查询报修派单数据 入参 info : {}", info);
         List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("repairUserServiceDaoImpl.queryRepairUsersCount", info);
         if (businessRepairUserInfos.size() < 1) {
             return 0;
         }
-
         return Integer.parseInt(businessRepairUserInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 插入报修派单信息
+     *
+     * @param info
+     * @author fqz
+     */
+    @Override
+    public void saveRepairUser(Map info) {
+        logger.debug("插入报修派单信息 入参 info : {}", info);
+        int saveFlag = sqlSessionTemplate.insert("repairUserServiceDaoImpl.saveRepairUser", info);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存报修派单信息数据失败：" + JSONObject.toJSONString(info));
+        }
+    }
 
 }

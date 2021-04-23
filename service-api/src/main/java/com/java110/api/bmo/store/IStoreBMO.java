@@ -1,7 +1,12 @@
 package com.java110.api.bmo.store;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.IApiBaseBMO;
+import com.java110.dto.workflow.WorkflowDto;
+import com.java110.po.workflow.WorkflowPo;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
 
 /**
  * @ClassName IStoreBMO
@@ -60,5 +65,24 @@ public interface IStoreBMO extends IApiBaseBMO {
     public JSONObject addPurchase(JSONObject paramInJson);
 
     public JSONObject addCollection(JSONObject paramInJson);
+
+     JSONObject contractApply(JSONObject paramInJson);
+
+
+    /**
+     * 合同变更
+     *
+     * @param paramInJson
+     * @return
+     */
+     JSONObject contractChange(JSONObject paramInJson);
+
+    /**
+     * 调拨审核
+     *
+     * @param paramInJson
+     * @return
+     */
+    JSONObject allocationStorehouse(JSONObject paramInJson);
 
 }

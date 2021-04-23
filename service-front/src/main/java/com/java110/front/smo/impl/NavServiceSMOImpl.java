@@ -2,6 +2,7 @@ package com.java110.front.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.StateConstant;
 import com.java110.utils.util.CommonUtil;
@@ -81,6 +82,9 @@ public class NavServiceSMOImpl extends BaseComponentSMO implements INavServiceSM
         resultUserInfo.put("tel", CommonUtil.mobileEncrypt(tmpUserInfo.getString("tel")));
         resultUserInfo.put("email", tmpUserInfo.getString("email"));
         resultUserInfo.put("userId",tmpUserInfo.getString("userId"));
+        String watermark = MappingCache.getValue("watermark");
+        resultUserInfo.put("watermark",watermark);
+
         responseEntity = new ResponseEntity<String>(resultUserInfo.toJSONString(), HttpStatus.OK);
 
         return responseEntity;

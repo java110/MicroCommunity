@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allocationStorehouseServiceDaoImpl">
+
+    <!-- 保存仓库调拨信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAllocationStorehouseInfo" parameterType="Map">
+        insert into business_allocation_storehouse(
+        as_id,store_id,res_id,sh_id_z,res_name,start_user_id,operate,sh_id_a,start_user_name,state,b_id,stock,remark
+        ) values (
+        #{asId},#{storeId},#{resId},#{shIdz},#{resName},#{startUserId},#{operate},#{shIda},#{startUserName},#{state},#{bId},#{stock},#{remark}
+        )
+    </insert>
+
+    <!-- 查询仓库调拨信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAllocationStorehouseInfo" parameterType="Map" resultType="Map">
+        select t.as_id,t.as_id asId,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.sh_id_z,t.sh_id_z
+        shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id startUserId,t.operate,t.sh_id_a,t.sh_id_a
+        shIda,t.start_user_name,t.start_user_name startUserName,t.state,t.b_id,t.b_id bId,t.stock,t.remark
+        from business_allocation_storehouse t
+        where 1 =1
+        <if test="asId !=null and asId != ''">
+            and t.as_id= #{asId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="shIdz !=null and shIdz != ''">
+            and t.sh_id_z= #{shIdz}
+        </if>
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="shIda !=null and shIda != ''">
+            and t.sh_id_a= #{shIda}
+        </if>
+        <if test="startUserName !=null and startUserName != ''">
+            and t.start_user_name= #{startUserName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+    </select>
+
+    <!-- 保存仓库调拨信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveAllocationStorehouseInfoInstance" parameterType="Map">
+        insert into allocation_storehouse(
+        as_id,status_cd,store_id,res_id,sh_id_z,res_name,start_user_id,sh_id_a,start_user_name,state,b_id,stock,remark
+        ) select
+        t.as_id,'0',t.store_id,t.res_id,t.sh_id_z,t.res_name,t.start_user_id,t.sh_id_a,t.start_user_name,t.state,t.b_id,t.stock,t.remark
+        from business_allocation_storehouse t where 1=1
+        <if test="asId !=null and asId != ''">
+            and t.as_id= #{asId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="shIdz !=null and shIdz != ''">
+            and t.sh_id_z= #{shIdz}
+        </if>
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="shIda !=null and shIda != ''">
+            and t.sh_id_a= #{shIda}
+        </if>
+        <if test="startUserName !=null and startUserName != ''">
+            and t.start_user_name= #{startUserName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+    </insert>
+
+    <!-- 查询仓库调拨信息 add by wuxw 2018-07-03 -->
+    <select id="getAllocationStorehouseInfo" parameterType="Map" resultType="Map">
+        select t.as_id,t.as_id asId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.res_id,t.res_id
+        resId,t.sh_id_z,t.sh_id_z shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id
+        startUserId,t.sh_id_a,t.sh_id_a shIda,t.start_user_name,t.start_user_name startUserName,t.state,t.b_id,t.b_id
+        bId,t.stock,t.remark,t.create_time createTime,td.name stateName,a.sh_name shaName,z.sh_name shzName
+        from allocation_storehouse t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse' and td.table_columns = 'state'
+        left join storehouse a on t.sh_id_a = a.sh_id and a.store_id = t.store_id and a.status_cd = '0'
+        left join storehouse z on t.sh_id_z = z.sh_id and z.store_id = t.store_id and z.status_cd = '0'
+        where 1 =1
+        <if test="asId !=null and asId != ''">
+            and t.as_id= #{asId}
+        </if>
+        <if test="asIds !=null ">
+            and t.as_id in
+            <foreach collection="asIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="shIdz !=null and shIdz != ''">
+            and t.sh_id_z= #{shIdz}
+        </if>
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
+        </if>
+        <if test="shIda !=null and shIda != ''">
+            and t.sh_id_a= #{shIda}
+        </if>
+        <if test="startUserName !=null and startUserName != ''">
+            and t.start_user_name= #{startUserName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 修改仓库调拨信息 add by wuxw 2018-07-03 -->
+    <update id="updateAllocationStorehouseInfoInstance" parameterType="Map">
+        update allocation_storehouse t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            , t.res_id= #{resId}
+        </if>
+        <if test="shIdz !=null and shIdz != ''">
+            , t.sh_id_z= #{shIdz}
+        </if>
+        <if test="resName !=null and resName != ''">
+            , t.res_name= #{resName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            , t.start_user_id= #{startUserId}
+        </if>
+        <if test="shIda !=null and shIda != ''">
+            , t.sh_id_a= #{shIda}
+        </if>
+        <if test="startUserName !=null and startUserName != ''">
+            , t.start_user_name= #{startUserName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="stock !=null and stock != ''">
+            , t.stock= #{stock}
+        </if>
+        where 1=1
+        <if test="asId !=null and asId != ''">
+            and t.as_id= #{asId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+    </update>
+
+    <!-- 查询仓库调拨数量 add by wuxw 2018-07-03 -->
+    <select id="queryAllocationStorehousesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from allocation_storehouse t
+        where 1 =1
+        <if test="asId !=null and asId != ''">
+            and t.as_id= #{asId}
+        </if>
+        <if test="asIds !=null ">
+            and t.as_id in
+            <foreach collection="asIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="shIdz !=null and shIdz != ''">
+            and t.sh_id_z= #{shIdz}
+        </if>
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
+        </if>
+        <if test="shIda !=null and shIda != ''">
+            and t.sh_id_a= #{shIda}
+        </if>
+        <if test="startUserName !=null and startUserName != ''">
+            and t.start_user_name= #{startUserName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+    </select>
+
+</mapper>

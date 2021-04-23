@@ -9,6 +9,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
@@ -124,12 +125,24 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         }
 
         //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
-        feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetails(feeReceiptDetailPos);
+//        feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetails(feeReceiptDetailPos);
+//
+//        feeReceiptInnerServiceSMOImpl.saveFeeReceipts(feeReceiptPos);
+
+        //根据明细ID 查询收据信息
+        List<String> detailIds = new ArrayList<>();
+
+        for (FeeReceiptDetailPo feeReceiptDetailPo : feeReceiptDetailPos) {
+            detailIds.add(feeReceiptDetailPo.getDetailId());
+        }
+
+        FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
+        feeReceiptDetailDto.setDetailIds(detailIds.toArray(new String[detailIds.size()]));
+        feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
+        List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
 
-        feeReceiptInnerServiceSMOImpl.saveFeeReceipts(feeReceiptPos);
-
-        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptPos));
+        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos));
     }
 
     private void getFeeReceiptDetailPo(DataFlowContext dataFlowContext, JSONObject paramObj, JSONArray businesses, List<FeeReceiptDetailPo> feeReceiptDetailPos, List<FeeReceiptPo> feeReceiptPos) {

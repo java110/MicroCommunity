@@ -30,6 +30,7 @@ public class SmallWechatAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_WECHAT_HOUSE_DECORATION_CHECK_TEMPLATE = "33013";//装修审核/完成提醒给物业管理人员
     public static final String SPEC_CD_WECHAT_HOUSE_DECORATION_CHECK_RESULT_TEMPLATE = "33014";//装修审核结果提醒给业主
     public static final String SPEC_CD_WECHAT_HOUSE_DECORATION_COMPLETED_TEMPLATE = "33015";//装修验收结果提醒给业主
+    public static final String SPEC_CD_WECHAT_REPAIR_CHARGE_SCENE_TEMPLATE = "33016";//报修通知-上门维修现场收费通知业主
 
     private String attrId;
     private String wechatId;
