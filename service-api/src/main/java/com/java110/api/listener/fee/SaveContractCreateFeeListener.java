@@ -81,12 +81,16 @@ public class SaveContractCreateFeeListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
         //Assert.hasKeyAndValue(reqJson, "startTime", "未包含收费其实时间");
         //Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
-        Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
+        //Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
+
+
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         logger.debug("ServiceDataFlowEvent : {}", event);
+        String storeId = context.getRequestCurrentHeaders().get("store-id");
+        reqJson.put("storeId",storeId);
         List<ContractDto> contractDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
