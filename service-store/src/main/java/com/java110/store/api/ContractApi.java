@@ -1326,12 +1326,14 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContractRoom", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractRoom(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestParam(value = "contractId",required = false) String contractId,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ContractRoomDto contractRoomDto = new ContractRoomDto();
         contractRoomDto.setPage(page);
         contractRoomDto.setRow(row);
         contractRoomDto.setStoreId(storeId);
+        contractRoomDto.setContractId(contractId);
         return getContractRoomBMOImpl.get(contractRoomDto);
     }
 
