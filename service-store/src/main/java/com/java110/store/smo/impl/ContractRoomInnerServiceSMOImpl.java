@@ -3,8 +3,10 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.RoomDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
 import com.java110.intf.IContractRoomInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.store.dao.IContractRoomServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +30,9 @@ public class ContractRoomInnerServiceSMOImpl extends BaseServiceSMO implements I
 
     @Autowired
     private IContractRoomServiceDao contractRoomServiceDaoImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
 
     @Override
@@ -64,7 +70,31 @@ public class ContractRoomInnerServiceSMOImpl extends BaseServiceSMO implements I
 
         List<ContractRoomDto> contractRooms = BeanConvertUtil.covertBeanList(contractRoomServiceDaoImpl.getContractRoomInfo(BeanConvertUtil.beanCovertMap(contractRoomDto)), ContractRoomDto.class);
 
+        if(contractRooms != null && contractRooms.size() > 0){
+            refreshContractRooms(contractRooms);
+        }
         return contractRooms;
+    }
+
+    private void refreshContractRooms(List<ContractRoomDto> contractRooms) {
+        List<String> roomIds = new ArrayList<>();
+
+        for(ContractRoomDto contractRoomDto : contractRooms){
+            roomIds.add(contractRoomDto.getRoomId());
+        }
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        roomDto.setCommunityId(contractRooms.get(0).getCommunityId());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        for(ContractRoomDto contractRoomDto : contractRooms){
+            for(RoomDto tmpRoomDto : roomDtos){
+                if(contractRoomDto.getRoomId().equals(tmpRoomDto.getRoomId())){
+                    BeanConvertUtil.covertBean(tmpRoomDto,contractRoomDto);
+                }
+            }
+        }
     }
 
 

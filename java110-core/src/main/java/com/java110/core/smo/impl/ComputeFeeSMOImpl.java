@@ -3,6 +3,7 @@ package com.java110.core.smo.impl;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.contractRoom.ContractRoomDto;
 import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
@@ -14,6 +15,7 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
+import com.java110.intf.IContractRoomInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -73,6 +75,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Autowired(required = false)
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired(required = false)
+    private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
 
     @Override
     public Date getFeeEndTime() {
@@ -777,6 +782,54 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
+        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //合同相关
+            String computingFormula = feeDto.getComputingFormula();
+
+            //查询合同关联房屋
+            ContractRoomDto contractRoomDto = new ContractRoomDto();
+            contractRoomDto.setContractId(feeDto.getPayerObjId());
+            contractRoomDto.setCommunityId(feeDto.getCommunityId());
+            List<ContractRoomDto> contractRoomDtos = contractRoomInnerServiceSMOImpl.queryContractRooms(contractRoomDto);
+
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal builtUpArea = new BigDecimal(0);
+                for(ContractRoomDto tmpContractRoomDto: contractRoomDtos){
+                    builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getBuiltUpArea())));
+                }
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(3, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal roomDount = new BigDecimal(contractRoomDtos.size());
+                additionalAmount = additionalAmount.multiply(roomDount);
+                feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("4004".equals(computingFormula)) {  //动态费用
+                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            } else if ("5005".equals(computingFormula)) {  //(本期度数-上期度数)*单价+附加费
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                    //throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
+            } else if ("6006".equals(computingFormula)) {
+                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            } else if ("7007".equals(computingFormula)) { //自定义公式
+                feePrice = computeContractCustomizeFormula(feeDto, contractRoomDtos);
+            } else if ("8008".equals(computingFormula)) {  //手动动态费用
+                feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            } else {
+                throw new IllegalArgumentException("暂不支持该类公式");
+            }
         }
         return feePrice.setScale(3, BigDecimal.ROUND_HALF_EVEN).doubleValue();
     }
@@ -834,6 +887,26 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         }
 
         return valueObj;
+    }
+
+    /**
+     * 自定义公式计算
+     *
+     * @param feeDto
+     * @return C 代表房屋对应小区面积
+     * F 代表房屋对应楼栋面积
+     * U 代表房屋对应单元面积
+     * R 代表房屋面积
+     * X 代表房屋收费系数（房屋管理中配置）
+     * L 代表房屋层数
+     */
+    private BigDecimal computeContractCustomizeFormula(FeeDto feeDto, List<ContractRoomDto> contractRoomDtos) {
+
+        BigDecimal total = new BigDecimal(0.0);
+       for(ContractRoomDto contractRoomDto :contractRoomDtos){
+           total = total.add(computeRoomCustomizeFormula(feeDto,contractRoomDto));
+       }
+        return total;
     }
 
     /**
