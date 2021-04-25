@@ -17,8 +17,9 @@
 
     <!-- 查询合同房屋变更信息 add by wuxw 2018-07-03 -->
     <select id="getContractChangePlanRoomInfo" parameterType="Map" resultType="Map">
-        select t.owner_name,t.owner_name ownerName,t.contract_id,t.contract_id contractId,t.pr_id,t.pr_id prId,t.plan_id,t.plan_id planId,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id
-        ownerId,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName
+        select t.owner_name,t.owner_name ownerName,t.contract_id,t.contract_id contractId,t.pr_id,t.pr_id prId,t.plan_id,
+        t.plan_id planId,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id
+        ownerId,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName,t.operate
         from contract_change_plan_room t
         where 1 =1
         <if test="ownerName !=null and ownerName != ''">
@@ -47,6 +48,9 @@
         </if>
         <if test="roomName !=null and roomName != ''">
             and t.room_name= #{roomName}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">

@@ -20,9 +20,9 @@ import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
 import com.java110.po.contractChangePlanDetailAttr.ContractChangePlanDetailAttrPo;
+import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import com.java110.po.contractCollectionPlan.ContractCollectionPlanPo;
 import com.java110.po.contractFile.ContractFilePo;
-import com.java110.po.contractPartya.ContractPartyaPo;
 import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.po.contractType.ContractTypePo;
 import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
@@ -849,9 +849,19 @@ public class ContractApi {
         contractChangePlanPo.setState(ContractChangePlanDto.STATE_W);
         contractChangePlanPo.setRemark(reqJson.getString("changeRemark"));
 
+        List<ContractChangePlanRoomPo> contractChangePlanRoomPos = new ArrayList<>();
+        if (reqJson.containsKey("rooms")) {
+            JSONArray rooms = reqJson.getJSONArray("rooms");
+            if (rooms != null && rooms.size() > 0) {
+                for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
+                    contractChangePlanRoomPos.add(BeanConvertUtil.covertBean(rooms.getJSONObject(roomIndex), ContractChangePlanRoomPo.class));
+                }
+            }
+        }
+
         ContractChangePlanDetailPo contractChangePlanDetailPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanDetailPo.class);
         contractChangePlanDetailPo.setStoreId(storeId);
-        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo);
+        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo,contractChangePlanRoomPos);
     }
 
     /**
@@ -1326,7 +1336,7 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContractRoom", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractRoom(@RequestHeader(value = "store-id") String storeId,
-                                                    @RequestParam(value = "contractId",required = false) String contractId,
+                                                    @RequestParam(value = "contractId", required = false) String contractId,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ContractRoomDto contractRoomDto = new ContractRoomDto();

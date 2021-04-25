@@ -5,120 +5,118 @@
 <mapper namespace="contractRoomServiceDaoImpl">
 
 
-
-
-
     <!-- 保存合同房屋信息 add by wuxw 2018-07-03 -->
     <insert id="saveContractRoomInfo" parameterType="Map">
         insert into contract_room(
-cr_id,owner_name,contract_id,owner_id,store_id,room_id,room_name
-) values (
-#{crId},#{ownerName},#{contractId},#{ownerId},#{storeId},#{roomId},#{roomName}
-)
+        cr_id,owner_name,contract_id,owner_id,store_id,room_id,room_name
+        ) values (
+        #{crId},#{ownerName},#{contractId},#{ownerId},#{storeId},#{roomId},#{roomName}
+        )
     </insert>
-
 
 
     <!-- 查询合同房屋信息 add by wuxw 2018-07-03 -->
     <select id="getContractRoomInfo" parameterType="Map" resultType="Map">
-        select  t.cr_id,t.cr_id crId,t.owner_name,t.owner_name ownerName,t.contract_id,t.contract_id contractId,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName 
-from contract_room t 
-where 1 =1 
-<if test="crId !=null and crId != ''">
-   and t.cr_id= #{crId}
-</if> 
-<if test="ownerName !=null and ownerName != ''">
-   and t.owner_name= #{ownerName}
-</if> 
-<if test="contractId !=null and contractId != ''">
-   and t.contract_id= #{contractId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="ownerId !=null and ownerId != ''">
-   and t.owner_id= #{ownerId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="roomId !=null and roomId != ''">
-   and t.room_id= #{roomId}
-</if> 
-<if test="roomName !=null and roomName != ''">
-   and t.room_name= #{roomName}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.cr_id,t.cr_id crId,t.owner_name,t.owner_name ownerName,t.contract_id,t.contract_id contractId,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.store_id,t.store_id
+        storeId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName
+        from contract_room t
+        where 1 =1
+        <if test="crId !=null and crId != ''">
+            and t.cr_id= #{crId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改合同房屋信息 add by wuxw 2018-07-03 -->
     <update id="updateContractRoomInfo" parameterType="Map">
-        update  contract_room t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="ownerName !=null and ownerName != ''">
-, t.owner_name= #{ownerName}
-</if> 
-<if test="contractId !=null and contractId != ''">
-, t.contract_id= #{contractId}
-</if> 
-<if test="ownerId !=null and ownerId != ''">
-, t.owner_id= #{ownerId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="roomId !=null and roomId != ''">
-, t.room_id= #{roomId}
-</if> 
-<if test="roomName !=null and roomName != ''">
-, t.room_name= #{roomName}
-</if> 
- where 1=1 <if test="crId !=null and crId != ''">
-and t.cr_id= #{crId}
-</if> 
+        update contract_room t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        where 1=1
+        <if test="crId !=null and crId != ''">
+            and t.cr_id= #{crId}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
 
     </update>
 
     <!-- 查询合同房屋数量 add by wuxw 2018-07-03 -->
-     <select id="queryContractRoomsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from contract_room t 
-where 1 =1 
-<if test="crId !=null and crId != ''">
-   and t.cr_id= #{crId}
-</if> 
-<if test="ownerName !=null and ownerName != ''">
-   and t.owner_name= #{ownerName}
-</if> 
-<if test="contractId !=null and contractId != ''">
-   and t.contract_id= #{contractId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="ownerId !=null and ownerId != ''">
-   and t.owner_id= #{ownerId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="roomId !=null and roomId != ''">
-   and t.room_id= #{roomId}
-</if> 
-<if test="roomName !=null and roomName != ''">
-   and t.room_name= #{roomName}
-</if> 
+    <select id="queryContractRoomsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_room t
+        where 1 =1
+        <if test="crId !=null and crId != ''">
+            and t.cr_id= #{crId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

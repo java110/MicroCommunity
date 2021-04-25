@@ -3,10 +3,13 @@ package com.java110.store.bmo.contract.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
 import com.java110.dto.contractChangePlanDetail.ContractChangePlanDetailDto;
+import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
+import com.java110.dto.contractRoom.ContractRoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.store.StoreDto;
@@ -17,7 +20,9 @@ import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
+import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import com.java110.po.contractFile.ContractFilePo;
+import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.store.bmo.contract.IUpdateContractBMO;
 import com.java110.store.bmo.contractFile.IDeleteContractFileBMO;
@@ -26,6 +31,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.apache.http.annotation.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,6 +61,12 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
 
     @Autowired
     private IContractChangePlanDetailInnerServiceSMO contractChangePlanDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractChangePlanRoomInnerServiceSMO contractChangePlanRoomInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
 
 
     @Autowired
@@ -167,6 +179,8 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             ContractPo contractPo = BeanConvertUtil.covertBean(contractChangePlanDetailDtos.get(0), ContractPo.class);
 
             contractInnerServiceSMOImpl.updateContract(contractPo);
+            dealContractChangePlanRoom(contractChangePlanDto);
+
         } else { //修改为审核中
             ContractChangePlanPo contractChangePlanPo = new ContractChangePlanPo();
             contractChangePlanPo.setPlanId(contractChangePlanDto.getPlanId());
@@ -175,6 +189,45 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             contractChangePlanInnerServiceSMOImpl.updateContractChangePlan(contractChangePlanPo);
         }
         return ResultVo.success();
+    }
+
+    private void dealContractChangePlanRoom(ContractChangePlanDto contractChangePlanDto) {
+        // 查询 是否有资产变更
+
+        ContractChangePlanRoomDto contractChangePlanRoomDto = new ContractChangePlanRoomDto();
+        contractChangePlanRoomDto.setPlanId(contractChangePlanDto.getPlanId());
+        contractChangePlanRoomDto.setStoreId(contractChangePlanDto.getStoreId());
+        contractChangePlanRoomDto.setOperate("ADD");
+
+        List<ContractChangePlanRoomDto> contractChangePlanRoomDtos
+                = contractChangePlanRoomInnerServiceSMOImpl.queryContractChangePlanRooms(contractChangePlanRoomDto);
+
+        if(contractChangePlanRoomDtos == null || contractChangePlanRoomDtos.size() < 1){
+            return ;
+        }
+
+        //删除之前数据 插入新数据
+        ContractRoomPo contractRoomPo = new ContractRoomPo();
+        contractRoomPo.setContractId(contractChangePlanRoomDtos.get(0).getContractId());
+        contractRoomPo.setStoreId(contractChangePlanRoomDtos.get(0).getStoreId());
+        contractRoomInnerServiceSMOImpl.deleteContractRoom(contractRoomPo);
+
+        //插入新的关系值
+
+        for(ContractChangePlanRoomDto tmpContractChangePlanRoomDto : contractChangePlanRoomDtos){
+            contractRoomPo = new ContractRoomPo();
+            contractRoomPo.setContractId(contractChangePlanRoomDtos.get(0).getContractId());
+            contractRoomPo.setStoreId(contractChangePlanRoomDtos.get(0).getStoreId());
+            contractRoomPo.setCrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_crId));
+            contractRoomPo.setOwnerId(tmpContractChangePlanRoomDto.getOwnerId());
+            contractRoomPo.setOwnerName(tmpContractChangePlanRoomDto.getOwnerName());
+            contractRoomPo.setRoomId(tmpContractChangePlanRoomDto.getRoomId());
+            contractRoomPo.setRoomName(tmpContractChangePlanRoomDto.getRoomName());
+            contractRoomInnerServiceSMOImpl.saveContractRoom(contractRoomPo);
+        }
+
+
+
     }
 
     private void updateContractAttr(JSONObject jsonObject, ContractPo contractPo) {
