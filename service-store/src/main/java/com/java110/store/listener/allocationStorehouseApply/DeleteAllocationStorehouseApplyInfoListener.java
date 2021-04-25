@@ -1,7 +1,9 @@
-package com.java110.store.listener.allocationAllocationStorehouseApplyhouseApply;
+package com.java110.store.listener.allocationStorehouseApply;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
+import com.java110.store.listener.allocationStorehouseApply.AbstractAllocationStorehouseApplyBusinessServiceDataFlowListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -75,7 +77,7 @@ public class DeleteAllocationStorehouseApplyInfoListener extends AbstractAllocat
                     JSONObject businessAllocationStorehouseApply = businessAllocationStorehouseApplys.getJSONObject(_allocationAllocationStorehouseApplyhouseApplyIndex);
                     doBusinessAllocationStorehouseApply(business, businessAllocationStorehouseApply);
                     if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("allocationAllocationStorehouseApplyhouseApplyId", businessAllocationStorehouseApply.getString("allocationAllocationStorehouseApplyhouseApplyId"));
+                        dataFlowContext.addParamOut("applyId", businessAllocationStorehouseApply.getString("applyId"));
                     }
                 }
 
@@ -106,7 +108,7 @@ public class DeleteAllocationStorehouseApplyInfoListener extends AbstractAllocat
                 Map businessAllocationStorehouseApplyInfo = businessAllocationStorehouseApplyInfos.get(_allocationAllocationStorehouseApplyhouseApplyIndex);
                 flushBusinessAllocationStorehouseApplyInfo(businessAllocationStorehouseApplyInfo,StatusConstant.STATUS_CD_INVALID);
                 allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.updateAllocationStorehouseApplyInfoInstance(businessAllocationStorehouseApplyInfo);
-                dataFlowContext.addParamOut("allocationAllocationStorehouseApplyhouseApplyId",businessAllocationStorehouseApplyInfo.get("allocationAllocationStorehouseApplyhouseApply_id"));
+                dataFlowContext.addParamOut("applyId",businessAllocationStorehouseApplyInfo.get("allocationAllocationStorehouseApplyhouseApply_id"));
             }
         }
 
@@ -156,10 +158,10 @@ public class DeleteAllocationStorehouseApplyInfoListener extends AbstractAllocat
      */
     private void doBusinessAllocationStorehouseApply(Business business,JSONObject businessAllocationStorehouseApply){
 
-        Assert.jsonObjectHaveKey(businessAllocationStorehouseApply,"allocationAllocationStorehouseApplyhouseApplyId","businessAllocationStorehouseApply 节点下没有包含 allocationAllocationStorehouseApplyhouseApplyId 节点");
+        Assert.jsonObjectHaveKey(businessAllocationStorehouseApply,"applyId","businessAllocationStorehouseApply 节点下没有包含 applyId 节点");
 
-        if(businessAllocationStorehouseApply.getString("allocationAllocationStorehouseApplyhouseApplyId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"allocationAllocationStorehouseApplyhouseApplyId 错误，不能自动生成（必须已经存在的allocationAllocationStorehouseApplyhouseApplyId）"+businessAllocationStorehouseApply);
+        if(businessAllocationStorehouseApply.getString("applyId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"applyId 错误，不能自动生成（必须已经存在的applyId）"+businessAllocationStorehouseApply);
         }
         //自动插入DEL
         autoSaveDelBusinessAllocationStorehouseApply(business,businessAllocationStorehouseApply);

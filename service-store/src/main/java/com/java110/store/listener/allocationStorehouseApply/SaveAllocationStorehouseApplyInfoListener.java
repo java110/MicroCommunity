@@ -1,7 +1,9 @@
-package com.java110.store.listener.allocationAllocationStorehouseApplyhouseApply;
+package com.java110.store.listener.allocationStorehouseApply;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
+import com.java110.store.listener.allocationStorehouseApply.AbstractAllocationStorehouseApplyBusinessServiceDataFlowListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -25,7 +27,7 @@ import java.util.Map;
  */
 @Java110Listener("saveAllocationStorehouseApplyInfoListener")
 @Transactional
-public class SaveAllocationStorehouseApplyInfoListener extends AbstractAllocationStorehouseApplyBusinessServiceDataFlowListener{
+public class SaveAllocationStorehouseApplyInfoListener extends AbstractAllocationStorehouseApplyBusinessServiceDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(SaveAllocationStorehouseApplyInfoListener.class);
 
@@ -67,7 +69,7 @@ public class SaveAllocationStorehouseApplyInfoListener extends AbstractAllocatio
                 JSONObject businessAllocationStorehouseApply = businessAllocationStorehouseApplys.getJSONObject(bAllocationStorehouseApplyIndex);
                 doBusinessAllocationStorehouseApply(business, businessAllocationStorehouseApply);
                 if(bObj instanceof JSONObject) {
-                    dataFlowContext.addParamOut("allocationAllocationStorehouseApplyhouseApplyId", businessAllocationStorehouseApply.getString("allocationAllocationStorehouseApplyhouseApplyId"));
+                    dataFlowContext.addParamOut("applyId", businessAllocationStorehouseApply.getString("applyId"));
                 }
             }
         }
@@ -92,7 +94,7 @@ public class SaveAllocationStorehouseApplyInfoListener extends AbstractAllocatio
             reFreshShareColumn(info, businessAllocationStorehouseApplyInfo.get(0));
             allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.saveAllocationStorehouseApplyInfoInstance(info);
             if(businessAllocationStorehouseApplyInfo.size() == 1) {
-                dataFlowContext.addParamOut("allocationAllocationStorehouseApplyhouseApplyId", businessAllocationStorehouseApplyInfo.get(0).get("allocationAllocationStorehouseApplyhouseApply_id"));
+                dataFlowContext.addParamOut("applyId", businessAllocationStorehouseApplyInfo.get(0).get("allocationAllocationStorehouseApplyhouseApply_id"));
             }
         }
     }
@@ -148,13 +150,13 @@ public class SaveAllocationStorehouseApplyInfoListener extends AbstractAllocatio
      */
     private void doBusinessAllocationStorehouseApply(Business business,JSONObject businessAllocationStorehouseApply){
 
-        Assert.jsonObjectHaveKey(businessAllocationStorehouseApply,"allocationAllocationStorehouseApplyhouseApplyId","businessAllocationStorehouseApply 节点下没有包含 allocationAllocationStorehouseApplyhouseApplyId 节点");
+        Assert.jsonObjectHaveKey(businessAllocationStorehouseApply,"applyId","businessAllocationStorehouseApply 节点下没有包含 applyId 节点");
 
-        if(businessAllocationStorehouseApply.getString("allocationAllocationStorehouseApplyhouseApplyId").startsWith("-")){
+        if(businessAllocationStorehouseApply.getString("applyId").startsWith("-")){
             //刷新缓存
             //flushAllocationStorehouseApplyId(business.getDatas());
 
-            businessAllocationStorehouseApply.put("allocationAllocationStorehouseApplyhouseApplyId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationAllocationStorehouseApplyhouseApplyId));
+            businessAllocationStorehouseApply.put("applyId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyId));
 
         }
 
