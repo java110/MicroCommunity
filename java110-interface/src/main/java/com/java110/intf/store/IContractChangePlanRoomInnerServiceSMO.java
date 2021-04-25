@@ -1,7 +1,8 @@
-package com.java110.intf;
+package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
+import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,13 +18,13 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "store-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/contractChangePlanRoomApi")
 public interface IContractChangePlanRoomInnerServiceSMO {
 
 
     @RequestMapping(value = "/saveContractChangePlanRoom", method = RequestMethod.POST)
-    public int saveContractChangePlanRoom(@RequestBody  ContractChangePlanRoomPo contractChangePlanRoomPo);
+    public int saveContractChangePlanRoom(@RequestBody ContractChangePlanRoomPo contractChangePlanRoomPo);
 
     @RequestMapping(value = "/updateContractChangePlanRoom", method = RequestMethod.POST)
     public int updateContractChangePlanRoom(@RequestBody  ContractChangePlanRoomPo contractChangePlanRoomPo);

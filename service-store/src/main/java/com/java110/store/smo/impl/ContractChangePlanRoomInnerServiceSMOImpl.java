@@ -1,8 +1,9 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.intf.store.IContractChangePlanRoomInnerServiceSMO;
+import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import com.java110.store.dao.IContractChangePlanRoomServiceDao;
-import com.java110.intf.contractChangePlanRoom.IContractChangePlanRoomInnerServiceSMO;
 import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -31,7 +32,7 @@ public class ContractChangePlanRoomInnerServiceSMOImpl extends BaseServiceSMO im
 
 
     @Override
-    public int saveContractChangePlanRoom(@RequestBody  ContractChangePlanRoomPo contractChangePlanRoomPo) {
+    public int saveContractChangePlanRoom(@RequestBody ContractChangePlanRoomPo contractChangePlanRoomPo) {
         int saveFlag = 1;
         contractChangePlanRoomServiceDaoImpl.saveContractChangePlanRoomInfo(BeanConvertUtil.beanCovertMap(contractChangePlanRoomPo));
         return saveFlag;

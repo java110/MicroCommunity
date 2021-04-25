@@ -1,5 +1,6 @@
-package com.java110.api.bmo.contractChangePlanRoom;
+package com.java110.store.bmo.contractChangePlanRoom;
 
+import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveContractChangePlanRoomBMO {
 
