@@ -68,7 +68,7 @@ public class WechatFactory {
      * @return
      */
     private static String refreshAccessToken(String appId, String appSecure) {
-        String getAccessToken = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.GET_ACCESS_TOKEN_URL);
+        String getAccessToken = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN,WechatConstant.GET_ACCESS_TOKEN_URL);
         if(StringUtil.isEmpty(getAccessToken)){
             getAccessToken = WechatConstant.GET_ACCESS_TOKEN;
         }
