@@ -13,6 +13,9 @@ public class WechatConstant {
     //微信域
     public static final String WECHAT_DOMAIN = "WECHAT";
 
+    public static final String ACCESS_TOKEN_URL = "ACCESS_TOKEN_URL";
+    public static final String SEND_TEMPLATE_URL = "SEND_TEMPLATE_URL";
+
     //微信ID
     public static final String PAGE_WECHAT_APP_ID = "wId";//微信id 一般是appId
 
