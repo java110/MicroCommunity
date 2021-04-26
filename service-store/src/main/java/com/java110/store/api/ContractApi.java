@@ -850,11 +850,19 @@ public class ContractApi {
         contractChangePlanPo.setRemark(reqJson.getString("changeRemark"));
 
         List<ContractChangePlanRoomPo> contractChangePlanRoomPos = new ArrayList<>();
+        ContractChangePlanRoomPo contractChangePlanRoomPo = null;
+        JSONObject roomInfo = null;
         if (reqJson.containsKey("rooms")) {
             JSONArray rooms = reqJson.getJSONArray("rooms");
             if (rooms != null && rooms.size() > 0) {
                 for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
-                    contractChangePlanRoomPos.add(BeanConvertUtil.covertBean(rooms.getJSONObject(roomIndex), ContractChangePlanRoomPo.class));
+//                    contractChangePlanRoomPos.add(BeanConvertUtil.covertBean(rooms.getJSONObject(roomIndex), ContractChangePlanRoomPo.class));
+                    roomInfo = rooms.getJSONObject(roomIndex);
+                    contractChangePlanRoomPo = BeanConvertUtil.covertBean(roomInfo, ContractChangePlanRoomPo.class);
+                    contractChangePlanRoomPo.setRoomName(roomInfo.getString("floorNum")
+                            +"-"+roomInfo.getString("unitNum")
+                            +"-"+roomInfo.getString("roomNum"));
+                    contractChangePlanRoomPos.add(contractChangePlanRoomPo);
                 }
             }
         }
