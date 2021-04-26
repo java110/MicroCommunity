@@ -134,7 +134,7 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
             contractChangePlanRoomPo.setContractId(contractChangePlanPo.getContractId());
             contractChangePlanRoomPo.setPlanId(contractChangePlanPo.getPlanId());
             contractChangePlanRoomPo.setPrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_prId));
-            contractChangePlanRoomPo.setStoreId(contractRoomDtos.get(0).getStoreId());
+            contractChangePlanRoomPo.setStoreId(contractChangePlanPo.getStoreId());
             contractChangePlanRoomPo.setOperate("ADD");
             contractChangePlanRoomInnerServiceSMOImpl.saveContractChangePlanRoom(contractChangePlanRoomPo);
         }
