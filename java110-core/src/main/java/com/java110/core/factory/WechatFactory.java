@@ -3,6 +3,7 @@ package com.java110.core.factory;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Synchronized;
 import com.java110.utils.cache.JWTCache;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
@@ -67,7 +68,11 @@ public class WechatFactory {
      * @return
      */
     private static String refreshAccessToken(String appId, String appSecure) {
-        String url = WechatConstant.GET_ACCESS_TOKEN.replace("APPID", appId)
+        String getAccessToken = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.GET_ACCESS_TOKEN_URL);
+        if(StringUtil.isEmpty(getAccessToken)){
+            getAccessToken = WechatConstant.GET_ACCESS_TOKEN;
+        }
+        String url = getAccessToken.replace("APPID", appId)
                 .replace("SECRET", appSecure);
         RestTemplate outRestTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
         String response = outRestTemplate.getForObject(url, String.class);

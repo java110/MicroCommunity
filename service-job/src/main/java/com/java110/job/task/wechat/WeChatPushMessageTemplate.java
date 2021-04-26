@@ -332,7 +332,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
     }
 
     private void doSendToOpenId(NoticeDto noticeDto, String templateId, String accessToken, String nextOpenid, SmallWeChatDto weChatDto) {
-        String url = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.ACCESS_TOKEN_URL);
+        String url = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.GET_USER_URL);
         if(StringUtil.isEmpty(url)){
             url = getUser;
         }
