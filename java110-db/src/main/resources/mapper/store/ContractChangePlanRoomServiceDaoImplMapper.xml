@@ -18,7 +18,7 @@
     <!-- 查询合同房屋变更信息 add by wuxw 2018-07-03 -->
     <select id="getContractChangePlanRoomInfo" parameterType="Map" resultType="Map">
         select t.owner_name,t.owner_name ownerName,t.contract_id,t.contract_id contractId,t.pr_id,t.pr_id prId,t.plan_id,
-        t.plan_id planId,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id
+        t.plan_id planId,t.owner_id,t.owner_id
         ownerId,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName,t.operate
         from contract_change_plan_room t
         where 1 =1
@@ -34,9 +34,7 @@
         <if test="planId !=null and planId != ''">
             and t.plan_id= #{planId}
         </if>
-        <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
-        </if>
+
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
         </if>
@@ -62,7 +60,7 @@
 
     <!-- 修改合同房屋变更信息 add by wuxw 2018-07-03 -->
     <update id="updateContractChangePlanRoomInfo" parameterType="Map">
-        update contract_change_plan_room t set t.status_cd = #{statusCd}
+        update contract_change_plan_room t set t.operator = #{operator}
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
@@ -110,9 +108,6 @@
         </if>
         <if test="planId !=null and planId != ''">
             and t.plan_id= #{planId}
-        </if>
-        <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
