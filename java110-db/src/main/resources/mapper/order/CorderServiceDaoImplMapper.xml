@@ -29,7 +29,7 @@
 
 
     <select id="getCorderInfo" parameterType="Map" resultType="Map">
-        select ca.`name` appName,t.create_time createTime,cbt.`name`,t.user_id,u.name userName ,t.ext_transaction_id,t.status_cd
+        select ca.`name` appName,t.create_time createTime,cbt.`name`,t.user_id,u.name userName,t.ext_transaction_id extTransactionId,t.status_cd statusCd,t.o_id oId
         from c_orders t
         left join c_business cb on t.o_id = cb.o_id
         left join c_business_type cbt on cb.business_type_cd = cbt.business_type_cd
