@@ -28,7 +28,7 @@
     </resultMap>
 
 
-    <select id="getCorderInfo" parameterType="Map" resultMap="orderMap">
+    <select id="getCorderInfo" parameterType="Map" resultMap="Map">
         select ca.`name` appName,t.create_time createTime,cbt.`name`,t.user_id,u.name userName ,t.ext_transaction_id,t.status_cd
         from c_orders t
         left join c_business cb on t.o_id = cb.o_id
