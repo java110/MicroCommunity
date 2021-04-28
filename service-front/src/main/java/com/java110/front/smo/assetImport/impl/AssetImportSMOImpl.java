@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -234,8 +236,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("psId", savedParkingSpaceInfo.getString("psId"));
             paramIn.put("storeId", result.getStoreId());
             paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
-            paramIn.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            paramIn.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            paramIn.put("startTime", parkingSpace.getStartTime());
+            paramIn.put("endTime", parkingSpace.getEndTime());
 
             if ("H".equals(parkingSpace.getSellOrHire())) {
                 paramIn.put("cycles", "0");
@@ -720,10 +722,42 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 importParkingSpace.setCarType(os[7].toString());
                 importParkingSpace.setCarColor(os[8].toString());
                 importParkingSpace.setSellOrHire(os[9].toString());
+
+                String startTime = excelDoubleToDate(os[10].toString());
+                String endTime = excelDoubleToDate(os[11].toString());
+                Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
+                Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
+                importParkingSpace.setStartTime(startTime);
+                importParkingSpace.setEndTime(endTime);
             }
 
             parkingSpaces.add(importParkingSpace);
         }
+    }
+
+    //解析Excel日期格式
+    public static String excelDoubleToDate(String strDate) {
+        if (strDate.length() == 5) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date tDate = DoubleToDate(Double.parseDouble(strDate));
+                return sdf.format(tDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return strDate;
+            }
+        }
+        return strDate;
+    }
+
+
+    //解析Excel日期格式
+    public static Date DoubleToDate(Double dVal) {
+        Date tDate = new Date();
+        long localOffset = tDate.getTimezoneOffset() * 60000; //系统时区偏移 1900/1/1 到 1970/1/1 的 25569 天
+        tDate.setTime((long) ((dVal - 25569) * 24 * 3600 * 1000 + localOffset));
+
+        return tDate;
     }
 
     /**
