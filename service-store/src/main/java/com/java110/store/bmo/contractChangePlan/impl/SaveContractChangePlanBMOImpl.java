@@ -6,6 +6,7 @@ import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
 import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
+import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
@@ -42,6 +43,9 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
     @Autowired
     private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
 
+    @Autowired
+    private IContractTypeInnerServiceSMO contractTypeInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -60,6 +64,14 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
         List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
 
         Assert.listOnlyOne(contractDtos, "合同不存在");
+
+        //查询 合同是否需要审核
+        ContractTypeDto contractTypeDto = new ContractTypeDto();
+        contractTypeDto.setContractTypeId(contractDtos.get(0).getContractType());
+        contractTypeDto.setStoreId(contractDtos.get(0).getStoreId());
+        List<ContractTypeDto> contractTypeDtos = contractTypeInnerServiceSMOImpl.queryContractTypes(contractTypeDto);
+
+        Assert.listOnlyOne(contractTypeDtos,"合同类型不存在");
 
         contractChangePlanPo.setPlanId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_planId));
         int flag = contractChangePlanInnerServiceSMOImpl.saveContractChangePlan(contractChangePlanPo);
@@ -87,12 +99,15 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
 
         dealContractChangePlanRooms(contractChangePlanPo,contractChangePlanRoomPos);
 
+        //需要审核时才写 工作流
+        if (!ContractTypeDto.NO_AUDIT.equals(contractTypeDtos.get(0).getAudit())) {
+            //提交流程
+            ContractChangePlanDto contractChangePlanDto = BeanConvertUtil.covertBean(contractChangePlanPo, ContractChangePlanDto.class);
+            contractChangePlanDto.setCurrentUserId(contractChangePlanPo.getChangePerson());
+            contractChangeUserInnerServiceSMO.startProcess(contractChangePlanDto);
+        }
 
 
-        //提交流程
-        ContractChangePlanDto contractChangePlanDto = BeanConvertUtil.covertBean(contractChangePlanPo, ContractChangePlanDto.class);
-        contractChangePlanDto.setCurrentUserId(contractChangePlanPo.getChangePerson());
-        contractChangeUserInnerServiceSMO.startProcess(contractChangePlanDto);
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
     }
