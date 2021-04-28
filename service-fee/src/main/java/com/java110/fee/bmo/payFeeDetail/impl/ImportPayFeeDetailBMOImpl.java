@@ -202,7 +202,11 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
                 payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
                 payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
                 payFeePo.setIncomeObjId(storeId);
-                payFeePo.setState(FeeDto.STATE_DOING);
+                if(FeeDto.FEE_FLAG_ONCE.equals(tmpFeeConfigDto.getFeeFlag())) {
+                    payFeePo.setState(FeeDto.STATE_FINISH);
+                }else {
+                    payFeePo.setState(FeeDto.STATE_DOING);
+                }
                 payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
                 payFeePo.setPayerObjId(importRoomFee.getRoomId());
                 payFeePo.setUserId(userId);
@@ -270,6 +274,10 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         payFeePo.setStatusCd(StatusConstant.STATUS_CD_VALID);
         payFeePo.setFeeId(tmpFeeDto.getFeeId());
         payFeePo.setEndTime(importRoomFee.getEndTime());
+        if(FeeDto.FEE_FLAG_ONCE.equals(tmpFeeDto.getFeeFlag())) {
+            payFeePo.setState(FeeDto.STATE_FINISH);
+        }
+
         feeInnerServiceSMOImpl.updateFee(payFeePo);
     }
 
