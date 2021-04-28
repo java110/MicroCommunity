@@ -20,6 +20,7 @@ import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -89,6 +90,9 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
 
         importRoomFees = roomInnerServiceSMOImpl.freshRoomIds(importRoomFees);
         for (ImportRoomFee importRoomFee : importRoomFees) {
+            if(StringUtil.isEmpty(importRoomFee.getRoomId())){
+                continue;
+            }
             importFeeDetail(importRoomFee, storeId, userId);
         }
     }
