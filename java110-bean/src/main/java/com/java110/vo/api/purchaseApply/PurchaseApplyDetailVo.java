@@ -18,6 +18,9 @@ public class PurchaseApplyDetailVo {
     private String operate;
     private String statusCd;
     private String description;
+    private String purchaseQuantity;
+    private String purchaseRemark;
+    private String purchasePrice;
 
 
     public String getApplyOrderId() {
@@ -130,6 +133,30 @@ public class PurchaseApplyDetailVo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPurchaseQuantity() {
+        return purchaseQuantity;
+    }
+
+    public void setPurchaseQuantity(String purchaseQuantity) {
+        this.purchaseQuantity = purchaseQuantity;
+    }
+
+    public String getPurchaseRemark() {
+        return purchaseRemark;
+    }
+
+    public void setPurchaseRemark(String purchaseRemark) {
+        this.purchaseRemark = purchaseRemark;
+    }
+
+    public String getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(String purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 }
 

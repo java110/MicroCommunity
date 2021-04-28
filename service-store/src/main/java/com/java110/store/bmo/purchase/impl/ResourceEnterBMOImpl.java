@@ -26,9 +26,6 @@ public class ResourceEnterBMOImpl implements IResourceEnterBMO {
 
 
     @Autowired
-    private IPurchaseApplyUserInnerServiceSMO purchaseApplyUserInnerServiceSMOImpl;
-
-    @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
 
 

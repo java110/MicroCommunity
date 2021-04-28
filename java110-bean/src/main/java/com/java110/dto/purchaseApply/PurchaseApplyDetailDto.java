@@ -13,6 +13,9 @@ public class PurchaseApplyDetailDto {
     private String resCode;
     private String price;
     private String stock;
+    private String purchaseQuantity;
+    private String purchaseRemark;
+    private String purchasePrice;
     private String id;
 
     public String getApplyOrderId() {
@@ -93,6 +96,30 @@ public class PurchaseApplyDetailDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPurchaseQuantity() {
+        return purchaseQuantity;
+    }
+
+    public void setPurchaseQuantity(String purchaseQuantity) {
+        this.purchaseQuantity = purchaseQuantity;
+    }
+
+    public String getPurchaseRemark() {
+        return purchaseRemark;
+    }
+
+    public void setPurchaseRemark(String purchaseRemark) {
+        this.purchaseRemark = purchaseRemark;
+    }
+
+    public String getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(String purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 }
 

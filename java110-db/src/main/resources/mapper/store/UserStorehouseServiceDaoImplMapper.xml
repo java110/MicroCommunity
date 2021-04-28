@@ -87,10 +87,9 @@
     <select id="getUserStorehouseInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.store_id,t.store_id
         storeId,t.stock,t.res_id,t.res_id resId,t.user_id,t.user_id userId,t.us_id,t.us_id usId,rs.res_code resCode,
-        td.name goodsTypeName from user_storehouse t
-        left join resource_store rs on t.res_id = rs.res_id
-        left join t_dict td on td.table_name = 'resource_store' and table_columns = 'goods_type'
-        and rs.goods_type = td.status_cd
+        rs.goods_type goodsType,rs.out_low_price outLowPrice,rs.out_high_price outHighPrice,rst.name goodsTypeName from user_storehouse t
+        left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
+        left join resource_store_type rst on rs.goods_type = rst.goods_type and rst.status_cd = '0'
         where 1 = 1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
@@ -112,6 +111,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="goodsType !=null and goodsType != ''">
+            and rs.goods_type= #{goodsType}
         </if>
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}
@@ -154,9 +156,10 @@
 
     <!-- 查询个人物品数量 add by wuxw 2018-07-03 -->
     <select id="queryUserStorehousesCount" parameterType="Map" resultType="Map">
-        select count(1) count
-        from user_storehouse t
-        where 1 =1
+        select count(1) count from user_storehouse t
+        left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
+        left join resource_store_type rst on rs.goods_type = rst.goods_type and rst.status_cd = '0'
+        where 1 = 1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
         </if>
@@ -177,6 +180,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="goodsType !=null and goodsType != ''">
+            and rs.goods_type= #{goodsType}
         </if>
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}

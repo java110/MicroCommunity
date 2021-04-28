@@ -1,0 +1,40 @@
+{
+  "autoMove": true,
+  "id": "rstId",
+  "name": "resourceStoreType",
+  "desc": "物品类型",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_RESOURCE_STORE_TYPE",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_RESOURCE_STORE_TYPE",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_RESOURCE_STORE_TYPE",
+  "newBusinessTypeCdValue": "671100030007",
+  "updateBusinessTypeCdValue": "671100040007",
+  "deleteBusinessTypeCdValue": "671100050007",
+  "businessTableName": "business_resource_store_type",
+  "tableName": "resource_store_type",
+  "param": {
+    "rstId": "rst_id",
+    "goodsType": "goods_type",
+    "name": "name",
+    "bId": "b_id",
+    "storeId": "store_id",
+    "description": "description",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "rstId",
+      "msg": "物品类型不能为空"
+    },
+    {
+      "code": "name",
+      "msg": "物品类型名称不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户不能为空"
+    }
+  ]
+}

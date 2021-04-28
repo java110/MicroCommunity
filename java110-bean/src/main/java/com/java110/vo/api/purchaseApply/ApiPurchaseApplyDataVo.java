@@ -16,6 +16,7 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String resourceNames;
     //累计价格
     private String totalPrice;
+    private String purchaseTotalPrice;
     private String endUserName;
     private String endUserTel;
     private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
@@ -23,6 +24,9 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String staffId;
     private String staffName;
     private String staffTel;
+    private String warehousingWay;
+    private String createUserId;
+    private String createUserName;
 
 
     public String getApplyOrderId() {
@@ -143,5 +147,37 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setStaffTel(String staffTel) {
         this.staffTel = staffTel;
+    }
+
+    public String getPurchaseTotalPrice() {
+        return purchaseTotalPrice;
+    }
+
+    public void setPurchaseTotalPrice(String purchaseTotalPrice) {
+        this.purchaseTotalPrice = purchaseTotalPrice;
+    }
+
+    public String getWarehousingWay() {
+        return warehousingWay;
+    }
+
+    public void setWarehousingWay(String warehousingWay) {
+        this.warehousingWay = warehousingWay;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
     }
 }

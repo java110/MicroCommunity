@@ -134,13 +134,13 @@
     <select id="getResourceStoreInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.price,t.res_code,t.res_code resCode,t.description,t.status_cd,t.status_cd
         statusCd,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,t.out_low_price,
-        t.out_low_price outLowPrice,td.name goodsTypeName,t.out_high_price,t.out_high_price outHighPrice,t.goods_type,
+        t.out_low_price outLowPrice,rst.name goodsTypeName,t.out_high_price,t.out_high_price outHighPrice,t.goods_type,
         t.goods_type goodsType,t.unit_code,t.unit_code unitCode,t.remark,t.show_mobile,t.show_mobile showMobile,
         t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,sh.sh_name shName
         from resource_store t
-        left join t_dict td on t.goods_type = td.status_cd and td.table_name = 'resource_store' and td.table_columns ='goods_type'
+        left join resource_store_type rst on t.goods_type = rst.goods_type and rst.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
-        where 1 =1
+        where 1 = 1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
         </if>
