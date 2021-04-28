@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.payFeeDetail.IImportPayFeeBMODetail;
@@ -90,7 +89,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
 
         importRoomFees = roomInnerServiceSMOImpl.freshRoomIds(importRoomFees);
         for (ImportRoomFee importRoomFee : importRoomFees) {
-            if(StringUtil.isEmpty(importRoomFee.getRoomId())){
+            if (StringUtil.isEmpty(importRoomFee.getRoomId())) {
                 continue;
             }
             importFeeDetail(importRoomFee, storeId, userId);
@@ -102,6 +101,9 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
 
         importCarFees = ownerCarInnerServiceSMOImpl.freshCarIds(importCarFees);
         for (ImportRoomFee importCarFee : importCarFees) {
+            if (StringUtil.isEmpty(importCarFee.getCarId())) {
+                continue;
+            }
             importCarFeeDetail(importCarFee, storeId, userId);
         }
     }
@@ -142,7 +144,11 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
                 payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
                 payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
                 payFeePo.setIncomeObjId(storeId);
-                payFeePo.setState(FeeDto.STATE_DOING);
+                if (FeeDto.FEE_FLAG_ONCE.equals(tmpFeeConfigDto.getFeeFlag())) {
+                    payFeePo.setState(FeeDto.STATE_FINISH);
+                } else {
+                    payFeePo.setState(FeeDto.STATE_DOING);
+                }
                 payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
                 payFeePo.setPayerObjId(importRoomFee.getCarId());
                 payFeePo.setUserId(userId);
@@ -202,9 +208,9 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
                 payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
                 payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
                 payFeePo.setIncomeObjId(storeId);
-                if(FeeDto.FEE_FLAG_ONCE.equals(tmpFeeConfigDto.getFeeFlag())) {
+                if (FeeDto.FEE_FLAG_ONCE.equals(tmpFeeConfigDto.getFeeFlag())) {
                     payFeePo.setState(FeeDto.STATE_FINISH);
-                }else {
+                } else {
                     payFeePo.setState(FeeDto.STATE_DOING);
                 }
                 payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
@@ -274,7 +280,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         payFeePo.setStatusCd(StatusConstant.STATUS_CD_VALID);
         payFeePo.setFeeId(tmpFeeDto.getFeeId());
         payFeePo.setEndTime(importRoomFee.getEndTime());
-        if(FeeDto.FEE_FLAG_ONCE.equals(tmpFeeDto.getFeeFlag())) {
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpFeeDto.getFeeFlag())) {
             payFeePo.setState(FeeDto.STATE_FINISH);
         }
 
