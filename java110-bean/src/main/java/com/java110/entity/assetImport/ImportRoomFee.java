@@ -29,6 +29,8 @@ public class ImportRoomFee {
 
     private String communityId;
 
+    private String contractId;
+
     private String cycle;
     private String remark;
     private String ownerId;
@@ -170,5 +172,13 @@ public class ImportRoomFee {
 
     public void setOwnerLink(String ownerLink) {
         this.ownerLink = ownerLink;
+    }
+
+    public String getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
     }
 }

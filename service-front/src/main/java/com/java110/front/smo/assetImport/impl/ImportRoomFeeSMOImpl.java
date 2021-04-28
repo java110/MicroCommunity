@@ -11,6 +11,7 @@ import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.entity.component.ComponentValidateResult;
@@ -39,6 +40,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -136,6 +138,10 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         ImportRoomFee importRoomFee = BeanConvertUtil.covertBean(paramIn,ImportRoomFee.class);
         importRoomFee.setRoomId(paramIn.getString("objId"));
+        if(paramIn.containsKey("objType") && FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(paramIn.getString("objType"))){
+            importRoomFee.setContractId(paramIn.getString("objId"));
+            importRoomFee.setRoomId("");
+        }
         List<ImportRoomFee> rooms = new ArrayList<ImportRoomFee>();
         rooms.add(importRoomFee);
         return dealExcelData(pd, rooms, result);
@@ -257,6 +263,10 @@ public class ImportRoomFeeSMOImpl extends BaseComponentSMO implements IImportRoo
         data.put("importRoomFees", importRoomFees);
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/importRoomFees";
+
+        if(!StringUtils.isEmpty(tmpImportRoomFee.get(0).getContractId())){
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/importContractFees";
+        }
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
 
