@@ -22,6 +22,7 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     private String applyCount;
     private String remark;
     private String state;
+    private String stateName;
     private String storeId;
     private String currentUserId;
     private String processInstanceId;
@@ -181,5 +182,13 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
 
     public void setApplyIds(String[] applyIds) {
         this.applyIds = applyIds;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
