@@ -2,7 +2,11 @@ package com.java110.store.bmo.contractChangePlan;
 
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
+import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 public interface ISaveContractChangePlanBMO {
 
 
@@ -12,7 +16,9 @@ public interface ISaveContractChangePlanBMO {
      * @param contractChangePlanPo
      * @return
      */
-    ResponseEntity<String> save(ContractChangePlanPo contractChangePlanPo, ContractChangePlanDetailPo contractChangePlanDetailPo);
+    ResponseEntity<String> save(ContractChangePlanPo contractChangePlanPo,
+                                ContractChangePlanDetailPo contractChangePlanDetailPo,
+                                List<ContractChangePlanRoomPo> contractChangePlanRoomPos);
 
 
 }

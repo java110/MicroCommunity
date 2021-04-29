@@ -20,6 +20,7 @@ import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
 import com.java110.po.contractChangePlanDetailAttr.ContractChangePlanDetailAttrPo;
+import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import com.java110.po.contractCollectionPlan.ContractCollectionPlanPo;
 import com.java110.po.contractFile.ContractFilePo;
 import com.java110.po.contractRoom.ContractRoomPo;
@@ -221,15 +222,18 @@ public class ContractApi {
         reqJson.put("userId", userId);
 
 
-        JSONArray contractFiles = reqJson.getJSONArray("contractFilePo");
-        List<ContractFilePo> contractFilePos = new ArrayList<>();
-        for (int conFileIndex = 0; conFileIndex < contractFiles.size(); conFileIndex++) {
-            JSONObject resourceStore = contractFiles.getJSONObject(conFileIndex);
-            ContractFilePo contractFilePo = BeanConvertUtil.covertBean(resourceStore, ContractFilePo.class);
-            contractFilePo.setContractFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractFileId));
-            contractFilePos.add(contractFilePo);
+        if (reqJson.containsKey("contractFilePo")) {
+            JSONArray contractFiles = reqJson.getJSONArray("contractFilePo");
+            List<ContractFilePo> contractFilePos = new ArrayList<>();
+            for (int conFileIndex = 0; conFileIndex < contractFiles.size(); conFileIndex++) {
+                JSONObject resourceStore = contractFiles.getJSONObject(conFileIndex);
+                ContractFilePo contractFilePo = BeanConvertUtil.covertBean(resourceStore, ContractFilePo.class);
+                contractFilePo.setContractFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_contractFileId));
+                contractFilePos.add(contractFilePo);
+            }
+            contractPo.setContractFilePo(contractFilePos);
         }
-        contractPo.setContractFilePo(contractFilePos);
+
 
         return saveContractBMOImpl.save(contractPo, reqJson);
     }
@@ -845,9 +849,27 @@ public class ContractApi {
         contractChangePlanPo.setState(ContractChangePlanDto.STATE_W);
         contractChangePlanPo.setRemark(reqJson.getString("changeRemark"));
 
+        List<ContractChangePlanRoomPo> contractChangePlanRoomPos = new ArrayList<>();
+        ContractChangePlanRoomPo contractChangePlanRoomPo = null;
+        JSONObject roomInfo = null;
+        if (reqJson.containsKey("rooms")) {
+            JSONArray rooms = reqJson.getJSONArray("rooms");
+            if (rooms != null && rooms.size() > 0) {
+                for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
+//                    contractChangePlanRoomPos.add(BeanConvertUtil.covertBean(rooms.getJSONObject(roomIndex), ContractChangePlanRoomPo.class));
+                    roomInfo = rooms.getJSONObject(roomIndex);
+                    contractChangePlanRoomPo = BeanConvertUtil.covertBean(roomInfo, ContractChangePlanRoomPo.class);
+                    contractChangePlanRoomPo.setRoomName(roomInfo.getString("floorNum")
+                            +"-"+roomInfo.getString("unitNum")
+                            +"-"+roomInfo.getString("roomNum"));
+                    contractChangePlanRoomPos.add(contractChangePlanRoomPo);
+                }
+            }
+        }
+
         ContractChangePlanDetailPo contractChangePlanDetailPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanDetailPo.class);
         contractChangePlanDetailPo.setStoreId(storeId);
-        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo);
+        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo,contractChangePlanRoomPos);
     }
 
     /**
@@ -1259,8 +1281,8 @@ public class ContractApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /contractRoom/saveContractRoom
-     * @path /app/contractRoom/saveContractRoom
+     * @serviceCode /contract/saveContractRoom
+     * @path /app/contract/saveContractRoom
      */
     @RequestMapping(value = "/saveContractRoom", method = RequestMethod.POST)
     public ResponseEntity<String> saveContractRoom(@RequestBody JSONObject reqJson) {
@@ -1278,8 +1300,8 @@ public class ContractApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /contractRoom/updateContractRoom
-     * @path /app/contractRoom/updateContractRoom
+     * @serviceCode /contract/updateContractRoom
+     * @path /app/contract/updateContractRoom
      */
     @RequestMapping(value = "/updateContractRoom", method = RequestMethod.POST)
     public ResponseEntity<String> updateContractRoom(@RequestBody JSONObject reqJson) {
@@ -1298,8 +1320,8 @@ public class ContractApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /contractRoom/deleteContractRoom
-     * @path /app/contractRoom/deleteContractRoom
+     * @serviceCode /contract/deleteContractRoom
+     * @path /app/contract/deleteContractRoom
      */
     @RequestMapping(value = "/deleteContractRoom", method = RequestMethod.POST)
     public ResponseEntity<String> deleteContractRoom(@RequestBody JSONObject reqJson) {
@@ -1317,17 +1339,19 @@ public class ContractApi {
      *
      * @param storeId 小区ID
      * @return
-     * @serviceCode /contractRoom/queryContractRoom
-     * @path /app/contractRoom/queryContractRoom
+     * @serviceCode /contract/queryContractRoom
+     * @path /app/contract/queryContractRoom
      */
     @RequestMapping(value = "/queryContractRoom", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractRoom(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestParam(value = "contractId", required = false) String contractId,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ContractRoomDto contractRoomDto = new ContractRoomDto();
         contractRoomDto.setPage(page);
         contractRoomDto.setRow(row);
         contractRoomDto.setStoreId(storeId);
+        contractRoomDto.setContractId(contractId);
         return getContractRoomBMOImpl.get(contractRoomDto);
     }
 

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contractChangePlanRoomServiceDaoImpl">
+
+
+    <!-- 保存合同房屋变更信息 add by wuxw 2018-07-03 -->
+    <insert id="saveContractChangePlanRoomInfo" parameterType="Map">
+        insert into contract_change_plan_room(
+        operate,owner_name,contract_id,pr_id,plan_id,owner_id,store_id,room_id,room_name
+        ) values (
+        #{operate},#{ownerName},#{contractId},#{prId},#{planId},#{ownerId},#{storeId},#{roomId},#{roomName}
+        )
+    </insert>
+
+
+    <!-- 查询合同房屋变更信息 add by wuxw 2018-07-03 -->
+    <select id="getContractChangePlanRoomInfo" parameterType="Map" resultType="Map">
+        select t.owner_name,t.owner_name ownerName,t.contract_id,t.contract_id contractId,t.pr_id,t.pr_id prId,t.plan_id,
+        t.plan_id planId,t.owner_id,t.owner_id
+        ownerId,t.store_id,t.store_id storeId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName,t.operate
+        from contract_change_plan_room t
+        where 1 =1
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="prId !=null and prId != ''">
+            and t.pr_id= #{prId}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改合同房屋变更信息 add by wuxw 2018-07-03 -->
+    <update id="updateContractChangePlanRoomInfo" parameterType="Map">
+        update contract_change_plan_room t set t.operator = #{operator}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            , t.contract_id= #{contractId}
+        </if>
+        <if test="planId !=null and planId != ''">
+            , t.plan_id= #{planId}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        where 1=1
+        <if test="prId !=null and prId != ''">
+            and t.pr_id= #{prId}
+        </if>
+
+    </update>
+
+    <!-- 查询合同房屋变更数量 add by wuxw 2018-07-03 -->
+    <select id="queryContractChangePlanRoomsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_change_plan_room t
+        where 1 =1
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="prId !=null and prId != ''">
+            and t.pr_id= #{prId}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+
+
+    </select>
+
+</mapper>

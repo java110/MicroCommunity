@@ -139,6 +139,8 @@ public class ListFeeListener extends AbstractServiceApiListener {
                     computeFeePriceByRoom(feeDto, oweMonth);
                 } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
                     computeFeePriceByCar(feeDto, oweMonth);
+                } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {//车位相关
+                    computeFeePriceByContract(feeDto, oweMonth);
                 }
                 feeDto.setDeadlineTime(targetEndDate);
             } catch (Exception e) {
@@ -182,6 +184,26 @@ public class ListFeeListener extends AbstractServiceApiListener {
      * @param feeDto
      */
     private void computeFeePriceByRoom(FeeDto feeDto, double oweMonth) {
+        String computingFormula = feeDto.getComputingFormula();
+        double feePrice = 0.00;
+        feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
+        feeDto.setFeePrice(feePrice);
+        BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
+        curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
+        feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
+        //动态费用
+        if ("4004".equals(computingFormula) && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
+        }
+    }
+
+    /**
+     * 根据合同来算单价
+     *
+     * @param feeDto
+     */
+    private void computeFeePriceByContract(FeeDto feeDto, double oweMonth) {
         String computingFormula = feeDto.getComputingFormula();
         double feePrice = 0.00;
         feePrice = computeFeeSMOImpl.getFeePrice(feeDto);

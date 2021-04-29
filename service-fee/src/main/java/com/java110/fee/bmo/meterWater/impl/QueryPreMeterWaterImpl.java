@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.contractRoom.ContractRoomDto;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.meterWater.ImportExportMeterWaterDto;
@@ -12,8 +14,11 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.fee.bmo.meterWater.IQueryPreMeterWater;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
+import com.java110.intf.store.IContractRoomInnerServiceSMO;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.meterWater.MeterWaterPo;
 import com.java110.utils.util.Assert;
@@ -50,6 +55,12 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+    @Autowired
+    private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
 
     @Override
     public ResponseEntity<String> query(MeterWaterDto meterWaterDto, String roomNum) {
@@ -78,9 +89,9 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             meterWaterDto.setObjId(tmpRoomDto.getRoomId());
             List<MeterWaterDto> meterWaterDtos = meterWaterInnerServiceSMOImpl.queryMeterWaters(meterWaterDto);
             importExportMeterWaterDto = BeanConvertUtil.covertBean(tmpRoomDto, ImportExportMeterWaterDto.class);
-            String preDegree = "0" ;
+            String preDegree = "0";
             String preReadTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B);
-            if(meterWaterDtos != null && meterWaterDtos.size()> 0){
+            if (meterWaterDtos != null && meterWaterDtos.size() > 0) {
                 preDegree = meterWaterDtos.get(0).getCurDegrees();
                 preReadTime = DateUtil.dateTimeToDate(meterWaterDtos.get(0).getCurReadingTime());
             }
@@ -104,6 +115,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
 
         List<PayFeePo> fees = new ArrayList<>();
         List<MeterWaterPo> meterWaterPos = new ArrayList<>();
+        List<FeeAttrPo> feeAttrPos = new ArrayList<>();
         for (int meteWaterIndex = 0; meteWaterIndex < importMeteWaterFees.size(); meteWaterIndex++) {
             meteWaterJson = importMeteWaterFees.getJSONObject(meteWaterIndex);
 
@@ -116,7 +128,8 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
                     userId,
                     feeTypeCd,
                     fees,
-                    meterWaterPos
+                    meterWaterPos,
+                    feeAttrPos
             );
         }
 
@@ -126,13 +139,17 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
 
         feeInnerServiceSMOImpl.saveFee(fees);
 
+        if (feeAttrPos.size() > 0) {
+            feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrPos);
+        }
+
         meterWaterInnerServiceSMOImpl.saveMeterWaters(meterWaterPos);
         return ResultVo.success();
     }
 
     private void dealImportExportMeterWater(ImportExportMeterWaterDto importExportMeterWaterDto, String communityId,
                                             String storeId, String configId, String userId, String feeTypeCd,
-                                            List<PayFeePo> fees, List<MeterWaterPo> meterWaterPos) {
+                                            List<PayFeePo> fees, List<MeterWaterPo> meterWaterPos, List<FeeAttrPo> feeAttrPos) {
 
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(communityId);
@@ -149,6 +166,14 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             importExportMeterWaterDto.setMeterType("2020");
         }
 
+        //查询房屋是否有合同
+        ContractRoomDto contractRoomDto = new ContractRoomDto();
+
+        contractRoomDto.setRoomId(roomDtos.get(0).getRoomId());
+
+        List<ContractRoomDto> contractRoomDtos = contractRoomInnerServiceSMOImpl.queryContractRooms(contractRoomDto);
+
+
         PayFeePo payFeePo = new PayFeePo();
         payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         payFeePo.setIncomeObjId(storeId);
@@ -158,6 +183,26 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         payFeePo.setPayerObjId(roomDtos.get(0).getRoomId());
         //payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
         payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+
+        if (contractRoomDtos != null && contractRoomDtos.size() > 0) {
+            payFeePo.setPayerObjId(contractRoomDtos.get(0).getContractId());
+            //payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CONTRACT);
+            FeeAttrPo feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(communityId);
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_IMPORT_FEE_NAME);
+            String feeName = importExportMeterWaterDto.getFloorNum() + "栋" + importExportMeterWaterDto.getUnitNum() + "单元" + importExportMeterWaterDto.getRoomNum() + "室";
+
+            if("1010".equals(importExportMeterWaterDto.getMeterType())){
+                feeName +="水费";
+            }else{
+                feeName +="电费";
+            }
+            feeAttrPo.setValue(feeName);
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPos.add(feeAttrPo);
+        }
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
         payFeePo.setState(FeeDto.STATE_DOING);
         payFeePo.setUserId(userId);
@@ -165,6 +210,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         payFeePo.setConfigId(configId);
         payFeePo.setCommunityId(communityId);
         fees.add(payFeePo);
+
 
         MeterWaterPo meterWaterPo = new MeterWaterPo();
         meterWaterPo.setCommunityId(communityId);

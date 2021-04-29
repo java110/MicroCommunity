@@ -150,7 +150,12 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         billOweFeeDto.setCurBill("T");
         List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
 
-        String url = sendMsgUrl + accessToken;
+        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.SEND_TEMPLATE_URL);
+        if(StringUtil.isEmpty(sendTemplate)){
+            sendTemplate = sendMsgUrl;
+        }
+        String url = sendTemplate + accessToken;
+
         String oweRoomUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
         String oweCarUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
         Miniprogram miniprogram = null;

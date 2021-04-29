@@ -1,7 +1,7 @@
 package com.java110.store.bmo.contractRoom.impl;
 
 import com.java110.dto.contractRoom.ContractRoomDto;
-import com.java110.intf.IContractRoomInnerServiceSMO;
+import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.store.bmo.contractRoom.IGetContractRoomBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

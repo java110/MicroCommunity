@@ -308,4 +308,23 @@ public class FeeApi extends BaseController {
         return importRoomFeeImpl.importCarFee(reqJson);
     }
 
+    /**
+     * 合同费用导入
+     * /feeApi/importContractFees
+     * path /app/feeApi/importContractFees
+     * @param reqString
+     * @return
+     */
+    @RequestMapping(value = "/importContractFees", method = RequestMethod.POST)
+    public ResponseEntity<String> importContractFees(@RequestBody String reqString) {
+
+        JSONObject reqJson = JSONObject.parseObject(reqString);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
+        Assert.hasKeyAndValue(reqJson, "feeTypeCd", "未包含费用类型");
+        Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户信息");
+        Assert.hasKeyAndValue(reqJson, "userId", "未包含用户信息");
+
+        return importRoomFeeImpl.importContractFees(reqJson);
+    }
+
 }

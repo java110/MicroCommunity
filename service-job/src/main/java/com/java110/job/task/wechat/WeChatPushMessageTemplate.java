@@ -28,6 +28,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -301,6 +302,10 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
     private void doSend(List<OwnerAppUserDto> ownerAppUserDtos, NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
         String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/#/pages/notice/detail/detail?noticeId=";
         ResponseEntity<String> responseEntity = null;
+        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.SEND_TEMPLATE_URL);
+        if(StringUtil.isEmpty(sendTemplate)){
+            sendTemplate = sendMsgUrl;
+        }
         for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
             Date startTime = DateUtil.getCurrentDate();
             PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
@@ -316,7 +321,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 templateMessage.setData(data);
                 templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId());
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                responseEntity = outRestTemplate.postForEntity(sendMsgUrl + accessToken, JSON.toJSONString(templateMessage), String.class);
+                responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
                 logger.info("微信模板返回内容:{}", responseEntity);
             } catch (Exception e) {
                 logger.error("发送失败", e);
@@ -327,7 +332,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
     }
 
     private void doSendToOpenId(NoticeDto noticeDto, String templateId, String accessToken, String nextOpenid, SmallWeChatDto weChatDto) {
-        String url = getUser.replace("ACCESS_TOKEN", accessToken);
+        String url = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.GET_USER_URL);
+        if(StringUtil.isEmpty(url)){
+            url = getUser;
+        }
+        url = url.replace("ACCESS_TOKEN", accessToken);
         if (!StringUtil.isEmpty(nextOpenid)) {
             url += ("&next_openid=" + nextOpenid);
         }
@@ -358,6 +367,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             miniprogram = new Miniprogram();
             miniprogram.setAppid(wechatUrl);
         }
+
+        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.SEND_TEMPLATE_URL);
+        if(StringUtil.isEmpty(sendTemplate)){
+            sendTemplate = sendMsgUrl;
+        }
         ResponseEntity<String> responseEntity = null;
         for (int openIndex = 0; openIndex < openids.size(); openIndex++) {
             Date startTime = DateUtil.getCurrentDate();
@@ -382,7 +396,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                     }
                 }
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                responseEntity = outRestTemplate.postForEntity(sendMsgUrl + accessToken, JSON.toJSONString(templateMessage), String.class);
+                responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
                 logger.info("微信模板返回内容:{}", responseEntity);
             } catch (Exception e) {
                 logger.error("发送失败", e);

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contractFileServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存合同附件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveContractFileInfo" parameterType="Map">
+        insert into contract_file(
+        file_real_name,contract_file_id,contract_id,file_save_name
+        ) values (
+        #{fileRealName},#{contractFileId},#{contractId},#{fileSaveName}
+        )
+    </insert>
+
+
+
+    <!-- 查询合同附件信息 add by wuxw 2018-07-03 -->
+    <select id="getContractFileInfo" parameterType="Map" resultType="Map">
+        select  t.create_time,t.create_time createTime,t.file_real_name,t.file_real_name fileRealName,t.contract_file_id,t.contract_file_id contractFileId,t.contract_id,t.contract_id contractId,t.file_save_name,t.file_save_name fileSaveName,t.status_cd,t.status_cd statusCd
+        from contract_file t
+        where 1 =1
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            and t.file_real_name= #{fileRealName}
+        </if>
+        <if test="contractFileId !=null and contractFileId != ''">
+            and t.contract_file_id= #{contractFileId}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            and t.file_save_name= #{fileSaveName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+
+
+    <!-- 修改合同附件信息 add by wuxw 2018-07-03 -->
+    <update id="updateContractFileInfo" parameterType="Map">
+        update  contract_file t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            , t.file_real_name= #{fileRealName}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            , t.file_save_name= #{fileSaveName}
+        </if>
+        where 1=1
+        <if test="contractFileId !=null and contractFileId != ''">
+            and t.contract_file_id= #{contractFileId}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+    </update>
+
+    <!-- 查询合同附件数量 add by wuxw 2018-07-03 -->
+    <select id="queryContractFilesCount" parameterType="Map" resultType="Map">
+        select  count(1) count
+        from contract_file t
+        where 1 =1
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            and t.file_real_name= #{fileRealName}
+        </if>
+        <if test="contractFileId !=null and contractFileId != ''">
+            and t.contract_file_id= #{contractFileId}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            and t.file_save_name= #{fileSaveName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+
+    </select>
+
+</mapper>
