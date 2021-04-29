@@ -25,8 +25,7 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
     private String storeId;
     private String resId;
     private String communityId;
-
-
+    private String resName;
     private Date createTime;
 
     private String statusCd = "0";
@@ -111,7 +110,6 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
         this.communityId = communityId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -126,5 +124,13 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getResName() {
+        return resName;
+    }
+
+    public void setResName(String resName) {
+        this.resName = resName;
     }
 }

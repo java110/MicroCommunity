@@ -15,6 +15,7 @@ public class ResourceStoreUseRecordPo implements Serializable {
     private String storeId;
     private String resId;
     private String communityId;
+    private String resName;
 
     public String getRepairId() {
         return repairId;
@@ -96,5 +97,11 @@ public class ResourceStoreUseRecordPo implements Serializable {
         this.communityId = communityId;
     }
 
+    public String getResName() {
+        return resName;
+    }
 
+    public void setResName(String resName) {
+        this.resName = resName;
+    }
 }

@@ -107,10 +107,11 @@
         select t.unit_price,t.unit_price unitPrice,t.create_user_id,t.create_user_id
         createUserId,t.quantity,t.rsur_id,t.rsur_id rsurId,t.repair_id,t.repair_id
         repairId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
-        statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.b_id,t.b_id
-        bId,t.community_id,t.community_id communityId
+        statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,rs.res_name resName,
+        t.b_id,t.b_id bId,t.community_id,t.community_id communityId
         from resource_store_use_record t
-        where 1 =1
+        left join resource_store rs on rs.res_id = t.res_id
+        where 1 = 1
         <if test="unitPrice !=null and unitPrice != ''">
             and t.unit_price= #{unitPrice}
         </if>
