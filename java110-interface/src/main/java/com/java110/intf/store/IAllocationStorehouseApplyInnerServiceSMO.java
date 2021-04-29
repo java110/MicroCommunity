@@ -17,8 +17,8 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/allocationAllocationStorehouseApplyhouseApplyApi")
+@FeignClient(name = "store-service", configuration = {FeignConfiguration.class})
+@RequestMapping("/allocationStorehouseApplyApi")
 public interface IAllocationStorehouseApplyInnerServiceSMO {
 
     /**
