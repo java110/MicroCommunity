@@ -91,8 +91,8 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
-        allocationStorehouseApplyPo.setApplyId(GenerateCodeFactory.CODE_PREFIX_applyId);
-        allocationStorehouseApplyPo.setApplyCount("1");
+        allocationStorehouseApplyPo.setApplyId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyId));
+        allocationStorehouseApplyPo.setApplyCount("0");
         allocationStorehouseApplyPo.setRemark(reqJson.getString("remark"));
         allocationStorehouseApplyPo.setStartUserId(reqJson.getString("userId"));
         allocationStorehouseApplyPo.setStartUserName(reqJson.getString("userName"));
@@ -127,6 +127,9 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
             int stockB = Integer.parseInt(resObj.getString("stock"));
             resourceStorePo.setStock((stockA - stockB) + "");
             super.update(context, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
+            int oldCurStore = Integer.parseInt(allocationStorehouseApplyPo.getApplyCount());
+            oldCurStore += Integer.parseInt(resObj.getString("curStock"));
+            allocationStorehouseApplyPo.setApplyCount(oldCurStore + "");
         }
         super.insert(context, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ALLOCATION_STOREHOUSE_APPLY);
         commit(context);
