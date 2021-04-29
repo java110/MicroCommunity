@@ -72,7 +72,7 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
             Assert.listOnlyOne(resourceStoreDtos, "未包含 物品信息");
 
             int stockA = Integer.parseInt(resourceStoreDtos.get(0).getStock());
-            int stockB = Integer.parseInt(reqJson.getString("stock"));
+            int stockB = Integer.parseInt(resourceStores.getJSONObject(resIndex).getString("curStock"));
 
             if (stockA < stockB) {
                 throw new IllegalArgumentException("库存不足");
