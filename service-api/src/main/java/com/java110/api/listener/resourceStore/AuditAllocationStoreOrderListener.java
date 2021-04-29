@@ -8,11 +8,14 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
+import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
+import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.po.allocationStorehouse.AllocationStorehousePo;
+import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
@@ -41,6 +44,10 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
 
     @Autowired
     private IAllocationStorehouseInnerServiceSMO allocationStorehouseInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IAllocationStorehouseApplyInnerServiceSMO allocationStorehouseApplyInnerServiceSMOImpl;
 
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
@@ -72,19 +79,19 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
+        AllocationStorehouseApplyDto allocationStorehouseDto = new AllocationStorehouseApplyDto();
         allocationStorehouseDto.setTaskId(reqJson.getString("taskId"));
-        allocationStorehouseDto.setAsId(reqJson.getString("asId"));
+        allocationStorehouseDto.setApplyId(reqJson.getString("applyId"));
         allocationStorehouseDto.setStoreId(reqJson.getString("storeId"));
         allocationStorehouseDto.setAuditCode(reqJson.getString("state"));
         allocationStorehouseDto.setAuditMessage(reqJson.getString("remark"));
         allocationStorehouseDto.setCurrentUserId(reqJson.getString("userId"));
 
-        AllocationStorehouseDto tmpAllocationStorehouseDto = new AllocationStorehouseDto();
-        tmpAllocationStorehouseDto.setAsId(reqJson.getString("asId"));
+        AllocationStorehouseApplyDto tmpAllocationStorehouseDto = new AllocationStorehouseApplyDto();
+        tmpAllocationStorehouseDto.setApplyId(reqJson.getString("applyId"));
         tmpAllocationStorehouseDto.setStoreId(reqJson.getString("storeId"));
-        List<AllocationStorehouseDto> allocationStorehouseDtos = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(tmpAllocationStorehouseDto);
-        Assert.listOnlyOne(allocationStorehouseDtos, "采购申请单存在多条");
+        List<AllocationStorehouseApplyDto> allocationStorehouseDtos = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(tmpAllocationStorehouseDto);
+        Assert.listOnlyOne(allocationStorehouseDtos, "调拨申请单存在多条");
         allocationStorehouseDto.setStartUserId(allocationStorehouseDtos.get(0).getStartUserId());
 
         boolean isLastTask = allocationStorehouseUserInnerServiceSMOImpl.completeTask(allocationStorehouseDto);
@@ -103,46 +110,53 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
      */
     private void updateAllocationStorehouse(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        AllocationStorehouseApplyDto tmpAllocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
+        tmpAllocationStorehouseApplyDto.setApplyId(paramInJson.getString("applyId"));
+        tmpAllocationStorehouseApplyDto.setStoreId(paramInJson.getString("storeId"));
+        List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtos = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(tmpAllocationStorehouseApplyDto);
+
+        Assert.listOnlyOne(allocationStorehouseApplyDtos, "存在多条记录，或不存在数据" + tmpAllocationStorehouseApplyDto.getApplyId());
+
+        JSONObject businessComplaint = new JSONObject();
+        businessComplaint.putAll(BeanConvertUtil.beanCovertMap(allocationStorehouseApplyDtos.get(0)));
+        businessComplaint.put("state", AllocationStorehouseDto.STATE_SUCCESS);
+        AllocationStorehouseApplyPo allocationStorehouseApplyPo = BeanConvertUtil.covertBean(businessComplaint, AllocationStorehouseApplyPo.class);
+
+        super.update(dataFlowContext, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
+
         AllocationStorehouseDto tmpAllocationStorehouseDto = new AllocationStorehouseDto();
-        tmpAllocationStorehouseDto.setAsId(paramInJson.getString("asId"));
+        tmpAllocationStorehouseDto.setApplyId(paramInJson.getString("applyId"));
         tmpAllocationStorehouseDto.setStoreId(paramInJson.getString("storeId"));
         List<AllocationStorehouseDto> allocationStorehouseDtos = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(tmpAllocationStorehouseDto);
 
-        Assert.listOnlyOne(allocationStorehouseDtos, "存在多条记录，或不存在数据" + tmpAllocationStorehouseDto.getAsId());
-
-        JSONObject businessComplaint = new JSONObject();
-        businessComplaint.putAll(BeanConvertUtil.beanCovertMap(allocationStorehouseDtos.get(0)));
-        businessComplaint.put("state", AllocationStorehouseDto.STATE_SUCCESS);
-        AllocationStorehousePo allocationStorehousePo = BeanConvertUtil.covertBean(businessComplaint, AllocationStorehousePo.class);
-
-        super.update(dataFlowContext, allocationStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE);
-
-        //查询是否新仓库有此物品
-        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
-        resourceStoreDto.setShId(allocationStorehouseDtos.get(0).getShIdz());
-        resourceStoreDto.setResName(allocationStorehouseDtos.get(0).getResName());
-        List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-        ResourceStorePo resourceStorePo = new ResourceStorePo();
-
-        if (resourceStoreDtos != null && resourceStoreDtos.size() > 0) {
-            resourceStorePo.setShId(allocationStorehouseDtos.get(0).getShIdz());
-            resourceStorePo.setResId(resourceStoreDtos.get(0).getResId());
-            resourceStorePo.setStock((Integer.parseInt(resourceStoreDtos.get(0).getStock()) + Integer.parseInt(allocationStorehouseDtos.get(0).getStock())) + "");
-            super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
-        } else {
+        for(AllocationStorehouseDto allocationStorehouseDto : allocationStorehouseDtos) {
             //查询是否新仓库有此物品
-            resourceStoreDto = new ResourceStoreDto();
-            resourceStoreDto.setShId(allocationStorehouseDtos.get(0).getShIda());
-            resourceStoreDto.setResId(allocationStorehouseDtos.get(0).getResId());
-            resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-            Assert.listOnlyOne(resourceStoreDtos, "原仓库记录不存在");
-            resourceStorePo = BeanConvertUtil.covertBean(resourceStoreDtos.get(0), resourceStorePo);
+            ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
+            resourceStoreDto.setShId(allocationStorehouseDto.getShIdz());
+            resourceStoreDto.setResName(allocationStorehouseDto.getResName());
+            List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+            ResourceStorePo resourceStorePo = new ResourceStorePo();
 
-            resourceStorePo.setResId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId));
-            resourceStorePo.setStock(allocationStorehouseDtos.get(0).getStock());
-            resourceStorePo.setShId(allocationStorehouseDtos.get(0).getShIdz());
+            if (resourceStoreDtos != null && resourceStoreDtos.size() > 0) {
+                resourceStorePo.setShId(allocationStorehouseDto.getShIdz());
+                resourceStorePo.setResId(allocationStorehouseDto.getResId());
+                resourceStorePo.setStock((Integer.parseInt(allocationStorehouseDto.getStock()) + Integer.parseInt(allocationStorehouseDto.getStock())) + "");
+                super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
+            } else {
+                //查询是否新仓库有此物品
+                resourceStoreDto = new ResourceStoreDto();
+                resourceStoreDto.setShId(allocationStorehouseDto.getShIda());
+                resourceStoreDto.setResId(allocationStorehouseDto.getResId());
+                resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+                Assert.listOnlyOne(resourceStoreDtos, "原仓库记录不存在");
+                resourceStorePo = BeanConvertUtil.covertBean(allocationStorehouseDto, resourceStorePo);
 
-            super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
+                resourceStorePo.setResId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId));
+                resourceStorePo.setStock(allocationStorehouseDto.getStock());
+                resourceStorePo.setShId(allocationStorehouseDto.getShIdz());
+
+                super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
+            }
         }
     }
 

@@ -16,6 +16,7 @@ public class AllocationStorehousePo implements Serializable {
     private String stock;
     private String remark;
     private String statusCd;
+    private String applyId;
 
     public String getAsId() {
         return asId;
@@ -111,5 +112,13 @@ public class AllocationStorehousePo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
     }
 }

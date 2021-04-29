@@ -3,13 +3,13 @@ package com.java110.common.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
+import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
-import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.activiti.engine.HistoryService;
@@ -50,6 +50,9 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
     private IAllocationStorehouseInnerServiceSMO allocationStorehouseInnerServiceSMOImpl;
 
     @Autowired
+    private IAllocationStorehouseApplyInnerServiceSMO allocationStorehouseApplyInnerServiceSMOImpl;
+
+    @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
 
 
@@ -58,21 +61,21 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
      *
      * @return
      */
-    public AllocationStorehouseDto startProcess(@RequestBody AllocationStorehouseDto allocationStorehouseDto) {
+    public AllocationStorehouseApplyDto startProcess(@RequestBody AllocationStorehouseApplyDto allocationStorehouseApplyDto) {
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("allocationStorehouseDto", allocationStorehouseDto);
-        variables.put("userId", allocationStorehouseDto.getCurrentUserId());
-        variables.put("startUserId", allocationStorehouseDto.getCurrentUserId());
+        variables.put("allocationStorehouseApplyDto", allocationStorehouseApplyDto);
+        variables.put("userId", allocationStorehouseApplyDto.getCurrentUserId());
+        variables.put("startUserId", allocationStorehouseApplyDto.getCurrentUserId());
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(allocationStorehouseDto.getStoreId()), allocationStorehouseDto.getAsId(), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(allocationStorehouseApplyDto.getStoreId()), allocationStorehouseApplyDto.getApplyId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
 
-        allocationStorehouseDto.setProcessInstanceId(processInstanceId);
+        allocationStorehouseApplyDto.setProcessInstanceId(processInstanceId);
 
-        return allocationStorehouseDto;
+        return allocationStorehouseApplyDto;
 
     }
 
@@ -94,7 +97,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
      *
      * @param user 用户信息
      */
-    public List<AllocationStorehouseDto> getUserTasks(@RequestBody AuditUser user) {
+    public List<AllocationStorehouseApplyDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
         TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
         query.taskAssignee(user.getUserId());
@@ -109,7 +112,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
             list = query.list();
         }
 
-        List<String> asIds = new ArrayList<>();
+        List<String> appIyIds = new ArrayList<>();
         Map<String, String> taskBusinessKeyMap = new HashMap<>();
         for (Task task : list) {
             String processInstanceId = task.getProcessInstanceId();
@@ -117,52 +120,52 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
             ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
-            asIds.add(business_key);
+            appIyIds.add(business_key);
             taskBusinessKeyMap.put(business_key, task.getId());
         }
 
-        if (asIds == null || asIds.size() == 0) {
+        if (appIyIds == null || appIyIds.size() == 0) {
             return new ArrayList<>();
         }
 
         //查询 投诉信息
-        AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
-        allocationStorehouseDto.setStoreId(user.getStoreId());
-        allocationStorehouseDto.setAsIds(asIds.toArray(new String[asIds.size()]));
-        List<AllocationStorehouseDto> tmpAllocationStorehouseDtos = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
+        AllocationStorehouseApplyDto allocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
+        allocationStorehouseApplyDto.setStoreId(user.getStoreId());
+        allocationStorehouseApplyDto.setApplyIds(appIyIds.toArray(new String[appIyIds.size()]));
+        List<AllocationStorehouseApplyDto> tmpAllocationStorehouseApplyDtos = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
 
-        for (AllocationStorehouseDto tmpAllocationStorehouseDto : tmpAllocationStorehouseDtos) {
-            tmpAllocationStorehouseDto.setTaskId(taskBusinessKeyMap.get(tmpAllocationStorehouseDto.getAsId()));
+        for (AllocationStorehouseApplyDto tmpAllocationStorehouseApplyDto : tmpAllocationStorehouseApplyDtos) {
+            tmpAllocationStorehouseApplyDto.setTaskId(taskBusinessKeyMap.get(tmpAllocationStorehouseApplyDto.getApplyId()));
         }
-        return tmpAllocationStorehouseDtos;
+        return tmpAllocationStorehouseApplyDtos;
     }
 
-    public boolean agreeCompleteTask(@RequestBody AllocationStorehouseDto allocationStorehouseDto) {
+    public boolean agreeCompleteTask(@RequestBody AllocationStorehouseApplyDto allocationStorehouseApplyDto) {
         TaskService taskService = processEngine.getTaskService();
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("auditCode", allocationStorehouseDto.getAuditCode());
-        taskService.complete(allocationStorehouseDto.getTaskId(), variables);
+        variables.put("auditCode", allocationStorehouseApplyDto.getAuditCode());
+        taskService.complete(allocationStorehouseApplyDto.getTaskId(), variables);
         return true;
     }
 
-    public boolean refuteCompleteTask(@RequestBody AllocationStorehouseDto allocationStorehouseDto) {
+    public boolean refuteCompleteTask(@RequestBody AllocationStorehouseApplyDto allocationStorehouseApplyDto) {
         TaskService taskService = processEngine.getTaskService();
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("auditCode", allocationStorehouseDto.getAuditCode());
-        taskService.complete(allocationStorehouseDto.getTaskId(), variables);
+        variables.put("auditCode", allocationStorehouseApplyDto.getAuditCode());
+        taskService.complete(allocationStorehouseApplyDto.getTaskId(), variables);
         return true;
     }
 
     /**
      * 审核 当前任务
      *
-     * @param allocationStorehouseDto 资源订单
+     * @param allocationStorehouseApplyDto 资源订单
      * @return
      */
-    public boolean complete(@RequestBody AllocationStorehouseDto allocationStorehouseDto) {
+    public boolean complete(@RequestBody AllocationStorehouseApplyDto allocationStorehouseApplyDto) {
         TaskService taskService = processEngine.getTaskService();
 
-        taskService.complete(allocationStorehouseDto.getTaskId());
+        taskService.complete(allocationStorehouseApplyDto.getTaskId());
 
 
         return true;
@@ -216,7 +219,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
      *
      * @param user 用户信息
      */
-    public List<AllocationStorehouseDto> getUserHistoryTasks(@RequestBody AuditUser user) {
+    public List<AllocationStorehouseApplyDto> getUserHistoryTasks(@RequestBody AuditUser user) {
         HistoryService historyService = processEngine.getHistoryService();
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
@@ -238,7 +241,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
             list = query.list();
         }
 
-        List<String> asIds = new ArrayList<>();
+        List<String> appIyIds = new ArrayList<>();
         Map<String, String> taskBusinessKeyMap = new HashMap<>();
 
         for (HistoricTaskInstance task : list) {
@@ -247,35 +250,35 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
             HistoricProcessInstance pi = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
-            asIds.add(business_key);
+            appIyIds.add(business_key);
             taskBusinessKeyMap.put(business_key, task.getId());
         }
 
         //查询 投诉信息
-        AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
-        allocationStorehouseDto.setStoreId(user.getStoreId());
-        allocationStorehouseDto.setAsIds(asIds.toArray(new String[asIds.size()]));
-        List<AllocationStorehouseDto> tmpAllocationStorehouseDtos = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
+        AllocationStorehouseApplyDto allocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
+        allocationStorehouseApplyDto.setStoreId(user.getStoreId());
+        allocationStorehouseApplyDto.setApplyIds(appIyIds.toArray(new String[appIyIds.size()]));
+        List<AllocationStorehouseApplyDto> tmpAllocationStorehouseApplyDtos = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
 
-        for (AllocationStorehouseDto tmpAllocationStorehouseDto : tmpAllocationStorehouseDtos) {
-            tmpAllocationStorehouseDto.setTaskId(taskBusinessKeyMap.get(tmpAllocationStorehouseDto.getAsId()));
+        for (AllocationStorehouseApplyDto tmpAllocationStorehouseApplyDto : tmpAllocationStorehouseApplyDtos) {
+            tmpAllocationStorehouseApplyDto.setTaskId(taskBusinessKeyMap.get(tmpAllocationStorehouseApplyDto.getApplyId()));
         }
-        return tmpAllocationStorehouseDtos;
+        return tmpAllocationStorehouseApplyDtos;
     }
 
 
-    public boolean completeTask(@RequestBody AllocationStorehouseDto allocationStorehouseDto) {
+    public boolean completeTask(@RequestBody AllocationStorehouseApplyDto allocationStorehouseApplyDto) {
         TaskService taskService = processEngine.getTaskService();
-        Task task = taskService.createTaskQuery().taskId(allocationStorehouseDto.getTaskId()).singleResult();
+        Task task = taskService.createTaskQuery().taskId(allocationStorehouseApplyDto.getTaskId()).singleResult();
         String processInstanceId = task.getProcessInstanceId();
-        Authentication.setAuthenticatedUserId(allocationStorehouseDto.getCurrentUserId());
-        taskService.addComment(allocationStorehouseDto.getTaskId(), processInstanceId, allocationStorehouseDto.getAuditMessage());
+        Authentication.setAuthenticatedUserId(allocationStorehouseApplyDto.getCurrentUserId());
+        taskService.addComment(allocationStorehouseApplyDto.getTaskId(), processInstanceId, allocationStorehouseApplyDto.getAuditMessage());
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("auditCode", allocationStorehouseDto.getAuditCode());
-        variables.put("currentUserId", allocationStorehouseDto.getCurrentUserId());
-        variables.put("flag", "1200".equals(allocationStorehouseDto.getAuditCode()) ? "false" : "true");
-        variables.put("startUserId", allocationStorehouseDto.getStartUserId());
-        taskService.complete(allocationStorehouseDto.getTaskId(), variables);
+        variables.put("auditCode", allocationStorehouseApplyDto.getAuditCode());
+        variables.put("currentUserId", allocationStorehouseApplyDto.getCurrentUserId());
+        variables.put("flag", "1200".equals(allocationStorehouseApplyDto.getAuditCode()) ? "false" : "true");
+        variables.put("startUserId", allocationStorehouseApplyDto.getStartUserId());
+        taskService.complete(allocationStorehouseApplyDto.getTaskId(), variables);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {

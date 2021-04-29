@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
+import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeAuditUserConstant;
@@ -66,7 +67,7 @@ public class ListAllocationStoreHisAuditOrders extends AbstractServiceApiListene
         //调拨已办(（默认只查询和当前登录用户相关并且是参与流程审批或者自己提交已经结束的审批数据）)
         long count = allocationStorehouseUserInnerServiceSMOImpl.getUserHistoryTaskCount(auditUser);
 
-        List<AllocationStorehouseDto> purchaseApplyDtos = null;
+        List<AllocationStorehouseApplyDto> purchaseApplyDtos = null;
 
         if (count > 0) {
             purchaseApplyDtos = allocationStorehouseUserInnerServiceSMOImpl.getUserHistoryTasks(auditUser);

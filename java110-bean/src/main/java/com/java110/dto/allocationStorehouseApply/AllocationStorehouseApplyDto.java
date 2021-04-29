@@ -1,6 +1,7 @@
 package com.java110.dto.allocationStorehouseApply;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,12 +16,21 @@ import java.util.Date;
 public class AllocationStorehouseApplyDto extends PageDto implements Serializable {
 
     private String applyId;
-private String startUserId;
-private String startUserName;
-private String applyCount;
-private String remark;
-private String state;
-private String storeId;
+    private String[] applyIds;
+    private String startUserId;
+    private String startUserName;
+    private String applyCount;
+    private String remark;
+    private String state;
+    private String storeId;
+    private String currentUserId;
+    private String processInstanceId;
+    private String taskId;
+    private String auditCode;
+    private String auditMessage;
+    private String staffId;
+    private String staffName;
+    private String staffTel;
 
 
     private Date createTime;
@@ -31,43 +41,56 @@ private String storeId;
     public String getApplyId() {
         return applyId;
     }
-public void setApplyId(String applyId) {
+
+    public void setApplyId(String applyId) {
         this.applyId = applyId;
     }
-public String getStartUserId() {
+
+    public String getStartUserId() {
         return startUserId;
     }
-public void setStartUserId(String startUserId) {
+
+    public void setStartUserId(String startUserId) {
         this.startUserId = startUserId;
     }
-public String getStartUserName() {
+
+    public String getStartUserName() {
         return startUserName;
     }
-public void setStartUserName(String startUserName) {
+
+    public void setStartUserName(String startUserName) {
         this.startUserName = startUserName;
     }
-public String getApplyCount() {
+
+    public String getApplyCount() {
         return applyCount;
     }
-public void setApplyCount(String applyCount) {
+
+    public void setApplyCount(String applyCount) {
         this.applyCount = applyCount;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 
@@ -86,5 +109,77 @@ public void setStoreId(String storeId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getAuditCode() {
+        return auditCode;
+    }
+
+    public void setAuditCode(String auditCode) {
+        this.auditCode = auditCode;
+    }
+
+    public String getAuditMessage() {
+        return auditMessage;
+    }
+
+    public void setAuditMessage(String auditMessage) {
+        this.auditMessage = auditMessage;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStaffTel() {
+        return staffTel;
+    }
+
+    public void setStaffTel(String staffTel) {
+        this.staffTel = staffTel;
+    }
+
+    public String[] getApplyIds() {
+        return applyIds;
+    }
+
+    public void setApplyIds(String[] applyIds) {
+        this.applyIds = applyIds;
     }
 }

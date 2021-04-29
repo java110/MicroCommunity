@@ -18,7 +18,7 @@ import java.util.Map;
  * 调拨申请服务 与数据库交互
  * Created by wuxw on 2017/4/5.
  */
-@Service("allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl")
+@Service("allocationStorehouseApplyServiceDaoImpl")
 //@Transactional
 public class AllocationStorehouseApplyServiceDaoImpl extends BaseServiceDao implements IAllocationStorehouseApplyServiceDao {
 
@@ -34,7 +34,7 @@ public class AllocationStorehouseApplyServiceDaoImpl extends BaseServiceDao impl
         businessAllocationStorehouseApplyInfo.put("month", DateUtil.getCurrentMonth());
         // 查询business_user 数据是否已经存在
         logger.debug("保存调拨申请信息 入参 businessAllocationStorehouseApplyInfo : {}",businessAllocationStorehouseApplyInfo);
-        int saveFlag = sqlSessionTemplate.insert("allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.saveBusinessAllocationStorehouseApplyInfo",businessAllocationStorehouseApplyInfo);
+        int saveFlag = sqlSessionTemplate.insert("allocationStorehouseApplyServiceDaoImpl.saveBusinessAllocationStorehouseApplyInfo",businessAllocationStorehouseApplyInfo);
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存调拨申请数据失败："+ JSONObject.toJSONString(businessAllocationStorehouseApplyInfo));
@@ -53,7 +53,7 @@ public class AllocationStorehouseApplyServiceDaoImpl extends BaseServiceDao impl
 
         logger.debug("查询调拨申请信息 入参 info : {}",info);
 
-        List<Map> businessAllocationStorehouseApplyInfos = sqlSessionTemplate.selectList("allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.getBusinessAllocationStorehouseApplyInfo",info);
+        List<Map> businessAllocationStorehouseApplyInfos = sqlSessionTemplate.selectList("allocationStorehouseApplyServiceDaoImpl.getBusinessAllocationStorehouseApplyInfo",info);
 
         return businessAllocationStorehouseApplyInfos;
     }
@@ -69,7 +69,7 @@ public class AllocationStorehouseApplyServiceDaoImpl extends BaseServiceDao impl
     public void saveAllocationStorehouseApplyInfoInstance(Map info) throws DAOException {
         logger.debug("保存调拨申请信息Instance 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.insert("allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.saveAllocationStorehouseApplyInfoInstance",info);
+        int saveFlag = sqlSessionTemplate.insert("allocationStorehouseApplyServiceDaoImpl.saveAllocationStorehouseApplyInfoInstance",info);
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存调拨申请信息Instance数据失败："+ JSONObject.toJSONString(info));
@@ -87,7 +87,7 @@ public class AllocationStorehouseApplyServiceDaoImpl extends BaseServiceDao impl
     public List<Map> getAllocationStorehouseApplyInfo(Map info) throws DAOException {
         logger.debug("查询调拨申请信息 入参 info : {}",info);
 
-        List<Map> businessAllocationStorehouseApplyInfos = sqlSessionTemplate.selectList("allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.getAllocationStorehouseApplyInfo",info);
+        List<Map> businessAllocationStorehouseApplyInfos = sqlSessionTemplate.selectList("allocationStorehouseApplyServiceDaoImpl.getAllocationStorehouseApplyInfo",info);
 
         return businessAllocationStorehouseApplyInfos;
     }
@@ -102,7 +102,7 @@ public class AllocationStorehouseApplyServiceDaoImpl extends BaseServiceDao impl
     public void updateAllocationStorehouseApplyInfoInstance(Map info) throws DAOException {
         logger.debug("修改调拨申请信息Instance 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.update("allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.updateAllocationStorehouseApplyInfoInstance",info);
+        int saveFlag = sqlSessionTemplate.update("allocationStorehouseApplyServiceDaoImpl.updateAllocationStorehouseApplyInfoInstance",info);
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改调拨申请信息Instance数据失败："+ JSONObject.toJSONString(info));
@@ -118,7 +118,7 @@ public class AllocationStorehouseApplyServiceDaoImpl extends BaseServiceDao impl
     public int queryAllocationStorehouseApplysCount(Map info) {
         logger.debug("查询调拨申请数据 入参 info : {}",info);
 
-        List<Map> businessAllocationStorehouseApplyInfos = sqlSessionTemplate.selectList("allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.queryAllocationStorehouseApplysCount", info);
+        List<Map> businessAllocationStorehouseApplyInfos = sqlSessionTemplate.selectList("allocationStorehouseApplyServiceDaoImpl.queryAllocationStorehouseApplysCount", info);
         if (businessAllocationStorehouseApplyInfos.size() < 1) {
             return 0;
         }

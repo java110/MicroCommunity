@@ -35,6 +35,7 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String shzName;
     private String resCode;
     private Date createTime;
+    private String applyId;
 
     private String statusCd = "0";
 
@@ -256,5 +257,13 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setResCode(String resCode) {
         this.resCode = resCode;
+    }
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
     }
 }

@@ -2,6 +2,7 @@ package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
+import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.entity.audit.AuditUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ public interface IAllocationStorehouseUserInnerServiceSMO {
      * @return CommunityDto 对象数据
      */
     @RequestMapping(value = "/startProcess", method = RequestMethod.POST)
-    public AllocationStorehouseDto startProcess(@RequestBody AllocationStorehouseDto allocationStorehouseDto);
+    public AllocationStorehouseApplyDto startProcess(@RequestBody AllocationStorehouseApplyDto allocationStorehouseDto);
 
 
     /**
@@ -39,7 +40,7 @@ public interface IAllocationStorehouseUserInnerServiceSMO {
      * @param user 用户信息
      */
     @RequestMapping(value = "/getUserTasks", method = RequestMethod.POST)
-    public List<AllocationStorehouseDto> getUserTasks(@RequestBody AuditUser user);
+    public List<AllocationStorehouseApplyDto> getUserTasks(@RequestBody AuditUser user);
 
     /**
      * 同意
@@ -48,7 +49,7 @@ public interface IAllocationStorehouseUserInnerServiceSMO {
      * @return
      */
     @RequestMapping(value = "/agreeCompleteTask", method = RequestMethod.POST)
-    public boolean agreeCompleteTask(@RequestBody AllocationStorehouseDto allocationStorehouseDto);
+    public boolean agreeCompleteTask(@RequestBody AllocationStorehouseApplyDto allocationStorehouseDto);
 
 
     /**
@@ -58,7 +59,7 @@ public interface IAllocationStorehouseUserInnerServiceSMO {
      * @return
      */
     @RequestMapping(value = "/refuteCompleteTask", method = RequestMethod.POST)
-    public boolean refuteCompleteTask(@RequestBody AllocationStorehouseDto allocationStorehouseDto);
+    public boolean refuteCompleteTask(@RequestBody AllocationStorehouseApplyDto allocationStorehouseDto);
 
     /**
      * 完成任务
@@ -66,7 +67,7 @@ public interface IAllocationStorehouseUserInnerServiceSMO {
      * @param
      */
     @RequestMapping(value = "/complete", method = RequestMethod.GET)
-    public boolean complete(@RequestBody AllocationStorehouseDto allocationStorehouseDto);
+    public boolean complete(@RequestBody AllocationStorehouseApplyDto allocationStorehouseDto);
 
     /**
      * 查询用户任务数
@@ -83,7 +84,7 @@ public interface IAllocationStorehouseUserInnerServiceSMO {
      * @param user 用户信息
      */
     @RequestMapping(value = "/getUserHistoryTasks", method = RequestMethod.POST)
-    public List<AllocationStorehouseDto> getUserHistoryTasks(@RequestBody AuditUser user);
+    public List<AllocationStorehouseApplyDto> getUserHistoryTasks(@RequestBody AuditUser user);
 
     /**
      * 处理任务
@@ -91,7 +92,7 @@ public interface IAllocationStorehouseUserInnerServiceSMO {
      * @return true 为流程结束 false 为流程没有结束
      */
     @RequestMapping(value = "/completeTask", method = RequestMethod.POST)
-    public boolean completeTask(@RequestBody AllocationStorehouseDto allocationStorehouseDto);
+    public boolean completeTask(@RequestBody AllocationStorehouseApplyDto allocationStorehouseDto);
 
 
 }

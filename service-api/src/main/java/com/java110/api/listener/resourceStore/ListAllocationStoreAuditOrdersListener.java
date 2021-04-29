@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
+import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeAuditUserConstant;
@@ -66,18 +67,18 @@ public class ListAllocationStoreAuditOrdersListener extends AbstractServiceApiLi
         //调拨待办（默认只查询和当前登录用户相关并且是审批或者结束待办事项）
         long count = allocationStorehouseUserInnerServiceSMOImpl.getUserTaskCount(auditUser);
 
-        List<AllocationStorehouseDto> purchaseApplyDtos = null;
+        List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtos = null;
 
         if (count > 0) {
-            purchaseApplyDtos = allocationStorehouseUserInnerServiceSMOImpl.getUserTasks(auditUser);
+            allocationStorehouseApplyDtos = allocationStorehouseUserInnerServiceSMOImpl.getUserTasks(auditUser);
         } else {
-            purchaseApplyDtos = new ArrayList<>();
+            allocationStorehouseApplyDtos = new ArrayList<>();
         }
 
         ResponseEntity responseEntity
                 = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")),
                 (int) count,
-                purchaseApplyDtos);
+                allocationStorehouseApplyDtos);
         context.setResponseEntity(responseEntity);
     }
 }

@@ -7,9 +7,9 @@
     <!-- 保存仓库调拨信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAllocationStorehouseInfo" parameterType="Map">
         insert into business_allocation_storehouse(
-        as_id,store_id,res_id,sh_id_z,res_name,start_user_id,operate,sh_id_a,start_user_name,state,b_id,stock,remark
+        as_id,store_id,res_id,sh_id_z,res_name,start_user_id,operate,sh_id_a,start_user_name,state,b_id,stock,remark,apply_id
         ) values (
-        #{asId},#{storeId},#{resId},#{shIdz},#{resName},#{startUserId},#{operate},#{shIda},#{startUserName},#{state},#{bId},#{stock},#{remark}
+        #{asId},#{storeId},#{resId},#{shIdz},#{resName},#{startUserId},#{operate},#{shIda},#{startUserName},#{state},#{bId},#{stock},#{remark},#{applyId}
         )
     </insert>
 
@@ -17,7 +17,7 @@
     <select id="getBusinessAllocationStorehouseInfo" parameterType="Map" resultType="Map">
         select t.as_id,t.as_id asId,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.sh_id_z,t.sh_id_z
         shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id startUserId,t.operate,t.sh_id_a,t.sh_id_a
-        shIda,t.start_user_name,t.start_user_name startUserName,t.state,t.b_id,t.b_id bId,t.stock,t.remark
+        shIda,t.start_user_name,t.start_user_name startUserName,t.state,t.b_id,t.b_id bId,t.stock,t.remark,t.apply_id,t.apply_id applyId
         from business_allocation_storehouse t
         where 1 =1
         <if test="asId !=null and asId != ''">
@@ -61,9 +61,9 @@
     <!-- 保存仓库调拨信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAllocationStorehouseInfoInstance" parameterType="Map">
         insert into allocation_storehouse(
-        as_id,status_cd,store_id,res_id,sh_id_z,res_name,start_user_id,sh_id_a,start_user_name,state,b_id,stock,remark
+        as_id,status_cd,store_id,res_id,sh_id_z,res_name,start_user_id,sh_id_a,start_user_name,state,b_id,stock,remark,apply_id
         ) select
-        t.as_id,'0',t.store_id,t.res_id,t.sh_id_z,t.res_name,t.start_user_id,t.sh_id_a,t.start_user_name,t.state,t.b_id,t.stock,t.remark
+        t.as_id,'0',t.store_id,t.res_id,t.sh_id_z,t.res_name,t.start_user_id,t.sh_id_a,t.start_user_name,t.state,t.b_id,t.stock,t.remark,t.apply_id
         from business_allocation_storehouse t where 1=1
         <if test="asId !=null and asId != ''">
             and t.as_id= #{asId}
@@ -107,7 +107,7 @@
         resId,t.sh_id_z,t.sh_id_z shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id
         startUserId,t.sh_id_a,t.sh_id_a shIda,t.start_user_name,t.start_user_name startUserName,t.state,t.b_id,t.b_id
         bId,t.stock,t.remark,t.create_time createTime,td.name stateName,a.sh_name shaName,z.sh_name shzName,
-        rs.res_code,rs.res_code resCode
+        rs.res_code,rs.res_code resCode,t.apply_id,t.apply_id applyId
         from allocation_storehouse t
         left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse' and td.table_columns =
         'state'
@@ -126,6 +126,9 @@
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
@@ -229,6 +232,9 @@
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
