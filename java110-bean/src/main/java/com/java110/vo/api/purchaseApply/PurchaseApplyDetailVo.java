@@ -7,6 +7,7 @@ public class PurchaseApplyDetailVo {
     private String id;
     private String applyOrderId;
     private String resId;
+    private String rsId;
     private String quantity;
     private String remark;
     private String resName;
@@ -157,6 +158,14 @@ public class PurchaseApplyDetailVo {
 
     public void setPurchasePrice(String purchasePrice) {
         this.purchasePrice = purchasePrice;
+    }
+
+    public String getRsId() {
+        return rsId;
+    }
+
+    public void setRsId(String rsId) {
+        this.rsId = rsId;
     }
 }
 

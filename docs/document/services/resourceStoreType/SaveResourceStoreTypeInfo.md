@@ -92,7 +92,7 @@ public class SaveResourceStoreTypeInfoListener extends AbstractResourceStoreType
             reFreshShareColumn(info, businessResourceStoreTypeInfo.get(0));
             resourceResourceStoreTypeTypeServiceDaoImpl.saveResourceStoreTypeInfoInstance(info);
             if(businessResourceStoreTypeInfo.size() == 1) {
-                dataFlowContext.addParamOut("rstId", businessResourceStoreTypeInfo.get(0).get("resourceResourceStoreTypeType_id"));
+                dataFlowContext.addParamOut("rstId", businessResourceStoreTypeInfo.get(0).get("rst_id"));
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.java110.vo.api.resourceStore;
 
+import com.java110.dto.resourceSupplier.ResourceSupplierDto;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -24,14 +26,16 @@ public class ApiResourceStoreDataVo implements Serializable {
     private String outLowPrice;
     //对外收集最高价格
     private String outHighPrice;
-    //对外售价
-    private String outPrice;
     //手机端是否显示(N否 Y是)
     private String showMobile;
     private Date createTime;
     private String shName;
     private String shId;
+    private String warningStock;
     private List<String> fileUrls;
+    private List<ResourceSupplierDto> resourceSupplierDtos;
+    //均价
+    private String averagePrice;
 
     public String getResId() {
         return resId;
@@ -121,13 +125,6 @@ public class ApiResourceStoreDataVo implements Serializable {
         this.outHighPrice = outHighPrice;
     }
 
-    public String getOutPrice() {
-        return outPrice;
-    }
-
-    public void setOutPrice(String outPrice) {
-        this.outPrice = outPrice;
-    }
 
     public String getShowMobile() {
         return showMobile;
@@ -175,5 +172,29 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public List<ResourceSupplierDto> getResourceSupplierDtos() {
+        return resourceSupplierDtos;
+    }
+
+    public void setResourceSupplierDtos(List<ResourceSupplierDto> resourceSupplierDtos) {
+        this.resourceSupplierDtos = resourceSupplierDtos;
+    }
+
+    public String getWarningStock() {
+        return warningStock;
+    }
+
+    public void setWarningStock(String warningStock) {
+        this.warningStock = warningStock;
+    }
+
+    public String getAveragePrice() {
+        return averagePrice;
+    }
+
+    public void setAveragePrice(String averagePrice) {
+        this.averagePrice = averagePrice;
     }
 }

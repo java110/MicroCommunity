@@ -23,6 +23,7 @@ import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IResourceStoreServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreUseRecordInnerServiceSMO;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
@@ -32,6 +33,7 @@ import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreUseRecord.ResourceStoreUseRecordPo;
 import com.java110.po.userStorehouse.UserStorehousePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
@@ -88,6 +90,9 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IUserStorehouseInnerServiceSMO userStorehouseInnerServiceSMO;
 
+    @Autowired
+    private IResourceStoreUseRecordInnerServiceSMO resourceStoreUseRecordInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
@@ -111,6 +116,18 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         String resId = reqJson.getString("resId");
         //获取商品数量
         String useNumber = reqJson.getString("useNumber");
+        //判断当前用户是否有需要处理的订单
+        RepairUserDto repairUserDto = new RepairUserDto();
+        repairUserDto.setRepairId(reqJson.getString("repairId"));
+        repairUserDto.setCommunityId(reqJson.getString("communityId"));
+        repairUserDto.setState(RepairUserDto.STATE_DOING);
+        repairUserDto.setStaffId(userId);
+        List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
+        if (repairUserDtos.size() != 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         String outLowPrice = "0";
         String outHighPrice = "0";
         List<ResourceStorePo> resourceStorePoList = new ArrayList<>();
@@ -140,7 +157,6 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             outLowPrice = resourceStorePoList.get(0).getOutLowPrice();
             outHighPrice = resourceStorePoList.get(0).getOutHighPrice();
         }
-
         if (!StringUtil.isEmpty(useNumber)
                 && !"0".equals(useNumber)
                 && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
@@ -150,13 +166,11 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             userStorehouseDto.setResId(resId);
             userStorehouseDto.setUserId(userId);
             userStorehouseDtoList = userStorehouseInnerServiceSMO.queryUserStorehouses(userStorehouseDto);
-
             if (userStorehouseDtoList == null || userStorehouseDtoList.size() < 1) {
                 ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修物料库存不足，请您先申领物品！");
                 context.setResponseEntity(responseEntity);
                 return;
             }
-
             if (userStorehouseDtoList.size() == 1) {
                 nowStock = userStorehouseDtoList.get(0).getStock();
             }
@@ -186,16 +200,23 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 return;
             }
         }
-        RepairUserDto repairUserDto = new RepairUserDto();
-        repairUserDto.setRepairId(reqJson.getString("repairId"));
-        repairUserDto.setCommunityId(reqJson.getString("communityId"));
-        repairUserDto.setState(RepairUserDto.STATE_DOING);
-        repairUserDto.setStaffId(userId);
-        List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        if (repairUserDtos.size() != 1) {
-            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
-            context.setResponseEntity(responseEntity);
-            return;
+        //往物品使用记录表插入数据
+        ResourceStoreUseRecordPo resourceStoreUseRecordPo = new ResourceStoreUseRecordPo();
+        resourceStoreUseRecordPo.setRsurId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rsurId));
+        resourceStoreUseRecordPo.setRepairId(reqJson.getString("repairId"));
+        resourceStoreUseRecordPo.setResId(resId);
+        resourceStoreUseRecordPo.setCommunityId(reqJson.getString("communityId"));
+        resourceStoreUseRecordPo.setStoreId(reqJson.getString("storeId"));
+        resourceStoreUseRecordPo.setCreateUserId(reqJson.getString("userId"));
+        resourceStoreUseRecordPo.setCreateUserName(reqJson.getString("userName"));
+        resourceStoreUseRecordPo.setRemark(reqJson.getString("context"));
+        resourceStoreUseRecordPo.setQuantity(useNumber);
+        //有偿服务
+        if (maintenanceType.equals("1001")) {
+            resourceStoreUseRecordPo.setUnitPrice(reqJson.getString("price"));
+            super.insert(context, resourceStoreUseRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD);
+        } else if (maintenanceType.equals("1003")) {  //需要用料
+            super.insert(context, resourceStoreUseRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD);
         }
         // 1.0 关闭自己订单
         RepairUserPo repairUserPo = new RepairUserPo();

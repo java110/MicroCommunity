@@ -25,6 +25,8 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     private String createTime;
 
+    private String rsId;
+
     public String getApplyOrderId() {
         return applyOrderId;
     }
@@ -95,5 +97,13 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getRsId() {
+        return rsId;
+    }
+
+    public void setRsId(String rsId) {
+        this.rsId = rsId;
     }
 }

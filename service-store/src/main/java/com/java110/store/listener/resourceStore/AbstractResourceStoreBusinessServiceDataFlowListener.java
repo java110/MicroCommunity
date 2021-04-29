@@ -51,6 +51,7 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         businessResourceStoreInfo.put("outLowPrice", businessResourceStoreInfo.get("out_low_price"));
         businessResourceStoreInfo.put("outHighPrice", businessResourceStoreInfo.get("out_high_price"));
         businessResourceStoreInfo.put("shId", businessResourceStoreInfo.get("sh_id"));
+        businessResourceStoreInfo.put("warningStock", businessResourceStoreInfo.get("warning_stock"));
         businessResourceStoreInfo.remove("bId");
         businessResourceStoreInfo.put("statusCd", statusCd);
     }
@@ -90,6 +91,7 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         currentResourceStoreInfo.put("outHighPrice", currentResourceStoreInfo.get("out_high_price"));
         currentResourceStoreInfo.put("operate", StatusConstant.OPERATE_DEL);
         currentResourceStoreInfo.put("shId", currentResourceStoreInfo.get("sh_id"));
+        currentResourceStoreInfo.put("warningStock", currentResourceStoreInfo.get("warning_stock"));
         getResourceStoreServiceDaoImpl().saveBusinessResourceStoreInfo(currentResourceStoreInfo);
 
         for (Object key : currentResourceStoreInfo.keySet()) {

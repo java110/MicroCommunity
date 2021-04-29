@@ -107,7 +107,7 @@ public class DeleteResourceStoreTypeInfoListener extends AbstractResourceStoreTy
                 Map businessResourceStoreTypeInfo = businessResourceStoreTypeInfos.get(_resourceResourceStoreTypeTypeIndex);
                 flushBusinessResourceStoreTypeInfo(businessResourceStoreTypeInfo,StatusConstant.STATUS_CD_INVALID);
                 resourceResourceStoreTypeTypeServiceDaoImpl.updateResourceStoreTypeInfoInstance(businessResourceStoreTypeInfo);
-                dataFlowContext.addParamOut("rstId",businessResourceStoreTypeInfo.get("resourceResourceStoreTypeType_id"));
+                dataFlowContext.addParamOut("rstId",businessResourceStoreTypeInfo.get("rst_id"));
             }
         }
 

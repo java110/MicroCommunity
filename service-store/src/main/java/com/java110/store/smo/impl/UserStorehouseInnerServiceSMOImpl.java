@@ -1,6 +1,5 @@
 package com.java110.store.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
@@ -44,8 +43,19 @@ public class UserStorehouseInnerServiceSMOImpl extends BaseServiceSMO implements
 
         List<UserStorehouseDto> userStorehouses = BeanConvertUtil.covertBeanList(useStorehouseServiceDaoImpl.getUserStorehouseInfo(BeanConvertUtil.beanCovertMap(userUserStorehousehouseDto)), UserStorehouseDto.class);
 
+        List<UserStorehouseDto> userStorehouseDtos = new ArrayList<>();
+        String outPrice = "";
+        for (UserStorehouseDto userStorehouseDto : userStorehouses) {
+            if (userStorehouseDto.getOutLowPrice().equals(userStorehouseDto.getOutHighPrice())) {
+                outPrice = userStorehouseDto.getOutLowPrice() + "元";
+            } else {
+                outPrice = userStorehouseDto.getOutLowPrice() + "元-" + userStorehouseDto.getOutHighPrice() + "元";
+            }
+            userStorehouseDto.setOutPrice(outPrice);
+            userStorehouseDtos.add(userStorehouseDto);
+        }
 
-        return userStorehouses;
+        return userStorehouseDtos;
     }
 
     /**

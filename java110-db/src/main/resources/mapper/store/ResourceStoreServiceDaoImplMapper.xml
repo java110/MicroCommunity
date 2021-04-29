@@ -7,21 +7,23 @@
     <!-- 保存资源信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceStoreInfo" parameterType="Map">
         insert into business_resource_store(
-        res_name,operate,price,res_code,description,store_id,stock,b_id,res_id,goods_type,
-        unit_code,remark,out_low_price,out_high_price,show_mobile,create_time,sh_id
+        res_name,operate,price,res_code,description,store_id,stock,warning_stock,b_id,res_id,goods_type,
+        unit_code,remark,out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price
         ) values (
-        #{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{bId},#{resId},
-        #{goodsType},#{unitCode},#{remark},#{outLowPrice},#{outHighPrice},#{showMobile},#{createTime},#{shId}
+        #{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{warningStock},#{bId},#{resId},
+        #{goodsType},#{unitCode},#{remark},#{outLowPrice},#{outHighPrice},#{showMobile},#{createTime},#{shId},#{averagePrice}
         )
     </insert>
 
     <!-- 查询资源信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessResourceStoreInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.operate,t.price,t.res_code,t.res_code
-        resCode,t.description,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,
+        resCode,t.description,t.store_id,t.store_id storeId,t.stock,t.warning_stock,t.warning_stock
+        warningStock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,
         t.goods_type,t.goods_type goodsType,t.unit_code,t.unit_code unitCode,t.remark,
         t.out_low_price,t.out_low_price outLowPrice,t.out_high_price,t.out_high_price outHighPrice,
-        t.show_mobile,t.show_mobile showMobile,t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId
+        t.show_mobile,t.show_mobile showMobile,t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,
+        t.average_price,t.average_price averagePrice
         from business_resource_store t
         where 1 =1
         <if test="resName !=null and resName != ''">
@@ -45,6 +47,9 @@
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}
         </if>
+        <if test="warningStock !=null and warningStock != ''">
+            and t.warning_stock= #{warningStock}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -69,6 +74,9 @@
         <if test="showMobile !=null and showMobile != ''">
             and t.show_mobile= #{showMobile}
         </if>
+        <if test="averagePrice !=null and averagePrice != ''">
+            and t.average_price= #{averagePrice}
+        </if>
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
         </if>
@@ -77,11 +85,12 @@
     <!-- 保存资源信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreInfoInstance" parameterType="Map">
         insert into resource_store(
-        res_name,price,res_code,description,status_cd,store_id,stock,b_id,res_id,goods_type,unit_code,remark,
-        out_low_price,out_high_price,show_mobile,create_time,sh_id
-        ) select t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.b_id,t.res_id,t.goods_type,
-        t.unit_code,t.remark,t.out_low_price,t.out_high_price,t.show_mobile,t.create_time,t.sh_id from
-        business_resource_store t where 1=1
+        res_name,price,res_code,description,status_cd,store_id,stock,warning_stock,b_id,res_id,goods_type,unit_code,remark,
+        out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price
+        ) select
+        t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.warning_stock,t.b_id,t.res_id,t.goods_type,
+        t.unit_code,t.remark,t.out_low_price,t.out_high_price,t.show_mobile,t.create_time,t.sh_id,t.average_price
+        from business_resource_store t where 1=1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
         </if>
@@ -101,6 +110,9 @@
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}
         </if>
+        <if test="warningStock !=null and warningStock != ''">
+            and t.warning_stock= #{warningStock}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -125,6 +137,9 @@
         <if test="showMobile !=null and showMobile != ''">
             and t.show_mobile= #{showMobile}
         </if>
+        <if test="averagePrice !=null and averagePrice != ''">
+            and t.average_price= #{averagePrice}
+        </if>
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
         </if>
@@ -133,10 +148,12 @@
     <!-- 查询资源信息 add by wuxw 2018-07-03 -->
     <select id="getResourceStoreInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.price,t.res_code,t.res_code resCode,t.description,t.status_cd,t.status_cd
-        statusCd,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,t.out_low_price,
+        statusCd,t.store_id,t.store_id storeId,t.stock,t.warning_stock,t.warning_stock warningStock,t.b_id,t.b_id
+        bId,t.res_id,t.res_id resId,t.out_low_price,
         t.out_low_price outLowPrice,rst.name goodsTypeName,t.out_high_price,t.out_high_price outHighPrice,t.goods_type,
         t.goods_type goodsType,t.unit_code,t.unit_code unitCode,t.remark,t.show_mobile,t.show_mobile showMobile,
-        t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,sh.sh_name shName
+        t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,sh.sh_name shName,t.average_price,t.average_price
+        averagePrice
         from resource_store t
         left join resource_store_type rst on t.goods_type = rst.goods_type and rst.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
@@ -177,6 +194,9 @@
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}
         </if>
+        <if test="warningStock !=null and warningStock != ''">
+            and t.warning_stock= #{warningStock}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -194,6 +214,9 @@
         </if>
         <if test="showMobile != null and showMobile != ''">
             and t.show_mobile = #{showMobile}
+        </if>
+        <if test="averagePrice != null and averagePrice != ''">
+            and t.average_price = #{averagePrice}
         </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0
@@ -243,11 +266,15 @@
         <if test="storeId !=null and storeId != ''">
             , t.store_id= #{storeId}
         </if>
-        <if test="stock !=null and stock != ''">
-            , t.stock= #{stock}
+        , t.stock= #{stock}
+        <if test="warningStock !=null and warningStock != ''">
+            , t.warning_stock= #{warningStock}
         </if>
         <if test="shId !=null and shId != ''">
             , t.sh_id= #{shId}
+        </if>
+        <if test="averagePrice !=null and averagePrice != ''">
+            , t.average_price= #{averagePrice}
         </if>
         where 1=1
         <if test="bId !=null and bId != ''">
@@ -285,6 +312,9 @@
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}
         </if>
+        <if test="warningStock !=null and warningStock != ''">
+            and t.warning_stock= #{warningStock}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -317,6 +347,9 @@
         </if>
         <if test="shType !=null and shType != ''">
             and sh.sh_type= #{shType}
+        </if>
+        <if test="averagePrice != null and averagePrice != ''">
+            and t.average_price = #{averagePrice}
         </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0

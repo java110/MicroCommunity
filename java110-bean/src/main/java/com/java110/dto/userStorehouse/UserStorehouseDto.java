@@ -26,6 +26,7 @@ public class UserStorehouseDto extends PageDto implements Serializable {
     private String goodsType;
     private String outLowPrice;
     private String outHighPrice;
+    private String outPrice;
 
     private Date createTime;
 
@@ -133,5 +134,13 @@ public class UserStorehouseDto extends PageDto implements Serializable {
 
     public void setOutHighPrice(String outHighPrice) {
         this.outHighPrice = outHighPrice;
+    }
+
+    public String getOutPrice() {
+        return outPrice;
+    }
+
+    public void setOutPrice(String outPrice) {
+        this.outPrice = outPrice;
     }
 }

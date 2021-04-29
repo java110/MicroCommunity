@@ -29,6 +29,8 @@ public class PurchaseApplyPo implements Serializable {
     private String createUserId;
     private String createUserName;
 
+    private String statusCd;
+
     private ResourceStorePo[] resourceStores;
 
     List<PurchaseApplyDetailPo> purchaseApplyDetailPos;
@@ -151,5 +153,13 @@ public class PurchaseApplyPo implements Serializable {
 
     public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

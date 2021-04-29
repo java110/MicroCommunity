@@ -54,6 +54,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String warehousingWay;
     private String createUserId;
     private String createUserName;
+    private String price;
 
     public String getResOrderType() {
         return resOrderType;
@@ -271,5 +272,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

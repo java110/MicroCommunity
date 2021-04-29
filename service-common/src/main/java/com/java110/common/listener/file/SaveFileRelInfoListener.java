@@ -109,7 +109,7 @@ public class SaveFileRelInfoListener extends AbstractFileRelBusinessServiceDataF
      */
     private void reFreshShareColumn(Map info, Map businessInfo) {
 
-        if (info.containsKey("obj_id")) {
+        if (info.containsKey("objId")) {
             return;
         }
 
@@ -117,7 +117,7 @@ public class SaveFileRelInfoListener extends AbstractFileRelBusinessServiceDataF
             return;
         }
 
-        info.put("obj_id", businessInfo.get("obj_id"));
+        info.put("objId", businessInfo.get("obj_id"));
     }
 
     /**

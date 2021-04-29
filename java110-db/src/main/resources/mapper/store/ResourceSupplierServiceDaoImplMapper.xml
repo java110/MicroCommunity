@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resourceSupplierServiceDaoImpl">
+
+    <!-- 保存物品供应商信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessResourceSupplierInfo" parameterType="Map">
+           insert into business_resource_supplier(
+            supplier_name,create_user_id,address,contact_name,rs_id,create_user_name,remark,store_id,account_bank,operate,tel,bank_account_number,b_id
+            ) values (
+            #{supplierName},#{createUserId},#{address},#{contactName},#{rsId},#{createUserName},#{remark},#{storeId},#{accountBank},#{operate},#{tel},#{bankAccountNumber},#{bId}
+            )
+        </insert>
+
+
+    <!-- 查询物品供应商信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessResourceSupplierInfo" parameterType="Map" resultType="Map">
+        select t.supplier_name,t.supplier_name supplierName,t.create_user_id,t.create_user_id
+        createUserId,t.address,t.contact_name,t.contact_name contactName,t.rs_id,t.rs_id
+        rsId,t.create_user_name,t.create_user_name createUserName,t.remark,t.store_id,t.store_id
+        storeId,t.account_bank,t.account_bank accountBank,t.operate,t.tel,t.bank_account_number,t.bank_account_number
+        bankAccountNumber,t.b_id,t.b_id bId
+        from business_resource_supplier t
+        where 1 =1
+        <if test="supplierName !=null and supplierName != ''">
+            and t.supplier_name= #{supplierName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="contactName !=null and contactName != ''">
+            and t.contact_name= #{contactName}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="accountBank !=null and accountBank != ''">
+            and t.account_bank= #{accountBank}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="bankAccountNumber !=null and bankAccountNumber != ''">
+            and t.bank_account_number= #{bankAccountNumber}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+    </select>
+    <!-- 保存物品供应商信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveResourceSupplierInfoInstance" parameterType="Map">
+        insert into resource_supplier(
+        supplier_name,create_user_id,address,contact_name,rs_id,create_user_name,status_cd,remark,store_id,account_bank,tel,bank_account_number,b_id
+        ) select
+        t.supplier_name,t.create_user_id,t.address,t.contact_name,t.rs_id,t.create_user_name,'0',t.remark,t.store_id,t.account_bank,t.tel,t.bank_account_number,t.b_id
+        from business_resource_supplier t where 1=1
+        <if test="supplierName !=null and supplierName != ''">
+            and t.supplier_name= #{supplierName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="contactName !=null and contactName != ''">
+            and t.contact_name= #{contactName}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="accountBank !=null and accountBank != ''">
+            and t.account_bank= #{accountBank}
+        </if>
+        and t.operate= 'ADD'
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="bankAccountNumber !=null and bankAccountNumber != ''">
+            and t.bank_account_number= #{bankAccountNumber}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+    </insert>
+
+
+    <!-- 查询物品供应商信息 add by wuxw 2018-07-03 -->
+    <select id="getResourceSupplierInfo" parameterType="Map" resultType="Map">
+        select t.supplier_name,t.supplier_name supplierName,t.create_user_id,t.create_user_id
+        createUserId,t.address,t.contact_name,t.contact_name contactName,t.rs_id,t.rs_id
+        rsId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
+        statusCd,t.remark,t.store_id,t.store_id storeId,t.account_bank,t.account_bank
+        accountBank,t.tel,t.bank_account_number,t.bank_account_number bankAccountNumber,t.b_id,t.b_id bId
+        from resource_supplier t
+        where 1 =1
+        <if test="supplierName !=null and supplierName != ''">
+            and t.supplier_name= #{supplierName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="contactName !=null and contactName != ''">
+            and t.contact_name= #{contactName}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="accountBank !=null and accountBank != ''">
+            and t.account_bank= #{accountBank}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="bankAccountNumber !=null and bankAccountNumber != ''">
+            and t.bank_account_number= #{bankAccountNumber}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+    <!-- 修改物品供应商信息 add by wuxw 2018-07-03 -->
+    <update id="updateResourceSupplierInfoInstance" parameterType="Map">
+        update resource_supplier t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="supplierName !=null and supplierName != ''">
+            , t.supplier_name= #{supplierName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="address !=null and address != ''">
+            , t.address= #{address}
+        </if>
+        <if test="contactName !=null and contactName != ''">
+            , t.contact_name= #{contactName}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            , t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="accountBank !=null and accountBank != ''">
+            , t.account_bank= #{accountBank}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="bankAccountNumber !=null and bankAccountNumber != ''">
+            , t.bank_account_number= #{bankAccountNumber}
+        </if>
+        where 1=1
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+    </update>
+
+    <!-- 查询物品供应商数量 add by wuxw 2018-07-03 -->
+    <select id="queryResourceSuppliersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from resource_supplier t
+        where 1 =1
+        <if test="supplierName !=null and supplierName != ''">
+            and t.supplier_name= #{supplierName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="contactName !=null and contactName != ''">
+            and t.contact_name= #{contactName}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="accountBank !=null and accountBank != ''">
+            and t.account_bank= #{accountBank}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="bankAccountNumber !=null and bankAccountNumber != ''">
+            and t.bank_account_number= #{bankAccountNumber}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+    </select>
+</mapper>

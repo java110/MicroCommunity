@@ -524,7 +524,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("floorNum", importFloor.getFloorNum());
                 paramIn.put("userId", result.getUserId());
-                paramIn.put("name", importFloor.getFloorNum() + "号楼");
+                paramIn.put("name", importFloor.getFloorNum() + "栋");
                 paramIn.put("floorArea", 1.00);
 
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);

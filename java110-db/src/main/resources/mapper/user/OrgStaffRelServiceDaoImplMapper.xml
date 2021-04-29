@@ -177,7 +177,7 @@
     <select id="queryOrgInfoByStaffIds" parameterType="Map" resultType="Map">
         select
         t.rel_id relId,t.org_id departmentId,t.staff_id staffId,t.store_id storeId,u.org_name departmentName,
-        u.parent_org_id companyId,o.org_name companyName
+        u.parent_org_id companyId,o.org_name companyName,o.org_id companyId
         from
         u_org_staff_rel t
         inner join u_org u on t.org_id = u.org_id

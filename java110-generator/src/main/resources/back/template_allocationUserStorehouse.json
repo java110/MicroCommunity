@@ -1,0 +1,50 @@
+{
+  "autoMove": true,
+  "id": "ausId",
+  "name": "allocationUserStorehouse",
+  "desc": "物品供应商",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_ALLOCATION_USER_STOREHOUSE",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_ALLOCATION_USER_STOREHOUSE",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_ALLOCATION_USER_STOREHOUSE",
+  "newBusinessTypeCdValue": "671100030009",
+  "updateBusinessTypeCdValue": "671100040009",
+  "deleteBusinessTypeCdValue": "671100050009",
+  "businessTableName": "business_allocation_user_storehouse",
+  "tableName": "allocation_user_storehouse",
+  "param": {
+    "ausId": "aus_id",
+    "bId": "b_id",
+    "resId": "res_id",
+    "resName": "res_name",
+    "storeId": "store_id",
+    "stock": "stock",
+    "startUserId": "start_user_id",
+    "startUserName": "start_user_name",
+    "acceptUserId": "accept_user_id",
+    "acceptUserName": "accept_user_name",
+    "statusCd": "status_cd",
+    "remark": "remark",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "resId",
+      "msg": "物品资源不能为空"
+    },
+    {
+      "code": "stock",
+      "msg": "转增数量不能为空"
+    },
+    {
+      "code": "acceptUserId",
+      "msg": "接受人不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户不能为空"
+    }
+  ]
+}

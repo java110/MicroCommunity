@@ -107,7 +107,7 @@ public class UpdateResourceStoreTypeInfoListener extends AbstractResourceStoreTy
                 flushBusinessResourceStoreTypeInfo(businessResourceStoreTypeInfo,StatusConstant.STATUS_CD_VALID);
                 resourceResourceStoreTypeTypeServiceDaoImpl.updateResourceStoreTypeInfoInstance(businessResourceStoreTypeInfo);
                 if(businessResourceStoreTypeInfo.size() == 1) {
-                    dataFlowContext.addParamOut("rstId", businessResourceStoreTypeInfo.get("resourceResourceStoreTypeType_id"));
+                    dataFlowContext.addParamOut("rstId", businessResourceStoreTypeInfo.get("rst_id"));
                 }
             }
         }

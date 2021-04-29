@@ -23,6 +23,7 @@
             <id property="id" column="id"/>
             <result property="applyOrderId" column="applyOrderId"/>
             <result property="resId" column="resId"/>
+            <result column="rsId" property="rsId"/>
             <result property="quantity" column="quantity"/>
             <result property="resName" column="resName"/>
             <result property="remark" column="remark"/>
@@ -60,11 +61,12 @@
 
     <!-- 保存采购明细表-->
     <insert id="savePurchaseApplyDetailInfo" parameterType="List">
-        insert into purchase_apply_detail (id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark)
+        insert into purchase_apply_detail (id,rs_id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.id},
+            #{item.rsId},
             #{item.applyOrderId},
             #{item.resId},
             #{item.quantity},

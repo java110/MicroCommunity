@@ -60,13 +60,84 @@
         t.status_cd statusCd,
         t.b_id bId,
         t.res_id resId,
+        t.rs_id rsId,
+        rs.res_name resName,
         t.remark remark,
         t.quantity quantity,
-        t.price
+        t.purchase_quantity purchaseQuantity,
+        t.purchase_remark purchaseRemark,
+        t.price,
+        pa.res_order_type resOrderType,
+        pa.user_id userId,
+        pa.user_name userName,
+        pa.description,
+        pa.state,
+        pa.end_user_name endUserName,
+        pa.end_user_tel endUserTel,
+        pa.warehousing_way warehousingWay,
+        pa.create_time createTime,
+        rsp.supplier_name supplierName,
+        td1.name resOrderTypeName,
+        td2.name stateName,
+        td3.name warehousingWayName
         from purchase_apply_detail t
+        left join purchase_apply pa on t.apply_order_id = pa.apply_order_id
+        left join resource_store rs on rs.res_id = t.res_id
+        left join resource_supplier rsp on rsp.rs_id = t.rs_id
+        left join t_dict td1 on pa.res_order_type = td1.status_cd and td1.table_name = 'purchase_apply' and
+        td1.table_columns = 'res_order_type'
+        left join t_dict td2 on pa.state = td2.status_cd and td2.table_name = 'purchase_apply' and td2.table_columns =
+        'state'
+        left join t_dict td3 on pa.warehousing_way = td3.status_cd and td3.table_name = 'purchase_apply' and
+        td3.table_columns = 'warehousing_way'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="resName !=null and resName != ''">
+            and rs.res_name like '%${resName}%'
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id = #{rsId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="purchaseQuantity !=null and purchaseQuantity != ''">
+            and t.purchase_quantity= #{purchaseQuantity}
+        </if>
+        <if test="purchaseRemark !=null and purchaseRemark != ''">
+            and t.purchase_remark= #{purchaseRemark}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="resOrderType !=null and resOrderType != ''">
+            and pa.res_order_type= #{resOrderType}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and pa.user_id= #{userId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and pa.user_name like '%${userName}%'
+        </if>
+        <if test="description !=null and description != ''">
+            and pa.description= #{description}
+        </if>
+        <if test="state !=null and state != ''">
+            and pa.state= #{state}
+        </if>
+        <if test="endUserName !=null and endUserName != ''">
+            and pa.end_user_name like '%${endUserName}%'
+        </if>
+        <if test="endUserTel !=null and endUserTel != ''">
+            and pa.end_user_tel= #{endUserTel}
+        </if>
+        <if test="warehousingWay !=null and warehousingWay != ''">
+            and pa.warehousing_way= #{warehousingWay}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -80,6 +151,16 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="supplierName !=null and supplierName != ''">
+            and rsp.supplier_name= #{supplierName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and pa.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and pa.create_time &lt;= #{endTime}
+        </if>
+        order by pa.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -121,9 +202,66 @@
     <select id="queryPurchaseApplyDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from purchase_apply_detail t
-        where 1 =1
+        left join purchase_apply pa on t.apply_order_id = pa.apply_order_id
+        left join resource_store rs on rs.res_id = t.res_id
+        left join resource_supplier rsp on rsp.rs_id = t.rs_id
+        left join t_dict td1 on pa.res_order_type = td1.status_cd and td1.table_name = 'purchase_apply' and
+        td1.table_columns = 'res_order_type'
+        left join t_dict td2 on pa.state = td2.status_cd and td2.table_name = 'purchase_apply' and td2.table_columns =
+        'state'
+        left join t_dict td3 on pa.warehousing_way = td3.status_cd and td3.table_name = 'purchase_apply' and
+        td3.table_columns = 'warehousing_way'
+        where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="resName !=null and resName != ''">
+            and rs.res_name like '%${resName}%'
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id = #{rsId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="purchaseQuantity !=null and purchaseQuantity != ''">
+            and t.purchase_quantity= #{purchaseQuantity}
+        </if>
+        <if test="purchaseRemark !=null and purchaseRemark != ''">
+            and t.purchase_remark= #{purchaseRemark}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="resOrderType !=null and resOrderType != ''">
+            and pa.res_order_type= #{resOrderType}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and pa.user_id= #{userId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and pa.user_name like '%${userName}%'
+        </if>
+        <if test="description !=null and description != ''">
+            and pa.description= #{description}
+        </if>
+        <if test="state !=null and state != ''">
+            and pa.state= #{state}
+        </if>
+        <if test="endUserName !=null and endUserName != ''">
+            and pa.end_user_name like '%${endUserName}%'
+        </if>
+        <if test="endUserTel !=null and endUserTel != ''">
+            and pa.end_user_tel= #{endUserTel}
+        </if>
+        <if test="warehousingWay !=null and warehousingWay != ''">
+            and pa.warehousing_way= #{warehousingWay}
+        </if>
+        <if test="supplierName !=null and supplierName != ''">
+            and rsp.supplier_name= #{supplierName}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -136,6 +274,12 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and pa.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and pa.create_time &lt;= #{endTime}
         </if>
     </select>
 </mapper>

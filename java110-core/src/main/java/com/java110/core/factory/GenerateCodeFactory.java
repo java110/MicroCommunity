@@ -197,6 +197,9 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_rstId = "28";
     public static final String CODE_PREFIX_crId = "28";
     public static final String CODE_PREFIX_partyaId = "28";
+    public static final String CODE_PREFIX_rsId = "29";
+    public static final String CODE_PREFIX_ausId = "29";
+    public static final String CODE_PREFIX_rsurId = "30";
 
 
     /**

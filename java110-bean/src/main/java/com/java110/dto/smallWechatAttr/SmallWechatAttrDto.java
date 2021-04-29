@@ -20,7 +20,7 @@ public class SmallWechatAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_WECHAT_TEMPLATE = "33003";//欠费推送模板
     public static final String SPEC_CD_WECHAT_SUCCESS_TEMPLATE = "33004";//业主缴费成功推送模板
     public static final String SPEC_CD_WECHAT_EXPIRE_TEMPLATE = "33005";//业主费用到期通知推送模板
-    public static final String SPEC_CD_WECHAT_PROCESS_TEMPLATE = "33006";//空置房验房申请流程、审批流程通知模板
+    public static final String SPEC_CD_WECHAT_PROCESS_TEMPLATE = "33006";//空置房验房申请流程、审批流程通知模板（资产调拨审批、领用审批、转赠通知-资产管理待办审批通知）
     public static final String SPEC_CD_WECHAT_ROOM_STATE_TEMPLATE = "33007";//空置房验房状态（通过和不通过）、审批状态（通过和不通过）模板
     public static final String SPEC_CD_WECHAT_WORK_ORDER_REMIND_TEMPLATE = "33008";//报修工单提醒模板
     public static final String SPEC_CD_WECHAT_DISPATCH_REMIND_TEMPLATE = "33009";//报修工单派单和转单提醒给维修师傅

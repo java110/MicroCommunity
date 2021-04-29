@@ -91,7 +91,7 @@ public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
             smallWechatAttrPo.setWechatId(wechatId);
             super.insert(context, smallWechatAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WECHAT_ATTR);
 
-            //空置房验房申请流程、审批流程通知--模板ID
+            //空置房验房申请流程、审批流程通知--模板ID（资产调拨审批、领用审批、转赠通知-资产管理待办审批通知）
             smallWechatAttrPo = new SmallWechatAttrPo();
             smallWechatAttrPo.setAttrId("-3");
             smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));

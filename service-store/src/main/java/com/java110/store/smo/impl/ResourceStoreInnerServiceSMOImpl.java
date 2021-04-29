@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,15 +44,11 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
 
     @Override
     public List<ResourceStoreDto> queryResourceStores(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
-
         //校验是否传了 分页信息
-
         int page = resourceResourceStoreDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             resourceResourceStoreDto.setPage((page - 1) * resourceResourceStoreDto.getRow());
         }
-
         List<ResourceStoreDto> resourceResourceStores = BeanConvertUtil.covertBeanList(resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto)), ResourceStoreDto.class);
         //获取图片地址
         List<ResourceStoreDto> resourceStoreDtos = new ArrayList<>();
@@ -93,15 +90,27 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             info.put("resId", resourceStorePo.getResId());
             info.put("storeId", resourceStorePo.getStoreId());
             List<Map> stores = resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(info);
-
             Assert.listOnlyOne(stores, "不存在该物品");
-            int stock = Integer.parseInt(stores.get(0).get("stock").toString());
-            int newStock = Integer.parseInt(resourceStorePo.getStock());
-            int totalStock = stock + newStock;
-
+            Double stock = Double.parseDouble(stores.get(0).get("stock").toString());
+            Double newStock = Double.parseDouble(resourceStorePo.getStock());
+            Double totalStock = stock + newStock;
             if (totalStock < 0) {
                 throw new IllegalArgumentException("库存不足，参数有误");
             }
+            //获取原均价
+            Object averageOldPrice = stores.get(0).get("averagePrice");
+            Double price = 0.0;
+            if (averageOldPrice != null) {
+                price = Double.parseDouble(averageOldPrice.toString());
+            }
+            //获取现在采购的价格
+            Double newPrice = Double.parseDouble(resourceStorePo.getPurchasePrice());
+            //获取均价
+            double averagePrice = ((newPrice * newStock) + (price * stock)) / totalStock;
+            BigDecimal b0 = new BigDecimal(averagePrice);
+            //四舍五入保留两位
+            double f0 = b0.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            resourceStorePo.setAveragePrice(String.valueOf(f0));
             resourceStorePo.setStock(totalStock + "");
             resourceStorePo.setStatusCd("0");
             return resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance(BeanConvertUtil.beanCovertMap(resourceStorePo));

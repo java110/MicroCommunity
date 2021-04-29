@@ -33,8 +33,7 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String stateName;
     private String shaName;
     private String shzName;
-
-
+    private String resCode;
     private Date createTime;
 
     private String statusCd = "0";
@@ -179,7 +178,6 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
         this.shzName = shzName;
     }
 
-
     public String getCurrentUserId() {
         return currentUserId;
     }
@@ -250,5 +248,13 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setAsIds(String[] asIds) {
         this.asIds = asIds;
+    }
+
+    public String getResCode() {
+        return resCode;
+    }
+
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
     }
 }

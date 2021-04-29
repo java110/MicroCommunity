@@ -13,6 +13,7 @@ import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeResourceStoreConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.resourceStore.ApiResourceStoreDataVo;
 import com.java110.vo.api.resourceStore.ApiResourceStoreVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,22 +77,14 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
         basePrivilegeDto.setResource("/viewGroupResource");
         basePrivilegeDto.setUserId(userId);
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size()==0) {
+        if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size() == 0) {
             resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
             resourceStoreDto.setShObjId(reqJson.getString("communityId"));
         }
         int count = resourceStoreInnerServiceSMOImpl.queryResourceStoresCount(resourceStoreDto);
         List<ApiResourceStoreDataVo> resourceStores = new ArrayList<>();
         if (count > 0) {
-            List<ApiResourceStoreDataVo> apiResourceStoreDataVos = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
-            for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
-                if (apiResourceStoreDataVo.getOutLowPrice().equals(apiResourceStoreDataVo.getOutHighPrice())) {
-                    apiResourceStoreDataVo.setOutPrice(apiResourceStoreDataVo.getOutLowPrice() + "元");
-                } else {
-                    apiResourceStoreDataVo.setOutPrice(apiResourceStoreDataVo.getOutLowPrice() + "元-" + apiResourceStoreDataVo.getOutHighPrice() + "元");
-                }
-                resourceStores.add(apiResourceStoreDataVo);
-            }
+            resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
         } else {
             resourceStores = new ArrayList<>();
         }

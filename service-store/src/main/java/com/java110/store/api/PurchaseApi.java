@@ -97,6 +97,7 @@ public class PurchaseApi {
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
         return resourceEnterBMOImpl.enter(purchaseApplyPo);
     }
+
     /**
      * 直接入库操作
      * <p>
@@ -109,9 +110,9 @@ public class PurchaseApi {
      */
     @RequestMapping(value = "/purchaseStorage", method = RequestMethod.POST)
     public ResponseEntity<String> purchaseStorage(@RequestBody JSONObject reqJson,
-                                                @RequestHeader(value = "user-id") String userId,
-                                                @RequestHeader(value = "user-name") String userName,
-                                                @RequestHeader(value = "store-id") String storeId) {
+                                                  @RequestHeader(value = "user-id") String userId,
+                                                  @RequestHeader(value = "user-name") String userName,
+                                                  @RequestHeader(value = "store-id") String storeId) {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
@@ -124,7 +125,7 @@ public class PurchaseApi {
         purchaseApplyPo.setEndUserTel(reqJson.getString("endUserTel"));
         purchaseApplyPo.setStoreId(storeId);
         purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
-        purchaseApplyPo.setState(PurchaseApplyDto.STATE_AUDITED);
+        purchaseApplyPo.setState(PurchaseApplyDto.STATE_END);
         purchaseApplyPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         purchaseApplyPo.setDescription("直接采购入库");
         purchaseApplyPo.setCreateUserId(userId);
@@ -141,6 +142,7 @@ public class PurchaseApi {
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
             //增加库存
             ResourceStorePo resourceStorePo = new ResourceStorePo();
+            resourceStorePo.setPurchasePrice(purchaseApplyDetailPo.getPrice());
             resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
             resourceStorePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);

@@ -1504,5 +1504,54 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_RESOURCE_STORE_TYPE="671100050007";
 
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_RESOURCE_SUPPLIER="671100030008";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_RESOURCE_SUPPLIER="671100040008";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_RESOURCE_SUPPLIER="671100050008";
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ALLOCATION_USER_STOREHOUSE="671100030009";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ALLOCATION_USER_STOREHOUSE="671100040009";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ALLOCATION_USER_STOREHOUSE="671100050009";
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD="671100030010";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_RESOURCE_STORE_USE_RECORD="671100040010";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_RESOURCE_STORE_USE_RECORD="671100050010";
+
 
 }

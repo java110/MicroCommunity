@@ -32,6 +32,9 @@ public class ResourceStorePo implements Serializable {
     private String bId;
     private List<String> photos;
     private List<String> fileUrls;
+    private String warningStock;
+    private String averagePrice;
+    private String purchasePrice;
 
     public String getResId() {
         return resId;
@@ -183,5 +186,29 @@ public class ResourceStorePo implements Serializable {
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public String getWarningStock() {
+        return warningStock;
+    }
+
+    public void setWarningStock(String warningStock) {
+        this.warningStock = warningStock;
+    }
+
+    public String getAveragePrice() {
+        return averagePrice;
+    }
+
+    public void setAveragePrice(String averagePrice) {
+        this.averagePrice = averagePrice;
+    }
+
+    public String getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(String purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 }
