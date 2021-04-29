@@ -26,7 +26,7 @@ public class DeleteAllocationStorehouseListener extends AbstractServiceApiPlusLi
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
-        Assert.hasKeyAndValue(reqJson, "asId", "asId不能为空");
+        Assert.hasKeyAndValue(reqJson, "applyId", "调拨编号不能为空");
 
     }
 
