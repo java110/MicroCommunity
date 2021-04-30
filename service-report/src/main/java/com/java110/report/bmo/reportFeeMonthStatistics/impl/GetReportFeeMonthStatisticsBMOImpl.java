@@ -329,8 +329,11 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getFloorNum()
                             + "栋" + reportFeeMonthStatistics.getUnitNum()
                             + "单元" + reportFeeMonthStatistics.getRoomNum() + "室");
-                } else {
+                } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(reportFeeMonthStatistics.getPayerObjType())) {
                     reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getCarNum());
+                }else{
+                    reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getContractCode());
+
                 }
 
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getImportFeeName())) {
