@@ -5,10 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
@@ -46,9 +48,11 @@ public class CollectionApi {
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
 
-
     @Autowired
     private IUserStorehouseInnerServiceSMO userStorehouseInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
 
     /**
@@ -56,7 +60,6 @@ public class CollectionApi {
      *
      * @param reqJson
      * @param userId
-     * @param userName
      * @param storeId
      * @return {"resourceStores":[{"resId":"852020070239060001","resName":"水性笔","resCode":"002","price":"2.00","stock":"2",
      * "description":"黑色","quantity":"1"}],"description":"123123","endUserName":"1","endUserTel":"17797173942","file":"",
@@ -65,10 +68,16 @@ public class CollectionApi {
     @RequestMapping(value = "/goodsCollection", method = RequestMethod.POST)
     public ResponseEntity<String> goodsCollection(@RequestBody JSONObject reqJson,
                                                   @RequestHeader(value = "user-id") String userId,
-                                                  @RequestHeader(value = "user-name") String userName,
                                                   @RequestHeader(value = "store-id") String storeId) {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写物品领用的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
+        //查询用户名
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setStatusCd("0");
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+        Assert.listOnlyOne(users, "查询用户信息错误");
+        String userName = users.get(0).getName();
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         purchaseApplyPo.setDescription(reqJson.getString("description"));
@@ -161,7 +170,7 @@ public class CollectionApi {
         purchaseApplyPo.setEndUserTel(reqJson.getString("endUserTel"));
         purchaseApplyPo.setStoreId(storeId);
         purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_OUT);
-        purchaseApplyPo.setState(PurchaseApplyDto.STATE_AUDITED);
+        purchaseApplyPo.setState(PurchaseApplyDto.STATE_END);
         purchaseApplyPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         purchaseApplyPo.setCreateUserId(userId);
         purchaseApplyPo.setCreateUserName(userName);
@@ -181,6 +190,7 @@ public class CollectionApi {
             ResourceStorePo resourceStorePo = new ResourceStorePo();
             resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
             resourceStorePo.setStock("-" + purchaseApplyDetailPo.getPurchaseQuantity());
+            resourceStorePo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_OUT);
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
             //查询资源
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();

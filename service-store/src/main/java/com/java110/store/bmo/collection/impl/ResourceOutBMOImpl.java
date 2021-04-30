@@ -52,6 +52,7 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
             ResourceStorePo resourceStorePo = new ResourceStorePo();
             resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
             resourceStorePo.setStock("-" + purchaseApplyDetailPo.getPurchaseQuantity());
+            resourceStorePo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_OUT);
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
             resourceStoreDto.setResId(purchaseApplyDetailPo.getResId());

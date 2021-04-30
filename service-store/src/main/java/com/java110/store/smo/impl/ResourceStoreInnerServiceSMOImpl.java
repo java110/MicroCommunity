@@ -3,6 +3,7 @@ package com.java110.store.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
@@ -97,20 +98,23 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             if (totalStock < 0) {
                 throw new IllegalArgumentException("库存不足，参数有误");
             }
-            //获取原均价
-            Object averageOldPrice = stores.get(0).get("averagePrice");
-            Double price = 0.0;
-            if (averageOldPrice != null) {
-                price = Double.parseDouble(averageOldPrice.toString());
+            //入库操作 对物品进行加权平均
+            if(resourceStorePo.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)){
+                //获取原均价
+                Object averageOldPrice = stores.get(0).get("averagePrice");
+                Double price = 0.0;
+                if (averageOldPrice != null) {
+                    price = Double.parseDouble(averageOldPrice.toString());
+                }
+                //获取现在采购的价格
+                Double newPrice = Double.parseDouble(resourceStorePo.getPurchasePrice());
+                //获取均价
+                double averagePrice = ((newPrice * newStock) + (price * stock)) / totalStock;
+                BigDecimal b0 = new BigDecimal(averagePrice);
+                //四舍五入保留两位
+                double f0 = b0.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                resourceStorePo.setAveragePrice(String.valueOf(f0));
             }
-            //获取现在采购的价格
-            Double newPrice = Double.parseDouble(resourceStorePo.getPurchasePrice());
-            //获取均价
-            double averagePrice = ((newPrice * newStock) + (price * stock)) / totalStock;
-            BigDecimal b0 = new BigDecimal(averagePrice);
-            //四舍五入保留两位
-            double f0 = b0.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-            resourceStorePo.setAveragePrice(String.valueOf(f0));
             resourceStorePo.setStock(totalStock + "");
             resourceStorePo.setStatusCd("0");
             return resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance(BeanConvertUtil.beanCovertMap(resourceStorePo));

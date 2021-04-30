@@ -38,6 +38,7 @@ public class ResourceEnterBMOImpl implements IResourceEnterBMO {
             resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
             resourceStorePo.setPurchasePrice(purchaseApplyDetailPo.getPrice());
             resourceStorePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
+            resourceStorePo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
         }
         //获取订单号

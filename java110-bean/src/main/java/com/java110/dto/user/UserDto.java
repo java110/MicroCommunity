@@ -52,12 +52,12 @@ public class UserDto extends PageDto implements Serializable {
     private String staffId;
 
     private String openId;
+
     private String statusCd;
 
     private String token;
 
     private String key;//临时登录秘钥，每次登录后重置
-
 
     private String parentOrgName;
 
@@ -70,8 +70,6 @@ public class UserDto extends PageDto implements Serializable {
     private boolean loginByPhone;
 
     private String relCd;
-
-
 
     public String getUserId() {
         return userId;

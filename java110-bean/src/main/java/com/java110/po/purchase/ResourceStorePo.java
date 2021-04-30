@@ -35,6 +35,7 @@ public class ResourceStorePo implements Serializable {
     private String warningStock;
     private String averagePrice;
     private String purchasePrice;
+    private String resOrderType;
 
     public String getResId() {
         return resId;
@@ -210,5 +211,14 @@ public class ResourceStorePo implements Serializable {
 
     public void setPurchasePrice(String purchasePrice) {
         this.purchasePrice = purchasePrice;
+    }
+
+
+    public String getResOrderType() {
+        return resOrderType;
+    }
+
+    public void setResOrderType(String resOrderType) {
+        this.resOrderType = resOrderType;
     }
 }

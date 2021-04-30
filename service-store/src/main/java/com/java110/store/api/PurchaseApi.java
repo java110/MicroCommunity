@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -145,6 +144,7 @@ public class PurchaseApi {
             resourceStorePo.setPurchasePrice(purchaseApplyDetailPo.getPrice());
             resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
             resourceStorePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
+            resourceStorePo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
