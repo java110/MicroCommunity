@@ -3,6 +3,7 @@ package com.java110.core.smo.impl;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
 import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerCarDto;
@@ -15,6 +16,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
@@ -69,6 +71,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Autowired(required = false)
     private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
+
+    @Autowired(required = false)
+    private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
     @Override
     public Date getFeeEndTime() {
@@ -395,6 +400,21 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             Assert.listOnlyOne(ownerCarDtos, "车辆不存在");
             ownerDto = new OwnerDto();
             ownerDto.setOwnerId(ownerCarDtos.get(0).getOwnerId());
+            ownerDto.setCommunityId(feeDto.getCommunityId());
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+            Assert.listOnlyOne(ownerDtos, "业主不存在");
+            return ownerDtos.get(0);
+        }
+
+        if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {
+            ContractDto contractDto = new ContractDto();
+            contractDto.setContractId(feeDto.getPayerObjId());
+            contractDto.setCommunityId(feeDto.getCommunityId());
+            List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
+
+            Assert.listOnlyOne(contractDtos, "车辆不存在");
+            ownerDto = new OwnerDto();
+            ownerDto.setOwnerId(contractDtos.get(0).getObjId());
             ownerDto.setCommunityId(feeDto.getCommunityId());
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             Assert.listOnlyOne(ownerDtos, "业主不存在");
