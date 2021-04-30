@@ -40,6 +40,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String roomId;
     private String roomNum;
     private String carNum;
+    private String contractCode;
     private String payerObjType;
 
     private String objCount;
@@ -472,5 +473,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setVacantHousingReduction(String vacantHousingReduction) {
         this.vacantHousingReduction = vacantHousingReduction;
+    }
+
+    public String getContractCode() {
+        return contractCode;
+    }
+
+    public void setContractCode(String contractCode) {
+        this.contractCode = contractCode;
     }
 }

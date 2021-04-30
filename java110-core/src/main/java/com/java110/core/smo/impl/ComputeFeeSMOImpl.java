@@ -3,12 +3,9 @@ package com.java110.core.smo.impl;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
-import com.java110.dto.fee.BillDto;
-import com.java110.dto.fee.BillOweFeeDto;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
+import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
@@ -19,6 +16,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
@@ -38,12 +36,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 费用计算 服务类
@@ -78,6 +71,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Autowired(required = false)
     private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
+
+    @Autowired(required = false)
+    private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
     @Override
     public Date getFeeEndTime() {
@@ -143,6 +139,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             computeFeePriceByRoom(feeDto, roomDto);
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
             computeFeePriceByParkingSpace(feeDto);
+        }else if(FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //房屋相关
+            computeFeePriceByContract(feeDto, roomDto);
         }
     }
 
@@ -182,6 +180,31 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
      * @param feeDto
      */
     private void computeFeePriceByRoom(FeeDto feeDto, RoomDto roomDto) {
+        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
+
+        String computingFormula = feeDto.getComputingFormula();
+        double feePrice = getFeePrice(feeDto, roomDto);
+        feeDto.setFeePrice(feePrice);
+        //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
+        price = price.multiply(new BigDecimal(oweMonth));
+        feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+        feeDto.setDeadlineTime(targetEndDate);
+
+        //动态费用
+        if ("4004".equals(computingFormula) && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
+        }
+    }
+    /**
+     * 根据房屋来算单价
+     *
+     * @param feeDto
+     */
+    private void computeFeePriceByContract(FeeDto feeDto, RoomDto roomDto) {
         Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
         double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
@@ -368,15 +391,30 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             return ownerDtos.get(0);
         }
 
-        if(FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())){
+        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
             ownerCarDto.setCarId(feeDto.getPayerObjId());
             ownerCarDto.setCommunityId(feeDto.getCommunityId());
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-            Assert.listOnlyOne(ownerCarDtos,"车辆不存在");
+            Assert.listOnlyOne(ownerCarDtos, "车辆不存在");
             ownerDto = new OwnerDto();
             ownerDto.setOwnerId(ownerCarDtos.get(0).getOwnerId());
+            ownerDto.setCommunityId(feeDto.getCommunityId());
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+            Assert.listOnlyOne(ownerDtos, "业主不存在");
+            return ownerDtos.get(0);
+        }
+
+        if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {
+            ContractDto contractDto = new ContractDto();
+            contractDto.setContractId(feeDto.getPayerObjId());
+            contractDto.setCommunityId(feeDto.getCommunityId());
+            List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
+
+            Assert.listOnlyOne(contractDtos, "车辆不存在");
+            ownerDto = new OwnerDto();
+            ownerDto.setOwnerId(contractDtos.get(0).getObjId());
             ownerDto.setCommunityId(feeDto.getCommunityId());
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             Assert.listOnlyOne(ownerDtos, "业主不存在");
@@ -795,10 +833,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
                 BigDecimal builtUpArea = new BigDecimal(0);
-                for(ContractRoomDto tmpContractRoomDto: contractRoomDtos){
+                for (ContractRoomDto tmpContractRoomDto : contractRoomDtos) {
                     builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getBuiltUpArea())));
                 }
-                feeDto.setBuiltUpArea(builtUpArea.doubleValue()+"");
+                feeDto.setBuiltUpArea(builtUpArea.doubleValue() + "");
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
                 feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(3, BigDecimal.ROUND_HALF_EVEN);
             } else if ("2002".equals(computingFormula)) { // 固定费用
@@ -904,9 +942,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     private BigDecimal computeContractCustomizeFormula(FeeDto feeDto, List<ContractRoomDto> contractRoomDtos) {
 
         BigDecimal total = new BigDecimal(0.0);
-       for(ContractRoomDto contractRoomDto :contractRoomDtos){
-           total = total.add(computeRoomCustomizeFormula(feeDto,contractRoomDto));
-       }
+        for (ContractRoomDto contractRoomDto : contractRoomDtos) {
+            total = total.add(computeRoomCustomizeFormula(feeDto, contractRoomDto));
+        }
         return total;
     }
 
