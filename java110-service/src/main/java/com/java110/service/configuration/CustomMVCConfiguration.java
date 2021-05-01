@@ -36,4 +36,14 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
             ContentNegotiationConfigurer configurer) {
         configurer.favorPathExtension(false);
     }
+
+    /**
+     * +对于header中的中文字进行解码
+     *
+     * @return 转换结果
+     */
+    @Bean
+    public StringDecoderForHeaderConverter stringHeaderConverter() {
+        return new StringDecoderForHeaderConverter(Charset.forName("UTF-8"));
+    }
 }
