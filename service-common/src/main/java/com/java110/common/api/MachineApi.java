@@ -59,7 +59,7 @@ public class MachineApi {
         if (!USER_ROLE_OWNER.equals(reqJson.getString("userRole"))) { //这种为 员工的情况呢
             reqJson.put("userId", userId);
         }
-        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含设备信息");
+        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含用户信息");
         return machineOpenDoorBMOImpl.openDoor(reqJson);
     }
 
