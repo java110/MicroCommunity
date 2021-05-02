@@ -1,25 +1,27 @@
 {
   "autoMove": true,
-  "id": "vipAcctId",
-  "name": "shopVipAccount",
-  "desc": "会员账户",
+  "id": "detailId",
+  "name": "shopVipAccountDetail",
+  "desc": "会员账户交易",
   "shareParam": "shopId",
   "shareColumn": "shop_id",
   "shareName": "acct",
-  "tableName": "shop_vip_account",
+  "tableName": "shop_vip_account_detail",
   "param": {
+    "detailId": "detail_id",
     "vipAcctId": "vip_acct_id",
-    "vipId": "vip_id",
-    "acctName": "acct_name",
-    "acctType": "acct_type",
+    "detailType": "detail_type",
+    "relAcctId": "rel_acct_id",
     "amount": "amount",
     "shopId": "shop_id",
     "storeId": "store_id",
+    "orderId": "order_id",
+    "remark": "remark",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "vipId",
+      "code": "vipAcctId",
       "msg": "会员不能为空"
     },
     {
@@ -28,4 +30,3 @@
     }
   ]
 }
-
