@@ -1,38 +1,41 @@
 {
   "autoMove": true,
-  "id": "acctId",
-  "name": "account",
-  "desc": "账户",
+  "id": "detailId",
+  "name": "accountDetail",
+  "desc": "账户交易",
   "shareParam": "objId",
   "shareColumn": "obj_id",
   "shareName": "acct",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_ACCT",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_ACCT",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_ACCT",
-  "newBusinessTypeCdValue": "121100030001",
-  "updateBusinessTypeCdValue": "121100040001",
-  "deleteBusinessTypeCdValue": "121100050001",
-  "businessTableName": "business_account",
-  "tableName": "account",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_ACCT_DETAIL",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_ACCT_DETAIL",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_ACCT_DETAIL",
+  "newBusinessTypeCdValue": "121100030002",
+  "updateBusinessTypeCdValue": "121100040002",
+  "deleteBusinessTypeCdValue": "121100050002",
+  "businessTableName": "business_account_detail",
+  "tableName": "account_detail",
   "param": {
+    "detailId": "detail_id",
     "acctId": "acct_id",
-    "acctName": "acct_name",
-    "acctType": "acct_type",
+    "detailType": "detail_type",
     "bId": "b_id",
+    "relAcctId": "rel_acct_id",
     "amount": "amount",
     "objType": "obj_type",
     "objId": "obj_id",
+    "orderId": "order_id",
+    "remark": "remark",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "acctName",
-      "msg": "账户名称不能为空"
+      "code": "acctId",
+      "msg": "账户不能为空"
     },
     {
-      "code": "acctType",
-      "msg": "账户类型不能为空"
+      "code": "detailType",
+      "msg": "类型不能为空"
     },
     {
       "code": "amount",

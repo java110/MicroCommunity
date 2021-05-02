@@ -1590,4 +1590,22 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_ACCT="121100050001";
 
 
+    /**
+     *  添加账户明细
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ACCT_DETAIL="121100030002";
+
+    /**
+     *  修改账户明细
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ACCT_DETAIL="121100040002";
+
+    /**
+     * 删除账户明细
+     */
+    public static final String BUSINESS_TYPE_DELETE_ACCT_DETAIL="121100050002";
+
+
 }
