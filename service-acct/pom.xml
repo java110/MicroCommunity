@@ -63,7 +63,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>com.java110.user.AcctServiceApplicationStart</mainClass>
+          <mainClass>com.java110.acct.AcctServiceApplicationStart</mainClass>
         </configuration>
       </plugin>
     </plugins>
