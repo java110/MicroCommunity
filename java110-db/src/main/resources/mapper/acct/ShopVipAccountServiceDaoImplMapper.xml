@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopVipAccountServiceDaoImpl">
+
+
+    <!-- 保存会员账户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveShopVipAccountInfo" parameterType="Map">
+        insert into shop_vip_account(
+        amount,vip_acct_id,vip_id,acct_type,shop_id,acct_name,store_id
+        ) values (
+        #{amount},#{vipAcctId},#{vipId},#{acctType},#{shopId},#{acctName},#{storeId}
+        )
+    </insert>
+
+
+    <!-- 查询会员账户信息 add by wuxw 2018-07-03 -->
+    <select id="getShopVipAccountInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.vip_acct_id,t.vip_acct_id vipAcctId,t.vip_id,t.vip_id vipId,t.acct_type,t.acct_type
+        acctType,t.status_cd,t.status_cd statusCd,t.shop_id,t.shop_id shopId,t.acct_name,t.acct_name
+        acctName,t.store_id,t.store_id storeId
+        from shop_vip_account t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="vipAcctId !=null and vipAcctId != ''">
+            and t.vip_acct_id= #{vipAcctId}
+        </if>
+        <if test="vipId !=null and vipId != ''">
+            and t.vip_id= #{vipId}
+        </if>
+        <if test="acctType !=null and acctType != ''">
+            and t.acct_type= #{acctType}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改会员账户信息 add by wuxw 2018-07-03 -->
+    <update id="updateShopVipAccountInfo" parameterType="Map">
+        update shop_vip_account t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="vipId !=null and vipId != ''">
+            , t.vip_id= #{vipId}
+        </if>
+        <if test="acctType !=null and acctType != ''">
+            , t.acct_type= #{acctType}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            , t.shop_id= #{shopId}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            , t.acct_name= #{acctName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="vipAcctId !=null and vipAcctId != ''">
+            and t.vip_acct_id= #{vipAcctId}
+        </if>
+
+    </update>
+
+    <!-- 查询会员账户数量 add by wuxw 2018-07-03 -->
+    <select id="queryShopVipAccountsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from shop_vip_account t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="vipAcctId !=null and vipAcctId != ''">
+            and t.vip_acct_id= #{vipAcctId}
+        </if>
+        <if test="vipId !=null and vipId != ''">
+            and t.vip_id= #{vipId}
+        </if>
+        <if test="acctType !=null and acctType != ''">
+            and t.acct_type= #{acctType}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+
+    </select>
+
+</mapper>

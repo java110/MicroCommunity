@@ -1,32 +1,30 @@
 {
   "autoMove": true,
-  "id": "prId",
-  "name": "contractChangePlanRoom",
-  "desc": "合同房屋变更",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "store",
-  "tableName": "contract_change_plan_room",
+  "id": "vipAcctId",
+  "name": "shopVipAccount",
+  "desc": "会员账户",
+  "shareParam": "shopId",
+  "shareColumn": "shop_id",
+  "shareName": "acct",
+  "tableName": "shop_vip_account",
   "param": {
-    "prId": "pr_id",
-    "planId": "plan_id",
-    "contractId": "contract_id",
-    "roomId": "room_id",
-    "roomName": "room_name",
-    "ownerId": "owner_id",
-    "ownerName": "owner_name",
-    "operate": "operate",
+    "vipAcctId": "vip_acct_id",
+    "vipId": "vip_id",
+    "acctName": "acct_name",
+    "acctType": "acct_type",
+    "amount": "amount",
+    "shopId": "shop_id",
     "storeId": "store_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "planId",
-      "msg": "计划不能为空"
+      "code": "vipId",
+      "msg": "会员不能为空"
     },
     {
-      "code": "roomId",
-      "msg": "房屋不能为空"
+      "code": "amount",
+      "msg": "金额不能为空"
     }
   ]
 }
