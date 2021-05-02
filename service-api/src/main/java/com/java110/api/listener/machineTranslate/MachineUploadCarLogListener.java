@@ -15,6 +15,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -116,7 +117,9 @@ public class MachineUploadCarLogListener extends BaseMachineListener {
             reqJson.put("machineRecordId", reqJson.getString("detailId"));
             reqJson.put("relTypeCd", "15000");
             //保存文件信息
-            machineTranslateBMOImpl.savePhoto(reqJson, context);
+            if(reqJson.containsKey("photo") && !StringUtil.isEmpty(reqJson.getString("reqJson"))){
+                machineTranslateBMOImpl.savePhoto(reqJson, context);
+            }
             commit(context);
             responseEntity = context.getResponseEntity();
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
