@@ -1572,4 +1572,22 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_ALLOCATION_STOREHOUSE_APPLY="681100050006";
 
 
+    /**
+     *  添加账户
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ACCT="121100030001";
+
+    /**
+     *  修改账户
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ACCT="121100040001";
+
+    /**
+     * 删除账户
+     */
+    public static final String BUSINESS_TYPE_DELETE_ACCT="121100050001";
+
+
 }

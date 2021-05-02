@@ -202,6 +202,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_rsurId = "30";
     public static final String CODE_PREFIX_applyId = "29";
     public static final String CODE_PREFIX_prId = "30";
+    public static final String CODE_PREFIX_acctId = "31";
 
 
     /**
