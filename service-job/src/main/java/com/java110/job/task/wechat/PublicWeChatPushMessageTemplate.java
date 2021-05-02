@@ -3,6 +3,7 @@ package com.java110.job.task.wechat;
 import com.alibaba.fastjson.JSON;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.fee.BillDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
@@ -203,6 +204,13 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                     logger.info("微信模板返回内容:{}", responseEntity);
                 }
             }
+
+            BillOweFeeDto tmpBillOweFeeDto = new BillOweFeeDto();
+            tmpBillOweFeeDto.setFeeId(fee.getFeeId());
+            tmpBillOweFeeDto.setCommunityId(fee.getCommunityId());
+            tmpBillOweFeeDto.setBillId(fee.getBillId());
+            tmpBillOweFeeDto.setState(BillOweFeeDto.STATE_SEND_OWNER);
+            feeInnerServiceSMOImpl.updateBillOweFees(tmpBillOweFeeDto);
 
         }
     }

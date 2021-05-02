@@ -16,6 +16,7 @@ public class BillOweFeeDto extends PageDto implements Serializable {
 
     public static final String STATE_FINISH_FEE = "2000";//已缴费
     public static final String STATE_WILL_FEE = "1000";//未缴费
+    public static final String STATE_SEND_OWNER = "3000";//未缴费
 
     private String oweId;
     private String billId;
