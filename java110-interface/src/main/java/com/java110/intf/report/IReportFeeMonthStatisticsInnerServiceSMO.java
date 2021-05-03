@@ -2,6 +2,7 @@ package com.java110.intf.report;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
@@ -263,6 +264,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/queryReportProficientCount", method = RequestMethod.POST)
     JSONObject queryReportProficientCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * <p>查询小区楼信息</p>
      *
@@ -299,4 +301,21 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     @RequestMapping(value = "/queryRepairForStaff", method = RequestMethod.POST)
     List<RepairUserDto> queryRepairForStaff(@RequestBody RepairUserDto repairUserDto);
 
+    /**
+     * 查询未收费房屋
+     *
+     * @param roomDto
+     * @return
+     */
+    @RequestMapping(value = "/queryNoFeeRoomsCount", method = RequestMethod.POST)
+    int queryNoFeeRoomsCount(@RequestBody RoomDto roomDto);
+
+    /**
+     * 查询未收费房屋
+     *
+     * @param roomDto 房屋
+     * @return
+     */
+    @RequestMapping(value = "/queryNoFeeRooms", method = RequestMethod.POST)
+    List<RoomDto> queryNoFeeRooms(@RequestBody RoomDto roomDto);
 }

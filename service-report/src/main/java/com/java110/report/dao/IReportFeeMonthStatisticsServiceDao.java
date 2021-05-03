@@ -294,4 +294,8 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @return
      */
     List<Map> getFeeConfigReceivableInformation(Map beanCovertMap);
+
+    int queryNoFeeRoomsCount(Map beanCovertMap);
+
+    Object queryNoFeeRooms(Map beanCovertMap);
 }

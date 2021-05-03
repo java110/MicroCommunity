@@ -402,5 +402,29 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return businessReportFeeMonthStatisticsInfos;
     }
 
+    @Override
+    public int queryNoFeeRoomsCount(Map info) {
+        logger.debug("查询未收费房屋统计数据 入参 info : {}", info);
+
+        List<Map> roomInfos =
+                sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryNoFeeRoomsCount", info);
+        if (roomInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(roomInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public Object queryNoFeeRooms(Map info) {
+        logger.debug("查询未收费房屋统计信息 入参 info : {}", info);
+
+        List<Map> roomInfos =
+                sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryNoFeeRooms", info);
+
+        return roomInfos;
+    }
+
+
 
 }

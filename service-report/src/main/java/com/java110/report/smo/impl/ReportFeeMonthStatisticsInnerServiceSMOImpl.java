@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
@@ -318,7 +319,7 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
 
         int deadlineFeeCount = reportFeeMonthStatisticsServiceDaoImpl.queryDeadlineFeeCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
-        int  prePaymentCount = reportFeeMonthStatisticsServiceDaoImpl.queryPrePaymentNewCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+        int prePaymentCount = reportFeeMonthStatisticsServiceDaoImpl.queryPrePaymentNewCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
 
 
         JSONObject remindInfomation = new JSONObject();
@@ -384,6 +385,28 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         }
         List<RepairUserDto> repairUserDtoList = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.getRepairStaff(BeanConvertUtil.beanCovertMap(repairUserDto)), RepairUserDto.class);
         return repairUserDtoList;
+    }
+
+    @Override
+    public int queryNoFeeRoomsCount(@RequestBody RoomDto roomDto) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryNoFeeRoomsCount(BeanConvertUtil.beanCovertMap(roomDto));
+    }
+
+    @Override
+    public List<RoomDto> queryNoFeeRooms(@RequestBody RoomDto roomDto) {
+//校验是否传了 分页信息
+
+        int page = roomDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            roomDto.setPage((page - 1) * roomDto.getRow());
+        }
+
+        List<RoomDto> rooms =
+                BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryNoFeeRooms(BeanConvertUtil.beanCovertMap(roomDto)),
+                        RoomDto.class);
+
+        return rooms;
     }
 
 

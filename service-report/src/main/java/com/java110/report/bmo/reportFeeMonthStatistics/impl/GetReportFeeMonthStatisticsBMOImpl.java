@@ -1,6 +1,7 @@
 package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.repair.RepairUserDto;
@@ -598,6 +599,24 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         int size = staffs.size();
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) size / (double) repairUserDto.getRow()), repairUserList.size(), repairUserList, staffs, repairUser);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> queryNoFeeRooms(RoomDto roomDto) {
+        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryNoFeeRoomsCount(roomDto);
+
+        List<RoomDto> roomDtos = null;
+        if (count > 0) {
+            roomDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryNoFeeRooms(roomDto);
+        } else {
+            roomDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) roomDto.getRow()), count, roomDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

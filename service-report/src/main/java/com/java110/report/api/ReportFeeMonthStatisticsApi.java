@@ -1,6 +1,7 @@
 package com.java110.report.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.RoomDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
@@ -520,5 +521,20 @@ public class ReportFeeMonthStatisticsApi {
      *
      * limit 10
      */
+
+    /**
+     * 查询费用分项表
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryNoFeeRooms
+     * @path /app/reportFeeMonthStatistics/queryNoFeeRooms
+     */
+    @RequestMapping(value = "/queryNoFeeRooms", method = RequestMethod.GET)
+    public ResponseEntity<String> queryNoFeeRooms(@RequestParam(value = "communityId") String communityId) {
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(communityId);
+        return getReportFeeMonthStatisticsBMOImpl.queryNoFeeRooms(roomDto);
+    }
 
 }
