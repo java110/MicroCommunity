@@ -179,8 +179,8 @@ public class ImportMeterWaterFeeSMOImpl extends BaseComponentSMO implements IImp
 
             String startTime = excelDoubleToDate(os[4].toString());
             String endTime = excelDoubleToDate(os[6].toString());
-            Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_A, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD hh:mm:ss 文本格式");
-            Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_A, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD hh:mm:ss 文本格式");
+            Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
+            Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
 
 
             importRoomFee = new ImportExportMeterWaterDto();
