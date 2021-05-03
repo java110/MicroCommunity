@@ -508,4 +508,17 @@ public class ReportFeeMonthStatisticsApi {
         return getReportFeeMonthStatisticsBMOImpl.queryReportProficientCount(reportFeeMonthStatisticsDto);
     }
 
+    /**
+     * 查询未收费房屋
+     * select t.* from building_room t
+     * inner join building_unit bu on t.unit_id  = bu.unit_id and bu.status_cd = '0'
+     * inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+     * where t.status_cd = '0'
+     * and not exists(
+     * 	select 1 from pay_fee pf where t.room_id = pf.payer_obj_id and pf.status_cd = '0' and pf.state = '2008001'
+     * )
+     *
+     * limit 10
+     */
+
 }
