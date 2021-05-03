@@ -538,6 +538,8 @@ public class ReportFeeMonthStatisticsApi {
             ) {
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(communityId);
+        roomDto.setPage(page);
+        roomDto.setRow(row);
         return getReportFeeMonthStatisticsBMOImpl.queryNoFeeRooms(roomDto);
     }
 
