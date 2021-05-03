@@ -531,7 +531,11 @@ public class ReportFeeMonthStatisticsApi {
      * @path /app/reportFeeMonthStatistics/queryNoFeeRooms
      */
     @RequestMapping(value = "/queryNoFeeRooms", method = RequestMethod.GET)
-    public ResponseEntity<String> queryNoFeeRooms(@RequestParam(value = "communityId") String communityId) {
+    public ResponseEntity<String> queryNoFeeRooms(
+            @RequestParam(value = "communityId") String communityId,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "row") int row
+            ) {
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(communityId);
         return getReportFeeMonthStatisticsBMOImpl.queryNoFeeRooms(roomDto);
