@@ -1,32 +1,34 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "shopVipAccountDetail",
-  "desc": "会员账户交易",
-  "shareParam": "shopId",
-  "shareColumn": "shop_id",
+  "id": "settingId",
+  "name": "systemGoldSetting",
+  "desc": "金币设置",
+  "shareParam": "settingId",
+  "shareColumn": "settingId",
   "shareName": "acct",
-  "tableName": "shop_vip_account_detail",
+  "tableName": "system_gold_setting",
   "param": {
-    "detailId": "detail_id",
-    "vipAcctId": "vip_acct_id",
-    "detailType": "detail_type",
-    "relAcctId": "rel_acct_id",
-    "amount": "amount",
-    "shopId": "shop_id",
-    "storeId": "store_id",
-    "orderId": "order_id",
-    "remark": "remark",
+    "settingId": "setting_id",
+    "goldName": "gold_name",
+    "goldType": "gold_type",
+    "buyPrice": "buy_price",
+    "usePrice": "use_price",
+    "validity": "validity",
+    "state": "state",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "vipAcctId",
-      "msg": "会员不能为空"
+      "code": "buyPrice",
+      "msg": "购买价不能为空"
     },
     {
-      "code": "amount",
-      "msg": "金额不能为空"
+      "code": "usePrice",
+      "msg": "使用价不能为空"
+    },
+    {
+      "code": "validity",
+      "msg": "有效期不能为空"
     }
   ]
 }
