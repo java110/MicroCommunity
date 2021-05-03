@@ -57,7 +57,9 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
 
         if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("meterType", "1010");
-        } else {
+        } else if(FeeConfigDto.FEE_TYPE_CD_GAS.equals(reqJson.getString("feeTypeCd"))){
+            reqJson.put("meterType", "3030");
+        }else {
             reqJson.put("meterType", "2020");
         }
 
