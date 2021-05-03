@@ -1565,4 +1565,37 @@
         group by t.fee_name
     </select>
 
+
+    <!-- 查询未收费房屋统计数量 add by wuxw 2018-07-03 -->
+    <select id="queryNoFeeRoomsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from building_room t
+        inner join building_unit bu on t.unit_id  = bu.unit_id and bu.status_cd = '0'
+         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+         where t.status_cd = '0'
+         and not exists(
+         	select 1 from pay_fee pf where t.room_id = pf.payer_obj_id and pf.status_cd = '0' and pf.state = '2008001'
+         )
+        and t.community_id = #{communityId}
+    </select>
+
+    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
+    <select id="queryNoFeeRooms" parameterType="Map" resultType="Map">
+        select f.floor_num floorNum,bu.unit_num unitNum,t.room_num roomNum,t.room_id roomId,bo.owner_id ownerId,bo.name ownerName,bo.link
+        from building_room t
+        inner join building_unit bu on t.unit_id  = bu.unit_id and bu.status_cd = '0'
+        inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join building_owner_room_rel borr on borr.room_id = t.room_id and borr.status_cd ='0'
+        left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
+        where t.status_cd = '0'
+        and not exists(
+        select 1 from pay_fee pf where t.room_id = pf.payer_obj_id and pf.status_cd = '0' and pf.state = '2008001'
+        )
+        and t.community_id = #{communityId}
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
 </mapper>

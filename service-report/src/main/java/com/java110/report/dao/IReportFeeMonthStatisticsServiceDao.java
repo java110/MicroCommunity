@@ -297,5 +297,5 @@ public interface IReportFeeMonthStatisticsServiceDao {
 
     int queryNoFeeRoomsCount(Map beanCovertMap);
 
-    Object queryNoFeeRooms(Map beanCovertMap);
+    List<Map> queryNoFeeRooms(Map beanCovertMap);
 }

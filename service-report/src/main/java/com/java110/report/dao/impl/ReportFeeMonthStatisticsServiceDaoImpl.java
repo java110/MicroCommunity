@@ -416,7 +416,7 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     }
 
     @Override
-    public Object queryNoFeeRooms(Map info) {
+    public List<Map> queryNoFeeRooms(Map info) {
         logger.debug("查询未收费房屋统计信息 入参 info : {}", info);
 
         List<Map> roomInfos =
