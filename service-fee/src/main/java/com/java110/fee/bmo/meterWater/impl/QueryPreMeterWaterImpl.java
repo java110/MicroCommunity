@@ -162,6 +162,8 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
 
         if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(feeTypeCd)) {
             importExportMeterWaterDto.setMeterType("1010");
+        }else if(FeeConfigDto.FEE_TYPE_CD_GAS.equals(feeTypeCd)){
+            importExportMeterWaterDto.setMeterType("3030");
         } else {
             importExportMeterWaterDto.setMeterType("2020");
         }
