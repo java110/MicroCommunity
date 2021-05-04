@@ -157,6 +157,9 @@
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
         </if>
+        <if test="carNumLike !=null and carNumLike != ''">
+            and t.car_num like  concat('%',#{carNumLike},'%')
+        </if>
         <if test="carNums !=null">
             and t.car_num in
             <foreach collection="carNums" item="item" index="index" open="(" close=")" separator=",">
@@ -306,6 +309,9 @@
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
+        </if>
+        <if test="carNumLike !=null and carNumLike != ''">
+            and t.car_num like  concat('%',#{carNumLike},'%')
         </if>
         <if test="carNums !=null">
             and t.car_num in
