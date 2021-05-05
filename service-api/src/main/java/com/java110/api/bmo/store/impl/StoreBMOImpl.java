@@ -386,6 +386,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         JSONArray account = new JSONArray();
         AccountPo accountPo = new AccountPo();
         accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
+
         accountPo.setAcctName(businessStoreObj.getString("name"));
         accountPo.setAcctType(acctType);
         accountPo.setAmount("0");
