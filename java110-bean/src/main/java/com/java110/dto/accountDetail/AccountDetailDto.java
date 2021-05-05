@@ -1,6 +1,7 @@
 package com.java110.dto.accountDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,15 @@ import java.util.Date;
 public class AccountDetailDto extends PageDto implements Serializable {
 
     private String detailType;
-private String amount;
-private String orderId;
-private String objId;
-private String detailId;
-private String acctId;
-private String relAcctId;
-private String remark;
-private String objType;
+    private String amount;
+    private String orderId;
+    private String objId;
+    private String detailId;
+    private String acctId;
+    private String acctName;
+    private String relAcctId;
+    private String remark;
+    private String objType;
 
 
     private Date createTime;
@@ -33,55 +35,72 @@ private String objType;
     public String getDetailType() {
         return detailType;
     }
-public void setDetailType(String detailType) {
+
+    public void setDetailType(String detailType) {
         this.detailType = detailType;
     }
-public String getAmount() {
+
+    public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getAcctId() {
+
+    public String getAcctId() {
         return acctId;
     }
-public void setAcctId(String acctId) {
+
+    public void setAcctId(String acctId) {
         this.acctId = acctId;
     }
-public String getRelAcctId() {
+
+    public String getRelAcctId() {
         return relAcctId;
     }
-public void setRelAcctId(String relAcctId) {
+
+    public void setRelAcctId(String relAcctId) {
         this.relAcctId = relAcctId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getObjType() {
+
+    public String getObjType() {
         return objType;
     }
-public void setObjType(String objType) {
+
+    public void setObjType(String objType) {
         this.objType = objType;
     }
 
@@ -100,5 +119,13 @@ public void setObjType(String objType) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAcctName() {
+        return acctName;
+    }
+
+    public void setAcctName(String acctName) {
+        this.acctName = acctName;
     }
 }

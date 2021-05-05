@@ -2,6 +2,8 @@ package com.java110.acct.bmo.account.impl;
 
 import com.java110.acct.bmo.account.IGetAccountBMO;
 import com.java110.dto.account.AccountDto;
+import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
 
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountDetailInnerServiceSMO accountDetailInnerServiceSMOImpl;
 
     /**
      * @param accountDto
@@ -35,6 +40,24 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
         }
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) accountDto.getRow()), count, accountDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> getDetail(AccountDetailDto accountDetailDto) {
+        int count = accountDetailInnerServiceSMOImpl.queryAccountDetailsCount(accountDetailDto);
+
+        List<AccountDetailDto> accountDetailDtos = null;
+        if (count > 0) {
+            accountDetailDtos = accountDetailInnerServiceSMOImpl.queryAccountDetails(accountDetailDto);
+        } else {
+            accountDetailDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) accountDetailDto.getRow()), count, accountDetailDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
