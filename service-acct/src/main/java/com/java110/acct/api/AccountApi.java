@@ -47,8 +47,8 @@ public class AccountApi {
      *
      * @param storeId 小区ID
      * @return
-     * @serviceCode /account/queryAccount
-     * @path /app/account/queryAccount
+     * @serviceCode /account/queryAccountDetail
+     * @path /app/account/queryAccountDetail
      */
     @RequestMapping(value = "/queryAccountDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryAccountDetail(@RequestHeader(value = "store-id", required = false) String storeId,
