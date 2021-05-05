@@ -1,45 +1,61 @@
-package com.java110.acct.kafka;
+package com.java110.acct.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.acct.smo.IAcctServiceSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataTransactionFactory;
-import com.java110.utils.constant.KafkaConstant;
+import com.java110.acct.smo.IAcctServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.InitConfigDataException;
 import com.java110.utils.exception.InitDataFlowContextException;
-import com.java110.utils.kafka.KafkaFactory;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * kafka侦听
- * Created by wuxw on 2018/4/15.
+ * 用户服务类
+ * Created by wuxw on 2018/5/14.
  */
-public class AcctServiceKafka extends BaseController {
+@RestController
+public class AcctApi extends BaseController {
 
-    private final static Logger logger = LoggerFactory.getLogger(AcctServiceKafka.class);
+    private static Logger logger = LoggerFactory.getLogger(AcctApi.class);
 
     @Autowired
-    private IAcctServiceSMO acctServiceSMOImpl;
+    IAcctServiceSMO acctServiceSMOImpl;
 
-    @KafkaListener(topics = {"acctServiceTopic"})
-    public void listen(ConsumerRecord<?, ?> record) {
-        logger.info("kafka的key: " + record.key());
-        logger.info("kafka的value: " + record.value().toString());
-        String orderInfo = record.value().toString();
+    /**
+     *
+     * @param request 页面信息封装
+     * @return
+     */
+    @RequestMapping(path = "/acctApi/service", method = RequestMethod.GET)
+    public String serviceGet(HttpServletRequest request) {
+        return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR, "不支持Get方法请求").toJSONString();
+    }
+
+    /**
+     * 用户服务统一处理接口
+     *
+     * @param orderInfo
+     * @param request
+     * @return
+     */
+    @RequestMapping(path = "/acctApi/service", method = RequestMethod.POST)
+    public String servicePost(@RequestBody String orderInfo, HttpServletRequest request) {
         BusinessServiceDataFlow businessServiceDataFlow = null;
         JSONObject responseJson = null;
         try {
             Map<String, String> headers = new HashMap<String, String>();
+            getRequestInfo(request, headers);
             //预校验
             preValiateOrderInfo(orderInfo);
             businessServiceDataFlow = this.writeDataToDataFlowContext(orderInfo, headers);
@@ -55,18 +71,7 @@ public class AcctServiceKafka extends BaseController {
             responseJson = DataTransactionFactory.createBusinessResponseJson(businessServiceDataFlow, ResponseConstant.RESULT_CODE_ERROR, e.getMessage() + e,
                     null);
         } finally {
-            logger.debug("当前请求报文：" + orderInfo + ", 当前返回报文：" + responseJson.toJSONString());
-            //只有business 和 instance 过程才做通知消息
-            if (!StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(responseJson.getString("businessType"))
-                    && !StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(responseJson.getString("businessType"))) {
-                return;
-            }
-            try {
-                KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_NOTIFY_CENTER_SERVICE_NAME, "", responseJson.toJSONString());
-            } catch (Exception e) {
-                logger.error("用户服务通知centerService失败" + responseJson, e);
-                //这里保存异常信息
-            }
+            return responseJson.toJSONString();
         }
     }
 
@@ -82,4 +87,28 @@ public class AcctServiceKafka extends BaseController {
         }*/
     }
 
+    /**
+     * 获取请求信息
+     *
+     * @param request
+     * @param headers
+     * @throws RuntimeException
+     */
+    private void getRequestInfo(HttpServletRequest request, Map headers) throws Exception {
+        try {
+            super.initHeadParam(request, headers);
+            super.initUrlParam(request, headers);
+        } catch (Exception e) {
+            logger.error("加载头信息失败", e);
+            throw new InitConfigDataException(ResponseConstant.RESULT_PARAM_ERROR, "加载头信息失败");
+        }
+    }
+
+    public IAcctServiceSMO getAcctServiceSMOImpl() {
+        return acctServiceSMOImpl;
+    }
+
+    public void setAcctServiceSMOImpl(IAcctServiceSMO acctServiceSMOImpl) {
+        this.acctServiceSMOImpl = acctServiceSMOImpl;
+    }
 }
