@@ -392,7 +392,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         accountPo.setObjId(paramInJson.getString("storeId"));
         accountPo.setObjType(AccountDto.OBJ_TYPE_STORE);
         account.add(JSONObject.parseObject(JSONObject.toJSONString(accountPo)));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), account);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(AccountPo.class.getSimpleName(), account);
         return business;
     }
 
