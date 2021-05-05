@@ -32,6 +32,7 @@ public class AccountDto extends PageDto implements Serializable {
     public static final String OBJ_TYPE_STORE = "7007";
     private String amount;
     private String acctType;
+    private String acctTypeName;
     private String objId;
     private String acctId;
     private String acctName;
@@ -106,5 +107,13 @@ public class AccountDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAcctTypeName() {
+        return acctTypeName;
+    }
+
+    public void setAcctTypeName(String acctTypeName) {
+        this.acctTypeName = acctTypeName;
     }
 }
