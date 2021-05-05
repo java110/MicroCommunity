@@ -15,6 +15,21 @@ import java.util.Date;
  **/
 public class AccountDto extends PageDto implements Serializable {
 
+    /**
+     * 2003	现金账户
+     * 2004	积分账户
+     * 2005	优惠券账户
+     * 2006	金币账户
+     */
+    public static final String ACCT_TYPE_CASH = "2003";
+    public static final String ACCT_TYPE_INTEGRAL = "2004";
+    public static final String ACCT_TYPE_COUPON = "2005";
+    public static final String ACCT_TYPE_GOLD = "2006";
+
+
+    //对象类型，6006 个人 7007 商户
+    public static final String OBJ_TYPE_PERSON = "6006";
+    public static final String OBJ_TYPE_STORE = "7007";
     private String amount;
     private String acctType;
     private String objId;

@@ -5,16 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.store.IStoreBMO;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.account.AccountDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.po.account.AccountPo;
 import com.java110.po.org.OrgPo;
 import com.java110.po.org.OrgStaffRelPo;
-import com.java110.po.store.StoreAttrPo;
-import com.java110.po.store.StoreCerdentialPo;
-import com.java110.po.store.StorePhotoPo;
-import com.java110.po.store.StorePo;
-import com.java110.po.store.StoreUserPo;
+import com.java110.po.store.*;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -378,6 +376,25 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         return business;
     }
 
+    @Override
+    public JSONObject addAccount(JSONObject paramInJson,String acctType) {
+        JSONObject businessStoreObj = paramInJson.getJSONObject(StorePo.class.getSimpleName());
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ACCT);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 12);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONArray account = new JSONArray();
+        AccountPo accountPo = new AccountPo();
+        accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
+        accountPo.setAcctName(businessStoreObj.getString("name"));
+        accountPo.setAcctType(acctType);
+        accountPo.setAmount("0");
+        accountPo.setObjId(paramInJson.getString("storeId"));
+        accountPo.setObjType(AccountDto.OBJ_TYPE_STORE);
+        account.add(JSONObject.parseObject(JSONObject.toJSONString(accountPo)));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), account);
+        return business;
+    }
 
 
 }

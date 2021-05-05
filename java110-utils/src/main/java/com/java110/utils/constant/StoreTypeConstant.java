@@ -32,9 +32,9 @@ public class StoreTypeConstant {
     public final static String STORE_TYPE_LOGISTICS_COMPANY = "800900000004";
 
     /**
-     * 超市
+     * 商家
      */
-    public final static String STORE_TYPE_SUPER_MARKET = "800900000005";
+    public final static String STORE_TYPE_MALL = "800900000005";
 
     /**
      * 餐厅

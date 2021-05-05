@@ -85,4 +85,6 @@ public interface IStoreBMO extends IApiBaseBMO {
      */
     JSONObject allocationStorehouse(JSONObject paramInJson);
 
+    JSONObject addAccount(JSONObject paramInJson,String acctType);
+
 }

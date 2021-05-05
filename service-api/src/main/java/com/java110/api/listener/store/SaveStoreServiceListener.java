@@ -2,16 +2,21 @@ package com.java110.api.listener.store;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.account.IAccountBMO;
 import com.java110.api.bmo.store.IStoreBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.account.AccountDto;
 import com.java110.entity.center.AppService;
+import com.java110.po.account.AccountPo;
 import com.java110.po.store.StorePo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.constant.StoreTypeConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -25,6 +30,9 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
 
     @Autowired
     private IStoreBMO storeBMOImpl;
+
+    @Autowired
+    private IAccountBMO accountBMOImpl;
 
     @Override
     public int getOrder() {
@@ -79,6 +87,15 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         businesses.add(storeBMOImpl.contractChange(paramObj));
         //物品调拨流程
         businesses.add(storeBMOImpl.allocationStorehouse(paramObj));
+
+        //新建账户 目前只有商家创建账户
+        JSONObject businessStoreObj = paramObj.getJSONObject(StorePo.class.getSimpleName());
+        if (StoreTypeConstant.STORE_TYPE_MALL.equals(businessStoreObj.getString("storeTypeCd"))) {
+            //物品调拨流程
+            businesses.add(storeBMOImpl.addAccount(paramObj,AccountDto.ACCT_TYPE_CASH));
+            businesses.add(storeBMOImpl.addAccount(paramObj,AccountDto.ACCT_TYPE_INTEGRAL));
+            businesses.add(storeBMOImpl.addAccount(paramObj,AccountDto.ACCT_TYPE_GOLD));
+        }
 
         //super.doResponse(dataFlowContext);
         ResponseEntity<String> responseEntity = storeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
