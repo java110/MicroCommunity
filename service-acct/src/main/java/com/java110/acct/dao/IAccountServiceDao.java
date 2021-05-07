@@ -78,4 +78,11 @@ public interface IAccountServiceDao {
      */
     int queryAccountsCount(Map info);
 
+    /**
+     * 查询账户总数
+     *
+     * @param info 账户信息
+     * @return 账户数量
+     */
+    int updateAccount(Map info);
 }

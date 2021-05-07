@@ -86,7 +86,8 @@
         acctId,t.status_cd,t.status_cd statusCd,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type
         objType,t.create_time createTime,td.`name` acctTypeName
         from account t
-        LEFT JOIN t_dict td on t.acct_type = td.status_cd and td.table_name = 'account' and td.table_columns = 'acct_type'
+        LEFT JOIN t_dict td on t.acct_type = td.status_cd and td.table_name = 'account' and td.table_columns =
+        'acct_type'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
@@ -183,5 +184,29 @@
 
 
     </select>
+
+
+    <!-- 修改账户信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccount" parameterType="Map">
+        update account t
+        <set>
+            <if test="amount !=null and amount != ''">
+                t.amount= #{amount},
+            </if>
+            <if test="acctType !=null and acctType != ''">
+                t.acct_type= #{acctType},
+            </if>
+            <if test="acctName !=null and acctName != ''">
+                t.acct_name= #{acctName},
+            </if>
+        </set>
+        where 1=1
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            t.obj_id= #{objId},
+        </if>
+    </update>
 
 </mapper>

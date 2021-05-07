@@ -2,11 +2,13 @@ package com.java110.acct.smo.impl;
 
 
 import com.java110.acct.dao.IAccountServiceDao;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.po.account.AccountPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,6 +81,12 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
     @Override
     public int queryAccountsCount(@RequestBody AccountDto accountDto) {
         return accountServiceDaoImpl.queryAccountsCount(BeanConvertUtil.beanCovertMap(accountDto));
+    }
+
+    @Override
+    @Java110Transactional
+    public int updateAccount(@RequestBody AccountPo accountPo) {
+        return accountServiceDaoImpl.updateAccount(BeanConvertUtil.beanCovertMap(accountPo));
     }
 
     public IAccountServiceDao getAccountServiceDaoImpl() {
