@@ -221,7 +221,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         meterWaterPo.setFeeId(payFeePo.getFeeId());
         meterWaterPo.setMeterType(importExportMeterWaterDto.getMeterType());
         meterWaterPo.setObjId(roomDtos.get(0).getRoomId());
-        meterWaterPo.setObjName(importExportMeterWaterDto.getFloorNum() + "栋" + importExportMeterWaterDto.getUnitNum() + "单元" + importExportMeterWaterDto.getRoomNum() + "室");
+        meterWaterPo.setObjName(importExportMeterWaterDto.getFloorNum() + "-" + importExportMeterWaterDto.getUnitNum() + "-" + importExportMeterWaterDto.getRoomNum());
         meterWaterPo.setObjType(MeterWaterDto.OBJ_TYPE_ROOM);
         meterWaterPo.setPreDegrees(importExportMeterWaterDto.getPreDegrees());
         meterWaterPo.setPreReadingTime(importExportMeterWaterDto.getPreReadingTime());
