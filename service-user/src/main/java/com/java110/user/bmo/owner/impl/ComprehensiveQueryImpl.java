@@ -536,12 +536,12 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         for (OwnerDto owner : ownerDtos) {
             //对业主身份证号隐藏处理
             String idCard = owner.getIdCard();
-            if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+            if (mark.size() == 0 && idCard != null && idCard.length() >= 16) {
                 idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
             }
             //对业主手机号隐藏处理
             String link = owner.getLink();
-            if (mark.size() == 0 && link != null && !link.equals("")) {
+            if (mark.size() == 0 && link != null && link.length() == 11) {
                 link = link.substring(0, 3) + "****" + link.substring(7);
             }
             owner.setIdCard(idCard);
