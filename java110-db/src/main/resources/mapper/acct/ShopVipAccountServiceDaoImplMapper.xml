@@ -19,8 +19,9 @@
     <select id="getShopVipAccountInfo" parameterType="Map" resultType="Map">
         select t.amount,t.vip_acct_id,t.vip_acct_id vipAcctId,t.vip_id,t.vip_id vipId,t.acct_type,t.acct_type
         acctType,t.status_cd,t.status_cd statusCd,t.shop_id,t.shop_id shopId,t.acct_name,t.acct_name
-        acctName,t.store_id,t.store_id storeId
+        acctName,t.store_id,t.store_id storeId,t.create_time createTime,td.`name` acctTypeName
         from shop_vip_account t
+        LEFT JOIN t_dict td on td.status_cd = t.acct_type and td.table_name = 'shop_vip_account' and td.table_columns = 'acct_type'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}

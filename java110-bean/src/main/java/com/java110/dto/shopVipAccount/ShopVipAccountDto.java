@@ -31,6 +31,7 @@ public class ShopVipAccountDto extends PageDto implements Serializable {
     private String vipAcctId;
     private String vipId;
     private String acctType;
+    private String acctTypeName;
     private String shopId;
     private String acctName;
     private String storeId;
@@ -112,5 +113,13 @@ public class ShopVipAccountDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAcctTypeName() {
+        return acctTypeName;
+    }
+
+    public void setAcctTypeName(String acctTypeName) {
+        this.acctTypeName = acctTypeName;
     }
 }
