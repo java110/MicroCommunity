@@ -1,4 +1,4 @@
-package com.java110.store.api;
+package com.java110.acct.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.bmo.shopVipAccount.IDeleteShopVipAccountBMO;
@@ -112,12 +112,14 @@ public class ShopVipAccountApi {
      */
     @RequestMapping(value = "/queryShopVipAccount", method = RequestMethod.GET)
     public ResponseEntity<String> queryShopVipAccount(@RequestParam(value = "shopId", required = false) String shopId,
+                                                      @RequestParam(value = "vipId", required = false) String vipId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ShopVipAccountDto shopVipAccountDto = new ShopVipAccountDto();
         shopVipAccountDto.setPage(page);
         shopVipAccountDto.setRow(row);
         shopVipAccountDto.setShopId(shopId);
+        shopVipAccountDto.setVipId(vipId);
         return getShopVipAccountBMOImpl.get(shopVipAccountDto);
     }
 

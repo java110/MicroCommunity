@@ -1,6 +1,7 @@
 package com.java110.dto.shopVipAccount;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,13 +15,25 @@ import java.util.Date;
  **/
 public class ShopVipAccountDto extends PageDto implements Serializable {
 
+
+    /**
+     * 2003	现金账户
+     * 2004	积分账户
+     * 2005	优惠券账户
+     * 2006	金币账户
+     */
+    public static final String ACCT_TYPE_CASH = "2003";
+    public static final String ACCT_TYPE_INTEGRAL = "2004";
+    public static final String ACCT_TYPE_COUPON = "2005";
+    public static final String ACCT_TYPE_GOLD = "2006";
+
     private String amount;
-private String vipAcctId;
-private String vipId;
-private String acctType;
-private String shopId;
-private String acctName;
-private String storeId;
+    private String vipAcctId;
+    private String vipId;
+    private String acctType;
+    private String shopId;
+    private String acctName;
+    private String storeId;
 
 
     private Date createTime;
@@ -31,43 +44,56 @@ private String storeId;
     public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getVipAcctId() {
+
+    public String getVipAcctId() {
         return vipAcctId;
     }
-public void setVipAcctId(String vipAcctId) {
+
+    public void setVipAcctId(String vipAcctId) {
         this.vipAcctId = vipAcctId;
     }
-public String getVipId() {
+
+    public String getVipId() {
         return vipId;
     }
-public void setVipId(String vipId) {
+
+    public void setVipId(String vipId) {
         this.vipId = vipId;
     }
-public String getAcctType() {
+
+    public String getAcctType() {
         return acctType;
     }
-public void setAcctType(String acctType) {
+
+    public void setAcctType(String acctType) {
         this.acctType = acctType;
     }
-public String getShopId() {
+
+    public String getShopId() {
         return shopId;
     }
-public void setShopId(String shopId) {
+
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
-public String getAcctName() {
+
+    public String getAcctName() {
         return acctName;
     }
-public void setAcctName(String acctName) {
+
+    public void setAcctName(String acctName) {
         this.acctName = acctName;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 
