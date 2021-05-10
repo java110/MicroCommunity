@@ -40,6 +40,7 @@ import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -302,7 +303,11 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         Assert.listOnlyOne(feeDtos, "费用不存在");
         //获取创建用户,即处理结单的维修维修师傅
         String userId = feeDtos.get(0).getUserId();
-        String url = sendMsgUrl + accessToken;
+        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.SEND_TEMPLATE_URL);
+        if(StringUtil.isEmpty(sendTemplate)){
+            sendTemplate = sendMsgUrl;
+        }
+        String url = sendTemplate + accessToken;
         //根据 userId 查询到openId
         try {
             StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();

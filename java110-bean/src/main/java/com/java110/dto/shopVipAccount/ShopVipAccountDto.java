@@ -122,4 +122,5 @@ public class ShopVipAccountDto extends PageDto implements Serializable {
     public void setAcctTypeName(String acctTypeName) {
         this.acctTypeName = acctTypeName;
     }
+
 }
