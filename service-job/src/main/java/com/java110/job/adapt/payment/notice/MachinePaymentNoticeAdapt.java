@@ -231,7 +231,11 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         basePrivilegeDto.setResource("/wechatNotification");
         basePrivilegeDto.setStoreId(feeDtos.get(0).getIncomeObjId());
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
-        String url = sendMsgUrl + accessToken;
+        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.SEND_TEMPLATE_URL);
+        if(StringUtil.isEmpty(sendTemplate)){
+            sendTemplate = sendMsgUrl;
+        }
+        String url = sendTemplate + accessToken;
         for (UserDto userDto : userDtos) {
             //根据 userId 查询到openId
             try {
