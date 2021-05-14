@@ -99,7 +99,7 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
 
         for (ApiSmallWeChatDataVo apiSmallWeChatDataVo : smallWeChats) {
             apiSmallWeChatDataVo.setwId(WechatFactory.getWId(apiSmallWeChatDataVo.getAppId()));
-            if (AppDto.WEB_APP_ID.equals(appId)) {
+            if (AppDto.WEB_APP_ID.equals(appId) || AppDto.WECHAT_MALL_APP_ID.equals(appId)) {
                 apiSmallWeChatDataVo.setAppSecret("");
                 apiSmallWeChatDataVo.setPayPassword("");
             }
