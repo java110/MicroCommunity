@@ -120,6 +120,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 reportOweFeeItemDto.setAmountOwed(oldAmount.doubleValue() + "");
             }
             oldReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
+            oldReportOweFeeDto.setUpdateTime(reportOweFeeDto.getUpdateTime());
         }
 
         //计算总金额
