@@ -48,26 +48,26 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         return responseEntity;
     }
 
-    private void refreshReportOwe(List<ReportOweFeeDto> reportOweFeeDtos, String[] configIds) {
+    private void refreshReportOwe(List<ReportOweFeeDto> oldReportOweFeeDtos, String[] configIds) {
         List<String> payObjIds = new ArrayList<>();
 
-        if (reportOweFeeDtos == null || reportOweFeeDtos.size() < 1) {
+        if (oldReportOweFeeDtos == null || oldReportOweFeeDtos.size() < 1) {
             return;
         }
 
-        for (ReportOweFeeDto reportOweFeeDto : reportOweFeeDtos) {
+        for (ReportOweFeeDto reportOweFeeDto : oldReportOweFeeDtos) {
             payObjIds.add(reportOweFeeDto.getPayerObjId());
         }
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPayerObjIds(payObjIds.toArray(new String[payObjIds.size()]));
-        reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
+        List<ReportOweFeeDto>  allReportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
 
-        for (ReportOweFeeDto tmpReportOweFeeDto : reportOweFeeDtos) {
-            dealItem(tmpReportOweFeeDto, reportOweFeeDtos);
+        for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
+            dealItem(tmpReportOweFeeDto, allReportOweFeeDtos);
         }
 
         //如果费用对象上没有这个费用项时默认写零
-        for (ReportOweFeeDto tmpReportOweFeeDto : reportOweFeeDtos) {
+        for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
             for (String configId : configIds) {
                 if (hasItem(tmpReportOweFeeDto.getItems(), configId) != null) {
                     continue;
@@ -84,15 +84,15 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
 
     }
 
-    private void dealItem(ReportOweFeeDto tmpReportOweFeeDto, List<ReportOweFeeDto> reportOweFeeDtos) {
+    private void dealItem(ReportOweFeeDto oldReportOweFeeDto, List<ReportOweFeeDto> allReportOweFeeDtos) {
         List<ReportOweFeeItemDto> items = new ArrayList<>();
-        if (reportOweFeeDtos == null || reportOweFeeDtos.size() < 1) {
+        if (allReportOweFeeDtos == null || allReportOweFeeDtos.size() < 1) {
             return;
         }
 
         ReportOweFeeItemDto reportOweFeeItemDto = null;
-        for (ReportOweFeeDto reportOweFeeDto : reportOweFeeDtos) {
-            if (!tmpReportOweFeeDto.getPayerObjId().equals(reportOweFeeDto.getPayerObjId())) {
+        for (ReportOweFeeDto reportOweFeeDto : allReportOweFeeDtos) {
+            if (!oldReportOweFeeDto.getPayerObjId().equals(reportOweFeeDto.getPayerObjId())) {
                 continue;
             }
             reportOweFeeItemDto = hasItem(items, reportOweFeeDto.getConfigId());
@@ -115,7 +115,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 oldAmount = oldAmount.add(new BigDecimal(Double.parseDouble(reportOweFeeDto.getAmountOwed())));
                 reportOweFeeItemDto.setAmountOwed(oldAmount.doubleValue() + "");
             }
-            tmpReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
+            oldReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
         }
 
         //计算总金额
@@ -137,11 +137,11 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
             }
             totalAmount = totalAmount.add(new BigDecimal(Double.parseDouble(tempReportOweFeeItemDto.getAmountOwed())));
         }
-        tmpReportOweFeeDto.setEndTime(DateUtil.getFormatTimeString(startTime, DateUtil.DATE_FORMATE_STRING_A));
-        tmpReportOweFeeDto.setDeadlineTime(DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_A));
-        tmpReportOweFeeDto.setItems(items);
-        tmpReportOweFeeDto.setPayerObjName(items.get(0).getPayerObjName());
-        tmpReportOweFeeDto.setAmountOwed(totalAmount.doubleValue() + "");
+        oldReportOweFeeDto.setEndTime(DateUtil.getFormatTimeString(startTime, DateUtil.DATE_FORMATE_STRING_A));
+        oldReportOweFeeDto.setDeadlineTime(DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_A));
+        oldReportOweFeeDto.setItems(items);
+        oldReportOweFeeDto.setPayerObjName(items.get(0).getPayerObjName());
+        oldReportOweFeeDto.setAmountOwed(totalAmount.doubleValue() + "");
     }
 
     private ReportOweFeeItemDto hasItem(List<ReportOweFeeItemDto> reportOweFeeItemDtos, String configId) {
