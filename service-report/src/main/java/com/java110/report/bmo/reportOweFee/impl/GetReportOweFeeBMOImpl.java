@@ -25,8 +25,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
     @Autowired
     private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
 
-    @Autowired
-    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
 
 
     /**
