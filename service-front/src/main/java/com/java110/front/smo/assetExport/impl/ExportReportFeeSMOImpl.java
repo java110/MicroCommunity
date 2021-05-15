@@ -140,8 +140,11 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             for (int feeConfigIndex = 0; feeConfigIndex < feeConfigDtos.size(); feeConfigIndex++) {
                 row.createCell(4 + feeConfigIndex).setCellValue(feeConfigDtos.get(feeConfigIndex).getFeeName());
             }
+            row.createCell(4 + feeConfigDtos.size()).setCellValue("合计");
+        } else {
+            row.createCell(4).setCellValue("合计");
         }
-        row.createCell(4 + feeConfigDtos.size()).setCellValue("合计");
+
 
         JSONObject dataObj = null;
         for (int roomIndex = 0; roomIndex < oweFees.size(); roomIndex++) {
@@ -155,8 +158,11 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
                 for (int feeConfigIndex = 0; feeConfigIndex < feeConfigDtos.size(); feeConfigIndex++) {
                     row.createCell(4 + feeConfigIndex).setCellValue(getFeeConfigAmount(feeConfigDtos.get(feeConfigIndex), dataObj));
                 }
+                row.createCell(4 + feeConfigDtos.size()).setCellValue(getAllFeeOweAmount(feeConfigDtos, dataObj));
+            } else {
+                row.createCell(4).setCellValue(getAllFeeOweAmount(feeConfigDtos, dataObj));
             }
-            row.createCell(4 + feeConfigDtos.size()).setCellValue(getAllFeeOweAmount(feeConfigDtos, dataObj));
+
         }
     }
 
@@ -218,13 +224,13 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         FeeConfigDto feeConfigDto = null;
         for (int oweFeeIndex = 0; oweFeeIndex < oweFees.size(); oweFeeIndex++) {
             JSONArray items = oweFees.getJSONObject(oweFeeIndex).getJSONArray("items");
-            for(int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+            for (int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
                 if (existsFeeConfig(feeConfigDtos, items.getJSONObject(itemIndex))) {
                     continue;
                 }
                 feeConfigDto = new FeeConfigDto();
-                feeConfigDto.setConfigId(items.getJSONObject(oweFeeIndex).getString("configId"));
-                feeConfigDto.setFeeName(items.getJSONObject(oweFeeIndex).getString("configName"));
+                feeConfigDto.setConfigId(items.getJSONObject(itemIndex).getString("configId"));
+                feeConfigDto.setFeeName(items.getJSONObject(itemIndex).getString("configName"));
                 feeConfigDtos.add(feeConfigDto);
             }
         }
