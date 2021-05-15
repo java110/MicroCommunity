@@ -94,7 +94,7 @@ public class ReportOweFeeApi {
      */
     @RequestMapping(value = "/queryReportOweFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportOweFee(@RequestParam(value = "communityId") String communityId,
-                                                    @RequestParam(value = "configIds") String configIds,
+                                                    @RequestParam(value = "configIds",required = false) String configIds,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
