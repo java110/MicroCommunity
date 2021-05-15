@@ -1,6 +1,5 @@
 package com.java110.core.factory;
 
-import sun.misc.BASE64Encoder;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,6 +13,8 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
 /**
  * <p><b>ValidateCodeFactory Description:</b> (验证码生成)</p>
  * <b>DATE:</b> 2016年6月2日 下午3:53:34
@@ -23,7 +24,8 @@ public class ValidateCodeFactory{
     //使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了1,0,i,o几个容易混淆的字符
     public static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
     private static Random random = new Random();
-    static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+    
+    private static Base64 base64 = new Base64();
 
 
     /**
@@ -180,7 +182,7 @@ public class ValidateCodeFactory{
         ImageIO.write(image, "jpg", baos);
         byte[] bytes = baos.toByteArray();
 
-        return "data:image/jpeg;base64,"+encoder.encodeBuffer(bytes).trim();
+        return "data:image/jpeg;base64,"+base64.encodeToString(bytes).trim();
     }
 
     private static Color getRandColor(int fc, int bc) {
