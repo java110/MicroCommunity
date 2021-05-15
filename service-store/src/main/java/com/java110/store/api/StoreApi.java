@@ -91,8 +91,9 @@ public class StoreApi extends BaseController {
                     null);
         } finally {
             logger.debug("storeApi 请求报文{},返回报文：{}", orderInfo, responseJson.toJSONString());
-            return responseJson.toJSONString();
         }
+        
+        return responseJson.toJSONString();
     }
 
     /**

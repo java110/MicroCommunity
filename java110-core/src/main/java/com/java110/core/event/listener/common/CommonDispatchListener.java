@@ -99,7 +99,7 @@ public class CommonDispatchListener implements AppListener<AppCommonEvent> {
         if(!"0".equals(after_method) && !StringUtil.isEmpty(after_method)){
 
             try {
-                Class clazz = commonDispatchAfterMethod.getClass();
+                Class<?> clazz = commonDispatchAfterMethod.getClass();
 
                 Method method = clazz.getDeclaredMethod(after_method,new Class[]{AppContext.class,JSONArray.class,JSONObject.class});
 

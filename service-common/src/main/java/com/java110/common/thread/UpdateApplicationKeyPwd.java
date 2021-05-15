@@ -106,8 +106,9 @@ public class UpdateApplicationKeyPwd implements Runnable {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);
-            return responseEntity;
         }
+        
+        return responseEntity;
     }
 
     /**

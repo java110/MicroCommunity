@@ -36,8 +36,9 @@ public class RegisterComponent {
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            return responseEntity;
         }
+        
+        return responseEntity;
     }
 
     /**
@@ -53,8 +54,9 @@ public class RegisterComponent {
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            return responseEntity;
         }
+        
+        return responseEntity;
     }
 
     public ResponseEntity<String> getSysInfo(IPageData pd) {

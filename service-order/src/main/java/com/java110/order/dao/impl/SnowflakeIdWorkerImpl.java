@@ -205,8 +205,9 @@ public class SnowflakeIdWorkerImpl extends LoggerEngine implements ISnowflakeldW
             logger.error("生成主键ID异常" + prefix, e);
             throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "生成主键ID异常" + prefix + e);
         } finally {
-            return id;
         }
+        
+        return id;
     }
 
 

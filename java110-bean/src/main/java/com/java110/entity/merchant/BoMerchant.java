@@ -10,7 +10,7 @@ import java.util.List;
  * 对应商户 过程表 bo_merchant
  * Created by wuxw on 2017/5/20.
  */
-public class BoMerchant extends DefaultBoEntity implements Comparable{
+public class BoMerchant extends DefaultBoEntity implements Comparable<BoMerchant>{
 
     private String boId;
 
@@ -149,9 +149,8 @@ public class BoMerchant extends DefaultBoEntity implements Comparable{
      * @return
      */
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(BoMerchant otherBoMerchant) {
 
-        BoMerchant otherBoMerchant = (BoMerchant)o;
         if("DEL".equals(this.getState()) && "ADD".equals(otherBoMerchant.getState())) {
             return -1;
         }

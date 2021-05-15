@@ -132,10 +132,8 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             //添加耗时
             saveLog(dataFlow, startDate, endDate, reqJson, responseEntity);
             //这里保存耗时，以及日志
-            return responseEntity;
-
         }
-
+        return responseEntity;
     }
 
     /**

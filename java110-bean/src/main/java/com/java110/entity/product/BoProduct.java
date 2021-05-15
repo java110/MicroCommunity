@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by wuxw on 2017/5/20.
  */
-public class BoProduct extends Product implements Comparable{
+public class BoProduct extends Product implements Comparable<BoProduct>{
 
     private String boId;
 
@@ -56,9 +56,8 @@ public class BoProduct extends Product implements Comparable{
      * @return
      */
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(BoProduct otherBoProduct) {
 
-        BoProduct otherBoProduct = (BoProduct)o;
         if("DEL".equals(this.getState()) && "ADD".equals(otherBoProduct.getState())) {
             return -1;
         }
