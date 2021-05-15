@@ -32,9 +32,8 @@ public class EnterCommunityComponent {
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            return responseEntity;
         }
-
+        return responseEntity;
     }
 
 

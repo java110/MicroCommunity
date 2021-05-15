@@ -144,9 +144,9 @@ public class AppEventPublishing extends LoggerEngine{
     public static void multicastEvent(String actionTypeCd,String orderInfo,String data,String asyn) throws  Exception{
         Class<AppEvent> appEvent = getEvent(actionTypeCd);
 
-        Class[] parameterTypes={Object.class,String.class};
+        Class<?>[] parameterTypes={Object.class,String.class};
 
-        Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+        Constructor<?> constructor = appEvent.getClass().getConstructor(parameterTypes);
         Object[] parameters={orderInfo,data};
         AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
         multicastEvent(targetAppEvent,asyn);
@@ -167,9 +167,9 @@ public class AppEventPublishing extends LoggerEngine{
        for(String key : keys){
            Class<AppEvent> appEvent = getEvent(key);
 
-           Class[] parameterTypes={Object.class,AppContext.class,JSONArray.class};
+           Class<?>[] parameterTypes={Object.class,AppContext.class,JSONArray.class};
 
-           Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+           Constructor<?> constructor = appEvent.getClass().getConstructor(parameterTypes);
            context.setBo_action_type(key);
            Object[] parameters={null,context,data.get(key)};
            AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
@@ -264,9 +264,9 @@ public class AppEventPublishing extends LoggerEngine{
 
         Class<AppEvent> appEvent = getEvent(busiOrder.getActionTypeCd());
 
-        Class[] parameterTypes={Object.class,AppContext.class};
+        Class<?>[] parameterTypes={Object.class,AppContext.class};
 
-        Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+        Constructor<?> constructor = appEvent.getClass().getConstructor(parameterTypes);
 
         Object[] parameters={null,context};
 
@@ -290,9 +290,9 @@ public class AppEventPublishing extends LoggerEngine{
 
         Class<AppEvent> appEvent = getEvent(busiOrder.getActionTypeCd());
 
-        Class[] parameterTypes={Object.class,AppContext.class};
+        Class<?>[] parameterTypes={Object.class,AppContext.class};
 
-        Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+        Constructor<?> constructor = appEvent.getClass().getConstructor(parameterTypes);
 
         Object[] parameters={null,context};
 

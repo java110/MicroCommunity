@@ -112,8 +112,8 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("api返回信息" + responseEntity);
-            return responseEntity;
         }
+        return responseEntity;
     }
 
 

@@ -86,10 +86,10 @@ public class OwnerRoomRelServiceDaoImpl extends BaseServiceDao implements IOwner
      * @throws DAOException DAO异常
      */
     @Override
-    public List<Map> getOwnerRoomRelInfo(Map info) throws DAOException {
+    public List<Map<Object,Object>> getOwnerRoomRelInfo(Map<Object,Object> info) throws DAOException {
         logger.debug("查询业主房屋信息 入参 info : {}", info);
 
-        List<Map> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelServiceDaoImpl.getOwnerRoomRelInfo", info);
+        List<Map<Object,Object>> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelServiceDaoImpl.getOwnerRoomRelInfo", info);
 
         return businessOwnerRoomRelInfos;
     }

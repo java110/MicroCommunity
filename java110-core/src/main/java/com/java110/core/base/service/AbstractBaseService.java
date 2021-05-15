@@ -13,7 +13,7 @@ public abstract class AbstractBaseService extends BaseService {
      * @param t 对象分装
      * @return ResponseEntity对象
      */
-    public final <T> T businessProcess(T t, Class clazz) {
+    public final <T> T businessProcess(T t, Class<?> clazz) {
 
 
         return null;

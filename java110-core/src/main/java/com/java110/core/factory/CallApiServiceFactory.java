@@ -221,10 +221,8 @@ public class CallApiServiceFactory {
         } finally {
             logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);
             logger.debug(url + "调用api耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
-
-            return responseEntity;
         }
-
+        return responseEntity;
     }
 
 

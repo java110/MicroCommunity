@@ -377,8 +377,8 @@ public class DownloadFileFromFtpToTable extends HcFtpToFileSystemQuartz {
 	/**
 	 * 分配每个线程处理的起止位置
 	 */
-	public static List contSaveThreadContInfo(Map taskInfo) {
-		List contlist = new ArrayList();
+	public static List<Map<String,Long>> contSaveThreadContInfo(Map taskInfo) {
+		List<Map<String,Long>> contlist = new ArrayList<Map<String,Long>>();
 		try {
 			RandomAccessFile raf = new RandomAccessFile(taskInfo.get("localfilename").toString(), "r");
 			int tnum = Integer.valueOf(taskInfo.get("TNUM").toString());
@@ -398,7 +398,7 @@ public class DownloadFileFromFtpToTable extends HcFtpToFileSystemQuartz {
 				}
 				for (int i = 0; i < tnum; i++) {
 					if (i == tnum - 1) {
-						Map tmp = new HashMap();
+						Map<String,Long> tmp = new HashMap<String,Long>();
 						tmp.put("begin", begin);
 						tmp.put("end", filelen - 1);
 						contlist.add(tmp);
@@ -409,7 +409,7 @@ public class DownloadFileFromFtpToTable extends HcFtpToFileSystemQuartz {
 					if (end < begin) {
 						begin = 0;
 						end = begin;
-						Map tmp = new HashMap();
+						Map<String,Long> tmp = new HashMap<String,Long>();
 						tmp.put("begin", begin);
 						tmp.put("end", end);
 						contlist.add(tmp);
@@ -419,7 +419,7 @@ public class DownloadFileFromFtpToTable extends HcFtpToFileSystemQuartz {
 					while (end > 0) {
 						raf.seek(end);
 						if (raf.readByte() == '\n') {
-							Map tmp = new HashMap();
+							Map<String,Long> tmp = new HashMap<String,Long>();
 							tmp.put("begin", begin);
 							tmp.put("end", end);
 							contlist.add(tmp);
