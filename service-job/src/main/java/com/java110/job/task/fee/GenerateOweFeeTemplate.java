@@ -4,31 +4,30 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.fee.*;
+import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.report.IReportFeeYearCollectionDetailInnerServiceSMO;
+import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.exception.TaskTemplateException;
+import com.java110.po.reportOweFee.ReportOweFeePo;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName GenerateOwnerBillTemplate
@@ -62,6 +61,9 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
@@ -143,88 +145,32 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
         //保存数据
-
-
-
-    }
-
-    /**
-     * 查询车位信息
-     *
-     * @param billOweFeeDto
-     * @param feeDto
-     */
-    private void getParkingSpaceInfo(BillOweFeeDto billOweFeeDto, FeeDto feeDto) {
-
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setWithOwner(true);
-        ownerCarDto.setCarId(feeDto.getPayerObjId());
-        ownerCarDto.setCommunityId(feeDto.getCommunityId());
-
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
-            //房屋可能被删除了
-            billOweFeeDto.setOwnerId("1");
-            billOweFeeDto.setOwnerName("未知");
-            billOweFeeDto.setOwnerTel("19999999999");
-            return;
-        }
-
-        billOweFeeDto.setPayerObjName(ownerCarDtos.get(0).getCarNum());
-        billOweFeeDto.setOwnerId(ownerCarDtos.get(0).getOwnerId());
-        billOweFeeDto.setOwnerName(ownerCarDtos.get(0).getOwnerName());
-        billOweFeeDto.setOwnerTel(ownerCarDtos.get(0).getLink());
-    }
-
-    /**
-     * 查询房屋信息
-     *
-     * @param billOweFeeDto
-     * @param feeDto
-     */
-    private void getRoomInfo(BillOweFeeDto billOweFeeDto, FeeDto feeDto) {
-        RoomDto roomDto = new RoomDto();
-        roomDto.setRoomId(feeDto.getPayerObjId());
-        roomDto.setCommunityId(feeDto.getCommunityId());
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
-        if (roomDtos == null || roomDtos.size() < 1) {
-            //房屋可能被删除了
-            billOweFeeDto.setOweId("1");
-            billOweFeeDto.setOwnerName("未知");
-            billOweFeeDto.setOwnerTel("19999999999");
-            billOweFeeDto.setPayerObjName("未知");
-            return;
-        }
-
-        RoomDto tmpRoomDto = roomDtos.get(0);
-        if (RoomDto.ROOM_TYPE_ROOM.equals(tmpRoomDto.getRoomType())) {
-            billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
+        ReportOweFeePo reportOweFeePo = new ReportOweFeePo();
+        reportOweFeePo.setAmountOwed(feeDto.getFeePrice() + "");
+        reportOweFeePo.setCommunityId(feeDto.getCommunityId());
+        reportOweFeePo.setConfigId(feeConfigDto.getConfigId());
+        reportOweFeePo.setConfigName(feeConfigDto.getFeeName());
+        reportOweFeePo.setDeadlineTime(DateUtil.getFormatTimeString(feeDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
+        reportOweFeePo.setEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        reportOweFeePo.setFeeId(feeDto.getFeeId());
+        reportOweFeePo.setFeeName(feeDto.getFeeName());
+        reportOweFeePo.setOwnerId(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_ID));
+        reportOweFeePo.setOwnerName(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_NAME));
+        reportOweFeePo.setOwnerTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
+        reportOweFeePo.setPayerObjId(feeDto.getPayerObjId());
+        reportOweFeePo.setPayerObjName(feeDto.getPayerObjName());
+        reportOweFeePo.setPayerObjType(feeDto.getPayerObjType());
+        reportOweFeePo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
+        reportOweFeeDto.setFeeId(feeDto.getFeeId());
+        reportOweFeeDto.setPayerObjId(feeDto.getPayerObjId());
+        List<ReportOweFeeDto> reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
+        if (reportOweFeeDtos == null || reportOweFeeDtos.size() < 1) {
+            reportOweFeePo.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId));
+            reportOweFeeInnerServiceSMOImpl.saveReportOweFee(reportOweFeePo);
         } else {
-            billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getRoomNum() + "室");
+            reportOweFeePo.setOweId(reportOweFeeDtos.get(0).getOweId());
+            reportOweFeeInnerServiceSMOImpl.updateReportOweFee(reportOweFeePo);
         }
-
-        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-        ownerRoomRelDto.setByOwnerInfo(true);
-        ownerRoomRelDto.setRoomId(tmpRoomDto.getRoomId());
-        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
-            //房屋可能被删除了
-            billOweFeeDto.setOweId("1");
-            billOweFeeDto.setOwnerName("未知");
-            billOweFeeDto.setOwnerTel("19999999999");
-            return;
-        }
-
-        billOweFeeDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
-        billOweFeeDto.setOwnerName(ownerRoomRelDtos.get(0).getOwnerName());
-        billOweFeeDto.setOwnerTel(ownerRoomRelDtos.get(0).getLink());
-
     }
-
-
-
 }
