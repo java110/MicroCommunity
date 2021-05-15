@@ -60,10 +60,14 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         }
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPayerObjIds(payObjIds.toArray(new String[payObjIds.size()]));
-        List<ReportOweFeeDto>  allReportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
+        List<ReportOweFeeDto> allReportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
 
         for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
             dealItem(tmpReportOweFeeDto, allReportOweFeeDtos);
+        }
+
+        if (configIds == null || configIds.length < 1) {
+            return;
         }
 
         //如果费用对象上没有这个费用项时默认写零
