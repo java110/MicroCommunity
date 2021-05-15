@@ -55,9 +55,9 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
             return saveFlag;
         } finally {
             logger.debug("----【userServiceDaoImpl.saveDataToBoCust】保存数据出参 : saveFlag:" + saveFlag);
-            return saveFlag;
         }
 
+        return saveFlag;
     }
 
     /**

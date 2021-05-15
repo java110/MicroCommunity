@@ -120,12 +120,10 @@ public class OrderServiceSMOImpl extends AbstractOrderServiceSMOImpl implements 
 //                        LogAgent.createLogMessage(dataFlow.getResponseHeaders(),responseEntity.getBody()),endDate.getTime()-dataFlow.getStartDate().getTime());
 //                DataFlowEventPublishing.dataResponse(dataFlow,reqJson,headers);
             }
-
-
             //这里保存耗时，以及日志
-            return responseEntity;
 
         }
+        return responseEntity;
     }
 
 

@@ -68,8 +68,8 @@ public class BaseComponentSMO extends BaseServiceSMO {
             responseEntity = new ResponseEntity<String>("调用组件" + componentCode + ",组件方法" + componentMethod + "失败：" + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            return responseEntity;
         }
+        return responseEntity;
     }
 
 

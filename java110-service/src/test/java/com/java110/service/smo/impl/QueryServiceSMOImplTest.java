@@ -30,7 +30,7 @@ public class QueryServiceSMOImplTest extends TestCase {
 
         CtMethod helloM1 = CtNewMethod.make(javaCode2, ctClass);
         ctClass.addMethod(helloM1);
-        Class pc=ctClass.toClass();
+        Class<?> pc=ctClass.toClass();
         //ctClass.writeFile("./1111");
         Method move= pc.getMethod("testJava1",new Class[]{});
 

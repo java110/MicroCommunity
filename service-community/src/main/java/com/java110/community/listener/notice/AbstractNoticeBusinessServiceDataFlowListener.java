@@ -60,7 +60,7 @@ public abstract class AbstractNoticeBusinessServiceDataFlowListener extends Abst
      */
     protected void autoSaveDelBusinessNotice(Business business, JSONObject businessNotice) {
 //自动插入DEL
-        Map info = new HashMap();
+        Map<String,String> info = new HashMap<String,String>();
         info.put("noticeId", businessNotice.getString("noticeId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentNoticeInfos = getNoticeServiceDaoImpl().getNoticeInfo(info);

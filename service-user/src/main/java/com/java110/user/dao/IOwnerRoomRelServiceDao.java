@@ -53,7 +53,7 @@ public interface IOwnerRoomRelServiceDao {
      * @return 业主房屋信息
      * @throws DAOException DAO异常
      */
-    List<Map> getOwnerRoomRelInfo(Map info) throws DAOException;
+    List<Map<Object,Object>> getOwnerRoomRelInfo(Map<Object,Object> info) throws DAOException;
 
 
 

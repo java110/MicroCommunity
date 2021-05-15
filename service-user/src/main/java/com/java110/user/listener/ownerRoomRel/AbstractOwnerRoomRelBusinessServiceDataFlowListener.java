@@ -35,7 +35,7 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
      *
      * @param businessOwnerRoomRelInfo
      */
-    protected void flushBusinessOwnerRoomRelInfo(Map businessOwnerRoomRelInfo, String statusCd) {
+    protected void flushBusinessOwnerRoomRelInfo(Map<Object,Object> businessOwnerRoomRelInfo, String statusCd) {
         businessOwnerRoomRelInfo.put("newBId", businessOwnerRoomRelInfo.get("b_id"));
         businessOwnerRoomRelInfo.put("relId", businessOwnerRoomRelInfo.get("rel_id"));
         businessOwnerRoomRelInfo.put("operate", businessOwnerRoomRelInfo.get("operate"));
@@ -58,15 +58,15 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
      */
     protected void autoSaveDelBusinessOwnerRoomRel(Business business, JSONObject businessOwnerRoomRel) {
 //自动插入DEL
-        Map info = new HashMap();
+        Map<Object,Object> info = new HashMap<Object,Object>();
         info.put("relId", businessOwnerRoomRel.getString("relId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
-        List<Map> currentOwnerRoomRelInfos = getOwnerRoomRelServiceDaoImpl().getOwnerRoomRelInfo(info);
+        List<Map<Object,Object>> currentOwnerRoomRelInfos = getOwnerRoomRelServiceDaoImpl().getOwnerRoomRelInfo(info);
         if (currentOwnerRoomRelInfos == null || currentOwnerRoomRelInfos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
 
-        Map currentOwnerRoomRelInfo = currentOwnerRoomRelInfos.get(0);
+        Map<Object,Object> currentOwnerRoomRelInfo = currentOwnerRoomRelInfos.get(0);
         currentOwnerRoomRelInfo.put("bId", business.getbId());
         currentOwnerRoomRelInfo.put("relId", currentOwnerRoomRelInfo.get("rel_id"));
         currentOwnerRoomRelInfo.put("operate", currentOwnerRoomRelInfo.get("operate"));

@@ -29,7 +29,7 @@ public final class ApacheBeanConvertUtil {
     static {
         ConvertUtils.register(new Converter() { //注册一个日期转换器
 
-            public Object convert(Class type, Object value) {
+        	public <T> T convert(Class<T> type, Object value) {
                 Date date1 = null;
                 if (value instanceof String) {
                     String date = (String) value;
@@ -44,9 +44,9 @@ public final class ApacheBeanConvertUtil {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    return date1;
+                    return (T) date1;
                 }
-                return value;
+                return (T) value;
             }
         }, Date.class);
 

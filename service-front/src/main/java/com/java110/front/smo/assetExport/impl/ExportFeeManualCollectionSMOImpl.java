@@ -186,7 +186,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         int line = 0;
         double totalPageHeight = 0;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
-            Map info = generatorRoomOweFee(sheet, workbook, rooms.getJSONObject(roomIndex), line, totalPageHeight, patriarch, feePrint);
+            Map<String, Object> info = generatorRoomOweFee(sheet, workbook, rooms.getJSONObject(roomIndex), line, totalPageHeight, patriarch, feePrint);
             line = Integer.parseInt(info.get("line").toString()) + 1;
             totalPageHeight = Double.parseDouble(info.get("totalPageHeight").toString());
         }

@@ -125,8 +125,8 @@ public class CallComponentController extends BaseController {
             if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
                 return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
             }
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     /**
@@ -195,8 +195,8 @@ public class CallComponentController extends BaseController {
             if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
                 return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
             }
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     //组件上传文件处理/callComponent/upload/
@@ -266,8 +266,8 @@ public class CallComponentController extends BaseController {
             if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
                 return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
             }
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     /**
@@ -320,8 +320,8 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<Object>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     /**

@@ -153,10 +153,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             }
             resJson = encrypt(responseJson.toJSONString(),headers);
             //这里保存耗时，以及日志
-            return resJson;
-
         }
-
+        return resJson;
     }
 
     /**
@@ -247,11 +245,9 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                         LogAgent.createLogMessage(dataFlow.getResponseHeaders(),responseEntity.getBody()),endDate.getTime()-dataFlow.getStartDate().getTime());
                 //DataFlowEventPublishing.dataResponse(dataFlow,reqJson,headers);
             }
-
             //这里保存耗时，以及日志
-            return responseEntity ;
-
         }
+        return responseEntity ;
     }
 
     /**
@@ -328,9 +324,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 AuthenticationFactory.putSign(dataFlow, headers);
             }
             resJson = encrypt(responseData,headers);
-            return resJson;
-
         }
+        return resJson;
     }
 
     /**
