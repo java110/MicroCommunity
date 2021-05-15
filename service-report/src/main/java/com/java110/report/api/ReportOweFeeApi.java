@@ -94,12 +94,16 @@ public class ReportOweFeeApi {
      */
     @RequestMapping(value = "/queryReportOweFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportOweFee(@RequestParam(value = "communityId") String communityId,
-                                                    @RequestParam(value = "configIds",required = false) String configIds,
+                                                    @RequestParam(value = "configIds", required = false) String configIds,
+                                                    @RequestParam(value = "payObjType", required = false) String payObjType,
+                                                    @RequestParam(value = "num", required = false) String num,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPage(page);
         reportOweFeeDto.setRow(row);
+        reportOweFeeDto.setPayerObjType(payObjType);
+        reportOweFeeDto.setPayerObjName(num);
         reportOweFeeDto.setCommunityId(communityId);
         if (!StringUtil.isEmpty(configIds)) {
             String[] tmpConfigIds = configIds.split(",");
