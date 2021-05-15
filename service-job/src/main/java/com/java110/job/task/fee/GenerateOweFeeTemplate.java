@@ -13,6 +13,7 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.report.IReportFeeYearCollectionDetailInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
@@ -41,8 +42,6 @@ import java.util.Map;
 public class GenerateOweFeeTemplate extends TaskSystemQuartz {
 
 
-    private static final String TASK_ATTR_VALUE_ONCE_MONTH = "005"; //一次性按月出账
-
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
@@ -66,7 +65,6 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
-
 
     @Override
     protected void process(TaskDto taskDto) throws Exception {
@@ -144,6 +142,9 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
 
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
+        //保存数据
+
+
 
     }
 
@@ -154,7 +155,6 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
      * @param feeDto
      */
     private void getParkingSpaceInfo(BillOweFeeDto billOweFeeDto, FeeDto feeDto) {
-
 
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setWithOwner(true);

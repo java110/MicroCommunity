@@ -1,34 +1,35 @@
 {
   "autoMove": true,
-  "id": "settingId",
-  "name": "systemGoldSetting",
-  "desc": "金币设置",
-  "shareParam": "settingId",
-  "shareColumn": "settingId",
-  "shareName": "acct",
-  "tableName": "system_gold_setting",
+  "id": "oweId",
+  "name": "reportOweFee",
+  "desc": "欠费统计",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "report",
+  "tableName": "report_owe_fee",
   "param": {
-    "settingId": "setting_id",
-    "goldName": "gold_name",
-    "goldType": "gold_type",
-    "buyPrice": "buy_price",
-    "usePrice": "use_price",
-    "validity": "validity",
-    "state": "state",
+    "oweId": "owe_id",
+    "configId": "config_id",
+    "configName": "config_name",
+    "feeId": "fee_id",
+    "feeName": "fee_name",
+    "amountOwed": "amount_owed",
+    "ownerId": "owner_id",
+    "ownerName": "owner_name",
+    "ownerTel": "owner_tel",
+    "payerObjId": "payer_obj_id",
+    "payerObjName": "payer_obj_name",
+    "payerObjType": "payer_obj_type",
+    "communityId": "community_id",
+    "updateTime": "update_time",
+    "endTime": "end_time",
+    "deadlineTime": "deadline_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "buyPrice",
-      "msg": "购买价不能为空"
-    },
-    {
-      "code": "usePrice",
-      "msg": "使用价不能为空"
-    },
-    {
-      "code": "validity",
-      "msg": "有效期不能为空"
+      "code": "configName",
+      "msg": "费用项不能为空"
     }
   ]
 }

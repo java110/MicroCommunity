@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportOweFeeServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存欠费统计信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportOweFeeInfo" parameterType="Map">
+        insert into report_owe_fee(
+config_name,deadline_time,owner_tel,update_time,owe_id,owner_id,fee_id,amount_owed,payer_obj_name,owner_name,config_id,fee_name,end_time,community_id,payer_obj_type,payer_obj_id
+) values (
+#{configName},#{deadlineTime},#{ownerTel},#{updateTime},#{oweId},#{ownerId},#{feeId},#{amountOwed},#{payerObjName},#{ownerName},#{configId},#{feeName},#{endTime},#{communityId},#{payerObjType},#{payerObjId}
+)
+    </insert>
+
+
+
+    <!-- 查询欠费统计信息 add by wuxw 2018-07-03 -->
+    <select id="getReportOweFeeInfo" parameterType="Map" resultType="Map">
+        select  t.config_name,t.config_name configName,t.deadline_time,t.deadline_time deadlineTime,t.owner_tel,t.owner_tel ownerTel,t.update_time,t.update_time updateTime,t.status_cd,t.status_cd statusCd,t.owe_id,t.owe_id oweId,t.owner_id,t.owner_id ownerId,t.fee_id,t.fee_id feeId,t.amount_owed,t.amount_owed amountOwed,t.payer_obj_name,t.payer_obj_name payerObjName,t.owner_name,t.owner_name ownerName,t.config_id,t.config_id configId,t.fee_name,t.fee_name feeName,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId 
+from report_owe_fee t 
+where 1 =1 
+<if test="configName !=null and configName != ''">
+   and t.config_name= #{configName}
+</if> 
+<if test="deadlineTime !=null and deadlineTime != ''">
+   and t.deadline_time= #{deadlineTime}
+</if> 
+<if test="ownerTel !=null and ownerTel != ''">
+   and t.owner_tel= #{ownerTel}
+</if> 
+<if test="updateTime !=null and updateTime != ''">
+   and t.update_time= #{updateTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="oweId !=null and oweId != ''">
+   and t.owe_id= #{oweId}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+   and t.fee_id= #{feeId}
+</if> 
+<if test="amountOwed !=null and amountOwed != ''">
+   and t.amount_owed= #{amountOwed}
+</if> 
+<if test="payerObjName !=null and payerObjName != ''">
+   and t.payer_obj_name= #{payerObjName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="configId !=null and configId != ''">
+   and t.config_id= #{configId}
+</if> 
+<if test="feeName !=null and feeName != ''">
+   and t.fee_name= #{feeName}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="payerObjType !=null and payerObjType != ''">
+   and t.payer_obj_type= #{payerObjType}
+</if> 
+<if test="payerObjId !=null and payerObjId != ''">
+   and t.payer_obj_id= #{payerObjId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改欠费统计信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportOweFeeInfo" parameterType="Map">
+        update  report_owe_fee t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="configName !=null and configName != ''">
+, t.config_name= #{configName}
+</if> 
+<if test="deadlineTime !=null and deadlineTime != ''">
+, t.deadline_time= #{deadlineTime}
+</if> 
+<if test="ownerTel !=null and ownerTel != ''">
+, t.owner_tel= #{ownerTel}
+</if> 
+<if test="updateTime !=null and updateTime != ''">
+, t.update_time= #{updateTime}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+, t.owner_id= #{ownerId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+, t.fee_id= #{feeId}
+</if> 
+<if test="amountOwed !=null and amountOwed != ''">
+, t.amount_owed= #{amountOwed}
+</if> 
+<if test="payerObjName !=null and payerObjName != ''">
+, t.payer_obj_name= #{payerObjName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+, t.owner_name= #{ownerName}
+</if> 
+<if test="configId !=null and configId != ''">
+, t.config_id= #{configId}
+</if> 
+<if test="feeName !=null and feeName != ''">
+, t.fee_name= #{feeName}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="payerObjType !=null and payerObjType != ''">
+, t.payer_obj_type= #{payerObjType}
+</if> 
+<if test="payerObjId !=null and payerObjId != ''">
+, t.payer_obj_id= #{payerObjId}
+</if> 
+ where 1=1 <if test="oweId !=null and oweId != ''">
+and t.owe_id= #{oweId}
+</if> 
+
+    </update>
+
+    <!-- 查询欠费统计数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportOweFeesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_owe_fee t 
+where 1 =1 
+<if test="configName !=null and configName != ''">
+   and t.config_name= #{configName}
+</if> 
+<if test="deadlineTime !=null and deadlineTime != ''">
+   and t.deadline_time= #{deadlineTime}
+</if> 
+<if test="ownerTel !=null and ownerTel != ''">
+   and t.owner_tel= #{ownerTel}
+</if> 
+<if test="updateTime !=null and updateTime != ''">
+   and t.update_time= #{updateTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="oweId !=null and oweId != ''">
+   and t.owe_id= #{oweId}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+   and t.fee_id= #{feeId}
+</if> 
+<if test="amountOwed !=null and amountOwed != ''">
+   and t.amount_owed= #{amountOwed}
+</if> 
+<if test="payerObjName !=null and payerObjName != ''">
+   and t.payer_obj_name= #{payerObjName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="configId !=null and configId != ''">
+   and t.config_id= #{configId}
+</if> 
+<if test="feeName !=null and feeName != ''">
+   and t.fee_name= #{feeName}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="payerObjType !=null and payerObjType != ''">
+   and t.payer_obj_type= #{payerObjType}
+</if> 
+<if test="payerObjId !=null and payerObjId != ''">
+   and t.payer_obj_id= #{payerObjId}
+</if> 
+
+
+     </select>
+
+</mapper>
