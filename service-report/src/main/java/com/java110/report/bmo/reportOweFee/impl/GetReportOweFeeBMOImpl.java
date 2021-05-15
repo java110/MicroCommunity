@@ -1,9 +1,7 @@
 package com.java110.report.bmo.reportOweFee.impl;
 
-import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.report.bmo.reportOweFee.IGetReportOweFeeBMO;
 import com.java110.utils.util.DateUtil;
@@ -24,8 +22,6 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
 
     @Autowired
     private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
-
-
 
 
     /**
@@ -184,6 +180,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 reportOweFeeItemDto.setAmountOwed(reportOweFeeDto.getAmountOwed());
                 reportOweFeeItemDto.setPayerObjId(reportOweFeeDto.getPayerObjId());
                 reportOweFeeItemDto.setPayerObjName(reportOweFeeDto.getPayerObjName());
+                reportOweFeeItemDto.setConfigName(reportOweFeeDto.getConfigName());
                 try {
                     reportOweFeeItemDto.setStartTime(DateUtil.getDateFromString(reportOweFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
                     reportOweFeeItemDto.setEndTime(DateUtil.getDateFromString(reportOweFeeDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));

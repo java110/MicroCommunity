@@ -19,6 +19,7 @@ public class ReportOweFeeItemDto extends PageDto implements Serializable {
     private String amountOwed;
     private String payerObjName;
     private String feeName;
+    private String configName;
     private String payerObjId;
     private Date startTime;
     private Date endTime;
@@ -78,5 +79,13 @@ public class ReportOweFeeItemDto extends PageDto implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+
+    public void setConfigName(String configName) {
+        this.configName = configName;
     }
 }

@@ -217,14 +217,16 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         List<FeeConfigDto> feeConfigDtos = new ArrayList<>();
         FeeConfigDto feeConfigDto = null;
         for (int oweFeeIndex = 0; oweFeeIndex < oweFees.size(); oweFeeIndex++) {
-            if (existsFeeConfig(feeConfigDtos, oweFees.getJSONObject(oweFeeIndex))) {
-                continue;
+            JSONArray items = oweFees.getJSONObject(oweFeeIndex).getJSONArray("items");
+            for(int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+                if (existsFeeConfig(feeConfigDtos, items.getJSONObject(itemIndex))) {
+                    continue;
+                }
+                feeConfigDto = new FeeConfigDto();
+                feeConfigDto.setConfigId(items.getJSONObject(oweFeeIndex).getString("configId"));
+                feeConfigDto.setFeeName(items.getJSONObject(oweFeeIndex).getString("configName"));
+                feeConfigDtos.add(feeConfigDto);
             }
-
-            feeConfigDto = new FeeConfigDto();
-            feeConfigDto.setConfigId(oweFees.getJSONObject(oweFeeIndex).getString("configId"));
-            feeConfigDto.setFeeName(oweFees.getJSONObject(oweFeeIndex).getString("configName"));
-            feeConfigDtos.add(feeConfigDto);
         }
 
         return feeConfigDtos;
