@@ -2,14 +2,10 @@ package com.java110.job.task.fee;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
-import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
@@ -142,6 +138,7 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
      */
     private void generateFee(FeeDto feeDto, FeeConfigDto feeConfigDto) {
 
+        //刷入欠费金额
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
         //保存数据
@@ -158,7 +155,7 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
         reportOweFeePo.setOwnerName(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_NAME));
         reportOweFeePo.setOwnerTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
         reportOweFeePo.setPayerObjId(feeDto.getPayerObjId());
-        reportOweFeePo.setPayerObjName(feeDto.getPayerObjName());
+        reportOweFeePo.setPayerObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
         reportOweFeePo.setPayerObjType(feeDto.getPayerObjType());
         reportOweFeePo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();

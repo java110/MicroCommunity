@@ -139,7 +139,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             computeFeePriceByRoom(feeDto, roomDto);
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
             computeFeePriceByParkingSpace(feeDto);
-        }else if(FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //房屋相关
+        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //房屋相关
             computeFeePriceByContract(feeDto, roomDto);
         }
     }
@@ -199,6 +199,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
         }
     }
+
     /**
      * 根据房屋来算单价
      *
@@ -348,9 +349,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             }
             roomDto = roomDtos.get(0);
             if (RoomDto.ROOM_TYPE_ROOM.equals(roomDto.getRoomType())) {
-                objName = roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室";
+                objName = roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum();
             } else {
-                objName = roomDto.getFloorNum() + "栋" + roomDto.getRoomNum() + "室";
+                objName = roomDto.getFloorNum() + "-" + roomDto.getRoomNum();
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
 
@@ -371,6 +372,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 return objName;
             }
             objName = objName + "(" + parkingSpaceDtos.get(0).getAreaNum() + "停车场" + parkingSpaceDtos.get(0).getNum() + "车位)";
+        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {
+            ContractDto contractDto = new ContractDto();
+            contractDto.setContractId(feeDto.getPayerObjId());
+            contractDto.setCommunityId(feeDto.getCommunityId());
+            List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
+            if (contractDtos == null || contractDtos.size() < 1) { //数据有问题
+                return objName;
+            }
+            objName = contractDtos.get(0).getContractCode();
+
         }
         return objName;
     }
@@ -412,7 +423,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             contractDto.setCommunityId(feeDto.getCommunityId());
             List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
 
-            Assert.listOnlyOne(contractDtos, "车辆不存在");
+            Assert.listOnlyOne(contractDtos, "合同不存在");
             ownerDto = new OwnerDto();
             ownerDto.setOwnerId(contractDtos.get(0).getObjId());
             ownerDto.setCommunityId(feeDto.getCommunityId());
@@ -570,7 +581,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     continue;
                 }
                 if (tmpRoomDto.getRoomId().equals(feeDto.getPayerObjId())) {
-                    objName = tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室";
+                    objName = tmpRoomDto.getFloorNum() + "-" + tmpRoomDto.getUnitNum() + "-" + tmpRoomDto.getRoomNum();
                     feeDto.setPayerObjName(objName);
                 }
             }
