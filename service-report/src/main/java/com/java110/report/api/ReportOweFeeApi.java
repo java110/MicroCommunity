@@ -9,6 +9,7 @@ import com.java110.report.bmo.reportOweFee.ISaveReportOweFeeBMO;
 import com.java110.report.bmo.reportOweFee.IUpdateReportOweFeeBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -93,12 +94,17 @@ public class ReportOweFeeApi {
      */
     @RequestMapping(value = "/queryReportOweFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportOweFee(@RequestParam(value = "communityId") String communityId,
+                                                    @RequestParam(value = "configIds") String configIds,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPage(page);
         reportOweFeeDto.setRow(row);
         reportOweFeeDto.setCommunityId(communityId);
+        if (!StringUtil.isEmpty(configIds)) {
+            String[] tmpConfigIds = configIds.split(",");
+            reportOweFeeDto.setConfigIds(tmpConfigIds);
+        }
         return getReportOweFeeBMOImpl.get(reportOweFeeDto);
     }
 }

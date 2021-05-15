@@ -50,4 +50,12 @@ public interface IReportOweFeeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryReportOweFeesCount", method = RequestMethod.POST)
     int queryReportOweFeesCount(@RequestBody ReportOweFeeDto reportOweFeeDto);
+
+    /**
+     * 查询所有 欠费信息
+     * @param reportOweFeeDto
+     * @return
+     */
+    @RequestMapping(value = "/queryReportAllOweFees", method = RequestMethod.POST)
+    List<ReportOweFeeDto> queryReportAllOweFees(@RequestBody ReportOweFeeDto reportOweFeeDto);
 }

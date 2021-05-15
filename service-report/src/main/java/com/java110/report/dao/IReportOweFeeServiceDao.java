@@ -58,4 +58,5 @@ public interface IReportOweFeeServiceDao {
      */
     int queryReportOweFeesCount(Map info);
 
+    List<Map> queryReportAllOweFees(Map beanCovertMap);
 }

@@ -94,5 +94,14 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
         return Integer.parseInt(businessReportOweFeeInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryReportAllOweFees(Map info) {
+        logger.debug("queryReportAllOweFees 入参 info : {}",info);
+
+        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportAllOweFees",info);
+
+        return businessReportOweFeeInfos;
+    }
+
 
 }

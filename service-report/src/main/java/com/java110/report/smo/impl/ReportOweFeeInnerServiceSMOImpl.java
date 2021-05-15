@@ -73,6 +73,13 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
         return reportOweFeeServiceDaoImpl.queryReportOweFeesCount(BeanConvertUtil.beanCovertMap(reportOweFeeDto));
     }
 
+    @Override
+    public List<ReportOweFeeDto> queryReportAllOweFees(@RequestBody ReportOweFeeDto reportOweFeeDto) {
+        List<ReportOweFeeDto> reportOweFees = BeanConvertUtil.covertBeanList(reportOweFeeServiceDaoImpl.queryReportAllOweFees(BeanConvertUtil.beanCovertMap(reportOweFeeDto)), ReportOweFeeDto.class);
+        return reportOweFees;
+
+    }
+
     public IReportOweFeeServiceDao getReportOweFeeServiceDaoImpl() {
         return reportOweFeeServiceDaoImpl;
     }
