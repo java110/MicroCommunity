@@ -86,9 +86,7 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
         //查询费用项
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(communityDto.getCommunityId());
-        if (StringUtil.isEmpty(feeConfigDto.getBillType())) {
-            throw new IllegalArgumentException("配置错误 未拿到属性值");
-        }
+
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
         for (FeeConfigDto tmpFeeConfigDto : feeConfigDtos) {
