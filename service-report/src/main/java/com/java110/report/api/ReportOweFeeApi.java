@@ -111,4 +111,28 @@ public class ReportOweFeeApi {
         }
         return getReportOweFeeBMOImpl.get(reportOweFeeDto);
     }
+
+    /**
+     * 查询所有欠费信息
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportOweFee/queryReportAllOweFee
+     * @path /app/reportOweFee/queryReportAllOweFee
+     */
+    @RequestMapping(value = "/queryReportAllOweFee", method = RequestMethod.GET)
+    public ResponseEntity<String> queryReportAllOweFee(@RequestParam(value = "communityId") String communityId,
+                                                    @RequestParam(value = "configIds", required = false) String configIds,
+                                                    @RequestParam(value = "payObjType", required = false) String payObjType,
+                                                    @RequestParam(value = "num", required = false) String num) {
+        ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
+        reportOweFeeDto.setPayerObjType(payObjType);
+        reportOweFeeDto.setPayerObjName(num);
+        reportOweFeeDto.setCommunityId(communityId);
+        if (!StringUtil.isEmpty(configIds)) {
+            String[] tmpConfigIds = configIds.split(",");
+            reportOweFeeDto.setConfigIds(tmpConfigIds);
+        }
+        return getReportOweFeeBMOImpl.getAllFees(reportOweFeeDto);
+    }
 }

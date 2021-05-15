@@ -13,4 +13,5 @@ public interface IGetReportOweFeeBMO {
     ResponseEntity<String> get(ReportOweFeeDto reportOweFeeDto);
 
 
+    ResponseEntity<String> getAllFees(ReportOweFeeDto reportOweFeeDto);
 }

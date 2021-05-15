@@ -40,6 +40,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String squarePrice;
     private String isDefault;
     private String configId;
+    private String[] configIds;
     private String feeFlag;
     private String feeName;
     private String startTime;
@@ -242,5 +243,13 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setComputingFormulaText(String computingFormulaText) {
         this.computingFormulaText = computingFormulaText;
+    }
+
+    public String[] getConfigIds() {
+        return configIds;
+    }
+
+    public void setConfigIds(String[] configIds) {
+        this.configIds = configIds;
     }
 }

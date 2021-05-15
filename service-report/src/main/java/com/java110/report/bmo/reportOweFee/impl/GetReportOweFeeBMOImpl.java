@@ -1,7 +1,9 @@
 package com.java110.report.bmo.reportOweFee.impl;
 
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.report.bmo.reportOweFee.IGetReportOweFeeBMO;
 import com.java110.utils.util.DateUtil;
@@ -22,6 +24,9 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
 
     @Autowired
     private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
 
     /**
@@ -46,6 +51,79 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    /**
+     * query all owe fee
+     *
+     * @param reportOweFeeDto
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> getAllFees(ReportOweFeeDto reportOweFeeDto) {
+        //
+        List<ReportOweFeeDto> allReportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
+        if (allReportOweFeeDtos == null || allReportOweFeeDtos.size() < 1) {
+            return ResultVo.createResponseEntity(allReportOweFeeDtos);
+        }
+
+        //get old report owe fee
+        List<ReportOweFeeDto> oldReportOweFeeDtos = new ArrayList<>();
+        ReportOweFeeDto oldReportOweFeeDto = null;
+        for (ReportOweFeeDto tmpReportOweFeeDto : allReportOweFeeDtos) {
+            if (existsOweFee(oldReportOweFeeDtos, tmpReportOweFeeDto.getPayerObjId())) {
+                continue;
+            }
+            oldReportOweFeeDto = new ReportOweFeeDto();
+            oldReportOweFeeDto.setPayerObjId(tmpReportOweFeeDto.getPayerObjId());
+
+            oldReportOweFeeDtos.add(oldReportOweFeeDto);
+        }
+
+        for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
+            dealItem(tmpReportOweFeeDto, allReportOweFeeDtos);
+        }
+
+        if (reportOweFeeDto.getConfigIds() == null || reportOweFeeDto.getConfigIds().length < 1) {
+            return ResultVo.createResponseEntity(oldReportOweFeeDtos);
+        }
+
+        //如果费用对象上没有这个费用项时默认写零
+        for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
+            for (String configId : reportOweFeeDto.getConfigIds()) {
+                if (hasItem(tmpReportOweFeeDto.getItems(), configId) != null) {
+                    continue;
+                }
+                ReportOweFeeItemDto reportOweFeeItemDto = new ReportOweFeeItemDto();
+                reportOweFeeItemDto.setConfigId(configId);
+                reportOweFeeItemDto.setFeeName("");
+                reportOweFeeItemDto.setAmountOwed("0");
+                reportOweFeeItemDto.setPayerObjId("");
+                reportOweFeeItemDto.setPayerObjName("");
+                tmpReportOweFeeDto.getItems().add(reportOweFeeItemDto);
+            }
+        }
+        return ResultVo.createResponseEntity(oldReportOweFeeDtos);
+    }
+
+    /**
+     * exists owe fee in oldReportOweFeeDtos
+     * true is exists false is not
+     *
+     * @param oldReportOweFeeDtos
+     * @param payerObjId
+     * @return
+     */
+    private boolean existsOweFee(List<ReportOweFeeDto> oldReportOweFeeDtos, String payerObjId) {
+        for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
+            // if equal return true
+            if (tmpReportOweFeeDto.getPayerObjId().equals(payerObjId)) {
+                return true;
+            }
+
+        }
+        //default return false
+        return false;
     }
 
     private void refreshReportOwe(List<ReportOweFeeDto> oldReportOweFeeDtos, String[] configIds) {
@@ -121,6 +199,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
             }
             oldReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
             oldReportOweFeeDto.setUpdateTime(reportOweFeeDto.getUpdateTime());
+            oldReportOweFeeDto.setConfigName(reportOweFeeDto.getConfigName());
         }
 
         //计算总金额
@@ -147,6 +226,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         oldReportOweFeeDto.setItems(items);
         oldReportOweFeeDto.setPayerObjName(items.get(0).getPayerObjName());
         oldReportOweFeeDto.setAmountOwed(totalAmount.doubleValue() + "");
+
     }
 
     private ReportOweFeeItemDto hasItem(List<ReportOweFeeItemDto> reportOweFeeItemDtos, String configId) {

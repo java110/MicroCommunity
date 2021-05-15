@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetExport.IExportReportFeeSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -27,6 +29,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -46,6 +51,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
     public static final String REPORT_OWE_FEE_DETAIL = "reportOweFeeDetail";
     public static final String REPORT_PAY_FEE_DETAIL = "reportPayFeeDetail";
     public static final String REPORT_YEAR_COLLECTION = "reportYearCollection";
+    public static final String REPORT_LIST_OWE_FEE = "listOweFee";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -87,7 +93,9 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             case REPORT_YEAR_COLLECTION:
                 reportYearCollection(pd, result, workbook);
                 break;
-
+            case REPORT_LIST_OWE_FEE:
+                reportListOweFee(pd, result, workbook);
+                break;
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultiValueMap headers = new HttpHeaders();
@@ -111,6 +119,130 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
     }
+
+    private void reportListOweFee(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        String configIds = reqJson.getString("configIds");
+        //查询楼栋信息
+        JSONArray oweFees = this.getReportListOweFees(pd, result);
+        if (oweFees == null) {
+            return;
+        }
+        //获取费用项
+        List<FeeConfigDto> feeConfigDtos = getFeeConfigs(oweFees);
+        Sheet sheet = workbook.createSheet("欠费清单");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("收费对象");
+        row.createCell(1).setCellValue("业主名称");
+        row.createCell(2).setCellValue("开始时间");
+        row.createCell(3).setCellValue("结束时间");
+        if (!StringUtil.isEmpty(configIds)) {
+            for (int feeConfigIndex = 0; feeConfigIndex < feeConfigDtos.size(); feeConfigIndex++) {
+                row.createCell(4 + feeConfigIndex).setCellValue(feeConfigDtos.get(feeConfigIndex).getFeeName());
+            }
+        }
+        row.createCell(4 + feeConfigDtos.size()).setCellValue("合计");
+
+        JSONObject dataObj = null;
+        for (int roomIndex = 0; roomIndex < oweFees.size(); roomIndex++) {
+            row = sheet.createRow(roomIndex + 1);
+            dataObj = oweFees.getJSONObject(roomIndex);
+            row.createCell(0).setCellValue(dataObj.getString("payerObjName"));
+            row.createCell(1).setCellValue(dataObj.getString("ownerName"));
+            row.createCell(2).setCellValue(dataObj.getString("endTime"));
+            row.createCell(3).setCellValue(dataObj.getString("deadlineTime"));
+            if (!StringUtil.isEmpty(configIds)) {
+                for (int feeConfigIndex = 0; feeConfigIndex < feeConfigDtos.size(); feeConfigIndex++) {
+                    row.createCell(4 + feeConfigIndex).setCellValue(getFeeConfigAmount(feeConfigDtos.get(feeConfigIndex), dataObj));
+                }
+            }
+            row.createCell(4 + feeConfigDtos.size()).setCellValue(getAllFeeOweAmount(feeConfigDtos, dataObj));
+        }
+    }
+
+    /**
+     * _getAllFeeOweAmount: function (_fee) {
+     * let _feeConfigNames = $that.listOweFeeInfo.feeConfigNames;
+     * if (_feeConfigNames.length < 1) {
+     * return _fee.amountOwed;
+     * }
+     * <p>
+     * let _amountOwed = 0.0;
+     * let _items = _fee.items;
+     * _feeConfigNames.forEach(_feeItem =>{
+     * _items.forEach(_item=>{
+     * if(_feeItem.configId == _item.configId){
+     * _amountOwed += parseFloat(_item.amountOwed);
+     * }
+     * })
+     * })
+     * return _amountOwed;
+     * }
+     *
+     * @param dataObj
+     * @return
+     */
+    private double getAllFeeOweAmount(List<FeeConfigDto> feeConfigDtos, JSONObject dataObj) {
+        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
+            return dataObj.getDouble("amountOwed");
+        }
+        JSONArray items = dataObj.getJSONArray("items");
+        BigDecimal oweAmount = new BigDecimal(0);
+        for (FeeConfigDto feeConfigDto : feeConfigDtos) {
+            for (int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+                if (feeConfigDto.getConfigId().equals(items.getJSONObject(itemIndex).getString("configId"))) {
+                    oweAmount = oweAmount.add(new BigDecimal(items.getJSONObject(itemIndex).getDouble("amountOwed")));
+                }
+            }
+        }
+
+        return oweAmount.doubleValue();
+    }
+
+    private double getFeeConfigAmount(FeeConfigDto feeConfigDto, JSONObject dataObj) {
+        JSONArray items = dataObj.getJSONArray("items");
+
+        double oweAmount = 0;
+        for (int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+            if (feeConfigDto.getConfigId().equals(items.getJSONObject(itemIndex).getString("configId"))) {
+                oweAmount = items.getJSONObject(itemIndex).getDouble("amountOwed");
+                break;
+            }
+        }
+        return oweAmount;
+    }
+
+
+    private List<FeeConfigDto> getFeeConfigs(JSONArray oweFees) {
+        List<FeeConfigDto> feeConfigDtos = new ArrayList<>();
+        FeeConfigDto feeConfigDto = null;
+        for (int oweFeeIndex = 0; oweFeeIndex < oweFees.size(); oweFeeIndex++) {
+            if (existsFeeConfig(feeConfigDtos, oweFees.getJSONObject(oweFeeIndex))) {
+                continue;
+            }
+
+            feeConfigDto = new FeeConfigDto();
+            feeConfigDto.setConfigId(oweFees.getJSONObject(oweFeeIndex).getString("configId"));
+            feeConfigDto.setFeeName(oweFees.getJSONObject(oweFeeIndex).getString("configName"));
+            feeConfigDtos.add(feeConfigDto);
+        }
+
+        return feeConfigDtos;
+    }
+
+    private boolean existsFeeConfig(List<FeeConfigDto> feeConfigDtos, JSONObject oweFee) {
+        if (feeConfigDtos.size() < 1) {
+            return false;
+        }
+        for (FeeConfigDto feeConfigDto : feeConfigDtos) {
+            if (feeConfigDto.getConfigId().equals(oweFee.getString("configId"))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     private void reportPayFeeDetail(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("缴费明细表");
@@ -192,6 +324,24 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
                 row.createCell(6 + detailIndex).setCellValue(reportFeeYearCollectionDetailDtos.getJSONObject(detailIndex).getString("receivedAmount"));
             }
         }
+    }
+
+    private JSONArray getReportListOweFees(IPageData pd, ComponentValidateResult result) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        reqJson.put("page", 1);
+        reqJson.put("row", 10000);
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api//reportOweFee/queryReportAllOweFee" + mapToUrlParam(reqJson);
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+        JSONObject savedRoomInfoResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
+        if (!savedRoomInfoResults.containsKey("data")) {
+            return null;
+        }
+        return savedRoomInfoResults.getJSONArray("data");
     }
 
     private JSONArray getReportPayFeeDetail(IPageData pd, ComponentValidateResult result) {
