@@ -85,6 +85,7 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
             addRoomView.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             addRoomView.put("unitId", viewUnitInfo.getString("unitId"));
             addRoomView.put("roomType", RoomDto.ROOM_TYPE_ROOM);
+
             roomBMOImpl.addBusinessRoom(addRoomView, context);
             //处理房屋属性
             dealRoomAttr(addRoomView, context);
