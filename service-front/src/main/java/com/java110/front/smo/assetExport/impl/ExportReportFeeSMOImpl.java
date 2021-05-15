@@ -193,6 +193,10 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             return dataObj.getDouble("amountOwed");
         }
         JSONArray items = dataObj.getJSONArray("items");
+        if (items == null || items.size() < 1) {
+            return dataObj.getDouble("amountOwed");
+        }
+
         BigDecimal oweAmount = new BigDecimal(0);
         for (FeeConfigDto feeConfigDto : feeConfigDtos) {
             for (int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
@@ -207,8 +211,12 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
 
     private double getFeeConfigAmount(FeeConfigDto feeConfigDto, JSONObject dataObj) {
         JSONArray items = dataObj.getJSONArray("items");
-
         double oweAmount = 0;
+
+        if (items == null || items.size() < 1) {
+            return oweAmount;
+        }
+
         for (int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
             if (feeConfigDto.getConfigId().equals(items.getJSONObject(itemIndex).getString("configId"))) {
                 oweAmount = items.getJSONObject(itemIndex).getDouble("amountOwed");
