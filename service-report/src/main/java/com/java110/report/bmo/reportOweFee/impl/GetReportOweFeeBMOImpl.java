@@ -5,6 +5,7 @@ import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.report.bmo.reportOweFee.IGetReportOweFeeBMO;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -193,7 +194,9 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 oldAmount = oldAmount.add(new BigDecimal(Double.parseDouble(reportOweFeeDto.getAmountOwed())));
                 reportOweFeeItemDto.setAmountOwed(oldAmount.doubleValue() + "");
             }
-            oldReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
+            if(!StringUtil.isEmpty(reportOweFeeDto.getOwnerName())) {
+                oldReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
+            }
             oldReportOweFeeDto.setUpdateTime(reportOweFeeDto.getUpdateTime());
             oldReportOweFeeDto.setConfigName(reportOweFeeDto.getConfigName());
         }
