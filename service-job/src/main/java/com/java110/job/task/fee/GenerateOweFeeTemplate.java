@@ -159,7 +159,7 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setFeeId(feeDto.getFeeId());
         reportOweFeeDto.setPayerObjId(feeDto.getPayerObjId());
-        List<ReportOweFeeDto> reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
+        List<ReportOweFeeDto> reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
         if (reportOweFeeDtos == null || reportOweFeeDtos.size() < 1) {
             reportOweFeePo.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId));
             reportOweFeeInnerServiceSMOImpl.saveReportOweFee(reportOweFeePo);
