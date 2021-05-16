@@ -137,9 +137,7 @@
             </if>
         </set>
         where 1=1
-        <if test="oweId !=null and oweId != ''">
             and t.owe_id= #{oweId}
-        </if>
 
     </update>
 
