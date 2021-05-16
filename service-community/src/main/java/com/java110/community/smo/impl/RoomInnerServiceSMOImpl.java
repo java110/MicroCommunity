@@ -11,6 +11,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.room.RoomPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -88,6 +89,12 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             refreshRoom(room, users, roomAttrDtos);
         }
         return rooms;
+    }
+
+    @Override
+    public int updateRooms(@RequestBody RoomPo roomPo) {
+        roomServiceDaoImpl.updateRoomInfoInstance(BeanConvertUtil.beanCovertMap(roomPo));
+        return 1;
     }
 
     /**
@@ -285,12 +292,12 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
     public List<ImportRoomFee> freshRoomIds(@RequestBody List<ImportRoomFee> importRoomFees) {
         for (ImportRoomFee importRoomFee : importRoomFees) {
             List<Map> infos = null;
-            if(!StringUtil.isEmpty(importRoomFee.getRoomId()) && !importRoomFee.getRoomId().startsWith("-")){
+            if (!StringUtil.isEmpty(importRoomFee.getRoomId()) && !importRoomFee.getRoomId().startsWith("-")) {
                 Map paramIn = new HashMap();
-                paramIn.put("communityId",importRoomFee.getCommunityId());
-                paramIn.put("roomId",importRoomFee.getRoomId());
+                paramIn.put("communityId", importRoomFee.getCommunityId());
+                paramIn.put("roomId", importRoomFee.getRoomId());
                 infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
-            }else{
+            } else {
                 infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
             }
 

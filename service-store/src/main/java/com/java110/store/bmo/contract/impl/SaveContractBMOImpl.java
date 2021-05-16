@@ -23,6 +23,7 @@ import com.java110.po.contractFile.ContractFilePo;
 import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.rentingPool.RentingPoolPo;
+import com.java110.po.room.RoomPo;
 import com.java110.store.bmo.contract.ISaveContractBMO;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -255,6 +256,13 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             ownerRoomRelPo.setState("2001");
             ownerRoomRelPo.setUserId("-1");
             ownerRoomRelInnerServiceSMOImpl.saveOwnerRoomRels(ownerRoomRelPo);
+
+            //修改房屋状态
+            RoomPo roomPo = new RoomPo();
+            roomPo.setRoomId(contractRoomPo.getRoomId());
+            roomPo.setState(RoomDto.STATE_SELL);
+            roomPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
+            roomInnerServiceSMOImpl.updateRooms(roomPo);
             //删除老的
             if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
                 ownerRoomRelPo = new OwnerRoomRelPo();

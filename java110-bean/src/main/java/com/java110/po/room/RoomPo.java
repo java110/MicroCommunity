@@ -26,6 +26,7 @@ public class RoomPo implements Serializable {
     private String state;
     private String communityId;
     private String roomType;
+    private String statusCd;
 
 
     public String getRoomId() {
@@ -131,5 +132,13 @@ public class RoomPo implements Serializable {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

@@ -3,6 +3,7 @@ package com.java110.intf.community;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.RoomDto;
 import com.java110.entity.assetImport.ImportRoomFee;
+import com.java110.po.room.RoomPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +26,20 @@ public interface IRoomInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param roomDto 数据对象分享
      * @return RoomDto 对象数据
      */
     @RequestMapping(value = "/queryRooms", method = RequestMethod.POST)
     List<RoomDto> queryRooms(@RequestBody RoomDto roomDto);
+
+    /**
+     * <p>修改房屋信息</p>
+     *
+     * @param roomPo 房屋信息
+     * @return RoomDto 对象数据
+     */
+    @RequestMapping(value = "/updateRooms", method = RequestMethod.POST)
+    int updateRooms(@RequestBody RoomPo roomPo);
 
     /**
      * 查询<p>小区楼</p>总记录数
@@ -62,7 +71,6 @@ public interface IRoomInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param roomDto 数据对象分享
      * @return RoomDto 对象数据
      */
@@ -71,7 +79,6 @@ public interface IRoomInnerServiceSMO {
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param roomDto 数据对象分享
      * @return RoomDto 对象数据
@@ -83,7 +90,6 @@ public interface IRoomInnerServiceSMO {
     /**
      * <p>根据业主查询房屋信息</p>
      *
-     *
      * @param roomDto 数据对象分享
      * @return RoomDto 对象数据
      */
@@ -93,7 +99,6 @@ public interface IRoomInnerServiceSMO {
 
     /**
      * <p>根据业主查询房屋信息</p>
-     *
      *
      * @param importRoomFees 数据对象分享
      */
