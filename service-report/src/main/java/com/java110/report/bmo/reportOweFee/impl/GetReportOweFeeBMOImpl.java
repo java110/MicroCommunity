@@ -216,7 +216,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 endTime = tempReportOweFeeItemDto.getEndTime();
             }
             if (endTime.getTime() < tempReportOweFeeItemDto.getEndTime().getTime()) {
-                endTime = tempReportOweFeeItemDto.getStartTime();
+                endTime = tempReportOweFeeItemDto.getEndTime();
             }
             totalAmount = totalAmount.add(new BigDecimal(Double.parseDouble(tempReportOweFeeItemDto.getAmountOwed()))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
         }
