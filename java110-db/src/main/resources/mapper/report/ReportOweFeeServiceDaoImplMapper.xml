@@ -85,7 +85,7 @@
 
     <!-- 修改欠费统计信息 add by wuxw 2018-07-03 -->
     <update id="updateReportOweFeeInfo" parameterType="Map">
-        update report_owe_fee t set
+        update report_owe_fee t
         <set>
             <if test="newBId != null and newBId != ''">
                 t.b_id = #{newBId},
