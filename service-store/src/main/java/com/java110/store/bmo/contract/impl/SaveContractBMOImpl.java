@@ -4,20 +4,27 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.RoomDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.store.*;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractFile.ContractFilePo;
 import com.java110.po.contractRoom.ContractRoomPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.store.bmo.contract.ISaveContractBMO;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -52,6 +59,15 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
     @Autowired
     private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -68,6 +84,8 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
         List<ContractTypeDto> contractTypeDtos = contractTypeInnerServiceSMOImpl.queryContractTypes(contractTypeDto);
 
         Assert.listOnlyOne(contractTypeDtos, "查询合同类型失败");
+
+        validateRoom(contractPo, reqJson);
 
         String audit = contractTypeDtos.get(0).getAudit();
 
@@ -136,6 +154,53 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
 
     }
 
+    /**
+     * 房屋是否欠费校验
+     *
+     * @param contractPo
+     * @param reqJson
+     */
+    private void validateRoom(ContractPo contractPo, JSONObject reqJson) {
+        //校验 房屋上是否有费用存在
+        if (!reqJson.containsKey("rooms")) {
+            return;
+        }
+        JSONArray rooms = reqJson.getJSONArray("rooms");
+        for (int conFileIndex = 0; conFileIndex < rooms.size(); conFileIndex++) {
+            JSONObject roomObj = rooms.getJSONObject(conFileIndex);
+
+            //判断房屋是否存在
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(roomObj.getString("roomId"));
+            roomDto.setCommunityId(reqJson.getString("communityId"));
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+            Assert.listOnlyOne(roomDtos, "房屋不存在");
+
+            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+            ownerRoomRelDto.setRoomId(roomObj.getString("roomId"));
+            List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+            //不存在关系
+            if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() == 0) { // 说明业主没有发生变化，后续工作不做处理
+                continue;
+            }
+            //存在关系 并且是他自己
+            if (contractPo.getObjId().equals(ownerRoomRelDtos.get(0).getOwnerId())) {
+                continue;
+            }
+
+            //查询房屋时候有欠费
+            FeeDto feeDto = new FeeDto();
+            feeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            feeDto.setPayerObjId(roomObj.getString("roomId"));
+            feeDto.setState(FeeDto.STATE_DOING);
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+            if (feeDtos != null && feeDtos.size() > 0) {
+                throw new IllegalArgumentException(roomDtos.get(0).getRoomNum() + "房屋存在未结束的费用 请先处理");
+            }
+        }
+    }
+
     private void saveContractRoomRel(JSONObject reqJson, ContractPo contractPo) {
 
         //保存关联房屋
@@ -153,8 +218,54 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
                     resourceStore.getString("floorNum") + "-"
                             + resourceStore.getString("unitNum") + "-" + resourceStore.getString("roomNum"));
             contractRoomInnerServiceSMOImpl.saveContractRoom(contractRoomPo);
+
+            //刷业主
+            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+            ownerRoomRelDto.setRoomId(contractRoomPo.getRoomId());
+            List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+            if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) { // 说明业主没有发生变化，后续工作不做处理
+                if (contractPo.getObjId().equals(ownerRoomRelDtos.get(0).getOwnerId())) {
+                    continue;
+                }
+            }
+
+            //补充 B过程数据 ADD
+            OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
+            ownerRoomRelPo.setEndTime(contractPo.getEndTime());
+            ownerRoomRelPo.setStartTime(contractPo.getStartTime());
+            ownerRoomRelPo.setOwnerId(contractPo.getObjId());
+            ownerRoomRelPo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+            ownerRoomRelPo.setRemark("签订合同自动绑定");
+            ownerRoomRelPo.setRoomId(contractRoomPo.getRoomId());
+            ownerRoomRelPo.setState("2001");
+            ownerRoomRelPo.setUserId("-1");
+            ownerRoomRelPo.setOperate("ADD");
+            ownerRoomRelPo.setbId("-1");
+            ownerRoomRelInnerServiceSMOImpl.saveBusinessOwnerRoomRels(ownerRoomRelPo);
+
+            ownerRoomRelPo = new OwnerRoomRelPo();
+            ownerRoomRelPo.setEndTime(contractPo.getEndTime());
+            ownerRoomRelPo.setStartTime(contractPo.getStartTime());
+            ownerRoomRelPo.setOwnerId(contractPo.getObjId());
+            ownerRoomRelPo.setRelId(ownerRoomRelPo.getRelId());
+            ownerRoomRelPo.setRemark("签订合同自动绑定");
+            ownerRoomRelPo.setRoomId(contractRoomPo.getRoomId());
+            ownerRoomRelPo.setState("2001");
+            ownerRoomRelInnerServiceSMOImpl.saveOwnerRoomRels(ownerRoomRelPo);
+            //删除老的
+            if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
+                ownerRoomRelPo = new OwnerRoomRelPo();
+                ownerRoomRelPo.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+                ownerRoomRelPo.setRelId(ownerRoomRelDtos.get(0).getRelId());
+                ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
+                ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtos.get(0), OwnerRoomRelPo.class);
+                ownerRoomRelPo.setbId("-1");
+                ownerRoomRelPo.setOperate("DEL");
+                ownerRoomRelInnerServiceSMOImpl.saveBusinessOwnerRoomRels(ownerRoomRelPo);
+            }
         }
-        //刷业主
+
     }
 
     /**

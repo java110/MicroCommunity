@@ -1,11 +1,11 @@
 package com.java110.user.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.user.dao.IOwnerRoomRelServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
-import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.user.dao.IOwnerRoomRelServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -86,10 +86,10 @@ public class OwnerRoomRelServiceDaoImpl extends BaseServiceDao implements IOwner
      * @throws DAOException DAO异常
      */
     @Override
-    public List<Map<Object,Object>> getOwnerRoomRelInfo(Map<Object,Object> info) throws DAOException {
+    public List<Map<Object, Object>> getOwnerRoomRelInfo(Map<Object, Object> info) throws DAOException {
         logger.debug("查询业主房屋信息 入参 info : {}", info);
 
-        List<Map<Object,Object>> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelServiceDaoImpl.getOwnerRoomRelInfo", info);
+        List<Map<Object, Object>> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelServiceDaoImpl.getOwnerRoomRelInfo", info);
 
         return businessOwnerRoomRelInfos;
     }
@@ -128,6 +128,18 @@ public class OwnerRoomRelServiceDaoImpl extends BaseServiceDao implements IOwner
         }
 
         return Integer.parseInt(businessOwnerRoomRelInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public int saveOwnerRoomRels(Map info) {
+        int saveFlag = sqlSessionTemplate.update("ownerRoomRelServiceDaoImpl.saveOwnerRoomRels", info);
+        return saveFlag;
+    }
+
+    @Override
+    public int updateOwnerRoomRels(Map info) {
+        int saveFlag = sqlSessionTemplate.update("ownerRoomRelServiceDaoImpl.updateOwnerRoomRelInfoInstance", info);
+        return saveFlag;
     }
 
 
