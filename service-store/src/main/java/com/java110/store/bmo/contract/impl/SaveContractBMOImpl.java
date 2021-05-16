@@ -231,11 +231,12 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             }
 
             //补充 B过程数据 ADD
+            String relId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId);
             OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
             ownerRoomRelPo.setEndTime(contractPo.getEndTime());
             ownerRoomRelPo.setStartTime(contractPo.getStartTime());
             ownerRoomRelPo.setOwnerId(contractPo.getObjId());
-            ownerRoomRelPo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+            ownerRoomRelPo.setRelId(relId);
             ownerRoomRelPo.setRemark("签订合同自动绑定");
             ownerRoomRelPo.setRoomId(contractRoomPo.getRoomId());
             ownerRoomRelPo.setState("2001");
@@ -248,7 +249,7 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             ownerRoomRelPo.setEndTime(contractPo.getEndTime());
             ownerRoomRelPo.setStartTime(contractPo.getStartTime());
             ownerRoomRelPo.setOwnerId(contractPo.getObjId());
-            ownerRoomRelPo.setRelId(ownerRoomRelPo.getRelId());
+            ownerRoomRelPo.setRelId(relId);
             ownerRoomRelPo.setRemark("签订合同自动绑定");
             ownerRoomRelPo.setRoomId(contractRoomPo.getRoomId());
             ownerRoomRelPo.setState("2001");
