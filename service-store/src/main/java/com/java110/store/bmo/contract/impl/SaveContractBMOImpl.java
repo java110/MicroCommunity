@@ -253,6 +253,7 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             ownerRoomRelPo.setRemark("签订合同自动绑定");
             ownerRoomRelPo.setRoomId(contractRoomPo.getRoomId());
             ownerRoomRelPo.setState("2001");
+            ownerRoomRelPo.setUserId("-1");
             ownerRoomRelInnerServiceSMOImpl.saveOwnerRoomRels(ownerRoomRelPo);
             //删除老的
             if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
