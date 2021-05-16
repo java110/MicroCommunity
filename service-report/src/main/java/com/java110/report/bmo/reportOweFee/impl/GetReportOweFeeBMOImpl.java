@@ -191,7 +191,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 items.add(reportOweFeeItemDto);
             } else {
                 BigDecimal oldAmount = new BigDecimal(Double.parseDouble(reportOweFeeItemDto.getAmountOwed()));
-                oldAmount = oldAmount.add(new BigDecimal(Double.parseDouble(reportOweFeeDto.getAmountOwed())));
+                oldAmount = oldAmount.add(new BigDecimal(Double.parseDouble(reportOweFeeDto.getAmountOwed()))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 reportOweFeeItemDto.setAmountOwed(oldAmount.doubleValue() + "");
             }
             if(!StringUtil.isEmpty(reportOweFeeDto.getOwnerName())) {
@@ -218,7 +218,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
             if (endTime.getTime() < tempReportOweFeeItemDto.getEndTime().getTime()) {
                 endTime = tempReportOweFeeItemDto.getStartTime();
             }
-            totalAmount = totalAmount.add(new BigDecimal(Double.parseDouble(tempReportOweFeeItemDto.getAmountOwed())));
+            totalAmount = totalAmount.add(new BigDecimal(Double.parseDouble(tempReportOweFeeItemDto.getAmountOwed()))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
         }
         oldReportOweFeeDto.setEndTime(DateUtil.getFormatTimeString(startTime, DateUtil.DATE_FORMATE_STRING_A));
         oldReportOweFeeDto.setDeadlineTime(DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_A));
