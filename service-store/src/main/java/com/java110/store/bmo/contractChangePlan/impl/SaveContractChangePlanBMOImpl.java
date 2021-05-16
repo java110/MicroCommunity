@@ -4,15 +4,19 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
+import com.java110.dto.contractChangePlanDetail.ContractChangePlanDetailDto;
 import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
 import com.java110.dto.contractType.ContractTypeDto;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
 import com.java110.intf.store.*;
+import com.java110.po.contract.ContractPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.po.contractChangePlanDetail.ContractChangePlanDetailPo;
 import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
+import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.store.bmo.contractChangePlan.ISaveContractChangePlanBMO;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -105,11 +109,69 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
             ContractChangePlanDto contractChangePlanDto = BeanConvertUtil.covertBean(contractChangePlanPo, ContractChangePlanDto.class);
             contractChangePlanDto.setCurrentUserId(contractChangePlanPo.getChangePerson());
             contractChangeUserInnerServiceSMO.startProcess(contractChangePlanDto);
+        }else{
+            ContractChangePlanPo tmpContractChangePlanPo = new ContractChangePlanPo();
+            tmpContractChangePlanPo.setPlanId(contractChangePlanPo.getPlanId());
+            tmpContractChangePlanPo.setState(ContractDto.STATE_AUDIT_FINISH);
+            tmpContractChangePlanPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
+            contractChangePlanInnerServiceSMOImpl.updateContractChangePlan(tmpContractChangePlanPo);
+            //修改合同信息
+            ContractChangePlanDetailDto contractChangePlanDetailDto = new ContractChangePlanDetailDto();
+            contractChangePlanDetailDto.setPlanId(contractChangePlanPo.getPlanId());
+            contractChangePlanDetailDto.setStoreId(contractChangePlanPo.getStoreId());
+            contractChangePlanDetailDto.setOperate("ADD");
+            List<ContractChangePlanDetailDto> contractChangePlanDetailDtos =
+                    contractChangePlanDetailInnerServiceSMOImpl.queryContractChangePlanDetails(contractChangePlanDetailDto);
+
+            Assert.listOnlyOne(contractChangePlanDetailDtos, "数据错误");
+            ContractPo contractPo = BeanConvertUtil.covertBean(contractChangePlanDetailDtos.get(0), ContractPo.class);
+
+            contractInnerServiceSMOImpl.updateContract(contractPo);
+            dealContractChangePlanRoom(tmpContractChangePlanPo);
         }
 
 
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+    }
+
+    private void dealContractChangePlanRoom(ContractChangePlanPo contractChangePlanPo) {
+        // 查询 是否有资产变更
+
+        ContractChangePlanRoomDto contractChangePlanRoomDto = new ContractChangePlanRoomDto();
+        contractChangePlanRoomDto.setPlanId(contractChangePlanPo.getPlanId());
+        contractChangePlanRoomDto.setStoreId(contractChangePlanPo.getStoreId());
+        contractChangePlanRoomDto.setOperate("ADD");
+
+        List<ContractChangePlanRoomDto> contractChangePlanRoomDtos
+                = contractChangePlanRoomInnerServiceSMOImpl.queryContractChangePlanRooms(contractChangePlanRoomDto);
+
+        if(contractChangePlanRoomDtos == null || contractChangePlanRoomDtos.size() < 1){
+            return ;
+        }
+
+        //删除之前数据 插入新数据
+        ContractRoomPo contractRoomPo = new ContractRoomPo();
+        contractRoomPo.setContractId(contractChangePlanRoomDtos.get(0).getContractId());
+        contractRoomPo.setStoreId(contractChangePlanRoomDtos.get(0).getStoreId());
+        contractRoomInnerServiceSMOImpl.deleteContractRoom(contractRoomPo);
+
+        //插入新的关系值
+
+        for(ContractChangePlanRoomDto tmpContractChangePlanRoomDto : contractChangePlanRoomDtos){
+            contractRoomPo = new ContractRoomPo();
+            contractRoomPo.setContractId(contractChangePlanRoomDtos.get(0).getContractId());
+            contractRoomPo.setStoreId(contractChangePlanRoomDtos.get(0).getStoreId());
+            contractRoomPo.setCrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_crId));
+            contractRoomPo.setOwnerId(tmpContractChangePlanRoomDto.getOwnerId());
+            contractRoomPo.setOwnerName(tmpContractChangePlanRoomDto.getOwnerName());
+            contractRoomPo.setRoomId(tmpContractChangePlanRoomDto.getRoomId());
+            contractRoomPo.setRoomName(tmpContractChangePlanRoomDto.getRoomName());
+            contractRoomInnerServiceSMOImpl.saveContractRoom(contractRoomPo);
+        }
+
+
+
     }
 
     /**
