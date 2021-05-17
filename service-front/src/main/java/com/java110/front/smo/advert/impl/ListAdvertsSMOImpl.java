@@ -35,7 +35,6 @@ public class ListAdvertsSMOImpl extends AbstractComponentSMO implements IListAdv
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         super.validatePageInfo(pd);
-        Assert.hasKeyAndValue(paramIn, "communityId", "未包含小区信息");
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_ADVERT);
     }

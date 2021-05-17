@@ -158,15 +158,12 @@
         locationTypeCd,t.status_cd,t.status_cd statusCd,t.ad_type_cd,t.ad_type_cd adTypeCd,t.advert_id,t.advert_id
         advertId,t.start_time,t.start_time startTime,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.location_obj_id,t.location_obj_id locationObjId,t.seq,td1.name
-        classifyName,td2.name stateName,t.create_time createTime
-        from advert t,t_dict td1,t_dict td2
+        classifyName,td2.name stateName,t.create_time createTime,td3.name locationObjName
+        from advert t
+        left join t_dict td1 on  t.classify = td1.status_cd and td1.table_name = 'advert' and td1.table_columns = 'classify'
+        left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'advert' and td2.table_columns = 'state'
+        left join t_dict td3 on t.location_type_cd = td2.status_cd and td2.table_name = 'advert' and td2.table_columns = 'location_type_cd'
         where 1 =1
-        and t.classify = td1.status_cd
-        and td1.table_name = 'advert'
-        and td1.table_columns = 'classify'
-        and t.state = td2.status_cd
-        and td2.table_name = 'advert'
-        and td2.table_columns = 'state'
         <if test="classify !=null and classify != ''">
             and t.classify= #{classify}
         </if>
@@ -193,9 +190,6 @@
         </if>
         <if test="endTime !=null ">
             and t.end_time= #{endTime}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -242,9 +236,6 @@
         <if test="endTime !=null ">
             , t.end_time= #{endTime}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
         <if test="locationObjId !=null and locationObjId != ''">
             , t.location_obj_id= #{locationObjId}
         </if>
@@ -263,14 +254,8 @@
     <!-- 查询广告信息数量 add by wuxw 2018-07-03 -->
     <select id="queryAdvertsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from advert t,t_dict td1,t_dict td2
+        from advert t
         where 1 =1
-        and t.classify = td1.status_cd
-        and td1.table_name = 'advert'
-        and td1.table_columns = 'classify'
-        and t.state = td2.status_cd
-        and td2.table_name = 'advert'
-        and td2.table_columns = 'state'
         <if test="classify !=null and classify != ''">
             and t.classify= #{classify}
         </if>
@@ -297,9 +282,6 @@
         </if>
         <if test="endTime !=null ">
             and t.end_time= #{endTime}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
