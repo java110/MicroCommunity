@@ -68,12 +68,8 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         reqJson.put("advertId", advertId);
         reqJson.put("state", "1000");
         reqJson.put("createTime", new Date());
-        /*reqJson.put("bId", "-1");
-        AdvertDto advertDto = BeanConvertUtil.covertBean(reqJson, AdvertDto.class);
-        //保存广告信息
-        advertInnerServiceSMOImpl.saveAdverts(advertDto);*/
+        reqJson.put("communityId", "9999");
         AdvertPo advertPo = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
-        advertPo.setCommunityId("9999");
         super.insert(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT);
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
