@@ -162,7 +162,7 @@
         from advert t
         left join t_dict td1 on  t.classify = td1.status_cd and td1.table_name = 'advert' and td1.table_columns = 'classify'
         left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'advert' and td2.table_columns = 'state'
-        left join t_dict td3 on t.location_type_cd = td2.status_cd and td2.table_name = 'advert' and td2.table_columns = 'location_type_cd'
+        left join t_dict td3 on t.location_type_cd = td3.status_cd and td3.table_name = 'advert' and td3.table_columns = 'location_type_cd'
         where 1 =1
         <if test="classify !=null and classify != ''">
             and t.classify= #{classify}
