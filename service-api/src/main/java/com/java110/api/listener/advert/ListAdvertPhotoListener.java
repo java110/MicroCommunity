@@ -5,13 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.common.IAdvertInnerServiceSMO;
-import com.java110.intf.common.IAdvertItemInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.advert.AdvertDto;
 import com.java110.dto.advert.AdvertItemDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.common.IAdvertInnerServiceSMO;
+import com.java110.intf.common.IAdvertItemInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeAdvertConstant;
-import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,6 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
 
     @Autowired
     private IAdvertItemInnerServiceSMO advertItemInnerServiceSMOImpl;
-
 
 
     @Override
@@ -62,7 +61,6 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
     }
 
     @Override
@@ -76,7 +74,12 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
 
         //如果是大门 则只获取小区的广告
 
-        getCommunityAdvert(reqJson.getString("communityId"), advertPhoto);
+        AdvertDto advertDto = BeanConvertUtil.covertBean(reqJson, AdvertDto.class);
+        List<AdvertDto> advertDtos = advertInnerServiceSMOImpl.queryAdverts(advertDto);
+
+        if (advertDtos != null && advertDtos.size() != 0) {
+            this.getAdvertItem(advertDtos, advertPhoto);
+        }
 
         responseEntity = new ResponseEntity<String>(advertPhoto.toJSONString(), HttpStatus.OK);
 
