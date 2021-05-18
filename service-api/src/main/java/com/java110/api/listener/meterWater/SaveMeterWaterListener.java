@@ -11,6 +11,8 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -18,9 +20,10 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeMeterWaterConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+
+import java.util.List;
 
 /**
  * 保存商户侦听
@@ -34,6 +37,9 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFeeBMO feeBMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -57,9 +63,9 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
 
         if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("meterType", "1010");
-        } else if(FeeConfigDto.FEE_TYPE_CD_GAS.equals(reqJson.getString("feeTypeCd"))){
+        } else if (FeeConfigDto.FEE_TYPE_CD_GAS.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("meterType", "3030");
-        }else {
+        } else {
             reqJson.put("meterType", "2020");
         }
 
@@ -84,9 +90,40 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         feeAttrPo.setValue(reqJson.getString("curReadingTime"));
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPo.setAttrId("-1");
-        super.insert(context,feeAttrPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
 
-        reqJson.put("feeId",payFeePo.getFeeId());
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        ownerDto.setRoomId(reqJson.getString("objId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
+
+        if (ownerDtos != null && ownerDtos.size() > 0) {
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
+            feeAttrPo.setValue(ownerDtos.get(0).getOwnerId());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPo.setAttrId("-2");
+            super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
+            feeAttrPo.setValue(ownerDtos.get(0).getLink());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPo.setAttrId("-3");
+            super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME);
+            feeAttrPo.setValue(ownerDtos.get(0).getName());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPo.setAttrId("-4");
+            super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        }
+
+        reqJson.put("feeId", payFeePo.getFeeId());
 
         meterWaterBMOImpl.addMeterWater(reqJson, context);
     }
