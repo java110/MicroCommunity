@@ -10,8 +10,10 @@ import com.java110.dto.advert.AdvertDto;
 import com.java110.dto.advert.AdvertItemDto;
 import com.java110.intf.common.IAdvertInnerServiceSMO;
 import com.java110.intf.common.IAdvertItemInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeAdvertConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -109,7 +111,8 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
      */
     private void getAdvertItem(List<AdvertDto> advertDtos, JSONArray advertPhotoAndVideos) {
         JSONObject photoAndVideo = null;
-
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         for (AdvertDto advertDto : advertDtos) {
 
             AdvertItemDto advertItemDto = new AdvertItemDto();
@@ -122,7 +125,8 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
                 if ("8888".equals(tmpAdvertItemDto.getItemTypeCd())) {
                     photoAndVideo = new JSONObject();
                     photoAndVideo.put("suffix", "JPEG");
-                    photoAndVideo.put("url", "/callComponent/download/getFile/file?fileId=" + tmpAdvertItemDto.getUrl() + "&communityId=" + advertDto.getCommunityId());
+                    //photoAndVideo.put("url", "/callComponent/download/getFile/file?fileId=" + tmpAdvertItemDto.getUrl() + "&communityId=" + advertDto.getCommunityId());
+                    photoAndVideo.put("url", imgUrl + tmpAdvertItemDto.getUrl());
                     photoAndVideo.put("seq", tmpAdvertItemDto.getSeq());
                     advertPhotoAndVideos.add(photoAndVideo);
                 }
