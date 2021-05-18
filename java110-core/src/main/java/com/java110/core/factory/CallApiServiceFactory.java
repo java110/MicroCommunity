@@ -16,7 +16,11 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -210,6 +214,12 @@ public class CallApiServiceFactory {
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), pd.getTransactionId());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        if (pd.getHeaders() != null) {
+            for (String key : pd.getHeaders().keySet()
+            ) {
+                header.add(key, pd.getHeaders().get(key).toString());
+            }
+        }
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
         //logger.debug("请求中心服务信息，{}", httpEntity);
         try {

@@ -2,6 +2,7 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.util.DateUtil;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
@@ -50,6 +51,7 @@ public class PageData implements IPageData, Serializable {
     private String apiUrl;
 
     private HttpMethod method;
+    private Map<String, Object> headers;
 
     /**
      * 付款方id
@@ -190,7 +192,8 @@ public class PageData implements IPageData, Serializable {
                 componentMethod,
                 url,
                 sessionId,
-                "");
+                "",
+                null);
     }
 
     @Override
@@ -221,7 +224,6 @@ public class PageData implements IPageData, Serializable {
         this.setEndTime(endTime);
         return this;
     }
-
     public IPageData builder(String userId,
                              String userName,
                              String token,
@@ -231,6 +233,30 @@ public class PageData implements IPageData, Serializable {
                              String url,
                              String sessionId,
                              String appId)
+            throws IllegalArgumentException {
+        return builder(userId,
+                userName,
+                token,
+                reqData,
+                componentCode,
+                componentMethod,
+                url,
+                sessionId,
+                appId,
+                null);
+    }
+
+
+    public IPageData builder(String userId,
+                             String userName,
+                             String token,
+                             String reqData,
+                             String componentCode,
+                             String componentMethod,
+                             String url,
+                             String sessionId,
+                             String appId,
+                             Map<String, Object> headers)
             throws IllegalArgumentException {
         this.setComponentCode(componentCode);
         this.setComponentMethod(componentMethod);
@@ -242,6 +268,7 @@ public class PageData implements IPageData, Serializable {
         this.setUrl(url);
         this.setSessionId(sessionId);
         this.setAppId(appId);
+        this.setHeaders(headers);
 
         return this;
     }
@@ -277,6 +304,15 @@ public class PageData implements IPageData, Serializable {
 
     public HttpMethod getMethod() {
         return method;
+    }
+
+    @Override
+    public Map<String, Object> getHeaders() {
+        return null;
+    }
+
+    public void setHeaders(Map<String, Object> headers) {
+        this.headers = headers;
     }
 
     public void setMethod(HttpMethod method) {
