@@ -912,11 +912,12 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryPayFeeDetail" parameterType="Map" resultType="Map">
+
         select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,oc.car_num carNum,
         pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,
         t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfa.`value`
         importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name
-        ruleName,pfdd.discount_price discountPrice,co.contract_code contractCode
+        ruleName,pfdd.discount_price discountPrice,co.contract_code contractCode,pfo.`value` ownerName
         from pay_fee_detail t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -925,6 +926,7 @@
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'  and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
+        left join pay_fee_attrs pfo on t.fee_id = pfo.fee_id and pfo.spec_cd = '390008'
         left join pay_fee_detail_discount pfdd on t.detail_id = pfdd.detail_id and pfdd.status_cd = '0'
         left join fee_discount fd on pfdd.discount_id = fd.discount_id and fd.status_cd = '0'
         left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'

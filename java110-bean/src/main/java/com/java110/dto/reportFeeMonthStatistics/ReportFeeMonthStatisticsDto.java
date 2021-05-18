@@ -42,6 +42,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String carNum;
     private String contractCode;
     private String payerObjType;
+    private String ownerName;
 
     private String objCount;
     private String normalCount;
@@ -481,5 +482,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setContractCode(String contractCode) {
         this.contractCode = contractCode;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }
