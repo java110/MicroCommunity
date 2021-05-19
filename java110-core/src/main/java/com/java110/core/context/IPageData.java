@@ -1,7 +1,10 @@
 package com.java110.core.context;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 /**
  * 页面数据封装对象
@@ -117,6 +120,8 @@ public interface IPageData {
 
     public HttpMethod getMethod();
 
+    Map<String, Object> getHeaders();
+
     public void setMethod(HttpMethod method);
 
     public String getPayerObjId();
@@ -153,6 +158,31 @@ public interface IPageData {
                       String url,
                       String sessionId,
                       String appId)
+            throws IllegalArgumentException;
+
+    /**
+     * 构建 pd 对象
+     *
+     * @param userId          用户ID
+     * @param token           token
+     * @param reqData         请求数据
+     * @param componentCode   组件编码
+     * @param componentMethod 组件方法
+     * @param url             请求url
+     * @param sessionId       会话ID
+     * @return IPageData对象
+     * @throws IllegalArgumentException 参数错误异常
+     */
+    IPageData builder(String userId,
+                      String userName,
+                      String token,
+                      String reqData,
+                      String componentCode,
+                      String componentMethod,
+                      String url,
+                      String sessionId,
+                      String appId,
+                      Map<String, Object> headers)
             throws IllegalArgumentException;
 
     IPageData builder(String userId,

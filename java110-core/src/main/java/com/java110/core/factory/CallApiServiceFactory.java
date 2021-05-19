@@ -16,7 +16,11 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -205,11 +209,18 @@ public class CallApiServiceFactory {
         long startTime = DateUtil.getCurrentDate().getTime();
         logger.debug(url + "调用api开始：" + (startTime));
         HttpHeaders header = new HttpHeaders();
+        if (pd.getHeaders() != null) {
+            for (String key : pd.getHeaders().keySet()
+            ) {
+                header.add(key, pd.getHeaders().get(key).toString());
+            }
+        }
         header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), StringUtil.isEmpty(pd.getAppId()) ? AppDto.WEB_APP_ID : pd.getAppId());
         header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), pd.getTransactionId());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
         //logger.debug("请求中心服务信息，{}", httpEntity);
         try {
