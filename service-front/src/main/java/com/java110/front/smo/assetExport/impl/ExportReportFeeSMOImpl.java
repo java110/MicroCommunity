@@ -277,6 +277,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         row.createCell(11).setCellValue("滞纳金");
         row.createCell(12).setCellValue("空置房打折金额");
         row.createCell(13).setCellValue("空置房减免金额");
+        row.createCell(14).setCellValue("业主");
         //查询楼栋信息
         JSONArray rooms = this.getReportPayFeeDetail(pd, result);
         if (rooms == null) {
@@ -300,6 +301,8 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             row.createCell(11).setCellValue(dataObj.getDouble("lateFee"));
             row.createCell(12).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
             row.createCell(13).setCellValue(dataObj.getDouble("vacantHousingReduction"));
+            row.createCell(14).setCellValue(dataObj.getString("ownerName"));
+
         }
     }
 
