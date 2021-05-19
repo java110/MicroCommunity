@@ -124,7 +124,7 @@
             and pf.payer_obj_id = #{payerObjId}
         </if>
         <if test="ownerId != null and ownerId != ''">
-            pfa.value = #{ownerId}
+           and pfa.value = #{ownerId}
         </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
@@ -230,7 +230,7 @@
             and pf.payer_obj_id = #{payerObjId}
         </if>
         <if test="ownerId != null and ownerId != ''">
-            pfa.value = #{ownerId}
+           and pfa.value = #{ownerId}
         </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
