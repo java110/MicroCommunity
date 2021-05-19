@@ -263,7 +263,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
     private void reportPayFeeDetail(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("缴费明细表");
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("费用编号");
+        row.createCell(0).setCellValue("订单号");
         row.createCell(1).setCellValue("房号");
         row.createCell(2).setCellValue("费用项");
         row.createCell(3).setCellValue("支付方式");
@@ -286,20 +286,20 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(roomIndex + 1);
+            row.createCell(0).setCellValue(dataObj.getString("oId"));
             row.createCell(1).setCellValue(dataObj.getString("objName"));
             row.createCell(2).setCellValue(dataObj.getString("feeName"));
             row.createCell(3).setCellValue(dataObj.getString("primeRate"));
             row.createCell(4).setCellValue(dataObj.getString("startTime"));
             row.createCell(5).setCellValue(dataObj.getString("endTime"));
             row.createCell(6).setCellValue(dataObj.getString("createTime"));
-            row.createCell(7).setCellValue(dataObj.getString("receivableAmount"));
-            row.createCell(8).setCellValue(dataObj.getString("receivedAmount"));
-            row.createCell(9).setCellValue(dataObj.getString("preferentialAmount"));
-            row.createCell(10).setCellValue(dataObj.getString("deductionAmount"));
-            row.createCell(11).setCellValue(dataObj.getString("lateFee"));
-            row.createCell(12).setCellValue(dataObj.getString("vacantHousingDiscount"));
-            row.createCell(13).setCellValue(dataObj.getString("vacantHousingReduction"));
+            row.createCell(7).setCellValue(dataObj.getDouble("receivableAmount"));
+            row.createCell(8).setCellValue(dataObj.getDouble("receivedAmount"));
+            row.createCell(9).setCellValue(dataObj.getDouble("preferentialAmount"));
+            row.createCell(10).setCellValue(dataObj.getDouble("deductionAmount"));
+            row.createCell(11).setCellValue(dataObj.getDouble("lateFee"));
+            row.createCell(12).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
+            row.createCell(13).setCellValue(dataObj.getDouble("vacantHousingReduction"));
         }
     }
 
