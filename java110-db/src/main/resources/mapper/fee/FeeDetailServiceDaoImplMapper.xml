@@ -115,7 +115,7 @@
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
         <if test="ownerId != null and ownerId != ''">
-            left join pay_fee_attrs pfao on pfa.fee_id = t.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
+            left join pay_fee_attrs pfao on pfao.fee_id = t.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
         </if>
         left join t_dict d on t.state = d.status_cd and d.table_name = 'pay_fee_detail' and d.table_columns = 'state'
         where 1 =1
