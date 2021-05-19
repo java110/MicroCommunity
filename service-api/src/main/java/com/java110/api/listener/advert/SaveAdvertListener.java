@@ -96,13 +96,13 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         paramInJson.put("fileSaveName", fileName);
         paramInJson.put("advertPhotoId", fileDto.getFileId());
         itemTypeCd = "8888";
-        url = fileDto.getFileId();
+/*        url = fileDto.getFileId();*/
         AdvertItemPo advertItemPo = new AdvertItemPo();
         advertItemPo.setAdvertId(paramInJson.getString("advertId"));
         advertItemPo.setAdvertItemId("-1");
         advertItemPo.setCommunityId(paramInJson.getString("communityId"));
         advertItemPo.setItemTypeCd(itemTypeCd);
-        advertItemPo.setUrl(url);
+        advertItemPo.setUrl(fileName);
         advertItemPo.setSeq("1");
         super.insert(dataFlowContext, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
     }
