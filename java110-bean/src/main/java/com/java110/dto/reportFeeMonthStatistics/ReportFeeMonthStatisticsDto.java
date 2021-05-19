@@ -59,6 +59,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String importFeeName;
 
+    private String oId;
+
     //支付方式
     private String primeRate;
 
@@ -490,5 +492,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public String getoId() {
+        return oId;
+    }
+
+    public void setoId(String oId) {
+        this.oId = oId;
     }
 }
