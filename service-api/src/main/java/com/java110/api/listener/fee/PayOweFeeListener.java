@@ -146,7 +146,9 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
     }
 
     private void getFeeReceiptDetailPo(DataFlowContext dataFlowContext, JSONObject paramObj, JSONArray businesses, List<FeeReceiptDetailPo> feeReceiptDetailPos, List<FeeReceiptPo> feeReceiptPos) {
-        paramObj.put("primeRate", "6");
+        if(!paramObj.containsKey("primeRate")) {
+            paramObj.put("primeRate", "6");
+        }
         //paramObj.put("remark", "微信支付");
         businesses.add(feeBMOImpl.addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos));
         businesses.add(feeBMOImpl.modifyOweFee(paramObj, dataFlowContext));
