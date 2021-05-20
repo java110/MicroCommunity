@@ -36,7 +36,11 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.user.*;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.cache.MappingCache;
@@ -180,10 +184,10 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         if (feeTypeCd.equals("888800010012")) {
             //给处理报修完结单的维修师傅推送消息
             sendMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
-        } else {
-            //给员工推送消息
-            publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
         }
+        //给员工推送消息
+        publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
+
     }
 
     /**
@@ -231,8 +235,8 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         basePrivilegeDto.setResource("/wechatNotification");
         basePrivilegeDto.setStoreId(feeDtos.get(0).getIncomeObjId());
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
-        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.SEND_TEMPLATE_URL);
-        if(StringUtil.isEmpty(sendTemplate)){
+        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.SEND_TEMPLATE_URL);
+        if (StringUtil.isEmpty(sendTemplate)) {
             sendTemplate = sendMsgUrl;
         }
         String url = sendTemplate + accessToken;
@@ -307,8 +311,8 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         Assert.listOnlyOne(feeDtos, "费用不存在");
         //获取创建用户,即处理结单的维修维修师傅
         String userId = feeDtos.get(0).getUserId();
-        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN,WechatConstant.SEND_TEMPLATE_URL);
-        if(StringUtil.isEmpty(sendTemplate)){
+        String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.SEND_TEMPLATE_URL);
+        if (StringUtil.isEmpty(sendTemplate)) {
             sendTemplate = sendMsgUrl;
         }
         String url = sendTemplate + accessToken;
