@@ -9,7 +9,6 @@ public class ResourceStoreTypePo implements Serializable {
     private String name;
     private String description;
     private String storeId;
-    private String goodsType;
     private String createTime;
     private String statusCd = "0";
 
@@ -43,14 +42,6 @@ public class ResourceStoreTypePo implements Serializable {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
-    }
-
-    public String getGoodsType() {
-        return goodsType;
-    }
-
-    public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
     }
 
     public String getCreateTime() {

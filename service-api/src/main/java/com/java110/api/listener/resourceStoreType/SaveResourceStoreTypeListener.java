@@ -24,7 +24,6 @@ public class SaveResourceStoreTypeListener extends AbstractServiceApiPlusListene
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-        Assert.hasKeyAndValue(reqJson, "goodsType", "请求报文中未包含goodsType");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
     }

@@ -28,6 +28,14 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
     private Date createTime;
     private String statusCd = "0";
     private String giveQuantity;
+    private String rstName;
+    private String specName;
+    private String rstId;
+    private String rssId;
+    //转增总数量(小计)
+    private String subTotalQuantity;
+    //转增总数量(大计)
+    private String highTotalQuantity;
 
     public String getAcceptUserId() {
         return acceptUserId;
@@ -132,5 +140,53 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
 
     public void setGiveQuantity(String giveQuantity) {
         this.giveQuantity = giveQuantity;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getSubTotalQuantity() {
+        return subTotalQuantity;
+    }
+
+    public void setSubTotalQuantity(String subTotalQuantity) {
+        this.subTotalQuantity = subTotalQuantity;
+    }
+
+    public String getHighTotalQuantity() {
+        return highTotalQuantity;
+    }
+
+    public void setHighTotalQuantity(String highTotalQuantity) {
+        this.highTotalQuantity = highTotalQuantity;
     }
 }

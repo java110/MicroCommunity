@@ -27,6 +27,7 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
     private String resOrderTypeName;
     private String remark;
     private String userId;
+    private String createUserId;
     private String userName;
     private String description;
     private String state;
@@ -39,6 +40,10 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
     private String endTime;
     private String rsId;
     private String supplierName;
+    private String rstName;
+    private String specName;
+    private String rstId;
+    private String rssId;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -246,5 +251,45 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 }

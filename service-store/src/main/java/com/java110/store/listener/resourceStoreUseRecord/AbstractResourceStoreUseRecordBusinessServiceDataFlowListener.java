@@ -48,6 +48,7 @@ public abstract class AbstractResourceStoreUseRecordBusinessServiceDataFlowListe
         businessResourceStoreUseRecordInfo.put("resId", businessResourceStoreUseRecordInfo.get("res_id"));
         businessResourceStoreUseRecordInfo.put("operate", businessResourceStoreUseRecordInfo.get("operate"));
         businessResourceStoreUseRecordInfo.put("communityId", businessResourceStoreUseRecordInfo.get("community_id"));
+        businessResourceStoreUseRecordInfo.put("resourceStoreName", businessResourceStoreUseRecordInfo.get("resource_store_name"));
         businessResourceStoreUseRecordInfo.remove("bId");
         businessResourceStoreUseRecordInfo.put("statusCd", statusCd);
     }
@@ -80,6 +81,7 @@ public abstract class AbstractResourceStoreUseRecordBusinessServiceDataFlowListe
         currentResourceStoreUseRecordInfo.put("resId", currentResourceStoreUseRecordInfo.get("res_id"));
         currentResourceStoreUseRecordInfo.put("operate", currentResourceStoreUseRecordInfo.get("operate"));
         currentResourceStoreUseRecordInfo.put("communityId", currentResourceStoreUseRecordInfo.get("community_id"));
+        currentResourceStoreUseRecordInfo.put("resourceStoreName", currentResourceStoreUseRecordInfo.get("resource_store_name"));
         currentResourceStoreUseRecordInfo.put("operate", StatusConstant.OPERATE_DEL);
         getResourceStoreUseRecordServiceDaoImpl().saveBusinessResourceStoreUseRecordInfo(currentResourceStoreUseRecordInfo);
         for (Object key : currentResourceStoreUseRecordInfo.keySet()) {

@@ -21,7 +21,6 @@ public class ResourceStorePo implements Serializable {
     private String price;
     private String stock;
     private String statusCd = "0";
-    private String goodsType;
     private String unitCode;
     private String remark;
     private String outLowPrice;
@@ -36,6 +35,10 @@ public class ResourceStorePo implements Serializable {
     private String averagePrice;
     private String purchasePrice;
     private String resOrderType;
+    private String rstId;
+    private String rstName;
+    private String rssId;
+    private String rssName;
 
     public String getResId() {
         return resId;
@@ -99,14 +102,6 @@ public class ResourceStorePo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
-    }
-
-    public String getGoodsType() {
-        return goodsType;
-    }
-
-    public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
     }
 
     public String getUnitCode() {
@@ -213,12 +208,43 @@ public class ResourceStorePo implements Serializable {
         this.purchasePrice = purchasePrice;
     }
 
-
     public String getResOrderType() {
         return resOrderType;
     }
 
     public void setResOrderType(String resOrderType) {
         this.resOrderType = resOrderType;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getRssName() {
+        return rssName;
+    }
+
+    public void setRssName(String rssName) {
+        this.rssName = rssName;
     }
 }

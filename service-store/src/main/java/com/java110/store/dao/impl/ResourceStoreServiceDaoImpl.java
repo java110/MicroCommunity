@@ -2,6 +2,7 @@ package com.java110.store.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.store.dao.IResourceStoreServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;

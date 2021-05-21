@@ -32,6 +32,8 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
     private String endTime;
     private String rsId;
     private String supplierName;
+    private String rstName;
+    private String specName;
 
     public String getOperate() {
         return operate;
@@ -263,5 +265,22 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
     }
 }

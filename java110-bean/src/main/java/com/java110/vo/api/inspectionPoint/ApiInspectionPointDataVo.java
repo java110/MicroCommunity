@@ -15,11 +15,13 @@ public class ApiInspectionPointDataVo implements Serializable {
     private String locationObjId;
     private String locationObjName;
     private String pointObjType;
+    private String pointTypeName;
     private String pointObjId;
     private String pointObjName;
     private String machineId;
     private String communityId;
-
+    private String pointStartTime;
+    private String pointEndTime;
 
     public String getInspectionId() {
         return inspectionId;
@@ -139,5 +141,29 @@ public class ApiInspectionPointDataVo implements Serializable {
 
     public void setPointObjName(String pointObjName) {
         this.pointObjName = pointObjName;
+    }
+
+    public String getPointTypeName() {
+        return pointTypeName;
+    }
+
+    public void setPointTypeName(String pointTypeName) {
+        this.pointTypeName = pointTypeName;
+    }
+
+    public String getPointStartTime() {
+        return pointStartTime;
+    }
+
+    public void setPointStartTime(String pointStartTime) {
+        this.pointStartTime = pointStartTime;
+    }
+
+    public String getPointEndTime() {
+        return pointEndTime;
+    }
+
+    public void setPointEndTime(String pointEndTime) {
+        this.pointEndTime = pointEndTime;
     }
 }

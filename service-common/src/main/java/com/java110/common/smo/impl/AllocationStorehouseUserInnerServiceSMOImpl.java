@@ -1,6 +1,5 @@
 package com.java110.common.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
@@ -9,7 +8,6 @@ import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
-import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.activiti.engine.HistoryService;
@@ -44,17 +42,10 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
     private RuntimeService runtimeService;
 
     @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private IAllocationStorehouseInnerServiceSMO allocationStorehouseInnerServiceSMOImpl;
-
-    @Autowired
     private IAllocationStorehouseApplyInnerServiceSMO allocationStorehouseApplyInnerServiceSMOImpl;
 
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
-
 
     /**
      * 启动流程
@@ -133,7 +124,6 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         allocationStorehouseApplyDto.setStoreId(user.getStoreId());
         allocationStorehouseApplyDto.setApplyIds(appIyIds.toArray(new String[appIyIds.size()]));
         List<AllocationStorehouseApplyDto> tmpAllocationStorehouseApplyDtos = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
-
         for (AllocationStorehouseApplyDto tmpAllocationStorehouseApplyDto : tmpAllocationStorehouseApplyDtos) {
             tmpAllocationStorehouseApplyDto.setTaskId(taskBusinessKeyMap.get(tmpAllocationStorehouseApplyDto.getApplyId()));
         }

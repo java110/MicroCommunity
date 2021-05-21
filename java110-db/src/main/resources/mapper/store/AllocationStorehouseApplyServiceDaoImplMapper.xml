@@ -13,7 +13,6 @@
         )
     </insert>
 
-
     <!-- 查询调拨申请信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAllocationStorehouseApplyInfo" parameterType="Map" resultType="Map">
         select t.apply_id,t.apply_id applyId,t.start_user_id,t.start_user_id
@@ -48,9 +47,7 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
     </select>
-
 
     <!-- 保存调拨申请信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAllocationStorehouseApplyInfoInstance" parameterType="Map">
@@ -83,9 +80,7 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
     </insert>
-
 
     <!-- 查询调拨申请信息 add by wuxw 2018-07-03 -->
     <select id="getAllocationStorehouseApplyInfo" parameterType="Map" resultType="Map">
@@ -94,9 +89,10 @@
         applyCount,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.b_id,t.b_id bId,t.store_id,t.store_id storeId,
         td.name stateName,t.create_time createTime
         from allocation_storehouse_apply t
-        left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse' and td.table_columns =
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and
+        td.table_columns =
         'state'
-        where 1 =1
+        where 1 = 1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
         </if>
@@ -130,13 +126,17 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改调拨申请信息 add by wuxw 2018-07-03 -->
     <update id="updateAllocationStorehouseApplyInfoInstance" parameterType="Map">
@@ -169,14 +169,13 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询调拨申请数量 add by wuxw 2018-07-03 -->
     <select id="queryAllocationStorehouseApplysCount" parameterType="Map" resultType="Map">
         select count(1) count
         from allocation_storehouse_apply t
-        where 1 =1
+        where 1 = 1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
         </if>
@@ -210,8 +209,11 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
-
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
     </select>
-
 </mapper>

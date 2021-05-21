@@ -5,10 +5,14 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.resourceStore.IResourceStoreBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyDetailInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.po.file.FileRelPo;
@@ -42,6 +46,12 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
+    @Autowired
+    private IPurchaseApplyDetailInnerServiceSMO purchaseApplyDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IAllocationStorehouseInnerServiceSMO allocationStorehouseInnerServiceSMOImpl;
+
     /**
      * 删除资源信息
      *
@@ -50,11 +60,21 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
      * @return 订单服务能够接受的报文
      */
     public void deleteResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        paramInJson.put("statusCd", "1");
-        ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(paramInJson, ResourceStorePo.class);
-        super.delete(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_RESOURCE_STORE);
         //获取资源id
         String resId = paramInJson.getString("resId");
+        paramInJson.put("statusCd", "1");
+        ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(paramInJson, ResourceStorePo.class);
+        //根据物品id查询采购明细表
+        PurchaseApplyDetailDto purchaseApplyDetailDto = new PurchaseApplyDetailDto();
+        purchaseApplyDetailDto.setResId(resId);
+        List<PurchaseApplyDetailDto> purchaseApplyDetailDtos = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetails(purchaseApplyDetailDto);
+        Assert.listIsNull(purchaseApplyDetailDtos, "该物品存在采购或领用记录，不能删除！");
+        //根据物品id查询调拨记录
+        AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
+        allocationStorehouseDto.setResId(resId);
+        List<AllocationStorehouseDto> allocationStorehouseDtos = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
+        Assert.listIsNull(allocationStorehouseDtos, "该物品存在调拨记录，不能删除！");
+        super.delete(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_RESOURCE_STORE);
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(resId);
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);

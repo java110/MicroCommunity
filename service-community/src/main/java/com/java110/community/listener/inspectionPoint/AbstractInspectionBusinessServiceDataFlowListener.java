@@ -45,6 +45,8 @@ public abstract class AbstractInspectionBusinessServiceDataFlowListener extends 
         businessInspectionInfo.put("pointObjType", businessInspectionInfo.get("point_obj_type"));
         businessInspectionInfo.put("pointObjId", businessInspectionInfo.get("point_obj_id"));
         businessInspectionInfo.put("pointObjName", businessInspectionInfo.get("point_obj_name"));
+        businessInspectionInfo.put("pointStartTime", businessInspectionInfo.get("point_start_time"));
+        businessInspectionInfo.put("pointEndTime", businessInspectionInfo.get("point_end_time"));
         businessInspectionInfo.remove("bId");
         businessInspectionInfo.put("statusCd", statusCd);
     }
@@ -75,6 +77,8 @@ public abstract class AbstractInspectionBusinessServiceDataFlowListener extends 
         currentInspectionInfo.put("pointObjType", currentInspectionInfo.get("point_obj_type"));
         currentInspectionInfo.put("pointObjId", currentInspectionInfo.get("point_obj_id"));
         currentInspectionInfo.put("pointObjName", currentInspectionInfo.get("point_obj_name"));
+        currentInspectionInfo.put("pointStartTime", currentInspectionInfo.get("point_start_time"));
+        currentInspectionInfo.put("pointEndTime", currentInspectionInfo.get("point_end_time"));
         getInspectionServiceDaoImpl().saveBusinessInspectionInfo(currentInspectionInfo);
 
         for (Object key : currentInspectionInfo.keySet()) {

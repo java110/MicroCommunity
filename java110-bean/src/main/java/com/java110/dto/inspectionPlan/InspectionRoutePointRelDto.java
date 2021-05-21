@@ -31,14 +31,13 @@ public class InspectionRoutePointRelDto extends PageDto implements Serializable 
     private String relationship; //1 查询关联的巡检点 0 还未关联巡检点
 
     private String pointObjType;
+    private String pointTypeName;
     private String pointObjId;
     private String pointObjName;
-
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getInspectionId() {
         return inspectionId;
@@ -191,5 +190,13 @@ public class InspectionRoutePointRelDto extends PageDto implements Serializable 
 
     public void setPointObjName(String pointObjName) {
         this.pointObjName = pointObjName;
+    }
+
+    public String getPointTypeName() {
+        return pointTypeName;
+    }
+
+    public void setPointTypeName(String pointTypeName) {
+        this.pointTypeName = pointTypeName;
     }
 }

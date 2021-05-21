@@ -146,8 +146,9 @@
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getBasePrivilegeInfo" parameterType="Map" resultType="Map">
-        select t.p_id,t.name,t.domain,t.resource,t.description,t.p_id pId,t.create_time createTime
+        select t.p_id,t.name,t.domain,t.resource,t.description,t.p_id pId,t.create_time createTime,st.name stName
         from p_privilege t
+        left join store_type st on t.domain=st.store_type_cd
         where t.status_cd= '0'
         <if test="pId !=null and pId != ''">
             and t.p_id= #{pId}

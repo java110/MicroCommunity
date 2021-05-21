@@ -77,23 +77,24 @@ public class ListOrgsListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         OrgDto orgDto = BeanConvertUtil.covertBean(reqJson, OrgDto.class);
-//        if(reqJson.getString("orgLevel").equals("2")){
-//            //默认只查看当前归属组织架构
-//            BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-//            basePrivilegeDto.setResource("/viewAllOrganization");
-//            basePrivilegeDto.setUserId(reqJson.getString("userId"));
-//            List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-//            if(privileges.size()==0){
-//                //查询员工所属二级组织架构
-//                OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-//                orgStaffRelDto.setStaffId(reqJson.getString("userId"));
-//                List<OrgStaffRelDto> orgStaffRelDtos = iOrgStaffRelInnerServiceSMO.queryOrgInfoByStaffIds(orgStaffRelDto);
-//                if(orgStaffRelDtos.size()>0){
-//                    orgDto.setOrgId(orgStaffRelDtos.get(0).getCompanyId());
-//                }
-//
-//            }
-//        }
+        //2级别组织信息
+        if(reqJson.getString("orgLevel").equals("2")){
+            //默认只查看当前归属组织架构
+            BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+            basePrivilegeDto.setResource("/viewAllOrganization");
+            basePrivilegeDto.setUserId(reqJson.getString("userId"));
+            List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+            if(privileges.size()==0){
+                //查询员工所属二级组织架构
+                OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
+                orgStaffRelDto.setStaffId(reqJson.getString("userId"));
+                List<OrgStaffRelDto> orgStaffRelDtos = iOrgStaffRelInnerServiceSMO.queryOrgInfoByStaffIds(orgStaffRelDto);
+                if(orgStaffRelDtos.size()>0){
+                    orgDto.setOrgId(orgStaffRelDtos.get(0).getCompanyId());//当前人虽归属的二级组织信息
+                }
+
+            }
+        }
 
         int count = orgInnerServiceSMOImpl.queryOrgsCount(orgDto);
 

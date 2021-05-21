@@ -48,6 +48,7 @@ public abstract class AbstractAllocationStorehouseBusinessServiceDataFlowListene
         businessAllocationStorehouseInfo.put("startUserName", businessAllocationStorehouseInfo.get("start_user_name"));
         businessAllocationStorehouseInfo.put("state", businessAllocationStorehouseInfo.get("state"));
         businessAllocationStorehouseInfo.put("stock", businessAllocationStorehouseInfo.get("stock"));
+        businessAllocationStorehouseInfo.put("originalStock", businessAllocationStorehouseInfo.get("original_stock"));
         businessAllocationStorehouseInfo.put("remark", businessAllocationStorehouseInfo.get("remark"));
         businessAllocationStorehouseInfo.put("applyId", businessAllocationStorehouseInfo.get("apply_id"));
         businessAllocationStorehouseInfo.remove("bId");
@@ -85,6 +86,7 @@ public abstract class AbstractAllocationStorehouseBusinessServiceDataFlowListene
         currentAllocationStorehouseInfo.put("startUserName", currentAllocationStorehouseInfo.get("start_user_name"));
         currentAllocationStorehouseInfo.put("state", currentAllocationStorehouseInfo.get("state"));
         currentAllocationStorehouseInfo.put("stock", currentAllocationStorehouseInfo.get("stock"));
+        currentAllocationStorehouseInfo.put("originalStock", currentAllocationStorehouseInfo.get("original_stock"));
         currentAllocationStorehouseInfo.put("remark", currentAllocationStorehouseInfo.get("remark"));
         currentAllocationStorehouseInfo.put("applyId", currentAllocationStorehouseInfo.get("apply_id"));
 

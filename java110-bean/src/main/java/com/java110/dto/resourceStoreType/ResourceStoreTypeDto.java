@@ -1,6 +1,7 @@
 package com.java110.dto.resourceStoreType;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,48 +16,43 @@ import java.util.Date;
 public class ResourceStoreTypeDto extends PageDto implements Serializable {
 
     private String rstId;
-private String name;
-private String description;
-private String storeId;
-private String goodsType;
-
-
+    private String name;
+    private String description;
+    private String storeId;
     private Date createTime;
-
     private String statusCd = "0";
-
 
     public String getRstId() {
         return rstId;
     }
-public void setRstId(String rstId) {
+
+    public void setRstId(String rstId) {
         this.rstId = rstId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getDescription() {
+
+    public String getDescription() {
         return description;
     }
-public void setDescription(String description) {
+
+    public void setDescription(String description) {
         this.description = description;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getGoodsType() {
-        return goodsType;
-    }
-public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
-    }
-
 
     public Date getCreateTime() {
         return createTime;

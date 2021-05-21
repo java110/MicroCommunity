@@ -10,14 +10,13 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     private String resId;
     private String resName;
+    private String rstId;
+    private String rstName;
     private String resCode;
     private String price;
+    //库存数
     private String stock;
     private String description;
-    //物品类型
-    private String goodsType;
-    //物品类型名称
-    private String goodsTypeName;
     //单位
     private String unitCode;
     //备注
@@ -36,6 +35,14 @@ public class ApiResourceStoreDataVo implements Serializable {
     private List<ResourceSupplierDto> resourceSupplierDtos;
     //均价
     private String averagePrice;
+    //规格id
+    private String rssId;
+    //规格名称
+    private String rssName;
+    //物品总价(大计)
+    private String highTotalPrice;
+    //物品总价(小计)
+    private String subTotalPrice;
 
     public String getResId() {
         return resId;
@@ -85,14 +92,6 @@ public class ApiResourceStoreDataVo implements Serializable {
         this.description = description;
     }
 
-    public String getGoodsType() {
-        return goodsType;
-    }
-
-    public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
-    }
-
     public String getUnitCode() {
         return unitCode;
     }
@@ -125,7 +124,6 @@ public class ApiResourceStoreDataVo implements Serializable {
         this.outHighPrice = outHighPrice;
     }
 
-
     public String getShowMobile() {
         return showMobile;
     }
@@ -140,14 +138,6 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public String getGoodsTypeName() {
-        return goodsTypeName;
-    }
-
-    public void setGoodsTypeName(String goodsTypeName) {
-        this.goodsTypeName = goodsTypeName;
     }
 
     public List<String> getFileUrls() {
@@ -196,5 +186,53 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setAveragePrice(String averagePrice) {
         this.averagePrice = averagePrice;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getRssName() {
+        return rssName;
+    }
+
+    public void setRssName(String rssName) {
+        this.rssName = rssName;
+    }
+
+    public String getHighTotalPrice() {
+        return highTotalPrice;
+    }
+
+    public void setHighTotalPrice(String highTotalPrice) {
+        this.highTotalPrice = highTotalPrice;
+    }
+
+    public String getSubTotalPrice() {
+        return subTotalPrice;
+    }
+
+    public void setSubTotalPrice(String subTotalPrice) {
+        this.subTotalPrice = subTotalPrice;
     }
 }

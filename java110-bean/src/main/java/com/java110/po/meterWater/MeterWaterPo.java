@@ -1,6 +1,7 @@
 package com.java110.po.meterWater;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class MeterWaterPo implements Serializable {
 
@@ -16,6 +17,7 @@ public class MeterWaterPo implements Serializable {
     private String communityId;
     private String objType;
     private String feeId;
+    private Date createTime;
 
     public String getRemark() {
         return remark;
@@ -111,5 +113,13 @@ public class MeterWaterPo implements Serializable {
 
     public void setObjName(String objName) {
         this.objName = objName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

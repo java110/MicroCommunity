@@ -32,14 +32,14 @@
     <!-- 查询巡检计划信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessInspectionPlanInfo" parameterType="Map" resultType="Map">
         select
-            t.inspection_plan_name inspectionPlanName,
-            t.inspection_route_id inspectionRouteId,
-            t.inspection_plan_period inspectionPlanPeriod,
-            t.remark,t.end_time endTime,
-            t.operate,t.sign_type signType,
-            t.start_time startTime,t.create_user_id createUserId,
-            t.inspection_plan_id inspectionPlanId,t.state,
-            t.community_id communityId,t.b_id bId
+        t.inspection_plan_name inspectionPlanName,
+        t.inspection_route_id inspectionRouteId,
+        t.inspection_plan_period inspectionPlanPeriod,
+        t.remark,t.end_time endTime,
+        t.operate,t.sign_type signType,
+        t.start_time startTime,t.create_user_id createUserId,
+        t.inspection_plan_id inspectionPlanId,t.state,
+        t.community_id communityId,t.b_id bId
         from business_inspection_plan t
         where 1 =1
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
@@ -91,10 +91,10 @@
     <insert id="saveInspectionPlanInfoInstance" parameterType="Map">
         insert into
         inspection_plan(
-            inspection_plan_name,inspection_route_id,
-            inspection_plan_period,remark,status_cd,end_time,
-            sign_type,start_time,create_user_id,create_user_name,
-            inspection_plan_id,state,community_id,b_id
+        inspection_plan_name,inspection_route_id,
+        inspection_plan_period,remark,status_cd,end_time,
+        sign_type,start_time,create_user_id,create_user_name,
+        inspection_plan_id,state,community_id,b_id
         ) select
         t.inspection_plan_name,t.inspection_route_id,t.inspection_plan_period,t.remark,'0',
         t.end_time,t.sign_type,t.start_time,t.create_user_id,t.create_user_name,
@@ -146,32 +146,34 @@
     <!-- 查询巡检计划信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionPlanInfo" parameterType="Map" resultType="Map">
         select
-            t.inspection_plan_name inspectionPlanName,
-            t.inspection_route_id inspectionRouteId,
-            t.inspection_plan_period inspectionPlanPeriod,
-            t.remark,
-            t.status_cd statusCd,
-            t.end_time endTime,
-            t.sign_type signType,
-            t.start_time startTime,
-            t.create_user_id createUserId,
-            t.create_user_name createUserName,
-            t.inspection_plan_id inspectionPlanId,
-            t.state,
-            t.community_id communityId,
-            t.b_id bId,
-            t.create_time createTime,
-            d.name stateName,
-            c.name inspectionPlanPeriodName,
-            i.name signTypeName
+        t.inspection_plan_name inspectionPlanName,
+        t.inspection_route_id inspectionRouteId,
+        t.inspection_plan_period inspectionPlanPeriod,
+        t.remark,
+        t.status_cd statusCd,
+        t.end_time endTime,
+        t.sign_type signType,
+        t.start_time startTime,
+        t.create_user_id createUserId,
+        t.create_user_name createUserName,
+        t.inspection_plan_id inspectionPlanId,
+        t.state,
+        t.community_id communityId,
+        t.b_id bId,
+        t.create_time createTime,
+        d.name stateName,
+        c.name inspectionPlanPeriodName,
+        i.name signTypeName
         from
-            inspection_plan t
+        inspection_plan t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'inspection_plan' and d.table_columns = 'state'
-        inner join t_dict c on t.inspection_plan_period = c.status_cd and c.table_name = 'inspection_plan' and c.table_columns = 'inspection_plan_period'
-        inner join t_dict i on t.sign_type = i.status_cd and i.table_name = 'inspection_plan' and i.table_columns = 'sign_type'
+        inner join t_dict c on t.inspection_plan_period = c.status_cd and c.table_name = 'inspection_plan' and
+        c.table_columns = 'inspection_plan_period'
+        inner join t_dict i on t.sign_type = i.status_cd and i.table_name = 'inspection_plan' and i.table_columns =
+        'sign_type'
         where 1 =1
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
-            and t.inspection_plan_name= #{inspectionPlanName}
+            and t.inspection_plan_name like '%${inspectionPlanName}%'
         </if>
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             and t.inspection_route_id= #{inspectionRouteId}
@@ -192,7 +194,6 @@
         <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-
         <if test="curTime !=null ">
             and t.start_time &lt; #{curTime}
             and t.end_time &gt; #{curTime}
@@ -216,7 +217,6 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 
@@ -254,7 +254,6 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-
         where 1=1
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
@@ -271,7 +270,7 @@
         from inspection_plan t
         where 1 =1
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
-            and t.inspection_plan_name= #{inspectionPlanName}
+            and t.inspection_plan_name like '%${inspectionPlanName}%'
         </if>
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             and t.inspection_route_id= #{inspectionRouteId}
@@ -288,7 +287,6 @@
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
-
         <if test="signType !=null and signType != ''">
             and t.sign_type= #{signType}
         </if>
@@ -307,9 +305,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
-
     </select>
 
 </mapper>

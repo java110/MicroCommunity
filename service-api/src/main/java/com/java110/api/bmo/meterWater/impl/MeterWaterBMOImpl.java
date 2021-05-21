@@ -25,7 +25,6 @@ public class MeterWaterBMOImpl extends ApiBaseBMO implements IMeterWaterBMO {
      * @return 订单服务能够接受的报文
      */
     public void addMeterWater(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
         paramInJson.put("waterId", "-1");
         MeterWaterPo meterWaterPo = BeanConvertUtil.covertBean(paramInJson, MeterWaterPo.class);
         super.insert(dataFlowContext, meterWaterPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_METER_WATER);

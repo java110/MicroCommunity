@@ -61,7 +61,7 @@
 
     <!-- 保存采购明细表-->
     <insert id="savePurchaseApplyDetailInfo" parameterType="List">
-        insert into purchase_apply_detail (id,rs_id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark)
+        insert into purchase_apply_detail (id,rs_id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark,original_stock)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -76,7 +76,8 @@
             '0',
             #{item.price},
             #{item.purchaseQuantity},
-            #{item.purchaseRemark}
+            #{item.purchaseRemark},
+            #{item.originalStock}
             )
         </foreach>
     </insert>
@@ -305,11 +306,14 @@
         select
         p.id,
         p.apply_order_id applyOrderId,
-        p.res_id resId,p.quantity,p.remark,p.purchase_quantity purchaseQuantity,p.purchase_remark purchaseRemark,p.price purchasePrice,
+        p.res_id resId,p.quantity,p.remark,p.purchase_quantity purchaseQuantity,p.purchase_remark purchaseRemark,p.price purchasePrice,p.original_stock originalStock,
         r.res_name resName,r.res_code resCode,
-        r.price,r.stock
+        r.price,r.price standardPrice,r.stock,rst.name rstName,rss.spec_name specName
         from
         purchase_apply_detail p inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
+        LEFT JOIN resource_supplier rs on p.rs_id=rs.rs_id
+        LEFT JOIN resource_store_type rst  on r.rst_id=rst.rst_id
+        LEFT JOIN resource_store_specification rss   on r.rss_id=rss.rss_id
         where 1=1
         and p.status_cd = '0'
         <if test="applyOrderIds !=null">

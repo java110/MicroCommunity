@@ -7,9 +7,9 @@
     <!-- 保存物品使用记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceStoreUseRecordInfo" parameterType="Map">
            insert into business_resource_store_use_record(
-            unit_price,create_user_id,quantity,rsur_id,repair_id,create_user_name,remark,store_id,res_id,operate,b_id,community_id
+            unit_price,create_user_id,quantity,rsur_id,repair_id,create_user_name,remark,store_id,res_id,resource_store_name,operate,b_id,community_id
             ) values (
-            #{unitPrice},#{createUserId},#{quantity},#{rsurId},#{repairId},#{createUserName},#{remark},#{storeId},#{resId},#{operate},#{bId},#{communityId}
+            #{unitPrice},#{createUserId},#{quantity},#{rsurId},#{repairId},#{createUserName},#{remark},#{storeId},#{resId},#{resourceStoreName},#{operate},#{bId},#{communityId}
             )
     </insert>
 
@@ -18,7 +18,7 @@
         select t.unit_price,t.unit_price unitPrice,t.create_user_id,t.create_user_id
         createUserId,t.quantity,t.rsur_id,t.rsur_id rsurId,t.repair_id,t.repair_id
         repairId,t.create_user_name,t.create_user_name createUserName,t.remark,t.store_id,t.store_id
-        storeId,t.res_id,t.res_id resId,t.operate,t.b_id,t.b_id bId,t.community_id,t.community_id communityId
+        storeId,t.res_id,t.res_id resId,t.resource_store_name,t.resource_store_name resourceStoreName,t.operate,t.b_id,t.b_id bId,t.community_id,t.community_id communityId
         from business_resource_store_use_record t
         where 1 =1
         <if test="unitPrice !=null and unitPrice != ''">
@@ -48,6 +48,9 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="resourceStoreName !=null and resourceStoreName != ''">
+            and t.resource_store_name= #{resourceStoreName}
+        </if>
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
@@ -62,9 +65,9 @@
     <!-- 保存物品使用记录信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreUseRecordInfoInstance" parameterType="Map">
         insert into resource_store_use_record(
-        unit_price,create_user_id,quantity,rsur_id,repair_id,create_user_name,status_cd,remark,store_id,res_id,b_id,community_id
+        unit_price,create_user_id,quantity,rsur_id,repair_id,create_user_name,status_cd,remark,store_id,res_id,resource_store_name,b_id,community_id
         ) select
-        t.unit_price,t.create_user_id,t.quantity,t.rsur_id,t.repair_id,t.create_user_name,'0',t.remark,t.store_id,t.res_id,t.b_id,t.community_id
+        t.unit_price,t.create_user_id,t.quantity,t.rsur_id,t.repair_id,t.create_user_name,'0',t.remark,t.store_id,t.res_id,t.resource_store_name,t.b_id,t.community_id
         from business_resource_store_use_record t where 1=1
         <if test="unitPrice !=null and unitPrice != ''">
             and t.unit_price= #{unitPrice}
@@ -93,6 +96,9 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="resourceStoreName !=null and resourceStoreName != ''">
+            and t.resource_store_name= #{resourceStoreName}
+        </if>
         and t.operate= 'ADD'
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -107,10 +113,13 @@
         select t.unit_price,t.unit_price unitPrice,t.create_user_id,t.create_user_id
         createUserId,t.quantity,t.rsur_id,t.rsur_id rsurId,t.repair_id,t.repair_id
         repairId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
-        statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,rs.res_name resName,
-        t.b_id,t.b_id bId,t.community_id,t.community_id communityId
+        statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.resource_store_name,t.resource_store_name resourceStoreName,rs.res_name resName,
+        t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.create_time createTime, rst.name
+        rstName,rss.spec_name specName
         from resource_store_use_record t
         left join resource_store rs on rs.res_id = t.res_id
+        left join resource_store_type rst on rs.rst_id = rst.rst_id
+        left join resource_store_specification rss on rs.rss_id = rss.rss_id
         where 1 = 1
         <if test="unitPrice !=null and unitPrice != ''">
             and t.unit_price= #{unitPrice}
@@ -128,7 +137,7 @@
             and t.repair_id= #{repairId}
         </if>
         <if test="createUserName !=null and createUserName != ''">
-            and t.create_user_name= #{createUserName}
+            and t.create_user_name like '%${createUserName}%'
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -141,6 +150,15 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="resourceStoreName !=null and resourceStoreName != ''">
+            and t.resource_store_name= #{resourceStoreName}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and rs.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and rs.rss_id= #{rssId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -184,6 +202,9 @@
         <if test="resId !=null and resId != ''">
             , t.res_id= #{resId}
         </if>
+        <if test="resourceStoreName !=null and resourceStoreName != ''">
+            , t.resource_store_name= #{resourceStoreName}
+        </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
@@ -200,6 +221,9 @@
     <select id="queryResourceStoreUseRecordsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from resource_store_use_record t
+        left join resource_store rs on rs.res_id = t.res_id
+        left join resource_store_type rst on rs.rst_id = rst.rst_id
+        left join resource_store_specification rss on rs.rss_id = rss.rss_id
         where 1 =1
         <if test="unitPrice !=null and unitPrice != ''">
             and t.unit_price= #{unitPrice}
@@ -217,7 +241,7 @@
             and t.repair_id= #{repairId}
         </if>
         <if test="createUserName !=null and createUserName != ''">
-            and t.create_user_name= #{createUserName}
+            and t.create_user_name like '%${createUserName}%'
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -231,11 +255,20 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="resourceStoreName !=null and resourceStoreName != ''">
+            and t.resource_store_name= #{resourceStoreName}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and rs.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and rs.rss_id= #{rssId}
         </if>
     </select>
 

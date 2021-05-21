@@ -7,11 +7,12 @@
     <!-- 保存资源信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceStoreInfo" parameterType="Map">
         insert into business_resource_store(
-        res_name,operate,price,res_code,description,store_id,stock,warning_stock,b_id,res_id,goods_type,
-        unit_code,remark,out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price
+        res_name,operate,price,res_code,description,store_id,stock,warning_stock,b_id,res_id,
+        unit_code,remark,out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price,rst_id,rss_id
         ) values (
         #{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{warningStock},#{bId},#{resId},
-        #{goodsType},#{unitCode},#{remark},#{outLowPrice},#{outHighPrice},#{showMobile},#{createTime},#{shId},#{averagePrice}
+        #{unitCode},#{remark},#{outLowPrice},#{outHighPrice},#{showMobile},#{createTime},#{shId},
+        #{averagePrice},#{rstId},#{rssId}
         )
     </insert>
 
@@ -19,10 +20,10 @@
     <select id="getBusinessResourceStoreInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.operate,t.price,t.res_code,t.res_code
         resCode,t.description,t.store_id,t.store_id storeId,t.stock,t.warning_stock,t.warning_stock
-        warningStock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,
-        t.goods_type,t.goods_type goodsType,t.unit_code,t.unit_code unitCode,t.remark,
-        t.out_low_price,t.out_low_price outLowPrice,t.out_high_price,t.out_high_price outHighPrice,
-        t.show_mobile,t.show_mobile showMobile,t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,
+        warningStock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,t.rst_id,t.rst_id rstId,t.rss_id,t.rss_id rssId,
+        t.unit_code,t.unit_code unitCode,t.remark,t.out_low_price,t.out_low_price outLowPrice,
+        t.out_high_price,t.out_high_price outHighPrice,t.show_mobile,t.show_mobile showMobile,
+        t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,
         t.average_price,t.average_price averagePrice
         from business_resource_store t
         where 1 =1
@@ -37,6 +38,12 @@
         </if>
         <if test="resCode !=null and resCode != ''">
             and t.res_code= #{resCode}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and t.rss_id= #{rssId}
         </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}
@@ -55,9 +62,6 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
-        </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
         </if>
         <if test="unitCode !=null and unitCode != ''">
             and t.unit_code= #{unitCode}
@@ -85,11 +89,11 @@
     <!-- 保存资源信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreInfoInstance" parameterType="Map">
         insert into resource_store(
-        res_name,price,res_code,description,status_cd,store_id,stock,warning_stock,b_id,res_id,goods_type,unit_code,remark,
-        out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price
+        res_name,price,res_code,description,status_cd,store_id,stock,warning_stock,b_id,res_id,unit_code,remark,
+        out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price,rst_id,rss_id
         ) select
-        t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.warning_stock,t.b_id,t.res_id,t.goods_type,
-        t.unit_code,t.remark,t.out_low_price,t.out_high_price,t.show_mobile,t.create_time,t.sh_id,t.average_price
+        t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.warning_stock,t.b_id,t.res_id,
+        t.unit_code,t.remark,t.out_low_price,t.out_high_price,t.show_mobile,t.create_time,t.sh_id,t.average_price,t.rst_id,t.rss_id
         from business_resource_store t where 1=1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
@@ -100,6 +104,12 @@
         </if>
         <if test="resCode !=null and resCode != ''">
             and t.res_code= #{resCode}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and t.rss_id= #{rssId}
         </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}
@@ -118,9 +128,6 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
-        </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
         </if>
         <if test="unitCode !=null and unitCode != ''">
             and t.unit_code= #{unitCode}
@@ -149,29 +156,36 @@
     <select id="getResourceStoreInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.price,t.res_code,t.res_code resCode,t.description,t.status_cd,t.status_cd
         statusCd,t.store_id,t.store_id storeId,t.stock,t.warning_stock,t.warning_stock warningStock,t.b_id,t.b_id
-        bId,t.res_id,t.res_id resId,t.out_low_price,
-        t.out_low_price outLowPrice,rst.name goodsTypeName,t.out_high_price,t.out_high_price outHighPrice,t.goods_type,
-        t.goods_type goodsType,t.unit_code,t.unit_code unitCode,t.remark,t.show_mobile,t.show_mobile showMobile,
+        bId,t.res_id,t.res_id resId,t.out_low_price,t.rst_id,t.rst_id rstId,t.rss_id,t.rss_id rssId,
+        t.out_low_price outLowPrice,rst.name rstName,t.out_high_price,t.out_high_price outHighPrice,
+        t.unit_code,t.unit_code unitCode,t.remark,t.show_mobile,t.show_mobile showMobile,
         t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,sh.sh_name shName,t.average_price,t.average_price
-        averagePrice
+        averagePrice,rss.spec_name rssName
         from resource_store t
-        left join resource_store_type rst on t.goods_type = rst.goods_type and rst.status_cd = '0'
+        left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
+        left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
         where 1 = 1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
         </if>
+        <if test="name != null and name != ''">
+            and t.res_name = #{name}
+        </if>
         <if test="price !=null and price != ''">
             and t.price= #{price}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and t.rss_id= #{rssId}
         </if>
         <if test="outLowPrice !=null and outLowPrice != ''">
             and t.out_low_price = #{outLowPrice}
         </if>
         <if test="outHighPrice != null and outHighPrice != ''">
             and t.out_high_price = #{outHighPrice}
-        </if>
-        <if test="goodsType != null and goodsType != ''">
-            and t.goods_type = #{goodsType}
         </if>
         <if test="unitCode != null and unitCode != ''">
             and t.unit_code = #{unitCode}
@@ -239,14 +253,17 @@
         <if test="price !=null and price != ''">
             , t.price= #{price}
         </if>
+        <if test="rstId !=null and rstId != ''">
+            , t.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            , t.rss_id= #{rssId}
+        </if>
         <if test="outLowPrice !=null and outLowPrice != ''">
             , t.out_low_price= #{outLowPrice}
         </if>
         <if test="outHighPrice !=null and outHighPrice != ''">
             , t.out_high_price= #{outHighPrice}
-        </if>
-        <if test="goodsType !=null and goodsType != ''">
-            , t.goods_type= #{goodsType}
         </if>
         <if test="unitCode !=null and unitCode != ''">
             , t.unit_code= #{unitCode}
@@ -294,6 +311,15 @@
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
         </if>
+        <if test="name != null and name != ''">
+            and t.res_name = #{name}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and t.rss_id= #{rssId}
+        </if>
         <if test="price !=null and price != ''">
             and t.price= #{price}
         </if>
@@ -320,9 +346,6 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
-        </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
         </if>
         <if test="unitCode !=null and unitCode != ''">
             and t.unit_code= #{unitCode}

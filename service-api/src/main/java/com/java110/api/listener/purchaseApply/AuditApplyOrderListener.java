@@ -74,7 +74,7 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
         List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(tmpPurchaseApplyDto);
         Assert.listOnlyOne(purchaseApplyDtos, "采购申请单存在多条");
         purchaseApplyDto.setStartUserId(purchaseApplyDtos.get(0).getUserId());
-        if (purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_WAIT_DEAL)) {  //如果状态是未审核，就变成审核中
+        if (purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_WAIT_DEAL) && reqJson.getString("state").equals("1100")) {  //如果状态是未审核 并且是审核通过，就变成审核中
             PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
             purchaseApplyPo.setState(purchaseApplyDto.STATE_DEALING);
@@ -82,8 +82,14 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
         }
         boolean isLastTask = purchaseApplyUserInnerServiceSMOImpl.completeTask(purchaseApplyDto);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
-        if (isLastTask) {
+        if (isLastTask && purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_AUDITED)) {//已经是已审核入库完成的状态进行更新状态
             updatePurchaseApply(reqJson, context);
+        }
+        if (reqJson.getString("state").equals("1200") && !isLastTask) {//审核拒绝时，状态变为  1200拒绝状态
+            PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
+            purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
+            purchaseApplyPo.setState(purchaseApplyDto.STATE_NOT_PASS);
+            super.update(context, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
         }
     }
 
@@ -100,8 +106,8 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
         Assert.listOnlyOne(purchaseApplyDtos, "存在多条记录，或不存在数据" + purchaseApplyDto.getApplyOrderId());
         JSONObject businessComplaint = new JSONObject();
         businessComplaint.putAll(BeanConvertUtil.beanCovertMap(purchaseApplyDtos.get(0)));
-        businessComplaint.put("state", "1002");
         PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(businessComplaint, PurchaseApplyPo.class);
+        purchaseApplyPo.setState(purchaseApplyDto.STATE_END);
         super.update(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
     }
 }

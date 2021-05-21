@@ -17,6 +17,10 @@ public class PurchaseApplyDetailDto {
     private String purchaseRemark;
     private String purchasePrice;
     private String id;
+    private String rstName;
+    private String specName;
+    private String standardPrice;
+    private String originalStock;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -120,6 +124,38 @@ public class PurchaseApplyDetailDto {
 
     public void setPurchasePrice(String purchasePrice) {
         this.purchasePrice = purchasePrice;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(String standardPrice) {
+        this.standardPrice = standardPrice;
+    }
+
+    public String getOriginalStock() {
+        return originalStock;
+    }
+
+    public void setOriginalStock(String originalStock) {
+        this.originalStock = originalStock;
     }
 }
 
