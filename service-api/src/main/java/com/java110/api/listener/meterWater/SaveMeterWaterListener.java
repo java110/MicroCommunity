@@ -12,6 +12,8 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.cache.MappingCache;
@@ -49,6 +51,9 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
 
     //键(电费黑名单)
     public static final String ELECTRIC_BLACK_LIST = "ELECTRIC_BLACK_LIST";
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -128,6 +133,36 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setAttrId("-1");
             super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setCommunityId(reqJson.getString("communityId"));
+            ownerDto.setRoomId(reqJson.getString("objId"));
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
+
+            if (ownerDtos != null && ownerDtos.size() > 0) {
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
+                feeAttrPo.setValue(ownerDtos.get(0).getOwnerId());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPo.setAttrId("-2");
+                super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
+                feeAttrPo.setValue(ownerDtos.get(0).getLink());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPo.setAttrId("-3");
+                super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+
+                feeAttrPo = new FeeAttrPo();
+                feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+                feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME);
+                feeAttrPo.setValue(ownerDtos.get(0).getName());
+                feeAttrPo.setFeeId(payFeePo.getFeeId());
+                feeAttrPo.setAttrId("-4");
+                super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+            }
             reqJson.put("feeId", payFeePo.getFeeId());
             meterWaterBMOImpl.addMeterWater(reqJson, context);
         }

@@ -1,6 +1,7 @@
 package com.java110.core.event.init;
 
 import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.core.event.app.AppEvent;
 import com.java110.core.event.app.AppEventPublishing;
 import com.java110.core.event.app.AppListener;
 import com.java110.core.event.listener.common.CommonDispatchListener;
@@ -150,7 +151,7 @@ public class SystemStartUpInit /*implements ApplicationListener<ApplicationReady
                 throw new ConfigurationException("配置错误，["+DISPATCH_EVENT+"= "+events+"] 当前 [event = "+event+"],只能有一个 :: ,配置格式为 A::B");
             }
 
-            Class clazz = Class.forName(tmpEvent[1]);
+            Class<AppEvent> clazz = (Class<AppEvent>) Class.forName(tmpEvent[1]);
 
             AppEventPublishing.addEvent(tmpEvent[0],clazz);
         }

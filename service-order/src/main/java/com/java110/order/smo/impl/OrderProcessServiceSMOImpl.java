@@ -116,9 +116,8 @@ public class OrderProcessServiceSMOImpl extends AbstractOrderServiceSMOImpl impl
             responseEntity = new ResponseEntity<String>("内部异常了：" + e.getMessage() + e.getLocalizedMessage(), OrderDataFlowContextFactory.hashMap2MultiValueMap(dataFlow.getResHeaders()), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             //这里保存耗时，以及日志
-            return responseEntity;
-
         }
+        return responseEntity;
     }
 
     /**
@@ -288,9 +287,8 @@ public class OrderProcessServiceSMOImpl extends AbstractOrderServiceSMOImpl impl
 
         } finally {
             responseEntity = new ResponseEntity<>("成功", HttpStatus.OK);
-
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     /**

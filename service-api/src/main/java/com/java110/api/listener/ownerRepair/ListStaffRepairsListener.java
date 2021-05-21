@@ -11,6 +11,7 @@ import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.dto.repair.RepairDto;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -70,14 +71,16 @@ public class ListStaffRepairsListener extends AbstractServiceApiListener {
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
         //获取用户id
         String userId = reqJson.getString("userId");
-        UserDto userDto = new UserDto();
-        userDto.setUserId(userId);
-        //报修待办查看所有记录权限
-        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-        basePrivilegeDto.setResource("/viewListStaffRepairs");
-        basePrivilegeDto.setUserId(userId);
-        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (privileges.size()==0) {
+        String viewListStaffRepairs = MappingCache.getValue("viewListStaffRepairs");
+        List<Map> privileges = null;
+        if("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
+            //报修待办查看所有记录权限
+            BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+            basePrivilegeDto.setResource("/viewListStaffRepairs");
+            basePrivilegeDto.setUserId(userId);
+            privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        }
+        if (privileges == null || privileges.size() == 0) {
             ownerRepairDto.setStaffId(reqJson.getString("userId"));
         }
         int count = repairInnerServiceSMOImpl.queryStaffRepairsCount(ownerRepairDto);

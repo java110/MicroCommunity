@@ -1,12 +1,13 @@
 package com.java110.utils.util;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 import java.io.*;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class Base64Convert {
 
+	private static final Base64 base64 = new Base64();
+	
     private void Base64Convert() {
 
     }
@@ -25,7 +26,7 @@ public class Base64Convert {
             byte[] bytes = new byte[in.available()];
             // 将文件中的内容读入到数组中
             in.read(bytes);
-            strBase64 = new BASE64Encoder().encode(bytes);      //将字节流数组转换为字符串
+            strBase64 = base64.encodeToString(bytes);      //将字节流数组转换为字符串
         } finally {
             if (in != null) {
                 in.close();
@@ -45,7 +46,7 @@ public class Base64Convert {
     public static String byteToBase64(byte[] bytes)  {
         String strBase64 = null;
             // in.available()返回文件的字节长度
-            strBase64 = new BASE64Encoder().encode(bytes);      //将字节流数组转换为字符串
+            strBase64 = base64.encodeToString(bytes);      //将字节流数组转换为字符串
         return strBase64;
     }
 
@@ -61,7 +62,7 @@ public class Base64Convert {
      */
     public static byte[] base64ToByte(String strBase64) throws IOException {
         // 解码，然后将字节转换为文件
-        byte[] bytes = new BASE64Decoder().decodeBuffer(strBase64);   //将字符串转换为byte数组
+        byte[] bytes = base64.decode(strBase64);   //将字符串转换为byte数组
         return bytes;
     }
 }

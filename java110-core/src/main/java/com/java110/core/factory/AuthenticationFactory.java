@@ -536,7 +536,7 @@ public class AuthenticationFactory {
 //        PrivateKey privateKey = keyPair.getPrivate();
 //        System.out.println("私钥：" + new String(Base64.getEncoder().encode(privateKey.getEncoded())));
 
-        System.out.printf("passwdMd5 " + passwdMd5("wuxw2015"));
+        System.out.printf("passwdMd5 " + passwdMd5("397301"));
 
     }
 

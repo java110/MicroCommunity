@@ -68,10 +68,7 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         reqJson.put("advertId", advertId);
         reqJson.put("state", "1000");
         reqJson.put("createTime", new Date());
-        /*reqJson.put("bId", "-1");
-        AdvertDto advertDto = BeanConvertUtil.covertBean(reqJson, AdvertDto.class);
-        //保存广告信息
-        advertInnerServiceSMOImpl.saveAdverts(advertDto);*/
+        reqJson.put("communityId", "9999");
         AdvertPo advertPo = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
         super.insert(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT);
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
@@ -99,13 +96,13 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         paramInJson.put("fileSaveName", fileName);
         paramInJson.put("advertPhotoId", fileDto.getFileId());
         itemTypeCd = "8888";
-        url = fileDto.getFileId();
+/*        url = fileDto.getFileId();*/
         AdvertItemPo advertItemPo = new AdvertItemPo();
         advertItemPo.setAdvertId(paramInJson.getString("advertId"));
         advertItemPo.setAdvertItemId("-1");
         advertItemPo.setCommunityId(paramInJson.getString("communityId"));
         advertItemPo.setItemTypeCd(itemTypeCd);
-        advertItemPo.setUrl(url);
+        advertItemPo.setUrl(fileName);
         advertItemPo.setSeq("1");
         super.insert(dataFlowContext, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
     }

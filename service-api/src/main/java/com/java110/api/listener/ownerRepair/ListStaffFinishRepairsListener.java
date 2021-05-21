@@ -13,6 +13,7 @@ import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -75,12 +76,15 @@ public class ListStaffFinishRepairsListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
         String userId = reqJson.getString("userId");
-        //报修已办查看所有记录权限
-        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-        basePrivilegeDto.setResource("/listStaffFinishRepairs");
-        basePrivilegeDto.setUserId(userId);
-        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (privileges.size()==0) {
+        String viewListStaffRepairs = MappingCache.getValue("viewListStaffRepairs");
+        List<Map> privileges = null;
+        if("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
+            BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+            basePrivilegeDto.setResource("/listStaffFinishRepairs");
+            basePrivilegeDto.setUserId(userId);
+            privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        }
+        if (privileges == null || privileges.size()==0) {
             ownerRepairDto.setStaffId(reqJson.getString("userId"));
         }
         if (reqJson.containsKey("repairStates")) {
@@ -88,8 +92,8 @@ public class ListStaffFinishRepairsListener extends AbstractServiceApiListener {
             ownerRepairDto.setStates(Arrays.asList(states));
         }else{
             //Pc WEB维修已办
-            String[] states={RepairDto.STATE_BACK, RepairDto.STATE_TRANSFER,RepairDto.STATE_PAY, RepairDto.STATE_PAY_ERROR, RepairDto.STATE_APPRAISE, RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_COMPLATE};
-            ownerRepairDto.setStates(Arrays.asList(states));
+//            String[] states={RepairDto.STATE_BACK, RepairDto.STATE_TRANSFER,RepairDto.STATE_PAY, RepairDto.STATE_PAY_ERROR, RepairDto.STATE_APPRAISE, RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_COMPLATE};
+//            ownerRepairDto.setStates(Arrays.asList(states));
         }
         int count = repairInnerServiceSMOImpl.queryStaffFinishRepairsCount(ownerRepairDto);
         List<RepairDto> ownerRepairs = null;

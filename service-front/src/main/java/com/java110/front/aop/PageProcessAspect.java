@@ -8,7 +8,13 @@ import com.java110.utils.exception.FilterException;
 import com.java110.utils.util.StringUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -25,6 +31,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -125,7 +133,13 @@ public class PageProcessAspect {
                 componentCode = urls[4];
             }
         }
-        pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId);
+        Map<String, Object> headers = new HashMap<>();
+        Enumeration reqHeaderEnum = request.getHeaderNames();
+        while (reqHeaderEnum.hasMoreElements()) {
+            String headerName = (String) reqHeaderEnum.nextElement();
+            headers.put(headerName.toLowerCase(), request.getHeader(headerName));
+        }
+        pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId, headers);
         pd.setMethod(request.getMethod().equals("GET") ? HttpMethod.GET : HttpMethod.POST);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
     }

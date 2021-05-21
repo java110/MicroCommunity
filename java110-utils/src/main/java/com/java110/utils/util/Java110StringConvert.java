@@ -45,19 +45,23 @@ public class Java110StringConvert extends AbstractConverter {
     }
 
     @Override
-    protected Object convertToType(Class type, Object value) throws Throwable {
+    protected <T> T convertToType(Class<T> type, Object value) throws Throwable {
         //System.out.printf("12313");
         logger.debug("convertToType当前对象类型start" + value.getClass());
 
-        if (value instanceof Date) {
-            return DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
+        if(type.getClass().equals(String.class)) {
+	        if (value instanceof Date) {
+	            return type.cast(DateUtil.getFormatTimeString(Date.class.cast(value), DateUtil.DATE_FORMATE_STRING_A));
+	        }
+	        logger.debug("convertToType当前对象类型" + value.getClass());
+	        return type.cast(value.toString());
+        }else {
+        	return null;
         }
-        logger.debug("convertToType当前对象类型" + value.getClass());
-        return value.toString();
     }
 
     @Override
-    protected Class getDefaultType() {
+    protected Class<?> getDefaultType() {
         return String.class;
     }
 }

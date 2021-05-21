@@ -64,8 +64,8 @@ public class CommunityApi extends BaseController {
             responseJson = DataTransactionFactory.createBusinessResponseJson(businessServiceDataFlow,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e,
                     null);
         }finally {
-            return responseJson.toJSONString();
         }
+        return responseJson.toJSONString();
     }
 
     /**

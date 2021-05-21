@@ -129,7 +129,7 @@ public class ToQrPayOweFeeSMOImpl extends AppAbstractComponentSMO implements ITo
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?communityId="
-                        + paramIn.getString("communityId") + "&page=1&row=1&weChatType=1100", HttpMethod.GET);
+                        + paramIn.getString("communityId") + "&page=1&row=1&weChatType=1100&communityId="+paramIn.getString("communityId"), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return null;

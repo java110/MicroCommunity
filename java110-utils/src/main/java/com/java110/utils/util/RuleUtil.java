@@ -20,13 +20,13 @@ public class RuleUtil extends LoggerEngine{
      * @param reqJson
      * @return   如果获取不到则会返回new ArrayList(),不会为null
      */
-    public static List getRuleIdsInGroupByJson(String reqJson,List saopRuleGroupInfoList)
+    public static List<Object> getRuleIdsInGroupByJson(String reqJson,List<Object> saopRuleGroupInfoList)
     {
         //获取缓存中规则分组集合
         //List saopRuleGroupInfoList = RuleUtil.getRuleGroupRelaList();
 
         //当前分组下的规则编码集合
-        List ruleIdsInCurGroupList = new ArrayList();
+        List<Object> ruleIdsInCurGroupList = new ArrayList<Object>();
 
         try
         {

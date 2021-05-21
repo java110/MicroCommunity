@@ -25,7 +25,6 @@ public class DeleteAdvertListener extends AbstractServiceApiPlusListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "advertId", "广告ID不能为空");
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区信息不能为空");
 
     }
 

@@ -75,7 +75,6 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
     }
 
     @Override
@@ -85,7 +84,6 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
         List<ApiAdvertDataVo> adverts = null;
         if (count > 0) {
             List<AdvertDto> advertDtos = advertInnerServiceSMOImpl.queryAdverts(advertDto);
-            refreshAdvert(advertDtos);
             adverts = BeanConvertUtil.covertBeanList(advertDtos, ApiAdvertDataVo.class);
         } else {
             adverts = new ArrayList<>();

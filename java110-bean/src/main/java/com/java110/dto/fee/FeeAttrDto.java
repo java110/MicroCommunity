@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -34,6 +35,32 @@ public class FeeAttrDto extends PageDto implements Serializable {
     private String communityId;
     private String feeId;
     private String value;
+
+    public static String getFeeAttrValue(FeeDto feeDto, String specCd) {
+        List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+        FeeAttrDto feeAttrDto = getFeeAttr(feeAttrDtos, specCd);
+        if (feeAttrDto == null) {
+            return "";
+        }
+        return feeAttrDto.getValue();
+    }
+
+    public static FeeAttrDto getFeeAttr(FeeDto feeDto, String specCd) {
+        List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+        return getFeeAttr(feeAttrDtos, specCd);
+    }
+
+    public static FeeAttrDto getFeeAttr(List<FeeAttrDto> feeAttrDtos, String specCd) {
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return null;
+        }
+        for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+            if (specCd.equals(feeAttrDto.getSpecCd())) {
+                return feeAttrDto;
+            }
+        }
+        return null;
+    }
 
 
     private Date createTime;

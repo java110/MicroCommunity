@@ -82,12 +82,11 @@ public class HttpApi extends BaseController {
             logger.error("请求订单异常",e);
             resData = DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
                     ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
-        }finally {
-            for(String key : headers.keySet()) {
-                response.addHeader(key,headers.get(key));
-            }
-            return resData;
         }
+        for(String key : headers.keySet()) {
+            response.addHeader(key,headers.get(key));
+        }
+        return resData;
     }
 
     /**

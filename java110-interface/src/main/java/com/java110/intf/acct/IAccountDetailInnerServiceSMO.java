@@ -2,6 +2,7 @@ package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.po.accountDetail.AccountDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,4 +40,15 @@ public interface IAccountDetailInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAccountDetailsCount", method = RequestMethod.POST)
     int queryAccountDetailsCount(@RequestBody AccountDetailDto accountDetailDto);
+
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param accountDetailPo 数据对象分享
+     * @return AccountDetailDto 对象数据
+     */
+    @RequestMapping(value = "/saveAccountDetails", method = RequestMethod.POST)
+    int saveAccountDetails(@RequestBody AccountDetailPo accountDetailPo);
 }

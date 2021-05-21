@@ -2,6 +2,7 @@ package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.account.AccountDto;
+import com.java110.po.account.AccountPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,4 +40,13 @@ public interface IAccountInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAccountsCount", method = RequestMethod.POST)
     int queryAccountsCount(@RequestBody AccountDto accountDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param accountPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/updateAccount", method = RequestMethod.POST)
+    int updateAccount(@RequestBody AccountPo accountPo);
 }

@@ -9,7 +9,7 @@ import java.util.Date;
  * 主要用于新建客户，更新客户，删除客户时，保存到以bo开头的过程表 实体
  * Created by wuxw on 2016/12/27.
  */
-public class BoCust extends DefaultBoEntity implements Comparable {
+public class BoCust extends DefaultBoEntity implements Comparable<BoCust> {
 
 
     private final static String CUST_TYPE_GENERAL= "1";// 普通客户
@@ -178,9 +178,8 @@ public class BoCust extends DefaultBoEntity implements Comparable {
      * @return
      */
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(BoCust otherBoCust) {
 
-        BoCust otherBoCust = (BoCust)o;
         if("DEL".equals(this.getState()) && "ADD".equals(otherBoCust.getState())) {
             return -1;
         }

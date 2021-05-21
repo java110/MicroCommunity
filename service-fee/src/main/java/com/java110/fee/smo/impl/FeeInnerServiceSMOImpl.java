@@ -114,6 +114,14 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.getFeeInfo(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
 
+
+        for(FeeDto tmpFeeDto : fees) {
+            if (!StringUtil.isEmpty(tmpFeeDto.getImportFeeName())) {
+                //fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");
+                tmpFeeDto.setFeeName(tmpFeeDto.getImportFeeName());
+            }
+        }
+
         return fees;
     }
 

@@ -230,7 +230,7 @@
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
         </if>
-        <if test="unitNum !=null and unitNum != ''">
+        <if test="unitNum !=null and unitNum != '' or unitNum == 0">
             and t.unit_num= #{unitNum}
         </if>
         <if test="lift !=null and lift != ''">

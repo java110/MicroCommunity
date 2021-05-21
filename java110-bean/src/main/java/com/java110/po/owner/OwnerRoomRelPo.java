@@ -20,6 +20,9 @@ public class OwnerRoomRelPo implements Serializable {
     private String remark;
     private String startTime;
     private String endTime;
+    private String statusCd;
+    private String operate;
+    private String bId;
 
     public String getRelId() {
         return relId;
@@ -83,5 +86,29 @@ public class OwnerRoomRelPo implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getOperate() {
+        return operate;
+    }
+
+    public void setOperate(String operate) {
+        this.operate = operate;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

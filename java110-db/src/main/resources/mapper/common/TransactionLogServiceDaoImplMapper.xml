@@ -19,7 +19,7 @@
     <select id="getTransactionLogInfo" parameterType="Map" resultType="Map">
         select t.src_ip,t.src_ip srcIp,t.service_code,t.service_code serviceCode,t.cost_time,t.cost_time
         costTime,t.ip,t.app_id,t.app_id appId,t.log_id,t.log_id logId,t.state,t.user_id,t.user_id
-        userId,t.transaction_id,t.transaction_id transactionId,t.timestamp
+        userId,t.transaction_id,t.transaction_id transactionId,t.timestamp,t.create_time createTime
         from transaction_log t
         where 1 =1
         <if test="srcIp !=null and srcIp != ''">
