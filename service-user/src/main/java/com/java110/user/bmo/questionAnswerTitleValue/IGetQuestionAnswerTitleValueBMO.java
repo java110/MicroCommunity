@@ -13,4 +13,10 @@ public interface IGetQuestionAnswerTitleValueBMO {
     ResponseEntity<String> get(QuestionAnswerTitleValueDto questionAnswerTitleValueDto);
 
 
+    /**
+     * 查询结果
+     * @param questionAnswerTitleValueDto
+     * @return
+     */
+    ResponseEntity<String> queryQuestionAnswerTitleValueResult(QuestionAnswerTitleValueDto questionAnswerTitleValueDto);
 }

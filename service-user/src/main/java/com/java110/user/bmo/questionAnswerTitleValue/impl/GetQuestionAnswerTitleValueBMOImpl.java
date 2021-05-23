@@ -41,4 +41,11 @@ public class GetQuestionAnswerTitleValueBMOImpl implements IGetQuestionAnswerTit
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> queryQuestionAnswerTitleValueResult(QuestionAnswerTitleValueDto questionAnswerTitleValueDto) {
+        List<QuestionAnswerTitleValueDto>  questionAnswerTitleValueDtos
+                = questionAnswerTitleValueInnerServiceSMOImpl.queryQuestionAnswerTitleValueResult(questionAnswerTitleValueDto);
+        return ResultVo.createResponseEntity(questionAnswerTitleValueDtos);
+    }
+
 }

@@ -360,4 +360,27 @@ public class QuestionAnswerApi {
         questionAnswerTitleValueDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
         return getQuestionAnswerTitleValueBMOImpl.get(questionAnswerTitleValueDto);
     }
+
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /questionAnswer/queryQuestionAnswerTitleValueResult
+     * @path /app/questionAnswer/queryQuestionAnswerTitleValueResult
+     */
+    @RequestMapping(value = "/queryQuestionAnswerTitleValueResult", method = RequestMethod.GET)
+    public ResponseEntity<String> queryQuestionAnswerTitleValueResult(@RequestHeader(value = "store-id") String storeId,
+                                                                @RequestParam(value = "communityId", required = false) String communityId,
+                                                                @RequestParam(value = "objType") String objType,
+                                                                @RequestParam(value = "page") int page,
+                                                                @RequestParam(value = "row") int row) {
+        QuestionAnswerTitleValueDto questionAnswerTitleValueDto = new QuestionAnswerTitleValueDto();
+        questionAnswerTitleValueDto.setPage(page);
+        questionAnswerTitleValueDto.setRow(row);
+        questionAnswerTitleValueDto.setObjType(objType);
+        questionAnswerTitleValueDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
+        return getQuestionAnswerTitleValueBMOImpl.queryQuestionAnswerTitleValueResult(questionAnswerTitleValueDto);
+    }
 }
