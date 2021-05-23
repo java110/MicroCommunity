@@ -30,6 +30,7 @@ public class QuestionAnswerTitleDto extends PageDto implements Serializable {
     private String seq;
     private String qaId;
     private String qaTitle;
+    private String userId;
 
 
     private Date createTime;
@@ -126,5 +127,13 @@ public class QuestionAnswerTitleDto extends PageDto implements Serializable {
 
     public void setQuestionAnswerTitleValues(List<QuestionAnswerTitleValueDto> questionAnswerTitleValues) {
         this.questionAnswerTitleValues = questionAnswerTitleValues;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

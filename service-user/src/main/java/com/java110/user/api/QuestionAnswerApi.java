@@ -147,6 +147,7 @@ public class QuestionAnswerApi {
     @RequestMapping(value = "/queryQuestionAnswer", method = RequestMethod.GET)
     public ResponseEntity<String> queryQuestionAnswer(
             @RequestHeader(value = "store-id", required = false) String storeId,
+            @RequestHeader(value = "user-id", required = false) String userId,
             @RequestParam(value = "communityId", required = false) String communityId,
             @RequestParam(value = "objType", required = false) String objType,
             @RequestParam(value = "page") int page,
@@ -154,6 +155,7 @@ public class QuestionAnswerApi {
         QuestionAnswerDto questionAnswerDto = new QuestionAnswerDto();
         questionAnswerDto.setPage(page);
         questionAnswerDto.setRow(row);
+        questionAnswerDto.setUserId(userId);
         if (!StringUtil.isEmpty(objType)) {
             questionAnswerDto.setObjType(objType);
             questionAnswerDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
@@ -192,7 +194,7 @@ public class QuestionAnswerApi {
 
 
         QuestionAnswerTitlePo questionAnswerTitlePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitlePo.class);
-        return saveQuestionAnswerTitleBMOImpl.save(questionAnswerTitlePo,titleValues);
+        return saveQuestionAnswerTitleBMOImpl.save(questionAnswerTitlePo, titleValues);
     }
 
     /**
@@ -222,7 +224,7 @@ public class QuestionAnswerApi {
         }
 
         QuestionAnswerTitlePo questionAnswerTitlePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitlePo.class);
-        return updateQuestionAnswerTitleBMOImpl.update(questionAnswerTitlePo,titleValues);
+        return updateQuestionAnswerTitleBMOImpl.update(questionAnswerTitlePo, titleValues);
     }
 
     /**
@@ -254,6 +256,7 @@ public class QuestionAnswerApi {
      */
     @RequestMapping(value = "/queryQuestionAnswerTitle", method = RequestMethod.GET)
     public ResponseEntity<String> queryQuestionAnswerTitle(@RequestHeader(value = "store-id", required = false) String storeId,
+                                                          // @RequestHeader(value = "user-id", required = false) String userId,
                                                            @RequestParam(value = "communityId", required = false) String communityId,
                                                            @RequestParam(value = "objType") String objType,
                                                            @RequestParam(value = "qaId") String qaId,
@@ -263,6 +266,7 @@ public class QuestionAnswerApi {
         questionAnswerTitleDto.setPage(page);
         questionAnswerTitleDto.setRow(row);
         questionAnswerTitleDto.setQaId(qaId);
+        //questionAnswerTitleDto.setUserId(userId);
         if (!StringUtil.isEmpty(objType)) {
             questionAnswerTitleDto.setObjType(objType);
             questionAnswerTitleDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
