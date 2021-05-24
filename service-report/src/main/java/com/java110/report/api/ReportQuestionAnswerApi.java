@@ -40,6 +40,8 @@ public class ReportQuestionAnswerApi {
         userQuestionAnswerValueDto.setRow(row);
         userQuestionAnswerValueDto.setObjIds(new String[]{storeId, communityId});
         userQuestionAnswerValueDto.setQaType(qaType);
+        userQuestionAnswerValueDto.setStartTime(startTime);
+        userQuestionAnswerValueDto.setEndTime(endTime);
         return getReportQuestionAnswerBMOImpl.get(userQuestionAnswerValueDto);
     }
 }
