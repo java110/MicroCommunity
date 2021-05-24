@@ -5,6 +5,8 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.utils.constant.ServiceCodeAllocationStorehouseApplyConstant;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 查询小区侦听类
@@ -26,6 +29,9 @@ public class ListAllocationStorehouseApplysListener extends AbstractServiceApiLi
 
     @Autowired
     private IAllocationStorehouseApplyInnerServiceSMO allocationStorehouseApplyInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -61,7 +67,15 @@ public class ListAllocationStorehouseApplysListener extends AbstractServiceApiLi
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         AllocationStorehouseApplyDto allocationStorehouseApplyDto = BeanConvertUtil.covertBean(reqJson, AllocationStorehouseApplyDto.class);
-
+        //调拨记录（调拨记录所有权限查看所有数据）
+        String userId = reqJson.getString("userId");
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewlistAllocationStorehouses");
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges.size()==0) {
+            allocationStorehouseApplyDto.setStartUserId(userId);
+        }
         int count = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplysCount(allocationStorehouseApplyDto);
 
         List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtos = null;

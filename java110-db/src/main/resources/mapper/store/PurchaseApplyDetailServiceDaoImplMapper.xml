@@ -79,7 +79,9 @@
         rsp.supplier_name supplierName,
         td1.name resOrderTypeName,
         td2.name stateName,
-        td3.name warehousingWayName
+        td3.name warehousingWayName,
+        rst.name rstName,
+        rss.spec_name specName
         from purchase_apply_detail t
         left join purchase_apply pa on t.apply_order_id = pa.apply_order_id
         left join resource_store rs on rs.res_id = t.res_id
@@ -90,6 +92,8 @@
         'state'
         left join t_dict td3 on pa.warehousing_way = td3.status_cd and td3.table_name = 'purchase_apply' and
         td3.table_columns = 'warehousing_way'
+        LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id
+        LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
@@ -121,6 +125,9 @@
         <if test="userId !=null and userId != ''">
             and pa.user_id= #{userId}
         </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and pa.create_user_id= #{createUserId}
+        </if>
         <if test="userName !=null and userName != ''">
             and pa.user_name like '%${userName}%'
         </if>
@@ -150,6 +157,12 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and rs.rss_id= #{rssId}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and rs.rst_id= #{rstId}
         </if>
         <if test="supplierName !=null and supplierName != ''">
             and rsp.supplier_name= #{supplierName}
@@ -211,6 +224,8 @@
         'state'
         left join t_dict td3 on pa.warehousing_way = td3.status_cd and td3.table_name = 'purchase_apply' and
         td3.table_columns = 'warehousing_way'
+        LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id
+        LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
@@ -241,6 +256,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             and pa.user_id= #{userId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and pa.create_user_id= #{createUserId}
         </if>
         <if test="userName !=null and userName != ''">
             and pa.user_name like '%${userName}%'
@@ -274,6 +292,12 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and rs.rss_id= #{rssId}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and rs.rst_id= #{rstId}
         </if>
         <if test="startTime !=null and startTime != ''">
             and pa.create_time &gt;= #{startTime}

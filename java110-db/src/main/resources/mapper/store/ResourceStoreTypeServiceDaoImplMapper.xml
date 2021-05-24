@@ -7,16 +7,16 @@
     <!-- 保存物品类型信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceStoreTypeInfo" parameterType="Map">
         insert into business_resource_store_type(
-        rst_id,name,description,b_id,store_id,goods_type,create_time,operate
+        rst_id,name,description,b_id,store_id,create_time,operate
         ) values (
-         #{rstId},#{name},#{description},#{bId},#{storeId},#{goodsType},#{createTime},#{operate}
+         #{rstId},#{name},#{description},#{bId},#{storeId},#{createTime},#{operate}
         )
     </insert>
 
     <!-- 查询物品类型信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessResourceStoreTypeInfo" parameterType="Map" resultType="Map">
         select t.rst_id,t.rst_id rstId,t.name,t.description,t.b_id,t.b_id bId,t.store_id,t.store_id
-        storeId,t.goods_type,t.goods_type goodsType
+        storeId
         from business_resource_store_type t
         where 1 =1
         <if test="rstId !=null and rstId != ''">
@@ -34,16 +34,13 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
-        </if>
     </select>
 
     <!-- 保存物品类型信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreTypeInfoInstance" parameterType="Map">
         insert into resource_store_type(
-        rst_id,name,description,status_cd,b_id,store_id,goods_type,create_time
-        ) select t.rst_id,t.name,t.description,'0',t.b_id,t.store_id,t.goods_type,t.create_time from
+        rst_id,name,description,status_cd,b_id,store_id,create_time
+        ) select t.rst_id,t.name,t.description,'0',t.b_id,t.store_id,t.create_time from
         business_resource_store_type t
         where 1=1
         <if test="rstId !=null and rstId != ''">
@@ -61,15 +58,12 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
-        </if>
     </insert>
 
     <!-- 查询物品类型信息 add by wuxw 2018-07-03 -->
     <select id="getResourceStoreTypeInfo" parameterType="Map" resultType="Map">
         select t.rst_id,t.rst_id rstId,t.name,t.description,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id
-        bId,t.store_id,t.store_id storeId,t.goods_type,t.goods_type goodsType,t.create_time,t.create_time createTime
+        bId,t.store_id,t.store_id storeId,t.create_time,t.create_time createTime
         from resource_store_type t
         where 1 =1
         <if test="rstId !=null and rstId != ''">
@@ -89,9 +83,6 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
-        </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -113,9 +104,6 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             , t.store_id= #{storeId}
-        </if>
-        <if test="goodsType !=null and goodsType != ''">
-            , t.goods_type= #{goodsType}
         </if>
         where 1=1
         <if test="rstId !=null and rstId != ''">
@@ -148,9 +136,6 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
-        </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
         </if>
     </select>
 </mapper>

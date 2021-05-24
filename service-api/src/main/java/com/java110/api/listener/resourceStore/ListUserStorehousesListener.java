@@ -9,12 +9,14 @@ import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeUserStorehouseConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +71,12 @@ public class ListUserStorehousesListener extends AbstractServiceApiListener {
         if (count > 0) {
             userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
         } else {
+            Object chooseType = reqJson.get("chooseType");
+            if (chooseType != null && !StringUtil.isEmpty(chooseType.toString()) && reqJson.get("chooseType").equals("repair")) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您还没有该类型的物品，请您先申领物品！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
             userStorehouseDtos = new ArrayList<>();
         }
 

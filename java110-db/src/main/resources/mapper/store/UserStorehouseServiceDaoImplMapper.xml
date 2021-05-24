@@ -87,13 +87,14 @@
     <select id="getUserStorehouseInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.store_id,t.store_id
         storeId,t.stock,t.res_id,t.res_id resId,t.user_id,t.user_id userId,t.us_id,t.us_id usId,rs.res_code resCode,
-        rs.goods_type goodsType,rs.out_low_price outLowPrice,rs.out_high_price outHighPrice,rst.name goodsTypeName from
+        rs.out_low_price outLowPrice,rs.out_high_price outHighPrice,rst.name rstName,rss.spec_name specName from
         user_storehouse t
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
-        left join resource_store_type rst on rs.goods_type = rst.goods_type and rst.status_cd = '0'
+        left join resource_store_type rst on rs.rst_id = rst.rst_id
+        left join resource_store_specification rss on rs.rss_id = rss.rss_id
         where t.stock &gt; 0
         <if test="resName !=null and resName != ''">
-            and t.res_name= #{resName}
+            and t.res_name like '%${resName}%'
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -110,11 +111,17 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="resCode !=null and resCode != ''">
+            and rs.res_code= #{resCode}
+        </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and rs.goods_type= #{goodsType}
+        <if test="rstId !=null and rstId != ''">
+            and rs.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and rs.rss_id= #{rssId}
         </if>
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}
@@ -157,10 +164,11 @@
     <select id="queryUserStorehousesCount" parameterType="Map" resultType="Map">
         select count(1) count from user_storehouse t
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
-        left join resource_store_type rst on rs.goods_type = rst.goods_type and rst.status_cd = '0'
-        where 1 = 1
+        left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
+        left join resource_store_specification rss on rs.rss_id = rss.rss_id
+        where 1 = 1 and t.stock &gt; 0
         <if test="resName !=null and resName != ''">
-            and t.res_name= #{resName}
+            and t.res_name like '%${resName}%'
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -177,11 +185,17 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="resCode !=null and resCode != ''">
+            and rs.res_code= #{resCode}
+        </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and rs.goods_type= #{goodsType}
+        <if test="rstId !=null and rstId != ''">
+            and rs.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and rs.rss_id= #{rssId}
         </if>
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}

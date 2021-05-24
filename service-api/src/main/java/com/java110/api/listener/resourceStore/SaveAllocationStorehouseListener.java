@@ -2,7 +2,6 @@ package com.java110.api.listener.resourceStore;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.allocationStorehouse.IAllocationStorehouseBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -33,9 +32,6 @@ import java.util.List;
  */
 @Java110Listener("saveAllocationStorehouseListener")
 public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusListener {
-
-    @Autowired
-    private IAllocationStorehouseBMO allocationStorehouseBMOImpl;
 
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
@@ -81,11 +77,8 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
             resourceStores.getJSONObject(resIndex).put("stockA", stockA);
         }
         reqJson.put("resourceStores", resourceStores);
-//
 //        reqJson.put("resName", resourceStoreDtos.get(0).getResName());
 //        reqJson.put("stockA", stockA);
-
-
     }
 
     @Override
@@ -97,7 +90,7 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
         allocationStorehouseApplyPo.setStartUserId(reqJson.getString("userId"));
         allocationStorehouseApplyPo.setStartUserName(reqJson.getString("userName"));
         allocationStorehouseApplyPo.setStoreId(reqJson.getString("storeId"));
-        allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_AUDIT);
+        allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_APPLY);
 
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         JSONObject resObj = null;
@@ -110,9 +103,10 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
             allocationStorehousePo.setResName(resObj.getString("resName"));
             allocationStorehousePo.setShIda(resObj.getString("shId"));
             allocationStorehousePo.setShIdz(resObj.getString("shzId"));
-            allocationStorehousePo.setState(AllocationStorehouseDto.STATE_SUCCESS);
+            allocationStorehousePo.setState(AllocationStorehouseDto.STATE_APPLY);
             allocationStorehousePo.setStoreId(reqJson.getString("storeId"));
             allocationStorehousePo.setStock(resObj.getString("curStock"));
+            allocationStorehousePo.setOriginalStock(resObj.getString("stock"));
             allocationStorehousePo.setRemark(reqJson.getString("remark"));
             allocationStorehousePo.setStartUserId(reqJson.getString("userId"));
             allocationStorehousePo.setStartUserName(reqJson.getString("userName"));
@@ -123,8 +117,8 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
             resourceStorePo.setResId(resObj.getString("resId"));
             resourceStorePo.setStoreId(reqJson.getString("storeId"));
             resourceStorePo.setShId(resObj.getString("shId"));
-            int stockA = Integer.parseInt(resObj.getString("stockA"));
-            int stockB = Integer.parseInt(resObj.getString("stock"));
+            int stockA = Integer.parseInt(resObj.getString("stock"));//调拨数量
+            int stockB = Integer.parseInt(resObj.getString("curStock"));//现有库存
             resourceStorePo.setStock((stockA - stockB) + "");
             super.update(context, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
             int oldCurStore = Integer.parseInt(allocationStorehouseApplyPo.getApplyCount());

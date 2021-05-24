@@ -26,7 +26,6 @@ public class AddResourceStoreTypeSMOImpl extends AbstractComponentSMO implements
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
-        Assert.hasKeyAndValue(paramIn, "goodsType", "必填，请填写物品类型编码");
         Assert.hasKeyAndValue(paramIn, "name", "必填，请填写物品类型名称");
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_RESOURCESTORE_TYPE);
     }

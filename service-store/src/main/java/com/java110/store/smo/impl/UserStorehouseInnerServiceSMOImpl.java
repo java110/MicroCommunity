@@ -42,20 +42,7 @@ public class UserStorehouseInnerServiceSMOImpl extends BaseServiceSMO implements
         }
 
         List<UserStorehouseDto> userStorehouses = BeanConvertUtil.covertBeanList(useStorehouseServiceDaoImpl.getUserStorehouseInfo(BeanConvertUtil.beanCovertMap(userUserStorehousehouseDto)), UserStorehouseDto.class);
-
-        List<UserStorehouseDto> userStorehouseDtos = new ArrayList<>();
-        String outPrice = "";
-        for (UserStorehouseDto userStorehouseDto : userStorehouses) {
-            if (userStorehouseDto.getOutLowPrice().equals(userStorehouseDto.getOutHighPrice())) {
-                outPrice = userStorehouseDto.getOutLowPrice() + "元";
-            } else {
-                outPrice = userStorehouseDto.getOutLowPrice() + "元-" + userStorehouseDto.getOutHighPrice() + "元";
-            }
-            userStorehouseDto.setOutPrice(outPrice);
-            userStorehouseDtos.add(userStorehouseDto);
-        }
-
-        return userStorehouseDtos;
+        return userStorehouses;
     }
 
     /**

@@ -23,7 +23,6 @@ import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IResourceStoreServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.store.IResourceStoreUseRecordInnerServiceSMO;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
@@ -90,15 +89,12 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IUserStorehouseInnerServiceSMO userStorehouseInnerServiceSMO;
 
-    @Autowired
-    private IResourceStoreUseRecordInnerServiceSMO resourceStoreUseRecordInnerServiceSMOImpl;
-
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
         Assert.hasKeyAndValue(reqJson, "context", "未包含派单内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
-        Assert.hasKeyAndValue(reqJson, "amount", "未包含金额");
+//        Assert.hasKeyAndValue(reqJson, "amount", "未包含金额");
         Assert.hasKeyAndValue(reqJson, "feeFlag", "未包含费用标识");
     }
 
@@ -107,15 +103,12 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         String userId = reqJson.getString("userId");
         String userName = reqJson.getString("userName");
         String publicArea = reqJson.getString("publicArea");
-        String isCustom = reqJson.getString("isCustom");//是否自定义
         //获取报修渠道
         String repairChannel = reqJson.getString("repairChannel");
         //获取维修类型
         String maintenanceType = reqJson.getString("maintenanceType");
-        //获取商品资源res_id
-        String resId = reqJson.getString("resId");
-        //获取商品数量
-        String useNumber = reqJson.getString("useNumber");
+        //获取商品集合
+        String choosedGoodsList = reqJson.getString("choosedGoodsList");
         //判断当前用户是否有需要处理的订单
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(reqJson.getString("repairId"));
@@ -128,95 +121,164 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             context.setResponseEntity(responseEntity);
             return;
         }
-        String outLowPrice = "0";
-        String outHighPrice = "0";
-        List<ResourceStorePo> resourceStorePoList = new ArrayList<>();
-        List<UserStorehouseDto> userStorehouseDtoList = new ArrayList<>();
+        JSONArray json = JSONArray.parseArray(choosedGoodsList);
         //用料
-        String repairMaterials = "";
-        //单价
-        Double unitPrice = 0.0;
-        //数量
-        Double useNumber_s = 0.0;
-        //总价
-        String totalPrice = "";
-        DecimalFormat df = new DecimalFormat("#.00");
-        if (!StringUtil.isEmpty(reqJson.getString("price")) && !StringUtil.isEmpty(useNumber)) {
-            //支付费用 数量乘以单价
-            unitPrice = Double.parseDouble(reqJson.getString("price"));
-            useNumber_s = Double.parseDouble(useNumber);
-            //计算金额
-            totalPrice = df.format(unitPrice * useNumber_s);
-        }
-        if (!StringUtil.isEmpty(resId)) {
-            //查询库存并校验库存
-            ResourceStorePo resourceStorePo = new ResourceStorePo();
-            resourceStorePo.setResId(resId);
-            resourceStorePoList = resourceStoreServiceSMO.getResourceStores(resourceStorePo);
-            repairMaterials = resourceStorePoList.get(0).getResName() + "*" + useNumber;
-            outLowPrice = resourceStorePoList.get(0).getOutLowPrice();
-            outHighPrice = resourceStorePoList.get(0).getOutHighPrice();
-        }
-        if (!StringUtil.isEmpty(useNumber)
-                && !"0".equals(useNumber)
-                && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
-            String nowStock = "0";
-            //（从我的物料中获取商品库存）
-            UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
-            userStorehouseDto.setResId(resId);
-            userStorehouseDto.setUserId(userId);
-            userStorehouseDtoList = userStorehouseInnerServiceSMO.queryUserStorehouses(userStorehouseDto);
-            if (userStorehouseDtoList == null || userStorehouseDtoList.size() < 1) {
-                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修物料库存不足，请您先申领物品！");
-                context.setResponseEntity(responseEntity);
-                return;
+        String repairMaterial = "";
+        //费用明细(单价 * 数量 = 总价)
+        String repairFee = "";
+        if (json.size() > 0) {
+            Object[] objects = json.toArray();
+            //数据前期校验
+            for (int i = 0; i < objects.length; i++) {
+                Object object = objects[i];
+                JSONObject paramIn = JSONObject.parseObject(String.valueOf(object));
+                String isCustom = paramIn.getString("isCustom");//是否自定义
+                String resId = paramIn.getString("resId");//获取商品资源id
+                String useNumber = paramIn.getString("useNumber");//获取商品数量
+                String outLowPrice = "0";//最低价
+                String outHighPrice = "0"; //最高价
+                List<ResourceStorePo> resourceStorePoList = new ArrayList<>();
+                List<UserStorehouseDto> userStorehouseDtoList = new ArrayList<>();
+
+                if (!StringUtil.isEmpty(resId)) {
+                    //查询库存并校验库存
+                    ResourceStorePo resourceStorePo = new ResourceStorePo();
+                    resourceStorePo.setResId(resId);
+                    resourceStorePoList = resourceStoreServiceSMO.getResourceStores(resourceStorePo);//查询物品资源信息
+                    outLowPrice = resourceStorePoList.get(0).getOutLowPrice(); //最低价
+                    outHighPrice = resourceStorePoList.get(0).getOutHighPrice();//最高价
+                }
+                if (!StringUtil.isEmpty(useNumber) && !"0".equals(useNumber)
+                        && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
+                    String nowStock = "0";
+                    //（从我的物料中获取商品库存）
+                    UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
+                    userStorehouseDto.setResId(resId);
+                    userStorehouseDto.setUserId(userId);
+                    //查询个人物品信息
+                    userStorehouseDtoList = userStorehouseInnerServiceSMO.queryUserStorehouses(userStorehouseDto);
+                    if (userStorehouseDtoList == null || userStorehouseDtoList.size() < 1) {
+                        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修物料"+ userStorehouseDtoList.get(0).getResName()+"库存不足，请您先申领物品！");
+                        context.setResponseEntity(responseEntity);
+                        return;
+                    }
+                    if (userStorehouseDtoList.size() == 1) {
+                        nowStock = userStorehouseDtoList.get(0).getStock();
+                    }
+                    if (Integer.parseInt(nowStock) < Integer.parseInt(useNumber)) {
+                        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修物料"+ userStorehouseDtoList.get(0).getResName()+"库存不足，请您先申领物品！");
+                        context.setResponseEntity(responseEntity);
+                        return;
+                    }
+
+                }
+                if (maintenanceType.equals("1001") && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
+                    Double price = Double.parseDouble(paramIn.getString("price")); //获取价格
+                    Double outLowPrices = Double.parseDouble(outLowPrice);//最低价
+                    Double outHighPrices = Double.parseDouble(outHighPrice);//最高价
+                    //物品价格应该在最低价和最高价之间
+                    if (price < outLowPrices || price > outHighPrices) {
+                        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "输入的维修物料"+userStorehouseDtoList.get(0).getResName()+"单价不正确，请重新输入！");
+                        context.setResponseEntity(responseEntity);
+                        return;
+                    }
+                }
             }
-            if (userStorehouseDtoList.size() == 1) {
-                nowStock = userStorehouseDtoList.get(0).getStock();
+            //数据操作入库以及更新数据库
+            for (int i = 0; i < objects.length; i++) {
+                Object object = objects[i];
+                JSONObject paramIn = JSONObject.parseObject(String.valueOf(object));
+                String isCustom = paramIn.getString("isCustom");//是否自定义
+                //获取商品资源id
+                String resId = paramIn.getString("resId");
+                //获取商品数量
+                String useNumber = paramIn.getString("useNumber");
+                //总价
+                String totalPrice = "";
+                //用料
+                String repairMaterials = "";
+                //单价
+                Double unitPrice = 0.0;
+                //数量
+                Double useNumber_s = 0.0;
+                //费用明细
+                String repair = "";
+                DecimalFormat df = new DecimalFormat("#.00");
+                List<ResourceStorePo> resourceStorePoList = new ArrayList<>();
+                List<UserStorehouseDto> userStorehouseDtoList = new ArrayList<>();
+                if (!StringUtil.isEmpty(paramIn.getString("price")) && !StringUtil.isEmpty(useNumber)) {
+                    //支付费用 数量乘以单价
+                    unitPrice = Double.parseDouble(paramIn.getString("price"));
+                    //物品数量
+                    useNumber_s = Double.parseDouble(useNumber);
+                    //计算金额
+                    totalPrice = df.format(unitPrice * useNumber_s);
+                    //费用明细
+                    repair = df.format(unitPrice) + " * " + useNumber_s + " = " + totalPrice;
+                }
+                if (!StringUtil.isEmpty(resId)) {
+                    ResourceStorePo resourceStorePo = new ResourceStorePo();
+                    resourceStorePo.setResId(resId);
+                    //查询物品资源信息
+                    resourceStorePoList = resourceStoreServiceSMO.getResourceStores(resourceStorePo);
+                    //用料
+                    repairMaterials = resourceStorePoList.get(0).getResName() + "*" + useNumber;
+                }else{
+                    //用料
+                    repairMaterials = paramIn.getString("customGoodsName") + "*" + useNumber;
+                }
+                if (!StringUtil.isEmpty(useNumber) && !"0".equals(useNumber)
+                        && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
+                    String nowStock = "0";
+                    //（从我的物料中获取商品库存）
+                    UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
+                    userStorehouseDto.setResId(resId);
+                    userStorehouseDto.setUserId(userId);
+                    //查询个人物品信息
+                    userStorehouseDtoList = userStorehouseInnerServiceSMO.queryUserStorehouses(userStorehouseDto);
+                    if (userStorehouseDtoList.size() == 1) {
+                        nowStock = userStorehouseDtoList.get(0).getStock();
+                    }
+                    //库存减少
+                    UserStorehousePo userStorehousePo = new UserStorehousePo();
+                    Integer surplusStock = Integer.parseInt(nowStock) - Integer.parseInt(useNumber);
+                    userStorehousePo.setStock(String.valueOf(surplusStock));
+                    userStorehousePo.setUsId(userStorehouseDtoList.get(0).getUsId());
+                    userStorehousePo.setResId(resId);
+                    userStorehousePo.setUserId(userId);
+                    //更新库存
+                    super.update(context, userStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_STOREHOUSE);
+                }
+                //往物品使用记录表插入数据
+                ResourceStoreUseRecordPo resourceStoreUseRecordPo = new ResourceStoreUseRecordPo();
+                resourceStoreUseRecordPo.setRsurId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rsurId));
+                resourceStoreUseRecordPo.setRepairId(reqJson.getString("repairId"));
+                resourceStoreUseRecordPo.setResourceStoreName(paramIn.getString("resName"));
+                if(!StringUtil.isEmpty(isCustom) && isCustom.equals("true")){
+                    resId="666666";
+                    resourceStoreUseRecordPo.setResourceStoreName(paramIn.getString("customGoodsName"));
+                }
+                resourceStoreUseRecordPo.setResId(resId);
+                resourceStoreUseRecordPo.setCommunityId(reqJson.getString("communityId"));
+                resourceStoreUseRecordPo.setStoreId(reqJson.getString("storeId"));
+                resourceStoreUseRecordPo.setCreateUserId(reqJson.getString("userId"));
+                resourceStoreUseRecordPo.setCreateUserName(reqJson.getString("userName"));
+                resourceStoreUseRecordPo.setRemark(reqJson.getString("context"));
+                resourceStoreUseRecordPo.setQuantity(useNumber);
+                //有偿服务
+                if (maintenanceType.equals("1001")) {
+                    resourceStoreUseRecordPo.setUnitPrice(paramIn.getString("price"));
+                    super.insert(context, resourceStoreUseRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD);
+                } else if (maintenanceType.equals("1003")) {  //需要用料
+                    super.insert(context, resourceStoreUseRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD);
+                }
+                if (!StringUtil.isEmpty(repairMaterials)) {
+                    repairMaterial += repairMaterials + "；";
+                }
+                if (!StringUtil.isEmpty(repair)) {
+                    repairFee += repair + "；";
+                }
             }
-            if (Integer.parseInt(nowStock) < Integer.parseInt(useNumber)) {
-                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修物料库存不足，请您先申领物品！");
-                context.setResponseEntity(responseEntity);
-                return;
-            }
-            //库存减少
-            UserStorehousePo userStorehousePo = new UserStorehousePo();
-            Integer surplusStock = Integer.parseInt(nowStock) - Integer.parseInt(useNumber);
-            userStorehousePo.setStock(String.valueOf(surplusStock));
-            userStorehousePo.setUsId(userStorehouseDtoList.get(0).getUsId());
-            userStorehousePo.setResId(resId);
-            userStorehousePo.setUserId(userId);
-            super.update(context, userStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_STOREHOUSE);
-        }
-        if (maintenanceType.equals("1001") && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
-            //获取价格
-            Double price = Double.parseDouble(reqJson.getString("price"));
-            Double outLowPrices = Double.parseDouble(outLowPrice);
-            Double outHighPrices = Double.parseDouble(outHighPrice);
-            //物品价格应该在最低价和最高价之间
-            if (price < outLowPrices || price > outHighPrices) {
-                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "输入的维修物料单价不正确，请重新输入！");
-                context.setResponseEntity(responseEntity);
-                return;
-            }
-        }
-        //往物品使用记录表插入数据
-        ResourceStoreUseRecordPo resourceStoreUseRecordPo = new ResourceStoreUseRecordPo();
-        resourceStoreUseRecordPo.setRsurId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rsurId));
-        resourceStoreUseRecordPo.setRepairId(reqJson.getString("repairId"));
-        resourceStoreUseRecordPo.setResId(resId);
-        resourceStoreUseRecordPo.setCommunityId(reqJson.getString("communityId"));
-        resourceStoreUseRecordPo.setStoreId(reqJson.getString("storeId"));
-        resourceStoreUseRecordPo.setCreateUserId(reqJson.getString("userId"));
-        resourceStoreUseRecordPo.setCreateUserName(reqJson.getString("userName"));
-        resourceStoreUseRecordPo.setRemark(reqJson.getString("context"));
-        resourceStoreUseRecordPo.setQuantity(useNumber);
-        //有偿服务
-        if (maintenanceType.equals("1001")) {
-            resourceStoreUseRecordPo.setUnitPrice(reqJson.getString("price"));
-            super.insert(context, resourceStoreUseRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD);
-        } else if (maintenanceType.equals("1003")) {  //需要用料
-            super.insert(context, resourceStoreUseRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD);
         }
         // 1.0 关闭自己订单
         RepairUserPo repairUserPo = new RepairUserPo();
@@ -243,7 +305,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             if (maintenanceType.equals("1001")) { //如果是有偿的就走下面(业主报修有偿或者电话申请有偿或者员工报修有偿)
                 repairUserPo.setState(RepairUserDto.STATE_PAY_FEE);
-                repairUserPo.setContext("待支付" + totalPrice + "元");
+                repairUserPo.setContext("待支付" + reqJson.getString("totalPrice") + "元");
             } else {
                 repairUserPo.setState(RepairUserDto.STATE_EVALUATE);
                 repairUserPo.setContext("待评价");
@@ -368,7 +430,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 return;
             }
             PayFeePo feePo = new PayFeePo();
-            feePo.setAmount(String.valueOf(totalPrice));
+            feePo.setAmount(String.valueOf(reqJson.getString("")));
             feePo.setCommunityId(reqJson.getString("communityId"));
             feePo.setConfigId(feeConfigDtos.get(0).getConfigId());
             feePo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -377,6 +439,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             feePo.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_REPAIR);
             feePo.setIncomeObjId(reqJson.getString("storeId"));
             feePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            feePo.setAmount(reqJson.getString("totalPrice"));
             RepairDto repairDto = new RepairDto();
             repairDto.setCommunityId(reqJson.getString("communityId"));
             repairDto.setRepairId(reqJson.getString("repairId"));
@@ -404,12 +467,23 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             //维修类型
             repairPoolPo.setMaintenanceType(reqJson.getString("maintenanceType"));
             //用料
-            repairPoolPo.setRepairMaterials(repairMaterials);
+            repairPoolPo.setRepairMaterials(repairMaterial.substring(0, repairMaterial.length() - 1));
             //费用明细
-            repairPoolPo.setRepairFee(df.format(unitPrice) + " * " + useNumber + " = " + totalPrice);
+            repairPoolPo.setRepairFee(repairFee.substring(0, repairFee.length() - 1));
             super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
             ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_PAY);
         } else if (publicArea.equals("T")) {  //公共区域走这里
+            //公共区域用料时修改维修类型和用料
+            if (maintenanceType.equals("1003")) {
+                //改变r_repair_pool表maintenance_type维修类型
+                RepairPoolPo repairPoolPo = new RepairPoolPo();
+                repairPoolPo.setRepairId(reqJson.getString("repairId"));
+                //维修类型
+                repairPoolPo.setMaintenanceType(reqJson.getString("maintenanceType"));
+                //用料
+                repairPoolPo.setRepairMaterials(repairMaterial.substring(0, repairMaterial.length() - 1));
+                super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
+            }
             if (repairChannel.equals("T") || repairChannel.equals("D")) { //如果是电话报修和员工代客报修结单后状态变为待回访
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_RETURN_VISIT);
             } else if (repairChannel.equals("Z")) { //如果是业主自主报修结单后状态变为待评价

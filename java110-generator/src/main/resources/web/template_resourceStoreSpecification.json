@@ -1,0 +1,71 @@
+{
+  "templateName": "物品规格",
+  "directories": "property",
+  "templateCode": "resourceStoreSpecification",
+  "templateKey": "rss_id",
+  "templateKeyName": "规格编号",
+  "searchCode": "rssId",
+  "searchName": "规格编号",
+  "conditions": [
+    {
+      "name": "规格名称",
+      "inputType": "input",
+      "code": "specName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "商品类型",
+      "inputType": "select",
+      "selectValue":"10001,10002",
+      "selectValueName":"水暖,电器",
+      "code": "rstId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "规格编号",
+      "inputType": "input",
+      "code": "rssId",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns": [
+    {
+      "code": "specName",
+      "cnCode": "规格名称",
+      "desc": "必填，请填写规格名称",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "255",
+      "limitErrInfo": "规格名称太长",
+      "show": true
+    },
+    {
+      "code": "rstId",
+      "cnCode": "商品类型",
+      "desc": "必填，请填写商品类型",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue":"10001,10002",
+      "selectValueName":"水暖,电器",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"商品类型格式错误",
+      "show": true
+    },
+    {
+      "code": "description",
+      "cnCode": "描述",
+      "desc": "选填，请填写描述",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "512",
+      "limitErrInfo": "备注太长",
+      "show": true
+    }
+  ]
+}

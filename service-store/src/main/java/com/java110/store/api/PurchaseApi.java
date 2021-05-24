@@ -70,6 +70,7 @@ public class PurchaseApi {
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             resourceStore.remove("price");//采购价格默认空
+            resourceStore.put("originalStock",resourceStore.get("stock"));
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
@@ -137,6 +138,7 @@ public class PurchaseApi {
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             purchaseApplyDetailPo.setRemark("直接采购入库");
+            purchaseApplyDetailPo.setOriginalStock(resourceStore.get("stock").toString());
             purchaseApplyDetailPo.setQuantity(purchaseApplyDetailPo.getPurchaseQuantity());
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
             //增加库存

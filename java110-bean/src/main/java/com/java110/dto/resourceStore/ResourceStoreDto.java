@@ -16,7 +16,10 @@ import java.util.List;
  **/
 public class ResourceStoreDto extends PageDto implements Serializable {
 
+    //物品名称(用来做模糊查询)
     private String resName;
+    //物品名称(用来做精确查询)
+    private String name;
     private String price;
     private String resCode;
     private String description;
@@ -25,10 +28,6 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String resId;
     //10000 采购 20000出库
     private String resOrderType;
-    //物品类型
-    private String goodsType;
-    //物品类型名称
-    private String goodsTypeName;
     //单位
     private String unitCode;
     //备注
@@ -49,10 +48,21 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String averagePrice;
     private List<String> fileUrls;
     private Date createTime;
+    private String rstId;
+    private String rstName;
 
     private String statusCd = "0";
 
     private String shName;
+
+    //规格id
+    private String rssId;
+
+    //规格名称
+    private String rssName;
+
+    //物品总价
+    private String totalPrice;
 
     public String getResName() {
         return resName;
@@ -135,14 +145,6 @@ public class ResourceStoreDto extends PageDto implements Serializable {
         this.resOrderType = resOrderType;
     }
 
-    public String getGoodsType() {
-        return goodsType;
-    }
-
-    public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
-    }
-
     public String getUnitCode() {
         return unitCode;
     }
@@ -189,14 +191,6 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setShowMobile(String showMobile) {
         this.showMobile = showMobile;
-    }
-
-    public String getGoodsTypeName() {
-        return goodsTypeName;
-    }
-
-    public void setGoodsTypeName(String goodsTypeName) {
-        this.goodsTypeName = goodsTypeName;
     }
 
     public List<String> getFileUrls() {
@@ -253,5 +247,53 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setAveragePrice(String averagePrice) {
         this.averagePrice = averagePrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getRssName() {
+        return rssName;
+    }
+
+    public void setRssName(String rssName) {
+        this.rssName = rssName;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

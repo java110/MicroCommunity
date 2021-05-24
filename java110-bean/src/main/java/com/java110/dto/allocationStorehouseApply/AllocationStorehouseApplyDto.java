@@ -32,12 +32,12 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     private String staffId;
     private String staffName;
     private String staffTel;
-
+    private String startTime;
+    private String endTime;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getApplyId() {
         return applyId;
@@ -190,5 +190,21 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

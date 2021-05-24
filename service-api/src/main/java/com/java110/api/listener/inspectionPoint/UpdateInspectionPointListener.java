@@ -28,6 +28,8 @@ public class UpdateInspectionPointListener extends AbstractServiceApiPlusListene
         Assert.hasKeyAndValue(reqJson, "pointObjId", "必填，请填写位置信息");
         Assert.hasKeyAndValue(reqJson, "pointObjType", "必填，请填写巡检类型");
         Assert.hasKeyAndValue(reqJson, "pointObjName", "必填，请填写位置信息");
+        Assert.hasKeyAndValue(reqJson, "pointStartTime", "必填，请选择巡检开始时间");
+        Assert.hasKeyAndValue(reqJson, "pointEndTime", "必填，请选择巡检结束时间");
 
 
     }

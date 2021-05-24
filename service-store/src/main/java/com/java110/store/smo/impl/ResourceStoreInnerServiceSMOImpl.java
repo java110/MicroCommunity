@@ -99,7 +99,7 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 throw new IllegalArgumentException("库存不足，参数有误");
             }
             //入库操作 对物品进行加权平均
-            if(resourceStorePo.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)){
+            if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)) {
                 //获取原均价
                 Object averageOldPrice = stores.get(0).get("averagePrice");
                 Double price = 0.0;

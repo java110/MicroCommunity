@@ -5,6 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.PageDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.dto.storehouse.StorehouseDto;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +86,47 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
         int count = resourceStoreInnerServiceSMOImpl.queryResourceStoresCount(resourceStoreDto);
         List<ApiResourceStoreDataVo> resourceStores = new ArrayList<>();
         if (count > 0) {
-            resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
+            List<ApiResourceStoreDataVo> apiResourceStoreDataVos = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
+            //计算总价(小计)
+            BigDecimal subTotalPrice = BigDecimal.ZERO;
+            ;
+            BigDecimal totalPrice = BigDecimal.ZERO;
+            for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
+                //获取均价
+                String averagePrice = apiResourceStoreDataVo.getAveragePrice();
+                //获取数量
+                String stock = apiResourceStoreDataVo.getStock();
+                if (!StringUtil.isEmpty(averagePrice) && !StringUtil.isEmpty(stock)) {
+                    //总价
+                    BigDecimal x1 = new BigDecimal(averagePrice);
+                    BigDecimal y1 = new BigDecimal(stock);
+                    BigDecimal price = x1.multiply(y1);
+                    //计算总价(小计)
+                    subTotalPrice = subTotalPrice.add(price);
+                }
+            }
+            resourceStoreDto.setPage(PageDto.DEFAULT_PAGE);
+            //查询所有物品信息数据(不分组)
+            List<ResourceStoreDto> resourceStoreList = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+            for (ResourceStoreDto resourceStore : resourceStoreList) {
+                //获取均价
+                String averagePrice = resourceStore.getAveragePrice();
+                //获取数量
+                String stock = resourceStore.getStock();
+                if (!StringUtil.isEmpty(averagePrice) && !StringUtil.isEmpty(stock)) {
+                    //总价
+                    BigDecimal x1 = new BigDecimal(averagePrice);
+                    BigDecimal y1 = new BigDecimal(stock);
+                    BigDecimal price = x1.multiply(y1);
+                    //计算总价(大计)
+                    totalPrice = totalPrice.add(price);
+                }
+            }
+            for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
+                apiResourceStoreDataVo.setSubTotalPrice(subTotalPrice.toString());
+                apiResourceStoreDataVo.setHighTotalPrice(totalPrice.toString());
+                resourceStores.add(apiResourceStoreDataVo);
+            }
         } else {
             resourceStores = new ArrayList<>();
         }

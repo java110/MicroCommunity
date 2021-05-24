@@ -61,29 +61,30 @@ public abstract class AbstractAllocationStorehouseApplyBusinessServiceDataFlowLi
         info.put("applyId", businessAllocationStorehouseApply.getString("applyId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentAllocationStorehouseApplyInfos = getAllocationStorehouseApplyServiceDaoImpl().getAllocationStorehouseApplyInfo(info);
-        if (currentAllocationStorehouseApplyInfos == null || currentAllocationStorehouseApplyInfos.size() != 1) {
+        if (currentAllocationStorehouseApplyInfos == null || currentAllocationStorehouseApplyInfos.size() < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
 
-        Map currentAllocationStorehouseApplyInfo = currentAllocationStorehouseApplyInfos.get(0);
+        for (int i = 0; i < currentAllocationStorehouseApplyInfos.size(); i++) {
+            Map currentAllocationStorehouseApplyInfo = currentAllocationStorehouseApplyInfos.get(i);
 
-        currentAllocationStorehouseApplyInfo.put("bId", business.getbId());
+            currentAllocationStorehouseApplyInfo.put("bId", business.getbId());
 
-        currentAllocationStorehouseApplyInfo.put("applyId", currentAllocationStorehouseApplyInfo.get("apply_id"));
-        currentAllocationStorehouseApplyInfo.put("startUserId", currentAllocationStorehouseApplyInfo.get("start_user_id"));
-        currentAllocationStorehouseApplyInfo.put("operate", currentAllocationStorehouseApplyInfo.get("operate"));
-        currentAllocationStorehouseApplyInfo.put("startUserName", currentAllocationStorehouseApplyInfo.get("start_user_name"));
-        currentAllocationStorehouseApplyInfo.put("applyCount", currentAllocationStorehouseApplyInfo.get("apply_count"));
-        currentAllocationStorehouseApplyInfo.put("remark", currentAllocationStorehouseApplyInfo.get("remark"));
-        currentAllocationStorehouseApplyInfo.put("state", currentAllocationStorehouseApplyInfo.get("state"));
-        currentAllocationStorehouseApplyInfo.put("storeId", currentAllocationStorehouseApplyInfo.get("store_id"));
+            currentAllocationStorehouseApplyInfo.put("applyId", currentAllocationStorehouseApplyInfo.get("apply_id"));
+            currentAllocationStorehouseApplyInfo.put("startUserId", currentAllocationStorehouseApplyInfo.get("start_user_id"));
+            currentAllocationStorehouseApplyInfo.put("operate", currentAllocationStorehouseApplyInfo.get("operate"));
+            currentAllocationStorehouseApplyInfo.put("startUserName", currentAllocationStorehouseApplyInfo.get("start_user_name"));
+            currentAllocationStorehouseApplyInfo.put("applyCount", currentAllocationStorehouseApplyInfo.get("apply_count"));
+            currentAllocationStorehouseApplyInfo.put("remark", currentAllocationStorehouseApplyInfo.get("remark"));
+            currentAllocationStorehouseApplyInfo.put("state", currentAllocationStorehouseApplyInfo.get("state"));
+            currentAllocationStorehouseApplyInfo.put("storeId", currentAllocationStorehouseApplyInfo.get("store_id"));
 
-
-        currentAllocationStorehouseApplyInfo.put("operate", StatusConstant.OPERATE_DEL);
-        getAllocationStorehouseApplyServiceDaoImpl().saveBusinessAllocationStorehouseApplyInfo(currentAllocationStorehouseApplyInfo);
-        for (Object key : currentAllocationStorehouseApplyInfo.keySet()) {
-            if (businessAllocationStorehouseApply.get(key) == null) {
-                businessAllocationStorehouseApply.put(key.toString(), currentAllocationStorehouseApplyInfo.get(key));
+            currentAllocationStorehouseApplyInfo.put("operate", StatusConstant.OPERATE_DEL);
+            getAllocationStorehouseApplyServiceDaoImpl().saveBusinessAllocationStorehouseApplyInfo(currentAllocationStorehouseApplyInfo);
+            for (Object key : currentAllocationStorehouseApplyInfo.keySet()) {
+                if (businessAllocationStorehouseApply.get(key) == null) {
+                    businessAllocationStorehouseApply.put(key.toString(), currentAllocationStorehouseApplyInfo.get(key));
+                }
             }
         }
     }

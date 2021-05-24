@@ -22,6 +22,10 @@ public class PurchaseApplyDetailVo {
     private String purchaseQuantity;
     private String purchaseRemark;
     private String purchasePrice;
+    private String rstName;
+    private String specName;
+    private String standardPrice;
+    private String originalStock;
 
 
     public String getApplyOrderId() {
@@ -166,6 +170,38 @@ public class PurchaseApplyDetailVo {
 
     public void setRsId(String rsId) {
         this.rsId = rsId;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(String standardPrice) {
+        this.standardPrice = standardPrice;
+    }
+
+    public String getOriginalStock() {
+        return originalStock;
+    }
+
+    public void setOriginalStock(String originalStock) {
+        this.originalStock = originalStock;
     }
 }
 

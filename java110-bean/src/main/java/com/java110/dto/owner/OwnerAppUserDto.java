@@ -39,6 +39,7 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String appType;
     private String[] userIds;
     private String oldAppUserId;
+    private String sCommunityTel;
 
 
     private String[] states;
@@ -264,5 +265,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setHeadImgUrl(String headImgUrl) {
         this.headImgUrl = headImgUrl;
+    }
+
+    public String getsCommunityTel() {
+        return sCommunityTel;
+    }
+
+    public void setsCommunityTel(String sCommunityTel) {
+        this.sCommunityTel = sCommunityTel;
     }
 }

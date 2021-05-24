@@ -34,11 +34,12 @@ public class InspectionTaskDto extends PageDto implements Serializable {
     private String ipStaffId;
     private String[] states;
 
+    private String startTime;
+    private String endTime;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getPlanUserId() {
         return planUserId;
@@ -198,5 +199,21 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     public void setTodayPlanInsTime(String todayPlanInsTime) {
         this.todayPlanInsTime = todayPlanInsTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

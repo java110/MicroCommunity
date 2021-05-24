@@ -30,7 +30,7 @@
     <!-- 查询小区信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCommunityInfo" parameterType="Map" resultType="Map">
         select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,
-        s.map_x,s.map_y,s.operate,s.state,s.community_area communityArea,s.community_area
+        s.map_x,s.map_y,s.operate,s.state,s.community_area communityArea,s.community_area,s.tel
         from business_community s where 1 = 1
         <if test="operate != null and operate != ''">
             and s.operate = #{operate}
@@ -79,8 +79,8 @@
     <!-- 保存小区信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityInfoInstance" parameterType="Map">
         insert into
-        s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd,state,community_area)
-        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0',#{state},#{communityArea})
+        s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd,state,community_area,tel)
+        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0',#{state},#{communityArea},#{tel})
     </insert>
 
     <!-- 保存小区属性信息到 instance add by wuxw 2018-07-03 -->
@@ -197,7 +197,9 @@
         <if test="state != null and state != ''">
             ,s.state = #{state}
         </if>
-        ,s.tel = #{tel}
+        <if test="tel != null and tel != ''">
+            ,s.tel = #{tel}
+        </if>
         <if test="communityArea != null and communityArea != ''">
             ,s.community_area = #{communityArea}
         </if>

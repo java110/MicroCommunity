@@ -83,6 +83,13 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
                 userStorehouseInnerServiceSMOImpl.updateUserStorehouses(userStorehousePo);
             }
         }
+        //获取订单号
+        String applyOrderId = purchaseApplyPo.getApplyOrderId();
+        PurchaseApplyPo purchaseApply = new PurchaseApplyPo();
+        purchaseApply.setApplyOrderId(applyOrderId);
+        purchaseApply.setState(PurchaseApplyDto.STATE_AUDITED);
+        purchaseApply.setStatusCd("0");
+        purchaseApplyInnerServiceSMOImpl.updatePurchaseApply(purchaseApply);
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "出库成功");
     }
 }

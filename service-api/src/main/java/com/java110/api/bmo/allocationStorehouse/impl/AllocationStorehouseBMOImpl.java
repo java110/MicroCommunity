@@ -81,9 +81,6 @@ public class AllocationStorehouseBMOImpl extends ApiBaseBMO implements IAllocati
             int storehouseStock = Integer.parseInt(allocationStorehousePo.getStock());
             //库存数量
             int stock = resourceStoreStock + storehouseStock;
-        /*ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
-        resourceStoreDto.setResId(allocationStorehousePo.getResId());
-        resourceStoreDto.setStock(String.valueOf(stock));*/
             resourceStorePo.setStock(String.valueOf(stock));
             super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
         }

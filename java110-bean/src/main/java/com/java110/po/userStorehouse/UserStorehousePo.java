@@ -8,6 +8,7 @@ public class UserStorehousePo implements Serializable {
     private String storeId;
     private String stock;
     private String resId;
+    private String rstId;
     private String userId;
     private String usId;
     private String statusCd = "0";
@@ -66,5 +67,13 @@ public class UserStorehousePo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
     }
 }

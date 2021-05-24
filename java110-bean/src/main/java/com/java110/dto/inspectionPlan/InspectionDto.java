@@ -31,8 +31,13 @@ public class InspectionDto extends PageDto implements Serializable {
     private String inspectionPlanId;
 
     private String pointObjType;
+    //巡检状态名称
+    private String pointTypeName;
     private String pointObjId;
     private String pointObjName;
+
+    private String pointStartTime;
+    private String pointEndTime;
 
 
     private Date createTime;
@@ -192,5 +197,29 @@ public class InspectionDto extends PageDto implements Serializable {
 
     public void setPointObjName(String pointObjName) {
         this.pointObjName = pointObjName;
+    }
+
+    public String getPointTypeName() {
+        return pointTypeName;
+    }
+
+    public void setPointTypeName(String pointTypeName) {
+        this.pointTypeName = pointTypeName;
+    }
+
+    public String getPointStartTime() {
+        return pointStartTime;
+    }
+
+    public void setPointStartTime(String pointStartTime) {
+        this.pointStartTime = pointStartTime;
+    }
+
+    public String getPointEndTime() {
+        return pointEndTime;
+    }
+
+    public void setPointEndTime(String pointEndTime) {
+        this.pointEndTime = pointEndTime;
     }
 }

@@ -27,6 +27,11 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
     private String communityId;
     private String resName;
     private Date createTime;
+    private String rstName;
+    private String specName;
+    private String rstId;
+    private String rssId;
+    private String resourceStoreName;
 
     private String statusCd = "0";
 
@@ -132,5 +137,45 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
 
     public void setResName(String resName) {
         this.resName = resName;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getResourceStoreName() {
+        return resourceStoreName;
+    }
+
+    public void setResourceStoreName(String resourceStoreName) {
+        this.resourceStoreName = resourceStoreName;
     }
 }

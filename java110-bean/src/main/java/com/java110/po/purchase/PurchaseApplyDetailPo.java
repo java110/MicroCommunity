@@ -26,6 +26,7 @@ public class PurchaseApplyDetailPo implements Serializable {
     private String createTime;
 
     private String rsId;
+    private String originalStock;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -105,5 +106,13 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     public void setRsId(String rsId) {
         this.rsId = rsId;
+    }
+
+    public String getOriginalStock() {
+        return originalStock;
+    }
+
+    public void setOriginalStock(String originalStock) {
+        this.originalStock = originalStock;
     }
 }

@@ -14,10 +14,10 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class AllocationStorehouseDto extends PageDto implements Serializable {
-
-    public static final String STATE_AUDIT = "1201";//状态，1201 调拨审核 1202 调拨完成 1202 调拨失败
-    public static final String STATE_SUCCESS = "1202";//状态，1201 调拨审核 1202 调拨完成 1202 调拨失败
-    public static final String STATE_FAIL = "1203";//状态，1201 调拨审核 1202 调拨完成 1202 调拨失败
+    public static final String STATE_APPLY = "1200";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败
+    public static final String STATE_AUDIT = "1201";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败
+    public static final String STATE_SUCCESS = "1202";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败
+    public static final String STATE_FAIL = "1203";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败
     private String asId;
     private String[] asIds;
     private String storeId;
@@ -36,9 +36,14 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String resCode;
     private Date createTime;
     private String applyId;
+    private String price;
+    private String originalStock;
+    private String rstName;
+    private String specName;
+    private String rstId;
+    private String rssId;
 
     private String statusCd = "0";
-
 
     private String currentUserId;
     private String processInstanceId;
@@ -48,7 +53,6 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String staffId;
     private String staffName;
     private String staffTel;
-
 
     public String getAsId() {
         return asId;
@@ -265,5 +269,53 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setApplyId(String applyId) {
         this.applyId = applyId;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getOriginalStock() {
+        return originalStock;
+    }
+
+    public void setOriginalStock(String originalStock) {
+        this.originalStock = originalStock;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
     }
 }

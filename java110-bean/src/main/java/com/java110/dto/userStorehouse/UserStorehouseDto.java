@@ -22,11 +22,12 @@ public class UserStorehouseDto extends PageDto implements Serializable {
     private String userId;
     private String usId;
     private String resCode;
-    private String goodsTypeName;
-    private String goodsType;
+    private String rstId;
     private String outLowPrice;
     private String outHighPrice;
-    private String outPrice;
+    private String rstName;
+    private String specName;
+    private String rssId;
 
     private Date createTime;
 
@@ -104,22 +105,6 @@ public class UserStorehouseDto extends PageDto implements Serializable {
         this.resCode = resCode;
     }
 
-    public String getGoodsTypeName() {
-        return goodsTypeName;
-    }
-
-    public void setGoodsTypeName(String goodsTypeName) {
-        this.goodsTypeName = goodsTypeName;
-    }
-
-    public String getGoodsType() {
-        return goodsType;
-    }
-
-    public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
-    }
-
     public String getOutLowPrice() {
         return outLowPrice;
     }
@@ -136,11 +121,35 @@ public class UserStorehouseDto extends PageDto implements Serializable {
         this.outHighPrice = outHighPrice;
     }
 
-    public String getOutPrice() {
-        return outPrice;
+    public String getRstId() {
+        return rstId;
     }
 
-    public void setOutPrice(String outPrice) {
-        this.outPrice = outPrice;
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
     }
 }

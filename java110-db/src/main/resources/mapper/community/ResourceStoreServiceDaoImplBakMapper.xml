@@ -6,10 +6,13 @@
 
     <!-- 查询资源物品信息 -->
     <select id="getResourceStoresInfo" parameterType="Map" resultType="Map">
-        select t.res_id resId,t.store_id storeId,t.res_name resName,t.res_code resCode,t.goods_type goodsType,
+        select t.res_id resId,t.rst_id rstId,t.store_id storeId,t.res_name resName,t.res_code resCode,rst.name rstName,
         t.unit_code unitCode,t.remark,t.out_low_price outLowPrice,t.out_high_price outHighPrice,
-        t.show_mobile showMobile,t.description,t.price,t.stock,t.create_time createTime,t.sh_id shId
+        t.show_mobile showMobile,t.description,t.price,t.stock,t.create_time createTime,t.sh_id shId,
+        t.rss_id rssId,rss.spec_name rssName
         from resource_store t
+        left join resource_store_type rst on rst.rst_id = t.rst_id and rst.status_cd = '0'
+        left join resource_store_specification rss on rss.rss_id = t.rss_id and rss.status_cd = '0'
         where 1 = 1 and t.status_cd = '0'
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
@@ -23,8 +26,11 @@
         <if test="resCode !=null and resCode != ''">
             and t.res_code= #{resCode}
         </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and t.rss_id= #{rssId}
         </if>
         <if test="unitCode !=null and unitCode != ''">
             and t.unit_code= #{unitCode}
@@ -69,14 +75,17 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and t.rss_id= #{rssId}
+        </if>
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
         </if>
         <if test="resCode !=null and resCode != ''">
             and t.res_code= #{resCode}
-        </if>
-        <if test="goodsType !=null and goodsType != ''">
-            and t.goods_type= #{goodsType}
         </if>
         <if test="unitCode !=null and unitCode != ''">
             and t.unit_code= #{unitCode}

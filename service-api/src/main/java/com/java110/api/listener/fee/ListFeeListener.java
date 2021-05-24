@@ -10,7 +10,6 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -33,12 +32,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * 查询小区侦听类
  */
 @Java110Listener("listFeeListener")
 public class ListFeeListener extends AbstractServiceApiListener {
+
     private static Logger logger = LoggerFactory.getLogger(ListFeeListener.class);
 
     @Autowired
@@ -51,14 +50,10 @@ public class ListFeeListener extends AbstractServiceApiListener {
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Autowired
-    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
-
-    @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
-
 
     @Override
     public String getServiceCode() {
@@ -69,7 +64,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
     public HttpMethod getHttpMethod() {
         return HttpMethod.GET;
     }
-
 
     @Override
     public int getOrder() {
@@ -89,7 +83,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
-
     }
 
     @Override

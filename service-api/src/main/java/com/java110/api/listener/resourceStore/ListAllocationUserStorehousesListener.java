@@ -3,6 +3,8 @@ package com.java110.api.listener.resourceStore;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.PageDto;
+import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.allocationUserStorehouse.AllocationUserStorehouseDto;
 import com.java110.intf.store.IAllocationUserStorehouseInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeAllocationUserStorehouseConstant;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,10 +67,36 @@ public class ListAllocationUserStorehousesListener extends AbstractServiceApiLis
 
         int count = allocationUserStorehouseInnerServiceSMOImpl.queryAllocationUserStorehousesCount(allocationUserStorehouseDto);
 
-        List<AllocationUserStorehouseDto> allocationUserStorehouseDtos = null;
+        List<AllocationUserStorehouseDto> allocationUserStorehouseDtos = new ArrayList<>();
 
         if (count > 0) {
-            allocationUserStorehouseDtos = allocationUserStorehouseInnerServiceSMOImpl.queryAllocationUserStorehouses(allocationUserStorehouseDto);
+            List<AllocationUserStorehouseDto> allocationUserStorehouseList = allocationUserStorehouseInnerServiceSMOImpl.queryAllocationUserStorehouses(allocationUserStorehouseDto);
+            //转增总数量(小计)
+            BigDecimal subTotalQuantity = BigDecimal.ZERO;
+            //转增总数量(小计)
+            BigDecimal totalQuantity = BigDecimal.ZERO;
+            for (AllocationUserStorehouseDto allocationUserStorehouse : allocationUserStorehouseList) {
+                //获取转增数量
+                String giveQuantity = allocationUserStorehouse.getGiveQuantity();
+                BigDecimal quantity = new BigDecimal(giveQuantity);
+                //计算转增总数量(小计)
+                subTotalQuantity = subTotalQuantity.add(quantity);
+            }
+            //查询所有转增记录
+            allocationUserStorehouseDto.setPage(PageDto.DEFAULT_PAGE);
+            List<AllocationUserStorehouseDto> allocationUserStorehouses = allocationUserStorehouseInnerServiceSMOImpl.queryAllocationUserStorehouses(allocationUserStorehouseDto);
+            for (AllocationUserStorehouseDto allocationUserStorehouse : allocationUserStorehouses) {
+                //获取转增数量
+                String giveQuantity = allocationUserStorehouse.getGiveQuantity();
+                BigDecimal quantity = new BigDecimal(giveQuantity);
+                //计算转增总数量(大计)
+                totalQuantity = totalQuantity.add(quantity);
+            }
+            for (AllocationUserStorehouseDto allocationUserStorehouse : allocationUserStorehouseList) {
+                allocationUserStorehouse.setSubTotalQuantity(subTotalQuantity.toString());
+                allocationUserStorehouse.setHighTotalQuantity(totalQuantity.toString());
+                allocationUserStorehouseDtos.add(allocationUserStorehouse);
+            }
         } else {
             allocationUserStorehouseDtos = new ArrayList<>();
         }
