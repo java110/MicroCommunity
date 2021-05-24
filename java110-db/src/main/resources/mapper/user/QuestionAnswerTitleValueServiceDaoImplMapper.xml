@@ -18,7 +18,7 @@
     <select id="queryQuestionAnswerTitleValueResult" parameterType="Map" resultType="Map">
         select t.value_id valueId,t.qa_value qaValue,count(uqav.person_id) userCount
         from question_answer_title_value t
-        LEFT JOIN user_question_answer_value uqav on t.title_id = uqav.title_id and uqav.status_cd = '0'
+        LEFT JOIN user_question_answer_value uqav on t.value_id = uqav.value_id and uqav.status_cd = '0'
         where 1 =1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
@@ -62,7 +62,6 @@
         <if test="titleId !=null and titleId != ''">
             and t.title_id= #{titleId}
         </if>
-
         <if test="titleIds !=null">
             and t.title_id in
             <foreach collection="titleIds" item="item" open="(" close=")" separator=",">
