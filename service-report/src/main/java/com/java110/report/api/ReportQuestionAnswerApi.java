@@ -33,6 +33,7 @@ public class ReportQuestionAnswerApi {
             @RequestParam(value = "qaType",required = false) String qaType,
             @RequestParam(value = "startTime",required = false) String startTime,
             @RequestParam(value = "endTime",required = false) String endTime,
+            @RequestParam(value = "titleId",required = false) String titleId,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row) {
         UserQuestionAnswerValueDto userQuestionAnswerValueDto = new UserQuestionAnswerValueDto();
@@ -42,6 +43,7 @@ public class ReportQuestionAnswerApi {
         userQuestionAnswerValueDto.setQaType(qaType);
         userQuestionAnswerValueDto.setStartTime(startTime);
         userQuestionAnswerValueDto.setEndTime(endTime);
+        userQuestionAnswerValueDto.setTitleId(titleId);
         return getReportQuestionAnswerBMOImpl.get(userQuestionAnswerValueDto);
     }
 }
