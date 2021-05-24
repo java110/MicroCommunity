@@ -367,11 +367,11 @@ public class QuestionAnswerApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /questionAnswer/queryQuestionAnswerTitleValueResult
-     * @path /app/questionAnswer/queryQuestionAnswerTitleValueResult
+     * @serviceCode /questionAnswer/queryTitleValueResult
+     * @path /app/questionAnswer/queryTitleValueResult
      */
-    @RequestMapping(value = "/queryQuestionAnswerTitleValueResult", method = RequestMethod.GET)
-    public ResponseEntity<String> queryQuestionAnswerTitleValueResult(@RequestHeader(value = "store-id") String storeId,
+    @RequestMapping(value = "/queryTitleValueResult", method = RequestMethod.GET)
+    public ResponseEntity<String> queryTitleValueResult(@RequestHeader(value = "store-id") String storeId,
                                                                 @RequestParam(value = "communityId", required = false) String communityId,
                                                                 @RequestParam(value = "objType") String objType,
                                                                 @RequestParam(value = "page") int page,
