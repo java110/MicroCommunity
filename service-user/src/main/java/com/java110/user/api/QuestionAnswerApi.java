@@ -374,12 +374,14 @@ public class QuestionAnswerApi {
     public ResponseEntity<String> queryTitleValueResult(@RequestHeader(value = "store-id") String storeId,
                                                                 @RequestParam(value = "communityId", required = false) String communityId,
                                                                 @RequestParam(value = "objType") String objType,
+                                                                @RequestParam(value = "titleId",required = false) String titleId,
                                                                 @RequestParam(value = "page") int page,
                                                                 @RequestParam(value = "row") int row) {
         QuestionAnswerTitleValueDto questionAnswerTitleValueDto = new QuestionAnswerTitleValueDto();
         questionAnswerTitleValueDto.setPage(page);
         questionAnswerTitleValueDto.setRow(row);
         questionAnswerTitleValueDto.setObjType(objType);
+        questionAnswerTitleValueDto.setTitleId(titleId);
         questionAnswerTitleValueDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
         return getQuestionAnswerTitleValueBMOImpl.queryQuestionAnswerTitleValueResult(questionAnswerTitleValueDto);
     }
