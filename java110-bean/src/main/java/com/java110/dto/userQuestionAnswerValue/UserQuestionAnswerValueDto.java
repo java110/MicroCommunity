@@ -1,6 +1,7 @@
 package com.java110.dto.userQuestionAnswerValue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,16 +16,22 @@ import java.util.Date;
 public class UserQuestionAnswerValueDto extends PageDto implements Serializable {
 
     private String score;
-private String valueId;
-private String titleId;
-private String answerType;
-private String objId;
-private String userQaId;
-private String valueContent;
-private String personId;
-private String objType;
-private String userTitleId;
-private String qaId;
+    private String valueId;
+    private String titleId;
+    private String answerType;
+    private String objId;
+    private String userQaId;
+    private String valueContent;
+    private String personId;
+    private String objType;
+    private String userTitleId;
+    private String qaId;
+    private String qaTypeName;
+    private String userName;
+    private String qaName;
+    private String qaTitle;
+    private String qaValue;
+    private String qaType;
 
 
     private Date createTime;
@@ -35,67 +42,88 @@ private String qaId;
     public String getScore() {
         return score;
     }
-public void setScore(String score) {
+
+    public void setScore(String score) {
         this.score = score;
     }
-public String getValueId() {
+
+    public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getTitleId() {
+
+    public String getTitleId() {
         return titleId;
     }
-public void setTitleId(String titleId) {
+
+    public void setTitleId(String titleId) {
         this.titleId = titleId;
     }
-public String getAnswerType() {
+
+    public String getAnswerType() {
         return answerType;
     }
-public void setAnswerType(String answerType) {
+
+    public void setAnswerType(String answerType) {
         this.answerType = answerType;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getUserQaId() {
+
+    public String getUserQaId() {
         return userQaId;
     }
-public void setUserQaId(String userQaId) {
+
+    public void setUserQaId(String userQaId) {
         this.userQaId = userQaId;
     }
-public String getValueContent() {
+
+    public String getValueContent() {
         return valueContent;
     }
-public void setValueContent(String valueContent) {
+
+    public void setValueContent(String valueContent) {
         this.valueContent = valueContent;
     }
-public String getPersonId() {
+
+    public String getPersonId() {
         return personId;
     }
-public void setPersonId(String personId) {
+
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
-public String getObjType() {
+
+    public String getObjType() {
         return objType;
     }
-public void setObjType(String objType) {
+
+    public void setObjType(String objType) {
         this.objType = objType;
     }
-public String getUserTitleId() {
+
+    public String getUserTitleId() {
         return userTitleId;
     }
-public void setUserTitleId(String userTitleId) {
+
+    public void setUserTitleId(String userTitleId) {
         this.userTitleId = userTitleId;
     }
-public String getQaId() {
+
+    public String getQaId() {
         return qaId;
     }
-public void setQaId(String qaId) {
+
+    public void setQaId(String qaId) {
         this.qaId = qaId;
     }
 
@@ -114,5 +142,53 @@ public void setQaId(String qaId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getQaTypeName() {
+        return qaTypeName;
+    }
+
+    public void setQaTypeName(String qaTypeName) {
+        this.qaTypeName = qaTypeName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getQaName() {
+        return qaName;
+    }
+
+    public void setQaName(String qaName) {
+        this.qaName = qaName;
+    }
+
+    public String getQaTitle() {
+        return qaTitle;
+    }
+
+    public void setQaTitle(String qaTitle) {
+        this.qaTitle = qaTitle;
+    }
+
+    public String getQaValue() {
+        return qaValue;
+    }
+
+    public void setQaValue(String qaValue) {
+        this.qaValue = qaValue;
+    }
+
+    public String getQaType() {
+        return qaType;
+    }
+
+    public void setQaType(String qaType) {
+        this.qaType = qaType;
     }
 }
