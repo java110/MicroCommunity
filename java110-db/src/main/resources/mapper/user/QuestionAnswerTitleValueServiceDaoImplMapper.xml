@@ -16,9 +16,9 @@
 
     <!-- 查询答卷选项信息 add by wuxw 2018-07-03 -->
     <select id="queryQuestionAnswerTitleValueResult" parameterType="Map" resultType="Map">
-        select t.value_id,t.value_id valueId,t.title_id,t.title_id titleId,t.obj_id,t.obj_id
-        objId,t.status_cd,t.status_cd statusCd,t.obj_type,t.obj_type objType,t.qa_value,t.qa_value qaValue,t.seq
+        select t.value_id valueId,t.qa_value qaValue,count(uqav.person_id) userCount
         from question_answer_title_value t
+        LEFT JOIN user_question_answer_value uqav on t.title_id = uqav.title_id and uqav.status_cd = '0'
         where 1 =1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
@@ -49,10 +49,7 @@
             and t.seq= #{seq}
         </if>
         order by t.seq
-        <if test="page != -1 and page != null ">
-            limit #{page}, #{row}
-        </if>
-
+        GROUP BY t.value_id,t.qa_value
     </select>
     <!-- 查询答卷选项信息 add by wuxw 2018-07-03 -->
     <select id="getQuestionAnswerTitleValueInfo" parameterType="Map" resultType="Map">
