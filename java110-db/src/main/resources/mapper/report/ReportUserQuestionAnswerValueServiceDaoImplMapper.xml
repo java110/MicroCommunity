@@ -30,6 +30,12 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
+        <if test="objIds !=null">
+            and t.obj_id in
+            <foreach collection="objIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="userQaId !=null and userQaId != ''">
             and t.user_qa_id= #{userQaId}
         </if>
@@ -50,6 +56,15 @@
         </if>
         <if test="qaId !=null and qaId != ''">
             and t.qa_id= #{qaId}
+        </if>
+        <if test="qaType !=null and qaType != ''">
+            and qa.qa_type= #{qaType}
+        </if>
+        <if test="startTime != null">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null">
+            and t.create_time &lt; #{endTime}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -84,6 +99,12 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
+        <if test="objIds !=null">
+            and t.obj_id in
+            <foreach collection="objIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="userQaId !=null and userQaId != ''">
             and t.user_qa_id= #{userQaId}
         </if>
@@ -101,6 +122,15 @@
         </if>
         <if test="userTitleId !=null and userTitleId != ''">
             and t.user_title_id= #{userTitleId}
+        </if>
+        <if test="qaType !=null and qaType != ''">
+            and qa.qa_type= #{qaType}
+        </if>
+        <if test="startTime != null">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null">
+            and t.create_time &lt; #{endTime}
         </if>
         <if test="qaId !=null and qaId != ''">
             and t.qa_id= #{qaId}

@@ -20,6 +20,7 @@ public class UserQuestionAnswerValueDto extends PageDto implements Serializable 
     private String titleId;
     private String answerType;
     private String objId;
+    private String[] objIds;
     private String userQaId;
     private String valueContent;
     private String personId;
@@ -32,6 +33,8 @@ public class UserQuestionAnswerValueDto extends PageDto implements Serializable 
     private String qaTitle;
     private String qaValue;
     private String qaType;
+    private String startTime;
+    private String endTime;
 
 
     private Date createTime;
@@ -190,5 +193,29 @@ public class UserQuestionAnswerValueDto extends PageDto implements Serializable 
 
     public void setQaType(String qaType) {
         this.qaType = qaType;
+    }
+
+    public String[] getObjIds() {
+        return objIds;
+    }
+
+    public void setObjIds(String[] objIds) {
+        this.objIds = objIds;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
