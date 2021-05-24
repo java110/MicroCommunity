@@ -48,7 +48,6 @@
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-        order by t.seq
         GROUP BY t.value_id,t.qa_value
     </select>
     <!-- 查询答卷选项信息 add by wuxw 2018-07-03 -->
