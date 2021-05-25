@@ -126,7 +126,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         String repairMaterial = "";
         //费用明细(单价 * 数量 = 总价)
         String repairFee = "";
-        if (json.size() > 0) {
+        if (json != null && json.size() > 0) {
             Object[] objects = json.toArray();
             //数据前期校验
             for (int i = 0; i < objects.length; i++) {
