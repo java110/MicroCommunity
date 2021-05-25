@@ -132,6 +132,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         // 根据特定权限查询 有该权限的 员工
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
         basePrivilegeDto.setResource("/wechatRepairRegistration");
+        //basePrivilegeDto.setStoreId();
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         String url = sendMsgUrl + accessToken;
         for (UserDto userDto : userDtos) {
