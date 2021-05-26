@@ -32,13 +32,11 @@ public class SaveResourceSupplierListener extends AbstractServiceApiPlusListener
         }
 
         if (!reqJson.containsKey("createUserId")) {
-            String userId = event.getDataFlowContext().getRequestCurrentHeaders().get("user-id");
-            reqJson.put("createUserId", userId);
+            reqJson.put("createUserId", "-1");
         }
 
         if (!reqJson.containsKey("createUserName")) {
-            String userName = event.getDataFlowContext().getRequestCurrentHeaders().get("user-name");
-            reqJson.put("createUserName", userName);
+            reqJson.put("createUserName", "未知");
         }
 
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
