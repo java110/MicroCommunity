@@ -22,6 +22,7 @@ public class ReportFeeMonthStatisticsPo implements Serializable {
     private String feeCreateTime;
     private String objType;
     private String deadlineTime;
+    private String curMaxTime;
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -165,5 +166,13 @@ public class ReportFeeMonthStatisticsPo implements Serializable {
 
     public void setDeadlineTime(String deadlineTime) {
         this.deadlineTime = deadlineTime;
+    }
+
+    public String getCurMaxTime() {
+        return curMaxTime;
+    }
+
+    public void setCurMaxTime(String curMaxTime) {
+        this.curMaxTime = curMaxTime;
     }
 }

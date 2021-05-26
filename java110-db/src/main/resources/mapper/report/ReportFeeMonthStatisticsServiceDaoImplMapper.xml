@@ -8,10 +8,10 @@
     <insert id="saveReportFeeMonthStatisticsInfo" parameterType="Map">
         insert into report_fee_month_statistics(
         receivable_amount,statistics_id,update_time,remark,obj_name,received_amount,fee_year,fee_month,fee_id,config_id,
-        obj_id,fee_name,owe_amount,community_id,fee_create_time,obj_type,deadline_time
+        obj_id,fee_name,owe_amount,community_id,fee_create_time,obj_type,deadline_time,cur_max_time
         ) values (
         #{receivableAmount},#{statisticsId},#{updateTime},#{remark},#{objName},#{receivedAmount},#{feeYear},#{feeMonth},
-        #{feeId},#{configId},#{objId},#{feeName},#{oweAmount},#{communityId},#{feeCreateTime},#{objType},#{deadlineTime}
+        #{feeId},#{configId},#{objId},#{feeName},#{oweAmount},#{communityId},#{feeCreateTime},#{objType},#{deadlineTime},#{curMaxTime}
         )
     </insert>
 
@@ -23,7 +23,7 @@
         feeYear,t.fee_month,t.fee_month feeMonth,t.fee_id,t.fee_id feeId,t.config_id,t.config_id
         configId,t.obj_id,t.obj_id objId,t.fee_name,t.fee_name feeName,t.owe_amount,t.owe_amount
         oweAmount,t.community_id,t.community_id communityId,t.fee_create_time,t.fee_create_time
-        feeCreateTime,t.obj_type,t.obj_type objType
+        feeCreateTime,t.obj_type,t.obj_type objType,t.cur_max_time curMaxTime
         from report_fee_month_statistics t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where 1 =1
@@ -92,11 +92,8 @@
         <if test="statisticsId !=null and statisticsId != ''">
             and t.statistics_id= #{statisticsId}
         </if>
-        <if test="feeYear !=null ">
-            and t.fee_year &lt;= #{feeYear}
-        </if>
-        <if test="feeMonth !=null ">
-            and t.fee_month &lt;= #{feeMonth}
+        <if test="curMaxTime !=null ">
+            and t.cur_max_time &lt;= #{curMaxTime}
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
