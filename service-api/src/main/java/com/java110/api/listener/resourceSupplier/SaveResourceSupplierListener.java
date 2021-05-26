@@ -30,6 +30,17 @@ public class SaveResourceSupplierListener extends AbstractServiceApiPlusListener
             String storeId = event.getDataFlowContext().getRequestCurrentHeaders().get("store-id");
             reqJson.put("storeId", storeId);
         }
+
+        if (!reqJson.containsKey("createUserId")) {
+            String userId = event.getDataFlowContext().getRequestCurrentHeaders().get("user-id");
+            reqJson.put("createUserId", userId);
+        }
+
+        if (!reqJson.containsKey("createUserName")) {
+            String userName = event.getDataFlowContext().getRequestCurrentHeaders().get("user-name");
+            reqJson.put("createUserName", userName);
+        }
+
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
 
     }
