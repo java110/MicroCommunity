@@ -1,21 +1,21 @@
 package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.userLogin.UserLoginDto;
 import com.java110.po.userLogin.UserLoginPo;
 import com.java110.user.bmo.userLogin.IDeleteUserLoginBMO;
 import com.java110.user.bmo.userLogin.IGetUserLoginBMO;
 import com.java110.user.bmo.userLogin.ISaveUserLoginBMO;
 import com.java110.user.bmo.userLogin.IUpdateUserLoginBMO;
+import com.java110.utils.cache.CommonCache;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/userLogin")
@@ -100,9 +100,9 @@ public class UserLoginApi {
      * @path /app/userLogin/queryUserLogin
      */
     @RequestMapping(value = "/queryUserLogin", method = RequestMethod.GET)
-    public ResponseEntity<String> queryUserLogin(@RequestParam(value = "userName",required = false) String userName,
-                                                 @RequestParam(value = "parentOrgName",required = false) String parentOrgName,
-                                                 @RequestParam(value = "orgName",required = false) String orgName,
+    public ResponseEntity<String> queryUserLogin(@RequestParam(value = "userName", required = false) String userName,
+                                                 @RequestParam(value = "parentOrgName", required = false) String parentOrgName,
+                                                 @RequestParam(value = "orgName", required = false) String orgName,
                                                  @RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row) {
         UserLoginDto userLoginDto = new UserLoginDto();
@@ -112,5 +112,33 @@ public class UserLoginApi {
         userLoginDto.setParentOrgName(parentOrgName);
         userLoginDto.setOrgName(orgName);
         return getUserLoginBMOImpl.get(userLoginDto);
+    }
+
+    /**
+     * 根据code 查询用户信息
+     *
+     * @param hcCode
+     * @serviceCode /userLogin/getUserInfoByHcCode
+     * @return
+     */
+    @RequestMapping(value = "/getUserInfoByHcCode", method = RequestMethod.GET)
+    public ResponseEntity<String> getUserInfoByHcCode(@RequestParam(value = "hcCode") String hcCode) {
+        UserDto userDto = null;
+        String env = MappingCache.getValue("HC_ENV");
+        if ("DEV".equals(env) || "TEST".equals(env)) {
+            userDto = new UserDto();
+            userDto.setUserId("1000000020021010001");
+            userDto.setUserName("吴学文");
+            userDto.setAddress("青海省西宁市城中区申宁路");
+            userDto.setAge(30);
+            userDto.setEmail("928255095@qq.com");
+            userDto.setName("吴学文");
+            userDto.setSex("1");
+            userDto.setTel("18909711443");
+            return ResultVo.createResponseEntity(userDto);
+        }
+        String userInfoStr = CommonCache.getAndRemoveValue(hcCode);
+        userDto = JSONObject.parseObject(userInfoStr, UserDto.class);
+        return ResultVo.createResponseEntity(userDto);
     }
 }
