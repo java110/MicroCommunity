@@ -23,7 +23,6 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.meterWater.MeterWaterPo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -93,6 +92,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             meterWaterDto.setMeterType(meterType);
             meterWaterDto.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
             meterWaterDto.setObjId(tmpRoomDto.getRoomId());
+            meterWaterDto.setCommunityId(communityId);
             List<MeterWaterDto> meterWaterDtos = meterWaterInnerServiceSMOImpl.queryMeterWaters(meterWaterDto);
             importExportMeterWaterDto = BeanConvertUtil.covertBean(tmpRoomDto, ImportExportMeterWaterDto.class);
             String preDegree = "0";
@@ -168,7 +168,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
 
         if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(feeTypeCd)) {
             importExportMeterWaterDto.setMeterType("1010");
-        }else if(FeeConfigDto.FEE_TYPE_CD_GAS.equals(feeTypeCd)){
+        } else if (FeeConfigDto.FEE_TYPE_CD_GAS.equals(feeTypeCd)) {
             importExportMeterWaterDto.setMeterType("3030");
         } else {
             importExportMeterWaterDto.setMeterType("2020");
@@ -202,10 +202,10 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_IMPORT_FEE_NAME);
             String feeName = importExportMeterWaterDto.getFloorNum() + "栋" + importExportMeterWaterDto.getUnitNum() + "单元" + importExportMeterWaterDto.getRoomNum() + "室";
 
-            if("1010".equals(importExportMeterWaterDto.getMeterType())){
-                feeName +="水费";
-            }else{
-                feeName +="电费";
+            if ("1010".equals(importExportMeterWaterDto.getMeterType())) {
+                feeName += "水费";
+            } else {
+                feeName += "电费";
             }
             feeAttrPo.setValue(feeName);
             feeAttrPo.setFeeId(payFeePo.getFeeId());
