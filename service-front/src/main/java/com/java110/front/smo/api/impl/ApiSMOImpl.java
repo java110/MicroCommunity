@@ -81,7 +81,9 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         if (!StringUtil.isEmpty(result.getUserId())) {
             header.add("user-id", result.getUserId());
-            header.add("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
+            if (!StringUtil.isEmpty(result.getUserName())) {
+                header.add("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
+            }
         }
 
         header.add("store-id", result.getStoreId());

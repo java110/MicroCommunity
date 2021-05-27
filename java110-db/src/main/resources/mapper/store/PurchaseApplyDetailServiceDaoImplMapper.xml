@@ -192,6 +192,9 @@
             <if test="newBId != null and newBId != ''">
                 t.b_id = #{newBId},
             </if>
+            <if test="rsId != null and rsId != ''">
+                t.rs_id = #{rsId},
+            </if>
             <if test="resId !=null and resId != ''">
                 t.res_id= #{resId},
             </if>

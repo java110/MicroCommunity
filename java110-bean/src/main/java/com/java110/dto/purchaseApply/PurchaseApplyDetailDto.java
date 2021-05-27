@@ -21,6 +21,7 @@ public class PurchaseApplyDetailDto {
     private String specName;
     private String standardPrice;
     private String originalStock;
+    private String supplierName;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -156,6 +157,14 @@ public class PurchaseApplyDetailDto {
 
     public void setOriginalStock(String originalStock) {
         this.originalStock = originalStock;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }
 

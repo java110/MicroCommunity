@@ -2,6 +2,8 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.community.CommunityDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
@@ -33,6 +35,9 @@ public class OwnerAppUserInnerServiceSMOImpl extends BaseServiceSMO implements I
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityInnerServiceSMO iCommunityInnerServiceSMO;
+
     @Override
     public List<OwnerAppUserDto> queryOwnerAppUsers(@RequestBody OwnerAppUserDto ownerAppUserDto) {
 
@@ -45,6 +50,14 @@ public class OwnerAppUserInnerServiceSMOImpl extends BaseServiceSMO implements I
         }
 
         List<OwnerAppUserDto> ownerAppUsers = BeanConvertUtil.covertBeanList(ownerAppUserServiceDaoImpl.getOwnerAppUserInfo(BeanConvertUtil.beanCovertMap(ownerAppUserDto)), OwnerAppUserDto.class);
+        for (OwnerAppUserDto ownerAppUserDto1 : ownerAppUsers) {
+            CommunityDto communityDto = new CommunityDto();
+            communityDto.setCommunityId(ownerAppUserDto1.getCommunityId());
+            List<CommunityDto> communityDtoList = iCommunityInnerServiceSMO.queryCommunitys(communityDto);
+            if (communityDtoList != null && communityDtoList.size() > 0) {
+                ownerAppUserDto1.setsCommunityTel(communityDtoList.get(0).getTel());
+            }
+        }
 
         return ownerAppUsers;
     }
@@ -58,7 +71,7 @@ public class OwnerAppUserInnerServiceSMOImpl extends BaseServiceSMO implements I
     @Override
     public int updateOwnerAppUser(@RequestBody OwnerAppUserPo ownerAppUserPo) {
         Map info = BeanConvertUtil.beanCovertMap(ownerAppUserPo);
-        info.put("statusCd","0");
+        info.put("statusCd", "0");
         ownerAppUserServiceDaoImpl.updateOwnerAppUserInfoInstance(info);
         return 0;
     }
