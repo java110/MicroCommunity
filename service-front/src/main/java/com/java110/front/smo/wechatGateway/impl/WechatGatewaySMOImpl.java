@@ -74,8 +74,8 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
                 noBindOwnerResponseMessage = WechatConstant.NO_BIND_OWNER_RESPONSE_MESSAGE;
             }
             if (!noBindOwnerResponseMessage.contains("wAppId=")) {
-                if (noBindOwnerResponseMessage.indexOf("?") > 0) {
-                    noBindOwnerResponseMessage += ("&wAppId=" +WechatFactory.getAppId(wId));
+                if (noBindOwnerResponseMessage.indexOf("W_APP_ID") > 0) {
+                    noBindOwnerResponseMessage = noBindOwnerResponseMessage.replace("W_APP_ID","wAppId=" +WechatFactory.getAppId(wId));
                 }
             }
 
