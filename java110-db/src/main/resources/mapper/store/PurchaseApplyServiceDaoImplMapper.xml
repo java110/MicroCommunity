@@ -308,7 +308,7 @@
         p.apply_order_id applyOrderId,
         p.res_id resId,p.quantity,p.remark,p.purchase_quantity purchaseQuantity,p.purchase_remark purchaseRemark,p.price purchasePrice,p.original_stock originalStock,
         r.res_name resName,r.res_code resCode,
-        r.price,r.price standardPrice,r.stock,rst.name rstName,rss.spec_name specName
+        r.price,r.price standardPrice,r.stock,rst.name rstName,rss.spec_name specName,rs.supplier_name supplierName
         from
         purchase_apply_detail p inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
         LEFT JOIN resource_supplier rs on p.rs_id=rs.rs_id
