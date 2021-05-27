@@ -49,7 +49,6 @@ public class SaveUserListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "name", "请求参数中未包含name 节点，请确认");
         //Assert.jsonObjectHaveKey(paramObj,"email","请求参数中未包含email 节点，请确认");
         Assert.jsonObjectHaveKey(reqJson, "tel", "请求参数中未包含tel 节点，请确认");
-        Assert.jsonObjectHaveKey(reqJson, "orgId", "请求报文格式错误或未包含部门信息");
         Assert.jsonObjectHaveKey(reqJson, "address", "请求报文格式错误或未包含地址信息");
         Assert.jsonObjectHaveKey(reqJson, "sex", "请求报文格式错误或未包含性别信息");
         Assert.jsonObjectHaveKey(reqJson, "levelCd", "请求报文格式错误或未包含员工角色");
@@ -71,7 +70,7 @@ public class SaveUserListener extends AbstractServiceApiPlusListener {
 
         //设置默认密码
         String staffDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
-        Assert.hasLength(staffDefaultPassword, "映射表中未设置员工默认密码，请检查" + MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
+        Assert.hasLength(staffDefaultPassword, "映射表中未设置默认密码，请检查" + MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
         staffDefaultPassword = AuthenticationFactory.passwdMd5(staffDefaultPassword);
         reqJson.put("password", staffDefaultPassword);
         UserPo userPo = BeanConvertUtil.covertBean(reqJson, UserPo.class);
