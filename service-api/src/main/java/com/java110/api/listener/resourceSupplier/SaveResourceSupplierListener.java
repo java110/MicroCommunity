@@ -31,12 +31,12 @@ public class SaveResourceSupplierListener extends AbstractServiceApiPlusListener
             reqJson.put("storeId", storeId);
         }
 
-        if (!reqJson.containsKey("createUserId")) {
-            reqJson.put("createUserId", "-1");
+        if (!reqJson.containsKey("userId")) {
+            reqJson.put("userId", "-1");
         }
 
-        if (!reqJson.containsKey("createUserName")) {
-            reqJson.put("createUserName", "未知");
+        if (!reqJson.containsKey("userName")) {
+            reqJson.put("userName", "未知");
         }
 
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
