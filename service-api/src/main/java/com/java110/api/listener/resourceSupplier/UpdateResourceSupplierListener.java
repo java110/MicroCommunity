@@ -27,6 +27,18 @@ public class UpdateResourceSupplierListener extends AbstractServiceApiPlusListen
         Assert.hasKeyAndValue(reqJson, "supplierName", "请求报文中未包含supplierName");
         Assert.hasKeyAndValue(reqJson, "address", "请求报文中未包含address");
         Assert.hasKeyAndValue(reqJson, "tel", "请求报文中未包含tel");
+        if (!reqJson.containsKey("storeId")) {
+            String storeId = event.getDataFlowContext().getRequestCurrentHeaders().get("store-id");
+            reqJson.put("storeId", storeId);
+        }
+        if (!reqJson.containsKey("createUserId")) {
+            reqJson.put("createUserId", "-1");
+        }
+
+        if (!reqJson.containsKey("createUserName")) {
+            reqJson.put("createUserName", "未知");
+        }
+
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
     }
 

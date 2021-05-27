@@ -22,6 +22,7 @@ public class QuestionAnswerTitleValueDto extends PageDto implements Serializable
     private String objType;
     private String qaValue;
     private String seq;
+    private long userCount;
 
 
     private Date createTime;
@@ -100,5 +101,13 @@ public class QuestionAnswerTitleValueDto extends PageDto implements Serializable
 
     public void setTitleIds(String[] titleIds) {
         this.titleIds = titleIds;
+    }
+
+    public long getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(long userCount) {
+        this.userCount = userCount;
     }
 }

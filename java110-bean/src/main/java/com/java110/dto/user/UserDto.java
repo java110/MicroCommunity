@@ -15,6 +15,8 @@ import java.util.List;
  **/
 public class UserDto extends PageDto implements Serializable {
 
+    public static final String LEVEL_CD_MALL = "03";//商城用户
+
     private String userId;
 
     private String userName;

@@ -83,7 +83,7 @@
         rst.name rstName,
         rss.spec_name specName
         from purchase_apply_detail t
-        left join purchase_apply pa on t.apply_order_id = pa.apply_order_id
+        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id
         left join resource_store rs on rs.res_id = t.res_id
         left join resource_supplier rsp on rsp.rs_id = t.rs_id
         left join t_dict td1 on pa.res_order_type = td1.status_cd and td1.table_name = 'purchase_apply' and
@@ -157,6 +157,9 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and pa.store_id= #{storeId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}
@@ -218,7 +221,7 @@
     <select id="queryPurchaseApplyDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from purchase_apply_detail t
-        left join purchase_apply pa on t.apply_order_id = pa.apply_order_id
+        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id
         left join resource_store rs on rs.res_id = t.res_id
         left join resource_supplier rsp on rsp.rs_id = t.rs_id
         left join t_dict td1 on pa.res_order_type = td1.status_cd and td1.table_name = 'purchase_apply' and
@@ -295,6 +298,9 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and pa.store_id= #{storeId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}

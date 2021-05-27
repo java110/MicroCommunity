@@ -25,6 +25,10 @@ public class UpdateResourceStoreTypeListener extends AbstractServiceApiPlusListe
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "rstId", "请求报文中未包含rstId");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
+        if (!reqJson.containsKey("storeId")) {
+            String storeId = event.getDataFlowContext().getRequestCurrentHeaders().get("store-id");
+            reqJson.put("storeId", storeId);
+        }
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
     }
 

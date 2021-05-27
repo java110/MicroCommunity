@@ -1,6 +1,7 @@
 package com.java110.user.dao;
 
 
+import com.java110.dto.questionAnswerTitleValue.QuestionAnswerTitleValueDto;
 import com.java110.utils.exception.DAOException;
 import com.java110.entity.merchant.BoMerchant;
 import com.java110.entity.merchant.BoMerchantAttr;
@@ -58,4 +59,10 @@ public interface IQuestionAnswerTitleValueServiceDao {
      */
     int queryQuestionAnswerTitleValuesCount(Map info);
 
+    /**
+     * 查询问卷结果
+     * @param info
+     * @return
+     */
+    List<Map> queryQuestionAnswerTitleValueResult(Map info);
 }

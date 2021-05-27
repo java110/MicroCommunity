@@ -3,6 +3,7 @@ package com.java110.job.adapt.Repair;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
+import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.repair.RepairDto;
@@ -22,6 +23,7 @@ import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,9 +131,17 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
             return;
         }
+        //查询小区物业公司
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(communityDto.getCommunityId());
+        communityMemberDto.setAuditStatusCd(CommunityMemberDto.AUDIT_STATUS_NORMAL);
+        communityMemberDto.setMemberTypeCd(CommunityMemberDto.MEMBER_TYPE_PROPERTY);
+        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMO.getCommunityMembers(communityMemberDto);
+        Assert.listOnlyOne(communityMemberDtos, "小区没有 物业公司");
         // 根据特定权限查询 有该权限的 员工
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
         basePrivilegeDto.setResource("/wechatRepairRegistration");
+        basePrivilegeDto.setStoreId(communityMemberDtos.get(0).getMemberId());
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         String url = sendMsgUrl + accessToken;
         for (UserDto userDto : userDtos) {
@@ -140,6 +150,9 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             staffAppAuthDto.setStaffId(userDto.getUserId());
             staffAppAuthDto.setAppType("WECHAT");
             List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+            if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
+                continue;
+            }
             String openId = staffAppAuthDtos.get(0).getOpenId();
             Data data = new Data();
             PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();

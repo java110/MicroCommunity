@@ -113,8 +113,8 @@ public class UserQuestionAnswerApi {
     public ResponseEntity<String> queryUserQuestionAnswer(@RequestHeader(value = "store-id") String storeId,
                                                           @RequestHeader(value = "user-id") String userId,
                                                           @RequestParam(value = "communityId", required = false) String communityId,
-                                                          @RequestParam(value = "roleCd") String roleCd,
-                                                          @RequestParam(value = "state") String state,
+                                                          @RequestParam(value = "roleCd", required = false) String roleCd,
+                                                          @RequestParam(value = "state", required = false) String state,
                                                           @RequestParam(value = "page") int page,
                                                           @RequestParam(value = "row") int row) {
         UserQuestionAnswerDto userQuestionAnswerDto = new UserQuestionAnswerDto();

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportUserQuestionAnswerValueServiceDaoImpl">
+
+    <!-- 查询欠费统计信息 add by wuxw 2018-07-03 -->
+    <select id="getUserQuestionAnswerValueInfo" parameterType="Map" resultType="Map">
+        select uu.`name` userName,qa.qa_name qaName,uat.qa_title qaTitle,qatv.qa_value qaValue,t.value_content valueContent,
+        t.create_time createTime,qa.qa_type qaType,td.`name` qaTypeName
+        from user_question_answer_value t
+        left join question_answer_title uat on t.title_id = uat.title_id and uat.status_cd = '0'
+        left join question_answer qa on uat.qa_id = qa.qa_id and qa.status_cd = '0'
+        left join u_user uu on t.person_id = uu.user_id and uu.status_cd = '0'
+        left join question_answer_title_value qatv on t.value_id = qatv.value_id and qatv.status_cd = '0'
+        left join t_dict td on qa.qa_type = td.status_cd and td.table_name = 'question_answer' and td.table_columns = 'qa_type'
+        where 1=1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="answerType !=null and answerType != ''">
+            and t.answer_type= #{answerType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="objIds !=null">
+            and t.obj_id in
+            <foreach collection="objIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and t.value_content= #{valueContent}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="userTitleId !=null and userTitleId != ''">
+            and t.user_title_id= #{userTitleId}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+        <if test="qaType !=null and qaType != ''">
+            and qa.qa_type= #{qaType}
+        </if>
+        <if test="startTime != null">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null">
+            and t.create_time &lt; #{endTime}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 查询欠费统计数量 add by wuxw 2018-07-03 -->
+    <select id="queryUserQuestionAnswerValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from user_question_answer_value t
+        left join question_answer_title uat on t.title_id = uat.title_id and uat.status_cd = '0'
+        left join question_answer qa on uat.qa_id = qa.qa_id and qa.status_cd = '0'
+        left join u_user uu on t.person_id = uu.user_id and uu.status_cd = '0'
+        left join question_answer_title_value qatv on t.value_id = qatv.value_id and qatv.status_cd = '0'
+        left join t_dict td on qa.qa_type = td.status_cd and td.table_name = 'question_answer' and td.table_columns = 'qa_type'
+        where 1=1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="answerType !=null and answerType != ''">
+            and t.answer_type= #{answerType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="objIds !=null">
+            and t.obj_id in
+            <foreach collection="objIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and t.value_content= #{valueContent}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="userTitleId !=null and userTitleId != ''">
+            and t.user_title_id= #{userTitleId}
+        </if>
+        <if test="qaType !=null and qaType != ''">
+            and qa.qa_type= #{qaType}
+        </if>
+        <if test="startTime != null">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null">
+            and t.create_time &lt; #{endTime}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+    </select>
+
+</mapper>

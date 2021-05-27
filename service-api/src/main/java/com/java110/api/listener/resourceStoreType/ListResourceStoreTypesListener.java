@@ -53,6 +53,10 @@ public class ListResourceStoreTypesListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        if (!reqJson.containsKey("storeId")) {
+            String storeId = event.getDataFlowContext().getRequestCurrentHeaders().get("store-id");
+            reqJson.put("storeId", storeId);
+        }
         super.validatePageInfo(reqJson);
     }
 

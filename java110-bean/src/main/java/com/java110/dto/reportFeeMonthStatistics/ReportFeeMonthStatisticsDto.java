@@ -57,6 +57,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private int oweDay;
     private String deadlineTime;
 
+    private String curMaxTime;
     private String importFeeName;
 
     private String oId;
@@ -500,5 +501,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setoId(String oId) {
         this.oId = oId;
+    }
+
+    public String getCurMaxTime() {
+        return curMaxTime;
+    }
+
+    public void setCurMaxTime(String curMaxTime) {
+        this.curMaxTime = curMaxTime;
     }
 }

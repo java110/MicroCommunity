@@ -67,7 +67,7 @@ public class ServiceCodeConstant {
     /**
      * 保存用户
      */
-    public static final String SERVICE_CODE_SAVE_USER_INFO = "save.user.info";
+    public static final String SERVICE_CODE_SAVE_USER_INFO = "user.saveUser";
 
     /**
      * 修改用户信息
@@ -299,6 +299,8 @@ public class ServiceCodeConstant {
      * 添加员工 服务
      */
     public static final String SERVICE_CODE_USER_STAFF_ADD = "user.staff.add";
+
+
 
     /**
      * 添加员工 服务

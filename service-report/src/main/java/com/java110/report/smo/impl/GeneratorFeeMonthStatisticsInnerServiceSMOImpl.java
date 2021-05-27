@@ -267,6 +267,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
             reportFeeMonthStatisticsPo.setFeeMonth(DateUtil.getMonth() + "");
             reportFeeMonthStatisticsPo.setFeeYear(DateUtil.getYear() + "");
+            reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getNextMonthFirstDay(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsPo.setObjId(tmpReportCarDto.getCarId());
             reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
             reportFeeMonthStatisticsPo.setFeeName(tmpReportFeeDto.getFeeName());
@@ -285,8 +286,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         ReportFeeMonthStatisticsPo tmpReportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         tmpReportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
-        tmpReportFeeMonthStatisticsPo.setFeeYear(year + "");
-        tmpReportFeeMonthStatisticsPo.setFeeMonth(month + "");
+        tmpReportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(endTime,DateUtil.DATE_FORMATE_STRING_A));
         tmpReportFeeMonthStatisticsPo.setOweAmount("0");
         reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsOwe(BeanConvertUtil.beanCovertMap(tmpReportFeeMonthStatisticsPo));
     }
@@ -357,6 +357,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsPo.setFeeMonth((preMonthDate.get(Calendar.MONTH) + 1) + "");
         reportFeeMonthStatisticsPo.setFeeYear(preMonthDate.get(Calendar.YEAR) + "");
+        reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(),DateUtil.DATE_FORMATE_STRING_A));
         reportFeeMonthStatisticsPo.setObjId(tmpReportCarDto.getCarId());
         reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
         reportFeeMonthStatisticsPo.setFeeName(tmpReportFeeDto.getFeeName());
@@ -453,6 +454,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
             reportFeeMonthStatisticsPo.setFeeMonth(DateUtil.getMonth() + "");
             reportFeeMonthStatisticsPo.setFeeYear(DateUtil.getYear() + "");
+            reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getNextMonthFirstDay(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsPo.setObjId(reportRoomDto.getRoomId());
             reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
             reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
@@ -469,15 +471,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         //将缴费 到期时间之前得欠费刷为0
         Date endTime = tmpReportFeeDto.getEndTime();
 
-        Calendar calender = Calendar.getInstance();
-        calender.setTime(endTime);
-        int year = calender.get(Calendar.YEAR);
-        int month = calender.get(Calendar.MONTH);
-
         ReportFeeMonthStatisticsPo tmpReportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         tmpReportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
-        tmpReportFeeMonthStatisticsPo.setFeeYear(year + "");
-        tmpReportFeeMonthStatisticsPo.setFeeMonth(month + "");
+        tmpReportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(endTime,DateUtil.DATE_FORMATE_STRING_A));
         tmpReportFeeMonthStatisticsPo.setOweAmount("0");
         reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsOwe(BeanConvertUtil.beanCovertMap(tmpReportFeeMonthStatisticsPo));
     }
@@ -554,6 +550,8 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsPo.setFeeMonth((preMonthDate.get(Calendar.MONTH) + 1) + "");
         reportFeeMonthStatisticsPo.setFeeYear(preMonthDate.get(Calendar.YEAR) + "");
+        reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(),DateUtil.DATE_FORMATE_STRING_A));
+
         reportFeeMonthStatisticsPo.setObjId(reportRoomDto.getRoomId());
         reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
         reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
