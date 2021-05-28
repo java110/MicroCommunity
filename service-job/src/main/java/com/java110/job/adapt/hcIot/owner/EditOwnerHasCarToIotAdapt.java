@@ -38,6 +38,7 @@ import com.java110.po.owner.OwnerPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,8 +52,8 @@ import java.util.List;
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "editCarOwnerToIotAdapt")
-public class EditCarOwnerToIotAdapt extends DatabusAdaptImpl {
+@Component(value = "editOwnerHasCarToIotAdapt")
+public class EditOwnerHasCarToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcMachineAsynImpl;
@@ -145,6 +146,12 @@ public class EditCarOwnerToIotAdapt extends DatabusAdaptImpl {
         if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
             return;
         }
+
+        //没有车位就不同步了
+        if (StringUtil.isEmpty(ownerCarDtos.get(0).getPsId()) || "-1".equals(ownerCarDtos.get(0).getPsId())) {
+            return;
+        }
+
         //拿到小区ID
         String communityId = ownerPo.getCommunityId();
         //根据小区ID查询现有设备

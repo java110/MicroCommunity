@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.hcIot.owner;
+package com.java110.job.adapt.hcIot.car;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -32,10 +32,12 @@ import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.owner.OwnerPo;
+import com.java110.po.car.OwnerCarPo;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,25 +45,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * HC iot 添加车辆业主同步iot
+ * HC iot 设备同步适配器
  * <p>
  * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "addCarOwnerToIotAdapt")
-public class AddCarOwnerToIotAdapt extends DatabusAdaptImpl {
+@Component(value = "deleteCarOwnerToIotAdapt")
+public class DeleteCarOwnerToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
-    private IIotSendAsyn hcMachineAsynImpl;
-    @Autowired
-    IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+    private IIotSendAsyn hcOwnerCarAsynImpl;
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -71,16 +68,15 @@ public class AddCarOwnerToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+    @Autowired
+    private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
     /**
-     * accessToken={access_token}
-     * &extCommunityUuid=01000
-     * &extCommunityId=1
-     * &devSn=111111111
-     * &name=设备名称
-     * &positionType=0
-     * &positionUuid=1
+     * {
+     * "extOwnerCarId": "702020042194860037"
+     * }
      *
      * @param business   当前处理业务
      * @param businesses 所有业务信息
@@ -88,30 +84,55 @@ public class AddCarOwnerToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        if (data.containsKey(OwnerPo.class.getSimpleName())) {
-            Object bObj = data.get(OwnerPo.class.getSimpleName());
-            JSONArray businessMachines = null;
+        if (data.containsKey(OwnerCarPo.class.getSimpleName())) {
+            Object bObj = data.get(OwnerCarPo.class.getSimpleName());
+            JSONArray businessOwnerCars = null;
             if (bObj instanceof JSONObject) {
-                businessMachines = new JSONArray();
-                businessMachines.add(bObj);
+                businessOwnerCars = new JSONArray();
+                businessOwnerCars.add(bObj);
             } else if (bObj instanceof List) {
-                businessMachines = JSONArray.parseArray(JSONObject.toJSONString(bObj));
+                businessOwnerCars = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
-                businessMachines = (JSONArray) bObj;
+                businessOwnerCars = (JSONArray) bObj;
             }
-            for (int bOwnerIndex = 0; bOwnerIndex < businessMachines.size(); bOwnerIndex++) {
-                JSONObject businessOwner = businessMachines.getJSONObject(bOwnerIndex);
-                doSendMachine(business, businessOwner);
+            //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+            for (int bOwnerCarIndex = 0; bOwnerCarIndex < businessOwnerCars.size(); bOwnerCarIndex++) {
+                JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(bOwnerCarIndex);
+                doSendOwnerCar(business, businessOwnerCar);
             }
         }
     }
 
-    private void doSendMachine(Business business, JSONObject businessOwner) {
+    private void doSendOwnerCar(Business business, JSONObject businessOwnerCar) {
+        OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(businessOwnerCar, OwnerCarPo.class);
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCarId(ownerCarPo.getCarId());
+        ownerCarDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        Assert.listOnlyOne(ownerCarDtos, "未找到停车场");
 
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        //没有车位就不同步了
+        if (StringUtil.isEmpty(ownerCarDtos.get(0).getPsId()) || "-1".equals(ownerCarDtos.get(0).getPsId())) {
+            return;
+        }
+
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(ownerCarDtos.get(0).getOwnerId());
+        ownerDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+
+        Assert.listOnlyOne(ownerDtos, "业主不存在");
+
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
+        parkingSpaceDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        Assert.listOnlyOne(ownerCarDtos, "未找到车位");
+
 
         FileRelDto fileRelDto = new FileRelDto();
-        fileRelDto.setObjId(ownerPo.getMemberId());
+        fileRelDto.setObjId(ownerCarDtos.get(0).getOwnerId());
         fileRelDto.setRelTypeCd("10000");
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         if (fileRelDtos == null || fileRelDtos.size() != 1) {
@@ -120,51 +141,17 @@ public class AddCarOwnerToIotAdapt extends DatabusAdaptImpl {
         FileDto fileDto = new FileDto();
         fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
         fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
-        fileDto.setCommunityId(ownerPo.getCommunityId());
+        fileDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
         List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
         if (fileDtos == null || fileDtos.size() != 1) {
             return;
         }
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setMemberId(ownerPo.getMemberId());
-        ownerDto.setCommunityId(ownerPo.getCommunityId());
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-
-        Assert.listOnlyOne(ownerDtos, "业主不存在");
-
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setOwnerId(ownerPo.getOwnerId());
-        ownerCarDto.setCommunityId(ownerPo.getCommunityId());
-        //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-        //没有车辆
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
-            return;
-        }
-        //拿到小区ID
-        String communityId = ownerPo.getCommunityId();
         //根据小区ID查询现有设备
         MachineDto machineDto = new MachineDto();
-        machineDto.setCommunityId(communityId);
+        machineDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
         List<String> locationObjIds = new ArrayList<>();
-        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+        locationObjIds.add(parkingSpaceDtos.get(0).getPaId());
 
-            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-            parkingSpaceDto.setPsId(tmpOwnerCarDto.getPsId());
-            parkingSpaceDto.setCommunityId(tmpOwnerCarDto.getCommunityId());
-            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-            if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
-                continue;
-            }
-            for (ParkingSpaceDto tmpParkingSpaceDto : parkingSpaceDtos) {
-                locationObjIds.add(tmpParkingSpaceDto.getPaId());
-            }
-        }
-
-        if (locationObjIds.size() < 1) {
-            return;
-        }
         machineDto.setMachineTypeCd(MachineDto.MACHINE_TYPE_ACCESS_CONTROL);
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
@@ -178,18 +165,12 @@ public class AddCarOwnerToIotAdapt extends DatabusAdaptImpl {
             }
             JSONObject postParameters = new JSONObject();
 
-            postParameters.put("userId", ownerPo.getMemberId());
-            postParameters.put("faceBase64", fileDtos.get(0).getContext());
-            postParameters.put("startTime", DateUtil.getFormatTimeString(ownerCarDtos.get(0).getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
-            postParameters.put("endTime", DateUtil.getFormatTimeString(ownerCarDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-            postParameters.put("name", ownerPo.getName());
-            postParameters.put("idNumber", ownerPo.getIdCard());
             postParameters.put("machineCode", tmpMachineDto.getMachineCode());
+            postParameters.put("userId", ownerDtos.get(0).getMemberId());
+            postParameters.put("name", ownerDtos.get(0).getName());
             postParameters.put("extMachineId", tmpMachineDto.getMachineId());
             postParameters.put("extCommunityId", tmpMachineDto.getCommunityId());
-            postParameters.put("attrs", ownerDtos.get(0).getOwnerAttrDtos());
-            hcMachineAsynImpl.addOwner(postParameters);
+            hcOwnerCarAsynImpl.sendUpdateOwner(postParameters);
         }
-
     }
 }
