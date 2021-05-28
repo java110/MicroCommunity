@@ -5,11 +5,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.dto.RoomDto;
-import com.java110.entity.assetImport.*;
+import com.java110.entity.assetImport.ImportFee;
+import com.java110.entity.assetImport.ImportFloor;
+import com.java110.entity.assetImport.ImportOwner;
+import com.java110.entity.assetImport.ImportParkingSpace;
+import com.java110.entity.assetImport.ImportRoom;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
 import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.util.*;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.CommonUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ImportExcelUtils;
+import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -808,6 +816,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 importRoom.setImportOwner(getImportOwner(owners, os[6].toString()));
                 rooms.add(importRoom);
             } catch (Exception e) {
+                logger.error("房屋数据校验失败", e);
                 throw new IllegalArgumentException("房屋信息sheet中第" + (osIndex + 1) + "行数据错误，请检查" + e.getLocalizedMessage());
             }
         }
