@@ -108,10 +108,12 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
         deleteContractFileBMOImpl.delete(contractFilePo);
 
         List<ContractFilePo> filePos = contractPo.getContractFilePo();
-        for (ContractFilePo file: filePos) {
-            if (file.getFileRealName().length() > 0 && file.getFileSaveName().length() > 0){
-                file.setContractId(contractPo.getContractId());
-                contractFileInnerServiceSMOImpl.saveContractFile(file);
+        if(filePos != null) {
+            for (ContractFilePo file : filePos) {
+                if (file.getFileRealName().length() > 0 && file.getFileSaveName().length() > 0) {
+                    file.setContractId(contractPo.getContractId());
+                    contractFileInnerServiceSMOImpl.saveContractFile(file);
+                }
             }
         }
 
