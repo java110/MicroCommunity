@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.RoomDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractAttr.ContractAttrDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
@@ -11,11 +12,14 @@ import com.java110.dto.contractChangePlanDetail.ContractChangePlanDetailDto;
 import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.store.*;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
@@ -23,7 +27,9 @@ import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import com.java110.po.contractFile.ContractFilePo;
 import com.java110.po.contractRoom.ContractRoomPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.rentingPool.RentingPoolPo;
+import com.java110.po.room.RoomPo;
 import com.java110.store.bmo.contract.IUpdateContractBMO;
 import com.java110.store.bmo.contractFile.IDeleteContractFileBMO;
 import com.java110.utils.constant.StatusConstant;
@@ -74,6 +80,13 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
 
     @Autowired
     private IDeleteContractFileBMO deleteContractFileBMOImpl;
+
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     /**
      * @param contractPo
@@ -153,6 +166,15 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
 
     @Override
     public ResponseEntity<String> needAuditContractPlan(ContractChangePlanDto contractChangePlanDto, JSONObject reqJson) {
+
+        //查询老的合同信息
+        ContractDto contractDto = new ContractDto();
+        contractDto.setContractId(contractChangePlanDto.getContractId());
+        contractDto.setStoreId(contractChangePlanDto.getStoreId());
+        List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
+
+        Assert.listOnlyOne(contractDtos, "合同不存在");
+
         ContractChangePlanDto tmpContractChangePlanDto = new ContractChangePlanDto();
         tmpContractChangePlanDto.setPlanId(contractChangePlanDto.getPlanId());
         tmpContractChangePlanDto.setStoreId(contractChangePlanDto.getStoreId());
@@ -179,7 +201,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             ContractPo contractPo = BeanConvertUtil.covertBean(contractChangePlanDetailDtos.get(0), ContractPo.class);
 
             contractInnerServiceSMOImpl.updateContract(contractPo);
-            dealContractChangePlanRoom(contractChangePlanDto);
+            dealContractChangePlanRoom(contractChangePlanDto,contractDtos.get(0));
 
         } else { //修改为审核中
             ContractChangePlanPo contractChangePlanPo = new ContractChangePlanPo();
@@ -191,7 +213,13 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
         return ResultVo.success();
     }
 
-    private void dealContractChangePlanRoom(ContractChangePlanDto contractChangePlanDto) {
+    private void dealContractChangePlanRoom(ContractChangePlanDto contractChangePlanDto, ContractDto contractDto) {
+
+        //查询合同房屋
+        ContractRoomDto contractRoomDto = new ContractRoomDto();
+        contractRoomDto.setStoreId(contractChangePlanDto.getStoreId());
+        contractRoomDto.setContractId(contractDto.getContractId());
+        List<ContractRoomDto> oldContractRoomDtos = contractRoomInnerServiceSMOImpl.queryContractRooms(contractRoomDto);
         // 查询 是否有资产变更
 
         ContractChangePlanRoomDto contractChangePlanRoomDto = new ContractChangePlanRoomDto();
@@ -202,19 +230,27 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
         List<ContractChangePlanRoomDto> contractChangePlanRoomDtos
                 = contractChangePlanRoomInnerServiceSMOImpl.queryContractChangePlanRooms(contractChangePlanRoomDto);
 
-        if(contractChangePlanRoomDtos == null || contractChangePlanRoomDtos.size() < 1){
-            return ;
+        if (contractChangePlanRoomDtos == null || contractChangePlanRoomDtos.size() < 1) {
+            //删除老的关系值
+            doDelOldRoomRel(contractChangePlanRoomDtos, oldContractRoomDtos);
+            return;
         }
+        doAddRoomRel(contractDto, oldContractRoomDtos, contractChangePlanRoomDtos);
 
+        //删除老的关系值
+        doDelOldRoomRel(contractChangePlanRoomDtos, oldContractRoomDtos);
+
+
+    }
+
+    private void doAddRoomRel(ContractDto contractDto, List<ContractRoomDto> oldContractRoomDtos, List<ContractChangePlanRoomDto> contractChangePlanRoomDtos) {
         //删除之前数据 插入新数据
-        ContractRoomPo contractRoomPo = new ContractRoomPo();
-        contractRoomPo.setContractId(contractChangePlanRoomDtos.get(0).getContractId());
-        contractRoomPo.setStoreId(contractChangePlanRoomDtos.get(0).getStoreId());
-        contractRoomInnerServiceSMOImpl.deleteContractRoom(contractRoomPo);
-
+        ContractRoomPo contractRoomPo = null;
         //插入新的关系值
-
-        for(ContractChangePlanRoomDto tmpContractChangePlanRoomDto : contractChangePlanRoomDtos){
+        for (ContractChangePlanRoomDto tmpContractChangePlanRoomDto : contractChangePlanRoomDtos) {
+            if (isOldRoom(tmpContractChangePlanRoomDto, oldContractRoomDtos)) {
+                continue;
+            }
             contractRoomPo = new ContractRoomPo();
             contractRoomPo.setContractId(contractChangePlanRoomDtos.get(0).getContractId());
             contractRoomPo.setStoreId(contractChangePlanRoomDtos.get(0).getStoreId());
@@ -224,12 +260,133 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             contractRoomPo.setRoomId(tmpContractChangePlanRoomDto.getRoomId());
             contractRoomPo.setRoomName(tmpContractChangePlanRoomDto.getRoomName());
             contractRoomInnerServiceSMOImpl.saveContractRoom(contractRoomPo);
+
+            //刷业主
+            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+            ownerRoomRelDto.setRoomId(contractRoomPo.getRoomId());
+            List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+            if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) { // 说明业主没有发生变化，后续工作不做处理
+                if (contractDto.getObjId().equals(ownerRoomRelDtos.get(0).getOwnerId())) {
+                    continue;
+                }
+            }
+
+            //绑定关系
+            String relId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId);
+            OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
+            ownerRoomRelPo.setEndTime(contractDto.getEndTime());
+            ownerRoomRelPo.setStartTime(contractDto.getStartTime());
+            ownerRoomRelPo.setOwnerId(contractDto.getObjId());
+            ownerRoomRelPo.setRelId(relId);
+            ownerRoomRelPo.setRemark("签订合同自动绑定");
+            ownerRoomRelPo.setRoomId(contractRoomPo.getRoomId());
+            ownerRoomRelPo.setState("2001");
+            ownerRoomRelPo.setUserId("-1");
+            ownerRoomRelPo.setOperate("ADD");
+            ownerRoomRelPo.setbId("-1");
+            ownerRoomRelInnerServiceSMOImpl.saveBusinessOwnerRoomRels(ownerRoomRelPo);
+
+            ownerRoomRelPo = new OwnerRoomRelPo();
+            ownerRoomRelPo.setEndTime(contractDto.getEndTime());
+            ownerRoomRelPo.setStartTime(contractDto.getStartTime());
+            ownerRoomRelPo.setOwnerId(contractDto.getObjId());
+            ownerRoomRelPo.setRelId(relId);
+            ownerRoomRelPo.setRemark("签订合同自动绑定");
+            ownerRoomRelPo.setRoomId(contractRoomPo.getRoomId());
+            ownerRoomRelPo.setState("2001");
+            ownerRoomRelPo.setUserId("-1");
+            ownerRoomRelInnerServiceSMOImpl.saveOwnerRoomRels(ownerRoomRelPo);
+
+            //修改房屋状态
+            RoomPo roomPo = new RoomPo();
+            roomPo.setRoomId(contractRoomPo.getRoomId());
+            roomPo.setState(RoomDto.STATE_SELL);
+            roomPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
+            roomInnerServiceSMOImpl.updateRooms(roomPo);
+            //删除老的
+            if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
+                ownerRoomRelPo = new OwnerRoomRelPo();
+                ownerRoomRelPo.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+                ownerRoomRelPo.setRelId(ownerRoomRelDtos.get(0).getRelId());
+                ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
+                ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtos.get(0), OwnerRoomRelPo.class);
+                ownerRoomRelPo.setbId("-1");
+                ownerRoomRelPo.setOperate("DEL");
+                ownerRoomRelInnerServiceSMOImpl.saveBusinessOwnerRoomRels(ownerRoomRelPo);
+            }
         }
-
-
-
     }
 
+    private void doDelOldRoomRel(List<ContractChangePlanRoomDto> contractChangePlanRoomDtos, List<ContractRoomDto> oldContractRoomDtos) {
+        ContractRoomPo contractRoomPo;
+        OwnerRoomRelPo ownerRoomRelPo = null;
+        for (ContractRoomDto oldContractRoomDto : oldContractRoomDtos) {
+            if (isDelOldRoom(oldContractRoomDto, contractChangePlanRoomDtos)) {
+                continue;
+            }
+            contractRoomPo = new ContractRoomPo();
+            contractRoomPo.setContractId(oldContractRoomDtos.get(0).getContractId());
+            contractRoomPo.setStoreId(oldContractRoomDtos.get(0).getStoreId());
+            contractRoomPo.setCrId(oldContractRoomDto.getCrId());
+            contractRoomInnerServiceSMOImpl.deleteContractRoom(contractRoomPo);
+
+            //刷业主
+            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+            ownerRoomRelDto.setRoomId(oldContractRoomDto.getRoomId());
+            List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+            if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) { // 说明房屋没有业主
+                continue;
+            }
+            //删除关系
+            ownerRoomRelPo = new OwnerRoomRelPo();
+            ownerRoomRelPo.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+            ownerRoomRelPo.setRelId(ownerRoomRelDtos.get(0).getRelId());
+            ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
+
+            //插入删除关系
+            ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtos.get(0), OwnerRoomRelPo.class);
+            ownerRoomRelPo.setbId("-1");
+            ownerRoomRelPo.setOperate("DEL");
+            ownerRoomRelInnerServiceSMOImpl.saveBusinessOwnerRoomRels(ownerRoomRelPo);
+
+            //修改房屋状态
+            RoomPo roomPo = new RoomPo();
+            roomPo.setRoomId(oldContractRoomDto.getRoomId());
+            roomPo.setState(RoomDto.STATE_FREE);
+            roomPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
+            roomInnerServiceSMOImpl.updateRooms(roomPo);
+        }
+    }
+
+    private boolean isDelOldRoom(ContractRoomDto oldContractRoomDto, List<ContractChangePlanRoomDto> contractChangePlanRoomDtos) {
+        if (contractChangePlanRoomDtos == null || contractChangePlanRoomDtos.size() > 0) {
+            return false;
+        }
+
+        for (ContractChangePlanRoomDto contractChangePlanRoomDto : contractChangePlanRoomDtos) {
+            if (contractChangePlanRoomDto.getRoomId().equals(oldContractRoomDto.getRoomId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isOldRoom(ContractChangePlanRoomDto tmpContractChangePlanRoomDto, List<ContractRoomDto> oldContractRoomDtos) {
+        if (oldContractRoomDtos == null || oldContractRoomDtos.size() > 0) {
+            return false;
+        }
+
+        for (ContractRoomDto contractRoomDto : oldContractRoomDtos) {
+            if (tmpContractChangePlanRoomDto.getRoomId().equals(contractRoomDto.getRoomId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     private void updateContractAttr(JSONObject jsonObject, ContractPo contractPo) {
         ContractAttrDto contractAttrDto = new ContractAttrDto();
         contractAttrDto.setContractId(contractPo.getContractId());
