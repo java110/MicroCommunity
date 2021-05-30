@@ -89,7 +89,6 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
                 continue;
             }
 
-            validateRoom(tmpContractRoomDto);
 
             //刷业主
             OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
@@ -100,6 +99,7 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
                 continue;
             }
 
+            validateRoom(tmpContractRoomDto);
 
             //修改房屋状态
             RoomPo roomPo = new RoomPo();
