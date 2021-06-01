@@ -138,5 +138,6 @@ public interface IComputeFeeSMO {
     double getReportFeePrice(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto);
 
     void computeEveryOweFee(FeeDto tmpFeeDto);
+
     void computeEveryOweFee(FeeDto tmpFeeDto, RoomDto roomDto);
 }

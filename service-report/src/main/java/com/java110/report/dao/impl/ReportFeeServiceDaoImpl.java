@@ -2,6 +2,7 @@ package com.java110.report.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.report.ReportFeeDetailDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.report.dao.IReportFeeServiceDao;
@@ -44,6 +45,15 @@ public class ReportFeeServiceDaoImpl extends BaseServiceDao implements IReportFe
         List<ReportFeeDto> roomDtos = sqlSessionTemplate.selectList("reportFeeServiceDaoImpl.getFees", reportFeeDto);
 
         return roomDtos;
+    }
+
+    @Override
+    public List<Map> getFeeConfigs(Map reportFeeDto) {
+        logger.debug("getFeeConfigs 入参 info : {}", JSONObject.toJSONString(reportFeeDto));
+
+        List<Map> feeConfigDtos = sqlSessionTemplate.selectList("reportFeeServiceDaoImpl.getFeeConfigs", reportFeeDto);
+
+        return feeConfigDtos;
     }
 
     @Override

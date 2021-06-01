@@ -1,4 +1,4 @@
-package com.java110.job.task.fee;
+package com.java110.report.smo.impl;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
@@ -7,102 +7,107 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.logSystemError.LogSystemErrorDto;
+import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
-import com.java110.dto.task.TaskDto;
-import com.java110.intf.common.ILogSystemErrorInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
+import com.java110.intf.report.IGeneratorOweFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.logSystemError.LogSystemErrorPo;
+import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.po.reportOweFee.ReportOweFeePo;
+import com.java110.report.dao.IReportCommunityServiceDao;
+import com.java110.report.dao.IReportFeeServiceDao;
+import com.java110.report.dao.IReportFeeYearCollectionDetailServiceDao;
+import com.java110.report.dao.IReportFeeYearCollectionServiceDao;
+import com.java110.report.dao.IReportOweFeeServiceDao;
 import com.java110.service.smo.ISaveSystemErrorSMO;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
-import com.java110.utils.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * @ClassName GenerateOwnerBillTemplate
- * @Description TODO  房屋费用账单生成
+ * @ClassName GeneratorFeeMonthStatisticsInnerServiceSMOImpl
+ * @Description TODO
  * @Author wuxw
- * @Date 2020/6/4 8:33
+ * @Date 2020/10/15 21:53
  * @Version 1.0
- * add by wuxw 2020/6/4
+ * add by wuxw 2020/10/15
  **/
-@Component
-public class GenerateOweFeeTemplate extends TaskSystemQuartz {
+@RestController
+public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInnerServiceSMO {
+    private static final Logger logger = LoggerFactory.getLogger(GeneratorOweFeeInnerServiceSMOImpl.class);
 
+    //默认 处理房屋数量
+    private static final int DEFAULT_DEAL_ROOM_COUNT = 1000;
 
-    @Autowired
-    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
-
-    @Autowired
-    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
-
-    @Autowired
-    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+    private static final String RECEIVED_TIME = "RECEIVED_TIME";
+    private static final String RECEIVED_TIME_START = "START";
+    private static final String RECEIVED_TIME_END = "END";
 
     @Autowired
-    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+    private IReportFeeYearCollectionServiceDao reportFeeYearCollectionServiceDaoImpl;
 
     @Autowired
-    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+    private IReportFeeYearCollectionDetailServiceDao reportFeeYearCollectionDetailServiceDaoImpl;
 
     @Autowired
-    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+    private IReportCommunityServiceDao reportCommunityServiceDaoImpl;
 
     @Autowired
-    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
-
-    @Autowired
-    private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
+    private IReportFeeServiceDao reportFeeServiceDaoImpl;
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
     @Autowired
-    private ILogSystemErrorInnerServiceSMO logSystemErrorInnerServiceSMOImpl;
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Autowired
     private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
 
+    @Autowired
+    private IReportOweFeeServiceDao reportOweFeeServiceDaoImpl;
+
     @Override
-    protected void process(TaskDto taskDto) throws Exception {
+    public int generatorOweData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
 
-        // 获取小区
-        List<CommunityDto> communityDtos = getAllCommunity();
+        CommunityDto communityDto = new CommunityDto();
 
-        for (CommunityDto communityDto : communityDtos) {
-            GenerateOweFee(taskDto, communityDto);
+        List<CommunityDto> communityDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.getCommunitys(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);
+
+        for (CommunityDto tmpCommunityDto : communityDtos) {
+            reportFeeMonthStatisticsPo.setCommunityId(tmpCommunityDto.getCommunityId());
+            doGeneratorData(reportFeeMonthStatisticsPo);
         }
-
+        return 0;
     }
 
-    /**
-     * 根据小区生成账单
-     *
-     * @param communityDto
-     */
-    private void GenerateOweFee(TaskDto taskDto, CommunityDto communityDto) {
+    @Async
+    private void doGeneratorData(ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
+        String communityId = reportFeeMonthStatisticsPo.getCommunityId();
+
+        Assert.hasLength(communityId, "未包含小区信息");
 
         //查询费用项
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(communityDto.getCommunityId());
+        feeConfigDto.setCommunityId(communityId);
 
-        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        List<FeeConfigDto> feeConfigDtos = BeanConvertUtil.covertBeanList(reportFeeServiceDaoImpl.getFeeConfigs(
+                BeanConvertUtil.beanCovertMap(feeConfigDto)), FeeConfigDto.class);
 
         for (FeeConfigDto tmpFeeConfigDto : feeConfigDtos) {
             try {
-                GenerateOweFeeByFeeConfig(taskDto, tmpFeeConfigDto);
+                GenerateOweFeeByFeeConfig(tmpFeeConfigDto);
             } catch (Exception e) {
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
                 logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
@@ -113,29 +118,27 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
             }
         }
 
-
     }
 
     /**
      * 按费用项来出账
      *
-     * @param taskDto
      * @param feeConfigDto
      */
-    private void GenerateOweFeeByFeeConfig(TaskDto taskDto, FeeConfigDto feeConfigDto) throws Exception {
+    private void GenerateOweFeeByFeeConfig(FeeConfigDto feeConfigDto) throws Exception {
 
         //当前费用项是否
 
-        FeeDto feeDto = new FeeDto();
+        ReportFeeDto feeDto = new ReportFeeDto();
         feeDto.setConfigId(feeConfigDto.getConfigId());
         feeDto.setCommunityId(feeConfigDto.getCommunityId());
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        List<ReportFeeDto> feeDtos = reportFeeServiceDaoImpl.getFees(feeDto);
 
         //没有关联费用
         if (feeDto == null || feeDtos.size() < 1) {
             return;
         }
-        for (FeeDto tmpFeeDto : feeDtos) {
+        for (ReportFeeDto tmpFeeDto : feeDtos) {
             try {
                 generateFee(tmpFeeDto, feeConfigDto);
             } catch (Exception e) {
@@ -153,10 +156,11 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
     /**
      * 生成 费用
      *
-     * @param feeDto
+     * @param reportFeeDto
      */
-    private void generateFee(FeeDto feeDto, FeeConfigDto feeConfigDto) {
+    private void generateFee(ReportFeeDto reportFeeDto, FeeConfigDto feeConfigDto) {
 
+        FeeDto feeDto = BeanConvertUtil.covertBean(reportFeeDto, FeeDto.class);
         //刷入欠费金额
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
@@ -180,13 +184,14 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setFeeId(feeDto.getFeeId());
         reportOweFeeDto.setPayerObjId(feeDto.getPayerObjId());
-        List<ReportOweFeeDto> reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
+        List<Map> reportOweFeeDtos = reportOweFeeServiceDaoImpl.queryReportAllOweFees(BeanConvertUtil.beanCovertMap(reportOweFeeDto));
         if (reportOweFeeDtos == null || reportOweFeeDtos.size() < 1) {
             reportOweFeePo.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId));
-            reportOweFeeInnerServiceSMOImpl.saveReportOweFee(reportOweFeePo);
+            reportOweFeeServiceDaoImpl.saveReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
         } else {
-            reportOweFeePo.setOweId(reportOweFeeDtos.get(0).getOweId());
-            reportOweFeeInnerServiceSMOImpl.updateReportOweFee(reportOweFeePo);
+            reportOweFeePo.setOweId(reportOweFeeDtos.get(0).get("oweId").toString());
+            reportOweFeeServiceDaoImpl.updateReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
         }
     }
+
 }
