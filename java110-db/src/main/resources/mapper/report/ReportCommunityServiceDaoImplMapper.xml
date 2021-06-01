@@ -79,7 +79,7 @@
     </select>
 
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->
-    <select id="getCommunitys" parameterType="com.java110.dto.community.CommunityDto" resultType="com.java110.dto.community.CommunityDto">
+    <select id="getCommunitys" parameterType="Map" resultType="Map">
         select t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,
         t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,t.tel,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,

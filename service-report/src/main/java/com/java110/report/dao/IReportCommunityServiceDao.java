@@ -5,6 +5,7 @@ import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportRoomDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName ICommunityServiceDao
@@ -52,5 +53,5 @@ public interface IReportCommunityServiceDao {
      *
      * @return
      */
-    List<CommunityDto> getCommunitys(CommunityDto communityDto);
+    List<Map> getCommunitys(Map communityDto);
 }

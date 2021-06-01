@@ -82,7 +82,8 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
 
         CommunityDto communityDto = new CommunityDto();
 
-        List<CommunityDto> communityDtos = reportCommunityServiceDaoImpl.getCommunitys(communityDto);
+        List<CommunityDto> communityDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.getCommunitys(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);
 
         for (CommunityDto tmpCommunityDto : communityDtos) {
             reportFeeMonthStatisticsPo.setCommunityId(tmpCommunityDto.getCommunityId());
@@ -101,7 +102,8 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(communityId);
 
-        List<FeeConfigDto> feeConfigDtos = reportFeeServiceDaoImpl.getFeeConfigs(feeConfigDto);
+        List<FeeConfigDto> feeConfigDtos = BeanConvertUtil.covertBeanList(reportFeeServiceDaoImpl.getFeeConfigs(
+                BeanConvertUtil.beanCovertMap(feeConfigDto)), FeeConfigDto.class);
 
         for (FeeConfigDto tmpFeeConfigDto : feeConfigDtos) {
             try {

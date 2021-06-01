@@ -48,10 +48,10 @@ public class ReportFeeServiceDaoImpl extends BaseServiceDao implements IReportFe
     }
 
     @Override
-    public List<FeeConfigDto> getFeeConfigs(FeeConfigDto reportFeeDto) {
+    public List<Map> getFeeConfigs(Map reportFeeDto) {
         logger.debug("getFeeConfigs 入参 info : {}", JSONObject.toJSONString(reportFeeDto));
 
-        List<FeeConfigDto> feeConfigDtos = sqlSessionTemplate.selectList("reportFeeServiceDaoImpl.getFeeConfigs", reportFeeDto);
+        List<Map> feeConfigDtos = sqlSessionTemplate.selectList("reportFeeServiceDaoImpl.getFeeConfigs", reportFeeDto);
 
         return feeConfigDtos;
     }

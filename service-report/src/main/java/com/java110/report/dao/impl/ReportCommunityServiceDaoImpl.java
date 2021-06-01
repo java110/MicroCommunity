@@ -75,10 +75,10 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
     }
 
     @Override
-    public List<CommunityDto> getCommunitys(CommunityDto communityDto) {
+    public List<Map> getCommunitys(Map communityDto) {
         logger.debug("查询getCommunitys信息 入参 info : {}", JSONObject.toJSONString(communityDto));
 
-        List<CommunityDto> communityDtos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.getCommunitys", communityDto);
+        List<Map> communityDtos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.getCommunitys", communityDto);
 
         return communityDtos;
     }
