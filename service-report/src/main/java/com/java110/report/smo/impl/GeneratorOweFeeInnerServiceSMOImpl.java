@@ -1,29 +1,18 @@
 package com.java110.report.smo.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
-import com.java110.dto.RoomDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.logSystemError.LogSystemErrorDto;
-import com.java110.dto.report.ReportCarDto;
-import com.java110.dto.report.ReportFeeDetailDto;
 import com.java110.dto.report.ReportFeeDto;
-import com.java110.dto.report.ReportRoomDto;
-import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
-import com.java110.dto.reportFeeYearCollection.ReportFeeYearCollectionDto;
-import com.java110.dto.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
-import com.java110.dto.task.TaskDto;
-import com.java110.intf.report.IGeneratorFeeYearStatisticsInnerServiceSMO;
 import com.java110.intf.report.IGeneratorOweFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
-import com.java110.po.reportFeeYearCollection.ReportFeeYearCollectionPo;
-import com.java110.po.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailPo;
 import com.java110.po.reportOweFee.ReportOweFeePo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportFeeServiceDao;
@@ -31,13 +20,10 @@ import com.java110.report.dao.IReportFeeYearCollectionDetailServiceDao;
 import com.java110.report.dao.IReportFeeYearCollectionServiceDao;
 import com.java110.report.dao.IReportOweFeeServiceDao;
 import com.java110.service.smo.ISaveSystemErrorSMO;
-import com.java110.utils.cache.CommonCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
-import com.java110.utils.util.ListUtil;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +31,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +80,14 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
     @Override
     public int generatorOweData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
 
-        doGeneratorData(reportFeeMonthStatisticsPo);
+        CommunityDto communityDto = new CommunityDto();
+
+        List<CommunityDto> communityDtos = reportCommunityServiceDaoImpl.getCommunitys(communityDto);
+
+        for (CommunityDto tmpCommunityDto : communityDtos) {
+            reportFeeMonthStatisticsPo.setCommunityId(tmpCommunityDto.getCommunityId());
+            doGeneratorData(reportFeeMonthStatisticsPo);
+        }
         return 0;
     }
 
@@ -168,7 +158,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
      */
     private void generateFee(ReportFeeDto reportFeeDto, FeeConfigDto feeConfigDto) {
 
-        FeeDto feeDto = BeanConvertUtil.covertBean(reportFeeDto,FeeDto.class);
+        FeeDto feeDto = BeanConvertUtil.covertBean(reportFeeDto, FeeDto.class);
         //刷入欠费金额
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 

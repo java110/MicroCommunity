@@ -2,6 +2,7 @@ package com.java110.report.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportRoomDto;
 import com.java110.report.dao.IReportCommunityServiceDao;
@@ -71,5 +72,14 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
         List<ReportCarDto> carDtos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.getCarParkingSpace", reportCarDto);
 
         return carDtos;
+    }
+
+    @Override
+    public List<CommunityDto> getCommunitys(CommunityDto communityDto) {
+        logger.debug("查询getCommunitys信息 入参 info : {}", JSONObject.toJSONString(communityDto));
+
+        List<CommunityDto> communityDtos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.getCommunitys", communityDto);
+
+        return communityDtos;
     }
 }
