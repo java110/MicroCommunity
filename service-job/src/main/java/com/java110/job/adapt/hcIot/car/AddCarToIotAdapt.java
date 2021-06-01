@@ -124,6 +124,7 @@ public class AddCarToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("startTime", DateUtil.getFormatTimeString(ownerCarDtos.get(0).getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
         postParameters.put("endTime", DateUtil.getFormatTimeString(ownerCarDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         postParameters.put("extPaId", parkingSpaceDtos.get(0).getPaId());
+        postParameters.put("personId", ownerCarDtos.get(0).getOwnerId());
         postParameters.put("personName", ownerCarDtos.get(0).getOwnerName());
         postParameters.put("personTel", ownerCarDtos.get(0).getLink());
         postParameters.put("extCarId", ownerCarDtos.get(0).getCarId());
