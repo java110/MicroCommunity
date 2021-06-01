@@ -158,6 +158,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 || "/transactionLog/queryTransactionLogMessage".equals(serviceCode)
                 || "file.getFile".equals(serviceCode)
                 || "file.getFileByObjId".equals(serviceCode)
+                || "/machine/heartbeat".equals(serviceCode) // 心跳也不记录
         ) {
             return;
         }

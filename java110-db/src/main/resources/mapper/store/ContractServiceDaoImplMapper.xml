@@ -92,6 +92,9 @@
         <if test="contractName !=null and contractName != ''">
             and t.contract_name= #{contractName}
         </if>
+        <if test="contractNameLike !=null and contractNameLike != ''">
+            and t.contract_name like  concat('%',#{contractNameLike},'%')
+        </if>
         <if test="startTime !=null">
             and t.start_time= #{startTime}
         </if>

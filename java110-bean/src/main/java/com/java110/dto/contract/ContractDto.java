@@ -42,6 +42,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String[] contractIds;
     private String objId;
     private String contractName;
+    private String contractNameLike;
     private String startTime;
     private String endTime;
     private String state;
@@ -442,5 +443,13 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getContractNameLike() {
+        return contractNameLike;
+    }
+
+    public void setContractNameLike(String contractNameLike) {
+        this.contractNameLike = contractNameLike;
     }
 }
