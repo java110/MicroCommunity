@@ -115,7 +115,10 @@ public class ModifyCarToIotAdapt extends DatabusAdaptImpl {
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
         Assert.listOnlyOne(ownerCarDtos, "未找到车位");
 
-
+        ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCarNum(ownerCarPo.getCarNum());
+        ownerCarDto.setCommunityId(ownerCarPo.getCommunityId());
+        long parkingSpaceCount = ownerCarInnerServiceSMOImpl.queryOwnerParkingSpaceCount(ownerCarDto);
         JSONObject postParameters = new JSONObject();
 
         postParameters.put("carNum", ownerCarDtos.get(0).getCarNum());
@@ -126,6 +129,7 @@ public class ModifyCarToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("personTel", ownerCarDtos.get(0).getLink());
         postParameters.put("personId", ownerCarDtos.get(0).getOwnerId());
         postParameters.put("extCarId", ownerCarDtos.get(0).getCarId());
+        postParameters.put("parkingNum", parkingSpaceCount);
         postParameters.put("extCommunityId", ownerCarDtos.get(0).getCommunityId());
         hcOwnerCarAsynImpl.updateOwnerCar(postParameters);
     }
