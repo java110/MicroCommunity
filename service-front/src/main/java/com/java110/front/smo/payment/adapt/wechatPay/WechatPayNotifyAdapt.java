@@ -29,7 +29,6 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +66,7 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
      * @return
      * @throws Exception
      */
-    public String confirmPayFee(String param,String wId) {
+    public String confirmPayFee(String param, String wId) {
         String resXml = "";
         try {
             Map<String, Object> map = PayUtil.getMapFromXML(param);
@@ -138,17 +137,14 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
         } else {
             openId = map.get("openid").toString();
         }
+        responseEntity = getUserInfoByOpenId(restTemplate, openId);
+        logger.debug("查询用户信息返回报文：" + responseEntity);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId);
+        }
+        JSONObject userResult = JSONObject.parseObject(responseEntity.getBody());
         String useId = "-1";
-        if(!StringUtil.isEmpty(openId)) {
-
-            responseEntity = getUserInfoByOpenId(restTemplate, openId);
-
-            logger.debug("查询用户信息返回报文：" + responseEntity);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId);
-            }
-
-            JSONObject userResult = JSONObject.parseObject(responseEntity.getBody());
+        if (userResult.containsKey("data") && userResult.getJSONArray("data").size() > 0) {
             JSONObject realUserInfo = userResult.getJSONArray("data").getJSONObject(0);
             useId = realUserInfo.getString("userId");
         }
