@@ -963,5 +963,9 @@ public class GenerateCodeFactory {
         return result;
     }
 
+    public static String getUUID(){
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
 
 }

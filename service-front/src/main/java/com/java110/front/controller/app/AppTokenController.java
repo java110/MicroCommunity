@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.front.controller;
+package com.java110.front.controller.app;
 
 import com.java110.core.base.controller.BaseController;
 import org.springframework.http.HttpStatus;
@@ -32,9 +32,10 @@ import javax.servlet.http.HttpServletRequest;
  * add by wuxw 2020/3/16
  **/
 @RestController
+@RequestMapping(path = "/app/appToken")
 public class AppTokenController extends BaseController {
 
-    @RequestMapping(path = "/app/checkToken")
+    @RequestMapping(path = "/checkToken")
     public ResponseEntity<String> checkToken(HttpServletRequest request) {
         return new ResponseEntity<String>("", HttpStatus.OK);
     }
