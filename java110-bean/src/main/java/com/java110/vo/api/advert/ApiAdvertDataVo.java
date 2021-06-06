@@ -26,6 +26,9 @@ public class ApiAdvertDataVo implements Serializable {
     private String roomNum;
     private String createTime;
 
+    private String viewType;
+
+
     public String getAdvertId() {
         return advertId;
     }
@@ -184,5 +187,13 @@ public class ApiAdvertDataVo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(String viewType) {
+        this.viewType = viewType;
     }
 }
