@@ -26,7 +26,6 @@ public class ListAdvertItemSMOImpl extends AbstractComponentSMO implements IList
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
         Assert.hasKeyAndValue(paramIn, "advertId", "请求报文中未包含广告");
-        Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区");
 
     }
 

@@ -35,6 +35,8 @@ public class AdvertDto extends PageDto implements Serializable {
     private String roomId;
     private String roomNum;
     private String bId;
+    private String viewType ;
+
 
     private String createTime;
 
@@ -222,5 +224,13 @@ public class AdvertDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(String viewType) {
+        this.viewType = viewType;
     }
 }

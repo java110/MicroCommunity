@@ -60,6 +60,7 @@ public class UpdateAdvertListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "seq", "必填，请填写播放顺序");
         Assert.hasKeyAndValue(reqJson, "startTime", "必填，请选择投放时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
+        reqJson.put("communityId", "9999");
         if (!hasKeyAndValue(reqJson, "photos") && !hasKeyAndValue(reqJson, "vedioName")) {
             throw new IllegalArgumentException("请求报文中没有包含视频或图片");
         }
