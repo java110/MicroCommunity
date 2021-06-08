@@ -7,7 +7,9 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.user.UserAttrDto;
 import com.java110.po.user.UserPo;
+import com.java110.po.userAttr.UserAttrPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.MappingConstant;
@@ -75,6 +77,15 @@ public class SaveUserListener extends AbstractServiceApiPlusListener {
         reqJson.put("password", staffDefaultPassword);
         UserPo userPo = BeanConvertUtil.covertBean(reqJson, UserPo.class);
         super.insert(context, userPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
+
+        if(!StringUtil.isEmpty(reqJson.getString("extUserId"))) {
+            UserAttrPo userAttrPo = new UserAttrPo();
+            userAttrPo.setUserId(reqJson.getString("userId"));
+            userAttrPo.setAttrId("-1");
+            userAttrPo.setSpecCd(UserAttrDto.SPEC_PROPERTY_USER_ID);
+            userAttrPo.setValue(reqJson.getString("extUserId"));
+            super.insert(context, userAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_ATTR_INFO);
+        }
     }
 
 }

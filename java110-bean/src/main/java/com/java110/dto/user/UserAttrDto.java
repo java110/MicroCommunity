@@ -10,6 +10,8 @@ public class UserAttrDto extends PageDto implements Serializable {
 
     public static final String SPEC_OPEN_ID = "100201911001";//用户微信OPENID
 
+    public static final String SPEC_PROPERTY_USER_ID = "100202106001";//物业系统用户ID
+
     private String attrId;
     private String userId;
     private String specCd;
