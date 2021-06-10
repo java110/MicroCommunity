@@ -48,8 +48,8 @@
     </select>
 
     <!-- 查询 费用 -->
-    <select id="getFees" parameterType="com.java110.dto.report.ReportFeeDto"
-            resultType="com.java110.dto.report.ReportFeeDto">
+    <select id="getFees" parameterType="Map"
+            resultType="Map">
         select pfc.fee_name feeName,pfc.start_time configStartTime,pfc.end_time configEndTime,pfc.config_id
         configId,pfc.fee_type_cd feeTypeCd,
         pfc.additional_amount additionalAmount,pfc.bill_type billType,pfc.computing_formula
