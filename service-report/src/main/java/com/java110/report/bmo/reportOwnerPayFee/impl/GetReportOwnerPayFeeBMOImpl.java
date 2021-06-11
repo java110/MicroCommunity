@@ -4,6 +4,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.reportOwnerPayFee.ReportOwnerPayFeeDto;
 import com.java110.intf.report.IReportOwnerPayFeeInnerServiceSMO;
 import com.java110.report.bmo.reportOwnerPayFee.IGetReportOwnerPayFeeBMO;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class GetReportOwnerPayFeeBMOImpl implements IGetReportOwnerPayFeeBMO {
         List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos = null;
         if (count > 0) {
             reportOwnerPayFeeDtos = reportOwnerPayFeeInnerServiceSMOImpl.queryReportOwnerPayFees(reportOwnerPayFeeDto);
-            refreshOwnerPayFeeDto(reportOwnerPayFeeDtos);
+            refreshOwnerPayFeeDto(reportOwnerPayFeeDtos,reportOwnerPayFeeDto);
         } else {
             reportOwnerPayFeeDtos = new ArrayList<>();
         }
@@ -47,7 +48,7 @@ public class GetReportOwnerPayFeeBMOImpl implements IGetReportOwnerPayFeeBMO {
     /**
      * @param reportOwnerPayFeeDtos
      */
-    private void refreshOwnerPayFeeDto(List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos) {
+    private void refreshOwnerPayFeeDto(List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos,ReportOwnerPayFeeDto tmpReportOwnerPayFeeDto) {
         if (reportOwnerPayFeeDtos == null || reportOwnerPayFeeDtos.size() < 1) {
             return;
         }
@@ -64,6 +65,29 @@ public class GetReportOwnerPayFeeBMOImpl implements IGetReportOwnerPayFeeBMO {
                 reportOwnerPayFeeDto.setObjName(reportOwnerPayFeeDto.getContractCode());
             }
             feeIds.add(reportOwnerPayFeeDto.getFeeId());
+        }
+
+        ReportOwnerPayFeeDto reportOwnerPayFeeDto = new ReportOwnerPayFeeDto();
+        reportOwnerPayFeeDto.setFeeIds(feeIds.toArray(new String[feeIds.size()]));
+        reportOwnerPayFeeDto.setPfYear(tmpReportOwnerPayFeeDto.getPfYear());
+
+        if(StringUtil.isEmpty(reportOwnerPayFeeDto.getPfYear())){
+            reportOwnerPayFeeDto.setPfYear(DateUtil.getYear()+"");
+        }
+        List<ReportOwnerPayFeeDto> tmpReportOwnerPayFeeDtos
+                = reportOwnerPayFeeInnerServiceSMOImpl.queryReportOwnerMonthPayFees(reportOwnerPayFeeDto);
+
+
+
+        List<ReportOwnerPayFeeDto> tmoNewReportOwnerPayFeeDtos = new ArrayList<>();
+
+        for(ReportOwnerPayFeeDto oldReportOwnerPayFeeDto : reportOwnerPayFeeDtos){
+            for(ReportOwnerPayFeeDto newReportOwnerPayFeeDto : tmpReportOwnerPayFeeDtos){
+                if(oldReportOwnerPayFeeDto.getFeeId().equals(newReportOwnerPayFeeDto.getFeeId())){
+                    tmoNewReportOwnerPayFeeDtos.add(newReportOwnerPayFeeDto);
+                }
+            }
+            oldReportOwnerPayFeeDto.setReportOwnerPayFeeDtos(tmoNewReportOwnerPayFeeDtos);
         }
 
 

@@ -94,12 +94,14 @@ public class ReportOwnerPayFeeApi {
      */
     @RequestMapping(value = "/queryReportOwnerPayFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportOwnerPayFee(@RequestParam(value = "communityId") String communityId,
+                                                         @RequestParam(value = "pfYear",required = false) String pfYear,
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {
         ReportOwnerPayFeeDto reportOwnerPayFeeDto = new ReportOwnerPayFeeDto();
         reportOwnerPayFeeDto.setPage(page);
         reportOwnerPayFeeDto.setRow(row);
         reportOwnerPayFeeDto.setCommunityId(communityId);
+        reportOwnerPayFeeDto.setPfYear(pfYear);
         return getReportOwnerPayFeeBMOImpl.get(reportOwnerPayFeeDto);
     }
 }

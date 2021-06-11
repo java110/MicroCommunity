@@ -21,6 +21,9 @@
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
         </if>
+        <if test="pfYear !=null and pfYear != ''">
+            and t.pf_year= #{pfYear}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>

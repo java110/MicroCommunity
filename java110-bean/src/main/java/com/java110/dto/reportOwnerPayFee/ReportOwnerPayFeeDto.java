@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -42,6 +43,8 @@ public class ReportOwnerPayFeeDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos;
 
 
 
@@ -237,5 +240,13 @@ public class ReportOwnerPayFeeDto extends PageDto implements Serializable {
 
     public void setFeeIds(String[] feeIds) {
         this.feeIds = feeIds;
+    }
+
+    public List<ReportOwnerPayFeeDto> getReportOwnerPayFeeDtos() {
+        return reportOwnerPayFeeDtos;
+    }
+
+    public void setReportOwnerPayFeeDtos(List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos) {
+        this.reportOwnerPayFeeDtos = reportOwnerPayFeeDtos;
     }
 }
