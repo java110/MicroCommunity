@@ -94,5 +94,14 @@ public class ReportOwnerPayFeeServiceDaoImpl extends BaseServiceDao implements I
         return Integer.parseInt(businessReportOwnerPayFeeInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryReportOwnerMonthPayFees(Map info) {
+        logger.debug("查询业主缴费明细信息 入参 info : {}",info);
+
+        List<Map> businessReportOwnerPayFeeInfos = sqlSessionTemplate.selectList("reportOwnerPayFeeServiceDaoImpl.queryReportOwnerMonthPayFees",info);
+
+        return businessReportOwnerPayFeeInfos;
+    }
+
 
 }

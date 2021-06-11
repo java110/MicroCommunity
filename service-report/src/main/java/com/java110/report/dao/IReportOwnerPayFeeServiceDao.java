@@ -58,4 +58,10 @@ public interface IReportOwnerPayFeeServiceDao {
      */
     int queryReportOwnerPayFeesCount(Map info);
 
+    /**
+     * 查询 月缴费
+     * @param info
+     * @return
+     */
+    List<Map> queryReportOwnerMonthPayFees(Map info);
 }

@@ -67,6 +67,21 @@ public class ReportOwnerPayFeeInnerServiceSMOImpl extends BaseServiceSMO impleme
         return reportOwnerPayFees;
     }
 
+    @Override
+    public List<ReportOwnerPayFeeDto> queryReportOwnerMonthPayFees(ReportOwnerPayFeeDto reportOwnerPayFeeDto) {
+        //校验是否传了 分页信息
+
+        int page = reportOwnerPayFeeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportOwnerPayFeeDto.setPage((page - 1) * reportOwnerPayFeeDto.getRow());
+        }
+
+        List<ReportOwnerPayFeeDto> reportOwnerPayFees = BeanConvertUtil.covertBeanList(reportOwnerPayFeeServiceDaoImpl.queryReportOwnerMonthPayFees(BeanConvertUtil.beanCovertMap(reportOwnerPayFeeDto)), ReportOwnerPayFeeDto.class);
+
+        return reportOwnerPayFees;
+    }
+
 
     @Override
     public int queryReportOwnerPayFeesCount(@RequestBody ReportOwnerPayFeeDto reportOwnerPayFeeDto) {

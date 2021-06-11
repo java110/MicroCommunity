@@ -43,6 +43,16 @@ public interface IReportOwnerPayFeeInnerServiceSMO {
     List<ReportOwnerPayFeeDto> queryReportOwnerPayFees(@RequestBody ReportOwnerPayFeeDto reportOwnerPayFeeDto);
 
     /**
+     * <p>查询月费用</p>
+     *
+     *
+     * @param reportOwnerPayFeeDto 数据对象分享
+     * @return ReportOwnerPayFeeDto 对象数据
+     */
+    @RequestMapping(value = "/queryReportOwnerMonthPayFees", method = RequestMethod.POST)
+    List<ReportOwnerPayFeeDto> queryReportOwnerMonthPayFees(@RequestBody ReportOwnerPayFeeDto reportOwnerPayFeeDto);
+
+    /**
      * 查询<p>小区楼</p>总记录数
      *
      * @param reportOwnerPayFeeDto 数据对象分享

@@ -1,6 +1,7 @@
 package com.java110.dto.reportOwnerPayFee;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,21 +16,27 @@ import java.util.Date;
 public class ReportOwnerPayFeeDto extends PageDto implements Serializable {
 
     private String configName;
-private String amount;
-private String pfId;
-private String detailId;
-private String objName;
-private String ownerId;
-private String feeId;
-private String pfMonth;
-private String ownerName;
-private String pfYear;
-private String configId;
-private String pfDate;
-private String objId;
-private String feeName;
-private String communityId;
-private String objType;
+    private String amount;
+    private String pfId;
+    private String detailId;
+    private String objName;
+    private String ownerId;
+    private String feeId;
+    private String[] feeIds;
+    private String pfMonth;
+    private String ownerName;
+    private String pfYear;
+    private String configId;
+    private String pfDate;
+    private String objId;
+    private String feeName;
+    private String importFeeName;
+    private String roomName;
+    private String payerObjType;
+    private String carNum;
+    private String contractCode;
+    private String communityId;
+    private String objType;
 
 
     private Date createTime;
@@ -37,100 +44,133 @@ private String objType;
     private String statusCd = "0";
 
 
+
+
     public String getConfigName() {
         return configName;
     }
-public void setConfigName(String configName) {
+
+    public void setConfigName(String configName) {
         this.configName = configName;
     }
-public String getAmount() {
+
+    public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getPfId() {
+
+    public String getPfId() {
         return pfId;
     }
-public void setPfId(String pfId) {
+
+    public void setPfId(String pfId) {
         this.pfId = pfId;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getObjName() {
+
+    public String getObjName() {
         return objName;
     }
-public void setObjName(String objName) {
+
+    public void setObjName(String objName) {
         this.objName = objName;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-public String getPfMonth() {
+
+    public String getPfMonth() {
         return pfMonth;
     }
-public void setPfMonth(String pfMonth) {
+
+    public void setPfMonth(String pfMonth) {
         this.pfMonth = pfMonth;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getPfYear() {
+
+    public String getPfYear() {
         return pfYear;
     }
-public void setPfYear(String pfYear) {
+
+    public void setPfYear(String pfYear) {
         this.pfYear = pfYear;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getPfDate() {
+
+    public String getPfDate() {
         return pfDate;
     }
-public void setPfDate(String pfDate) {
+
+    public void setPfDate(String pfDate) {
         this.pfDate = pfDate;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getFeeName() {
+
+    public String getFeeName() {
         return feeName;
     }
-public void setFeeName(String feeName) {
+
+    public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getObjType() {
+
+    public String getObjType() {
         return objType;
     }
-public void setObjType(String objType) {
+
+    public void setObjType(String objType) {
         this.objType = objType;
     }
 
@@ -149,5 +189,53 @@ public void setObjType(String objType) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getImportFeeName() {
+        return importFeeName;
+    }
+
+    public void setImportFeeName(String importFeeName) {
+        this.importFeeName = importFeeName;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public String getContractCode() {
+        return contractCode;
+    }
+
+    public void setContractCode(String contractCode) {
+        this.contractCode = contractCode;
+    }
+
+    public String[] getFeeIds() {
+        return feeIds;
+    }
+
+    public void setFeeIds(String[] feeIds) {
+        this.feeIds = feeIds;
     }
 }
