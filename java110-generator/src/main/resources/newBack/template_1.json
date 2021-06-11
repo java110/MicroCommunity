@@ -1,35 +1,35 @@
 {
   "autoMove": true,
-  "id": "oweId",
-  "name": "reportOweFee",
-  "desc": "欠费统计",
+  "id": "pfId",
+  "name": "reportOwnerPayFee",
+  "desc": "业主缴费明细",
   "shareParam": "communityId",
   "shareColumn": "community_id",
   "shareName": "report",
-  "tableName": "report_owe_fee",
+  "tableName": "report_owner_pay_fee",
   "param": {
-    "oweId": "owe_id",
+    "pfId": "pf_id",
+    "pfYear": "pf_year",
+    "pfMonth": "pf_month",
+    "pfDate": "pf_date",
+    "communityId": "community_id",
+    "ownerId": "owner_id",
+    "ownerName": "owner_name",
+    "objName": "obj_name",
+    "objType": "obj_type",
+    "objId": "obj_id",
+    "detailId": "detail_id",
     "configId": "config_id",
     "configName": "config_name",
     "feeId": "fee_id",
     "feeName": "fee_name",
-    "amountOwed": "amount_owed",
-    "ownerId": "owner_id",
-    "ownerName": "owner_name",
-    "ownerTel": "owner_tel",
-    "payerObjId": "payer_obj_id",
-    "payerObjName": "payer_obj_name",
-    "payerObjType": "payer_obj_type",
-    "communityId": "community_id",
-    "updateTime": "update_time",
-    "endTime": "end_time",
-    "deadlineTime": "deadline_time",
+    "amount": "amount",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "configName",
-      "msg": "费用项不能为空"
+      "code": "pfId",
+      "msg": "缴费ID不能为空"
     }
   ]
 }

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportOwnerPayFeeServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存业主缴费明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportOwnerPayFeeInfo" parameterType="Map">
+        insert into report_owner_pay_fee(
+config_name,amount,pf_id,detail_id,obj_name,owner_id,fee_id,pf_month,owner_name,pf_year,config_id,pf_date,obj_id,fee_name,community_id,obj_type
+) values (
+#{configName},#{amount},#{pfId},#{detailId},#{objName},#{ownerId},#{feeId},#{pfMonth},#{ownerName},#{pfYear},#{configId},#{pfDate},#{objId},#{feeName},#{communityId},#{objType}
+)
+    </insert>
+
+
+
+    <!-- 查询业主缴费明细信息 add by wuxw 2018-07-03 -->
+    <select id="getReportOwnerPayFeeInfo" parameterType="Map" resultType="Map">
+        select  t.config_name,t.config_name configName,t.amount,t.pf_id,t.pf_id pfId,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name objName,t.owner_id,t.owner_id ownerId,t.fee_id,t.fee_id feeId,t.pf_month,t.pf_month pfMonth,t.owner_name,t.owner_name ownerName,t.pf_year,t.pf_year pfYear,t.config_id,t.config_id configId,t.pf_date,t.pf_date pfDate,t.obj_id,t.obj_id objId,t.fee_name,t.fee_name feeName,t.community_id,t.community_id communityId,t.obj_type,t.obj_type objType 
+from report_owner_pay_fee t 
+where 1 =1 
+<if test="configName !=null and configName != ''">
+   and t.config_name= #{configName}
+</if> 
+<if test="amount !=null and amount != ''">
+   and t.amount= #{amount}
+</if> 
+<if test="pfId !=null and pfId != ''">
+   and t.pf_id= #{pfId}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="objName !=null and objName != ''">
+   and t.obj_name= #{objName}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+   and t.fee_id= #{feeId}
+</if> 
+<if test="pfMonth !=null and pfMonth != ''">
+   and t.pf_month= #{pfMonth}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="pfYear !=null and pfYear != ''">
+   and t.pf_year= #{pfYear}
+</if> 
+<if test="configId !=null and configId != ''">
+   and t.config_id= #{configId}
+</if> 
+<if test="pfDate !=null and pfDate != ''">
+   and t.pf_date= #{pfDate}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="feeName !=null and feeName != ''">
+   and t.fee_name= #{feeName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改业主缴费明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportOwnerPayFeeInfo" parameterType="Map">
+        update  report_owner_pay_fee t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="configName !=null and configName != ''">
+, t.config_name= #{configName}
+</if> 
+<if test="amount !=null and amount != ''">
+, t.amount= #{amount}
+</if> 
+<if test="detailId !=null and detailId != ''">
+, t.detail_id= #{detailId}
+</if> 
+<if test="objName !=null and objName != ''">
+, t.obj_name= #{objName}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+, t.owner_id= #{ownerId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+, t.fee_id= #{feeId}
+</if> 
+<if test="pfMonth !=null and pfMonth != ''">
+, t.pf_month= #{pfMonth}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+, t.owner_name= #{ownerName}
+</if> 
+<if test="pfYear !=null and pfYear != ''">
+, t.pf_year= #{pfYear}
+</if> 
+<if test="configId !=null and configId != ''">
+, t.config_id= #{configId}
+</if> 
+<if test="pfDate !=null and pfDate != ''">
+, t.pf_date= #{pfDate}
+</if> 
+<if test="objId !=null and objId != ''">
+, t.obj_id= #{objId}
+</if> 
+<if test="feeName !=null and feeName != ''">
+, t.fee_name= #{feeName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="objType !=null and objType != ''">
+, t.obj_type= #{objType}
+</if> 
+ where 1=1 <if test="pfId !=null and pfId != ''">
+and t.pf_id= #{pfId}
+</if> 
+
+    </update>
+
+    <!-- 查询业主缴费明细数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportOwnerPayFeesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_owner_pay_fee t 
+where 1 =1 
+<if test="configName !=null and configName != ''">
+   and t.config_name= #{configName}
+</if> 
+<if test="amount !=null and amount != ''">
+   and t.amount= #{amount}
+</if> 
+<if test="pfId !=null and pfId != ''">
+   and t.pf_id= #{pfId}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="objName !=null and objName != ''">
+   and t.obj_name= #{objName}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+   and t.fee_id= #{feeId}
+</if> 
+<if test="pfMonth !=null and pfMonth != ''">
+   and t.pf_month= #{pfMonth}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="pfYear !=null and pfYear != ''">
+   and t.pf_year= #{pfYear}
+</if> 
+<if test="configId !=null and configId != ''">
+   and t.config_id= #{configId}
+</if> 
+<if test="pfDate !=null and pfDate != ''">
+   and t.pf_date= #{pfDate}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="feeName !=null and feeName != ''">
+   and t.fee_name= #{feeName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+
+
+     </select>
+
+</mapper>
