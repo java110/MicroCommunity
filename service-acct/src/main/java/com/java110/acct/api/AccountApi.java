@@ -3,9 +3,14 @@ package com.java110.acct.api;
 import com.java110.acct.bmo.account.IGetAccountBMO;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.owner.OwnerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @ClassName AccountApi
@@ -40,6 +45,38 @@ public class AccountApi {
         accountDto.setRow(row);
         accountDto.setObjId(storeId);
         return getAccountBMOImpl.get(accountDto);
+    }
+
+    /**
+     * 查询业主账户
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /account/queryOwnerAccount
+     * @path /app/account/queryOwnerAccount
+     */
+    @RequestMapping(value = "/queryOwnerAccount", method = RequestMethod.GET)
+    public ResponseEntity<String> queryOwnerAccount(
+            @RequestParam(value = "communityId") String communityId,
+            @RequestParam(value = "ownerId",required = false) String ownerId,
+            @RequestParam(value = "ownerName",required = false) String ownerName,
+            @RequestParam(value = "tel",required = false) String tel,
+            @RequestParam(value = "idCard",required = false) String idCard,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "row") int row) {
+        AccountDto accountDto = new AccountDto();
+        accountDto.setPage(page);
+        accountDto.setRow(row);
+        accountDto.setObjId(ownerId);
+        accountDto.setObjType(AccountDto.OBJ_TYPE_PERSON);
+        accountDto.setAcctName(ownerName);
+        accountDto.setPartId(communityId);
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(ownerId);
+        ownerDto.setCommunityId(communityId);
+        ownerDto.setLink(tel);
+        ownerDto.setIdCard(idCard);
+        return getAccountBMOImpl.queryOwnerAccount(accountDto,ownerDto);
     }
 
     /**

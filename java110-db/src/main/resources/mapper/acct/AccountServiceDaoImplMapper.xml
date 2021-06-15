@@ -7,9 +7,9 @@
     <!-- 保存账户信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAccountInfo" parameterType="Map">
         insert into business_account(
-        amount,operate,acct_type,obj_id,acct_id,acct_name,b_id,obj_type
+        amount,operate,acct_type,obj_id,acct_id,acct_name,b_id,obj_type,part_id
         ) values (
-        #{amount},#{operate},#{acctType},#{objId},#{acctId},#{acctName},#{bId},#{objType}
+        #{amount},#{operate},#{acctType},#{objId},#{acctId},#{acctName},#{bId},#{objType},#{partId}
         )
     </insert>
 
@@ -17,7 +17,7 @@
     <!-- 查询账户信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAccountInfo" parameterType="Map" resultType="Map">
         select t.amount,t.operate,t.acct_type,t.acct_type acctType,t.obj_id,t.obj_id objId,t.acct_id,t.acct_id
-        acctId,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType
+        acctId,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType,t.part_id,t.part_id partId
         from business_account t
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -44,6 +44,9 @@
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
+        <if test="partId !=null and partId != ''">
+            and t.obj_type= #{partId}
+        </if>
 
     </select>
 
@@ -51,8 +54,9 @@
     <!-- 保存账户信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAccountInfoInstance" parameterType="Map">
         insert into account(
-        amount,acct_type,obj_id,acct_id,status_cd,acct_name,b_id,obj_type
-        ) select t.amount,t.acct_type,t.obj_id,t.acct_id,'0',t.acct_name,t.b_id,t.obj_type from business_account t where
+        amount,acct_type,obj_id,acct_id,status_cd,acct_name,b_id,obj_type,part_id
+        ) select t.amount,t.acct_type,t.obj_id,t.acct_id,'0',t.acct_name,t.b_id,t.obj_type,t.part_id
+        from business_account t where
         1=1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
@@ -84,7 +88,7 @@
     <select id="getAccountInfo" parameterType="Map" resultType="Map">
         select t.amount,t.acct_type,t.acct_type acctType,t.obj_id,t.obj_id objId,t.acct_id,t.acct_id
         acctId,t.status_cd,t.status_cd statusCd,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type
-        objType,t.create_time createTime,td.`name` acctTypeName
+        objType,t.create_time createTime,td.`name` acctTypeName,t.part_id,t.part_id partId
         from account t
         LEFT JOIN t_dict td on t.acct_type = td.status_cd and td.table_name = 'account' and td.table_columns =
         'acct_type'
@@ -112,6 +116,9 @@
         </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
+        </if>
+        <if test="partId !=null and partId != ''">
+            and t.obj_type= #{partId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -141,6 +148,9 @@
         </if>
         <if test="objType !=null and objType != ''">
             , t.obj_type= #{objType}
+        </if>
+        <if test="partId !=null and partId != ''">
+            , t.obj_type= #{partId}
         </if>
         where 1=1
         <if test="acctId !=null and acctId != ''">
@@ -180,6 +190,9 @@
         </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
+        </if>
+        <if test="partId !=null and partId != ''">
+            and t.obj_type= #{partId}
         </if>
 
 
