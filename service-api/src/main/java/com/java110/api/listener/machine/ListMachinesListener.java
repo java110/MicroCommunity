@@ -5,20 +5,18 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.communityLocation.CommunityLocationDto;
+import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.unit.FloorAndUnitDto;
+import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.community.*;
 import com.java110.utils.constant.ServiceCodeMachineConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.machine.ApiMachineDataVo;
 import com.java110.vo.api.machine.ApiMachineVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -120,7 +120,29 @@ public class ListMachinesListener extends AbstractServiceApiListener {
 
     private void refreshMachineLocation(List<MachineDto> machines) {
         for (MachineDto machineDto : machines) {
+            freshMachineStateName(machineDto);
             getMachineLocation(machineDto);
+        }
+    }
+
+    private void freshMachineStateName(MachineDto machineDto) {
+        String heartbeatTime = machineDto.getHeartbeatTime();
+        try {
+            if (StringUtil.isEmpty(heartbeatTime)) {
+                machineDto.setStateName(machineDto.getStateName() + ";设备离线");
+            } else {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(DateUtil.getDateFromString(heartbeatTime, DateUtil.DATE_FORMATE_STRING_A));
+                calendar.add(Calendar.MINUTE, 2);
+                if (calendar.getTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+                    machineDto.setStateName(machineDto.getStateName() + ";设备离线");
+                } else {
+                    machineDto.setStateName(machineDto.getStateName() + ";设备在线");
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            machineDto.setStateName(machineDto.getStateName() + ";设备离线");
         }
     }
 
@@ -141,6 +163,7 @@ public class ListMachinesListener extends AbstractServiceApiListener {
     }
 
     private void getMachineLocation(MachineDto machineDto) {
+
         CommunityLocationDto communityLocationDto = new CommunityLocationDto();
         communityLocationDto.setCommunityId(machineDto.getCommunityId());
         communityLocationDto.setLocationId(machineDto.getLocationTypeCd());

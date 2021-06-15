@@ -3,26 +3,46 @@ package com.java110.api.listener.fee;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.fee.IFeeBMO;
+import com.java110.api.bmo.payFeeDetailDiscount.IPayFeeDetailDiscountBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.app.AppDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDetailDto;
+import com.java110.dto.feeDiscount.ComputeDiscountDto;
+import com.java110.dto.repair.RepairDto;
+import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeDiscountInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.po.owner.RepairPoolPo;
+import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * @ClassName PayFeeListener
@@ -50,10 +70,16 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Autowired
-    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
-    @Autowired
-    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
+    private IFeeDiscountInnerServiceSMO feeDiscountInnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IRepairUserInnerServiceSMO repairUserInnerServiceSMO;
 
     @Override
     public String getServiceCode() {
@@ -66,7 +92,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
     }
 
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    public void soService(ServiceDataFlowEvent event) throws ParseException {
 
         logger.debug("ServiceDataFlowEvent : {}", event);
 
@@ -77,15 +103,100 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
         //校验数据
         validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn)   ;
+        JSONObject paramObj = JSONObject.parseObject(paramIn);
 
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
+        //判断是否有折扣情况
+        judgeDiscount(paramObj);
+
+        String appId = event.getDataFlowContext().getAppId();
+
+        if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) {  //微信小程序支付
+            paramObj.put("primeRate", "5");
+            paramObj.put("remark", "线上小程序支付");
+        } else if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {  //微信公众号支付
+            paramObj.put("primeRate", "6");
+            paramObj.put("remark", "线上公众号支付");
+        }else{
+            paramObj.put("primeRate", "5");
+            paramObj.put("remark", "线上小程序支付");
+        }
 
         //添加单元信息
         businesses.add(feeBMOImpl.addFeePreDetail(paramObj, dataFlowContext));
         businesses.add(feeBMOImpl.modifyPreFee(paramObj, dataFlowContext));
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS,Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
+
+        double discountPrice = paramObj.getDouble("discountPrice");
+        if (discountPrice > 0) {
+            addDiscount(paramObj, businesses, dataFlowContext);
+        }
+
+        //判断是否有派单属性ID
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setCommunityId(paramObj.getString("communityId"));
+        feeAttrDto.setFeeId(paramObj.getString("feeId"));
+        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+        //修改 派单状态
+        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
+            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
+            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
+            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairPoolPo repairPoolPo = new RepairPoolPo();
+            repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
+            repairPoolPo.setCommunityId(paramObj.getString("communityId"));
+            repairPoolPo.setState(RepairDto.STATE_APPRAISE);
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairPoolPo));
+            businesses.add(business);
+        }
+        //修改报修派单状态
+        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
+            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
+            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
+            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairUserDto repairUserDto = new RepairUserDto();
+            repairUserDto.setRepairId(feeAttrDtos.get(0).getValue());
+            repairUserDto.setState(RepairUserDto.STATE_PAY_FEE);
+            //查询待支付状态的记录
+            List<RepairUserDto> repairUserDtoList = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
+            Assert.listOnlyOne(repairUserDtoList, "信息错误！");
+            RepairUserPo repairUserPo = new RepairUserPo();
+            repairUserPo.setRuId(repairUserDtoList.get(0).getRuId());
+            repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
+            //如果是待评价状态，就更新结束时间
+            repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            DecimalFormat df = new DecimalFormat("#.00");
+            BigDecimal payment_amount=new BigDecimal(paramObj.getString("receivableAmount"));
+            repairUserPo.setContext("已支付" + df.format(payment_amount) + "元");
+            //新增待评价状态
+            JSONObject object = JSONObject.parseObject("{\"datas\":{}}");
+            object.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+            object.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
+            object.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairUserPo repairUser = new RepairUserPo();
+            repairUser.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+            repairUser.setStartTime(repairUserPo.getEndTime());
+            repairUser.setState(RepairUserDto.STATE_EVALUATE);
+            repairUser.setContext("待评价");
+            repairUser.setCommunityId(paramObj.getString("communityId"));
+            repairUser.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            repairUser.setRepairId(repairUserDtoList.get(0).getRepairId());
+            repairUser.setStaffId(repairUserDtoList.get(0).getStaffId());
+            repairUser.setStaffName(repairUserDtoList.get(0).getStaffName());
+            repairUser.setPreStaffId(repairUserDtoList.get(0).getStaffId());
+            repairUser.setPreStaffName(repairUserDtoList.get(0).getStaffName());
+            repairUser.setPreRuId(repairUserDtoList.get(0).getRuId());
+            repairUser.setRepairEvent("auditUser");
+            object.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairUserPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairUser));
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairUserPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairUserPo));
+            businesses.add(object);
+            businesses.add(business);
+        }
+
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS, Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);
@@ -93,9 +204,59 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         }
 
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        //这里调整为实收金额
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
+        paramOut.put("receivedAmount", paramObj.getString("receivedAmount"));
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void judgeDiscount(JSONObject paramObj) throws ParseException {
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setCommunityId(paramObj.getString("communityId"));
+        feeDetailDto.setFeeId(paramObj.getString("feeId"));
+        feeDetailDto.setCycles(paramObj.getString("cycles"));
+        feeDetailDto.setPayerObjId(paramObj.getString("payerObjId"));
+        feeDetailDto.setPayerObjType(paramObj.getString("payerObjType"));
+        String endTime = paramObj.getString("endTime");  //获取缴费到期时间
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        feeDetailDto.setStartTime(simpleDateFormat.parse(endTime));
+
+        feeDetailDto.setRow(20);
+        feeDetailDto.setPage(1);
+        List<ComputeDiscountDto> computeDiscountDtos = feeDiscountInnerServiceSMOImpl.computeDiscount(feeDetailDto);
+
+        if (computeDiscountDtos == null || computeDiscountDtos.size() < 1) {
+            paramObj.put("discountPrice", 0.0);
+            return;
+        }
+        BigDecimal discountPrice = new BigDecimal(0);
+        for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+            discountPrice = discountPrice.add(new BigDecimal(computeDiscountDto.getDiscountPrice()));
+        }
+        paramObj.put("discountPrice", discountPrice);
+        paramObj.put("computeDiscountDtos", computeDiscountDtos);
+    }
+
+    private void addDiscount(JSONObject paramObj, JSONArray businesses, DataFlowContext dataFlowContext) {
+        List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
+        JSONObject discountBusiness = null;
+        for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+            if (computeDiscountDto.getDiscountPrice() <= 0) {
+                continue;
+            }
+            JSONObject paramIn = new JSONObject();
+            paramIn.put("discountPrice", computeDiscountDto.getDiscountPrice());
+            paramIn.put("discountId", computeDiscountDto.getDiscountId());
+            paramIn.put("detailId", paramObj.getString("detailId"));
+            paramIn.put("communityId", paramObj.getString("communityId"));
+            paramIn.put("feeId", paramObj.getString("feeId"));
+            discountBusiness = payFeeDetailDiscountBMOImpl.addPayFeeDetailDiscount(paramObj,
+                    paramIn, dataFlowContext);
+            if (discountBusiness != null) {
+                businesses.add(discountBusiness);
+            }
+        }
     }
 
     /**
@@ -118,6 +279,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         Assert.hasLength(paramInObj.getString("receivedAmount"), "实收金额不能为空");
         Assert.hasLength(paramInObj.getString("feeId"), "费用ID不能为空");
         Assert.hasLength(paramInObj.getString("appId"), "appId不能为空");
+
 
     }
 

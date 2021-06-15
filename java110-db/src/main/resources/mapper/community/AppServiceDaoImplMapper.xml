@@ -5,169 +5,169 @@
 <mapper namespace="appServiceDaoImpl">
 
     <!-- 保存应用信息 add by wuxw 2018-07-03 -->
-       <insert id="saveAppInfo" parameterType="Map">
-           insert into c_app(
-status_cd,app_id,black_list_ip,name,security_code,remark,while_list_ip
-) values (
-'0',#{appId},#{blackListIp},#{name},#{securityCode},#{remark},#{whileListIp}
-)
-       </insert>
+    <insert id="saveAppInfo" parameterType="Map">
+        insert into c_app(
+        status_cd,app_id,black_list_ip,name,security_code,remark,while_list_ip
+        ) values (
+        '0',#{appId},#{blackListIp},#{name},#{securityCode},#{remark},#{whileListIp}
+        )
+    </insert>
 
 
-       <!-- 查询应用信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessAppInfo" parameterType="Map" resultType="Map">
-           select  t.operate,t.app_id,t.app_id appId,t.black_list_ip,t.black_list_ip blackListIp,t.name,t.security_code,t.security_code securityCode,t.remark,t.while_list_ip,t.while_list_ip whileListIp
-from business_app t 
-where 1 =1 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="appId !=null and appId != ''">
-   and t.app_id= #{appId}
-</if> 
-<if test="blackListIp !=null and blackListIp != ''">
-   and t.black_list_ip= #{blackListIp}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="securityCode !=null and securityCode != ''">
-   and t.security_code= #{securityCode}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
+    <!-- 查询应用信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAppInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.app_id,t.app_id appId,t.black_list_ip,t.black_list_ip
+        blackListIp,t.name,t.security_code,t.security_code securityCode,t.remark,t.while_list_ip,t.while_list_ip
+        whileListIp
+        from business_app t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="blackListIp !=null and blackListIp != ''">
+            and t.black_list_ip= #{blackListIp}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="securityCode !=null and securityCode != ''">
+            and t.security_code= #{securityCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
 
-<if test="whileListIp !=null and whileListIp != ''">
-   and t.while_list_ip= #{whileListIp}
-</if> 
+        <if test="whileListIp !=null and whileListIp != ''">
+            and t.while_list_ip= #{whileListIp}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存应用信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAppInfoInstance" parameterType="Map">
         insert into c_app(
-app_id,black_list_ip,name,security_code,remark,status_cd,while_list_ip
-) select t.app_id,t.black_list_ip,t.name,t.security_code,t.remark,'0',t.while_list_ip from business_app t where 1=1
-   and t.operate= 'ADD'
-<if test="appId !=null and appId != ''">
-   and t.app_id= #{appId}
-</if> 
-<if test="blackListIp !=null and blackListIp != ''">
-   and t.black_list_ip= #{blackListIp}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="securityCode !=null and securityCode != ''">
-   and t.security_code= #{securityCode}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
+        app_id,black_list_ip,name,security_code,remark,status_cd,while_list_ip
+        ) select t.app_id,t.black_list_ip,t.name,t.security_code,t.remark,'0',t.while_list_ip from business_app t where
+        1=1
+        and t.operate= 'ADD'
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="blackListIp !=null and blackListIp != ''">
+            and t.black_list_ip= #{blackListIp}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="securityCode !=null and securityCode != ''">
+            and t.security_code= #{securityCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
 
-<if test="whileListIp !=null and whileListIp != ''">
-   and t.while_list_ip= #{whileListIp}
-</if> 
+        <if test="whileListIp !=null and whileListIp != ''">
+            and t.while_list_ip= #{whileListIp}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询应用信息 add by wuxw 2018-07-03 -->
     <select id="getAppInfo" parameterType="Map" resultType="Map">
-        select  t.app_id,t.app_id appId,t.black_list_ip,t.black_list_ip blackListIp,t.name,t.security_code,t.security_code securityCode,t.remark,t.status_cd,t.status_cd statusCd,t.while_list_ip,t.while_list_ip whileListIp
-from c_app t 
-where 1 =1 
-<if test="appId !=null and appId != ''">
-   and t.app_id= #{appId}
-</if> 
-<if test="blackListIp !=null and blackListIp != ''">
-   and t.black_list_ip= #{blackListIp}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="securityCode !=null and securityCode != ''">
-   and t.security_code= #{securityCode}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
+        select t.app_id,t.app_id appId,t.black_list_ip,t.black_list_ip
+        blackListIp,t.name,t.security_code,t.security_code securityCode,t.remark,t.status_cd,t.status_cd
+        statusCd,t.while_list_ip,t.while_list_ip whileListIp
+        from c_app t
+        where 1 =1
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="blackListIp !=null and blackListIp != ''">
+            and t.black_list_ip= #{blackListIp}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="securityCode !=null and securityCode != ''">
+            and t.security_code= #{securityCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
 
-<if test="whileListIp !=null and whileListIp != ''">
-   and t.while_list_ip= #{whileListIp}
-</if> 
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        <if test="whileListIp !=null and whileListIp != ''">
+            and t.while_list_ip= #{whileListIp}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改应用信息 add by wuxw 2018-07-03 -->
     <update id="updateAppInfo" parameterType="Map">
-        update  c_app t set t.status_cd = #{statusCd}
-<if test="blackListIp !=null and blackListIp != ''">
-, t.black_list_ip= #{blackListIp}
-</if> 
-<if test="name !=null and name != ''">
-, t.name= #{name}
-</if> 
-<if test="securityCode !=null and securityCode != ''">
-, t.security_code= #{securityCode}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
+        update c_app t set t.status_cd = #{statusCd}
+        <if test="blackListIp !=null and blackListIp != ''">
+            , t.black_list_ip= #{blackListIp}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="securityCode !=null and securityCode != ''">
+            , t.security_code= #{securityCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
 
-<if test="whileListIp !=null and whileListIp != ''">
-, t.while_list_ip= #{whileListIp}
-</if> 
- where 1=1 <if test="appId !=null and appId != ''">
-and t.app_id= #{appId}
-</if> 
+        <if test="whileListIp !=null and whileListIp != ''">
+            , t.while_list_ip= #{whileListIp}
+        </if>
+        where 1=1
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
 
     </update>
 
     <!-- 查询应用数量 add by wuxw 2018-07-03 -->
-     <select id="queryAppsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from c_app t 
-where 1 =1 
-<if test="appId !=null and appId != ''">
-   and t.app_id= #{appId}
-</if> 
-<if test="blackListIp !=null and blackListIp != ''">
-   and t.black_list_ip= #{blackListIp}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="securityCode !=null and securityCode != ''">
-   and t.security_code= #{securityCode}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
+    <select id="queryAppsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from c_app t
+        where 1 =1
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="blackListIp !=null and blackListIp != ''">
+            and t.black_list_ip= #{blackListIp}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="securityCode !=null and securityCode != ''">
+            and t.security_code= #{securityCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
 
-<if test="whileListIp !=null and whileListIp != ''">
-   and t.while_list_ip= #{whileListIp}
-</if> 
+        <if test="whileListIp !=null and whileListIp != ''">
+            and t.while_list_ip= #{whileListIp}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

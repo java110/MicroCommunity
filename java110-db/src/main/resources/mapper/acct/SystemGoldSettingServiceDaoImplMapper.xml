@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="systemGoldSettingServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存金币设置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSystemGoldSettingInfo" parameterType="Map">
+        insert into system_gold_setting(
+buy_price,gold_name,gold_type,validity,state,use_price,setting_id
+) values (
+#{buyPrice},#{goldName},#{goldType},#{validity},#{state},#{usePrice},#{settingId}
+)
+    </insert>
+
+
+
+    <!-- 查询金币设置信息 add by wuxw 2018-07-03 -->
+    <select id="getSystemGoldSettingInfo" parameterType="Map" resultType="Map">
+        select  t.buy_price,t.buy_price buyPrice,t.gold_name,t.gold_name goldName,t.status_cd,t.status_cd statusCd,t.gold_type,t.gold_type goldType,t.validity,t.state,t.use_price,t.use_price usePrice,t.setting_id,t.setting_id settingId 
+from system_gold_setting t 
+where 1 =1 
+<if test="buyPrice !=null and buyPrice != ''">
+   and t.buy_price= #{buyPrice}
+</if> 
+<if test="goldName !=null and goldName != ''">
+   and t.gold_name= #{goldName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="goldType !=null and goldType != ''">
+   and t.gold_type= #{goldType}
+</if> 
+<if test="validity !=null and validity != ''">
+   and t.validity= #{validity}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="usePrice !=null and usePrice != ''">
+   and t.use_price= #{usePrice}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改金币设置信息 add by wuxw 2018-07-03 -->
+    <update id="updateSystemGoldSettingInfo" parameterType="Map">
+        update  system_gold_setting t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="buyPrice !=null and buyPrice != ''">
+, t.buy_price= #{buyPrice}
+</if> 
+<if test="goldName !=null and goldName != ''">
+, t.gold_name= #{goldName}
+</if> 
+<if test="goldType !=null and goldType != ''">
+, t.gold_type= #{goldType}
+</if> 
+<if test="validity !=null and validity != ''">
+, t.validity= #{validity}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="usePrice !=null and usePrice != ''">
+, t.use_price= #{usePrice}
+</if> 
+ where 1=1 <if test="settingId !=null and settingId != ''">
+and t.setting_id= #{settingId}
+</if> 
+
+    </update>
+
+    <!-- 查询金币设置数量 add by wuxw 2018-07-03 -->
+     <select id="querySystemGoldSettingsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from system_gold_setting t 
+where 1 =1 
+<if test="buyPrice !=null and buyPrice != ''">
+   and t.buy_price= #{buyPrice}
+</if> 
+<if test="goldName !=null and goldName != ''">
+   and t.gold_name= #{goldName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="goldType !=null and goldType != ''">
+   and t.gold_type= #{goldType}
+</if> 
+<if test="validity !=null and validity != ''">
+   and t.validity= #{validity}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="usePrice !=null and usePrice != ''">
+   and t.use_price= #{usePrice}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+
+
+     </select>
+
+</mapper>

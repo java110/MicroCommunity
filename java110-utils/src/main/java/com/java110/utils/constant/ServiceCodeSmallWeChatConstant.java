@@ -27,5 +27,9 @@ public class ServiceCodeSmallWeChatConstant {
      */
     public static final String LIST_SMALL_WE_CHATS = "smallWeChat.listSmallWeChats";
 
+    /**
+     * 查询 小程序管理
+     */
+    public static final String LIST_SMALL_WE_CHAT_ONLY_APP_ID = "smallWeChat.listSmallWeChatOnlyAppId";
 
 }

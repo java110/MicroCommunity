@@ -13,12 +13,14 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
 
+
 logging:
   file: logs/eureka.log
   level:
+    com.netflix: ERROR
     org:
       springframework:
-        web: DEBUG
+        web: ERROR
 
 # 参考文档：http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#_standalone_mode
 # 参考文档：http://my.oschina.net/buwei/blog/618756

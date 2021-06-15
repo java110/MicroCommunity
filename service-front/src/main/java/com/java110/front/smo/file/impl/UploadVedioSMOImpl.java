@@ -34,8 +34,8 @@ public class UploadVedioSMOImpl extends BaseComponentSMO implements IUploadVedio
     public ResponseEntity<Object> upload(IPageData pd, MultipartFile uploadFile) throws IOException {
 
         //JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-        if (uploadFile.getSize() > 200 * 1024 * 1024) {
-            throw new IllegalArgumentException("上传文件超过200兆");
+        if (uploadFile.getSize() > 1024 * 1024 * 1024) {
+            throw new IllegalArgumentException("上传文件超过1024兆");
         }
 
         String fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),

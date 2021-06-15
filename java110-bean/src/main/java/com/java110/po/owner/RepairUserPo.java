@@ -17,14 +17,17 @@ public class RepairUserPo implements Serializable {
     private String communityId;
     private String state;
     private String context;
-
     private String staffId;
     private String staffName;
     private String preStaffId;
     private String preStaffName;
+    private String preRuId;
     private String startTime;
     private String endTime;
     private String repairEvent;
+    private String createTime;
+    private String bId;
+    private String statusCd = "0";
 
     public String getRuId() {
         return ruId;
@@ -128,5 +131,37 @@ public class RepairUserPo implements Serializable {
 
     public void setRepairEvent(String repairEvent) {
         this.repairEvent = repairEvent;
+    }
+
+    public String getPreRuId() {
+        return preRuId;
+    }
+
+    public void setPreRuId(String preRuId) {
+        this.preRuId = preRuId;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

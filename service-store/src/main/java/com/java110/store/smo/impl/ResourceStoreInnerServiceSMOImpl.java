@@ -1,9 +1,11 @@
 package com.java110.store.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.file.FileRelDto;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.purchase.ResourceStorePo;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,20 +40,37 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Override
     public List<ResourceStoreDto> queryResourceStores(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
-
         //校验是否传了 分页信息
-
         int page = resourceResourceStoreDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             resourceResourceStoreDto.setPage((page - 1) * resourceResourceStoreDto.getRow());
         }
-
         List<ResourceStoreDto> resourceResourceStores = BeanConvertUtil.covertBeanList(resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto)), ResourceStoreDto.class);
-
-        return resourceResourceStores;
+        //获取图片地址
+        List<ResourceStoreDto> resourceStoreDtos = new ArrayList<>();
+        for (ResourceStoreDto resourceStoreDto : resourceResourceStores) {
+            //获取资源id
+            String resId = resourceStoreDto.getResId();
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(resId);
+            //查询文件表
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            if (fileRelDtos != null && fileRelDtos.size() > 0) {
+                List<String> fileUrls = new ArrayList<>();
+                for (FileRelDto fileRel : fileRelDtos) {
+                    String url = "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                    fileUrls.add(url);
+                }
+                resourceStoreDto.setFileUrls(fileUrls);
+            }
+            resourceStoreDtos.add(resourceStoreDto);
+        }
+        return resourceStoreDtos;
     }
 
 
@@ -70,14 +91,29 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             info.put("resId", resourceStorePo.getResId());
             info.put("storeId", resourceStorePo.getStoreId());
             List<Map> stores = resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(info);
-
             Assert.listOnlyOne(stores, "不存在该物品");
-            int stock = Integer.parseInt(stores.get(0).get("stock").toString());
-            int newStock = Integer.parseInt(resourceStorePo.getStock());
-            int totalStock = stock + newStock;
-
+            Double stock = Double.parseDouble(stores.get(0).get("stock").toString());
+            Double newStock = Double.parseDouble(resourceStorePo.getStock());
+            Double totalStock = stock + newStock;
             if (totalStock < 0) {
                 throw new IllegalArgumentException("库存不足，参数有误");
+            }
+            //入库操作 对物品进行加权平均
+            if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)) {
+                //获取原均价
+                Object averageOldPrice = stores.get(0).get("averagePrice");
+                Double price = 0.0;
+                if (averageOldPrice != null) {
+                    price = Double.parseDouble(averageOldPrice.toString());
+                }
+                //获取现在采购的价格
+                Double newPrice = Double.parseDouble(resourceStorePo.getPurchasePrice());
+                //获取均价
+                double averagePrice = ((newPrice * newStock) + (price * stock)) / totalStock;
+                BigDecimal b0 = new BigDecimal(averagePrice);
+                //四舍五入保留两位
+                double f0 = b0.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                resourceStorePo.setAveragePrice(String.valueOf(f0));
             }
             resourceStorePo.setStock(totalStock + "");
             resourceStorePo.setStatusCd("0");
@@ -86,7 +122,6 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             DistributedLock.releaseDistributedLock(requestId, key);
         }
     }
-
 
     public IResourceStoreServiceDao getResourceStoreServiceDaoImpl() {
         return resourceResourceStoreServiceDaoImpl;

@@ -136,5 +136,16 @@ public class MachineRecordServiceDaoImpl extends BaseServiceDao implements IMach
         return machineRecordInfos;
     }
 
+    @Override
+    public int saveMachineRecords(Map info) {
+        int saveFlag = sqlSessionTemplate.update("machineRecordServiceDaoImpl.saveMachineRecords", info);
+
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "添加数据失败：" + JSONObject.toJSONString(info));
+        }
+
+        return saveFlag;
+    }
+
 
 }

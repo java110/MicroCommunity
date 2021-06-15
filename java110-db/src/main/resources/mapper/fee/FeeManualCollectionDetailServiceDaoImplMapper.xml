@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeManualCollectionDetailServiceDaoImpl">
+
+
+    <!-- 保存托收明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeManualCollectionDetailInfo" parameterType="Map">
+        insert into fee_manual_collection_detail(
+        amount,fee_name,detail_id,start_time,end_time,state,community_id,collection_id,fee_id
+        ) values (
+        #{amount},#{feeName},#{detailId},#{startTime},#{endTime},#{state},#{communityId},#{collectionId},#{feeId}
+        )
+    </insert>
+
+
+    <!-- 查询托收明细信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeManualCollectionDetailInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.fee_name,t.fee_name feeName,t.detail_id,t.detail_id detailId,t.start_time,t.start_time
+        startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id
+        communityId,t.collection_id,t.collection_id collectionId,t.fee_id,t.fee_id feeId,td.name stateName,
+        pf.config_id configId
+        from fee_manual_collection_detail t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'fee_manual_collection_detail' and td.table_columns = 'state'
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.community_id = t.community_id
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改托收明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeManualCollectionDetailInfo" parameterType="Map">
+        update fee_manual_collection_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            , t.collection_id= #{collectionId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+
+    </update>
+
+    <!-- 查询托收明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeManualCollectionDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_manual_collection_detail t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+
+
+    </select>
+    <select id="queryFeeManualCollectionDetailTotalFee" parameterType="Map" resultType="Map">
+        select sum(t.amount) totalFee
+        from fee_manual_collection_detail t
+        where 1 =1
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+    </select>
+
+
+</mapper>

@@ -55,6 +55,14 @@ public interface IOrderInnerServiceSMO {
     @RequestMapping(value = "/queryOrderByBusinessType", method = RequestMethod.POST)
     public List<OrderDto> queryOrderByBusinessType(@RequestBody OrderDto orderDto);
 
+    /**
+     * 根据
+     * @param businessDto
+     * @return
+     */
+    @RequestMapping(value = "/queryOrderByBId", method = RequestMethod.POST)
+    public List<OrderDto> queryOrderByBId(@RequestBody BusinessDto businessDto);
+
     @RequestMapping(value = "/updateBusinessStatusCd", method = RequestMethod.POST)
     int updateBusinessStatusCd(@RequestBody OrderDto orderDto);
 

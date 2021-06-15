@@ -20,6 +20,9 @@ public class PayFeeDetailPo implements Serializable {
     private String receivedAmount;
     private String primeRate;
     private String remark;
+    private String startTime;
+    private String endTime;
+    private String createTime;
 
     private String state;
 
@@ -94,4 +97,30 @@ public class PayFeeDetailPo implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+
 }

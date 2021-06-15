@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="machineAuthServiceDaoImpl">
+
+    <!-- 保存设备权限信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessMachineAuthInfo" parameterType="Map">
+           insert into business_machine_auth(
+person_name,machine_id,operate,person_id,start_time,state,end_time,community_id,b_id,person_type,auth_id
+) values (
+#{personName},#{machineId},#{operate},#{personId},#{startTime},#{state},#{endTime},#{communityId},#{bId},#{personType},#{authId}
+)
+       </insert>
+
+
+       <!-- 查询设备权限信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessMachineAuthInfo" parameterType="Map" resultType="Map">
+           select  t.person_name,t.person_name personName,t.machine_id,t.machine_id machineId,t.operate,t.person_id,t.person_id personId,t.start_time,t.start_time startTime,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.person_type,t.person_type personType,t.auth_id,t.auth_id authId 
+from business_machine_auth t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="personId !=null and personId != ''">
+   and t.person_id= #{personId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="personType !=null and personType != ''">
+   and t.person_type= #{personType}
+</if> 
+<if test="authId !=null and authId != ''">
+   and t.auth_id= #{authId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存设备权限信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveMachineAuthInfoInstance" parameterType="Map">
+        insert into machine_auth(
+person_name,machine_id,person_id,start_time,status_cd,state,end_time,community_id,b_id,person_type,auth_id
+) select t.person_name,t.machine_id,t.person_id,t.start_time,'0',t.state,t.end_time,t.community_id,t.b_id,t.person_type,t.auth_id from business_machine_auth t where 1=1
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+   and t.operate= 'ADD'
+<if test="personId !=null and personId != ''">
+   and t.person_id= #{personId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="personType !=null and personType != ''">
+   and t.person_type= #{personType}
+</if> 
+<if test="authId !=null and authId != ''">
+   and t.auth_id= #{authId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询设备权限信息 add by wuxw 2018-07-03 -->
+    <select id="getMachineAuthInfo" parameterType="Map" resultType="Map">
+        select  t.person_name,t.person_name personName,t.machine_id,t.machine_id machineId,t.person_id,t.person_id personId,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.person_type,t.person_type personType,t.auth_id,t.auth_id authId 
+from machine_auth t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="personId !=null and personId != ''">
+   and t.person_id= #{personId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="personType !=null and personType != ''">
+   and t.person_type= #{personType}
+</if> 
+<if test="authId !=null and authId != ''">
+   and t.auth_id= #{authId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改设备权限信息 add by wuxw 2018-07-03 -->
+    <update id="updateMachineAuthInfoInstance" parameterType="Map">
+        update  machine_auth t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="personName !=null and personName != ''">
+, t.person_name= #{personName}
+</if> 
+<if test="machineId !=null and machineId != ''">
+, t.machine_id= #{machineId}
+</if> 
+<if test="personId !=null and personId != ''">
+, t.person_id= #{personId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="personType !=null and personType != ''">
+, t.person_type= #{personType}
+</if> 
+ where 1=1 <if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+<if test="authId !=null and authId != ''">
+and t.auth_id= #{authId}
+</if> 
+
+    </update>
+
+    <!-- 查询设备权限数量 add by wuxw 2018-07-03 -->
+     <select id="queryMachineAuthsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from machine_auth t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="personId !=null and personId != ''">
+   and t.person_id= #{personId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="personType !=null and personType != ''">
+   and t.person_type= #{personType}
+</if> 
+<if test="authId !=null and authId != ''">
+   and t.auth_id= #{authId}
+</if> 
+
+
+     </select>
+
+</mapper>

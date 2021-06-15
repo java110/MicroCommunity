@@ -1,5 +1,5 @@
 package com.java110.common.bmo.attrValue;
-import com.java110.dto.attrValue.AttrValueDto;
+import com.java110.dto.attrSpec.AttrValueDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetAttrValueBMO {
 

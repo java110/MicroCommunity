@@ -6,14 +6,15 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairUserInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairUserPo;
@@ -40,15 +41,14 @@ import java.util.List;
 @Java110Listener("repairDispatchListener")
 public class RepairDispatchListener extends AbstractServiceApiPlusListener {
 
-
     //派单
     public static final String ACTION_DISPATCH = "DISPATCH";
 
     //转单
     public static final String ACTION_TRANSFER = "TRANSFER";
+
     //退单
     public static final String ACTION_BACK = "BACK";
-
 
     private static Logger logger = LoggerFactory.getLogger(RepairDispatchListener.class);
 
@@ -97,13 +97,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
             case ACTION_BACK:
                 backRepair(context, reqJson);
                 break;
-
         }
-
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
-
-        context.setResponseEntity(responseEntity);
-
     }
 
     private void backRepair(DataFlowContext context, JSONObject reqJson) {
@@ -145,6 +139,10 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
                 super.delete(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
 
             }
+
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+
+            context.setResponseEntity(responseEntity);
         }
 
 
@@ -158,7 +156,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserDto.setStaffId(userId);
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
         Assert.listOnlyOne(repairUserDtos, "当前用户没有需要处理订单");
-        //插入派单者的信息
+        //把自己改成退单
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -178,6 +176,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserDto.setRepairId(reqJson.getString("repairId"));
         repairUserDto.setStaffId(reqJson.getString("staffId"));
         repairUserDto.setCommunityId(reqJson.getString("communityId"));
+        repairUserDto.setRuId(repairUserDtos.get(0).getPreRuId());
         repairUserDto.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE});
         repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
 
@@ -188,12 +187,13 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_WAIT);
                 return;
             } else {
-                throw new IllegalArgumentException("未找到上级处理人");
+                throw new IllegalArgumentException("非常抱歉当前不能退单");
             }
         }
 
         repairUserPo.setPreStaffId(repairUserDtos.get(0).getPreStaffId());
         repairUserPo.setPreStaffName(repairUserDtos.get(0).getPreStaffName());
+        repairUserPo.setPreRuId(repairUserDtos.get(0).getPreRuId());
         repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
         repairUserPo.setContext("");
         repairUserPo.setCommunityId(reqJson.getString("communityId"));
@@ -236,12 +236,16 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserPo.setPreStaffId(userId);
         repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setPreStaffName(userName);
+        repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId());
         repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
         repairUserPo.setContext("");
         repairUserPo.setCommunityId(reqJson.getString("communityId"));
         super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
         ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TRANSFER);
 
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+
+        context.setResponseEntity(responseEntity);
     }
 
     /**
@@ -251,41 +255,65 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
      * @param reqJson
      */
     private void dispacthRepair(DataFlowContext context, JSONObject reqJson) {
-        String userId = reqJson.getString("userId");
-        String userName = reqJson.getString("userName");
+        //获取报修id
+        String repairId = reqJson.getString("repairId");
+        RepairDto repairDto = new RepairDto();
+        repairDto.setRepairId(repairId);
+        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
+        if (repairDtos == null || repairDtos.size() < 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "数据错误！");
+            context.setResponseEntity(responseEntity);
+        } else {
+            //获取状态
+            String state = repairDtos.get(0).getState();
+            if (state.equals("1000")) {   //1000表示未派单
+                String userId = reqJson.getString("userId");
+                String userName = reqJson.getString("userName");
 
-        // 自己的单子状态修改为转单
-        RepairUserPo repairUserPo = new RepairUserPo();
-        repairUserPo.setRuId("-1");
-        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setState(RepairUserDto.STATE_TRANSFER);
-        repairUserPo.setRepairId(reqJson.getString("repairId"));
-        repairUserPo.setStaffId(userId);
-        repairUserPo.setStaffName(userName);
-        freshPreStaff(reqJson, repairUserPo);
-        repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
-        repairUserPo.setContext(reqJson.getString("context"));
-        repairUserPo.setCommunityId(reqJson.getString("communityId"));
-        super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
-        //处理人信息
-        repairUserPo = new RepairUserPo();
-        repairUserPo.setRuId("-2");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.SECOND, 30);
-        repairUserPo.setStartTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setState(RepairUserDto.STATE_DOING);
-        repairUserPo.setRepairId(reqJson.getString("repairId"));
-        repairUserPo.setStaffId(reqJson.getString("staffId"));
-        repairUserPo.setStaffName(reqJson.getString("staffName"));
-        repairUserPo.setPreStaffId(userId);
-        repairUserPo.setPreStaffName(userName);
-        repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
-        repairUserPo.setContext("");
-        repairUserPo.setCommunityId(reqJson.getString("communityId"));
-        super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
-        ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
+                String ruId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId);
+                // 自己的单子状态修改为转单
+                RepairUserPo repairUserPo = new RepairUserPo();
+                repairUserPo.setRuId(ruId);
+                repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setState(RepairUserDto.STATE_DISPATCH);
+                repairUserPo.setRepairId(reqJson.getString("repairId"));
+                repairUserPo.setStaffId(userId);
+                repairUserPo.setStaffName(userName);
+                freshPreStaff(reqJson, repairUserPo);
+                repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
+                repairUserPo.setContext(reqJson.getString("context"));
+                repairUserPo.setCommunityId(reqJson.getString("communityId"));
+                super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+                //处理人信息
+                repairUserPo = new RepairUserPo();
+                repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.SECOND, 30);
+                repairUserPo.setStartTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setState(RepairUserDto.STATE_DOING);
+                repairUserPo.setRepairId(reqJson.getString("repairId"));
+                repairUserPo.setStaffId(reqJson.getString("staffId"));
+                repairUserPo.setStaffName(reqJson.getString("staffName"));
+                repairUserPo.setPreStaffId(userId);
+                repairUserPo.setPreStaffName(userName);
+                repairUserPo.setPreRuId(ruId);
+                repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
+                repairUserPo.setContext("");
+                repairUserPo.setCommunityId(reqJson.getString("communityId"));
+                super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+                context.setResponseEntity(responseEntity);
+            } else if (state.equals("1100")) {   //1100表示接单
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "该订单处于接单状态，无法进行派单！");
+                context.setResponseEntity(responseEntity);
+            } else {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "状态异常！");
+                context.setResponseEntity(responseEntity);
+            }
+        }
     }
 
     /**
@@ -304,10 +332,12 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         if (repairUserDtos == null || repairUserDtos.size() < 1) {
             repairUserPo.setPreStaffId("-1");
             repairUserPo.setPreStaffName("-1");
+            repairUserPo.setPreRuId("-1");
         } else {
             int pos = repairUserDtos.size() - 1;
             repairUserPo.setPreStaffId(repairUserDtos.get(pos).getStaffId());
             repairUserPo.setPreStaffName(repairUserDtos.get(pos).getStaffName());
+            repairUserPo.setPreRuId(repairUserDtos.get(pos).getRuId());
         }
     }
 

@@ -10,9 +10,14 @@ import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.payment.IToPaySMO;
+import com.java110.front.smo.payment.adapt.IPayAdapt;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,8 @@ import java.util.Map;
 @Service("toPaySMOImpl")
 public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
     private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
+
+
 
 
     @Autowired
@@ -82,13 +89,13 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         }
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         String orderId = orderInfo.getString("oId");
-        double money = Double.parseDouble(orderInfo.getString("receivableAmount"));
+        double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
         if (AppDto.WECHAT_OWNER_APP_ID.equals(pd.getAppId())) {
             appType = OwnerAppUserDto.APP_TYPE_WECHAT;
-        }else if(AppDto.WECHAT_MINA_OWNER_APP_ID.equals(pd.getAppId())){
+        } else if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(pd.getAppId())) {
             appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
-        }else{
+        } else {
             appType = OwnerAppUserDto.APP_TYPE_APP;
         }
         Map tmpParamIn = new HashMap();
@@ -108,13 +115,12 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         }
 
         JSONObject realUserInfo = userResult.getJSONArray("data").getJSONObject(0);
-
         String openId = realUserInfo.getString("openId");
-//        String payAppId = orderInfo.getString("payAppId");
-//        String payMchId = orderInfo.getString("payMchId");
-
-
-        Map result = super.java110Payment(outRestTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"), orderId, money, openId, smallWeChatDto);
+        String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_ADAPT);
+        payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAY_ADAPT : payAdapt;
+        //支付适配器
+        IPayAdapt tPayAdapt = ApplicationContextFactory.getBean(payAdapt, IPayAdapt.class);
+        Map result = tPayAdapt.java110Payment(outRestTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"), orderId, money, openId, smallWeChatDto);
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
 
         return responseEntity;
@@ -130,7 +136,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
-                        + paramIn.getString("appId") + "&page=1&row=1", HttpMethod.GET);
+                        + paramIn.getString("appId") + "&page=1&row=1&communityId="+paramIn.getString("communityId"), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return null;

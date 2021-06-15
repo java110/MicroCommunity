@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userLoginServiceDaoImpl">
+
+
+    <!-- 保存用户登录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveUserLoginInfo" parameterType="Map">
+        insert into u_user_login(
+        password,login_id,login_time,source,user_name,user_id,token
+        ) values (
+        #{password},#{loginId},#{loginTime},#{source},#{userName},#{userId},#{token}
+        )
+    </insert>
+
+
+    <!-- 查询用户登录信息 add by wuxw 2018-07-03 -->
+    <select id="getUserLoginInfo" parameterType="Map" resultType="Map">
+        select DISTINCT t.login_id,t.login_id loginId,t.login_time,t.login_time
+        loginTime,t.source,t.user_name,t.user_name userName,t.user_id,t.user_id userId,
+        puo.org_name parentOrgName,uo.org_name orgName
+        from u_user_login t
+        left join u_org_staff_rel uosr on t.user_id = uosr.staff_id and uosr.status_cd = '0'
+        left join u_org uo on uosr.org_id = uo.org_id  and uo.status_cd = '0'
+        left join u_org puo on uo.parent_org_id = puo.org_id and puo.status_cd = '0'
+        where 1 =1
+        <if test="parentOrgName !=null and parentOrgName != ''">
+            and puo.org_name= #{parentOrgName}
+        </if>
+        <if test="orgName !=null and orgName != ''">
+            and uo.org_name= #{orgName}
+        </if>
+        <if test="password !=null and password != ''">
+            and t.password= #{password}
+        </if>
+        <if test="loginId !=null and loginId != ''">
+            and t.login_id= #{loginId}
+        </if>
+        <if test="loginTime !=null and loginTime != ''">
+            and t.login_time= #{loginTime}
+        </if>
+        <if test="source !=null and source != ''">
+            and t.source= #{source}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="token !=null and token != ''">
+            and t.token= #{token}
+        </if>
+        order by t.login_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改用户登录信息 add by wuxw 2018-07-03 -->
+    <update id="updateUserLoginInfo" parameterType="Map">
+        update u_user_login t
+        <set>
+            <if test="newBId != null and newBId != ''">
+                t.b_id = #{newBId},
+            </if>
+            <if test="password !=null and password != ''">
+                t.password= #{password},
+            </if>
+            <if test="loginTime !=null and loginTime != ''">
+                t.login_time= #{loginTime},
+            </if>
+            <if test="source !=null and source != ''">
+                t.source= #{source},
+            </if>
+            <if test="userName !=null and userName != ''">
+                t.user_name= #{userName},
+            </if>
+            <if test="userId !=null and userId != ''">
+                t.user_id= #{userId},
+            </if>
+            <if test="token !=null and token != ''">
+                t.token= #{token},
+            </if>
+        </set>
+        where 1=1
+        <if test="loginId !=null and loginId != ''">
+            and t.login_id= #{loginId}
+        </if>
+
+    </update>
+
+    <!-- 查询用户登录数量 add by wuxw 2018-07-03 -->
+    <select id="queryUserLoginsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from u_user_login t
+        where 1 =1
+        <if test="password !=null and password != ''">
+            and t.password= #{password}
+        </if>
+        <if test="loginId !=null and loginId != ''">
+            and t.login_id= #{loginId}
+        </if>
+        <if test="loginTime !=null and loginTime != ''">
+            and t.login_time= #{loginTime}
+        </if>
+        <if test="source !=null and source != ''">
+            and t.source= #{source}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="token !=null and token != ''">
+            and t.token= #{token}
+        </if>
+
+
+    </select>
+
+</mapper>

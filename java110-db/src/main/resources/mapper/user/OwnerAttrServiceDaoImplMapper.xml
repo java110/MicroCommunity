@@ -13,6 +13,14 @@
         )
     </insert>
 
+    <insert id="saveOwnerAttr" parameterType="Map">
+        insert into building_owner_attr(
+        attr_id,spec_cd,b_id,community_id,value,member_id
+        ) values (
+        #{attrId},#{specCd},'-1',#{communityId},#{value},#{memberId}
+        )
+    </insert>
+
 
     <!-- 查询业主属性信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessOwnerAttrInfo" parameterType="Map" resultType="Map">

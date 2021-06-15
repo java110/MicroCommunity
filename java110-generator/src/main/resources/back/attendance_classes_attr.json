@@ -1,0 +1,33 @@
+{
+  "id": "attrId",
+  "name": "attendanceClassesAttr",
+  "desc": "考勤班组属性",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "common",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_ATTENDANCE_CLASSES_ATTR",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_ATTENDANCE_CLASSES_ATTR",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_ATTENDANCE_CLASSES_ATTR",
+  "newBusinessTypeCdValue": "651100030004",
+  "updateBusinessTypeCdValue": "651100040004",
+  "deleteBusinessTypeCdValue": "651100050004",
+  "businessTableName": "business_attendance_classes_attr",
+  "tableName": "attendance_classes_attr",
+  "param": {
+    "storeId": "store_id",
+    "classesId": "classes_id",
+    "bId": "b_id",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
+    "value": "value",
+    "createTime": "create_time",
+    "statusCd": "status_cd",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "specCd",
+      "msg": "属性不能为空"
+    }
+  ]
+}

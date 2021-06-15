@@ -103,7 +103,7 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
         workflowDto.setStoreId(storeId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
 
-        Assert.listOnlyOne(workflowDtos, "未找到 采购流程或找到多条");
+        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {

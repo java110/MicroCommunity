@@ -2,7 +2,6 @@ package com.java110.core.client;
 
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
-import com.tencentcloudapi.tci.v20190318.models.FaceExpressionResult;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -17,6 +16,7 @@ import java.util.UUID;
 
 @Component
 public class FtpUploadTemplate {
+
     private static Logger logger = LoggerFactory.getLogger(FtpUploadTemplate.class);
 
     /*
@@ -25,14 +25,11 @@ public class FtpUploadTemplate {
      * private static String userPassword ="MXUsssMjhssE+*=a3C4\\0";//密码
      */
     private static String ftpPath = "uploadFiles"; // 文件上传目录
-
     private static String LOCAL_CHARSET = "GBK";
     private static String SERVER_CHARSET = "ISO-8859-1";
     private final static String localpath = "F:/";//下载到F盘下
     private final static String fileSeparator = System.getProperty("file.separator");
-
     private final static String DEFAULT_IMG_SUFFIX = ".jpg";
-
     private final static String IMAGE_DEFAULT_PATH = "img/";
 
     /*
@@ -43,10 +40,11 @@ public class FtpUploadTemplate {
                          String userName, String userPassword, String ftpPath) {
         String fileName = "";
         FTPClient ftpClient = null;
+        ByteArrayInputStream is = null;
         try {
             ftpClient = new FTPClient();
             // request.setCharacterEncoding("utf-8");
-            if(!ftpClient.isConnected()){
+            if (!ftpClient.isConnected()) {
                 ftpClient.connect(server, port);
             }
             ftpClient.login(userName, userPassword);
@@ -60,7 +58,6 @@ public class FtpUploadTemplate {
                 LOCAL_CHARSET = "UTF-8";
             }
             fileName = UUID.randomUUID().toString();
-
             if (imageBase64.contains("data:image/png;base64,")) {
                 imageBase64 = imageBase64.replace("data:image/png;base64,", "");
                 fileName += ".png";
@@ -73,6 +70,9 @@ public class FtpUploadTemplate {
             } else if (imageBase64.contains("data:application/octet-stream;base64,")) {
                 imageBase64 = imageBase64.replace("data:application/octet-stream;base64,", "");
                 fileName += ".jpg";
+            } else if (imageBase64.contains("mp4") || imageBase64.contains("MP4") || imageBase64.contains("AVI") || imageBase64.contains("avi")
+                    || imageBase64.contains("WMV") || imageBase64.contains("wmv")) {
+                fileName += ".mp4";
             } else {
                 fileName += ".jpg";
             }
@@ -83,12 +83,9 @@ public class FtpUploadTemplate {
                 System.out.println("this file exist ftp");
                 ftpClient.deleteFile(fs[0].getName());
             }
-
-
             byte[] context = Base64Convert.base64ToByte(imageBase64);
-            ByteArrayInputStream is = new ByteArrayInputStream(context);
+            is = new ByteArrayInputStream(context);
             boolean saveFlag = ftpClient.storeFile(fileName, is);
-            is.close();
             if (!saveFlag) {
                 throw new IllegalArgumentException("存储文件失败");
             }
@@ -98,6 +95,9 @@ public class FtpUploadTemplate {
         } finally {
             try {
                 ftpClient.disconnect();
+                if (is != null) {
+                    is.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.error("关闭ftpClient 失败", e);
@@ -105,7 +105,6 @@ public class FtpUploadTemplate {
         }
         return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
     }
-
 
     /*
      *文件上传工具方法
@@ -117,7 +116,7 @@ public class FtpUploadTemplate {
         try {
             // request.setCharacterEncoding("utf-8");
             ftpClient = new FTPClient();
-            if(!ftpClient.isConnected()){
+            if (!ftpClient.isConnected()) {
                 ftpClient.connect(server, port);
             }
             ftpClient.login(userName, userPassword);
@@ -146,7 +145,7 @@ public class FtpUploadTemplate {
                 throw new IllegalArgumentException("存储文件失败");
             }
         } catch (Exception e) {
-            // logger.error("上传文件失败", e);
+            logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
         } finally {
             try {
@@ -166,7 +165,7 @@ public class FtpUploadTemplate {
         FTPClient ftpClient = null;
         try {
             ftpClient = new FTPClient();
-            if(!ftpClient.isConnected()){
+            if (!ftpClient.isConnected()) {
                 ftpClient.connect(server, port);
             }
             ftpClient.login(userName, userPassword);
@@ -212,18 +211,18 @@ public class FtpUploadTemplate {
 
     public static void main(String[] args) {
         FtpUploadTemplate ftpUploadTemplate = new FtpUploadTemplate();
-        String img = ftpUploadTemplate.download("/hc/img/20200518/","ed05abae-2eca-40ff-81a8-b586ff2e6a36.jpg",
-                "118.89.243.11",617,"hcdemo","45j74jpWTf7bNhnC");
-
-        System.out.printf("img="+img);
+        String img = ftpUploadTemplate.download("/hc/img/20200518/", "ed05abae-2eca-40ff-81a8-b586ff2e6a36.jpg",
+                "118.89.243.11", 617, "hcdemo", "45j74jpWTf7bNhnC");
+        System.out.printf("img=" + img);
     }
 
     public String download(String remotePath, String fileName, String server, int port, String userName, String userPassword) {
         InputStream is = null;
         ByteArrayOutputStream bos = null;
+        ByteArrayInputStream fis = null;
         FTPClient ftpClient = new FTPClient();
         try {
-            if(!ftpClient.isConnected()){
+            if (!ftpClient.isConnected()) {
                 ftpClient.connect(server, port);
             }
             ftpClient.login(userName, userPassword);
@@ -246,11 +245,9 @@ public class FtpUploadTemplate {
             while (-1 != (length = is.read(buf, 0, buf.length))) {
                 bos.write(buf, 0, length);
             }
-            ByteArrayInputStream fis = new ByteArrayInputStream(
+            fis = new ByteArrayInputStream(
                     bos.toByteArray());
             bos.flush();
-            is.close();
-            bos.close();
             byte[] buffer = new byte[fis.available()];
             int offset = 0;
             int numRead = 0;
@@ -260,18 +257,32 @@ public class FtpUploadTemplate {
             if (offset != buffer.length) {
                 throw new IOException("Could not completely read file ");
             }
-            fis.close();
             return Base64Convert.byteToBase64(buffer);
         } catch (Exception e) {
             logger.error("ftp通过文件名称获取远程文件流", e);
         } finally {
-            try {
-                if(bos != null){
+            if (bos != null) {
+                try {
                     bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                if(is !=null) {
+            }
+            if (is != null) {
+                try {
                     is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
                 closeConnect(ftpClient);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -329,5 +340,4 @@ public class FtpUploadTemplate {
             return false;
         }
     }
-
 }

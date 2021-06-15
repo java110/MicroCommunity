@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.RoomDto;
 import com.java110.entity.assetImport.*;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
-import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.*;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -175,7 +177,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
         for (ImportParkingSpace parkingSpace : parkingSpaces) {
-
+            responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
             JSONObject savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
             paramIn = new JSONObject();
             // 如果不存在，才插入
@@ -184,6 +186,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("typeCd", parkingSpace.getTypeCd());
                 paramIn.put("num", parkingSpace.getPaNum());
+
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
                 savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
             }
@@ -204,6 +207,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("num", parkingSpace.getPsNum());
             paramIn.put("area", parkingSpace.getArea());
             paramIn.put("typeCd", parkingSpace.getTypeCd());
+            paramIn.put("parkingType", "1");
 
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -232,26 +236,12 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("psId", savedParkingSpaceInfo.getString("psId"));
             paramIn.put("storeId", result.getStoreId());
             paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
+            paramIn.put("startTime", parkingSpace.getStartTime());
+            paramIn.put("endTime", parkingSpace.getEndTime());
 
             if ("H".equals(parkingSpace.getSellOrHire())) {
                 paramIn.put("cycles", "0");
             }
-
-            String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
-                    ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd + "&isDefault=T";
-            responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
-
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                continue;
-            }
-
-            JSONObject configInfo = JSONObject.parseObject(responseEntity.getBody()).getJSONArray("feeConfigs").getJSONObject(0);
-            if (!configInfo.containsKey("additionalAmount")) {
-                continue;
-            }
-
-            paramIn.put("receivedAmount", configInfo.getString("additionalAmount"));
 
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace";
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
@@ -294,7 +284,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("apartment", room.getSection());
             paramIn.put("state", "2002");
             paramIn.put("builtUpArea", room.getBuiltUpArea());
-            paramIn.put("unitPrice", "1000.00");
+            paramIn.put("feeCoefficient", "1.00");
+            paramIn.put("roomType", "0".equals(room.getFloor().getUnitNum()) ? RoomDto.ROOM_TYPE_SHOPS : RoomDto.ROOM_TYPE_SHOPS);
 
 
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
@@ -356,6 +347,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("configId", ttFee.getString("configId"));
                 paramIn.put("storeId", result.getStoreId());
                 paramIn.put("feeEndDate", room.getFeeEndDate().split("#")[feeIndex]);
+                paramIn.put("startTime", paramIn.getString("feeEndDate"));
+
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             }
 
@@ -377,7 +370,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaces?page=1&row=1&communityId=" + result.getCommunityId()
-                + "&num=" + parkingSpace.getPsNum();
+                + "&num=" + parkingSpace.getPsNum() + "&areaNum=" + parkingSpace.getPaNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -533,7 +526,9 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("floorNum", importFloor.getFloorNum());
                 paramIn.put("userId", result.getUserId());
-                paramIn.put("name", importFloor.getFloorNum() + "号楼");
+                paramIn.put("name", importFloor.getFloorNum() + "栋");
+                paramIn.put("floorArea", 1.00);
+
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
                 savedFloorInfo = getExistsFloor(pd, result, importFloor);
             }
@@ -561,6 +556,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("unitNum", importFloor.getUnitNum());
             paramIn.put("layerCount", importFloor.getLayerCount());
             paramIn.put("lift", importFloor.getLift());
+            paramIn.put("unitArea", 1.00);
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
 
             //将unitId 刷入ImportFloor对象
@@ -714,7 +710,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importParkingSpace.setPsNum(os[1].toString());
             importParkingSpace.setTypeCd(os[2].toString());
             importParkingSpace.setArea(Double.parseDouble(os[3].toString()));
-            if (StringUtil.isNullOrNone(os[4])) {
+            if (os.length < 5 || StringUtil.isNullOrNone(os[4])) {
                 parkingSpaces.add(importParkingSpace);
                 continue;
             }
@@ -726,10 +722,42 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 importParkingSpace.setCarType(os[7].toString());
                 importParkingSpace.setCarColor(os[8].toString());
                 importParkingSpace.setSellOrHire(os[9].toString());
+
+                String startTime = excelDoubleToDate(os[10].toString());
+                String endTime = excelDoubleToDate(os[11].toString());
+                Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
+                Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
+                importParkingSpace.setStartTime(startTime);
+                importParkingSpace.setEndTime(endTime);
             }
 
             parkingSpaces.add(importParkingSpace);
         }
+    }
+
+    //解析Excel日期格式
+    public static String excelDoubleToDate(String strDate) {
+        if (strDate.length() == 5) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date tDate = DoubleToDate(Double.parseDouble(strDate));
+                return sdf.format(tDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return strDate;
+            }
+        }
+        return strDate;
+    }
+
+
+    //解析Excel日期格式
+    public static Date DoubleToDate(Double dVal) {
+        Date tDate = new Date();
+        long localOffset = tDate.getTimezoneOffset() * 60000; //系统时区偏移 1900/1/1 到 1970/1/1 的 25569 天
+        tDate.setTime((long) ((dVal - 25569) * 24 * 3600 * 1000 + localOffset));
+
+        return tDate;
     }
 
     /**
@@ -745,39 +773,44 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
         ImportRoom importRoom = null;
         for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
-            Object[] os = oList.get(osIndex);
-            if (osIndex == 0) { // 第一行是 头部信息 直接跳过
-                continue;
-            }
-            if (StringUtil.isNullOrNone(os[0])) {
-                continue;
-            }
-            Assert.hasValue(os[1], "房屋信息选项中" + (osIndex + 1) + "行楼栋编号为空");
-            Assert.hasValue(os[2], "房屋信息选项中" + (osIndex + 1) + "行单元编号为空");
-            Assert.hasValue(os[3], "房屋信息选项中" + (osIndex + 1) + "行房屋楼层为空");
-            Assert.hasValue(os[4], "房屋信息选项中" + (osIndex + 1) + "行房屋户型为空");
-            Assert.hasValue(os[5], "房屋信息选项中" + (osIndex + 1) + "行建筑面积为空");
-            if (!StringUtil.isNullOrNone(os[6])) {
-                Assert.hasValue(os[7], "房屋信息选项中" + (osIndex + 1) + "行房屋费用为空");
-                Assert.hasValue(os[8], "房屋信息选项中" + (osIndex + 1) + "行费用到期时间为空");
-            }
-            importRoom = new ImportRoom();
-            importRoom.setRoomNum(os[0].toString());
-            importRoom.setFloor(getImportFloor(floors, os[1].toString(), os[2].toString()));
-            importRoom.setLayer(Integer.parseInt(os[3].toString()));
-            importRoom.setSection(os[4].toString());
-            importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
+            try {
+                Object[] os = oList.get(osIndex);
+                if (osIndex == 0) { // 第一行是 头部信息 直接跳过
+                    continue;
+                }
+                if (StringUtil.isNullOrNone(os[0])) {
+                    continue;
+                }
+                Assert.hasValue(os[1], "房屋信息选项中" + (osIndex + 1) + "行楼栋编号为空");
+                Assert.hasValue(os[2], "房屋信息选项中" + (osIndex + 1) + "行单元编号为空");
+                Assert.hasValue(os[3], "房屋信息选项中" + (osIndex + 1) + "行房屋楼层为空");
+                Assert.hasValue(os[4], "房屋信息选项中" + (osIndex + 1) + "行房屋户型为空");
+                Assert.hasValue(os[5], "房屋信息选项中" + (osIndex + 1) + "行建筑面积为空");
+                if (os.length > 6 && !StringUtil.isNullOrNone(os[6])) {
+                    Assert.hasValue(os[7], "房屋信息选项中" + (osIndex + 1) + "行房屋费用为空");
+                    Assert.hasValue(os[8], "房屋信息选项中" + (osIndex + 1) + "行费用到期时间为空");
+                }
+                importRoom = new ImportRoom();
+                importRoom.setRoomNum(os[0].toString());
+                importRoom.setFloor(getImportFloor(floors, os[1].toString(), os[2].toString()));
+                importRoom.setLayer(Integer.parseInt(os[3].toString()));
+                importRoom.setSection(os[4].toString());
+                importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
 
-            if (!StringUtil.isNullOrNone(os[6])) {
-                importRoom.setRoomFeeId(os[7].toString());
-                importRoom.setFeeEndDate(os[8].toString());
-            }
-            if (StringUtil.isNullOrNone(os[6])) {
+                if (os.length > 6 && !StringUtil.isNullOrNone(os[6])) {
+                    importRoom.setRoomFeeId(os[7].toString());
+                    importRoom.setFeeEndDate(os[8].toString());
+                }
+                if (os.length < 7 || StringUtil.isNullOrNone(os[6])) {
+                    rooms.add(importRoom);
+                    continue;
+                }
+                importRoom.setImportOwner(getImportOwner(owners, os[6].toString()));
                 rooms.add(importRoom);
-                continue;
+            } catch (Exception e) {
+                logger.error("房屋数据校验失败", e);
+                throw new IllegalArgumentException("房屋信息sheet中第" + (osIndex + 1) + "行数据错误，请检查" + e.getLocalizedMessage());
             }
-            importRoom.setImportOwner(getImportOwner(owners, os[6].toString()));
-            rooms.add(importRoom);
         }
     }
 
@@ -889,35 +922,40 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
         ImportOwner importOwner = null;
         for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
-            Object[] os = oList.get(osIndex);
-            if (osIndex == 0) { // 第一行是 头部信息 直接跳过
-                continue;
-            }
-            if (StringUtil.isNullOrNone(os[0])) {
-                continue;
-            }
-            Assert.hasValue(os[0], "业主信息选项中" + (osIndex + 1) + "行业主编号为空");
-            Assert.hasValue(os[1], "业主信息选项中" + (osIndex + 1) + "行业主名称为空");
-            Assert.hasValue(os[2], "业主信息选项中" + (osIndex + 1) + "行业主性别为空");
-            String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
-            String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
+            try {
+                Object[] os = oList.get(osIndex);
+                if (osIndex == 0) { // 第一行是 头部信息 直接跳过
+                    continue;
+                }
+                if (StringUtil.isNullOrNone(os[0])) {
+                    continue;
+                }
+                Assert.hasValue(os[0], "业主信息选项中" + (osIndex + 1) + "行业主编号为空");
+                Assert.hasValue(os[1], "业主信息选项中" + (osIndex + 1) + "行业主名称为空");
+                Assert.hasValue(os[2], "业主信息选项中" + (osIndex + 1) + "行业主性别为空");
+                String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
+                String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
 
-            if (os[4].toString().length() > 11) {
-                throw new IllegalArgumentException(os[1].toString() + " 的手机号超过11位,请核实");
-            }
-            if (os[5].toString().length() > 18) {
-                throw new IllegalArgumentException(os[1].toString() + " 的身份证超过18位,请核实");
-            }
+                if (os[4].toString().length() > 11) {
+                    throw new IllegalArgumentException(os[1].toString() + " 的手机号超过11位,请核实");
+                }
+                if (os[5].toString().length() > 18) {
+                    throw new IllegalArgumentException(os[1].toString() + " 的身份证超过18位,请核实");
+                }
 
-            String age = StringUtil.isNullOrNone(os[3]) ? CommonUtil.getAgeByCertId(idCard) : os[3].toString();
-            importOwner = new ImportOwner();
-            importOwner.setOwnerNum(os[0].toString());
-            importOwner.setOwnerName(os[1].toString());
-            importOwner.setSex("男".equals(os[2].toString()) ? "0" : "1");
-            importOwner.setAge(Integer.parseInt(age));
-            importOwner.setTel(tel);
-            importOwner.setIdCard(idCard);
-            owners.add(importOwner);
+                String age = StringUtil.isNullOrNone(os[3]) ? CommonUtil.getAgeByCertId(idCard) : os[3].toString();
+                importOwner = new ImportOwner();
+                importOwner.setOwnerNum(os[0].toString());
+                importOwner.setOwnerName(os[1].toString());
+                importOwner.setSex("男".equals(os[2].toString()) ? "0" : "1");
+                importOwner.setAge(Integer.parseInt(age));
+                importOwner.setTel(tel);
+                importOwner.setIdCard(idCard);
+                owners.add(importOwner);
+            } catch (Exception e) {
+                logger.error("第" + (osIndex + 1) + "行数据出现问题", e);
+                throw new IllegalArgumentException("第" + (osIndex + 1) + "行数据出现问题" + e.getLocalizedMessage(), e);
+            }
         }
     }
 

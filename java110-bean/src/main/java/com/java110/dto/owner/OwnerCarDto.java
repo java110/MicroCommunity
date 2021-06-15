@@ -15,11 +15,20 @@ import java.util.Date;
  **/
 public class OwnerCarDto extends PageDto implements Serializable {
 
+    public static final String STATE_NORMAL = "1001";
+    public static final String STATE_OWE = "2002";
+    public static final String STATE_FINISH = "3003";
+
+
+    public static final String CAR_TYPE_PRIMARY = "1001"; //主车辆
+    public static final String CAR_TYPE_MEMBER = "1002"; //车辆成员
+
     private String carColor;
     private String carBrand;
     private String carType;
     private String carTypeName;
     private String carNum;
+    private String carNumLike;
     private String[] carNums;
     private String communityId;
     private String psId;
@@ -28,15 +37,34 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String ownerId;
     private String userId;
     private String carId;
-    private boolean withOwner =false;
+    private String[] carIds;
+    private boolean withOwner = false;
     private String ownerName;
     private String idCard;
     private String link;
+    private String parkingType;
+
+    private String roomName;
+
+    private Date startTime;
+    private Date endTime;
+    private String state;
+    private String stateName;
+
+    private String areaNum;
+
+    private String num;
 
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String valid;
+
+    private String bId;
+    private String carTypeCd;
+    private String memberId;
 
 
     public String getCarColor() {
@@ -190,5 +218,117 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getAreaNum() {
+        return areaNum;
+    }
+
+    public void setAreaNum(String areaNum) {
+        this.areaNum = areaNum;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getValid() {
+        return valid;
+    }
+
+    public void setValid(String valid) {
+        this.valid = valid;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String[] getCarIds() {
+        return carIds;
+    }
+
+    public void setCarIds(String[] carIds) {
+        this.carIds = carIds;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getCarTypeCd() {
+        return carTypeCd;
+    }
+
+    public void setCarTypeCd(String carTypeCd) {
+        this.carTypeCd = carTypeCd;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getParkingType() {
+        return parkingType;
+    }
+
+    public void setParkingType(String parkingType) {
+        this.parkingType = parkingType;
+    }
+
+    public String getCarNumLike() {
+        return carNumLike;
+    }
+
+    public void setCarNumLike(String carNumLike) {
+        this.carNumLike = carNumLike;
     }
 }

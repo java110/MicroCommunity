@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupBuyProductSpecServiceDaoImpl">
+
+
+    <!-- 保存拼团产品规格信息 add by wuxw 2018-07-03 -->
+    <insert id="saveGroupBuyProductSpecInfo" parameterType="Map">
+        insert into group_buy_product_spec(
+        spec_id,group_sales,product_id,group_price,default_show,store_id,group_stock,value_id
+        ) values (
+        #{specId},#{groupSales},#{productId},#{groupPrice},#{defaultShow},#{storeId},#{groupStock},#{valueId}
+        )
+    </insert>
+
+
+    <!-- 查询拼团产品规格信息 add by wuxw 2018-07-03 -->
+    <select id="getGroupBuyProductSpecInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.group_sales,t.group_sales groupSales,t.product_id,t.product_id
+        productId,t.group_price,t.group_price groupPrice,t.default_show,t.default_show
+        defaultShow,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.group_stock,t.group_stock
+        groupStock,ps.spec_name specName,psv.price,psv.ot_price otPrice,psv.cost_price costPrice,psv.vip_price vipPrice,
+        psv.stock,psv.sales,t.value_id valueId
+        from group_buy_product_spec t
+        inner join product_spec_value psv on psv.spec_id = t.spec_id and psv.product_id = t.product_id and psv.status_cd = '0'
+        and psv.store_id = t.store_id and psv.value_id = t.value_id
+        left join product_spec ps on t.spec_id = ps.spec_id and ps.store_id = t.store_id and ps.status_cd = '0'
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="groupSales !=null and groupSales != ''">
+            and t.group_sales= #{groupSales}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="groupPrice !=null and groupPrice != ''">
+            and t.group_price= #{groupPrice}
+        </if>
+        <if test="defaultShow !=null and defaultShow != ''">
+            and t.default_show= #{defaultShow}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="groupStock !=null and groupStock != ''">
+            and t.group_stock= #{groupStock}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改拼团产品规格信息 add by wuxw 2018-07-03 -->
+    <update id="updateGroupBuyProductSpecInfo" parameterType="Map">
+        update group_buy_product_spec t set t.status_cd = #{statusCd}
+        <if test="groupSales !=null and groupSales != ''">
+            , t.group_sales= #{groupSales}
+        </if>
+        <if test="groupPrice !=null and groupPrice != ''">
+            , t.group_price= #{groupPrice}
+        </if>
+        <if test="defaultShow !=null and defaultShow != ''">
+            , t.default_show= #{defaultShow}
+        </if>
+
+        <if test="groupStock !=null and groupStock != ''">
+            , t.group_stock= #{groupStock}
+        </if>
+        where 1=1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询拼团产品规格数量 add by wuxw 2018-07-03 -->
+    <select id="queryGroupBuyProductSpecsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from group_buy_product_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id = #{valueId}
+        </if>
+        <if test="groupSales !=null and groupSales != ''">
+            and t.group_sales= #{groupSales}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="groupPrice !=null and groupPrice != ''">
+            and t.group_price= #{groupPrice}
+        </if>
+        <if test="defaultShow !=null and defaultShow != ''">
+            and t.default_show= #{defaultShow}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="groupStock !=null and groupStock != ''">
+            and t.group_stock= #{groupStock}
+        </if>
+
+
+    </select>
+
+    <select id="queryProductStockAndSales" parameterType="Map" resultType="Map">
+        select t.product_id productId,sum(t.group_stock) groupStock,SUM(t.group_sales) groupSales
+        from group_buy_product_spec t
+        where 1 =1
+        and t.status_cd= '0'
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="productIds != null">
+            and t.product_id in
+            <foreach collection="productIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        group by t.product_id
+    </select>
+
+</mapper>

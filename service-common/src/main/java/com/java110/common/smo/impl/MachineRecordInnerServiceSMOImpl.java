@@ -8,11 +8,13 @@ import com.java110.dto.PageDto;
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.intf.common.IMachineRecordInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,18 @@ public class MachineRecordInnerServiceSMOImpl extends BaseServiceSMO implements 
         List<Map> records = machineRecordServiceDaoImpl.getAssetsMachineRecords(info);
 
         return JSONArray.parseArray(JSONArray.toJSONString(records));
+    }
+
+    @Override
+    public int saveMachineRecords(@RequestBody List<MachineRecordPo> machineRecordPos) {
+        List<Map> machineRecords = new ArrayList<>();
+        for (MachineRecordPo payFeePo : machineRecordPos) {
+            machineRecords.add(BeanConvertUtil.beanCovertMap(payFeePo));
+        }
+
+        Map info = new HashMap();
+        info.put("machineRecords", machineRecords);
+        return machineRecordServiceDaoImpl.saveMachineRecords(info);
     }
 
     public IMachineRecordServiceDao getMachineRecordServiceDaoImpl() {

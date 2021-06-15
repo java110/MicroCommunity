@@ -1,6 +1,7 @@
 package com.java110.report;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+
 
 import java.nio.charset.Charset;
 
@@ -36,7 +37,13 @@ import java.nio.charset.Charset;
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.report.listener"})
-@EnableFeignClients(basePackages = {"com.java110.intf.user"})
+@EnableFeignClients(basePackages = {"com.java110.intf.user",
+        "com.java110.intf.order",
+        "com.java110.intf.common",
+        "com.java110.intf.store",
+        "com.java110.intf.user",
+        "com.java110.intf.fee",
+        "com.java110.intf.community"})
 public class ReportServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(ReportServiceApplicationStart.class);
@@ -51,7 +58,7 @@ public class ReportServiceApplicationStart {
     @LoadBalanced
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
     }
 
@@ -61,9 +68,9 @@ public class ReportServiceApplicationStart {
      * @return restTemplate
      */
     @Bean
-    public com.java110.core.client.RestTemplate outRestTemplate() {
+    public RestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        com.java110.core.client.RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(com.java110.core.client.RestTemplate.class);
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
     }
 

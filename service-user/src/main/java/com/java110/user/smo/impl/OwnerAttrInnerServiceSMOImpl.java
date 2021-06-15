@@ -7,6 +7,7 @@ import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.owner.OwnerAttrPo;
 import com.java110.user.dao.IOwnerAttrServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -97,6 +98,10 @@ public class OwnerAttrInnerServiceSMOImpl extends BaseServiceSMO implements IOwn
     @Override
     public int queryOwnerAttrsCount(@RequestBody OwnerAttrDto ownerAttrDto) {
         return ownerAttrServiceDaoImpl.queryOwnerAttrsCount(BeanConvertUtil.beanCovertMap(ownerAttrDto));
+    }
+    @Override
+    public int saveOwnerAttr(@RequestBody OwnerAttrPo ownerAttrPo) {
+        return ownerAttrServiceDaoImpl.saveOwnerAttr(BeanConvertUtil.beanCovertMap(ownerAttrPo));
     }
 
     public IOwnerAttrServiceDao getOwnerAttrServiceDaoImpl() {

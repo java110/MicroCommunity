@@ -3,7 +3,7 @@ package com.java110.community.bmo.assets.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.bmo.assets.IQueryAssetsInspectionBMO;
-import com.java110.dto.inspectionTask.InspectionTaskDto;
+import com.java110.dto.inspectionPlan.InspectionTaskDto;
 import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;

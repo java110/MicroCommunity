@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyDetailInnerServiceSMO;
 import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -28,6 +31,9 @@ public class ListPurchaseApplyDetailsListener extends AbstractServiceApiListener
 
     @Autowired
     private IPurchaseApplyDetailInnerServiceSMO purchaseApplyDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -63,6 +69,20 @@ public class ListPurchaseApplyDetailsListener extends AbstractServiceApiListener
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         PurchaseApplyDetailDto purchaseApplyDetailDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDetailDto.class);
+
+        //是否具有查看所有出入库明细的权限
+        String userId = reqJson.getString("userId");
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewAllPurchaseApplyDetail");
+        basePrivilegeDto.setUserId(userId);
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        purchaseApplyDetailDto.setUserId("");//申请人
+        if (privileges.size()!=0) {
+            purchaseApplyDetailDto.setUserId("");//创建人
+        }else{
+            purchaseApplyDetailDto.setCreateUserId(userId);//创建人
+        }
+
 
         int count = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetailsCount(purchaseApplyDetailDto);
 

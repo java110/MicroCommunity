@@ -49,6 +49,7 @@ public abstract class AbstractAdvertBusinessServiceDataFlowListener extends Abst
         businessAdvertInfo.put("communityId", businessAdvertInfo.get("community_id"));
         businessAdvertInfo.put("locationObjId", businessAdvertInfo.get("location_obj_id"));
         businessAdvertInfo.put("seq", businessAdvertInfo.get("seq"));
+        businessAdvertInfo.put("viewType", businessAdvertInfo.get("view_type"));
         businessAdvertInfo.remove("bId");
         businessAdvertInfo.put("statusCd", statusCd);
     }
@@ -85,6 +86,7 @@ public abstract class AbstractAdvertBusinessServiceDataFlowListener extends Abst
         currentAdvertInfo.put("communityId", currentAdvertInfo.get("community_id"));
         currentAdvertInfo.put("locationObjId", currentAdvertInfo.get("location_obj_id"));
         currentAdvertInfo.put("seq", currentAdvertInfo.get("seq"));
+        currentAdvertInfo.put("viewType", currentAdvertInfo.get("view_type"));
 
 
         currentAdvertInfo.put("operate", StatusConstant.OPERATE_DEL);

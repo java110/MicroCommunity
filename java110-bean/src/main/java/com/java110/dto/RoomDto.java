@@ -1,5 +1,7 @@
 package com.java110.dto;
 
+import com.java110.dto.fee.FeeDto;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,36 +16,51 @@ import java.util.List;
  **/
 public class RoomDto extends PageDto implements Serializable {
 
-    public static final String STATE_SELL = "2001";
-    public static final String STATE_FREE = "2002";
+    public static final String STATE_SELL = "2001"; // 已入住
+    public static final String STATE_FREE = "2002"; //未入住
+    public static final String STATE_DELIVERY = "2003";//已交房
+    public static final String STATE_RENOVATION = "2005";//已装修
+    public static final String STATE_SHOP_FIRE = "2006";//已经租
+    public static final String STATE_SHOP_SELL = "2007";//已售
+    public static final String STATE_SHOP_FREE = "2008";//空闲
+    public static final String ROOM_TYPE_ROOM = "1010301";//普通房屋
+    public static final String ROOM_TYPE_SHOPS = "2020602";//商铺
 
 
-    private String unitPrice;
+    private String feeCoefficient;
     private String section;
     private String remark;
     private String userId;
     private String roomId;
     private String[] roomIds;
     private String layer;
+    private String[] layers;
     private String builtUpArea;
     private String roomNum;
     private String unitId;
+    private String unitArea;
     private String apartment;
     private String apartmentName;
     private String communityId;
     private String floorId;
     private String floorNum;
+    private String floorArea;
     private String userName;
     private String ownerId;
     private String ownerName;
     private String idCard;
     private String link;
+    private String roomType;
 
 
     private String state;
+    private String[] states;
+    private String stateName;
     private String unitNum;
 
     private List<RoomAttrDto> roomAttrDto;
+
+    private List<FeeDto> fees;
 
 
     private Date createTime;
@@ -51,12 +68,12 @@ public class RoomDto extends PageDto implements Serializable {
     private String statusCd = "0";
 
 
-    public String getUnitPrice() {
-        return unitPrice;
+    public String getFeeCoefficient() {
+        return feeCoefficient;
     }
 
-    public void setUnitPrice(String unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setFeeCoefficient(String feeCoefficient) {
+        this.feeCoefficient = feeCoefficient;
     }
 
     public String getSection() {
@@ -252,5 +269,61 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getUnitArea() {
+        return unitArea;
+    }
+
+    public void setUnitArea(String unitArea) {
+        this.unitArea = unitArea;
+    }
+
+    public String getFloorArea() {
+        return floorArea;
+    }
+
+    public void setFloorArea(String floorArea) {
+        this.floorArea = floorArea;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
+    }
+
+    public List<FeeDto> getFees() {
+        return fees;
+    }
+
+    public void setFees(List<FeeDto> fees) {
+        this.fees = fees;
+    }
+
+    public String[] getLayers() {
+        return layers;
+    }
+
+    public void setLayers(String[] layers) {
+        this.layers = layers;
     }
 }

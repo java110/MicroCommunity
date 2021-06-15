@@ -28,19 +28,13 @@
     </resultMap>
 
 
-    <select id="getCorderInfo" parameterType="Map" resultMap="orderMap">
-        select
-            t.o_id oId,t.app_id appId,t.ext_transaction_id extTransactionId,
-            t.user_id userId,
-            t.request_time requestTime,t.create_time createtime,
-            t.order_type_cd orderTypeCd,t.finish_time finishTime,
-            t.remark,b.b_id bId,b.o_id oId,b.create_time createTime,
-            b.business_type_cd businessTypecd,b.finish_time finishTime,
-            b.remark remark,
-            t1.name orderTypeCdName,t2.name businessTypeCdName
-        from c_orders t left join c_business b on t.o_id = b.o_id
-        left join c_business_type t2 on b.business_type_cd = t2.business_type_cd
-        inner join c_order_type t1 on t.order_type_cd = t1.order_type_cd
+    <select id="getCorderInfo" parameterType="Map" resultType="Map">
+        select ca.`name` appName,t.create_time createTime,cbt.`name`,t.user_id,u.name userName,t.ext_transaction_id extTransactionId,t.status_cd statusCd,t.o_id oId
+        from c_orders t
+        left join c_business cb on t.o_id = cb.o_id
+        left join c_business_type cbt on cb.business_type_cd = cbt.business_type_cd
+        left join u_user u on t.user_id = u.user_id
+        left join c_app ca on t.app_id = ca.app_id
         where 1 =1
         <if test="oId !=null and oId != ''">
             and t.o_id= #{oId}
@@ -54,6 +48,7 @@
         <if test="appId !=null and appId != ''">
             and t.app_id= #{appId}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -63,6 +58,10 @@
     <select id="queryCordersCount" parameterType="Map" resultType="Map">
         select count(1) count
         from c_orders t
+        left join c_business cb on t.o_id = cb.o_id
+        left join c_business_type cbt on cb.business_type_cd = cbt.business_type_cd
+        left join u_user u on t.user_id = u.user_id
+        left join c_app ca on t.app_id = ca.app_id
         where 1 =1
         <if test="oId !=null and oId != ''">
             and t.o_id= #{oId}

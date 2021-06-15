@@ -39,6 +39,8 @@ public class ApiOwnerDataVo extends Vo {
     private String ownerTypeCd;
     private String ownerTypeName;
 
+    private String roomName;
+
     private List<OwnerAttrDto> ownerAttrDtos;
 
     private String idCard;
@@ -145,5 +147,13 @@ public class ApiOwnerDataVo extends Vo {
 
     public void setOwnerAttrDtos(List<OwnerAttrDto> ownerAttrDtos) {
         this.ownerAttrDtos = ownerAttrDtos;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

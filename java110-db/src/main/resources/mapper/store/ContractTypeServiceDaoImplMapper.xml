@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contractTypeServiceDaoImpl">
+
+
+    <!-- 保存合同类型信息 add by wuxw 2018-07-03 -->
+    <insert id="saveContractTypeInfo" parameterType="Map">
+        insert into contract_type(
+        audit,type_name,remark,store_id,contract_type_id
+        ) values (
+        #{audit},#{typeName},#{remark},#{storeId},#{contractTypeId}
+        )
+    </insert>
+
+
+    <!-- 查询合同类型信息 add by wuxw 2018-07-03 -->
+    <select id="getContractTypeInfo" parameterType="Map" resultType="Map">
+        select t.audit,t.type_name,t.type_name typeName,t.remark,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
+        storeId,t.contract_type_id,t.contract_type_id contractTypeId,td.`name` auditName,t.create_time createTime
+        from contract_type t
+        LEFT JOIN t_dict td on td.table_name = 'contract_type' and td.table_columns = 'audit' and t.audit = td.status_cd
+        where 1 =1
+        <if test="audit !=null and audit != ''">
+            and t.audit= #{audit}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="contractTypeId !=null and contractTypeId != ''">
+            and t.contract_type_id= #{contractTypeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改合同类型信息 add by wuxw 2018-07-03 -->
+    <update id="updateContractTypeInfo" parameterType="Map">
+        update contract_type t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="audit !=null and audit != ''">
+            , t.audit= #{audit}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            , t.type_name= #{typeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="contractTypeId !=null and contractTypeId != ''">
+            and t.contract_type_id= #{contractTypeId}
+        </if>
+
+    </update>
+
+    <!-- 查询合同类型数量 add by wuxw 2018-07-03 -->
+    <select id="queryContractTypesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_type t
+        where 1 =1
+        <if test="audit !=null and audit != ''">
+            and t.audit= #{audit}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="contractTypeId !=null and contractTypeId != ''">
+            and t.contract_type_id= #{contractTypeId}
+        </if>
+
+
+    </select>
+
+</mapper>

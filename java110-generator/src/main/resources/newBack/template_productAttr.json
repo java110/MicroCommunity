@@ -1,0 +1,33 @@
+{
+  "autoMove": true,
+  "id": "attrId",
+  "name": "productAttr",
+  "desc": "产品属性",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "goods",
+  "tableName": "product_attr",
+  "param": {
+    "storeId": "store_id",
+    "productId": "product_id",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
+    "value": "value",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "productId",
+      "msg": "产品不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户ID不能为空"
+    },
+    {
+      "code": "specCd",
+      "msg": "用户规格不能为空"
+    }
+  ]
+}
+

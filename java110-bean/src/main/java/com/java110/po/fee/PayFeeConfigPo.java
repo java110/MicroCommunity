@@ -25,6 +25,7 @@ public class PayFeeConfigPo implements Serializable {
     private String feeFlag;
     private String feeName;
     private String computingFormula;
+    private String computingFormulaText;
 
     private String billType;
 
@@ -142,5 +143,13 @@ public class PayFeeConfigPo implements Serializable {
 
     public void setPaymentCycle(String paymentCycle) {
         this.paymentCycle = paymentCycle;
+    }
+
+    public String getComputingFormulaText() {
+        return computingFormulaText;
+    }
+
+    public void setComputingFormulaText(String computingFormulaText) {
+        this.computingFormulaText = computingFormulaText;
     }
 }

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeDiscountSpecServiceDaoImpl">
+
+
+    <!-- 保存费用折扣信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeDiscountSpecInfo" parameterType="Map">
+        insert into fee_discount_spec(
+        spec_id,spec_name,spec_value,discount_id,community_id, discount_spec_id
+
+        ) values (
+        #{specId},#{specName},#{specValue},#{discountId},#{communityId},#{discountSpecId}
+        )
+    </insert>
+
+
+    <!-- 查询费用折扣信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeDiscountSpecInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.spec_name,t.spec_name specName,t.spec_value,t.spec_value
+        specValue,t.status_cd,t.status_cd statusCd,t.discount_id,t.discount_id discountId,t.community_id,t.community_id
+        communityId,t.discount_spec_id discountSpecId
+        from fee_discount_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="specValue !=null and specValue != ''">
+            and t.spec_value= #{specValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="discountIds !=null ">
+            and t.discount_id in
+            <foreach collection="discountIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="discountSpecId !=null and discountSpecId != ''">
+            and t.discount_spec_id= #{discountSpecId}
+        </if>
+
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改费用折扣信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeDiscountSpecInfo" parameterType="Map">
+        update fee_discount_spec t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            , t.spec_name= #{specName}
+        </if>
+        <if test="specValue !=null and specValue != ''">
+            , t.spec_value= #{specValue}
+        </if>
+
+
+        where 1=1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="discountSpecId !=null and discountSpecId != ''">
+            and t.discount_spec_id= #{discountSpecId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询费用折扣数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeDiscountSpecsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_discount_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="specValue !=null and specValue != ''">
+            and t.spec_value= #{specValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="discountId !=null and discountId != ''">
+            and t.discount_id= #{discountId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="discountSpecId !=null and discountSpecId != ''">
+            and t.discount_spec_id= #{discountSpecId}
+        </if>
+
+
+    </select>
+
+</mapper>

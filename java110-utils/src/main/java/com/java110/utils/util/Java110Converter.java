@@ -17,7 +17,7 @@ import java.util.Date;
  * add by wuxw 2020/1/28
  **/
 public class Java110Converter implements Converter {
-    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     @Override
     public Object convert(Object value, Class target, Object context) {
@@ -27,6 +27,8 @@ public class Java110Converter implements Converter {
 
     public static Object getValue(Object value, Class target) {
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         if (value == null) {
             return value;
         }
@@ -34,13 +36,14 @@ public class Java110Converter implements Converter {
         if (value instanceof String && target == Date.class) {
             String date = (String) value;
             Date newDate = null;
+            SimpleDateFormat strdf = null;
             if (date.contains(":")) {
-                //sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                strdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             } else {
-                sdf = new SimpleDateFormat("yyyy-MM-dd");
+                strdf = new SimpleDateFormat("yyyy-MM-dd");
             }
             try {
-                newDate = sdf.parse(date);
+                newDate = strdf.parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -93,6 +96,19 @@ public class Java110Converter implements Converter {
 
         if (target == double.class || target == Double.class) {
             return Double.parseDouble(String.valueOf(value));
+        }
+
+        if (target == String[].class) {
+            return String.valueOf(value).split(",");
+        }
+
+        //1.0 String 转 Date
+        if (value instanceof String && target == boolean.class) {
+            String bl = (String) value;
+            if ("true".equals(bl)) {
+                return true;
+            }
+            return false;
         }
 
         return value;

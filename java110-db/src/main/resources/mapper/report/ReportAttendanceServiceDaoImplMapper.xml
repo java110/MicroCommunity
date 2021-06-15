@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportAttendanceServiceDaoImpl">
+
+    <!-- 查询实收金额 -->
+    <select id="getMonthAttendanceCount" parameterType="Map" resultType="Map">
+        select count(1) count from (
+        select distinct t.staff_id
+        from attendance_classes_task t
+        left join u_user s on t.staff_id = s.user_id and s.status_cd = '0'
+        left join u_org_staff_rel uosr on uosr.staff_id = s.user_id and uosr.status_cd = '0'
+        left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
+        where 1 =1
+        and t.status_cd = '0'
+        <if test="staffName !=null and staffName != ''">
+            and s.staff_name like concat('%',#{staffName},'%')
+        </if>
+        <if test="departmentId !=null and departmentId != ''">
+            and uo.org_id = #{departmentId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="classId !=null and classId != ''">
+            and t.class_id= #{classId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="taskYear !=null and taskYear != ''">
+            and t.task_year= #{taskYear}
+        </if>
+        <if test="taskMonth !=null and taskMonth != ''">
+            and t.task_month= #{taskMonth}
+        </if>
+        ) tt
+    </select>
+
+    <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
+    <select id="getMonthAttendance" parameterType="Map" resultType="Map">
+        select distinct t.class_id classId,t.staff_id staffId,
+        s.name staffName,uo.org_name departmentName,
+        (select count(1) from attendance_classes_task_detail b where t.task_id = b.task_id and b.state = '10000')
+        noClockIn,
+        (select count(1) from attendance_classes_task_detail b where t.task_id = b.task_id and b.state = '30000')
+        clockIn,
+        (select count(1) from attendance_classes_task_detail b where t.task_id = b.task_id and b.state = '40000') late,
+        (select count(1) from attendance_classes_task_detail b where t.task_id = b.task_id and b.state = '50000') early,
+        (select count(1) from attendance_classes_task_detail b where t.task_id = b.task_id and b.state = '60000') free
+        from attendance_classes_task t
+        left join u_user s on t.staff_id = s.user_id and s.status_cd = '0'
+        left join u_org_staff_rel uosr on uosr.staff_id = s.user_id and uosr.status_cd = '0'
+        left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
+        where 1 =1
+        and t.status_cd = '0'
+        <if test="staffName !=null and staffName != ''">
+            and s.staff_name like concat('%',#{staffName},'%')
+        </if>
+        <if test="departmentId !=null and departmentId != ''">
+            and uo.org_id = #{departmentId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="classId !=null and classId != ''">
+            and t.class_id= #{classId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="taskYear !=null and taskYear != ''">
+            and t.task_year= #{taskYear}
+        </if>
+        <if test="taskMonth !=null and taskMonth != ''">
+            and t.task_month= #{taskMonth}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+</mapper>

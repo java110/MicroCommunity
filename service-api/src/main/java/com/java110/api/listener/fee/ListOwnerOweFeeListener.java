@@ -313,7 +313,7 @@ public class ListOwnerOweFeeListener extends AbstractServiceApiListener {
 
         long t1 = from.getTimeInMillis();
         long t2 = to.getTimeInMillis();
-        long days = (t2 - t1) / (24 * 60 * 60 * 1000);
+        double days = (t2 - t1)*1.00/ (24 * 60 * 60 * 1000);
 
         BigDecimal tmpDays = new BigDecimal(days);
         BigDecimal monthDay = new BigDecimal(30);

@@ -3,10 +3,11 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IFileRelServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.file.FileRelPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,6 +47,20 @@ public class FileRelInnerServiceSMOImpl extends BaseServiceSMO implements IFileR
 
 
         return fileRels;
+    }
+
+    /**
+     * 保存文件关系
+     * @param fileRelPo
+     * @return
+     */
+    @Override
+    public int saveFileRel(@RequestBody FileRelPo fileRelPo) {
+        return fileRelServiceDaoImpl.saveFileRel(BeanConvertUtil.beanCovertMap(fileRelPo));
+    }
+
+    public int deleteFileRel(@RequestBody FileRelPo fileRelPo){
+        return fileRelServiceDaoImpl.deleteFileRel(BeanConvertUtil.beanCovertMap(fileRelPo));
     }
 
 

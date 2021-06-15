@@ -7,6 +7,7 @@ import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,7 @@ public abstract class AbstractMachineBusinessServiceDataFlowListener extends Abs
         businessMachineInfo.put("machineIp", businessMachineInfo.get("machine_ip"));
         businessMachineInfo.put("locationTypeCd", businessMachineInfo.get("location_type_cd"));
         businessMachineInfo.put("locationObjId", businessMachineInfo.get("location_obj_id"));
+        businessMachineInfo.put("heartbeatTime", businessMachineInfo.get("heartbeat_time"));
         businessMachineInfo.put("state", businessMachineInfo.get("state"));
 
         businessMachineInfo.remove("bId");
@@ -88,6 +90,8 @@ public abstract class AbstractMachineBusinessServiceDataFlowListener extends Abs
         currentMachineInfo.put("locationTypeCd", currentMachineInfo.get("location_type_cd"));
         currentMachineInfo.put("locationObjId", currentMachineInfo.get("location_obj_id"));
         currentMachineInfo.put("state", currentMachineInfo.get("state"));
+        currentMachineInfo.put("heartbeatTime", currentMachineInfo.get("heartbeat_time"));
+
 
 
         currentMachineInfo.put("operate", StatusConstant.OPERATE_DEL);

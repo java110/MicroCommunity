@@ -5,11 +5,6 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.machineTranslate.IMachineTranslateBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.file.FileDto;
@@ -17,6 +12,11 @@ import com.java110.dto.machine.ApplicationKeyDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.car.CarInoutDetailPo;
 import com.java110.po.car.CarInoutPo;
 import com.java110.po.fee.PayFeePo;
@@ -91,7 +91,8 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
         businessCarInoutDetail.put("machineId", machineDto.getMachineId());
         businessCarInoutDetail.put("machineCode", machineDto.getMachineCode());
         businessCarInoutDetail.put("carInout", machineDto.getDirection());
-        businessCarInoutDetail.put("detailId", "-1");
+        businessCarInoutDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        paramInJson.put("detailId",businessCarInoutDetail.getString("detailId"));
         CarInoutDetailPo carInoutDetailPo = BeanConvertUtil.covertBean(businessCarInoutDetail, CarInoutDetailPo.class);
         super.insert(dataFlowContext, carInoutDetailPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT);
 
@@ -107,7 +108,9 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      */
     public void addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId) {
 
-        paramInJson.put("inoutId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_inoutId));
+        if (!paramInJson.containsKey("inoutId") || "-1".equals(paramInJson.getString("inoutId"))) {
+            paramInJson.put("inoutId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_inoutId));
+        }
         JSONObject businessCarInout = new JSONObject();
         businessCarInout.put("carNum", paramInJson.getString("carNum"));
         businessCarInout.put("inoutId", paramInJson.getString("inoutId"));

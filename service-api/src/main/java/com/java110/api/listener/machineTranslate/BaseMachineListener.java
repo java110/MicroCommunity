@@ -70,6 +70,13 @@ public abstract class BaseMachineListener extends AbstractServiceApiPlusListener
             return false;
         }
         //检查设备是否合法
+
+        if("-1".equals(reqHeader.get("machinecode"))){
+            reqJson.put("machineCode", reqHeader.get("machinecode"));
+            reqJson.put("machineId", reqHeader.get("machinecode"));
+            reqJson.put("communityId", communityId);
+            return true;
+        }
         //检查设备是否合法
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(reqHeader.get("machinecode"));

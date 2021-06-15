@@ -67,7 +67,7 @@ public class ServiceCodeConstant {
     /**
      * 保存用户
      */
-    public static final String SERVICE_CODE_SAVE_USER_INFO = "save.user.info";
+    public static final String SERVICE_CODE_SAVE_USER_INFO = "user.saveUser";
 
     /**
      * 修改用户信息
@@ -260,6 +260,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_USER_SERVICE_LOGIN = "user.service.login";
 
     /**
+     * 管理员免密登录
+     */
+    public static final String SERVICE_CODE_ADMIN_LOGIN_PROPERTY = "login.adminLoginProperty";
+
+    /**
      * 用户登录服务处理
      */
     public static final String SERVICE_CODE_USER_LOGIN = "user.userLogin";
@@ -294,6 +299,8 @@ public class ServiceCodeConstant {
      * 添加员工 服务
      */
     public static final String SERVICE_CODE_USER_STAFF_ADD = "user.staff.add";
+
+
 
     /**
      * 添加员工 服务
@@ -434,8 +441,14 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SAVE_ROOM = "room.saveRoom";
 
 
+    //保存商铺
+    public static final String SERVICE_CODE_SAVE_SHOPS = "room.saveShops";
+
+
     //售卖房屋
     public static final String SERVICE_CODE_SELL_ROOM = "room.sellRoom";
+    //绑定业主（租客） 和商铺关系
+    public static final String SERVICE_CODE_SAVE_OWNER_SHOPS = "room.saveOwnerShops";
     //退房
     public static final String SERVICE_CODE_EXIT_ROOM = "room.exitRoom";
 
@@ -461,6 +474,27 @@ public class ServiceCodeConstant {
 
     //查询业主
     public static final String SERVICE_CODE_QUERY_OWNER = "owner.queryOwners";
+
+    //查询业主车辆
+    public static final String SERVICE_CODE_QUERY_OWNER_CAR = "owner.queryOwnerCars";
+
+    //删除业主车辆
+    public static final String SERVICE_CODE_DELETE_OWNER_CAR = "owner.deleteOwnerCars";
+
+    //添加业主车辆
+    public static final String SERVICE_CODE_SAVE_OWNER_CAR = "owner.saveOwnerCar";
+
+    //添加业主车辆
+    public static final String SERVICE_CODE_SAVE_OWNER_CAR_MEMBER = "owner.saveOwnerCarMember";
+
+    //编辑业主车辆
+    public static final String SERVICE_CODE_EDIT_OWNER_CAR = "owner.editOwnerCar";
+
+    //释放车位
+    public static final String SERVICE_CODE_DELETE_CAR_PARKING_SPACE = "owner.deleteCarParkingSpace";
+
+    //续租车位
+    public static final String SERVICE_CODE_CAR_ADD_PARKING_SPACE = "owner.carAddParkingSpace";
 
     //查询业主成员
     public static final String SERVICE_CODE_QUERY_OWNER_MEMBER = "owner.queryOwnerMembers";
@@ -499,8 +533,6 @@ public class ServiceCodeConstant {
     public static final String UPDATE_APPUSERBINDINGOWNER = "owner.updateAppUserBindingOwner";
     public static final String DELETE_APPUSERBINDINGOWNER = "owner.deleteAppUserBindingOwner";
     public static final String REFRESH_APP_USER_BINDING_OWNER_OPEN_ID = "owner.refreshAppUserBindingOwnerOpenId";
-
-
 
 
     public static final String SERVICE_CODE_APPLICATION_KEY = "owner.applicationKey";
@@ -543,13 +575,23 @@ public class ServiceCodeConstant {
     //缴费
     public static final String SERVICE_CODE_PAY_FEE = "fee.payFee";
 
+    //欠费缴费
+    public static final String SERVICE_CODE_PAY_OWE_FEE = "fee.payOweFee";
+
     //设置费用
     public static final String SERVICE_CODE_SAVE_ROOM_CREATE_FEE = "fee.saveRoomCreateFee";
+    public static final String SERVICE_CODE_SAVE_CONTRACT_CREATE_FEE = "fee.saveContractCreateFee";
     //设置费用
     public static final String SERVICE_CODE_SAVE_PARKING_SPEC_CREATE_FEE = "fee.saveParkingSpaceCreateFee";
 
     //设置房屋费用
     public static final String SERVICE_CODE_DELETE_FEE = "fee.deleteFee";
+
+    //修改房屋费用
+    public static final String SERVICE_CODE_UPDATE_FEE = "fee.updateFee";
+
+    //修改房屋费用
+    public static final String SERVICE_CODE_FINISH_FEE = "fee.finishFee";
 
     //预交费
     public static final String SERVICE_CODE_PAY_FEE_PRE = "fee.payFeePre";
@@ -560,6 +602,12 @@ public class ServiceCodeConstant {
 
     //交费通知
     public static final String SERVICE_CODE_PAY_CONFIRM_PRE = "fee.payFeeConfirm";
+
+    //租赁服务费
+    public static final String SERVICE_CODE_RENTING_PAY_CONFIRM_PRE = "fee.rentingPayFeeConfirm";
+
+    //欠费
+    public static final String SERVICE_CODE_OWE_FEE_PAY_CONFIRM_PRE = "fee.oweFeePayFeeConfirm";
 
 
     //查询停车位
@@ -582,7 +630,6 @@ public class ServiceCodeConstant {
 
     // 保存停车位信息
     public static final String SERVICE_CODE_SELL_PARKING_SPACE = "parkingSpace.sellParkingSpace";
-
 
 
     // 保存停车位信息
@@ -630,7 +677,7 @@ public class ServiceCodeConstant {
      * 修改小区
      */
     public static final String SERVICE_CODE_UPDATE_COMMUNITY = "community.updateCommunity";
-/**
+    /**
      * 删除小区community.deleteCommunity
      */
     public static final String SERVICE_CODE_DELETE_COMMUNITY = "community.deleteCommunity";
@@ -665,7 +712,7 @@ public class ServiceCodeConstant {
     /**
      * 查询数据字典
      */
-    public static final String SERVICE_CODE_DICT_TYPE="dict.queryDict";
+    public static final String SERVICE_CODE_DICT_TYPE = "dict.queryDict";
 
     /**
      * 查询 地区

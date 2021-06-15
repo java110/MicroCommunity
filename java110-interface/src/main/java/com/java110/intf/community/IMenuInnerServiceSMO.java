@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IMenuGroupInnerServiceSMO
@@ -97,7 +98,7 @@ public interface IMenuInnerServiceSMO {
      * @return 小区下的小区楼记录数
      */
     @RequestMapping(value = "/checkUserHasResource", method = RequestMethod.POST)
-    boolean checkUserHasResource(@RequestBody BasePrivilegeDto routeDto);
+    List<Map> checkUserHasResource(@RequestBody BasePrivilegeDto routeDto);
 
 
     /**

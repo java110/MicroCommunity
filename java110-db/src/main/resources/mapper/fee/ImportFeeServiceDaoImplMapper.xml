@@ -8,9 +8,9 @@
     <!-- 保存费用导入信息 add by wuxw 2018-07-03 -->
     <insert id="saveImportFeeInfo" parameterType="Map">
         insert into import_fee(
-        fee_type_cd,import_fee_id,community_id
+        fee_type_cd,import_fee_id,community_id,remark
         ) values (
-        #{feeTypeCd},#{importFeeId},#{communityId}
+        #{feeTypeCd},#{importFeeId},#{communityId},#{remark}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <!-- 查询费用导入信息 add by wuxw 2018-07-03 -->
     <select id="getImportFeeInfo" parameterType="Map" resultType="Map">
         select t.fee_type_cd,t.fee_type_cd feeTypeCd,t.status_cd,t.status_cd statusCd,t.import_fee_id,t.import_fee_id
-        importFeeId,t.community_id,t.community_id communityId,t.create_time createTime,d.name feeTypeCdName
+        importFeeId,t.community_id,t.community_id communityId,t.create_time createTime,d.name feeTypeCdName,remark
         from import_fee t
         left join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
         where 1 =1

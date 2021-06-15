@@ -14,6 +14,8 @@ public class AppraisePo implements Serializable {
     private String statusCd = "0";
     private String objType;
     private String appraiseUserId;
+    private String doorSpeedScore;
+    private String repairmanServiceScore;
 
     public String getParentAppraiseId() {
         return parentAppraiseId;
@@ -95,5 +97,19 @@ public class AppraisePo implements Serializable {
         this.appraiseUserId = appraiseUserId;
     }
 
+    public String getDoorSpeedScore() {
+        return doorSpeedScore;
+    }
 
+    public void setDoorSpeedScore(String doorSpeedScore) {
+        this.doorSpeedScore = doorSpeedScore;
+    }
+
+    public String getRepairmanServiceScore() {
+        return repairmanServiceScore;
+    }
+
+    public void setRepairmanServiceScore(String repairmanServiceScore) {
+        this.repairmanServiceScore = repairmanServiceScore;
+    }
 }

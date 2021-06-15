@@ -1,0 +1,35 @@
+{
+  "autoMove": true,
+  "id": "receiptId",
+  "name": "feeReceipt",
+  "desc": "收据",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "fee_receipt",
+  "param": {
+    "receiptId": "receipt_id",
+    "communityId": "community_id",
+    "objType": "obj_type",
+    "objId": "obj_id",
+    "objName": "obj_name",
+    "amount": "amount",
+    "remark": "remark",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "amount",
+      "msg": "金额不能为空"
+    },
+    {
+      "code": "objName",
+      "msg": "名称不能为空"
+    }
+  ]
+}
+

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountDetailServiceDaoImpl">
+
+    <!-- 保存账户交易信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAccountDetailInfo" parameterType="Map">
+        insert into business_account_detail(
+        detail_type,amount,operate,order_id,obj_id,detail_id,acct_id,rel_acct_id,remark,b_id,obj_type
+        ) values (
+        #{detailType},#{amount},#{operate},#{orderId},#{objId},#{detailId},#{acctId},#{relAcctId},#{remark},#{bId},#{objType}
+        )
+    </insert>
+
+
+    <!-- 查询账户交易信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAccountDetailInfo" parameterType="Map" resultType="Map">
+        select t.detail_type,t.detail_type detailType,t.amount,t.operate,t.order_id,t.order_id orderId,t.obj_id,t.obj_id
+        objId,t.detail_id,t.detail_id detailId,t.acct_id,t.acct_id acctId,t.rel_acct_id,t.rel_acct_id
+        relAcctId,t.remark,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType
+        from business_account_detail t
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="relAcctId !=null and relAcctId != ''">
+            and t.rel_acct_id= #{relAcctId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+
+    </select>
+
+
+    <!-- 保存账户交易信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveAccountDetailInfoInstance" parameterType="Map">
+        insert into account_detail(
+        detail_type,amount,order_id,obj_id,detail_id,acct_id,rel_acct_id,remark,status_cd,b_id,obj_type
+        ) select
+        t.detail_type,t.amount,t.order_id,t.obj_id,t.detail_id,t.acct_id,t.rel_acct_id,t.remark,'0',t.b_id,t.obj_type
+        from business_account_detail t where 1=1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        and t.operate= 'ADD'
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="relAcctId !=null and relAcctId != ''">
+            and t.rel_acct_id= #{relAcctId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询账户交易信息 add by wuxw 2018-07-03 -->
+    <select id="getAccountDetailInfo" parameterType="Map" resultType="Map">
+        select t.detail_type,t.detail_type detailType,t.amount,t.order_id,t.order_id orderId,t.obj_id,t.obj_id
+        objId,t.detail_id,t.detail_id detailId,t.acct_id,t.acct_id acctId,t.rel_acct_id,t.rel_acct_id
+        relAcctId,t.remark,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType,
+        ac.acct_name acctName
+        from account_detail t
+        LEFT JOIN account ac on t.acct_id = ac.acct_id and ac.status_cd = '0' and ac.obj_id = t.obj_id
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="relAcctId !=null and relAcctId != ''">
+            and t.rel_acct_id= #{relAcctId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改账户交易信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccountDetailInfoInstance" parameterType="Map">
+        update account_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="detailType !=null and detailType != ''">
+            , t.detail_type= #{detailType}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            , t.acct_id= #{acctId}
+        </if>
+        <if test="relAcctId !=null and relAcctId != ''">
+            , t.rel_acct_id= #{relAcctId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询账户交易数量 add by wuxw 2018-07-03 -->
+    <select id="queryAccountDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from account_detail t
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="relAcctId !=null and relAcctId != ''">
+            and t.rel_acct_id= #{relAcctId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+
+
+    </select>
+
+    <!-- 保存账户交易信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAccountDetails" parameterType="Map">
+        insert into account_detail(
+        detail_type,amount,order_id,obj_id,detail_id,acct_id,rel_acct_id,remark,b_id,obj_type
+        ) values (
+        #{detailType},#{amount},#{orderId},#{objId},#{detailId},#{acctId},#{relAcctId},#{remark},'-1',#{objType}
+        )
+    </insert>
+</mapper>

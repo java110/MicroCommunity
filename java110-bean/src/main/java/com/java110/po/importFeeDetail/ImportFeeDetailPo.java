@@ -17,8 +17,12 @@ public class ImportFeeDetailPo implements Serializable {
     private String endTime;
     private String state;
     private String communityId;
+    private String objId;
+    private String objName;
+    private String objType;
 
     private String importFeeId;
+    private String remark;
 
     public String getAmount() {
         return amount;
@@ -130,5 +134,37 @@ public class ImportFeeDetailPo implements Serializable {
 
     public void setImportFeeId(String importFeeId) {
         this.importFeeId = importFeeId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
+    }
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
     }
 }

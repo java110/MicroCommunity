@@ -1,0 +1,83 @@
+{
+  "templateName": "信息大类",
+  "directories": "property",
+  "templateCode": "activitiesType",
+  "templateKey": "typeCd",
+  "templateKeyName": "大类编码",
+  "searchCode": "typeCd",
+  "searchName": "大类编码",
+  "conditions": [
+    {
+      "name": "大类编码",
+      "inputType": "input",
+      "code": "typeCd",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "大类名称",
+      "inputType": "input",
+      "code": "typeName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "是否显示",
+      "inputType": "select",
+      "selectValue":"Y,N",
+      "selectValueName":"是,否",
+      "code": "defalutShow",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns": [
+    {
+      "code": "typeName",
+      "cnCode": "大类名称",
+      "desc": "必填，请填写大类名称",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "100",
+      "limitErrInfo": "大类名称超过100位",
+      "show": true
+    },
+    {
+      "code": "typeDesc",
+      "cnCode": "大类描述",
+      "desc": "可填，请填写类型描述",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "500",
+      "limitErrInfo": "描述超过500位",
+      "show": true
+    },
+    {
+      "code": "seq",
+      "cnCode": "显示序号",
+      "desc": "必填，请填写显示序号",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "num",
+      "limitParam": "",
+      "limitErrInfo": "显示序号不是有效数字",
+      "show": true
+    },
+    {
+      "code": "defalutShow",
+      "cnCode": "是否显示",
+      "desc": "必填，请填写是否显示",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue": "Y,N",
+      "selectValueName": "是,否",
+      "limit": "maxLength",
+      "limitParam": "2",
+      "limitErrInfo": "是否显示格式错误",
+      "show": true
+    }
+  ]
+}

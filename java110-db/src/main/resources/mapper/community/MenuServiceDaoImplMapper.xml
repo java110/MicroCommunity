@@ -3,14 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="menuServiceDaoImpl">
-    
+
 
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMenuGroupInfo" parameterType="Map">
         insert into m_menu_group(
-        g_id,name,icon,label,seq,description
+        g_id,name,icon,label,seq,description,group_type,store_type
         ) values (
-        #{gId},#{name},#{icon},#{label},#{seq},#{description}
+        #{gId},#{name},#{icon},#{label},#{seq},#{description},#{groupType},#{storeType}
         )
 
     </insert>
@@ -18,7 +18,7 @@
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getMenuGroupInfo" parameterType="Map" resultType="Map">
-        select t.g_id,t.name,t.icon,t.label,t.seq,t.description,t.g_id gId
+        select t.g_id,t.name,t.icon,t.label,t.seq,t.description,t.g_id gId,t.group_type groupType,t.store_type storeType
         from m_menu_group t
         where t.status_cd= '0'
         <if test="gId !=null and gId != ''">
@@ -33,13 +33,20 @@
         <if test="label !=null and label != ''">
             and t.label= #{label}
         </if>
+        <if test="groupType !=null and groupType != ''">
+            and t.group_type= #{groupType}
+        </if>
+        <if test="storeType !=null and storeType != ''">
+            and t.store_type= #{storeType}
+        </if>
         <if test="seq !=null">
             and t.seq= #{seq}
         </if>
+
         <if test="description !=null and description != ''">
             and t.description= #{description}
         </if>
-        order by t.create_time desc
+        order by t.seq desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -55,16 +62,22 @@
                 t.status_cd = #{statusCd},
             </if>
             <if test="name !=null and name != ''">
-                 t.name= #{name},
+                t.name= #{name},
             </if>
             <if test="icon !=null and icon != ''">
                 t.icon= #{icon},
+            </if>
+            <if test="groupType !=null and groupType != ''">
+                t.group_type= #{groupType},
             </if>
             <if test="label !=null ">
                 t.label= #{label},
             </if>
             <if test="seq !=null ">
                 t.seq= #{seq},
+            </if>
+            <if test="storeType !=null and storeType != ''">
+                t.store_type= #{storeType},
             </if>
             <if test="description !=null and description != ''">
                 t.description= #{description}
@@ -78,7 +91,7 @@
     <select id="queryMenuGroupsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from m_menu_group t
-        where 1 =1
+        where t.status_cd= '0'
         <if test="gId !=null and gId != ''">
             and t.g_id= #{gId}
         </if>
@@ -87,6 +100,9 @@
         </if>
         <if test="icon !=null and icon != ''">
             and t.icon= #{icon}
+        </if>
+        <if test="groupType !=null and groupType != ''">
+            and t.group_type= #{groupType}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -97,14 +113,13 @@
         <if test="seq !=null">
             and t.seq= #{seq}
         </if>
+        <if test="storeType !=null and storeType != ''">
+            and t.store_type= #{storeType}
+        </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}
         </if>
     </select>
-
-
-
-
 
 
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
@@ -116,7 +131,6 @@
         )
 
     </insert>
-
 
 
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
@@ -132,8 +146,9 @@
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getBasePrivilegeInfo" parameterType="Map" resultType="Map">
-        select t.p_id,t.name,t.domain,t.resource,t.description,t.p_id pId,t.create_time createTime
+        select t.p_id,t.name,t.domain,t.resource,t.description,t.p_id pId,t.create_time createTime,st.name stName
         from p_privilege t
+        left join store_type st on t.domain=st.store_type_cd
         where t.status_cd= '0'
         <if test="pId !=null and pId != ''">
             and t.p_id= #{pId}
@@ -199,7 +214,6 @@
     </update>
 
 
-
     <!-- 查询路由数量 add by wuxw 2018-07-03 -->
     <select id="queryBasePrivilegesCount" parameterType="Map" resultType="Map">
         select count(1) count
@@ -226,13 +240,12 @@
     </select>
 
 
-
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMenuInfo" parameterType="Map">
         insert into m_menu(
-           m_id,name,g_id,url,seq,p_id,description,is_show
+        m_id,name,g_id,url,seq,p_id,description,is_show
         ) values (
-            #{mId},#{name},#{gId},#{url},#{seq},'-1',#{description},#{isShow}
+        #{mId},#{name},#{gId},#{url},#{seq},'-1',#{description},#{isShow}
         )
     </insert>
 
@@ -241,11 +254,13 @@
     <select id="getMenuInfo" parameterType="Map" resultType="Map">
         select DISTINCT t.m_id mId,t.name,t.g_id gId,t.url,t.seq,t.p_id pId,t.description,t.is_show isShow,
         if(t.is_show='Y','显示','不显示') isShowName,
-        t.m_id pId,t.name pName
-        from m_menu t,p_privilege p
+        t.m_id pId,t.name pName,mg.name menuGroupName,mg.store_type,st.name storeTypeName
+        from m_menu t,p_privilege p,m_menu_group mg,store_type st
         where t.status_cd= '0'
         and p.status_cd= '0'
         and t.m_id = p.m_id
+        and t.g_id = mg.g_id
+        and mg.store_type = st.store_type_cd
         <if test="gId !=null and gId != ''">
             and t.g_id= #{gId}
         </if>
@@ -304,7 +319,7 @@
             AND ppr.status_cd = '0'
             )
         </if>
-        order by t.seq asc
+        order by t.m_id desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -347,10 +362,12 @@
     <!-- 查询路由数量 add by wuxw 2018-07-03 -->
     <select id="queryMenusCount" parameterType="Map" resultType="Map">
         select count(DISTINCT(t.m_id)) count
-        from m_menu t,p_privilege p
+        from m_menu t,p_privilege p,m_menu_group mg,store_type st
         where t.status_cd= '0'
         and p.status_cd= '0'
         and t.m_id = p.m_id
+        and t.g_id = mg.g_id
+        and mg.store_type = st.store_type_cd
         <if test="gId !=null and gId != ''">
             and t.g_id= #{gId}
         </if>
@@ -415,24 +432,29 @@
 
     <select id="checkUserHasResource" parameterType="Map" resultType="Map">
         SELECT pp.*,'-1' AS pg_id,'' AS pg_name FROM p_privilege_user ppu,p_privilege pp
-            WHERE ppu.`p_id` = pp.`p_id`
-                AND pp.`resource` = #{resource}
-                AND ppu.`privilege_flag` = '0'
-                AND ppu.`user_id` = #{userId}
-                AND ppu.`status_cd` = '0'
-                AND pp.`status_cd` = '0'
+        WHERE ppu.`p_id` = pp.`p_id`
+        <if test="resource != null and resource != ''">
+            AND pp.`resource` = #{resource}
+        </if>
+        AND ppu.`privilege_flag` = '0'
+        AND ppu.`user_id` = #{userId}
+        AND ppu.`status_cd` = '0'
+        AND pp.`status_cd` = '0'
         UNION
-        SELECT pp.*,ppg.pg_id,ppg.name pg_name FROM p_privilege_user ppu,p_privilege_group ppg,p_privilege pp,p_privilege_rel ppr
-            WHERE ppu.`p_id` = ppr.pg_id
-                AND ppr.pg_id = ppg.pg_id
-                AND ppr.p_id = pp.`p_id`
-                AND pp.`resource` = #{resource}
-                AND ppu.`privilege_flag` = '1'
-                AND ppu.`user_id` = #{userId}
-                AND ppu.`status_cd` = '0'
-                AND pp.`status_cd` = '0'
-                AND ppg.status_cd = '0'
-                AND ppr.status_cd = '0'
+        SELECT pp.*,ppg.pg_id,ppg.name pg_name FROM p_privilege_user ppu,p_privilege_group ppg,p_privilege
+        pp,p_privilege_rel ppr
+        WHERE ppu.`p_id` = ppr.pg_id
+        AND ppr.pg_id = ppg.pg_id
+        AND ppr.p_id = pp.`p_id`
+        <if test="resource != null and resource != ''">
+            AND pp.`resource` = #{resource}
+        </if>
+        AND ppu.`privilege_flag` = '1'
+        AND ppu.`user_id` = #{userId}
+        AND ppu.`status_cd` = '0'
+        AND pp.`status_cd` = '0'
+        AND ppg.status_cd = '0'
+        AND ppr.status_cd = '0'
     </select>
 
 

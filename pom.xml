@@ -16,12 +16,9 @@
         <module>java110-service</module>
         <module>java110-db</module>
         <module>service-user</module>
-        <module>service-log</module>
         <module>service-fee</module>
         <module>service-eureka</module>
-        <module>service-sequence</module>
         <module>service-store</module>
-        <module>service-rule</module>
         <module>service-order</module>
         <module>service-api</module>
         <module>service-community</module>
@@ -29,7 +26,10 @@
         <module>service-common</module>
         <module>service-report</module>
         <module>service-front</module>
+        <module>service-goods</module>
         <module>java110-generator</module>
+        <module>service-acct</module>
+
     </modules>
 
     <parent>
@@ -43,7 +43,6 @@
         <maven.compile.target>1.8</maven.compile.target>
         <sourceEncoding>UTF-8</sourceEncoding>
         <spring-boot>2.0.4.RELEASE</spring-boot>
-        <shiro.version>1.2.4</shiro.version>
         <mybatis.version>3.3.0</mybatis.version>
         <microcommunity.version>1.0-SNAPSHOT</microcommunity.version>
         <dubbo.version>2.5.4-SNAPSHOT</dubbo.version>
@@ -73,6 +72,7 @@
         <zookeeper.version>3.4.14</zookeeper.version>
         <swagger.version>2.5.0</swagger.version>
         <pinyin4j.version>2.5.0</pinyin4j.version>
+        <oss.aliyun>2.8.2</oss.aliyun>
     </properties>
 
     <dependencyManagement>
@@ -100,7 +100,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.28</version>
+                <version>1.2.69</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
@@ -337,17 +337,6 @@
                 <version>${httpclient.verion}</version>
             </dependency>
 
-            <!--<dependency>
-                <groupId>io.shardingsphere</groupId>
-                <artifactId>sharding-jdbc</artifactId>
-                <version>3.0.0.M3</version>
-            </dependency>-->
-
-            <!--<dependency>
-                <groupId>io.shardingsphere</groupId>
-                <artifactId>sharding-jdbc-core</artifactId>
-                <version>3.1.0</version>
-            </dependency>-->
 
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
@@ -355,30 +344,6 @@
                 <version>4.0.0-RC1</version>
             </dependency>
 
-
-            <!-- https://mvnrepository.com/artifact/org.apache.axis2/axis2
-            <dependency>
-                <groupId>org.apache.axis</groupId>
-                <artifactId>axis</artifactId>
-                <version>${axis.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.axis</groupId>
-                <artifactId>axis-jaxrpc</artifactId>
-                <version>${axis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.axis</groupId>
-                <artifactId>axis-saaj</artifactId>
-                <version>${axis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>wsdl4j</groupId>
-                <artifactId>wsdl4j</artifactId>
-                <version>${axis.version}</version>
-            </dependency>
-            -->
 
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
@@ -393,11 +358,6 @@
             </dependency>
 
 
-            <!-- <dependency>
-                 <groupId>org.quartz-scheduler</groupId>
-                 <artifactId>quartz</artifactId>
-                 <version>2.3.0</version>
-             </dependency>-->
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
@@ -505,12 +465,6 @@
                 <version>6.0.0.RC1</version>
             </dependency>
 
-            <!--<dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-modeler</artifactId>
-                <version>6.0.0</version>
-            </dependency>-->
-
             <dependency>
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-spring-boot-starter-basic</artifactId>
@@ -531,18 +485,12 @@
                 <version>3.0.112</version>
             </dependency>
 
-            <!--<dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-modeler</artifactId>
-                <version>5.22.0</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.activiti</groupId>
-                        <artifactId>activiti-bpmn-model</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>-->
-
+            <!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${oss.aliyun}</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
@@ -551,7 +499,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -582,7 +529,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -593,7 +539,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
                 <configuration>
                     <attach>true</attach>
                 </configuration>

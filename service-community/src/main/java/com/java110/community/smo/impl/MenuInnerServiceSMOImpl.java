@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -125,7 +126,7 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
      * @return 小区下的小区楼记录数
      */
     @RequestMapping(value = "/checkUserHasResource", method = RequestMethod.POST)
-    public boolean checkUserHasResource(@RequestBody BasePrivilegeDto basePrivilegeDto) {
+    public List<Map> checkUserHasResource(@RequestBody BasePrivilegeDto basePrivilegeDto) {
         return menuServiceDaoImpl.checkUserHasResource(BeanConvertUtil.beanCovertMap(basePrivilegeDto));
     }
 

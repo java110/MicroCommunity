@@ -8,13 +8,17 @@ import com.java110.dto.PageDto;
 import com.java110.dto.meterWater.MeterWaterDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.dao.IMeterWaterServiceDao;
+import com.java110.po.fee.PayFeePo;
+import com.java110.po.meterWater.MeterWaterPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -92,6 +96,18 @@ public class MeterWaterInnerServiceSMOImpl extends BaseServiceSMO implements IMe
     @Override
     public int queryMeterWatersCount(@RequestBody MeterWaterDto meterWaterDto) {
         return meterWaterServiceDaoImpl.queryMeterWatersCount(BeanConvertUtil.beanCovertMap(meterWaterDto));
+    }
+
+    @Override
+    public int saveMeterWaters(@RequestBody List<MeterWaterPo> meterWaterPos) {
+        List<Map> fees = new ArrayList<>();
+        for (MeterWaterPo payFeePo : meterWaterPos) {
+            fees.add(BeanConvertUtil.beanCovertMap(payFeePo));
+        }
+
+        Map info = new HashMap();
+        info.put("meterWaterPos", fees);
+        return meterWaterServiceDaoImpl.insertMeterWaters(info);
     }
 
     public IMeterWaterServiceDao getMeterWaterServiceDaoImpl() {

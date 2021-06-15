@@ -156,7 +156,7 @@
             and t.sex= #{sex}
         </if>
         <if test="name !=null and name != ''">
-            and t.name like concat('%',#{name},'%')
+            and t.name = #{name}
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
@@ -498,7 +498,7 @@
     <!-- 查询未入驻业主 总数 -->
     <select id="queryNoEnterRoomOwnerCount" parameterType="Map" resultType="Map">
         select
-            COUNT(1) count
+        COUNT(1) count
         from
         building_owner o
         left join building_owner_room_rel orr on o.owner_id = orr.owner_id and orr.status_cd = '0'
@@ -548,6 +548,7 @@
         and oc.owner_id = t.owner_id
         AND oc.`status_cd` = '0'
         AND ps.`status_cd` = '0'
+        and oc.car_type_cd='1001'
         AND t.`status_cd` = '0'
         <if test="psIds != null ">
             and ps.ps_id in
@@ -561,5 +562,36 @@
 
     </select>
 
+    <select id="queryOwnerLogsByRoom" parameterType="Map" resultType="Map">
+        SELECT
+        bo.owner_id ownerId,
+        bo.`name`,
+        bo.link,
+        t.start_time startTime,
+        t.end_time endTime,
+        t.create_time createTime,
+        t.room_id roomId
+        FROM
+        business_building_owner_room_rel t
+        INNER JOIN building_owner bo ON t.owner_id = bo.owner_id AND bo.status_cd = '0' AND bo.community_id = #{communityId}
+        WHERE
+        t.operate = 'ADD'
+        AND t.room_id = #{roomId}
+        ORDER BY
+        t.create_time DESC
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <select id="queryOwnerLogsCountByRoom" parameterType="Map" resultType="Map">
+        select
+        COUNT(1) count
+        from business_building_owner_room_rel t
+        inner join building_owner bo on t.owner_id = bo.owner_id and bo.status_cd = '0' and bo.community_id = #{communityId}
+        where t.operate = 'ADD'
+        and t.room_id = #{roomId}
+        order by t.create_time desc
+    </select>
 
 </mapper>

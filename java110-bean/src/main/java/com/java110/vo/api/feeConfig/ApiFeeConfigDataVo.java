@@ -24,6 +24,7 @@ public class ApiFeeConfigDataVo implements Serializable {
     private String paymentCd;
 
     private String paymentCycle;
+    private String computingFormulaText;
 
 
     public String getConfigId() {
@@ -152,5 +153,13 @@ public class ApiFeeConfigDataVo implements Serializable {
 
     public void setPaymentCycle(String paymentCycle) {
         this.paymentCycle = paymentCycle;
+    }
+
+    public String getComputingFormulaText() {
+        return computingFormulaText;
+    }
+
+    public void setComputingFormulaText(String computingFormulaText) {
+        this.computingFormulaText = computingFormulaText;
     }
 }

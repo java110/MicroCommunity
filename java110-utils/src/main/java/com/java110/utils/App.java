@@ -1,4 +1,4 @@
-package com.java110.entity;
+package com.java110.utils;
 
 /**
  * Hello world!

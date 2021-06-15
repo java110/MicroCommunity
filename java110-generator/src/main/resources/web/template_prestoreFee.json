@@ -1,0 +1,125 @@
+{
+  "templateName":"预付费用",
+  "directories": "property",
+  "templateCode":"prestoreFee",
+  "templateKey":"prestoreFeeId",
+  "templateKeyName":"预付费用ID",
+  "searchCode": "prestoreFeeId",
+  "searchName": "预付费用ID",
+  "conditions": [
+    {
+      "name": "预存类型",
+      "inputType": "select",
+      "selectValue":"8003,8004",
+      "selectValueName":"水费,电费",
+      "code": "prestoreFeeType",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "预存金额",
+      "inputType": "input",
+      "code": "prestoreFeeAmount",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "状态",
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"未使用,已使用",
+      "code": "state",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code": "roomId",
+      "cnCode":"房屋ID",
+      "desc":"必填，请填写房屋ID",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"100",
+      "limitErrInfo":"标题太长 超过100位",
+      "show": true
+    },
+    {
+      "inputType": "select",
+      "selectValue":"8003,8004",
+      "selectValueName":"水费,电费",
+      "code": "prestoreFeeType",
+      "cnCode":"预付类型",
+      "desc":"必选，请选择水费或电费",
+      "required":true,
+      "hasDefaultValue":false,
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"格式错误",
+      "show": true
+    },
+    {
+      "inputType": "select",
+      "selectValue":"3333,6666",
+      "selectValueName":"房屋,车位",
+      "code": "prestoreFeeObjType",
+      "cnCode":"预存对象类型",
+      "desc":"必选，请选择预存对象类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"预存对象类型格式错误",
+      "show": true
+    },
+    {
+      "code": "prestoreFeeAmount",
+      "cnCode":"预付金额",
+      "desc":"必填，请填写预付金额",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"预付金额格式错误",
+      "show": true
+    },
+    {
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"未使用,已使用",
+      "code": "state",
+      "cnCode":"状态",
+      "desc":"必选，请选择状态",
+      "required":true,
+      "hasDefaultValue":false,
+      "limit":"maxLength",
+      "limitParam":"8",
+      "limitErrInfo":"状态格式错误",
+      "show": true
+    },
+    {
+      "code": "reason",
+      "cnCode":"原因",
+      "desc":"选填，请填写原因",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"100",
+      "limitErrInfo":"原因格式错误",
+      "show": false
+    },
+    {
+      "code": "remark",
+      "cnCode":"备注",
+      "desc":"必填，请填写入住时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"100",
+      "limitErrInfo":"备注格式错误",
+      "show": true
+    }
+  ]
+}

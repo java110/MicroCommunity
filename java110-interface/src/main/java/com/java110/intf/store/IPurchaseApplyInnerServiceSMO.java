@@ -3,6 +3,7 @@ package com.java110.intf.store;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.purchaseApply.PurchaseApplyDetailDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,5 +62,9 @@ public interface IPurchaseApplyInnerServiceSMO {
     //查询采购明细表
     @RequestMapping(value = "/queryPurchaseApplyDetails", method = RequestMethod.POST)
     List<PurchaseApplyDetailDto> queryPurchaseApplyDetails(@RequestBody PurchaseApplyDetailDto purchaseApplyDetailDto);
+
+    //修改采购申请
+    @RequestMapping(value = "/updatePurchaseApply", method = RequestMethod.POST)
+    void updatePurchaseApply(@RequestBody PurchaseApplyPo purchaseApplyPo);
 
 }

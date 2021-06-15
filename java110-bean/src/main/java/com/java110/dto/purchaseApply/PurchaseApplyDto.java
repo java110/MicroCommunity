@@ -19,9 +19,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public static final String RES_ORDER_TYPE_ENTER = "10000"; //采购入库
     public static final String RES_ORDER_TYPE_OUT = "20000"; //出库
-
     public static final String STATE_WAIT_DEAL = "1000"; // 等待处理
     public static final String STATE_DEALING = "1001"; // 审核中
+    public static final String STATE_AUDITED = "1002"; // 已审核
+    public static final String STATE_END = "1003"; // 完结
+    public static final String STATE_NOT_PASS = "1004"; // 未通过
+    public static final String WAREHOUSING_TYPE_DIRECT = "10000"; // 直接入库/出库
+    public static final String WAREHOUSING_TYPE_APPLY = "20000"; // 采购申请入库/出库
 
     private String resOrderType;
     private String description;
@@ -36,11 +40,8 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String endUserName;
     private String endUserTel;
     private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
-
     private String createTime;
-
     private String statusCd = "0";
-
     private String currentUserId;
     private String processInstanceId;
     private String taskId;
@@ -50,9 +51,11 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String staffName;
     private String staffTel;
     private String startUserId;
-
-
-
+    private String warehousingWay;
+    private String createUserId;
+    private String createUserName;
+    private String price;
+    private String supplierName;
 
     public String getResOrderType() {
         return resOrderType;
@@ -246,5 +249,45 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setStartUserId(String startUserId) {
         this.startUserId = startUserId;
+    }
+
+    public String getWarehousingWay() {
+        return warehousingWay;
+    }
+
+    public void setWarehousingWay(String warehousingWay) {
+        this.warehousingWay = warehousingWay;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }

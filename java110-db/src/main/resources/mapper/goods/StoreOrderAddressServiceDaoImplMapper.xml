@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeOrderAddressServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存发货地址信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreOrderAddressInfo" parameterType="Map">
+        insert into store_order_address(
+area_code,address,order_id,tel,oa_id,address_id,username
+) values (
+#{areaCode},#{address},#{orderId},#{tel},#{oaId},#{addressId},#{username}
+)
+    </insert>
+
+
+
+    <!-- 查询发货地址信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreOrderAddressInfo" parameterType="Map" resultType="Map">
+        select  t.area_code,t.area_code areaCode,t.address,t.order_id,t.order_id orderId,t.tel,t.status_cd,t.status_cd statusCd,t.oa_id,t.oa_id oaId,t.address_id,t.address_id addressId,t.username 
+from store_order_address t 
+where 1 =1 
+<if test="areaCode !=null and areaCode != ''">
+   and t.area_code= #{areaCode}
+</if> 
+<if test="address !=null and address != ''">
+   and t.address= #{address}
+</if> 
+<if test="orderId !=null and orderId != ''">
+   and t.order_id= #{orderId}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="oaId !=null and oaId != ''">
+   and t.oa_id= #{oaId}
+</if> 
+<if test="addressId !=null and addressId != ''">
+   and t.address_id= #{addressId}
+</if> 
+<if test="username !=null and username != ''">
+   and t.username= #{username}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改发货地址信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreOrderAddressInfo" parameterType="Map">
+        update  store_order_address t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="areaCode !=null and areaCode != ''">
+, t.area_code= #{areaCode}
+</if> 
+<if test="address !=null and address != ''">
+, t.address= #{address}
+</if> 
+<if test="orderId !=null and orderId != ''">
+, t.order_id= #{orderId}
+</if> 
+<if test="tel !=null and tel != ''">
+, t.tel= #{tel}
+</if> 
+<if test="addressId !=null and addressId != ''">
+, t.address_id= #{addressId}
+</if> 
+<if test="username !=null and username != ''">
+, t.username= #{username}
+</if> 
+ where 1=1 <if test="oaId !=null and oaId != ''">
+and t.oa_id= #{oaId}
+</if> 
+
+    </update>
+
+    <!-- 查询发货地址数量 add by wuxw 2018-07-03 -->
+     <select id="queryStoreOrderAddresssCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from store_order_address t 
+where 1 =1 
+<if test="areaCode !=null and areaCode != ''">
+   and t.area_code= #{areaCode}
+</if> 
+<if test="address !=null and address != ''">
+   and t.address= #{address}
+</if> 
+<if test="orderId !=null and orderId != ''">
+   and t.order_id= #{orderId}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="oaId !=null and oaId != ''">
+   and t.oa_id= #{oaId}
+</if> 
+<if test="addressId !=null and addressId != ''">
+   and t.address_id= #{addressId}
+</if> 
+<if test="username !=null and username != ''">
+   and t.username= #{username}
+</if> 
+
+
+     </select>
+
+</mapper>

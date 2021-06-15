@@ -15,6 +15,8 @@ import java.util.List;
  **/
 public class UserDto extends PageDto implements Serializable {
 
+    public static final String LEVEL_CD_MALL = "03";//商城用户
+
     private String userId;
 
     private String userName;
@@ -43,6 +45,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String parentOrgId;
 
+    private String departmentOrgId;
+
     private String orgId;
 
     private String staffName;
@@ -50,12 +54,12 @@ public class UserDto extends PageDto implements Serializable {
     private String staffId;
 
     private String openId;
+
     private String statusCd;
 
     private String token;
 
     private String key;//临时登录秘钥，每次登录后重置
-
 
     private String parentOrgName;
 
@@ -65,7 +69,9 @@ public class UserDto extends PageDto implements Serializable {
 
     private String belongCommunityId;
 
+    private boolean loginByPhone;
 
+    private String relCd;
 
     public String getUserId() {
         return userId;
@@ -265,5 +271,29 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isLoginByPhone() {
+        return loginByPhone;
+    }
+
+    public void setLoginByPhone(boolean loginByPhone) {
+        this.loginByPhone = loginByPhone;
+    }
+
+    public String getDepartmentOrgId() {
+        return departmentOrgId;
+    }
+
+    public void setDepartmentOrgId(String departmentOrgId) {
+        this.departmentOrgId = departmentOrgId;
+    }
+
+    public String getRelCd() {
+        return relCd;
+    }
+
+    public void setRelCd(String relCd) {
+        this.relCd = relCd;
     }
 }

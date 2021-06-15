@@ -91,7 +91,7 @@ public interface IMenuServiceDao {
      */
     int queryBasePrivilegesCount(Map info);
 
-    boolean checkUserHasResource(Map info);
+    List<Map> checkUserHasResource(Map info);
 
 
     /**

@@ -6,12 +6,12 @@
 
     <!-- 保存文件存放信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessFileRelInfo" parameterType="Map">
-           insert into business_file_rel(
-rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_id
-) values (
-#{relTypeCd},#{saveWay},#{operate},#{fileRelId},#{fileRealName},#{objId},#{fileSaveName},#{bId}
-)
-       </insert>
+        insert into business_file_rel(
+        rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_id
+        ) values (
+        #{relTypeCd},#{saveWay},#{operate},#{fileRelId},#{fileRealName},#{objId},#{fileSaveName},#{bId}
+        )
+    </insert>
 
 
     <!-- 查询文件存放信息（Business） add by wuxw 2018-07-03 -->
@@ -77,9 +77,36 @@ rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </insert>
 
+    <insert id="saveFileRel" parameterType="Map">
+        insert into file_rel(
+            rel_type_cd,save_way,file_rel_id,file_real_name,obj_id,file_save_name,b_id
+        )
+        values(
+            #{relTypeCd},#{saveWay},#{fileRelId},#{fileRealName},#{objId},#{fileSaveName},'-1'
+        )
+    </insert>
+
+    <update id="deleteFileRel" parameterType="Map">
+        update file_rel t set t.status_cd = '1'
+        where 1=1
+        <if test="relTypeCd !=null and relTypeCd != ''">
+            and t.rel_type_cd= #{relTypeCd}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            and t.file_real_name= #{fileRealName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            and t.file_save_name= #{fileSaveName}
+        </if>
+        <if test="fileRelId !=null and fileRelId != ''">
+            and t.file_rel_id= #{fileRelId}
+        </if>
+    </update>
 
     <!-- 查询文件存放信息 add by wuxw 2018-07-03 -->
     <select id="getFileRelInfo" parameterType="Map" resultType="Map">
@@ -110,6 +137,13 @@ rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
+        <if test="objIds !=null">
+            and t.obj_id in
+            <foreach collection="objIds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
         <if test="fileSaveName !=null and fileSaveName != ''">
             and t.file_save_name= #{fileSaveName}
         </if>
@@ -122,9 +156,7 @@ rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改文件存放信息 add by wuxw 2018-07-03 -->
     <update id="updateFileRelInfoInstance" parameterType="Map">
@@ -154,7 +186,6 @@ rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询文件存放数量 add by wuxw 2018-07-03 -->
@@ -193,8 +224,5 @@ rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
     </select>
-
 </mapper>

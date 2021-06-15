@@ -239,6 +239,9 @@
         <if test="allowOperation !=null and allowOperation != ''">
             and t.allow_operation= #{allowOperation}
         </if>
+        <if test="orgId !=null and orgId != ''">
+            and t.org_id= #{orgId}
+        </if>
 
     </select>
     <!-- 查询上级组织信息 -->

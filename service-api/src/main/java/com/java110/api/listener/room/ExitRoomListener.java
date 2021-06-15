@@ -5,23 +5,19 @@ import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.RoomDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.dto.fee.FeeDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -41,6 +37,9 @@ public class ExitRoomListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -74,32 +73,32 @@ public class ExitRoomListener extends AbstractServiceApiPlusListener {
         Assert.hasLength(reqJson.getString("storeId"), "storeId不能为空");
         //
 
-        super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
+        //super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
 
         //校验物业费是否已经交清
-        FeeDto feeDto = new FeeDto();
-        feeDto.setCommunityId(reqJson.getString("communityId"));
-        feeDto.setIncomeObjId(reqJson.getString("storeId"));
-        feeDto.setPayerObjId(reqJson.getString("roomId"));
-        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        if (feeDtos == null || feeDtos.size() == 0) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未包含物业费，数据异常");
-        }
-
-        if (feeDtos.size() > 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "包含多条物业费，数据异常");
-        }
-
-        FeeDto feeDtoData = feeDtos.get(0);
-
-        Calendar calc = Calendar.getInstance();
-        calc.setTime(feeDtoData.getEndTime());
-        calc.add(Calendar.DATE, 30);
-        if (calc.getTime().getTime() < DateUtil.getCurrentDate().getTime()) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "你还有物业费没有缴清，请先缴清欠款");
-        }
+//        FeeDto feeDto = new FeeDto();
+//        feeDto.setCommunityId(reqJson.getString("communityId"));
+//        feeDto.setIncomeObjId(reqJson.getString("storeId"));
+//        feeDto.setPayerObjId(reqJson.getString("roomId"));
+//        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
+//        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+//
+//        if (feeDtos == null || feeDtos.size() == 0) {
+//            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未包含物业费，数据异常");
+//        }
+//
+//        if (feeDtos.size() > 1) {
+//            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "包含多条物业费，数据异常");
+//        }
+//
+//        FeeDto feeDtoData = feeDtos.get(0);
+//
+//        Calendar calc = Calendar.getInstance();
+//        calc.setTime(feeDtoData.getEndTime());
+//        calc.add(Calendar.DATE, 30);
+//        if (calc.getTime().getTime() < DateUtil.getCurrentDate().getTime()) {
+//            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "你还有物业费没有缴清，请先缴清欠款");
+//        }
     }
 
     @Override
@@ -107,12 +106,22 @@ public class ExitRoomListener extends AbstractServiceApiPlusListener {
 //添加单元信息
         roomBMOImpl.exitRoom(reqJson, context);
 
-        reqJson.put("state", "2002");
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(reqJson.getString("roomId"));
+        roomDto.setCommunityId(reqJson.getString("communityId"));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        Assert.listOnlyOne(roomDtos, "房屋或商铺不存在");
+        if (RoomDto.ROOM_TYPE_SHOPS.equals(roomDtos.get(0).getRoomType())) {
+            reqJson.put("state", RoomDto.STATE_SHOP_FREE);
+        } else {
+            reqJson.put("state", "2002");
+        }
         //修改房屋状态
         roomBMOImpl.updateRoom(reqJson, context);
 
         //删除费用信息
-        roomBMOImpl.exitPropertyFee(reqJson, context);
+        //roomBMOImpl.exitPropertyFee(reqJson, context);
 
     }
 

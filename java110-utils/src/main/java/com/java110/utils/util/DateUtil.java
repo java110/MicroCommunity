@@ -347,16 +347,22 @@ public class DateUtil {
         return returndate;
     }
 
+    public static Date getNextMonthFirstDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.MONTH, 1);
+        return calendar.getTime();
+    }
+
+    public static Date getFirstDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
+    }
+
     public static String getNextMonthFirstDay(String fmt) {
         String returndate = "";
-        Date date = null;
-
-        Calendar cl = Calendar.getInstance();
-        cl.set(2, cl.get(2) + 1);
-        cl.set(5, 1);
-
-        date = cl.getTime();
-
+        Date date = getNextMonthFirstDate();
         returndate = getFormatTimeString(date, fmt);
 
         return returndate;
@@ -413,5 +419,81 @@ public class DateUtil {
         c.add(Calendar.MONTH, month);
 
         return c.getTime();
+    }
+
+    public static String dateTimeToDate(String dateTime) {
+        String dateStr = "";
+        try {
+            Date date = getDateFromString(dateTime, DATE_FORMATE_STRING_A);
+            dateStr = getFormatTimeString(date, DATE_FORMATE_STRING_B);
+        } catch (ParseException e) {
+            dateStr = dateTime;
+        }
+
+        return dateStr;
+    }
+
+    public static int getYear() {
+        Date date = getCurrentDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public static int getMonth() {
+        Date date = getCurrentDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MONTH) + 1;
+    }
+
+    /**
+     * 判断时间是否在时间段内
+     *
+     * @param nowTime
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(beginTime);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else if (nowTime.compareTo(beginTime) == 0 || nowTime.compareTo(endTime) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //获取两个日期之间的天数
+    public static int daysBetween(Date now, Date returnDate) {
+        Calendar cNow = Calendar.getInstance();
+        Calendar cReturnDate = Calendar.getInstance();
+        cNow.setTime(now);
+        cReturnDate.setTime(returnDate);
+        setTimeToMidnight(cNow);
+        setTimeToMidnight(cReturnDate);
+        long todayMs = cNow.getTimeInMillis();
+        long returnMs = cReturnDate.getTimeInMillis();
+        long intervalMs = todayMs - returnMs;
+        return millisecondsToDays(intervalMs);
+    }
+
+    //获取两个日期之间的毫秒数
+    private static void setTimeToMidnight(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+    }
+
+    //获取两个日期之间的分钟数
+    private static int millisecondsToDays(long intervalMs) {
+        return (int) (intervalMs / (1000 * 86400));
     }
 }

@@ -93,6 +93,7 @@ public class UserSendSmsListener extends AbstractServiceApiListener {
         if ("ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
             smsDto = smsInnerServiceSMOImpl.send(smsDto);
         } else {
+            CommonCache.setValue(smsDto.getTel() + SendSmsFactory.VALIDATE_CODE, smsDto.getCode().toLowerCase() + "-" + new Date().getTime(), CommonCache.defaultExpireTime);
             smsDto.setSuccess(true);
             smsDto.setMsg("当前为演示环境，您的验证码为" + msgCode);
         }

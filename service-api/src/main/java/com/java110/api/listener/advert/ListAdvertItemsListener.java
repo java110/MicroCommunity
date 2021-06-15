@@ -60,7 +60,6 @@ public class ListAdvertItemsListener extends AbstractServiceApiListener {
         super.validatePageInfo(reqJson);
 
         Assert.hasKeyAndValue(reqJson, "advertId", "请求报文中未包含广告ID");
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
     }
 
     @Override

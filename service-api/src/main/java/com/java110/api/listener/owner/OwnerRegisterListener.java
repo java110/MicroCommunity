@@ -9,20 +9,22 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
+import com.java110.dto.app.AppDto;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.msg.SmsDto;
+import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.community.CommunityDto;
-import com.java110.dto.msg.SmsDto;
-import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +45,11 @@ import java.util.List;
 @Java110Listener("ownerRegisterListener")
 public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
 
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    //键
+    public static final String ID_CARD_SWITCH = "ID_CARD_SWITCH";
 
     private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
 
@@ -134,6 +141,14 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
             //ownerDto.setIdCard(reqJson.getString("idCard"));
             ownerDto.setName(reqJson.getString("appUserName"));
             ownerDto.setLink(reqJson.getString("link"));
+
+            //取出开关映射的值
+            String val = MappingCache.getValue(DOMAIN_COMMON, ID_CARD_SWITCH);
+            //取出身份证
+            String idCard = reqJson.getString("idCard");
+            if ("1".equals(val) && !StringUtil.isEmpty(idCard)) {
+                ownerDto.setIdCard(idCard);
+            }
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
             Assert.listOnlyOne(ownerDtos, "填写业主信息错误");
@@ -145,9 +160,9 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
             String paramIn = dataFlowContext.getReqData();
             JSONObject paramObj = JSONObject.parseObject(paramIn);
             String appId = context.getAppId();
-            if ("992020061452450002".equals(appId)) { //公众号
+            if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) { //公众号
                 paramObj.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT);
-            } else if ("992019111758490006".equals(appId)) { //小程序
+            } else if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) { //小程序
                 paramObj.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
             } else {//app
                 paramObj.put("appType", OwnerAppUserDto.APP_TYPE_APP);
@@ -164,9 +179,9 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
             paramObj.put("tel", paramObj.getString("link"));
             userBMOImpl.registerUser(paramObj, dataFlowContext);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             context.setServiceBusiness(null);
-            context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_UNAUTHORIZED,e.getMessage()));
+            context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_UNAUTHORIZED, e.getMessage()));
         }
     }
 

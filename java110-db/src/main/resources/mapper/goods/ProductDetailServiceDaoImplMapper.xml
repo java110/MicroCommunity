@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productDetailServiceDaoImpl">
+
+
+    <!-- 保存产品属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveProductDetailInfo" parameterType="Map">
+        insert into product_detail(
+        product_id,detail_id,store_id,content
+        ) values (
+        #{productId},#{detailId},#{storeId},#{content}
+        )
+    </insert>
+
+
+    <!-- 查询产品属性信息 add by wuxw 2018-07-03 -->
+    <select id="getProductDetailInfo" parameterType="Map" resultType="Map">
+        select t.product_id,t.product_id productId,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd
+        statusCd,t.store_id,t.store_id storeId,t.content
+        from product_detail t
+        where 1 =1
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改产品属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateProductDetailInfo" parameterType="Map">
+        update product_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="content !=null and content != ''">
+            , t.content= #{content}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询产品属性数量 add by wuxw 2018-07-03 -->
+    <select id="queryProductDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from product_detail t
+        where 1 =1
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+
+
+    </select>
+
+</mapper>

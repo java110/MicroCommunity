@@ -16,6 +16,7 @@ public class BillOweFeeDto extends PageDto implements Serializable {
 
     public static final String STATE_FINISH_FEE = "2000";//已缴费
     public static final String STATE_WILL_FEE = "1000";//未缴费
+    public static final String STATE_SEND_OWNER = "3000";//未缴费
 
     private String oweId;
     private String billId;
@@ -32,7 +33,19 @@ public class BillOweFeeDto extends PageDto implements Serializable {
     private String state;
     private String createTime;
     private String[] ownerIds;
+    private String deadlineTime;
+    private String payObjId;
+    private String curBill;
+    private String feeTypeCd;
+    private String feeTypeName;
 
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
+    }
 
     public String getOweId() {
         return oweId;
@@ -152,5 +165,37 @@ public class BillOweFeeDto extends PageDto implements Serializable {
 
     public void setOwnerIds(String[] ownerIds) {
         this.ownerIds = ownerIds;
+    }
+
+    public String getDeadlineTime() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(String deadlineTime) {
+        this.deadlineTime = deadlineTime;
+    }
+
+    public String getPayObjId() {
+        return payObjId;
+    }
+
+    public void setPayObjId(String payObjId) {
+        this.payObjId = payObjId;
+    }
+
+    public String getCurBill() {
+        return curBill;
+    }
+
+    public void setCurBill(String curBill) {
+        this.curBill = curBill;
+    }
+
+    public String getFeeTypeName() {
+        return feeTypeName;
+    }
+
+    public void setFeeTypeName(String feeTypeName) {
+        this.feeTypeName = feeTypeName;
     }
 }

@@ -1,7 +1,10 @@
 package com.java110.vo.api.fee;
 
+import com.java110.dto.fee.FeeAttrDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName ApiFeeDataVo
@@ -21,6 +24,7 @@ public class ApiFeeDataVo implements Serializable {
     private String feeId;
     private String userId;
     private String payerObjId;
+    private String payerObjType;
     private String configId;
 
     private String state;
@@ -39,6 +43,17 @@ public class ApiFeeDataVo implements Serializable {
     private String paymentCd;
 
     private String paymentCycle;
+    private String computingFormula;
+    private String deadlineTime;
+    private String amountOwed;
+
+    private String curDegrees;
+    private String preDegrees;
+
+    private String preReadingTime;
+    private String curReadingTime;
+    private List<FeeAttrDto> feeAttrs;
+
     public String getAmount() {
         return amount;
     }
@@ -213,5 +228,77 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setAdditionalAmount(String additionalAmount) {
         this.additionalAmount = additionalAmount;
+    }
+
+    public String getComputingFormula() {
+        return computingFormula;
+    }
+
+    public void setComputingFormula(String computingFormula) {
+        this.computingFormula = computingFormula;
+    }
+
+    public String getDeadlineTime() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(String deadlineTime) {
+        this.deadlineTime = deadlineTime;
+    }
+
+    public String getAmountOwed() {
+        return amountOwed;
+    }
+
+    public void setAmountOwed(String amountOwed) {
+        this.amountOwed = amountOwed;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
+    }
+
+    public String getCurDegrees() {
+        return curDegrees;
+    }
+
+    public void setCurDegrees(String curDegrees) {
+        this.curDegrees = curDegrees;
+    }
+
+    public String getPreDegrees() {
+        return preDegrees;
+    }
+
+    public void setPreDegrees(String preDegrees) {
+        this.preDegrees = preDegrees;
+    }
+
+    public String getPreReadingTime() {
+        return preReadingTime;
+    }
+
+    public void setPreReadingTime(String preReadingTime) {
+        this.preReadingTime = preReadingTime;
+    }
+
+    public String getCurReadingTime() {
+        return curReadingTime;
+    }
+
+    public void setCurReadingTime(String curReadingTime) {
+        this.curReadingTime = curReadingTime;
+    }
+
+    public List<FeeAttrDto> getFeeAttrs() {
+        return feeAttrs;
+    }
+
+    public void setFeeAttrs(List<FeeAttrDto> feeAttrs) {
+        this.feeAttrs = feeAttrs;
     }
 }

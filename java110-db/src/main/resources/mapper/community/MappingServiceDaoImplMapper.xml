@@ -117,7 +117,7 @@
         <if test="name !=null and name != ''">
             , t.name= #{name}
         </if>
-        <if test="remark !=null and remark != ''">
+        <if test="remark !=null">
             , t.remark= #{remark}
         </if>
         <if test="value !=null and value != ''">

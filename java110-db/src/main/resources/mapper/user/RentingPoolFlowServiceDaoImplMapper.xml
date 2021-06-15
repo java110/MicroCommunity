@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rentingPoolFlowServiceDaoImpl">
+
+
+    <!-- 保存出租流程信息 add by wuxw 2018-07-03 -->
+    <insert id="saveRentingPoolFlowInfo" parameterType="Map">
+        insert into renting_pool_flow(
+        deal_time,user_name,context,user_tel,state,user_role,community_id,flow_id,renting_id
+        ) values (
+        #{dealTime},#{useName},#{context},#{userTel},#{state},#{userRole},#{communityId},#{flowId},#{rentingId}
+        )
+    </insert>
+
+
+    <!-- 查询出租流程信息 add by wuxw 2018-07-03 -->
+    <select id="getRentingPoolFlowInfo" parameterType="Map" resultType="Map">
+        select t.deal_time,t.deal_time dealTime,t.user_name,t.user_name useName,t.context,t.user_tel,t.user_tel
+        userTel,t.status_cd,t.status_cd statusCd,t.state,t.user_role,t.user_role userRole,t.community_id,t.community_id
+        communityId,t.flow_id,t.flow_id flowId,t.renting_id,t.renting_id rentingId,td.name stateName
+        from renting_pool_flow t
+        left join t_dict td on td.status_cd = t.state and td.table_name =  'renting_pool_flow' and td.table_columns = 'state'
+        where 1 =1
+        <if test="dealTime !=null and dealTime != ''">
+            and t.deal_time= #{dealTime}
+        </if>
+        <if test="useName !=null and useName != ''">
+            and t.user_name= #{useName}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="userTel !=null and userTel != ''">
+            and t.user_tel= #{userTel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="userRole !=null and userRole != ''">
+            and t.user_role= #{userRole}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="rentingId !=null and rentingId != ''">
+            and t.renting_id= #{rentingId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改出租流程信息 add by wuxw 2018-07-03 -->
+    <update id="updateRentingPoolFlowInfo" parameterType="Map">
+        update renting_pool_flow t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="dealTime !=null and dealTime != ''">
+            , t.deal_time= #{dealTime}
+        </if>
+        <if test="useName !=null and useName != ''">
+            , t.user_name= #{useName}
+        </if>
+        <if test="context !=null and context != ''">
+            , t.context= #{context}
+        </if>
+        <if test="userTel !=null and userTel != ''">
+            , t.user_tel= #{userTel}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="userRole !=null and userRole != ''">
+            , t.user_role= #{userRole}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="rentingId !=null and rentingId != ''">
+            , t.renting_id= #{rentingId}
+        </if>
+        where 1=1
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+
+    </update>
+
+    <!-- 查询出租流程数量 add by wuxw 2018-07-03 -->
+    <select id="queryRentingPoolFlowsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from renting_pool_flow t
+        where 1 =1
+        <if test="dealTime !=null and dealTime != ''">
+            and t.deal_time= #{dealTime}
+        </if>
+        <if test="useName !=null and useName != ''">
+            and t.user_name= #{useName}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="userTel !=null and userTel != ''">
+            and t.user_tel= #{userTel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="userRole !=null and userRole != ''">
+            and t.user_role= #{userRole}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="rentingId !=null and rentingId != ''">
+            and t.renting_id= #{rentingId}
+        </if>
+
+
+    </select>
+
+</mapper>

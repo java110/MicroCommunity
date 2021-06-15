@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sysDocumentServiceDaoImpl">
+
+
+    <!-- 保存系统文档信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSysDocumentInfo" parameterType="Map">
+        insert into sys_document(
+        doc_id,doc_title,doc_content,doc_code
+        ) values (
+        #{docId},#{docTitle},#{docContent},#{docCode}
+        )
+    </insert>
+
+
+    <!-- 查询系统文档信息 add by wuxw 2018-07-03 -->
+    <select id="getSysDocumentInfo" parameterType="Map" resultType="Map">
+        select t.doc_id docId,t.doc_content,t.doc_content docContent,t.doc_code,t.doc_code docCode,t.status_cd,t.status_cd statusCd,
+        t.doc_title docTitle,t.create_time createTime
+        from sys_document t
+        where 1 =1
+        <if test="docContent !=null and docContent != ''">
+            and t.doc_content= #{docContent}
+        </if>
+        <if test="docCode !=null and docCode != ''">
+            and t.doc_code= #{docCode}
+        </if>
+        <if test="docTitle !=null and docTitle != ''">
+            and t.doc_title like concat('%',#{docTitle},'%')
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="docId !=null and docId != ''">
+            and t.doc_id= #{docId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改系统文档信息 add by wuxw 2018-07-03 -->
+    <update id="updateSysDocumentInfo" parameterType="Map">
+        update sys_document t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="docContent !=null and docContent != ''">
+            , t.doc_content= #{docContent}
+        </if>
+        <if test="docTitle !=null and docTitle != ''">
+            , t.doc_title= #{docTitle}
+        </if>
+        <if test="docCode !=null and docCode != ''">
+            , t.doc_code= #{docCode}
+        </if>
+        where 1=1
+        <if test="docId !=null and docId != ''">
+            and t.doc_id= #{docId}
+        </if>
+    </update>
+
+    <!-- 查询系统文档数量 add by wuxw 2018-07-03 -->
+    <select id="querySysDocumentsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from sys_document t
+        where 1 =1
+        <if test="docContent !=null and docContent != ''">
+            and t.doc_content= #{docContent}
+        </if>
+        <if test="docCode !=null and docCode != ''">
+            and t.doc_code= #{docCode}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="docId !=null and docId != ''">
+            and t.doc_id= #{docId}
+        </if>
+        <if test="docTitle !=null and docTitle != ''">
+            and t.doc_title like concat('%',#{docTitle},'%')
+        </if>
+
+    </select>
+
+</mapper>

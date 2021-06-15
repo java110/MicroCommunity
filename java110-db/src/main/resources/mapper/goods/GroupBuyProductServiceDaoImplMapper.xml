@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupBuyProductServiceDaoImpl">
+
+
+    <!-- 保存拼团产品信息 add by wuxw 2018-07-03 -->
+    <insert id="saveGroupBuyProductInfo" parameterType="Map">
+        insert into group_buy_product(
+        group_prod_name,product_id,user_count,group_id,group_prod_desc,sort,state,store_id,batch_id
+        ) values (
+        #{groupProdName},#{productId},#{userCount},#{groupId},#{groupProdDesc},#{sort},#{state},#{storeId},#{batchId}
+        )
+    </insert>
+
+
+    <!-- 查询拼团产品信息 add by wuxw 2018-07-03 -->
+    <select id="getGroupBuyProductInfo" parameterType="Map" resultType="Map">
+        select t.group_prod_name,t.group_prod_name groupProdName,t.product_id,t.product_id
+        productId,t.user_count,t.user_count userCount,t.group_id,t.group_id groupId,t.group_prod_desc,t.group_prod_desc
+        groupProdDesc,t.status_cd,t.status_cd statusCd,t.sort,t.state,t.store_id,t.store_id
+        storeId,t.batch_id,t.batch_id batchId,p.prod_name prodName,p.prod_desc prodDesc,
+        gbb.batch_start_time batchStartTime,gbb.batch_end_time batchEndTime,
+        psv.cost_price costPrice,psv.ot_price otPrice,psv.price,psv.vip_price vipPrice,gbps.group_price groupPrice,
+        gbps.group_sales groupSales,gbps.group_stock groupStock
+        from group_buy_product t
+        inner join product p on t.product_id = p.product_id and p.status_cd = '0' and t.store_id = p.store_id
+        LEFT JOIN group_buy_batch gbb on t.batch_id = gbb.batch_id and gbb.store_id = t.store_id and gbb.status_cd = '0'
+        left join product_spec_value psv on p.product_id = psv.product_id and psv.store_id = p.store_id and psv.is_default = 'T' and psv.status_cd = '0'
+        left join group_buy_product_spec gbps on psv.value_id = gbps.value_id and gbps.store_id = p.store_id and gbps.product_id = p.product_id and gbps.status_cd = '0'
+        where 1 =1
+        <if test="groupProdName !=null and groupProdName != ''">
+            and t.group_prod_name= #{groupProdName}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="userCount !=null and userCount != ''">
+            and t.user_count= #{userCount}
+        </if>
+        <if test="groupId !=null and groupId != ''">
+            and t.group_id= #{groupId}
+        </if>
+        <if test="groupProdDesc !=null and groupProdDesc != ''">
+            and t.group_prod_desc= #{groupProdDesc}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sort !=null and sort != ''">
+            and t.sort= #{sort}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改拼团产品信息 add by wuxw 2018-07-03 -->
+    <update id="updateGroupBuyProductInfo" parameterType="Map">
+        update group_buy_product t set t.status_cd = #{statusCd}
+
+        <if test="groupProdName !=null and groupProdName != ''">
+            , t.group_prod_name= #{groupProdName}
+        </if>
+        <if test="productId !=null and productId != ''">
+            , t.product_id= #{productId}
+        </if>
+        <if test="userCount !=null and userCount != ''">
+            , t.user_count= #{userCount}
+        </if>
+        <if test="groupProdDesc !=null and groupProdDesc != ''">
+            , t.group_prod_desc= #{groupProdDesc}
+        </if>
+        <if test="sort !=null and sort != ''">
+            , t.sort= #{sort}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+
+        <if test="batchId !=null and batchId != ''">
+            , t.batch_id= #{batchId}
+        </if>
+        where 1=1
+        <if test="groupId !=null and groupId != ''">
+            and t.group_id= #{groupId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询拼团产品数量 add by wuxw 2018-07-03 -->
+    <select id="queryGroupBuyProductsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from group_buy_product t
+        where 1 =1
+        <if test="groupProdName !=null and groupProdName != ''">
+            and t.group_prod_name= #{groupProdName}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="userCount !=null and userCount != ''">
+            and t.user_count= #{userCount}
+        </if>
+        <if test="groupId !=null and groupId != ''">
+            and t.group_id= #{groupId}
+        </if>
+        <if test="groupProdDesc !=null and groupProdDesc != ''">
+            and t.group_prod_desc= #{groupProdDesc}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sort !=null and sort != ''">
+            and t.sort= #{sort}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -22,6 +22,16 @@ public class FeeConfigDto extends PageDto implements Serializable {
     public static final String BILL_TYPE_ONCE_MONTH = "005";// 一次性按月
 
     public static final String DEFAULT_FEE_CONFIG = "T";
+    public static final String CUSTOME_FEE_CONFIG = "F";
+
+    public static final String FEE_TYPE_CD_WATER = "888800010016";//电费
+    public static final String FEE_TYPE_CD_METER = "888800010015";//水费
+    public static final String FEE_TYPE_CD_GAS = "888800010009";//煤气
+    public static final String FEE_TYPE_CD_SYSTEM = "888800010000";//系统
+
+    public static final String CONFIG_ID_RENTING = "920000000000000000";//租赁费用项
+    public static final String CONFIG_ID_GOODS = "930000000000000000";//商品费用项
+
 
 
     private String feeTypeCd;
@@ -30,6 +40,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String squarePrice;
     private String isDefault;
     private String configId;
+    private String[] configIds;
     private String feeFlag;
     private String feeName;
     private String startTime;
@@ -53,6 +64,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+    private String computingFormulaText;
 
 
     public String getFeeTypeCd() {
@@ -223,5 +235,21 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setValid(String valid) {
         this.valid = valid;
+    }
+
+    public String getComputingFormulaText() {
+        return computingFormulaText;
+    }
+
+    public void setComputingFormulaText(String computingFormulaText) {
+        this.computingFormulaText = computingFormulaText;
+    }
+
+    public String[] getConfigIds() {
+        return configIds;
+    }
+
+    public void setConfigIds(String[] configIds) {
+        this.configIds = configIds;
     }
 }

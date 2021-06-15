@@ -3,15 +3,18 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.ICarBlackWhiteServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.common.ICarBlackWhiteInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.machine.CarBlackWhiteDto;
+import com.java110.dto.parking.ParkingAreaDto;
+import com.java110.intf.common.ICarBlackWhiteInnerServiceSMO;
+import com.java110.intf.community.IParkingAreaInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +34,9 @@ public class CarBlackWhiteInnerServiceSMOImpl extends BaseServiceSMO implements 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
+
     @Override
     public List<CarBlackWhiteDto> queryCarBlackWhites(@RequestBody CarBlackWhiteDto carBlackWhiteDto) {
 
@@ -45,7 +51,36 @@ public class CarBlackWhiteInnerServiceSMOImpl extends BaseServiceSMO implements 
         List<CarBlackWhiteDto> carBlackWhites = BeanConvertUtil.covertBeanList(carBlackWhiteServiceDaoImpl.getCarBlackWhiteInfo(BeanConvertUtil.beanCovertMap(carBlackWhiteDto)), CarBlackWhiteDto.class);
 
 
+        if (carBlackWhiteDto.getRow() > 15) {
+            return carBlackWhites;
+        }
+        freshCarBlackWhites(carBlackWhites);
         return carBlackWhites;
+    }
+
+    private void freshCarBlackWhites(List<CarBlackWhiteDto> carBlackWhites) {
+        List<String> paIds = new ArrayList<>();
+        for (CarBlackWhiteDto carBlackWhiteDto : carBlackWhites) {
+            paIds.add(carBlackWhiteDto.getPaId());
+        }
+
+        if (paIds.size() < 1) {
+            return;
+        }
+
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setCommunityId(carBlackWhites.get(0).getCommunityId());
+        parkingAreaDto.setPaIds(paIds.toArray(new String[paIds.size()]));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+
+        for (ParkingAreaDto tmpParkingAreaDto : parkingAreaDtos) {
+            for (CarBlackWhiteDto carBlackWhiteDto : carBlackWhites) {
+                if (tmpParkingAreaDto.getPaId().endsWith(carBlackWhiteDto.getPaId())) {
+                    carBlackWhiteDto.setPaNum(tmpParkingAreaDto.getNum());
+                }
+            }
+        }
+
     }
 
 

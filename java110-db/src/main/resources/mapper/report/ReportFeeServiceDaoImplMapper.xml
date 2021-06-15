@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportFeeServiceDaoImpl">
+
+    <!-- 查询实收金额 -->
+    <select id="getFeeReceivedAmount" parameterType="com.java110.dto.report.ReportFeeDetailDto" resultType="Map">
+
+        select SUM(t.received_amount) receivedAmount
+        from pay_fee_detail t
+        <if test="configId != null and configId != ''">
+            inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        </if>
+        where 1=1
+        <if test="configId != null and configId != ''">
+            and pf.config_id = #{configId}
+            and pf.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id = #{feeId}
+        </if>
+        <if test="startTime != null">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null">
+            and t.create_time &lt; #{endTime}
+        </if>
+        <if test="curStartYear != null and curStartYear != ''">
+            and DATE_FORMAT(t.start_time,'%Y') = #{curStartYear}
+        </if>
+        <if test="curEndYear != null and curEndYear != ''">
+            and DATE_FORMAT(DATE_SUB(t.end_time,INTERVAL 1 DAY),'%Y') = #{curEndYear}
+        </if>
+    </select>
+
+    <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
+    <select id="getFeeCount" parameterType="com.java110.dto.report.ReportFeeDto" resultType="Map">
+        select count(1) count
+        from pay_fee t
+        where t.status_cd = '0'
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type= #{payerObjType}
+        </if>
+    </select>
+
+    <!-- 查询 费用 -->
+    <select id="getFees" parameterType="Map"
+            resultType="Map">
+        select pfc.fee_name feeName,pfc.start_time configStartTime,pfc.end_time configEndTime,pfc.config_id
+        configId,pfc.fee_type_cd feeTypeCd,
+        pfc.additional_amount additionalAmount,pfc.bill_type billType,pfc.computing_formula
+        computingFormula,pfc.computing_formula_text computingFormulaText,
+        pfc.payment_cd paymentCd,
+        pfc.payment_cycle paymentCycle,pfc.square_price squarePrice,pfc.fee_flag feeFlag,t.payer_obj_id
+        payerObjId,t.payer_obj_type payerObjType,
+        t.amount,t.create_time createTime,t.end_time endTime,t.fee_id feeId,t.income_obj_id incomeObjId,t.start_time
+        startTime,t.state,
+        br.room_id roomId,br.room_num roomNum,oc.car_num carNum,ss.store_id storeId,ss.`name` storeName,ss.store_type_cd
+        storeTypeCd,
+        t.community_id communityId,pfa.value importFeeName,ifd.end_time importFeeEndTime,mw.cur_degrees
+        curDegrees,mw.pre_degrees preDegrees,
+        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime
+        from pay_fee t
+        INNER JOIN pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and
+        oc.car_type_cd='1001'
+        left join s_store ss on t.income_obj_id = ss.store_id and ss.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002' and pfa.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.spec_cd = '390010' and pfa1.status_cd = '0'
+        left join import_fee_detail ifd on t.fee_id = ifd.fee_id and ifd.status_cd = '0' and t.fee_flag = '2006012'
+        LEFT JOIN meter_water mw on t.fee_id = mw.fee_id and mw.status_cd = '0' and mw.community_id = t.community_id
+        where t.status_cd = '0'
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id= #{payerObjId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type= #{payerObjType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeFlag !=null and feeFlag != ''">
+            and t.fee_flag= #{feeFlag}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询费用配置信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeConfigs" parameterType="com.java110.dto.fee.FeeConfigDto"
+            resultType="com.java110.dto.fee.FeeConfigDto">
+        select t.fee_type_cd,t.fee_type_cd feeTypeCd,t.computing_formula,t.computing_formula
+        computingFormula,t.additional_amount,t.additional_amount additionalAmount,t.status_cd,t.status_cd
+        statusCd,t.square_price,t.square_price squarePrice,t.is_default,t.is_default isDefault,t.config_id,t.config_id
+        configId,t.fee_flag,t.fee_flag feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time
+        startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,
+        td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName,
+        t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle,
+        t.computing_formula_text,t.computing_formula_text computingFormulaText
+        from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3
+        where 1 =1
+        and t.fee_type_cd = td1.status_cd
+        and td1.table_name = 'pay_fee_config'
+        and td1.table_columns = 'fee_type_cd'
+        and t.fee_flag = td2.status_cd
+        and td2.table_name = 'pay_fee_config'
+        and td2.table_columns = 'fee_flag'
+        and t.bill_type = td3.status_cd
+        and td3.table_name = 'pay_fee_config'
+        and td3.table_columns = 'bill_type'
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="computingFormula !=null and computingFormula != ''">
+            and t.computing_formula= #{computingFormula}
+        </if>
+        <if test="additionalAmount !=null and additionalAmount != ''">
+            and t.additional_amount= #{additionalAmount}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="squarePrice !=null and squarePrice != ''">
+            and t.square_price= #{squarePrice}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            and t.is_default= #{isDefault}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeFlag !=null and feeFlag != ''">
+            and t.fee_flag= #{feeFlag}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name like '%${feeName}%'
+        </if>
+        <if test="startTime !=null ">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="valid !=null and valid == 1">
+            and t.end_time &gt; now()
+        </if>
+        <if test="curTime !=null ">
+            and t.end_time &gt; #{curTime}
+            and t.start_time &lt; #{curTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="paymentCd !=null and paymentCd != ''">
+            and t.payment_cd= #{paymentCd}
+        </if>
+        <if test="paymentCycle !=null and paymentCycle != ''">
+            and t.payment_cycle= #{paymentCycle}
+        </if>
+        <if test="billType !=null and billType != ''">
+            and t.bill_type= #{billType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+</mapper>

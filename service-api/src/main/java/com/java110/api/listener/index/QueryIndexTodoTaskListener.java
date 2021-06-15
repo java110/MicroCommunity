@@ -6,11 +6,13 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
 import com.java110.intf.common.IGoodCollectionUserInnerServiceSMO;
 import com.java110.intf.common.IResourceEntryStoreInnerServiceSMO;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
@@ -18,6 +20,9 @@ import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorDto
@@ -46,6 +51,9 @@ public class QueryIndexTodoTaskListener extends AbstractServiceApiDataFlowListen
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -80,11 +88,24 @@ public class QueryIndexTodoTaskListener extends AbstractServiceApiDataFlowListen
 
         //报修 待办
         RepairDto ownerRepairDto = new RepairDto();
-        ownerRepairDto.setStaffId(reqJson.getString("userId"));
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewListStaffRepairs");
+        basePrivilegeDto.setUserId(reqJson.getString("userId"));
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges.size()==0) {
+            ownerRepairDto.setStaffId(reqJson.getString("userId"));
+        }
         ownerRepairDto.setCommunityId(reqJson.getString("communityId"));
         int repairCount = repairInnerServiceSMOImpl.queryStaffRepairsCount(ownerRepairDto);
 
         //报修已办
+        basePrivilegeDto.setResource("/listStaffFinishRepairs");
+        List<Map> privileges2 = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges2.size()==0) {
+            ownerRepairDto.setStaffId(reqJson.getString("userId"));
+        }else{
+            ownerRepairDto.setStaffId("");
+        }
         int repairHisCount = repairInnerServiceSMOImpl.queryStaffFinishRepairsCount(ownerRepairDto);
 
         // 采购待办

@@ -24,6 +24,8 @@ public class ApiParkingSpaceDataVo extends Vo {
     private String stateName;
     private String communityId;
     private String userId;
+    private String parkingType;
+    private String parkingTypeName;
 
     private String remark;
 
@@ -225,5 +227,21 @@ public class ApiParkingSpaceDataVo extends Vo {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getParkingType() {
+        return parkingType;
+    }
+
+    public void setParkingType(String parkingType) {
+        this.parkingType = parkingType;
+    }
+
+    public String getParkingTypeName() {
+        return parkingTypeName;
+    }
+
+    public void setParkingTypeName(String parkingTypeName) {
+        this.parkingTypeName = parkingTypeName;
     }
 }

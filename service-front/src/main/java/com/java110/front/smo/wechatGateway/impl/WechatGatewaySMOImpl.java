@@ -48,8 +48,7 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
     private WechatAuthProperties wechatAuthProperties;
 
     @Override
-    public ResponseEntity<String>
-    gateway(IPageData pd) throws Exception {
+    public ResponseEntity<String> gateway(IPageData pd, String wId) throws Exception {
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasKeyAndValue(paramIn, "fromUserName", "请求报文中未包含fromUserName");
@@ -73,6 +72,11 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
             if (StringUtil.isEmpty(noBindOwnerResponseMessage)) {
 
                 noBindOwnerResponseMessage = WechatConstant.NO_BIND_OWNER_RESPONSE_MESSAGE;
+            }
+            if (!noBindOwnerResponseMessage.contains("wAppId=")) {
+                if (noBindOwnerResponseMessage.indexOf("W_APP_ID") > 0) {
+                    noBindOwnerResponseMessage = noBindOwnerResponseMessage.replace("W_APP_ID","wAppId=" +WechatFactory.getAppId(wId));
+                }
             }
 
             responseStr = WechatFactory.formatText(toUserName, fromUserName, noBindOwnerResponseMessage);

@@ -6,12 +6,16 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.workflow.WorkflowDto;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.po.community.CommunityAttrPo;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.community.CommunityPo;
 import com.java110.po.fee.PayFeeConfigPo;
+import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -22,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +41,11 @@ import java.util.Map;
 @Service("communityBMOImpl")
 public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
-
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -108,6 +115,35 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessCommunityMember.put("auditStatusCd", auditStatusCd);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
+        return business;
+    }
+
+    /**
+     * 添加小区成员
+     *
+     * @param paramInJson 接口请求数据封装
+     * @return 封装好的 data数据
+     */
+    public JSONObject updateComplaint(JSONObject paramInJson) {
+        WorkflowDto workflowDto = new WorkflowDto();
+        workflowDto.setCommunityId(paramInJson.getString("communityId"));
+        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
+        List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
+
+        if (workflowDtos == null || workflowDtos.size() < 1) {
+            return null;
+        }
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_WORKFLOW);
+        business.put(CommonConstant.HTTP_SEQ, 2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessCommunityMember = new JSONObject();
+        businessCommunityMember.put("flowId", workflowDtos.get(0).getFlowId());
+        businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
+        businessCommunityMember.put("storeId", paramInJson.getString("memberId"));
+        JSONArray data = new JSONArray();
+        data.add(businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(WorkflowPo.class.getSimpleName(), data);
         return business;
     }
 
@@ -483,6 +519,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
         paramInJson.put("communityId", GenerateCodeFactory.getCommunityId());
         paramInJson.put("state", "1000");
+        paramInJson.put("communityArea", "0");
         CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
         super.insert(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
 
@@ -495,12 +532,39 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public void updateCommunityOne(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        paramInJson.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        CommunityAttrPo communityAttrPo = BeanConvertUtil.covertBean(paramInJson, CommunityAttrPo.class);
+        super.insert(dataFlowContext, communityAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
+
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void updateAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        CommunityAttrPo communityAttrPo = BeanConvertUtil.covertBean(paramInJson, CommunityAttrPo.class);
+        super.insert(dataFlowContext, communityAttrPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
+
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void updateCommunityOne(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
 
         super.update(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
-
     }
 }

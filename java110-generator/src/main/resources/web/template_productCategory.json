@@ -1,0 +1,71 @@
+{
+  "templateName": "商品分类",
+  "directories": "goods",
+  "templateCode": "productCategory",
+  "templateKey": "categoryId",
+  "templateKeyName": "分类ID",
+  "searchCode": "categoryId",
+  "searchName": "分类ID",
+  "conditions": [
+    {
+      "name": "名称",
+      "inputType": "input",
+      "code": "categoryName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "分类级别",
+      "inputType": "input",
+      "code": "categoryLevel",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "是否显示",
+      "inputType": "select",
+      "selectValue":"Y,N",
+      "selectValueName":"是,否",
+      "code": "isShow",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns": [
+    {
+      "code": "categoryName",
+      "cnCode": "分类名称",
+      "desc": "必填，请填写分类名称",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "100",
+      "limitErrInfo": "分类名称不能超过100位",
+      "show": true
+    },
+    {
+      "code": "seq",
+      "cnCode": "显示序号",
+      "desc": "必填，请填写显示序号",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "num",
+      "limitParam": "",
+      "limitErrInfo": "显示序号不是有效数字",
+      "show": true
+    },
+    {
+      "code": "isShow",
+      "cnCode": "是否显示",
+      "desc": "必填，请填写是否显示",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue": "Y,N",
+      "selectValueName": "是,否",
+      "limit": "maxLength",
+      "limitParam": "2",
+      "limitErrInfo": "是否显示格式错误",
+      "show": true
+    }
+  ]
+}

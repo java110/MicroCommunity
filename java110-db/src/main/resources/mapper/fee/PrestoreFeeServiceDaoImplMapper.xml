@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="prestoreFeeServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存预存费用信息 add by wuxw 2018-07-03 -->
+    <insert id="savePrestoreFeeInfo" parameterType="Map">
+        insert into prestore_fee(
+prestore_fee_amount,reason,prestore_fee_obj_type,prestore_fee_id,remark,state,community_id,prestore_fee_type,room_id
+) values (
+#{prestoreFeeAmount},#{reason},#{prestoreFeeObjType},#{prestoreFeeId},#{remark},#{state},#{communityId},#{prestoreFeeType},#{roomId}
+)
+    </insert>
+
+
+
+    <!-- 查询预存费用信息 add by wuxw 2018-07-03 -->
+    <select id="getPrestoreFeeInfo" parameterType="Map" resultType="Map">
+        select  t.prestore_fee_amount,t.prestore_fee_amount prestoreFeeAmount,t.reason,t.prestore_fee_obj_type,t.prestore_fee_obj_type prestoreFeeObjType,t.prestore_fee_id,t.prestore_fee_id prestoreFeeId,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.prestore_fee_type,t.prestore_fee_type prestoreFeeType,t.room_id,t.room_id roomId 
+from prestore_fee t 
+where 1 =1 
+<if test="prestoreFeeAmount !=null and prestoreFeeAmount != ''">
+   and t.prestore_fee_amount= #{prestoreFeeAmount}
+</if> 
+<if test="reason !=null and reason != ''">
+   and t.reason= #{reason}
+</if> 
+<if test="prestoreFeeObjType !=null and prestoreFeeObjType != ''">
+   and t.prestore_fee_obj_type= #{prestoreFeeObjType}
+</if> 
+<if test="prestoreFeeId !=null and prestoreFeeId != ''">
+   and t.prestore_fee_id= #{prestoreFeeId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="prestoreFeeType !=null and prestoreFeeType != ''">
+   and t.prestore_fee_type= #{prestoreFeeType}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改预存费用信息 add by wuxw 2018-07-03 -->
+    <update id="updatePrestoreFeeInfo" parameterType="Map">
+        update  prestore_fee t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="prestoreFeeAmount !=null and prestoreFeeAmount != ''">
+, t.prestore_fee_amount= #{prestoreFeeAmount}
+</if> 
+<if test="reason !=null and reason != ''">
+, t.reason= #{reason}
+</if> 
+<if test="prestoreFeeObjType !=null and prestoreFeeObjType != ''">
+, t.prestore_fee_obj_type= #{prestoreFeeObjType}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="prestoreFeeType !=null and prestoreFeeType != ''">
+, t.prestore_fee_type= #{prestoreFeeType}
+</if> 
+<if test="roomId !=null and roomId != ''">
+, t.room_id= #{roomId}
+</if> 
+ where 1=1 <if test="prestoreFeeId !=null and prestoreFeeId != ''">
+and t.prestore_fee_id= #{prestoreFeeId}
+</if> 
+
+    </update>
+
+    <!-- 查询预存费用数量 add by wuxw 2018-07-03 -->
+     <select id="queryPrestoreFeesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from prestore_fee t 
+where 1 =1 
+<if test="prestoreFeeAmount !=null and prestoreFeeAmount != ''">
+   and t.prestore_fee_amount= #{prestoreFeeAmount}
+</if> 
+<if test="reason !=null and reason != ''">
+   and t.reason= #{reason}
+</if> 
+<if test="prestoreFeeObjType !=null and prestoreFeeObjType != ''">
+   and t.prestore_fee_obj_type= #{prestoreFeeObjType}
+</if> 
+<if test="prestoreFeeId !=null and prestoreFeeId != ''">
+   and t.prestore_fee_id= #{prestoreFeeId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="prestoreFeeType !=null and prestoreFeeType != ''">
+   and t.prestore_fee_type= #{prestoreFeeType}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+
+
+     </select>
+
+</mapper>

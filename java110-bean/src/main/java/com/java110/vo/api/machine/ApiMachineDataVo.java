@@ -1,7 +1,9 @@
 package com.java110.vo.api.machine;
 
+import com.java110.dto.machine.MachineAttrDto;
+
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 public class ApiMachineDataVo implements Serializable {
 
@@ -29,9 +31,11 @@ public class ApiMachineDataVo implements Serializable {
     private String locationObjName;
     private String direction;
     private String directionName;
+    private List<MachineAttrDto> machineAttrs;
 
 
     private String createTime;
+    private String heartbeatTime;
 
     public String getMachineId() {
         return machineId;
@@ -215,5 +219,21 @@ public class ApiMachineDataVo implements Serializable {
 
     public void setDirectionName(String directionName) {
         this.directionName = directionName;
+    }
+
+    public List<MachineAttrDto> getMachineAttrs() {
+        return machineAttrs;
+    }
+
+    public void setMachineAttrs(List<MachineAttrDto> machineAttrs) {
+        this.machineAttrs = machineAttrs;
+    }
+
+    public String getHeartbeatTime() {
+        return heartbeatTime;
+    }
+
+    public void setHeartbeatTime(String heartbeatTime) {
+        this.heartbeatTime = heartbeatTime;
     }
 }

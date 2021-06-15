@@ -1,0 +1,50 @@
+{
+  "autoMove": true,
+  "id": "rentingConfigId",
+  "name": "rentingConfig",
+  "desc": "房屋出租配置",
+  "shareParam": "rentingConfigId",
+  "shareColumn": "renting_config_id",
+  "shareName": "user",
+  "tableName": "renting_config",
+  "param": {
+    "rentingConfigId": "renting_config_id",
+    "rentingType": "renting_type",
+    "rentingFormula": "renting_formula",
+    "servicePrice": "service_price",
+    "serviceOwnerRate": "service_owner_rate",
+    "serviceTenantRate": "service_tenant_rate",
+    "adminSeparateRate": "admin_separate_rate",
+    "proxySeparateRate": "proxy_separate_rate",
+    "propertySeparateRate": "property_separate_rate",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "rentingType",
+      "msg": "租户类型不能为空"
+    },
+    {
+      "code": "rentingFormula",
+      "msg": "计算公式不能为空"
+    },{
+      "code": "servicePrice",
+      "msg": "服务金额不能为空"
+    },{
+      "code": "serviceOwnerRate",
+      "msg": "业主收费率不能为空"
+    },{
+      "code": "serviceTenantRate",
+      "msg": "租户收费率不能为空"
+    },{
+      "code": "adminSeparateRate",
+      "msg": "运营收费率不能为空"
+    },{
+      "code": "proxySeparateRate",
+      "msg": "代理商收费率不能为空"
+    },{
+      "code": "propertySeparateRate",
+      "msg": "物业收费率不能为空"
+    }
+  ]
+}

@@ -253,6 +253,22 @@ public class DataFlowEventPublishing extends LoggerEngine {
         multicastEvent(new InvokeBusinessSystemEvent("",dataFlow));
     }
 
+    /**
+     * 调用完成业务系统事件
+     * @param dataFlow 数据流
+     */
+    public static void invokeFinishBusinessSystem(IOrderDataFlowContext dataFlow){
+        multicastEvent(new InvokeFinishBusinessSystemEvent("",dataFlow));
+    }
+
+    /**
+     * 调用 确认订单完成
+     * @param dataFlow
+     */
+    public static void invokeConfirmFinishBusinessSystem(IOrderDataFlowContext dataFlow) {
+        multicastEvent(new InvokeConfirmFinishBusinessSystemEvent("",dataFlow));
+    }
+
 
     /**
      * 调用业务系统成功后事件
@@ -289,6 +305,8 @@ public class DataFlowEventPublishing extends LoggerEngine {
     public static void dataResponse(IOrderDataFlowContext dataFlow,String responseData,Map<String,String> headers){
         multicastEvent(new DataResponseEvent("",dataFlow,responseData,headers));
     }
+
+
 
     /***********************************************发布侦听 结束***************************************************************/
 }

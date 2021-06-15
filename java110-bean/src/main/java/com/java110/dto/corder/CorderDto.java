@@ -9,6 +9,8 @@ import java.util.List;
 public class CorderDto extends PageDto implements Serializable {
     private String oId;
     private String appId;
+    private String appName;
+    private String name;
     private String extTransactionId;
     private String userId;
     private String requestTime;
@@ -123,5 +125,21 @@ public class CorderDto extends PageDto implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

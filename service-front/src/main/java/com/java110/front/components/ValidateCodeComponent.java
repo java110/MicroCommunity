@@ -1,7 +1,7 @@
 package com.java110.front.components;
 
 import com.java110.core.context.IPageData;
-import com.java110.front.smo.ILoginServiceSMO;
+import com.java110.front.smo.login.ILoginServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +31,9 @@ public class ValidateCodeComponent {
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            return responseEntity;
         }
+        
+        return responseEntity;
     }
 
     /**
@@ -48,8 +49,9 @@ public class ValidateCodeComponent {
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            return responseEntity;
         }
+        
+        return responseEntity;
     }
 
 

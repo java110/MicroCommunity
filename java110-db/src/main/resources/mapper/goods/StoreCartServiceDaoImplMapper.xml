@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeCartServiceDaoImpl">
+
+
+    <!-- 保存购物车信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreCartInfo" parameterType="Map">
+        insert into store_cart(
+        value_id,product_id,cart_id,person_id,state,store_id,cart_num
+        ) values (
+        #{valueId},#{productId},#{cartId},#{personId},#{state},#{storeId},#{cartNum}
+        )
+    </insert>
+
+
+    <!-- 查询购物车信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreCartInfo" parameterType="Map" resultType="Map">
+        select t.value_id,t.value_id valueId,t.product_id,t.product_id productId,t.cart_id,t.cart_id
+        cartId,t.person_id,t.person_id personId,t.status_cd,t.status_cd statusCd,t.state,t.store_id,t.store_id
+        storeId,t.cart_num,t.cart_num cartNum,p.prod_name prodName,psv.price
+        from store_cart t
+        left join product p on t.product_id = p.product_id and t.store_id = p.store_id and p.status_cd = '0'
+        left join product_spec_value psv on psv.product_id = t.product_id and psv.value_id = t.value_id and psv.store_id = t.store_id and psv.status_cd = '0'
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="cartNum !=null and cartNum != ''">
+            and t.cart_num= #{cartNum}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改购物车信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreCartInfo" parameterType="Map">
+        update store_cart t set t.status_cd = #{statusCd}
+
+        <if test="valueId !=null and valueId != ''">
+            , t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            , t.product_id= #{productId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+
+        <if test="cartNum !=null and cartNum != ''">
+            , t.cart_num= #{cartNum}
+        </if>
+        where 1=1
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询购物车数量 add by wuxw 2018-07-03 -->
+    <select id="queryStoreCartsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from store_cart t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="cartNum !=null and cartNum != ''">
+            and t.cart_num= #{cartNum}
+        </if>
+
+
+    </select>
+
+</mapper>

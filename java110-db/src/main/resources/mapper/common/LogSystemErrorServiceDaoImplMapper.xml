@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="logSystemErrorServiceDaoImpl">
+
+
+    <!-- 保存系统异常信息 add by wuxw 2018-07-03 -->
+    <insert id="saveLogSystemErrorInfo" parameterType="Map">
+        insert into log_system_error(
+        msg,err_type,err_id
+        ) values (
+        #{msg},#{errType},#{errId}
+        )
+    </insert>
+
+
+    <!-- 查询系统异常信息 add by wuxw 2018-07-03 -->
+    <select id="getLogSystemErrorInfo" parameterType="Map" resultType="Map">
+        select t.msg,t.err_type,t.err_type errType,t.err_id,t.err_id errId,t.status_cd,t.status_cd statusCd
+        from log_system_error t
+        where 1 =1
+        <if test="msg !=null and msg != ''">
+            and t.msg= #{msg}
+        </if>
+        <if test="errType !=null and errType != ''">
+            and t.err_type= #{errType}
+        </if>
+        <if test="errId !=null and errId != ''">
+            and t.err_id= #{errId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改系统异常信息 add by wuxw 2018-07-03 -->
+    <update id="updateLogSystemErrorInfo" parameterType="Map">
+        update log_system_error t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="msg !=null and msg != ''">
+            , t.msg= #{msg}
+        </if>
+        <if test="errType !=null and errType != ''">
+            , t.err_type= #{errType}
+        </if>
+        where 1=1
+        <if test="errId !=null and errId != ''">
+            and t.err_id= #{errId}
+        </if>
+
+    </update>
+
+    <!-- 查询系统异常数量 add by wuxw 2018-07-03 -->
+    <select id="queryLogSystemErrorsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from log_system_error t
+        where 1 =1
+        <if test="msg !=null and msg != ''">
+            and t.msg= #{msg}
+        </if>
+        <if test="errType !=null and errType != ''">
+            and t.err_type= #{errType}
+        </if>
+        <if test="errId !=null and errId != ''">
+            and t.err_id= #{errId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+
+    </select>
+
+</mapper>

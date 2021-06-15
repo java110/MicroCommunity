@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupBuyServiceDaoImpl">
+
+
+    <!-- 保存拼团购买信息 add by wuxw 2018-07-03 -->
+    <insert id="saveGroupBuyInfo" parameterType="Map">
+        insert into group_buy(
+        spec_id,buy_count,amount,product_id,group_id,persion_id,batch_id,store_id,persion_name,group_price,buy_id,state
+        ) values (
+        #{specId},#{buyCount},#{amount},#{productId},#{groupId},#{persionId},#{batchId},#{storeId},#{persionName},#{groupPrice},#{buyId},#{state}
+        )
+    </insert>
+
+
+    <!-- 查询拼团购买信息 add by wuxw 2018-07-03 -->
+    <select id="getGroupBuyInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.buy_count,t.buy_count buyCount,t.amount,t.product_id,t.product_id
+        productId,t.group_id,t.group_id groupId,t.status_cd,t.status_cd statusCd,t.persion_id,t.persion_id
+        persionId,t.batch_id,t.batch_id batchId,t.store_id,t.store_id storeId,t.persion_name,t.persion_name
+        persionName,t.group_price,t.group_price groupPrice,t.buy_id,t.buy_id buyId,t.state,gbp.group_prod_name groupProdName
+        from group_buy t
+        left join group_buy_product gbp on t.group_id = gbp.group_id and t.store_id = gbp.store_id and gbp.status_cd = '0'
+        where 1 =1
+        <if test="groupProdName !=null and groupProdName != ''">
+            and gbp.group_prod_name = #{groupProdName}
+        </if>
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="buyCount !=null and buyCount != ''">
+            and t.buy_count= #{buyCount}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="groupId !=null and groupId != ''">
+            and t.group_id= #{groupId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="persionId !=null and persionId != ''">
+            and t.persion_id= #{persionId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="persionName !=null and persionName != ''">
+            and t.persion_name= #{persionName}
+        </if>
+        <if test="groupPrice !=null and groupPrice != ''">
+            and t.group_price= #{groupPrice}
+        </if>
+        <if test="buyId !=null and buyId != ''">
+            and t.buy_id= #{buyId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改拼团购买信息 add by wuxw 2018-07-03 -->
+    <update id="updateGroupBuyInfo" parameterType="Map">
+        update group_buy t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="specId !=null and specId != ''">
+            , t.spec_id= #{specId}
+        </if>
+        <if test="buyCount !=null and buyCount != ''">
+            , t.buy_count= #{buyCount}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="productId !=null and productId != ''">
+            , t.product_id= #{productId}
+        </if>
+        <if test="groupId !=null and groupId != ''">
+            , t.group_id= #{groupId}
+        </if>
+        <if test="persionId !=null and persionId != ''">
+            , t.persion_id= #{persionId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            , t.batch_id= #{batchId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="persionName !=null and persionName != ''">
+            , t.persion_name= #{persionName}
+        </if>
+        <if test="groupPrice !=null and groupPrice != ''">
+            , t.group_price= #{groupPrice}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        where 1=1
+        <if test="buyId !=null and buyId != ''">
+            and t.buy_id= #{buyId}
+        </if>
+
+    </update>
+
+    <!-- 查询拼团购买数量 add by wuxw 2018-07-03 -->
+    <select id="queryGroupBuysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from group_buy t
+        left join group_buy_product gbp on t.group_id = gbp.group_id and t.store_id = gbp.store_id and gbp.status_cd = '0'
+        where 1 =1
+        <if test="groupProdName !=null and groupProdName != ''">
+            and gbp.group_prod_name = #{groupProdName}
+        </if>
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="buyCount !=null and buyCount != ''">
+            and t.buy_count= #{buyCount}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="groupId !=null and groupId != ''">
+            and t.group_id= #{groupId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="persionId !=null and persionId != ''">
+            and t.persion_id= #{persionId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="persionName !=null and persionName != ''">
+            and t.persion_name= #{persionName}
+        </if>
+        <if test="groupPrice !=null and groupPrice != ''">
+            and t.group_price= #{groupPrice}
+        </if>
+        <if test="buyId !=null and buyId != ''">
+            and t.buy_id= #{buyId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+
+    </select>
+
+</mapper>

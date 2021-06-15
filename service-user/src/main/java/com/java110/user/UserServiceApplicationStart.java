@@ -29,18 +29,30 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(
-        scanBasePackages = {"com.java110.service", "com.java110.user", "com.java110.core", "com.java110.config.properties.code", "com.java110.db"},
+        scanBasePackages = {"com.java110.service","com.java110.core", "com.java110.user",  "com.java110.config.properties.code", "com.java110.db"},
         excludeName = {"com.java110.intf.user"}
 )
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.user.listener"})
-@EnableFeignClients(basePackages = {"com.java110.intf.community","com.java110.intf.common","com.java110.intf.store"})
+@EnableFeignClients(basePackages = {"com.java110.intf.community","com.java110.intf.common","com.java110.intf.store",
+        "com.java110.intf.fee","com.java110.intf.order"})
 public class UserServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceApplicationStart.class);
 
     private static final String LISTENER_PATH = "java110.UserService.listeners";
+
+    public static void main(String[] args) throws Exception {
+        try {
+            ApplicationContext context = SpringApplication.run(UserServiceApplicationStart.class, args);
+            ServiceStartInit.initSystemConfig(context);
+            //加载业务侦听
+            // SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
+        } catch (Throwable e) {
+            logger.error("系统启动失败", e);
+        }
+    }
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
@@ -53,16 +65,5 @@ public class UserServiceApplicationStart {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
-    }
-
-    public static void main(String[] args) throws Exception {
-        try {
-            ApplicationContext context = SpringApplication.run(UserServiceApplicationStart.class, args);
-            ServiceStartInit.initSystemConfig(context);
-            //加载业务侦听
-            // SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
-        } catch (Throwable e) {
-            logger.error("系统启动失败", e);
-        }
     }
 }

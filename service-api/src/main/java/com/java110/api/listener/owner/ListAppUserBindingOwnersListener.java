@@ -110,8 +110,12 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
      * @param ownerAppUserDtos
      */
     private void refreshCommunityArea(List<OwnerAppUserDto> ownerAppUserDtos) {
+        String[] communityIds = getCommunityIds(ownerAppUserDtos);
+        if(communityIds == null || communityIds.length < 1){
+            return ;
+        }
         CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityIds(getCommunityIds(ownerAppUserDtos));
+        communityDto.setCommunityIds(communityIds);
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
         for (CommunityDto tmpCommunityDto : communityDtos) {

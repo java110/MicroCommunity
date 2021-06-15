@@ -109,10 +109,10 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
         //添加小区楼
         ownerBMOImpl.addOwner(reqJson, context);
 
-        if ("1001".equals(reqJson.getString("ownerTypeCd"))) {
-            //小区楼添加到小区中
-            ownerBMOImpl.addCommunityMember(reqJson, context);
-        }
+//        if ("1001".equals(reqJson.getString("ownerTypeCd"))) {
+//            //小区楼添加到小区中
+//            ownerBMOImpl.addCommunityMember(reqJson, context);
+//        }
 
         //有房屋信息，则直接绑定房屋和 业主的关系
         if (reqJson.containsKey("roomId")) {
@@ -120,7 +120,7 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
             ownerBMOImpl.sellRoom(reqJson, context);
 
             //添加物业费用信息
-            ownerBMOImpl.addPropertyFee(reqJson, context);
+            //ownerBMOImpl.addPropertyFee(reqJson, context);
         }
         if (reqJson.containsKey("ownerPhoto") && !StringUtils.isEmpty(reqJson.getString("ownerPhoto"))) {
             FileDto fileDto = new FileDto();

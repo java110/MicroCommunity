@@ -83,8 +83,8 @@ public class FeeApi extends BaseController {
             responseJson = DataTransactionFactory.createBusinessResponseJson(businessServiceDataFlow, ResponseConstant.RESULT_CODE_ERROR, e.getMessage() + e,
                     null);
         } finally {
-            return responseJson.toJSONString();
         }
+        return responseJson.toJSONString();
     }
 
     /**
@@ -180,12 +180,48 @@ public class FeeApi extends BaseController {
         feeDto.setCommunityId(communityId);
         return queryOweFeeImpl.query(feeDto);
     }
+    /**
+     * 查询欠费费用
+     *
+     * @param roomId    房屋ID
+     * @param communityId 小区ID
+     * @return
+     * @path /app/feeApi/listAllRoomOweFees
+     */
+    @RequestMapping(value = "/listAllRoomOweFees", method = RequestMethod.GET)
+    public ResponseEntity<String> listAllRoomOweFees(
+            @RequestParam(value = "roomId",required = false) String roomId,
+            @RequestParam(value = "communityId") String communityId) {
+        FeeDto feeDto = new FeeDto();
+        feeDto.setPayerObjId(roomId);
+        feeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        feeDto.setCommunityId(communityId);
+        return queryOweFeeImpl.querys(feeDto);
+    }
+
+    /**
+     * 查询欠费费用
+     *
+     * @param feeId       费用ID
+     * @param communityId 小区ID
+     * @return
+     * @path /app/feeApi/listFeeObj
+     */
+    @RequestMapping(value = "/listFeeObj", method = RequestMethod.GET)
+    public ResponseEntity<String> listFeeObj(
+            @RequestParam(value = "feeId") String feeId,
+            @RequestParam(value = "communityId") String communityId) {
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(feeId);
+        feeDto.setCommunityId(communityId);
+        return queryOweFeeImpl.listFeeObj(feeDto);
+    }
 
 
     /**
      * 查询欠费费用(批量查询)
      *
-     * @param num    停车位或房屋编号
+     * @param num         停车位或房屋编号
      * @param communityId 小区ID
      * @return
      * @path /app/feeApi/getOweFees
@@ -197,7 +233,7 @@ public class FeeApi extends BaseController {
             @RequestParam(value = "billType") String billType,
             @RequestParam(value = "row") int row,
             @RequestParam(value = "page") int page,
-            @RequestParam(value = "num",required = false) String num
+            @RequestParam(value = "num", required = false) String num
     ) {
         FeeDto feeDto = new FeeDto();
         feeDto.setPayerObjId(num);
@@ -251,6 +287,44 @@ public class FeeApi extends BaseController {
         Assert.hasKeyAndValue(reqJson, "userId", "未包含用户信息");
 
         return importRoomFeeImpl.importFee(reqJson);
+    }
+
+    /**
+     * 车辆费用导入
+     * /feeApi/importCarFees
+     * path /app/feeApi/importCarFees
+     * @param reqString
+     * @return
+     */
+    @RequestMapping(value = "/importCarFees", method = RequestMethod.POST)
+    public ResponseEntity<String> importCarFees(@RequestBody String reqString) {
+
+        JSONObject reqJson = JSONObject.parseObject(reqString);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
+        Assert.hasKeyAndValue(reqJson, "feeTypeCd", "未包含费用类型");
+        Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户信息");
+        Assert.hasKeyAndValue(reqJson, "userId", "未包含用户信息");
+
+        return importRoomFeeImpl.importCarFee(reqJson);
+    }
+
+    /**
+     * 合同费用导入
+     * /feeApi/importContractFees
+     * path /app/feeApi/importContractFees
+     * @param reqString
+     * @return
+     */
+    @RequestMapping(value = "/importContractFees", method = RequestMethod.POST)
+    public ResponseEntity<String> importContractFees(@RequestBody String reqString) {
+
+        JSONObject reqJson = JSONObject.parseObject(reqString);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
+        Assert.hasKeyAndValue(reqJson, "feeTypeCd", "未包含费用类型");
+        Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户信息");
+        Assert.hasKeyAndValue(reqJson, "userId", "未包含用户信息");
+
+        return importRoomFeeImpl.importContractFees(reqJson);
     }
 
 }

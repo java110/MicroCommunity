@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -39,7 +40,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
      *
      * @param event
      */
-    public final void soService(ServiceDataFlowEvent event) {
+    public final void soService(ServiceDataFlowEvent event) throws ParseException {
 
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         //获取请求数据
@@ -240,7 +241,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
      * @param context 数据上文对象
      * @param reqJson 请求报文
      */
-    protected abstract void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson);
+    protected abstract void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException;
 
 
     @Override

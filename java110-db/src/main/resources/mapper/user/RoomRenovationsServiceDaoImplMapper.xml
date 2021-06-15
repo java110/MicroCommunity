@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="roomRenovationsServiceDaoImpl">
+
+    <!-- 查询装修申请信息 -->
+    <select id="getRoomRenovationInfo" parameterType="Map" resultType="Map">
+        select t.status_cd,t.status_cd statusCd,t.remark,t.is_violation,t.is_violation isViolation,t.r_id,t.r_id
+        rId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName,t.person_name,t.person_name
+        personName,t.violation_desc,t.violation_desc violationDesc,t.start_time,t.start_time
+        startTime,t.end_time,t.end_time endTime,t.state,td.name stateName,t.community_id,t.community_id
+        communityId,t.person_tel,t.person_tel personTel,t.create_time createTime
+        from room_renovation t
+        left join t_dict td on td.table_name='room_renovation' and td.table_columns='state'
+        and t.state=td.status_cd
+        where 1 =1
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="isViolation !=null and isViolation != ''">
+            and t.is_violation= #{isViolation}
+        </if>
+        <if test="rId !=null and rId != ''">
+            and t.r_id= #{rId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name like '%${personName}%'
+        </if>
+        <if test="violationDesc !=null and violationDesc != ''">
+            and t.violation_desc= #{violationDesc}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询装修申请数量 -->
+    <select id="queryRoomRenovationsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from room_renovation t
+        where 1 =1
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="isViolation !=null and isViolation != ''">
+            and t.is_violation= #{isViolation}
+        </if>
+        <if test="rId !=null and rId != ''">
+            and t.r_id= #{rId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name like '%${personName}%'
+        </if>
+        <if test="violationDesc !=null and violationDesc != ''">
+            and t.violation_desc= #{violationDesc}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+    </select>
+
+</mapper>

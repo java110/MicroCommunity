@@ -155,9 +155,9 @@
     <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
     <select id="getStoreAttrs" parameterType="Map" resultType="Map">
         select
-            sa.b_id,sa.attr_id,sa.attr_id attrId,
-            sa.store_id, sa.store_id storeId,sa.spec_cd,sa.spec_cd specCd,sa.value,sa.status_cd,
-            c.name
+        sa.b_id,sa.attr_id,sa.attr_id attrId,
+        sa.store_id, sa.store_id storeId,sa.spec_cd,sa.spec_cd specCd,sa.value,sa.status_cd,
+        c.name
         from s_store_attr sa inner join spec c on sa.spec_cd = c.spec_cd
         where
         1=1
@@ -474,19 +474,19 @@
     <!-- 查询商户 -->
     <select id="getStores" parameterType="Map" resultType="Map">
         select
-            s.store_id,
-            s.b_id,
-            s.user_id,
-            s.name,s.name storeName,
-            s.address,
-            s.tel,
-            s.store_id storeId,
-            s.store_type_cd,s.store_type_cd storeTypeCd,
-            s.nearby_landmarks,s.nearby_landmarks nearByLandmarks,
-            s.map_x,s.map_x mapX,
-            s.map_y,s.map_y mapY,
-            s.status_cd,
-            st.name storeTypeName
+        s.store_id,
+        s.b_id,
+        s.user_id,
+        s.name,s.name storeName,
+        s.address,
+        s.tel,
+        s.store_id storeId,
+        s.store_type_cd,s.store_type_cd storeTypeCd,
+        s.nearby_landmarks,s.nearby_landmarks nearByLandmarks,
+        s.map_x,s.map_x mapX,
+        s.map_y,s.map_y mapY,
+        s.status_cd,
+        st.name storeTypeName
         from s_store s,store_type st
         where s.status_cd = '0'
         and s.store_type_cd = st.store_type_cd
@@ -561,4 +561,101 @@
         </if>
     </select>
 
+    <!--查询员工和商户信息-->
+    <select id="getStoreUserInfo" parameterType="Map" resultType="Map">
+        select s.store_id,s.store_id storeId,s.b_id,s.user_id,s.user_id
+        userId,s.name,s.address,s.tel,s.store_type_cd,s.store_type_cd storeTypeCd,
+        s.nearby_landmarks,s.map_x,s.map_y,s.create_time,su.store_user_id,su.rel_cd,s.state
+        from s_store s
+        left join s_store_user su on s.store_id=su.store_id and su.status_cd = '0'
+        where
+        s.status_cd = '0'
+        <if test="userId != null and userId != ''">
+            and su.user_id = #{userId}
+        </if>
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            and s.store_type_cd = #{storeTypeCd}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and s.store_id = #{storeId}
+        </if>
+
+    </select>
+
+
+    <select id="getStoreStaffs" parameterType="Map" resultType="Map">
+        select t.name storeName,t.address,su.user_id staffId , t.store_id storeId,t.create_time createTime,t.state
+        from s_store t
+        inner join s_store_user su on t.store_id = su.store_id and su.status_cd = '0'
+        <if test="relCd != null and relCd != ''">
+            and su.rel_cd = #{relCd}
+        </if>
+        where
+        1=1
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            and t.store_type_cd = #{storeTypeCd}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and t.store_id = #{storeId}
+        </if>
+        and t.status_cd = '0'
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <select id="getStoreStaffCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_store t
+        inner join s_store_user su on t.store_id = su.store_id and su.status_cd = '0'
+        <if test="relCd != null and relCd != ''">
+            and su.rel_cd = #{relCd}
+        </if>
+        where
+        1=1
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            and t.store_type_cd = #{storeTypeCd}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and t.store_id = #{storeId}
+        </if>
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 修改商户信息 add by wuxw 2018-07-03 -->
+    <update id="updateStore" parameterType="Map">
+        update s_store s
+        <set>
+            <if test="userId != null and userId != ''">
+                s.user_id = #{userId},
+            </if>
+            <if test="name != null and name != ''">
+                s.name = #{name},
+            </if>
+            <if test="address != null and address != ''">
+                s.address = #{address},
+            </if>
+            <if test="tel != null and tel != ''">
+                s.tel = #{tel},
+            </if>
+            <if test="storeTypeCd != null and storeTypeCd != ''">
+                s.store_type_cd = #{storeTypeCd},
+            </if>
+            <if test="nearbyLandmarks != null and nearbyLandmarks != ''">
+                s.nearby_landmarks = #{nearbyLandmarks},
+            </if>
+            <if test="mapX != null and mapX != ''">
+                s.map_x = #{mapX},
+            </if>
+            <if test="mapY != null and mapY != ''">
+                s.map_y = #{mapY},
+            </if>
+            <if test="state != null and state != ''">
+                s.state = #{state},
+            </if>
+        </set>
+        where 1=1
+        and s.store_id = #{storeId}
+        and s.status_cd = '0'
+    </update>
 </mapper>

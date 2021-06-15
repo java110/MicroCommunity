@@ -48,6 +48,11 @@ public class ServiceCodeMachineTranslateConstant {
     public static final String MACHINE_UPLOAD_FACE_LOG = "machineTranslate.machineUploadFaceLog";
 
     /**
+     * 上传进出场信息
+     */
+    public static final String MACHINE_UPLOAD_CAR_LOG = "machineTranslate.machineUploadCarLog";
+
+    /**
      * 结果上报
      */
     public static final String MACHINE_CMD_RESULT = "machineTranslate.machineCmdResult";

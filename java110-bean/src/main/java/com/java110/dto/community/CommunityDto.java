@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -30,8 +31,15 @@ public class CommunityDto extends PageDto implements Serializable {
     private String auditStatusCd;
     private String areaCode;
     private String areaName;
+    private String cityName;
+    private String provName;
     private String parentAreaCode;
     private String parentAreaName;
+    private String tel;
+
+    private String communityArea;
+
+    private List<CommunityAttrDto> communityAttrDtos;
 
 
     private Date createTime;
@@ -190,5 +198,46 @@ public class CommunityDto extends PageDto implements Serializable {
 
     public void setParentAreaName(String parentAreaName) {
         this.parentAreaName = parentAreaName;
+    }
+
+
+    public String getCommunityArea() {
+        return communityArea;
+    }
+
+    public void setCommunityArea(String communityArea) {
+        this.communityArea = communityArea;
+    }
+
+    public List<CommunityAttrDto> getCommunityAttrDtos() {
+        return communityAttrDtos;
+    }
+
+    public void setCommunityAttrDtos(List<CommunityAttrDto> communityAttrDtos) {
+        this.communityAttrDtos = communityAttrDtos;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getProvName() {
+        return provName;
+    }
+
+    public void setProvName(String provName) {
+        this.provName = provName;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 }

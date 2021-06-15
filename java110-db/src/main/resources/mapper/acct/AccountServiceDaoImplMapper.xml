@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountServiceDaoImpl">
+
+    <!-- 保存账户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAccountInfo" parameterType="Map">
+        insert into business_account(
+        amount,operate,acct_type,obj_id,acct_id,acct_name,b_id,obj_type
+        ) values (
+        #{amount},#{operate},#{acctType},#{objId},#{acctId},#{acctName},#{bId},#{objType}
+        )
+    </insert>
+
+
+    <!-- 查询账户信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAccountInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.operate,t.acct_type,t.acct_type acctType,t.obj_id,t.obj_id objId,t.acct_id,t.acct_id
+        acctId,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType
+        from business_account t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="acctType !=null and acctType != ''">
+            and t.acct_type= #{acctType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+
+    </select>
+
+
+    <!-- 保存账户信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveAccountInfoInstance" parameterType="Map">
+        insert into account(
+        amount,acct_type,obj_id,acct_id,status_cd,acct_name,b_id,obj_type
+        ) select t.amount,t.acct_type,t.obj_id,t.acct_id,'0',t.acct_name,t.b_id,t.obj_type from business_account t where
+        1=1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        and t.operate= 'ADD'
+        <if test="acctType !=null and acctType != ''">
+            and t.acct_type= #{acctType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询账户信息 add by wuxw 2018-07-03 -->
+    <select id="getAccountInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.acct_type,t.acct_type acctType,t.obj_id,t.obj_id objId,t.acct_id,t.acct_id
+        acctId,t.status_cd,t.status_cd statusCd,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type
+        objType,t.create_time createTime,td.`name` acctTypeName
+        from account t
+        LEFT JOIN t_dict td on t.acct_type = td.status_cd and td.table_name = 'account' and td.table_columns =
+        'acct_type'
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="acctType !=null and acctType != ''">
+            and t.acct_type= #{acctType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改账户信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccountInfoInstance" parameterType="Map">
+        update account t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="acctType !=null and acctType != ''">
+            , t.acct_type= #{acctType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            , t.acct_name= #{acctName}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        where 1=1
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询账户数量 add by wuxw 2018-07-03 -->
+    <select id="queryAccountsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from account t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="acctType !=null and acctType != ''">
+            and t.acct_type= #{acctType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+
+
+    </select>
+
+
+    <!-- 修改账户信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccount" parameterType="Map">
+        update account t
+        <set>
+            <if test="amount !=null and amount != ''">
+                t.amount= #{amount},
+            </if>
+            <if test="acctType !=null and acctType != ''">
+                t.acct_type= #{acctType},
+            </if>
+            <if test="acctName !=null and acctName != ''">
+                t.acct_name= #{acctName},
+            </if>
+        </set>
+        where 1=1
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            t.obj_id= #{objId},
+        </if>
+    </update>
+
+</mapper>

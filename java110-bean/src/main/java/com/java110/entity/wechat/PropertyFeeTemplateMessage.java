@@ -13,6 +13,8 @@ public class PropertyFeeTemplateMessage {
 //    private String color;//模板内容字体颜色，不填默认为黑色
     private Data data;//模板数据
 
+    private Miniprogram miniprogram;
+
     public String getTouser() {
         return touser;
     }
@@ -45,5 +47,13 @@ public class PropertyFeeTemplateMessage {
 
     public void setData(Data data) {
         this.data = data;
+    }
+
+    public Miniprogram getMiniprogram() {
+        return miniprogram;
+    }
+
+    public void setMiniprogram(Miniprogram miniprogram) {
+        this.miniprogram = miniprogram;
     }
 }

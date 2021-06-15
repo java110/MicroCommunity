@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contractPartyaServiceDaoImpl">
+
+
+    <!-- 保存合同房屋信息 add by wuxw 2018-07-03 -->
+    <insert id="saveContractPartyaInfo" parameterType="Map">
+        insert into contract_partya(
+        party_a,a_link,a_contacts,partya_id,store_id
+        ) values (
+        #{partyA},#{aLink},#{aContacts},#{partyaId},#{storeId}
+        )
+    </insert>
+
+
+    <!-- 查询合同房屋信息 add by wuxw 2018-07-03 -->
+    <select id="getContractPartyaInfo" parameterType="Map" resultType="Map">
+        select t.party_a,t.party_a partyA,t.a_link,t.a_link aLink,t.a_contacts,t.a_contacts
+        aContacts,t.partya_id,t.partya_id partyaId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId
+        from contract_partya t
+        where 1 =1
+        <if test="partyA !=null and partyA != ''">
+            and t.party_a= #{partyA}
+        </if>
+        <if test="aLink !=null and aLink != ''">
+            and t.a_link= #{aLink}
+        </if>
+        <if test="aContacts !=null and aContacts != ''">
+            and t.a_contacts= #{aContacts}
+        </if>
+        <if test="partyaId !=null and partyaId != ''">
+            and t.partya_id= #{partyaId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改合同房屋信息 add by wuxw 2018-07-03 -->
+    <update id="updateContractPartyaInfo" parameterType="Map">
+        update contract_partya t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="partyA !=null and partyA != ''">
+            , t.party_a= #{partyA}
+        </if>
+        <if test="aLink !=null and aLink != ''">
+            , t.a_link= #{aLink}
+        </if>
+        <if test="aContacts !=null and aContacts != ''">
+            , t.a_contacts= #{aContacts}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="partyaId !=null and partyaId != ''">
+            and t.partya_id= #{partyaId}
+        </if>
+
+    </update>
+
+    <!-- 查询合同房屋数量 add by wuxw 2018-07-03 -->
+    <select id="queryContractPartyasCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_partya t
+        where 1 =1
+        <if test="partyA !=null and partyA != ''">
+            and t.party_a= #{partyA}
+        </if>
+        <if test="aLink !=null and aLink != ''">
+            and t.a_link= #{aLink}
+        </if>
+        <if test="aContacts !=null and aContacts != ''">
+            and t.a_contacts= #{aContacts}
+        </if>
+        <if test="partyaId !=null and partyaId != ''">
+            and t.partya_id= #{partyaId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+
+    </select>
+
+</mapper>

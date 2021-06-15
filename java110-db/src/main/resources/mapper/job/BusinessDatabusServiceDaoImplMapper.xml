@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="businessDatabusServiceDaoImpl">
+
+    <!-- 保存业务数据同步信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessDatabusInfo" parameterType="Map">
+        insert into c_business_databus(
+        business_type_cd,databus_id,bean_name,seq,databus_name,state
+        ) values (
+        #{businessTypeCd},#{databusId},#{beanName},#{seq},#{databusName},#{state}
+        )
+    </insert>
+
+
+    <!-- 查询业务数据同步信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessDatabusInfo" parameterType="Map" resultType="Map">
+        select t.business_type_cd,t.business_type_cd businessTypeCd,t.databus_id,t.databus_id
+        databusId,t.bean_name,t.bean_name beanName,t.status_cd,t.status_cd statusCd,t.seq,
+        t.databus_name databusName,t.state
+        from c_business_databus t
+        where 1 =1
+        <if test="businessTypeCd !=null and businessTypeCd != ''">
+            and t.business_type_cd= #{businessTypeCd}
+        </if>
+        <if test="databusId !=null and databusId != ''">
+            and t.databus_id= #{databusId}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            and t.bean_name= #{beanName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="databusName !=null and databusName != ''">
+            and t.databus_name= #{databusName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改业务数据同步信息 add by wuxw 2018-07-03 -->
+    <update id="updateBusinessDatabusInfo" parameterType="Map">
+        update c_business_databus t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="businessTypeCd !=null and businessTypeCd != ''">
+            , t.business_type_cd= #{businessTypeCd}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            , t.bean_name= #{beanName}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        <if test="databusName !=null and databusName != ''">
+            , t.databus_name= #{databusName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        where 1=1
+        <if test="databusId !=null and databusId != ''">
+            and t.databus_id= #{databusId}
+        </if>
+
+    </update>
+
+    <!-- 查询业务数据同步数量 add by wuxw 2018-07-03 -->
+    <select id="queryBusinessDatabussCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from c_business_databus t
+        where 1 =1
+        <if test="businessTypeCd !=null and businessTypeCd != ''">
+            and t.business_type_cd= #{businessTypeCd}
+        </if>
+        <if test="databusId !=null and databusId != ''">
+            and t.databus_id= #{databusId}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            and t.bean_name= #{beanName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="databusName !=null and databusName != ''">
+            and t.databus_name= #{databusName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+
+    </select>
+
+</mapper>

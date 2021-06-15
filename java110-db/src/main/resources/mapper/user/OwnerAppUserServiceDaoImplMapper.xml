@@ -7,10 +7,10 @@
     <!-- 保存绑定业主信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerAppUserInfo" parameterType="Map">
         insert into business_owner_app_user(
-        id_card,open_id,link,remark,operate,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id,app_type
+        id_card,open_id,link,remark,operate,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id,app_type,nickname,headimgurl
         ) values (
         #{idCard},#{openId},#{link},#{remark},#{operate},#{appUserName},#{communityName},#{state},#{appUserId},#{communityId},
-        #{appTypeCd},#{bId},#{memberId},#{userId},#{appType}
+        #{appTypeCd},#{bId},#{memberId},#{userId},#{appType},#{nickName},#{headImgUrl}
         )
     </insert>
 
@@ -21,7 +21,7 @@
         openId,t.link,t.remark,t.operate,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
         communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,t.user_id,
-        t.user_id userId,t.app_type,t.app_type appType
+        t.user_id userId,t.app_type,t.app_type appType,t.nickname,t.nickname nickName,t.headimgurl,t.headimgurl headImgUrl
         from business_owner_app_user t
         where 1 =1
         <if test="idCard !=null and idCard != ''">
@@ -74,10 +74,10 @@
     <insert id="saveOwnerAppUserInfoInstance" parameterType="Map">
         insert into owner_app_user(
         id_card,open_id,link,remark,status_cd,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id,
-        app_type
+        app_type,nickname,headimgurl
         ) select
         t.id_card,t.open_id,t.link,t.remark,'0',t.app_user_name,t.community_name,t.state,t.app_user_id,t.community_id,t.app_type_cd,t.b_id,
-        t.member_id,t.user_id,t.app_type
+        t.member_id,t.user_id,t.app_type,t.nickname,t.headimgurl
         from business_owner_app_user t where 1=1
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
@@ -119,6 +119,12 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
+        <if test="nickName !=null and nickName != ''">
+            and t.nickname= #{nickName}
+        </if>
+        <if test="headImgUrl !=null and headImgUrl != ''">
+            and t.headimgurl= #{headImgUrl}
+        </if>
 
     </insert>
 
@@ -126,15 +132,19 @@
     <!-- 查询绑定业主信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerAppUserInfo" parameterType="Map" resultType="Map">
         select t.id_card,t.id_card idCard,t.open_id,t.open_id openId,t.link,t.remark,t.status_cd,t.status_cd
-        statusCd,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
+        statusCd,t.nickname,t.headimgurl,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
         communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,
-        td1.name stateName,t.user_id,t.user_id userId,t.app_type,t.app_type appType,t.create_time createTime
-        from owner_app_user t,t_dict td1
+        td1.name stateName,t.user_id,t.user_id userId,t.app_type,t.app_type appType,t.create_time createTime,
+        bo.owner_id ownerId
+        from owner_app_user t,t_dict td1,building_owner bo
         where 1 =1
         and t.state = td1.status_cd
         and td1.table_name = 'owner_app_user'
         and td1.table_columns = 'state'
+        and t.member_id = bo.member_id
+        and t.community_id = bo.community_id
+        and bo.status_cd = '0'
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
         </if>
@@ -240,6 +250,12 @@
         </if>
         <if test="appType !=null and appType != ''">
             , t.app_type = #{appType}
+        </if>
+        <if test="nickName !=null and nickName != ''">
+            , t.nickname= #{nickName}
+        </if>
+        <if test="headImgUrl !=null and headImgUrl != ''">
+            , t.headimgurl= #{headImgUrl}
         </if>
         where 1=1
         <if test="appUserId !=null and appUserId != ''">

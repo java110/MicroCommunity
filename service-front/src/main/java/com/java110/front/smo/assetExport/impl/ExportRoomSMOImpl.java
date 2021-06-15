@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.fee.FeeDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetExport.IExportRoomSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -47,13 +47,21 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
 
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
+        Assert.hasKeyAndValue(paramIn, "objType", "请求中未包含费用对象");
 
         Workbook workbook = null;  //工作簿
         //工作表
         workbook = new XSSFWorkbook();
-        //获取楼信息
-        getRooms(pd, result, workbook);
+
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(paramIn.getString("objType"))) {
+            //获取楼信息
+            getRooms(pd, result, workbook);
+        } else {
+            getCars(pd, result, workbook);
+        }
 
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -77,6 +85,51 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
         }
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
+    }
+
+    /**
+     * 查询车辆
+     *
+     * @param pd
+     * @param result
+     * @param workbook
+     */
+    private void getCars(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+        Sheet sheet = workbook.createSheet("车位费用信息");
+        Row row = sheet.createRow(0);
+        Cell cell0 = row.createCell(0);
+        cell0.setCellValue("费用名称: 请填写系统中费用类型，如停车费等 ；\n开始时间: " +
+                "收费开始时间，格式为YYYY-MM-DD；\n结束时间: 费用结束时间，格式为YYYY-MM-DD； \n收费金额: 本次收取金额 单位元； " +
+                "\n注意：所有单元格式为文本");
+        CellStyle cs = workbook.createCellStyle();
+        cs.setWrapText(true);  //关键
+        cell0.setCellStyle(cs);
+        row.setHeight((short) (200 * 10));
+        row = sheet.createRow(1);
+        row.createCell(0).setCellValue("车牌号");
+        row.createCell(1).setCellValue("费用名称");
+        row.createCell(2).setCellValue("开始时间");
+        row.createCell(3).setCellValue("结束时间");
+        row.createCell(4).setCellValue("收费金额");
+
+        //查询楼栋信息
+        JSONArray cars = this.getExistsCars(pd, result);
+        if (cars == null) {
+            CellRangeAddress region = new CellRangeAddress(0, 0, 0, 4);
+            sheet.addMergedRegion(region);
+            return;
+        }
+        for (int carIndex = 0; carIndex < cars.size(); carIndex++) {
+            row = sheet.createRow(carIndex + 2);
+            row.createCell(0).setCellValue(cars.getJSONObject(carIndex).getString("carNum"));
+            row.createCell(1).setCellValue("");
+            row.createCell(2).setCellValue("");
+            row.createCell(3).setCellValue("");
+            row.createCell(4).setCellValue("");
+        }
+
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 4);
+        sheet.addMergedRegion(region);
     }
 
 
@@ -107,6 +160,36 @@ public class ExportRoomSMOImpl extends BaseComponentSMO implements IExportRoomSM
 
 
         return savedRoomInfoResults.getJSONArray("rooms");
+
+    }
+
+    /**
+     * 查询存在的房屋信息
+     * room.queryRooms
+     *
+     * @param pd
+     * @param result
+     * @return
+     */
+    private JSONArray getExistsCars(IPageData pd, ComponentValidateResult result) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.queryOwnerCars?page=1&row=10000&communityId=" + result.getCommunityId();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedCarInfoResults = JSONObject.parseObject(responseEntity.getBody());
+
+
+        if (!savedCarInfoResults.containsKey("data")) {
+            return null;
+        }
+
+
+        return savedCarInfoResults.getJSONArray("data");
 
     }
 

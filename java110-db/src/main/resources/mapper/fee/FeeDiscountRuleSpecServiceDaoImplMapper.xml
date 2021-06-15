@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeDiscountRuleSpecServiceDaoImpl">
+
+
+    <!-- 保存折扣规则配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeDiscountRuleSpecInfo" parameterType="Map">
+        insert into fee_discount_rule_spec(
+        spec_id,spec_name,remark,rule_id
+        ) values (
+        #{specId},#{specName},#{remark},#{ruleId}
+        )
+    </insert>
+
+
+    <!-- 查询折扣规则配置信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeDiscountRuleSpecInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.spec_name,t.spec_name specName,t.remark,t.status_cd,t.status_cd
+        statusCd,t.rule_id,t.rule_id ruleId
+        from fee_discount_rule_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="ruleIds !=null ">
+            and t.rule_id in
+            <foreach collection="ruleIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改折扣规则配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeDiscountRuleSpecInfo" parameterType="Map">
+        update fee_discount_rule_spec t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            , t.spec_name= #{specName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        where 1=1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+
+    </update>
+
+    <!-- 查询折扣规则配置数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeDiscountRuleSpecsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_discount_rule_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+
+
+    </select>
+
+</mapper>

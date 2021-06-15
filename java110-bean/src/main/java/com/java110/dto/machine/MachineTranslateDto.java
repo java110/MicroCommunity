@@ -1,6 +1,7 @@
 package com.java110.dto.machine;
 
 import com.java110.dto.PageDto;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,8 +16,65 @@ import java.util.Date;
  **/
 public class MachineTranslateDto extends PageDto implements Serializable {
 
+    /**
+     * 301	添加设备
+     * 302	编辑设备
+     * 303	删除设备
+     * 401	添加小区
+     * 402	编辑小区
+     * 403	删除小区
+     * 501	添加业主人脸
+     * 502	编辑业主人脸
+     * 503	删除业主人脸
+     */
+    public static final String CMD_ADD_MACHINE = "301";
+    public static final String CMD_UPDATE_MACHINE = "302";
+    public static final String CMD_DELETE_MACHINE = "303";
+    public static final String CMD_ADD_COMMUNITY = "401";
+    public static final String CMD_UPDATE_COMMUNITY = "402";
+    public static final String CMD_DELETE_COMMUNITY = "403";
+    public static final String CMD_ADD_OWNER_FACE = "501";
+    public static final String CMD_UPDATE_OWNER_FACE = "502";
+    public static final String CMD_DELETE_OWNER_FACE = "503";
+    public static final String CMD_ADD_PARKING_AREA = "601";
+    public static final String CMD_UPDATE_PARKING_AREA = "602";
+    public static final String CMD_DELETE_PARKING_AREA = "603";
+    public static final String CMD_ADD_OWNER_CAR = "701";
+    public static final String CMD_UPDATE_OWNER_CAR = "702";
+    public static final String CMD_DELETE_OWNER_CAR = "703";
+    public static final String CMD_ADD_CAR_BLACK_WHITE = "801";
+    public static final String CMD_DELETE_CAR_BLACK_WHITE = "803";
+    public static final String CMD_ADD_TEAM_CAR_FEE_CONFIG = "901";
+    public static final String CMD_UPDATE_TEAM_CAR_FEE_CONFIG = "902";
+    public static final String CMD_DELETE_TEAM_CAR_FEE_CONFIG = "903";
+
+    public static final String CMD_ADD_ATTENDANCE_CLASSES = "911";
+    public static final String CMD_UPDATE_ATTENDANCE_CLASSES = "912";
+    public static final String CMD_DELETE_ATTENDANCE_CLASSES = "913";
+
+    public static final String CMD_OPEN_DOOR = "5";
+
+    //小区信息
+    public static final String TYPE_COMMUNITY = "9988";
+    public static final String TYPE_MACHINE = "3344";
+    public static final String TYPE_OWNER = "8899";
+    public static final String TYPE_PARKING_AREA = "2233";
+    public static final String TYPE_OWNER_CAR = "4455";
+    public static final String TYPE_TEAM_CAR_FEE_CONFIG = "1122";
+    public static final String TYPE_ATTENDANCE = "1111";
+
+
+    //同步状态
+    public static final String STATE_SUCCESS = "20000";
+    public static final String STATE_DOING = "30000";
+
+    //同步失败
+    public static final String STATE_ERROR = "60000";
+
+
     private String machineId;
     private String machineCode;
+    private String machineName;
     private String typeCd;
     private String typeCdName;
     private String machineTranslateId;
@@ -30,6 +88,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     private String bId;
 
     private String machineCmd;
+    private String machineCmdName;
 
     private String objBId;
 
@@ -175,6 +234,25 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     }
 
     public void setRemark(String remark) {
+        if (!StringUtils.isEmpty(remark) && remark.length() > 190) {
+            remark = remark.substring(0, 190);
+        }
         this.remark = remark;
+    }
+
+    public String getMachineCmdName() {
+        return machineCmdName;
+    }
+
+    public void setMachineCmdName(String machineCmdName) {
+        this.machineCmdName = machineCmdName;
+    }
+
+    public String getMachineName() {
+        return machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
     }
 }

@@ -23,6 +23,8 @@ public class AdvertPo implements Serializable {
     private String seq;
     private String startTime;
     private String endTime;
+    private String createTime;
+    private String viewType;
 
 
     public String getAdvertId() {
@@ -111,5 +113,21 @@ public class AdvertPo implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(String viewType) {
+        this.viewType = viewType;
     }
 }

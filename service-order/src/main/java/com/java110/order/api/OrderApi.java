@@ -79,10 +79,9 @@ public class OrderApi extends BaseController {
             logger.error("请求订单异常", e);
             responseEntity = new ResponseEntity<String>("请求中心服务发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-
             logger.debug("订单服务返回报文为: {}", responseEntity);
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     /**

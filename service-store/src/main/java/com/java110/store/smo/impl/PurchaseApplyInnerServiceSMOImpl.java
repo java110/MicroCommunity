@@ -190,6 +190,11 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
         return purchaseApplyDetails;
     }
 
+    @Override
+    public void updatePurchaseApply(@RequestBody PurchaseApplyPo purchaseApplyPo) {
+        purchaseApplyServiceDaoImpl.updatePurchaseApplyInfoInstance(BeanConvertUtil.beanCovertMap(purchaseApplyPo));
+    }
+
 
     public IPurchaseApplyServiceDao getPurchaseApplyServiceDaoImpl() {
         return purchaseApplyServiceDaoImpl;

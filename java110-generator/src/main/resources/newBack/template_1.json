@@ -1,34 +1,35 @@
 {
   "autoMove": true,
-  "id": "valueId",
-  "name": "attrValue",
-  "desc": "属性值",
-  "shareParam": "valueId",
-  "shareColumn": "value_id",
-  "shareName": "common",
-  "tableName": "attr_value",
+  "id": "pfId",
+  "name": "reportOwnerPayFee",
+  "desc": "业主缴费明细",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "report",
+  "tableName": "report_owner_pay_fee",
   "param": {
-    "valueId": "value_id",
-    "specCd": "spec_cd",
-    "value": "value",
-    "valueName": "value_name",
-    "valueShow": "value_show",
+    "pfId": "pf_id",
+    "pfYear": "pf_year",
+    "pfMonth": "pf_month",
+    "pfDate": "pf_date",
+    "communityId": "community_id",
+    "ownerId": "owner_id",
+    "ownerName": "owner_name",
+    "objName": "obj_name",
+    "objType": "obj_type",
+    "objId": "obj_id",
+    "detailId": "detail_id",
+    "configId": "config_id",
+    "configName": "config_name",
+    "feeId": "fee_id",
+    "feeName": "fee_name",
+    "amount": "amount",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "specCd",
-      "msg": "规格ID不能为空"
-    },
-    {
-      "code": "value",
-      "msg": "值不能为空"
-    },{
-      "code": "valueName",
-      "msg": "值名称不能为空"
-    },{
-      "code": "valueShow",
-      "msg": "是否显示不能为空"
+      "code": "pfId",
+      "msg": "缴费ID不能为空"
     }
   ]
 }

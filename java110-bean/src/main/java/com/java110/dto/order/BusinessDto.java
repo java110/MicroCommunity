@@ -12,6 +12,7 @@ public class BusinessDto  extends PageDto implements Serializable {
     private String oId;
 
     private String bId;
+    private String[] bIds;
 
     private String businessTypeCd;
 
@@ -58,5 +59,13 @@ public class BusinessDto  extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getbIds() {
+        return bIds;
+    }
+
+    public void setbIds(String[] bIds) {
+        this.bIds = bIds;
     }
 }

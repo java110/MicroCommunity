@@ -46,17 +46,17 @@ public class ActivitiesInnerServiceSMOImpl extends BaseServiceSMO implements IAc
 
         List<ActivitiesDto> activitiess = BeanConvertUtil.covertBeanList(activitiesServiceDaoImpl.getActivitiesInfo(BeanConvertUtil.beanCovertMap(activitiesDto)), ActivitiesDto.class);
 
-        if (activitiess == null || activitiess.size() == 0) {
-            return activitiess;
-        }
-
-        String[] userIds = getUserIds(activitiess);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
-
-        for (ActivitiesDto activities : activitiess) {
-            refreshActivities(activities, users);
-        }
+//        if (activitiess == null || activitiess.size() == 0) {
+//            return activitiess;
+//        }
+//
+//        String[] userIds = getUserIds(activitiess);
+//        //根据 userId 查询用户信息
+//        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+//
+//        for (ActivitiesDto activities : activitiess) {
+//            refreshActivities(activities, users);
+//        }
         return activitiess;
     }
 

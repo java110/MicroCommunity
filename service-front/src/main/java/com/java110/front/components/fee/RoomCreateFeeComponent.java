@@ -3,7 +3,7 @@ package com.java110.front.components.fee;
 import com.java110.core.context.IPageData;
 import com.java110.front.smo.IFloorServiceSMO;
 import com.java110.front.smo.IUnitServiceSMO;
-import com.java110.front.smo.feeConfig.IListRoomsWhereFeeSetSMO;
+import com.java110.front.smo.fee.IListRoomsWhereFeeSetSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

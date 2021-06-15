@@ -1,0 +1,41 @@
+{
+  "autoMove": true,
+  "id": "rssId",
+  "name": "resourceStoreSpecification",
+  "desc": "物品规格",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_RESOURCE_STORE_SPECIFICATION",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_RESOURCE_STORE_SPECIFICATION",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_RESOURCE_STORE_SPECIFICATION",
+  "newBusinessTypeCdValue": "671100030011",
+  "updateBusinessTypeCdValue": "671100040011",
+  "deleteBusinessTypeCdValue": "671100050011",
+  "businessTableName": "business_resource_store_specification",
+  "tableName": "resource_store_specification",
+  "param": {
+    "rssId": "rss_id",
+    "specName": "spec_name",
+    "rstId": "rst_id",
+    "bId": "b_id",
+    "storeId": "store_id",
+    "description": "description",
+    "statusCd": "status_cd",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "specName",
+      "msg": "规格名称不能为空"
+    },
+    {
+      "code": "rstId",
+      "msg": "商品类型不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户不能为空"
+    }
+  ]
+}

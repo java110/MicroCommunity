@@ -6,6 +6,7 @@ public class ApiMachineTranslateDataVo implements Serializable {
 
     private String machineTranslateId;
     private String machineCode;
+    private String machineName;
     private String machineId;
     private String typeCd;
     private String typeCdName;
@@ -17,6 +18,8 @@ public class ApiMachineTranslateDataVo implements Serializable {
     private String updateTime;
 
     private String machineCmd;
+    private String machineCmdName;
+    private String remark;
 
     private String objBId;
 
@@ -122,5 +125,29 @@ public class ApiMachineTranslateDataVo implements Serializable {
 
     public void setObjBId(String objBId) {
         this.objBId = objBId;
+    }
+
+    public String getMachineCmdName() {
+        return machineCmdName;
+    }
+
+    public void setMachineCmdName(String machineCmdName) {
+        this.machineCmdName = machineCmdName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getMachineName() {
+        return machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
     }
 }

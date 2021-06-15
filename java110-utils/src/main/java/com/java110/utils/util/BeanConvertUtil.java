@@ -1,6 +1,7 @@
 package com.java110.utils.util;
 
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
@@ -35,9 +36,9 @@ public final class BeanConvertUtil {
     static {
         ConvertUtils.register(new Converter() { //注册一个日期转换器
 
-            public Object convert(Class type, Object value) {
+        	public <T> T convert(Class<T> type, Object value) {
                 Date date1 = null;
-                if (value instanceof String) {
+                if (value instanceof String && type.getClass().equals(Date.class)) {
                     String date = (String) value;
                     SimpleDateFormat sdf = null;
                     if (date.contains(":")) {
@@ -50,10 +51,11 @@ public final class BeanConvertUtil {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    return date1;
+                    return type.cast(date1);
                 }
-                return value;
+                return null;
             }
+
         }, Date.class);
 
 
@@ -90,14 +92,14 @@ public final class BeanConvertUtil {
         return dstBean;
     }
 
-    private static void objectFieldsPutMap(Object dstBean, BeanMap beanMap, Map orgMap) {
+    private static void objectFieldsPutMap(Object dstBean, BeanMap beanMap, Map<String,Object> orgMap) {
         //Field[] fields = dstBean.getClass().getDeclaredFields();
         Field[] fields = FieldUtils.getAllFields(dstBean.getClass());
         for (Field field : fields) {
             if (!orgMap.containsKey(field.getName())) {
                 continue;
             }
-            Class dstClass = field.getType();
+            Class<?> dstClass = field.getType();
             //System.out.println("字段类型" + dstClass);
 
             Object value = orgMap.get(field.getName());
@@ -167,6 +169,17 @@ public final class BeanConvertUtil {
             throw new RuntimeException("bean转换Map失败", e);
         }
         return map;
+    }
+
+    /**
+     * bean转换为map对象
+     *
+     * @param orgBean 原始bean
+     * @return map对象
+     */
+    public static JSONObject beanCovertJson(Object orgBean) {
+
+        return JSONObject.parseObject(JSONObject.toJSONString(orgBean));
     }
 
 

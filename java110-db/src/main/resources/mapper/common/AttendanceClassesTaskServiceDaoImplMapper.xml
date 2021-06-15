@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attendanceClassesTaskServiceDaoImpl">
+
+
+    <!-- 保存考勤任务信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAttendanceClassesTaskInfo" parameterType="Map">
+        insert into attendance_classes_task(
+        class_id,task_month,task_day,state,store_id,task_year,task_id,staff_id
+        ) values (
+        #{classId},#{taskMonth},#{taskDay},#{state},#{storeId},#{taskYear},#{taskId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询考勤任务信息 add by wuxw 2018-07-03 -->
+    <select id="getAttendanceClassesTaskInfo" parameterType="Map" resultType="Map">
+        select t.class_id,t.class_id classId,t.task_month,t.task_month taskMonth,t.task_day,t.task_day
+        taskDay,t.status_cd,t.status_cd statusCd,t.state,t.store_id,t.store_id storeId,t.task_year,t.task_year
+        taskYear,t.task_id,t.task_id taskId,t.staff_id,t.staff_id staffId,ac.classes_name classesName,ac.classes_obj_name classObjName,
+        td.name stateName
+        from attendance_classes_task t
+        LEFT JOIN attendance_classes ac on t.class_id = ac.classes_id and ac.status_cd = '0'
+        left join t_dict td on td.table_name = 'attendance_classes_task' and td.table_columns = 'state' and t.state = td.status_cd
+        where 1 =1
+        <if test="classId !=null and classId != ''">
+            and t.class_id= #{classId}
+        </if>
+        <if test="taskMonth !=null and taskMonth != ''">
+            and t.task_month= #{taskMonth}
+        </if>
+        <if test="taskDay !=null and taskDay != ''">
+            and t.task_day= #{taskDay}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="taskYear !=null and taskYear != ''">
+            and t.task_year= #{taskYear}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改考勤任务信息 add by wuxw 2018-07-03 -->
+    <update id="updateAttendanceClassesTaskInfo" parameterType="Map">
+        update attendance_classes_task t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="classId !=null and classId != ''">
+            , t.class_id= #{classId}
+        </if>
+        <if test="taskMonth !=null and taskMonth != ''">
+            , t.task_month= #{taskMonth}
+        </if>
+        <if test="taskDay !=null and taskDay != ''">
+            , t.task_day= #{taskDay}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="taskYear !=null and taskYear != ''">
+            , t.task_year= #{taskYear}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+
+    </update>
+
+    <!-- 查询考勤任务数量 add by wuxw 2018-07-03 -->
+    <select id="queryAttendanceClassesTasksCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from attendance_classes_task t
+        where 1 =1
+        <if test="classId !=null and classId != ''">
+            and t.class_id= #{classId}
+        </if>
+        <if test="taskMonth !=null and taskMonth != ''">
+            and t.task_month= #{taskMonth}
+        </if>
+        <if test="taskDay !=null and taskDay != ''">
+            and t.task_day= #{taskDay}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="taskYear !=null and taskYear != ''">
+            and t.task_year= #{taskYear}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>

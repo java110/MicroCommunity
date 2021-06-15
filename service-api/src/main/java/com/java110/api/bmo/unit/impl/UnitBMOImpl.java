@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.unit.IUnitBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.po.unit.UnitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -48,10 +49,12 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("floorId", paramInJson.getString("floorId"));
         businessUnit.put("layerCount", paramInJson.getString("layerCount"));
-        businessUnit.put("unitId", "-1");
+        businessUnit.put("unitId", !paramInJson.containsKey("unitId") ? GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_unitId)
+                : paramInJson.getString("unitId"));
         businessUnit.put("unitNum", paramInJson.getString("unitNum"));
         businessUnit.put("lift", paramInJson.getString("lift"));
         businessUnit.put("remark", paramInJson.getString("remark"));
+        businessUnit.put("unitArea", paramInJson.getString("unitArea"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         UnitPo unitPo = BeanConvertUtil.covertBean(businessUnit, UnitPo.class);
 
@@ -74,6 +77,7 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
         businessUnit.put("unitNum", paramInJson.getString("unitNum"));
         businessUnit.put("lift", paramInJson.getString("lift"));
         businessUnit.put("remark", paramInJson.getString("remark"));
+        businessUnit.put("unitArea", paramInJson.getString("unitArea"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         UnitPo unitPo = BeanConvertUtil.covertBean(businessUnit, UnitPo.class);
 

@@ -2,16 +2,19 @@ package com.java110.order.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.order.IOrderInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.order.BusinessDto;
 import com.java110.dto.order.OrderDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.order.IOrderInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,7 +69,49 @@ public class OrderInnerServiceSMOImpl extends BaseServiceSMO implements IOrderIn
         return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryOrderByBusinessType(BeanConvertUtil.beanCovertMap(orderDto)), OrderDto.class);
     }
 
-    public int updateBusinessStatusCd(@RequestBody OrderDto orderDto){
+    public List<OrderDto> queryOrderByBId(@RequestBody BusinessDto businessDto) {
+        List<OrderDto> orderDtos = BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryOrderByBId(BeanConvertUtil.beanCovertMap(businessDto)), OrderDto.class);
+
+        if (orderDtos == null || orderDtos.size() < 1) {
+            return orderDtos;
+        }
+        String[] userIds = getUserIds(orderDtos);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (OrderDto orderDto : orderDtos) {
+            for (UserDto userDto : users) {
+                if (orderDto.getUserId().equals(userDto.getUserId())) {
+                    orderDto.setUserName(userDto.getUserName());
+                    break;
+                }
+            }
+        }
+        return orderDtos;
+    }
+
+    /**
+     * 获取批量userId
+     *
+     * @param orderDtos 小区楼信息
+     * @return 批量userIds 信息
+     */
+    private String[] getUserIds(List<OrderDto> orderDtos) {
+        List<String> userIds = new ArrayList<String>();
+        for (OrderDto orderDto : orderDtos) {
+
+            if (StringUtil.isEmpty(orderDto.getUserId()) || orderDto.getUserId().startsWith("-")) {
+                continue;
+            }
+            userIds.add(orderDto.getUserId());
+
+        }
+
+        return userIds.toArray(new String[userIds.size()]);
+    }
+
+
+    public int updateBusinessStatusCd(@RequestBody OrderDto orderDto) {
         return centerServiceDAOImpl.updateBusinessStatusCd(BeanConvertUtil.beanCovertMap(orderDto));
     }
 
@@ -81,16 +126,17 @@ public class OrderInnerServiceSMOImpl extends BaseServiceSMO implements IOrderIn
      * @param orderDto 数据对象分享
      * @return OrderDto 对象数据
      */
-    public List<OrderDto> queryApplicationKeyOrders(@RequestBody OrderDto orderDto){
+    public List<OrderDto> queryApplicationKeyOrders(@RequestBody OrderDto orderDto) {
         return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryApplicationKeyOrders(BeanConvertUtil.beanCovertMap(orderDto)), OrderDto.class);
     }
 
     /**
      * 查询 同订单 订单项
+     *
      * @param businessDto
      * @return
      */
-    public List<BusinessDto> querySameOrderBusiness(@RequestBody BusinessDto businessDto){
+    public List<BusinessDto> querySameOrderBusiness(@RequestBody BusinessDto businessDto) {
         return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.querySameOrderBusiness(BeanConvertUtil.beanCovertMap(businessDto)), BusinessDto.class);
     }
 

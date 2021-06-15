@@ -480,4 +480,14 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
         return Integer.parseInt(businessCommunityInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> getStoreCommunitys(Map info) {
+        logger.debug("查询小区信息 入参 info : {}", info);
+
+        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getStoreCommunitys", info);
+
+        return businessCommunityInfos;
+    }
+
+
 }

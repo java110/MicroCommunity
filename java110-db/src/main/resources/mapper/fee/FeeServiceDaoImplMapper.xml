@@ -137,10 +137,12 @@
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
         additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
         pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula
-        computingFormula,
+        computingFormula,pfc.computing_formula_text computingFormulaText,
         pfc.bill_type billType,t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name
-        billTypeName,pfa.value importFeeName
+        billTypeName,pfa.value importFeeName,ifd.end_time importFeeEndTime,mw.cur_degrees curDegrees,mw.pre_degrees
+        preDegrees,
+        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime
         from pay_fee t
         INNER join pay_fee_config pfc on t.config_id = pfc.config_id and
         pfc.status_cd = '0'
@@ -152,9 +154,18 @@
         left join t_dict td4 on pfc.bill_type = td4.status_cd and td4.table_name = 'pay_fee_config' and
         td4.table_columns = 'bill_type'
         LEFT JOIN pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002' and pfa.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.spec_cd = '390010' and pfa1.status_cd = '0'
+        left join import_fee_detail ifd on t.fee_id = ifd.fee_id and ifd.status_cd = '0' and t.fee_flag = '2006012'
+        LEFT JOIN meter_water mw on t.fee_id = mw.fee_id and mw.status_cd = '0' and mw.community_id = t.community_id
+        <if test="ownerId != null and ownerId != ''">
+            LEFT JOIN pay_fee_attrs pfao on t.fee_id = pfao.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
+        </if>
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and pfao.value= #{ownerId}
         </if>
         <if test="incomeObjId !=null and incomeObjId != ''">
             and t.income_obj_id= #{incomeObjId}
@@ -180,9 +191,12 @@
         <if test="arrearsEndTime != null">
             and t.end_time &lt; #{arrearsEndTime}
         </if>
+        <if test="nowDate != null">
+            and t.end_time &gt; #{nowDate}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
-            and pfc.community_id= #{communityId}
+            and pfc.community_id in (#{communityId},'9999')
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -272,6 +286,9 @@
     <select id="queryFeesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3,t_dict td4
+        <if test="ownerId != null and ownerId != ''">
+            ,pay_fee_attrs pfao
+        </if>
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
         and t.config_id = pfc.config_id
@@ -288,6 +305,12 @@
         and pfc.bill_type = td4.status_cd
         and td4.table_name = 'pay_fee_config'
         and td4.table_columns = 'bill_type'
+        <if test="ownerId != null and ownerId != ''">
+            and t.fee_id = pfao.fee_id
+            and pfao.spec_cd = '390007'
+            and pfao.status_cd = '0'
+            and pfao.value= #{ownerId}
+        </if>
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
@@ -459,8 +482,17 @@
         t.payer_obj_type payerObjType,
         t.community_id communityId,
         t.state,
-        t.create_time createTime
+        t.create_time createTime,
+        t.deadline_time deadlineTime,
+        pf.payer_obj_id payObjId,
+        td.`name` feeTypeName
         from bill_owe_fee t
+        <if test="curBill !=null and curBill != ''">
+            inner join bill b on t.bill_id = b.bill_id and b.community_id = t.community_id and b.cur_bill = #{curBill}
+        </if>
+        left join pay_fee pf on t.fee_id = pf.fee_id and t.community_id = pf.community_id and pf.status_cd = '0'
+        left join t_dict td on pf.fee_type_cd = td.status_cd and td.table_name = 'pay_fee_config' and td.table_columns =
+        'fee_type_cd'
         where 1 =1
         <if test="oweId !=null and oweId != ''">
             and t.owe_id= #{oweId}
@@ -546,10 +578,10 @@
     <insert id="insertBillOweFees" parameterType="Map">
         INSERT INTO bill_owe_fee
         (`owe_id`, `bill_id`, `fee_id`, `bill_amount_owed`, `amount_owed`, `fee_end_time`, `owner_id`, `owner_name`,
-        `owner_tel`, `payer_obj_name`, `payer_obj_type`, `community_id`, `state`)
+        `owner_tel`, `payer_obj_name`, `payer_obj_type`, `community_id`, `state`,deadline_time)
         VALUES (#{oweId}, #{billId}, #{feeId}, #{billAmountOwed}, #{amountOwed}, #{feeEndTime}, #{ownerId},
         #{ownerName},
-        #{ownerTel}, #{payerObjName}, #{payerObjType}, #{communityId}, #{state})
+        #{ownerTel}, #{payerObjName}, #{payerObjType}, #{communityId}, #{state},#{deadlineTime})
     </insert>
 
     <update id="updateBillOweFees" parameterType="Map">
@@ -659,7 +691,7 @@
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
         additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
         pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula
-        computingFormula,
+        computingFormula,pfc.computing_formula_text computingFormulaText,
         t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle
         from pay_fee t
@@ -758,7 +790,8 @@
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type in ('001','002','003') and
         pfc.status_cd = '0' and pf.community_id = pfc.community_id
-        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state ='1000' and bof.amount_owed &gt; 0
+        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state
+        ='1000' and bof.amount_owed &gt; 0
         inner join bill b on bof.bill_id = b.bill_id and b.community_id = bof.community_id and b.cur_bill = 'T'
         where pf.status_cd = '0'
         and pf.state = '2008001'
@@ -773,12 +806,14 @@
 
     <select id="computeBillOweFee" parameterType="Map" resultType="Map">
         select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,bof.amount_owed amountOwed,bof.payer_obj_name
-        roomName,bof.owner_name ownerName,bof.owner_tel ownerTel,pf.payer_obj_id payerObjId,pf.payer_obj_type payerObjType,
+        roomName,bof.owner_name ownerName,bof.owner_tel ownerTel,pf.payer_obj_id payerObjId,pf.payer_obj_type
+        payerObjType,
         pf.community_id communityId
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type in ('001','002','003') and
         pfc.status_cd = '0' and pf.community_id = pfc.community_id
-        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state ='1000' and bof.amount_owed &gt; 0
+        inner join bill_owe_fee bof on pf.fee_id = bof.fee_id and bof.community_id = pf.community_id and bof.state
+        ='1000' and bof.amount_owed &gt; 0
         inner join bill b on bof.bill_id = b.bill_id and b.community_id = bof.community_id and b.cur_bill = 'T'
         where pf.status_cd = '0'
         and pf.state = '2008001'
@@ -813,8 +848,11 @@
     </select>
 
     <select id="computeEveryOweFee" parameterType="Map" resultType="Map">
-        select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,pf.payer_obj_id payerObjId,pf.payer_obj_type payerObjType,
-        pf.community_id communityId,pfc.computing_formula computingFormula,pfc.square_price squarePrice,pfc.additional_amount additionalAmount
+        select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,pf.payer_obj_id payerObjId,pf.payer_obj_type
+        payerObjType,
+        pf.community_id communityId,pfc.computing_formula computingFormula,pfc.computing_formula_text computingFormulaText,
+        pfc.square_price
+        squarePrice,pfc.additional_amount additionalAmount
         from pay_fee pf
         INNER JOIN pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.bill_type = '004' and pfc.status_cd = '0'
         and pf.community_id = pfc.community_id

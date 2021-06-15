@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feePrintSpecServiceDaoImpl">
+
+
+    <!-- 保存打印说明信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeePrintSpecInfo" parameterType="Map">
+        insert into fee_print_spec(
+        print_id,content,spec_cd,community_id,qr_img
+        ) values (
+        #{printId},#{content},#{specCd},#{communityId},#{qrImg}
+        )
+    </insert>
+
+
+    <!-- 查询打印说明信息 add by wuxw 2018-07-03 -->
+    <select id="getFeePrintSpecInfo" parameterType="Map" resultType="Map">
+        select t.print_id,t.print_id printId,t.content,t.spec_cd,t.spec_cd
+        specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.qr_img,t.qr_img qrImg
+        from fee_print_spec t
+        where 1 =1
+        <if test="printId !=null and printId != ''">
+            and t.print_id= #{printId}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="qrImg !=null and qrImg != ''">
+            and t.qr_img= #{qrImg}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改打印说明信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeePrintSpecInfo" parameterType="Map">
+        update fee_print_spec t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="content !=null and content != ''">
+            , t.content= #{content}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="qrImg !=null and qrImg != ''">
+            , t.qr_img= #{qrImg}
+        </if>
+        where 1=1
+        <if test="printId !=null and printId != ''">
+            and t.print_id= #{printId}
+        </if>
+
+    </update>
+
+    <!-- 查询打印说明数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeePrintSpecsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_print_spec t
+        where 1 =1
+        <if test="printId !=null and printId != ''">
+            and t.print_id= #{printId}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="qrImg !=null and qrImg != ''">
+            and t.qr_img= #{qrImg}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -35,12 +35,10 @@ public class AdvertServiceDaoImpl extends BaseServiceDao implements IAdvertServi
         // 查询business_user 数据是否已经存在
         logger.debug("保存广告信息信息 入参 businessAdvertInfo : {}", businessAdvertInfo);
         int saveFlag = sqlSessionTemplate.insert("advertServiceDaoImpl.saveBusinessAdvertInfo", businessAdvertInfo);
-
         if (saveFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存广告信息数据失败：" + JSONObject.toJSONString(businessAdvertInfo));
         }
     }
-
 
     /**
      * 查询广告信息信息
@@ -51,14 +49,10 @@ public class AdvertServiceDaoImpl extends BaseServiceDao implements IAdvertServi
      */
     @Override
     public List<Map> getBusinessAdvertInfo(Map info) throws DAOException {
-
         logger.debug("查询广告信息信息 入参 info : {}", info);
-
         List<Map> businessAdvertInfos = sqlSessionTemplate.selectList("advertServiceDaoImpl.getBusinessAdvertInfo", info);
-
         return businessAdvertInfos;
     }
-
 
     /**
      * 保存广告信息信息 到 instance
@@ -69,14 +63,11 @@ public class AdvertServiceDaoImpl extends BaseServiceDao implements IAdvertServi
     @Override
     public void saveAdvertInfoInstance(Map info) throws DAOException {
         logger.debug("保存广告信息信息Instance 入参 info : {}", info);
-
         int saveFlag = sqlSessionTemplate.insert("advertServiceDaoImpl.saveAdvertInfoInstance", info);
-
         if (saveFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存广告信息信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
-
 
     /**
      * 查询广告信息信息（instance）
@@ -88,12 +79,9 @@ public class AdvertServiceDaoImpl extends BaseServiceDao implements IAdvertServi
     @Override
     public List<Map> getAdvertInfo(Map info) throws DAOException {
         logger.debug("查询广告信息信息 入参 info : {}", info);
-
         List<Map> businessAdvertInfos = sqlSessionTemplate.selectList("advertServiceDaoImpl.getAdvertInfo", info);
-
         return businessAdvertInfos;
     }
-
 
     /**
      * 修改广告信息信息
@@ -104,9 +92,7 @@ public class AdvertServiceDaoImpl extends BaseServiceDao implements IAdvertServi
     @Override
     public void updateAdvertInfoInstance(Map info) throws DAOException {
         logger.debug("修改广告信息信息Instance 入参 info : {}", info);
-
         int saveFlag = sqlSessionTemplate.update("advertServiceDaoImpl.updateAdvertInfoInstance", info);
-
         if (saveFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改广告信息信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
@@ -121,14 +107,20 @@ public class AdvertServiceDaoImpl extends BaseServiceDao implements IAdvertServi
     @Override
     public int queryAdvertsCount(Map info) {
         logger.debug("查询广告信息数据 入参 info : {}", info);
-
         List<Map> businessAdvertInfos = sqlSessionTemplate.selectList("advertServiceDaoImpl.queryAdvertsCount", info);
         if (businessAdvertInfos.size() < 1) {
             return 0;
         }
-
         return Integer.parseInt(businessAdvertInfos.get(0).get("count").toString());
     }
 
-
+    @Override
+    public void updateAdverts(Map info) {
+        logger.debug("修改广告信息Instance 入参 info : {}", info);
+//        int saveFlag = sqlSessionTemplate.update("advertServiceDaoImpl.updateAdvertInfoInstance", info);
+        int saveFlag = sqlSessionTemplate.update("advertServiceDaoImpl.updateAdvert", info);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改广告信息Instance数据失败：" + JSONObject.toJSONString(info));
+        }
+    }
 }

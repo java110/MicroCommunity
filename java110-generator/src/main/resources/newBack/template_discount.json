@@ -1,0 +1,34 @@
+{
+  "autoMove": true,
+  "id": "discountId",
+  "name": "feeDiscount",
+  "desc": "费用折扣",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "fee_discount",
+  "param": {
+    "discountId": "discount_id",
+    "communityId": "community_id",
+    "discountType": "discount_type",
+    "discountName": "discount_name",
+    "ruleId": "rule_id",
+    "discountDesc": "discount_desc",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "discountName",
+      "msg": "折扣名称不能为空"
+    },
+    {
+      "code": "ruleId",
+      "msg": "规则不能为空"
+    },
+    {
+      "code": "discountType",
+      "msg": "折扣类型不能为空"
+    }
+  ]
+}
+

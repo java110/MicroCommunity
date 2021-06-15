@@ -1,0 +1,115 @@
+{
+  "templateName": "供应商",
+  "directories": "property",
+  "templateCode": "resourceSupplier",
+  "templateKey": "rs_id",
+  "templateKeyName": "供应商编号",
+  "searchCode": "rsId",
+  "searchName": "供应商编号",
+  "conditions": [
+    {
+      "name": "供应商名称",
+      "inputType": "input",
+      "code": "supplierName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "供联系方式",
+      "inputType": "input",
+      "code": "tel",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "供应商编号",
+      "inputType": "input",
+      "code": "rsId",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns": [
+    {
+      "code": "supplierName",
+      "cnCode": "供应商名称",
+      "desc": "必填，请填写供应商名称",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "255",
+      "limitErrInfo": "供应商名称太长",
+      "show": true
+    },
+    {
+      "code": "address",
+      "cnCode": "供应商地址",
+      "desc": "必填，请填写供应商地址",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "255",
+      "limitErrInfo": "供应商名称太长",
+      "show": true
+    },
+    {
+      "code": "tel",
+      "cnCode": "供应商联系方式",
+      "desc": "必填，请填写供应商联系方式",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "11",
+      "limitErrInfo": "供应商联系方式太长",
+      "show": true
+    },
+    {
+      "code": "contactName",
+      "cnCode": "联系人姓名",
+      "desc": "必填，请填写联系人姓名",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "255",
+      "limitErrInfo": "供应商联系人姓名太长",
+      "show": true
+    },
+    {
+      "code": "accountBank",
+      "cnCode": "开户行",
+      "desc": "选填，请填写开户行",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "255",
+      "limitErrInfo": "供应商开户行太长",
+      "show": true
+    },
+    {
+      "code": "bankAccountNumber",
+      "cnCode": "开户行账号",
+      "desc": "选填，请填写开户行账号",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "255",
+      "limitErrInfo": "供应商开户行账号太长",
+      "show": true
+    },
+    {
+      "code": "remark",
+      "cnCode": "备注",
+      "desc": "选填，请填写备注",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "512",
+      "limitErrInfo": "备注太长",
+      "show": true
+    }
+  ]
+}

@@ -23,7 +23,9 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String receivedAmount;
     private String communityId;
     private String feeId;
-
+    private String bId;
+    private String payerObjId;
+    private String payerObjType;
 
     private Date createTime;
     private Date startTime;
@@ -32,6 +34,11 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String statusCd = "0";
     private String state;
     private String stateName;
+    private String curYear;
+    private String configId;
+    private String feeName;
+    private String importFeeName;
+    private String ownerId;
 
 
     public String getPrimeRate() {
@@ -145,5 +152,69 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getPayerObjId() {
+        return payerObjId;
+    }
+
+    public void setPayerObjId(String payerObjId) {
+        this.payerObjId = payerObjId;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
+    }
+
+    public String getCurYear() {
+        return curYear;
+    }
+
+    public void setCurYear(String curYear) {
+        this.curYear = curYear;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+
+    public String getFeeName() {
+        return feeName;
+    }
+
+    public void setFeeName(String feeName) {
+        this.feeName = feeName;
+    }
+
+    public String getImportFeeName() {
+        return importFeeName;
+    }
+
+    public void setImportFeeName(String importFeeName) {
+        this.importFeeName = importFeeName;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }

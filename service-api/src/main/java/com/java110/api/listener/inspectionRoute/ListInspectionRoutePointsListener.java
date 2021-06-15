@@ -10,7 +10,7 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.inspectionRoute.InspectionRoutePointRelDto;
+import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeInspectionRouteConstant;

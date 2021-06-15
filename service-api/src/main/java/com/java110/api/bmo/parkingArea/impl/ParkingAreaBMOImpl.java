@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.parkingArea.IParkingAreaBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.po.parking.ParkingAreaPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -44,9 +45,10 @@ public class ParkingAreaBMOImpl extends ApiBaseBMO implements IParkingAreaBMO {
 
         JSONObject businessParkingArea = new JSONObject();
         businessParkingArea.putAll(paramInJson);
-        businessParkingArea.put("paId", "-1");
+        businessParkingArea.put("paId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_paId));
         ParkingAreaPo parkingAreaPo = BeanConvertUtil.covertBean(businessParkingArea, ParkingAreaPo.class);
         super.insert(dataFlowContext, parkingAreaPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_AREA);
+        paramInJson.put("paId", businessParkingArea.getString("paId"));
     }
 
     /**

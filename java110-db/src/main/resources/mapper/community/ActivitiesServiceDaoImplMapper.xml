@@ -138,20 +138,16 @@
         statusCd,t.title,t.read_count,t.read_count readCount,t.user_name,t.user_name userName,t.user_id,t.user_id
         userId,t.activities_id,t.activities_id activitiesId,t.type_cd,t.type_cd
         typeCd,t.context,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.header_img,t.header_img headerImg,t.state,td1.name typeCdName,t.create_time createTime
-        from activities t,t_dict td1
+        communityId,t.b_id,t.b_id bId,t.header_img,t.header_img headerImg,t.state,act.type_name typeCdName,t.create_time createTime
+        from activities t
+        left join activities_type act on t.type_cd = act.type_cd and act.status_cd = '0' and t.community_id = act.community_id
         where 1 =1
-        and t.type_cd = td1.status_cd
-        and td1.table_name = 'activities'
-        and td1.table_columns = 'type_cd'
+        and t.status_cd= '0'
         <if test="collectCount !=null and collectCount != ''">
             and t.collect_count= #{collectCount}
         </if>
         <if test="likeCount !=null and likeCount != ''">
             and t.like_count= #{likeCount}
-        </if>
-        <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
         </if>
         <if test="title !=null and title != ''">
             and t.title= #{title}
@@ -159,12 +155,10 @@
         <if test="readCount !=null and readCount != ''">
             and t.read_count= #{readCount}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="staffName !=null and staffName != ''">
+            and t.user_name= #{staffName}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="activitiesId !=null and activitiesId != ''">
             and t.activities_id= #{activitiesId}
         </if>
@@ -260,26 +254,22 @@
         select count(1) count
         from activities t
         where 1 =1
+        and t.status_cd= '0'
         <if test="collectCount !=null and collectCount != ''">
             and t.collect_count= #{collectCount}
         </if>
         <if test="likeCount !=null and likeCount != ''">
             and t.like_count= #{likeCount}
         </if>
-        <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
-        </if>
+
         <if test="title !=null and title != ''">
             and t.title= #{title}
         </if>
         <if test="readCount !=null and readCount != ''">
             and t.read_count= #{readCount}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="staffName !=null and staffName != ''">
+            and t.user_name= #{staffName}
         </if>
         <if test="activitiesId !=null and activitiesId != ''">
             and t.activities_id= #{activitiesId}

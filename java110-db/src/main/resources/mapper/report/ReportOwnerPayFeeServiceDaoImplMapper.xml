@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportOwnerPayFeeServiceDaoImpl">
+
+
+    <!-- 保存业主缴费明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportOwnerPayFeeInfo" parameterType="Map">
+        insert into report_owner_pay_fee(
+        config_name,amount,pf_id,detail_id,obj_name,owner_id,fee_id,pf_month,owner_name,pf_year,config_id,pf_date,obj_id,fee_name,community_id,obj_type
+        ) values (
+        #{configName},#{amount},#{pfId},#{detailId},#{objName},#{ownerId},#{feeId},#{pfMonth},#{ownerName},#{pfYear},#{configId},#{pfDate},#{objId},#{feeName},#{communityId},#{objType}
+        )
+    </insert>
+
+    <select id="queryReportOwnerMonthPayFees" parameterType="Map" resultType="Map">
+        select t.pf_year pfYear,t.pf_month pfMonth ,t.amount,t.fee_id feeId
+        from report_owner_pay_fee t
+        where t.status_cd = '0'
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="pfYear !=null and pfYear != ''">
+            and t.pf_year= #{pfYear}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeIds !=null">
+            and t.fee_id in
+            <foreach collection="feeIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+    <!-- 查询业主缴费明细信息 add by wuxw 2018-07-03 -->
+    <select id="getReportOwnerPayFeeInfo" parameterType="Map" resultType="Map">
+        select t.community_id communityId,pfa.`value` ownerId,pfa1.`value` ownerName,pfc.fee_name feeName,pfa2.`value` importFeeName,t.config_id configId,t.fee_id feeId,
+        concat(ff.floor_num , '-' , bu.unit_num , '-',br.room_num) roomName,t.payer_obj_type payerObjType,oc.car_num carNum,con.contract_code contractCode
+        from pay_fee t
+        inner join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.community_id = t.community_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
+        inner join pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.community_id = t.community_id and pfa1.spec_cd = '390008' and pfa1.status_cd = '0'
+        left join pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.community_id = t.community_id and pfa2.spec_cd = '390002' and pfa2.status_cd = '0'
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.community_id = t.community_id and pfc.status_cd = '0'
+        LEFT JOIN building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
+        LEFT JOIN building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        LEFT JOIN f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and oc.car_type_cd='1001'
+        left join contract con on t.payer_obj_id = con.contract_id and t.payer_obj_type = '7777' and con.status_cd = '0'
+        where t.end_time > NOW()
+        and t.state = '2008001'
+        and t.status_cd = '0'
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and pfa1.`value` = #{ownerName}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改业主缴费明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportOwnerPayFeeInfo" parameterType="Map">
+        update report_owner_pay_fee t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="configName !=null and configName != ''">
+            , t.config_name= #{configName}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            , t.detail_id= #{detailId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="pfMonth !=null and pfMonth != ''">
+            , t.pf_month= #{pfMonth}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="pfYear !=null and pfYear != ''">
+            , t.pf_year= #{pfYear}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="pfDate !=null and pfDate != ''">
+            , t.pf_date= #{pfDate}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        where 1=1
+        <if test="pfId !=null and pfId != ''">
+            and t.pf_id= #{pfId}
+        </if>
+
+    </update>
+
+    <!-- 查询业主缴费明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryReportOwnerPayFeesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee t
+        inner join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.community_id = t.community_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
+        inner join pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.community_id = t.community_id and pfa1.spec_cd = '390008' and pfa1.status_cd = '0'
+        left join pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.community_id = t.community_id and pfa2.spec_cd = '390002' and pfa2.status_cd = '0'
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.community_id = t.community_id and pfc.status_cd = '0'
+        LEFT JOIN building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
+        LEFT JOIN building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        LEFT JOIN f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and oc.car_type_cd='1001'
+        left join contract con on t.payer_obj_id = con.contract_id and t.payer_obj_type = '7777' and con.status_cd = '0'
+        where t.end_time > NOW()
+        and t.state = '2008001'
+        and t.status_cd = '0'
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and pfa1.`value` = #{ownerName}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+    </select>
+
+</mapper>

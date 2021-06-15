@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userAddressServiceDaoImpl">
+
+
+    <!-- 保存用户联系地址信息 add by wuxw 2018-07-03 -->
+    <insert id="saveUserAddressInfo" parameterType="Map">
+        insert into u_user_address(
+        area_code,is_default,address,tel,user_id,address_id,username
+        ) values (
+        #{areaCode},#{isDefault},#{address},#{tel},#{userId},#{addressId},#{username}
+        )
+    </insert>
+
+
+    <!-- 查询用户联系地址信息 add by wuxw 2018-07-03 -->
+    <select id="getUserAddressInfo" parameterType="Map" resultType="Map">
+        select t.area_code,t.area_code areaCode,t.is_default,t.is_default
+        isDefault,t.address,t.tel,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id userId,t.address_id,t.address_id
+        addressId,t.username
+        from u_user_address t
+        where 1 =1
+        <if test="areaCode !=null and areaCode != ''">
+            and t.area_code= #{areaCode}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            and t.is_default= #{isDefault}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="addressId !=null and addressId != ''">
+            and t.address_id= #{addressId}
+        </if>
+        <if test="username !=null and username != ''">
+            and t.username= #{username}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改用户联系地址信息 add by wuxw 2018-07-03 -->
+    <update id="updateUserAddressInfo" parameterType="Map">
+        update u_user_address t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="areaCode !=null and areaCode != ''">
+            , t.area_code= #{areaCode}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            , t.is_default= #{isDefault}
+        </if>
+        <if test="address !=null and address != ''">
+            , t.address= #{address}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="username !=null and username != ''">
+            , t.username= #{username}
+        </if>
+        where 1=1
+        <if test="addressId !=null and addressId != ''">
+            and t.address_id= #{addressId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+    </update>
+
+    <!-- 查询用户联系地址数量 add by wuxw 2018-07-03 -->
+    <select id="queryUserAddresssCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from u_user_address t
+        where 1 =1
+        <if test="areaCode !=null and areaCode != ''">
+            and t.area_code= #{areaCode}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            and t.is_default= #{isDefault}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="username !=null and username != ''">
+            and t.username= #{username}
+        </if>
+        <if test="addressId !=null and addressId != ''">
+            and t.address_id= #{addressId}
+        </if>
+
+
+    </select>
+
+</mapper>

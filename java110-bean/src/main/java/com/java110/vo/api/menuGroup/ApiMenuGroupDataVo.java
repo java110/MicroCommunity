@@ -1,7 +1,6 @@
 package com.java110.vo.api.menuGroup;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ApiMenuGroupDataVo implements Serializable {
 
@@ -11,6 +10,18 @@ public class ApiMenuGroupDataVo implements Serializable {
     private String label;
     private String seq;
     private String description;
+    private String groupType;
+
+
+    private String storeType;
+
+    public String getStoreType() {
+        return storeType;
+    }
+
+    public void setStoreType(String storeType) {
+        this.storeType = storeType;
+    }
 
     public String getGId() {
         return gId;
@@ -68,5 +79,11 @@ public class ApiMenuGroupDataVo implements Serializable {
         this.gId = gId;
     }
 
+    public String getGroupType() {
+        return groupType;
+    }
 
+    public void setGroupType(String groupType) {
+        this.groupType = groupType;
+    }
 }

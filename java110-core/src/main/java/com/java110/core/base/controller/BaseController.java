@@ -1,20 +1,22 @@
 package com.java110.core.base.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.context.IPageData;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.exception.NoAuthorityException;
-
-import com.java110.utils.util.StringUtil;
 import com.java110.core.base.AppBase;
 import com.java110.core.context.BusinessServiceDataFlow;
-import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.smo.IGetCommunityStoreInfoSMO;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.utils.cache.PrivilegeCache;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.NoAuthorityException;
+import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +30,9 @@ import java.util.*;
  * Created by wuxw on 2017/2/23.
  */
 public class BaseController extends AppBase {
+
+    @Autowired
+    private IGetCommunityStoreInfoSMO getCommunityStoreInfoSMOImpl;
 
 
     /**
@@ -128,23 +133,23 @@ public class BaseController extends AppBase {
         headers.put("port", request.getLocalPort() + "");
 
         //处理app-id
-        if(headers.containsKey("app-id")){
-            headers.put("app_id",headers.get("app-id"));
+        if (headers.containsKey("app-id")) {
+            headers.put("app_id", headers.get("app-id"));
         }
 
         //处理transaction-id
-        if(headers.containsKey("transaction-id")){
-            headers.put("transaction_id",headers.get("transaction-id"));
+        if (headers.containsKey("transaction-id")) {
+            headers.put("transaction_id", headers.get("transaction-id"));
         }
 
         //处理req-time
-        if(headers.containsKey("req-time")){
-            headers.put("req_time",headers.get("req-time"));
+        if (headers.containsKey("req-time")) {
+            headers.put("req_time", headers.get("req-time"));
         }
 
         //处理req-time
-        if(headers.containsKey("user-id")){
-            headers.put("user_id",headers.get("user-id"));
+        if (headers.containsKey("user-id")) {
+            headers.put("user_id", headers.get("user-id"));
         }
 
     }
@@ -281,15 +286,47 @@ public class BaseController extends AppBase {
             return;
         }
         JSONObject paramIn = new JSONObject();
-        paramIn.put("resource", resource);
+        //paramIn.put("resource", resource);
         paramIn.put("userId", pd.getUserId());
-        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/basePrivilege.CheckUserHasResourceListener",
-                HttpMethod.POST);
 
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+        //校验资源路劲是否定义权限
+        List<BasePrivilegeDto> basePrivilegeDtos = PrivilegeCache.getPrivileges();
+        if (basePrivilegeDtos == null || basePrivilegeDtos.size() < 1) {
+            return;
+        }
+        String tmpResource = null;
+        boolean hasPrivilege = false;
+        for (BasePrivilegeDto privilegeDto : basePrivilegeDtos) {
+            if (resource.equals(privilegeDto.getResource())) {
+                hasPrivilege = true;
+            }
+        }
+        if (!hasPrivilege) { //权限没有配置，直接跳过
+            return;
+        }
+
+        ResultVo resultVo = getCommunityStoreInfoSMOImpl.checkUserHasResourceListener(restTemplate, pd, paramIn, pd.getUserId());
+        if (resultVo == null || resultVo.getCode() != ResultVo.CODE_OK) {
             throw new UnsupportedOperationException("用户没有权限操作");
         }
+        JSONArray privileges = JSONArray.parseArray(resultVo.getMsg());
+
+        hasPrivilege = false;
+        if (privileges == null || privileges.size() < 1) {
+            throw new UnsupportedOperationException("用户没有权限操作");
+        }
+        for (int privilegeIndex = 0; privilegeIndex < privileges.size(); privilegeIndex++) {
+            tmpResource = privileges.getJSONObject(privilegeIndex).getString("resource");
+            if (resource.equals(tmpResource)) {
+                hasPrivilege = true;
+                break;
+            }
+        }
+        if (!hasPrivilege) {
+            throw new UnsupportedOperationException("用户没有权限操作");
+        }
+
     }
+
 
 }

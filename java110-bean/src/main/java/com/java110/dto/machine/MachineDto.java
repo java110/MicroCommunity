@@ -3,6 +3,7 @@ package com.java110.dto.machine;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -13,6 +14,11 @@ import java.io.Serializable;
  * add by wuxw 2019/4/24
  **/
 public class MachineDto extends PageDto implements Serializable {
+
+    public static final String MACHINE_TYPE_CAR = "9996";
+    public static final String MACHINE_TYPE_ACCESS_CONTROL = "9999";
+    public static final String MACHINE_STATE_ON = "1200";
+    public static final String MACHINE_STATE_OFF = "1300";
 
     private String machineMac;
     private String machineId;
@@ -42,11 +48,14 @@ public class MachineDto extends PageDto implements Serializable {
     private String direction;//设备方向
     private String directionName;
 
+    private List<MachineAttrDto> machineAttrs;
+
 
 
     private String createTime;
 
     private String statusCd = "0";
+    private String heartbeatTime;
 
 
     public String getMachineMac() {
@@ -280,5 +289,21 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setLocationType(String locationType) {
         this.locationType = locationType;
+    }
+
+    public List<MachineAttrDto> getMachineAttrs() {
+        return machineAttrs;
+    }
+
+    public void setMachineAttrs(List<MachineAttrDto> machineAttrs) {
+        this.machineAttrs = machineAttrs;
+    }
+
+    public String getHeartbeatTime() {
+        return heartbeatTime;
+    }
+
+    public void setHeartbeatTime(String heartbeatTime) {
+        this.heartbeatTime = heartbeatTime;
     }
 }

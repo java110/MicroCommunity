@@ -7,8 +7,6 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
-import com.java110.po.workflow.WorkflowPo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeWorkflowConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -57,79 +55,12 @@ public class ListWorkflowsListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         WorkflowDto workflowDto = BeanConvertUtil.covertBean(reqJson, WorkflowDto.class);
-
         int count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-
         List<WorkflowDto> workflowDtos = null;
-
-        if (count > 2) {
-            workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
-            ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workflowDtos);
-            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-            context.setResponseEntity(responseEntity);
-            return;
-        }
-        WorkflowPo workflowPo = null;
-        workflowDto = new WorkflowDto();
-        workflowDto.setStoreId(reqJson.getString("storeId"));
-        workflowDto.setCommunityId(reqJson.getString("communityId"));
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
-        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-        if (count < 1) {
-            //插入默认的工作信息  投诉流程
-            workflowPo = new WorkflowPo();
-            workflowPo.setCommunityId(reqJson.getString("communityId"));
-            workflowPo.setFlowId("-1");
-            workflowPo.setFlowName("投诉建议流程");
-            workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
-            workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-            workflowPo.setStoreId(reqJson.getString("storeId"));
-            super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
-        }
-
-        workflowDto = new WorkflowDto();
-        workflowDto.setStoreId(reqJson.getString("storeId"));
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
-        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-        if (count < 1) {
-            workflowPo = new WorkflowPo();
-            workflowPo.setCommunityId("9999"); //所有小区
-            workflowPo.setFlowId("-3");
-            workflowPo.setFlowName("采购流程");
-            workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
-            workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-            workflowPo.setStoreId(reqJson.getString("storeId"));
-            super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
-        }
-
-        workflowDto = new WorkflowDto();
-        workflowDto.setStoreId(reqJson.getString("storeId"));
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
-        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-        if (count < 1) {
-            workflowPo = new WorkflowPo();
-            workflowPo.setCommunityId("9999"); //所有小区
-            workflowPo.setFlowId("-4");
-            workflowPo.setFlowName("物品领用");
-            workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
-            workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-            workflowPo.setStoreId(reqJson.getString("storeId"));
-            super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
-        }
-
-
-        commit(context);
-
-        workflowDto = BeanConvertUtil.covertBean(reqJson, WorkflowDto.class);
-        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
-
         workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workflowDtos);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
-
-
     }
 }

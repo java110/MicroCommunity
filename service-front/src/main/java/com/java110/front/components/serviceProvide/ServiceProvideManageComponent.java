@@ -2,7 +2,7 @@ package com.java110.front.components.serviceProvide;
 
 
 import com.java110.core.context.IPageData;
-import com.java110.front.smo.serviceProvide.IListServiceProvidesSMO;
+import com.java110.front.smo.service.IListServiceProvidesSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

@@ -141,6 +141,22 @@ public class BusinessTypeConstant {
 
 
     /**
+     * 保存业主车辆
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_CAR_ATTR = "111200030002";
+
+    /**
+     * 修改业主车辆
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_CAR_ATTR = "111200040002";
+
+
+    /**
+     * 删除业主车辆
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_CAR_ATTR = "111200050002";
+
+    /**
      * 保存车辆黑白名单
      */
     public static final String BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE = "112200030001";
@@ -354,6 +370,22 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_FLOOR_INFO = "510100050001";
 
+    /**
+     * 增加小区楼属性
+     */
+    public static final String BUSINESS_TYPE_SAVE_FLOOR_ATTR_INFO = "510100030002";
+
+    /**
+     * 修改小区楼属性
+     */
+    public static final String BUSINESS_TYPE_UPDATE_FLOOR_ATTR_INFO = "510100040002";
+
+
+    /**
+     * 删除小区楼属性
+     */
+    public static final String BUSINESS_TYPE_DELETE_FLOOR_ATTR_INFO = "510100050002";
+
 
     /**
      * 增加小区单元
@@ -370,6 +402,23 @@ public class BusinessTypeConstant {
      * 删除小区单元
      */
     public static final String BUSINESS_TYPE_DELETE_UNIT_INFO = "520100050001";
+
+
+    /**
+     * 增加小区单元 属性
+     */
+    public static final String BUSINESS_TYPE_SAVE_UNIT_ATTR_INFO = "520100030002";
+
+    /**
+     * 修改小区单元 属性
+     */
+    public static final String BUSINESS_TYPE_UPDATE_UNIT_ATTR_INFO = "520100040002";
+
+
+    /**
+     * 删除小区单元 属性
+     */
+    public static final String BUSINESS_TYPE_DELETE_UNIT_ATTR_INFO = "520100050002";
 
     /**
      * 增加房屋
@@ -404,6 +453,22 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_PARKING_AREA = "541100050001";
 
     /**
+     * 增加停车场
+     */
+    public static final String BUSINESS_TYPE_SAVE_PARKING_AREA_ATTR = "541100030002";
+
+    /**
+     * 修改车位
+     */
+    public static final String BUSINESS_TYPE_UPDATE_PARKING_AREA_ATTR = "541100040002";
+
+
+    /**
+     * 删除车位
+     */
+    public static final String BUSINESS_TYPE_DELETE_PARKING_AREA_ATTR = "541100050002";
+
+    /**
      * 增加车位
      */
     public static final String BUSINESS_TYPE_SAVE_PARKING_SPACE = "540100030001";
@@ -418,6 +483,22 @@ public class BusinessTypeConstant {
      * 删除车位
      */
     public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE = "540100050001";
+
+    /**
+     * 增加车位
+     */
+    public static final String BUSINESS_TYPE_SAVE_PARKING_SPACE_ATTR = "540100030002";
+
+    /**
+     * 修改车位
+     */
+    public static final String BUSINESS_TYPE_UPDATE_PARKING_SPACE_ATTR = "540100040002";
+
+
+    /**
+     * 删除车位
+     */
+    public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE_ATTR = "540100050002";
 
     /**
      * 添加进场记录
@@ -479,6 +560,11 @@ public class BusinessTypeConstant {
      * 修改费用信息
      */
     public static final String BUSINESS_TYPE_UPDATE_FEE_INFO = "600100040001";
+
+    /**
+     * 修改费用信息
+     */
+    public static final String BUSINESS_TYPE_ONLY_UPDATE_FEE_INFO = "600100040002";
     /**
      * 删除费用信息
      */
@@ -684,16 +770,16 @@ public class BusinessTypeConstant {
 
 
     /**
-     * 保修派单信息
+     * 报修派单信息
      * 11开头  3保存
      */
     public static final String BUSINESS_TYPE_SAVE_REPAIR_USER="130200030001";
     /**
-     *  保修派单变更 11开头  4修改
+     *  报修派单变更 11开头  4修改
      */
     public static final String BUSINESS_TYPE_UPDATE_REPAIR_USER="130200040001";
     /**
-     *  作废保修派单信息  11开头  5修改
+     *  作废报修派单信息  11开头  5修改
      */
     public static final String BUSINESS_TYPE_DELETE_REPAIR_USER ="130200050001";
 
@@ -1161,6 +1247,25 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_LOCATION="570100050001";
 
     /**
+     *  保存任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_LOCATION_ATTR="570100030002";
+
+
+    /**
+     *  修改任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_LOCATION_ATTR="570100040002";
+
+    /**
+     * 删除任务
+     */
+    public static final String BUSINESS_TYPE_DELETE_LOCATION_ATTR="570100050002";
+
+
+    /**
      *  保存工作流
      *  3保存
      */
@@ -1213,6 +1318,311 @@ public class BusinessTypeConstant {
      * 删除工作流节点 处理员工
      */
     public static final String BUSINESS_TYPE_DELETE_WORKFLOW_STEP_STAFF="580300050001";
+    /**
+     *  保存工作流节点 处理员工 ORDER_FEE_SERVICE_URL
+     *  3保存 feeServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_DETAIL_DISCOUNT_INFO="641100030001";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_DETAIL_DISCOUNT_INFO="641100040001";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_DETAIL_DISCOUNT_INFO="641100050001";
+
+    /**
+     *  保存工作流节点 处理员工 ORDER_FEE_SERVICE_URL
+     *  3保存 feeServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_TEMP_CAR_FEE_CONFIG_INFO="651100030001";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_TEMP_CAR_FEE_CONFIG_INFO="651100040001";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_TEMP_CAR_FEE_CONFIG_INFO="651100050001";
+
+    /**
+     *  保存工作流节点 处理员工 ORDER_FEE_SERVICE_URL
+     *  3保存 feeServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_TEMP_CAR_FEE_CONFIG_ATTR_INFO="651100030002";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_TEMP_CAR_FEE_CONFIG_ATTR_INFO="651100040002";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_TEMP_CAR_FEE_CONFIG_ATTR_INFO="651100050002";
+
+    /**
+     *  保存工作流节点 处理员工 ORDER_COMMON_SERVICE_URL
+     *  3保存 commonServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_ATTENDANCE_CLASSES="651100030003";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ATTENDANCE_CLASSES="651100040003";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ATTENDANCE_CLASSES="651100050003";
+
+    /**
+     *  保存工作流节点 处理员工 ORDER_COMMON_SERVICE_URL
+     *  3保存 commonServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_ATTENDANCE_CLASSES_ATTR="651100030004";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ATTENDANCE_CLASSES_ATTR="651100040004";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ATTENDANCE_CLASSES_ATTR="651100050004";
+
+
+    /**
+     *  保存工作流节点 处理员工 ORDER_COMMON_SERVICE_URL
+     *  3保存 commonServiceTopic
+     */
+    public static final String BUSINESS_TYPE_SAVE_MACHINE_AUTH="661100030004";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_MACHINE_AUTH="661100040004";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_MACHINE_AUTH="661100050004";
+
+    /**
+     * 开门记录 送databus
+     */
+    public static final String BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG = "990000060001";
+
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_STOREHOUSE="671100030004";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_STOREHOUSE="671100040004";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_STOREHOUSE="671100050004";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ALLOCATION_STOREHOUSE="671100030005";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE="671100040005";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ALLOCATION_STOREHOUSE="671100050005";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_USER_STOREHOUSE="671100030006";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_USER_STOREHOUSE="671100040006";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_USER_STOREHOUSE="671100050006";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_RESOURCE_STORE_TYPE="671100030007";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_RESOURCE_STORE_TYPE="671100040007";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_RESOURCE_STORE_TYPE="671100050007";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_RESOURCE_SUPPLIER="671100030008";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_RESOURCE_SUPPLIER="671100040008";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_RESOURCE_SUPPLIER="671100050008";
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ALLOCATION_USER_STOREHOUSE="671100030009";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ALLOCATION_USER_STOREHOUSE="671100040009";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ALLOCATION_USER_STOREHOUSE="671100050009";
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD="671100030010";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_RESOURCE_STORE_USE_RECORD="671100040010";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_RESOURCE_STORE_USE_RECORD="671100050010";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ALLOCATION_STOREHOUSE_APPLY="681100030006";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY="681100040006";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_SAVE_RESOURCE_STORE_SPECIFICATION="671100030011";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_RESOURCE_STORE_SPECIFICATION="671100040011";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_DELETE_RESOURCE_STORE_SPECIFICATION="671100050011";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_ALLOCATION_STOREHOUSE_APPLY="681100050006";
+
+
+    /**
+     *  添加账户
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ACCT="121100030001";
+
+    /**
+     *  修改账户
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ACCT="121100040001";
+
+    /**
+     * 删除账户
+     */
+    public static final String BUSINESS_TYPE_DELETE_ACCT="121100050001";
+
+
+    /**
+     *  添加账户明细
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ACCT_DETAIL="121100030002";
+
+    /**
+     *  修改账户明细
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ACCT_DETAIL="121100040002";
+
+    /**
+     * 删除账户明细
+     */
+    public static final String BUSINESS_TYPE_DELETE_ACCT_DETAIL="121100050002";
 
 
 }

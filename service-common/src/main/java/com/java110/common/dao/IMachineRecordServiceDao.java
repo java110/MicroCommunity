@@ -75,4 +75,5 @@ public interface IMachineRecordServiceDao {
 
     List<Map> getAssetsMachineRecords(Map info);
 
+    int saveMachineRecords(Map info);
 }

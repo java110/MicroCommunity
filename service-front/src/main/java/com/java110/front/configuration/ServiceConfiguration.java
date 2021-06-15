@@ -23,7 +23,11 @@ public class ServiceConfiguration {
         exclusions.append("/callComponent/advertVedioView/*,");//放开 广告页面是不需要登录的
         exclusions.append("/callComponent/download/getFile/file,");//放开 下载图片也不需要登录
         exclusions.append("/callComponent/download/getFile/fileByObjId,");//放开 下载图片也不需要登录
+        exclusions.append("/callComponent/upload/uploadVedio/upload,");
         exclusions.append("/app/payment/notify,");//微信支付通知
+        exclusions.append("/app/payment/rentingNotify,");//微信支付通知
+        exclusions.append("/app/payment/oweFeeNotify,");//欠费微信支付通知
+        exclusions.append("/goods/notify,");//商品购买通知
         exclusions.append("/app/loginWx,");// 登录跳过
         exclusions.append("/app/getWxPhoto,");// 登录跳过
         exclusions.append("/app/loginProperty,");// 物业APP登录跳过
@@ -39,7 +43,12 @@ public class ServiceConfiguration {
         exclusions.append("/app/junkRequirement.listJunkRequirements,");//市场
         exclusions.append("/app/wechat/gateway,");//微信公众号对接接口
         exclusions.append("/app/loginOwnerWechatAuth,");//微信公众号对接接口
-        exclusions.append("/app/refreshToken");//微信公众号对接接口
+        exclusions.append("/app/refreshToken,");//微信公众号对接接口
+        exclusions.append("/app/renting/queryRentingPool,");//微信公众号对接接口
+        exclusions.append("/app/activitiesType/queryActivitiesType,");//查询大类
+        exclusions.append("/app/product/queryProductLabel,");//查询大类
+        exclusions.append("/app/loginStaffWechatAuth,");//查询大类
+        exclusions.append("/app/staffAuth");//查询大类
 
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());

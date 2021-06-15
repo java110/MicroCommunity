@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contractServiceDaoImpl">
+
+
+    <!-- 保存合同管理信息 add by wuxw 2018-07-03 -->
+    <insert id="saveContractInfo" parameterType="Map">
+        insert into contract(
+        a_link,a_contacts,amount,contract_type,store_id,operator,signing_time,b_contacts,party_a,b_link,party_b,
+        contract_id,obj_id,contract_name,start_time,end_time,state,contract_code,obj_type,operator_link,contract_parent_id,
+        obj_name, obj_person_name, obj_person_id,start_user_id
+        ) values (
+        #{aLink},#{aContacts},#{amount},#{contractType},#{storeId},#{operator},#{signingTime},#{bContacts},#{partyA},#{bLink},#{partyB},
+        #{contractId},#{objId},#{contractName},#{startTime},#{endTime},#{state},#{contractCode},#{objType},#{operatorLink},#{contractParentId},
+        #{objName}, #{objPersonName}, #{objPersonId},#{startUserId}
+        )
+    </insert>
+
+
+    <!-- 查询合同管理信息 add by wuxw 2018-07-03 -->
+    <select id="getContractInfo" parameterType="Map" resultType="Map">
+        select t.a_link,t.a_link aLink,t.a_contacts,t.a_contacts aContacts,t.amount,t.contract_type,t.contract_type
+        contractType,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
+        storeId,t.operator,t.signing_time,t.signing_time signingTime,t.b_contacts,t.b_contacts
+        bContacts,t.party_a,t.party_a partyA,t.b_link,t.b_link bLink,t.party_b,t.party_b
+        partyB,t.contract_id,t.contract_id contractId,t.obj_id,t.obj_id objId,t.contract_name,t.contract_name
+        contractName,t.start_time,t.start_time startTime,t.end_time,t.end_time
+        endTime,t.state,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
+        objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name`
+        stateName,t.state_desc stateDesc,t.contract_parent_id contractParentId,tt.contract_code parentContractCode,
+        tt.contract_name parentContractName,t.obj_name objName, t.obj_person_name objPersonName, t.obj_person_id objPersonId,
+        t.start_user_id startUserId
+        from contract t
+        LEFT JOIN contract_type ct on t.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id =
+        t.store_id
+        LEFT JOIN t_dict td on td.status_cd = t.state and td.table_name = 'contract' and td.table_columns = 'state'
+        left join contract tt on t.contract_parent_id = tt.contract_id and tt.status_cd = '0' and tt.store_id = t.store_id
+        where 1 =1
+        <if test="aLink !=null and aLink != ''">
+            and t.a_link= #{aLink}
+        </if>
+        <if test="aContacts !=null and aContacts != ''">
+            and t.a_contacts= #{aContacts}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="contractType !=null and contractType != ''">
+            and t.contract_type= #{contractType}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="operator !=null and operator != ''">
+            and t.operator= #{operator}
+        </if>
+        <if test="signingTime !=null and signingTime != ''">
+            and t.signing_time= #{signingTime}
+        </if>
+        <if test="bContacts !=null and bContacts != ''">
+            and t.b_contacts= #{bContacts}
+        </if>
+        <if test="partyA !=null and partyA != ''">
+            and t.party_a= #{partyA}
+        </if>
+        <if test="bLink !=null and bLink != ''">
+            and t.b_link= #{bLink}
+        </if>
+        <if test="partyB !=null and partyB != ''">
+            and t.party_b= #{partyB}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="contractIds !=null">
+            and t.contract_id in
+            <foreach collection="contractIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="objPersonId !=null and objPersonId != ''">
+            and t.obj_person_id= #{objPersonId}
+        </if>
+        <if test="contractName !=null and contractName != ''">
+            and t.contract_name= #{contractName}
+        </if>
+        <if test="contractNameLike !=null and contractNameLike != ''">
+            and t.contract_name like  concat('%',#{contractNameLike},'%')
+        </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.end_time &lt;= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="noStates !=null ">
+            and t.state not in
+            <foreach collection="noStates" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="contractCode !=null and contractCode != ''">
+            and t.contract_code= #{contractCode}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="operatorLink !=null and operatorLink != ''">
+            and t.operator_link= #{operatorLink}
+        </if>
+        <if test="contractParentId !=null and contractParentId != ''">
+            and t.contract_parent_id= #{contractParentId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改合同管理信息 add by wuxw 2018-07-03 -->
+    <update id="updateContractInfo" parameterType="Map">
+        update contract t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="aLink !=null and aLink != ''">
+            , t.a_link= #{aLink}
+        </if>
+        <if test="aContacts !=null and aContacts != ''">
+            , t.a_contacts= #{aContacts}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="contractType !=null and contractType != ''">
+            , t.contract_type= #{contractType}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="operator !=null and operator != ''">
+            , t.operator= #{operator}
+        </if>
+        <if test="signingTime !=null and signingTime != ''">
+            , t.signing_time= #{signingTime}
+        </if>
+        <if test="bContacts !=null and bContacts != ''">
+            , t.b_contacts= #{bContacts}
+        </if>
+        <if test="partyA !=null and partyA != ''">
+            , t.party_a= #{partyA}
+        </if>
+        <if test="bLink !=null and bLink != ''">
+            , t.b_link= #{bLink}
+        </if>
+        <if test="partyB !=null and partyB != ''">
+            , t.party_b= #{partyB}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="objPersonId !=null and objPersonId != ''">
+            , t.obj_person_id= #{objPersonId}
+        </if>
+        <if test="objPersonName !=null and objPersonName != ''">
+            , t.obj_person_name= #{objPersonName}
+        </if>
+        <if test="contractName !=null and contractName != ''">
+            , t.contract_name= #{contractName}
+        </if>
+        <if test="startTime !=null ">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="stateDesc !=null and stateDesc != ''">
+            , t.state_desc= #{stateDesc}
+        </if>
+        <if test="contractCode !=null and contractCode != ''">
+            , t.contract_code= #{contractCode}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        <if test="operatorLink !=null and operatorLink != ''">
+            , t.operator_link= #{operatorLink}
+        </if>
+        where 1=1
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+
+    </update>
+
+    <!-- 查询合同管理数量 add by wuxw 2018-07-03 -->
+    <select id="queryContractsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract t
+        where 1 =1
+        <if test="aLink !=null and aLink != ''">
+            and t.a_link= #{aLink}
+        </if>
+        <if test="aContacts !=null and aContacts != ''">
+            and t.a_contacts= #{aContacts}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="contractType !=null and contractType != ''">
+            and t.contract_type= #{contractType}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="operator !=null and operator != ''">
+            and t.operator= #{operator}
+        </if>
+        <if test="signingTime !=null and signingTime != ''">
+            and t.signing_time= #{signingTime}
+        </if>
+        <if test="bContacts !=null and bContacts != ''">
+            and t.b_contacts= #{bContacts}
+        </if>
+        <if test="partyA !=null and partyA != ''">
+            and t.party_a= #{partyA}
+        </if>
+        <if test="bLink !=null and bLink != ''">
+            and t.b_link= #{bLink}
+        </if>
+        <if test="partyB !=null and partyB != ''">
+            and t.party_b= #{partyB}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="objPersonId !=null and objPersonId != ''">
+            and t.obj_person_id= #{objPersonId}
+        </if>
+        <if test="contractName !=null and contractName != ''">
+            and t.contract_name= #{contractName}
+        </if>
+        <if test="startTime !=null ">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.end_time &lt;= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="noStates !=null ">
+            and t.state not in
+            <foreach collection="noStates" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="contractCode !=null and contractCode != ''">
+            and t.contract_code= #{contractCode}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="operatorLink !=null and operatorLink != ''">
+            and t.operator_link= #{operatorLink}
+        </if>
+        <if test="contractParentId !=null and contractParentId != ''">
+            and t.contract_parent_id= #{contractParentId}
+        </if>
+
+
+    </select>
+
+</mapper>

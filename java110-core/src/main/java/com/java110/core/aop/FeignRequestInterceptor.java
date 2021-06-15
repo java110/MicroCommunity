@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
  * add by wuxw 2020/7/5
  **/
 @Configuration
-public class FeignRequestInterceptor implements RequestInterceptor {
+public class  FeignRequestInterceptor implements RequestInterceptor {
 
 
     /**

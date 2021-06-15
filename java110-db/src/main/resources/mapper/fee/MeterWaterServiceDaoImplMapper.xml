@@ -5,258 +5,285 @@
 <mapper namespace="meterWaterServiceDaoImpl">
 
     <!-- 保存水电费信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessMeterWaterInfo" parameterType="Map">
-           insert into business_meter_water(
-remark,cur_reading_time,water_id,cur_degrees,operate,create_time,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,community_id,obj_type
-) values (
-#{remark},#{curReadingTime},#{waterId},#{curDegrees},#{operate},#{createTime},#{meterType},#{preDegrees},#{objId},#{preReadingTime},#{bId},#{communityId},#{objType}
-)
-       </insert>
+    <insert id="saveBusinessMeterWaterInfo" parameterType="Map">
+        insert into business_meter_water(
+        remark,cur_reading_time,water_id,cur_degrees,operate,meter_type,pre_degrees,obj_id,pre_reading_time,
+        b_id,community_id,obj_type,fee_id,obj_name
+        ) values (
+        #{remark},#{curReadingTime},#{waterId},#{curDegrees},#{operate},#{meterType},#{preDegrees},#{objId},
+        #{preReadingTime},#{bId},#{communityId},#{objType},#{feeId},#{objName}
+        )
+    </insert>
 
 
-       <!-- 查询水电费信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessMeterWaterInfo" parameterType="Map" resultType="Map">
-           select  t.remark,t.cur_reading_time,t.cur_reading_time curReadingTime,t.water_id,t.water_id waterId,t.cur_degrees,t.cur_degrees curDegrees,t.operate,t.create_time,t.create_time createTime,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.obj_type,t.obj_type objType 
-from business_meter_water t 
-where 1 =1 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="curReadingTime !=null and curReadingTime != ''">
-   and t.cur_reading_time= #{curReadingTime}
-</if> 
-<if test="waterId !=null and waterId != ''">
-   and t.water_id= #{waterId}
-</if> 
-<if test="curDegrees !=null and curDegrees != ''">
-   and t.cur_degrees= #{curDegrees}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="meterType !=null and meterType != ''">
-   and t.meter_type= #{meterType}
-</if> 
-<if test="preDegrees !=null and preDegrees != ''">
-   and t.pre_degrees= #{preDegrees}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="preReadingTime !=null and preReadingTime != ''">
-   and t.pre_reading_time= #{preReadingTime}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="objType !=null and objType != ''">
-   and t.obj_type= #{objType}
-</if> 
+    <!-- 查询水电费信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessMeterWaterInfo" parameterType="Map" resultType="Map">
+        select t.remark,t.cur_reading_time,t.cur_reading_time curReadingTime,t.water_id,t.water_id
+        waterId,t.cur_degrees,t.cur_degrees curDegrees,t.operate,t.meter_type,t.meter_type
+        meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
+        objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
+        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName
+        from business_meter_water t
+        where 1 =1
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="curReadingTime !=null ">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="waterId !=null and waterId != ''">
+            and t.water_id= #{waterId}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            and t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            and t.meter_type= #{meterType}
+        </if>
+        <if test="preDegrees !=null and preDegrees != ''">
+            and t.pre_degrees= #{preDegrees}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="preReadingTime !=null ">
+            and t.pre_reading_time= #{preReadingTime}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存水电费信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMeterWaterInfoInstance" parameterType="Map">
         insert into meter_water(
-remark,status_cd,cur_reading_time,water_id,cur_degrees,create_time,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,community_id,obj_type
-) select t.remark,'0',t.cur_reading_time,t.water_id,t.cur_degrees,t.create_time,t.meter_type,t.pre_degrees,t.obj_id,t.pre_reading_time,t.b_id,t.community_id,t.obj_type from business_meter_water t where 1=1
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="curReadingTime !=null and curReadingTime != ''">
-   and t.cur_reading_time= #{curReadingTime}
-</if> 
-<if test="waterId !=null and waterId != ''">
-   and t.water_id= #{waterId}
-</if> 
-<if test="curDegrees !=null and curDegrees != ''">
-   and t.cur_degrees= #{curDegrees}
-</if> 
-   and t.operate= 'ADD'
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="meterType !=null and meterType != ''">
-   and t.meter_type= #{meterType}
-</if> 
-<if test="preDegrees !=null and preDegrees != ''">
-   and t.pre_degrees= #{preDegrees}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="preReadingTime !=null and preReadingTime != ''">
-   and t.pre_reading_time= #{preReadingTime}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="objType !=null and objType != ''">
-   and t.obj_type= #{objType}
-</if> 
+        remark,status_cd,cur_reading_time,water_id,cur_degrees,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,
+        community_id,obj_type,fee_id,obj_name
+        ) select
+        t.remark,'0',t.cur_reading_time,t.water_id,t.cur_degrees,t.meter_type,t.pre_degrees,t.obj_id,
+        t.pre_reading_time,t.b_id,t.community_id,t.obj_type,t.fee_id,t.obj_name
+        from business_meter_water t where 1=1
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="curReadingTime !=null ">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="waterId !=null and waterId != ''">
+            and t.water_id= #{waterId}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            and t.cur_degrees= #{curDegrees}
+        </if>
+        and t.operate= 'ADD'
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            and t.meter_type= #{meterType}
+        </if>
+        <if test="preDegrees !=null and preDegrees != ''">
+            and t.pre_degrees= #{preDegrees}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="preReadingTime !=null ">
+            and t.pre_reading_time= #{preReadingTime}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询水电费信息 add by wuxw 2018-07-03 -->
     <select id="getMeterWaterInfo" parameterType="Map" resultType="Map">
-        select  t.remark,t.status_cd,t.status_cd statusCd,t.cur_reading_time,t.cur_reading_time curReadingTime,t.water_id,t.water_id waterId,t.cur_degrees,t.cur_degrees curDegrees,t.create_time,t.create_time createTime,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.obj_type,t.obj_type objType 
-from meter_water t 
-where 1 =1 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="curReadingTime !=null and curReadingTime != ''">
-   and t.cur_reading_time= #{curReadingTime}
-</if> 
-<if test="waterId !=null and waterId != ''">
-   and t.water_id= #{waterId}
-</if> 
-<if test="curDegrees !=null and curDegrees != ''">
-   and t.cur_degrees= #{curDegrees}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="meterType !=null and meterType != ''">
-   and t.meter_type= #{meterType}
-</if> 
-<if test="preDegrees !=null and preDegrees != ''">
-   and t.pre_degrees= #{preDegrees}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="preReadingTime !=null and preReadingTime != ''">
-   and t.pre_reading_time= #{preReadingTime}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="objType !=null and objType != ''">
-   and t.obj_type= #{objType}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.remark,t.status_cd,t.status_cd statusCd,t.cur_reading_time,t.cur_reading_time
+        curReadingTime,t.water_id,t.water_id waterId,t.cur_degrees,t.cur_degrees curDegrees,t.create_time,t.create_time
+        createTime,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
+        objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
+        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName
+        from meter_water t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where 1 =1
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="curReadingTime !=null ">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="waterId !=null and waterId != ''">
+            and t.water_id= #{waterId}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            and t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            and t.meter_type= #{meterType}
+        </if>
+        <if test="preDegrees !=null and preDegrees != ''">
+            and t.pre_degrees= #{preDegrees}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="preReadingTime !=null ">
+            and t.pre_reading_time= #{preReadingTime}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id = #{feeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改水电费信息 add by wuxw 2018-07-03 -->
     <update id="updateMeterWaterInfoInstance" parameterType="Map">
-        update  meter_water t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="curReadingTime !=null and curReadingTime != ''">
-, t.cur_reading_time= #{curReadingTime}
-</if> 
-<if test="curDegrees !=null and curDegrees != ''">
-, t.cur_degrees= #{curDegrees}
-</if> 
-<if test="createTime !=null and createTime != ''">
-, t.create_time= #{createTime}
-</if> 
-<if test="meterType !=null and meterType != ''">
-, t.meter_type= #{meterType}
-</if> 
-<if test="preDegrees !=null and preDegrees != ''">
-, t.pre_degrees= #{preDegrees}
-</if> 
-<if test="objId !=null and objId != ''">
-, t.obj_id= #{objId}
-</if> 
-<if test="preReadingTime !=null and preReadingTime != ''">
-, t.pre_reading_time= #{preReadingTime}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="objType !=null and objType != ''">
-, t.obj_type= #{objType}
-</if> 
- where 1=1 <if test="waterId !=null and waterId != ''">
-and t.water_id= #{waterId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update meter_water t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="curReadingTime !=null ">
+            , t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            , t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            , t.meter_type= #{meterType}
+        </if>
+        <if test="preDegrees !=null and preDegrees != ''">
+            , t.pre_degrees= #{preDegrees}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="preReadingTime !=null ">
+            , t.pre_reading_time= #{preReadingTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        where 1=1
+        <if test="waterId !=null and waterId != ''">
+            and t.water_id= #{waterId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询水电费数量 add by wuxw 2018-07-03 -->
-     <select id="queryMeterWatersCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from meter_water t 
-where 1 =1 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="curReadingTime !=null and curReadingTime != ''">
-   and t.cur_reading_time= #{curReadingTime}
-</if> 
-<if test="waterId !=null and waterId != ''">
-   and t.water_id= #{waterId}
-</if> 
-<if test="curDegrees !=null and curDegrees != ''">
-   and t.cur_degrees= #{curDegrees}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="meterType !=null and meterType != ''">
-   and t.meter_type= #{meterType}
-</if> 
-<if test="preDegrees !=null and preDegrees != ''">
-   and t.pre_degrees= #{preDegrees}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="preReadingTime !=null and preReadingTime != ''">
-   and t.pre_reading_time= #{preReadingTime}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="objType !=null and objType != ''">
-   and t.obj_type= #{objType}
-</if> 
+    <select id="queryMeterWatersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from meter_water t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where 1 =1
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="curReadingTime !=null ">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="waterId !=null and waterId != ''">
+            and t.water_id= #{waterId}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            and t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            and t.meter_type= #{meterType}
+        </if>
+        <if test="preDegrees !=null and preDegrees != ''">
+            and t.pre_degrees= #{preDegrees}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="preReadingTime !=null ">
+            and t.pre_reading_time= #{preReadingTime}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id = #{feeId}
+        </if>
 
 
-     </select>
+    </select>
+
+
+    <!-- 批量插入费用 -->
+    <insert id="insertMeterWaters" parameterType="Map">
+        insert into meter_water
+        (remark,status_cd,cur_reading_time,water_id,cur_degrees,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,
+        community_id,obj_type,fee_id,obj_name)
+        VALUES
+        <foreach collection="meterWaterPos" item="item" separator=",">
+            (#{item.remark},'0',#{item.curReadingTime},#{item.waterId},#{item.curDegrees},#{item.meterType},#{item.preDegrees},
+            #{item.objId},#{item.preReadingTime},'-1',#{item.communityId},#{item.objType},#{item.feeId},#{item.objName})
+        </foreach>
+    </insert>
 
 </mapper>

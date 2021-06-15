@@ -37,4 +37,8 @@ public class ServiceCodePurchaseApplyConstant {
     public static final String AUDIT_PURCHASE_APPLY = "purchaseApply.auditApplyOrder";
 
 
+    //调拨审核
+    public static final String AUDIT_ALLOCATION_STORE = "resourceStore.auditAllocationStoreOrder";
+
+
 }

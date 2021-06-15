@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.intf.community.IInspectionRouteInnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
-import com.java110.dto.inspectionRoute.InspectionRouteDto;
+import com.java110.dto.inspectionPlan.InspectionRouteDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.utils.constant.ServiceCodeInspectionPlanConstant;
 import com.java110.utils.util.Assert;
@@ -82,8 +82,8 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
 
         if (count > 0) {
             inspectionPlans = BeanConvertUtil.covertBeanList(inspectionPlanInnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto), ApiInspectionPlanDataVo.class);
-            ArrayList staffIds = new ArrayList<>();
-            ArrayList inspectionRouteIds = new ArrayList<>();
+            List<Object> staffIds = new ArrayList<Object>();
+            List<Object> inspectionRouteIds = new ArrayList<Object>();
             for (ApiInspectionPlanDataVo Plans : inspectionPlans) {
                 staffIds.add(Plans.getStaffId());
                 String[] ids = Plans.getInspectionRouteId().split(",");

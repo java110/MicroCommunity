@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.community.CommunityDto;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeParkingAreaConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.api.community.ApiCommunityDataVo;
 import com.java110.vo.api.parkingArea.ApiParkingAreaDataVo;
 import com.java110.vo.api.parkingArea.ApiParkingAreaVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,9 +71,18 @@ public class ListParkingAreasListener extends AbstractServiceApiListener {
         int count = parkingAreaInnerServiceSMOImpl.queryParkingAreasCount(parkingAreaDto);
 
         List<ApiParkingAreaDataVo> parkingAreas = null;
+        ApiParkingAreaDataVo parkingAreaDataVo = null;
+        List<ParkingAreaDto> parkingAreaDtos = null;
 
         if (count > 0) {
-            parkingAreas = BeanConvertUtil.covertBeanList(parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto), ApiParkingAreaDataVo.class);
+            parkingAreas = new ArrayList<>();
+            parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+
+            for (ParkingAreaDto tmpParkingAreaDto : parkingAreaDtos) {
+                parkingAreaDataVo = BeanConvertUtil.covertBean(tmpParkingAreaDto, ApiParkingAreaDataVo.class);
+                parkingAreaDataVo.setAttrs(tmpParkingAreaDto.getAttrs());
+                parkingAreas.add(parkingAreaDataVo);
+            }
         } else {
             parkingAreas = new ArrayList<>();
         }

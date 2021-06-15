@@ -46,6 +46,8 @@ public abstract class AbstractFeeDetailBusinessServiceDataFlowListener extends A
         businessFeeDetailInfo.put("receivedAmount", businessFeeDetailInfo.get("received_amount"));
         businessFeeDetailInfo.put("communityId", businessFeeDetailInfo.get("community_id"));
         businessFeeDetailInfo.put("feeId", businessFeeDetailInfo.get("fee_id"));
+        businessFeeDetailInfo.put("startTime", businessFeeDetailInfo.get("start_time"));
+        businessFeeDetailInfo.put("endTime", businessFeeDetailInfo.get("end_time"));
         businessFeeDetailInfo.remove("bId");
         businessFeeDetailInfo.put("statusCd", statusCd);
     }
@@ -79,6 +81,8 @@ public abstract class AbstractFeeDetailBusinessServiceDataFlowListener extends A
         currentFeeDetailInfo.put("receivedAmount", currentFeeDetailInfo.get("received_amount"));
         currentFeeDetailInfo.put("communityId", currentFeeDetailInfo.get("community_id"));
         currentFeeDetailInfo.put("feeId", currentFeeDetailInfo.get("fee_id"));
+        currentFeeDetailInfo.put("startTime", currentFeeDetailInfo.get("start_time"));
+        currentFeeDetailInfo.put("endTime", currentFeeDetailInfo.get("end_time"));
 
 
         currentFeeDetailInfo.put("operate", StatusConstant.OPERATE_DEL);

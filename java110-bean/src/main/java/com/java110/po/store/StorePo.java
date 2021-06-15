@@ -21,6 +21,7 @@ public class StorePo implements Serializable {
     private String nearbyLandmarks;
     private String mapX;
     private String mapY;
+    private String state;
 
     public String getStoreId() {
         return storeId;
@@ -92,5 +93,13 @@ public class StorePo implements Serializable {
 
     public void setMapY(String mapY) {
         this.mapY = mapY;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

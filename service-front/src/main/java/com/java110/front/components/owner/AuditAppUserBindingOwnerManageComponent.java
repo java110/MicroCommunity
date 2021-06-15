@@ -2,8 +2,8 @@ package com.java110.front.components.owner;
 
 
 import com.java110.core.context.IPageData;
-import com.java110.front.smo.auditAppUserBindingOwner.IEditAuditAppUserBindingOwnerSMO;
-import com.java110.front.smo.auditAppUserBindingOwner.IListAuditAppUserBindingOwnersSMO;
+import com.java110.front.smo.auditUser.IEditAuditAppUserBindingOwnerSMO;
+import com.java110.front.smo.auditUser.IListAuditAppUserBindingOwnersSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

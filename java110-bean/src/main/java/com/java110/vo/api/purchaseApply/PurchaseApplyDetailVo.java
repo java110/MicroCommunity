@@ -7,6 +7,7 @@ public class PurchaseApplyDetailVo {
     private String id;
     private String applyOrderId;
     private String resId;
+    private String rsId;
     private String quantity;
     private String remark;
     private String resName;
@@ -18,6 +19,14 @@ public class PurchaseApplyDetailVo {
     private String operate;
     private String statusCd;
     private String description;
+    private String purchaseQuantity;
+    private String purchaseRemark;
+    private String purchasePrice;
+    private String rstName;
+    private String specName;
+    private String standardPrice;
+    private String originalStock;
+    private String supplierName;
 
 
     public String getApplyOrderId() {
@@ -130,6 +139,78 @@ public class PurchaseApplyDetailVo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPurchaseQuantity() {
+        return purchaseQuantity;
+    }
+
+    public void setPurchaseQuantity(String purchaseQuantity) {
+        this.purchaseQuantity = purchaseQuantity;
+    }
+
+    public String getPurchaseRemark() {
+        return purchaseRemark;
+    }
+
+    public void setPurchaseRemark(String purchaseRemark) {
+        this.purchaseRemark = purchaseRemark;
+    }
+
+    public String getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(String purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public String getRsId() {
+        return rsId;
+    }
+
+    public void setRsId(String rsId) {
+        this.rsId = rsId;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(String standardPrice) {
+        this.standardPrice = standardPrice;
+    }
+
+    public String getOriginalStock() {
+        return originalStock;
+    }
+
+    public void setOriginalStock(String originalStock) {
+        this.originalStock = originalStock;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }
 

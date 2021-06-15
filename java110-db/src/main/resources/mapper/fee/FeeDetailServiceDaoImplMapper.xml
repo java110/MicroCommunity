@@ -8,23 +8,23 @@
     <insert id="saveBusinessFeeDetailInfo" parameterType="Map">
         insert into
         business_pay_fee_detail(
-            operate,prime_rate,detail_id,
-            receivable_amount,cycles,remark,
-            received_amount,community_id,b_id,fee_id,state) values (
-            #{operate},#{primeRate},#{detailId},#{receivableAmount},
-            #{cycles},#{remark},#{receivedAmount},#{communityId},#{bId},#{feeId},#{state})
-       </insert>
+        operate,prime_rate,detail_id,
+        receivable_amount,cycles,remark,
+        received_amount,community_id,b_id,fee_id,state,start_time,end_time) values (
+        #{operate},#{primeRate},#{detailId},#{receivableAmount},
+        #{cycles},#{remark},#{receivedAmount},#{communityId},#{bId},#{feeId},#{state},#{startTime},#{endTime})
+    </insert>
 
 
     <!-- 查询费用明细信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessFeeDetailInfo" parameterType="Map" resultType="Map">
         select
-            t.operate,t.prime_rate,t.prime_rate primeRate,t.detail_id,
-            t.detail_id detailId,t.receivable_amount,
-            t.receivable_amount receivableAmount,t.cycles,
-            t.remark,t.received_amount,t.received_amount receivedAmount,
-            t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
-            t.fee_id,t.fee_id feeId,t.state
+        t.operate,t.prime_rate,t.prime_rate primeRate,t.detail_id,
+        t.detail_id detailId,t.receivable_amount,
+        t.receivable_amount receivableAmount,t.cycles,
+        t.remark,t.received_amount,t.received_amount receivedAmount,
+        t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
+        t.fee_id,t.fee_id feeId,t.state,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime
         from business_pay_fee_detail t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -64,9 +64,10 @@
     <!-- 保存费用明细信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFeeDetailInfoInstance" parameterType="Map">
         insert into
-            pay_fee_detail(
-                prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state) select
-        t.prime_rate,t.detail_id,t.receivable_amount,t.cycles,t.remark,'0',t.received_amount,t.community_id,t.b_id,t.fee_id,state
+        pay_fee_detail(
+        prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state,start_time,end_time)
+        select
+        t.prime_rate,t.detail_id,t.receivable_amount,t.cycles,t.remark,'0',t.received_amount,t.community_id,t.b_id,t.fee_id,state,t.start_time,t.end_time
         from business_pay_fee_detail t where 1=1
         and t.operate= 'ADD'
         <if test="primeRate !=null and primeRate != ''">
@@ -103,15 +104,28 @@
     <!-- 查询费用明细信息 add by wuxw 2018-07-03 -->
     <select id="getFeeDetailInfo" parameterType="Map" resultType="Map">
         select
-            t.prime_rate,t.prime_rate primeRate,
-            t.detail_id,t.detail_id detailId,
-            t.receivable_amount,t.receivable_amount receivableAmount,
-            t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,
-            t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId ,t.create_time createTime,
-            t.state,d.name stateName
+        t.prime_rate,t.prime_rate primeRate,
+        t.detail_id,t.detail_id detailId,
+        t.receivable_amount,t.receivable_amount receivableAmount,
+        t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,
+        t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId ,t.create_time createTime,
+        t.state,d.name stateName,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime,pfa.`value` importFeeName,pfc.fee_name feeName
         from pay_fee_detail t
+        left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        <if test="ownerId != null and ownerId != ''">
+            left join pay_fee_attrs pfao on pfao.fee_id = t.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
+        </if>
         left join t_dict d on t.state = d.status_cd and d.table_name = 'pay_fee_detail' and d.table_columns = 'state'
         where 1 =1
+        <if test="configId != null and configId != ''">
+            and pf.config_id = #{configId}
+            and pf.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="ownerId != null and ownerId != ''">
+           and pfao.value = #{ownerId}
+        </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
         </if>
@@ -147,6 +161,9 @@
         </if>
         <if test="endTime !=null ">
             and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="curYear != null and curYear != ''">
+            and DATE_FORMAT(DATE_SUB(t.end_time,INTERVAL 1 DAY),'%Y') = #{curYear}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -201,7 +218,20 @@
     <select id="queryFeeDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee_detail t
+        <if test="configId != null and configId != ''">
+            inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        </if>
+        <if test="ownerId != null and ownerId != ''">
+            left join pay_fee_attrs pfa on pfa.fee_id = t.fee_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="configId != null and configId != ''">
+            and pf.config_id = #{configId}
+            and pf.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="ownerId != null and ownerId != ''">
+           and pfa.value = #{ownerId}
+        </if>
         <if test="primeRate !=null and primeRate != ''">
             and t.prime_rate= #{primeRate}
         </if>
@@ -238,6 +268,9 @@
         <if test="endTime !=null ">
             and t.create_time &lt;= #{endTime}
         </if>
+        <if test="curYear != null and curYear != ''">
+            and DATE_FORMAT(DATE_SUB(t.end_time,INTERVAL 1 DAY),'%Y') = #{curYear}
+        </if>
 
 
     </select>
@@ -246,8 +279,18 @@
     <insert id="saveFeeDetail" parameterType="Map">
         insert into
         pay_fee_detail(
-        prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state)
-        values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},'0',#{receivedAmount},#{communityId},'-1',#{feeId},#{state})
+        prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state,start_time,end_time
+        <if test="createTime != null and createTime != ''">
+            ,create_time
+        </if>
+
+        )
+        values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},'0',#{receivedAmount},#{communityId},'-1',#{feeId},#{state},
+        #{startTime},#{endTime}
+        <if test="createTime != null and createTime != ''">
+            ,#{createTime}
+        </if>
+        )
 
     </insert>
 

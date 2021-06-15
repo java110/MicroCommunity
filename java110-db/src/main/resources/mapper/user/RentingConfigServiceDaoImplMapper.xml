@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rentingConfigServiceDaoImpl">
+
+
+    <!-- 保存房屋出租配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveRentingConfigInfo" parameterType="Map">
+        insert into renting_config(
+        service_tenant_rate,property_separate_rate,service_price,admin_separate_rate,service_owner_rate,renting_config_id,renting_type,proxy_separate_rate,renting_formula
+        ) values (
+        #{serviceTenantRate},#{propertySeparateRate},#{servicePrice},#{adminSeparateRate},#{serviceOwnerRate},#{rentingConfigId},#{rentingType},#{proxySeparateRate},#{rentingFormula}
+        )
+    </insert>
+
+
+    <!-- 查询房屋出租配置信息 add by wuxw 2018-07-03 -->
+    <select id="getRentingConfigInfo" parameterType="Map" resultType="Map">
+        select t.service_tenant_rate,t.service_tenant_rate
+        serviceTenantRate,t.property_separate_rate,t.property_separate_rate
+        propertySeparateRate,t.service_price,t.service_price servicePrice,t.admin_separate_rate,t.admin_separate_rate
+        adminSeparateRate,t.service_owner_rate,t.service_owner_rate
+        serviceOwnerRate,t.renting_config_id,t.renting_config_id rentingConfigId,t.status_cd,t.status_cd
+        statusCd,t.renting_type,t.renting_type rentingType,t.proxy_separate_rate,t.proxy_separate_rate
+        proxySeparateRate,t.renting_formula,t.renting_formula rentingFormula,td1.`name` rentingTypeName,td2.`name` rentingFormulaName
+        from renting_config t
+        LEFT JOIN t_dict td1 on t.renting_type = td1.status_cd and td1.table_name = 'renting_config' and td1.table_columns = 'renting_type'
+        left join t_dict td2 on t.renting_formula = td2.status_cd and td2.table_name = 'renting_config' and td2.table_columns = 'renting_formula'
+        where 1 =1
+        <if test="serviceTenantRate !=null and serviceTenantRate != ''">
+            and t.service_tenant_rate= #{serviceTenantRate}
+        </if>
+        <if test="propertySeparateRate !=null and propertySeparateRate != ''">
+            and t.property_separate_rate= #{propertySeparateRate}
+        </if>
+        <if test="servicePrice !=null and servicePrice != ''">
+            and t.service_price= #{servicePrice}
+        </if>
+        <if test="adminSeparateRate !=null and adminSeparateRate != ''">
+            and t.admin_separate_rate= #{adminSeparateRate}
+        </if>
+        <if test="serviceOwnerRate !=null and serviceOwnerRate != ''">
+            and t.service_owner_rate= #{serviceOwnerRate}
+        </if>
+        <if test="rentingConfigId !=null and rentingConfigId != ''">
+            and t.renting_config_id= #{rentingConfigId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="rentingType !=null and rentingType != ''">
+            and t.renting_type= #{rentingType}
+        </if>
+        <if test="proxySeparateRate !=null and proxySeparateRate != ''">
+            and t.proxy_separate_rate= #{proxySeparateRate}
+        </if>
+        <if test="rentingFormula !=null and rentingFormula != ''">
+            and t.renting_formula= #{rentingFormula}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改房屋出租配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateRentingConfigInfo" parameterType="Map">
+        update renting_config t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="serviceTenantRate !=null and serviceTenantRate != ''">
+            , t.service_tenant_rate= #{serviceTenantRate}
+        </if>
+        <if test="propertySeparateRate !=null and propertySeparateRate != ''">
+            , t.property_separate_rate= #{propertySeparateRate}
+        </if>
+        <if test="servicePrice !=null and servicePrice != ''">
+            , t.service_price= #{servicePrice}
+        </if>
+        <if test="adminSeparateRate !=null and adminSeparateRate != ''">
+            , t.admin_separate_rate= #{adminSeparateRate}
+        </if>
+        <if test="serviceOwnerRate !=null and serviceOwnerRate != ''">
+            , t.service_owner_rate= #{serviceOwnerRate}
+        </if>
+        <if test="rentingType !=null and rentingType != ''">
+            , t.renting_type= #{rentingType}
+        </if>
+        <if test="proxySeparateRate !=null and proxySeparateRate != ''">
+            , t.proxy_separate_rate= #{proxySeparateRate}
+        </if>
+        <if test="rentingFormula !=null and rentingFormula != ''">
+            , t.renting_formula= #{rentingFormula}
+        </if>
+        where 1=1
+        <if test="rentingConfigId !=null and rentingConfigId != ''">
+            and t.renting_config_id= #{rentingConfigId}
+        </if>
+
+    </update>
+
+    <!-- 查询房屋出租配置数量 add by wuxw 2018-07-03 -->
+    <select id="queryRentingConfigsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from renting_config t
+        where 1 =1
+        <if test="serviceTenantRate !=null and serviceTenantRate != ''">
+            and t.service_tenant_rate= #{serviceTenantRate}
+        </if>
+        <if test="propertySeparateRate !=null and propertySeparateRate != ''">
+            and t.property_separate_rate= #{propertySeparateRate}
+        </if>
+        <if test="servicePrice !=null and servicePrice != ''">
+            and t.service_price= #{servicePrice}
+        </if>
+        <if test="adminSeparateRate !=null and adminSeparateRate != ''">
+            and t.admin_separate_rate= #{adminSeparateRate}
+        </if>
+        <if test="serviceOwnerRate !=null and serviceOwnerRate != ''">
+            and t.service_owner_rate= #{serviceOwnerRate}
+        </if>
+        <if test="rentingConfigId !=null and rentingConfigId != ''">
+            and t.renting_config_id= #{rentingConfigId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="rentingType !=null and rentingType != ''">
+            and t.renting_type= #{rentingType}
+        </if>
+        <if test="proxySeparateRate !=null and proxySeparateRate != ''">
+            and t.proxy_separate_rate= #{proxySeparateRate}
+        </if>
+        <if test="rentingFormula !=null and rentingFormula != ''">
+            and t.renting_formula= #{rentingFormula}
+        </if>
+
+
+    </select>
+
+</mapper>

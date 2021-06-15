@@ -28,6 +28,7 @@ public class ResultVo implements Serializable {
 
     public static final int CODE_UNAUTHORIZED = 401; //认证失败
     public static final int CODE_WECHAT_UNAUTHORIZED = 1401; //认证失败
+    public static final int CODE_BUSINESS_VERIFICATION = 5010; //业务校验未通过
 
     public static final int ORDER_ERROR = 500; //订单调度异常
 
@@ -52,7 +53,7 @@ public class ResultVo implements Serializable {
     // 总记录数
     private int total;
 
-    //状态嘛
+    //状态
     private int code;
 
     //错误提示
@@ -60,6 +61,12 @@ public class ResultVo implements Serializable {
 
     //数据对象
     private Object data;
+
+    //用来存放大计、小计金额
+    private Object sumTotal;
+
+    //所需数据
+    private Object rep;
 
     public ResultVo() {
     }
@@ -81,6 +88,25 @@ public class ResultVo implements Serializable {
         this.records = records;
         this.total = total;
         this.data = data;
+    }
+
+    public ResultVo(int records, int total, Object data, Object sumTotal) {
+        this.code = CODE_OK;
+        this.msg = MSG_OK;
+        this.records = records;
+        this.total = total;
+        this.data = data;
+        this.sumTotal = sumTotal;
+    }
+
+    public ResultVo(int records, int total, Object data, Object sumTotal, Object rep) {
+        this.code = CODE_OK;
+        this.msg = MSG_OK;
+        this.records = records;
+        this.total = total;
+        this.data = data;
+        this.sumTotal = sumTotal;
+        this.rep = rep;
     }
 
     public ResultVo(int code, String msg, Object data) {
@@ -153,6 +179,22 @@ public class ResultVo implements Serializable {
         this.data = data;
     }
 
+    public Object getSumTotal() {
+        return sumTotal;
+    }
+
+    public void setSumTotal(Object sumTotal) {
+        this.sumTotal = sumTotal;
+    }
+
+    public Object getRep() {
+        return rep;
+    }
+
+    public void setRep(Object rep) {
+        this.rep = rep;
+    }
+
     @Override
     public String toString() {
         return JSONObject.toJSONString(this, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteDateUseDateFormat);
@@ -172,11 +214,34 @@ public class ResultVo implements Serializable {
     }
 
     /**
+     * 创建ResponseEntity对象
+     *
+     * @param resultVo 数据对象
+     * @return
+     */
+    public static ResponseEntity<String> createResponseEntity(ResultVo resultVo) {
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
      * 成功通用回复
+     *
      * @return
      */
     public static ResponseEntity<String> success() {
         ResultVo resultVo = new ResultVo(CODE_OK, MSG_OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * 成功通用回复
+     *
+     * @return
+     */
+    public static ResponseEntity<String> error(String msg) {
+        ResultVo resultVo = new ResultVo(CODE_ERROR, msg);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         return responseEntity;
     }
@@ -191,6 +256,21 @@ public class ResultVo implements Serializable {
      */
     public static ResponseEntity<String> createResponseEntity(int records, int total, Object data) {
         ResultVo resultVo = new ResultVo(records, total, data);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * 创建ResponseEntity对象
+     *
+     * @param records
+     * @param total
+     * @param data
+     * @param sumTotal
+     * @return
+     */
+    public static ResponseEntity<String> createResponseEntity(int records, int total, Object data, Object sumTotal) {
+        ResultVo resultVo = new ResultVo(records, total, data, sumTotal);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         return responseEntity;
     }
@@ -250,4 +330,6 @@ public class ResultVo implements Serializable {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         return responseEntity;
     }
+
+
 }

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productServiceDaoImpl">
+
+
+    <!-- 保存产品信息 add by wuxw 2018-07-03 -->
+    <insert id="saveProductInfo" parameterType="Map">
+        insert into product(
+        product_id,unit_name,is_postage,sort,store_id,bar_code,postage,prod_name,state,keyword,prod_desc,category_id
+        ) values (
+        #{productId},#{unitName},#{isPostage},#{sort},#{storeId},#{barCode},#{postage},#{prodName},#{state},#{keyword},#{prodDesc},#{categoryId}
+        )
+    </insert>
+
+
+    <!-- 查询产品信息 add by wuxw 2018-07-03 -->
+    <select id="getProductInfo" parameterType="Map" resultType="Map">
+        select t.product_id,t.product_id productId,t.unit_name,t.unit_name unitName,t.is_postage,t.is_postage
+        isPostage,t.status_cd,t.status_cd statusCd,t.sort,t.store_id,t.store_id storeId,t.bar_code,t.bar_code
+        barCode,t.postage,t.prod_name,t.prod_name prodName,t.state,t.keyword,t.prod_desc,t.prod_desc
+        prodDesc,t.category_id,t.category_id categoryId,pc.category_name categoryName,td.name stateName,
+        psv.cost_price costPrice,psv.ot_price otPrice,psv.price,psv.sales,psv.stock,psv.vip_price vipPrice
+        from product t
+        left join product_category pc on pc.category_id = t.category_id and pc.store_id = t.store_id and pc.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name= 'product' and td.table_columns = 'state'
+        left join product_spec_value psv on psv.product_id = t.product_id and psv.store_id = t.store_id and psv.is_default = 'T'
+        where 1 =1
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="unitName !=null and unitName != ''">
+            and t.unit_name= #{unitName}
+        </if>
+        <if test="isPostage !=null and isPostage != ''">
+            and t.is_postage= #{isPostage}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sort !=null and sort != ''">
+            and t.sort= #{sort}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="barCode !=null and barCode != ''">
+            and t.bar_code= #{barCode}
+        </if>
+        <if test="postage !=null and postage != ''">
+            and t.postage= #{postage}
+        </if>
+        <if test="prodName !=null and prodName != ''">
+            and t.prod_name= #{prodName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="keyword !=null and keyword != ''">
+            and t.keyword= #{keyword}
+        </if>
+        <if test="prodDesc !=null and prodDesc != ''">
+            and t.prod_desc= #{prodDesc}
+        </if>
+        <if test="categoryId !=null and categoryId != ''">
+            and t.category_id= #{categoryId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改产品信息 add by wuxw 2018-07-03 -->
+    <update id="updateProductInfo" parameterType="Map">
+        update product t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="unitName !=null and unitName != ''">
+            , t.unit_name= #{unitName}
+        </if>
+        <if test="isPostage !=null and isPostage != ''">
+            , t.is_postage= #{isPostage}
+        </if>
+        <if test="sort !=null and sort != ''">
+            , t.sort= #{sort}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="barCode !=null and barCode != ''">
+            , t.bar_code= #{barCode}
+        </if>
+        <if test="postage !=null and postage != ''">
+            , t.postage= #{postage}
+        </if>
+        <if test="prodName !=null and prodName != ''">
+            , t.prod_name= #{prodName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="keyword !=null and keyword != ''">
+            , t.keyword= #{keyword}
+        </if>
+        <if test="prodDesc !=null and prodDesc != ''">
+            , t.prod_desc= #{prodDesc}
+        </if>
+        <if test="categoryId !=null and categoryId != ''">
+            , t.category_id= #{categoryId}
+        </if>
+        where 1=1
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+
+    </update>
+
+    <!-- 查询产品数量 add by wuxw 2018-07-03 -->
+    <select id="queryProductsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from product t
+        where 1 =1
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="unitName !=null and unitName != ''">
+            and t.unit_name= #{unitName}
+        </if>
+        <if test="isPostage !=null and isPostage != ''">
+            and t.is_postage= #{isPostage}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sort !=null and sort != ''">
+            and t.sort= #{sort}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="barCode !=null and barCode != ''">
+            and t.bar_code= #{barCode}
+        </if>
+        <if test="postage !=null and postage != ''">
+            and t.postage= #{postage}
+        </if>
+        <if test="prodName !=null and prodName != ''">
+            and t.prod_name= #{prodName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="keyword !=null and keyword != ''">
+            and t.keyword= #{keyword}
+        </if>
+        <if test="prodDesc !=null and prodDesc != ''">
+            and t.prod_desc= #{prodDesc}
+        </if>
+        <if test="categoryId !=null and categoryId != ''">
+            and t.category_id= #{categoryId}
+        </if>
+
+
+    </select>
+
+</mapper>

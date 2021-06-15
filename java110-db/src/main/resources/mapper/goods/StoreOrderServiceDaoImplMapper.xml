@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeOrderServiceDaoImpl">
+
+
+    <!-- 保存购物车信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreOrderInfo" parameterType="Map">
+        insert into store_order(
+        person_name,ext_order_id,order_id,total_price,pay_price,person_id,remark,o_id,state,freight_price
+        ) values (
+        #{personName},#{extOrderId},#{orderId},#{totalPrice},#{payPrice},#{personId},#{remark},#{OId},#{state},#{freightPrice}
+        )
+    </insert>
+
+
+    <!-- 查询购物车信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreOrderInfo" parameterType="Map" resultType="Map">
+        select t.person_name,t.person_name personName,t.ext_order_id,t.ext_order_id extOrderId,t.order_id,t.order_id
+        orderId,t.total_price,t.total_price totalPrice,t.pay_price,t.pay_price payPrice,t.person_id,t.person_id
+        personId,t.remark,t.o_id,t.o_id oId,t.state,t.freight_price,t.freight_price
+        freightPrice
+        from store_order t
+        where 1 =1
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="extOrderId !=null and extOrderId != ''">
+            and t.ext_order_id= #{extOrderId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="totalPrice !=null and totalPrice != ''">
+            and t.total_price= #{totalPrice}
+        </if>
+        <if test="payPrice !=null and payPrice != ''">
+            and t.pay_price= #{payPrice}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+
+        <if test="oId !=null and oId != ''">
+            and t.o_id= #{oId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="freightPrice !=null and freightPrice != ''">
+            and t.freight_price= #{freightPrice}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改购物车信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreOrderInfo" parameterType="Map">
+        update store_order t
+        <set>
+        <if test="personName !=null and personName != ''">
+             t.person_name= #{personName},
+        </if>
+        <if test="extOrderId !=null and extOrderId != ''">
+             t.ext_order_id= #{extOrderId},
+        </if>
+        <if test="totalPrice !=null and totalPrice != ''">
+             t.total_price= #{totalPrice},
+        </if>
+        <if test="payPrice !=null and payPrice != ''">
+             t.pay_price= #{payPrice},
+        </if>
+
+        <if test="remark !=null and remark != ''">
+             t.remark= #{remark},
+        </if>
+
+        <if test="state !=null and state != ''">
+             t.state= #{state},
+        </if>
+        <if test="freightPrice !=null and freightPrice != ''">
+            t.freight_price= #{freightPrice},
+        </if>
+        </set>
+        where 1=1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="oId !=null and oId != ''">
+            t.o_id= #{oId},
+        </if>
+        <if test="personId !=null and personId != ''">
+            t.person_id= #{personId},
+        </if>
+
+    </update>
+
+    <!-- 查询购物车数量 add by wuxw 2018-07-03 -->
+    <select id="queryStoreOrdersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from store_order t
+        where 1 =1
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="extOrderId !=null and extOrderId != ''">
+            and t.ext_order_id= #{extOrderId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="totalPrice !=null and totalPrice != ''">
+            and t.total_price= #{totalPrice}
+        </if>
+        <if test="payPrice !=null and payPrice != ''">
+            and t.pay_price= #{payPrice}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+
+        <if test="oId !=null and oId != ''">
+            and t.o_id= #{oId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="freightPrice !=null and freightPrice != ''">
+            and t.freight_price= #{freightPrice}
+        </if>
+
+
+    </select>
+
+</mapper>

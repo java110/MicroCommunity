@@ -1,0 +1,103 @@
+{
+  "templateName": "人工托收",
+  "directories": "property",
+  "templateCode": "feeManualCollection",
+  "templateKey": "collectionId",
+  "templateKeyName": "托收ID",
+  "searchCode": "collectionId",
+  "searchName": "托收ID",
+  "conditions": [
+    {
+      "name": "房屋编号",
+      "inputType": "input",
+      "code": "roomName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "业主名称",
+      "inputType": "input",
+      "code": "ownerName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "业主电话",
+      "inputType": "input",
+      "code": "link",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns": [
+    {
+      "code": "roomName",
+      "cnCode": "规格",
+      "desc": "必填，请填写房屋，如楼栋-单元-房屋",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "100",
+      "limitErrInfo": "房屋错误",
+      "show": true
+    },
+    {
+      "code": "ownerName",
+      "cnCode": "业主名称",
+      "desc": "必填，请填写业主名称",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "100",
+      "limitErrInfo": "业主名称超过100位",
+      "show": true
+    },
+    {
+      "code": "link",
+      "cnCode": "业主电话",
+      "desc": "必填，请填写业主电话",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "phone",
+      "limitParam": "",
+      "limitErrInfo": "业主电话格式错误",
+      "show": true
+    },
+    {
+      "code": "roomArea",
+      "cnCode": "房屋面积",
+      "desc": "必填，请填写房屋面积",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "money",
+      "limitParam": "",
+      "limitErrInfo": "房屋面积格式错误",
+      "show": true
+    },
+    {
+      "code": "squarePrice",
+      "cnCode": "房屋单价",
+      "desc": "必填，请填写房屋单价",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "money",
+      "limitParam": "",
+      "limitErrInfo": "房屋单价格式错误",
+      "show": true
+    },
+    {
+      "code": "remark",
+      "cnCode": "备注",
+      "desc": "选填，请填写备注",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "200",
+      "limitErrInfo": "备注超过200位",
+      "show": false
+    }
+  ]
+}

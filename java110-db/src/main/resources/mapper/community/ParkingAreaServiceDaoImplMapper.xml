@@ -88,6 +88,12 @@
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
         </if>
+        <if test="paIds !=null ">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
@@ -149,6 +155,12 @@
         </if>
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
+        </if>
+        <if test="paIds !=null ">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}

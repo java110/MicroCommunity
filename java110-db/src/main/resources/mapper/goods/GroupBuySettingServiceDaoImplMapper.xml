@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupBuySettingServiceDaoImpl">
+
+
+    <!-- 保存拼团设置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveGroupBuySettingInfo" parameterType="Map">
+        insert into group_buy_setting(
+        group_buy_name,group_buy_desc,valid_hours,start_time,end_time,store_id,setting_id
+        ) values (
+        #{groupBuyName},#{groupBuyDesc},#{validHours},#{startTime},#{endTime},#{storeId},#{settingId}
+        )
+    </insert>
+
+
+    <!-- 查询拼团设置信息 add by wuxw 2018-07-03 -->
+    <select id="getGroupBuySettingInfo" parameterType="Map" resultType="Map">
+        select t.group_buy_name,t.group_buy_name groupBuyName,t.group_buy_desc,t.group_buy_desc
+        groupBuyDesc,t.valid_hours,t.valid_hours validHours,t.start_time,t.start_time startTime,t.status_cd,t.status_cd
+        statusCd,t.end_time,t.end_time endTime,t.store_id,t.store_id storeId,t.setting_id,t.setting_id settingId
+        from group_buy_setting t
+        where 1 =1
+        <if test="groupBuyName !=null and groupBuyName != ''">
+            and t.group_buy_name= #{groupBuyName}
+        </if>
+        <if test="groupBuyDesc !=null and groupBuyDesc != ''">
+            and t.group_buy_desc= #{groupBuyDesc}
+        </if>
+        <if test="validHours !=null and validHours != ''">
+            and t.valid_hours= #{validHours}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改拼团设置信息 add by wuxw 2018-07-03 -->
+    <update id="updateGroupBuySettingInfo" parameterType="Map">
+        update group_buy_setting t set t.status_cd = #{statusCd}
+        <if test="groupBuyName !=null and groupBuyName != ''">
+            , t.group_buy_name= #{groupBuyName}
+        </if>
+        <if test="groupBuyDesc !=null and groupBuyDesc != ''">
+            , t.group_buy_desc= #{groupBuyDesc}
+        </if>
+        <if test="validHours !=null and validHours != ''">
+            , t.valid_hours= #{validHours}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+
+    </update>
+
+    <!-- 查询拼团设置数量 add by wuxw 2018-07-03 -->
+    <select id="queryGroupBuySettingsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from group_buy_setting t
+        where 1 =1
+        <if test="groupBuyName !=null and groupBuyName != ''">
+            and t.group_buy_name= #{groupBuyName}
+        </if>
+        <if test="groupBuyDesc !=null and groupBuyDesc != ''">
+            and t.group_buy_desc= #{groupBuyDesc}
+        </if>
+        <if test="validHours !=null and validHours != ''">
+            and t.valid_hours= #{validHours}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+
+
+    </select>
+
+</mapper>

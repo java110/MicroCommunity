@@ -6,12 +6,14 @@ import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerCarDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -41,6 +43,9 @@ public class DeleteOwnerListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_OWNER;
@@ -56,6 +61,22 @@ public class DeleteOwnerListener extends AbstractServiceApiPlusListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
+        if (!"1001".equals(reqJson.getString("ownerTypeCd"))) { //不是业主成员不管
+            return;
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(reqJson.getString("memberId"));
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING});
+
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+
+        if (ownerDtos != null && ownerDtos.size() > 0) {
+            throw new IllegalArgumentException("请先删除业主下的成员");
+        }
+
+
     }
 
     @Override
@@ -80,9 +101,8 @@ public class DeleteOwnerListener extends AbstractServiceApiPlusListener {
             if (ownerCarDtos.size() > 0) {
                 throw new IllegalArgumentException("删除失败,删除前请先解绑车位信息");
             }
-
             //小区楼添加到小区中
-            ownerBMOImpl.exitCommunityMember(reqJson, context);
+            //ownerBMOImpl.exitCommunityMember(reqJson, context);
         }
     }
 

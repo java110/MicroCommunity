@@ -5,6 +5,8 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.file.FileRelDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.dto.repair.RepairUserDto;
@@ -12,6 +14,7 @@ import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +35,9 @@ public class ListRepairStaffsListener extends AbstractServiceApiListener {
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -95,6 +101,27 @@ public class ListRepairStaffsListener extends AbstractServiceApiListener {
                 duration = repairUserDto.getEndTime().getTime() - repairUserDto.getStartTime().getTime();
             }
             repairUserDto.setDuration(getCostTime(duration));
+        }
+
+        //刷入图片信息
+        List<PhotoVo> photoVos = null;  //业主上传维修图片
+        PhotoVo photoVo = null;
+        for (RepairUserDto repairUserDto : repairUserDtos) {
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(repairUserDto.getRepairId());
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            photoVos = new ArrayList<>();
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                if (tmpFileRelDto.getRelTypeCd().equals("14000")) {  //维修图片
+                    photoVo = new PhotoVo();
+                    photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairUserDto.getCommunityId());
+                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
+                    photoVos.add(photoVo);
+                } else {
+                    continue;
+                }
+            }
+            repairUserDto.setPhotoVos(photoVos);
         }
     }
 

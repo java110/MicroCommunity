@@ -75,6 +75,7 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
         SmallWeChatDto smallWeChatDto = BeanConvertUtil.covertBean(reqJson, SmallWeChatDto.class);
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         smallWeChatDto.setObjId(reqJson.getString("communityId"));
+        //smallWeChatDto.setWeChatType(reqJson.getString("wechatType"));
         int count = smallWeChatInnerServiceSMOImpl.querySmallWeChatsCount(smallWeChatDto);
         List<ApiSmallWeChatDataVo> smallWeChats = null;
         if (count > 0) {
@@ -98,11 +99,11 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
 
         for (ApiSmallWeChatDataVo apiSmallWeChatDataVo : smallWeChats) {
             apiSmallWeChatDataVo.setwId(WechatFactory.getWId(apiSmallWeChatDataVo.getAppId()));
-            if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId) || AppDto.WECHAT_OWNER_APP_ID.equals(appId) || AppDto.OWNER_WECHAT_PAY.equals(appId)) {
-                continue;
+            if (AppDto.WEB_APP_ID.equals(appId) || AppDto.WECHAT_MALL_APP_ID.equals(appId)) {
+                apiSmallWeChatDataVo.setAppSecret("");
+                apiSmallWeChatDataVo.setPayPassword("");
             }
-            apiSmallWeChatDataVo.setAppSecret("");
-            apiSmallWeChatDataVo.setPayPassword("");
+
         }
     }
 }

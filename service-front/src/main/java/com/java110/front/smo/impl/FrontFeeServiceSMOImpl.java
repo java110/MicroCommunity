@@ -131,6 +131,11 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_PROPERTY_FEE);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String remark = paramIn.getString("remark");
+        if(!StringUtil.isEmpty(remark)){
+            remark="-"+remark;
+        }
+        paramIn.put("remark", "现场收银台支付" + remark);
         String communityId = paramIn.getString("communityId");
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -405,11 +410,11 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
 
     private void validateLoadFeeDetail(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "feeId", "请求报文中未包含roomId节点");
+        //Assert.jsonObjectHaveKey(pd.getReqData(), "feeId", "请求报文中未包含feeId节点");
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
-        Assert.hasLength(paramIn.getString("feeId"), "费用ID不能为空");
+        //Assert.hasLength(paramIn.getString("feeId"), "费用ID不能为空");
     }
 
     /**
@@ -477,13 +482,13 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
         Assert.jsonObjectHaveKey(pd.getReqData(), "apartment", "请求报文中未包含apartment节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "builtUpArea", "请求报文中未包含builtUpArea节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "state", "请求报文中未包含state节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "unitPrice", "请求报文中未包含unitPrice节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "feeCoefficient", "请求报文中未包含feeCoefficient节点");
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
 
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.isInteger(reqJson.getString("section"), "房间数不是有效数字");
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
-        Assert.isMoney(reqJson.getString("unitPrice"), "房屋单价数据格式错误");
+        Assert.isMoney(reqJson.getString("feeCoefficient"), "算费系数数据格式错误");
 
        /* if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");

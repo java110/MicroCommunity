@@ -121,7 +121,8 @@
         statusCd,t.act_user_name,t.act_user_name actUserName,t.sign_type,t.sign_type
         signType,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.plan_user_name,t.plan_user_name
         planUserName,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.act_user_id,t.act_user_id
-        actUserId,t.task_id,t.task_id taskId,t.state,td1.name signTypeName,td2.name stateName,ip.inspection_plan_name inspectionPlanName
+        actUserId,t.task_id,t.task_id taskId,t.state,td1.name signTypeName,td2.name stateName,ip.inspection_plan_name
+        inspectionPlanName
         from inspection_task t,inspection_plan ip,t_dict td1,t_dict td2
         where 1 =1
         and t.sign_type = td1.status_cd
@@ -135,8 +136,11 @@
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
-        <if test="actInsTime !=null ">
-            and t.act_ins_time= #{actInsTime}
+        <if test="startTime != null">
+            and t.act_ins_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and t.act_ins_time &lt;= #{endTime}
         </if>
         <if test="planInsTime !=null ">
             and t.plan_ins_time= #{planInsTime}
@@ -156,8 +160,11 @@
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
         </if>
+        <if test="inspectionPlanName != null and inspectionPlanName != ''">
+            and ip.inspection_plan_name = #{inspectionPlanName}
+        </if>
         <if test="planUserName !=null and planUserName != ''">
-            and t.plan_user_name= #{planUserName}
+            and t.plan_user_name like '%${planUserName}%'
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -188,7 +195,6 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 
@@ -235,7 +241,6 @@
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
         </if>
-
     </update>
 
     <!-- 查询活动数量 add by wuxw 2018-07-03 -->
@@ -254,8 +259,11 @@
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
-        <if test="actInsTime !=null ">
-            and t.act_ins_time= #{actInsTime}
+        <if test="startTime != null">
+            and t.act_ins_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and t.act_ins_time &lt;= #{endTime}
         </if>
         <if test="planInsTime !=null ">
             and t.plan_ins_time= #{planInsTime}
@@ -272,8 +280,11 @@
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
         </if>
+        <if test="inspectionPlanName != null and inspectionPlanName != ''">
+            and ip.inspection_plan_name = #{inspectionPlanName}
+        </if>
         <if test="planUserName !=null and planUserName != ''">
-            and t.plan_user_name= #{planUserName}
+            and t.plan_user_name like '%${planUserName}%'
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -296,8 +307,6 @@
                 #{item}
             </foreach>
         </if>
-
-
     </select>
 
     <!-- 查询未安排的巡检计划 -->
@@ -319,7 +328,7 @@
         AND it.status_cd = '0'
         AND ip.community_id = it.community_id
         <if test="inspectionPlanPeriod !=null and inspectionPlanPeriod == '2020023'">
-        and it.plan_ins_time &gt; DATE_SUB(curdate(),INTERVAL 7 DAY)
+            and it.plan_ins_time &gt; DATE_SUB(curdate(),INTERVAL 7 DAY)
         </if>
         <if test="inspectionPlanPeriod !=null and inspectionPlanPeriod == '2020024'">
             and it.plan_ins_time &gt; DATE_SUB(curdate(),INTERVAL 30 DAY)
@@ -356,7 +365,4 @@
             (#{task.taskDetailId},'-1',#{task.communityId},#{task.taskId},#{task.inspectionId},#{task.inspectionName},'20200405')
         </foreach>
     </insert>
-
-
-
 </mapper>

@@ -1,5 +1,7 @@
 package com.java110.order.dao;
 
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.utils.exception.DAOException;
 import com.java110.entity.mapping.Mapping;
 
@@ -204,6 +206,19 @@ public interface ICenterServiceDAO {
     public List<Mapping> getMappingInfoAll();
 
     /**
+     * 查询映射表
+     *
+     * @return
+     */
+    public List<BasePrivilegeDto> getPrivilegeAll();
+    /**
+     * 查询映射表
+     *
+     * @return
+     */
+    public List<BusinessDatabusDto> getDatabusAll();
+
+    /**
      * 查询业主 添加 修改 删除订单
      *
      * @param info
@@ -217,6 +232,15 @@ public interface ICenterServiceDAO {
      * @return
      */
     public List<Map> queryOrderByBusinessType(Map info);
+
+
+    /**
+     * 根据业务类型查询 订单
+     * @param info
+     * @return
+     */
+    public List<Map> queryOrderByBId(Map info);
+
 
     /**
      * 查询业主 添加 修改 删除订单

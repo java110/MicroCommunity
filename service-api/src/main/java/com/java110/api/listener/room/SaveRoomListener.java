@@ -5,9 +5,10 @@ import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IUnitInnerServiceSMO;
-import com.java110.dto.UnitDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.RoomDto;
+import com.java110.dto.UnitDto;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -56,11 +57,11 @@ public class SaveRoomListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "apartment", "请求报文中未包含apartment节点");
         Assert.jsonObjectHaveKey(reqJson, "state", "请求报文中未包含state节点");
         Assert.jsonObjectHaveKey(reqJson, "builtUpArea", "请求报文中未包含builtUpArea节点");
-        Assert.jsonObjectHaveKey(reqJson, "unitPrice", "请求报文中未包含unitPrice节点");
+        Assert.jsonObjectHaveKey(reqJson, "feeCoefficient", "请求报文中未包含feeCoefficient节点");
 
         Assert.isInteger(reqJson.getString("section"), "房间数不是有效数字");
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
-        Assert.isMoney(reqJson.getString("unitPrice"), "房屋单价数据格式错误");
+        Assert.isMoney(reqJson.getString("feeCoefficient"), "房屋单价数据格式错误");
 
         /*if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
@@ -82,10 +83,17 @@ public class SaveRoomListener extends AbstractServiceApiPlusListener {
         if (units == null || units.size() < 1) {
             throw new IllegalArgumentException("传入单元ID不是该小区的单元");
         }
+
+        reqJson.put("unitNum", units.get(0).getUnitNum());
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        if ("0".equals(reqJson.getString("unitNum"))) { // 处理为商铺
+            reqJson.put("roomType", RoomDto.ROOM_TYPE_SHOPS);
+        } else {
+            reqJson.put("roomType", RoomDto.ROOM_TYPE_ROOM);
+        }
         roomBMOImpl.addRoom(reqJson, context);
     }
 

@@ -5,11 +5,12 @@ import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +61,17 @@ public class SellRoomListener extends AbstractServiceApiPlusListener {
         Assert.hasLength(reqJson.getString("roomId"), "roomId不能为空");
         Assert.hasLength(reqJson.getString("state"), "state不能为空");
 
-        super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
+        //super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        if (!reqJson.containsKey("startTime")) {
+            reqJson.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        }
+        if (!reqJson.containsKey("endTime")) {
+            reqJson.put("endTime", "2037-01-01 00:00:00");
+        }
         //添加单元信息
         roomBMOImpl.sellRoom(reqJson, context);
 
@@ -72,7 +79,7 @@ public class SellRoomListener extends AbstractServiceApiPlusListener {
         roomBMOImpl.updateShellRoom(reqJson, context);
 
         //添加物业费用信息
-        roomBMOImpl.addPropertyFee(reqJson, context);
+        //roomBMOImpl.addPropertyFee(reqJson, context);
     }
 
 

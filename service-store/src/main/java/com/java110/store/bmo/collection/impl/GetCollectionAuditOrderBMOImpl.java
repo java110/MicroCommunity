@@ -29,7 +29,7 @@ public class GetCollectionAuditOrderBMOImpl implements IGetCollectionAuditOrderB
 
     @Override
     public ResponseEntity<String> auditOrder(AuditUser auditUser) {
-
+        //物品领用待办 （默认只查询和当前登录用户相关并且是审批或者结束待办事项）
         long count = goodCollectionUserInnerServiceSMOImpl.getUserTaskCount(auditUser);
 
         List<ApiResourceOrderDataVo> auditOrders = null;

@@ -1,0 +1,39 @@
+{
+  "autoMove": true,
+  "id": "receiptId",
+  "name": "feeManualCollection",
+  "desc": "人工托收",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "fee_manual_collection",
+  "param": {
+    "collectionId": "collection_id",
+    "roomId": "room_id",
+    "roomName": "room_name",
+    "ownerId": "owner_id",
+    "ownerName": "owner_name",
+    "link": "link",
+    "roomArea": "room_area",
+    "squarePrice": "square_price",
+    "communityId": "community_id",
+    "state": "state",
+    "remark": "remark",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "roomId",
+      "msg": "房屋不能为空"
+    },
+    {
+      "code": "ownerId",
+      "msg": "业主不能为空"
+    }
+  ]
+}
+

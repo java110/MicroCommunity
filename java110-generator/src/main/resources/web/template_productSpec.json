@@ -1,0 +1,37 @@
+{
+  "templateName": "商品规格",
+  "directories": "goods",
+  "templateCode": "productSpec",
+  "templateKey": "specId",
+  "templateKeyName": "规格ID",
+  "searchCode": "specId",
+  "searchName": "规格ID",
+  "conditions": [
+    {
+      "name": "名称",
+      "inputType": "input",
+      "code": "specName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "规格ID",
+      "inputType": "input",
+      "code": "specId",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns": [
+    {
+      "code": "specName",
+      "cnCode": "规格名称",
+      "desc": "必填，请填写规格名称",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "100",
+      "limitErrInfo": "规格名称不能超过100位",
+      "show": true
+    }
+  ]
+}

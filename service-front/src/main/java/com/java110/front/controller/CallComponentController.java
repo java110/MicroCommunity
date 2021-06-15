@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017-2020 吴学文 and java110 team.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.java110.front.controller;
 
 import com.alibaba.fastjson.JSONObject;
@@ -8,6 +23,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -58,6 +74,7 @@ public class CallComponentController extends BaseController {
         ResponseEntity<String> responseEntity = null;
         String componentCode = "api";
         String componentMethod = "callApi";
+        long startTime = DateUtil.getCurrentDate().getTime();
         try {
             Assert.hasLength(api, "参数错误，未传入api编码");
 
@@ -98,6 +115,8 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("api调用返回信息为{}", responseEntity);
+            logger.debug(componentCode + "::" + componentCode + "back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
+
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 return responseEntity;
             }
@@ -106,8 +125,8 @@ public class CallComponentController extends BaseController {
             if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
                 return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
             }
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     /**
@@ -124,6 +143,9 @@ public class CallComponentController extends BaseController {
             //@RequestBody String info,
             HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
+        long startTime = DateUtil.getCurrentDate().getTime();
+        logger.debug(componentCode + "::" + componentMethod + "调用back开始：" + (startTime));
+
         try {
             Assert.hasLength(componentCode, "参数错误，未传入组件编码");
             Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
@@ -164,6 +186,7 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
+            logger.debug(componentCode + "::" + componentMethod + "调用back耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 return responseEntity;
             }
@@ -172,8 +195,8 @@ public class CallComponentController extends BaseController {
             if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
                 return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
             }
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     //组件上传文件处理/callComponent/upload/
@@ -243,8 +266,8 @@ public class CallComponentController extends BaseController {
             if (!StringUtil.isEmpty(version) && VERSION_2.equals(version)) {
                 return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, responseEntity.getBody());
             }
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     /**
@@ -297,8 +320,8 @@ public class CallComponentController extends BaseController {
             responseEntity = new ResponseEntity<Object>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
-            return responseEntity;
         }
+        return responseEntity;
     }
 
     /**

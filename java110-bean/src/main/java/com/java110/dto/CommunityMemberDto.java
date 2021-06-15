@@ -9,6 +9,11 @@ import java.io.Serializable;
  */
 public class CommunityMemberDto extends CommunityDto implements Serializable {
 
+
+    public static final String AUDIT_STATUS_NORMAL = "1100"; // 审核通过
+
+    public static final String MEMBER_TYPE_PROPERTY = "390001200002";
+
     private String communityMemberId;
 
     private String communityId;

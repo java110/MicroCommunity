@@ -19,8 +19,10 @@ public class OrgStaffRelDto extends PageDto implements Serializable {
     private String storeId;
     private String orgId;
     private String staffId;
+    private String staffName;
     private String[] staffIds;
     private String relCd;
+    private String relCdName;
     private String departmentId;
     private String departmentName;
     private String companyId;
@@ -136,5 +138,21 @@ public class OrgStaffRelDto extends PageDto implements Serializable {
 
     public void setParentOrgId(String parentOrgId) {
         this.parentOrgId = parentOrgId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getRelCdName() {
+        return relCdName;
+    }
+
+    public void setRelCdName(String relCdName) {
+        this.relCdName = relCdName;
     }
 }

@@ -6,15 +6,21 @@ import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.dto.RoomDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.entity.center.AppService;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.entity.center.AppService;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +29,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +44,7 @@ import java.util.List;
  **/
 @Java110Listener("saveRoomCreateFeeListener")
 public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
+
     private static Logger logger = LoggerFactory.getLogger(SaveRoomCreateFeeListener.class);
 
     @Autowired
@@ -47,6 +57,9 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -65,7 +78,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "未包含收费范围");
         Assert.hasKeyAndValue(reqJson, "locationObjId", "未包含收费对象");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
-//        Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
+        //Assert.hasKeyAndValue(reqJson, "startTime", "未包含收费其实时间");
+        //Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
     }
 
@@ -80,22 +94,46 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         Assert.listOnlyOne(feeConfigDtos, "当前费用项ID不存在或存在多条" + reqJson.getString("configId"));
         reqJson.put("feeTypeCd", feeConfigDtos.get(0).getFeeTypeCd());
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
+        reqJson.put("configEndTime", feeConfigDtos.get(0).getEndTime());
+
+        if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
+            Date endTime = null;
+            Date configEndTime = null;
+            try {
+                endTime = DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
+                configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
+                if (endTime.getTime() > configEndTime.getTime()) {
+                    throw new IllegalArgumentException("结束时间不能超过费用项时间");
+                }
+            } catch (ParseException e) {
+                throw new IllegalArgumentException("结束时间错误" + reqJson.getString("endTime"));
+            }
+        }
         //判断收费范围
         RoomDto roomDto = new RoomDto();
-        if (reqJson.containsKey("roomState") && "2001".equals(reqJson.getString("roomState"))) {
-            roomDto.setState("2001");
+        /*if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
+            roomDto.setState(RoomDto.STATE_SELL);
+        }*/
+        if (reqJson.containsKey("roomState") && reqJson.getString("roomState").contains(",")) {
+            String states = reqJson.getString("roomState");
+            roomDto.setStates(states.split(","));
+        }
+        //如果区分了 房屋类型则设置
+        if (reqJson.containsKey("roomType")) {
+            roomDto.setRoomType(reqJson.getString("roomType"));
+        }
+        if (reqJson.containsKey("feeLayer") && !"全部".equals(reqJson.getString("feeLayer"))) {
+            String[] layers = reqJson.getString("feeLayer").split("#");
+            roomDto.setLayers(layers);
         }
         if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
-
             roomDto.setCommunityId(reqJson.getString("communityId"));
             roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
         } else if ("4000".equals(reqJson.getString("locationTypeCd"))) {//楼栋
             //RoomDto roomDto = new RoomDto();
             roomDto.setCommunityId(reqJson.getString("communityId"));
             roomDto.setFloorId(reqJson.getString("locationObjId"));
             roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
         } else if ("2000".equals(reqJson.getString("locationTypeCd"))) {//单元
             //RoomDto roomDto = new RoomDto();
             roomDto.setCommunityId(reqJson.getString("communityId"));
@@ -109,19 +147,32 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         } else {
             throw new IllegalArgumentException("收费范围错误");
         }
-
         if (roomDtos == null || roomDtos.size() < 1) {
             throw new IllegalArgumentException("未查到需要付费的房屋");
         }
-
         dealRoomFee(roomDtos, context, reqJson, event);
     }
 
     private void dealRoomFee(List<RoomDto> roomDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) {
-
         AppService service = event.getAppService();
-
-
+        List<String> roomIds = new ArrayList<>();
+        for (RoomDto roomDto : roomDtos) {
+            roomIds.add(roomDto.getRoomId());
+        }
+        //房屋刷入业主信息
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(roomDtos.get(0).getCommunityId());
+        ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
+        for (RoomDto roomDto : roomDtos) {
+            for (OwnerDto tmpOwnerDto : ownerDtos) {
+                if (roomDto.getRoomId().equals(tmpOwnerDto.getRoomId())) {
+                    roomDto.setOwnerId(tmpOwnerDto.getOwnerId());
+                    roomDto.setOwnerName(tmpOwnerDto.getName());
+                    roomDto.setLink(tmpOwnerDto.getLink());
+                }
+            }
+        }
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
@@ -129,40 +180,42 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = null;
         int failRooms = 0;
         //添加单元信息
+        int curFailRoomCount = 0;
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
-
+            curFailRoomCount++;
             businesses.add(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context));
-
-            if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
-
-                responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-                if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                    failRooms += businesses.size();
+            if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
+                if (FeeDto.FEE_FLAG_ONCE.equals(reqJson.getString("feeFlag"))) {
+                    businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                            reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
                 }
-
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
+            }
+            if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
+                responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
+                if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                    failRooms += curFailRoomCount;
+                } else {
+                    curFailRoomCount = 0;
+                }
                 businesses = new JSONArray();
             }
         }
         if (businesses != null && businesses.size() > 0) {
-
             responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 failRooms += businesses.size();
             }
         }
-
         JSONObject paramOut = new JSONObject();
         paramOut.put("totalRoom", roomDtos.size());
         paramOut.put("successRoom", roomDtos.size() - failRooms);
         paramOut.put("errorRoom", failRooms);
-
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
     }
-
-
 
     @Override
     public int getOrder() {

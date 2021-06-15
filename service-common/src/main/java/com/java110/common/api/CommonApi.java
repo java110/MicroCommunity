@@ -66,8 +66,8 @@ public class CommonApi extends BaseController {
                     null);
         } finally {
             logger.debug("common服务请求报文：" + orderInfo + " 返回报文：" + responseJson.toJSONString());
-            return responseJson.toJSONString();
         }
+        return responseJson.toJSONString();
     }
 
     /**

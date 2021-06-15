@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contractCollectionPlanServiceDaoImpl">
+
+
+    <!-- 保存合同收款计划信息 add by wuxw 2018-07-03 -->
+    <insert id="saveContractCollectionPlanInfo" parameterType="Map">
+        insert into contract_collection_plan(
+        contract_id,fee_name,plan_name,plan_id,remark,store_id,fee_id
+        ) values (
+        #{contractId},#{feeName},#{planName},#{planId},#{remark},#{storeId},#{feeId}
+        )
+    </insert>
+
+
+    <!-- 查询合同收款计划信息 add by wuxw 2018-07-03 -->
+    <select id="getContractCollectionPlanInfo" parameterType="Map" resultType="Map">
+        select t.contract_id,t.contract_id contractId,t.fee_name,t.fee_name feeName,t.plan_name,t.plan_name
+        planName,t.plan_id,t.plan_id planId,t.remark,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
+        storeId,t.fee_id,t.fee_id feeId
+        from contract_collection_plan t
+        where 1 =1
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="planName !=null and planName != ''">
+            and t.plan_name= #{planName}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改合同收款计划信息 add by wuxw 2018-07-03 -->
+    <update id="updateContractCollectionPlanInfo" parameterType="Map">
+        update contract_collection_plan t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            , t.contract_id= #{contractId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="planName !=null and planName != ''">
+            , t.plan_name= #{planName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        where 1=1
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+
+    </update>
+
+    <!-- 查询合同收款计划数量 add by wuxw 2018-07-03 -->
+    <select id="queryContractCollectionPlansCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_collection_plan t
+        where 1 =1
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="planName !=null and planName != ''">
+            and t.plan_name= #{planName}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+
+
+    </select>
+
+</mapper>

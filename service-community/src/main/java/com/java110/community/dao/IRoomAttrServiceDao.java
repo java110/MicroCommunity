@@ -73,4 +73,5 @@ public interface IRoomAttrServiceDao {
      */
     int queryRoomAttrsCount(Map info);
 
+    int saveRoomAttr(Map beanCovertMap);
 }

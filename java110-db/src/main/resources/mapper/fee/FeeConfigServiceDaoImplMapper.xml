@@ -8,13 +8,13 @@
     <insert id="saveBusinessFeeConfigInfo" parameterType="Map">
         insert into business_pay_fee_config(
         fee_type_cd,computing_formula,additional_amount,square_price,is_default,operate,config_id,fee_flag,fee_name,
-        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text
         ) values (
         #{feeTypeCd},#{computingFormula},#{additionalAmount},#{squarePrice},#{isDefault},#{operate},#{configId},
-        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},#{bId},#{billType},#{paymentCd},#{paymentCycle}
+        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},#{bId},#{billType},#{paymentCd},#{paymentCycle},
+        #{computingFormulaText}
         )
     </insert>
-
 
     <!-- 查询费用配置信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessFeeConfigInfo" parameterType="Map" resultType="Map">
@@ -23,7 +23,7 @@
         squarePrice,t.is_default,t.is_default isDefault,t.operate,t.config_id,t.config_id configId,t.fee_flag,t.fee_flag
         feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.bill_type,t.bill_type billType,
-        t.payment_cd,t.payment_cycle
+        t.payment_cd,t.payment_cycle,t.computing_formula_text,t.computing_formula_text computingFormulaText
         from business_pay_fee_config t
         where 1 =1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
@@ -51,7 +51,7 @@
             and t.fee_flag= #{feeFlag}
         </if>
         <if test="feeName !=null and feeName != ''">
-            and t.fee_name= #{feeName}
+            and t.fee_name like '%${feeName}%'
         </if>
         <if test="billType !=null and billType != ''">
             and t.bill_type= #{billType}
@@ -68,19 +68,17 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </select>
-
 
     <!-- 保存费用配置信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFeeConfigInfoInstance" parameterType="Map">
         insert into pay_fee_config(
         fee_type_cd,computing_formula,additional_amount,status_cd,square_price,is_default,config_id,fee_flag,fee_name,
-        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text
         ) select
         t.fee_type_cd,t.computing_formula,t.additional_amount,'0',t.square_price,t.is_default,t.config_id,t.fee_flag,t.fee_name,
         t.start_time,t.end_time,t.community_id,
-        t.b_id,t.bill_type,t.payment_cd,t.payment_cycle
+        t.b_id,t.bill_type,t.payment_cd,t.payment_cycle,t.computing_formula_text
         from business_pay_fee_config t where 1=1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
@@ -122,9 +120,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </insert>
-
 
     <!-- 查询费用配置信息 add by wuxw 2018-07-03 -->
     <select id="getFeeConfigInfo" parameterType="Map" resultType="Map">
@@ -134,7 +130,8 @@
         configId,t.fee_flag,t.fee_flag feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
         td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName,
-        t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle
+        t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle,
+        t.computing_formula_text,t.computing_formula_text computingFormulaText
         from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.fee_type_cd = td1.status_cd
@@ -171,7 +168,7 @@
             and t.fee_flag= #{feeFlag}
         </if>
         <if test="feeName !=null and feeName != ''">
-            and t.fee_name= #{feeName}
+            and t.fee_name like '%${feeName}%'
         </if>
         <if test="startTime !=null ">
             and t.start_time= #{startTime}
@@ -205,9 +202,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改费用配置信息 add by wuxw 2018-07-03 -->
     <update id="updateFeeConfigInfoInstance" parameterType="Map">
@@ -220,6 +215,9 @@
         </if>
         <if test="computingFormula !=null and computingFormula != ''">
             , t.computing_formula= #{computingFormula}
+        </if>
+        <if test="computingFormulaText !=null and computingFormulaText != ''">
+            , t.computing_formula_text= #{computingFormulaText}
         </if>
         <if test="additionalAmount !=null and additionalAmount != '' or additionalAmount == 0">
             , t.additional_amount= #{additionalAmount}
@@ -261,7 +259,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询费用配置数量 add by wuxw 2018-07-03 -->
@@ -303,7 +300,7 @@
             and t.fee_flag= #{feeFlag}
         </if>
         <if test="feeName !=null and feeName != ''">
-            and t.fee_name= #{feeName}
+            and t.fee_name like '%${feeName}%'
         </if>
         <if test="startTime !=null ">
             and t.start_time= #{startTime}
@@ -329,22 +326,16 @@
         <if test="billType !=null and billType != ''">
             and t.bill_type= #{billType}
         </if>
-
-
     </select>
-
-
-
 
     <!-- 保存费用配置信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeConfig" parameterType="Map">
         insert into pay_fee_config(
         fee_type_cd,computing_formula,additional_amount,status_cd,square_price,is_default,config_id,fee_flag,fee_name,
-        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text
         ) values (
         #{feeTypeCd},#{computingFormula},#{additionalAmount},'0',#{squarePrice},#{isDefault},#{configId},
-        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},'-1',#{billType},#{paymentCd},#{paymentCycle}
+        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},'-1',#{billType},#{paymentCd},#{paymentCycle},#{computingFormulaText}
         )
     </insert>
-
 </mapper>

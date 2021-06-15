@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="activitiesBeautifulStaffServiceDaoImpl">
+
+    <!-- 保存活动规则信息 add by wuxw 2018-07-03 -->
+    <insert id="saveActivitiesBeautifulStaffInfo" parameterType="Map">
+        insert into activities_beautiful_staff(
+        be_id,work_content,activities_num,poll,rule_id,store_id,staff_id
+        ) values (
+        #{beId},#{workContent},#{activitiesNum},#{poll},#{ruleId},#{storeId},#{staffId}
+        )
+    </insert>
+
+    <!-- 查询活动规则信息 add by wuxw 2018-07-03 -->
+    <select id="getActivitiesBeautifulStaffInfo" parameterType="Map" resultType="Map">
+        select t.be_id,t.be_id beId,t.work_content,t.work_content workContent,t.activities_num,t.activities_num
+        activitiesNum,t.status_cd,t.status_cd statusCd,t.poll,t.rule_id,t.rule_id ruleId,t.store_id,t.store_id
+        storeId,t.staff_id,t.staff_id staffId,uu.name staffName,ar.rule_name ruleName,t.create_time createTime
+        from activities_beautiful_staff t
+        left join u_user uu on t.staff_id = uu.user_id and uu.status_cd = '0'
+        left join activities_rule ar on t.rule_id = ar.rule_id and ar.status_cd = '0' and ar.obj_type = '3307' and
+        ar.obj_id = t.store_id
+        where 1 =1
+        <if test="beId !=null and beId != ''">
+            and t.be_id= #{beId}
+        </if>
+        <if test="workContent !=null and workContent != ''">
+            and t.work_content= #{workContent}
+        </if>
+        <if test="activitiesNum !=null and activitiesNum != ''">
+            and t.activities_num= #{activitiesNum}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="poll !=null and poll != ''">
+            and t.poll= #{poll}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 修改活动规则信息 add by wuxw 2018-07-03 -->
+    <update id="updateActivitiesBeautifulStaffInfo" parameterType="Map">
+        update activities_beautiful_staff t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="workContent !=null and workContent != ''">
+            , t.work_content= #{workContent}
+        </if>
+        <if test="activitiesNum !=null and activitiesNum != ''">
+            , t.activities_num= #{activitiesNum}
+        </if>
+        <if test="poll !=null and poll != ''">
+            , t.poll= #{poll}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="beId !=null and beId != ''">
+            and t.be_id= #{beId}
+        </if>
+    </update>
+
+    <!-- 查询活动规则数量 add by wuxw 2018-07-03 -->
+    <select id="queryActivitiesBeautifulStaffsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from activities_beautiful_staff t
+        where 1 =1
+        <if test="beId !=null and beId != ''">
+            and t.be_id= #{beId}
+        </if>
+        <if test="workContent !=null and workContent != ''">
+            and t.work_content= #{workContent}
+        </if>
+        <if test="activitiesNum !=null and activitiesNum != ''">
+            and t.activities_num= #{activitiesNum}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="poll !=null and poll != ''">
+            and t.poll= #{poll}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+    </select>
+</mapper>

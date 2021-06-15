@@ -11,6 +11,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.room.RoomPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -70,20 +71,30 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         attrParamInfo.put("roomIds", roomIds);
         attrParamInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<RoomAttrDto> roomAttrDtos = BeanConvertUtil.covertBeanList(roomAttrServiceDaoImpl.getRoomAttrInfo(attrParamInfo), RoomAttrDto.class);
-
-        String[] userIds = getUserIds(rooms);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+        List<UserDto> users = null;
+        if (rooms.size() < 2) {
+            String[] userIds = getUserIds(rooms);
+            //根据 userId 查询用户信息
+            users = userInnerServiceSMOImpl.getUserInfo(userIds);
+        } else {
+            users = new ArrayList<>();
+        }
 
         for (RoomDto room : rooms) {
             try {
-                room.setApartmentName(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 5).toString()));
+                room.setApartmentName(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 4).toString()));
             } catch (Exception e) {
                 logger.error("设置房屋户型失败", e);
             }
             refreshRoom(room, users, roomAttrDtos);
         }
         return rooms;
+    }
+
+    @Override
+    public int updateRooms(@RequestBody RoomPo roomPo) {
+        roomServiceDaoImpl.updateRoomInfoInstance(BeanConvertUtil.beanCovertMap(roomPo));
+        return 1;
     }
 
     /**
@@ -280,12 +291,24 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
     @Override
     public List<ImportRoomFee> freshRoomIds(@RequestBody List<ImportRoomFee> importRoomFees) {
         for (ImportRoomFee importRoomFee : importRoomFees) {
-            List<Map> infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
+            List<Map> infos = null;
+            if (!StringUtil.isEmpty(importRoomFee.getRoomId()) && !importRoomFee.getRoomId().startsWith("-")) {
+                Map paramIn = new HashMap();
+                paramIn.put("communityId", importRoomFee.getCommunityId());
+                paramIn.put("roomId", importRoomFee.getRoomId());
+                infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
+            } else {
+                infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
+            }
 
             if (infos == null || infos.size() < 1) {
                 continue;
             }
             importRoomFee.setRoomId(infos.get(0).get("roomId").toString());
+            importRoomFee.setFloorNum(infos.get(0).get("floorNum").toString());
+            importRoomFee.setUnitNum(infos.get(0).get("unitNum").toString());
+            importRoomFee.setRoomNum(infos.get(0).get("roomNum").toString());
+
         }
         return importRoomFees;
     }

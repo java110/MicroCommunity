@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productCategoryServiceDaoImpl">
+
+
+    <!-- 保存产品目录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveProductCategoryInfo" parameterType="Map">
+        insert into product_category(
+        category_level,parent_category_id,store_id,category_name,category_id,seq,is_show
+        ) values (
+        #{categoryLevel},#{parentCategoryId},#{storeId},#{categoryName},#{categoryId},#{seq},#{isShow}
+        )
+    </insert>
+
+
+    <!-- 查询产品目录信息 add by wuxw 2018-07-03 -->
+    <select id="getProductCategoryInfo" parameterType="Map" resultType="Map">
+        select t.category_level,t.category_level categoryLevel,t.parent_category_id,t.parent_category_id parentCategoryId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
+        storeId,t.category_name,t.category_name categoryName,t.category_id,t.category_id categoryId,t.seq,t.is_show,t.is_show isShow
+        from product_category t
+        where 1 =1
+        <if test="categoryLevel !=null and categoryLevel != ''">
+            and t.category_level= #{categoryLevel}
+        </if>
+        <if test="parentCategoryId !=null and parentCategoryId != ''">
+            and t.parent_category_id= #{parentCategoryId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="categoryName !=null and categoryName != ''">
+            and t.category_name= #{categoryName}
+        </if>
+        <if test="categoryId !=null and categoryId != ''">
+            and t.category_id= #{categoryId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改产品目录信息 add by wuxw 2018-07-03 -->
+    <update id="updateProductCategoryInfo" parameterType="Map">
+        update product_category t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="categoryLevel !=null and categoryLevel != ''">
+            , t.category_level= #{categoryLevel}
+        </if>
+        <if test="parentCategoryId !=null and parentCategoryId != ''">
+            , t.parent_category_id= #{parentCategoryId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="categoryName !=null and categoryName != ''">
+            , t.category_name= #{categoryName}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            , t.is_show= #{isShow}
+        </if>
+        where 1=1
+        <if test="categoryId !=null and categoryId != ''">
+            and t.category_id= #{categoryId}
+        </if>
+
+    </update>
+
+    <!-- 查询产品目录数量 add by wuxw 2018-07-03 -->
+    <select id="queryProductCategorysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from product_category t
+        where 1 =1
+        <if test="categoryLevel !=null and categoryLevel != ''">
+            and t.category_level= #{categoryLevel}
+        </if>
+        <if test="parentCategoryId !=null and parentCategoryId != ''">
+            and t.parent_category_id= #{parentCategoryId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="categoryName !=null and categoryName != ''">
+            and t.category_name= #{categoryName}
+        </if>
+        <if test="categoryId !=null and categoryId != ''">
+            and t.category_id= #{categoryId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+
+
+    </select>
+
+</mapper>

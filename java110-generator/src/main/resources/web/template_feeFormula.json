@@ -1,0 +1,43 @@
+{
+  "templateName":"公摊公式",
+  "directories": "property",
+  "templateCode":"feeFormula",
+  "templateKey":"formulaId",
+  "templateKeyName":"公式ID",
+  "searchCode": "formulaId",
+  "searchName": "公式ID",
+  "conditions": [
+    {
+      "name": "公式ID",
+      "inputType": "input",
+      "code": "formulaId",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code": "formulaValue",
+      "cnCode":"公式",
+      "desc":"必填，请填写公式",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"公式太复杂",
+      "show": true
+    },
+    {
+      "code": "formulaDesc",
+      "cnCode":"描述",
+      "desc":"选填，请填写本期度数",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"描述太长",
+      "show": true
+    }
+  ]
+}

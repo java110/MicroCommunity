@@ -1,7 +1,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.attrValue.AttrValueDto;
+import com.java110.dto.attrSpec.AttrValueDto;
 import com.java110.po.attrValue.AttrValuePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

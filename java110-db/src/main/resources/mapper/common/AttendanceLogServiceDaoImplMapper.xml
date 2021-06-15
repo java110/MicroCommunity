@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attendanceLogServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存考勤日志信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAttendanceLogInfo" parameterType="Map">
+        insert into attendance_log(
+department_name,department_id,staff_name,log_id,store_id,staff_id,clock_time
+) values (
+#{departmentName},#{departmentId},#{staffName},#{logId},#{storeId},#{staffId},#{clockTime}
+)
+    </insert>
+
+
+
+    <!-- 查询考勤日志信息 add by wuxw 2018-07-03 -->
+    <select id="getAttendanceLogInfo" parameterType="Map" resultType="Map">
+        select  t.department_name,t.department_name departmentName,t.department_id,t.department_id departmentId,t.staff_name,t.staff_name staffName,t.log_id,t.log_id logId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.staff_id,t.staff_id staffId,t.clock_time,t.clock_time clockTime 
+from attendance_log t 
+where 1 =1 
+<if test="departmentName !=null and departmentName != ''">
+   and t.department_name= #{departmentName}
+</if> 
+<if test="departmentId !=null and departmentId != ''">
+   and t.department_id= #{departmentId}
+</if> 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="logId !=null and logId != ''">
+   and t.log_id= #{logId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+<if test="clockTime !=null and clockTime != ''">
+   and t.clock_time= #{clockTime}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改考勤日志信息 add by wuxw 2018-07-03 -->
+    <update id="updateAttendanceLogInfo" parameterType="Map">
+        update  attendance_log t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="departmentName !=null and departmentName != ''">
+, t.department_name= #{departmentName}
+</if> 
+<if test="departmentId !=null and departmentId != ''">
+, t.department_id= #{departmentId}
+</if> 
+<if test="staffName !=null and staffName != ''">
+, t.staff_name= #{staffName}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+, t.staff_id= #{staffId}
+</if> 
+<if test="clockTime !=null and clockTime != ''">
+, t.clock_time= #{clockTime}
+</if> 
+ where 1=1 <if test="logId !=null and logId != ''">
+and t.log_id= #{logId}
+</if> 
+
+    </update>
+
+    <!-- 查询考勤日志数量 add by wuxw 2018-07-03 -->
+     <select id="queryAttendanceLogsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from attendance_log t 
+where 1 =1 
+<if test="departmentName !=null and departmentName != ''">
+   and t.department_name= #{departmentName}
+</if> 
+<if test="departmentId !=null and departmentId != ''">
+   and t.department_id= #{departmentId}
+</if> 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="logId !=null and logId != ''">
+   and t.log_id= #{logId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+<if test="clockTime !=null and clockTime != ''">
+   and t.clock_time= #{clockTime}
+</if> 
+
+
+     </select>
+
+</mapper>

@@ -1,0 +1,42 @@
+{
+  "autoMove": true,
+  "id": "appointmentId",
+  "name": "rentingAppointment",
+  "desc": "租赁预约",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "user",
+  "tableName": "renting_appointment",
+  "param": {
+    "appointmentId": "appointment_id",
+    "tenantName": "tenant_name",
+    "tenantSex": "tenant_sex",
+    "tenantTel": "tenant_tel",
+    "appointmentTime": "appointment_time",
+    "appointmentRoomId": "appointment_room_id",
+    "roomId": "room_id",
+    "storeId": "store_id",
+    "state": "state",
+    "msg": "msg",
+    "remark": "remark",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "tenantName",
+      "msg": "租客名称不能为空"
+    },
+    {
+      "code": "tenantSex",
+      "msg": "租客性别不能为空"
+    },
+    {
+      "code": "tenantTel",
+      "msg": "租客电话不能为空"
+    },
+    {
+      "code": "appointmentTime",
+      "msg": "预约时间不能为空"
+    }
+  ]
+}

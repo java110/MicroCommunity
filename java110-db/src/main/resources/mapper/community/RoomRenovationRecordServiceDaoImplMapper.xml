@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="roomRenovationRecordServiceDaoImpl">
+
+    <!-- 保存装修记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveRoomRenovationRecordInfo" parameterType="Map">
+        insert into room_renovation_record(record_id,r_id,staff_id,staff_name,state,remark,create_time) values (#{recordId},#{rId},#{staffId},#{staffName},#{state},#{remark},#{createTime})
+    </insert>
+
+    <!-- 查询装修记录信息(与文件表关联) -->
+    <select id="getRoomRenovationRecordsInfo" parameterType="Map" resultType="Map">
+        SELECT
+        re.record_id recordId,
+        re.r_id rId,
+        re.staff_id staffId,
+        re.staff_name staffName,
+        re.remark,
+        re.state,
+        td. NAME stateName,
+        re.create_time createTime,
+        r.room_id roomId,
+        r.room_name roomName,
+        fr.file_real_name fileRealName,
+        fr.file_save_name fileSaveName,
+        fr.rel_type_cd relTypeCd
+        FROM
+        room_renovation_record re
+        LEFT JOIN room_renovation r ON re.r_id = r.r_id
+        AND r.status_cd = '0'
+        LEFT JOIN t_dict td ON td.table_name = 'room_renovation_record'
+        AND td.table_columns = 'state'
+        AND re.state = td.status_cd
+        LEFT JOIN file_rel fr ON re.record_id = fr.obj_id
+        AND fr.status_cd = "0"
+        WHERE 1 = 1
+        <if test="recordId !=null and recordId != ''">
+            and re.record_id= #{recordId}
+        </if>
+        <if test="rId !=null and rId != ''">
+            and re.r_id= #{rId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and re.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and re.staff_name like '%{staffName}%'
+        </if>
+        <if test="remark !=null and remark != ''">
+            and re.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and re.state= #{state}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and r.room_id = #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and r.room_name= #{roomName}
+        </if>
+        <if test="statusCd != null and statusCd != ''">
+            and re.status_cd = #{statusCd}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and re.create_time= #{createTime}
+        </if>
+        order by re.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询装修记录数量(与文件表关联) -->
+    <select id="queryRoomRenovationRecordsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from room_renovation_record re
+        LEFT JOIN room_renovation r ON re.r_id = r.r_id
+        AND r.status_cd = '0'
+        LEFT JOIN file_rel fr ON re.record_id = fr.obj_id
+        AND fr.status_cd = '0'
+        where 1 = 1
+        <if test="recordId !=null and recordId != ''">
+            and re.record_id= #{recordId}
+        </if>
+        <if test="rId !=null and rId != ''">
+            and re.r_id= #{rId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and re.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and re.staff_name like '%{staffName}%'
+        </if>
+        <if test="remark !=null and remark != ''">
+            and re.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and re.state= #{state}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and r.room_id = #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and r.room_name= #{roomName}
+        </if>
+        <if test="statusCd != null and statusCd != ''">
+            and re.status_cd = #{statusCd}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and re.create_time= #{createTime}
+        </if>
+    </select>
+
+    <!-- 查询装修记录信息 -->
+    <select id="getRoomRenovationRecords" parameterType="Map" resultType="Map">
+        SELECT
+        re.record_id recordId,
+        re.r_id rId,
+        re.staff_id staffId,
+        re.staff_name staffName,
+        re.remark,
+        re.state,
+        td. NAME stateName,
+        re.create_time createTime,
+        r.room_id roomId,
+        r.room_name roomName
+        FROM
+        room_renovation_record re
+        LEFT JOIN room_renovation r ON re.r_id = r.r_id
+        AND r.status_cd = '0'
+        LEFT JOIN t_dict td ON td.table_name = 'room_renovation_record'
+        AND td.table_columns = 'state'
+        AND re.state = td.status_cd
+        WHERE 1 = 1
+        <if test="recordId !=null and recordId != ''">
+            and re.record_id= #{recordId}
+        </if>
+        <if test="rId !=null and rId != ''">
+            and re.r_id= #{rId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and re.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and re.staff_name like '%{staffName}%'
+        </if>
+        <if test="remark !=null and remark != ''">
+            and re.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and re.state= #{state}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and r.room_id = #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and r.room_name= #{roomName}
+        </if>
+        <if test="statusCd != null and statusCd != ''">
+            and re.status_cd = #{statusCd}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and re.create_time= #{createTime}
+        </if>
+        order by re.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询装修记录数量 -->
+    <select id="getRoomRenovationRecordsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from room_renovation_record re
+        LEFT JOIN room_renovation r ON re.r_id = r.r_id
+        AND r.status_cd = '0'
+        where 1 = 1
+        <if test="recordId !=null and recordId != ''">
+            and re.record_id= #{recordId}
+        </if>
+        <if test="rId !=null and rId != ''">
+            and re.r_id= #{rId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and re.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and re.staff_name like '%{staffName}%'
+        </if>
+        <if test="remark !=null and remark != ''">
+            and re.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and re.state= #{state}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and r.room_id = #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and r.room_name= #{roomName}
+        </if>
+        <if test="statusCd != null and statusCd != ''">
+            and re.status_cd = #{statusCd}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and re.create_time= #{createTime}
+        </if>
+    </select>
+
+    <!-- 修改装修记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateRoomRenovationRecordInfo" parameterType="Map">
+        update room_renovation_record r set r.status_cd = #{statusCd}
+        where 1=1
+        <if test="recordId !=null and recordId != ''">
+            and r.record_id= #{recordId}
+        </if>
+    </update>
+
+</mapper>

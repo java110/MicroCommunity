@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Hello world!
  */
-public class    BackCoderGeneratorStart extends BaseGenerator {
+public class BackCoderGeneratorStart extends BaseGenerator {
 
 
     protected BackCoderGeneratorStart() {

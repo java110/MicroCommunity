@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="parkingSpaceAttrServiceDaoImpl">
+
+    <!-- 保存车位属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessParkingSpaceAttrInfo" parameterType="Map">
+        insert into business_parking_space_attr(
+        attr_id,operate,create_time,ps_id,spec_cd,community_id,b_id,value
+        ) values (
+        #{attrId},#{operate},#{createTime},#{psId},#{specCd},#{communityId},#{bId},#{value}
+        )
+    </insert>
+
+
+
+    <insert id="saveParkingSpaceAttr" parameterType="Map">
+        insert into parking_space_attr(
+        attr_id,ps_id,spec_cd,community_id,b_id,value
+        ) values (
+        #{attrId},#{psId},#{specCd},#{communityId},'-1',#{value}
+        )
+    </insert>
+
+
+    <!-- 查询车位属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessParkingSpaceAttrInfo" parameterType="Map" resultType="Map">
+        select t.attr_id,t.attr_id attrId,t.operate,t.create_time,t.create_time createTime,t.ps_id,t.ps_id
+        psId,t.spec_cd,t.spec_cd specCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.value
+        from business_parking_space_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+    </select>
+
+
+    <!-- 保存车位属性信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingSpaceAttrInfoInstance" parameterType="Map">
+        insert into parking_space_attr(
+        attr_id,create_time,ps_id,spec_cd,status_cd,community_id,b_id,value
+        ) select t.attr_id,t.create_time,t.ps_id,t.spec_cd,'0',t.community_id,t.b_id,t.value from
+        business_parking_space_attr t where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询车位属性信息 add by wuxw 2018-07-03 -->
+    <select id="getParkingSpaceAttrInfo" parameterType="Map" resultType="Map">
+        select t.attr_id,t.attr_id attrId,t.create_time,t.create_time createTime,t.ps_id,t.ps_id
+        psId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId,t.value
+        from parking_space_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改车位属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateParkingSpaceAttrInfoInstance" parameterType="Map">
+        update parking_space_attr t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="psId !=null and psId != ''">
+            , t.ps_id= #{psId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询车位属性数量 add by wuxw 2018-07-03 -->
+    <select id="queryParkingSpaceAttrsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from parking_space_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -64,9 +64,9 @@ public class DeleteFeeListener extends AbstractServiceApiPlusListener {
 
         Assert.listOnlyOne(feeDtos, "未查询到费用信息 或查询到多条" + reqJson);
 
-        if ("T".equals(feeDtos.get(0).getIsDefault())) {
-            throw new IllegalArgumentException("当前费用为默认费用不能做删除");
-        }
+//        if ("T".equals(feeDtos.get(0).getIsDefault())) {
+//            throw new IllegalArgumentException("当前费用为默认费用不能做删除");
+//        }
 
     }
 

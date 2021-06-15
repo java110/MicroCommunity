@@ -20,6 +20,7 @@ public class ActivitiesDto extends PageDto implements Serializable {
     private String title;
     private String readCount;
     private String userName;
+    private String staffName;
     private String userId;
     private String activitiesId;
     private String typeCd;
@@ -31,6 +32,13 @@ public class ActivitiesDto extends PageDto implements Serializable {
     private String headerImg;
     private String state;
 
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
 
     private Date createTime;
 

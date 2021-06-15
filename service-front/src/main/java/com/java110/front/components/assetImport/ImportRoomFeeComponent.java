@@ -2,7 +2,6 @@ package com.java110.front.components.assetImport;
 
 import com.java110.core.context.IPageData;
 import com.java110.front.controller.CallComponentController;
-import com.java110.front.smo.assetExport.IAssetExportSMO;
 import com.java110.front.smo.assetExport.IExportRoomSMO;
 import com.java110.front.smo.assetImport.IImportRoomFeeSMO;
 import org.slf4j.Logger;
@@ -36,6 +35,28 @@ public class ImportRoomFeeComponent {
     public ResponseEntity<String> importData(IPageData pd, MultipartFile uploadFile) throws Exception {
 
         return importRoomFeeSMOImpl.importExcelData(pd, uploadFile);
+    }
+
+    /**
+     * 上传附件
+     *
+     * @param uploadFile 附件数据
+     * @return ResponseEntity 对象
+     */
+    public ResponseEntity<String> uploadContactFile(IPageData pd, MultipartFile uploadFile) throws Exception {
+        return importRoomFeeSMOImpl.importFile(uploadFile);
+    }
+
+
+    /**
+     * 添加应用数据
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
+    public ResponseEntity<String> importTempData(IPageData pd) throws Exception {
+
+        return importRoomFeeSMOImpl.importTempData(pd);
     }
 
     /**

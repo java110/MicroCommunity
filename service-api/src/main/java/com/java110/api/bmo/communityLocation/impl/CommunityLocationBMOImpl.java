@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.communityLocation.ICommunityLocationBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
 import com.java110.po.community.CommunityLocationPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -26,7 +27,7 @@ public class CommunityLocationBMOImpl extends ApiBaseBMO implements ICommunityLo
      */
     public void addCommunityLocation(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        paramInJson.put("locationId", "-1");
+        paramInJson.put("locationId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_locationId));
         CommunityLocationPo communityLocationPo = BeanConvertUtil.covertBean(paramInJson, CommunityLocationPo.class);
         super.insert(dataFlowContext, communityLocationPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_LOCATION);
     }

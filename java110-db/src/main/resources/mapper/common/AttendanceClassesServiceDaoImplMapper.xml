@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attendanceClassesServiceDaoImpl">
+
+    <!-- 保存考勤班次信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAttendanceClassesInfo" parameterType="Map">
+        insert into business_attendance_classes(
+        time_offset,clock_count,classes_obj_type,store_id,clock_type,classes_obj_id,classes_name,classes_id,operate,
+        leave_offset,late_offset,b_id,clock_type_value,classes_obj_name
+        ) values (
+        #{timeOffset},#{clockCount},#{classesObjType},#{storeId},#{clockType},#{classesObjId},#{classesName},#{classesId},#{operate},
+        #{leaveOffset},#{lateOffset},#{bId},#{clockTypeValue},#{classesObjName}
+        )
+    </insert>
+
+
+    <!-- 查询考勤班次信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAttendanceClassesInfo" parameterType="Map" resultType="Map">
+        select t.time_offset,t.time_offset timeOffset,t.clock_count,t.clock_count
+        clockCount,t.classes_obj_type,t.classes_obj_type classesObjType,t.store_id,t.store_id
+        storeId,t.clock_type,t.clock_type clockType,t.classes_obj_id,t.classes_obj_id
+        classesObjId,t.classes_name,t.classes_name classesName,t.classes_id,t.classes_id
+        classesId,t.operate,t.leave_offset,t.leave_offset leaveOffset,t.late_offset,t.late_offset
+        lateOffset,t.b_id,t.b_id bId,t.clock_type_value,t.clock_type_value clockTypeValue,
+        t.classes_obj_name,t.classes_obj_name classesObjName
+        from business_attendance_classes t
+        where 1 =1
+        <if test="timeOffset !=null and timeOffset != ''">
+            and t.time_offset= #{timeOffset}
+        </if>
+        <if test="clockCount !=null and clockCount != ''">
+            and t.clock_count= #{clockCount}
+        </if>
+        <if test="classesObjType !=null and classesObjType != ''">
+            and t.classes_obj_type= #{classesObjType}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="clockType !=null and clockType != ''">
+            and t.clock_type= #{clockType}
+        </if>
+        <if test="classesObjId !=null and classesObjId != ''">
+            and t.classes_obj_id= #{classesObjId}
+        </if>
+        <if test="classesName !=null and classesName != ''">
+            and t.classes_name= #{classesName}
+        </if>
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="leaveOffset !=null and leaveOffset != ''">
+            and t.leave_offset= #{leaveOffset}
+        </if>
+        <if test="lateOffset !=null and lateOffset != ''">
+            and t.late_offset= #{lateOffset}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="clockTypeValue !=null and clockTypeValue != ''">
+            and t.clock_type_value= #{clockTypeValue}
+        </if>
+
+    </select>
+
+
+    <!-- 保存考勤班次信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveAttendanceClassesInfoInstance" parameterType="Map">
+        insert into attendance_classes(
+        time_offset,status_cd,clock_count,classes_obj_type,store_id,clock_type,classes_obj_id,classes_name,classes_id,
+        leave_offset,late_offset,b_id,clock_type_value,classes_obj_name
+        ) select
+        t.time_offset,'0',t.clock_count,t.classes_obj_type,t.store_id,t.clock_type,t.classes_obj_id,t.classes_name,t.classes_id,
+        t.leave_offset,t.late_offset,t.b_id,t.clock_type_value,t.classes_obj_name
+        from business_attendance_classes t where 1=1
+        <if test="timeOffset !=null and timeOffset != ''">
+            and t.time_offset= #{timeOffset}
+        </if>
+        <if test="clockCount !=null and clockCount != ''">
+            and t.clock_count= #{clockCount}
+        </if>
+        <if test="classesObjType !=null and classesObjType != ''">
+            and t.classes_obj_type= #{classesObjType}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="clockType !=null and clockType != ''">
+            and t.clock_type= #{clockType}
+        </if>
+        <if test="classesObjId !=null and classesObjId != ''">
+            and t.classes_obj_id= #{classesObjId}
+        </if>
+        <if test="classesName !=null and classesName != ''">
+            and t.classes_name= #{classesName}
+        </if>
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="leaveOffset !=null and leaveOffset != ''">
+            and t.leave_offset= #{leaveOffset}
+        </if>
+        <if test="lateOffset !=null and lateOffset != ''">
+            and t.late_offset= #{lateOffset}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="clockTypeValue !=null and clockTypeValue != ''">
+            and t.clock_type_value= #{clockTypeValue}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询考勤班次信息 add by wuxw 2018-07-03 -->
+    <select id="getAttendanceClassesInfo" parameterType="Map" resultType="Map">
+        select t.time_offset,t.time_offset timeOffset,t.status_cd,t.status_cd statusCd,t.clock_count,t.clock_count
+        clockCount,t.classes_obj_type,t.classes_obj_type classesObjType,t.store_id,t.store_id
+        storeId,t.clock_type,t.clock_type clockType,t.classes_obj_id,t.classes_obj_id
+        classesObjId,t.classes_name,t.classes_name classesName,t.classes_id,t.classes_id
+        classesId,t.leave_offset,t.leave_offset leaveOffset,t.late_offset,t.late_offset lateOffset,t.b_id,t.b_id
+        bId,t.clock_type_value,t.clock_type_value clockTypeValue,
+        t.classes_obj_name,t.classes_obj_name classesObjName
+        from attendance_classes t
+        where 1 =1
+        <if test="timeOffset !=null and timeOffset != ''">
+            and t.time_offset= #{timeOffset}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="clockCount !=null and clockCount != ''">
+            and t.clock_count= #{clockCount}
+        </if>
+        <if test="classesObjType !=null and classesObjType != ''">
+            and t.classes_obj_type= #{classesObjType}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="clockType !=null and clockType != ''">
+            and t.clock_type= #{clockType}
+        </if>
+        <if test="classesObjId !=null and classesObjId != ''">
+            and t.classes_obj_id= #{classesObjId}
+        </if>
+        <if test="classesName !=null and classesName != ''">
+            and t.classes_name= #{classesName}
+        </if>
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="leaveOffset !=null and leaveOffset != ''">
+            and t.leave_offset= #{leaveOffset}
+        </if>
+        <if test="lateOffset !=null and lateOffset != ''">
+            and t.late_offset= #{lateOffset}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="clockTypeValue !=null and clockTypeValue != ''">
+            and t.clock_type_value= #{clockTypeValue}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改考勤班次信息 add by wuxw 2018-07-03 -->
+    <update id="updateAttendanceClassesInfoInstance" parameterType="Map">
+        update attendance_classes t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="timeOffset !=null and timeOffset != ''">
+            , t.time_offset= #{timeOffset}
+        </if>
+        <if test="clockCount !=null and clockCount != ''">
+            , t.clock_count= #{clockCount}
+        </if>
+        <if test="classesObjType !=null and classesObjType != ''">
+            , t.classes_obj_type= #{classesObjType}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="clockType !=null and clockType != ''">
+            , t.clock_type= #{clockType}
+        </if>
+        <if test="classesObjId !=null and classesObjId != ''">
+            , t.classes_obj_id= #{classesObjId}
+        </if>
+        <if test="classesName !=null and classesName != ''">
+            , t.classes_name= #{classesName}
+        </if>
+        <if test="leaveOffset !=null and leaveOffset != ''">
+            , t.leave_offset= #{leaveOffset}
+        </if>
+        <if test="lateOffset !=null and lateOffset != ''">
+            , t.late_offset= #{lateOffset}
+        </if>
+        <if test="clockTypeValue !=null and clockTypeValue != ''">
+            , t.clock_type_value= #{clockTypeValue}
+        </if>
+        where 1=1
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询考勤班次数量 add by wuxw 2018-07-03 -->
+    <select id="queryAttendanceClassessCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from attendance_classes t
+        where 1 =1
+        <if test="timeOffset !=null and timeOffset != ''">
+            and t.time_offset= #{timeOffset}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="clockCount !=null and clockCount != ''">
+            and t.clock_count= #{clockCount}
+        </if>
+        <if test="classesObjType !=null and classesObjType != ''">
+            and t.classes_obj_type= #{classesObjType}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="clockType !=null and clockType != ''">
+            and t.clock_type= #{clockType}
+        </if>
+        <if test="classesObjId !=null and classesObjId != ''">
+            and t.classes_obj_id= #{classesObjId}
+        </if>
+        <if test="classesName !=null and classesName != ''">
+            and t.classes_name= #{classesName}
+        </if>
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="leaveOffset !=null and leaveOffset != ''">
+            and t.leave_offset= #{leaveOffset}
+        </if>
+        <if test="lateOffset !=null and lateOffset != ''">
+            and t.late_offset= #{lateOffset}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="clockTypeValue !=null and clockTypeValue != ''">
+            and t.clock_type_value= #{clockTypeValue}
+        </if>
+
+
+    </select>
+
+</mapper>

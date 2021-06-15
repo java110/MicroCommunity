@@ -53,6 +53,13 @@ public class SellParkingSpaceListener extends AbstractServiceApiPlusListener {
     }
 
 
+    /**
+     * {"carBrand":"大众","carNum":"琼A00D16","psId":"792020090377480065","cycles":"0","ownerId":"772020090241570534",
+     * "storeId":"402020082680880179","userId":"302020082625140085","carColor":"白色","carType":"9901",
+     * "startTime":"2020-09-03 10:24:39","endTime":"2020-09-03 10:24:39","communityId":"702020082605020183","sellOrHire":"H"}
+     * @param event   事件对象
+     * @param reqJson 请求报文数据
+     */
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
@@ -63,13 +70,13 @@ public class SellParkingSpaceListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "carColor", "未包含carColor");
         Assert.jsonObjectHaveKey(reqJson, "psId", "未包含psId");
         Assert.jsonObjectHaveKey(reqJson, "storeId", "未包含storeId");
-        Assert.jsonObjectHaveKey(reqJson, "receivedAmount", "未包含receivedAmount");
+        //Assert.jsonObjectHaveKey(reqJson, "receivedAmount", "未包含receivedAmount");
         Assert.jsonObjectHaveKey(reqJson, "sellOrHire", "未包含sellOrHire");
 
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(reqJson.getString("psId"), "psId不能为空");
-        Assert.isMoney(reqJson.getString("receivedAmount"), "不是有效的实收金额");
+        //Assert.isMoney(reqJson.getString("receivedAmount"), "不是有效的实收金额");
 
         if (!"H".equals(reqJson.getString("sellOrHire"))
                 && !"S".equals(reqJson.getString("sellOrHire"))) {
@@ -86,14 +93,17 @@ public class SellParkingSpaceListener extends AbstractServiceApiPlusListener {
         //添加小区楼
         parkingSpaceBMOImpl.sellParkingSpace(reqJson, context);
 
+
+        reqJson.put("carNumType",reqJson.getString("sellOrHire"));
+
         parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
 
-        //计算 费用信息
-        parkingSpaceBMOImpl.computeFeeInfo(reqJson, context);
-        //添加物业费用信息
-        parkingSpaceBMOImpl.addParkingSpaceFee(reqJson, context);
-
-        parkingSpaceBMOImpl.addFeeDetail(reqJson, context);
+//        //计算 费用信息
+//        parkingSpaceBMOImpl.computeFeeInfo(reqJson, context);
+//        //添加物业费用信息
+//        parkingSpaceBMOImpl.addParkingSpaceFee(reqJson, context);
+//
+//        parkingSpaceBMOImpl.addFeeDetail(reqJson, context);
 
 
     }

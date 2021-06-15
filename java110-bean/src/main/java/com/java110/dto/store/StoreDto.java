@@ -16,6 +16,16 @@ import java.util.Date;
 public class StoreDto extends PageDto implements Serializable {
 
 
+    //运营团队
+    //400000000000000002
+    public static final String STORE_ADMIN = "400000000000000001";
+
+    //开发
+    public static final String STORE_DEV = "400000000000000002";
+
+    public static final String STORE_TYPE_ADMIN = "800900000001";
+    public static final String STORE_TYPE_PROPERTY = "800900000003";
+
     private String storeId;
     private String[] storeIds;
     private String userId;

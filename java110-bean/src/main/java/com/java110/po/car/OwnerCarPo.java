@@ -12,6 +12,8 @@ import java.io.Serializable;
  **/
 public class OwnerCarPo implements Serializable {
 
+
+
     private String carId;
     private String ownerId;
     private String carNum;
@@ -22,7 +24,16 @@ public class OwnerCarPo implements Serializable {
     private String userId;
     private String remark;
 
+    private String startTime;
+
+    private String endTime;
+
+    private String state;
+
     private String communityId;
+    private String carTypeCd;
+    private String memberId;
+
 
     public String getCarId() {
         return carId;
@@ -102,5 +113,45 @@ public class OwnerCarPo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCarTypeCd() {
+        return carTypeCd;
+    }
+
+    public void setCarTypeCd(String carTypeCd) {
+        this.carTypeCd = carTypeCd;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 }

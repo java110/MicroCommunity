@@ -11,6 +11,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 保存用户权限
+     *
      * @param info
      * @return
      */
@@ -19,6 +20,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 删除用所有权限
+     *
      * @param info
      * @return
      */
@@ -27,6 +29,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 保存权限组
+     *
      * @param info
      * @return
      */
@@ -34,6 +37,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 编辑权限组
+     *
      * @param info
      * @return
      */
@@ -41,6 +45,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 删除权限组
+     *
      * @param info
      * @return
      */
@@ -49,6 +54,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 删除权限组下权限
+     *
      * @param info
      * @return
      */
@@ -63,6 +69,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 查询权限
+     *
      * @param info
      * @return
      */
@@ -70,6 +77,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 查询用户权限
+     *
      * @param info
      * @return
      */
@@ -77,6 +85,7 @@ public interface IPrivilegeDAO {
 
     /**
      * 添加用户权限
+     *
      * @param info
      * @return
      */
@@ -84,8 +93,17 @@ public interface IPrivilegeDAO {
 
     /**
      * 删除用户权限
+     *
      * @param info
      * @return
      */
     public boolean deleteUserPrivilege(Map info);
+
+    /**
+     * Query employees with this permission
+     *
+     * @param info
+     * @return
+     */
+    List<Map> queryPrivilegeUsers(Map info);
 }

@@ -27,6 +27,9 @@ public class MachineRecordDto extends PageDto implements Serializable {
     private String communityId;
     private String fileId;
     private String recordTypeCd;
+    private String userId;
+    private String similar;
+    private String photo;
 
 
     private Date createTime;
@@ -145,5 +148,29 @@ public class MachineRecordDto extends PageDto implements Serializable {
 
     public void setOpenTypeName(String openTypeName) {
         this.openTypeName = openTypeName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getSimilar() {
+        return similar;
+    }
+
+    public void setSimilar(String similar) {
+        this.similar = similar;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

@@ -1,20 +1,24 @@
 package com.java110.user.smo.impl;
 
 
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
+import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.user.UserDto;
+import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.PageDto;
-import com.java110.dto.user.UserDto;
 import com.java110.user.dao.IOwnerCarServiceDao;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -46,17 +50,6 @@ public class OwnerCarInnerServiceSMOImpl extends BaseServiceSMO implements IOwne
 
         List<OwnerCarDto> ownerCars = BeanConvertUtil.covertBeanList(ownerCarServiceDaoImpl.getOwnerCarInfo(BeanConvertUtil.beanCovertMap(ownerCarDto)), OwnerCarDto.class);
 
-        if (ownerCars == null || ownerCars.size() == 0) {
-            return ownerCars;
-        }
-
-        String[] userIds = getUserIds(ownerCars);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
-
-        for (OwnerCarDto ownerCar : ownerCars) {
-            refreshOwnerCar(ownerCar, users);
-        }
         return ownerCars;
     }
 
@@ -92,6 +85,42 @@ public class OwnerCarInnerServiceSMOImpl extends BaseServiceSMO implements IOwne
     @Override
     public int queryOwnerCarsCount(@RequestBody OwnerCarDto ownerCarDto) {
         return ownerCarServiceDaoImpl.queryOwnerCarsCount(BeanConvertUtil.beanCovertMap(ownerCarDto));
+    }
+
+    @Override
+    public List<ImportRoomFee> freshCarIds(@RequestBody List<ImportRoomFee> tmpImportCarFees) {
+        List<String> carNums = new ArrayList<>();
+        for (ImportRoomFee importRoomFee : tmpImportCarFees) {
+            if (StringUtil.isEmpty(importRoomFee.getCarNum())) {
+                continue;
+            }
+            carNums.add(importRoomFee.getCarNum());
+        }
+
+        if (carNums.size() < 1) {
+            return tmpImportCarFees;
+        }
+        Map<String, Object> info = new HashMap<>();
+        info.put("carNums", carNums.toArray(new String[carNums.size()]));
+        info.put("communityId", tmpImportCarFees.get(0).getCommunityId());
+        List<OwnerCarDto> ownerCarDtos = BeanConvertUtil.covertBeanList(ownerCarServiceDaoImpl.getOwnerCarInfo(info), OwnerCarDto.class);
+
+        for (OwnerCarDto ownerCarDto : ownerCarDtos) {
+            for (ImportRoomFee importRoomFee : tmpImportCarFees) {
+                if (ownerCarDto.getCarNum().equals(importRoomFee.getCarNum())) {
+                    importRoomFee.setCarId(ownerCarDto.getCarId());
+                    importRoomFee.setOwnerId(ownerCarDto.getOwnerId());
+                    importRoomFee.setOwnerName(ownerCarDto.getOwnerName());
+                    importRoomFee.setOwnerLink(ownerCarDto.getLink());
+                }
+            }
+        }
+        return tmpImportCarFees;
+    }
+
+    @Override
+    public long queryOwnerParkingSpaceCount(@RequestBody OwnerCarDto ownerCarDto) {
+        return ownerCarServiceDaoImpl.queryOwnerParkingSpaceCount(BeanConvertUtil.beanCovertMap(ownerCarDto));
     }
 
     public IOwnerCarServiceDao getOwnerCarServiceDaoImpl() {

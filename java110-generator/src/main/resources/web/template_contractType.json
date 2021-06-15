@@ -1,0 +1,70 @@
+{
+  "templateName": "合同类型",
+  "directories": "admin",
+  "templateCode": "contractType",
+  "templateKey": "contractTypeId",
+  "templateKeyName": "类型ID",
+  "searchCode": "contractTypeId",
+  "searchName": "类型ID",
+  "conditions": [
+    {
+      "name": "类型名称",
+      "inputType": "input",
+      "code": "typeName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "审核",
+      "inputType": "select",
+      "selectValue": "1001,2002,3003,4004",
+      "selectValueName": "物业审核,不审核,运营审核,代理商审核",
+      "code": "audit",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "类型编码",
+      "inputType": "input",
+      "code": "contractTypeId",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns": [
+    {
+      "code": "typeName",
+      "cnCode": "类型名称",
+      "desc": "必填，请填写合同类型名称",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "200",
+      "limitErrInfo": "类型名称不能超过64位",
+      "show": true
+    },
+    {
+      "code": "audit",
+      "cnCode": "是否审核",
+      "desc": "必须，请选择是否审核",
+      "required": true,
+      "hasDefaultValue": false,
+      "selectValue": "1001,2002,3003,4004",
+      "selectValueName": "物业审核,不审核,运营审核,代理商审核",
+      "limit": "num",
+      "limitParam": "",
+      "limitErrInfo": "是否审核格式错误",
+      "show": true
+    },
+    {
+      "code": "remark",
+      "cnCode": "描述",
+      "desc": "选填，请填写描述",
+      "required": false,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "200",
+      "limitErrInfo": "描述超过200位",
+      "show": true
+    }
+  ]
+}

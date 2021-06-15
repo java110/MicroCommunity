@@ -80,33 +80,26 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-
-
         //1.0 先查询 员工对应的部门
         OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
         orgStaffRelDto.setStoreId(reqJson.getString("storeId"));
         orgStaffRelDto.setStaffId(reqJson.getString("userId"));
         List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-
         Assert.listOnlyOne(orgStaffRelDtos, "未查询到相应员工对应的部门信息或查询到多条");
-
         //2.0 再根据 部门对应的 小区ID查询小区信息
         OrgDto orgDto = new OrgDto();
         orgDto.setOrgId(orgStaffRelDtos.get(0).getParentOrgId());
         orgDto.setStoreId(reqJson.getString("storeId"));
         orgDto.setOrgLevel("2");
         List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
-
         Assert.listOnlyOne(orgDtos, "根据组织ID未查询到员工对应部门信息或查询到多条数据");
-
         int count = 0;
         List<ApiCommunityDataVo> communitys = null;
         if ("9999".equals(orgDtos.get(0).getBelongCommunityId())) {
             CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
             communityDto.setMemberId(reqJson.getString("storeId"));
             communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
-            if(reqJson.containsKey("communityName")){
+            if (reqJson.containsKey("communityName")) {
                 communityDto.setName(reqJson.getString("communityName"));
             }
             count = communityInnerServiceSMOImpl.queryCommunitysCount(communityDto);
@@ -134,18 +127,12 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
                 communitys = new ArrayList<>();
             }
         }
-
-
         ApiCommunityVo apiCommunityVo = new ApiCommunityVo();
-
         apiCommunityVo.setTotal(count);
-        apiCommunityVo.setRecords(1);
+        apiCommunityVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiCommunityVo.setCommunitys(communitys);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiCommunityVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 
     public IOrgStaffRelInnerServiceSMO getOrgStaffRelInnerServiceSMOImpl() {

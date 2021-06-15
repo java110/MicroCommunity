@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rentingPoolServiceDaoImpl">
+
+
+    <!-- 保存房屋出租信息 add by wuxw 2018-07-03 -->
+    <insert id="saveRentingPoolInfo" parameterType="Map">
+        insert into renting_pool(
+        latitude,owner_tel,renting_config_id,renting_desc,renting_title,check_in,renting_id,room_id,payment_type,owner_name,
+        price,state,community_id,longitude,community_name
+        ) values (
+        #{latitude},#{ownerTel},#{rentingConfigId},#{rentingDesc},#{rentingTitle},#{checkIn},#{rentingId},#{roomId},
+        #{paymentType},#{ownerName},#{price},#{state},#{communityId},#{longitude},#{communityName}
+        )
+    </insert>
+
+
+    <!-- 查询房屋出租信息 add by wuxw 2018-07-03 -->
+    <select id="getRentingPoolInfo" parameterType="Map" resultType="Map">
+        select t.latitude,t.owner_tel,t.owner_tel ownerTel,t.renting_config_id,t.renting_config_id
+        rentingConfigId,t.renting_desc,t.renting_desc rentingDesc,t.status_cd,t.status_cd
+        statusCd,t.renting_title,t.renting_title rentingTitle,t.check_in,t.check_in
+        checkIn,t.renting_id,t.renting_id rentingId,t.room_id,t.room_id roomId,t.payment_type,t.payment_type
+        paymentType,t.owner_name,t.owner_name ownerName,t.price,t.state,t.community_id,t.community_id
+        communityId,t.longitude,td.name stateName,td2.name paymentTypeName,rc.renting_type rentingType,
+        rc.service_owner_rate serviceOwnerRate,rc.service_tenant_rate serviceTenantRate,rc.admin_separate_rate adminSeparateRate,
+        rc.proxy_separate_rate proxySeparateRate,rc.property_separate_rate propertySeparateRate,rc.service_price servicePrice,rc.renting_formula rentingFormula,
+        t.community_name communityName
+        from renting_pool t
+        left join t_dict td on td.status_cd = t.state and td.table_name = 'renting_pool' and td.table_columns = 'state'
+        left join t_dict td2 on td2.status_cd = t.payment_type and td2.table_name = 'renting_pool' and td2.table_columns = 'payment_type'
+        left join renting_config rc on t.renting_config_id = rc.renting_config_id and rc.status_cd = '0'
+        where 1 =1
+        <if test="latitude !=null and latitude != ''">
+            and t.latitude= #{latitude}
+        </if>
+        <if test="ownerTel !=null and ownerTel != ''">
+            and t.owner_tel= #{ownerTel}
+        </if>
+        <if test="rentingConfigId !=null and rentingConfigId != ''">
+            and t.renting_config_id= #{rentingConfigId}
+        </if>
+        <if test="rentingDesc !=null and rentingDesc != ''">
+            and t.renting_desc= #{rentingDesc}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="rentingTitle !=null and rentingTitle != ''">
+            and t.renting_title= #{rentingTitle}
+        </if>
+        <if test="checkIn !=null and checkIn != ''">
+            and t.check_in= #{checkIn}
+        </if>
+        <if test="rentingId !=null and rentingId != ''">
+            and t.renting_id= #{rentingId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            and t.payment_type= #{paymentType}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+        <if test="rentingType !=null and rentingType != ''">
+            and rc.renting_type= #{rentingType}
+        </if>
+        <if test="states !=null ">
+            and t.state in
+            <foreach collection="states" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name like concat('%',#{communityName},'%')
+        </if>
+        <if test="longitude !=null and longitude != ''">
+            and t.longitude= #{longitude}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改房屋出租信息 add by wuxw 2018-07-03 -->
+    <update id="updateRentingPoolInfo" parameterType="Map">
+        update renting_pool t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="latitude !=null and latitude != ''">
+            , t.latitude= #{latitude}
+        </if>
+        <if test="ownerTel !=null and ownerTel != ''">
+            , t.owner_tel= #{ownerTel}
+        </if>
+        <if test="rentingConfigId !=null and rentingConfigId != ''">
+            , t.renting_config_id= #{rentingConfigId}
+        </if>
+        <if test="rentingDesc !=null and rentingDesc != ''">
+            , t.renting_desc= #{rentingDesc}
+        </if>
+        <if test="rentingTitle !=null and rentingTitle != ''">
+            , t.renting_title= #{rentingTitle}
+        </if>
+        <if test="checkIn !=null and checkIn != ''">
+            , t.check_in= #{checkIn}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            , t.payment_type= #{paymentType}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="price !=null and price != ''">
+            , t.price= #{price}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="longitude !=null and longitude != ''">
+            , t.longitude= #{longitude}
+        </if>
+        where 1=1
+        <if test="rentingId !=null and rentingId != ''">
+            and t.renting_id= #{rentingId}
+        </if>
+
+    </update>
+
+    <!-- 查询房屋出租数量 add by wuxw 2018-07-03 -->
+    <select id="queryRentingPoolsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from renting_pool t
+        left join t_dict td on td.status_cd = t.state and td.table_name = 'renting_pool' and td.table_columns = 'state'
+        left join t_dict td2 on td2.status_cd = t.payment_type and td2.table_name = 'renting_pool' and td2.table_columns = 'payment_type'
+        left join renting_config rc on t.renting_config_id = rc.renting_config_id and rc.status_cd = '0'
+        where 1 =1
+        <if test="latitude !=null and latitude != ''">
+            and t.latitude= #{latitude}
+        </if>
+        <if test="ownerTel !=null and ownerTel != ''">
+            and t.owner_tel= #{ownerTel}
+        </if>
+        <if test="rentingConfigId !=null and rentingConfigId != ''">
+            and t.renting_config_id= #{rentingConfigId}
+        </if>
+        <if test="rentingDesc !=null and rentingDesc != ''">
+            and t.renting_desc= #{rentingDesc}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="rentingTitle !=null and rentingTitle != ''">
+            and t.renting_title= #{rentingTitle}
+        </if>
+        <if test="checkIn !=null and checkIn != ''">
+            and t.check_in= #{checkIn}
+        </if>
+        <if test="rentingId !=null and rentingId != ''">
+            and t.renting_id= #{rentingId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            and t.payment_type= #{paymentType}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+        <if test="rentingType !=null and rentingType != ''">
+            and rc.renting_type= #{rentingType}
+        </if>
+        <if test="states !=null ">
+            and t.state in
+            <foreach collection="states" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name like concat('%',#{communityName},'%')
+        </if>
+        <if test="longitude !=null and longitude != ''">
+            and t.longitude= #{longitude}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="machineTranslateErrorServiceDaoImpl">
+
+
+    <!-- 保存IOT同步错误日志记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMachineTranslateErrorInfo" parameterType="Map">
+        insert into machine_translate_error(
+        req_header,machine_translate_id,res_body,req_body,log_id,community_id,req_path,req_type
+        ) values (
+        #{reqHeader},#{machineTranslateId},#{resBody},#{reqBody},#{logId},#{communityId},#{reqPath},#{reqType}
+        )
+    </insert>
+
+
+    <!-- 查询IOT同步错误日志记录信息 add by wuxw 2018-07-03 -->
+    <select id="getMachineTranslateErrorInfo" parameterType="Map" resultType="Map">
+        select t.req_header,t.req_header reqHeader,t.machine_translate_id,t.machine_translate_id
+        machineTranslateId,t.res_body,t.res_body resBody,t.req_body,t.req_body reqBody,t.log_id,t.log_id
+        logId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,
+        t.req_path reqPath,t.req_type reqType
+        from machine_translate_error t
+        where 1 =1
+        <if test="reqHeader !=null and reqHeader != ''">
+            and t.req_header= #{reqHeader}
+        </if>
+        <if test="machineTranslateId !=null and machineTranslateId != ''">
+            and t.machine_translate_id= #{machineTranslateId}
+        </if>
+        <if test="resBody !=null and resBody != ''">
+            and t.res_body= #{resBody}
+        </if>
+        <if test="reqBody !=null and reqBody != ''">
+            and t.req_body= #{reqBody}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改IOT同步错误日志记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateMachineTranslateErrorInfo" parameterType="Map">
+        update machine_translate_error t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="reqHeader !=null and reqHeader != ''">
+            , t.req_header= #{reqHeader}
+        </if>
+        <if test="machineTranslateId !=null and machineTranslateId != ''">
+            , t.machine_translate_id= #{machineTranslateId}
+        </if>
+        <if test="resBody !=null and resBody != ''">
+            , t.res_body= #{resBody}
+        </if>
+        <if test="reqBody !=null and reqBody != ''">
+            , t.req_body= #{reqBody}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+
+    </update>
+
+    <!-- 查询IOT同步错误日志记录数量 add by wuxw 2018-07-03 -->
+    <select id="queryMachineTranslateErrorsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from machine_translate_error t
+        where 1 =1
+        <if test="reqHeader !=null and reqHeader != ''">
+            and t.req_header= #{reqHeader}
+        </if>
+        <if test="machineTranslateId !=null and machineTranslateId != ''">
+            and t.machine_translate_id= #{machineTranslateId}
+        </if>
+        <if test="resBody !=null and resBody != ''">
+            and t.res_body= #{resBody}
+        </if>
+        <if test="reqBody !=null and reqBody != ''">
+            and t.req_body= #{reqBody}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

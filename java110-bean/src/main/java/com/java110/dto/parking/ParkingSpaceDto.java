@@ -16,6 +16,7 @@ import java.util.Date;
 public class ParkingSpaceDto extends PageDto implements Serializable {
 
     public static final String STATE_FREE = "F";
+    public static final String STATE_HIRE = "H";
 
     private String area;
     private String typeCd;
@@ -34,6 +35,8 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
     private String ownerName;
     private String idCard;
     private String link;
+    private String parkingType;
+    private String parkingTypeName;
 
     private String[] psIds;
 
@@ -43,7 +46,7 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
-    private boolean withOwnerCar =false;
+    private boolean withOwnerCar = false;
 
 
     public String getArea() {
@@ -222,5 +225,21 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
 
     public void setWithOwnerCar(boolean withOwnerCar) {
         this.withOwnerCar = withOwnerCar;
+    }
+
+    public String getParkingType() {
+        return parkingType;
+    }
+
+    public void setParkingType(String parkingType) {
+        this.parkingType = parkingType;
+    }
+
+    public String getParkingTypeName() {
+        return parkingTypeName;
+    }
+
+    public void setParkingTypeName(String parkingTypeName) {
+        this.parkingTypeName = parkingTypeName;
     }
 }

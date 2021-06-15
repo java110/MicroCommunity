@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeManualCollectionServiceDaoImpl">
+
+
+    <!-- 保存人工托收信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeManualCollectionInfo" parameterType="Map">
+        insert into fee_manual_collection(
+        owner_name,link,room_area,remark,state,owner_id,community_id,collection_id,room_id,room_name
+        ) values (
+        #{ownerName},#{link},#{roomArea},#{remark},#{state},#{ownerId},#{communityId},#{collectionId},#{roomId},#{roomName}
+        )
+    </insert>
+
+
+    <!-- 查询人工托收信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeManualCollectionInfo" parameterType="Map" resultType="Map">
+        select t.owner_name,t.owner_name
+        ownerName,t.link,t.room_area,t.room_area roomArea,t.remark,t.status_cd,t.status_cd
+        statusCd,t.state,t.owner_id,t.owner_id ownerId,t.community_id,t.community_id
+        communityId,t.collection_id,t.collection_id collectionId,t.room_id,t.room_id roomId,t.room_name,t.room_name
+        roomName,td.name stateName
+        from fee_manual_collection t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'fee_manual_collection' and td.table_columns = 'state'
+        where 1 =1
+
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="roomArea !=null and roomArea != ''">
+            and t.room_area= #{roomArea}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改人工托收信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeManualCollectionInfo" parameterType="Map">
+        update fee_manual_collection t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="link !=null and link != ''">
+            , t.link= #{link}
+        </if>
+        <if test="roomArea !=null and roomArea != ''">
+            , t.room_area= #{roomArea}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            , t.collection_id= #{collectionId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        where 1=1
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+    </update>
+
+    <!-- 查询人工托收数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeManualCollectionsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_manual_collection t
+        where 1 =1
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="roomArea !=null and roomArea != ''">
+            and t.room_area= #{roomArea}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="collectionId !=null and collectionId != ''">
+            and t.collection_id= #{collectionId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -6,6 +6,11 @@ package com.java110.utils.constant;
  */
 public class ServiceCodeMeterWaterConstant {
 
+
+    /**
+     * 添加 水电费
+     */
+    public static final String ADD_PROXY_FEE = "meterWater.saveProxyFee";
     /**
      * 添加 水电费
      */

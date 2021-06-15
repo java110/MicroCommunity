@@ -14,6 +14,7 @@ public class ApiMachineRecordDataVo implements Serializable {
     private String tel;
     private String idCard;
     private String recordTypeCd;
+    private String createTime;
 
 
     public String getMachineRecordId() {
@@ -86,5 +87,13 @@ public class ApiMachineRecordDataVo implements Serializable {
 
     public void setOpenTypeName(String openTypeName) {
         this.openTypeName = openTypeName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

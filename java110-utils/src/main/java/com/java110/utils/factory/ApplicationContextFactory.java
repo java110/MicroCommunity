@@ -17,7 +17,7 @@ public class ApplicationContextFactory {
         ApplicationContextFactory.applicationContext = applicationContext;
     }
 
-    public static Object getBean(Class className){
+    public static Object getBean(Class<?> className){
         return applicationContext.getBean(className);
     }
 

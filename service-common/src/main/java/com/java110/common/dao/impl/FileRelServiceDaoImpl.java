@@ -77,6 +77,28 @@ public class FileRelServiceDaoImpl extends BaseServiceDao implements IFileRelSer
         }
     }
 
+    @Override
+    public int saveFileRel(Map info) {
+        int saveFlag = sqlSessionTemplate.insert("fileRelServiceDaoImpl.saveFileRel", info);
+
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件存放信息Instance数据失败：" + JSONObject.toJSONString(info));
+        }
+
+        return saveFlag;
+    }
+
+    @Override
+    public int deleteFileRel(Map info) {
+        int deleteFlag = sqlSessionTemplate.insert("fileRelServiceDaoImpl.deleteFileRel", info);
+
+        if (deleteFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "删除文件存放信息Instance数据失败：" + JSONObject.toJSONString(info));
+        }
+
+        return deleteFlag;
+    }
+
 
     /**
      * 查询文件存放信息（instance）

@@ -12,12 +12,18 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 @Service("apiSMOImpl")
@@ -47,7 +53,7 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
         }
 
         JSONObject storeInfo = JSONObject.parseObject(responseEntity.getBody().toString());
-        if(!storeInfo.containsKey("storeId")){
+        if (!storeInfo.containsKey("storeId")) {
             return new ComponentValidateResult("", "", "", pd.getUserId(), pd.getUserName());
         }
 
@@ -68,15 +74,18 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
     }
 
     @Override
-    public ResponseEntity<String> doApi(String body, Map<String, String> headers, HttpServletRequest request) {
+    public ResponseEntity<String> doApi(String body, Map<String, String> headers, HttpServletRequest request) throws UnsupportedEncodingException {
         HttpHeaders header = new HttpHeaders();
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         if (!StringUtil.isEmpty(result.getUserId())) {
             header.add("user-id", result.getUserId());
-            header.add("user-name", result.getUserName());
+            if (!StringUtil.isEmpty(result.getUserName())) {
+                header.add("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
+            }
         }
+
         header.add("store-id", result.getStoreId());
         logger.debug("api请求头" + headers + ";请求内容：" + body);
         HttpMethod method = null;
@@ -112,8 +121,8 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("api返回信息" + responseEntity);
-            return responseEntity;
         }
+        return responseEntity;
     }
 
 

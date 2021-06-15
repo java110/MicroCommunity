@@ -29,6 +29,8 @@ public class AppraiseDto extends PageDto implements Serializable {
     private String objId;
     private String objType;
     private String appraiseUserId;
+    private String doorSpeedScore;
+    private String repairmanServiceScore;
 
 
     private Date createTime;
@@ -123,5 +125,21 @@ public class AppraiseDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getDoorSpeedScore() {
+        return doorSpeedScore;
+    }
+
+    public void setDoorSpeedScore(String doorSpeedScore) {
+        this.doorSpeedScore = doorSpeedScore;
+    }
+
+    public String getRepairmanServiceScore() {
+        return repairmanServiceScore;
+    }
+
+    public void setRepairmanServiceScore(String repairmanServiceScore) {
+        this.repairmanServiceScore = repairmanServiceScore;
     }
 }

@@ -72,4 +72,5 @@ public interface IOwnerCarServiceDao {
      */
     int queryOwnerCarsCount(Map info);
 
+    long queryOwnerParkingSpaceCount(Map beanCovertMap);
 }

@@ -3,21 +3,23 @@ package com.java110.api.listener.machineTranslate;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.machineTranslate.IApplicationKeyMachineTranslateBMO;
+import com.java110.api.bmo.machineTranslate.IOwnerCarMachineTranslateBMO;
 import com.java110.api.bmo.machineTranslate.IOwnerMachineTranslateBMO;
 import com.java110.api.bmo.machineTranslate.IStaffMachineTranslateBMO;
 import com.java110.api.bmo.machineTranslate.IVisitMachineTranslateBMO;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.machine.CarResultDto;
+import com.java110.dto.machine.MachineTranslateDto;
+import com.java110.dto.machine.MachineUserResultDto;
 import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.dto.community.CommunityDto;
-import com.java110.dto.machine.MachineTranslateDto;
-import com.java110.dto.machine.MachineUserResultDto;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
@@ -47,6 +49,7 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
     public static final String TYPE_APPLICATION_KEY = "7788";//申请钥匙
     public static final String TYPE_VISIT = "6677";//访客人脸
     public static final String TYPE_STAFF = "5566";//员工人脸
+    public static final String TYPE_OWNER_CAR = "4455";//业主车辆
 
 
     private static final String DEFAULT_DOMAIN = "YUNLUN";
@@ -85,6 +88,9 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
 
     @Autowired
     private IStaffMachineTranslateBMO staffMachineTranslateBMOImpl;
+
+    @Autowired
+    private IOwnerCarMachineTranslateBMO ownerCarMachineTranslateBMOImpl;
 
     /**
      * @param event   事件对象
@@ -147,6 +153,7 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
         reqJson.put("machineCode", httpHeaders.get("machinecode").get(0));
 
         MachineUserResultDto machineUserResultDto = null;
+        CarResultDto carResultDto = null;
         switch (tmpMachineTranslateDto.getTypeCd()) {
             case TYPE_OWNER:
                 machineUserResultDto = ownerMachineTranslateBMOImpl.getPhotoInfo(reqJson);
@@ -159,8 +166,18 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
                 break;
             case TYPE_STAFF:
                 machineUserResultDto = staffMachineTranslateBMOImpl.getPhotoInfo(reqJson);
+                break;
+            case TYPE_OWNER_CAR:
+                carResultDto = ownerCarMachineTranslateBMOImpl.getInfo(reqJson);
             default:
                 break;
+        }
+
+        if (carResultDto != null) {
+            resultVo = new ResultVo(ResultVo.CODE_MACHINE_OK, ResultVo.MSG_OK, carResultDto);
+            responseEntity = new ResponseEntity<>(JSONObject.toJSONString(resultVo), httpHeaders, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
         }
 
         //检查是否存在该用户

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportCommunityServiceDaoImpl">
+
+    <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
+    <select id="getRoomCount" parameterType="com.java110.dto.report.ReportRoomDto" resultType="Map">
+        select count(1) count
+        from building_room t
+        where t.status_cd = '0'
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </select>
+
+    <!-- 查询 房屋 楼栋 单元 业主 -->
+    <select id="getRoomFloorUnitAndOwner" parameterType="com.java110.dto.report.ReportRoomDto"
+            resultType="com.java110.dto.report.ReportRoomDto">
+        select t.apartment,t.built_up_area builtUpArea,t.community_id communityId,t.create_time createTime,
+        t.fee_coefficient feeCoefficient,t.layer,t.room_id roomId,t.room_num roomNum,t.section,
+        t.state,bu.unit_id unitId,bu.unit_num unitNum,ff.floor_id floorId,ff.floor_num floorNum,
+        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.`name` ownerName,bo.owner_id ownerId,t.room_type roomType
+        from building_room t
+        INNER JOIN building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
+        LEFT JOIN building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
+        left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+    <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
+    <select id="getCarCount" parameterType="com.java110.dto.report.ReportCarDto" resultType="Map">
+        select count(1) count
+        from owner_car t
+        where t.status_cd = '0'
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </select>
+
+
+    <!-- 查询 房屋 楼栋 单元 业主 -->
+    <select id="getCarParkingSpace" parameterType="com.java110.dto.report.ReportCarDto"
+            resultType="com.java110.dto.report.ReportCarDto">
+        select t.car_brand carBrand,t.car_color carColor,t.car_id carId,t.car_num carNum,t.car_type carType,
+        t.community_id communityId,bo.`name` ownerName,bo.id_card idCard,bo.link,bo.owner_id ownerId,ps.ps_id psId,
+        ps.num,pa.pa_id paId,pa.num areaNum,ps.state,t.start_time startTime,t.end_time endTime
+        from owner_car t
+        INNER JOIN building_owner bo on t.owner_id = bo.member_id and t.status_cd = '0'
+        left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
+        left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
+        where t.status_cd = '0'
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询小区信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunitys" parameterType="Map" resultType="Map">
+        select t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,
+        t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,t.tel,
+        t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,
+        t.map_x,t.map_x mapX,t.state,ca.area_code areaCode,ca.area_name areaName,
+        ca.parent_area_code parentAreaCode,ca.parent_area_name parentAreaName,
+        t.community_area communityArea
+        from s_community t,city_area ca
+        where t.status_cd = '0'
+        and t.city_code = ca.area_code
+        and ca.status_cd = '0'
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="nearbyLandmarks !=null and nearbyLandmarks != ''">
+            and t.nearby_landmarks= #{nearbyLandmarks}
+        </if>
+        <if test="cityCode !=null and cityCode != ''">
+            and t.city_code= #{cityCode}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="mapY !=null and mapY != ''">
+            and t.map_y= #{mapY}
+        </if>
+        <if test="mapX !=null and mapX != ''">
+            and t.map_x= #{mapX}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        order by t.create_time ASC
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+
+
+
+</mapper>

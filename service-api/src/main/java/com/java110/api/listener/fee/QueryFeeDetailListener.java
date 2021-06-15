@@ -61,19 +61,6 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         ApiFeeDetailVo apiFeeDetailVo = new ApiFeeDetailVo();
         FeeDetailDto feeDetailDto = BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class);
 
-//        try {
-//            if (reqJson.containsKey("startTime")) {
-//                feeDetailDto.setStartTime(DateUtil.getDateFromString(reqJson.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B));
-//            }
-//
-//            if (reqJson.containsKey("endTime")) {
-//                feeDetailDto.setStartTime(DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B));
-//            }
-//        } catch (Exception e) {
-//            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, e.getMessage() + "传入开始时间或结束时间格式错误 c");
-//        }
-
-
         int total = feeDetailInnerServiceSMOImpl.queryFeeDetailsCount(feeDetailDto);
         apiFeeDetailVo.setTotal(total);
         if (total > 0) {
@@ -114,7 +101,7 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
      */
     private void validateFeeConfigData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "feeId", "请求中未包含feeId信息");
+       // Assert.jsonObjectHaveKey(reqJson, "feeId", "请求中未包含feeId信息");
 
 
     }

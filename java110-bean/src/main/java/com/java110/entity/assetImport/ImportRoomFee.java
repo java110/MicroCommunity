@@ -11,17 +11,31 @@ public class ImportRoomFee {
 
     private String roomNum;
 
+    private String carNum;
+
+    private String carId;
+
     private String feeName;
 
     private String startTime;
 
     private String endTime;
 
+    private String createTime;
+
     private String amount;
 
     private String roomId;
 
     private String communityId;
+
+    private String contractId;
+
+    private String cycle;
+    private String remark;
+    private String ownerId;
+    private String ownerName;
+    private String ownerLink;
 
 
     public String getFloorNum() {
@@ -94,5 +108,77 @@ public class ImportRoomFee {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerLink() {
+        return ownerLink;
+    }
+
+    public void setOwnerLink(String ownerLink) {
+        this.ownerLink = ownerLink;
+    }
+
+    public String getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
     }
 }

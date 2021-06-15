@@ -2,7 +2,10 @@ package com.java110.utils.cache;
 
 import com.java110.entity.mapping.Mapping;
 import com.java110.utils.constant.DomainContant;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.SerializeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 import java.util.List;
@@ -13,8 +16,14 @@ import java.util.List;
  */
 public class MappingCache extends BaseCache {
 
+    private final static Logger logger = LoggerFactory.getLogger(MappingCache.class);
+
+
     //后缀 用来刷缓存时删除 所有以这个为后缀的数据
     public final static String _SUFFIX_MAPPING = "_SUFFIX_MAPPING";
+    //日志
+    public final static String LOG_SERVICE_CODE = "LOG_SERVICE_CODE";
+
 
     /**
      * 获取值
@@ -25,6 +34,7 @@ public class MappingCache extends BaseCache {
      */
     public static String getValue(String domain, String key) {
         Jedis redis = null;
+        long startTime = DateUtil.getCurrentDate().getTime();
         try {
             redis = getJedis();
             Object object = SerializeUtil.unserialize(redis.get((domain + key + _SUFFIX_MAPPING).getBytes()));
@@ -38,6 +48,8 @@ public class MappingCache extends BaseCache {
             if (redis != null) {
                 redis.close();
             }
+
+            logger.debug(domain + "::" + key + " redis 耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
         }
     }
 
@@ -54,6 +66,8 @@ public class MappingCache extends BaseCache {
 
     public static Mapping getMapping(String key) {
         Jedis redis = null;
+        long startTime = DateUtil.getCurrentDate().getTime();
+
         try {
             redis = getJedis();
             Object obj = SerializeUtil.unserialize(redis.get((DomainContant.COMMON_DOMAIN + key + _SUFFIX_MAPPING).getBytes()));
@@ -64,6 +78,8 @@ public class MappingCache extends BaseCache {
             if (redis != null) {
                 redis.close();
             }
+            logger.debug( key + " redis 耗时：" + (DateUtil.getCurrentDate().getTime() - startTime));
+
         }
         return null;
     }

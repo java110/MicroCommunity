@@ -31,6 +31,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -91,7 +93,7 @@ public class PageProcessAspect {
                     if (params.get(key).length > 0) {
                         String value = "";
                         for (int paramIndex = 0; paramIndex < params.get(key).length; paramIndex++) {
-                            value = params.get(key)[paramIndex] + ",";
+                            value += (params.get(key)[paramIndex] + ",");
                         }
                         value = value.endsWith(",") ? value.substring(0, value.length() - 1) : value;
                         paramObj.put(key, value);
@@ -131,7 +133,13 @@ public class PageProcessAspect {
                 componentCode = urls[4];
             }
         }
-        pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId);
+        Map<String, Object> headers = new HashMap<>();
+        Enumeration reqHeaderEnum = request.getHeaderNames();
+        while (reqHeaderEnum.hasMoreElements()) {
+            String headerName = (String) reqHeaderEnum.nextElement();
+            headers.put(headerName.toLowerCase(), request.getHeader(headerName));
+        }
+        pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId, headers);
         pd.setMethod(request.getMethod().equals("GET") ? HttpMethod.GET : HttpMethod.POST);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
     }

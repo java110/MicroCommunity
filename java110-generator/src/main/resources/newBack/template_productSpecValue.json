@@ -1,0 +1,59 @@
+{
+  "autoMove": true,
+  "id": "valueId",
+  "name": "productSpecValue",
+  "desc": "产品规格值",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "goods",
+  "tableName": "product_spec_value",
+  "param": {
+    "valueId": "value_id",
+    "storeId": "store_id",
+    "specId": "spec_id",
+    "productId": "product_id",
+    "stock": "stock",
+    "sales": "sales",
+    "price": "price",
+    "costPrice": "cost_price",
+    "vipPrice": "vip_price",
+    "otPrice": "ot_price",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "specId",
+      "msg": "规格不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户不能为空"
+    },
+    {
+      "code": "productId",
+      "msg": "产品不能为空"
+    },
+    {
+      "code": "stock",
+      "msg": "库存不能为空"
+    },
+    {
+      "code": "price",
+      "msg": "价格不能为空"
+    },
+    {
+      "code": "sales",
+      "msg": "销量不能为空"
+    },{
+      "code": "costPrice",
+      "msg": "成本价不能为空"
+    },{
+      "code": "vipPrice",
+      "msg": "vip价不能为空"
+    },{
+      "code": "otPrice",
+      "msg": "市场价不能为空"
+    }
+  ]
+}
+

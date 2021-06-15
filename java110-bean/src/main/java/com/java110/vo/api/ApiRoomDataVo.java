@@ -15,7 +15,7 @@ import java.util.List;
  **/
 public class ApiRoomDataVo implements Serializable {
 
-    private String unitPrice;
+    private String feeCoefficient;
     private String section;
     private String remark;
     private String userName;
@@ -28,8 +28,10 @@ public class ApiRoomDataVo implements Serializable {
     private String floorId;
     private String floorNum;
     private String state;
+    private String stateName;
     private String apartment;
     private String apartmentName;
+    private String roomType;
 
     private String ownerId;
     private String ownerName;
@@ -39,13 +41,12 @@ public class ApiRoomDataVo implements Serializable {
     private List<RoomAttrDto> roomAttrDto;
 
 
-
-    public String getUnitPrice() {
-        return unitPrice;
+    public String getFeeCoefficient() {
+        return feeCoefficient;
     }
 
-    public void setUnitPrice(String unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setFeeCoefficient(String feeCoefficient) {
+        this.feeCoefficient = feeCoefficient;
     }
 
     public String getSection() {
@@ -199,5 +200,21 @@ public class ApiRoomDataVo implements Serializable {
 
     public void setRoomAttrDto(List<RoomAttrDto> roomAttrDto) {
         this.roomAttrDto = roomAttrDto;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
     }
 }

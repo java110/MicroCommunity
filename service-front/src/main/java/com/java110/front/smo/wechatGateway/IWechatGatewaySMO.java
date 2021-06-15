@@ -19,7 +19,7 @@ public interface IWechatGatewaySMO {
      * @return ResponseEntity 对象数据
      * @throws SMOException 业务代码层
      */
-    ResponseEntity<String> gateway(IPageData pd) throws Exception;
+    ResponseEntity<String> gateway(IPageData pd,String wId) throws Exception;
 
     /**
      * 查询微信信息

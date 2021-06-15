@@ -1,0 +1,51 @@
+{
+  "autoMove": true,
+  "id": "rsId",
+  "name": "resourceSupplier",
+  "desc": "物品供应商",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_RESOURCE_SUPPLIER",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_RESOURCE_SUPPLIER",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_RESOURCE_SUPPLIER",
+  "newBusinessTypeCdValue": "671100030008",
+  "updateBusinessTypeCdValue": "671100040008",
+  "deleteBusinessTypeCdValue": "671100050008",
+  "businessTableName": "business_resource_supplier",
+  "tableName": "resource_supplier",
+  "param": {
+    "rsId": "rs_id",
+    "supplierName": "supplier_name",
+    "bId": "b_id",
+    "address": "address",
+    "tel": "tel",
+    "contactName": "contact_name",
+    "accountBank": "account_bank",
+    "bankAccountNumber": "bank_account_number",
+    "createUserId": "create_user_id",
+    "createUserName": "create_user_name",
+    "statusCd": "status_cd",
+    "storeId": "store_id",
+    "remark": "remark",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "name",
+      "msg": "供应商名称不能为空"
+    },
+    {
+      "code": "address",
+      "msg": "供应商地址不能为空"
+    },
+    {
+      "code": "tel",
+      "msg": "供应商联系方式不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户不能为空"
+    }
+  ]
+}

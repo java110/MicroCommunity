@@ -3,27 +3,34 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="communityServiceDaoImpl">
-    
+
     <!-- 保存小区信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityInfo" parameterType="Map">
-        insert into business_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,month,state,operate)
-        values(#{communityId},#{bId},#{name},#{address},#{cityCode},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate})
+        insert into business_community(community_id,b_id,name,address,city_code,
+        nearby_landmarks,map_x,map_y,month,state,operate,community_area,tel)
+        values(#{communityId},#{bId},#{name},#{address},#{cityCode},
+        #{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate},#{communityArea},#{tel})
     </insert>
+
+
+
     <!-- 保存小区属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityAttr" parameterType="Map">
         insert into business_community_attr(b_id,attr_id,community_id,spec_cd,value,month,operate)
         values(#{bId},#{attrId},#{communityId},#{specCd},#{value},#{month},#{operate})
     </insert>
+
     <!-- 保存小区照片信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityPhoto" parameterType="Map">
-        insert into business_community_photo(community_photo_id,b_id,community_id,community_photo_type_cd,photo,month,operate)
+        insert into
+        business_community_photo(community_photo_id,b_id,community_id,community_photo_type_cd,photo,month,operate)
         values(#{communityPhotoId},#{bId},#{communityId},#{communityPhotoTypeCd},#{photo},#{month},#{operate})
     </insert>
 
-
     <!-- 查询小区信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCommunityInfo" parameterType="Map" resultType="Map">
-        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.operate,s.state
+        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,
+        s.map_x,s.map_y,s.operate,s.state,s.community_area communityArea,s.community_area,s.tel
         from business_community s where 1 = 1
         <if test="operate != null and operate != ''">
             and s.operate = #{operate}
@@ -35,7 +42,6 @@
             and s.community_id = #{communityId}
         </if>
     </select>
-
 
     <!-- 查询小区属性信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCommunityAttrs" parameterType="Map" resultType="Map">
@@ -70,11 +76,11 @@
         </if>
     </select>
 
-
     <!-- 保存小区信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityInfoInstance" parameterType="Map">
-        insert into s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd,state)
-        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0',#{state})
+        insert into
+        s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd,state,community_area,tel)
+        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0',#{state},#{communityArea},#{tel})
     </insert>
 
     <!-- 保存小区属性信息到 instance add by wuxw 2018-07-03 -->
@@ -87,18 +93,17 @@
             and sa.community_id = #{communityId}
         </if>
     </insert>
-    
+
     <!-- 保存 小区照片信息 instance add by wuxw 2018-07-03 -->
     <insert id="saveCommunityPhotoInstance" parameterType="Map">
         insert into s_community_photo(community_photo_id,b_id,community_id,community_photo_type_cd,photo,status_cd)
         select sp.community_photo_id,sp.b_id,sp.community_id,sp.community_photo_type_cd,sp.photo,'0'
         from business_community_photo sp
-        where  sp.operate = 'ADD' and sp.b_id=#{bId}
+        where sp.operate = 'ADD' and sp.b_id=#{bId}
         <if test="communityId != null and communityId != ''">
             and sp.community_id = #{communityId}
         </if>
     </insert>
-
 
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityInfo" parameterType="Map" resultType="Map">
@@ -108,7 +113,6 @@
         <if test="statusCd != null and statusCd != ''">
             and s.status_cd = #{statusCd}
         </if>
-
         <if test="bId != null and bId !=''">
             and s.b_id = #{bId}
         </if>
@@ -119,8 +123,15 @@
 
     <!-- 查询小区属性信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityAttrs" parameterType="Map" resultType="Map">
-        select sa.b_id,sa.attr_id,sa.community_id,sa.spec_cd,sa.value,sa.status_cd
+        select sa.b_id,sa.attr_id,sa.community_id,sa.spec_cd,sa.value,sa.status_cd,
+        sa.b_id bId,sa.attr_id attrId,sa.community_id communityId,sa.spec_cd specCd,
+        s.spec_name specName,
+        v.value_name valueName,
+        s.list_show listShow
         from s_community_attr sa
+        left join attr_spec s on sa.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name =
+        'building_community_attr'
+        left join attr_value v on sa.`value` = v.`value` and sa.spec_cd = v.spec_cd and v.status_cd = '0'
         where
         1=1
         <if test="statusCd != null and statusCd != ''">
@@ -131,6 +142,12 @@
         </if>
         <if test="communityId != null and communityId !=''">
             and sa.community_id = #{communityId}
+        </if>
+        <if test="communityIds != null ">
+            and sa.community_id in
+            <foreach collection="communityIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="attrId != null and attrId != ''">
             and sa.attr_id = #{attrId}
@@ -153,15 +170,12 @@
         </if>
     </select>
 
-
-
     <!-- 修改小区信息 add by wuxw 2018-07-03 -->
     <update id="updateCommunityInfoInstance" parameterType="Map">
         update s_community s set s.status_cd = #{statusCd}
         <if test="newBId != null and newBId != ''">
             ,s.b_id = #{newBId}
         </if>
-
         <if test="name != null and name != ''">
             ,s.name = #{name}
         </if>
@@ -182,6 +196,12 @@
         </if>
         <if test="state != null and state != ''">
             ,s.state = #{state}
+        </if>
+        <if test="tel != null and tel != ''">
+            ,s.tel = #{tel}
+        </if>
+        <if test="communityArea != null and communityArea != ''">
+            ,s.community_area = #{communityArea}
         </if>
         where 1=1
         <if test="bId != null and bId !=''">
@@ -240,17 +260,18 @@
         </if>
     </update>
 
-    
 
     <!--小区成员加入 add by wuxw 2018-10-27 saveBusinessCommunityMember-->
     <insert id="saveBusinessCommunityMember" parameterType="Map">
-        insert into business_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,month,operate,audit_status_cd)
+        insert into
+        business_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,month,operate,audit_status_cd)
         values(#{communityMemberId},#{bId},#{communityId},#{memberId},#{memberTypeCd},#{month},#{operate},#{auditStatusCd})
     </insert>
 
     <!-- 小区成员加入 instance表中 add by wuxw 2018-10-27 -->
     <insert id="saveCommunityMemberInstance" parameterType="Map">
-        insert into s_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,status_cd,audit_status_cd)
+        insert into
+        s_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,status_cd,audit_status_cd)
         select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,'0',ms.audit_status_cd
         from business_community_member ms where
         ms.operate = 'ADD' and ms.b_id=#{bId}
@@ -261,7 +282,8 @@
 
     <!-- 查询小区成员 add by wuxw 2018-10-27 getBusinessCommunityMember-->
     <select id="getBusinessCommunityMember" parameterType="Map" resultType="Map">
-        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.operate,ms.audit_status_cd
+        select
+        ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.operate,ms.audit_status_cd
         from business_community_member ms where 1 = 1
         <if test="operate != null and operate != ''">
             and ms.operate = #{operate}
@@ -277,8 +299,10 @@
 
     <!-- 查询小区成员  add by wuxw 2018-07-03 -->
     <select id="getCommunityMember" parameterType="Map" resultType="Map">
-        select ms.community_member_id , ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.status_cd,ms.audit_status_cd,
-        ms.community_member_id communityMemberId ,ms.b_id bId,ms.community_id communityId,ms.member_id memberId,ms.member_type_cd memberTypeCd,ms.status_cd statusCd,
+        select ms.community_member_id ,
+        ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.status_cd,ms.audit_status_cd,
+        ms.community_member_id communityMemberId ,ms.b_id bId,ms.community_id communityId,ms.member_id
+        memberId,ms.member_type_cd memberTypeCd,ms.status_cd statusCd,
         ms.audit_status_cd auditStatusCd,
         (CASE
         WHEN ms.audit_status_cd='1000'
@@ -435,8 +459,8 @@
 
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityInfoNew" parameterType="Map" resultType="Map">
-        select  t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,
-        t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,
+        select t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,
+        t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,t.tel,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,
         t.map_x,t.map_x mapX,t.state,(CASE
         WHEN t.state='1000'
@@ -446,12 +470,13 @@
         ELSE
         '审核拒绝'
         END) stateName,ca.area_code areaCode,ca.area_name areaName,
-        ca.parent_area_code parentAreaCode,ca.parent_area_name parentAreaName
+        ca.parent_area_code parentAreaCode,ca.parent_area_name parentAreaName,
+        t.community_area communityArea
         from s_community t,city_area ca
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
         </if>
-        where 1 =1
+        where t.status_cd = '0'
         and t.city_code = ca.area_code
         and ca.status_cd = '0'
         <if test="address !=null and address != ''">
@@ -505,6 +530,7 @@
             </foreach>
         </if>
         group by t.community_id
+        order by t.create_time ASC
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -512,10 +538,9 @@
     </select>
 
 
-
     <!-- 查询小区数量 add by wuxw 2018-07-03 -->
     <select id="queryCommunitysCount" parameterType="Map" resultType="Map">
-        select  count(DISTINCT(t.community_id)) count
+        select count(DISTINCT(t.community_id)) count
         from s_community t,city_area ca
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
@@ -575,5 +600,46 @@
         </if>
 
 
+    </select>
+    <!-- 查询商户小区 -->
+    <select id="getStoreCommunitys" parameterType="Map" resultType="Map">
+        SELECT
+        sc.`community_id` communityId,
+        sc.`name`,
+        sc.`address`,
+        sc.`nearby_landmarks` nearbyLandmarks,
+        sc.`city_code` cityCode,
+        sc.`map_x` mapX,
+        sc.`map_y` mapY,
+        sc.tel,
+        scm.`community_member_id` communityMemberId,
+        scm.`member_id` memberId,
+        scm.`member_type_cd` memberTypeCd,
+        scm.audit_status_cd auditStatusCd,
+        scm.`status_cd` statusCd,
+        ca.area_name areaName,
+        ca.parent_area_name cityName,
+        ca1.parent_area_name provName,
+        sc.community_area communityArea
+        FROM
+        s_community sc,
+        s_community_member scm,
+        city_area ca,
+        city_area ca1
+        WHERE
+        sc.`community_id` = scm.`community_id`
+        AND sc.`status_cd` = '0'
+        and sc.city_code = ca.area_code
+        and ca.parent_area_code = ca1.area_code
+        AND scm.`member_id` = #{memberId}
+        AND scm.`member_type_cd` = #{memberTypeCd}
+        AND scm.`status_cd` = '0'
+        <if test="auditStatusCd ==null or auditStatusCd ==''">
+            and scm.audit_status_cd in ('1000', '1100','1200')
+        </if>
+        <if test="auditStatusCd !=null and auditStatusCd !=''">
+            and scm.audit_status_cd = #{auditStatusCd}
+        </if>
+        group by sc.community_id
     </select>
 </mapper>

@@ -51,18 +51,19 @@ public class Java110MybatisInterceptor implements Interceptor {
 
         BoundSql boundSql = mappedStatement.getBoundSql(parameter);
         Configuration configuration = mappedStatement.getConfiguration();
+        Map<String, Object> sqlValue = new HashMap<>();
         //获取sql语句
-        String sql = showSql(configuration, boundSql);
+        String sql = showSql(configuration, boundSql, sqlValue, sqlCommandType);
         restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
         switch (sqlCommandType) {
             case INSERT:
-                dealInsertSql(mappedStatement, parameter, sql);
+                dealInsertSql(mappedStatement, parameter, sql, sqlValue);
                 break;
             case UPDATE:
-                dealUpdateSql(mappedStatement, parameter, sql);
+                dealUpdateSql(mappedStatement, parameter, sql, sqlValue);
                 break;
             case DELETE:
-                dealDeleteSql(mappedStatement, parameter, sql);
+                dealDeleteSql(mappedStatement, parameter, sql, sqlValue);
                 break;
         }
         return invocation.proceed();
@@ -74,7 +75,7 @@ public class Java110MybatisInterceptor implements Interceptor {
      * @param mappedStatement
      * @param parameter
      */
-    private void dealDeleteSql(MappedStatement mappedStatement, Object parameter, String sql) {
+    private void dealDeleteSql(MappedStatement mappedStatement, Object parameter, String sql, Map<String, Object> sqlValue) {
 
         String tmpTable = sql.substring(sql.indexOf("into") + 4, sql.indexOf("("));
         String tmpWhere = sql.substring(sql.indexOf("where"));
@@ -123,38 +124,17 @@ public class Java110MybatisInterceptor implements Interceptor {
      * @param mappedStatement
      * @param parameter
      */
-    private void dealUpdateSql(MappedStatement mappedStatement, Object parameter, String sql) {
+    private void dealUpdateSql(MappedStatement mappedStatement, Object parameter, String sql, Map<String, Object> sqlValue) {
         //RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
 
         String tmpTable = sql.substring(sql.indexOf("update") + 6, sql.indexOf("set"));
         String tmpWhere = sql.substring(sql.indexOf("where"));
-        String tmpKey = sql.substring(sql.indexOf("set") + 3, sql.indexOf("where"));
-        String[] tmpString = tmpKey.split(",");
-        Map tmpAfterMap = new HashMap();
-        for (String tmp : tmpString) {
-            String[] keyValues = tmp.split("=");
-            String key = "";
-            if (keyValues.length != 2) {
-                throw new IllegalArgumentException("update 语句可能有问题，没有 set 中出错 " + sql);
-            }
-            if (keyValues[0].contains(".")) {
-                key = keyValues[0].substring(keyValues[0].indexOf(".") + 1);
-            } else {
-                key = keyValues[0];
-            }
-            tmpAfterMap.put(key.trim(), keyValues[1].trim());
-        }
 
-
-        if (tmpString == null || tmpString.length < 1) {
-            throw new IllegalArgumentException("update 语句可能有问题，没有 set 内容 " + sql);
-        }
         //插入操作时之前的 没有数据 所以 preValue 为空对象
         JSONArray preValues = new JSONArray();
         JSONArray afterValues = new JSONArray();
         JSONObject afterVaule = null;
         String execSql = "select * from " + tmpTable + " " + tmpWhere;
-
         queryServiceDAOImpl = ApplicationContextFactory.getBean("queryServiceDAOImpl", IQueryServiceDAO.class);
         List<Map<String, Object>> deleteDatas = queryServiceDAOImpl.executeSql(execSql, null);
 
@@ -164,7 +144,7 @@ public class Java110MybatisInterceptor implements Interceptor {
                 preValues.add(map);
                 afterVaule = new JSONObject();
                 afterVaule.putAll(map);
-                afterVaule.putAll(tmpAfterMap);
+                afterVaule.putAll(sqlValue);
                 afterValues.add(afterVaule);
             }
         }
@@ -221,7 +201,7 @@ public class Java110MybatisInterceptor implements Interceptor {
      * @param mappedStatement
      * @param parameter
      */
-    private void dealInsertSql(MappedStatement mappedStatement, Object parameter, String sql) {
+    private void dealInsertSql(MappedStatement mappedStatement, Object parameter, String sql, Map<String, Object> sqlValue) {
 
         // RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
 
@@ -231,40 +211,41 @@ public class Java110MybatisInterceptor implements Interceptor {
         JSONArray afterValues = new JSONArray();
 
         String tmpTable = sql.substring(sql.toLowerCase().indexOf("into") + 4, sql.indexOf("("));
-        String tmpKey = sql.substring(sql.indexOf("(") + 1, sql.indexOf(")"));
-        String[] tmpKeys = tmpKey.split(",");
-        int valuePos = 0;
-        if (sql.contains("VALUES")) {
-            valuePos = sql.indexOf("VALUES") + 6;
-        } else {
-            valuePos = sql.indexOf("values") + 6;
-        }
-        String sqlValues = sql.substring(valuePos);
-        //说明批操作
+//        String tmpKey = sql.substring(sql.indexOf("(") + 1, sql.indexOf(")"));
+//        String[] tmpKeys = tmpKey.split(",");
+//        int valuePos = 0;
+//        if (sql.contains("VALUES")) {
+//            valuePos = sql.indexOf("VALUES") + 6;
+//        } else {
+//            valuePos = sql.indexOf("values") + 6;
+//        }
+//        String sqlValues = sql.substring(valuePos);
+//        //说明批操作
+//
+//        String[] sqlVauleses = sqlValues.split("\\)");
+//        JSONObject afterValue = null;
+//        for (String sqlV : sqlVauleses) {
+//            String tmpValue = sqlV.substring(sqlV.lastIndexOf("(") + 1);
+//            String[] tmpValues = tmpValue.split(",");
+//            afterValue = new JSONObject();
+//
+//            if (tmpKeys.length != tmpValues.length) {
+//                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
+//            }
+//
+//            if (tmpKeys.length < 1) {
+//                throw new IllegalArgumentException("sql 错误 未找到key" + sql);
+//            }
+//            for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
+//                if ("''".equals(tmpValues[keyIndex])) {
+//                    continue;
+//                }
+//                afterValue.put(tmpKeys[keyIndex], tmpValues[keyIndex]);
+//            }
+//
+//        }
 
-        String[] sqlVauleses = sqlValues.split("\\)");
-        JSONObject afterValue = null;
-        for (String sqlV : sqlVauleses) {
-            String tmpValue = sqlV.substring(sqlV.lastIndexOf("(") + 1);
-            String[] tmpValues = tmpValue.split(",");
-            afterValue = new JSONObject();
-
-            if (tmpKeys.length != tmpValues.length) {
-                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
-            }
-
-            if (tmpKeys.length < 1) {
-                throw new IllegalArgumentException("sql 错误 未找到key" + sql);
-            }
-            for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
-                if ("''".equals(tmpValues[keyIndex])) {
-                    continue;
-                }
-                afterValue.put(tmpKeys[keyIndex], tmpValues[keyIndex]);
-            }
-            afterValues.add(afterValue);
-        }
-
+        afterValues.add(sqlValue);
 
         JSONObject logText = new JSONObject();
         logText.put("preValue", preValues);
@@ -301,15 +282,18 @@ public class Java110MybatisInterceptor implements Interceptor {
 
     }
 
-    public String showSql(Configuration configuration, BoundSql boundSql) {
+    public String showSql(Configuration configuration, BoundSql boundSql, Map<String, Object> sqlValue, SqlCommandType sqlCommandType) {
         Object parameterObject = boundSql.getParameterObject();
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
-        String sql = boundSql.getSql().replaceAll("[\\s]+", " ");
+        String sql = boundSql.getSql().replaceAll("[\\s]+", " ").toLowerCase();
+        String orgSql = sql;// 原始sql
+
+        List<String> values = new ArrayList<>();
         if (parameterMappings.size() > 0 && parameterObject != null) {
             TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
             if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
                 sql = sql.replaceFirst("\\?", getParameterValue(parameterObject));
-
+                values.add(getParameterValue(parameterObject));
             } else {
                 MetaObject metaObject = configuration.newMetaObject(parameterObject);
                 for (ParameterMapping parameterMapping : parameterMappings) {
@@ -317,14 +301,70 @@ public class Java110MybatisInterceptor implements Interceptor {
                     if (metaObject.hasGetter(propertyName)) {
                         Object obj = metaObject.getValue(propertyName);
                         sql = sql.replaceFirst("\\?", getParameterValue(obj));
+                        values.add(getParameterValue(obj));
                     } else if (boundSql.hasAdditionalParameter(propertyName)) {
                         Object obj = boundSql.getAdditionalParameter(propertyName);
                         sql = sql.replaceFirst("\\?", getParameterValue(obj));
+                        values.add(getParameterValue(obj));
                     }
                 }
             }
         }
-        return sql.toLowerCase();
+
+        if (sqlCommandType == SqlCommandType.INSERT) {
+            String tmpKey = orgSql.substring(orgSql.indexOf("(") + 1, orgSql.indexOf(")"));
+            String[] tmpKeys = tmpKey.split(",");
+
+//            if (values.size() < tmpKeys.length) {
+//                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
+//            }
+            for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
+                String key = tmpKeys[keyIndex].trim();
+                String value = "";
+                if (values.size() - 1 < keyIndex) {
+                    continue;
+                }
+                value = values.get(keyIndex);
+                if ("''".equals(value)) {
+                    continue;
+                }
+                sqlValue.put(key, value);
+            }
+        } else if (sqlCommandType == SqlCommandType.UPDATE) {
+            String tmpKey = orgSql.substring(sql.indexOf("set") + 3, orgSql.indexOf("where"));
+            String[] tmpKeys = tmpKey.split(",");
+//            if (values.size() < tmpKeys.length) {
+//                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
+//            }
+            for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
+                String tmpSetKey = tmpKeys[keyIndex];
+                String[] keyValues = tmpSetKey.split("=");
+                String key = "";
+                if (keyValues.length != 2) {
+                    throw new IllegalArgumentException("update 语句可能有问题，没有 set 中出错 " + sql);
+                }
+                if (keyValues[0].contains(".")) {
+                    key = keyValues[0].substring(keyValues[0].indexOf(".") + 1).trim();
+                } else {
+                    key = keyValues[0].trim();
+                }
+                String value = "";
+                if (values.size() - 1 < keyIndex) {
+                    continue;
+                }
+                value = values.get(keyIndex);
+                if ("''".equals(value)) {
+                    continue;
+                }
+                sqlValue.put(key, value);
+            }
+
+        } else if (sqlCommandType == SqlCommandType.DELETE) {
+
+        }
+
+
+        return sql;
     }
 
     private String getParameterValue(Object obj) {

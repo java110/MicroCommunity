@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="transactionLogServiceDaoImpl">
+
+
+    <!-- 保存交互日志信息 add by wuxw 2018-07-03 -->
+    <insert id="saveTransactionLogInfo" parameterType="Map">
+        insert into transaction_log(
+        src_ip,service_code,cost_time,ip,app_id,log_id,state,user_id,transaction_id,timestamp
+        ) values (
+        #{srcIp},#{serviceCode},#{costTime},#{ip},#{appId},#{logId},#{state},#{userId},#{transactionId},#{timestamp}
+        )
+    </insert>
+
+
+    <!-- 查询交互日志信息 add by wuxw 2018-07-03 -->
+    <select id="getTransactionLogInfo" parameterType="Map" resultType="Map">
+        select t.src_ip,t.src_ip srcIp,t.service_code,t.service_code serviceCode,t.cost_time,t.cost_time
+        costTime,t.ip,t.app_id,t.app_id appId,t.log_id,t.log_id logId,t.state,t.user_id,t.user_id
+        userId,t.transaction_id,t.transaction_id transactionId,t.timestamp,t.create_time createTime
+        from transaction_log t
+        where 1 =1
+        <if test="srcIp !=null and srcIp != ''">
+            and t.src_ip= #{srcIp}
+        </if>
+        <if test="serviceCode !=null and serviceCode != ''">
+            and t.service_code= #{serviceCode}
+        </if>
+        <if test="costTime !=null and costTime != ''">
+            and t.cost_time= #{costTime}
+        </if>
+        <if test="ip !=null and ip != ''">
+            and t.ip= #{ip}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="transactionId !=null and transactionId != ''">
+            and t.transaction_id= #{transactionId}
+        </if>
+        <if test="timestamp !=null and timestamp != ''">
+            and t.timestamp= #{timestamp}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改交互日志信息 add by wuxw 2018-07-03 -->
+    <update id="updateTransactionLogInfo" parameterType="Map">
+        update transaction_log t
+        <set>
+        <if test="newBId != null and newBId != ''">
+            t.b_id = #{newBId},
+        </if>
+        <if test="srcIp !=null and srcIp != ''">
+             t.src_ip= #{srcIp},
+        </if>
+        <if test="serviceCode !=null and serviceCode != ''">
+             t.service_code= #{serviceCode},
+        </if>
+        <if test="costTime !=null and costTime != ''">
+             t.cost_time= #{costTime},
+        </if>
+        <if test="ip !=null and ip != ''">
+             t.ip= #{ip},
+        </if>
+        <if test="appId !=null and appId != ''">
+             t.app_id= #{appId},
+        </if>
+        <if test="state !=null and state != ''">
+             t.state= #{state},
+        </if>
+        <if test="userId !=null and userId != ''">
+             t.user_id= #{userId},
+        </if>
+        <if test="transactionId !=null and transactionId != ''">
+             t.transaction_id= #{transactionId},
+        </if>
+        <if test="timestamp !=null and timestamp != ''">
+            t.timestamp= #{timestamp},
+        </if>
+    </set>
+        where 1=1
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+
+    </update>
+
+    <!-- 查询交互日志数量 add by wuxw 2018-07-03 -->
+    <select id="queryTransactionLogsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from transaction_log t
+        where 1 =1
+        <if test="srcIp !=null and srcIp != ''">
+            and t.src_ip= #{srcIp}
+        </if>
+        <if test="serviceCode !=null and serviceCode != ''">
+            and t.service_code= #{serviceCode}
+        </if>
+        <if test="costTime !=null and costTime != ''">
+            and t.cost_time= #{costTime}
+        </if>
+        <if test="ip !=null and ip != ''">
+            and t.ip= #{ip}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="transactionId !=null and transactionId != ''">
+            and t.transaction_id= #{transactionId}
+        </if>
+        <if test="timestamp !=null and timestamp != ''">
+            and t.timestamp= #{timestamp}
+        </if>
+
+
+    </select>
+
+</mapper>

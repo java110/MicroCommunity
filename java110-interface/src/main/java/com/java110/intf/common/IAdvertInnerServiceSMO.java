@@ -38,4 +38,13 @@ public interface IAdvertInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAdvertsCount", method = RequestMethod.POST)
     int queryAdvertsCount(@RequestBody AdvertDto advertDto);
+
+    /**
+     * 修改广告信息
+     *
+     * @param advertDto
+     * @return
+     */
+    @RequestMapping(value = "/updateAdverts", method = RequestMethod.POST)
+    int updateAdverts(@RequestBody AdvertDto advertDto);
 }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupBuyBatchServiceDaoImpl">
+
+
+    <!-- 保存拼团批次信息 add by wuxw 2018-07-03 -->
+    <insert id="saveGroupBuyBatchInfo" parameterType="Map">
+        insert into group_buy_batch(
+        batch_end_time,batch_id,store_id,setting_id,batch_start_time,cur_batch
+        ) values (
+        #{batchEndTime},#{batchId},#{storeId},#{settingId},#{batchStartTime},#{curBatch}
+        )
+    </insert>
+
+
+    <!-- 查询拼团批次信息 add by wuxw 2018-07-03 -->
+    <select id="getGroupBuyBatchInfo" parameterType="Map" resultType="Map">
+        select t.batch_end_time,t.batch_end_time batchEndTime,t.status_cd,t.status_cd statusCd,t.batch_id,t.batch_id
+        batchId,t.store_id,t.store_id storeId,t.setting_id,t.setting_id settingId,t.batch_start_time,t.batch_start_time
+        batchStartTime,t.cur_batch,t.cur_batch curBatch,t.create_time createTime,gbs.group_buy_name groupBuyName
+        from group_buy_batch t
+        left join group_buy_setting gbs on t.setting_id = gbs.setting_id and t.store_id = gbs.store_id and gbs.status_cd = '0'
+        where 1 =1
+        <if test="batchEndTime !=null and batchEndTime != ''">
+            and t.batch_end_time= #{batchEndTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        <if test="batchStartTime !=null and batchStartTime != ''">
+            and t.batch_start_time= #{batchStartTime}
+        </if>
+        <if test="curBatch !=null and curBatch != ''">
+            and t.cur_batch= #{curBatch}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改拼团批次信息 add by wuxw 2018-07-03 -->
+    <update id="updateGroupBuyBatchInfo" parameterType="Map">
+        update group_buy_batch t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="batchEndTime !=null and batchEndTime != ''">
+            , t.batch_end_time= #{batchEndTime}
+        </if>
+
+        <if test="batchStartTime !=null and batchStartTime != ''">
+            , t.batch_start_time= #{batchStartTime}
+        </if>
+        <if test="curBatch !=null and curBatch != ''">
+            , t.cur_batch= #{curBatch}
+        </if>
+        where 1=1
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="defaultCurBatch !=null and defaultCurBatch != ''">
+            and t.cur_batch= #{defaultCurBatch}
+        </if>
+
+
+    </update>
+
+    <!-- 查询拼团批次数量 add by wuxw 2018-07-03 -->
+    <select id="queryGroupBuyBatchsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from group_buy_batch t
+        where 1 =1
+        <if test="batchEndTime !=null and batchEndTime != ''">
+            and t.batch_end_time= #{batchEndTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        <if test="batchStartTime !=null and batchStartTime != ''">
+            and t.batch_start_time= #{batchStartTime}
+        </if>
+        <if test="curBatch !=null and curBatch != ''">
+            and t.cur_batch= #{curBatch}
+        </if>
+
+
+    </select>
+
+</mapper>

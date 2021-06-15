@@ -1,4 +1,5 @@
-# HC小区管理系统是前后端完全开源并免费商用的小区物业管理系统，包含小区后端项目，小区前段项目，物业版uni-app和业主版uni-app,最新SQL文件加群获取827669685(已满)，799748606（群二）
+[english](Readme_en.md)
+# HC小区管理系统是前后端完全开源并免费商用的小区物业管理系统，包含小区后端项目，小区前段项目，物业版uni-app和业主版uni-app,最新SQL文件加群获取827669685(已满)，799748606（已满）274026637（群六）
 
 ## 开源代码说明
 
@@ -13,7 +14,7 @@
 
 ### 分支说明（branch）
 
-分支管理说明，master 为主分支，0.3-stable 为最新稳定分支（推荐使用） 0.1-stable 为前后端不分离版本（不推荐）
+分支管理说明，master 为主分支，0.7-stable 为最新稳定分支（推荐使用）
 
 
 ### 如何开始（how to start）
@@ -40,7 +41,7 @@
 
 ### 技术文档
 
-[技术文档](http://www.homecommunity.cn/document)
+[技术文档](http://www.homecommunity.cn/devDoc)
 
     
 ### 产品
@@ -54,7 +55,7 @@
    
    主要系统功能请查看
      
-   [http://www.homecommunity.cn//document/#/func/funcation](http://www.homecommunity.cn//document/#/func/funcation)
+   [http://www.homecommunity.cn/devDoc/#/func/funcation](http://www.homecommunity.cn/devDoc/#/func/funcation)
   
 
 ### 演示地址（demo）
@@ -62,8 +63,6 @@
 [http://www.homecommunity.cn/](http://www.homecommunity.cn/)
 
 物业 账号/密码：wuxw/admin
-
-代理商 账号/密码：dails/admin
 
 运维团队 账号/密码：admin/admin
 
@@ -87,7 +86,8 @@
 
 ### 加入我们（join）
 
-加入微小区交流群随时了解项目进度，和java110开发者零距离沟通 qq群号 827669685(已满)，799748606（群二），邮箱：928255095@qq.com
+
+加入微小区交流群随时了解项目进度，和java110开发者零距离沟通 qq群号 827669685(已满)，799748606（已满），274026637（未满）邮箱：928255095@qq.com
 
 ![image](docs/img/qq.png)
 

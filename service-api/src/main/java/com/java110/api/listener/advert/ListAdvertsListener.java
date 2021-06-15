@@ -28,7 +28,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 查询小区侦听类
  */
@@ -60,12 +59,10 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
         return HttpMethod.GET;
     }
 
-
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
     public IAdvertInnerServiceSMO getAdvertInnerServiceSMOImpl() {
         return advertInnerServiceSMOImpl;
@@ -78,54 +75,36 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         AdvertDto advertDto = BeanConvertUtil.covertBean(reqJson, AdvertDto.class);
-
         int count = advertInnerServiceSMOImpl.queryAdvertsCount(advertDto);
-
         List<ApiAdvertDataVo> adverts = null;
-
         if (count > 0) {
             List<AdvertDto> advertDtos = advertInnerServiceSMOImpl.queryAdverts(advertDto);
-            refreshAdvert(advertDtos);
             adverts = BeanConvertUtil.covertBeanList(advertDtos, ApiAdvertDataVo.class);
         } else {
             adverts = new ArrayList<>();
         }
-
         ApiAdvertVo apiAdvertVo = new ApiAdvertVo();
-
         apiAdvertVo.setTotal(count);
         apiAdvertVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiAdvertVo.setAdverts(adverts);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiAdvertVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 
-
     private void refreshAdvert(List<AdvertDto> advertDtos) {
-
         //批量处理 小区
         refreshCommunitys(advertDtos);
-
-
-        //批量处理单元信息
+        //批量处理楼栋信息
         refreshFloors(advertDtos);
-
         //批量处理单元信息
         refreshUnits(advertDtos);
-
         //批量处理 房屋信息
         refreshRooms(advertDtos);
-
     }
 
     /**
@@ -138,23 +117,19 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
         List<String> communityIds = new ArrayList<String>();
         List<AdvertDto> tmpAdvertDtos = new ArrayList<>();
         for (AdvertDto advertDto : advertDtos) {
-
             if ("1000".equals(advertDto.getLocationTypeCd())) {
                 communityIds.add(advertDto.getLocationObjId());
                 tmpAdvertDtos.add(advertDto);
             }
         }
-
         if (communityIds.size() < 1) {
             return;
         }
         String[] tmpCommunityIds = communityIds.toArray(new String[communityIds.size()]);
-
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityIds(tmpCommunityIds);
         //根据 userId 查询用户信息
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-
         for (AdvertDto advertDto : tmpAdvertDtos) {
             for (CommunityDto tmpCommunityDto : communityDtos) {
                 if (advertDto.getLocationObjId().equals(tmpCommunityDto.getCommunityId())) {
@@ -165,7 +140,7 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
     }
 
     /**
-     * 获取批量单元
+     * 获取批量楼栋
      *
      * @param adverts 设备信息
      * @return 批量userIds 信息
@@ -174,33 +149,27 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
         List<String> floorIds = new ArrayList<String>();
         List<AdvertDto> tmpAdvertDtos = new ArrayList<>();
         for (AdvertDto advertDto : adverts) {
-
             if ("4000".equals(advertDto.getLocationTypeCd())) {
                 floorIds.add(advertDto.getLocationObjId());
                 tmpAdvertDtos.add(advertDto);
             }
         }
-
         if (floorIds.size() < 1) {
             return;
         }
-        String[] tmpFloorIds = floorIds.toArray(new String[floorIds.size()]);
-
-        FloorDto floorDto = new FloorDto();
-        floorDto.setFloorIds(tmpFloorIds);
-        //根据 userId 查询用户信息
-        List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-
         for (AdvertDto advertDto : tmpAdvertDtos) {
-            for (FloorDto tmpFloorDto : floorDtos) {
-                if (advertDto.getLocationObjId().equals(tmpFloorDto.getFloorId())) {
-                    advertDto.setLocationObjName(tmpFloorDto.getFloorNum() + "栋");
-                    BeanConvertUtil.covertBean(tmpFloorDto, advertDto);
-                }
+            FloorDto floorDto = new FloorDto();
+            floorDto.setFloorId(advertDto.getLocationObjId());
+            floorDto.setCommunityId(advertDto.getCommunityId());
+            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+            if (floorDtos == null || floorDtos.size() < 1) {
+                return;
+            }
+            if (advertDto.getLocationObjId().equals(floorDtos.get(0).getFloorId())) {
+                advertDto.setLocationObjName(floorDtos.get(0).getFloorNum() + "栋");
             }
         }
     }
-
 
     /**
      * 获取批量单元
@@ -212,28 +181,23 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
         List<String> unitIds = new ArrayList<String>();
         List<AdvertDto> tmpAdvertDtos = new ArrayList<>();
         for (AdvertDto advertDto : adverts) {
-
             if ("2000".equals(advertDto.getLocationTypeCd())) {
                 unitIds.add(advertDto.getLocationObjId());
                 tmpAdvertDtos.add(advertDto);
             }
         }
-
         if (unitIds.size() < 1) {
             return;
         }
         String[] tmpUnitIds = unitIds.toArray(new String[unitIds.size()]);
-
         FloorAndUnitDto floorAndUnitDto = new FloorAndUnitDto();
         floorAndUnitDto.setUnitIds(tmpUnitIds);
         //根据 userId 查询用户信息
         List<FloorAndUnitDto> unitDtos = unitInnerServiceSMOImpl.getFloorAndUnitInfo(floorAndUnitDto);
-
         for (AdvertDto advertDto : tmpAdvertDtos) {
             for (FloorAndUnitDto tmpUnitDto : unitDtos) {
                 if (advertDto.getLocationObjId().equals(tmpUnitDto.getUnitId())) {
                     advertDto.setLocationObjName(tmpUnitDto.getFloorNum() + "栋" + tmpUnitDto.getUnitNum() + "单元");
-                    BeanConvertUtil.covertBean(tmpUnitDto, advertDto);
                 }
             }
         }
@@ -249,7 +213,6 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
         List<String> roomIds = new ArrayList<String>();
         List<AdvertDto> tmpAdvertDtos = new ArrayList<>();
         for (AdvertDto advertDto : adverts) {
-
             if ("3000".equals(advertDto.getLocationTypeCd())) {
                 roomIds.add(advertDto.getLocationObjId());
                 tmpAdvertDtos.add(advertDto);
@@ -259,18 +222,15 @@ public class ListAdvertsListener extends AbstractServiceApiListener {
             return;
         }
         String[] tmpRoomIds = roomIds.toArray(new String[roomIds.size()]);
-
         RoomDto roomDto = new RoomDto();
         roomDto.setRoomIds(tmpRoomIds);
         roomDto.setCommunityId(adverts.get(0).getCommunityId());
         //根据 userId 查询用户信息
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
         for (AdvertDto advertDto : tmpAdvertDtos) {
             for (RoomDto tmpRoomDto : roomDtos) {
                 if (advertDto.getLocationObjId().equals(tmpRoomDto.getRoomId())) {
                     advertDto.setLocationObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
-                    BeanConvertUtil.covertBean(tmpRoomDto, advertDto);
                 }
             }
         }

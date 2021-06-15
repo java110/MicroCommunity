@@ -28,6 +28,8 @@ public class FloorDto extends PageDto implements Serializable {
      */
     private String floorNum;
 
+    private String floorArea;
+
     /**
      * 名称
      */
@@ -112,5 +114,13 @@ public class FloorDto extends PageDto implements Serializable {
 
     public void setFloorIds(String[] floorIds) {
         this.floorIds = floorIds;
+    }
+
+    public String getFloorArea() {
+        return floorArea;
+    }
+
+    public void setFloorArea(String floorArea) {
+        this.floorArea = floorArea;
     }
 }

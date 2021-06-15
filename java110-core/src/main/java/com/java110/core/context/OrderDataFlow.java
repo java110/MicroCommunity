@@ -130,7 +130,13 @@ public class OrderDataFlow extends AbstractOrderDataFlowContext {
 
         this.orders.setRequestTime(this.getReqHeaders().get(CommonConstant.HTTP_REQ_TIME));
 
-        this.orders.setoId("-1");
+        String oId = this.getReqHeaders().get(CommonConstant.O_ID);
+
+        if(StringUtil.isEmpty(oId)){
+            oId = "-1";
+        }
+
+        this.orders.setoId(oId);
 
         JSONObject tmpOrderJson = this.getReqJson().getJSONObject("orders");
 

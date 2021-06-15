@@ -6,13 +6,12 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairUserInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.community.IRepairTypeUserInnerServiceSMO;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairTypeUserDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRepairTypeUserInnerServiceSMO;
+import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
@@ -49,68 +48,88 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IRepairTypeUserInnerServiceSMO repairTypeUserInnerServiceSMOImpl;
 
-    @Autowired
-    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
-
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
-        //Assert.hasKeyAndValue(reqJson, "context", "未包含派单内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "userId", "未包含用户ID");
         Assert.hasKeyAndValue(reqJson, "userName", "未包含用户名称");
-        RepairDto repairDto = new RepairDto();
-        repairDto.setRepairId(reqJson.getString("repairId"));
-        repairDto.setCommunityId(reqJson.getString("communityId"));
-        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
 
-        Assert.listOnlyOne(repairDtos, "未找到工单信息或找到多条");
-
-        String repairType = repairDtos.get(0).getRepairType();
-        RepairTypeUserDto repairTypeUserDto = new RepairTypeUserDto();
-        repairTypeUserDto.setCommunityId(reqJson.getString("communityId"));
-        repairTypeUserDto.setRepairType(repairType);
-        repairTypeUserDto.setStaffId(reqJson.getString("userId"));
-        int count = repairTypeUserInnerServiceSMOImpl.queryRepairTypeUsersCount(repairTypeUserDto);
-        if (count < 1) {
-            throw new IllegalArgumentException("您没有权限强该类型报修单");
-        }
 
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        RepairUserDto repairUserDto = new RepairUserDto();
-        repairUserDto.setRepairId(reqJson.getString("repairId"));
-        repairUserDto.setCommunityId(reqJson.getString("communityId"));
-        repairUserDto.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
-        List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        Assert.listOnlyOne(repairUserDtos, "未找到开始节点或找到多条");
+        RepairDto repairDtoData = new RepairDto();
+        repairDtoData.setRepairId(reqJson.getString("repairId"));
+        repairDtoData.setCommunityId(reqJson.getString("communityId"));
+        List<RepairDto> repairDtoList = repairInnerServiceSMOImpl.queryRepairs(repairDtoData);
+        if (repairDtoList.size()!= 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "未找到工单信息或找到多条！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        String repairType = repairDtoList.get(0).getRepairType();
+        RepairTypeUserDto repairTypeUserDto = new RepairTypeUserDto();
+        repairTypeUserDto.setCommunityId(reqJson.getString("communityId"));
+        repairTypeUserDto.setRepairType(repairType);
+        repairTypeUserDto.setStaffId(reqJson.getString("userId"));
+        int count = repairTypeUserInnerServiceSMOImpl.queryRepairTypeUsersCount(repairTypeUserDto);
+        if (count < 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您没有权限抢该类型报修单！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
 
-        String userId = reqJson.getString("userId");
-        String userName = reqJson.getString("userName");
-        RepairUserPo repairUserPo = new RepairUserPo();
-        repairUserPo.setRuId("-1");
-        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setState(RepairUserDto.STATE_DOING);
-        repairUserPo.setRepairId(reqJson.getString("repairId"));
-        repairUserPo.setStaffId(userId);
-        repairUserPo.setStaffName(userName);
-        repairUserPo.setPreStaffId(repairUserDtos.get(0).getStaffId());
-        repairUserPo.setPreStaffName(repairUserDtos.get(0).getStaffName());
-        repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
-        repairUserPo.setContext("");
-        repairUserPo.setCommunityId(reqJson.getString("communityId"));
-        super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
-        ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
+        //获取报修id
+        String repairId = reqJson.getString("repairId");
+        RepairDto repairDto = new RepairDto();
+        repairDto.setRepairId(repairId);
+        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
+        if (repairDtos == null || repairDtos.size() < 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "数据错误！");
+            context.setResponseEntity(responseEntity);
+        } else {
+            //获取状态
+            String state = repairDtos.get(0).getState();
+            if (state.equals("1000")) {   //1000表示未派单
+                RepairUserDto repairUserDto = new RepairUserDto();
+                repairUserDto.setRepairId(repairId);
+                repairUserDto.setCommunityId(reqJson.getString("communityId"));
+                repairUserDto.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
+                List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
+                Assert.listOnlyOne(repairUserDtos, "未找到开始节点或找到多条");
 
+                String userId = reqJson.getString("userId");
+                String userName = reqJson.getString("userName");
+                RepairUserPo repairUserPo = new RepairUserPo();
+                repairUserPo.setRuId("-1");
+                repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setState(RepairUserDto.STATE_DOING);
+                repairUserPo.setRepairId(reqJson.getString("repairId"));
+                repairUserPo.setStaffId(userId);
+                repairUserPo.setStaffName(userName);
+                repairUserPo.setPreStaffId(repairUserDtos.get(0).getStaffId());
+                repairUserPo.setPreStaffName(repairUserDtos.get(0).getStaffName());
+                repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId());
+                repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
+                repairUserPo.setContext("");
+                repairUserPo.setCommunityId(reqJson.getString("communityId"));
+                super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
 
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
 
-        context.setResponseEntity(responseEntity);
+                context.setResponseEntity(responseEntity);
+            } else if (state.equals("1100")) {   //1100表示接单
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "该订单处于接单状态，无法进行抢单！");
+                context.setResponseEntity(responseEntity);
+            } else {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "状态异常！");
+                context.setResponseEntity(responseEntity);
+            }
+        }
 
     }
 

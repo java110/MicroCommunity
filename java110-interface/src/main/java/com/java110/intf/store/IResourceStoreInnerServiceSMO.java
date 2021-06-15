@@ -42,4 +42,5 @@ public interface IResourceStoreInnerServiceSMO {
 
     @RequestMapping(value = "/updateResourceStore", method = RequestMethod.POST)
     int updateResourceStore(@RequestBody ResourceStorePo resourceStorePo);
+
 }

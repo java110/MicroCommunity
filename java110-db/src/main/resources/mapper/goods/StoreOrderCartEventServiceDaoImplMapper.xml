@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeOrderCartEventServiceDaoImpl">
+
+
+    <!-- 保存购物车事件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreOrderCartEventInfo" parameterType="Map">
+        insert into store_order_cart_event(
+        event_id,event_msg,order_id,cart_id,event_obj_type,event_obj_id
+        ) values (
+        #{eventId},#{eventMsg},#{orderId},#{cartId},#{eventObjType},#{eventObjId}
+        )
+    </insert>
+
+
+    <!-- 查询购物车事件信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreOrderCartEventInfo" parameterType="Map" resultType="Map">
+        select t.event_id,t.event_id eventId,t.event_msg,t.event_msg eventMsg,t.order_id,t.order_id
+        orderId,t.cart_id,t.cart_id cartId,t.event_obj_type,t.event_obj_type eventObjType,t.event_obj_id,t.event_obj_id
+        eventObjId,t.create_time createTime
+        from store_order_cart_event t
+        where 1 =1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="eventMsg !=null and eventMsg != ''">
+            and t.event_msg= #{eventMsg}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="eventObjType !=null and eventObjType != ''">
+            and t.event_obj_type= #{eventObjType}
+        </if>
+        <if test="eventObjId !=null and eventObjId != ''">
+            and t.event_obj_id= #{eventObjId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改购物车事件信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreOrderCartEventInfo" parameterType="Map">
+        update store_order_cart_event t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="eventMsg !=null and eventMsg != ''">
+            , t.event_msg= #{eventMsg}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            , t.cart_id= #{cartId}
+        </if>
+        <if test="eventObjType !=null and eventObjType != ''">
+            , t.event_obj_type= #{eventObjType}
+        </if>
+        <if test="eventObjId !=null and eventObjId != ''">
+            , t.event_obj_id= #{eventObjId}
+        </if>
+        where 1=1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+
+    </update>
+
+    <!-- 查询购物车事件数量 add by wuxw 2018-07-03 -->
+    <select id="queryStoreOrderCartEventsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from store_order_cart_event t
+        where 1 =1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="eventMsg !=null and eventMsg != ''">
+            and t.event_msg= #{eventMsg}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="cartId !=null and cartId != ''">
+            and t.cart_id= #{cartId}
+        </if>
+        <if test="eventObjType !=null and eventObjType != ''">
+            and t.event_obj_type= #{eventObjType}
+        </if>
+        <if test="eventObjId !=null and eventObjId != ''">
+            and t.event_obj_id= #{eventObjId}
+        </if>
+
+
+    </select>
+
+</mapper>

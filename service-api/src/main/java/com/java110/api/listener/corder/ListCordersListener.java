@@ -9,6 +9,7 @@ import com.java110.dto.corder.CorderDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeActivitiesConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.corder.ApiCorderDataVo;
 import com.java110.vo.api.corder.ApiCorderVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,22 +36,15 @@ public class ListCordersListener extends AbstractServiceApiListener {
 
         int count = cordersInnerServiceSMOImpl.queryCordersCount(corderDto);
 
-        List<ApiCorderDataVo> corderVos = null;
+        List<CorderDto> corderVos = null;
 
         if (count > 0) {
-            corderVos = BeanConvertUtil.covertBeanList(cordersInnerServiceSMOImpl.queryCorders(corderDto), ApiCorderDataVo.class);
+            corderVos = cordersInnerServiceSMOImpl.queryCorders(corderDto);
         } else {
             corderVos = new ArrayList<>();
         }
 
-
-        ApiCorderVo corderVo = new  ApiCorderVo();
-
-        corderVo.setTotal(count);
-        corderVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        corderVo.setCorderDataVos(corderVos);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(corderVo), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")),count,corderVos);
 
         context.setResponseEntity(responseEntity);
     }

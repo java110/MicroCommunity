@@ -34,10 +34,12 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String communityId;
     private String appTypeCd;
     private String memberId;
+    private String ownerId;
     private String userId;
     private String appType;
     private String[] userIds;
     private String oldAppUserId;
+    private String sCommunityTel;
 
 
     private String[] states;
@@ -48,10 +50,12 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String parentAreaName;
 
 
-
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String nickName;
+    private String headImgUrl;
 
 
     public String getIdCard() {
@@ -237,5 +241,37 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setOldAppUserId(String oldAppUserId) {
         this.oldAppUserId = oldAppUserId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
+    }
+
+    public String getsCommunityTel() {
+        return sCommunityTel;
+    }
+
+    public void setsCommunityTel(String sCommunityTel) {
+        this.sCommunityTel = sCommunityTel;
     }
 }

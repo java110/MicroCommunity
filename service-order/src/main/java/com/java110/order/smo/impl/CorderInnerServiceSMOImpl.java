@@ -42,14 +42,6 @@ public class CorderInnerServiceSMOImpl extends BaseServiceSMO implements ICorder
         if (corders == null || corders.size() == 0) {
             return corders;
         }
-
-        String[] userIds = getUserIds(corders);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
-
-        for (CorderDto order : corders) {
-            refreshDemo(order, users);
-        }
         return corders;
     }
 

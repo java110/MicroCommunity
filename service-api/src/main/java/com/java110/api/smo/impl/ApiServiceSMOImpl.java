@@ -3,6 +3,7 @@ package com.java110.api.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
+import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
@@ -13,10 +14,20 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.AppService;
 import com.java110.entity.center.DataFlowLinksCost;
+import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.utils.cache.AppRouteCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.*;
-import com.java110.utils.exception.*;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.KafkaConstant;
+import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.BusinessException;
+import com.java110.utils.exception.DecryptException;
+import com.java110.utils.exception.InitConfigDataException;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.exception.NoAuthorityException;
+import com.java110.utils.exception.SMOException;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.DateUtil;
@@ -50,6 +61,9 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private ISaveTransactionLogSMO saveTransactionLogSMOImpl;
+
 
     /**
      * 服务调度
@@ -64,7 +78,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         ApiDataFlow dataFlow = null;
 
-        //JSONObject responseJson = null;
+        Date startDate = DateUtil.getCurrentDate();
 
         ResponseEntity<String> responseEntity = null;
 
@@ -103,15 +117,10 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             responseEntity = new ResponseEntity<String>("内部异常：" + e.getMessage() + e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         } finally {
+            Date endDate = DateUtil.getCurrentDate();
             if (dataFlow != null) {
                 //这里记录日志
-                Date endDate = DateUtil.getCurrentDate();
-
                 dataFlow.setEndDate(endDate);
-                //添加耗时
-                //DataFlowFactory.addCostTime(dataFlow, "service", "业务处理总耗时", dataFlow.getStartDate(), dataFlow.getEndDate());
-                //保存耗时
-                //saveCostTimeLogMessage(dataFlow);
                 //处理返回报文鉴权
                 //AuthenticationFactory.putSign(dataFlow);
             }
@@ -119,11 +128,83 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 //resJson = encrypt(responseJson.toJSONString(),headers);
                 responseEntity = new ResponseEntity<String>(resJson, HttpStatus.OK);
             }
-            //这里保存耗时，以及日志
-            return responseEntity;
 
+            //添加耗时
+            saveLog(dataFlow, startDate, endDate, reqJson, responseEntity);
+            //这里保存耗时，以及日志
+        }
+        return responseEntity;
+    }
+
+    /**
+     * 日志记录
+     *
+     * @param dataFlow
+     * @param startDate
+     * @param endDate
+     */
+    private void saveLog(ApiDataFlow dataFlow, Date startDate, Date endDate, String reqJson, ResponseEntity<String> responseEntity) {
+
+        if (dataFlow == null) {
+            return;
         }
 
+        String serviceCode = dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE);
+
+        String logServiceCode = MappingCache.getValue(MappingCache.LOG_SERVICE_CODE);
+
+        //日志查询不记录
+        if ("/transactionLog/queryTransactionLog".equals(serviceCode)
+                || "/transactionLog/queryTransactionLogMessage".equals(serviceCode)
+                || "file.getFile".equals(serviceCode)
+                || "file.getFileByObjId".equals(serviceCode)
+                || "/machine/heartbeat".equals(serviceCode) // 心跳也不记录
+        ) {
+            return;
+        }
+
+        if (StringUtil.isEmpty(logServiceCode)) {
+            return;
+        }
+        if (logServiceCode.contains("|")) {
+            String[] logServiceCodes = logServiceCode.split("|");
+
+            for (String lServiceCode : logServiceCodes) {
+                if (serviceCode.equals(lServiceCode.trim())) {
+                    doSaveLog(dataFlow, startDate, endDate, serviceCode, reqJson, responseEntity);
+                    return;
+                }
+            }
+        }
+
+        if ("all".equals(logServiceCode.trim().toLowerCase())) {
+            doSaveLog(dataFlow, startDate, endDate, serviceCode, reqJson, responseEntity);
+            return;
+        }
+
+        if (serviceCode.equals(logServiceCode.trim())) {
+            doSaveLog(dataFlow, startDate, endDate, serviceCode, reqJson, responseEntity);
+        }
+    }
+
+
+    private void doSaveLog(ApiDataFlow dataFlow, Date startDate, Date endDate, String serviceCode, String reqJson, ResponseEntity<String> responseEntity) {
+
+        TransactionLogPo transactionLogPo = new TransactionLogPo();
+        transactionLogPo.setAppId(dataFlow.getAppId());
+        transactionLogPo.setCostTime((endDate.getTime() - startDate.getTime()) + "");
+        transactionLogPo.setIp("");
+        transactionLogPo.setServiceCode(serviceCode);
+        transactionLogPo.setSrcIp(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SRC_IP));
+        transactionLogPo.setState(responseEntity.getStatusCode() != HttpStatus.OK ? "F" : "S");
+        transactionLogPo.setTimestamp(dataFlow.getRequestTime());
+        transactionLogPo.setUserId(dataFlow.getUserId());
+        transactionLogPo.setTransactionId(dataFlow.getTransactionId());
+        transactionLogPo.setRequestHeader(dataFlow.getRequestHeaders() != null ? dataFlow.getRequestHeaders().toString() : "");
+        transactionLogPo.setResponseHeader(responseEntity.getHeaders().toSingleValueMap().toString());
+        transactionLogPo.setRequestMessage(reqJson);
+        transactionLogPo.setResponseMessage(responseEntity.getBody());
+        saveTransactionLogSMOImpl.saveLog(transactionLogPo);
     }
 
 

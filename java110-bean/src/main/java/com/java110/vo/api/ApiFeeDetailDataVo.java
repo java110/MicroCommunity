@@ -28,6 +28,9 @@ public class ApiFeeDetailDataVo extends Vo {
     private String createTime;
     private String state;
     private String stateName;
+    private String startTime;
+    private String endTime;
+    private String feeName;
 
 
     public String getPrimeRate() {
@@ -117,5 +120,29 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getFeeName() {
+        return feeName;
+    }
+
+    public void setFeeName(String feeName) {
+        this.feeName = feeName;
     }
 }

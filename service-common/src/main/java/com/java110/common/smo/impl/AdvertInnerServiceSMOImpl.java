@@ -1,6 +1,5 @@
 package com.java110.common.smo.impl;
 
-
 import com.java110.common.dao.IAdvertServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.common.IAdvertInnerServiceSMO;
@@ -33,24 +32,25 @@ public class AdvertInnerServiceSMOImpl extends BaseServiceSMO implements IAdvert
 
     @Override
     public List<AdvertDto> queryAdverts(@RequestBody AdvertDto advertDto) {
-
         //校验是否传了 分页信息
-
         int page = advertDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             advertDto.setPage((page - 1) * advertDto.getRow());
         }
-
         List<AdvertDto> adverts = BeanConvertUtil.covertBeanList(advertServiceDaoImpl.getAdvertInfo(BeanConvertUtil.beanCovertMap(advertDto)), AdvertDto.class);
-
         return adverts;
     }
-
 
     @Override
     public int queryAdvertsCount(@RequestBody AdvertDto advertDto) {
         return advertServiceDaoImpl.queryAdvertsCount(BeanConvertUtil.beanCovertMap(advertDto));
+    }
+
+    @Override
+    public int updateAdverts(@RequestBody AdvertDto advertDto) {
+        int saveFlag = 1;
+        advertServiceDaoImpl.updateAdverts(BeanConvertUtil.beanCovertMap(advertDto));
+        return saveFlag;
     }
 
     public IAdvertServiceDao getAdvertServiceDaoImpl() {

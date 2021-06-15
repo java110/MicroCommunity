@@ -2,7 +2,7 @@ package com.java110.front.components;
 
 
 import com.java110.core.context.IPageData;
-import com.java110.front.smo.ILoginServiceSMO;
+import com.java110.front.smo.login.ILoginServiceSMO;
 import com.java110.front.smo.sys.ISysServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,9 +31,9 @@ public class LoginComponent {
             responseEntity = loginServiceSMOImpl.doLogin(pd);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } finally {
-            return responseEntity;
         }
+        return responseEntity;
+        
     }
 
     public ResponseEntity<String> getSysInfo(IPageData pd) {

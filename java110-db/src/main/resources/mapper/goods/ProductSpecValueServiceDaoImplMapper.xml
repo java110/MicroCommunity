@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productSpecValueServiceDaoImpl">
+
+
+    <!-- 保存产品规格值信息 add by wuxw 2018-07-03 -->
+    <insert id="saveProductSpecValueInfo" parameterType="Map">
+        insert into product_spec_value(
+        spec_id,value_id,product_id,price,ot_price,cost_price,vip_price,store_id,stock,sales,is_default
+        ) values (
+        #{specId},#{valueId},#{productId},#{price},#{otPrice},#{costPrice},#{vipPrice},#{storeId},#{stock},#{sales},#{isDefault}
+        )
+    </insert>
+
+
+    <!-- 查询产品规格值信息 add by wuxw 2018-07-03 -->
+    <select id="getProductSpecValueInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.value_id,t.value_id valueId,t.product_id,t.product_id
+        productId,t.price,t.ot_price,t.ot_price otPrice,t.cost_price,t.cost_price costPrice,t.vip_price,t.vip_price
+        vipPrice,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.stock,t.sales,ps.spec_name specName,
+        t.is_default isDefault
+        from product_spec_value t
+        left join product_spec ps on t.spec_id = ps.spec_id and ps.store_id = t.store_id and ps.status_cd = '0'
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="otPrice !=null and otPrice != ''">
+            and t.ot_price= #{otPrice}
+        </if>
+        <if test="costPrice !=null and costPrice != ''">
+            and t.cost_price= #{costPrice}
+        </if>
+        <if test="vipPrice !=null and vipPrice != ''">
+            and t.vip_price= #{vipPrice}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="sales !=null and sales != ''">
+            and t.sales= #{sales}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            and t.is_default= #{isDefault}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 查询产品库存和销量 add by wuxw 2018-07-03 -->
+    <select id="queryProductStockAndSales" parameterType="Map" resultType="Map">
+        select t.product_id productId,sum(t.stock) stock,SUM(t.sales) sales
+        from product_spec_value t
+        where 1 =1
+        and t.status_cd= '0'
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="productIds != null">
+            and t.product_id in
+            <foreach collection="productIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        group by t.product_id
+    </select>
+
+    <!-- 修改产品规格值信息 add by wuxw 2018-07-03 -->
+    <update id="updateProductSpecValueInfo" parameterType="Map">
+        update product_spec_value t set t.status_cd = #{statusCd}
+
+        <if test="specId !=null and specId != ''">
+            , t.spec_id= #{specId}
+        </if>
+
+        <if test="price !=null and price != ''">
+            , t.price= #{price}
+        </if>
+        <if test="otPrice !=null and otPrice != ''">
+            , t.ot_price= #{otPrice}
+        </if>
+        <if test="costPrice !=null and costPrice != ''">
+            , t.cost_price= #{costPrice}
+        </if>
+        <if test="vipPrice !=null and vipPrice != ''">
+            , t.vip_price= #{vipPrice}
+        </if>
+
+        <if test="stock !=null and stock != ''">
+            , t.stock= #{stock}
+        </if>
+        <if test="sales !=null and sales != ''">
+            , t.sales= #{sales}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            , t.is_default= #{isDefault}
+        </if>
+        where 1=1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询产品规格值数量 add by wuxw 2018-07-03 -->
+    <select id="queryProductSpecValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from product_spec_value t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="productId !=null and productId != ''">
+            and t.product_id= #{productId}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="otPrice !=null and otPrice != ''">
+            and t.ot_price= #{otPrice}
+        </if>
+        <if test="costPrice !=null and costPrice != ''">
+            and t.cost_price= #{costPrice}
+        </if>
+        <if test="vipPrice !=null and vipPrice != ''">
+            and t.vip_price= #{vipPrice}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="sales !=null and sales != ''">
+            and t.sales= #{sales}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            and t.is_default= #{isDefault}
+        </if>
+
+
+    </select>
+
+</mapper>

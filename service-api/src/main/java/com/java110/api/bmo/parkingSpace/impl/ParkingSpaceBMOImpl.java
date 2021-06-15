@@ -4,13 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
@@ -22,6 +23,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,11 +42,12 @@ import java.util.List;
 @Service("parkingSpaceBMOImpl")
 public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO {
 
-
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
@@ -85,6 +88,7 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         businessParkingSpace.putAll(paramInJson);
         businessParkingSpace.put("state", parkingSpaceDto.getState());
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
+        //parkingSpaceInnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
         super.update(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
     }
 
@@ -186,13 +190,16 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
      * @return 订单服务能够接受的报文
      */
     public void addParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
         JSONObject businessParkingSpace = new JSONObject();
         businessParkingSpace.putAll(paramInJson);
         businessParkingSpace.put("state", "F");
-        businessParkingSpace.put("psId", "-1");
+        businessParkingSpace.put("psId", GenerateCodeFactory.getPsId(GenerateCodeFactory.CODE_PREFIX_psId));
+        businessParkingSpace.put("bId", "-1");
+        businessParkingSpace.put("createTime", new Date());
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
-        super.delete(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_SPACE);
+        super.insert(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_SPACE);
+
+        //parkingSpaceInnerServiceSMOImpl.saveParkingSpace(parkingSpacePo);
     }
 
 
@@ -212,9 +219,18 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
 
         JSONObject businessOwnerCar = new JSONObject();
         businessOwnerCar.putAll(paramInJson);
-        businessOwnerCar.put("carId", "-1");
+        businessOwnerCar.put("memberId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_carId));
+        if (!paramInJson.containsKey("carId") || paramInJson.getString("carId").startsWith("-")) {
+            businessOwnerCar.put("carId", businessOwnerCar.getString("memberId"));
+        }
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(businessOwnerCar, OwnerCarPo.class);
-        super.delete(dataFlowContext, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
+        ownerCarPo.setState(OwnerCarDto.STATE_NORMAL);
+
+        //没有指定时为主要车辆
+        if (!paramInJson.containsKey("carTypeCd") || StringUtil.isEmpty(paramInJson.getString("carTypeCd"))) {
+            ownerCarPo.setCarTypeCd(OwnerCarDto.CAR_TYPE_PRIMARY);
+        }
+        super.insert(dataFlowContext, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
     }
 
     /**
@@ -231,7 +247,8 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
 
         if (parkingSpaceDtos == null || parkingSpaceDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查询到停车位信息" + JSONObject.toJSONString(parkingSpaceDto));
+            //throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查询到停车位信息" + JSONObject.toJSONString(parkingSpaceDto));
+            return;
         }
 
         parkingSpaceDto = parkingSpaceDtos.get(0);
@@ -239,9 +256,9 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         JSONObject businessParkingSpace = new JSONObject();
 
         businessParkingSpace.putAll(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
-        businessParkingSpace.put("state", this.isHireParkingSpace(paramInJson) ? "H" : "S");
+        businessParkingSpace.put("state", paramInJson.getString("carNumType"));
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
-        super.delete(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
+        super.update(dataFlowContext, parkingSpacePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
     }
 
 

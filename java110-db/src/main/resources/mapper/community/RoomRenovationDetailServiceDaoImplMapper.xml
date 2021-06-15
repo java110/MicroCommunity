@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="roomRenovationDetailServiceDaoImpl">
+
+
+    <!-- 保存装修明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveRoomRenovationDetailInfo" parameterType="Map">
+        insert into room_renovation_detail(
+        detail_type,staff_name,detail_id,remark,state,r_id,community_id,staff_id
+        ) values (
+        #{detailType},#{staffName},#{detailId},#{remark},#{state},#{rId},#{communityId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询装修明细信息 add by wuxw 2018-07-03 -->
+    <select id="getRoomRenovationDetailInfo" parameterType="Map" resultType="Map">
+        select t.detail_type,t.detail_type detailType,t.staff_name,t.staff_name staffName,t.detail_id,t.detail_id
+        detailId,
+        t.status_cd,t.status_cd statusCd,t.remark,t.state,t.r_id,t.r_id rId,t.community_id,t.community_id communityId,
+        t.staff_id,t.staff_id staffId ,t.create_time createTime
+        from room_renovation_detail t
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="rId !=null and rId != ''">
+            and t.r_id= #{rId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改装修明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateRoomRenovationDetailInfo" parameterType="Map">
+        update room_renovation_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="detailType !=null and detailType != ''">
+            , t.detail_type= #{detailType}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="rId !=null and rId != ''">
+            , t.r_id= #{rId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+
+    </update>
+
+    <!-- 查询装修明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryRoomRenovationDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from room_renovation_detail t
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="rId !=null and rId != ''">
+            and t.r_id= #{rId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>

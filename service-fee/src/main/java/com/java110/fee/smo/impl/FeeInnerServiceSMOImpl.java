@@ -5,8 +5,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.fee.*;
-import com.java110.dto.user.UserDto;
+import com.java110.dto.fee.BillDto;
+import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.fee.dao.IFeeAttrServiceDao;
 import com.java110.fee.dao.IFeeServiceDao;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -44,12 +48,14 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeAttrServiceDao feeAttrServiceDaoImpl;
+
 
     @Override
     public List<FeeDto> queryFees(@RequestBody FeeDto feeDto) {
 
         //校验是否传了 分页信息
-
         int page = feeDto.getPage();
 
         if (page != PageDto.DEFAULT_PAGE) {
@@ -62,13 +68,60 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
             return fees;
         }
 
-        String[] userIds = getUserIds(fees);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+//        String[] userIds = getUserIds(fees);
+//        //根据 userId 查询用户信息
+//        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
         for (FeeDto fee : fees) {
-            refreshFee(fee, users);
+            refreshFee(fee);
         }
+
+        List<String> feeIds = new ArrayList<>();
+        for (FeeDto tmpFeeDto : fees) {
+            feeIds.add(tmpFeeDto.getFeeId());
+        }
+
+        Map info = new HashMap();
+        info.put("feeIds", feeIds);
+        info.put("communityId", feeDto.getCommunityId());
+
+        List<Map> attrMaps = feeAttrServiceDaoImpl.getFeeAttrInfo(info);
+
+        List<FeeAttrDto> feeAttrDtos = BeanConvertUtil.covertBeanList(attrMaps, FeeAttrDto.class);
+        List<FeeAttrDto> tmpFeeAttrDtos = null;
+        for (FeeDto tmpFeeDto : fees) {
+            tmpFeeAttrDtos = new ArrayList<>();
+            for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+
+                if (tmpFeeDto.getFeeId().equals(feeAttrDto.getFeeId())) {
+                    tmpFeeAttrDtos.add(feeAttrDto);
+                }
+            }
+            tmpFeeDto.setFeeAttrDtos(tmpFeeAttrDtos);
+        }
+        return fees;
+    }
+
+    @Override
+    public List<FeeDto> querySimpleFees(@RequestBody FeeDto feeDto) {
+
+        //校验是否传了 分页信息
+        int page = feeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDto.setPage((page - 1) * feeDto.getRow());
+        }
+
+        List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.getFeeInfo(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
+
+
+        for(FeeDto tmpFeeDto : fees) {
+            if (!StringUtil.isEmpty(tmpFeeDto.getImportFeeName())) {
+                //fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");
+                tmpFeeDto.setFeeName(tmpFeeDto.getImportFeeName());
+            }
+        }
+
         return fees;
     }
 
@@ -84,15 +137,15 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
-     * @param fee   小区费用信息
-     * @param users 用户列表
+     * @param fee 小区费用信息
+     *            //@param users 用户列表
      */
-    private void refreshFee(FeeDto fee, List<UserDto> users) {
-        for (UserDto user : users) {
-            if (fee.getUserId().equals(user.getUserId())) {
-                BeanConvertUtil.covertBean(user, fee);
-            }
-        }
+    private void refreshFee(FeeDto fee) {
+//        for (UserDto user : users) {
+//            if (fee.getUserId().equals(user.getUserId())) {
+//                BeanConvertUtil.covertBean(user, fee);
+//            }
+//        }
 
         if (!StringUtil.isEmpty(fee.getImportFeeName())) {
             //fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");
@@ -175,7 +228,6 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     public int computeBillOweFeeCount(@RequestBody FeeDto feeDto) {
         return feeServiceDaoImpl.computeBillOweFeeCount(BeanConvertUtil.beanCovertMap(feeDto));
     }
-
 
 
     @Override
@@ -306,50 +358,19 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     }
 
     private void dealFeeConfig(JSONArray data, FeeConfigDto tmpFeeConfigDto) {
-        String billType = tmpFeeConfigDto.getBillType();
         JSONObject config = new JSONObject();
-        if (FeeConfigDto.BILL_TYPE_EVERY.equals(billType)) {
-            Map info = new HashMap();
-            info.put("configId", tmpFeeConfigDto.getConfigId());
-            info.put("communityId", tmpFeeConfigDto.getCommunityId());
-            info.put("arrearsEndTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            info.put("state", FeeDto.STATE_DOING);
-            int oweFeeCount = feeServiceDaoImpl.queryFeesCount(info);
-            config.put("oweFeeCount", oweFeeCount);
-
-            info.put("noArrearsEndTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            info.put("state", FeeDto.STATE_DOING);
-            int feeCount = feeServiceDaoImpl.queryFeesCount(info);
-            config.put("feeCount", feeCount);
-
-            config.put("feeName", tmpFeeConfigDto.getFeeName());
-            data.add(config);
-            return;
-        }
-        BillDto billDto = new BillDto();
-        billDto.setConfigId(tmpFeeConfigDto.getConfigId());
-        billDto.setCommunityId(tmpFeeConfigDto.getCommunityId());
-        billDto.setCurBill("T");
-        List<Map> bills = feeServiceDaoImpl.queryBills(BeanConvertUtil.beanCovertMap(billDto));
-        if (bills == null || bills.size() < 1) {
-            config.put("oweFeeCount", 0);
-            config.put("feeCount", 0);
-            config.put("feeName", tmpFeeConfigDto.getFeeName());
-            return;
-        }
-
-        Map tmpBillDto = bills.get(0);
         Map info = new HashMap();
-        info.put("billId", tmpBillDto.get("billId"));
-        info.put("communityId", tmpFeeConfigDto.getCommunityId());
-        int oweFeeCount = feeServiceDaoImpl.queryBillOweFeeCount(info);
-
-        config.put("oweFeeCount", oweFeeCount);
         info.put("configId", tmpFeeConfigDto.getConfigId());
         info.put("communityId", tmpFeeConfigDto.getCommunityId());
+        info.put("arrearsEndTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         info.put("state", FeeDto.STATE_DOING);
-        int feeTotalCount = feeServiceDaoImpl.queryFeesCount(info);
-        config.put("feeCount", feeTotalCount - oweFeeCount);
+        int oweFeeCount = feeServiceDaoImpl.queryFeesCount(info);
+        config.put("oweFeeCount", oweFeeCount);
+
+        info.put("noArrearsEndTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        info.put("state", FeeDto.STATE_DOING);
+        int feeCount = feeServiceDaoImpl.queryFeesCount(info);
+        config.put("feeCount", feeCount);
 
         config.put("feeName", tmpFeeConfigDto.getFeeName());
         data.add(config);

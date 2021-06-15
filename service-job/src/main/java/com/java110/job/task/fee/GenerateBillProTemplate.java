@@ -1,12 +1,12 @@
 package com.java110.job.task.fee;
 
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
-import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -24,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName GenerateOwnerBillTemplate
@@ -69,6 +69,9 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
 
 
     @Override
@@ -187,7 +190,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
      */
     private void generateFee(Date startTime, FeeDto feeDto, BillDto billDto, FeeConfigDto feeConfigDto) {
 
-        if ("2009001".equals(feeDto.getState())) { //判断是否缴费结束
+        if (FeeDto.STATE_FINISH.equals(feeDto.getState())) { //判断是否缴费结束
             return;
         }
 
@@ -198,44 +201,23 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         // 目标到期时间 - 到期时间 = 欠费月份
         // 月份 * 每月单价 = 欠费金额
 
+        Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto);
+        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
+        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
+
         //当前时间
         Date billEndTime = DateUtil.getCurrentDate();
-        //开始时间
-        Date startDate = feeDto.getStartTime();
-        //到期时间
-        Date endDate = feeDto.getEndTime();
+
         //缴费周期
         long paymentCycle = Long.parseLong(feeConfigDto.getPaymentCycle());
-        // 当前时间 - 开始时间  = 月份
-        double mulMonth = dayCompare(startDate, billEndTime);
-        // 月份/ 周期 = 轮数（向上取整）
-        double round = 0.0;
-        if ("1200".equals(feeConfigDto.getPaymentCd())) { // 预付费
-            round = Math.floor(mulMonth / paymentCycle) + 1;
-        } else { //后付费
-            round = Math.floor(mulMonth / paymentCycle);
-        }
-        // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-        Date targetEndDate = getTargetEndTime(round * paymentCycle * 30, startDate);
+
 
         //说明没有欠费
-        if (endDate.getTime() > targetEndDate.getTime()) {
+        if (oweMonth <= 0.0) {
             return;
         }
-
-        // 目标到期时间 - 到期时间 = 欠费月份
-        double oweMonth = dayCompare(endDate, targetEndDate);
-
-
-        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
-            computeFeePriceByRoom(feeDto);
-        } else if (FeeDto.PAYER_OBJ_TYPE_PARKING_SPACE.equals(feeDto.getPayerObjType())) {
-            computeFeePriceByParkingSpace(feeDto);
-        } else {
-            return;//这个没有欠费可算
-            //throw new IllegalArgumentException("暂不支持该类型出账" + feeDto.getFeeId());
-        }
-
+        double tmpFeePrice = computeFeeSMOImpl.getFeePrice(feeDto);
+        feeDto.setFeePrice(tmpFeePrice);
         if (feeDto.getFeePrice() <= 0) {
             return;//这个没有欠费可算
         }
@@ -255,8 +237,8 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         billOweFeeDto.setCommunityId(feeDto.getCommunityId());
         billOweFeeDto.setPayerObjType(feeDto.getPayerObjType());
         billOweFeeDto.setState("1000");
-
-        if ("3333".equals(feeDto.getPayerObjType())) {
+        billOweFeeDto.setDeadlineTime(DateUtil.getFormatTimeString(targetEndDate, DateUtil.DATE_FORMATE_STRING_A));
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
             getRoomInfo(billOweFeeDto, feeDto);
         } else {
             getParkingSpaceInfo(billOweFeeDto, feeDto);
@@ -293,19 +275,8 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
                 curReceipts = recAmount.add(curReceipts);
             }
         }
-
         billDto.setReceipts(curReceipts.doubleValue() + "");
-
-
     }
-
-    private Date getTargetEndTime(double v, Date startDate) {
-        Calendar endDate = Calendar.getInstance();
-        endDate.setTime(startDate);
-        endDate.add(Calendar.DATE, (int) v);
-        return endDate.getTime();
-    }
-
 
     /**
      * 查询车位信息
@@ -315,25 +286,10 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
      */
     private void getParkingSpaceInfo(BillOweFeeDto billOweFeeDto, FeeDto feeDto) {
 
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setPsId(feeDto.getPayerObjId());
-        parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
-            //车位可能被删除了
-            billOweFeeDto.setOwnerId("1");
-            billOweFeeDto.setOwnerName("未知");
-            billOweFeeDto.setOwnerTel("19999999999");
-            billOweFeeDto.setPayerObjName("未知");
-            return;
-        }
-
-        billOweFeeDto.setPayerObjName(parkingSpaceDtos.get(0).getAreaNum() + "停车场" + parkingSpaceDtos.get(0).getNum() + "车位");
-
 
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setWithOwner(true);
-        ownerCarDto.setPsId(parkingSpaceDtos.get(0).getPsId());
+        ownerCarDto.setCarId(feeDto.getPayerObjId());
         ownerCarDto.setCommunityId(feeDto.getCommunityId());
 
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
@@ -347,6 +303,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
             return;
         }
 
+        billOweFeeDto.setPayerObjName(ownerCarDtos.get(0).getCarNum());
         billOweFeeDto.setOwnerId(ownerCarDtos.get(0).getOwnerId());
         billOweFeeDto.setOwnerName(ownerCarDtos.get(0).getOwnerName());
         billOweFeeDto.setOwnerTel(ownerCarDtos.get(0).getLink());
@@ -374,8 +331,11 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         }
 
         RoomDto tmpRoomDto = roomDtos.get(0);
-
-        billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
+        if (RoomDto.ROOM_TYPE_ROOM.equals(tmpRoomDto.getRoomType())) {
+            billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
+        } else {
+            billOweFeeDto.setPayerObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getRoomNum() + "室");
+        }
 
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setByOwnerInfo(true);
@@ -421,126 +381,6 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
 
         return calendar.getTime();
 
-    }
-
-    /**
-     * 根据房屋来算单价
-     *
-     * @param feeDto
-     */
-    private void computeFeePriceByRoom(FeeDto feeDto) {
-        RoomDto roomDto = new RoomDto();
-        roomDto.setCommunityId(feeDto.getCommunityId());
-        roomDto.setRoomId(feeDto.getPayerObjId());
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
-        if (roomDtos == null || roomDtos.size() < 1) { //数据有问题
-            return;
-        }
-
-        String computingFormula = feeDto.getComputingFormula();
-        double feePrice = 0.00;
-        if ("1001".equals(computingFormula)) { //面积*单价+附加费
-            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-            BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else if ("2002".equals(computingFormula)) { // 固定费用
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else {
-            feePrice = -1.00;
-        }
-
-        feeDto.setFeePrice(feePrice);
-
-        //查询业主信息
-
-
-    }
-
-    /**
-     * 根据车位来算单价
-     *
-     * @param feeDto
-     */
-    private void computeFeePriceByParkingSpace(FeeDto feeDto) {
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-        parkingSpaceDto.setPsId(feeDto.getPayerObjId());
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
-            return;
-        }
-
-        String computingFormula = feeDto.getComputingFormula();
-        double feePrice = 0.00;
-        if ("1001".equals(computingFormula)) { //面积*单价+附加费
-            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-            BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(parkingSpaceDtos.get(0).getArea()));
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else if ("2002".equals(computingFormula)) { // 固定费用
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else {
-            feePrice = -1.00;
-        }
-
-        feeDto.setFeePrice(feePrice);
-    }
-
-    /**
-     * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
-     * 比如：2011-02-02 到  2017-03-02
-     * 以年为单位相差为：6年
-     * 以月为单位相差为：73个月
-     * 以日为单位相差为：2220天
-     *
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    public static int monthCompare(Date fromDate, Date toDate) {
-        Calendar from = Calendar.getInstance();
-        from.setTime(fromDate);
-        Calendar to = Calendar.getInstance();
-        to.setTime(toDate);
-        //只要年月
-        int fromYear = from.get(Calendar.YEAR);
-        int fromMonth = from.get(Calendar.MONTH);
-        int toYear = to.get(Calendar.YEAR);
-        int toMonth = to.get(Calendar.MONTH);
-        int month = toYear * 12 + toMonth - (fromYear * 12 + fromMonth);
-        return month;
-    }
-
-    /**
-     * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
-     * 比如：2011-02-02 到  2017-03-02
-     * 以年为单位相差为：6年
-     * 以月为单位相差为：73个月
-     * 以日为单位相差为：2220天
-     *
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    public static double dayCompare(Date fromDate, Date toDate) {
-        Calendar from = Calendar.getInstance();
-        from.setTime(fromDate);
-        Calendar to = Calendar.getInstance();
-        to.setTime(toDate);
-
-        long t1 = from.getTimeInMillis();
-        long t2 = to.getTimeInMillis();
-        long days = (t2 - t1) / (24 * 60 * 60 * 1000);
-
-        BigDecimal tmpDays = new BigDecimal(days);
-        BigDecimal monthDay = new BigDecimal(30);
-
-        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
     }
 
 

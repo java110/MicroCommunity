@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,7 +16,10 @@ import java.util.Date;
  **/
 public class ResourceStoreDto extends PageDto implements Serializable {
 
+    //物品名称(用来做模糊查询)
     private String resName;
+    //物品名称(用来做精确查询)
+    private String name;
     private String price;
     private String resCode;
     private String description;
@@ -24,12 +28,41 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String resId;
     //10000 采购 20000出库
     private String resOrderType;
+    //单位
+    private String unitCode;
+    //备注
+    private String remark;
+    //对外售价最低价格
+    private String outLowPrice;
+    //对外收集最高价格
+    private String outHighPrice;
+    //对外售价
+    private String outPrice;
+    //手机端是否显示(N否 Y是)
+    private String showMobile;
 
-
+    private String shId;
+    private String warningStock;
+    private String shType;
+    private String shObjId;
+    private String averagePrice;
+    private List<String> fileUrls;
     private Date createTime;
+    private String rstId;
+    private String rstName;
 
     private String statusCd = "0";
 
+    private String shName;
+
+    //规格id
+    private String rssId;
+
+    //规格名称
+    private String rssName;
+
+    //物品总价
+    private String totalPrice;
 
     public String getResName() {
         return resName;
@@ -110,5 +143,157 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setResOrderType(String resOrderType) {
         this.resOrderType = resOrderType;
+    }
+
+    public String getUnitCode() {
+        return unitCode;
+    }
+
+    public void setUnitCode(String unitCode) {
+        this.unitCode = unitCode;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getOutLowPrice() {
+        return outLowPrice;
+    }
+
+    public void setOutLowPrice(String outLowPrice) {
+        this.outLowPrice = outLowPrice;
+    }
+
+    public String getOutHighPrice() {
+        return outHighPrice;
+    }
+
+    public void setOutHighPrice(String outHighPrice) {
+        this.outHighPrice = outHighPrice;
+    }
+
+    public String getOutPrice() {
+        return outPrice;
+    }
+
+    public void setOutPrice(String outPrice) {
+        this.outPrice = outPrice;
+    }
+
+    public String getShowMobile() {
+        return showMobile;
+    }
+
+    public void setShowMobile(String showMobile) {
+        this.showMobile = showMobile;
+    }
+
+    public List<String> getFileUrls() {
+        return fileUrls;
+    }
+
+    public void setFileUrls(List<String> fileUrls) {
+        this.fileUrls = fileUrls;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
+    }
+
+    public String getShName() {
+        return shName;
+    }
+
+    public void setShName(String shName) {
+        this.shName = shName;
+    }
+
+    public String getShType() {
+        return shType;
+    }
+
+    public void setShType(String shType) {
+        this.shType = shType;
+    }
+
+    public String getShObjId() {
+        return shObjId;
+    }
+
+    public void setShObjId(String shObjId) {
+        this.shObjId = shObjId;
+    }
+
+    public String getWarningStock() {
+        return warningStock;
+    }
+
+    public void setWarningStock(String warningStock) {
+        this.warningStock = warningStock;
+    }
+
+    public String getAveragePrice() {
+        return averagePrice;
+    }
+
+    public void setAveragePrice(String averagePrice) {
+        this.averagePrice = averagePrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getRstName() {
+        return rstName;
+    }
+
+    public void setRstName(String rstName) {
+        this.rstName = rstName;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getRssName() {
+        return rssName;
+    }
+
+    public void setRssName(String rssName) {
+        this.rssName = rssName;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attendanceClassesAttrServiceDaoImpl">
+
+    <!-- 保存考勤班组属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAttendanceClassesAttrInfo" parameterType="Map">
+        insert into business_attendance_classes_attr(
+        classes_id,attr_id,operate,spec_cd,store_id,b_id,value
+        ) values (
+        #{classesId},#{attrId},#{operate},#{specCd},#{storeId},#{bId},#{value}
+        )
+    </insert>
+
+
+    <!-- 查询考勤班组属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAttendanceClassesAttrInfo" parameterType="Map" resultType="Map">
+        select t.classes_id,t.classes_id classesId,t.attr_id,t.attr_id attrId,t.operate,t.spec_cd,t.spec_cd
+        specCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.value
+        from business_attendance_classes_attr t
+        where 1 =1
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+    </select>
+
+
+    <!-- 保存考勤班组属性信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveAttendanceClassesAttrInfoInstance" parameterType="Map">
+        insert into attendance_classes_attr(
+        classes_id,attr_id,spec_cd,status_cd,store_id,b_id,value
+        ) select t.classes_id,t.attr_id,t.spec_cd,'0',t.store_id,t.b_id,t.value from business_attendance_classes_attr t
+        where 1=1
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询考勤班组属性信息 add by wuxw 2018-07-03 -->
+    <select id="getAttendanceClassesAttrInfo" parameterType="Map" resultType="Map">
+        select t.classes_id,t.classes_id classesId,t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd
+        specCd,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.value,
+        td.name
+        from attendance_classes_attr t
+        LEFT JOIN t_dict td on t.spec_cd = td.status_cd and td.table_name = 'attendance_classes_attr' and td.table_columns = 'spec_cd'
+        where 1 =1
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="classesIds !=null ">
+            and t.classes_id in
+            <foreach collection="classesIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改考勤班组属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateAttendanceClassesAttrInfoInstance" parameterType="Map">
+        update attendance_classes_attr t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="classesId !=null and classesId != ''">
+            , t.classes_id= #{classesId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询考勤班组属性数量 add by wuxw 2018-07-03 -->
+    <select id="queryAttendanceClassesAttrsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from attendance_classes_attr t
+        where 1 =1
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="classesIds !=null ">
+            and t.classes_id in
+            <foreach collection="classesIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+
+    </select>
+
+</mapper>

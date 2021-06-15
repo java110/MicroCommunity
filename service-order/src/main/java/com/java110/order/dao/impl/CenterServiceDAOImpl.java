@@ -2,6 +2,8 @@ package com.java110.order.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.entity.mapping.Mapping;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.utils.constant.ResponseConstant;
@@ -350,6 +352,16 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.getMappingInfoAll");
     }
 
+    @Override
+    public List<BasePrivilegeDto> getPrivilegeAll() {
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getPrivilegeAll");
+    }
+
+    @Override
+    public List<BusinessDatabusDto> getDatabusAll() {
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getDatabusAll");
+    }
+
     /**
      * 查询业主订单
      *
@@ -371,6 +383,17 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     @Override
     public List<Map> queryOrderByBusinessType(Map info) {
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryOrderByBusinessType", info);
+    }
+
+    /**
+     * 查询业主订单
+     *
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryOrderByBId(Map info) {
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryOrderByBId", info);
     }
 
     public int updateBusinessStatusCd(Map info) {

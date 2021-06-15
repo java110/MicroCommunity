@@ -21,6 +21,10 @@ public class ApiMenuDataVo implements Serializable {
 
     private String uName;
 
+    private String menuGroupName;
+
+    private String storeTypeName;
+
     public String getMId() {
         return mId;
     }
@@ -123,5 +127,21 @@ public class ApiMenuDataVo implements Serializable {
 
     public void setuName(String uName) {
         this.uName = uName;
+    }
+
+    public String getMenuGroupName() {
+        return menuGroupName;
+    }
+
+    public void setMenuGroupName(String menuGroupName) {
+        this.menuGroupName = menuGroupName;
+    }
+
+    public String getStoreTypeName() {
+        return storeTypeName;
+    }
+
+    public void setStoreTypeName(String storeTypeName) {
+        this.storeTypeName = storeTypeName;
     }
 }
