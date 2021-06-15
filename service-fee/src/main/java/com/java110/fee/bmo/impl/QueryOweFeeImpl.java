@@ -433,7 +433,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         feeDto.setAmountOwed(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue() + "");
         feeDto.setDeadlineTime(targetEndDate);
         //动态费用
-        if ("4004".equals(computingFormula)) {
+        if ("4004".equals(computingFormula)
+                && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
+        ) {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
