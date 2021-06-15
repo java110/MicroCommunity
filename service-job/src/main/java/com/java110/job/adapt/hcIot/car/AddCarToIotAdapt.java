@@ -119,7 +119,7 @@ public class AddCarToIotAdapt extends DatabusAdaptImpl {
 
         //查询业主车位数量 主要是做字母车位
         ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCarNum(ownerCarPo.getCarNum());
+        ownerCarDto.setOwnerId(ownerCarPo.getOwnerId());
         ownerCarDto.setCommunityId(ownerCarPo.getCommunityId());
         long parkingSpaceCount = ownerCarInnerServiceSMOImpl.queryOwnerParkingSpaceCount(ownerCarDto);
 
