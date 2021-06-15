@@ -859,8 +859,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("2002".equals(computingFormula)) { // 固定费用
                 //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                BigDecimal roomDount = new BigDecimal(contractRoomDtos.size());
-                additionalAmount = additionalAmount.multiply(roomDount);
+//                BigDecimal roomDount = new BigDecimal(contractRoomDtos.size());
+//                additionalAmount = additionalAmount.multiply(roomDount);
                 feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN);
             } else if ("4004".equals(computingFormula)) {  //动态费用
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
