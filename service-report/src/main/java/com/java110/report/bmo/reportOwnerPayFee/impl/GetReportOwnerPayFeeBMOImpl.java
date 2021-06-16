@@ -70,6 +70,7 @@ public class GetReportOwnerPayFeeBMOImpl implements IGetReportOwnerPayFeeBMO {
         ReportOwnerPayFeeDto reportOwnerPayFeeDto = new ReportOwnerPayFeeDto();
         reportOwnerPayFeeDto.setFeeIds(feeIds.toArray(new String[feeIds.size()]));
         reportOwnerPayFeeDto.setPfYear(tmpReportOwnerPayFeeDto.getPfYear());
+        reportOwnerPayFeeDto.setConfigId(tmpReportOwnerPayFeeDto.getConfigId());
 
         if(StringUtil.isEmpty(reportOwnerPayFeeDto.getPfYear())){
             reportOwnerPayFeeDto.setPfYear(DateUtil.getYear()+"");

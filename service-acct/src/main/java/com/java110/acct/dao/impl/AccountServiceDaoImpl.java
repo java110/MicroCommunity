@@ -144,5 +144,13 @@ public class AccountServiceDaoImpl extends BaseServiceDao implements IAccountSer
         return flag;
     }
 
+    @Override
+    public void saveAccount(Map info) {
+        logger.debug("查询账户数据 入参 info : {}", info);
+
+         sqlSessionTemplate.update("accountServiceDaoImpl.saveAccount", info);
+
+    }
+
 
 }

@@ -13,6 +13,14 @@
         )
     </insert>
 
+    <insert id="saveAccount" parameterType="Map">
+        insert into account(
+        amount,acct_type,obj_id,acct_id,acct_name,b_id,obj_type,part_id
+        ) values (
+        #{amount},#{acctType},#{objId},#{acctId},#{acctName},'-1',#{objType},#{partId}
+        )
+    </insert>
+
 
     <!-- 查询账户信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAccountInfo" parameterType="Map" resultType="Map">
