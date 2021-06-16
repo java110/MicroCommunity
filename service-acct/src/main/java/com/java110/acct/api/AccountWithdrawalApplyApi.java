@@ -47,19 +47,16 @@ public class AccountWithdrawalApplyApi {
 
     /**
      * 微信修改消息模板
-     * @serviceCode /accountWithdrawalApply/updateAccountWithdrawalApply
-     * @path /app/accountWithdrawalApply/updateAccountWithdrawalApply
+     * @serviceCode /accountWithdrawalApply/upAccountWithdrawalApply
+     * @path /app/accountWithdrawalApply/upAccountWithdrawalApply
      * @param reqJson
      * @return
      */
-    @RequestMapping(value = "/updateAccountWithdrawalApply", method = RequestMethod.POST)
+    @RequestMapping(value = "/upAccountWithdrawalApply", method = RequestMethod.POST)
     public ResponseEntity<String> updateAccountWithdrawalApply(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "acctId", "请求报文中未包含acctId");
         Assert.hasKeyAndValue(reqJson, "amount", "请求报文中未包含amount");
-        Assert.hasKeyAndValue(reqJson, "applyUserId", "请求报文中未包含applyUserId");
-        Assert.hasKeyAndValue(reqJson, "applyUserName", "请求报文中未包含applyUserName");
-        Assert.hasKeyAndValue(reqJson, "applyUserTel", "请求报文中未包含applyUserTel");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
 
@@ -77,7 +74,7 @@ public class AccountWithdrawalApplyApi {
      */
     @RequestMapping(value = "/deleteAccountWithdrawalApply", method = RequestMethod.POST)
     public ResponseEntity<String> deleteAccountWithdrawalApply(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "acctId", "账户ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
 
@@ -88,17 +85,25 @@ public class AccountWithdrawalApplyApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /accountWithdrawalApply/queryAccountWithdrawalApply
-     * @path /app/accountWithdrawalApply/queryAccountWithdrawalApply
-     * @param
+     * @serviceCode /accountWithdrawalApply/listAccountWithdrawalApply
+     * @path /app/accountWithdrawalApply/listAccountWithdrawalApply
+     * @param applyUserName: '',
+     *                     applyUserTel: '',
+     *                     state: '486'
      * @return
      */
-    @RequestMapping(value = "/queryAccountWithdrawalApply", method = RequestMethod.GET)
+    @RequestMapping(value = "/listAccountWithdrawalApply", method = RequestMethod.GET)
     public ResponseEntity<String> queryAccountWithdrawalApply(@RequestParam(value = "page") int page,
-                                                      @RequestParam(value = "row") int row) {
+                                                              @RequestParam(value = "row") int row,
+                                                              @RequestParam(value = "applyUserName",required = false) String applyUserName,
+                                                              @RequestParam(value = "applyUserTel",required = false) String applyUserTel,
+                                                              @RequestParam(value = "state",required = false) String state) {
         AccountWithdrawalApplyDto accountWithdrawalApplyDto = new AccountWithdrawalApplyDto();
         accountWithdrawalApplyDto.setPage(page);
         accountWithdrawalApplyDto.setRow(row);
+        accountWithdrawalApplyDto.setApplyUserName(applyUserName);
+        accountWithdrawalApplyDto.setApplyUserTel(applyUserTel);
+        accountWithdrawalApplyDto.setState(state);
         return getAccountWithdrawalApplyBMOImpl.get(accountWithdrawalApplyDto);
     }
 }

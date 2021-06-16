@@ -4,9 +4,12 @@ import com.java110.acct.bmo.accountWithdrawalApply.ISaveAccountWithdrawalApplyBM
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 
+import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.IAccountWithdrawalApplyInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.accountWithdrawalApply.AccountWithdrawalApplyPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,8 @@ public class SaveAccountWithdrawalApplyBMOImpl implements ISaveAccountWithdrawal
     private IAccountWithdrawalApplyInnerServiceSMO accountWithdrawalApplyInnerServiceSMOImpl;
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
     /**
      * 添加小区信息
      *
@@ -40,13 +45,25 @@ public class SaveAccountWithdrawalApplyBMOImpl implements ISaveAccountWithdrawal
             accountWithdrawalApplyPo.setApplyUserName( userDtoList.get( 0 ).getUserName() );
             accountWithdrawalApplyPo.setApplyUserTel( userDtoList.get( 0 ).getTel() );
             accountWithdrawalApplyPo.setApplyUserId( userDtoList.get( 0 ).getUserId() );
-
             accountWithdrawalApplyPo.setApplyId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyId));
-            int flag = accountWithdrawalApplyInnerServiceSMOImpl.saveAccountWithdrawalApply(accountWithdrawalApplyPo);
 
-            if (flag > 0) {
-                return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+            AccountDetailPo accountDetailPo = new AccountDetailPo();
+            accountDetailPo.setAcctId( accountWithdrawalApplyPo.getAcctId() );
+            accountDetailPo.setAmount( accountWithdrawalApplyPo.getAmount() );
+            accountDetailPo.setRemark( accountWithdrawalApplyPo.getContext() );
+            accountDetailPo.setObjId( accountWithdrawalApplyPo.getApplyId() );
+            //调用扣款接口进行扣款
+            int acctflag = accountInnerServiceSMOImpl.withholdAccount( accountDetailPo );
+            if (acctflag < 1) {
+                return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "扣款失败");
             }
+            //报存提现信息
+            int flag = accountWithdrawalApplyInnerServiceSMOImpl.saveAccountWithdrawalApply(accountWithdrawalApplyPo);
+            if (flag < 1) {
+                return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存提现失败");
+            }
+
+            return ResultVo.createResponseEntity(ResultVo.CODE_OK, "提现成功");
         }
 
 
