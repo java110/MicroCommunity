@@ -25,6 +25,7 @@ import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.car.OwnerCarPo;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -121,6 +122,7 @@ public class AddCarToIotAdapt extends DatabusAdaptImpl {
         ownerCarDto = new OwnerCarDto();
         ownerCarDto.setOwnerId(ownerCarPo.getOwnerId());
         ownerCarDto.setCommunityId(ownerCarPo.getCommunityId());
+        ownerCarDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
         long parkingSpaceCount = ownerCarInnerServiceSMOImpl.queryOwnerParkingSpaceCount(ownerCarDto);
 
         JSONObject postParameters = new JSONObject();

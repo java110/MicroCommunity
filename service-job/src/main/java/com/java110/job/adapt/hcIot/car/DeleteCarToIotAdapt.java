@@ -102,10 +102,21 @@ public class DeleteCarToIotAdapt extends DatabusAdaptImpl {
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
         Assert.listOnlyOne(ownerCarDtos, "未找到车位");
 
+        ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setOwnerId(ownerCarPo.getOwnerId());
+        ownerCarDto.setCommunityId(ownerCarPo.getCommunityId());
+        ownerCarDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
+        long parkingSpaceCount = ownerCarInnerServiceSMOImpl.queryOwnerParkingSpaceCount(ownerCarDto);
+
         JSONObject postParameters = new JSONObject();
         postParameters.put("extCarId", ownerCarDtos.get(0).getCarId());
         postParameters.put("carNum", ownerCarDtos.get(0).getCarNum());
         postParameters.put("extPaId", parkingSpaceDtos.get(0).getPaId());
+        postParameters.put("personName", ownerCarDtos.get(0).getOwnerName());
+        postParameters.put("personTel", ownerCarDtos.get(0).getLink());
+        postParameters.put("personId", ownerCarDtos.get(0).getOwnerId());
+        postParameters.put("extCarId", ownerCarDtos.get(0).getCarId());
+        postParameters.put("parkingNum", parkingSpaceCount);
         postParameters.put("extCommunityId", ownerCarDtos.get(0).getCommunityId());
         hcOwnerCarAsynImpl.deleteOwnerCar(postParameters);
     }

@@ -1,0 +1,85 @@
+package com.java110.acct.bmo.account.impl;
+
+import com.alibaba.fastjson.JSONObject;
+import com.java110.acct.bmo.account.IOwnerPrestoreAccountBMO;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.account.AccountDto;
+import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.po.account.AccountPo;
+import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service("ownerPrestoreAccountBMOImpl")
+public class OwnerPrestoreAccountBMOImpl implements IOwnerPrestoreAccountBMO {
+
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountDetailInnerServiceSMO accountDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    /**
+     * @param accountDetailPo
+     * @return 订单服务能够接受的报文
+     */
+    public ResponseEntity<String> prestore(AccountDetailPo accountDetailPo, JSONObject reqJson) {
+
+        ResponseEntity<String> responseEntity = null;
+
+        //查询 业主是否有账户
+        AccountDto accountDto = new AccountDto();
+        accountDto.setObjId(accountDetailPo.getObjId());
+        accountDto.setObjType(AccountDto.OBJ_TYPE_PERSON);
+        accountDto.setPartId(reqJson.getString("communityId"));
+        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH);
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+        if (accountDtos == null || accountDtos.size() < 1) {
+            accountDto = addAccountDto(reqJson);
+        } else {
+            accountDto = accountDtos.get(0);
+        }
+        accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        accountDetailPo.setAcctId(accountDto.getAcctId());
+        accountDetailPo.setObjType(AccountDetailDto.ORDER_TYPE_USER);
+
+        int flag = accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
+        if (flag < 1) {
+            return ResultVo.error("预存失败");
+        }
+        return ResultVo.success();
+    }
+
+
+    private AccountDto addAccountDto(JSONObject reqJson) {
+        AccountPo accountPo = new AccountPo();
+        accountPo.setAmount(reqJson.getString("amount"));
+        accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
+        accountPo.setObjId(reqJson.getString("ownerId"));
+        accountPo.setObjType(AccountDto.OBJ_TYPE_PERSON);
+        accountPo.setAcctType(AccountDto.ACCT_TYPE_CASH);
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(reqJson.getString("ownerId"));
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        Assert.listOnlyOne(ownerDtos, "业主不存在");
+        accountPo.setAcctName(ownerDtos.get(0).getName());
+        accountPo.setPartId(reqJson.getString("communityId"));
+        accountInnerServiceSMOImpl.saveAccount(accountPo);
+        return BeanConvertUtil.covertBean(accountPo, AccountDto.class);
+    }
+
+}
