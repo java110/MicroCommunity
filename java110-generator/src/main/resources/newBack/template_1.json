@@ -1,35 +1,45 @@
 {
   "autoMove": true,
-  "id": "pfId",
-  "name": "reportOwnerPayFee",
-  "desc": "业主缴费明细",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "report",
-  "tableName": "report_owner_pay_fee",
+  "id": "applyId",
+  "name": "accountWithdrawalApply",
+  "desc": "账户提现",
+  "shareParam": "acctId",
+  "shareColumn": "acct_id",
+  "shareName": "acct",
+  "tableName": "account_withdrawal_apply",
   "param": {
-    "pfId": "pf_id",
-    "pfYear": "pf_year",
-    "pfMonth": "pf_month",
-    "pfDate": "pf_date",
-    "communityId": "community_id",
-    "ownerId": "owner_id",
-    "ownerName": "owner_name",
-    "objName": "obj_name",
-    "objType": "obj_type",
-    "objId": "obj_id",
-    "detailId": "detail_id",
-    "configId": "config_id",
-    "configName": "config_name",
-    "feeId": "fee_id",
-    "feeName": "fee_name",
+    "applyId": "apply_id",
+    "acctId": "acct_id",
     "amount": "amount",
+    "applyUserId": "apply_user_id",
+    "applyUserName": "apply_user_name",
+    "applyUserTel": "apply_user_tel",
+    "context": "context",
+    "state": "state",
+    "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "pfId",
-      "msg": "缴费ID不能为空"
+      "code": "acctId",
+      "msg": "账户ID不能为空"
+    },
+    {
+      "code": "amount",
+      "msg": "提现金额不能为空"
+    },
+    {
+      "code": "applyUserId",
+      "msg": "申请人ID不能为空"
+    },{
+      "code": "applyUserName",
+      "msg": "申请人名称不能为空"
+    },{
+      "code": "applyUserTel",
+      "msg": "申请人电话不能为空"
+    },{
+      "code": "state",
+      "msg": "申请状态不能为空"
     }
   ]
 }
