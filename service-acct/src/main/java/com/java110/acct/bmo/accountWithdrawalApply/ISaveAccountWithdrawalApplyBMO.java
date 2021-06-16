@@ -11,7 +11,7 @@ public interface ISaveAccountWithdrawalApplyBMO {
      * @param accountWithdrawalApplyPo
      * @return
      */
-    ResponseEntity<String> save(AccountWithdrawalApplyPo accountWithdrawalApplyPo);
+    ResponseEntity<String> save(AccountWithdrawalApplyPo accountWithdrawalApplyPo,String userId);
 
 
 }
