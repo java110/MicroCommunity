@@ -2,6 +2,7 @@ package com.java110.acct.bmo.account.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.bmo.account.IOwnerPrestoreAccountBMO;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.accountDetail.AccountDetailDto;
@@ -36,6 +37,7 @@ public class OwnerPrestoreAccountBMOImpl implements IOwnerPrestoreAccountBMO {
      * @param accountDetailPo
      * @return 订单服务能够接受的报文
      */
+    @Java110Transactional
     public ResponseEntity<String> prestore(AccountDetailPo accountDetailPo, JSONObject reqJson) {
 
         ResponseEntity<String> responseEntity = null;

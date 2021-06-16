@@ -126,7 +126,7 @@
             and t.obj_type= #{objType}
         </if>
         <if test="partId !=null and partId != ''">
-            and t.obj_type= #{partId}
+            and t.part_id= #{partId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -200,7 +200,7 @@
             and t.obj_type= #{objType}
         </if>
         <if test="partId !=null and partId != ''">
-            and t.obj_type= #{partId}
+            and t.part_id= #{partId}
         </if>
 
 
