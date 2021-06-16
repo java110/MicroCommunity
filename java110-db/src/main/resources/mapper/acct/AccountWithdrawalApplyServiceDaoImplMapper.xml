@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountWithdrawalApplyServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存账户提现信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAccountWithdrawalApplyInfo" parameterType="Map">
+        insert into account_withdrawal_apply(
+apply_id,apply_user_name,amount,context,acct_id,state,apply_user_tel,apply_user_id
+) values (
+#{applyId},#{applyUserName},#{amount},#{context},#{acctId},#{state},#{applyUserTel},#{applyUserId}
+)
+    </insert>
+
+
+
+    <!-- 查询账户提现信息 add by wuxw 2018-07-03 -->
+    <select id="getAccountWithdrawalApplyInfo" parameterType="Map" resultType="Map">
+        select  t.apply_id,t.apply_id applyId,t.apply_user_name,t.apply_user_name applyUserName,t.amount,t.create_time,t.create_time createTime,t.context,t.acct_id,t.acct_id acctId,t.status_cd,t.status_cd statusCd,t.state,t.apply_user_tel,t.apply_user_tel applyUserTel,t.apply_user_id,t.apply_user_id applyUserId 
+from account_withdrawal_apply t 
+where 1 =1 
+<if test="applyId !=null and applyId != ''">
+   and t.apply_id= #{applyId}
+</if> 
+<if test="applyUserName !=null and applyUserName != ''">
+   and t.apply_user_name= #{applyUserName}
+</if> 
+<if test="amount !=null and amount != ''">
+   and t.amount= #{amount}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="acctId !=null and acctId != ''">
+   and t.acct_id= #{acctId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="applyUserTel !=null and applyUserTel != ''">
+   and t.apply_user_tel= #{applyUserTel}
+</if> 
+<if test="applyUserId !=null and applyUserId != ''">
+   and t.apply_user_id= #{applyUserId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改账户提现信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccountWithdrawalApplyInfo" parameterType="Map">
+        update  account_withdrawal_apply t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="applyUserName !=null and applyUserName != ''">
+, t.apply_user_name= #{applyUserName}
+</if> 
+<if test="amount !=null and amount != ''">
+, t.amount= #{amount}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="context !=null and context != ''">
+, t.context= #{context}
+</if> 
+<if test="acctId !=null and acctId != ''">
+, t.acct_id= #{acctId}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="applyUserTel !=null and applyUserTel != ''">
+, t.apply_user_tel= #{applyUserTel}
+</if> 
+<if test="applyUserId !=null and applyUserId != ''">
+, t.apply_user_id= #{applyUserId}
+</if> 
+ where 1=1 <if test="applyId !=null and applyId != ''">
+and t.apply_id= #{applyId}
+</if> 
+
+    </update>
+
+    <!-- 查询账户提现数量 add by wuxw 2018-07-03 -->
+     <select id="queryAccountWithdrawalApplysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from account_withdrawal_apply t 
+where 1 =1 
+<if test="applyId !=null and applyId != ''">
+   and t.apply_id= #{applyId}
+</if> 
+<if test="applyUserName !=null and applyUserName != ''">
+   and t.apply_user_name= #{applyUserName}
+</if> 
+<if test="amount !=null and amount != ''">
+   and t.amount= #{amount}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="acctId !=null and acctId != ''">
+   and t.acct_id= #{acctId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="applyUserTel !=null and applyUserTel != ''">
+   and t.apply_user_tel= #{applyUserTel}
+</if> 
+<if test="applyUserId !=null and applyUserId != ''">
+   and t.apply_user_id= #{applyUserId}
+</if> 
+
+
+     </select>
+
+</mapper>
