@@ -9,6 +9,7 @@ import com.java110.report.bmo.reportOwnerPayFee.ISaveReportOwnerPayFeeBMO;
 import com.java110.report.bmo.reportOwnerPayFee.IUpdateReportOwnerPayFeeBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -94,7 +95,10 @@ public class ReportOwnerPayFeeApi {
      */
     @RequestMapping(value = "/queryReportOwnerPayFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportOwnerPayFee(@RequestParam(value = "communityId") String communityId,
-                                                         @RequestParam(value = "pfYear",required = false) String pfYear,
+                                                         @RequestParam(value = "pfYear", required = false) String pfYear,
+                                                         @RequestParam(value = "configId", required = false) String configId,
+                                                         @RequestParam(value = "roomName", required = false) String roomName,
+                                                         @RequestParam(value = "ownerName", required = false) String ownerName,
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {
         ReportOwnerPayFeeDto reportOwnerPayFeeDto = new ReportOwnerPayFeeDto();
@@ -102,6 +106,18 @@ public class ReportOwnerPayFeeApi {
         reportOwnerPayFeeDto.setRow(row);
         reportOwnerPayFeeDto.setCommunityId(communityId);
         reportOwnerPayFeeDto.setPfYear(pfYear);
+        reportOwnerPayFeeDto.setConfigId(configId);
+        reportOwnerPayFeeDto.setRoomName(roomName);
+        reportOwnerPayFeeDto.setOwnerName(ownerName);
+        if (!StringUtil.isEmpty(roomName) && roomName.contains("-")) {
+            String[] datas = roomName.split("-");
+            if (datas.length != 3) {
+                throw new IllegalArgumentException("房屋格式错误，请填写 楼栋-单元-房屋格式");
+            }
+            reportOwnerPayFeeDto.setFloorNum(datas[0]);
+            reportOwnerPayFeeDto.setUnitNum(datas[1]);
+            reportOwnerPayFeeDto.setRoomNum(datas[2]);
+        }
         return getReportOwnerPayFeeBMOImpl.get(reportOwnerPayFeeDto);
     }
 }

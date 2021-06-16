@@ -65,6 +65,15 @@
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
         </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and ff.floor_num = #{floorNum}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num = #{unitNum}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num = #{roomNum}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -158,6 +167,15 @@
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and ff.floor_num = #{floorNum}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num = #{unitNum}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num = #{roomNum}
         </if>
     </select>
 
