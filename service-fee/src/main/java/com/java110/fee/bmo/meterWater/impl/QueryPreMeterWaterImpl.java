@@ -156,6 +156,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         return ResultVo.success();
     }
 
+
     private void dealImportExportMeterWater(ImportExportMeterWaterDto importExportMeterWaterDto, String communityId,
                                             String storeId, String configId, String userId, String feeTypeCd,
                                             List<PayFeePo> fees, List<MeterWaterPo> meterWaterPos, List<FeeAttrPo> feeAttrPos) {
@@ -207,9 +208,9 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
 
             if ("1010".equals(importExportMeterWaterDto.getMeterType())) {
                 feeName += "水费";
-            } else if("2020".equals(importExportMeterWaterDto.getMeterType())) {
+            } else if ("2020".equals(importExportMeterWaterDto.getMeterType())) {
                 feeName += "电费";
-            }else{
+            } else {
                 feeName += "燃气费";
             }
             feeAttrPo.setValue(feeName);

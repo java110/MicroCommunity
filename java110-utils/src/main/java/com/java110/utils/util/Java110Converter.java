@@ -78,7 +78,7 @@ public class Java110Converter implements Converter {
             return newDate;
         }
 
-        if (value instanceof BigDecimal) {
+        if (value instanceof BigDecimal && target == String.class) {
             BigDecimal bd = (BigDecimal) value;
             return bd.toPlainString();
         }
