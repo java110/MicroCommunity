@@ -105,7 +105,7 @@
         select t.detail_type,t.detail_type detailType,t.amount,t.order_id,t.order_id orderId,t.obj_id,t.obj_id
         objId,t.detail_id,t.detail_id detailId,t.acct_id,t.acct_id acctId,t.rel_acct_id,t.rel_acct_id
         relAcctId,t.remark,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType,
-        ac.acct_name acctName
+        ac.acct_name acctName,t.create_time createTime
         from account_detail t
         LEFT JOIN account ac on t.acct_id = ac.acct_id and ac.status_cd = '0' and ac.obj_id = t.obj_id
         where 1 =1
