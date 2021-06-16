@@ -163,6 +163,45 @@ public class ExportMeterWaterSMOImpl extends BaseComponentSMO implements IExport
         sheet.addMergedRegion(region);
     }
 
+
+    @Override
+    public ResponseEntity<Object> exportExcelData2(IPageData pd) throws Exception {
+
+        ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+
+        Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
+        Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "meterType", "请求中未包含费用项目");
+
+        Workbook workbook = null;  //工作簿
+        //工作表
+        workbook = new XSSFWorkbook();
+        //获取楼信息
+        getMeterWater(pd, result, workbook);
+
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        MultiValueMap headers = new HttpHeaders();
+        headers.add("content-type", "application/octet-stream;charset=UTF-8");
+        headers.add("Content-Disposition", "attachment;filename=meteWaterImport_" + DateUtil.getyyyyMMddhhmmssDateString() + ".xlsx");
+        headers.add("Pargam", "no-cache");
+        headers.add("Cache-Control", "no-cache");
+        //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
+        headers.add("Accept-Ranges", "bytes");
+        byte[] context = null;
+        try {
+            workbook.write(os);
+            context = os.toByteArray();
+            os.close();
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 保存数据
+            return new ResponseEntity<Object>("导出失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        // 保存数据
+        return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
+    }
+
     public RestTemplate getRestTemplate() {
         return restTemplate;
     }

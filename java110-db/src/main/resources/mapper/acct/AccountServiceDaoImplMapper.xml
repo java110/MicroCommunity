@@ -226,7 +226,7 @@
             and t.acct_id= #{acctId}
         </if>
         <if test="objId !=null and objId != ''">
-           and t.obj_id= #{objId},
+           and t.obj_id = #{objId}
         </if>
     </update>
 
