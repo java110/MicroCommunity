@@ -112,7 +112,7 @@ public class AccountApi {
      * @serviceCode /account/ownerPrestoreAccount
      * @path /app/account/ownerPrestoreAccount
      */
-    @RequestMapping(value = "/ownerPrestoreAccount", method = RequestMethod.GET)
+    @RequestMapping(value = "/ownerPrestoreAccount", method = RequestMethod.POST)
     public ResponseEntity<String> queryAccountDetail(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
         Assert.hasKeyAndValue(reqJson, "ownerId", "业主不能为空");
