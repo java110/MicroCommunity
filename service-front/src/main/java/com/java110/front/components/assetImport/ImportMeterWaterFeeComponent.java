@@ -45,7 +45,28 @@ public class ImportMeterWaterFeeComponent {
      * @param pd 页面数据封装
      * @return ResponseEntity 对象
      */
+    public ResponseEntity<String> importData2(IPageData pd, MultipartFile uploadFile) throws Exception {
+
+        return importMeterWaterFeeSMOImpl.importExcelData2(pd, uploadFile);
+    }
+
+    /**
+     * 添加应用数据
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
     public ResponseEntity<Object> exportData(IPageData pd) throws Exception {
+
+        return exportMeterWaterSMOImpl.exportExcelData(pd);
+    }
+    /**
+     * 添加应用数据
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
+    public ResponseEntity<Object> exportData2(IPageData pd) throws Exception {
 
         return exportMeterWaterSMOImpl.exportExcelData(pd);
     }

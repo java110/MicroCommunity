@@ -70,6 +70,27 @@ public class ImportMeterWaterFeeSMOImpl extends BaseComponentSMO implements IImp
         }
     }
 
+    @Override
+    public ResponseEntity<String> importExcelData2(IPageData pd, MultipartFile uploadFile) {
+        try {
+            ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+
+            //InputStream is = uploadFile.getInputStream();
+
+            Workbook workbook = ImportExcelUtils.createWorkbook(uploadFile);  //工作簿
+
+            List<ImportExportMeterWaterDto> rooms = new ArrayList<ImportExportMeterWaterDto>();
+
+            //获取楼信息
+            getRooms(workbook, rooms);
+            // 保存数据
+            return dealExcelData(pd, rooms, result);
+        } catch (Exception e) {
+            logger.error("导入失败 ", e);
+            return new ResponseEntity<String>("非常抱歉，您填写的模板数据有误：" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     /**
      * 处理ExcelData数据
      */
