@@ -35,18 +35,14 @@ public class AccountWithdrawalApplyApi {
      * @return
      */
     @RequestMapping(value = "/saveAccountWithdrawalApply", method = RequestMethod.POST)
-    public ResponseEntity<String> saveAccountWithdrawalApply(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveAccountWithdrawalApply(@RequestBody JSONObject reqJson,
+                                                             @RequestHeader(value="user-id") String userId ) {
 
         Assert.hasKeyAndValue(reqJson, "acctId", "请求报文中未包含acctId");
         Assert.hasKeyAndValue(reqJson, "amount", "请求报文中未包含amount");
-        Assert.hasKeyAndValue(reqJson, "applyUserId", "请求报文中未包含applyUserId");
-        Assert.hasKeyAndValue(reqJson, "applyUserName", "请求报文中未包含applyUserName");
-        Assert.hasKeyAndValue(reqJson, "applyUserTel", "请求报文中未包含applyUserTel");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
-
 
         AccountWithdrawalApplyPo accountWithdrawalApplyPo = BeanConvertUtil.covertBean(reqJson, AccountWithdrawalApplyPo.class);
-        return saveAccountWithdrawalApplyBMOImpl.save(accountWithdrawalApplyPo);
+        return saveAccountWithdrawalApplyBMOImpl.save(accountWithdrawalApplyPo,userId);
     }
 
     /**
