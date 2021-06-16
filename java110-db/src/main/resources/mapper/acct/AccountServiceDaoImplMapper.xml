@@ -104,6 +104,9 @@
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
+        <if test="hasMoney !=null and hasMoney != ''">
+            and t.amount > 0
+        </if>
         <if test="acctType !=null and acctType != ''">
             and t.acct_type= #{acctType}
         </if>
@@ -178,6 +181,10 @@
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
+        <if test="hasMoney !=null and hasMoney != ''">
+            and t.amount > 0
+        </if>
+
         <if test="acctType !=null and acctType != ''">
             and t.acct_type= #{acctType}
         </if>
