@@ -17,6 +17,7 @@ public class MeterWaterPo implements Serializable {
     private String communityId;
     private String objType;
     private String feeId;
+    private double price;
     private Date createTime;
 
     public String getRemark() {
@@ -121,5 +122,13 @@ public class MeterWaterPo implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

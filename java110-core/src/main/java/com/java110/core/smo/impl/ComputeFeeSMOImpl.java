@@ -279,6 +279,15 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feeReceiptDetailPo.setArea(roomDtos.get(0).getBuiltUpArea());
                 feeReceiptDetailPo.setSquarePrice(feeDto.getComputingFormulaText());
+            }else if ("9009".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal sub = curDegree.subtract(preDegree).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    feeReceiptDetailPo.setArea(sub.doubleValue() + "");
+                    feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
+                }
             } else {
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
@@ -331,7 +340,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
                 feeReceiptDetailPo.setArea(parkingSpaceDtos.get(0).getArea());
                 feeReceiptDetailPo.setSquarePrice(feeDto.getComputingFormulaText());
-            } else {
+            } else if ("9009".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal sub = curDegree.subtract(preDegree).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    feeReceiptDetailPo.setArea(sub.doubleValue() + "");
+                    feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
+                }
+            }else {
             }
         }
     }
@@ -696,6 +714,19 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeRoomCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class), BeanConvertUtil.covertBean(reportRoomDto, RoomDto.class));
+            }else if ("9009".equals(computingFormula)) {
+                if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
+                    //throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getMwPrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -730,6 +761,19 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeCarCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class), BeanConvertUtil.covertBean(reportCarDto, OwnerCarDto.class));
+            }else if ("9009".equals(computingFormula)) {
+                if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
+                    throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getMwPrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -788,6 +832,19 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = computeRoomCustomizeFormula(feeDto, roomDto);
             } else if ("8008".equals(computingFormula)) {  //手动动态费用
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            } else if ("9009".equals(computingFormula)) {  //(本期度数-上期度数)*动态单价+附加费
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                    //throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getMwPrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -834,6 +891,19 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeCarCustomizeFormula(feeDto, ownerCarDtos.get(0));
+            } else if ("9009".equals(computingFormula)) {  //(本期度数-上期度数)*动态单价+附加费
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                    //throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getMwPrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -883,6 +953,19 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = computeContractCustomizeFormula(feeDto, contractRoomDtos);
             } else if ("8008".equals(computingFormula)) {  //手动动态费用
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
+            } else if ("9009".equals(computingFormula)) {  //(本期度数-上期度数)*动态单价+附加费
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                    //throw new IllegalArgumentException("抄表数据异常");
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getMwPrice()));
+                    BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                    BigDecimal sub = curDegree.subtract(preDegree);
+                    feePrice = sub.multiply(squarePrice)
+                            .add(additionalAmount)
+                            .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                }
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }

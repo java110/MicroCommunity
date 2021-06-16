@@ -51,6 +51,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String receivedAmountSwitch;
 
     private String squarePrice;
+    private String mwPrice;
     private String additionalAmount;
     private String state;
     private String stateName;
@@ -579,5 +580,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setComputingFormulaText(String computingFormulaText) {
         this.computingFormulaText = computingFormulaText;
+    }
+
+    public String getMwPrice() {
+        return mwPrice;
+    }
+
+    public void setMwPrice(String mwPrice) {
+        this.mwPrice = mwPrice;
     }
 }

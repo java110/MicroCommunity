@@ -63,7 +63,7 @@
         storeTypeCd,
         t.community_id communityId,pfa.value importFeeName,ifd.end_time importFeeEndTime,mw.cur_degrees
         curDegrees,mw.pre_degrees preDegrees,
-        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime
+        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,mw.price mwPrice
         from pay_fee t
         INNER JOIN pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'

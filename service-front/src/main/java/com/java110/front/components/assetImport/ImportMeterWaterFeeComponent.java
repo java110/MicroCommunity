@@ -68,7 +68,7 @@ public class ImportMeterWaterFeeComponent {
      */
     public ResponseEntity<Object> exportData2(IPageData pd) throws Exception {
 
-        return exportMeterWaterSMOImpl.exportExcelData(pd);
+        return exportMeterWaterSMOImpl.exportExcelData2(pd);
     }
 
 

@@ -176,13 +176,13 @@ public class ExportMeterWaterSMOImpl extends BaseComponentSMO implements IExport
         //工作表
         workbook = new XSSFWorkbook();
         //获取楼信息
-        getMeterWater(pd, result, workbook);
+        getMeterWater2(pd, result, workbook);
 
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultiValueMap headers = new HttpHeaders();
         headers.add("content-type", "application/octet-stream;charset=UTF-8");
-        headers.add("Content-Disposition", "attachment;filename=meteWaterImport_" + DateUtil.getyyyyMMddhhmmssDateString() + ".xlsx");
+        headers.add("Content-Disposition", "attachment;filename=meteWaterImport2_" + DateUtil.getyyyyMMddhhmmssDateString() + ".xlsx");
         headers.add("Pargam", "no-cache");
         headers.add("Cache-Control", "no-cache");
         //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
@@ -200,6 +200,62 @@ public class ExportMeterWaterSMOImpl extends BaseComponentSMO implements IExport
         }
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
+    }
+
+    /**
+     * 获取 房屋信息
+     *
+     * @param componentValidateResult
+     * @param workbook
+     */
+    private void getMeterWater2(IPageData pd, ComponentValidateResult componentValidateResult, Workbook workbook) {
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        Sheet sheet = workbook.createSheet("房屋费用信息");
+        Row row = sheet.createRow(0);
+        Cell cell0 = row.createCell(0);
+        cell0.setCellValue("上期度数: 请填写上期表读数 ；\n上期读表时间: " +
+                "格式为YYYY-MM-DD； \n本期度数: 本次表读数；\n本期读表时间: 格式为YYYY-MM-DD； " +
+                "\n注意：所有单元格式为文本");
+        CellStyle cs = workbook.createCellStyle();
+        cs.setWrapText(true);  //关键
+        cell0.setCellStyle(cs);
+        row.setHeight((short) (200 * 10));
+        row = sheet.createRow(1);
+        row.createCell(0).setCellValue("楼栋编号");
+        row.createCell(1).setCellValue("单元编号");
+        row.createCell(2).setCellValue("房屋编码");
+        row.createCell(3).setCellValue("费用类型");
+        row.createCell(4).setCellValue("单价");
+        row.createCell(5).setCellValue("上期度数");
+        row.createCell(6).setCellValue("上期读表时间");
+        row.createCell(7).setCellValue("本期度数");
+        row.createCell(8).setCellValue("本期读表时间");
+        row.createCell(9).setCellValue("备注");
+
+        //查询楼栋信息
+        JSONArray rooms = this.getExistsRoom(pd, componentValidateResult);
+        if (rooms == null) {
+            CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+            sheet.addMergedRegion(region);
+            return;
+        }
+
+        for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
+            row = sheet.createRow(roomIndex + 2);
+            row.createCell(0).setCellValue(rooms.getJSONObject(roomIndex).getString("floorNum"));
+            row.createCell(1).setCellValue(rooms.getJSONObject(roomIndex).getString("unitNum"));
+            row.createCell(2).setCellValue(rooms.getJSONObject(roomIndex).getString("roomNum"));
+            row.createCell(3).setCellValue(reqJson.getString("feeName"));
+            row.createCell(4).setCellValue(rooms.getJSONObject(roomIndex).getString("price"));
+            row.createCell(5).setCellValue(rooms.getJSONObject(roomIndex).getString("preDegrees"));
+            row.createCell(6).setCellValue(rooms.getJSONObject(roomIndex).getString("preReadingTime"));
+            row.createCell(7).setCellValue("");
+            row.createCell(8).setCellValue("");
+            row.createCell(9).setCellValue("");
+        }
+
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
+        sheet.addMergedRegion(region);
     }
 
     public RestTemplate getRestTemplate() {
