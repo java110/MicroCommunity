@@ -25,6 +25,7 @@ public class SaveAccountWithdrawalApplyBMOImpl implements ISaveAccountWithdrawal
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
     /**
      * 添加小区信息
