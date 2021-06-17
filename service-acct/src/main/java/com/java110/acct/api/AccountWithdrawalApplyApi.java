@@ -103,7 +103,19 @@ public class AccountWithdrawalApplyApi {
         accountWithdrawalApplyDto.setRow(row);
         accountWithdrawalApplyDto.setApplyUserName(applyUserName);
         accountWithdrawalApplyDto.setApplyUserTel(applyUserTel);
+        if(null == state || "".equals( state )){
+            state = "";
+        }
         accountWithdrawalApplyDto.setState(state);
         return getAccountWithdrawalApplyBMOImpl.get(accountWithdrawalApplyDto);
+    }
+
+
+    @RequestMapping(value = "/listStateWithdrawalApplys", method = RequestMethod.GET)
+    public ResponseEntity<String> listStateWithdrawalApplys(@RequestParam(value = "page") int page,
+                                                              @RequestParam(value = "row") int row,
+                                                              @RequestParam(value = "state",required = false) String [] state) {
+
+        return getAccountWithdrawalApplyBMOImpl.listStateWithdrawalApplys( state, page,row);
     }
 }

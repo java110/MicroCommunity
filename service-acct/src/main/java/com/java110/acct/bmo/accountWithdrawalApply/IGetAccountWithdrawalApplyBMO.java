@@ -12,5 +12,13 @@ public interface IGetAccountWithdrawalApplyBMO {
      */
     ResponseEntity<String> get(AccountWithdrawalApplyDto accountWithdrawalApplyDto);
 
+    /**
+     * 查询账户提现
+     * add by wuxw
+     * @param
+     * @return
+     */
+    ResponseEntity<String> listStateWithdrawalApplys(String [] states,int page,int row);
+
 
 }

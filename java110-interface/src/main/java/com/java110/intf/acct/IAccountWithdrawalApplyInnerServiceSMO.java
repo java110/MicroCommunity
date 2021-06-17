@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -50,4 +51,22 @@ public interface IAccountWithdrawalApplyInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAccountWithdrawalApplysCount", method = RequestMethod.POST)
     int queryAccountWithdrawalApplysCount(@RequestBody AccountWithdrawalApplyDto accountWithdrawalApplyDto);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param states 数据对象分享
+     * @return AccountWithdrawalApplyDto 对象数据
+     */
+    @RequestMapping(value = "/listStateWithdrawalApplys", method = RequestMethod.POST)
+    List<AccountWithdrawalApplyDto> listStateWithdrawalApplys(@RequestParam String [] states, int page, int row);
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param states 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/listStateWithdrawalApplysCount", method = RequestMethod.POST)
+    int listStateWithdrawalApplysCount(@RequestParam String [] states);
 }

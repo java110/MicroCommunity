@@ -43,4 +43,23 @@ public class GetAccountWithdrawalApplyBMOImpl implements IGetAccountWithdrawalAp
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> listStateWithdrawalApplys(String[] states, int page, int row) {
+
+        int count = accountWithdrawalApplyInnerServiceSMOImpl.listStateWithdrawalApplysCount( states);
+
+        List<AccountWithdrawalApplyDto> accountWithdrawalApplyDtos = null;
+        if (count > 0) {
+            accountWithdrawalApplyDtos = accountWithdrawalApplyInnerServiceSMOImpl.listStateWithdrawalApplys(states, page, row);
+        } else {
+            accountWithdrawalApplyDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) page), count, accountWithdrawalApplyDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
 }

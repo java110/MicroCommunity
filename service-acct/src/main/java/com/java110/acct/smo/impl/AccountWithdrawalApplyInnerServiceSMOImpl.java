@@ -5,15 +5,19 @@ import com.java110.acct.dao.IAccountWithdrawalApplyServiceDao;
 import com.java110.dto.accountWithdrawalApply.AccountWithdrawalApplyDto;
 import com.java110.intf.acct.IAccountWithdrawalApplyInnerServiceSMO;
 import com.java110.po.accountWithdrawalApply.AccountWithdrawalApplyPo;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -72,6 +76,32 @@ public class AccountWithdrawalApplyInnerServiceSMOImpl extends BaseServiceSMO im
     @Override
     public int queryAccountWithdrawalApplysCount(@RequestBody AccountWithdrawalApplyDto accountWithdrawalApplyDto) {
         return accountWithdrawalApplyServiceDaoImpl.queryAccountWithdrawalApplysCount(BeanConvertUtil.beanCovertMap(accountWithdrawalApplyDto));    }
+
+    @Override
+    public List<AccountWithdrawalApplyDto> listStateWithdrawalApplys(@RequestParam String[] states, int page, int row) {
+
+        //校验是否传了 分页信息
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            page = ((page - 1) * row);
+        }
+
+        Map stateInfo = new HashMap();
+        stateInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        stateInfo.put("states", states);
+        stateInfo.put("page", page);
+        stateInfo.put("row", row);
+
+        return BeanConvertUtil.covertBeanList(accountWithdrawalApplyServiceDaoImpl.listStateWithdrawalApplys(stateInfo), AccountWithdrawalApplyDto.class);
+    }
+
+
+    @Override
+    public int listStateWithdrawalApplysCount(@RequestParam String[] states) {
+        Map stateInfo = new HashMap();
+        stateInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        stateInfo.put("states", states);
+        return accountWithdrawalApplyServiceDaoImpl.listStateWithdrawalApplysCount(stateInfo);    }
 
     public IAccountWithdrawalApplyServiceDao getAccountWithdrawalApplyServiceDaoImpl() {
         return accountWithdrawalApplyServiceDaoImpl;

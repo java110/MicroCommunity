@@ -22,6 +22,7 @@ private String acctId;
 private String state;
 private String applyUserTel;
 private String applyUserId;
+private String stateName;
 
 
     private Date createTime;
@@ -93,5 +94,13 @@ public void setApplyUserId(String applyUserId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

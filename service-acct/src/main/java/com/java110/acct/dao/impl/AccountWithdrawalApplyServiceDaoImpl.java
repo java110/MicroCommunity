@@ -94,5 +94,35 @@ public class AccountWithdrawalApplyServiceDaoImpl extends BaseServiceDao impleme
         return Integer.parseInt(businessAccountWithdrawalApplyInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询账户提现信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> listStateWithdrawalApplys(Map info) throws DAOException {
+        logger.debug("查询账户提现信息 入参 info : {}",info);
 
+        List<Map> businessAccountWithdrawalApplyInfos = sqlSessionTemplate.selectList("accountWithdrawalApplyServiceDaoImpl.listStateWithdrawalApplys",info);
+
+        return businessAccountWithdrawalApplyInfos;
+    }
+
+    /**
+     * 查询账户提现数量
+     * @param info 账户提现信息
+     * @return 账户提现数量
+     */
+    @Override
+    public int listStateWithdrawalApplysCount(Map info) {
+        logger.debug("查询账户提现数据 入参 info : {}",info);
+
+        List<Map> businessAccountWithdrawalApplyInfos = sqlSessionTemplate.selectList("accountWithdrawalApplyServiceDaoImpl.listStateWithdrawalApplysCount", info);
+        if (businessAccountWithdrawalApplyInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessAccountWithdrawalApplyInfos.get(0).get("count").toString());
+    }
 }
