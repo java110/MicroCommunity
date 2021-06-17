@@ -55,8 +55,6 @@ public class AccountWithdrawalApplyApi {
     @RequestMapping(value = "/upAccountWithdrawalApply", method = RequestMethod.POST)
     public ResponseEntity<String> updateAccountWithdrawalApply(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "acctId", "请求报文中未包含acctId");
-        Assert.hasKeyAndValue(reqJson, "amount", "请求报文中未包含amount");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
 
@@ -103,7 +101,19 @@ public class AccountWithdrawalApplyApi {
         accountWithdrawalApplyDto.setRow(row);
         accountWithdrawalApplyDto.setApplyUserName(applyUserName);
         accountWithdrawalApplyDto.setApplyUserTel(applyUserTel);
+        if(null == state || "".equals( state )){
+            state = "";
+        }
         accountWithdrawalApplyDto.setState(state);
         return getAccountWithdrawalApplyBMOImpl.get(accountWithdrawalApplyDto);
+    }
+
+
+    @RequestMapping(value = "/listStateWithdrawalApplys", method = RequestMethod.GET)
+    public ResponseEntity<String> listStateWithdrawalApplys(@RequestParam(value = "page") int page,
+                                                              @RequestParam(value = "row") int row,
+                                                              @RequestParam(value = "state") String state) {
+        String [] states = state.split( "," );
+        return getAccountWithdrawalApplyBMOImpl.listStateWithdrawalApplys( states, page,row);
     }
 }

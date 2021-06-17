@@ -58,4 +58,20 @@ public interface IAccountWithdrawalApplyServiceDao {
      */
     int queryAccountWithdrawalApplysCount(Map info);
 
+    /**
+     * 查询账户提现信息（instance过程）
+     * 根据bId 查询账户提现信息
+     * @param info bId 信息
+     * @return 账户提现信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> listStateWithdrawalApplys(Map info) throws DAOException;
+
+    /**
+     * 查询账户提现总数
+     *
+     * @param info 账户提现信息
+     * @return 账户提现数量
+     */
+    int listStateWithdrawalApplysCount(Map info);
 }
