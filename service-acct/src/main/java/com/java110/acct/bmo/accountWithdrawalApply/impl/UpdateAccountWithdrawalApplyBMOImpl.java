@@ -1,5 +1,6 @@
 package com.java110.acct.bmo.accountWithdrawalApply.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.bmo.accountWithdrawalApply.IUpdateAccountWithdrawalApplyBMO;
 import com.java110.core.annotation.Java110Transactional;
 
@@ -43,7 +44,6 @@ public class UpdateAccountWithdrawalApplyBMOImpl implements IUpdateAccountWithdr
                     accountDetailPo.setAcctId( WithdrawalApplyDto.getAcctId() );
                     accountDetailPo.setAmount( WithdrawalApplyDto.getAmount() );
                     accountDetailPo.setRemark( accountWithdrawalApplyPo.getContext() );
-                    accountDetailPo.setObjId( accountWithdrawalApplyPo.getApplyId() );
                     accountInnerServiceSMOImpl.prestoreAccount( accountDetailPo );
             }
         }

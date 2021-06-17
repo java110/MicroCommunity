@@ -1,5 +1,6 @@
 package com.java110.acct.bmo.accountWithdrawalApply.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.bmo.accountWithdrawalApply.ISaveAccountWithdrawalApplyBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -34,7 +35,7 @@ public class SaveAccountWithdrawalApplyBMOImpl implements ISaveAccountWithdrawal
      * @return 订单服务能够接受的报文
      */
     @Java110Transactional
-    public ResponseEntity<String> save(AccountWithdrawalApplyPo accountWithdrawalApplyPo,String userId) {
+    public ResponseEntity<String> save(AccountWithdrawalApplyPo accountWithdrawalApplyPo, String userId) {
 
 
         UserDto userDto = new UserDto();
@@ -52,7 +53,6 @@ public class SaveAccountWithdrawalApplyBMOImpl implements ISaveAccountWithdrawal
             accountDetailPo.setAcctId( accountWithdrawalApplyPo.getAcctId() );
             accountDetailPo.setAmount( accountWithdrawalApplyPo.getAmount() );
             accountDetailPo.setRemark( accountWithdrawalApplyPo.getContext() );
-            accountDetailPo.setObjId( accountWithdrawalApplyPo.getApplyId() );
             //调用扣款接口进行扣款
             int acctflag = accountInnerServiceSMOImpl.withholdAccount( accountDetailPo );
             if (acctflag < 1) {
