@@ -57,7 +57,7 @@ import java.util.List;
  * 完成报修
  * add by wuxw 2019-06-30
  */
-@Java110Listener("repairCloseListener")
+@Java110Listener("repairFinishListener")
 public class RepairFinishListener extends AbstractServiceApiPlusListener {
 
     private static Logger logger = LoggerFactory.getLogger(RepairFinishListener.class);
