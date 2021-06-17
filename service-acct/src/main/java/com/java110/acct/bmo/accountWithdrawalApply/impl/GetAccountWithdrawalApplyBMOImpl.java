@@ -45,7 +45,7 @@ public class GetAccountWithdrawalApplyBMOImpl implements IGetAccountWithdrawalAp
 
     @Override
     public ResponseEntity<String> listStateWithdrawalApplys(String[] states, int page, int row) {
-
+        System.out.println( states.length + "statesstatesstates"+states[0] );
         int count = accountWithdrawalApplyInnerServiceSMOImpl.listStateWithdrawalApplysCount( states);
 
         List<AccountWithdrawalApplyDto> accountWithdrawalApplyDtos = null;

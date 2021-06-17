@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class AccountWithdrawalApplyPo implements Serializable {
+    public static final String STATE_PASS="587"; //审核不通过
+    public static final String STATE_ERROR_PAYER="687"; //付款失败
 
     private String applyId;
 private String applyUserName;

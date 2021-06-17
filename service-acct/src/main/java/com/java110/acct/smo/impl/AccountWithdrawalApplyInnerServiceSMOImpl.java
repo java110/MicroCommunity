@@ -101,6 +101,7 @@ public class AccountWithdrawalApplyInnerServiceSMOImpl extends BaseServiceSMO im
         Map stateInfo = new HashMap();
         stateInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
         stateInfo.put("states", states);
+        System.out.println( states.length + "statesstatesstates"+states[0] );
         return accountWithdrawalApplyServiceDaoImpl.listStateWithdrawalApplysCount(stateInfo);    }
 
     public IAccountWithdrawalApplyServiceDao getAccountWithdrawalApplyServiceDaoImpl() {

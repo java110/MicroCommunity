@@ -190,7 +190,7 @@ where 1 =1
 
     <!-- 查询账户提现信息 add by wuxw 2018-07-03 -->
     <select id="listStateWithdrawalApplysCount" parameterType="Map" resultType="Map">
-        select  count(*)
+        select  count(1)
         from account_withdrawal_apply t left join t_dict t1 on t.state = t1.status_cd
         where t1.table_name='account_withdrawal_apply'
         and t1.table_columns='state'
