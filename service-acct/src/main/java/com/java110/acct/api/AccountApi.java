@@ -84,6 +84,27 @@ public class AccountApi {
     }
 
     /**
+     * 查询业主账户明细
+     *
+     * @param objId 小区ID
+     * @return
+     * @serviceCode /account/queryOwnerAccountDetail
+     * @path /app/account/queryOwnerAccountDetail
+     */
+    @RequestMapping(value = "/queryOwnerAccountDetail", method = RequestMethod.GET)
+    public ResponseEntity<String> queryOwnerAccountDetail(@RequestParam(value = "objId", required = false) String objId,
+                                                     @RequestParam(value = "acctId", required = false) String acctId,
+                                                     @RequestParam(value = "page") int page,
+                                                     @RequestParam(value = "row") int row) {
+        AccountDetailDto accountDto = new AccountDetailDto();
+        accountDto.setPage(page);
+        accountDto.setRow(row);
+        accountDto.setObjId(objId);
+        accountDto.setAcctId(acctId);
+        return getAccountBMOImpl.getDetail(accountDto);
+    }
+
+    /**
      * 查询账户明细
      *
      * @param storeId 小区ID

@@ -8,10 +8,10 @@
     <insert id="saveBusinessMeterWaterInfo" parameterType="Map">
         insert into business_meter_water(
         remark,cur_reading_time,water_id,cur_degrees,operate,meter_type,pre_degrees,obj_id,pre_reading_time,
-        b_id,community_id,obj_type,fee_id,obj_name
+        b_id,community_id,obj_type,fee_id,obj_name,price
         ) values (
         #{remark},#{curReadingTime},#{waterId},#{curDegrees},#{operate},#{meterType},#{preDegrees},#{objId},
-        #{preReadingTime},#{bId},#{communityId},#{objType},#{feeId},#{objName}
+        #{preReadingTime},#{bId},#{communityId},#{objType},#{feeId},#{objName},#{price}
         )
     </insert>
 
@@ -22,7 +22,7 @@
         waterId,t.cur_degrees,t.cur_degrees curDegrees,t.operate,t.meter_type,t.meter_type
         meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
         objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
-        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName
+        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName,t.price
         from business_meter_water t
         where 1 =1
         <if test="remark !=null and remark != ''">
@@ -72,10 +72,10 @@
     <insert id="saveMeterWaterInfoInstance" parameterType="Map">
         insert into meter_water(
         remark,status_cd,cur_reading_time,water_id,cur_degrees,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,
-        community_id,obj_type,fee_id,obj_name
+        community_id,obj_type,fee_id,obj_name,price
         ) select
         t.remark,'0',t.cur_reading_time,t.water_id,t.cur_degrees,t.meter_type,t.pre_degrees,t.obj_id,
-        t.pre_reading_time,t.b_id,t.community_id,t.obj_type,t.fee_id,t.obj_name
+        t.pre_reading_time,t.b_id,t.community_id,t.obj_type,t.fee_id,t.obj_name,t.price
         from business_meter_water t where 1=1
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -124,7 +124,7 @@
         curReadingTime,t.water_id,t.water_id waterId,t.cur_degrees,t.cur_degrees curDegrees,t.create_time,t.create_time
         createTime,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
         objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
-        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName
+        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName,t.price
         from meter_water t
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
@@ -278,11 +278,11 @@
     <insert id="insertMeterWaters" parameterType="Map">
         insert into meter_water
         (remark,status_cd,cur_reading_time,water_id,cur_degrees,meter_type,pre_degrees,obj_id,pre_reading_time,b_id,
-        community_id,obj_type,fee_id,obj_name)
+        community_id,obj_type,fee_id,obj_name,price)
         VALUES
         <foreach collection="meterWaterPos" item="item" separator=",">
             (#{item.remark},'0',#{item.curReadingTime},#{item.waterId},#{item.curDegrees},#{item.meterType},#{item.preDegrees},
-            #{item.objId},#{item.preReadingTime},'-1',#{item.communityId},#{item.objType},#{item.feeId},#{item.objName})
+            #{item.objId},#{item.preReadingTime},'-1',#{item.communityId},#{item.objType},#{item.feeId},#{item.objName},#{item.price})
         </foreach>
     </insert>
 

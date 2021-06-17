@@ -52,6 +52,8 @@ public class ApiFeeDataVo implements Serializable {
 
     private String preReadingTime;
     private String curReadingTime;
+    private String mwPrice;
+
     private List<FeeAttrDto> feeAttrs;
 
     public String getAmount() {
@@ -300,5 +302,13 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setFeeAttrs(List<FeeAttrDto> feeAttrs) {
         this.feeAttrs = feeAttrs;
+    }
+
+    public String getMwPrice() {
+        return mwPrice;
+    }
+
+    public void setMwPrice(String mwPrice) {
+        this.mwPrice = mwPrice;
     }
 }
