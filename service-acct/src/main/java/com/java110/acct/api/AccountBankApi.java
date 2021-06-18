@@ -77,7 +77,7 @@ public class AccountBankApi {
      */
     @RequestMapping(value = "/deleteAccountBank", method = RequestMethod.POST)
     public ResponseEntity<String> deleteAccountBank(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "shopId", "商铺ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "bankId", "bankId不能为空");
 
@@ -95,12 +95,14 @@ public class AccountBankApi {
      */
     @RequestMapping(value = "/queryAccountBank", method = RequestMethod.GET)
     public ResponseEntity<String> queryAccountBank(@RequestParam(value = "shopId") String shopId,
+                                                   @RequestParam(value = "bankId") String bankId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         AccountBankDto accountBankDto = new AccountBankDto();
         accountBankDto.setPage(page);
         accountBankDto.setRow(row);
         accountBankDto.setShopId(shopId);
+        accountBankDto.setBankId( bankId );
         return getAccountBankBMOImpl.get(accountBankDto);
     }
 }
