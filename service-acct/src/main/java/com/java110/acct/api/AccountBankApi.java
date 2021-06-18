@@ -94,8 +94,8 @@ public class AccountBankApi {
      * @return
      */
     @RequestMapping(value = "/queryAccountBank", method = RequestMethod.GET)
-    public ResponseEntity<String> queryAccountBank(@RequestParam(value = "shopId") String shopId,
-                                                   @RequestParam(value = "bankId") String bankId,
+    public ResponseEntity<String> queryAccountBank(@RequestParam(value = "shopId",required = false) String shopId,
+                                                   @RequestParam(value = "bankId",required = false) String bankId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         AccountBankDto accountBankDto = new AccountBankDto();
