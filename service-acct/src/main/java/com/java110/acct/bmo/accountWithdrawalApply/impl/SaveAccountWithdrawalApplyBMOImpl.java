@@ -54,6 +54,8 @@ public class SaveAccountWithdrawalApplyBMOImpl implements ISaveAccountWithdrawal
             accountDetailPo.setAmount( accountWithdrawalApplyPo.getAmount() );
             accountDetailPo.setRemark( accountWithdrawalApplyPo.getContext() );
             accountDetailPo.setObjId( reqJson.getString( "objId" ) );
+            //商户类型
+            accountDetailPo.setObjType( "7007");
             //调用扣款接口进行扣款
             int acctflag = accountInnerServiceSMOImpl.withholdAccount( accountDetailPo );
             if (acctflag < 1) {

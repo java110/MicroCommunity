@@ -60,6 +60,7 @@ public class UpdateAccountWithdrawalApplyBMOImpl implements IUpdateAccountWithdr
                     throw new IllegalArgumentException("账户不存在");
                 }
                 accountDetailPo.setObjId( accounts.get( 0 ).getObjId() );
+                accountDetailPo.setObjType( "7007");
                 //调用预存接口
                 accountInnerServiceSMOImpl.prestoreAccount( accountDetailPo );
         }
