@@ -1,45 +1,37 @@
 {
   "autoMove": true,
-  "id": "applyId",
-  "name": "accountWithdrawalApply",
-  "desc": "账户提现",
-  "shareParam": "acctId",
-  "shareColumn": "acct_id",
+  "id": "bankId",
+  "name": "accountBank",
+  "desc": "开户行",
+  "shareParam": "shopId",
+  "shareColumn": "shop_id",
   "shareName": "acct",
-  "tableName": "account_withdrawal_apply",
+  "tableName": "account_bank",
   "param": {
-    "applyId": "apply_id",
-    "acctId": "acct_id",
-    "amount": "amount",
-    "applyUserId": "apply_user_id",
-    "applyUserName": "apply_user_name",
-    "applyUserTel": "apply_user_tel",
-    "context": "context",
-    "state": "state",
+    "bankId": "bank_id",
+    "bankCode": "bank_code",
+    "personName": "person_name",
+    "personTel": "person_tel",
+    "bankName": "bank_name",
+    "shopId": "shop_id",
     "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "acctId",
-      "msg": "账户ID不能为空"
+      "code": "bankCode",
+      "msg": "账号不能为空"
     },
     {
-      "code": "amount",
-      "msg": "提现金额不能为空"
+      "code": "personName",
+      "msg": "持卡人名称不能为空"
     },
     {
-      "code": "applyUserId",
-      "msg": "申请人ID不能为空"
+      "code": "bankName",
+      "msg": "开户行不能为空"
     },{
-      "code": "applyUserName",
-      "msg": "申请人名称不能为空"
-    },{
-      "code": "applyUserTel",
-      "msg": "申请人电话不能为空"
-    },{
-      "code": "state",
-      "msg": "申请状态不能为空"
+      "code": "shopId",
+      "msg": "商铺ID不能为空"
     }
   ]
 }

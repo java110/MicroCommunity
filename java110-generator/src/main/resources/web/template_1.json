@@ -1,84 +1,60 @@
 {
-  "templateName":"账户提现",
-  "templateCode":"accountWithdrawalApply",
-  "templateKey":"applyId",
-  "templateKeyName":"提现ID",
-  "searchCode": "applyId",
-  "searchName": "提现ID",
+  "templateName":"开户行",
+  "templateCode":"accountBank",
+  "templateKey":"bankId",
+  "templateKeyName":"银行ID",
+  "searchCode": "bankId",
+  "searchName": "银行ID",
   "directories": "acct",
   "conditions": [
-    {
-      "name": "申请人名称",
-      "inputType": "input",
-      "code": "applyUserName",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "申请人电话",
-      "inputType": "input",
-      "code": "applyUserTel",
-      "whereCondition": "equal"
-    }
   ],
   "columns":[
     {
-      "code":"amount",
-      "cnCode":"提现金额",
-      "desc":"必填，请填写提现金额",
+      "code":"bankCode",
+      "cnCode":"银行账号",
+      "desc":"必填，请填写银行账号",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
-      "limit":"money",
-      "limitParam":"",
-      "limitErrInfo":"提现金额格式错误",
-      "show": true
-    },
-    {
-      "code": "applyUserId",
-      "cnCode":"申请人ID",
-      "desc":"必填，请选择类型",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"类型格式错误",
-      "show": true
-    },
-    {
-      "code": "applyUserName",
-      "cnCode":"申请人名称",
-      "desc":"必填，请填写申请人名称",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
       "limit":"maxin",
       "limitParam":"1,20",
-      "limitErrInfo":"申请人名称不能超过20位",
+      "limitErrInfo":"银行账号超长了",
       "show": true
     },
     {
-      "code": "applyUserTel",
-      "cnCode":"申请人电话",
-      "desc":"必填，请填写申请人电话",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"phone",
-      "limitParam":"",
-      "limitErrInfo":"申请人电话格式错误",
-      "show": true
-    },
-    {
-      "code": "context",
-      "cnCode":"申请说明",
-      "desc":"请填写申请说明",
+      "code": "personName",
+      "cnCode":"持卡人",
+      "desc":"必填，请填写持卡人",
       "required":true,
       "hasDefaultValue":false,
       "inputType": "input",
       "limit":"maxLength",
-      "limitParam":"500",
-      "limitErrInfo":"申请说明不能超过500",
+      "limitParam":"20",
+      "limitErrInfo":"持卡人名称不能超过20位",
+      "show": true
+    },
+    {
+      "code": "personTel",
+      "cnCode":"手机号",
+      "desc":"必填，请填写手机号",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"phone",
+      "limitParam":"",
+      "limitErrInfo":"电话格式错误",
+      "show": true
+    },
+    {
+      "code": "bankName",
+      "cnCode":"开户行",
+      "desc":"必填，请填写开户行",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"100",
+      "limitErrInfo":"开户行名称不能超过100位",
       "show": true
     }
   ]

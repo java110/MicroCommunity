@@ -206,6 +206,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_vipAcctId = "32";
     public static final String CODE_PREFIX_rssId = "33";
     public static final String CODE_PREFIX_pfId = "34";
+    public static final String CODE_PREFIX_bankId = "74";
 
 
 
