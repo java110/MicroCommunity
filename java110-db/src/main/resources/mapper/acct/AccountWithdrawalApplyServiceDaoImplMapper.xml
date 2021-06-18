@@ -11,9 +11,9 @@
     <!-- 保存账户提现信息 add by wuxw 2018-07-03 -->
     <insert id="saveAccountWithdrawalApplyInfo" parameterType="Map">
         insert into account_withdrawal_apply(
-apply_id,apply_user_name,amount,context,acct_id,state,apply_user_tel,apply_user_id
+apply_id,apply_user_name,amount,context,acct_id,state,apply_user_tel,apply_user_id,bank_id
 ) values (
-#{applyId},#{applyUserName},#{amount},#{context},#{acctId},#{state},#{applyUserTel},#{applyUserId}
+#{applyId},#{applyUserName},#{amount},#{context},#{acctId},#{state},#{applyUserTel},#{applyUserId},#{bankId}
 )
     </insert>
 
@@ -21,7 +21,10 @@ apply_id,apply_user_name,amount,context,acct_id,state,apply_user_tel,apply_user_
 
     <!-- 查询账户提现信息 add by wuxw 2018-07-03 -->
     <select id="getAccountWithdrawalApplyInfo" parameterType="Map" resultType="Map">
-    select  t.apply_id,t.apply_id applyId,t.apply_user_name,t.apply_user_name applyUserName,t.amount,t.create_time,t.create_time createTime,t.context,t.acct_id,t.acct_id acctId,t.status_cd,t.status_cd statusCd,t.state,t.apply_user_tel,t.apply_user_tel applyUserTel,t.apply_user_id,t.apply_user_id applyUserId,t1.`name` stateName
+    select  t.apply_id,t.apply_id applyId,t.apply_user_name,t.apply_user_name applyUserName,
+    t.amount,t.create_time,t.create_time createTime,t.context,t.acct_id,t.acct_id acctId,
+    t.status_cd,t.status_cd statusCd,t.state,t.apply_user_tel,t.apply_user_tel applyUserTel,
+    t.apply_user_id,t.apply_user_id applyUserId,t1.`name` stateName,t.bank_id bankId
     from account_withdrawal_apply t left join t_dict t1 on t.state = t1.status_cd
     where t1.table_name='account_withdrawal_apply'
       and t1.table_columns='state'
@@ -85,8 +88,11 @@ order by t.create_time desc
 </if> 
 <if test="acctId !=null and acctId != ''">
 , t.acct_id= #{acctId}
-</if> 
-<if test="state !=null and state != ''">
+</if>
+    <if test="bankId !=null and bankId != ''">
+        , t.bank_id= #{bankId}
+    </if>
+        <if test="state !=null and state != ''">
 , t.state= #{state}
 </if> 
 <if test="applyUserTel !=null and applyUserTel != ''">
@@ -123,8 +129,11 @@ where 1 =1
 </if> 
 <if test="acctId !=null and acctId != ''">
    and t.acct_id= #{acctId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
+</if>
+         <if test="bankId !=null and bankId != ''">
+             and t.bank_id= #{bankId}
+         </if>
+         <if test="statusCd !=null and statusCd != ''">
    and t.status_cd= #{statusCd}
 </if> 
 <if test="state !=null and state != ''">
@@ -142,7 +151,9 @@ where 1 =1
 
     <!-- 查询账户提现信息 add by wuxw 2018-07-03 -->
     <select id="listStateWithdrawalApplys" parameterType="Map" resultType="Map">
-        select  t.apply_id,t.apply_id applyId,t.apply_user_name,t.apply_user_name applyUserName,t.amount,t.create_time,t.create_time createTime,t.context,t.acct_id,t.acct_id acctId,t.status_cd,t.status_cd statusCd,t.state,t.apply_user_tel,t.apply_user_tel applyUserTel,t.apply_user_id,t.apply_user_id applyUserId,t1.`name` stateName
+        select  t.apply_id,t.apply_id applyId,t.apply_user_name,t.apply_user_name applyUserName,t.amount,t.create_time,t.create_time createTime,
+        t.context,t.acct_id,t.acct_id acctId,t.status_cd,t.status_cd statusCd,t.state,t.apply_user_tel,t.apply_user_tel applyUserTel,
+        t.apply_user_id,t.apply_user_id applyUserId,t1.`name` stateName,t.bank_id bankId
         from account_withdrawal_apply t left join t_dict t1 on t.state = t1.status_cd
         where t1.table_name='account_withdrawal_apply'
         and t1.table_columns='state'
@@ -163,6 +174,9 @@ where 1 =1
         </if>
         <if test="acctId !=null and acctId != ''">
             and t.acct_id= #{acctId}
+        </if>
+        <if test="bankId !=null and bankId != ''">
+            and t.bank_id= #{bankId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -211,6 +225,9 @@ where 1 =1
         </if>
         <if test="acctId !=null and acctId != ''">
             and t.acct_id= #{acctId}
+        </if>
+        <if test="bankId !=null and bankId != ''">
+            and t.bank_id= #{bankId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

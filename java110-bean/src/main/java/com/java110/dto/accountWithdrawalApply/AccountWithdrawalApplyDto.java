@@ -23,7 +23,7 @@ private String state;
 private String applyUserTel;
 private String applyUserId;
 private String stateName;
-
+private String bankId;
 
     private Date createTime;
 
@@ -102,5 +102,13 @@ public void setApplyUserId(String applyUserId) {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getBankId() {
+        return bankId;
+    }
+
+    public void setBankId(String bankId) {
+        this.bankId = bankId;
     }
 }

@@ -16,6 +16,7 @@ private String statusCd = "0";
 private String state = "486";
 private String applyUserTel;
 private String applyUserId;
+private String bankId;
 public String getApplyId() {
         return applyId;
     }
@@ -71,6 +72,11 @@ public void setApplyUserId(String applyUserId) {
         this.applyUserId = applyUserId;
     }
 
+    public String getBankId() {
+        return bankId;
+    }
 
-
+    public void setBankId(String bankId) {
+        this.bankId = bankId;
+    }
 }
