@@ -42,7 +42,7 @@ public class AccountWithdrawalApplyApi {
         Assert.hasKeyAndValue(reqJson, "amount", "请求报文中未包含amount");
 
         AccountWithdrawalApplyPo accountWithdrawalApplyPo = BeanConvertUtil.covertBean(reqJson, AccountWithdrawalApplyPo.class);
-        return saveAccountWithdrawalApplyBMOImpl.save(accountWithdrawalApplyPo,userId);
+        return saveAccountWithdrawalApplyBMOImpl.save(accountWithdrawalApplyPo,userId,reqJson);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.java110.acct.bmo.accountWithdrawalApply;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 import com.java110.po.accountWithdrawalApply.AccountWithdrawalApplyPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveAccountWithdrawalApplyBMO {
@@ -12,7 +13,7 @@ public interface ISaveAccountWithdrawalApplyBMO {
      * @param accountWithdrawalApplyPo
      * @return
      */
-    ResponseEntity<String> save(AccountWithdrawalApplyPo accountWithdrawalApplyPo, String userId);
+    ResponseEntity<String> save(AccountWithdrawalApplyPo accountWithdrawalApplyPo, String userId, JSONObject reqJson);
 
 
 }
