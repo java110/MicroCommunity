@@ -141,4 +141,19 @@ public class UserLoginApi {
         userDto = JSONObject.parseObject(userInfoStr, UserDto.class);
         return ResultVo.createResponseEntity(userDto);
     }
+
+    /**
+     * 生成code
+     *
+     * @param userId
+     * @serviceCode /userLogin/generatorHcCode
+     * @return
+     */
+    @RequestMapping(value = "/generatorHcCode", method = RequestMethod.GET)
+    public ResponseEntity<String> generatorHcCode(@RequestHeader(value = "user-id") String userId) {
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        return  getUserLoginBMOImpl.generatorHcCode(userDto);
+
+    }
 }

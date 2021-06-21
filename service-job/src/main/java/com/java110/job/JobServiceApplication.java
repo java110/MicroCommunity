@@ -39,6 +39,7 @@ import java.nio.charset.Charset;
         "com.java110.intf.order",
         "com.java110.intf.store",
         "com.java110.intf.report",
+        "com.java110.intf.acct",
         "com.java110.intf.goods"
 })
 @EnableScheduling

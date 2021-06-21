@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountBankServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存开户行信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAccountBankInfo" parameterType="Map">
+        insert into account_bank(
+person_name,bank_code,bank_id,bank_name,shop_id,person_tel
+) values (
+#{personName},#{bankCode},#{bankId},#{bankName},#{shopId},#{personTel}
+)
+    </insert>
+
+
+
+    <!-- 查询开户行信息 add by wuxw 2018-07-03 -->
+    <select id="getAccountBankInfo" parameterType="Map" resultType="Map">
+        select  t.person_name,t.person_name personName,t.bank_code,t.bank_code bankCode,t.bank_id,t.bank_id bankId,t.create_time,t.create_time createTime,t.bank_name,t.bank_name bankName,t.status_cd,t.status_cd statusCd,t.shop_id,t.shop_id shopId,t.person_tel,t.person_tel personTel 
+from account_bank t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="bankCode !=null and bankCode != ''">
+   and t.bank_code= #{bankCode}
+</if> 
+<if test="bankId !=null and bankId != ''">
+   and t.bank_id= #{bankId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="bankName !=null and bankName != ''">
+   and t.bank_name= #{bankName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="shopId !=null and shopId != ''">
+   and t.shop_id= #{shopId}
+</if> 
+<if test="personTel !=null and personTel != ''">
+   and t.person_tel= #{personTel}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改开户行信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccountBankInfo" parameterType="Map">
+        update  account_bank t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="personName !=null and personName != ''">
+, t.person_name= #{personName}
+</if> 
+<if test="bankCode !=null and bankCode != ''">
+, t.bank_code= #{bankCode}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="bankName !=null and bankName != ''">
+, t.bank_name= #{bankName}
+</if> 
+<if test="shopId !=null and shopId != ''">
+, t.shop_id= #{shopId}
+</if> 
+<if test="personTel !=null and personTel != ''">
+, t.person_tel= #{personTel}
+</if> 
+ where 1=1 <if test="bankId !=null and bankId != ''">
+and t.bank_id= #{bankId}
+</if> 
+
+    </update>
+
+    <!-- 查询开户行数量 add by wuxw 2018-07-03 -->
+     <select id="queryAccountBanksCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from account_bank t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="bankCode !=null and bankCode != ''">
+   and t.bank_code= #{bankCode}
+</if> 
+<if test="bankId !=null and bankId != ''">
+   and t.bank_id= #{bankId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="bankName !=null and bankName != ''">
+   and t.bank_name= #{bankName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="shopId !=null and shopId != ''">
+   and t.shop_id= #{shopId}
+</if> 
+<if test="personTel !=null and personTel != ''">
+   and t.person_tel= #{personTel}
+</if> 
+
+
+     </select>
+
+</mapper>

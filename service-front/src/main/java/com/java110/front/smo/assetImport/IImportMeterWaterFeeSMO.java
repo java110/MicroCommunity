@@ -21,4 +21,6 @@ public interface IImportMeterWaterFeeSMO {
      * @return ResponseEntity
      */
     public ResponseEntity<String> importExcelData(IPageData pd,  MultipartFile uploadFile) throws Exception;
+
+    ResponseEntity<String> importExcelData2(IPageData pd, MultipartFile uploadFile);
 }

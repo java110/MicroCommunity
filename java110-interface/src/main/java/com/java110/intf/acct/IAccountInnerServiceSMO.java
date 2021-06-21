@@ -3,6 +3,7 @@ package com.java110.intf.acct;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.account.AccountDto;
 import com.java110.po.account.AccountPo;
+import com.java110.po.accountDetail.AccountDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,4 +50,28 @@ public interface IAccountInnerServiceSMO {
      */
     @RequestMapping(value = "/updateAccount", method = RequestMethod.POST)
     int updateAccount(@RequestBody AccountPo accountPo);
+
+    /**
+     * 保存账户
+     * @param accountPo
+     */
+    @RequestMapping(value = "/saveAccount", method = RequestMethod.POST)
+    int saveAccount(@RequestBody AccountPo accountPo);
+
+
+    /**
+     * 预存金额
+     * @param accountDetailPo
+     * @return
+     */
+    @RequestMapping(value = "/prestoreAccount", method = RequestMethod.POST)
+    int prestoreAccount(@RequestBody AccountDetailPo accountDetailPo);
+
+    /**
+     * 扣款金额
+     * @param accountDetailPo
+     * @return
+     */
+    @RequestMapping(value = "/withholdAccount", method = RequestMethod.POST)
+    int withholdAccount(@RequestBody AccountDetailPo accountDetailPo);
 }

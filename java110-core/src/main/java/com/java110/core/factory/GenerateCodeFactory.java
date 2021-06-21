@@ -205,6 +205,9 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_acctId = "31";
     public static final String CODE_PREFIX_vipAcctId = "32";
     public static final String CODE_PREFIX_rssId = "33";
+    public static final String CODE_PREFIX_pfId = "34";
+    public static final String CODE_PREFIX_bankId = "74";
+
 
 
     /**
@@ -963,5 +966,9 @@ public class GenerateCodeFactory {
         return result;
     }
 
+    public static String getUUID(){
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
 
 }

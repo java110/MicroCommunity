@@ -118,6 +118,11 @@ public class OwnerCarInnerServiceSMOImpl extends BaseServiceSMO implements IOwne
         return tmpImportCarFees;
     }
 
+    @Override
+    public long queryOwnerParkingSpaceCount(@RequestBody OwnerCarDto ownerCarDto) {
+        return ownerCarServiceDaoImpl.queryOwnerParkingSpaceCount(BeanConvertUtil.beanCovertMap(ownerCarDto));
+    }
+
     public IOwnerCarServiceDao getOwnerCarServiceDaoImpl() {
         return ownerCarServiceDaoImpl;
     }

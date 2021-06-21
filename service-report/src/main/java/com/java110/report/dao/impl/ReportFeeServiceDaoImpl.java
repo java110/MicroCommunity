@@ -2,9 +2,11 @@ package com.java110.report.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.report.ReportFeeDetailDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.report.dao.IReportFeeServiceDao;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,9 +43,19 @@ public class ReportFeeServiceDaoImpl extends BaseServiceDao implements IReportFe
     public List<ReportFeeDto> getFees(ReportFeeDto reportFeeDto) {
         logger.debug("查询费用信息 入参 info : {}", JSONObject.toJSONString(reportFeeDto));
 
-        List<ReportFeeDto> roomDtos = sqlSessionTemplate.selectList("reportFeeServiceDaoImpl.getFees", reportFeeDto);
-
+        //List<ReportFeeDto> roomDtos = sqlSessionTemplate.selectList("reportFeeServiceDaoImpl.getFees", reportFeeDto);
+        List<Map> roomMaps = sqlSessionTemplate.selectList("reportFeeServiceDaoImpl.getFees", BeanConvertUtil.beanCovertMap(reportFeeDto));
+        List<ReportFeeDto> roomDtos = BeanConvertUtil.covertBeanList(roomMaps,ReportFeeDto.class);
         return roomDtos;
+    }
+
+    @Override
+    public List<Map> getFeeConfigs(Map reportFeeDto) {
+        logger.debug("getFeeConfigs 入参 info : {}", JSONObject.toJSONString(reportFeeDto));
+
+        List<Map> feeConfigDtos = sqlSessionTemplate.selectList("reportFeeServiceDaoImpl.getFeeConfigs", reportFeeDto);
+
+        return feeConfigDtos;
     }
 
     @Override

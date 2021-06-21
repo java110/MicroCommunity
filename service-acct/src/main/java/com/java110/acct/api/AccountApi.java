@@ -1,8 +1,14 @@
 package com.java110.acct.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.bmo.account.IGetAccountBMO;
+import com.java110.acct.bmo.account.IOwnerPrestoreAccountBMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +28,9 @@ public class AccountApi {
 
     @Autowired
     private IGetAccountBMO getAccountBMOImpl;
+
+    @Autowired
+    private IOwnerPrestoreAccountBMO ownerPrestoreAccountBMOImpl;
 
     /**
      * 微信删除消息模板
@@ -43,6 +52,59 @@ public class AccountApi {
     }
 
     /**
+     * 查询业主账户
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /account/queryOwnerAccount
+     * @path /app/account/queryOwnerAccount
+     */
+    @RequestMapping(value = "/queryOwnerAccount", method = RequestMethod.GET)
+    public ResponseEntity<String> queryOwnerAccount(
+            @RequestParam(value = "communityId") String communityId,
+            @RequestParam(value = "ownerId",required = false) String ownerId,
+            @RequestParam(value = "ownerName",required = false) String ownerName,
+            @RequestParam(value = "tel",required = false) String tel,
+            @RequestParam(value = "idCard",required = false) String idCard,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "row") int row) {
+        AccountDto accountDto = new AccountDto();
+        accountDto.setPage(page);
+        accountDto.setRow(row);
+        accountDto.setObjId(ownerId);
+        accountDto.setObjType(AccountDto.OBJ_TYPE_PERSON);
+        accountDto.setAcctName(ownerName);
+        accountDto.setPartId(communityId);
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(ownerId);
+        ownerDto.setCommunityId(communityId);
+        ownerDto.setLink(tel);
+        ownerDto.setIdCard(idCard);
+        return getAccountBMOImpl.queryOwnerAccount(accountDto,ownerDto);
+    }
+
+    /**
+     * 查询业主账户明细
+     *
+     * @param objId 小区ID
+     * @return
+     * @serviceCode /account/queryOwnerAccountDetail
+     * @path /app/account/queryOwnerAccountDetail
+     */
+    @RequestMapping(value = "/queryOwnerAccountDetail", method = RequestMethod.GET)
+    public ResponseEntity<String> queryOwnerAccountDetail(@RequestParam(value = "objId", required = false) String objId,
+                                                     @RequestParam(value = "acctId", required = false) String acctId,
+                                                     @RequestParam(value = "page") int page,
+                                                     @RequestParam(value = "row") int row) {
+        AccountDetailDto accountDto = new AccountDetailDto();
+        accountDto.setPage(page);
+        accountDto.setRow(row);
+        accountDto.setObjId(objId);
+        accountDto.setAcctId(acctId);
+        return getAccountBMOImpl.getDetail(accountDto);
+    }
+
+    /**
      * 查询账户明细
      *
      * @param storeId 小区ID
@@ -61,5 +123,26 @@ public class AccountApi {
         accountDto.setObjId(storeId);
         accountDto.setAcctId(acctId);
         return getAccountBMOImpl.getDetail(accountDto);
+    }
+
+    /**
+     * 业主账户预存
+     *
+     * @param reqJson 小区ID
+     * @return
+     * @serviceCode /account/ownerPrestoreAccount
+     * @path /app/account/ownerPrestoreAccount
+     */
+    @RequestMapping(value = "/ownerPrestoreAccount", method = RequestMethod.POST)
+    public ResponseEntity<String> queryAccountDetail(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "ownerId", "业主不能为空");
+        Assert.hasKeyAndValue(reqJson, "amount", "金额不能为空");
+
+        AccountDetailPo accountDetailPo = new AccountDetailPo();
+        accountDetailPo.setRemark(reqJson.getString("remark"));
+        accountDetailPo.setObjId(reqJson.getString("ownerId"));
+        accountDetailPo.setAmount(reqJson.getString("amount"));
+        return ownerPrestoreAccountBMOImpl.prestore(accountDetailPo,reqJson);
     }
 }

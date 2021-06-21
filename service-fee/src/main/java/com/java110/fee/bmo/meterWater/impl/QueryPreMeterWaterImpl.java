@@ -97,12 +97,15 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             importExportMeterWaterDto = BeanConvertUtil.covertBean(tmpRoomDto, ImportExportMeterWaterDto.class);
             String preDegree = "0";
             String preReadTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B);
+            double price = 0;
             if (meterWaterDtos != null && meterWaterDtos.size() > 0) {
                 preDegree = meterWaterDtos.get(0).getCurDegrees();
                 preReadTime = DateUtil.dateTimeToDate(meterWaterDtos.get(0).getCurReadingTime());
+                price = meterWaterDtos.get(0).getPrice();
             }
             importExportMeterWaterDto.setPreDegrees(preDegree);
             importExportMeterWaterDto.setPreReadingTime(preReadTime);
+            importExportMeterWaterDto.setPrice(price);
             importExportMeterWaterDtos.add(importExportMeterWaterDto);
         }
         return ResultVo.createResponseEntity(1, importExportMeterWaterDtos.size(), importExportMeterWaterDtos);
@@ -152,6 +155,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         meterWaterInnerServiceSMOImpl.saveMeterWaters(meterWaterPos);
         return ResultVo.success();
     }
+
 
     private void dealImportExportMeterWater(ImportExportMeterWaterDto importExportMeterWaterDto, String communityId,
                                             String storeId, String configId, String userId, String feeTypeCd,
@@ -204,8 +208,10 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
 
             if ("1010".equals(importExportMeterWaterDto.getMeterType())) {
                 feeName += "水费";
-            } else {
+            } else if ("2020".equals(importExportMeterWaterDto.getMeterType())) {
                 feeName += "电费";
+            } else {
+                feeName += "燃气费";
             }
             feeAttrPo.setValue(feeName);
             feeAttrPo.setFeeId(payFeePo.getFeeId());
@@ -265,6 +271,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         meterWaterPo.setPreReadingTime(importExportMeterWaterDto.getPreReadingTime());
         meterWaterPo.setWaterId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_waterId));
         meterWaterPo.setRemark(importExportMeterWaterDto.getRemark());
+        meterWaterPo.setPrice(importExportMeterWaterDto.getPrice());
         meterWaterPos.add(meterWaterPo);
     }
 

@@ -130,5 +130,17 @@ public class OwnerCarServiceDaoImpl extends BaseServiceDao implements IOwnerCarS
         return Integer.parseInt(businessOwnerCarInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public long queryOwnerParkingSpaceCount(Map info) {
+        logger.debug("查询车辆管理数据 入参 info : {}", info);
+
+        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.queryOwnerParkingSpaceCount", info);
+        if (businessOwnerCarInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessOwnerCarInfos.get(0).get("count").toString());
+    }
+
 
 }

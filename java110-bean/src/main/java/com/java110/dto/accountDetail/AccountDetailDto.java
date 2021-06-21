@@ -19,6 +19,8 @@ public class AccountDetailDto extends PageDto implements Serializable {
     //类型，1001 转入 2002 转出
     public static String DETAIL_TYPE_IN = "1001";
     public static String DETAIL_TYPE_OUT = "2002";
+    public static String ORDER_TYPE_USER = "6006";
+    public static String ORDER_TYPE_STORE = "7007";
 
     private String detailType;
     private String amount;

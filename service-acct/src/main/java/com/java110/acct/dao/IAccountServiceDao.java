@@ -85,4 +85,6 @@ public interface IAccountServiceDao {
      * @return 账户数量
      */
     int updateAccount(Map info);
+
+    void saveAccount(Map beanCovertMap);
 }

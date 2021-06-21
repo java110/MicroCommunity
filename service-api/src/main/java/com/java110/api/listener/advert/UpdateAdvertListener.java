@@ -16,6 +16,7 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.po.advert.AdvertItemPo;
+import com.java110.po.advert.AdvertPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeAdvertConstant;
@@ -59,6 +60,7 @@ public class UpdateAdvertListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "seq", "必填，请填写播放顺序");
         Assert.hasKeyAndValue(reqJson, "startTime", "必填，请选择投放时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
+        reqJson.put("communityId", "9999");
         if (!hasKeyAndValue(reqJson, "photos") && !hasKeyAndValue(reqJson, "vedioName")) {
             throw new IllegalArgumentException("请求报文中没有包含视频或图片");
         }
@@ -82,11 +84,12 @@ public class UpdateAdvertListener extends AbstractServiceApiPlusListener {
         advertDto.setCommunityId(reqJson.getString("communityId"));
         List<AdvertDto> advertDtos = advertInnerServiceSMOImpl.queryAdverts(advertDto);
         Assert.listOnlyOne(advertDtos, "不存在该条广告 或存在多条数据");
-        AdvertDto advert = BeanConvertUtil.covertBean(reqJson, AdvertDto.class);
+
+        AdvertPo advert = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
         advert.setState(advertDtos.get(0).getState());
-        advertInnerServiceSMOImpl.updateAdverts(advert);
-//        super.update(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ADVERT);
-       /* AdvertItemDto advertItemDto = new AdvertItemDto();
+        super.update(context, advert, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ADVERT);
+
+        AdvertItemDto advertItemDto = new AdvertItemDto();
         advertItemDto.setAdvertId(reqJson.getString("advertId"));
         advertItemDto.setItemTypeCds(new String[]{"8888", "9999"});
         List<AdvertItemDto> advertItemDtos = advertItemInnerServiceSMOImpl.queryAdvertItems(advertItemDto);
@@ -94,16 +97,18 @@ public class UpdateAdvertListener extends AbstractServiceApiPlusListener {
         for (AdvertItemDto tmpAdvertItemDto : advertItemDtos) {
             AdvertItemPo advertItemPo = BeanConvertUtil.covertBean(tmpAdvertItemDto, AdvertItemPo.class);
             super.delete(context, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_ADVERT_ITEM);
-        }*/
+        }
+
         //删除文件和广告的关系
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(reqJson.getString("advertId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         for (FileRelDto tmpFileRelDto : fileRelDtos) {
             FileRelPo fileRelPo = BeanConvertUtil.covertBean(tmpFileRelDto, FileRelPo.class);
-            fileRelInnerServiceSMOImpl.deleteFileRel(fileRelPo);
-//            super.delete(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FILE_REL);
+            super.delete(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FILE_REL);
         }
+
+
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
@@ -129,13 +134,12 @@ public class UpdateAdvertListener extends AbstractServiceApiPlusListener {
         paramInJson.put("fileSaveName", fileName);
         paramInJson.put("advertPhotoId", fileDto.getFileId());
         itemTypeCd = "8888";
-        url = fileDto.getFileId();
         AdvertItemPo advertItemPo = new AdvertItemPo();
         advertItemPo.setAdvertId(paramInJson.getString("advertId"));
         advertItemPo.setAdvertItemId("-1");
         advertItemPo.setCommunityId(paramInJson.getString("communityId"));
         advertItemPo.setItemTypeCd(itemTypeCd);
-        advertItemPo.setUrl(url);
+        advertItemPo.setUrl(fileName);
         advertItemPo.setSeq("1");
         super.insert(dataFlowContext, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
     }

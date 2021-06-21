@@ -26,6 +26,7 @@ public class ImportExportMeterWaterDto extends PageDto implements Serializable {
     private String floorNum;
     private String unitNum;
     private String roomNum;
+    private double price;
 
 
     public String getRemark() {
@@ -114,5 +115,13 @@ public class ImportExportMeterWaterDto extends PageDto implements Serializable {
 
     public void setRoomNum(String roomNum) {
         this.roomNum = roomNum;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

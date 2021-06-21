@@ -1,9 +1,11 @@
 package com.java110.report.dao;
 
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportRoomDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName ICommunityServiceDao
@@ -45,4 +47,11 @@ public interface IReportCommunityServiceDao {
      * @return
      */
     List<ReportCarDto> getCarParkingSpace(ReportCarDto reportCarDto);
+
+    /**
+     * 查询 房屋 楼栋 单元 和 业主 信息
+     *
+     * @return
+     */
+    List<Map> getCommunitys(Map communityDto);
 }

@@ -83,11 +83,17 @@ public class SaveRoomListener extends AbstractServiceApiPlusListener {
         if (units == null || units.size() < 1) {
             throw new IllegalArgumentException("传入单元ID不是该小区的单元");
         }
+
+        reqJson.put("unitNum", units.get(0).getUnitNum());
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        reqJson.put("roomType", RoomDto.ROOM_TYPE_ROOM);
+        if ("0".equals(reqJson.getString("unitNum"))) { // 处理为商铺
+            reqJson.put("roomType", RoomDto.ROOM_TYPE_SHOPS);
+        } else {
+            reqJson.put("roomType", RoomDto.ROOM_TYPE_ROOM);
+        }
         roomBMOImpl.addRoom(reqJson, context);
     }
 

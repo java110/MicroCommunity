@@ -28,6 +28,7 @@ public class ReportFeeDto extends PageDto implements Serializable {
     private String configId;
 
     private String squarePrice;
+    private String mwPrice;
     private String additionalAmount;
     private String additionalAmountText;
     private String state;
@@ -500,5 +501,13 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     public void setAdditionalAmountText(String additionalAmountText) {
         this.additionalAmountText = additionalAmountText;
+    }
+
+    public String getMwPrice() {
+        return mwPrice;
+    }
+
+    public void setMwPrice(String mwPrice) {
+        this.mwPrice = mwPrice;
     }
 }

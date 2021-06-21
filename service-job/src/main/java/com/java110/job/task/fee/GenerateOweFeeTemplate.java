@@ -6,8 +6,10 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.task.TaskDto;
+import com.java110.intf.common.ILogSystemErrorInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -17,8 +19,11 @@ import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
+import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.po.reportOweFee.ReportOweFeePo;
+import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,6 +69,12 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
+    @Autowired
+    private ILogSystemErrorInnerServiceSMO logSystemErrorInnerServiceSMOImpl;
+
+    @Autowired
+    private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
+
     @Override
     protected void process(TaskDto taskDto) throws Exception {
 
@@ -93,6 +104,11 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
             try {
                 GenerateOweFeeByFeeConfig(taskDto, tmpFeeConfigDto);
             } catch (Exception e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("费用出账失败" + tmpFeeConfigDto.getConfigId(), e);
             }
         }
@@ -123,6 +139,11 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
             try {
                 generateFee(tmpFeeDto, feeConfigDto);
             } catch (Exception e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("生成费用失败", e);
             }
         }

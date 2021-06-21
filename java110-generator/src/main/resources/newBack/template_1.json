@@ -1,35 +1,37 @@
 {
   "autoMove": true,
-  "id": "oweId",
-  "name": "reportOweFee",
-  "desc": "欠费统计",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "report",
-  "tableName": "report_owe_fee",
+  "id": "bankId",
+  "name": "accountBank",
+  "desc": "开户行",
+  "shareParam": "shopId",
+  "shareColumn": "shop_id",
+  "shareName": "acct",
+  "tableName": "account_bank",
   "param": {
-    "oweId": "owe_id",
-    "configId": "config_id",
-    "configName": "config_name",
-    "feeId": "fee_id",
-    "feeName": "fee_name",
-    "amountOwed": "amount_owed",
-    "ownerId": "owner_id",
-    "ownerName": "owner_name",
-    "ownerTel": "owner_tel",
-    "payerObjId": "payer_obj_id",
-    "payerObjName": "payer_obj_name",
-    "payerObjType": "payer_obj_type",
-    "communityId": "community_id",
-    "updateTime": "update_time",
-    "endTime": "end_time",
-    "deadlineTime": "deadline_time",
+    "bankId": "bank_id",
+    "bankCode": "bank_code",
+    "personName": "person_name",
+    "personTel": "person_tel",
+    "bankName": "bank_name",
+    "shopId": "shop_id",
+    "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "configName",
-      "msg": "费用项不能为空"
+      "code": "bankCode",
+      "msg": "账号不能为空"
+    },
+    {
+      "code": "personName",
+      "msg": "持卡人名称不能为空"
+    },
+    {
+      "code": "bankName",
+      "msg": "开户行不能为空"
+    },{
+      "code": "shopId",
+      "msg": "商铺ID不能为空"
     }
   ]
 }

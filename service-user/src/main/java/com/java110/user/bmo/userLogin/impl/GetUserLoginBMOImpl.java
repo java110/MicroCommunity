@@ -1,8 +1,14 @@
 package com.java110.user.bmo.userLogin.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.userLogin.UserLoginDto;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.user.bmo.userLogin.IGetUserLoginBMO;
+import com.java110.utils.cache.CommonCache;
+import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +21,14 @@ import java.util.List;
 @Service("getUserLoginBMOImpl")
 public class GetUserLoginBMOImpl implements IGetUserLoginBMO {
 
+    public static final String PREFIX_CODE = "java110_";
+
     @Autowired
     private IUserLoginInnerServiceSMO userLoginInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     /**
      * @param userLoginDto
@@ -39,6 +51,25 @@ public class GetUserLoginBMOImpl implements IGetUserLoginBMO {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    /**
+     * 生成HCCODE
+     *
+     * @param userDto
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> generatorHcCode(UserDto userDto) {
+
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        String hcCode = PREFIX_CODE + GenerateCodeFactory.getUUID();
+        CommonCache.setValue(hcCode, JSONObject.toJSONString(userDtos.get(0)), CommonCache.defaultExpireTime);
+        JSONObject paramOut = new JSONObject();
+        paramOut.put("hcCode", hcCode);
+        return ResultVo.createResponseEntity(paramOut);
     }
 
 }

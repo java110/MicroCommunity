@@ -142,9 +142,9 @@
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name
         billTypeName,pfa.value importFeeName,ifd.end_time importFeeEndTime,mw.cur_degrees curDegrees,mw.pre_degrees
         preDegrees,
-        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime
+        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,mw.price mwPrice
         from pay_fee t
-        INNER join pay_fee_config pfc on t.fee_type_cd = pfc.fee_type_cd and t.config_id = pfc.config_id and
+        INNER join pay_fee_config pfc on t.config_id = pfc.config_id and
         pfc.status_cd = '0'
         left join t_dict td1 on pfc.fee_type_cd = td1.status_cd and td1.table_name = 'pay_fee_config' and
         td1.table_columns = 'fee_type_cd'

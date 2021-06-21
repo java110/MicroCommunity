@@ -150,15 +150,15 @@ public class SaveContractCreateFeeListener extends AbstractServiceApiListener {
         for (int roomIndex = 0; roomIndex < contractDtos.size(); roomIndex++) {
             curFailRoomCount++;
             businesses.add(feeBMOImpl.addContractFee(contractDtos.get(roomIndex), reqJson, context));
-//            if (!StringUtil.isEmpty(contractDtos.get(roomIndex).getOwnerId())) {
-//                if (FeeDto.FEE_FLAG_ONCE.equals(reqJson.getString("feeFlag"))) {
-//                    businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
-//                            reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
-//                }
-//                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
-//                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
-//                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
-//            }
+            if (!StringUtil.isEmpty(contractDtos.get(roomIndex).getObjId())) {
+                if (FeeDto.FEE_FLAG_ONCE.equals(reqJson.getString("feeFlag"))) {
+                    businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                            reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
+                }
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, contractDtos.get(roomIndex).getObjId()));
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, contractDtos.get(roomIndex).getbLink()));
+                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, contractDtos.get(roomIndex).getPartyB()));
+            }
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
                 responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
                 if (responseEntity.getStatusCode() != HttpStatus.OK) {

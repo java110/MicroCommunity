@@ -368,4 +368,19 @@
 
     </select>
 
+    <select id="queryOwnerParkingSpaceCount" parameterType="Map" resultType="Map">
+        select count(DISTINCT t.ps_id) count
+        from owner_car t
+        where
+         t.ps_id != '-1'
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </select>
 </mapper>

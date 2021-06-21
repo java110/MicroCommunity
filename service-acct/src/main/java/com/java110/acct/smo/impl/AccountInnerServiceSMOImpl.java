@@ -1,19 +1,27 @@
 package com.java110.acct.smo.impl;
 
 
+import com.java110.acct.dao.IAccountDetailServiceDao;
 import com.java110.acct.dao.IAccountServiceDao;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.account.AccountDto;
+import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.po.account.AccountPo;
+import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +38,9 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
 
     @Autowired
     private IAccountServiceDao accountServiceDaoImpl;
+
+    @Autowired
+    private IAccountDetailServiceDao accountDetailServiceDaoImpl;
 
 
     @Override
@@ -87,6 +98,130 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
     @Java110Transactional
     public int updateAccount(@RequestBody AccountPo accountPo) {
         return accountServiceDaoImpl.updateAccount(BeanConvertUtil.beanCovertMap(accountPo));
+    }
+
+    @Override
+    public int saveAccount(@RequestBody AccountPo accountPo) {
+        accountServiceDaoImpl.saveAccount(BeanConvertUtil.beanCovertMap(accountPo));
+        return 1;
+    }
+
+    /**
+     * 预存接口
+     *
+     * @param accountDetailPo
+     * @return
+     */
+    @Override
+    @Java110Transactional
+    public int prestoreAccount(@RequestBody AccountDetailPo accountDetailPo) {
+
+        if (StringUtil.isEmpty(accountDetailPo.getAcctId())) {
+            throw new IllegalArgumentException("账户ID为空");
+        }
+        //开始枷锁
+        String requestId = DistributedLock.getLockUUID();
+        String key = accountDetailPo.getAcctId();
+        AccountDto accountDto = null;
+        List<AccountDto> accounts = null;
+        int flag;
+        try {
+            DistributedLock.waitGetDistributedLock(key, requestId);
+            accountDto = new AccountDto();
+            accountDto.setObjId(accountDetailPo.getObjId());
+            accountDto.setAcctId(accountDetailPo.getAcctId());
+            accounts = BeanConvertUtil.covertBeanList(accountServiceDaoImpl.getAccountInfo(BeanConvertUtil.beanCovertMap(accountDto)), AccountDto.class);
+            if (accounts == null || accounts.size() < 1) {
+                throw new IllegalArgumentException("账户不存在");
+            }
+            //在账户增加
+            double amount = Double.parseDouble(accounts.get(0).getAmount());
+            BigDecimal amountBig = new BigDecimal(amount);
+            amount = amountBig.add(new BigDecimal(accountDetailPo.getAmount())).doubleValue();
+            AccountPo accountPo = new AccountPo();
+            accountPo.setObjId(accountDetailPo.getObjId());
+            accountPo.setAcctId(accountDetailPo.getAcctId());
+            accountPo.setAmount(amount + "");
+            flag = accountServiceDaoImpl.updateAccount(BeanConvertUtil.beanCovertMap(accountPo));
+            if (flag < 1) {
+                throw new IllegalArgumentException("更新账户失败");
+            }
+        } finally {
+            DistributedLock.releaseDistributedLock(requestId, key);
+        }
+        accountDetailPo.setDetailType(AccountDetailDto.DETAIL_TYPE_IN);
+        if(StringUtil.isEmpty(accountDetailPo.getDetailId())) {
+            accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        }
+        if(StringUtil.isEmpty(accountDetailPo.getOrderId())){
+            accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        }
+        if(StringUtil.isEmpty(accountDetailPo.getRelAcctId())){
+            accountDetailPo.setRelAcctId("-1");
+        }
+
+        //保存交易明细
+        return accountDetailServiceDaoImpl.saveAccountDetails(BeanConvertUtil.beanCovertMap(accountDetailPo));
+    }
+
+    /**
+     * 扣款接口
+     *
+     * @param accountDetailPo
+     * @return
+     */
+    @Override
+    @Java110Transactional
+    public int withholdAccount(@RequestBody AccountDetailPo accountDetailPo) {
+
+        if (StringUtil.isEmpty(accountDetailPo.getAcctId())) {
+            throw new IllegalArgumentException("账户ID为空");
+        }
+        //开始枷锁
+        String requestId = DistributedLock.getLockUUID();
+        String key = accountDetailPo.getAcctId();
+        AccountDto accountDto = null;
+        List<AccountDto> accounts = null;
+        int flag;
+        try {
+            DistributedLock.waitGetDistributedLock(key, requestId);
+            accountDto = new AccountDto();
+            accountDto.setObjId(accountDetailPo.getObjId());
+            accountDto.setAcctId(accountDetailPo.getAcctId());
+            accounts = BeanConvertUtil.covertBeanList(accountServiceDaoImpl.getAccountInfo(BeanConvertUtil.beanCovertMap(accountDto)), AccountDto.class);
+            if (accounts == null || accounts.size() < 1) {
+                throw new IllegalArgumentException("账户不存在");
+            }
+            //在账户增加
+            double amount = Double.parseDouble(accounts.get(0).getAmount());
+            BigDecimal amountBig = new BigDecimal(amount);
+            amount = amountBig.subtract(new BigDecimal(accountDetailPo.getAmount())).doubleValue();
+            if(amount < 0){
+                throw new IllegalArgumentException("余额不足");
+            }
+            AccountPo accountPo = new AccountPo();
+            accountPo.setObjId(accountDetailPo.getObjId());
+            accountPo.setAcctId(accountDetailPo.getAcctId());
+            accountPo.setAmount(amount + "");
+            flag = accountServiceDaoImpl.updateAccount(BeanConvertUtil.beanCovertMap(accountPo));
+            if (flag < 1) {
+                throw new IllegalArgumentException("更新账户失败");
+            }
+        } finally {
+            DistributedLock.releaseDistributedLock(requestId, key);
+        }
+        accountDetailPo.setDetailType(AccountDetailDto.DETAIL_TYPE_OUT);
+        if(StringUtil.isEmpty(accountDetailPo.getDetailId())) {
+            accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        }
+        if(StringUtil.isEmpty(accountDetailPo.getOrderId())){
+            accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        }
+        if(StringUtil.isEmpty(accountDetailPo.getRelAcctId())){
+            accountDetailPo.setRelAcctId("-1");
+        }
+        //保存交易明细
+        return accountDetailServiceDaoImpl.saveAccountDetails(BeanConvertUtil.beanCovertMap(accountDetailPo));
     }
 
     public IAccountServiceDao getAccountServiceDaoImpl() {

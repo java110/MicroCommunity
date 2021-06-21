@@ -70,6 +70,27 @@ public class ImportMeterWaterFeeSMOImpl extends BaseComponentSMO implements IImp
         }
     }
 
+    @Override
+    public ResponseEntity<String> importExcelData2(IPageData pd, MultipartFile uploadFile) {
+        try {
+            ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+
+            //InputStream is = uploadFile.getInputStream();
+
+            Workbook workbook = ImportExcelUtils.createWorkbook(uploadFile);  //工作簿
+
+            List<ImportExportMeterWaterDto> rooms = new ArrayList<ImportExportMeterWaterDto>();
+
+            //获取楼信息
+            getRooms2(workbook, rooms);
+            // 保存数据
+            return dealExcelData(pd, rooms, result);
+        } catch (Exception e) {
+            logger.error("导入失败 ", e);
+            return new ResponseEntity<String>("非常抱歉，您填写的模板数据有误：" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     /**
      * 处理ExcelData数据
      */
@@ -190,6 +211,55 @@ public class ImportMeterWaterFeeSMOImpl extends BaseComponentSMO implements IImp
             importRoomFee.setPreDegrees(os[3].toString());
             importRoomFee.setPreReadingTime(startTime);
             importRoomFee.setCurDegrees(os[5].toString());
+            importRoomFee.setCurReadingTime(endTime);
+            importRoomFee.setPrice(-1);
+            rooms.add(importRoomFee);
+        }
+    }
+
+    /**
+     * 获取 房屋信息
+     *
+     * @param workbook
+     * @param rooms
+     */
+    private void getRooms2(Workbook workbook, List<ImportExportMeterWaterDto> rooms) {
+        Sheet sheet = null;
+        sheet = ImportExcelUtils.getSheet(workbook, "房屋费用信息");
+        List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
+        ImportExportMeterWaterDto importRoomFee = null;
+        for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
+            Object[] os = oList.get(osIndex);
+            if (osIndex == 0 || osIndex == 1) { // 第一行是 头部信息 直接跳过
+                continue;
+            }
+            if (StringUtil.isNullOrNone(os[0])) {
+                continue;
+            }
+            Assert.hasValue(os[1], (osIndex + 1) + "单元编号不能为空");
+            Assert.hasValue(os[2], (osIndex + 1) + "房屋编号不能为空");
+            Assert.hasValue(os[4], (osIndex + 1) + "单价不能为空");
+            Assert.hasValue(os[5], (osIndex + 1) + "上期度数不能为空");
+            Assert.hasValue(os[6], (osIndex + 1) + "上期度数时间不能为空");
+            Assert.hasValue(os[7], (osIndex + 1) + "本期度数不能为空");
+            Assert.hasValue(os[8], (osIndex + 1) + "本期度数时间不能为空");
+
+//
+
+            String startTime = excelDoubleToDate(os[6].toString());
+            String endTime = excelDoubleToDate(os[8].toString());
+            Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
+            Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
+
+
+            importRoomFee = new ImportExportMeterWaterDto();
+            importRoomFee.setFloorNum(os[0].toString());
+            importRoomFee.setUnitNum(os[1].toString());
+            importRoomFee.setRoomNum(os[2].toString());
+            importRoomFee.setPrice(Double.parseDouble(os[4].toString()));
+            importRoomFee.setPreDegrees(os[5].toString());
+            importRoomFee.setPreReadingTime(startTime);
+            importRoomFee.setCurDegrees(os[7].toString());
             importRoomFee.setCurReadingTime(endTime);
             rooms.add(importRoomFee);
         }

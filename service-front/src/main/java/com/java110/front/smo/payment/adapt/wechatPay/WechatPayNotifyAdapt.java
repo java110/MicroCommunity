@@ -66,7 +66,7 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
      * @return
      * @throws Exception
      */
-    public String confirmPayFee(String param,String wId) {
+    public String confirmPayFee(String param, String wId) {
         String resXml = "";
         try {
             Map<String, Object> map = PayUtil.getMapFromXML(param);
@@ -137,17 +137,17 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
         } else {
             openId = map.get("openid").toString();
         }
-
         responseEntity = getUserInfoByOpenId(restTemplate, openId);
-
         logger.debug("查询用户信息返回报文：" + responseEntity);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId);
         }
-
         JSONObject userResult = JSONObject.parseObject(responseEntity.getBody());
-        JSONObject realUserInfo = userResult.getJSONArray("data").getJSONObject(0);
-        String useId = realUserInfo.getString("userId");
+        String useId = "-1";
+        if (userResult.containsKey("data") && userResult.getJSONArray("data").size() > 0) {
+            JSONObject realUserInfo = userResult.getJSONArray("data").getJSONObject(0);
+            useId = realUserInfo.getString("userId");
+        }
 
         //查询用户ID
         JSONObject paramIn = new JSONObject();

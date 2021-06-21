@@ -37,7 +37,13 @@ import java.nio.charset.Charset;
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.report.listener"})
-@EnableFeignClients(basePackages = {"com.java110.intf.user","com.java110.intf.order"})
+@EnableFeignClients(basePackages = {"com.java110.intf.user",
+        "com.java110.intf.order",
+        "com.java110.intf.common",
+        "com.java110.intf.store",
+        "com.java110.intf.user",
+        "com.java110.intf.fee",
+        "com.java110.intf.community"})
 public class ReportServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(ReportServiceApplicationStart.class);

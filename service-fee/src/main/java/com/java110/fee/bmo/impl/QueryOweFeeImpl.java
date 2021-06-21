@@ -31,12 +31,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class QueryOweFeeImpl implements IQueryOweFee {
@@ -187,8 +182,8 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         int threadNum = Java110ThreadPoolFactory.JAVA110_DEFAULT_THREAD_NUM;
 
         tempRooms.addAll(doGetTmpRoomDto(roomDtos, feeDto, threadNum));
-        for(RoomDto tmpRoomDto:tempRooms){
-            if(tmpRoomDto == null){
+        for (RoomDto tmpRoomDto : tempRooms) {
+            if (tmpRoomDto == null) {
                 continue;
             }
             tmpRoomDtos.add(tmpRoomDto);
@@ -422,6 +417,19 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                         .add(additionalAmount)
                         .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             }
+        } else if ("9009".equals(computingFormula)) {  //(本期度数-上期度数)*动态单价+附加费
+            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                feePrice = -1.00;
+            } else {
+                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getMwPrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal sub = curDegree.subtract(preDegree);
+                feePrice = sub.multiply(squarePrice)
+                        .add(additionalAmount)
+                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            }
         } else {
             feePrice = 0.00;
         }
@@ -433,7 +441,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         feeDto.setAmountOwed(price.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue() + "");
         feeDto.setDeadlineTime(targetEndDate);
         //动态费用
-        if ("4004".equals(computingFormula)) {
+        if ("4004".equals(computingFormula)
+                && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
+        ) {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
@@ -519,6 +529,20 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                         .add(additionalAmount)
                         .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             }
+        } else if ("9009".equals(computingFormula)) {
+
+            if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                feePrice = -1.00;
+            } else {
+                BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getMwPrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                BigDecimal sub = curDegree.subtract(preDegree);
+                feePrice = sub.multiply(squarePrice)
+                        .add(additionalAmount)
+                        .setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            }
         } else {
             feePrice = 0.00;
         }
@@ -579,9 +603,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             return targetEndDateAndOweMonth;
         }
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-            if(feeDto.getDeadlineTime() != null){
+            if (feeDto.getDeadlineTime() != null) {
                 targetEndDate = feeDto.getDeadlineTime();
-            }else if(!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+            } else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 targetEndDate = feeDto.getCurReadingTime();
             } else if (feeDto.getImportFeeEndTime() == null) {
                 targetEndDate = feeDto.getConfigEndTime();

@@ -1,6 +1,7 @@
 package com.java110.core.client;
 
 import com.aliyun.oss.OSSClient;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.OSSUtil;
@@ -63,7 +64,8 @@ public class OssUploadTemplate {
             urlPath = IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
             byte[] context = Base64Convert.base64ToByte(imageBase64);
             is = new ByteArrayInputStream(context);
-            OSSUtil.uploadByInputStream(ossClient, is, "java110", ftpPath + urlPath);
+
+            OSSUtil.uploadByInputStream(ossClient, is,  ftpPath + urlPath);
         } catch (Exception e) {
             logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");

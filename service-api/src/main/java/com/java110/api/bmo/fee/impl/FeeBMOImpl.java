@@ -13,7 +13,6 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.common.ICarInoutInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -387,9 +386,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
             if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-                if(feeDto.getDeadlineTime() != null){
+                if (feeDto.getDeadlineTime() != null) {
                     endCalender.setTime(feeDto.getDeadlineTime());
-                }else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                     endCalender.setTime(feeDto.getCurReadingTime());
                 } else if (feeDto.getImportFeeEndTime() == null) {
                     endCalender.setTime(feeDto.getConfigEndTime());
@@ -669,6 +668,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
         businessUnit.put("amount", "-1.00");
+        if (paramInJson.containsKey("amount") && !StringUtil.isEmpty(paramInJson.getString("amount"))) {
+            businessUnit.put("amount", paramInJson.getString("amount"));
+        }
         businessUnit.put("startTime", time);
         businessUnit.put("endTime", time);
         businessUnit.put("communityId", paramInJson.getString("communityId"));
