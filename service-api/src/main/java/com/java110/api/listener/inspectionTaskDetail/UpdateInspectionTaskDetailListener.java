@@ -9,7 +9,6 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.community.IInspectionInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskDetailInnerServiceSMO;
 import com.java110.dto.file.FileDto;
@@ -26,8 +25,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
-
 
 /**
  * 保存巡检任务明细侦听
@@ -44,10 +43,6 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiPlusLi
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
-
-    @Autowired
-    private IInspectionInnerServiceSMO inspectionInnerServiceSMOImpl;
 
     @Autowired
     private IInspectionTaskInnerServiceSMO inspectionTaskInnerServiceSMOImpl;
@@ -67,7 +62,7 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiPlusLi
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
 
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");

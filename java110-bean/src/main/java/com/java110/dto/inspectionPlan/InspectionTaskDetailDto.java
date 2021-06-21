@@ -25,12 +25,43 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
     private String patrolType;
     private String patrolTypeName;
     private String description;
+    private String inspectionPlanName;
+    private String routeName;
+    private String actUserName;
+    private String planUserName;
+    private String signType;
+    private String signTypeName;
+    private String inspectionPlanId;
+    private String inspectionRouteId;
+    private String taskState;
+    private String taskStateName;
 
-
+    private String planInsTime;
+    private String planEndTime;
     private Date createTime;
+    private String pointStartTime;
+    private String pointEndTime;
+    private String sortNumber;
+
+    //经度
+    private String longitude;
+
+    //维度
+    private String latitude;
+
+    //巡检点打卡时间
+    private String inspectionTime;
+
+    //签到状态
+    private String inspectionState;
+    private String inspectionStateName;
+
+    private String inspectionTimeFlag;
+
+    //当前日期
+    private String nowTime;
 
     private String statusCd = "0";
-
 
     public String getInspectionId() {
         return inspectionId;
@@ -80,7 +111,6 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
         this.taskDetailId = taskDetailId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -127,5 +157,181 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setPatrolTypeName(String patrolTypeName) {
         this.patrolTypeName = patrolTypeName;
+    }
+
+    public String getPlanInsTime() {
+        return planInsTime;
+    }
+
+    public void setPlanInsTime(String planInsTime) {
+        this.planInsTime = planInsTime;
+    }
+
+    public String getPlanEndTime() {
+        return planEndTime;
+    }
+
+    public void setPlanEndTime(String planEndTime) {
+        this.planEndTime = planEndTime;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getInspectionTime() {
+        return inspectionTime;
+    }
+
+    public void setInspectionTime(String inspectionTime) {
+        this.inspectionTime = inspectionTime;
+    }
+
+    public String getInspectionState() {
+        return inspectionState;
+    }
+
+    public void setInspectionState(String inspectionState) {
+        this.inspectionState = inspectionState;
+    }
+
+    public String getInspectionStateName() {
+        return inspectionStateName;
+    }
+
+    public void setInspectionStateName(String inspectionStateName) {
+        this.inspectionStateName = inspectionStateName;
+    }
+
+    public String getInspectionPlanName() {
+        return inspectionPlanName;
+    }
+
+    public void setInspectionPlanName(String inspectionPlanName) {
+        this.inspectionPlanName = inspectionPlanName;
+    }
+
+    public String getRouteName() {
+        return routeName;
+    }
+
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
+    }
+
+    public String getActUserName() {
+        return actUserName;
+    }
+
+    public void setActUserName(String actUserName) {
+        this.actUserName = actUserName;
+    }
+
+    public String getPlanUserName() {
+        return planUserName;
+    }
+
+    public void setPlanUserName(String planUserName) {
+        this.planUserName = planUserName;
+    }
+
+    public String getSignType() {
+        return signType;
+    }
+
+    public void setSignType(String signType) {
+        this.signType = signType;
+    }
+
+    public String getSignTypeName() {
+        return signTypeName;
+    }
+
+    public void setSignTypeName(String signTypeName) {
+        this.signTypeName = signTypeName;
+    }
+
+    public String getInspectionPlanId() {
+        return inspectionPlanId;
+    }
+
+    public void setInspectionPlanId(String inspectionPlanId) {
+        this.inspectionPlanId = inspectionPlanId;
+    }
+
+    public String getInspectionRouteId() {
+        return inspectionRouteId;
+    }
+
+    public void setInspectionRouteId(String inspectionRouteId) {
+        this.inspectionRouteId = inspectionRouteId;
+    }
+
+    public String getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(String taskState) {
+        this.taskState = taskState;
+    }
+
+    public String getTaskStateName() {
+        return taskStateName;
+    }
+
+    public void setTaskStateName(String taskStateName) {
+        this.taskStateName = taskStateName;
+    }
+
+    public String getPointStartTime() {
+        return pointStartTime;
+    }
+
+    public void setPointStartTime(String pointStartTime) {
+        this.pointStartTime = pointStartTime;
+    }
+
+    public String getPointEndTime() {
+        return pointEndTime;
+    }
+
+    public void setPointEndTime(String pointEndTime) {
+        this.pointEndTime = pointEndTime;
+    }
+
+    public String getSortNumber() {
+        return sortNumber;
+    }
+
+    public void setSortNumber(String sortNumber) {
+        this.sortNumber = sortNumber;
+    }
+
+    public String getNowTime() {
+        return nowTime;
+    }
+
+    public void setNowTime(String nowTime) {
+        this.nowTime = nowTime;
+    }
+
+    public String getInspectionTimeFlag() {
+        return inspectionTimeFlag;
+    }
+
+    public void setInspectionTimeFlag(String inspectionTimeFlag) {
+        this.inspectionTimeFlag = inspectionTimeFlag;
     }
 }

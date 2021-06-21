@@ -6,6 +6,7 @@ public class ApiInspectionPointDataVo implements Serializable {
 
     private String inspectionRouteId;
     private String inspectionId;
+    private String irpRelId;
     private String inspectionName;
     private String remark;
     private String machineCode;
@@ -22,6 +23,7 @@ public class ApiInspectionPointDataVo implements Serializable {
     private String communityId;
     private String pointStartTime;
     private String pointEndTime;
+    private String sortNumber;
 
     public String getInspectionId() {
         return inspectionId;
@@ -165,5 +167,21 @@ public class ApiInspectionPointDataVo implements Serializable {
 
     public void setPointEndTime(String pointEndTime) {
         this.pointEndTime = pointEndTime;
+    }
+
+    public String getSortNumber() {
+        return sortNumber;
+    }
+
+    public void setSortNumber(String sortNumber) {
+        this.sortNumber = sortNumber;
+    }
+
+    public String getIrpRelId() {
+        return irpRelId;
+    }
+
+    public void setIrpRelId(String irpRelId) {
+        this.irpRelId = irpRelId;
     }
 }

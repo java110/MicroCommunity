@@ -920,13 +920,14 @@
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'  and oc.car_type_cd='1001'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee_attrs pfo on t.fee_id = pfo.fee_id and pfo.spec_cd = '390008'
         left join pay_fee_detail_discount pfdd on t.detail_id = pfdd.detail_id and pfdd.status_cd = '0'
         left join fee_discount fd on pfdd.discount_id = fd.discount_id and fd.status_cd = '0'
         left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'
-        left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and d.table_columns="prime_rate"
+        left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and
+        d.table_columns="prime_rate"
         LEFT JOIN contract co on pf.payer_obj_id = co.contract_id and co.status_cd = '0' and pf.payer_obj_type='7777'
         LEFT JOIN c_business cb on t.b_id = cb.b_id
         where t.status_cd = '0'
@@ -986,7 +987,7 @@
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'  and oc.car_type_cd='1001'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
@@ -1046,7 +1047,7 @@
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0'  and oc.car_type_cd='1001'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee_detail_discount pfdd on t.detail_id = pfdd.detail_id and pfdd.status_cd = '0'
         left join fee_discount fd on pfdd.discount_id = fd.discount_id and fd.status_cd = '0'
@@ -1228,7 +1229,8 @@
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on f.floor_id = bu.floor_id and f.status_cd = '0'
-        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0'  and oc.car_type_cd='1001'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and
+        oc.car_type_cd='1001'
         where t.state = '2008001'
         and t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
@@ -1252,7 +1254,8 @@
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on f.floor_id = bu.floor_id and f.status_cd = '0'
-        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0'  and oc.car_type_cd='1001'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and
+        oc.car_type_cd='1001'
         where t.state = '2008001'
         and t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
@@ -1467,7 +1470,7 @@
     <select id="getRepairWithOutPage" parameterType="Map" resultType="Map">
         select r.staff_id staffId,r.staff_name staffName,r.state, t.name stateName, count(*) amount from r_repair_user r
         left join t_dict t on t.table_name="r_repair_user" and t.table_columns="state" and t.status_cd=r.state
-        where r.state != "10005" and r.status_cd = "0"
+        where r.state != '10005' and r.status_cd = '0'
         <if test="ruId != null and ruId != ''">
             and r.ru_id = #{ruId}
         </if>
@@ -1521,9 +1524,10 @@
     </select>
 
     <select id="queryRepairForStaff" parameterType="Map" resultType="Map">
-        SELECT r.staff_id staffId,r.staff_name staffName FROM r_repair_user r
-        WHERE r.state!='10005' AND
-        r.repair_event!='payUser' AND r.repair_event!="startUser" AND r.staff_id != '-1'
+        SELECT r.staff_id staffId,r.staff_name staffName,r.state FROM r_repair_user r
+        WHERE r.state!='10005' AND r.state!='10009' AND r.state!='11000' AND
+        r.state!='12000' AND r.state != '10007' AND r.status_cd = '0' AND
+        r.repair_event != 'payUser' AND r.repair_event != 'startUser' AND r.staff_id != '-1'
         <if test="communityId != null and communityId !=''">
             and r.community_id = #{communityId}
         </if>
@@ -1580,9 +1584,10 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryNoFeeRooms" parameterType="Map" resultType="Map">
-        select f.floor_num floorNum,bu.unit_num unitNum,t.room_num roomNum,t.room_id roomId,bo.owner_id ownerId,bo.name ownerName,bo.link
+        select f.floor_num floorNum,bu.unit_num unitNum,t.room_num roomNum,t.room_id roomId,bo.owner_id ownerId,bo.name
+        ownerName,bo.link
         from building_room t
-        inner join building_unit bu on t.unit_id  = bu.unit_id and bu.status_cd = '0'
+        inner join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join building_owner_room_rel borr on borr.room_id = t.room_id and borr.status_cd ='0'
         left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'

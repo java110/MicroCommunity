@@ -28,6 +28,7 @@ public class PurchaseApplyPo implements Serializable {
     private String warehousingWay;
     private String createUserId;
     private String createUserName;
+    private String communityId;
 
     private String statusCd;
 
@@ -161,5 +162,13 @@ public class PurchaseApplyPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

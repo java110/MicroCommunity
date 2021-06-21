@@ -82,11 +82,12 @@ public class CollectionApi {
         purchaseApplyPo.setCreateUserId(userId);
         purchaseApplyPo.setCreateUserName(userName);
         purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_APPLY);
+        purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
-            resourceStore.put("originalStock",resourceStore.get("stock"));
+            resourceStore.put("originalStock", resourceStore.get("stock"));
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
@@ -143,13 +144,12 @@ public class CollectionApi {
 
     /**
      * 物品直接出库
-     *
      */
     @RequestMapping(value = "/goodsDelivery", method = RequestMethod.POST)
     public ResponseEntity<String> goodsDelivery(@RequestBody JSONObject reqJson,
-                                                  @RequestHeader(value = "user-id") String userId,
-                                                  @RequestHeader(value = "user-name") String userName,
-                                                  @RequestHeader(value = "store-id") String storeId) {
+                                                @RequestHeader(value = "user-id") String userId,
+                                                @RequestHeader(value = "user-name") String userName,
+                                                @RequestHeader(value = "store-id") String storeId) {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写物品领用的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
@@ -167,6 +167,7 @@ public class CollectionApi {
         purchaseApplyPo.setCreateUserName(userName);
         purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT);
         purchaseApplyPo.setDescription("直接出库操作");
+        purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
@@ -177,7 +178,6 @@ public class CollectionApi {
             purchaseApplyDetailPo.setRemark("直接出库");
             purchaseApplyDetailPo.setOriginalStock(resourceStore.get("stock").toString());
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
-
             //调整总库存
             ResourceStorePo resourceStorePo = new ResourceStorePo();
             resourceStorePo.setResId(purchaseApplyDetailPo.getResId());

@@ -38,4 +38,13 @@ public interface IInspectionTaskDetailInnerServiceSMO {
      */
     @RequestMapping(value = "/queryInspectionTaskDetailsCount", method = RequestMethod.POST)
     int queryInspectionTaskDetailsCount(@RequestBody InspectionTaskDetailDto inspectionTaskDetailDto);
+
+    /**
+     * 更新巡检任务详情表
+     *
+     * @param inspectionTaskDetailDto
+     * @return
+     */
+    @RequestMapping(value = "/updateInspectionTaskDetail", method = RequestMethod.POST)
+    void updateInspectionTaskDetail(@RequestBody InspectionTaskDetailDto inspectionTaskDetailDto);
 }

@@ -524,9 +524,12 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         HistoricProcessInstance hisProcessInstance = (HistoricProcessInstance) historyService
                 .createHistoricProcessInstanceQuery()
                 .processInstanceBusinessKey(workflowAuditInfoDto.getBusinessKey()).singleResult();
-        // 该流程实例的所有节点审批记录
-        List<HistoricActivityInstance> hisActInstList = getHisUserTaskActivityInstanceList(hisProcessInstance
-                .getId());
+        List<HistoricActivityInstance> hisActInstList = new ArrayList<>();
+        if (hisProcessInstance != null) {
+            // 该流程实例的所有节点审批记录
+            hisActInstList = getHisUserTaskActivityInstanceList(hisProcessInstance
+                    .getId());
+        }
         List<WorkflowAuditInfoDto> workflowAuditInfoDtos = new ArrayList<>();
         WorkflowAuditInfoDto tmpWorkflowAuditInfoDto = null;
         for (Iterator iterator = hisActInstList.iterator(); iterator.hasNext(); ) {

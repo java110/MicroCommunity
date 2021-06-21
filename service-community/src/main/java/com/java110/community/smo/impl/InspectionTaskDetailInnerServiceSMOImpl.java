@@ -53,6 +53,11 @@ public class InspectionTaskDetailInnerServiceSMOImpl extends BaseServiceSMO impl
         return inspectionTaskDetailServiceDaoImpl.queryInspectionTaskDetailsCount(BeanConvertUtil.beanCovertMap(inspectionTaskDetailDto));
     }
 
+    @Override
+    public void updateInspectionTaskDetail(@RequestBody InspectionTaskDetailDto inspectionTaskDetailDto) {
+        inspectionTaskDetailServiceDaoImpl.updateInspectionTaskDetailInfoInstance(BeanConvertUtil.beanCovertMap(inspectionTaskDetailDto));
+    }
+
     public IInspectionTaskDetailServiceDao getInspectionTaskDetailServiceDaoImpl() {
         return inspectionTaskDetailServiceDaoImpl;
     }

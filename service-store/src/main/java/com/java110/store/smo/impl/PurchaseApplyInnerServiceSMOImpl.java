@@ -195,6 +195,18 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
         purchaseApplyServiceDaoImpl.updatePurchaseApplyInfoInstance(BeanConvertUtil.beanCovertMap(purchaseApplyPo));
     }
 
+    /**
+     * 获取下级处理人id
+     *
+     * @param purchaseApplyDto
+     * @return
+     */
+    @Override
+    public List<PurchaseApplyDto> getActRuTaskUserId(@RequestBody PurchaseApplyDto purchaseApplyDto) {
+        List<PurchaseApplyDto> purchaseApplys = BeanConvertUtil.covertBeanList(purchaseApplyServiceDaoImpl.getActRuTaskUserId(BeanConvertUtil.beanCovertMap(purchaseApplyDto)), PurchaseApplyDto.class);
+        return purchaseApplys;
+    }
+
 
     public IPurchaseApplyServiceDao getPurchaseApplyServiceDaoImpl() {
         return purchaseApplyServiceDaoImpl;

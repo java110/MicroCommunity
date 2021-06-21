@@ -40,6 +40,7 @@ public abstract class AbstractInspectionTaskBusinessServiceDataFlowListener exte
         businessInspectionTaskInfo.put("planUserId", businessInspectionTaskInfo.get("plan_user_id"));
         businessInspectionTaskInfo.put("actInsTime", businessInspectionTaskInfo.get("act_ins_time"));
         businessInspectionTaskInfo.put("planInsTime", businessInspectionTaskInfo.get("plan_ins_time"));
+        businessInspectionTaskInfo.put("planEndTime", businessInspectionTaskInfo.get("plan_end_time"));
         businessInspectionTaskInfo.put("actUserName", businessInspectionTaskInfo.get("act_user_name"));
         businessInspectionTaskInfo.put("operate", businessInspectionTaskInfo.get("operate"));
         businessInspectionTaskInfo.put("signType", businessInspectionTaskInfo.get("sign_type"));
@@ -48,6 +49,10 @@ public abstract class AbstractInspectionTaskBusinessServiceDataFlowListener exte
         businessInspectionTaskInfo.put("communityId", businessInspectionTaskInfo.get("community_id"));
         businessInspectionTaskInfo.put("actUserId", businessInspectionTaskInfo.get("act_user_id"));
         businessInspectionTaskInfo.put("taskId", businessInspectionTaskInfo.get("task_id"));
+        businessInspectionTaskInfo.put("originalPlanUserId", businessInspectionTaskInfo.get("original_plan_user_id"));
+        businessInspectionTaskInfo.put("originalPlanUserName", businessInspectionTaskInfo.get("original_plan_user_name"));
+        businessInspectionTaskInfo.put("transferDesc", businessInspectionTaskInfo.get("transfer_desc"));
+        businessInspectionTaskInfo.put("taskType", businessInspectionTaskInfo.get("task_type"));
         businessInspectionTaskInfo.remove("bId");
         businessInspectionTaskInfo.put("statusCd", statusCd);
     }
@@ -75,6 +80,7 @@ public abstract class AbstractInspectionTaskBusinessServiceDataFlowListener exte
         currentInspectionTaskInfo.put("planUserId", currentInspectionTaskInfo.get("plan_user_id"));
         currentInspectionTaskInfo.put("actInsTime", currentInspectionTaskInfo.get("act_ins_time"));
         currentInspectionTaskInfo.put("planInsTime", currentInspectionTaskInfo.get("plan_ins_time"));
+        currentInspectionTaskInfo.put("planEndTime", currentInspectionTaskInfo.get("plan_end_time"));
         currentInspectionTaskInfo.put("actUserName", currentInspectionTaskInfo.get("act_user_name"));
         currentInspectionTaskInfo.put("operate", currentInspectionTaskInfo.get("operate"));
         currentInspectionTaskInfo.put("signType", currentInspectionTaskInfo.get("sign_type"));
@@ -83,6 +89,10 @@ public abstract class AbstractInspectionTaskBusinessServiceDataFlowListener exte
         currentInspectionTaskInfo.put("communityId", currentInspectionTaskInfo.get("community_id"));
         currentInspectionTaskInfo.put("actUserId", currentInspectionTaskInfo.get("act_user_id"));
         currentInspectionTaskInfo.put("taskId", currentInspectionTaskInfo.get("task_id"));
+        currentInspectionTaskInfo.put("originalPlanUserId", currentInspectionTaskInfo.get("original_plan_user_id"));
+        currentInspectionTaskInfo.put("originalPlanUserName", currentInspectionTaskInfo.get("original_plan_user_name"));
+        currentInspectionTaskInfo.put("transferDesc", currentInspectionTaskInfo.get("transfer_desc"));
+        currentInspectionTaskInfo.put("taskType", currentInspectionTaskInfo.get("task_type"));
 
 
         currentInspectionTaskInfo.put("operate", StatusConstant.OPERATE_DEL);

@@ -18,8 +18,6 @@ public class InspectionPointPo implements Serializable {
     private String pointObjType;
     private String pointObjId;
     private String pointObjName;
-    private String pointStartTime;
-    private String pointEndTime;
     private String remark;
 
     public String getInspectionId() {
@@ -80,19 +78,4 @@ public class InspectionPointPo implements Serializable {
         this.pointObjName = pointObjName;
     }
 
-    public String getPointStartTime() {
-        return pointStartTime;
-    }
-
-    public void setPointStartTime(String pointStartTime) {
-        this.pointStartTime = pointStartTime;
-    }
-
-    public String getPointEndTime() {
-        return pointEndTime;
-    }
-
-    public void setPointEndTime(String pointEndTime) {
-        this.pointEndTime = pointEndTime;
-    }
 }

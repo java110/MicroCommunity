@@ -43,6 +43,9 @@ public abstract class AbstractInspectionRoutePointRelBusinessServiceDataFlowList
         businessInspectionRoutePointRelInfo.put("irpRelId", businessInspectionRoutePointRelInfo.get("irp_rel_id"));
         businessInspectionRoutePointRelInfo.put("remark", businessInspectionRoutePointRelInfo.get("remark"));
         businessInspectionRoutePointRelInfo.put("communityId", businessInspectionRoutePointRelInfo.get("community_id"));
+        businessInspectionRoutePointRelInfo.put("pointStartTime", businessInspectionRoutePointRelInfo.get("point_start_time"));
+        businessInspectionRoutePointRelInfo.put("pointEndTime", businessInspectionRoutePointRelInfo.get("point_end_time"));
+        businessInspectionRoutePointRelInfo.put("sortNumber", businessInspectionRoutePointRelInfo.get("sort_number"));
         businessInspectionRoutePointRelInfo.remove("bId");
         businessInspectionRoutePointRelInfo.put("statusCd", statusCd);
     }
@@ -73,6 +76,9 @@ public abstract class AbstractInspectionRoutePointRelBusinessServiceDataFlowList
         currentInspectionRoutePointRelInfo.put("irpRelId", currentInspectionRoutePointRelInfo.get("irp_rel_id"));
         currentInspectionRoutePointRelInfo.put("remark", currentInspectionRoutePointRelInfo.get("remark"));
         currentInspectionRoutePointRelInfo.put("communityId", currentInspectionRoutePointRelInfo.get("community_id"));
+        currentInspectionRoutePointRelInfo.put("pointStartTime", currentInspectionRoutePointRelInfo.get("point_start_time"));
+        currentInspectionRoutePointRelInfo.put("pointEndTime", currentInspectionRoutePointRelInfo.get("point_end_time"));
+        currentInspectionRoutePointRelInfo.put("sortNumber", currentInspectionRoutePointRelInfo.get("sort_number"));
 
 
         currentInspectionRoutePointRelInfo.put("operate", StatusConstant.OPERATE_DEL);

@@ -96,12 +96,16 @@ public class BusinessDatabusApi {
      */
     @RequestMapping(value = "/queryBusinessDatabus", method = RequestMethod.GET)
     public ResponseEntity<String> queryBusinessDatabus(@RequestParam(value = "businessTypeCd", required = false) String businessTypeCd,
+                                                       @RequestParam(value = "beanName", required = false) String beanName,
+                                                       @RequestParam(value = "databusId", required = false) String databusId,
                                                        @RequestParam(value = "page") int page,
                                                        @RequestParam(value = "row") int row) {
         BusinessDatabusDto businessDatabusDto = new BusinessDatabusDto();
         businessDatabusDto.setPage(page);
         businessDatabusDto.setRow(row);
         businessDatabusDto.setBusinessTypeCd(businessTypeCd);
+        businessDatabusDto.setBeanName(beanName);
+        businessDatabusDto.setDatabusId(databusId);
         return getBusinessDatabusBMOImpl.get(businessDatabusDto);
     }
 }

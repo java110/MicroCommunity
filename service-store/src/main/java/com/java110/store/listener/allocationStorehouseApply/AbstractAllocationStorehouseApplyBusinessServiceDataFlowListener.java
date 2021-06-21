@@ -19,8 +19,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractAllocationStorehouseApplyBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(AbstractAllocationStorehouseApplyBusinessServiceDataFlowListener.class);
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractAllocationStorehouseApplyBusinessServiceDataFlowListener.class);
 
     /**
      * 获取 DAO工具类
@@ -42,13 +42,14 @@ public abstract class AbstractAllocationStorehouseApplyBusinessServiceDataFlowLi
         businessAllocationStorehouseApplyInfo.put("operate", businessAllocationStorehouseApplyInfo.get("operate"));
         businessAllocationStorehouseApplyInfo.put("startUserName", businessAllocationStorehouseApplyInfo.get("start_user_name"));
         businessAllocationStorehouseApplyInfo.put("applyCount", businessAllocationStorehouseApplyInfo.get("apply_count"));
+        businessAllocationStorehouseApplyInfo.put("communityId", businessAllocationStorehouseApplyInfo.get("community_id"));
         businessAllocationStorehouseApplyInfo.put("remark", businessAllocationStorehouseApplyInfo.get("remark"));
         businessAllocationStorehouseApplyInfo.put("state", businessAllocationStorehouseApplyInfo.get("state"));
         businessAllocationStorehouseApplyInfo.put("storeId", businessAllocationStorehouseApplyInfo.get("store_id"));
+        businessAllocationStorehouseApplyInfo.put("applyType", businessAllocationStorehouseApplyInfo.get("apply_type"));
         businessAllocationStorehouseApplyInfo.remove("bId");
         businessAllocationStorehouseApplyInfo.put("statusCd", statusCd);
     }
-
 
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
@@ -56,7 +57,7 @@ public abstract class AbstractAllocationStorehouseApplyBusinessServiceDataFlowLi
      * @param businessAllocationStorehouseApply 调拨申请信息
      */
     protected void autoSaveDelBusinessAllocationStorehouseApply(Business business, JSONObject businessAllocationStorehouseApply) {
-//自动插入DEL
+        //自动插入DEL
         Map info = new HashMap();
         info.put("applyId", businessAllocationStorehouseApply.getString("applyId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
@@ -64,21 +65,19 @@ public abstract class AbstractAllocationStorehouseApplyBusinessServiceDataFlowLi
         if (currentAllocationStorehouseApplyInfos == null || currentAllocationStorehouseApplyInfos.size() < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
-
         for (int i = 0; i < currentAllocationStorehouseApplyInfos.size(); i++) {
             Map currentAllocationStorehouseApplyInfo = currentAllocationStorehouseApplyInfos.get(i);
-
             currentAllocationStorehouseApplyInfo.put("bId", business.getbId());
-
             currentAllocationStorehouseApplyInfo.put("applyId", currentAllocationStorehouseApplyInfo.get("apply_id"));
             currentAllocationStorehouseApplyInfo.put("startUserId", currentAllocationStorehouseApplyInfo.get("start_user_id"));
             currentAllocationStorehouseApplyInfo.put("operate", currentAllocationStorehouseApplyInfo.get("operate"));
             currentAllocationStorehouseApplyInfo.put("startUserName", currentAllocationStorehouseApplyInfo.get("start_user_name"));
             currentAllocationStorehouseApplyInfo.put("applyCount", currentAllocationStorehouseApplyInfo.get("apply_count"));
             currentAllocationStorehouseApplyInfo.put("remark", currentAllocationStorehouseApplyInfo.get("remark"));
+            currentAllocationStorehouseApplyInfo.put("communityId", currentAllocationStorehouseApplyInfo.get("community_id"));
             currentAllocationStorehouseApplyInfo.put("state", currentAllocationStorehouseApplyInfo.get("state"));
             currentAllocationStorehouseApplyInfo.put("storeId", currentAllocationStorehouseApplyInfo.get("store_id"));
-
+            currentAllocationStorehouseApplyInfo.put("applyType", currentAllocationStorehouseApplyInfo.get("apply_type"));
             currentAllocationStorehouseApplyInfo.put("operate", StatusConstant.OPERATE_DEL);
             getAllocationStorehouseApplyServiceDaoImpl().saveBusinessAllocationStorehouseApplyInfo(currentAllocationStorehouseApplyInfo);
             for (Object key : currentAllocationStorehouseApplyInfo.keySet()) {
@@ -88,6 +87,4 @@ public abstract class AbstractAllocationStorehouseApplyBusinessServiceDataFlowLi
             }
         }
     }
-
-
 }

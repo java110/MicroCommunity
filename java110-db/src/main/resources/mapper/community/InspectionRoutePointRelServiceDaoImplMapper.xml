@@ -7,9 +7,9 @@
     <!-- 保存巡检路线巡检点关系信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionRoutePointRelInfo" parameterType="Map">
         insert into business_inspection_route_point_rel(
-        inspection_id,operate,inspection_route_id,irp_rel_id,community_id,b_id
+        inspection_id,operate,inspection_route_id,irp_rel_id,community_id,b_id,point_start_time,point_end_time,sort_number
         ) values (
-        #{inspectionId},#{operate},#{inspectionRouteId},#{irpRelId},#{communityId},#{bId}
+        #{inspectionId},#{operate},#{inspectionRouteId},#{irpRelId},#{communityId},#{bId},#{pointStartTime},#{pointEndTime},#{sortNumber}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getBusinessInspectionRoutePointRelInfo" parameterType="Map" resultType="Map">
         select t.inspection_id,t.inspection_id inspectionId,t.operate,t.inspection_route_id,t.inspection_route_id
         inspectionRouteId,t.irp_rel_id,t.irp_rel_id irpRelId,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId
+        communityId,t.b_id,t.b_id bId,t.point_start_time,t.point_start_time pointStartTime,t.point_end_time,t.point_end_time pointEndTime,t.sort_number,t.sort_number sortNumber
         from business_inspection_route_point_rel t
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
@@ -46,8 +46,8 @@
     <!-- 保存巡检路线巡检点关系信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionRoutePointRelInfoInstance" parameterType="Map">
         insert into inspection_route_point_rel(
-        inspection_id,inspection_route_id,irp_rel_id,status_cd,community_id,b_id
-        ) select t.inspection_id,t.inspection_route_id,t.irp_rel_id,'0',t.community_id,t.b_id from
+        inspection_id,inspection_route_id,irp_rel_id,status_cd,community_id,b_id,point_start_time,point_end_time,sort_number
+        ) select t.inspection_id,t.inspection_route_id,t.irp_rel_id,'0',t.community_id,t.b_id,t.point_start_time,t.point_end_time,t.sort_number from
         business_inspection_route_point_rel t where 1=1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
@@ -76,7 +76,8 @@
         statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
         ip.inspection_id inspectionId,ip.remark,td.name pointTypeName,
         ip.inspection_name inspectionName,ip.point_obj_type,ip.point_obj_id,ip.point_obj_name,
-        ip.point_obj_type pointObjType,ip.point_obj_id pointObjId,ip.point_obj_name pointObjName
+        ip.point_obj_type pointObjType,ip.point_obj_id pointObjId,ip.point_obj_name pointObjName,
+        t.point_start_time,t.point_start_time pointStartTime,t.point_end_time,t.point_end_time pointEndTime,t.sort_number,t.sort_number sortNumber
         from inspection_route_point_rel t,inspection_point ip
         left join t_dict td on ip.point_obj_type = td.status_cd and td.table_name = 'inspection_point'
         and td.table_columns = 'point_obj_type'
@@ -102,7 +103,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        order by t.create_time desc
+        order by t.sort_number desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -124,6 +125,15 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
+        </if>
+        <if test="pointStartTime !=null and pointStartTime != ''">
+            , t.point_start_time= #{pointStartTime}
+        </if>
+        <if test="pointEndTime !=null and pointEndTime != ''">
+            , t.point_end_time= #{pointEndTime}
+        </if>
+        <if test="sortNumber !=null and sortNumber != ''">
+            , t.sort_number= #{sortNumber}
         </if>
         where 1=1
         <if test="irpRelId !=null and irpRelId != ''">

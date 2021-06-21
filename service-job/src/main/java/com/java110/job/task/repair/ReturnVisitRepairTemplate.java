@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
         repair.setReturnVisitFlag("001,003");
         repair.setPage(1);
         repair.setRow(100);
-        //查询都回访待价状态数据
+        //查询都回访待评价状态数据
         List<RepairDto> repairs = repairInnerServiceSMOImpl.queryRepairs(repair);
         for (RepairDto repairDto : repairs) {
             doFinishRepairAppraise(repairDto);
@@ -235,7 +234,7 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
     }
 
     /**
-     * 待评价状态超过48小时泡成待回访状态
+     * 待评价状态超过48小时跑成待回访状态
      *
      * @param tmpRepairDto
      */

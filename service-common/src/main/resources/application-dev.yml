@@ -48,6 +48,12 @@ spring:
   activiti:
     database-schema-update: false
 
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 10000
+        read-timeout: 10000
 
 #============== kafka ===================
 kafka:

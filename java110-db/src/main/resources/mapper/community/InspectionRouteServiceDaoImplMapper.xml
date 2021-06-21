@@ -125,7 +125,7 @@
         <if test="seq !=null and seq != 0">
             , t.seq= #{seq}
         </if>
-        <if test="remark !=null and remark != ''">
+        <if test="remark !=null">
             , t.remark= #{remark}
         </if>
         <if test="communityId !=null and communityId != ''">

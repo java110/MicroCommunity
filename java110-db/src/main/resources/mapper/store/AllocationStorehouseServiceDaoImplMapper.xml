@@ -7,9 +7,9 @@
     <!-- 保存仓库调拨信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAllocationStorehouseInfo" parameterType="Map">
         insert into business_allocation_storehouse(
-        as_id,store_id,res_id,sh_id_z,res_name,start_user_id,operate,sh_id_a,start_user_name,state,b_id,stock,original_stock,remark,apply_id
+        as_id,store_id,res_id,sh_id_z,res_name,start_user_id,operate,sh_id_a,start_user_name,b_id,stock,original_stock,remark,apply_id
         ) values (
-        #{asId},#{storeId},#{resId},#{shIdz},#{resName},#{startUserId},#{operate},#{shIda},#{startUserName},#{state},#{bId},#{stock},#{originalStock},#{remark},#{applyId}
+        #{asId},#{storeId},#{resId},#{shIdz},#{resName},#{startUserId},#{operate},#{shIda},#{startUserName},#{bId},#{stock},#{originalStock},#{remark},#{applyId}
         )
     </insert>
 
@@ -17,7 +17,7 @@
     <select id="getBusinessAllocationStorehouseInfo" parameterType="Map" resultType="Map">
         select t.as_id,t.as_id asId,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.sh_id_z,t.sh_id_z
         shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id startUserId,t.operate,t.sh_id_a,t.sh_id_a
-        shIda,t.start_user_name,t.start_user_name startUserName,t.state,t.b_id,t.b_id bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.apply_id,t.apply_id applyId
+        shIda,t.start_user_name,t.start_user_name startUserName,t.b_id,t.b_id bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.apply_id,t.apply_id applyId
         from business_allocation_storehouse t
         where 1 =1
         <if test="asId !=null and asId != ''">
@@ -47,9 +47,6 @@
         <if test="startUserName !=null and startUserName != ''">
             and t.start_user_name= #{startUserName}
         </if>
-        <if test="state !=null and state != ''">
-            and t.state= #{state}
-        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -64,9 +61,9 @@
     <!-- 保存仓库调拨信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAllocationStorehouseInfoInstance" parameterType="Map">
         insert into allocation_storehouse(
-        as_id,status_cd,store_id,res_id,sh_id_z,res_name,start_user_id,sh_id_a,start_user_name,state,b_id,stock,original_stock,remark,apply_id
+        as_id,status_cd,store_id,res_id,sh_id_z,res_name,start_user_id,sh_id_a,start_user_name,b_id,stock,original_stock,remark,apply_id
         ) select
-        t.as_id,'0',t.store_id,t.res_id,t.sh_id_z,t.res_name,t.start_user_id,t.sh_id_a,t.start_user_name,t.state,t.b_id,t.stock,t.original_stock,t.remark,t.apply_id
+        t.as_id,'0',t.store_id,t.res_id,t.sh_id_z,t.res_name,t.start_user_id,t.sh_id_a,t.start_user_name,t.b_id,t.stock,t.original_stock,t.remark,t.apply_id
         from business_allocation_storehouse t where 1=1
         <if test="asId !=null and asId != ''">
             and t.as_id= #{asId}
@@ -93,9 +90,6 @@
         <if test="startUserName !=null and startUserName != ''">
             and t.start_user_name= #{startUserName}
         </if>
-        <if test="state !=null and state != ''">
-            and t.state= #{state}
-        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -113,11 +107,11 @@
         resId,t.sh_id_z,t.sh_id_z shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id
         startUserId,t.sh_id_a,t.sh_id_a shIda,t.start_user_name,t.start_user_name startUserName,asa.state,t.b_id,t.b_id
         bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.create_time createTime,td.name stateName,a.sh_name shaName,z.sh_name shzName,
-        rs.res_code,rs.res_code resCode,t.apply_id,t.apply_id applyId,rst.name rstName,rss.spec_name specName
+        rs.res_code,rs.res_code resCode,t.apply_id,t.apply_id applyId,rst.name rstName,rss.spec_name specName,asa.apply_type,asa.apply_type applyType,td1.name applyTypeName
         from allocation_storehouse t
         left join allocation_storehouse_apply asa on asa.apply_id = t.apply_id and asa.status_cd = '0'
-        left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns =
-        'state'
+        left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns = 'state'
+        left join t_dict td1 on asa.apply_type = td1.status_cd and td.table_name = 'allocation_storehouse_apply' and td1.table_columns = 'apply_type'
         left join storehouse a on t.sh_id_a = a.sh_id and a.store_id = t.store_id and a.status_cd = '0'
         left join storehouse z on t.sh_id_z = z.sh_id and z.store_id = t.store_id and z.status_cd = '0'
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
@@ -180,6 +174,9 @@
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}
+        </if>
+        <if test="applyType !=null and applyType != ''">
+            and asa.apply_type= #{applyType}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -214,9 +211,6 @@
         <if test="startUserName !=null and startUserName != ''">
             , t.start_user_name= #{startUserName}
         </if>
-        <if test="state !=null and state != ''">
-            , t.state= #{state}
-        </if>
         <if test="stock !=null and stock != ''">
             , t.stock= #{stock}
         </if>
@@ -237,8 +231,8 @@
         select count(1) count
         from allocation_storehouse t
         left join allocation_storehouse_apply asa on asa.apply_id = t.apply_id and asa.status_cd = '0'
-        left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns =
-        'state'
+        left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns ='state'
+        left join t_dict td1 on asa.apply_type = td1.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns = 'apply_type'
         left join storehouse a on t.sh_id_a = a.sh_id and a.store_id = t.store_id and a.status_cd = '0'
         left join storehouse z on t.sh_id_z = z.sh_id and z.store_id = t.store_id and z.status_cd = '0'
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
@@ -301,6 +295,9 @@
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}
+        </if>
+        <if test="applyType !=null and applyType != ''">
+            and asa.apply_type= #{applyType}
         </if>
     </select>
 </mapper>

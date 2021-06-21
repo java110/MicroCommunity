@@ -96,6 +96,14 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
      * @return 订单服务能够接受的报文
      */
     public void addResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        //获取物品编码
+        String resCode = paramInJson.getString("resCode");
+        //根据物品编码查询物品资源表
+        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
+        resourceStoreDto.setResCode(resCode);
+        List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+        //判断资源表里是否有该物品编码，避免物品编码重复
+        Assert.listIsNull(resourceStoreDtos, "物品编码重复，请重新添加！");
         JSONObject businessResourceStore = new JSONObject();
         businessResourceStore.putAll(paramInJson);
         businessResourceStore.put("resId", GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));

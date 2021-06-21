@@ -13,6 +13,10 @@ public class AllocationStorehouseApplyPo implements Serializable {
     private String state;
     private String storeId;
     private String statusCd;
+    private String communityId;
+    private String createTime;
+    //调拨返还状态标识
+    private String applyType;
 
     public String getApplyId() {
         return applyId;
@@ -76,5 +80,29 @@ public class AllocationStorehouseApplyPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getApplyType() {
+        return applyType;
+    }
+
+    public void setApplyType(String applyType) {
+        this.applyType = applyType;
     }
 }

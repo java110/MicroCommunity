@@ -1,20 +1,23 @@
 package com.java110.common.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
+import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
-import com.java110.intf.common.IAuditUserInnerServiceSMO;
 import com.java110.intf.common.IGoodCollectionUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.store.IComplaintInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.machine.MachineRecordPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -35,7 +38,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * 物品领用工作流
+ */
 @RestController
 public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implements IGoodCollectionUserInnerServiceSMO {
 
@@ -49,13 +54,6 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
     private TaskService taskService;
 
     @Autowired
-    private HistoryService historyService;
-
-    @Autowired
-    private RepositoryService repositoryService;
-
-
-    @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
@@ -65,11 +63,10 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
     @Autowired
-    private IAuditUserInnerServiceSMO auditUserInnerServiceSMOImpl;
-
-    @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
 
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
     /**
      * 启动流程
@@ -77,6 +74,8 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
      * @return
      */
     public PurchaseApplyDto startProcess(@RequestBody PurchaseApplyDto purchaseApplyDto) {
+        //获取出入库类型
+        String resOrderType = purchaseApplyDto.getResOrderType();
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("purchaseApplyDto", purchaseApplyDto);
@@ -85,11 +84,30 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
         variables.put("startUserId", purchaseApplyDto.getCurrentUserId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(purchaseApplyDto.getStoreId()), purchaseApplyDto.getApplyOrderId(), variables);
-//        //将得到的实例流程id值赋给之前设置的变量
+        //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
-//        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
-//
+        String processDefinitionId = processInstance.getProcessDefinitionId();
+        String businessKey = processInstance.getBusinessKey();
+        //获取下级处理人id
+        PurchaseApplyDto purchaseApply = new PurchaseApplyDto();
+        purchaseApply.setBusinessKey(businessKey);
+        purchaseApply.setActRuTaskId(processInstanceId);
+        purchaseApply.setProcDefId(processDefinitionId);
+        List<PurchaseApplyDto> actRuTaskUserIds = purchaseApplyInnerServiceSMOImpl.getActRuTaskUserId(purchaseApply);
+        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
         purchaseApplyDto.setProcessInstanceId(processInstanceId);
+        if (actRuTaskUserIds != null && actRuTaskUserIds.size() > 0) {
+            for (PurchaseApplyDto purchase : actRuTaskUserIds) {
+                String actRuTaskUserId = purchase.getTaskUserId();
+                MachineRecordPo machineRecordPo = new MachineRecordPo();
+                machineRecordPo.setApplyOrderId(businessKey);
+                machineRecordPo.setPurchaseUserId(actRuTaskUserId);
+                machineRecordPo.setResOrderType(resOrderType);
+                //传送databus
+                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                        BusinessTypeConstant.BUSINESS_TYPE_DATABUS_PURCHASE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
+            }
+        }
         //autoFinishFirstTask(purchaseApplyDto);
         return purchaseApplyDto;
     }
@@ -299,7 +317,6 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
         variables.put("flag", "1200".equals(purchaseApplyDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", purchaseApplyDto.getStartUserId());
         taskService.complete(purchaseApplyDto.getTaskId(), variables);
-
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
             return true;

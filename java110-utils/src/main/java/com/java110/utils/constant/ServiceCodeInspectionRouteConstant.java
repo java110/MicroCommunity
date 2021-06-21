@@ -44,5 +44,11 @@ public class ServiceCodeInspectionRouteConstant {
     public static final String DELETE_INSPECTIONROUTE_POINT = "inspectionRoute.deleteInspectionRoutePoint";
 
 
+    /**
+     * 更新 巡检路线
+     */
+    public static final String UPDATE_INSPECTIONROUTE_POINT_REL = "inspectionRoute.updateInspectionRoutePointRel";
+
+
 
 }

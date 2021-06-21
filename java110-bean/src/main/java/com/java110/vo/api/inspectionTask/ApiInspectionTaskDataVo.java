@@ -8,6 +8,7 @@ public class ApiInspectionTaskDataVo implements Serializable {
     private String planUserId;
     private String actInsTime;
     private String planInsTime;
+    private String planEndTime;
     private String statusCd;
     private String actUserName;
     private String operate;
@@ -22,6 +23,12 @@ public class ApiInspectionTaskDataVo implements Serializable {
     private String taskId;
     private String state;
     private String stateName;
+
+    private String originalPlanUserId;
+    private String originalPlanUserName;
+    private String transferDesc;
+    private String taskType;
+
 
     public String getPlanUserId() {
         return planUserId;
@@ -165,5 +172,45 @@ public class ApiInspectionTaskDataVo implements Serializable {
 
     public void setInspectionPlanName(String inspectionPlanName) {
         this.inspectionPlanName = inspectionPlanName;
+    }
+
+    public String getPlanEndTime() {
+        return planEndTime;
+    }
+
+    public void setPlanEndTime(String planEndTime) {
+        this.planEndTime = planEndTime;
+    }
+
+    public String getOriginalPlanUserId() {
+        return originalPlanUserId;
+    }
+
+    public void setOriginalPlanUserId(String originalPlanUserId) {
+        this.originalPlanUserId = originalPlanUserId;
+    }
+
+    public String getOriginalPlanUserName() {
+        return originalPlanUserName;
+    }
+
+    public void setOriginalPlanUserName(String originalPlanUserName) {
+        this.originalPlanUserName = originalPlanUserName;
+    }
+
+    public String getTransferDesc() {
+        return transferDesc;
+    }
+
+    public void setTransferDesc(String transferDesc) {
+        this.transferDesc = transferDesc;
+    }
+
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
 }

@@ -31,7 +31,7 @@ public class GoodsCollectionBMOImpl implements IGoodsCollectionBMO {
         int saveFlag = purchaseApplyInnerServiceSMOImpl.savePurchaseApply(purchaseApplyPo);
 
         if (saveFlag < 1) {
-            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "采购申请失败");
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "物品领用申请失败");
         }
 
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(purchaseApplyPo, PurchaseApplyDto.class);

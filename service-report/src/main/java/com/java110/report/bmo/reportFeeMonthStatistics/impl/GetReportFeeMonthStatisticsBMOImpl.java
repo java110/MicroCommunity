@@ -332,7 +332,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                             + "单元" + reportFeeMonthStatistics.getRoomNum() + "室");
                 } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(reportFeeMonthStatistics.getPayerObjType())) {
                     reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getCarNum());
-                }else{
+                } else {
                     reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getContractCode());
 
                 }
@@ -465,6 +465,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     /**
      * 查询报表专家 统计信息
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -508,6 +509,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         int transferOrderNumber = 0;
         //派单总数量
         int dispatchNumber = 0;
+        //已回访总数量
+        int returnNumber = 0;
         if (count > 0) {
             for (RepairUserDto repairUser : repairUsers) {
                 RepairUserDto repairUserInfo = new RepairUserDto();
@@ -525,6 +528,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     int transferOrderAmount = 0;
                     //派单数量
                     int dispatchAmount = 0;
+                    //回访数量
+                    int returnAmount = 0;
                     for (RepairUserDto repair : repairUserDtoList) {
                         //处理中状态
                         if (repair.getState().equals("10001")) {
@@ -546,6 +551,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                         } else if (repair.getState().equals("10006")) {  //派单状态
                             int amount = Integer.parseInt(repair.getAmount());
                             dispatchAmount = dispatchAmount + amount;
+                        } else if (repair.getState().equals("10008")) {  //已回访状态
+                            int amount = Integer.parseInt(repair.getAmount());
+                            returnAmount = returnAmount + amount;
                         }
                     }
                     //员工id
@@ -572,6 +580,10 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     repairUserInfo.setDispatchAmount(Integer.toString(dispatchAmount));
                     //派单报修总数量
                     repairUserInfo.setDispatchNumber(Integer.toString(dispatchNumber));
+                    //回访数量
+                    repairUserInfo.setReturnAmount(Integer.toString(returnAmount));
+                    //回访总数量
+                    repairUserInfo.setReturnNumber(Integer.toString(returnNumber));
                     //员工id和姓名信息集合
                     repairUserInfo.setRepairList(staffs);
                     repairUserList.add(repairUserInfo);
@@ -583,6 +595,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 chargebackNumber = Integer.parseInt(repairUserInfo.getChargebackAmount()) + chargebackNumber;
                 transferOrderNumber = Integer.parseInt(repairUserInfo.getTransferOrderAmount()) + transferOrderNumber;
                 dispatchNumber = Integer.parseInt(repairUserInfo.getDispatchAmount()) + dispatchNumber;
+                returnNumber = Integer.parseInt(repairUserInfo.getReturnAmount()) + returnNumber;
             }
         } else {
             repairUserList = new ArrayList<>();
@@ -594,6 +607,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         repairUser.setChargebackNumber(Integer.toString(chargebackNumber));
         repairUser.setTransferOrderNumber(Integer.toString(transferOrderNumber));
         repairUser.setDispatchNumber(Integer.toString(dispatchNumber));
+        repairUser.setReturnNumber(Integer.toString(returnNumber));
 
         //获取总条数
         int size = staffs.size();

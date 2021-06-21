@@ -7,9 +7,9 @@
     <!-- 保存调拨申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAllocationStorehouseApplyInfo" parameterType="Map">
         insert into business_allocation_storehouse_apply(
-        apply_id,start_user_id,operate,start_user_name,apply_count,remark,state,b_id,store_id
+        apply_id,start_user_id,operate,start_user_name,apply_count,remark,state,b_id,store_id,community_id,create_time,apply_type
         ) values (
-        #{applyId},#{startUserId},#{operate},#{startUserName},#{applyCount},#{remark},#{state},#{bId},#{storeId}
+        #{applyId},#{startUserId},#{operate},#{startUserName},#{applyCount},#{remark},#{state},#{bId},#{storeId},#{communityId},#{createTime},#{applyType}
         )
     </insert>
 
@@ -17,7 +17,8 @@
     <select id="getBusinessAllocationStorehouseApplyInfo" parameterType="Map" resultType="Map">
         select t.apply_id,t.apply_id applyId,t.start_user_id,t.start_user_id
         startUserId,t.operate,t.start_user_name,t.start_user_name startUserName,t.apply_count,t.apply_count
-        applyCount,t.remark,t.state,t.b_id,t.b_id bId,t.store_id,t.store_id storeId
+        applyCount,t.remark,t.state,t.b_id,t.b_id bId,t.store_id,t.store_id storeId,t.community_id,t.community_id
+        communityId,t.apply_type,t.apply_type applyType
         from business_allocation_storehouse_apply t
         where 1 =1
         <if test="applyId !=null and applyId != ''">
@@ -47,14 +48,21 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="applyType !=null and applyType != ''">
+            and t.apply_type= #{applyType}
+        </if>
     </select>
 
     <!-- 保存调拨申请信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAllocationStorehouseApplyInfoInstance" parameterType="Map">
         insert into allocation_storehouse_apply(
-        apply_id,start_user_id,start_user_name,apply_count,remark,status_cd,state,b_id,store_id
-        ) select t.apply_id,t.start_user_id,t.start_user_name,t.apply_count,t.remark,'0',t.state,t.b_id,t.store_id from
-        business_allocation_storehouse_apply t where 1=1
+        apply_id,start_user_id,start_user_name,apply_count,remark,status_cd,state,b_id,store_id,community_id,create_time,apply_type
+        ) select
+        t.apply_id,t.start_user_id,t.start_user_name,t.apply_count,t.remark,'0',t.state,t.b_id,t.store_id,t.community_id,t.create_time,t.apply_type
+        from business_allocation_storehouse_apply t where 1=1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
         </if>
@@ -80,6 +88,12 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="applyType !=null and applyType != ''">
+            and t.apply_type= #{applyType}
+        </if>
     </insert>
 
     <!-- 查询调拨申请信息 add by wuxw 2018-07-03 -->
@@ -87,11 +101,13 @@
         select t.apply_id,t.apply_id applyId,t.start_user_id,t.start_user_id
         startUserId,t.start_user_name,t.start_user_name startUserName,t.apply_count,t.apply_count
         applyCount,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.b_id,t.b_id bId,t.store_id,t.store_id storeId,
-        td.name stateName,t.create_time createTime
+        td.name stateName,t.create_time createTime,t.community_id,t.community_id communityId,t.apply_type,t.apply_type
+        applyType,td2.name applyTypeName
         from allocation_storehouse_apply t
         left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and
-        td.table_columns =
-        'state'
+        td.table_columns = 'state'
+        left join t_dict td2 on t.apply_type = td2.status_cd and td2.table_name = 'allocation_storehouse_apply' and
+        td2.table_columns = 'apply_type'
         where 1 = 1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
@@ -132,6 +148,12 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id = #{communityId}
+        </if>
+        <if test="applyType !=null and applyType != ''">
+            and t.apply_type= #{applyType}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -161,6 +183,12 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             , t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="applyType !=null and applyType != ''">
+            , t.apply_type= #{applyType}
         </if>
         where 1=1
         <if test="applyId !=null and applyId != ''">
@@ -214,6 +242,12 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id = #{communityId}
+        </if>
+        <if test="applyType !=null and applyType != ''">
+            and t.apply_type= #{applyType}
         </if>
     </select>
 </mapper>

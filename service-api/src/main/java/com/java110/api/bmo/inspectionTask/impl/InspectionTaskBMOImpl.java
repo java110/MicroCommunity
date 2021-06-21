@@ -12,6 +12,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,14 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
         inspectionTaskPo.setActUserId(paramInJson.getString("userId"));
         inspectionTaskPo.setActUserName(paramInJson.getString("userName"));
         inspectionTaskPo.setState(paramInJson.getString("state"));
+        if(!StringUtil.isEmpty(paramInJson.getString("taskType")) && paramInJson.getString("taskType").equals("2000") ){
+//            inspectionTaskPo.setOriginalPlanUserId(inspectionTaskPo.getPlanUserId());
+//            inspectionTaskPo.setOriginalPlanUserName(inspectionTaskPo.getPlanUserName());
+            inspectionTaskPo.setPlanUserId(paramInJson.getString("staffId"));
+            inspectionTaskPo.setPlanUserName(paramInJson.getString("staffName"));
+            inspectionTaskPo.setTaskType(paramInJson.getString("taskType"));
+            inspectionTaskPo.setTransferDesc(paramInJson.getString("transferDesc"));
+        }
 
         super.update(dataFlowContext, inspectionTaskPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_TASK);
     }

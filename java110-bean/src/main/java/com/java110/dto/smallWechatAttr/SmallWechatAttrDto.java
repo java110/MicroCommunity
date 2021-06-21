@@ -17,7 +17,7 @@ public class SmallWechatAttrDto extends PageDto implements Serializable {
 
     public static final String SPEC_CD_TOKEN = "33001";//token
     public static final String SPEC_CD_OWE_FEE_TEMPLATE = "33002";//欠费推送模板
-    public static final String SPEC_CD_WECHAT_TEMPLATE = "33003";//欠费推送模板
+    public static final String SPEC_CD_WECHAT_TEMPLATE = "33003";//欠费推送模板、装修跟踪记录通知
     public static final String SPEC_CD_WECHAT_SUCCESS_TEMPLATE = "33004";//业主缴费成功推送模板
     public static final String SPEC_CD_WECHAT_EXPIRE_TEMPLATE = "33005";//业主费用到期通知推送模板
     public static final String SPEC_CD_WECHAT_PROCESS_TEMPLATE = "33006";//空置房验房申请流程、审批流程通知模板（资产调拨审批、领用审批、转赠通知-资产管理待办审批通知）

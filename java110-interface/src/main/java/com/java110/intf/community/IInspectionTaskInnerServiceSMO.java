@@ -56,4 +56,13 @@ public interface IInspectionTaskInnerServiceSMO {
 
     @RequestMapping(value = "/saveInspectionTaskDetail", method = RequestMethod.POST)
     int saveInspectionTaskDetail(@RequestBody List<InspectionTaskDetailPo> inspectionTaskDetailPos);
+
+    /**
+     * 更新巡检任务详情表
+     *
+     * @param inspectionTaskDto
+     * @return
+     */
+    @RequestMapping(value = "/updateInspectionTask", method = RequestMethod.POST)
+    void updateInspectionTask(@RequestBody InspectionTaskDto inspectionTaskDto);
 }

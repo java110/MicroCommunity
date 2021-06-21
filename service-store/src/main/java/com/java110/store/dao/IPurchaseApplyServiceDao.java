@@ -100,4 +100,9 @@ public interface IPurchaseApplyServiceDao {
      */
     int savePurchaseApply(Map businessPurchaseApplyInfo) throws DAOException;
 
+    /**
+     * 获取下级处理人id
+     */
+    List<Map> getActRuTaskUserId(Map info);
+
 }

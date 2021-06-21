@@ -18,6 +18,7 @@ public class InspectionTaskDto extends PageDto implements Serializable {
     private String planUserId;
     private String actInsTime;
     private String planInsTime;
+    private String planEndTime;
     private String todayPlanInsTime; // 今天计划时间
     private String actUserName;
     private String signType;
@@ -36,10 +37,17 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     private String startTime;
     private String endTime;
+    private String originalPlanUserId;
+    private String originalPlanUserName;
+    private String transferDesc;
+    private String taskType;
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    //查询当天巡检任务标识
+    private String dayTask;
 
     public String getPlanUserId() {
         return planUserId;
@@ -215,5 +223,54 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getDayTask() {
+        return dayTask;
+    }
+
+    public void setDayTask(String dayTask) {
+        this.dayTask = dayTask;
+    }
+
+    public String getPlanEndTime() {
+        return planEndTime;
+    }
+
+    public void setPlanEndTime(String planEndTime) {
+        this.planEndTime = planEndTime;
+    }
+
+
+    public String getOriginalPlanUserId() {
+        return originalPlanUserId;
+    }
+
+    public void setOriginalPlanUserId(String originalPlanUserId) {
+        this.originalPlanUserId = originalPlanUserId;
+    }
+
+    public String getOriginalPlanUserName() {
+        return originalPlanUserName;
+    }
+
+    public void setOriginalPlanUserName(String originalPlanUserName) {
+        this.originalPlanUserName = originalPlanUserName;
+    }
+
+    public String getTransferDesc() {
+        return transferDesc;
+    }
+
+    public void setTransferDesc(String transferDesc) {
+        this.transferDesc = transferDesc;
+    }
+
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
 }

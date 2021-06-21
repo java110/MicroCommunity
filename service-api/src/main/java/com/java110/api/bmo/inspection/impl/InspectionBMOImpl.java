@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.inspection.IInspectionBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.inspectionPlan.InspectionTaskDto;
 import com.java110.intf.community.IInspectionPlanInnerServiceSMO;
 import com.java110.intf.community.IInspectionRoutePointRelInnerServiceSMO;
 import com.java110.dto.inspectionPlan.InspectionPlanDto;
 import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
+import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.po.inspection.InspectionPlanPo;
 import com.java110.po.inspection.InspectionPointPo;
 import com.java110.po.inspection.InspectionRoutePo;
@@ -31,12 +33,14 @@ import java.util.List;
 @Service("inspectionBMOImpl")
 public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
 
-
     @Autowired
     private IInspectionPlanInnerServiceSMO inspectionPlanInnerServiceSMOImpl;
 
     @Autowired
     private IInspectionRoutePointRelInnerServiceSMO inspectionRoutePointRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IInspectionTaskInnerServiceSMO inspectionTaskInnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -46,9 +50,12 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @return 订单服务能够接受的报文
      */
     public void deleteInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
         InspectionPlanPo inspectionPlanPo = BeanConvertUtil.covertBean(paramInJson, InspectionPlanPo.class);
-
+        InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
+        inspectionTaskDto.setInspectionPlanId(inspectionPlanPo.getInspectionPlanId());
+        //根据巡检计划id查询巡检任务
+        List<InspectionTaskDto> inspectionTaskDtos = inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);
+        Assert.listIsNull(inspectionTaskDtos, "该巡检计划正在使用，不能删除！");
         super.delete(dataFlowContext, inspectionPlanPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_PLAN);
 
     }
@@ -112,10 +119,12 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @return 订单服务能够接受的报文
      */
     public void deleteInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         InspectionPointPo inspectionPointPo = BeanConvertUtil.covertBean(paramInJson, InspectionPointPo.class);
-
+        InspectionRoutePointRelDto inspectionRoutePointRelDto = new InspectionRoutePointRelDto();
+        inspectionRoutePointRelDto.setInspectionId(inspectionPointPo.getInspectionId());
+        //查询巡检点巡检路线关系表
+        List<InspectionRoutePointRelDto> inspectionRoutePointRelDtos = inspectionRoutePointRelInnerServiceSMOImpl.queryInspectionRoutePointRels(inspectionRoutePointRelDto);
+        Assert.listIsNull(inspectionRoutePointRelDtos, "该巡检点正在使用，不能删除！");
         super.delete(dataFlowContext, inspectionPointPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION);
     }
 
@@ -156,8 +165,12 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      */
     public void deleteInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         InspectionRoutePo inspectionRoutePo = BeanConvertUtil.covertBean(paramInJson, InspectionRoutePo.class);
+        InspectionPlanDto inspectionPlanDto = new InspectionPlanDto();
+        inspectionPlanDto.setInspectionRouteId(inspectionRoutePo.getInspectionRouteId());
+        //根据巡检路线id查询巡检计划
+        List<InspectionPlanDto> inspectionPlanDtos = inspectionPlanInnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto);
+        Assert.listIsNull(inspectionPlanDtos, "该巡检路线正在使用，不能删除！");
         super.delete(dataFlowContext, inspectionRoutePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE);
-
     }
 
     /**
@@ -222,6 +235,18 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
     public void updateInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         InspectionRoutePo inspectionRoutePo = BeanConvertUtil.covertBean(paramInJson, InspectionRoutePo.class);
         super.insert(dataFlowContext, inspectionRoutePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_ROUTE);
+    }
+
+    /**
+     * 添加巡检路线信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void updateInspectionRoutePointRel(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        InspectionRoutePointRelPo inspectionRoutePointRelPo = BeanConvertUtil.covertBean(paramInJson, InspectionRoutePointRelPo.class);
+        super.update(dataFlowContext, inspectionRoutePointRelPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_ROUTE_POINT_REL);
     }
 
 }

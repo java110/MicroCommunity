@@ -75,6 +75,8 @@ public class RepairUserDto extends PageDto implements Serializable {
     private String transferOrderAmount;
     //派单的报修数量
     private String dispatchAmount;
+    //回访数量
+    private String returnAmount;
     private String beginStartTime;
     private String beginEndTime;
     private String finishStartTime;
@@ -95,7 +97,8 @@ public class RepairUserDto extends PageDto implements Serializable {
     private String transferOrderNumber;
     //派单报修总数
     private String dispatchNumber;
-
+    //已回访总数量
+    private String returnNumber;
 
     public String getContext() {
         return context;
@@ -144,7 +147,6 @@ public class RepairUserDto extends PageDto implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -408,5 +410,21 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setDispatchNumber(String dispatchNumber) {
         this.dispatchNumber = dispatchNumber;
+    }
+
+    public String getReturnNumber() {
+        return returnNumber;
+    }
+
+    public void setReturnNumber(String returnNumber) {
+        this.returnNumber = returnNumber;
+    }
+
+    public String getReturnAmount() {
+        return returnAmount;
+    }
+
+    public void setReturnAmount(String returnAmount) {
+        this.returnAmount = returnAmount;
     }
 }
