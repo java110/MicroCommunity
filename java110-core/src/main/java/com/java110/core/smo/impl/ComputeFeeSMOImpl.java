@@ -279,7 +279,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feeReceiptDetailPo.setArea(roomDtos.get(0).getBuiltUpArea());
                 feeReceiptDetailPo.setSquarePrice(feeDto.getComputingFormulaText());
-            }else if ("9009".equals(computingFormula)) {
+            } else if ("9009".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 } else {
                     BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
@@ -349,7 +349,64 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     feeReceiptDetailPo.setArea(sub.doubleValue() + "");
                     feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
                 }
-            }else {
+            } else {
+            }
+        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {//车位相关
+            String computingFormula = feeDto.getComputingFormula();
+            ContractRoomDto contractRoomDto = new ContractRoomDto();
+            contractRoomDto.setContractId(feeDto.getPayerObjId());
+            contractRoomDto.setCommunityId(feeDto.getCommunityId());
+            List<ContractRoomDto> contractRoomDtos = contractRoomInnerServiceSMOImpl.queryContractRooms(contractRoomDto);
+            if (contractRoomDtos == null || contractRoomDtos.size() != 1) {
+                return;
+            }
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                BigDecimal builtUpArea = new BigDecimal(0);
+                for (ContractRoomDto tmpContractRoomDto : contractRoomDtos) {
+                    builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getBuiltUpArea())));
+                }
+                feeReceiptDetailPo.setArea(builtUpArea.doubleValue() + "");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                feeReceiptDetailPo.setArea("");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getAdditionalAmount());
+            } else if ("4004".equals(computingFormula)) {
+            } else if ("5005".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal sub = curDegree.subtract(preDegree).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    feeReceiptDetailPo.setArea(sub.doubleValue() + "");
+                    feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+                }
+            } else if ("6006".equals(computingFormula)) {
+                String value = "";
+                List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+                for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+                    if (feeAttrDto.getSpecCd().equals(FeeAttrDto.SPEC_CD_PROXY_CONSUMPTION)) {
+                        value = feeAttrDto.getValue();
+                    }
+                }
+                feeReceiptDetailPo.setArea(value);
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+            } else if ("7007".equals(computingFormula)) { //自定义公式
+                BigDecimal builtUpArea = new BigDecimal(0);
+                for (ContractRoomDto tmpContractRoomDto : contractRoomDtos) {
+                    builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getBuiltUpArea())));
+                }
+                feeReceiptDetailPo.setArea(builtUpArea.doubleValue() + "");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getComputingFormulaText());
+            } else if ("9009".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal sub = curDegree.subtract(preDegree).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    feeReceiptDetailPo.setArea(sub.doubleValue() + "");
+                    feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
+                }
+            } else {
             }
         }
     }
@@ -714,7 +771,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeRoomCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class), BeanConvertUtil.covertBean(reportRoomDto, RoomDto.class));
-            }else if ("9009".equals(computingFormula)) {
+            } else if ("9009".equals(computingFormula)) {
                 if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
                     //throw new IllegalArgumentException("抄表数据异常");
                 } else {
@@ -761,7 +818,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeCarCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class), BeanConvertUtil.covertBean(reportCarDto, OwnerCarDto.class));
-            }else if ("9009".equals(computingFormula)) {
+            } else if ("9009".equals(computingFormula)) {
                 if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
                     throw new IllegalArgumentException("抄表数据异常");
                 } else {
