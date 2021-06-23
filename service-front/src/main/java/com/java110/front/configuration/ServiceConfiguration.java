@@ -48,7 +48,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/activitiesType/queryActivitiesType,");//查询大类
         exclusions.append("/app/product/queryProductLabel,");//查询大类
         exclusions.append("/app/loginStaffWechatAuth,");//查询大类
-        exclusions.append("/app/staffAuth");//查询大类
+        exclusions.append("/app/staffAuth,");//查询大类
+        exclusions.append("/app/convenienceMenus/queryConvenienceMenus");//查询大类
 
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
