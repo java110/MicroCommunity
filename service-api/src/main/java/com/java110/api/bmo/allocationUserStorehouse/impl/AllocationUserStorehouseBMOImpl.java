@@ -45,16 +45,27 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                 String giveQuantity = paramIn.getString("giveQuantity");
                 //获取物品id
                 String resId = paramIn.getString("resId");
+                String resName = paramIn.getString("resName");
                 //获取当前用户id
                 String userId = paramInJson.getString("userId");
                 //获取接受转增用户id
                 String acceptUserId = paramInJson.getString("acceptUserId");
-                paramInJson.put("ausId", "-1");
-                paramInJson.put("createTime", new Date());
-                paramInJson.put("startUserId", userId);
-                paramInJson.put("startUserName", paramInJson.getString("userName"));
-                paramInJson.put("remark", paramInJson.getString("description"));
-                AllocationUserStorehousePo allocationUserStorehousePo = BeanConvertUtil.covertBean(paramInJson, AllocationUserStorehousePo.class);
+                String acceptUserName = paramInJson.getString("acceptUserName");
+                String storeId = paramInJson.getString("storeId");
+                JSONObject allocationUserStorehouseJson = new JSONObject();
+                allocationUserStorehouseJson.put("ausId", "-1");
+                allocationUserStorehouseJson.put("resId", resId);
+                allocationUserStorehouseJson.put("resName", resName);
+                allocationUserStorehouseJson.put("storeId", storeId);
+                allocationUserStorehouseJson.put("stock", stock);
+                allocationUserStorehouseJson.put("giveQuantity", giveQuantity);
+                allocationUserStorehouseJson.put("startUserId", userId);
+                allocationUserStorehouseJson.put("startUserName", paramInJson.getString("userName"));
+                allocationUserStorehouseJson.put("acceptUserId", acceptUserId);
+                allocationUserStorehouseJson.put("acceptUserName", acceptUserName);
+                allocationUserStorehouseJson.put("createTime", new Date());
+                allocationUserStorehouseJson.put("remark", paramInJson.getString("description"));
+                AllocationUserStorehousePo allocationUserStorehousePo = BeanConvertUtil.covertBean(allocationUserStorehouseJson, AllocationUserStorehousePo.class);
                 super.insert(dataFlowContext, allocationUserStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ALLOCATION_USER_STOREHOUSE);
                 UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
                 userStorehouseDto.setUserId(userId);
@@ -90,8 +101,8 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                     UserStorehousePo userStorePo = new UserStorehousePo();
                     userStorePo.setUsId("-1");
                     userStorePo.setResId(resId);
-                    userStorePo.setResName(paramInJson.getString("resName"));
-                    userStorePo.setStoreId(paramInJson.getString("storeId"));
+                    userStorePo.setResName(resName);
+                    userStorePo.setStoreId(storeId);
                     userStorePo.setStock(giveQuantity);
                     userStorePo.setUserId(acceptUserId);
                     //保存接受转增用户个人物品信息

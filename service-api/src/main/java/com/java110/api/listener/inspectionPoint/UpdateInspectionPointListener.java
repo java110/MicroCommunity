@@ -20,23 +20,18 @@ public class UpdateInspectionPointListener extends AbstractServiceApiPlusListene
 
     @Autowired
     private IInspectionBMO inspectionBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "inspectionId", "巡检点ID不能为空");
         Assert.hasKeyAndValue(reqJson, "inspectionName", "必填，请填写巡检点名称");
         Assert.hasKeyAndValue(reqJson, "pointObjId", "必填，请填写位置信息");
         Assert.hasKeyAndValue(reqJson, "pointObjType", "必填，请填写巡检类型");
         Assert.hasKeyAndValue(reqJson, "pointObjName", "必填，请填写位置信息");
-        Assert.hasKeyAndValue(reqJson, "pointStartTime", "必填，请选择巡检开始时间");
-        Assert.hasKeyAndValue(reqJson, "pointEndTime", "必填，请选择巡检结束时间");
-
-
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         inspectionBMOImpl.updateInspectionPoint(reqJson, context);
     }
 

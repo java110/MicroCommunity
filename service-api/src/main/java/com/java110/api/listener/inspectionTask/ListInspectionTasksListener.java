@@ -10,6 +10,7 @@ import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeInspectionTaskConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.inspectionTask.ApiInspectionTaskDataVo;
 import com.java110.vo.api.inspectionTask.ApiInspectionTaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * 查询小区侦听类
@@ -70,6 +70,10 @@ public class ListInspectionTasksListener extends AbstractServiceApiListener {
             inspectionTaskDto.setStates(reqJson.getString("moreState").split(","));
         }
 
+        //查询当天巡检任务标识
+        if (!StringUtil.isEmpty(reqJson.getString("isToday"))) {
+            inspectionTaskDto.setDayTask(reqJson.getString("isToday"));
+        }
         int count = inspectionTaskInnerServiceSMOImpl.queryInspectionTasksCount(inspectionTaskDto);
 
         List<ApiInspectionTaskDataVo> inspectionTasks = null;

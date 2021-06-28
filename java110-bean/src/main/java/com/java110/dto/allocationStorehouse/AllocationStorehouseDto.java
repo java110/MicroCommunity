@@ -14,10 +14,12 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class AllocationStorehouseDto extends PageDto implements Serializable {
-    public static final String STATE_APPLY = "1200";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败
-    public static final String STATE_AUDIT = "1201";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败
-    public static final String STATE_SUCCESS = "1202";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败
-    public static final String STATE_FAIL = "1203";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败
+    public static final String STATE_APPLY = "1200";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败 1204 调拨已审核 1205 已退还
+    public static final String STATE_AUDIT = "1201";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败 1204 调拨已审核 1205 已退还
+    public static final String STATE_SUCCESS = "1202";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败 1204 调拨已审核 1205 已退还
+    public static final String STATE_FAIL = "1203";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败 1204 调拨已审核 1205 已退还
+    public static final String STATE_REVIEWED = "1204";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败 1204 调拨已审核 1205 已退还
+    public static final String STATE_RETURN = "1205";//状态，1200 调拨申请 1201 调拨审核 1202 调拨完成 1203 调拨失败 1204 调拨已审核 1205 已退还
     private String asId;
     private String[] asIds;
     private String storeId;
@@ -53,6 +55,8 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String staffId;
     private String staffName;
     private String staffTel;
+    private String applyType;
+    private String applyTypeName;
 
     public String getAsId() {
         return asId;
@@ -317,5 +321,22 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setRssId(String rssId) {
         this.rssId = rssId;
+    }
+
+
+    public String getApplyType() {
+        return applyType;
+    }
+
+    public void setApplyType(String applyType) {
+        this.applyType = applyType;
+    }
+
+    public String getApplyTypeName() {
+        return applyTypeName;
+    }
+
+    public void setApplyTypeName(String applyTypeName) {
+        this.applyTypeName = applyTypeName;
     }
 }

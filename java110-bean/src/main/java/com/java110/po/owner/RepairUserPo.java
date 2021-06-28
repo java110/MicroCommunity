@@ -28,6 +28,7 @@ public class RepairUserPo implements Serializable {
     private String createTime;
     private String bId;
     private String statusCd = "0";
+    private String flag = "0";
 
     public String getRuId() {
         return ruId;
@@ -163,5 +164,13 @@ public class RepairUserPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 }

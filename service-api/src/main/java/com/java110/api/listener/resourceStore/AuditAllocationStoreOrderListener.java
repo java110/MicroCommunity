@@ -20,6 +20,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -79,7 +80,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
         allocationStorehouseDto.setAuditCode(reqJson.getString("state"));
         allocationStorehouseDto.setAuditMessage(reqJson.getString("remark"));
         allocationStorehouseDto.setCurrentUserId(reqJson.getString("userId"));
-
+        allocationStorehouseDto.setNoticeState(reqJson.getString("noticeState"));
         AllocationStorehouseApplyDto tmpAllocationStorehouseDto = new AllocationStorehouseApplyDto();
         tmpAllocationStorehouseDto.setApplyId(reqJson.getString("applyId"));
         tmpAllocationStorehouseDto.setStoreId(reqJson.getString("storeId"));
@@ -92,9 +93,13 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
         if (isLastTask) {
             updateAllocationStorehouse(reqJson, context);
         } else if (reqJson.getString("state").equals("1100")) {  //审核同意时，状态变为调拨审核  1100同意状态
+            String procure = reqJson.getString("procure");
             AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
             allocationStorehouseApplyPo.setApplyId(allocationStorehouseDtos.get(0).getApplyId());
             allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_AUDIT);
+            if(!StringUtil.isEmpty(procure) && procure.equals("true")){
+                allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_REVIEWED);
+            }
             super.update(context, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
         } else if (reqJson.getString("state").equals("1200")) {  //审核拒绝时，状态变为调拨失败  1200拒绝状态
             revokeAllocationStorehouse(reqJson, context);
@@ -120,7 +125,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
         businessComplaint.put("state", AllocationStorehouseDto.STATE_SUCCESS);
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = BeanConvertUtil.covertBean(businessComplaint, AllocationStorehouseApplyPo.class);
 
-        if (allocationStorehouseApplyDtos.get(0).getState().equals("1201")) {
+        if (allocationStorehouseApplyDtos.get(0).getState().equals("1201") || allocationStorehouseApplyDtos.get(0).getState().equals("1204")) {
             super.update(dataFlowContext, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
             //调拨详情
             AllocationStorehouseDto tmpAllocationStorehouseDto = new AllocationStorehouseDto();
@@ -132,7 +137,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                 //查询是否新仓库有此物品
                 ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
                 resourceStoreDto.setShId(allocationStorehouseDto.getShIdz());
-                resourceStoreDto.setName(allocationStorehouseDto.getResName());
+                resourceStoreDto.setResCode(allocationStorehouseDto.getResCode());
                 List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
                 ResourceStorePo resourceStorePo = new ResourceStorePo();
 

@@ -50,6 +50,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/loginStaffWechatAuth,");//查询大类
         exclusions.append("/app/staffAuth");//查询大类
 
+
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/");

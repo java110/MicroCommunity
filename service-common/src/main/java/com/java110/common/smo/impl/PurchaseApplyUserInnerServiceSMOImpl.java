@@ -1,19 +1,23 @@
 package com.java110.common.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
+import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
-import com.java110.intf.common.IAuditUserInnerServiceSMO;
 import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.store.IComplaintInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.machine.MachineRecordPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -34,7 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
 public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO implements IPurchaseApplyUserInnerServiceSMO {
 
@@ -48,24 +51,19 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
     private TaskService taskService;
 
     @Autowired
-    private HistoryService historyService;
-
-    @Autowired
-    private RepositoryService repositoryService;
-
-
-    @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
     private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
 
     @Autowired
-    private IAuditUserInnerServiceSMO auditUserInnerServiceSMOImpl;
-
-    @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
 
+    @Autowired
+    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
+
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
     /**
      * 启动流程
@@ -73,6 +71,8 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
      * @return
      */
     public PurchaseApplyDto startProcess(@RequestBody PurchaseApplyDto purchaseApplyDto) {
+        //获取出入库状态
+        String resOrderType = purchaseApplyDto.getResOrderType();
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("purchaseApplyDto", purchaseApplyDto);
@@ -81,15 +81,34 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("startUserId", purchaseApplyDto.getCurrentUserId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(purchaseApplyDto.getStoreId()), purchaseApplyDto.getApplyOrderId(), variables);
-//        //将得到的实例流程id值赋给之前设置的变量
+        //获取申请id
+        String applyOrderId = processInstance.getBusinessKey();
+        //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
-//        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
-//
+        String processDefinitionId = processInstance.getProcessDefinitionId();
+        //获取下级处理人id
+        PurchaseApplyDto purchaseDto = new PurchaseApplyDto();
+        purchaseDto.setActRuTaskId(processInstanceId);
+        purchaseDto.setProcDefId(processDefinitionId);
+        purchaseDto.setBusinessKey(applyOrderId);
+        List<PurchaseApplyDto> actRuTaskUserIds = purchaseApplyInnerServiceSMOImpl.getActRuTaskUserId(purchaseDto);
+        if (actRuTaskUserIds != null && actRuTaskUserIds.size() > 0) {
+            for (PurchaseApplyDto purchaseApply : actRuTaskUserIds) {
+                String actRuTaskUserId = purchaseApply.getTaskUserId();
+                MachineRecordPo machineRecordPo = new MachineRecordPo();
+                machineRecordPo.setApplyOrderId(applyOrderId);
+                machineRecordPo.setPurchaseUserId(actRuTaskUserId);
+                machineRecordPo.setResOrderType(resOrderType);
+                //传送databus
+                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                        BusinessTypeConstant.BUSINESS_TYPE_DATABUS_PURCHASE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
+            }
+        }
+        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
         purchaseApplyDto.setProcessInstanceId(processInstanceId);
         //autoFinishFirstTask(purchaseApplyDto);
         return purchaseApplyDto;
     }
-
 
     private String getWorkflowDto(String storeId) {
         //开启流程
@@ -266,6 +285,17 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
 
     public boolean completeTask(@RequestBody PurchaseApplyDto purchaseApplyDto) {
+        //获取状态标识
+        String noticeState = purchaseApplyDto.getNoticeState();
+        //获取审批状态
+        String auditCode = purchaseApplyDto.getAuditCode();
+        //获取拒绝理由
+        String auditMessage = "";
+        if (!StringUtil.isEmpty(auditCode) && auditCode.equals("1200")) {
+            auditMessage = purchaseApplyDto.getAuditMessage();
+        }
+        //获取出入库状态
+        String resOrderType = purchaseApplyDto.getResOrderType();
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(purchaseApplyDto.getTaskId()).singleResult();
         String processInstanceId = task.getProcessInstanceId();
@@ -277,10 +307,34 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("flag", "1200".equals(purchaseApplyDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", purchaseApplyDto.getStartUserId());
         taskService.complete(purchaseApplyDto.getTaskId(), variables);
-
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
             return true;
+        }
+        //获取申请id
+        String applyOrderId = pi.getBusinessKey();
+        //将得到的实例流程id值赋给之前设置的变量
+        String processId = pi.getId();
+        String processDefinitionId = pi.getProcessDefinitionId();
+        //获取下级处理人id
+        PurchaseApplyDto purchaseDto = new PurchaseApplyDto();
+        purchaseDto.setActRuTaskId(processId);
+        purchaseDto.setProcDefId(processDefinitionId);
+        purchaseDto.setBusinessKey(applyOrderId);
+        List<PurchaseApplyDto> actRuTaskUserIds = purchaseApplyInnerServiceSMOImpl.getActRuTaskUserId(purchaseDto);
+        if (actRuTaskUserIds != null && actRuTaskUserIds.size() > 0) {
+            for (PurchaseApplyDto purchaseApply : actRuTaskUserIds) {
+                String actRuTaskUserId = purchaseApply.getTaskUserId();
+                MachineRecordPo machineRecordPo = new MachineRecordPo();
+                machineRecordPo.setApplyOrderId(applyOrderId);
+                machineRecordPo.setPurchaseUserId(actRuTaskUserId);
+                machineRecordPo.setNoticeState(noticeState);
+                machineRecordPo.setResOrderType(resOrderType);
+                machineRecordPo.setAuditMessage(auditMessage);
+                //传送databus
+                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                        BusinessTypeConstant.BUSINESS_TYPE_DATABUS_PURCHASE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
+            }
         }
         return false;
     }
@@ -315,28 +369,30 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
     public PurchaseApplyDto getTaskCurrentUser(@RequestBody PurchaseApplyDto purchaseApplyDto) {
 
         TaskService taskService = processEngine.getTaskService();
-        Task task = taskService.createTaskQuery().processInstanceBusinessKey(purchaseApplyDto.getApplyOrderId()).singleResult();
+        List<Task> taskList = taskService.createTaskQuery().processInstanceBusinessKey(purchaseApplyDto.getApplyOrderId()).list();
 
-        if (task == null) {
+        if (taskList == null) {
             purchaseApplyDto.setStaffId("");
             purchaseApplyDto.setStaffName("");
             purchaseApplyDto.setStaffTel("");
             return purchaseApplyDto;
         }
+        for (Task task : taskList) {
+            String userId = task.getAssignee();
+            List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
 
-        String userId = task.getAssignee();
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
+            if (users == null || users.size() == 0) {
+                purchaseApplyDto.setStaffId("");
+                purchaseApplyDto.setStaffName("");
+                purchaseApplyDto.setStaffTel("");
+                return purchaseApplyDto;
+            }
 
-        if (users == null || users.size() == 0) {
-            purchaseApplyDto.setStaffId("");
-            purchaseApplyDto.setStaffName("");
-            purchaseApplyDto.setStaffTel("");
-            return purchaseApplyDto;
+            purchaseApplyDto.setCurrentUserId(userId);
+            purchaseApplyDto.setStaffName(users.get(0).getName());
+            purchaseApplyDto.setStaffTel(users.get(0).getTel());
         }
 
-        purchaseApplyDto.setCurrentUserId(userId);
-        purchaseApplyDto.setStaffName(users.get(0).getName());
-        purchaseApplyDto.setStaffTel(users.get(0).getTel());
         return purchaseApplyDto;
 
     }

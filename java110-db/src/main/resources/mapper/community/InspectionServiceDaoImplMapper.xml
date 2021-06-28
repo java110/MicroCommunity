@@ -7,9 +7,9 @@
     <!-- 保存巡检点信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionInfo" parameterType="Map">
         insert into business_inspection_point
-        (inspection_id,operate,remark,inspection_name,community_id,b_id,point_obj_type,point_obj_id,point_obj_name,point_start_time,point_end_time)
+        (inspection_id,operate,remark,inspection_name,community_id,b_id,point_obj_type,point_obj_id,point_obj_name)
         values
-        (#{inspectionId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId},#{pointObjType},#{pointObjId},#{pointObjName},#{pointStartTime},#{pointEndTime})
+        (#{inspectionId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId},#{pointObjType},#{pointObjId},#{pointObjName})
     </insert>
 
     <!-- 查询巡检点信息（Business） add by wuxw 2018-07-03 -->
@@ -17,7 +17,7 @@
         select t.inspection_id,t.inspection_id inspectionId,t.operate,t.remark,t.inspection_name,t.inspection_name
         inspectionName,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.point_obj_type,t.point_obj_id,t.point_obj_name,
-        t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName,t.point_start_time,t.point_start_time pointStartTime,t.point_end_time,t.point_end_time pointEndTime
+        t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName
         from business_inspection_point t
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
@@ -45,11 +45,10 @@
         insert into
         inspection_point(
         inspection_id,remark,status_cd,inspection_name,community_id,b_id,
-        point_obj_type,point_obj_id,point_obj_name,point_start_time,point_end_time
+        point_obj_type,point_obj_id,point_obj_name
         ) select t.inspection_id,t.remark,'0',t.inspection_name,t.community_id,t.b_id,
-        t.point_obj_type,t.point_obj_id,t.point_obj_name,t.point_start_time,t.point_end_time
-        from
-        business_inspection_point t where 1=1
+        t.point_obj_type,t.point_obj_id,t.point_obj_name
+        from business_inspection_point t where 1=1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
@@ -75,7 +74,7 @@
         t.inspection_name,t.inspection_name inspectionName,t.community_id,
         t.community_id communityId,t.b_id,t.b_id bId,
         t.point_obj_type,t.point_obj_type pointObjType,td.name pointTypeName,t.point_obj_id,
-        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName,t.point_start_time,t.point_start_time pointStartTime,t.point_end_time,t.point_end_time pointEndTime
+        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName
         from inspection_point t
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
             left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
@@ -128,7 +127,7 @@
         <if test="pointObjName !=null and pointObjName != ''">
             , t.point_obj_name= #{pointObjName}
         </if>
-        <if test="remark !=null and remark != ''">
+        <if test="remark !=null ">
             , t.remark= #{remark}
         </if>
         <if test="inspectionName !=null and inspectionName != ''">
@@ -136,12 +135,6 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
-        </if>
-        <if test="pointStartTime !=null">
-            , t.point_start_time= #{pointStartTime}
-        </if>
-        <if test="pointEndTime !=null">
-            , t.point_end_time= #{pointEndTime}
         </if>
         where 1=1
         <if test="inspectionId !=null and inspectionId != ''">
@@ -192,7 +185,7 @@
         t.inspection_name,t.inspection_name inspectionName,t.community_id,
         t.community_id communityId,t.b_id,t.b_id bId,
         t.point_obj_type,t.point_obj_type pointObjType,td.name pointTypeName,t.point_obj_id,
-        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName,t.point_start_time,t.point_start_time pointStartTime,t.point_end_time,t.point_end_time pointEndTime
+        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName
         from inspection_point t
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and
         c.inspection_route_id = #{inspectionRouteId}
@@ -274,7 +267,7 @@
         t.inspection_id,t.inspection_id inspectionId,t.machine_id,
         t.machine_id machineId,t.remark,t.status_cd,t.status_cd statusCd,
         t.inspection_name,t.inspection_name inspectionName,t.community_id,
-        t.community_id communityId,t.b_id,t.b_id bId,t.point_start_time,t.point_start_time pointStartTime,t.point_end_time,t.point_end_time pointEndTime,
+        t.community_id communityId,t.b_id,t.b_id bId
         m.machine_code machineCode,m.machine_name machineName,location_type_cd locationTypeCd,location_obj_id
         locationObjId,m.machine_id machineId,
         d.name locationTypeName

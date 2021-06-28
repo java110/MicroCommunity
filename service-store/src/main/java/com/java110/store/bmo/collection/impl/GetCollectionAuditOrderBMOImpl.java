@@ -40,7 +40,7 @@ public class GetCollectionAuditOrderBMOImpl implements IGetCollectionAuditOrderB
             for (ApiResourceOrderDataVo apiResourceOrderDataVo : auditOrders) {
                 switch (apiResourceOrderDataVo.getState()) {
                     case "1000":
-                        apiResourceOrderDataVo.setStateName("待审核");
+                        apiResourceOrderDataVo.setStateName("未审核");
                         break;
                     case "1001":
                         apiResourceOrderDataVo.setStateName("审核中");

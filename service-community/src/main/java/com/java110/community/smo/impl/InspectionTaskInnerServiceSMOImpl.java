@@ -186,6 +186,11 @@ public class InspectionTaskInnerServiceSMOImpl extends BaseServiceSMO implements
         return inspectionTaskServiceDaoImpl.insertInspectionTaskDetail(task);
     }
 
+    @Override
+    public void updateInspectionTask(@RequestBody InspectionTaskDto inspectionTaskDto) {
+        inspectionTaskServiceDaoImpl.updateInspectionTaskInfoInstance(BeanConvertUtil.beanCovertMap(inspectionTaskDto));
+    }
+
     public IInspectionTaskServiceDao getInspectionTaskServiceDaoImpl() {
         return inspectionTaskServiceDaoImpl;
     }

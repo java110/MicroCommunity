@@ -230,7 +230,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         Calendar configEndTime = Calendar.getInstance();
         configStartTime.setTime(tmpReportFeeDto.getConfigEndTime());
         int endYear = configEndTime.get(Calendar.YEAR);
-        int curYear = Calendar.getInstance().get(Calendar.YEAR);
+        int curYear = Calendar.getInstance().get(Calendar.YEAR)+1;
         double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, null, tmpReportCarDto);
         tmpReportFeeDto.setFeePrice(feePrice);
 
@@ -322,7 +322,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         int endYear = configEndTime.get(Calendar.YEAR);
 
         //当前年
-        int curYear = Calendar.getInstance().get(Calendar.YEAR);
+        int curYear = Calendar.getInstance().get(Calendar.YEAR)+1;
 
         double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, null);
         tmpReportFeeDto.setFeePrice(feePrice);

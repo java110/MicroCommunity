@@ -65,12 +65,13 @@ public class PurchaseApi {
         purchaseApplyPo.setCreateUserId(userId);
         purchaseApplyPo.setCreateUserName(userName);
         purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_APPLY);
+        purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             resourceStore.remove("price");//采购价格默认空
-            resourceStore.put("originalStock",resourceStore.get("stock"));
+            resourceStore.put("originalStock", resourceStore.get("stock"));
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
@@ -131,6 +132,7 @@ public class PurchaseApi {
         purchaseApplyPo.setCreateUserId(userId);
         purchaseApplyPo.setCreateUserName(userName);
         purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT);
+        purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {

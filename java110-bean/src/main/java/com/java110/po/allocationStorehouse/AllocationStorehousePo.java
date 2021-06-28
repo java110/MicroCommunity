@@ -12,7 +12,6 @@ public class AllocationStorehousePo implements Serializable {
     private String startUserId;
     private String shIda;
     private String startUserName;
-    private String state;
     private String stock;
     private String remark;
     private String statusCd = "0";
@@ -81,14 +80,6 @@ public class AllocationStorehousePo implements Serializable {
 
     public void setStartUserName(String startUserName) {
         this.startUserName = startUserName;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public String getStock() {

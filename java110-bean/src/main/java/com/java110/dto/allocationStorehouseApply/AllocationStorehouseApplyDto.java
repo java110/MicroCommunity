@@ -34,10 +34,18 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     private String staffTel;
     private String startTime;
     private String endTime;
+    private String communityId;
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    //状态标识
+    private String noticeState;
+
+    //调拨返还状态标识
+    private String applyType;
+    private String applyTypeName;
 
     public String getApplyId() {
         return applyId;
@@ -94,7 +102,6 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -206,5 +213,37 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getNoticeState() {
+        return noticeState;
+    }
+
+    public void setNoticeState(String noticeState) {
+        this.noticeState = noticeState;
+    }
+
+    public String getApplyType() {
+        return applyType;
+    }
+
+    public void setApplyType(String applyType) {
+        this.applyType = applyType;
+    }
+
+    public String getApplyTypeName() {
+        return applyTypeName;
+    }
+
+    public void setApplyTypeName(String applyTypeName) {
+        this.applyTypeName = applyTypeName;
     }
 }

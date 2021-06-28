@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.IApiBaseBMO;
 import com.java110.core.context.DataFlowContext;
 
+import java.text.ParseException;
+
 public interface IInspectionTaskDetailBMO extends IApiBaseBMO {
 
 
@@ -22,7 +24,7 @@ public interface IInspectionTaskDetailBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    void updateInspectionTaskDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void updateInspectionTaskDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) throws ParseException;
 
 
 

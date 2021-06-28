@@ -95,6 +95,7 @@ public class AccountWithdrawalApplyApi {
     public ResponseEntity<String> queryAccountWithdrawalApply(@RequestParam(value = "page") int page,
                                                               @RequestParam(value = "row") int row,
                                                               @RequestParam(value = "applyUserName",required = false) String applyUserName,
+                                                              @RequestParam(value = "bankCode",required = false) String bankCode,
                                                               @RequestParam(value = "applyUserTel",required = false) String applyUserTel,
                                                               @RequestParam(value = "state",required = false) String state) {
         AccountWithdrawalApplyDto accountWithdrawalApplyDto = new AccountWithdrawalApplyDto();
@@ -102,6 +103,8 @@ public class AccountWithdrawalApplyApi {
         accountWithdrawalApplyDto.setRow(row);
         accountWithdrawalApplyDto.setApplyUserName(applyUserName);
         accountWithdrawalApplyDto.setApplyUserTel(applyUserTel);
+        accountWithdrawalApplyDto.setBankCode(bankCode);
+
         if(null == state || "".equals( state )){
             state = "";
         }

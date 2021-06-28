@@ -56,6 +56,16 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String createUserName;
     private String price;
     private String supplierName;
+    private String communityId;
+
+    //下级处理人id
+    private String taskUserId;
+    private String actRuTaskId;
+    private String procDefId;
+    private String businessKey;
+
+    //状态标识
+    private String noticeState;
 
     public String getResOrderType() {
         return resOrderType;
@@ -112,7 +122,6 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 
     public String getCreateTime() {
         return createTime;
@@ -193,7 +202,6 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     public void setbId(String bId) {
         this.bId = bId;
     }
-
 
     public String getEndUserName() {
         return endUserName;
@@ -289,5 +297,53 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public String getTaskUserId() {
+        return taskUserId;
+    }
+
+    public void setTaskUserId(String taskUserId) {
+        this.taskUserId = taskUserId;
+    }
+
+    public String getActRuTaskId() {
+        return actRuTaskId;
+    }
+
+    public void setActRuTaskId(String actRuTaskId) {
+        this.actRuTaskId = actRuTaskId;
+    }
+
+    public String getProcDefId() {
+        return procDefId;
+    }
+
+    public void setProcDefId(String procDefId) {
+        this.procDefId = procDefId;
+    }
+
+    public String getBusinessKey() {
+        return businessKey;
+    }
+
+    public void setBusinessKey(String businessKey) {
+        this.businessKey = businessKey;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getNoticeState() {
+        return noticeState;
+    }
+
+    public void setNoticeState(String noticeState) {
+        this.noticeState = noticeState;
     }
 }

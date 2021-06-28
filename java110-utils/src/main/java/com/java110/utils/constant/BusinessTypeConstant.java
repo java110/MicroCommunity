@@ -1100,6 +1100,12 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL="500200030002";
 
     /**
+     *  修改巡检路线设备关联关系
+     *  4 删除
+     */
+    public static final String BUSINESS_TYPE_UPDATE_INSPECTION_ROUTE_POINT_REL ="500200040002";
+
+    /**
      *  删除巡检路线设备关联关系
      *  5 删除
      */
@@ -1432,7 +1438,15 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG = "990000060001";
 
+    /**
+     * 物品申请通知节点流
+     */
+    public static final String BUSINESS_TYPE_DATABUS_PURCHASE_APPLY = "/purchase/purchaseApply";
 
+    /**
+     * 物品调拨通知节点流
+     */
+    public static final String BUSINESS_TYPE_DATABUS_ALLOCATION_STOREHOUSE_APPLY = "671100030005";
 
     /**
      *  修改工作流节点 处理员工

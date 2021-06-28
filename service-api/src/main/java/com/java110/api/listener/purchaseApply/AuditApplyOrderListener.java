@@ -1,7 +1,6 @@
 package com.java110.api.listener.purchaseApply;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.auditApplyOrder.IApplyOrderBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -26,9 +25,6 @@ import java.util.List;
  */
 @Java110Listener("auditApplyOrderListener")
 public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
-
-    @Autowired
-    private IApplyOrderBMO iApplyOrderBMOImpl;
 
     @Autowired
     private IPurchaseApplyUserInnerServiceSMO purchaseApplyUserInnerServiceSMOImpl;
@@ -66,26 +62,31 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
         purchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
         purchaseApplyDto.setStoreId(reqJson.getString("storeId"));
         purchaseApplyDto.setAuditCode(reqJson.getString("state"));
+        purchaseApplyDto.setNoticeState(reqJson.getString("noticeState"));
         purchaseApplyDto.setAuditMessage(reqJson.getString("remark"));
         purchaseApplyDto.setCurrentUserId(reqJson.getString("userId"));
+        purchaseApplyDto.setCommunityId(reqJson.getString("communityId"));
         PurchaseApplyDto tmpPurchaseApplyDto = new PurchaseApplyDto();
         tmpPurchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
         tmpPurchaseApplyDto.setStoreId(reqJson.getString("storeId"));
         List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(tmpPurchaseApplyDto);
         Assert.listOnlyOne(purchaseApplyDtos, "采购申请单存在多条");
         purchaseApplyDto.setStartUserId(purchaseApplyDtos.get(0).getUserId());
+        purchaseApplyDto.setResOrderType(purchaseApplyDtos.get(0).getResOrderType());
         if (purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_WAIT_DEAL) && reqJson.getString("state").equals("1100")) {  //如果状态是未审核 并且是审核通过，就变成审核中
             PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
             purchaseApplyPo.setState(purchaseApplyDto.STATE_DEALING);
             super.update(context, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
+            super.commit(context);
         }
+
         boolean isLastTask = purchaseApplyUserInnerServiceSMOImpl.completeTask(purchaseApplyDto);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         if (isLastTask && purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_AUDITED)) {//已经是已审核入库完成的状态进行更新状态
             updatePurchaseApply(reqJson, context);
         }
-        if (reqJson.getString("state").equals("1200") && !isLastTask) {//审核拒绝时，状态变为  1200拒绝状态
+        if (reqJson.getString("state").equals("1200") && !isLastTask) {//审核拒绝时，状态变为拒绝状态
             PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
             purchaseApplyPo.setState(purchaseApplyDto.STATE_NOT_PASS);

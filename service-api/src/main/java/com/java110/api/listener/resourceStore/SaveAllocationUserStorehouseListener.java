@@ -7,9 +7,12 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeAllocationUserStorehouseConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.DataFlowContext;
+import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import com.java110.core.annotation.Java110Listener;
+import org.springframework.http.ResponseEntity;
 
 /**
  * 保存商户侦听
@@ -30,6 +33,13 @@ public class SaveAllocationUserStorehouseListener extends AbstractServiceApiPlus
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        String userId = reqJson.getString("userId");
+        String acceptUserId = reqJson.getString("acceptUserId");
+        if(!StringUtil.isEmpty(userId) && !StringUtil.isEmpty(acceptUserId) && acceptUserId.equals(userId)){
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "物品接受人不能是本人，所以无法进行转增操作！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         allocationUserStorehouseBMOImpl.addAllocationUserStorehouse(reqJson, context);
     }
 

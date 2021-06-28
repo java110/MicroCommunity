@@ -185,5 +185,18 @@ public class PurchaseApplyServiceDaoImpl extends BaseServiceDao implements IPurc
         return saveFlag;
     }
 
+    /**
+     * 获得下级处理人id
+     *
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> getActRuTaskUserId(Map info) {
+        logger.debug("获得下级处理人id信息入参 info : {}", info);
+        List<Map> purchaseApplys = sqlSessionTemplate.selectList("purchaseApplyServiceDaoImpl.getActRuTaskUserId", info);
+        return purchaseApplys;
+    }
+
 
 }

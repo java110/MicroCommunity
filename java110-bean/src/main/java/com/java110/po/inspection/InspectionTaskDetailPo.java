@@ -22,6 +22,23 @@ public class InspectionTaskDetailPo implements Serializable {
 
     private String patrolType;
     private String description;
+    private String pointStartTime;
+    private String pointEndTime;
+    private String sortNumber;
+
+    //经度
+    private String longitude;
+
+    //维度
+    private String latitude;
+
+    //巡检点打卡时间
+    private String inspectionTime;
+
+    //签到状态
+    private String inspectionState;
+    private String actUserId;
+    private String actUserName;
 
     public String getTaskDetailId() {
         return taskDetailId;
@@ -85,5 +102,77 @@ public class InspectionTaskDetailPo implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getInspectionTime() {
+        return inspectionTime;
+    }
+
+    public void setInspectionTime(String inspectionTime) {
+        this.inspectionTime = inspectionTime;
+    }
+
+    public String getInspectionState() {
+        return inspectionState;
+    }
+
+    public void setInspectionState(String inspectionState) {
+        this.inspectionState = inspectionState;
+    }
+
+    public String getPointStartTime() {
+        return pointStartTime;
+    }
+
+    public void setPointStartTime(String pointStartTime) {
+        this.pointStartTime = pointStartTime;
+    }
+
+    public String getPointEndTime() {
+        return pointEndTime;
+    }
+
+    public void setPointEndTime(String pointEndTime) {
+        this.pointEndTime = pointEndTime;
+    }
+
+    public String getSortNumber() {
+        return sortNumber;
+    }
+
+    public void setSortNumber(String sortNumber) {
+        this.sortNumber = sortNumber;
+    }
+
+    public String getActUserId() {
+        return actUserId;
+    }
+
+    public void setActUserId(String actUserId) {
+        this.actUserId = actUserId;
+    }
+
+    public String getActUserName() {
+        return actUserName;
+    }
+
+    public void setActUserName(String actUserName) {
+        this.actUserName = actUserName;
     }
 }

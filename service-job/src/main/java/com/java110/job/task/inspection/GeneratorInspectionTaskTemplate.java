@@ -168,11 +168,14 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
         inspectionTaskPo.setCommunityId(tmpInspectionPlanDto.getCommunityId());
         inspectionTaskPo.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
         inspectionTaskPo.setPlanInsTime(nowTime + tmpInspectionPlanStaffDto.getStartTime() + ":00");
+        inspectionTaskPo.setPlanEndTime(nowTime + tmpInspectionPlanStaffDto.getEndTime() + ":00");
         inspectionTaskPo.setPlanUserId(tmpInspectionPlanStaffDto.getStaffId());
         inspectionTaskPo.setPlanUserName(tmpInspectionPlanStaffDto.getStaffName());
         inspectionTaskPo.setSignType(tmpInspectionPlanDto.getSignType());
         inspectionTaskPo.setTaskId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskId));
-
+        inspectionTaskPo.setOriginalPlanUserId(tmpInspectionPlanStaffDto.getStaffId());
+        inspectionTaskPo.setOriginalPlanUserName(tmpInspectionPlanStaffDto.getStaffName());
+        inspectionTaskPo.setTaskType("1000");
 
         InspectionRoutePointRelDto inspectionRoutePointRelDto = new InspectionRoutePointRelDto();
         inspectionRoutePointRelDto.setCommunityId(tmpInspectionPlanDto.getCommunityId());
@@ -188,6 +191,9 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
             inspectionTaskDetailPo.setInspectionId(tmpInspectionRoutePointRelDto.getInspectionId());
             inspectionTaskDetailPo.setInspectionName(tmpInspectionRoutePointRelDto.getInspectionName());
             inspectionTaskDetailPo.setTaskId(inspectionTaskPo.getTaskId());
+            inspectionTaskDetailPo.setPointStartTime(tmpInspectionRoutePointRelDto.getPointStartTime());
+            inspectionTaskDetailPo.setPointEndTime(tmpInspectionRoutePointRelDto.getPointEndTime());
+            inspectionTaskDetailPo.setSortNumber(tmpInspectionRoutePointRelDto.getSortNumber());
             inspectionTaskDetailPo.setTaskDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskDetailId));
             inspectionTaskDetailPos.add(inspectionTaskDetailPo);
         }

@@ -19,8 +19,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractAllocationStorehouseBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(AbstractAllocationStorehouseBusinessServiceDataFlowListener.class);
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractAllocationStorehouseBusinessServiceDataFlowListener.class);
 
     /**
      * 获取 DAO工具类
@@ -46,7 +46,6 @@ public abstract class AbstractAllocationStorehouseBusinessServiceDataFlowListene
         businessAllocationStorehouseInfo.put("operate", businessAllocationStorehouseInfo.get("operate"));
         businessAllocationStorehouseInfo.put("shIda", businessAllocationStorehouseInfo.get("sh_id_a"));
         businessAllocationStorehouseInfo.put("startUserName", businessAllocationStorehouseInfo.get("start_user_name"));
-        businessAllocationStorehouseInfo.put("state", businessAllocationStorehouseInfo.get("state"));
         businessAllocationStorehouseInfo.put("stock", businessAllocationStorehouseInfo.get("stock"));
         businessAllocationStorehouseInfo.put("originalStock", businessAllocationStorehouseInfo.get("original_stock"));
         businessAllocationStorehouseInfo.put("remark", businessAllocationStorehouseInfo.get("remark"));
@@ -84,7 +83,6 @@ public abstract class AbstractAllocationStorehouseBusinessServiceDataFlowListene
         currentAllocationStorehouseInfo.put("operate", currentAllocationStorehouseInfo.get("operate"));
         currentAllocationStorehouseInfo.put("shIda", currentAllocationStorehouseInfo.get("sh_id_a"));
         currentAllocationStorehouseInfo.put("startUserName", currentAllocationStorehouseInfo.get("start_user_name"));
-        currentAllocationStorehouseInfo.put("state", currentAllocationStorehouseInfo.get("state"));
         currentAllocationStorehouseInfo.put("stock", currentAllocationStorehouseInfo.get("stock"));
         currentAllocationStorehouseInfo.put("originalStock", currentAllocationStorehouseInfo.get("original_stock"));
         currentAllocationStorehouseInfo.put("remark", currentAllocationStorehouseInfo.get("remark"));

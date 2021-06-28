@@ -19,8 +19,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractInspectionTaskDetailBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(AbstractInspectionTaskDetailBusinessServiceDataFlowListener.class);
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractInspectionTaskDetailBusinessServiceDataFlowListener.class);
 
     /**
      * 获取 DAO工具类
@@ -45,11 +45,19 @@ public abstract class AbstractInspectionTaskDetailBusinessServiceDataFlowListene
         businessInspectionTaskDetailInfo.put("taskId", businessInspectionTaskDetailInfo.get("task_id"));
         businessInspectionTaskDetailInfo.put("taskDetailId", businessInspectionTaskDetailInfo.get("task_detail_id"));
         businessInspectionTaskDetailInfo.put("patrolType", businessInspectionTaskDetailInfo.get("patrol_type"));
+        businessInspectionTaskDetailInfo.put("inspectionTime", businessInspectionTaskDetailInfo.get("inspection_time"));
         businessInspectionTaskDetailInfo.put("description", businessInspectionTaskDetailInfo.get("description"));
+        businessInspectionTaskDetailInfo.put("longitude", businessInspectionTaskDetailInfo.get("longitude"));
+        businessInspectionTaskDetailInfo.put("latitude", businessInspectionTaskDetailInfo.get("latitude"));
+        businessInspectionTaskDetailInfo.put("inspectionState", businessInspectionTaskDetailInfo.get("inspection_state"));
+        businessInspectionTaskDetailInfo.put("pointStartTime", businessInspectionTaskDetailInfo.get("point_start_time"));
+        businessInspectionTaskDetailInfo.put("pointEndTime", businessInspectionTaskDetailInfo.get("point_end_time"));
+        businessInspectionTaskDetailInfo.put("sortNumber", businessInspectionTaskDetailInfo.get("sort_number"));
+        businessInspectionTaskDetailInfo.put("actUserId", businessInspectionTaskDetailInfo.get("act_user_id"));
+        businessInspectionTaskDetailInfo.put("actUserName", businessInspectionTaskDetailInfo.get("act_user_name"));
         businessInspectionTaskDetailInfo.remove("bId");
         businessInspectionTaskDetailInfo.put("statusCd", statusCd);
     }
-
 
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
@@ -57,7 +65,7 @@ public abstract class AbstractInspectionTaskDetailBusinessServiceDataFlowListene
      * @param businessInspectionTaskDetail 巡检任务明细信息
      */
     protected void autoSaveDelBusinessInspectionTaskDetail(Business business, JSONObject businessInspectionTaskDetail) {
-//自动插入DEL
+        //自动插入DEL
         Map info = new HashMap();
         info.put("taskDetailId", businessInspectionTaskDetail.getString("taskDetailId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
@@ -65,11 +73,8 @@ public abstract class AbstractInspectionTaskDetailBusinessServiceDataFlowListene
         if (currentInspectionTaskDetailInfos == null || currentInspectionTaskDetailInfos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
-
         Map currentInspectionTaskDetailInfo = currentInspectionTaskDetailInfos.get(0);
-
         currentInspectionTaskDetailInfo.put("bId", business.getbId());
-
         currentInspectionTaskDetailInfo.put("inspectionId", currentInspectionTaskDetailInfo.get("inspection_id"));
         currentInspectionTaskDetailInfo.put("operate", currentInspectionTaskDetailInfo.get("operate"));
         currentInspectionTaskDetailInfo.put("inspectionName", currentInspectionTaskDetailInfo.get("inspection_name"));
@@ -77,11 +82,17 @@ public abstract class AbstractInspectionTaskDetailBusinessServiceDataFlowListene
         currentInspectionTaskDetailInfo.put("communityId", currentInspectionTaskDetailInfo.get("community_id"));
         currentInspectionTaskDetailInfo.put("taskId", currentInspectionTaskDetailInfo.get("task_id"));
         currentInspectionTaskDetailInfo.put("taskDetailId", currentInspectionTaskDetailInfo.get("task_detail_id"));
-
         currentInspectionTaskDetailInfo.put("patrolType", currentInspectionTaskDetailInfo.get("patrol_type"));
+        currentInspectionTaskDetailInfo.put("inspectionTime", currentInspectionTaskDetailInfo.get("inspection_time"));
         currentInspectionTaskDetailInfo.put("description", currentInspectionTaskDetailInfo.get("description"));
-
-
+        currentInspectionTaskDetailInfo.put("longitude", currentInspectionTaskDetailInfo.get("longitude"));
+        currentInspectionTaskDetailInfo.put("latitude", currentInspectionTaskDetailInfo.get("latitude"));
+        currentInspectionTaskDetailInfo.put("inspectionState", currentInspectionTaskDetailInfo.get("inspection_state"));
+        currentInspectionTaskDetailInfo.put("pointStartTime", currentInspectionTaskDetailInfo.get("point_start_time"));
+        currentInspectionTaskDetailInfo.put("pointEndTime", currentInspectionTaskDetailInfo.get("point_end_time"));
+        currentInspectionTaskDetailInfo.put("sortNumber", currentInspectionTaskDetailInfo.get("sort_number"));
+        currentInspectionTaskDetailInfo.put("actUserId", currentInspectionTaskDetailInfo.get("act_user_id"));
+        currentInspectionTaskDetailInfo.put("actUserName", currentInspectionTaskDetailInfo.get("act_user_name"));
         currentInspectionTaskDetailInfo.put("operate", StatusConstant.OPERATE_DEL);
         getInspectionTaskDetailServiceDaoImpl().saveBusinessInspectionTaskDetailInfo(currentInspectionTaskDetailInfo);
         for (Object key : currentInspectionTaskDetailInfo.keySet()) {
@@ -90,6 +101,4 @@ public abstract class AbstractInspectionTaskDetailBusinessServiceDataFlowListene
             }
         }
     }
-
-
 }

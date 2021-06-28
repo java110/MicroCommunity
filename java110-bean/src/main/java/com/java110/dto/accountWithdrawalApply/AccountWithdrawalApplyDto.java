@@ -1,6 +1,8 @@
 package com.java110.dto.accountWithdrawalApply;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.accountBank.AccountBankDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class AccountWithdrawalApplyDto extends PageDto implements Serializable {
+public class AccountWithdrawalApplyDto extends AccountBankDto implements Serializable {
 
     private String applyId;
 private String applyUserName;

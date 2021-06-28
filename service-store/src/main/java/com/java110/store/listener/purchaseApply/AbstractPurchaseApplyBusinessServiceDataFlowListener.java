@@ -48,6 +48,7 @@ public abstract class AbstractPurchaseApplyBusinessServiceDataFlowListener exten
         businessPurchaseApplyInfo.put("userId", businessPurchaseApplyInfo.get("user_id"));
         businessPurchaseApplyInfo.put("endUserName", businessPurchaseApplyInfo.get("end_user_name"));
         businessPurchaseApplyInfo.put("endUserTel", businessPurchaseApplyInfo.get("end_user_tel"));
+        businessPurchaseApplyInfo.put("communityId", businessPurchaseApplyInfo.get("community_id"));
         businessPurchaseApplyInfo.remove("bId");
         businessPurchaseApplyInfo.put("statusCd", statusCd);
     }
@@ -83,6 +84,7 @@ public abstract class AbstractPurchaseApplyBusinessServiceDataFlowListener exten
         currentPurchaseApplyInfo.put("endUserTel", currentPurchaseApplyInfo.get("end_user_tel"));
         currentPurchaseApplyInfo.put("userName", currentPurchaseApplyInfo.get("userName"));
         currentPurchaseApplyInfo.put("createTime", currentPurchaseApplyInfo.get("createTime"));
+        currentPurchaseApplyInfo.put("communityId", currentPurchaseApplyInfo.get("community_id"));
         currentPurchaseApplyInfo.put("operate", StatusConstant.OPERATE_DEL);
         getPurchaseApplyServiceDaoImpl().saveBusinessPurchaseApplyInfo(currentPurchaseApplyInfo);
 

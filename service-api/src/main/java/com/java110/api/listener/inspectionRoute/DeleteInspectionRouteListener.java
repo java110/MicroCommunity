@@ -17,21 +17,20 @@ import com.alibaba.fastjson.JSONObject;
  */
 @Java110Listener("deleteInspectionRouteListener")
 public class DeleteInspectionRouteListener extends AbstractServiceApiPlusListener {
+
     @Autowired
     private IInspectionBMO inspectionBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "inspectionRouteId", "路线ID不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-       inspectionBMOImpl.deleteInspectionRoute(reqJson, context);
+        inspectionBMOImpl.deleteInspectionRoute(reqJson, context);
     }
 
     @Override

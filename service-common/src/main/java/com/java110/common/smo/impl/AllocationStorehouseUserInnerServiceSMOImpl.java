@@ -3,12 +3,19 @@ package com.java110.common.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
+import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
+import com.java110.po.machine.MachineRecordPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
@@ -47,6 +54,12 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
 
+    @Autowired
+    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
+
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
     /**
      * 启动流程
      *
@@ -63,11 +76,27 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
-
+        String processDefinitionId = processInstance.getProcessDefinitionId();
+        String businessKey = processInstance.getBusinessKey();
+        //获取下级处理人id
+        PurchaseApplyDto purchaseDto = new PurchaseApplyDto();
+        purchaseDto.setActRuTaskId(processInstanceId);
+        purchaseDto.setProcDefId(processDefinitionId);
+        purchaseDto.setBusinessKey(businessKey);
+        List<PurchaseApplyDto> actRuTaskUserIds = purchaseApplyInnerServiceSMOImpl.getActRuTaskUserId(purchaseDto);
         allocationStorehouseApplyDto.setProcessInstanceId(processInstanceId);
-
+        if (actRuTaskUserIds != null && actRuTaskUserIds.size() > 0) {
+            for (PurchaseApplyDto purchaseApply : actRuTaskUserIds) {
+                String actRuTaskUserId = purchaseApply.getTaskUserId();
+                MachineRecordPo machineRecordPo = new MachineRecordPo();
+                machineRecordPo.setApplyOrderId(businessKey);
+                machineRecordPo.setPurchaseUserId(actRuTaskUserId);
+                //传送databus
+                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                        BusinessTypeConstant.BUSINESS_TYPE_DATABUS_ALLOCATION_STOREHOUSE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
+            }
+        }
         return allocationStorehouseApplyDto;
-
     }
 
     /**
@@ -258,6 +287,15 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
 
 
     public boolean completeTask(@RequestBody AllocationStorehouseApplyDto allocationStorehouseApplyDto) {
+        //获取状态标识
+        String noticeState = allocationStorehouseApplyDto.getNoticeState();
+        //获取审批状态
+        String auditCode = allocationStorehouseApplyDto.getAuditCode();
+        //获取拒绝理由
+        String auditMessage = "";
+        if (!StringUtil.isEmpty(auditCode) && auditCode.equals("1200")) {
+            auditMessage = allocationStorehouseApplyDto.getAuditMessage();
+        }
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(allocationStorehouseApplyDto.getTaskId()).singleResult();
         String processInstanceId = task.getProcessInstanceId();
@@ -269,10 +307,31 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         variables.put("flag", "1200".equals(allocationStorehouseApplyDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", allocationStorehouseApplyDto.getStartUserId());
         taskService.complete(allocationStorehouseApplyDto.getTaskId(), variables);
-
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
             return true;
+        }
+        String rootProcessInstanceId = pi.getId();
+        String processDefinitionId = pi.getProcessDefinitionId();
+        String businessKey = pi.getBusinessKey();
+        //获取下级处理人id
+        PurchaseApplyDto purchaseDto = new PurchaseApplyDto();
+        purchaseDto.setActRuTaskId(rootProcessInstanceId);
+        purchaseDto.setProcDefId(processDefinitionId);
+        purchaseDto.setBusinessKey(businessKey);
+        List<PurchaseApplyDto> actRuTaskUserIds = purchaseApplyInnerServiceSMOImpl.getActRuTaskUserId(purchaseDto);
+        if (actRuTaskUserIds != null && actRuTaskUserIds.size() > 0) {
+            for (PurchaseApplyDto purchaseApply : actRuTaskUserIds) {
+                String actRuTaskUserId = purchaseApply.getTaskUserId();
+                MachineRecordPo machineRecordPo = new MachineRecordPo();
+                machineRecordPo.setApplyOrderId(businessKey);
+                machineRecordPo.setPurchaseUserId(actRuTaskUserId);
+                machineRecordPo.setNoticeState(noticeState);
+                machineRecordPo.setAuditMessage(auditMessage);
+                //传送databus
+                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                        BusinessTypeConstant.BUSINESS_TYPE_DATABUS_ALLOCATION_STOREHOUSE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
+            }
         }
         return false;
     }
