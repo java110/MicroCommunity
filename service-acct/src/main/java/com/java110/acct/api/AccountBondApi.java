@@ -45,6 +45,8 @@ public class AccountBondApi {
 
 
         AccountBondPo accountBondPo = BeanConvertUtil.covertBean(reqJson, AccountBondPo.class);
+        //保证金类型默认未店铺类型，为6006，暂时写死方便后期扩展其他类型。
+        accountBondPo.setBondType( "6006" );
         return saveAccountBondBMOImpl.save(accountBondPo);
     }
 
