@@ -4,7 +4,7 @@ import com.java110.acct.bmo.accountBank.ISaveAccountBankBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 
-import com.java110.intf.IAccountBankInnerServiceSMO;
+import com.java110.intf.acct.IAccountBankInnerServiceSMO;
 import com.java110.po.accountBank.AccountBankPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
