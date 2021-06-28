@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountBondServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存保证金信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAccountBondInfo" parameterType="Map">
+        insert into account_bond(
+amount,bond_id,bond_month,bond_type,obj_id,remark,bond_name
+) values (
+#{amount},#{bondId},#{bondMonth},#{bondType},#{objId},#{remark},#{bondName}
+)
+    </insert>
+
+
+
+    <!-- 查询保证金信息 add by wuxw 2018-07-03 -->
+    <select id="getAccountBondInfo" parameterType="Map" resultType="Map">
+        select  t.amount,t.bond_id,t.bond_id bondId,t.bond_month,t.bond_month bondMonth,t.create_time,t.create_time createTime,t.bond_type,t.bond_type bondType,t.obj_id,t.obj_id objId,t.remark,t.status_cd,t.status_cd statusCd,t.bond_name,t.bond_name bondName 
+from account_bond t 
+where 1 =1 
+<if test="amount !=null and amount != ''">
+   and t.amount= #{amount}
+</if> 
+<if test="bondId !=null and bondId != ''">
+   and t.bond_id= #{bondId}
+</if> 
+<if test="bondMonth !=null and bondMonth != ''">
+   and t.bond_month= #{bondMonth}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="bondType !=null and bondType != ''">
+   and t.bond_type= #{bondType}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="bondName !=null and bondName != ''">
+   and t.bond_name= #{bondName}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改保证金信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccountBondInfo" parameterType="Map">
+        update  account_bond t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="amount !=null and amount != ''">
+, t.amount= #{amount}
+</if> 
+<if test="bondMonth !=null and bondMonth != ''">
+, t.bond_month= #{bondMonth}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="bondType !=null and bondType != ''">
+, t.bond_type= #{bondType}
+</if> 
+<if test="objId !=null and objId != ''">
+, t.obj_id= #{objId}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="bondName !=null and bondName != ''">
+, t.bond_name= #{bondName}
+</if> 
+ where 1=1 <if test="bondId !=null and bondId != ''">
+and t.bond_id= #{bondId}
+</if> 
+
+    </update>
+
+    <!-- 查询保证金数量 add by wuxw 2018-07-03 -->
+     <select id="queryAccountBondsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from account_bond t 
+where 1 =1 
+<if test="amount !=null and amount != ''">
+   and t.amount= #{amount}
+</if> 
+<if test="bondId !=null and bondId != ''">
+   and t.bond_id= #{bondId}
+</if> 
+<if test="bondMonth !=null and bondMonth != ''">
+   and t.bond_month= #{bondMonth}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="bondType !=null and bondType != ''">
+   and t.bond_type= #{bondType}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="bondName !=null and bondName != ''">
+   and t.bond_name= #{bondName}
+</if> 
+
+
+     </select>
+
+</mapper>
