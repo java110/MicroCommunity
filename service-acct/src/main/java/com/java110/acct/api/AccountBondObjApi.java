@@ -62,12 +62,8 @@ public class AccountBondObjApi {
     public ResponseEntity<String> updateAccountBondObj(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "bobjId", "bobjId不能为空");
-        Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
         Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
-        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
-        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
-
 
 
         AccountBondObjPo accountBondObjPo = BeanConvertUtil.covertBean(reqJson, AccountBondObjPo.class);
