@@ -101,13 +101,15 @@ public class AccountBondObjDetailApi {
      * @return
      */
     @RequestMapping(value = "/queryAccountBondObjDetail", method = RequestMethod.GET)
-    public ResponseEntity<String> queryAccountBondObjDetail(@RequestParam(value = "detailId") String detailId,
+    public ResponseEntity<String> queryAccountBondObjDetail(@RequestParam(value = "detailId" , required = false) String detailId,
+                                                            @RequestParam(value = "bobjId" , required = false) String bobjId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         AccountBondObjDetailDto accountBondObjDetailDto = new AccountBondObjDetailDto();
         accountBondObjDetailDto.setPage(page);
         accountBondObjDetailDto.setRow(row);
         accountBondObjDetailDto.setDetailId( detailId );
+        accountBondObjDetailDto.setBobjId( bobjId );
         return getAccountBondObjDetailBMOImpl.get(accountBondObjDetailDto);
     }
 }
