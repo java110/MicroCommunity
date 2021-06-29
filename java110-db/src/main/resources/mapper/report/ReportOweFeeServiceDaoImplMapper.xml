@@ -87,9 +87,6 @@
     <update id="updateReportOweFeeInfo" parameterType="Map">
         update report_owe_fee t
         <set>
-            <if test="newBId != null and newBId != ''">
-                t.b_id = #{newBId},
-            </if>
             <if test="configName !=null and configName != ''">
                  t.config_name= #{configName},
             </if>
@@ -126,9 +123,7 @@
             <if test="endTime !=null and endTime != ''">
                  t.end_time= #{endTime},
             </if>
-            <if test="communityId !=null and communityId != ''">
-                 t.community_id= #{communityId},
-            </if>
+
             <if test="payerObjType !=null and payerObjType != ''">
                  t.payer_obj_type= #{payerObjType},
             </if>
@@ -138,7 +133,25 @@
         </set>
         where 1=1
             and t.owe_id= #{oweId}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </update>
 
+
+    <!-- 修改欠费统计信息 add by wuxw 2018-07-03 -->
+    <update id="deleteReportOweFeeInfo" parameterType="Map">
+        delete from report_owe_fee
+        where 1=1
+        <if test="oweId !=null and oweId != ''">
+            and owe_id= #{oweId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and fee_id = #{feeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and community_id= #{communityId}
+        </if>
     </update>
 
     <!-- 查询欠费统计数量 add by wuxw 2018-07-03 -->
