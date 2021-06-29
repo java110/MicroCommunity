@@ -288,7 +288,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         repairUserPo.setContext(reqJson.getString("context"));
         repairUserPo.setCommunityId(reqJson.getString("communityId"));
         super.update(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
-        if (repairChannel.equals("Z") || (!StringUtil.isEmpty(maintenanceType) && maintenanceType.equals("1001"))) {  //如果是业主报修或者是有偿的就生成一条新状态，否则不变
+        if ((!StringUtil.isEmpty(repairChannel) && repairChannel.equals("Z")) || (!StringUtil.isEmpty(maintenanceType) && maintenanceType.equals("1001"))) {  //如果是业主报修或者是有偿的就生成一条新状态，否则不变
             //2.0 给开始节点派支付单
             repairUserDto = new RepairUserDto();
             repairUserDto.setRepairId(reqJson.getString("repairId"));
