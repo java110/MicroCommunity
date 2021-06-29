@@ -49,6 +49,8 @@ public interface IReportOweFeeServiceDao {
      */
     void updateReportOweFeeInfo(Map info) throws DAOException;
 
+    void deleteReportOweFeeInfo(Map info) throws DAOException;
+
 
     /**
      * 查询欠费统计总数

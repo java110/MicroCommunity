@@ -194,7 +194,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 oldAmount = oldAmount.add(new BigDecimal(Double.parseDouble(reportOweFeeDto.getAmountOwed()))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 reportOweFeeItemDto.setAmountOwed(oldAmount.doubleValue() + "");
             }
-            if(!StringUtil.isEmpty(reportOweFeeDto.getOwnerName())) {
+            if(!StringUtil.isEmpty(reportOweFeeDto.getOwnerName()) && StringUtil.isEmpty(oldReportOweFeeDto.getOwnerName())) {
                 oldReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
             }
             oldReportOweFeeDto.setUpdateTime(reportOweFeeDto.getUpdateTime());

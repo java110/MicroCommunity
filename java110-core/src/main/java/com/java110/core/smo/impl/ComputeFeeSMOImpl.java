@@ -357,7 +357,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             contractRoomDto.setContractId(feeDto.getPayerObjId());
             contractRoomDto.setCommunityId(feeDto.getCommunityId());
             List<ContractRoomDto> contractRoomDtos = contractRoomInnerServiceSMOImpl.queryContractRooms(contractRoomDto);
-            if (contractRoomDtos == null || contractRoomDtos.size() != 1) {
+            if (contractRoomDtos == null || contractRoomDtos.size() == 0) {
+                feeReceiptDetailPo.setArea("");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
                 return;
             }
             if ("1001".equals(computingFormula)) { //面积*单价+附加费

@@ -1,37 +1,54 @@
 {
   "autoMove": true,
-  "id": "bankId",
-  "name": "accountBank",
-  "desc": "开户行",
-  "shareParam": "shopId",
-  "shareColumn": "shop_id",
+  "id": "detailId",
+  "name": "accountBondObjDetail",
+  "desc": "保证金明细",
+  "shareParam": "detailId",
+  "shareColumn": "detail_id",
   "shareName": "acct",
-  "tableName": "account_bank",
+  "tableName": "account_bond_obj_detail",
   "param": {
-    "bankId": "bank_id",
-    "bankCode": "bank_code",
-    "personName": "person_name",
-    "personTel": "person_tel",
-    "bankName": "bank_name",
-    "shopId": "shop_id",
+    "detailId": "detail_id",
+    "bobjId": "bobj_id",
+    "objId": "obj_id",
+    "bondType": "bond_type",
+    "receivableAmount": "receivable_amount",
+    "receivedAmount": "received_amount",
+    "remark": "remark",
+    "state": "state",
+    "startTime": "start_time",
+    "endTime": "end_time",
     "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "bankCode",
-      "msg": "账号不能为空"
+      "code": "bobjId",
+      "msg": "保证金ID不能为空"
     },
     {
-      "code": "personName",
-      "msg": "持卡人名称不能为空"
+      "code": "objId",
+      "msg": "保证对象ID类型不能为空"
     },
     {
-      "code": "bankName",
-      "msg": "开户行不能为空"
+      "code": "bondType",
+      "msg": "保证对象类型不能为空"
     },{
-      "code": "shopId",
-      "msg": "商铺ID不能为空"
+      "code": "receivableAmount",
+      "msg": "应收金额不能为空"
+    },{
+      "code": "receivedAmount",
+      "msg": "实收金额不能为空"
+    },
+    {
+      "code": "state",
+      "msg": "状态不能为空"
+    },{
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },{
+      "code": "endTime",
+      "msg": "结束时间不能为空"
     }
   ]
 }
