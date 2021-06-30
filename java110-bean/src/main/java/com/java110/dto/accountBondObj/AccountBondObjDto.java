@@ -17,6 +17,7 @@ public class AccountBondObjDto extends PageDto implements Serializable {
     private String bondId;
 private String bobjId;
 private String objId;
+private String objName;
 private String bondType;
 private String receivableAmount;
 private String remark;
@@ -107,5 +108,13 @@ public void setEndTime(String endTime) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
     }
 }
