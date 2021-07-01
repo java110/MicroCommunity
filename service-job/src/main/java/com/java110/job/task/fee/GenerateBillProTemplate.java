@@ -191,7 +191,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
                 generateFee(startTime, tmpFeeDto, billDto, feeConfigDto);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
                 logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
                 logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
