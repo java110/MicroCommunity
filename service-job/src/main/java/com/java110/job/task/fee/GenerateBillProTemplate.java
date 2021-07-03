@@ -5,6 +5,7 @@ import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.*;
+import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.task.TaskDto;
@@ -16,9 +17,12 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
+import com.java110.po.logSystemError.LogSystemErrorPo;
+import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.TaskTemplateException;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -73,6 +77,9 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
+    @Autowired
+    private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
+
 
     @Override
     protected void process(TaskDto taskDto) throws Exception {
@@ -81,7 +88,17 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         List<CommunityDto> communityDtos = getAllCommunity();
 
         for (CommunityDto communityDto : communityDtos) {
-            GenerateBill(taskDto, communityDto);
+            try {
+                GenerateBill(taskDto, communityDto);
+            }catch (Throwable e){
+
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
+                logger.error("费用出账失败" + communityDto.getCommunityId(), e);
+            }
         }
 
     }
@@ -106,7 +123,12 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         for (FeeConfigDto tmpFeeConfigDto : feeConfigDtos) {
             try {
                 GenerateBillByFeeConfig(taskDto, tmpFeeConfigDto);
-            } catch (Exception e) {
+            } catch (Throwable e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("费用出账失败" + tmpFeeConfigDto.getConfigId(), e);
             }
         }
@@ -169,7 +191,12 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
                 generateFee(startTime, tmpFeeDto, billDto, feeConfigDto);
-            } catch (Exception e) {
+            } catch (Throwable e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("生成费用失败", e);
             }
         }

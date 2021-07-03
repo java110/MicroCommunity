@@ -7,6 +7,7 @@ public class AccountBondObjDetailPo implements Serializable {
 
     private String bobjId;
 private String objId;
+private String objName;
 private String bondType;
 private String detailId;
 private String receivableAmount;
@@ -83,6 +84,11 @@ public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
+    public String getObjName() {
+        return objName;
+    }
 
-
+    public void setObjName(String objName) {
+        this.objName = objName;
+    }
 }

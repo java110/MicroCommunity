@@ -11,9 +11,9 @@
     <!-- 保存保证金对象信息 add by wuxw 2018-07-03 -->
     <insert id="saveAccountBondObjInfo" parameterType="Map">
         insert into account_bond_obj(
-bond_id,bobj_id,obj_id,bond_type,receivable_amount,remark,start_time,received_amount,state,end_time
+bond_id,bobj_id,obj_id,bond_type,receivable_amount,remark,start_time,received_amount,state,end_time,obj_name
 ) values (
-#{bondId},#{bobjId},#{objId},#{bondType},#{receivableAmount},#{remark},#{startTime},#{receivedAmount},#{state},#{endTime}
+#{bondId},#{bobjId},#{objId},#{bondType},#{receivableAmount},#{remark},#{startTime},#{receivedAmount},#{state},#{endTime},#{objName}
 )
     </insert>
 
@@ -21,7 +21,10 @@ bond_id,bobj_id,obj_id,bond_type,receivable_amount,remark,start_time,received_am
 
     <!-- 查询保证金对象信息 add by wuxw 2018-07-03 -->
     <select id="getAccountBondObjInfo" parameterType="Map" resultType="Map">
-        select  t.bond_id,t.bond_id bondId,t.bobj_id,t.bobj_id bobjId,t.create_time,t.create_time createTime,t.obj_id,t.obj_id objId,t.bond_type,t.bond_type bondType,t.receivable_amount,t.receivable_amount receivableAmount,t.remark,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,t.state,t.end_time,t.end_time endTime 
+        select  t.bond_id,t.bond_id bondId,t.bobj_id,t.bobj_id bobjId,t.create_time,t.create_time createTime,t.obj_id,
+        t.obj_id objId,t.bond_type,t.bond_type bondType,t.receivable_amount,t.receivable_amount receivableAmount,t.remark,
+        t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,
+        t.state,t.end_time,t.end_time endTime,t.obj_name objName
 from account_bond_obj t 
 where 1 =1 
 <if test="bondId !=null and bondId != ''">
@@ -35,8 +38,11 @@ where 1 =1
 </if> 
 <if test="objId !=null and objId != ''">
    and t.obj_id= #{objId}
-</if> 
-<if test="bondType !=null and bondType != ''">
+</if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="bondType !=null and bondType != ''">
    and t.bond_type= #{bondType}
 </if> 
 <if test="receivableAmount !=null and receivableAmount != ''">
@@ -84,8 +90,11 @@ order by t.create_time desc
 </if> 
 <if test="objId !=null and objId != ''">
 , t.obj_id= #{objId}
-</if> 
-<if test="bondType !=null and bondType != ''">
+</if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="bondType !=null and bondType != ''">
 , t.bond_type= #{bondType}
 </if> 
 <if test="receivableAmount !=null and receivableAmount != ''">
