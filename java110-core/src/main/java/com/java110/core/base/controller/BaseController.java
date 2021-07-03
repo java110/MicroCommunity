@@ -129,7 +129,8 @@ public class BaseController extends AppBase {
 
         headers.put("IP", getIpAddr(request));
 
-        headers.put("hostName", request.getLocalName());
+        //headers.put("hostName", request.getLocalName()); 这里导致部分主机 速度比较慢
+        headers.put("hostName", "localhost");
         headers.put("port", request.getLocalPort() + "");
 
         //处理app-id
