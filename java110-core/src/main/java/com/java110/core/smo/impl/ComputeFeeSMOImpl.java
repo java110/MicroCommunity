@@ -1199,22 +1199,22 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             Date startDate = feeDto.getStartTime();
             //到期时间
             Date endDate = feeDto.getEndTime();
-            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
-                if (ownerCarDto == null) {
-                    targetEndDateAndOweMonth.put("oweMonth", 0);
-                    targetEndDateAndOweMonth.put("targetEndDate", "");
-                    return targetEndDateAndOweMonth;
-                }
-                targetEndDate = ownerCarDto.getEndTime();
-                //说明没有欠费
-                if (endDate.getTime() >= targetEndDate.getTime()) {
-                    // 目标到期时间 - 到期时间 = 欠费月份
-                    oweMonth = 0;
-                    targetEndDateAndOweMonth.put("oweMonth", oweMonth);
-                    targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
-                    return targetEndDateAndOweMonth;
-                }
-            }
+//            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+//                if (ownerCarDto == null) {
+//                    targetEndDateAndOweMonth.put("oweMonth", 0);
+//                    targetEndDateAndOweMonth.put("targetEndDate", "");
+//                    return targetEndDateAndOweMonth;
+//                }
+//                targetEndDate = ownerCarDto.getEndTime();
+//                //说明没有欠费
+//                if (endDate.getTime() >= targetEndDate.getTime()) {
+//                    // 目标到期时间 - 到期时间 = 欠费月份
+//                    oweMonth = 0;
+//                    targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+//                    targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+//                    return targetEndDateAndOweMonth;
+//                }
+//            }
 
             //缴费周期
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
@@ -1253,13 +1253,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     public Map getTargetEndDateAndOweMonth(FeeDto feeDto) {
 
-        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
-            OwnerCarDto ownerCarDto = new OwnerCarDto();
-            ownerCarDto.setCommunityId(feeDto.getCommunityId());
-            ownerCarDto.setCarId(feeDto.getPayerObjId());
-            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-            return getTargetEndDateAndOweMonth(feeDto, ownerCarDtos == null || ownerCarDtos.size() < 1 ? null : ownerCarDtos.get(0));
-        }
+//        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+//            OwnerCarDto ownerCarDto = new OwnerCarDto();
+//            ownerCarDto.setCommunityId(feeDto.getCommunityId());
+//            ownerCarDto.setCarId(feeDto.getPayerObjId());
+//            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+//            return getTargetEndDateAndOweMonth(feeDto, ownerCarDtos == null || ownerCarDtos.size() < 1 ? null : ownerCarDtos.get(0));
+//        }
         return getTargetEndDateAndOweMonth(feeDto, null);
     }
 
