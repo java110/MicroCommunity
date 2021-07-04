@@ -441,6 +441,11 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         businessFee.putAll(feeMap);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
+
+        //为停车费单独处理
+        paramInJson.put("carFeeEndTime", feeInfo.getEndTime());
+        paramInJson.put("carPayerObjType", feeInfo.getPayerObjType());
+        paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
         return business;
     }
 
