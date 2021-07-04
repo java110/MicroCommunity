@@ -217,6 +217,13 @@
         <if test="valid == '1'">
             and t.end_time &gt; now()
         </if>
+        <if test="valid == '0'">
+            and t.end_time &lt; now()
+        </if>
+        <if test="valid == '2'">
+            and t.ps_id= '-1'
+        </if>
+
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -364,7 +371,12 @@
         <if test="valid == '1'">
             and t.end_time &gt; now()
         </if>
-
+        <if test="valid == '0'">
+            and t.end_time &lt; now()
+        </if>
+        <if test="valid == '2'">
+            and t.ps_id= '-1'
+        </if>
 
     </select>
 
