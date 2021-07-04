@@ -214,13 +214,13 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-        <if test="valid == '1'">
+        <if test="valid == 1">
             and t.end_time &gt; now()
         </if>
-        <if test="valid == '0'">
+        <if test="valid == 3">
             and t.end_time &lt; now()
         </if>
-        <if test="valid == '2'">
+        <if test="valid == 2">
             and t.ps_id= '-1'
         </if>
 
@@ -368,13 +368,13 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-        <if test="valid == '1'">
+        <if test="valid == 1">
             and t.end_time &gt; now()
         </if>
-        <if test="valid == '0'">
+        <if test="valid == 3">
             and t.end_time &lt; now()
         </if>
-        <if test="valid == '2'">
+        <if test="valid == 2">
             and t.ps_id= '-1'
         </if>
 
