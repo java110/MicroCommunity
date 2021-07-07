@@ -276,10 +276,10 @@
             , t.view_type = #{viewType}
         </if>
         <if test="advertType !=null and advertType != ''">
-            and t.advert_type = #{advertType}
+            ,  t.advert_type = #{advertType}
         </if>
         <if test="pageUrl !=null and pageUrl != ''">
-            and t.page_url= #{pageUrl}
+            ,  t.page_url= #{pageUrl}
         </if>
         where 1=1
         <if test="advertId !=null and advertId != ''">
