@@ -6,9 +6,9 @@
 
     <!-- 保存广告信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAdvertInfo" parameterType="Map">
-    insert into business_advert(classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,end_time,community_id,b_id,location_obj_id,seq,view_type)
+    insert into business_advert(classify,ad_name,location_type_cd,ad_type_cd,advert_id,operate,start_time,state,end_time,community_id,b_id,location_obj_id,seq,view_type,advert_type,page_url)
     values
-    (#{classify},#{adName},#{locationTypeCd},#{adTypeCd},#{advertId},#{operate},#{startTime},#{state},#{endTime},#{communityId},#{bId},#{locationObjId},#{seq},#{viewType})
+    (#{classify},#{adName},#{locationTypeCd},#{adTypeCd},#{advertId},#{operate},#{startTime},#{state},#{endTime},#{communityId},#{bId},#{locationObjId},#{seq},#{viewType},#{advertType},#{pageUrl})
     </insert>
 
     <!-- 查询广告信息信息（Business） add by wuxw 2018-07-03 -->
@@ -17,7 +17,7 @@
         locationTypeCd,t.ad_type_cd,t.ad_type_cd adTypeCd,t.advert_id,t.advert_id
         advertId,t.operate,t.start_time,t.start_time startTime,t.state,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.location_obj_id,t.location_obj_id
-        locationObjId,t.seq,t.view_type,t.view_type viewType
+        locationObjId,t.seq,t.view_type,t.view_type viewType,t.advert_type,t.advert_type advertType,t.page_url,t.page_url pageUrl
         from business_advert t
         where 1 =1
         <if test="classify !=null and classify != ''">
@@ -56,6 +56,12 @@
         <if test="locationObjId !=null and locationObjId != ''">
             and t.location_obj_id= #{locationObjId}
         </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type = #{advertType}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
+        </if>
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
@@ -64,9 +70,9 @@
     <!-- 保存广告信息信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAdvertInfoInstance" parameterType="Map">
         insert into advert(
-        classify,ad_name,location_type_cd,status_cd,ad_type_cd,advert_id,start_time,state,end_time,community_id,b_id,location_obj_id,seq,view_type
+        classify,ad_name,location_type_cd,status_cd,ad_type_cd,advert_id,start_time,state,end_time,community_id,b_id,location_obj_id,seq,view_type,advert_type,page_url
         ) select
-        t.classify,t.ad_name,t.location_type_cd,'0',t.ad_type_cd,t.advert_id,t.start_time,t.state,t.end_time,t.community_id,t.b_id,t.location_obj_id,t.seq,t.view_type
+        t.classify,t.ad_name,t.location_type_cd,'0',t.ad_type_cd,t.advert_id,t.start_time,t.state,t.end_time,t.community_id,t.b_id,t.location_obj_id,t.seq,t.view_type,t.advert_type,t.page_url
         from business_advert t where 1=1
         <if test="classify !=null and classify != ''">
             and t.classify= #{classify}
@@ -101,6 +107,12 @@
         </if>
         <if test="locationObjId !=null and locationObjId != ''">
             and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type = #{advertType}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
         </if>
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
@@ -146,6 +158,12 @@
         <if test="viewType != null and viewType != ''">
             , t.view_type = #{viewType}
         </if>
+        <if test="advertType !=null and advertType != ''">
+            , t.advert_type = #{advertType}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            , t.page_url= #{pageUrl}
+        </if>
         where 1=1
         <if test="advertId !=null and advertId != ''">
             and t.advert_id= #{advertId}
@@ -161,7 +179,7 @@
         locationTypeCd,t.status_cd,t.status_cd statusCd,t.ad_type_cd,t.ad_type_cd adTypeCd,t.advert_id,t.advert_id
         advertId,t.start_time,t.start_time startTime,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.location_obj_id,t.location_obj_id locationObjId,t.seq,td1.name
-        classifyName,td2.name stateName,t.create_time createTime,td3.name locationObjName,t.view_type,t.view_type viewType
+        classifyName,td2.name stateName,t.create_time createTime,td3.name locationObjName,t.view_type,t.view_type viewType,t.advert_type,t.advert_type advertType,t.page_url,t.page_url pageUrl
         from advert t
         left join t_dict td1 on  t.classify = td1.status_cd and td1.table_name = 'advert' and td1.table_columns = 'classify'
         left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'advert' and td2.table_columns = 'state'
@@ -209,6 +227,12 @@
         <if test="viewType != null and viewType != ''">
             and t.view_type = #{viewType}
         </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type = #{advertType}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -250,6 +274,12 @@
         </if>
         <if test="viewType != null and viewType != ''">
             , t.view_type = #{viewType}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type = #{advertType}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
         </if>
         where 1=1
         <if test="advertId !=null and advertId != ''">
@@ -300,6 +330,12 @@
         </if>
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type = #{advertType}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
         </if>
         <if test="viewType != null and viewType != ''">
             and t.view_type = #{viewType}
