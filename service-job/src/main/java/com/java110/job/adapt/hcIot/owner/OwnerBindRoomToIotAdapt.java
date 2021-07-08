@@ -151,6 +151,7 @@ public class OwnerBindRoomToIotAdapt extends DatabusAdaptImpl {
         for (RoomDto tRoomDto : rooms) {
             locationObjIds.add(tRoomDto.getUnitId());
             locationObjIds.add(tRoomDto.getRoomId());
+            locationObjIds.add(tRoomDto.getFloorId());
         }
 
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
