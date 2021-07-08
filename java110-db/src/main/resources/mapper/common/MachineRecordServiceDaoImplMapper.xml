@@ -120,8 +120,8 @@
         openTypeCd,t.id_card,t.id_card idCard,t.status_cd,t.status_cd statusCd,t.machine_record_id,t.machine_record_id
         machineRecordId,t.machine_id,t.machine_id machineId,t.name,t.tel,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.file_id,t.file_id fileId,t.record_type_cd,t.record_type_cd recordTypeCd,td1.name
-        openTypeName,t.create_time createTime
-        from machine_record t,t_dict td1,t.similar
+        openTypeName,t.create_time createTime,t.similar
+        from machine_record t,t_dict td1
         where 1 =1
         and t.open_type_cd = td1.status_cd
         and td1.table_name = 'machine_record'
