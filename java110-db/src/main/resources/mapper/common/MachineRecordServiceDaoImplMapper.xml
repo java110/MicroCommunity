@@ -7,10 +7,10 @@
     <!-- 保存设备上报信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessMachineRecordInfo" parameterType="Map">
         insert into business_machine_record(
-        file_time,machine_code,open_type_cd,id_card,machine_record_id,machine_id,operate,`name`,tel,community_id,b_id,file_id,record_type_cd
+        file_time,machine_code,open_type_cd,id_card,machine_record_id,machine_id,operate,`name`,tel,community_id,b_id,file_id,record_type_cd,similar
         ) values (
         #{fileTime},#{machineCode},#{openTypeCd},#{idCard},#{machineRecordId},#{machineId},#{operate},#{name},#{tel},#{communityId},#{bId},#{fileId}
-        ,#{recordTypeCd}
+        ,#{recordTypeCd},#{similar}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.file_time,t.file_time fileTime,t.machine_code,t.machine_code machineCode,t.open_type_cd,t.open_type_cd
         openTypeCd,t.id_card,t.id_card idCard,t.machine_record_id,t.machine_record_id
         machineRecordId,t.machine_id,t.machine_id machineId,t.operate,t.name,t.tel,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.file_id,t.file_id fileId,t.record_type_cd,t.record_type_cd recordTypeCd
+        communityId,t.b_id,t.b_id bId,t.file_id,t.file_id fileId,t.record_type_cd,t.record_type_cd recordTypeCd,t.similar
         from business_machine_record t
         where 1 =1
         <if test="fileTime !=null and fileTime != ''">
@@ -69,9 +69,9 @@
     <!-- 保存设备上报信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMachineRecordInfoInstance" parameterType="Map">
         insert into machine_record(
-        file_time,machine_code,open_type_cd,id_card,status_cd,machine_record_id,machine_id,`name`,tel,community_id,b_id,file_id,record_type_cd
+        file_time,machine_code,open_type_cd,id_card,status_cd,machine_record_id,machine_id,`name`,tel,community_id,b_id,file_id,record_type_cd,similar
         ) select
-        t.file_time,t.machine_code,t.open_type_cd,t.id_card,'0',t.machine_record_id,t.machine_id,t.name,t.tel,t.community_id,t.b_id,t.file_id,t.record_type_cd
+        t.file_time,t.machine_code,t.open_type_cd,t.id_card,'0',t.machine_record_id,t.machine_id,t.name,t.tel,t.community_id,t.b_id,t.file_id,t.record_type_cd,t.similar
         from business_machine_record t where 1=1
         <if test="fileTime !=null and fileTime != ''">
             and t.file_time= #{fileTime}
@@ -121,7 +121,7 @@
         machineRecordId,t.machine_id,t.machine_id machineId,t.name,t.tel,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.file_id,t.file_id fileId,t.record_type_cd,t.record_type_cd recordTypeCd,td1.name
         openTypeName,t.create_time createTime
-        from machine_record t,t_dict td1
+        from machine_record t,t_dict td1,t.similar
         where 1 =1
         and t.open_type_cd = td1.status_cd
         and td1.table_name = 'machine_record'
@@ -283,12 +283,12 @@
     <!-- 保存设备上报信息 add by wuxw 2018-07-03 -->
     <insert id="saveMachineRecords" parameterType="Map">
         insert into machine_record(
-        file_time,machine_code,open_type_cd,id_card,machine_record_id,machine_id,`name`,tel,community_id,b_id,file_id,record_type_cd
+        file_time,machine_code,open_type_cd,id_card,machine_record_id,machine_id,`name`,tel,community_id,b_id,file_id,record_type_cd,similar
         ) values
         <foreach collection="machineRecords" item="item" separator=",">
             (
             #{item.fileTime},#{item.machineCode},#{item.openTypeCd},#{item.idCard},#{item.machineRecordId},#{item.machineId},#{item.name},#{item.tel},#{item.communityId},'-1',#{item.fileId}
-            ,#{item.recordTypeCd}
+            ,#{item.recordTypeCd},#{item.similar}
             )
         </foreach>
     </insert>
