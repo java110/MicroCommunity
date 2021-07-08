@@ -25,7 +25,8 @@ public class AdvertPo implements Serializable {
     private String endTime;
     private String createTime;
     private String viewType;
-
+    private String advertType ;
+    private String pageUrl ;
 
     public String getAdvertId() {
         return advertId;
@@ -129,5 +130,21 @@ public class AdvertPo implements Serializable {
 
     public void setViewType(String viewType) {
         this.viewType = viewType;
+    }
+
+    public String getAdvertType() {
+        return advertType;
+    }
+
+    public void setAdvertType(String advertType) {
+        this.advertType = advertType;
+    }
+
+    public String getPageUrl() {
+        return pageUrl;
+    }
+
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
     }
 }
