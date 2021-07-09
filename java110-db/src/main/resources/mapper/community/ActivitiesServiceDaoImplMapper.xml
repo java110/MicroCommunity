@@ -140,9 +140,9 @@
         typeCd,t.context,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.header_img,t.header_img headerImg,t.state,act.type_name typeCdName,t.create_time createTime
         from activities t
-        left join activities_type act on t.type_cd = act.type_cd and act.status_cd = '0' and t.community_id = act.community_id
+        left join activities_type act on t.type_cd = act.type_cd and t.community_id = act.community_id
         where 1 =1
-        and t.status_cd= '0'
+        and t.status_cd= '0' and act.status_cd = '0'
         <if test="collectCount !=null and collectCount != ''">
             and t.collect_count= #{collectCount}
         </if>
@@ -182,6 +182,9 @@
         </if>
         <if test="headerImg !=null and headerImg != ''">
             and t.header_img= #{headerImg}
+        </if>
+        <if test="endTimeFlag == null or endTimeFlag == ''">
+            and t.end_time > now()
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}

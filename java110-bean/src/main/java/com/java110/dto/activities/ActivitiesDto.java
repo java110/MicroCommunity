@@ -28,6 +28,7 @@ public class ActivitiesDto extends PageDto implements Serializable {
     private String context;
     private String startTime;
     private String endTime;
+    private String endTimeFlag;
     private String communityId;
     private String headerImg;
     private String state;
@@ -131,6 +132,14 @@ public class ActivitiesDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getEndTimeFlag() {
+        return endTimeFlag;
+    }
+
+    public void setEndTimeFlag(String endTimeFlag) {
+        this.endTimeFlag = endTimeFlag;
     }
 
     public String getCommunityId() {
