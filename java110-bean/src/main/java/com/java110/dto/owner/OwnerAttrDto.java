@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class OwnerAttrDto extends PageDto implements Serializable {
 
+    public static final String SPEC_CD_MACHINE_OPEN_COUNT = "7967001983";
+
     private String attrId;
     private String specCd;
     private String communityId;

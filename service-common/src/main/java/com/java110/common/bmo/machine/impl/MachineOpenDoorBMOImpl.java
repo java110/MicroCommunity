@@ -17,11 +17,18 @@ package com.java110.common.bmo.machine.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
+import com.java110.dto.machine.MachineTranslateDto;
+import com.java110.dto.owner.OwnerAttrDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 设备开门功能
@@ -34,6 +41,11 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
 
     @Autowired
     IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
 
     /**
      * 开门功能
@@ -43,8 +55,55 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
      */
     @Override
     public ResponseEntity<String> openDoor(JSONObject reqJson) {
+        //如果是业主 限制开门次数
+        if ("owner".equals(reqJson.getString("userRole"))) {
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setMemberId(reqJson.getString("userId"));
+            ownerDto.setCommunityId(reqJson.getString("communityId"));
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+            if (ownerDtos == null || ownerDtos.size() < 1) {
+                return ResultVo.error("没有权限开门");
+            }
+
+            if (!hasOpenDoorPri(ownerDtos.get(0), reqJson.getString("machineCode"))) {
+                return ResultVo.error("今日开门次数已用完，请联系物业客服人员");
+            }
+        }
         ResultVo resultVo = dataBusInnerServiceSMOImpl.openDoor(reqJson);
         return ResultVo.createResponseEntity(resultVo);
+    }
+
+    private boolean hasOpenDoorPri(OwnerDto ownerDto, String machineCode) {
+
+        List<OwnerAttrDto> ownerAttrDtos = ownerDto.getOwnerAttrDtos();
+
+        if (ownerAttrDtos == null || ownerAttrDtos.size() < 1) {
+            return true;
+        }
+        long openDoorCount = -1;
+        for (OwnerAttrDto ownerAttrDto : ownerAttrDtos) {
+            if (OwnerAttrDto.SPEC_CD_MACHINE_OPEN_COUNT.equals(ownerAttrDto.getSpecCd())) {
+                openDoorCount = Long.parseLong(ownerAttrDto.getValue());
+            }
+        }
+
+        if (openDoorCount == -1) { //说明没有配置 不限制
+            return true;
+        }
+
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setCommunityId(ownerDto.getCommunityId());
+        machineTranslateDto.setMachineCode(machineCode);
+        machineTranslateDto.setObjBId(ownerDto.getMemberId());
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_OPEN_DOOR);
+        machineTranslateDto.setIsNow("Y");
+        long count = machineTranslateInnerServiceSMOImpl.queryMachineTranslatesCount(machineTranslateDto);
+
+        if (openDoorCount > count) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

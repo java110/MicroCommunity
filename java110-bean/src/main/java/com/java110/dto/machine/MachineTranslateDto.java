@@ -94,6 +94,8 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     private String remark;
 
+    private String isNow;
+
 
     private Date createTime;
 
@@ -254,5 +256,13 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     public void setMachineName(String machineName) {
         this.machineName = machineName;
+    }
+
+    public String getIsNow() {
+        return isNow;
+    }
+
+    public void setIsNow(String isNow) {
+        this.isNow = isNow;
     }
 }
