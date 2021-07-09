@@ -167,7 +167,7 @@
         <if test="machineCmd !=null and machineCmd != ''">
             and t.machine_cmd= #{machineCmd}
         </if>
-        <if test="isNow !=null and isNow == 'Y'">
+        <if test='isNow !=null and isNow == "Y"'>
             and to_days(t.create_time) = to_days(now())
         </if>
         <if test="statusCd !=null and statusCd != ''">
@@ -261,7 +261,7 @@
         <if test="machineCmd !=null and machineCmd != ''">
             and t.machine_cmd= #{machineCmd}
         </if>
-        <if test="isNow !=null and isNow == 'Y'">
+        <if test='isNow !=null and isNow == "Y"'>
             and to_days(t.create_time) = to_days(now())
         </if>
 
