@@ -80,6 +80,7 @@ public class ListOwnerMachines extends AbstractServiceApiListener {
         for (RoomDto tmpRoomDto : rooms) {
             locationObjIds.add(tmpRoomDto.getUnitId());
             locationObjIds.add(tmpRoomDto.getRoomId());
+            locationObjIds.add(tmpRoomDto.getFloorId());
         }
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
