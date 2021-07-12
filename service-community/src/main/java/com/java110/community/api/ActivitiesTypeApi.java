@@ -101,10 +101,12 @@ public class ActivitiesTypeApi {
     @RequestMapping(value = "/queryActivitiesType", method = RequestMethod.GET)
     public ResponseEntity<String> queryActivitiesType(@RequestParam(value = "communityId") String communityId,
                                                       @RequestParam(value = "page") int page,
+                                                      @RequestParam(value = "defaultShow", required = false) String defaultShow,
                                                       @RequestParam(value = "row") int row) {
         ActivitiesTypeDto activitiesTypeDto = new ActivitiesTypeDto();
         activitiesTypeDto.setPage(page);
         activitiesTypeDto.setRow(row);
+        activitiesTypeDto.setDefaultShow(defaultShow);
         activitiesTypeDto.setCommunityId(communityId);
         return getActivitiesTypeBMOImpl.get(activitiesTypeDto);
     }
