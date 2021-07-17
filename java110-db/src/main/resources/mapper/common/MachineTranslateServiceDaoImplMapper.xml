@@ -164,6 +164,12 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
+        <if test="machineCmd !=null and machineCmd != ''">
+            and t.machine_cmd= #{machineCmd}
+        </if>
+        <if test='isNow !=null and isNow == "Y"'>
+            and to_days(t.create_time) = to_days(now())
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -252,6 +258,13 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
+        <if test="machineCmd !=null and machineCmd != ''">
+            and t.machine_cmd= #{machineCmd}
+        </if>
+        <if test='isNow !=null and isNow == "Y"'>
+            and to_days(t.create_time) = to_days(now())
+        </if>
+
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>

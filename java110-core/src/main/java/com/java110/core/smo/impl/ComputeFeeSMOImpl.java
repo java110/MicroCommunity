@@ -350,6 +350,66 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
                 }
             } else {
+
+            }
+        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {//车位相关
+            String computingFormula = feeDto.getComputingFormula();
+            ContractRoomDto contractRoomDto = new ContractRoomDto();
+            contractRoomDto.setContractId(feeDto.getPayerObjId());
+            contractRoomDto.setCommunityId(feeDto.getCommunityId());
+            List<ContractRoomDto> contractRoomDtos = contractRoomInnerServiceSMOImpl.queryContractRooms(contractRoomDto);
+            if (contractRoomDtos == null || contractRoomDtos.size() == 0) {
+                feeReceiptDetailPo.setArea("");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+                return;
+            }
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                BigDecimal builtUpArea = new BigDecimal(0);
+                for (ContractRoomDto tmpContractRoomDto : contractRoomDtos) {
+                    builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getBuiltUpArea())));
+                }
+                feeReceiptDetailPo.setArea(builtUpArea.doubleValue() + "");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                feeReceiptDetailPo.setArea("");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getAdditionalAmount());
+            } else if ("4004".equals(computingFormula)) {
+            } else if ("5005".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal sub = curDegree.subtract(preDegree).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    feeReceiptDetailPo.setArea(sub.doubleValue() + "");
+                    feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+                }
+            } else if ("6006".equals(computingFormula)) {
+                String value = "";
+                List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+                for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+                    if (feeAttrDto.getSpecCd().equals(FeeAttrDto.SPEC_CD_PROXY_CONSUMPTION)) {
+                        value = feeAttrDto.getValue();
+                    }
+                }
+                feeReceiptDetailPo.setArea(value);
+                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+            } else if ("7007".equals(computingFormula)) { //自定义公式
+                BigDecimal builtUpArea = new BigDecimal(0);
+                for (ContractRoomDto tmpContractRoomDto : contractRoomDtos) {
+                    builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getBuiltUpArea())));
+                }
+                feeReceiptDetailPo.setArea(builtUpArea.doubleValue() + "");
+                feeReceiptDetailPo.setSquarePrice(feeDto.getComputingFormulaText());
+            } else if ("9009".equals(computingFormula)) {
+                if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
+                } else {
+                    BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
+                    BigDecimal preDegree = new BigDecimal(Double.parseDouble(feeDto.getPreDegrees()));
+                    BigDecimal sub = curDegree.subtract(preDegree).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    feeReceiptDetailPo.setArea(sub.doubleValue() + "");
+                    feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
+                }
+            } else {
             }
         }
     }
@@ -1140,22 +1200,22 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             Date startDate = feeDto.getStartTime();
             //到期时间
             Date endDate = feeDto.getEndTime();
-            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
-                if (ownerCarDto == null) {
-                    targetEndDateAndOweMonth.put("oweMonth", 0);
-                    targetEndDateAndOweMonth.put("targetEndDate", "");
-                    return targetEndDateAndOweMonth;
-                }
-                targetEndDate = ownerCarDto.getEndTime();
-                //说明没有欠费
-                if (endDate.getTime() >= targetEndDate.getTime()) {
-                    // 目标到期时间 - 到期时间 = 欠费月份
-                    oweMonth = 0;
-                    targetEndDateAndOweMonth.put("oweMonth", oweMonth);
-                    targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
-                    return targetEndDateAndOweMonth;
-                }
-            }
+//            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+//                if (ownerCarDto == null) {
+//                    targetEndDateAndOweMonth.put("oweMonth", 0);
+//                    targetEndDateAndOweMonth.put("targetEndDate", "");
+//                    return targetEndDateAndOweMonth;
+//                }
+//                targetEndDate = ownerCarDto.getEndTime();
+//                //说明没有欠费
+//                if (endDate.getTime() >= targetEndDate.getTime()) {
+//                    // 目标到期时间 - 到期时间 = 欠费月份
+//                    oweMonth = 0;
+//                    targetEndDateAndOweMonth.put("oweMonth", oweMonth);
+//                    targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
+//                    return targetEndDateAndOweMonth;
+//                }
+//            }
 
             //缴费周期
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
@@ -1194,13 +1254,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     public Map getTargetEndDateAndOweMonth(FeeDto feeDto) {
 
-        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
-            OwnerCarDto ownerCarDto = new OwnerCarDto();
-            ownerCarDto.setCommunityId(feeDto.getCommunityId());
-            ownerCarDto.setCarId(feeDto.getPayerObjId());
-            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-            return getTargetEndDateAndOweMonth(feeDto, ownerCarDtos == null || ownerCarDtos.size() < 1 ? null : ownerCarDtos.get(0));
-        }
+//        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+//            OwnerCarDto ownerCarDto = new OwnerCarDto();
+//            ownerCarDto.setCommunityId(feeDto.getCommunityId());
+//            ownerCarDto.setCarId(feeDto.getPayerObjId());
+//            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+//            return getTargetEndDateAndOweMonth(feeDto, ownerCarDtos == null || ownerCarDtos.size() < 1 ? null : ownerCarDtos.get(0));
+//        }
         return getTargetEndDateAndOweMonth(feeDto, null);
     }
 

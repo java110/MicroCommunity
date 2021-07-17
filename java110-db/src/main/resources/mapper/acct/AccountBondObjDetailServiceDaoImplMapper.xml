@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountBondObjDetailServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存保证金明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAccountBondObjDetailInfo" parameterType="Map">
+        insert into account_bond_obj_detail(
+bobj_id,obj_id,bond_type,detail_id,receivable_amount,remark,start_time,received_amount,state,end_time,obj_name
+) values (
+#{bobjId},#{objId},#{bondType},#{detailId},#{receivableAmount},#{remark},#{startTime},#{receivedAmount},#{state},#{endTime},#{objName}
+)
+    </insert>
+
+
+
+    <!-- 查询保证金明细信息 add by wuxw 2018-07-03 -->
+    <select id="getAccountBondObjDetailInfo" parameterType="Map" resultType="Map">
+        select  t.bobj_id,t.bobj_id bobjId,t.create_time,t.create_time createTime,t.obj_id,t.obj_id objId,t.bond_type,t.bond_type bondType,
+        t.detail_id,t.detail_id detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.remark,t.start_time,t.start_time startTime,
+        t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,t.state,t.end_time,t.end_time endTime,t.obj_name objName
+from account_bond_obj_detail t 
+where 1 =1 
+<if test="bobjId !=null and bobjId != ''">
+   and t.bobj_id= #{bobjId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="bondType !=null and bondType != ''">
+   and t.bond_type= #{bondType}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+   and t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+   and t.received_amount= #{receivedAmount}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改保证金明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccountBondObjDetailInfo" parameterType="Map">
+        update  account_bond_obj_detail t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="bobjId !=null and bobjId != ''">
+, t.bobj_id= #{bobjId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="objId !=null and objId != ''">
+, t.obj_id= #{objId}
+</if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="bondType !=null and bondType != ''">
+, t.bond_type= #{bondType}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+, t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+, t.received_amount= #{receivedAmount}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+ where 1=1 <if test="detailId !=null and detailId != ''">
+and t.detail_id= #{detailId}
+</if> 
+
+    </update>
+
+    <!-- 查询保证金明细数量 add by wuxw 2018-07-03 -->
+     <select id="queryAccountBondObjDetailsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from account_bond_obj_detail t 
+where 1 =1 
+<if test="bobjId !=null and bobjId != ''">
+   and t.bobj_id= #{bobjId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="bondType !=null and bondType != ''">
+   and t.bond_type= #{bondType}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+   and t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+   and t.received_amount= #{receivedAmount}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+
+
+     </select>
+
+</mapper>

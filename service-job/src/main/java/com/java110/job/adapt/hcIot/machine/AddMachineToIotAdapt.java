@@ -207,6 +207,17 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         } else if ("3000".equals(communityLocationDto.getLocationType())) {// 3000 房屋门
             ownerDto.setRoomId(machinePo.getLocationObjId());
             owners = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+        }else if ("6000".equals(communityLocationDto.getLocationType())) {// 3000 房屋门
+            //先根据单元门ID 查询 房屋
+            RoomDto roomDto = new RoomDto();
+            roomDto.setFloorId(machinePo.getLocationObjId());
+            roomDto.setCommunityId(machinePo.getCommunityId());
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            if (roomDtos == null || roomDtos.size() == 0) { // 楼栋下没有房屋
+                return ownerDtos;
+            }
+            ownerDto.setRoomIds(getRoomIds(roomDtos));
+            owners = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         }
         if (owners == null) {
             return ownerDtos;

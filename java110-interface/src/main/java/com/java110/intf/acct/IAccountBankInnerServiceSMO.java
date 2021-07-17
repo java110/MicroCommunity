@@ -1,4 +1,4 @@
-package com.java110.intf;
+package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.accountBank.AccountBankDto;
@@ -18,7 +18,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "acct-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/accountBankApi")
 public interface IAccountBankInnerServiceSMO {
 

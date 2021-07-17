@@ -12,7 +12,9 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDetailDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.center.AppService;
@@ -23,6 +25,8 @@ import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeDiscountInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.car.OwnerCarPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -42,6 +46,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,6 +85,9 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMO;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -131,6 +139,8 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         if (discountPrice > 0) {
             addDiscount(paramObj, businesses, dataFlowContext);
         }
+
+        dealOwnerCartEndTime(paramObj,businesses);
 
         //判断是否有派单属性ID
         FeeAttrDto feeAttrDto = new FeeAttrDto();
@@ -209,6 +219,34 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         paramOut.put("receivedAmount", paramObj.getString("receivedAmount"));
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void dealOwnerCartEndTime(JSONObject paramObj,JSONArray businesses) {
+        //为停车费单独处理
+        if (paramObj.containsKey("carPayerObjType")
+                && FeeDto.PAYER_OBJ_TYPE_CAR.equals(paramObj.getString("carPayerObjType"))) {
+            Date feeEndTime = (Date) paramObj.get("carFeeEndTime");
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setCommunityId(paramObj.getString("communityId"));
+            ownerCarDto.setCarId(paramObj.getString("carPayerObjId"));
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            //车位费用续租
+            if (ownerCarDtos != null) {
+                for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+                    if (tmpOwnerCarDto.getEndTime().getTime() < feeEndTime.getTime()) {
+                        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+                        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR);
+                        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+                        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+                        OwnerCarPo ownerCarPo = new OwnerCarPo();
+                        ownerCarPo.setMemberId(tmpOwnerCarDto.getMemberId());
+                        ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
+                        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(OwnerCarPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(ownerCarPo));
+                        businesses.add(business);
+                    }
+                }
+            }
+        }
     }
 
     private void judgeDiscount(JSONObject paramObj) throws ParseException {

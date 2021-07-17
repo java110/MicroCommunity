@@ -47,7 +47,7 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
     public int deleteReportOweFee(@RequestBody ReportOweFeePo reportOweFeePo) {
         int saveFlag = 1;
         reportOweFeePo.setStatusCd("1");
-        reportOweFeeServiceDaoImpl.updateReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
+        reportOweFeeServiceDaoImpl.deleteReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
         return saveFlag;
     }
 

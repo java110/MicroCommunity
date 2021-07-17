@@ -30,6 +30,8 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
     private String squarePrice;
     private String remark;
     private String feeFlag;
+    private String preDegrees;
+    private String curDegrees;
 
 
     private Date createTime;
@@ -172,5 +174,21 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     public void setDetailIds(String[] detailIds) {
         this.detailIds = detailIds;
+    }
+
+    public String getPreDegrees() {
+        return preDegrees;
+    }
+
+    public void setPreDegrees(String preDegrees) {
+        this.preDegrees = preDegrees;
+    }
+
+    public String getCurDegrees() {
+        return curDegrees;
+    }
+
+    public void setCurDegrees(String curDegrees) {
+        this.curDegrees = curDegrees;
     }
 }

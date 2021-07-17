@@ -117,7 +117,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         repairUserDto.setState(RepairUserDto.STATE_DOING);
         repairUserDto.setStaffId(userId);
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        if (repairUserDtos.size() != 1) {
+        if (repairUserDtos == null || repairUserDtos.size() != 1) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
             context.setResponseEntity(responseEntity);
             return;
@@ -127,7 +127,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         String repairMaterial = "";
         //费用明细(单价 * 数量 = 总价)
         String repairFee = "";
-        if (json != null && json.size() > 0 && (maintenanceType.equals("1001") || maintenanceType.equals("1003"))) {
+        if (json != null && json.size() > 0 && ("1001".equals(maintenanceType) || "1003".equals(maintenanceType))) {
             Object[] objects = json.toArray();
             //数据前期校验
             for (int i = 0; i < objects.length; i++) {
@@ -318,7 +318,8 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         repairUserPo.setContext(reqJson.getString("context"));
         repairUserPo.setCommunityId(reqJson.getString("communityId"));
         super.update(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
-        if (repairChannel.equals("Z") || (!StringUtil.isEmpty(maintenanceType) && maintenanceType.equals("1001"))) {  //如果是业主报修或者是有偿的就生成一条新状态，否则不变
+        if ((!StringUtil.isEmpty(repairChannel) && "Z".equals(repairChannel))
+                || (!StringUtil.isEmpty(maintenanceType) && "1001".equals(maintenanceType))) {  //如果是业主报修或者是有偿的就生成一条新状态，否则不变
             //2.0 给开始节点派支付单
             repairUserDto = new RepairUserDto();
             repairUserDto.setRepairId(reqJson.getString("repairId"));
@@ -333,7 +334,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairUserPo = new RepairUserPo();
             repairUserPo.setRuId("-1");
             repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            if (maintenanceType.equals("1001")) { //如果是有偿的就走下面(业主报修有偿或者电话申请有偿或者员工报修有偿)
+            if ("1001".equals(maintenanceType)) { //如果是有偿的就走下面(业主报修有偿或者电话申请有偿或者员工报修有偿)
                 repairUserPo.setState(RepairUserDto.STATE_PAY_FEE);
                 repairUserPo.setContext("待支付" + reqJson.getString("totalPrice") + "元");
             } else {
@@ -341,7 +342,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 repairUserPo.setContext("待评价");
             }
             repairUserPo.setRepairId(reqJson.getString("repairId"));
-            if (repairChannel.equals("Z")) {  //如果是业主端报修的走下面的方法
+            if ("Z".equals(repairChannel)) {  //如果是业主端报修的走下面的方法
                 repairUserPo.setStaffId(repairUserDtos.get(0).getStaffId());
                 repairUserPo.setStaffName(repairUserDtos.get(0).getStaffName());
             } else { //如果不是业主报修，并且有偿
@@ -435,7 +436,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
             }
         }
-        if (publicArea.equals("F") && "1002".equals(reqJson.getString("maintenanceType"))) { //如果不是公共区域且是无偿的走下面
+        if ("F".equals(publicArea) && "1002".equals(reqJson.getString("maintenanceType"))) { //如果不是公共区域且是无偿的走下面
             //改变r_repair_pool表maintenance_type维修类型
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(reqJson.getString("repairId"));
@@ -446,7 +447,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             } else if (repairChannel.equals("Z")) { //如果是业主自主报修结单后状态变为待评价
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_APPRAISE);
             }
-        } else if (publicArea.equals("F") && "1001".equals(reqJson.getString("maintenanceType"))) { //如果不是公共区域且是有偿的走下面
+        } else if ("F".equals(publicArea) && "1001".equals(reqJson.getString("maintenanceType"))) { //如果不是公共区域且是有偿的走下面
             //3.0 生成支付费用
             //查询默认费用项
             FeeConfigDto feeConfigDto = new FeeConfigDto();
@@ -502,9 +503,9 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairPoolPo.setRepairFee(repairFee.substring(0, repairFee.length() - 1));
             super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
             ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_PAY);
-        } else if (publicArea.equals("T")) {  //公共区域走这里
+        } else if ("T".equals(publicArea)) {  //公共区域走这里
             //公共区域用料时修改维修类型和用料
-            if (maintenanceType.equals("1003")) {
+            if ("1003".equals(maintenanceType)) {
                 //改变r_repair_pool表maintenance_type维修类型
                 RepairPoolPo repairPoolPo = new RepairPoolPo();
                 repairPoolPo.setRepairId(reqJson.getString("repairId"));
@@ -514,9 +515,9 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 repairPoolPo.setRepairMaterials(repairMaterial.substring(0, repairMaterial.length() - 1));
                 super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
             }
-            if (repairChannel.equals("T") || repairChannel.equals("D")) { //如果是电话报修和员工代客报修结单后状态变为待回访
+            if ("T".equals(repairChannel) || "D".equals(repairChannel)) { //如果是电话报修和员工代客报修结单后状态变为待回访
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_RETURN_VISIT);
-            } else if (repairChannel.equals("Z")) { //如果是业主自主报修结单后状态变为待评价
+            } else if ("Z".equals(repairChannel)) { //如果是业主自主报修结单后状态变为待评价
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_APPRAISE);
             }
         }

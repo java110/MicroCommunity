@@ -1,7 +1,7 @@
 package com.java110.acct.bmo.accountBank.impl;
 
 import com.java110.acct.bmo.accountBank.IGetAccountBankBMO;
-import com.java110.intf.IAccountBankInnerServiceSMO;
+import com.java110.intf.acct.IAccountBankInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

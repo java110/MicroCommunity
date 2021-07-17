@@ -73,7 +73,7 @@
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
         </if>
-        order by t.create_time desc
+        order by t.payer_obj_name
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -84,9 +84,6 @@
     <update id="updateReportOweFeeInfo" parameterType="Map">
         update report_owe_fee t
         <set>
-            <if test="newBId != null and newBId != ''">
-                t.b_id = #{newBId},
-            </if>
             <if test="configName !=null and configName != ''">
                 t.config_name= #{configName},
             </if>
@@ -134,7 +131,26 @@
             </if>
         </set>
         where 1=1
-        and t.owe_id= #{oweId}
+            and t.owe_id= #{oweId}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </update>
+
+
+    <!-- 修改欠费统计信息 add by wuxw 2018-07-03 -->
+    <update id="deleteReportOweFeeInfo" parameterType="Map">
+        delete from report_owe_fee
+        where 1=1
+        <if test="oweId !=null and oweId != ''">
+            and owe_id= #{oweId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and fee_id = #{feeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and community_id= #{communityId}
+        </if>
     </update>
 
     <!-- 查询欠费统计数量 add by wuxw 2018-07-03 -->
@@ -270,7 +286,7 @@
                 #{item}
             </foreach>
         </if>
-        order by t.create_time desc
+        order by t.payer_obj_name
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
