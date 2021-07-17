@@ -27,14 +27,13 @@ public interface IReportOweFeeInnerServiceSMO {
     public int saveReportOweFee(@RequestBody ReportOweFeePo reportOweFeePo);
 
     @RequestMapping(value = "/updateReportOweFee", method = RequestMethod.POST)
-    public int updateReportOweFee(@RequestBody  ReportOweFeePo reportOweFeePo);
+    public int updateReportOweFee(@RequestBody ReportOweFeePo reportOweFeePo);
 
     @RequestMapping(value = "/deleteReportOweFee", method = RequestMethod.POST)
-    public int deleteReportOweFee(@RequestBody  ReportOweFeePo reportOweFeePo);
+    public int deleteReportOweFee(@RequestBody ReportOweFeePo reportOweFeePo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param reportOweFeeDto 数据对象分享
      * @return ReportOweFeeDto 对象数据
@@ -53,9 +52,22 @@ public interface IReportOweFeeInnerServiceSMO {
 
     /**
      * 查询所有 欠费信息
+     *
      * @param reportOweFeeDto
      * @return
      */
     @RequestMapping(value = "/queryReportAllOweFees", method = RequestMethod.POST)
     List<ReportOweFeeDto> queryReportAllOweFees(@RequestBody ReportOweFeeDto reportOweFeeDto);
+
+    /**
+     * 查询欠费信息(与房屋关联)
+     */
+    @RequestMapping(value = "/queryReportAllOweFeesByRoom", method = RequestMethod.POST)
+    List<ReportOweFeeDto> queryReportAllOweFeesByRoom(@RequestBody ReportOweFeeDto reportOweFeeDto);
+
+    /**
+     * 查询欠费信息(与车辆关联)
+     */
+    @RequestMapping(value = "/queryReportAllOweFeesByCar", method = RequestMethod.POST)
+    List<ReportOweFeeDto> queryReportAllOweFeesByCar(@RequestBody ReportOweFeeDto reportOweFeeDto);
 }

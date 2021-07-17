@@ -169,10 +169,10 @@
             and t.context= #{context}
         </if>
         <if test="startTime !=null ">
-            and t.start_time= #{startTime}
+            and t.start_time &lt;= #{startTime}
         </if>
         <if test="endTime !=null ">
-            and t.end_time= #{endTime}
+            and t.end_time &gt;= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -281,10 +281,10 @@
             and t.context= #{context}
         </if>
         <if test="startTime !=null ">
-            and t.start_time= #{startTime}
+            and t.start_time &lt;= #{startTime}
         </if>
         <if test="endTime !=null ">
-            and t.end_time= #{endTime}
+            and t.end_time &gt;= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

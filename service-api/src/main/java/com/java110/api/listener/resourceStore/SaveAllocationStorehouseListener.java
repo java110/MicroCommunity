@@ -28,6 +28,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -71,8 +72,8 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
                 resourceStoreDto.setShId(resourceStores.getJSONObject(resIndex).getString("shId"));
                 List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
                 Assert.listOnlyOne(resourceStoreDtos, "未包含 物品信息");
-                int stockA = Integer.parseInt(resourceStoreDtos.get(0).getStock());
-                int stockB = Integer.parseInt(resourceStores.getJSONObject(resIndex).getString("curStock"));
+                double stockA = Double.parseDouble(resourceStoreDtos.get(0).getStock());
+                double stockB = Double.parseDouble(resourceStores.getJSONObject(resIndex).getString("curStock"));
                 if (stockA < stockB) {
                     throw new IllegalArgumentException("库存不足");
                 }
@@ -84,9 +85,16 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
                 userStorehouseDto.setUserId(reqJson.getString("userId"));
                 List<UserStorehouseDto> userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
                 Assert.listOnlyOne(userStorehouseDtos, "未包含 物品信息");
-                int stockA = Integer.parseInt(userStorehouseDtos.get(0).getStock());
-                int stockB = Integer.parseInt(resourceStores.getJSONObject(resIndex).getString("curStock"));
-                if (stockA < stockB) {
+                double stockA = Double.parseDouble(userStorehouseDtos.get(0).getStock());
+//                double stockB = Double.parseDouble(resourceStores.getJSONObject(resIndex).getString("curStock"));
+                if (StringUtil.isEmpty(userStorehouseDtos.get(0).getMiniStock())) {
+                    throw new IllegalArgumentException("最小计量总数不能为空！");
+                }
+                //获取个人物品原最小计量总数
+                double miniStock = Double.parseDouble(userStorehouseDtos.get(0).getMiniStock());
+                //获取当前返还的数量
+                double curStock = Double.parseDouble(resourceStores.getJSONObject(resIndex).getString("curStock"));
+                if (miniStock < curStock) {
                     throw new IllegalArgumentException("库存不足");
                 }
                 resourceStores.getJSONObject(resIndex).put("resName", userStorehouseDtos.get(0).getResName());
@@ -148,12 +156,24 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
                 resourceStorePo.setResId(resObj.getString("resId"));
                 resourceStorePo.setStoreId(reqJson.getString("storeId"));
                 resourceStorePo.setShId(resObj.getString("shId"));
-                int stockA = Integer.parseInt(resObj.getString("stock"));//现有库存
-                int stockB = Integer.parseInt(resObj.getString("curStock"));//调拨数量
+                double stockA = Double.parseDouble(resObj.getString("stock"));//现有库存
+                double stockB = Double.parseDouble(resObj.getString("curStock"));//调拨数量
                 resourceStorePo.setStock((stockA - stockB) + "");
+                //计算当前调拨最小计量总数
+                if (StringUtil.isEmpty(resObj.getString("miniStock"))) {
+                    throw new IllegalArgumentException("最小计量总数不能为空！");
+                }
+                String miniStock = resObj.getString("miniStock"); //调拨前的最小计量总数
+                if (StringUtil.isEmpty(resObj.getString("miniUnitStock"))) {
+                    throw new IllegalArgumentException("最小计量单位数量不能为空！");
+                }
+                String miniUnitStock = resObj.getString("miniUnitStock"); //最小计量单位数量
+                double curStock = Double.parseDouble(resObj.getString("curStock")) * Double.parseDouble(miniUnitStock); //当前调拨的最小计量总数
+                double newMiniStock = Double.parseDouble(miniStock) - curStock; //调拨后剩余的最小计量总数
+                resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
                 super.update(context, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
-                int oldCurStore = Integer.parseInt(allocationStorehouseApplyPo.getApplyCount());
-                oldCurStore += Integer.parseInt(resObj.getString("curStock"));
+                double oldCurStore = Double.parseDouble(allocationStorehouseApplyPo.getApplyCount());
+                oldCurStore += Double.parseDouble(resObj.getString("curStock"));
                 allocationStorehouseApplyPo.setApplyCount(oldCurStore + "");
             } else {
                 UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
@@ -162,11 +182,42 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
                 //查询个人物品信息
                 List<UserStorehouseDto> userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
                 Assert.listOnlyOne(userStorehouseDtos, "查询当前用户个人物品信息错误！");
-                int stockA = Integer.parseInt(resObj.getString("stock"));//现有库存
-                int stockB = Integer.parseInt(resObj.getString("curStock"));//返还数量
+//              double stockA = Double.parseDouble(resObj.getString("stock"));//现有库存
+//              double stockB = Double.parseDouble(resObj.getString("curStock"));//返还数量
                 UserStorehousePo userStorehousePo = new UserStorehousePo();
+                //获取原最小计量单位数量
+                if (StringUtil.isEmpty(resObj.getString("miniUnitStock"))) {
+                    throw new IllegalArgumentException("最小计量总数不能为空！");
+                }
+                double miniUnitStock = Double.parseDouble(resObj.getString("miniUnitStock"));
+                //获取原最小计量总数
+                if (StringUtil.isEmpty(resObj.getString("miniStock"))) {
+                    throw new IllegalArgumentException("最小计量总数不能为空！");
+                }
+                String miniStock = resObj.getString("miniStock");
+                //获取物品单位
+                if (StringUtil.isEmpty(userStorehouseDtos.get(0).getUnitCode())) {
+                    throw new IllegalArgumentException("物品单位不能为空！");
+                }
+                String unitCode = userStorehouseDtos.get(0).getUnitCode();
+                //获取物品最小计量单位
+                if (StringUtil.isEmpty(userStorehouseDtos.get(0).getMiniUnitCode())) {
+                    throw new IllegalArgumentException("物品最小计量单位不能为空！");
+                }
+                String miniUnitCode = userStorehouseDtos.get(0).getMiniUnitCode();
+                //计算个人物品剩余的最小计量总数
+                double curStock = Double.parseDouble(miniStock) - Double.parseDouble(resObj.getString("curStock"));
+                if (unitCode.equals(miniUnitCode)) { //物品单位与最小计量单位相同时，就不向上取整
+                    //计算个人物品剩余的库存(向上取整)
+                    double newMiniStock = curStock / miniUnitStock;
+                    userStorehousePo.setStock(String.valueOf(newMiniStock));
+                } else { //物品单位与最小计量单位不同时就向上取整
+                    //计算个人物品剩余的库存(向上取整)
+                    double newMiniStock = Math.ceil(curStock / miniUnitStock);
+                    userStorehousePo.setStock(String.valueOf(newMiniStock));
+                }
                 userStorehousePo.setUsId(userStorehouseDtos.get(0).getUsId());
-                userStorehousePo.setStock((stockA - stockB) + "");
+                userStorehousePo.setMiniStock(String.valueOf(curStock));
                 super.update(context, userStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_STOREHOUSE);
                 //退还数量
                 allocationStorehouseApplyPo.setApplyCount(resObj.getString("curStock"));
@@ -179,10 +230,42 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
                 if (resourceStoreDtos != null && resourceStoreDtos.size() > 0) { //如果目标仓库下有这个物品信息，就更新该物品库存
                     for (ResourceStoreDto resourceStore : resourceStoreDtos) {
                         ResourceStorePo resourceStorePo = new ResourceStorePo();
-                        //获取目标仓库下该物品的原有库存数
-                        int stock = Integer.parseInt(resourceStore.getStock());
+                        //获取目标仓库下该物品的原有最小计量总数
+                        if (StringUtil.isEmpty(resourceStore.getMiniStock())) {
+                            throw new IllegalArgumentException("最小计量总数不能为空！");
+                        }
+                        double oldMiniStock = Double.parseDouble(resourceStore.getMiniStock());
+                        //计算返还后总的最小计量总数
+                        BigDecimal num1 = new BigDecimal(oldMiniStock);
+                        BigDecimal num2 = new BigDecimal(Double.parseDouble(resObj.getString("curStock")));
+                        double allMiniStock = num1.add(num2).doubleValue();
+                        //获取最小计量单位数量
+                        if (StringUtil.isEmpty(resourceStore.getMiniUnitStock())) {
+                            throw new IllegalArgumentException("最小计量单位数量不能为空！");
+                        }
+                        double miniUnitStock1 = Double.parseDouble(resourceStore.getMiniUnitStock());
+                        //获取物品单位
+                        if (StringUtil.isEmpty(resourceStore.getUnitCode())) {
+                            throw new IllegalArgumentException("物品单位不能为空！");
+                        }
+                        String unitCode1 = resourceStore.getUnitCode();
+                        //获取物品最小计量单位
+                        if (StringUtil.isEmpty(resourceStore.getMiniUnitCode())) {
+                            throw new IllegalArgumentException("物品最小计量单位不能为空！");
+                        }
+                        String miniUnitCode1 = resourceStore.getMiniUnitCode();
+                        if (unitCode1.equals(miniUnitCode1)) { //物品单位与物品最小计量单位相同时，就不向上取整
+                            //计算返还后物品资源库存(向上取整)
+                            double newStock = allMiniStock / miniUnitStock1;
+                            resourceStorePo.setStock(String.valueOf(newStock));
+                        } else { //物品单位与物品最小计量单位不同时，就向上取整
+                            //计算返还后物品资源库存(向上取整)
+                            double newStock = Math.ceil(allMiniStock / miniUnitStock1);
+                            resourceStorePo.setStock(String.valueOf(newStock));
+                        }
                         resourceStorePo.setResId(resourceStore.getResId());
-                        resourceStorePo.setStock((stock + stockB) + "");
+                        resourceStorePo.setMiniStock(String.valueOf(allMiniStock));
+//                      resourceStorePo.setStock((stock + stockB) + "");
                         super.update(context, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
                     }
                 } else { //如果目标仓库下没有这个物品信息，就插入一条物品信息
@@ -196,7 +279,7 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
                     resourceStorePo.setResName(resourceStoreList.get(0).getResName());
                     resourceStorePo.setStoreId(reqJson.getString("storeId"));
                     resourceStorePo.setResCode(resourceStoreList.get(0).getResCode());
-                    resourceStorePo.setStock(stockB + "");
+                    resourceStorePo.setMiniStock(resObj.getString("curStock"));
                     resourceStorePo.setShId(resObj.getString("shzId"));
                     resourceStorePo.setPrice(resourceStoreList.get(0).getPrice());
                     resourceStorePo.setDescription("");
@@ -208,6 +291,28 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
                     resourceStorePo.setAveragePrice(resourceStoreList.get(0).getAveragePrice());
                     resourceStorePo.setRstId(resourceStoreList.get(0).getRstId());
                     resourceStorePo.setRssId(resourceStoreList.get(0).getRssId());
+                    if (StringUtil.isEmpty(resourceStoreList.get(0).getMiniUnitStock())) {
+                        throw new IllegalArgumentException("最小计量单位数量不能为空！");
+                    }
+                    resourceStorePo.setMiniUnitStock(resourceStoreList.get(0).getMiniUnitStock());
+                    if (StringUtil.isEmpty(resourceStoreList.get(0).getMiniUnitCode())) {
+                        throw new IllegalArgumentException("最小计量单位不能为空！");
+                    }
+                    resourceStorePo.setMiniUnitCode(resourceStoreList.get(0).getMiniUnitCode());
+                    if (resourceStorePo.getUnitCode().equals(resourceStorePo.getMiniUnitCode())) { //如果物品单位与物品最小计量单位相同，就不向上取整
+                        //计算物品库存
+                        BigDecimal num1 = new BigDecimal(Double.parseDouble(resourceStorePo.getMiniStock()));
+                        BigDecimal num2 = new BigDecimal(Double.parseDouble(resourceStorePo.getMiniUnitStock()));
+                        double newStock = num1.divide(num2, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        resourceStorePo.setStock(String.valueOf(newStock));
+                    } else { //如果物品单位与物品最小计量单位不相同，就向上取整
+                        //计算物品库存
+                        BigDecimal num1 = new BigDecimal(Double.parseDouble(resourceStorePo.getMiniStock()));
+                        BigDecimal num2 = new BigDecimal(Double.parseDouble(resourceStorePo.getMiniUnitStock()));
+                        double newStock = num1.divide(num2, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double newStock1 = Math.ceil(newStock);
+                        resourceStorePo.setStock(String.valueOf(newStock1));
+                    }
                     resourceStorePo.setCreateTime(format.format(new Date()));
                     super.insert(context, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
                 }

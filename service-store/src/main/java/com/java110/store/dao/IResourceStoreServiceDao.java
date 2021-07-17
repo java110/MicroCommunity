@@ -41,6 +41,14 @@ public interface IResourceStoreServiceDao {
     void saveResourceStoreInfoInstance(Map info) throws DAOException;
 
     /**
+     * 保存物品信息
+     *
+     * @param info
+     * @throws DAOException DAO异常
+     */
+    void saveResourceStoreInfo(Map info) throws DAOException;
+
+    /**
      * 查询资源信息（instance过程）
      * 根据bId 查询资源信息
      *

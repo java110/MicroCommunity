@@ -1,6 +1,5 @@
 package com.java110.user.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.PageDto;
@@ -268,7 +267,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     @Override
     public int updateOwnerMember(OwnerPo ownerPo) {
         Map info = BeanConvertUtil.beanCovertMap(ownerPo);
-        info.put("statusCd","0");
+        info.put("statusCd", "0");
         ownerServiceDaoImpl.updateOwnerInfoInstance(info);
         return 1;
     }
@@ -286,6 +285,12 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
             ownerDto.setPage((page - 1) * ownerDto.getRow());
         }
         return BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.queryOwnerLogsByRoom(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
+    }
+
+    @Override
+    public List<OwnerDto> queryAllOwners(@RequestBody OwnerDto ownerDto) {
+        List<OwnerDto> allOwners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
+        return allOwners;
     }
 
     public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {

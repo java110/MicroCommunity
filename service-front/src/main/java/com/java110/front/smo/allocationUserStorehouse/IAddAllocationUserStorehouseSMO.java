@@ -4,7 +4,7 @@ import com.java110.core.context.IPageData;
 import org.springframework.http.ResponseEntity;
 
 /**
- * 添加转增记录接口
+ * 添加转赠记录接口
  *
  * add by fqz 2021-04-24
  */

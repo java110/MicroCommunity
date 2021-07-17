@@ -26,6 +26,9 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     public static final String STATE_NOT_PASS = "1004"; // 未通过
     public static final String WAREHOUSING_TYPE_DIRECT = "10000"; // 直接入库/出库
     public static final String WAREHOUSING_TYPE_APPLY = "20000"; // 采购申请入库/出库
+    public static final String WAREHOUSING_TYPE_URGENT = "30000"; //紧急采购入库
+    public static final String WEIGHTED_MEAN_TRUE = "10000"; //计算均价
+    public static final String WEIGHTED_MEAN_FALSE = "20000";
 
     private String resOrderType;
     private String description;
@@ -66,6 +69,9 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     //状态标识
     private String noticeState;
+
+    //查询当月数据标识
+    private String urgentFlag;
 
     public String getResOrderType() {
         return resOrderType;
@@ -345,5 +351,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setNoticeState(String noticeState) {
         this.noticeState = noticeState;
+    }
+
+    public String getUrgentFlag() {
+        return urgentFlag;
+    }
+
+    public void setUrgentFlag(String urgentFlag) {
+        this.urgentFlag = urgentFlag;
     }
 }

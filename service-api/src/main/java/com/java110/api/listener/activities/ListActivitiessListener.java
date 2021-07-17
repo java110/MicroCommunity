@@ -10,6 +10,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeActivitiesConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.activities.ApiActivitiesDataVo;
 import com.java110.vo.api.activities.ApiActivitiesVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -65,6 +68,12 @@ public class ListActivitiessListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         ActivitiesDto activitiesDto = BeanConvertUtil.covertBean(reqJson, ActivitiesDto.class);
+        if(!StringUtil.isEmpty("clientType") && "H5".equals(reqJson.get("clientType"))){
+            Date day=new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            activitiesDto.setStartTime(df.format(day));
+            activitiesDto.setEndTime(df.format(day));
+        }
 
         int count = activitiesInnerServiceSMOImpl.queryActivitiessCount(activitiesDto);
 

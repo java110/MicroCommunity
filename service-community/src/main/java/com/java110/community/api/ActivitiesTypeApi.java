@@ -9,6 +9,7 @@ import com.java110.dto.activitiesType.ActivitiesTypeDto;
 import com.java110.po.activitiesType.ActivitiesTypePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -100,12 +101,27 @@ public class ActivitiesTypeApi {
      */
     @RequestMapping(value = "/queryActivitiesType", method = RequestMethod.GET)
     public ResponseEntity<String> queryActivitiesType(@RequestParam(value = "communityId") String communityId,
+                                                      @RequestParam(value = "defaultShow", required=false) String defaultShow,
+                                                      @RequestParam(value = "typeCd", required=false) String typeCd,
+                                                      @RequestParam(value = "typeName", required=false) String typeName,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ActivitiesTypeDto activitiesTypeDto = new ActivitiesTypeDto();
         activitiesTypeDto.setPage(page);
         activitiesTypeDto.setRow(row);
         activitiesTypeDto.setCommunityId(communityId);
+        if(!StringUtil.isEmpty(defaultShow)){
+            activitiesTypeDto.setDefaultShow(defaultShow);
+        }
+        if(!StringUtil.isEmpty(typeCd)){
+            activitiesTypeDto.setTypeCd(typeCd);
+        }
+        if(!StringUtil.isEmpty(typeCd)){
+            activitiesTypeDto.setTypeCd(typeCd);
+        }
+        if(!StringUtil.isEmpty(typeName)){
+            activitiesTypeDto.setTypeName(typeName);
+        }
         return getActivitiesTypeBMOImpl.get(activitiesTypeDto);
     }
 }

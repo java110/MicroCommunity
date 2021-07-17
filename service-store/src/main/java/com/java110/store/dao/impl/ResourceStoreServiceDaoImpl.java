@@ -72,6 +72,21 @@ public class ResourceStoreServiceDaoImpl extends BaseServiceDao implements IReso
         }
     }
 
+    /**
+     * 保存物品信息
+     *
+     * @param info
+     * @throws DAOException
+     */
+    @Override
+    public void saveResourceStoreInfo(Map info) throws DAOException {
+        logger.debug("保存物品信息入参 info : {}", info);
+        int saveFlag = sqlSessionTemplate.insert("resourceResourceStoreServiceDaoImpl.saveResourceStoreInfo", info);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存物品信息数据失败：" + JSONObject.toJSONString(info));
+        }
+    }
+
 
     /**
      * 查询资源信息（instance）

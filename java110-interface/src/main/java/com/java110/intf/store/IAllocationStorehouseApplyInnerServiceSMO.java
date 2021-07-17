@@ -24,7 +24,6 @@ public interface IAllocationStorehouseApplyInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param allocationAllocationStorehouseApplyhouseApplyDto 数据对象分享
      * @return AllocationStorehouseApplyDto 对象数据
      */
@@ -39,4 +38,12 @@ public interface IAllocationStorehouseApplyInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAllocationStorehouseApplysCount", method = RequestMethod.POST)
     int queryAllocationStorehouseApplysCount(@RequestBody AllocationStorehouseApplyDto allocationAllocationStorehouseApplyhouseApplyDto);
+
+    /**
+     * 添加调拨申请记录
+     *
+     * @param allocationStorehouseApplyDto
+     */
+    @RequestMapping(value = "/saveAllocationStorehouseApplys", method = RequestMethod.POST)
+    void saveAllocationStorehouseApplys(@RequestBody AllocationStorehouseApplyDto allocationStorehouseApplyDto);
 }

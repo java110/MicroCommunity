@@ -151,6 +151,12 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
+        <if test="visitStartTime !=null and visitStartTime !='' ">
+            and t.visit_time &gt;= #{visitStartTime}
+        </if>
+        <if test="visitEndTime !=null and visitEndTime !='' ">
+            and t.visit_time &lt;= #{visitEndTime}
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -241,6 +247,12 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="visitStartTime !=null and visitStartTime !='' ">
+            and t.visit_time &gt;= #{visitStartTime}
+        </if>
+        <if test="visitEndTime !=null and visitEndTime !='' ">
+            and t.visit_time &lt;= #{visitEndTime}
         </if>
 
 

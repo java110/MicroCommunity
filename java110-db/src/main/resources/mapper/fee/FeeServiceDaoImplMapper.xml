@@ -391,16 +391,18 @@
         t.community_id communityId,
         t.config_id configId,
         t.cur_bill curBill,
+        td.name curBillName,
         c.fee_name feeName
         from bill t
         left join pay_fee_config c on t.config_id = c.config_id and c.community_id = t.community_id and c.status_cd =
         '0'
-        where 1 =1
+        left join t_dict td on td.table_name = 'bill' and td.table_columns = 'cur_bill' and t.cur_bill = td.status_cd
+        where 1 = 1
         <if test="billId !=null and billId != ''">
             and t.bill_id= #{billId}
         </if>
         <if test="billName !=null and billName != ''">
-            and t.bill_name= #{billName}
+            and t.bill_name like '%${billName}%'
         </if>
         <if test="receivable !=null and receivable != ''">
             and t.receivable= #{receivable}
@@ -440,7 +442,7 @@
             and t.bill_id= #{billId}
         </if>
         <if test="billName !=null and billName != ''">
-            and t.bill_name= #{billName}
+            and t.bill_name like '%${billName}%'
         </if>
         <if test="receivable !=null and receivable != ''">
             and t.receivable= #{receivable}
@@ -485,7 +487,8 @@
         t.create_time createTime,
         t.deadline_time deadlineTime,
         pf.payer_obj_id payObjId,
-        td.`name` feeTypeName
+        td.name feeTypeName,
+        td2.name stateName
         from bill_owe_fee t
         <if test="curBill !=null and curBill != ''">
             inner join bill b on t.bill_id = b.bill_id and b.community_id = t.community_id and b.cur_bill = #{curBill}
@@ -493,7 +496,9 @@
         left join pay_fee pf on t.fee_id = pf.fee_id and t.community_id = pf.community_id and pf.status_cd = '0'
         left join t_dict td on pf.fee_type_cd = td.status_cd and td.table_name = 'pay_fee_config' and td.table_columns =
         'fee_type_cd'
-        where 1 =1
+        left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'bill_owe_fee' and td2.table_columns =
+        'state'
+        where 1 = 1
         <if test="oweId !=null and oweId != ''">
             and t.owe_id= #{oweId}
         </if>
@@ -523,7 +528,7 @@
             </foreach>
         </if>
         <if test="ownerName != null and ownerName != ''">
-            and t.owner_name = #{ownerName}
+            and t.owner_name like '%${ownerName}%'
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -564,7 +569,7 @@
             and t.owner_id = #{ownerId}
         </if>
         <if test="ownerName != null and ownerName != ''">
-            and t.owner_name = #{ownerName}
+            and t.owner_name like '%${ownerName}%'
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -850,7 +855,8 @@
     <select id="computeEveryOweFee" parameterType="Map" resultType="Map">
         select pfc.fee_name feeName,pf.fee_id feeId,pf.end_time endTime,pf.payer_obj_id payerObjId,pf.payer_obj_type
         payerObjType,
-        pf.community_id communityId,pfc.computing_formula computingFormula,pfc.computing_formula_text computingFormulaText,
+        pf.community_id communityId,pfc.computing_formula computingFormula,pfc.computing_formula_text
+        computingFormulaText,
         pfc.square_price
         squarePrice,pfc.additional_amount additionalAmount
         from pay_fee pf

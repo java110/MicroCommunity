@@ -17,17 +17,22 @@ import com.java110.utils.constant.CommonConstant;
 public interface IRoomBMO extends IApiBaseBMO {
 
     /**
-     *  修改房屋
+     * 修改房屋
      *
      * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
     public void updateRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     public void addBusinessRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     public void addBusinessUnit(JSONObject paramInJson, DataFlowContext dataFlowContext);
-    public void addCommunityMember(JSONObject paramInJson,DataFlowContext dataFlowContext);
+
+    public void addCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     public void addBusinessFloor(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加小区楼信息
      *
@@ -36,6 +41,7 @@ public interface IRoomBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public void deleteRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 售卖房屋信息
      *
@@ -44,6 +50,7 @@ public interface IRoomBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public void exitRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 删除物业费用信息
      *
@@ -52,6 +59,7 @@ public interface IRoomBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public void exitPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加小区楼信息
      *
@@ -78,6 +86,7 @@ public interface IRoomBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public void updateRoomAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加小区楼信息
      *
@@ -86,6 +95,7 @@ public interface IRoomBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public void updateShellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加物业费用
      *
@@ -94,6 +104,7 @@ public interface IRoomBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public void addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 售卖房屋信息
      *

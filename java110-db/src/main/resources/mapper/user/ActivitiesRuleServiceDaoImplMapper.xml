@@ -22,7 +22,7 @@
         startTime,t.remark,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.rule_id,t.rule_id
         ruleId,t.obj_type,t.obj_type objType
         from activities_rule t
-        where 1 =1
+        where 1 = 1
         <if test="ruleType !=null and ruleType != ''">
             and t.rule_type= #{ruleType}
         </if>

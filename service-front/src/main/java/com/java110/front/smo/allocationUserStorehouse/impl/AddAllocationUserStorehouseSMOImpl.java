@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 添加转增记录实现类
+ * 添加转赠记录实现类
  * add by fqz 2021-04-24
  */
 @Service("addAllocationUserStorehouseSMOImpl")
@@ -25,7 +25,7 @@ public class AddAllocationUserStorehouseSMOImpl extends AbstractComponentSMO imp
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
        /* Assert.hasKeyAndValue(paramIn, "stock", "必填，请填现有库存数");
-        Assert.hasKeyAndValue(paramIn, "giveQuantity", "必填，请填转增数量");*/
+        Assert.hasKeyAndValue(paramIn, "giveQuantity", "必填，请填转赠数量");*/
     }
 
     @Override

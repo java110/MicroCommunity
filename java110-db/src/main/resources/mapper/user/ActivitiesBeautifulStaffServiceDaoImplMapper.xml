@@ -47,6 +47,9 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
+        <if test="staffName !=null and staffName != ''">
+            and uu.name like '%${staffName}%'
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

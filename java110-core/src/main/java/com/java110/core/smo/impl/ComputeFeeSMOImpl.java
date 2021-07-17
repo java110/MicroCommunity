@@ -279,7 +279,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feeReceiptDetailPo.setArea(roomDtos.get(0).getBuiltUpArea());
                 feeReceiptDetailPo.setSquarePrice(feeDto.getComputingFormulaText());
-            }else if ("9009".equals(computingFormula)) {
+            } else if ("9009".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 } else {
                     BigDecimal curDegree = new BigDecimal(Double.parseDouble(feeDto.getCurDegrees()));
@@ -349,7 +349,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     feeReceiptDetailPo.setArea(sub.doubleValue() + "");
                     feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
                 }
-            }else {
+            } else {
             }
         }
     }
@@ -395,7 +395,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
                 return objName;
             }
-            objName = objName + "(" + parkingSpaceDtos.get(0).getAreaNum() + "停车场" + parkingSpaceDtos.get(0).getNum() + "车位)";
+            objName = objName + "-" + parkingSpaceDtos.get(0).getAreaNum() + "停车场" + "-" + parkingSpaceDtos.get(0).getNum() + "车位";
         } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {
             ContractDto contractDto = new ContractDto();
             contractDto.setContractId(feeDto.getPayerObjId());
@@ -714,7 +714,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeRoomCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class), BeanConvertUtil.covertBean(reportRoomDto, RoomDto.class));
-            }else if ("9009".equals(computingFormula)) {
+            } else if ("9009".equals(computingFormula)) {
                 if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
                     //throw new IllegalArgumentException("抄表数据异常");
                 } else {
@@ -761,7 +761,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeCarCustomizeFormula(BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class), BeanConvertUtil.covertBean(reportCarDto, OwnerCarDto.class));
-            }else if ("9009".equals(computingFormula)) {
+            } else if ("9009".equals(computingFormula)) {
                 if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
                     throw new IllegalArgumentException("抄表数据异常");
                 } else {

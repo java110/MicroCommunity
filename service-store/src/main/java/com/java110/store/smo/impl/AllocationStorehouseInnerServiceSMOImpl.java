@@ -81,6 +81,16 @@ public class AllocationStorehouseInnerServiceSMOImpl extends BaseServiceSMO impl
         return allocationAllocationStorehousehouseServiceDaoImpl.queryAllocationStorehousesCount(BeanConvertUtil.beanCovertMap(allocationAllocationStorehousehouseDto));
     }
 
+    /**
+     * 新增调拨记录
+     *
+     * @param allocationStorehouseDto
+     */
+    @Override
+    public void saveAllocationStorehouses(@RequestBody AllocationStorehouseDto allocationStorehouseDto) {
+        allocationAllocationStorehousehouseServiceDaoImpl.saveAllocationStorehouseInfo(BeanConvertUtil.beanCovertMap(allocationStorehouseDto));
+    }
+
     public IAllocationStorehouseServiceDao getAllocationStorehouseServiceDaoImpl() {
         return allocationAllocationStorehousehouseServiceDaoImpl;
     }

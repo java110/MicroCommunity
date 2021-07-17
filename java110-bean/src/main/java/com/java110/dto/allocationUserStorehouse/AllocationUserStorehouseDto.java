@@ -32,9 +32,9 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
     private String specName;
     private String rstId;
     private String rssId;
-    //转增总数量(小计)
+    //转赠总数量(小计)
     private String subTotalQuantity;
-    //转增总数量(大计)
+    //转赠总数量(大计)
     private String highTotalQuantity;
 
     public String getAcceptUserId() {

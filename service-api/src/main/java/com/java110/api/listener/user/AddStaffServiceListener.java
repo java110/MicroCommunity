@@ -8,9 +8,11 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -28,6 +30,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 /**
  * 添加员工 2018年12月6日
  * Created by wuxw on 2018/5/18.
@@ -39,6 +43,9 @@ public class AddStaffServiceListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IUserBMO userBMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -67,6 +74,12 @@ public class AddStaffServiceListener extends AbstractServiceApiPlusListener {
         //获取数据上下文对象
         Assert.jsonObjectHaveKey(reqJson, "storeId", "请求参数中未包含storeId 节点，请确认");
         Assert.jsonObjectHaveKey(reqJson, "storeTypeCd", "请求参数中未包含storeTypeCd 节点，请确认");
+        //判断员工手机号是否重复(员工可根据手机号登录平台)
+        UserDto userDto = new UserDto();
+        userDto.setTel(reqJson.getString("tel"));
+        userDto.setUserFlag("1");
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+        Assert.listIsNull(users, "员工手机号不能重复，请重新输入");
         //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
         String userId = "";
         String oldUserId = "";

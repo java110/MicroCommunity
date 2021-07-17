@@ -26,6 +26,8 @@ public class VisitDto extends PageDto implements Serializable {
     private String visitCase;
     private String communityId;
     private String bId;
+    private String visitStartTime;
+    private String visitEndTime;
 
 
     public String getvName() {
@@ -115,5 +117,21 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getVisitStartTime() {
+        return visitStartTime;
+    }
+
+    public void setVisitStartTime(String visitStartTime) {
+        this.visitStartTime = visitStartTime;
+    }
+
+    public String getVisitEndTime() {
+        return visitEndTime;
+    }
+
+    public void setVisitEndTime(String visitEndTime) {
+        this.visitEndTime = visitEndTime;
     }
 }

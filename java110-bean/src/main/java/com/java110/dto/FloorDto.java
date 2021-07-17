@@ -43,6 +43,7 @@ public class FloorDto extends PageDto implements Serializable {
 
     private Date createTime;
 
+    private String statusCd = "0";
 
     public String getFloorId() {
         return floorId;
@@ -122,5 +123,13 @@ public class FloorDto extends PageDto implements Serializable {
 
     public void setFloorArea(String floorArea) {
         this.floorArea = floorArea;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

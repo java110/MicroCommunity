@@ -13,6 +13,15 @@
         )
     </insert>
 
+    <!-- 保存调拨申请信息-->
+    <insert id="saveAllocationStorehouseApplyInfo" parameterType="Map">
+        insert into allocation_storehouse_apply(
+        apply_id,b_id,start_user_id,start_user_name,remark,apply_count,store_id,create_time,state,community_id,apply_type
+        ) values (
+        #{applyId},#{bId},#{startUserId},#{startUserName},#{remark},#{applyCount},#{storeId},#{createTime},#{state},#{communityId},#{applyType}
+        )
+    </insert>
+
     <!-- 查询调拨申请信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAllocationStorehouseApplyInfo" parameterType="Map" resultType="Map">
         select t.apply_id,t.apply_id applyId,t.start_user_id,t.start_user_id
@@ -104,10 +113,8 @@
         td.name stateName,t.create_time createTime,t.community_id,t.community_id communityId,t.apply_type,t.apply_type
         applyType,td2.name applyTypeName
         from allocation_storehouse_apply t
-        left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and
-        td.table_columns = 'state'
-        left join t_dict td2 on t.apply_type = td2.status_cd and td2.table_name = 'allocation_storehouse_apply' and
-        td2.table_columns = 'apply_type'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns = 'state'
+        left join t_dict td2 on t.apply_type = td2.status_cd and td2.table_name = 'allocation_storehouse_apply' and td2.table_columns = 'apply_type'
         where 1 = 1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
@@ -122,7 +129,7 @@
             and t.start_user_id= #{startUserId}
         </if>
         <if test="startUserName !=null and startUserName != ''">
-            and t.start_user_name= #{startUserName}
+            and t.start_user_name like '%${startUserName}%'
         </if>
         <if test="applyCount !=null and applyCount != ''">
             and t.apply_count= #{applyCount}
@@ -217,7 +224,7 @@
             and t.start_user_id= #{startUserId}
         </if>
         <if test="startUserName !=null and startUserName != ''">
-            and t.start_user_name= #{startUserName}
+            and t.start_user_name like '%${startUserName}%'
         </if>
         <if test="applyCount !=null and applyCount != ''">
             and t.apply_count= #{applyCount}

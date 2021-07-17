@@ -30,6 +30,8 @@ public class ReportFeeYearCollectionDto extends PageDto implements Serializable 
     private String collectionId;
     private String objType;
     private String receivableAmount;
+    private String feeTypeCd;
+    private String feeTypeCdName;
 
     private List<ReportFeeYearCollectionDetailDto> reportFeeYearCollectionDetailDtos;
 
@@ -135,7 +137,6 @@ public class ReportFeeYearCollectionDto extends PageDto implements Serializable 
         this.objType = objType;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -166,5 +167,21 @@ public class ReportFeeYearCollectionDto extends PageDto implements Serializable 
 
     public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
+    }
+
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
+    }
+
+    public String getFeeTypeCdName() {
+        return feeTypeCdName;
+    }
+
+    public void setFeeTypeCdName(String feeTypeCdName) {
+        this.feeTypeCdName = feeTypeCdName;
     }
 }

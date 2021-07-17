@@ -5,7 +5,9 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.SendSmsFactory;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.msg.SmsDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
@@ -21,6 +23,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
+import java.util.List;
+
+import static com.java110.api.listener.owner.OwnerRegisterListener.ID_CARD_SWITCH;
 
 
 /**
@@ -28,6 +33,12 @@ import java.util.Date;
  */
 @Java110Listener("userSendSmsListener")
 public class UserSendSmsListener extends AbstractServiceApiListener {
+
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
@@ -85,6 +96,25 @@ public class UserSendSmsListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         String tel = reqJson.getString("tel");
+        String captchaType = reqJson.getString("captchaType");
+        if(!StringUtil.isEmpty(captchaType) && "ownerBinding".equals(captchaType)){
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setCommunityId(reqJson.getString("communityId"));
+            ownerDto.setName(reqJson.getString("appUserName"));
+            ownerDto.setLink(reqJson.getString("tel"));
+
+            //取出开关映射的值
+            String val = MappingCache.getValue(DOMAIN_COMMON, ID_CARD_SWITCH);
+            //取出身份证
+            String idCardErrorMsg ="";
+            String idCard = reqJson.getString("idCard");
+            if ("1".equals(val) && !StringUtil.isEmpty(idCard)) {
+                ownerDto.setIdCard(idCard);
+                idCardErrorMsg="或者身份证号";
+            }
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+            Assert.listOnlyOne(ownerDtos, "填写业主信息错误，请确认，预留业主姓名、手机号"+idCardErrorMsg+"信息是否正确！");
+        }
         //校验是否传了 分页信息
         String msgCode = SendSmsFactory.generateMessageCode(6);
         SmsDto smsDto = new SmsDto();

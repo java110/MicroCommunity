@@ -71,25 +71,25 @@ public class ListAllocationUserStorehousesListener extends AbstractServiceApiLis
 
         if (count > 0) {
             List<AllocationUserStorehouseDto> allocationUserStorehouseList = allocationUserStorehouseInnerServiceSMOImpl.queryAllocationUserStorehouses(allocationUserStorehouseDto);
-            //转增总数量(小计)
+            //转赠总数量(小计)
             BigDecimal subTotalQuantity = BigDecimal.ZERO;
-            //转增总数量(小计)
+            //转赠总数量(小计)
             BigDecimal totalQuantity = BigDecimal.ZERO;
             for (AllocationUserStorehouseDto allocationUserStorehouse : allocationUserStorehouseList) {
-                //获取转增数量
+                //获取转赠数量
                 String giveQuantity = allocationUserStorehouse.getGiveQuantity();
                 BigDecimal quantity = new BigDecimal(giveQuantity);
-                //计算转增总数量(小计)
+                //计算转赠总数量(小计)
                 subTotalQuantity = subTotalQuantity.add(quantity);
             }
-            //查询所有转增记录
+            //查询所有转赠记录
             allocationUserStorehouseDto.setPage(PageDto.DEFAULT_PAGE);
             List<AllocationUserStorehouseDto> allocationUserStorehouses = allocationUserStorehouseInnerServiceSMOImpl.queryAllocationUserStorehouses(allocationUserStorehouseDto);
             for (AllocationUserStorehouseDto allocationUserStorehouse : allocationUserStorehouses) {
-                //获取转增数量
+                //获取转赠数量
                 String giveQuantity = allocationUserStorehouse.getGiveQuantity();
                 BigDecimal quantity = new BigDecimal(giveQuantity);
-                //计算转增总数量(大计)
+                //计算转赠总数量(大计)
                 totalQuantity = totalQuantity.add(quantity);
             }
             for (AllocationUserStorehouseDto allocationUserStorehouse : allocationUserStorehouseList) {

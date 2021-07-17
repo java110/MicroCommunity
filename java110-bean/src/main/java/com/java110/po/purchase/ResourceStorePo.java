@@ -39,6 +39,13 @@ public class ResourceStorePo implements Serializable {
     private String rstName;
     private String rssId;
     private String rssName;
+    //最小计量单位
+    private String miniUnitCode;
+    //最小计量单位数量
+    private String miniUnitStock;
+    //最小计量总数
+    private String miniStock;
+    private String operationType;
 
     public String getResId() {
         return resId;
@@ -246,5 +253,37 @@ public class ResourceStorePo implements Serializable {
 
     public void setRssName(String rssName) {
         this.rssName = rssName;
+    }
+
+    public String getMiniUnitCode() {
+        return miniUnitCode;
+    }
+
+    public void setMiniUnitCode(String miniUnitCode) {
+        this.miniUnitCode = miniUnitCode;
+    }
+
+    public String getMiniUnitStock() {
+        return miniUnitStock;
+    }
+
+    public void setMiniUnitStock(String miniUnitStock) {
+        this.miniUnitStock = miniUnitStock;
+    }
+
+    public String getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(String operationType) {
+        this.operationType = operationType;
+    }
+
+    public String getMiniStock() {
+        return miniStock;
+    }
+
+    public void setMiniStock(String miniStock) {
+        this.miniStock = miniStock;
     }
 }

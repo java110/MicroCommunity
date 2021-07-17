@@ -6,6 +6,7 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
@@ -68,16 +69,17 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
-        Assert.jsonObjectHaveKey(reqJson, "carId", "请求报文中未包含carId");
+//        Assert.jsonObjectHaveKey(reqJson, "carId", "请求报文中未包含carId");
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
 
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarId(reqJson.getString("carId"));
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setStatusCd("0");
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-        Assert.listOnlyOne(ownerCarDtos, "未找到车辆信息");
-
+        if(ownerCarDtos!=null && ownerCarDtos.size()>1){
+            throw new IllegalArgumentException("有多个车辆绑定此车位，请先删除车辆！");
+        }
         String psId = ownerCarDtos.get(0).getPsId();
 
         if (StringUtil.isEmpty(psId) || "-1".equals(psId)) {
@@ -87,7 +89,6 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
         if (ownerCarDtos.get(0).getEndTime().getTime() > DateUtil.getCurrentDate().getTime()) {
             throw new IllegalArgumentException("车位租用还未结束不能释放");
         }
-
         reqJson.put("ownerCarDto", ownerCarDtos.get(0));
     }
 
@@ -116,6 +117,7 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
         OwnerCarPo ownerCarPo = new OwnerCarPo();
         ownerCarPo.setPsId("-1");
         ownerCarPo.setCarId(reqJson.getString("carId"));
+        ownerCarPo.setMemberId(reqJson.getString("memberId"));
         ownerCarPo.setCommunityId(reqJson.getString("communityId"));
         if (oweFee) {
             ownerCarPo.setState(OwnerCarDto.STATE_OWE);

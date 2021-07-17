@@ -9,9 +9,11 @@ import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.store.StoreUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.userLogin.UserLoginDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.po.userLogin.UserLoginPo;
 import com.java110.utils.constant.CommonConstant;
@@ -20,6 +22,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,9 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
 
     @Autowired
     private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -97,7 +103,7 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }
-        String requestUrl = appService.getUrl() + "?userCode=" + paramInJson.getString("username") + "&pwd=" + paramInJson.getString("passwd");
+        String requestUrl = appService.getUrl() + "?userCode=" + paramInJson.getString("username") + "&pwd=" + paramInJson.getString("passwd")+ "&levelCdTag=1";
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN);
         HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
@@ -128,6 +134,7 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }
+
 
         //检查商户状态
         StoreUserDto storeUserDto = new StoreUserDto();

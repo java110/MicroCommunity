@@ -5,8 +5,11 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeUserStorehouseConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -19,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 查询小区侦听类
@@ -28,6 +32,9 @@ public class ListUserStorehousesListener extends AbstractServiceApiListener {
 
     @Autowired
     private IUserStorehouseInnerServiceSMO userStorehouseInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -63,6 +70,23 @@ public class ListUserStorehousesListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         UserStorehouseDto userStorehouseDto = BeanConvertUtil.covertBean(reqJson, UserStorehouseDto.class);
+        //获取用户id
+        String userId = reqJson.getString("userId");
+        List<Map> privileges = null;
+        //查看所有个人物品权限
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/everythingGoods");
+        basePrivilegeDto.setUserId(userId);
+        privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges != null && privileges.size() > 0) {
+            userStorehouseDto.setUserId(reqJson.getString("searchUserId"));
+            userStorehouseDto.setUserName(reqJson.getString("searchUserName"));
+        }
+        //转增只查询自己的物品
+        if(!StringUtil.isEmpty(reqJson.getString("giveType")) && "1".equals(reqJson.getString("giveType"))){
+            userStorehouseDto.setUserId(reqJson.getString("userId"));
+            userStorehouseDto.setUserName(reqJson.getString("userName"));
+        }
 
         int count = userStorehouseInnerServiceSMOImpl.queryUserStorehousesCount(userStorehouseDto);
 

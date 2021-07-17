@@ -17,6 +17,7 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.notice.ApiNoticeDataVo;
 import com.java110.vo.api.notice.ApiNoticeVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -83,6 +86,12 @@ public class ListNoticesListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         NoticeDto noticeDto = BeanConvertUtil.covertBean(reqJson, NoticeDto.class);
+        if(!StringUtil.isEmpty("clientType") && "H5".equals(reqJson.get("clientType"))){
+            Date day=new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            noticeDto.setStartTime(df.format(day));
+            noticeDto.setEndTime(df.format(day));
+        }
 
         int count = noticeInnerServiceSMOImpl.queryNoticesCount(noticeDto);
 

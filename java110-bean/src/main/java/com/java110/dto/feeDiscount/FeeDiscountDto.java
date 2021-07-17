@@ -24,6 +24,7 @@ public class FeeDiscountDto extends PageDto implements Serializable {
     private String discountName;
     private String discountDesc;
     private String discountType;
+    private String discountTypeName;
     private String discountId;
     private String communityId;
     private String ruleId;
@@ -34,11 +35,9 @@ public class FeeDiscountDto extends PageDto implements Serializable {
 
     private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getDiscountName() {
         return discountName;
@@ -87,7 +86,6 @@ public class FeeDiscountDto extends PageDto implements Serializable {
     public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -143,5 +141,13 @@ public class FeeDiscountDto extends PageDto implements Serializable {
 
     public void setCycles(double cycles) {
         this.cycles = cycles;
+    }
+
+    public String getDiscountTypeName() {
+        return discountTypeName;
+    }
+
+    public void setDiscountTypeName(String discountTypeName) {
+        this.discountTypeName = discountTypeName;
     }
 }

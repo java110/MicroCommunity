@@ -85,12 +85,12 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
         }
         int count = resourceStoreInnerServiceSMOImpl.queryResourceStoresCount(resourceStoreDto);
         List<ApiResourceStoreDataVo> resourceStores = new ArrayList<>();
+        //计算总价(小计)
+        BigDecimal subTotalPrice = BigDecimal.ZERO;
+        //计算总价(大计)
+        BigDecimal totalPrice = BigDecimal.ZERO;
         if (count > 0) {
             List<ApiResourceStoreDataVo> apiResourceStoreDataVos = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
-            //计算总价(小计)
-            BigDecimal subTotalPrice = BigDecimal.ZERO;
-            ;
-            BigDecimal totalPrice = BigDecimal.ZERO;
             for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
                 //获取均价
                 String averagePrice = apiResourceStoreDataVo.getAveragePrice();
@@ -123,8 +123,8 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
                 }
             }
             for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
-                apiResourceStoreDataVo.setSubTotalPrice(subTotalPrice.toString());
-                apiResourceStoreDataVo.setHighTotalPrice(totalPrice.toString());
+                apiResourceStoreDataVo.setSubTotalPrice(String.format("%.2f", subTotalPrice));
+                apiResourceStoreDataVo.setHighTotalPrice(String.format("%.2f", totalPrice));
                 resourceStores.add(apiResourceStoreDataVo);
             }
         } else {

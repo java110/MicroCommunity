@@ -77,7 +77,30 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
     public List<ReportOweFeeDto> queryReportAllOweFees(@RequestBody ReportOweFeeDto reportOweFeeDto) {
         List<ReportOweFeeDto> reportOweFees = BeanConvertUtil.covertBeanList(reportOweFeeServiceDaoImpl.queryReportAllOweFees(BeanConvertUtil.beanCovertMap(reportOweFeeDto)), ReportOweFeeDto.class);
         return reportOweFees;
+    }
 
+    /**
+     * 查询欠费(与房屋关联)
+     *
+     * @param reportOweFeeDto
+     * @return
+     */
+    @Override
+    public List<ReportOweFeeDto> queryReportAllOweFeesByRoom(@RequestBody ReportOweFeeDto reportOweFeeDto) {
+        List<ReportOweFeeDto> reportOweFees = BeanConvertUtil.covertBeanList(reportOweFeeServiceDaoImpl.queryReportAllOweFeesByRoom(BeanConvertUtil.beanCovertMap(reportOweFeeDto)), ReportOweFeeDto.class);
+        return reportOweFees;
+    }
+
+    /**
+     * 查询欠费(与车辆关联)
+     *
+     * @param reportOweFeeDto
+     * @return
+     */
+    @Override
+    public List<ReportOweFeeDto> queryReportAllOweFeesByCar(@RequestBody ReportOweFeeDto reportOweFeeDto) {
+        List<ReportOweFeeDto> reportOweFees = BeanConvertUtil.covertBeanList(reportOweFeeServiceDaoImpl.queryReportAllOweFeesByCar(BeanConvertUtil.beanCovertMap(reportOweFeeDto)), ReportOweFeeDto.class);
+        return reportOweFees;
     }
 
     public IReportOweFeeServiceDao getReportOweFeeServiceDaoImpl() {

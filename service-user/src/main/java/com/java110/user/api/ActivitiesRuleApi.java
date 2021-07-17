@@ -210,9 +210,15 @@ public class ActivitiesRuleApi {
      */
     @RequestMapping(value = "/queryActivitiesBeautifulStaff", method = RequestMethod.GET)
     public ResponseEntity<String> queryActivitiesBeautifulStaff(@RequestHeader(value = "store-id", required = false) String storeId,
+                                                                @RequestParam(value = "ruleId", required = false) String ruleId,
+                                                                @RequestParam(value = "activitiesNum", required = false) String activitiesNum,
+                                                                @RequestParam(value = "staffName", required = false) String staffName,
                                                                 @RequestParam(value = "page") int page,
                                                                 @RequestParam(value = "row") int row) {
         ActivitiesBeautifulStaffDto activitiesBeautifulStaffDto = new ActivitiesBeautifulStaffDto();
+        activitiesBeautifulStaffDto.setStaffName(staffName);
+        activitiesBeautifulStaffDto.setRuleId(ruleId);
+        activitiesBeautifulStaffDto.setActivitiesNum(activitiesNum);
         activitiesBeautifulStaffDto.setPage(page);
         activitiesBeautifulStaffDto.setRow(row);
         activitiesBeautifulStaffDto.setStoreId(storeId);

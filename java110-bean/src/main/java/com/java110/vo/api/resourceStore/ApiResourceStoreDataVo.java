@@ -14,11 +14,13 @@ public class ApiResourceStoreDataVo implements Serializable {
     private String rstName;
     private String resCode;
     private String price;
+    private String shType;
     //库存数
     private String stock;
     private String description;
     //单位
     private String unitCode;
+    private String unitCodeName;
     //备注
     private String remark;
     //对外售价最低价格
@@ -43,6 +45,13 @@ public class ApiResourceStoreDataVo implements Serializable {
     private String highTotalPrice;
     //物品总价(小计)
     private String subTotalPrice;
+    //最小计量单位
+    private String miniUnitCode;
+    private String miniUnitCodeName;
+    //最小计量单位数量
+    private String miniUnitStock;
+    //最小计量总数
+    private String miniStock;
 
     public String getResId() {
         return resId;
@@ -234,5 +243,53 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setSubTotalPrice(String subTotalPrice) {
         this.subTotalPrice = subTotalPrice;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCode() {
+        return miniUnitCode;
+    }
+
+    public void setMiniUnitCode(String miniUnitCode) {
+        this.miniUnitCode = miniUnitCode;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getMiniUnitStock() {
+        return miniUnitStock;
+    }
+
+    public void setMiniUnitStock(String miniUnitStock) {
+        this.miniUnitStock = miniUnitStock;
+    }
+
+    public String getMiniStock() {
+        return miniStock;
+    }
+
+    public void setMiniStock(String miniStock) {
+        this.miniStock = miniStock;
+    }
+
+    public String getShType() {
+        return shType;
+    }
+
+    public void setShType(String shType) {
+        this.shType = shType;
     }
 }

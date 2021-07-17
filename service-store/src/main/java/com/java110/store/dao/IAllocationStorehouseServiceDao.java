@@ -27,8 +27,6 @@ public interface IAllocationStorehouseServiceDao {
      */
     void saveBusinessAllocationStorehouseInfo(Map businessAllocationStorehouseInfo) throws DAOException;
 
-
-
     /**
      * 查询仓库调拨信息（business过程）
      * 根据bId 查询仓库调拨信息
@@ -38,9 +36,6 @@ public interface IAllocationStorehouseServiceDao {
      */
     List<Map> getBusinessAllocationStorehouseInfo(Map info) throws DAOException;
 
-
-
-
     /**
      * 保存 仓库调拨信息 Business数据到 Instance中
      * @param info
@@ -48,8 +43,12 @@ public interface IAllocationStorehouseServiceDao {
      */
     void saveAllocationStorehouseInfoInstance(Map info) throws DAOException;
 
-
-
+    /**
+     * 保存调拨记录
+     * @param info
+     * @throws DAOException DAO异常
+     */
+    void saveAllocationStorehouseInfo(Map info) throws DAOException;
 
     /**
      * 查询仓库调拨信息（instance过程）
@@ -60,15 +59,12 @@ public interface IAllocationStorehouseServiceDao {
      */
     List<Map> getAllocationStorehouseInfo(Map info) throws DAOException;
 
-
-
     /**
      * 修改仓库调拨信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     void updateAllocationStorehouseInfoInstance(Map info) throws DAOException;
-
 
     /**
      * 查询仓库调拨总数

@@ -15,7 +15,7 @@ import java.util.Map;
  * 欠费统计组件内部之间使用，没有给外围系统提供服务能力
  * 欠费统计服务接口类，要求全部以字符串传输，方便微服务化
  * 新建客户，修改客户，删除客户，查询客户等功能
- *
+ * <p>
  * Created by wuxw on 2016/12/27.
  */
 public interface IReportOweFeeServiceDao {
@@ -23,17 +23,17 @@ public interface IReportOweFeeServiceDao {
 
     /**
      * 保存 欠费统计信息
+     *
      * @param info
      * @throws DAOException DAO异常
      */
     void saveReportOweFeeInfo(Map info) throws DAOException;
 
 
-
-
     /**
      * 查询欠费统计信息（instance过程）
      * 根据bId 查询欠费统计信息
+     *
      * @param info bId 信息
      * @return 欠费统计信息
      * @throws DAOException DAO异常
@@ -41,9 +41,9 @@ public interface IReportOweFeeServiceDao {
     List<Map> getReportOweFeeInfo(Map info) throws DAOException;
 
 
-
     /**
      * 修改欠费统计信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
@@ -59,4 +59,20 @@ public interface IReportOweFeeServiceDao {
     int queryReportOweFeesCount(Map info);
 
     List<Map> queryReportAllOweFees(Map beanCovertMap);
+
+    /**
+     * 查询欠费(与房屋关联)
+     *
+     * @param beanCovertMap
+     * @return
+     */
+    List<Map> queryReportAllOweFeesByRoom(Map beanCovertMap);
+
+    /**
+     * 查询欠费(与车辆关联)
+     *
+     * @param beanCovertMap
+     * @return
+     */
+    List<Map> queryReportAllOweFeesByCar(Map beanCovertMap);
 }

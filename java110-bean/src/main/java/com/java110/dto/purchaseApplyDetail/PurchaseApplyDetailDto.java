@@ -45,6 +45,8 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
     private String rstId;
     private String rssId;
     private String storeId;
+    private String shId;
+    private String shName;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -300,5 +302,21 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
+    }
+
+    public String getShName() {
+        return shName;
+    }
+
+    public void setShName(String shName) {
+        this.shName = shName;
     }
 }

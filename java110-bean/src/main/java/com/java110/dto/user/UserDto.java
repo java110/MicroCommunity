@@ -55,7 +55,7 @@ public class UserDto extends PageDto implements Serializable {
 
     private String openId;
 
-    private String statusCd;
+    private String statusCd = "0";
 
     private String token;
 
@@ -72,6 +72,10 @@ public class UserDto extends PageDto implements Serializable {
     private boolean loginByPhone;
 
     private String relCd;
+
+    private String score;
+
+    private String userFlag;
 
     public String getUserId() {
         return userId;
@@ -295,5 +299,21 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setRelCd(String relCd) {
         this.relCd = relCd;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
+
+    public String getUserFlag() {
+        return userFlag;
+    }
+
+    public void setUserFlag(String userFlag) {
+        this.userFlag = userFlag;
     }
 }

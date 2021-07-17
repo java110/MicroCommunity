@@ -35,6 +35,7 @@ public class BasePrivilegeDto extends PageDto implements Serializable {
     private String description;
     private String statusCd = "0";
     private String mId;
+    private String stName;
 
     private String createTime;
 
@@ -124,5 +125,13 @@ public class BasePrivilegeDto extends PageDto implements Serializable {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getStName() {
+        return stName;
+    }
+
+    public void setStName(String stName) {
+        this.stName = stName;
     }
 }

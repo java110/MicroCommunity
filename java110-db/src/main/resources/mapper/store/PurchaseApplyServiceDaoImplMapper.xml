@@ -397,7 +397,7 @@
     <select id="queryPurchaseApplysCount" parameterType="Map" resultType="Map">
         select count(1) count
         from purchase_apply t
-        where 1 =1
+        where 1 = 1
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
         </if>
@@ -409,6 +409,9 @@
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
+        </if>
+        <if test="warehousingWay !=null and warehousingWay != ''">
+            and t.warehousing_way= #{warehousingWay}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
@@ -430,6 +433,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id = #{communityId}
+        </if>
+        <if test='urgentFlag !=null and urgentFlag == "1"'>
+            and date_format(t.create_time,'%Y-%m') = date_format(now(),'%Y-%m')
         </if>
     </select>
 

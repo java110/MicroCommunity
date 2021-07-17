@@ -18,7 +18,8 @@
         select t.unit_price,t.unit_price unitPrice,t.create_user_id,t.create_user_id
         createUserId,t.quantity,t.rsur_id,t.rsur_id rsurId,t.repair_id,t.repair_id
         repairId,t.create_user_name,t.create_user_name createUserName,t.remark,t.store_id,t.store_id
-        storeId,t.res_id,t.res_id resId,t.resource_store_name,t.resource_store_name resourceStoreName,t.operate,t.b_id,t.b_id bId,t.community_id,t.community_id communityId
+        storeId,t.res_id,t.res_id resId,t.resource_store_name,t.resource_store_name
+        resourceStoreName,t.operate,t.b_id,t.b_id bId,t.community_id,t.community_id communityId
         from business_resource_store_use_record t
         where 1 =1
         <if test="unitPrice !=null and unitPrice != ''">
@@ -113,7 +114,8 @@
         select t.unit_price,t.unit_price unitPrice,t.create_user_id,t.create_user_id
         createUserId,t.quantity,t.rsur_id,t.rsur_id rsurId,t.repair_id,t.repair_id
         repairId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
-        statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.resource_store_name,t.resource_store_name resourceStoreName,rs.res_name resName,
+        statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id
+        resId,t.resource_store_name,t.resource_store_name resourceStoreName,rs.res_name resName,
         t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.create_time createTime, rst.name
         rstName,rss.spec_name specName
         from resource_store_use_record t
@@ -151,6 +153,9 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="resName !=null and resName != ''">
+            and rs.res_name like '%${resName}%'
+        </if>
         <if test="resourceStoreName !=null and resourceStoreName != ''">
             and t.resource_store_name= #{resourceStoreName}
         </if>
@@ -165,6 +170,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -255,6 +266,9 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="resName !=null and resName != ''">
+            and rs.res_name like '%${resId}%'
+        </if>
         <if test="resourceStoreName !=null and resourceStoreName != ''">
             and t.resource_store_name= #{resourceStoreName}
         </if>
@@ -270,6 +284,11 @@
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}
         </if>
+        <if test="startTime != null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
     </select>
-
 </mapper>

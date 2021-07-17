@@ -100,6 +100,9 @@ public class RepairUserDto extends PageDto implements Serializable {
     //已回访总数量
     private String returnNumber;
 
+    //评分
+    private String score;
+
     public String getContext() {
         return context;
     }
@@ -426,5 +429,13 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setReturnAmount(String returnAmount) {
         this.returnAmount = returnAmount;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
     }
 }

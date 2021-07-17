@@ -26,6 +26,7 @@ public class BillDto extends PageDto implements Serializable {
     private String createTime;
     private String remark;
     private String curBill;
+    private String curBillName;
     private String feeName;
 
     public String getBillId() {
@@ -130,5 +131,13 @@ public class BillDto extends PageDto implements Serializable {
 
     public void setFeeName(String feeName) {
         this.feeName = feeName;
+    }
+
+    public String getCurBillName() {
+        return curBillName;
+    }
+
+    public void setCurBillName(String curBillName) {
+        this.curBillName = curBillName;
     }
 }

@@ -9,12 +9,14 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.org.OrgStaffRelDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.org.OrgStaffRelPo;
 import com.java110.po.user.UserPo;
@@ -54,6 +56,10 @@ public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
     @Autowired
     private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
 
@@ -122,8 +128,20 @@ public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
 
     private void modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
         UserPo userPo = BeanConvertUtil.covertBean(builderStaffInfo(paramObj, dataFlowContext), UserPo.class);
+        //根据手机号查询用户
+        UserDto userDto = new UserDto();
+        userDto.setTel(userPo.getTel());
+        userDto.setUserFlag("1");
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+        if (users != null && users.size() > 0) {
+            for (UserDto user : users) {
+                if (!user.getUserId().equals(userPo.getUserId())) {
+                    throw new IllegalArgumentException("员工手机号不能重复，请重新输入");
+                }
+            }
+        }
         super.update(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
-        OrgStaffRelDto orgStaffRelDto = new  OrgStaffRelDto();
+        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
         orgStaffRelDto.setStaffId(userPo.getUserId());
         List<OrgStaffRelDto> orgStaffRelDtoList = orgStaffRelInnerServiceSMOImpl.queryOrgInfoByStaffIds(orgStaffRelDto);
         if (orgStaffRelDtoList.size() != 1) {

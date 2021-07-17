@@ -36,7 +36,7 @@
     },
     {
       "code": "stock",
-      "msg": "转增数量不能为空"
+      "msg": "转赠数量不能为空"
     },
     {
       "code": "acceptUserId",

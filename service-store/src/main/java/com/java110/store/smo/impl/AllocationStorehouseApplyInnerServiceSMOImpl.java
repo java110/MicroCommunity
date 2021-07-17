@@ -1,6 +1,5 @@
 package com.java110.store.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.dto.PageDto;
@@ -78,6 +77,16 @@ public class AllocationStorehouseApplyInnerServiceSMOImpl extends BaseServiceSMO
     @Override
     public int queryAllocationStorehouseApplysCount(@RequestBody AllocationStorehouseApplyDto allocationAllocationStorehouseApplyhouseApplyDto) {
         return allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.queryAllocationStorehouseApplysCount(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyDto));
+    }
+
+    /**
+     * 添加调拨申请记录
+     *
+     * @param allocationStorehouseApplyDto
+     */
+    @Override
+    public void saveAllocationStorehouseApplys(@RequestBody AllocationStorehouseApplyDto allocationStorehouseApplyDto) {
+        allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.saveAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationStorehouseApplyDto));
     }
 
     public IAllocationStorehouseApplyServiceDao getAllocationStorehouseApplyServiceDaoImpl() {

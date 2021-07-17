@@ -20,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 /**
  * 查询小区侦听类
@@ -33,7 +33,6 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
 
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
-
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
@@ -50,7 +49,6 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
     public HttpMethod getHttpMethod() {
         return HttpMethod.GET;
     }
-
 
     @Override
     public int getOrder() {
@@ -92,24 +90,49 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
             ownerRepairDto.setRepairChannels(Arrays.asList(repair_channel));
         }
 
-
         int count = repairInnerServiceSMOImpl.queryRepairsCount(ownerRepairDto);
 
-
-        List<RepairDto> ownerRepairs = null;
+        List<RepairDto> ownerRepairs = new ArrayList<>();
         if (count > 0) {
-            ownerRepairs = repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto);
-
+            List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto);
+            for(RepairDto repairDto : repairDtos){
+                //获取综合评价得分
+                String appraiseScoreNumber = repairDto.getAppraiseScore();
+                Double appraiseScoreNum = 0.0;
+                if (!StringUtil.isEmpty(appraiseScoreNumber)) {
+                    appraiseScoreNum = Double.parseDouble(appraiseScoreNumber);
+                }
+                int appraiseScore = (int) Math.ceil(appraiseScoreNum);
+                //获取上门速度评分
+                String doorSpeedScoreNumber = repairDto.getDoorSpeedScore();
+                Double doorSpeedScoreNum = 0.0;
+                if (!StringUtil.isEmpty(doorSpeedScoreNumber)) {
+                    doorSpeedScoreNum = Double.parseDouble(doorSpeedScoreNumber);
+                }
+                int doorSpeedScore = (int) Math.ceil(doorSpeedScoreNum);
+                //获取维修员服务评分
+                String repairmanServiceScoreNumber = repairDto.getRepairmanServiceScore();
+                Double repairmanServiceScoreNum = 0.0;
+                if (!StringUtil.isEmpty(repairmanServiceScoreNumber)) {
+                    repairmanServiceScoreNum = Double.parseDouble(repairmanServiceScoreNumber);
+                }
+                int repairmanServiceScore = (int) Math.ceil(repairmanServiceScoreNum);
+                //取得平均分
+                double averageNumber = (appraiseScoreNum + doorSpeedScoreNum + repairmanServiceScoreNum) / 3.0;
+                BigDecimal averageNum = new BigDecimal(averageNumber);
+                Double average = averageNum.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                repairDto.setAppraiseScore(String.valueOf(appraiseScore));
+                repairDto.setDoorSpeedScore(String.valueOf(doorSpeedScore));
+                repairDto.setRepairmanServiceScore(String.valueOf(repairmanServiceScore));
+                repairDto.setAverage(String.valueOf(average));
+                ownerRepairs.add(repairDto);
+            }
             refreshRepair(ownerRepairs);
         } else {
             ownerRepairs = new ArrayList<>();
         }
-
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerRepairs);
-
-
         context.setResponseEntity(responseEntity);
-
     }
 
     private void refreshRepair(List<RepairDto> ownerRepairs) {

@@ -28,7 +28,7 @@ public class LoginComponent {
     public ResponseEntity<String> doLogin(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
         try {
-            responseEntity = loginServiceSMOImpl.doLogin(pd);
+                responseEntity = loginServiceSMOImpl.doLogin(pd);
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

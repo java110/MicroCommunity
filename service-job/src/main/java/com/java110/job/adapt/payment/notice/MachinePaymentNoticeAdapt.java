@@ -170,15 +170,36 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String receivedAmount = payFeeDetailPo.getReceivedAmount();
         //获取费用类型
         String feeTypeCd = feeDtos.get(0).getFeeTypeCd();
+        //获取付费对象类型
+        String payerObjType = feeDtos.get(0).getPayerObjType();
+        //车牌号
+        String carNum = "";
+        //停车场
+        String num = "";
+        //车位
+        String spaceNum = "";
+        if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) {
+            String[] split = payerObjName.split("-");
+            //获取车牌
+            carNum = split[0];
+            //获取停车场
+            num = split[1];
+            //获取车位
+            spaceNum = split[2];
+        }
         //获取社区名称
         String name = communityDtos.get(0).getName();
         JSONObject paramIn = new JSONObject();
-        paramIn.put("payFeeRoom", name + payerObjName);
+        paramIn.put("payFeeRoom", name + "-" + payerObjName);
         paramIn.put("feeTypeCdName", feeTypeCdName);
         paramIn.put("payFeeTime", startTime + "至" + endTime);
         paramIn.put("receivedAmount", receivedAmount);
         paramIn.put("startTime", startTime);
         paramIn.put("endTime", endTime);
+        paramIn.put("payerObjType", payerObjType);
+        paramIn.put("carNum", carNum);
+        paramIn.put("num", num);
+        paramIn.put("spaceNum", spaceNum);
         //给业主推送消息
         sendMessage(paramIn, communityDtos.get(0), payFeeDetailPo);
         if (feeTypeCd.equals("888800010012")) {
@@ -240,35 +261,44 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             sendTemplate = sendMsgUrl;
         }
         String url = sendTemplate + accessToken;
-        for (UserDto userDto : userDtos) {
-            //根据 userId 查询到openId
-            try {
-                StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
-                staffAppAuthDto.setStaffId(userDto.getUserId());
-                staffAppAuthDto.setAppType("WECHAT");
-                List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
-                if(staffAppAuthDtos == null || staffAppAuthDtos.size()<1){
-                    continue;
+        //获取付费对象类型
+        String payerObjType = paramIn.getString("payerObjType");
+        if (userDtos != null && userDtos.size() > 0) {
+            for (UserDto userDto : userDtos) {
+                //根据 userId 查询到openId
+                try {
+                    StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
+                    staffAppAuthDto.setStaffId(userDto.getUserId());
+                    staffAppAuthDto.setAppType("WECHAT");
+                    List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+                    if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
+                        continue;
+                    }
+                    String openId = staffAppAuthDtos.get(0).getOpenId();
+                    Data data = new Data();
+                    PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+                    templateMessage.setTemplate_id(templateId);
+                    templateMessage.setTouser(openId);
+                    data.setFirst(new Content("本次缴费已到账"));
+                    if (payerObjType.equals("3333")) {  //房屋
+                        data.setKeyword1(new Content(paramIn.getString("payFeeRoom")));
+                        data.setKeyword2(new Content(paramIn.getString("feeTypeCdName")));
+                    } else {  //车辆
+                        data.setKeyword1(new Content(communityDto.getName() + "-" + paramIn.getString("num") + "-" + paramIn.getString("spaceNum")));
+                        data.setKeyword2(new Content(paramIn.getString("feeTypeCdName") + "-" + paramIn.getString("carNum")));
+                    }
+                    data.setKeyword3(new Content(paramIn.getString("payFeeTime")));
+                    data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
+                    data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
+                    templateMessage.setData(data);
+                    String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                    templateMessage.setUrl(wechatUrl);
+                    logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+                    ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+                    logger.info("微信模板返回内容:{}", responseEntity);
+                } catch (Exception e) {
+                    logger.error("发送缴费信息失败", e);
                 }
-                String openId = staffAppAuthDtos.get(0).getOpenId();
-                Data data = new Data();
-                PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-                templateMessage.setTemplate_id(templateId);
-                templateMessage.setTouser(openId);
-                data.setFirst(new Content("本次缴费已到账"));
-                data.setKeyword1(new Content(paramIn.getString("payFeeRoom")));
-                data.setKeyword2(new Content(paramIn.getString("feeTypeCdName")));
-                data.setKeyword3(new Content(paramIn.getString("payFeeTime")));
-                data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
-                data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
-                templateMessage.setData(data);
-                String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-                templateMessage.setUrl(wechatUrl);
-                logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-                logger.info("微信模板返回内容:{}", responseEntity);
-            } catch (Exception e) {
-                logger.error("发送缴费信息失败", e);
             }
         }
     }
@@ -387,7 +417,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
         Assert.listOnlyOne(feeDtos, "费用不存在");
-        //支付房间id
+        //支付房间id(支付车辆id)
         String payerObjId = feeDtos.get(0).getPayerObjId();
         //支付类型(房屋、车辆)
         String payerObjType = feeDtos.get(0).getPayerObjType();
@@ -401,8 +431,9 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             ownerId = ownerRoomRelDtos.get(0).getOwnerId();
         } else if (payerObjType.equals("6666")) {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
-            ownerCarDto.setPsId(payerObjId);
+            ownerCarDto.setCarId(payerObjId);
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMO.queryOwnerCars(ownerCarDto);
+            Assert.listOnlyOne(ownerCarDtos, "查询车辆所属业主信息错误！");
             //取得业主id
             ownerId = ownerCarDtos.get(0).getOwnerId();
         }
@@ -412,6 +443,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         ownerDto.setOwnerTypeCd("1001");
         //查询业主
         List<OwnerDto> ownerDtos = ownerInnerServiceSMO.queryOwners(ownerDto);
+        Assert.listOnlyOne(ownerDtos, "查询业主信息错误！");
         //获得成员id
         String memberId = ownerDtos.get(0).getMemberId();
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
@@ -427,8 +459,13 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             templateMessage.setTemplate_id(templateId);
             templateMessage.setTouser(openId);
             data.setFirst(new Content("本次缴费已到账"));
-            data.setKeyword1(new Content(paramIn.getString("payFeeRoom")));
-            data.setKeyword2(new Content(paramIn.getString("feeTypeCdName")));
+            if (payerObjType.equals("3333")) {  //房屋
+                data.setKeyword1(new Content(paramIn.getString("payFeeRoom")));
+                data.setKeyword2(new Content(paramIn.getString("feeTypeCdName")));
+            } else {  //车辆
+                data.setKeyword1(new Content(communityDto.getName() + "-" + paramIn.getString("num") + "-" + paramIn.getString("spaceNum")));
+                data.setKeyword2(new Content(paramIn.getString("feeTypeCdName") + "-" + paramIn.getString("carNum")));
+            }
             data.setKeyword3(new Content(paramIn.getString("payFeeTime")));
             data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
             data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));

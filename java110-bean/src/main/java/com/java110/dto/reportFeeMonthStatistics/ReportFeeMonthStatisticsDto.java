@@ -32,6 +32,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String oweAmount;
     private String communityId;
     private String feeCreateTime;
+    private String feeStartTime;
+    private String feeEndTime;
     private String objType;
     private String floorId;
     private String floorNum;
@@ -102,6 +104,9 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     //空置房减免金额
     private String vacantHousingReduction;
+
+    //收费率
+    private String chargeRate;
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -221,6 +226,22 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setFeeCreateTime(String feeCreateTime) {
         this.feeCreateTime = feeCreateTime;
+    }
+
+    public String getFeeStartTime() {
+        return feeStartTime;
+    }
+
+    public void setFeeStartTime(String feeStartTime) {
+        this.feeStartTime = feeStartTime;
+    }
+
+    public String getFeeEndTime() {
+        return feeEndTime;
+    }
+
+    public void setFeeEndTime(String feeEndTime) {
+        this.feeEndTime = feeEndTime;
     }
 
     public String getObjType() {
@@ -509,5 +530,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setCurMaxTime(String curMaxTime) {
         this.curMaxTime = curMaxTime;
+    }
+
+    public String getChargeRate() {
+        return chargeRate;
+    }
+
+    public void setChargeRate(String chargeRate) {
+        this.chargeRate = chargeRate;
     }
 }

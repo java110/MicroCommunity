@@ -3,13 +3,11 @@ package com.java110.report.dao.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
-import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.report.dao.IReportOweFeeServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -24,38 +22,36 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
 
     private static Logger logger = LoggerFactory.getLogger(ReportOweFeeServiceDaoImpl.class);
 
-
-
-
-
     /**
      * 保存欠费统计信息 到 instance
-     * @param info   bId 信息
+     *
+     * @param info bId 信息
      * @throws DAOException DAO异常
      */
     @Override
     public void saveReportOweFeeInfo(Map info) throws DAOException {
-        logger.debug("保存欠费统计信息Instance 入参 info : {}",info);
+        logger.debug("保存欠费统计信息Instance 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.insert("reportOweFeeServiceDaoImpl.saveReportOweFeeInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("reportOweFeeServiceDaoImpl.saveReportOweFeeInfo", info);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存欠费统计信息Instance数据失败："+ JSONObject.toJSONString(info));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存欠费统计信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
 
     /**
      * 查询欠费统计信息（instance）
+     *
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getReportOweFeeInfo(Map info) throws DAOException {
-        logger.debug("查询欠费统计信息 入参 info : {}",info);
+        logger.debug("查询欠费统计信息 入参 info : {}", info);
 
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.getReportOweFeeInfo",info);
+        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.getReportOweFeeInfo", info);
 
         return businessReportOweFeeInfos;
     }
@@ -63,28 +59,30 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
 
     /**
      * 修改欠费统计信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
     public void updateReportOweFeeInfo(Map info) throws DAOException {
-        logger.debug("修改欠费统计信息Instance 入参 info : {}",info);
+        logger.debug("修改欠费统计信息Instance 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.update("reportOweFeeServiceDaoImpl.updateReportOweFeeInfo",info);
+        int saveFlag = sqlSessionTemplate.update("reportOweFeeServiceDaoImpl.updateReportOweFeeInfo", info);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改欠费统计信息Instance数据失败："+ JSONObject.toJSONString(info));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改欠费统计信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
-     /**
+    /**
      * 查询欠费统计数量
+     *
      * @param info 欠费统计信息
      * @return 欠费统计数量
      */
     @Override
     public int queryReportOweFeesCount(Map info) {
-        logger.debug("查询欠费统计数据 入参 info : {}",info);
+        logger.debug("查询欠费统计数据 入参 info : {}", info);
 
         List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportOweFeesCount", info);
         if (businessReportOweFeeInfos.size() < 1) {
@@ -96,11 +94,29 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
 
     @Override
     public List<Map> queryReportAllOweFees(Map info) {
-        logger.debug("queryReportAllOweFees 入参 info : {}",info);
+        logger.debug("queryReportAllOweFees 入参 info : {}", info);
 
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportAllOweFees",info);
+        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportAllOweFees", info);
 
         return businessReportOweFeeInfos;
+    }
+
+    @Override
+    public List<Map> queryReportAllOweFeesByRoom(Map info) {
+        logger.debug("queryReportAllOweFeesByRoom 入参 info : {}", info);
+
+        List<Map> businessReportOweFeeByRoomInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportAllOweFeesByRoom", info);
+
+        return businessReportOweFeeByRoomInfos;
+    }
+
+    @Override
+    public List<Map> queryReportAllOweFeesByCar(Map info) {
+        logger.debug("queryReportAllOweFeesByCar 入参 info : {}", info);
+
+        List<Map> businessReportOweFeeByCarInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportAllOweFeesByCar", info);
+
+        return businessReportOweFeeByCarInfos;
     }
 
 

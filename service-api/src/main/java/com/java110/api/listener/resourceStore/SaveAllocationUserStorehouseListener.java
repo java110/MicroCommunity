@@ -36,7 +36,7 @@ public class SaveAllocationUserStorehouseListener extends AbstractServiceApiPlus
         String userId = reqJson.getString("userId");
         String acceptUserId = reqJson.getString("acceptUserId");
         if(!StringUtil.isEmpty(userId) && !StringUtil.isEmpty(acceptUserId) && acceptUserId.equals(userId)){
-            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "物品接受人不能是本人，所以无法进行转增操作！");
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "物品接受人不能是本人，所以无法进行转赠操作！");
             context.setResponseEntity(responseEntity);
             return;
         }

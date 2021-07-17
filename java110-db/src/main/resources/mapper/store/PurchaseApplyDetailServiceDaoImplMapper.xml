@@ -81,10 +81,13 @@
         td2.name stateName,
         td3.name warehousingWayName,
         rst.name rstName,
-        rss.spec_name specName
+        rss.spec_name specName,
+        rs.sh_id shId,
+        sh.sh_name shName
         from purchase_apply_detail t
-        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id
-        left join resource_store rs on rs.res_id = t.res_id
+        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.status_cd = '0'
+        left join resource_store rs on rs.res_id = t.res_id and rs.status_cd = '0'
+        left join storehouse sh on rs.sh_id = sh.sh_id and sh.status_cd = '0'
         left join resource_supplier rsp on rsp.rs_id = t.rs_id
         left join t_dict td1 on pa.res_order_type = td1.status_cd and td1.table_name = 'purchase_apply' and
         td1.table_columns = 'res_order_type'
@@ -92,8 +95,8 @@
         'state'
         left join t_dict td3 on pa.warehousing_way = td3.status_cd and td3.table_name = 'purchase_apply' and
         td3.table_columns = 'warehousing_way'
-        LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id
-        LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id
+        LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id and rst.status_cd = '0'
+        LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
@@ -175,6 +178,9 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and pa.create_time &lt;= #{endTime}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and rs.sh_id = #{shId}
         </if>
         order by pa.create_time desc
         <if test="page != -1 and page != null ">
@@ -221,17 +227,18 @@
     <select id="queryPurchaseApplyDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from purchase_apply_detail t
-        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id
-        left join resource_store rs on rs.res_id = t.res_id
-        left join resource_supplier rsp on rsp.rs_id = t.rs_id
+        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.status_cd = '0'
+        left join resource_store rs on rs.res_id = t.res_id and rs.status_cd = '0'
+        left join storehouse sh on rs.sh_id = sh.sh_id and sh.status_cd = '0'
+        left join resource_supplier rsp on rsp.rs_id = t.rs_id and rsp.status_cd = '0'
         left join t_dict td1 on pa.res_order_type = td1.status_cd and td1.table_name = 'purchase_apply' and
         td1.table_columns = 'res_order_type'
         left join t_dict td2 on pa.state = td2.status_cd and td2.table_name = 'purchase_apply' and td2.table_columns =
         'state'
         left join t_dict td3 on pa.warehousing_way = td3.status_cd and td3.table_name = 'purchase_apply' and
         td3.table_columns = 'warehousing_way'
-        LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id
-        LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id
+        LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id and rst.status_cd = '0'
+        LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
@@ -313,6 +320,9 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and pa.create_time &lt;= #{endTime}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and rs.sh_id = #{shId}
         </if>
     </select>
 </mapper>

@@ -43,4 +43,12 @@ public interface IResourceStoreInnerServiceSMO {
     @RequestMapping(value = "/updateResourceStore", method = RequestMethod.POST)
     int updateResourceStore(@RequestBody ResourceStorePo resourceStorePo);
 
+    /**
+     * 新增物品
+     *
+     * @param resourceStoreDto
+     */
+    @RequestMapping(value = "/saveResourceStore", method = RequestMethod.POST)
+    void saveResourceStore(@RequestBody ResourceStoreDto resourceStoreDto);
+
 }

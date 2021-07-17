@@ -108,6 +108,7 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
         businessResourceStore.putAll(paramInJson);
         businessResourceStore.put("resId", GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));
         businessResourceStore.put("stock", "0");
+        businessResourceStore.put("miniStock", "0");
         businessResourceStore.put("createTime", new Date());
         ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(businessResourceStore, ResourceStorePo.class);
         super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);

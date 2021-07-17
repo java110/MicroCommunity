@@ -116,9 +116,10 @@ public class ReportFeeYearCollectionApi {
      */
     @RequestMapping(value = "/queryReportFeeYear", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportFeeYear(@RequestParam(value = "communityId") String communityId,
-                                                     @RequestParam(value = "objType") String objType,
-                                                     @RequestParam(value = "objName",required = false) String objName,
-                                                     @RequestParam(value = "configId",required = false) String configId,
+                                                     @RequestParam(value = "objType", required = false) String objType,
+                                                     @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
+                                                     @RequestParam(value = "objName", required = false) String objName,
+                                                     @RequestParam(value = "configId", required = false) String configId,
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) {
         ReportFeeYearCollectionDto reportFeeYearCollectionDto = new ReportFeeYearCollectionDto();
@@ -128,9 +129,9 @@ public class ReportFeeYearCollectionApi {
         reportFeeYearCollectionDto.setObjType(objType);
         reportFeeYearCollectionDto.setObjName(objName);
         reportFeeYearCollectionDto.setConfigId(configId);
+        reportFeeYearCollectionDto.setFeeTypeCd(feeTypeCd);
         return getReportFeeYearCollectionBMOImpl.get(reportFeeYearCollectionDto);
     }
-
 
 
     /**
