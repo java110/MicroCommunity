@@ -105,7 +105,6 @@ public class ActivitiesTypeApi {
                                                       @RequestParam(value = "typeCd", required=false) String typeCd,
                                                       @RequestParam(value = "typeName", required=false) String typeName,
                                                       @RequestParam(value = "page") int page,
-                                                      @RequestParam(value = "defaultShow", required = false) String defaultShow,
                                                       @RequestParam(value = "row") int row) {
         ActivitiesTypeDto activitiesTypeDto = new ActivitiesTypeDto();
         activitiesTypeDto.setPage(page);
