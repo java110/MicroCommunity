@@ -56,6 +56,7 @@ public class RoomDto extends PageDto implements Serializable {
     private String link;
     private String roomType;
     private String roomSubType;
+    private String roomSubTypeName;
     private String roomRent;
     private String roomArea;
 
@@ -355,5 +356,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setRoomArea(String roomArea) {
         this.roomArea = roomArea;
+    }
+
+    public String getRoomSubTypeName() {
+        return roomSubTypeName;
+    }
+
+    public void setRoomSubTypeName(String roomSubTypeName) {
+        this.roomSubTypeName = roomSubTypeName;
     }
 }
