@@ -285,7 +285,11 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("state", "2002");
             paramIn.put("builtUpArea", room.getBuiltUpArea());
             paramIn.put("feeCoefficient", "1.00");
+            paramIn.put("roomSubType", room.getRoomSubType());
+            paramIn.put("roomArea", room.getRoomArea());
+            paramIn.put("roomRent", room.getRoomRent());
             paramIn.put("roomType", "0".equals(room.getFloor().getUnitNum()) ? RoomDto.ROOM_TYPE_SHOPS : RoomDto.ROOM_TYPE_SHOPS);
+
 
 
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
@@ -790,12 +794,19 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                     Assert.hasValue(os[7], "房屋信息选项中" + (osIndex + 1) + "行房屋费用为空");
                     Assert.hasValue(os[8], "房屋信息选项中" + (osIndex + 1) + "行费用到期时间为空");
                 }
+                Assert.hasValue(os[9], "房屋信息选项中" + (osIndex + 1) + "行房屋类型为空");
+                Assert.hasValue(os[10], "房屋信息选项中" + (osIndex + 1) + "行室内面积为空");
+                Assert.hasValue(os[11], "房屋信息选项中" + (osIndex + 1) + "行租金为空");
                 importRoom = new ImportRoom();
                 importRoom.setRoomNum(os[0].toString());
                 importRoom.setFloor(getImportFloor(floors, os[1].toString(), os[2].toString()));
                 importRoom.setLayer(Integer.parseInt(os[3].toString()));
                 importRoom.setSection(os[4].toString());
                 importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
+                importRoom.setRoomSubType(os[9].toString());
+                importRoom.setRoomArea(os[10].toString());
+                importRoom.setRoomRent(os[11].toString());
+
 
                 if (os.length > 6 && !StringUtil.isNullOrNone(os[6])) {
                     importRoom.setRoomFeeId(os[7].toString());

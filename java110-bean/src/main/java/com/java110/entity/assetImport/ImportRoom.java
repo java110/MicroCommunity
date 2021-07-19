@@ -19,6 +19,12 @@ public class ImportRoom {
 
     private String feeEndDate;
 
+    private String roomSubType;
+    private String roomRent;
+    private String roomArea;
+
+
+
     private ImportOwner importOwner;
 
     public ImportFloor getFloor() {
@@ -83,5 +89,29 @@ public class ImportRoom {
 
     public void setFeeEndDate(String feeEndDate) {
         this.feeEndDate = feeEndDate;
+    }
+
+    public String getRoomSubType() {
+        return roomSubType;
+    }
+
+    public void setRoomSubType(String roomSubType) {
+        this.roomSubType = roomSubType;
+    }
+
+    public String getRoomRent() {
+        return roomRent;
+    }
+
+    public void setRoomRent(String roomRent) {
+        this.roomRent = roomRent;
+    }
+
+    public String getRoomArea() {
+        return roomArea;
+    }
+
+    public void setRoomArea(String roomArea) {
+        this.roomArea = roomArea;
     }
 }
