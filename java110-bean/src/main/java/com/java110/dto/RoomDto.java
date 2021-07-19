@@ -26,6 +26,10 @@ public class RoomDto extends PageDto implements Serializable {
     public static final String ROOM_TYPE_ROOM = "1010301";//普通房屋
     public static final String ROOM_TYPE_SHOPS = "2020602";//商铺
 
+    public static final String ROOM_SUB_TYPE_PERSON = "110";
+    public static final String ROOM_SUB_TYPE_WORK = "119";
+    public static final String ROOM_SUB_TYPE_HOUSE = "120";
+
 
     private String feeCoefficient;
     private String section;
@@ -51,7 +55,9 @@ public class RoomDto extends PageDto implements Serializable {
     private String idCard;
     private String link;
     private String roomType;
-
+    private String roomSubType;
+    private String roomRent;
+    private String roomArea;
 
     private String state;
     private String[] states;
@@ -325,5 +331,29 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setLayers(String[] layers) {
         this.layers = layers;
+    }
+
+    public String getRoomSubType() {
+        return roomSubType;
+    }
+
+    public void setRoomSubType(String roomSubType) {
+        this.roomSubType = roomSubType;
+    }
+
+    public String getRoomRent() {
+        return roomRent;
+    }
+
+    public void setRoomRent(String roomRent) {
+        this.roomRent = roomRent;
+    }
+
+    public String getRoomArea() {
+        return roomArea;
+    }
+
+    public void setRoomArea(String roomArea) {
+        this.roomArea = roomArea;
     }
 }

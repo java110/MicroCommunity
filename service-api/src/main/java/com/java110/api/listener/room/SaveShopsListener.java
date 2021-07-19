@@ -79,6 +79,18 @@ public class SaveShopsListener extends AbstractServiceApiPlusListener {
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         Assert.isMoney(reqJson.getString("feeCoefficient"), "房屋单价数据格式错误");
 
+        if (!reqJson.containsKey("roomSubType")) {
+            reqJson.put("roomSubType", RoomDto.ROOM_SUB_TYPE_WORK);
+        }
+
+        if (!reqJson.containsKey("roomRent")) {
+            reqJson.put("roomRent", "0");
+        }
+
+        if (!reqJson.containsKey("roomArea")) {
+            reqJson.put("roomRent", reqJson.getString("builtUpArea"));
+        }
+
     }
 
     @Override

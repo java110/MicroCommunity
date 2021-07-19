@@ -8,10 +8,10 @@
     <insert id="saveBusinessRoomInfo" parameterType="Map">
         insert into business_building_room(
         fee_coefficient,section,remark,user_id,room_id,layer,built_up_area,operate,room_num,unit_id,b_id,apartment,state,community_id,
-        room_type
+        room_type,room_sub_type,room_rent,room_area
         ) values (
         #{feeCoefficient},#{section},#{remark},#{userId},#{roomId},#{layer},#{builtUpArea},#{operate},#{roomNum},#{unitId},#{bId},#{apartment},#{state},
-        #{communityId},#{roomType}
+        #{communityId},#{roomType},#{roomSubType},#{roomRent},#{roomArea}
         )
     </insert>
 
@@ -22,7 +22,7 @@
         userId,t.room_id,t.room_id
         roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.operate,t.room_num,t.room_num
         roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,t.community_id,t.community_id
-        communityId,t.room_type,t.room_type roomType
+        communityId,t.room_type,t.room_type roomType,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
         from business_building_room t
         where 1 =1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
@@ -67,6 +67,9 @@
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
         </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -78,10 +81,10 @@
     <insert id="saveRoomInfoInstance" parameterType="Map">
         insert into building_room(
         fee_coefficient,section,status_cd,remark,user_id,room_id,layer,built_up_area,room_num,unit_id,b_id,apartment,state,community_id,
-        room_type
+        room_type,room_sub_type,room_rent,room_area
         ) select
         t.fee_coefficient,t.section,'0',t.remark,t.user_id,t.room_id,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state,t.community_id,
-        t.room_type
+        t.room_type,t.room_sub_type,t.room_rent,t.room_area
         from business_building_room t where 1=1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
             and t.fee_coefficient= #{feeCoefficient}
@@ -123,6 +126,9 @@
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
         </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -135,7 +141,8 @@
         select t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
         statusCd,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area
         builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id
-        bId,t.apartment,t.state,t.community_id,t.community_id communityId,t.room_type,t.room_type roomType
+        bId,t.apartment,t.state,t.community_id,t.community_id communityId,t.room_type,t.room_type roomType,
+        t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
         from building_room t
         where 1 =1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
@@ -187,6 +194,9 @@
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
         </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -234,6 +244,15 @@
         </if>
         <if test="state !=null and state != ''">
             , t.state= #{state}
+        </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            , t.room_sub_type= #{roomSubType}
+        </if>
+        <if test="roomRent !=null and roomRent != ''">
+            , t.room_rent= #{roomRent}
+        </if>
+        <if test="roomArea !=null and roomArea != ''">
+            , t.room_area= #{roomArea}
         </if>
         where 1=1
         <if test="roomId !=null and roomId != ''">
@@ -298,6 +317,10 @@
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
         </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
+        </if>
+
 
 
     </select>
@@ -357,6 +380,9 @@
         </if>
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
+        </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
         </if>
         <if test="states != null">
             and t.state in
@@ -435,6 +461,9 @@
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
         </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -500,6 +529,9 @@
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
         </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -514,7 +546,7 @@
         statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
-        t.room_type roomType,t.room_type
+        t.room_type roomType,t.room_type,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
@@ -567,6 +599,9 @@
         </if>
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
+        </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -584,7 +619,7 @@
         statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
-        t.room_type roomType,t.room_type
+        t.room_type roomType,t.room_type,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
@@ -637,6 +672,9 @@
         </if>
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
+        </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -657,6 +695,7 @@
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
         u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum,f.floor_area floorArea,u.unit_area unitArea,td.name
         stateName,t.room_type roomType,t.room_type,t.`community_id` communityId
+        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
         FROM building_room t
         inner join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
         inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` =
@@ -726,6 +765,9 @@
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
         </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
+        </if>
         <if test="states != null">
             and t.state in
             <foreach collection="states" item="item" open="(" close=")" separator=",">
@@ -750,6 +792,7 @@
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num`
         unitNum,f.`floor_num` floorNum,t.room_type roomType,t.room_type,f.floor_id floorId
+        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
         FROM
         building_owner bo,building_room t,building_owner_room_rel borr,building_unit u,f_floor f
         WHERE
@@ -764,6 +807,9 @@
         AND bo.`owner_type_cd` = '1001'
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
+        </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and borr.`status_cd` = #{statusCd}
@@ -811,6 +857,7 @@
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
         t.room_type roomType,t.room_type,f.floor_num floorNum
+        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
@@ -846,6 +893,9 @@
         </if>
         <if test="roomType !=null and roomType != ''">
             and t.room_type= #{roomType}
+        </if>
+        <if test="roomSubType !=null and roomSubType != ''">
+            and t.room_sub_type= #{roomSubType}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
