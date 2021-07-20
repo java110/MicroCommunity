@@ -43,4 +43,11 @@ public interface IMachineOpenDoorBMO {
      * @return
      */
     ResponseEntity<String> resendIot(JSONObject reqJson);
+
+    /**
+     * 获取二维码
+     * @param reqJson
+     * @return
+     */
+    ResponseEntity<String> getQRcode(JSONObject reqJson);
 }

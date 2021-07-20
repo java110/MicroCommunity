@@ -83,4 +83,7 @@ public interface IDataBusInnerServiceSMO {
      */
     @RequestMapping(value = "/customExchange", method = RequestMethod.POST)
     void customExchange(@RequestBody CustomBusinessDatabusDto customBusinessDatabusDto);
+
+    @RequestMapping(value = "/getQRcode", method = RequestMethod.POST)
+    ResultVo getQRcode(@RequestBody JSONObject reqJson);
 }
