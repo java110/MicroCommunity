@@ -139,6 +139,11 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
         feeReceiptDetailDto.setDetailIds(detailIds.toArray(new String[detailIds.size()]));
         feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
+        try{
+            Thread.currentThread().sleep(2000);
+        }catch(InterruptedException ie){
+            ie.printStackTrace();
+        }
         List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
 

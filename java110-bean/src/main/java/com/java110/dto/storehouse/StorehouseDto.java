@@ -15,8 +15,8 @@ import java.util.Date;
  **/
 public class StorehouseDto extends PageDto implements Serializable {
 
-    public static final String SH_TYPE_GROUP = "2806";
-    public static final String SH_TYPE_COMMUNITY = "2807";
+    public static final String SH_TYPE_GROUP = "2806"; //集团仓库
+    public static final String SH_TYPE_COMMUNITY = "2807"; //项目仓库
 
     private String shDesc;
     private String shType;
@@ -26,11 +26,9 @@ public class StorehouseDto extends PageDto implements Serializable {
     private String shName;
     private String storeId;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getShDesc() {
         return shDesc;
@@ -79,7 +77,6 @@ public class StorehouseDto extends PageDto implements Serializable {
     public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-
 
     public Date getCreateTime() {
         return createTime;

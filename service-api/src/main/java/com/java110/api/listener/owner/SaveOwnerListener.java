@@ -12,17 +12,22 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.msg.SmsDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+
+import java.util.List;
 
 /**
  * @ClassName SaveOwnerListener
@@ -38,6 +43,9 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IOwnerBMO ownerBMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
     private IOwnerAttrBMO ownerAttrBMOImpl;
@@ -63,7 +71,6 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
         return HttpMethod.POST;
     }
 
-
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "name", "请求报文中未包含name");
@@ -74,24 +81,18 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求报文中未包含类型");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
         //Assert.jsonObjectHaveKey(paramIn, "idCard", "请求报文中未包含身份证号");
-
-
         if (reqJson.containsKey("roomId")) {
-
             Assert.jsonObjectHaveKey(reqJson, "state", "请求报文中未包含state节点");
             Assert.jsonObjectHaveKey(reqJson, "storeId", "请求报文中未包含storeId节点");
-
             Assert.hasLength(reqJson.getString("roomId"), "roomId不能为空");
             Assert.hasLength(reqJson.getString("state"), "state不能为空");
             Assert.hasLength(reqJson.getString("storeId"), "storeId不能为空");
         }
-
         if (reqJson.containsKey("msgCode")) {
             SmsDto smsDto = new SmsDto();
             smsDto.setTel(reqJson.getString("link"));
             smsDto.setCode(reqJson.getString("msgCode"));
             smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
-
             if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
                 throw new IllegalArgumentException(smsDto.getMsg());
             }
@@ -102,23 +103,34 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+        //获取手机号(判断手机号是否重复)
+        String link = reqJson.getString("link");
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setLink(link);
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
+        Assert.listIsNull(ownerDtos, "手机号重复，请重新输入");
+        //获取身份证号(判断身份证号是否重复)
+        String idCard = reqJson.getString("idCard");
+        if (!StringUtil.isEmpty(idCard) ) {
+            OwnerDto owner = new OwnerDto();
+            owner.setIdCard(idCard);
+            owner.setCommunityId(reqJson.getString("communityId"));
+            List<OwnerDto> owners = ownerInnerServiceSMOImpl.queryAllOwners(owner);
+            Assert.listIsNull(owners, "身份证号重复，请重新输入");
+        }
         //生成memberId
         generateMemberId(reqJson);
-
         //添加小区楼
         ownerBMOImpl.addOwner(reqJson, context);
-
-//        if ("1001".equals(reqJson.getString("ownerTypeCd"))) {
-//            //小区楼添加到小区中
-//            ownerBMOImpl.addCommunityMember(reqJson, context);
-//        }
-
+        // if ("1001".equals(reqJson.getString("ownerTypeCd"))) {
+        //  //小区楼添加到小区中
+        // ownerBMOImpl.addCommunityMember(reqJson, context);
+        //  }
         //有房屋信息，则直接绑定房屋和 业主的关系
         if (reqJson.containsKey("roomId")) {
             //添加单元信息
             ownerBMOImpl.sellRoom(reqJson, context);
-
             //添加物业费用信息
             //ownerBMOImpl.addPropertyFee(reqJson, context);
         }

@@ -362,6 +362,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
                 }
             } else {
+
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {//车位相关
             String computingFormula = feeDto.getComputingFormula();
@@ -480,7 +481,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
                 return objName;
             }
-            objName = objName + "(" + parkingSpaceDtos.get(0).getAreaNum() + "停车场" + parkingSpaceDtos.get(0).getNum() + "车位)";
+            objName = objName + "-" + parkingSpaceDtos.get(0).getAreaNum() + "停车场" + "-" + parkingSpaceDtos.get(0).getNum() + "车位";
         } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {
             ContractDto contractDto = new ContractDto();
             contractDto.setContractId(feeDto.getPayerObjId());

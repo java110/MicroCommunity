@@ -99,7 +99,8 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 throw new IllegalArgumentException("库存不足，参数有误");
             }
             //入库操作 对物品进行加权平均
-            if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)) {
+            if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)
+                    || (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT) && resourceStorePo.getOperationType().equals(PurchaseApplyDto.WEIGHTED_MEAN_TRUE))) {
                 //获取原均价
                 Object averageOldPrice = stores.get(0).get("averagePrice");
                 Double price = 0.0;
@@ -115,12 +116,26 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 double f0 = b0.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 resourceStorePo.setAveragePrice(String.valueOf(f0));
             }
-            resourceStorePo.setStock(totalStock + "");
+            if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT) && resourceStorePo.getOperationType().equals(PurchaseApplyDto.WEIGHTED_MEAN_TRUE)) {
+                resourceStorePo.setStock(stock + "");
+            } else {
+                resourceStorePo.setStock(totalStock + "");
+            }
             resourceStorePo.setStatusCd("0");
             return resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance(BeanConvertUtil.beanCovertMap(resourceStorePo));
         } finally {
             DistributedLock.releaseDistributedLock(requestId, key);
         }
+    }
+
+    /**
+     * 新增物品
+     *
+     * @param resourceStoreDto
+     */
+    @Override
+    public void saveResourceStore(@RequestBody ResourceStoreDto resourceStoreDto) {
+        resourceResourceStoreServiceDaoImpl.saveResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceStoreDto));
     }
 
     public IResourceStoreServiceDao getResourceStoreServiceDaoImpl() {

@@ -38,4 +38,12 @@ public interface IAllocationStorehouseInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAllocationStorehousesCount", method = RequestMethod.POST)
     int queryAllocationStorehousesCount(@RequestBody AllocationStorehouseDto allocationStorehouseDto);
+
+    /**
+     * 新增调拨记录
+     *
+     * @param allocationStorehouseDto
+     */
+    @RequestMapping(value = "/saveAllocationStorehouses", method = RequestMethod.POST)
+    void saveAllocationStorehouses(@RequestBody AllocationStorehouseDto allocationStorehouseDto);
 }

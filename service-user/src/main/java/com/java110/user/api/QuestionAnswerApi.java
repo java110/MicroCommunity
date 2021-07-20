@@ -150,12 +150,18 @@ public class QuestionAnswerApi {
             @RequestHeader(value = "user-id", required = false) String userId,
             @RequestParam(value = "communityId", required = false) String communityId,
             @RequestParam(value = "objType", required = false) String objType,
+            @RequestParam(value = "qaType", required = false) String qaType,
+            @RequestParam(value = "qaName", required = false) String qaName,
+            @RequestParam(value = "qaId", required = false) String qaId,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row) {
         QuestionAnswerDto questionAnswerDto = new QuestionAnswerDto();
         questionAnswerDto.setPage(page);
         questionAnswerDto.setRow(row);
         questionAnswerDto.setUserId(userId);
+        questionAnswerDto.setQaType(qaType);
+        questionAnswerDto.setQaName(qaName);
+        questionAnswerDto.setQaId(qaId);
         if (!StringUtil.isEmpty(objType)) {
             questionAnswerDto.setObjType(objType);
             questionAnswerDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);

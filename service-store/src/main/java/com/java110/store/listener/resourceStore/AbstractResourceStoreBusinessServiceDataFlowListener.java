@@ -19,8 +19,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractResourceStoreBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(AbstractResourceStoreBusinessServiceDataFlowListener.class);
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractResourceStoreBusinessServiceDataFlowListener.class);
 
     /**
      * 获取 DAO工具类
@@ -53,6 +53,9 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         businessResourceStoreInfo.put("warningStock", businessResourceStoreInfo.get("warning_stock"));
         businessResourceStoreInfo.put("rstId", businessResourceStoreInfo.get("rst_id"));
         businessResourceStoreInfo.put("rssId", businessResourceStoreInfo.get("rss_id"));
+        businessResourceStoreInfo.put("miniUnitCode", businessResourceStoreInfo.get("mini_unit_code"));
+        businessResourceStoreInfo.put("miniUnitStock", businessResourceStoreInfo.get("mini_unit_stock"));
+        businessResourceStoreInfo.put("miniStock", businessResourceStoreInfo.get("mini_stock"));
         businessResourceStoreInfo.remove("bId");
         businessResourceStoreInfo.put("statusCd", statusCd);
     }
@@ -64,7 +67,7 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
      * @param businessResourceStore 资源信息
      */
     protected void autoSaveDelBusinessResourceStore(Business business, JSONObject businessResourceStore) {
-//自动插入DEL
+        //自动插入DEL
         Map info = new HashMap();
         info.put("resId", businessResourceStore.getString("resId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
@@ -72,11 +75,8 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         if (currentResourceStoreInfos == null || currentResourceStoreInfos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
-
         Map currentResourceStoreInfo = currentResourceStoreInfos.get(0);
-
         currentResourceStoreInfo.put("bId", business.getbId());
-
         currentResourceStoreInfo.put("resName", currentResourceStoreInfo.get("res_name"));
         currentResourceStoreInfo.put("operate", currentResourceStoreInfo.get("operate"));
         currentResourceStoreInfo.put("price", currentResourceStoreInfo.get("price"));
@@ -94,14 +94,15 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         currentResourceStoreInfo.put("warningStock", currentResourceStoreInfo.get("warning_stock"));
         currentResourceStoreInfo.put("rstId", currentResourceStoreInfo.get("rst_id"));
         currentResourceStoreInfo.put("rssId", currentResourceStoreInfo.get("rss_id"));
+        currentResourceStoreInfo.put("miniUnitCode", currentResourceStoreInfo.get("mini_unit_code"));
+        currentResourceStoreInfo.put("miniUnitStock", currentResourceStoreInfo.get("mini_unit_stock"));
+        currentResourceStoreInfo.put("miniStock", currentResourceStoreInfo.get("mini_stock"));
         getResourceStoreServiceDaoImpl().saveBusinessResourceStoreInfo(currentResourceStoreInfo);
-
         for (Object key : currentResourceStoreInfo.keySet()) {
             if (businessResourceStore.get(key) == null) {
                 businessResourceStore.put(key.toString(), currentResourceStoreInfo.get(key));
             }
         }
     }
-
 
 }

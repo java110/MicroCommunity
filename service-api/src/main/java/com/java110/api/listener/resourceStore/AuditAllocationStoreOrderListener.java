@@ -13,7 +13,6 @@ import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
-import com.java110.po.allocationStorehouse.AllocationStorehousePo;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -27,7 +26,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,7 +95,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
             AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
             allocationStorehouseApplyPo.setApplyId(allocationStorehouseDtos.get(0).getApplyId());
             allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_AUDIT);
-            if(!StringUtil.isEmpty(procure) && procure.equals("true")){
+            if (!StringUtil.isEmpty(procure) && procure.equals("true")) {
                 allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_REVIEWED);
             }
             super.update(context, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
@@ -142,19 +140,37 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                 ResourceStorePo resourceStorePo = new ResourceStorePo();
 
                 if (resourceStoreDtos != null && resourceStoreDtos.size() == 1) {
+                    //查询原仓库该物品记录
                     ResourceStoreDto originalResourceStoreDto = new ResourceStoreDto();
                     originalResourceStoreDto.setShId(allocationStorehouseDto.getShIda());
                     originalResourceStoreDto.setResId(allocationStorehouseDto.getResId());
                     List<ResourceStoreDto> originalResourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(originalResourceStoreDto);
-                    Assert.listOnlyOne(resourceStoreDtos, "原仓库记录不存在");
+                    Assert.listOnlyOne(originalResourceStoreDtos, "原仓库记录不存在");
                     ResourceStoreDto resourceStoreDto1 = resourceStoreDtos.get(0);
-                    resourceStoreDto1.setStock((Integer.parseInt(resourceStoreDtos.get(0).getStock()) + Integer.parseInt(allocationStorehouseDto.getStock())) + "");
+                    //计算库存
+                    resourceStoreDto1.setStock((Double.parseDouble(resourceStoreDtos.get(0).getStock()) + Double.parseDouble(allocationStorehouseDto.getStock())) + "");
+                    //计算最小计量总数
+                    if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())) {
+                        throw new IllegalArgumentException("最小计量总数不能为空！");
+                    }
+                    String miniStock = resourceStoreDtos.get(0).getMiniStock(); //获取原最小计量总数
+                    if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniUnitStock())) {
+                        throw new IllegalArgumentException("最小计量单位数量不能为空！");
+                    }
+                    String miniUnitStock = resourceStoreDtos.get(0).getMiniUnitStock(); //获取最小计量单位数量
+                    double nowMiniStock = Double.parseDouble(allocationStorehouseDto.getStock()) * Double.parseDouble(miniUnitStock); //计算调拨的最小计量总数
+                    double newMiniStock = Double.parseDouble(miniStock) + Double.parseDouble(String.valueOf(nowMiniStock));
+                    resourceStoreDto1.setMiniStock(String.valueOf(newMiniStock));
                     resourceStorePo = BeanConvertUtil.covertBean(resourceStoreDto1, ResourceStorePo.class);
                     resourceStorePo.setAveragePrice(originalResourceStoreDtos.get(0).getAveragePrice());
                     resourceStorePo.setOutLowPrice(originalResourceStoreDtos.get(0).getOutLowPrice());
                     resourceStorePo.setOutHighPrice(originalResourceStoreDtos.get(0).getOutHighPrice());
                     resourceStorePo.setRstId(originalResourceStoreDtos.get(0).getRstId());
                     resourceStorePo.setRssId(originalResourceStoreDtos.get(0).getRssId());
+                    if (!StringUtil.isEmpty(originalResourceStoreDtos.get(0).getMiniUnitCode()) && !StringUtil.isEmpty(originalResourceStoreDtos.get(0).getMiniUnitStock())) {
+                        resourceStorePo.setMiniUnitCode(originalResourceStoreDtos.get(0).getMiniUnitCode());
+                        resourceStorePo.setMiniUnitStock(originalResourceStoreDtos.get(0).getMiniUnitStock());
+                    }
                     super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
                 } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
                     ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "物品信息查询到多条，请核实后再处理！");
@@ -168,9 +184,16 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
                     Assert.listOnlyOne(resourceStoreDtos, "原仓库记录不存在");
                     resourceStorePo = BeanConvertUtil.covertBean(allocationStorehouseDto, resourceStorePo);
-
                     resourceStorePo.setResId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId));
                     resourceStorePo.setStock(allocationStorehouseDto.getStock());
+                    //获取最小计量单位数量
+                    if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniUnitStock())) {
+                        throw new IllegalArgumentException("最小计量单位数量不能为空！");
+                    }
+                    String miniUnitStock = resourceStoreDtos.get(0).getMiniUnitStock();
+                    //计算最小计量单位总数
+                    double miniStock = Double.parseDouble(allocationStorehouseDto.getStock()) * Double.parseDouble(miniUnitStock);
+                    resourceStorePo.setMiniStock(String.valueOf(miniStock));
                     resourceStorePo.setShId(allocationStorehouseDto.getShIdz());
                     resourceStorePo.setPrice(resourceStoreDtos.get(0).getPrice());
                     resourceStorePo.setDescription("");
@@ -182,7 +205,8 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     resourceStorePo.setAveragePrice(resourceStoreDtos.get(0).getAveragePrice());
                     resourceStorePo.setRstId(resourceStoreDtos.get(0).getRstId());
                     resourceStorePo.setRssId(resourceStoreDtos.get(0).getRssId());
-
+                    resourceStorePo.setMiniUnitCode(resourceStoreDtos.get(0).getMiniUnitCode());
+                    resourceStorePo.setMiniUnitStock(resourceStoreDtos.get(0).getMiniUnitStock());
                     super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
                 }
             }
@@ -223,12 +247,24 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
             ResourceStorePo resourceStorePo = new ResourceStorePo();
             resourceStorePo.setResId(allocationStorehouseDto.getResId());
             //获取库存数量
-            int resourceStoreStock = Integer.parseInt(resourceStoreDtos.get(0).getStock());
+            double resourceStoreStock = Double.parseDouble(resourceStoreDtos.get(0).getStock());
             //获取调拨的数量
-            int storehouseStock = Integer.parseInt(allocationStorehouseDto.getStock());
+            double storehouseStock = Double.parseDouble(allocationStorehouseDto.getStock());
             //库存数量
-            int stock = resourceStoreStock + storehouseStock;
+            double stock = resourceStoreStock + storehouseStock;
             resourceStorePo.setStock(String.valueOf(stock));
+            //计算最小计量总数
+            if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())) {
+                throw new IllegalArgumentException("最小计量总数不能为空！");
+            }
+            String miniStock = resourceStoreDtos.get(0).getMiniStock(); //获取物品表的最小计量总数
+            if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniUnitStock())) {
+                throw new IllegalArgumentException("最小计量单位数量不能为空！");
+            }
+            String miniUnitStock = resourceStoreDtos.get(0).getMiniUnitStock(); //获取最小计量单位数量
+            double nowMiniStock = Double.parseDouble(allocationStorehouseDto.getStock()) * Double.parseDouble(miniUnitStock); //计算当前的最小计量总数
+            double newMiniStock = Double.parseDouble(miniStock) + Double.parseDouble(String.valueOf(nowMiniStock));
+            resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
             super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
         }
     }

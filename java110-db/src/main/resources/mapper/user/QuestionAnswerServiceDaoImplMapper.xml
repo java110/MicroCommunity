@@ -31,7 +31,7 @@
         </if>
         where 1 =1
         <if test="qaName !=null and qaName != ''">
-            and t.qa_name= #{qaName}
+            and t.qa_name like  concat('%',#{qaName},'%')
         </if>
         <if test="qaType !=null and qaType != ''">
             and t.qa_type= #{qaType}
@@ -111,7 +111,7 @@
         from question_answer t
         where 1 =1
         <if test="qaName !=null and qaName != ''">
-            and t.qa_name= #{qaName}
+            and t.qa_name like  concat('%',#{qaName},'%')
         </if>
         <if test="qaType !=null and qaType != ''">
             and t.qa_type= #{qaType}

@@ -9,6 +9,9 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.UnitDto;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeAddRoomBindingConstant;
 import com.java110.utils.util.Assert;
@@ -17,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * 保存小区侦听
@@ -27,6 +32,12 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
 
     @Autowired
     private IRoomBMO roomBMOImpl;
+
+    @Autowired
+    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -60,14 +71,36 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-
         JSONArray infos = reqJson.getJSONArray("data");
-
-
         JSONObject viewFloorInfo = getObj(infos, "viewFloorInfo");
         JSONObject viewUnitInfo = getObj(infos, "viewUnitInfo");
         JSONObject addRoomView = getObj(infos, "addRoomView");
+        //楼栋id
+        String floorId = "";
+        //单元id
+        String unitId = "";
+        //房屋编号
+        String roomNum = "";
+        if (viewFloorInfo.containsKey("floorId") && StringUtil.isEmpty(viewFloorInfo.getString("floorId"))
+                && viewUnitInfo.containsKey("unitId") && StringUtil.isEmpty(viewUnitInfo.getString("unitId"))
+                && addRoomView.containsKey("roomNum") && StringUtil.isEmpty(addRoomView.getString("roomNum"))) {
+            floorId = viewFloorInfo.getString("floorId");
+            unitId = viewUnitInfo.getString("unitId");
+            roomNum = addRoomView.getString("roomNum");
+            //查询楼栋下单元信息
+            UnitDto unitDto = new UnitDto();
+            unitDto.setFloorId(floorId);
+            unitDto.setUnitId(unitId);
+            List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+            Assert.listOnlyOne(unitDtos, "查询单元信息错误！");
+            RoomDto roomDto = new RoomDto();
+            roomDto.setUnitId(unitDtos.get(0).getUnitId());
+            roomDto.setRoomNum(roomNum);
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            if (roomDtos != null && roomDtos.size() > 0) {
+                throw new IllegalArgumentException("该房屋已经存在！");
+            }
+        }
         if (!hasKey(viewFloorInfo, "floorId")) {
             viewFloorInfo.put("floorId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
             viewFloorInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));

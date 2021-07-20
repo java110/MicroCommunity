@@ -8,11 +8,24 @@
     <insert id="saveBusinessResourceStoreInfo" parameterType="Map">
         insert into business_resource_store(
         res_name,operate,price,res_code,description,store_id,stock,warning_stock,b_id,res_id,
-        unit_code,remark,out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price,rst_id,rss_id
+        unit_code,remark,out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price,rst_id,rss_id,
+        mini_unit_code,mini_unit_stock,mini_stock
         ) values (
         #{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{warningStock},#{bId},#{resId},
         #{unitCode},#{remark},#{outLowPrice},#{outHighPrice},#{showMobile},#{createTime},#{shId},
-        #{averagePrice},#{rstId},#{rssId}
+        #{averagePrice},#{rstId},#{rssId},#{miniUnitCode},#{miniUnitStock},#{miniStock}
+        )
+    </insert>
+
+    <!-- 保存物品信息-->
+    <insert id="saveResourceStoreInfo" parameterType="Map">
+        insert into resource_store(
+        res_id,b_id,store_id,res_name,res_code,unit_code,remark,out_low_price,out_high_price,show_mobile,description,
+        price,stock,create_time,sh_id,warning_stock,average_price,rss_id,rst_id,mini_unit_code,mini_unit_stock,mini_stock
+        ) values (
+        #{resId},#{bId},#{storeId},#{resName},#{resCode},#{unitCode},#{remark},#{outLowPrice},#{outHighPrice},
+        #{showMobile},#{description},#{price},#{stock},#{createTime},#{shId},#{warningStock},
+        #{averagePrice},#{rssId},#{rstId},#{miniUnitCode},#{miniUnitStock},#{miniStock}
         )
     </insert>
 
@@ -23,8 +36,9 @@
         warningStock,t.b_id,t.b_id bId,t.res_id,t.res_id resId,t.rst_id,t.rst_id rstId,t.rss_id,t.rss_id rssId,
         t.unit_code,t.unit_code unitCode,t.remark,t.out_low_price,t.out_low_price outLowPrice,
         t.out_high_price,t.out_high_price outHighPrice,t.show_mobile,t.show_mobile showMobile,
-        t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,
-        t.average_price,t.average_price averagePrice
+        t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,t.mini_unit_code,t.mini_unit_code miniUnitCode,
+        t.mini_unit_stock,t.mini_unit_stock miniUnitStock,t.average_price,t.average_price averagePrice,t.mini_stock,
+        t.mini_stock miniStock
         from business_resource_store t
         where 1 =1
         <if test="resName !=null and resName != ''">
@@ -81,6 +95,15 @@
         <if test="averagePrice !=null and averagePrice != ''">
             and t.average_price= #{averagePrice}
         </if>
+        <if test="miniUnitCode !=null and miniUnitCode != ''">
+            and t.mini_unit_code= #{miniUnitCode}
+        </if>
+        <if test="miniUnitStock !=null and miniUnitStock != ''">
+            and t.mini_unit_stock= #{miniUnitStock}
+        </if>
+        <if test="miniStock !=null and miniStock != ''">
+            and t.mini_stock= #{miniStock}
+        </if>
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
         </if>
@@ -90,10 +113,12 @@
     <insert id="saveResourceStoreInfoInstance" parameterType="Map">
         insert into resource_store(
         res_name,price,res_code,description,status_cd,store_id,stock,warning_stock,b_id,res_id,unit_code,remark,
-        out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price,rst_id,rss_id
+        out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price,rst_id,rss_id,mini_unit_code,mini_unit_stock,
+        mini_stock
         ) select
         t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.warning_stock,t.b_id,t.res_id,
-        t.unit_code,t.remark,t.out_low_price,t.out_high_price,t.show_mobile,t.create_time,t.sh_id,t.average_price,t.rst_id,t.rss_id
+        t.unit_code,t.remark,t.out_low_price,t.out_high_price,t.show_mobile,t.create_time,t.sh_id,t.average_price,t.rst_id,t.rss_id,
+        t.mini_unit_code,t.mini_unit_stock,t.mini_stock
         from business_resource_store t where 1=1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
@@ -147,7 +172,16 @@
         <if test="averagePrice !=null and averagePrice != ''">
             and t.average_price= #{averagePrice}
         </if>
-        <if test="createTime !=null and createTime != ''">
+        <if test="miniUnitCode !=null and miniUnitCode != ''">
+            and t.mini_unit_code= #{miniUnitCode}
+        </if>
+        <if test="miniUnitStock !=null and miniUnitStock != ''">
+            and t.mini_unit_stock= #{miniUnitStock}
+        </if>
+        <if test="miniStock !=null and miniStock != ''">
+            and t.mini_stock= #{miniStock}
+        </if>
+        <if test="createTime !=null">
             and t.create_time= #{createTime}
         </if>
     </insert>
@@ -160,11 +194,16 @@
         t.out_low_price outLowPrice,rst.name rstName,t.out_high_price,t.out_high_price outHighPrice,
         t.unit_code,t.unit_code unitCode,t.remark,t.show_mobile,t.show_mobile showMobile,
         t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,sh.sh_name shName,t.average_price,t.average_price
-        averagePrice,rss.spec_name rssName
+        averagePrice,rss.spec_name rssName,t.mini_unit_code,t.mini_unit_code miniUnitCode,t.mini_stock,t.mini_stock
+        miniStock,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name miniUnitCodeName,sh.sh_type shType
         from resource_store t
         left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
+        left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
+        'unit_code'
+        left join t_dict td1 on t.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
+        td1.table_columns = 'unit_code'
         where 1 = 1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
@@ -232,6 +271,15 @@
         <if test="averagePrice != null and averagePrice != ''">
             and t.average_price = #{averagePrice}
         </if>
+        <if test="miniUnitCode !=null and miniUnitCode != ''">
+            and t.mini_unit_code= #{miniUnitCode}
+        </if>
+        <if test="miniUnitStock !=null and miniUnitStock != ''">
+            and t.mini_unit_stock= #{miniUnitStock}
+        </if>
+        <if test="miniStock !=null and miniStock != ''">
+            and t.mini_stock= #{miniStock}
+        </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
@@ -292,6 +340,15 @@
         </if>
         <if test="averagePrice !=null and averagePrice != ''">
             , t.average_price= #{averagePrice}
+        </if>
+        <if test="miniUnitCode !=null and miniUnitCode != ''">
+            , t.mini_unit_code= #{miniUnitCode}
+        </if>
+        <if test="miniUnitStock !=null and miniUnitStock != ''">
+            , t.mini_unit_stock= #{miniUnitStock}
+        </if>
+        <if test="miniStock !=null and miniStock != ''">
+            , t.mini_stock= #{miniStock}
         </if>
         where 1=1
         <if test="bId !=null and bId != ''">
@@ -373,6 +430,15 @@
         </if>
         <if test="averagePrice != null and averagePrice != ''">
             and t.average_price = #{averagePrice}
+        </if>
+        <if test="miniUnitCode !=null and miniUnitCode != ''">
+            and t.mini_unit_code= #{miniUnitCode}
+        </if>
+        <if test="miniUnitStock !=null and miniUnitStock != ''">
+            and t.mini_unit_stock= #{miniUnitStock}
+        </if>
+        <if test="miniStock !=null and miniStock != ''">
+            and t.mini_stock= #{miniStock}
         </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0

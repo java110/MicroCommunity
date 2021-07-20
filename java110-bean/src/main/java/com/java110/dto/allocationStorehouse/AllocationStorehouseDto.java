@@ -23,6 +23,7 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String asId;
     private String[] asIds;
     private String storeId;
+    private String bId;
     private String resId;
     private String shIdz;
     private String resName;
@@ -338,5 +339,13 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setApplyTypeName(String applyTypeName) {
         this.applyTypeName = applyTypeName;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

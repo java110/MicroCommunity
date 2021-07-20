@@ -8,6 +8,7 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
@@ -21,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+
+import java.util.List;
 
 /**
  * @ClassName EditOwnerListener
@@ -60,7 +63,6 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
         return HttpMethod.POST;
     }
 
-
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含ownerId");
@@ -69,21 +71,49 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
         Assert.jsonObjectHaveKey(reqJson, "age", "请求报文中未包含age");
         Assert.jsonObjectHaveKey(reqJson, "link", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(reqJson, "sex", "请求报文中未包含sex");
-        Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求报文中未包含sex");
+        Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求报文中未包含ownerTypeCd");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
         // Assert.jsonObjectHaveKey(paramIn, "idCard", "请求报文中未包含身份证号");
-
         Assert.judgeAttrValue(reqJson);
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-
         if (!reqJson.containsKey("ownerId") || "1001".equals(reqJson.getString("ownerTypeCd"))) {
             reqJson.put("ownerId", reqJson.getString("memberId"));
         }
-
+        //获取手机号(判断手机号是否重复)
+        String link = reqJson.getString("link");
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setLink(link);
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
+        if (ownerDtos != null && ownerDtos.size() > 1) {
+            throw new IllegalArgumentException("手机号重复，请重新输入");
+        } else if (ownerDtos != null && ownerDtos.size() == 1) {
+            for (OwnerDto owner : ownerDtos) {
+                if ((!StringUtil.isEmpty(reqJson.getString("ownerId")) && !owner.getOwnerId().equals(reqJson.getString("ownerId"))) || (!StringUtil.isEmpty(reqJson.getString("memberId")) && !owner.getMemberId().equals(reqJson.getString("memberId")))) {
+                    throw new IllegalArgumentException("手机号重复，请重新输入");
+                }
+            }
+        }
+        //获取身份证号(判断身份证号是否重复)
+        String idCard = reqJson.getString("idCard");
+        if (!StringUtil.isEmpty(idCard)) {
+            OwnerDto owner = new OwnerDto();
+            owner.setIdCard(idCard);
+            owner.setCommunityId(reqJson.getString("communityId"));
+            List<OwnerDto> owners = ownerInnerServiceSMOImpl.queryAllOwners(owner);
+            if (owners != null && owners.size() > 1) {
+                throw new IllegalArgumentException("身份证号重复，请重新输入");
+            } else if (owners != null && owners.size() == 1) {
+                for (OwnerDto ownerDto1 : owners) {
+                    if ((!StringUtil.isEmpty(reqJson.getString("ownerId")) && !ownerDto1.getOwnerId().equals(reqJson.getString("ownerId"))) || (!StringUtil.isEmpty(reqJson.getString("memberId")) && !ownerDto1.getMemberId().equals(reqJson.getString("memberId")))) {
+                        throw new IllegalArgumentException("身份证号重复，请重新输入");
+                    }
+                }
+            }
+        }
         if (reqJson.containsKey("ownerPhoto") && !StringUtils.isEmpty(reqJson.getString("ownerPhoto"))) {
             FileDto fileDto = new FileDto();
             fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
@@ -94,19 +124,13 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
             String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
             reqJson.put("ownerPhotoId", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
-
             ownerBMOImpl.editOwnerPhoto(reqJson, context);
-
         }
         ownerBMOImpl.editOwner(reqJson, context);
-
-
         JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs.size() < 1) {
             return;
         }
-
-
         JSONObject attr = null;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = attrs.getJSONObject(attrIndex);

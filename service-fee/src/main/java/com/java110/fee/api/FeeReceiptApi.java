@@ -128,6 +128,8 @@ public class FeeReceiptApi {
                                                   @RequestParam(value = "payObjId", required = false) String payObjId,
                                                   @RequestParam(value = "receiptId", required = false) String receiptId,
                                                   @RequestParam(value = "receiptIds", required = false) String receiptIds,
+                                                  @RequestParam(value = "qstartTime", required = false) String qstartTime,
+                                                  @RequestParam(value = "qendTime", required = false) String qendTime,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row,
                                                   @RequestHeader(value = "user_id") String userId) {
@@ -152,6 +154,12 @@ public class FeeReceiptApi {
         feeReceiptDto.setObjId(objId);
         feeReceiptDto.setStoreName(storeName);
         feeReceiptDto.setPayObjId(payObjId);
+        if (!StringUtil.isEmpty(qstartTime)) {
+            feeReceiptDto.setQstartTime(qstartTime + " 00:00:00");
+        }
+        if (!StringUtil.isEmpty(qendTime)) {
+            feeReceiptDto.setQendTime(qendTime + " 23:59:59");
+        }
         return getFeeReceiptBMOImpl.get(feeReceiptDto);
     }
 
@@ -161,8 +169,8 @@ public class FeeReceiptApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /feeReceipt/queryFeeReceipt
-     * @path /app/feeReceipt/queryFeeReceipt
+     * @serviceCode /feeReceipt/queryFeeReceiptNew
+     * @path /app/feeReceipt/queryFeeReceiptNew
      */
     @RequestMapping(value = "/queryFeeReceiptNew", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeReceiptNew(@RequestParam(value = "communityId") String communityId,

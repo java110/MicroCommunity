@@ -57,14 +57,14 @@ public class TempCarFeeApi {
      *
      * @param paId 停车场ID
      * @return
-     * @serviceCode /tempCarFee/queryTempCarFeeRules
-     * @path /app/tempCarFee/queryTempCarFeeRules
+     * @serviceCode /tempCarFee/getTempCarFeeOrder
+     * @path /app/tempCarFee/getTempCarFeeOrder
      */
     @RequestMapping(value = "/getTempCarFeeOrder", method = RequestMethod.GET)
     public ResponseEntity<String> getTempCarFeeOrder(
             @RequestParam(value = "paId", required = false) String paId,
             @RequestParam(value = "carNum", required = false) String carNum
-            ) {
+    ) {
         TempCarPayOrderDto tempCarPayOrderDto = new TempCarPayOrderDto();
         tempCarPayOrderDto.setPaId(paId);
         tempCarPayOrderDto.setCarNum(carNum);
@@ -76,12 +76,12 @@ public class TempCarFeeApi {
      *
      * @param reqParam 停车场ID
      * @return
-     * @serviceCode /tempCarFee/queryTempCarFeeRules
-     * @path /app/tempCarFee/queryTempCarFeeRules
+     * @serviceCode /tempCarFee/notifyTempCarFeeOrder
+     * @path /app/tempCarFee/notifyTempCarFeeOrder
      */
     @RequestMapping(value = "/notifyTempCarFeeOrder", method = RequestMethod.POST)
     public ResponseEntity<String> notifyTempCarFeeOrder(@RequestBody String reqParam) {
-        TempCarPayOrderDto tempCarPayOrderDto = BeanConvertUtil.covertBean(reqParam,TempCarPayOrderDto.class);
+        TempCarPayOrderDto tempCarPayOrderDto = BeanConvertUtil.covertBean(reqParam, TempCarPayOrderDto.class);
         return getTempCarFeeRulesImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
     }
 }

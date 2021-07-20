@@ -3,7 +3,6 @@ package com.java110.po.userStorehouse;
 import java.io.Serializable;
 
 public class UserStorehousePo implements Serializable {
-
     private String resName;
     private String storeId;
     private String stock;
@@ -12,6 +11,13 @@ public class UserStorehousePo implements Serializable {
     private String userId;
     private String usId;
     private String statusCd = "0";
+    private String unitCode;
+    private String unitCodeName;
+    private String miniUnitCode;
+    private String miniUnitCodeName;
+    private String miniUnitStock;
+    //最小计量总数
+    private String miniStock;
 
     public String getResName() {
         return resName;
@@ -75,5 +81,53 @@ public class UserStorehousePo implements Serializable {
 
     public void setRstId(String rstId) {
         this.rstId = rstId;
+    }
+
+    public String getUnitCode() {
+        return unitCode;
+    }
+
+    public void setUnitCode(String unitCode) {
+        this.unitCode = unitCode;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCode() {
+        return miniUnitCode;
+    }
+
+    public void setMiniUnitCode(String miniUnitCode) {
+        this.miniUnitCode = miniUnitCode;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getMiniStock() {
+        return miniStock;
+    }
+
+    public void setMiniStock(String miniStock) {
+        this.miniStock = miniStock;
+    }
+
+    public String getMiniUnitStock() {
+        return miniUnitStock;
+    }
+
+    public void setMiniUnitStock(String miniUnitStock) {
+        this.miniUnitStock = miniUnitStock;
     }
 }

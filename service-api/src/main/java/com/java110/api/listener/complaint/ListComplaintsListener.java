@@ -5,6 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.RoomDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
@@ -14,6 +15,7 @@ import com.java110.intf.store.IComplaintInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeComplaintConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.complaint.ApiComplaintDataVo;
 import com.java110.vo.api.complaint.ApiComplaintVo;
 import com.java110.vo.api.junkRequirement.PhotoVo;
@@ -80,9 +82,19 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
 
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
 
-        if (reqJson.containsKey("roomIds")) {
-            String[] roomIds = reqJson.getString("roomIds").split(",");
-            complaintDto.setRoomIds(roomIds);
+        String roomId=reqJson.getString("roomId");
+        if (!StringUtil.isEmpty(roomId) && roomId.contains("-")) {
+            String[] values = roomId.split("-");
+            if (values.length == 3) {
+                RoomDto roomDto = new RoomDto();
+                roomDto.setFloorNum(values[0]);
+                roomDto.setUnitNum(values[1]);
+                roomDto.setRoomNum(values[2]);
+                roomDto.setCommunityId(reqJson.getString("communityId"));
+                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+                Assert.listOnlyOne(roomDtos, "未找到房屋信息");
+                complaintDto.setRoomId(roomDtos.get(0).getRoomId());
+            }
         }
 
         int count = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);

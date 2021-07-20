@@ -131,7 +131,8 @@
         t.repair_materials,t.repair_materials repairMaterials,t.repair_fee,t.repair_fee repairFee,
         rs.repair_type_name repairTypeName,rs.repair_way repairWay,rs.return_visit_flag returnVisitFlag,
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,
-        t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext
+        t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext,a.appraise_score appraiseScore,
+        a.door_speed_score doorSpeedScore,a.repairman_service_score repairmanServiceScore
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
@@ -140,11 +141,12 @@
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
         left join r_repair_return_visit rrv on t.repair_id = rrv.repair_id and rrv.community_id = t.community_id and
         rrv.status_cd = '0'
+        left join appraise a on a.obj_id = t.repair_id and a.status_cd = '0'
         <if test="staffId != null and staffId != ''">
             ,r_repair_user rru
             ,t_dict td
         </if>
-        where 1 =1
+        where 1 = 1
         <if test="staffId != null and staffId != ''">
             and t.repair_id = rru.repair_id
             and rru.user_id = #{staffId}

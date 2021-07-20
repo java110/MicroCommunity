@@ -17,6 +17,7 @@ import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -110,13 +111,23 @@ public class ApplyRoomDiscountApi {
      * @path /app/applyRoomDiscount/updateApplyRoomDiscount
      */
     @RequestMapping(value = "/updateApplyRoomDiscount", method = RequestMethod.POST)
-    public ResponseEntity<String> updateApplyRoomDiscount(@RequestBody JSONObject reqJson,@RequestHeader(value = "user-id") String userId) {
+    public ResponseEntity<String> updateApplyRoomDiscount(@RequestBody JSONObject reqJson, @RequestHeader(value = "user-id") String userId) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含验房状态");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含结束时间");
         Assert.hasKeyAndValue(reqJson, "checkRemark", "请求报文中未包含验房说明");
         Assert.hasKeyAndValue(reqJson, "ardId", "ardId不能为空");
+        ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
+        applyRoomDiscountDto.setArdId(reqJson.getString("ardId"));
+        //查询房屋优惠申请信息
+        List<ApplyRoomDiscountDto> applyRoomDiscountDtos = applyRoomDiscountInnerServiceSMOImpl.queryApplyRoomDiscounts(applyRoomDiscountDto);
+        Assert.listOnlyOne(applyRoomDiscountDtos, "查询房屋优惠信息错误！");
+        //获取房屋优惠审核状态
+        String state = applyRoomDiscountDtos.get(0).getState();
+        if (!StringUtil.isEmpty(state) && !state.equals("1")) {
+            throw new IllegalArgumentException("该房屋已验过房，无法再次进行验房！");
+        }
         reqJson.put("checkUserId", userId);
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
         return updateApplyRoomDiscountBMOImpl.update(applyRoomDiscountPo);
@@ -139,6 +150,16 @@ public class ApplyRoomDiscountApi {
         Assert.hasKeyAndValue(reqJson, "reviewRemark", "请求报文中未包含验房说明");
 //        Assert.hasKeyAndValue(reqJson, "discountId", "请求报文中未包含折扣");
         Assert.hasKeyAndValue(reqJson, "ardId", "ardId不能为空");
+        ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
+        applyRoomDiscountDto.setArdId(reqJson.getString("ardId"));
+        //查询房屋优惠申请信息
+        List<ApplyRoomDiscountDto> applyRoomDiscountDtos = applyRoomDiscountInnerServiceSMOImpl.queryApplyRoomDiscounts(applyRoomDiscountDto);
+        Assert.listOnlyOne(applyRoomDiscountDtos, "查询房屋优惠信息错误！");
+        //获取房屋优惠审核状态
+        String state = applyRoomDiscountDtos.get(0).getState();
+        if (!StringUtil.isEmpty(state) && !state.equals("2")) {
+            throw new IllegalArgumentException("该房屋已审核过，无法再次进行审核！");
+        }
         reqJson.put("reviewUserId", userId);
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
         return updateApplyRoomDiscountBMOImpl.update(applyRoomDiscountPo);

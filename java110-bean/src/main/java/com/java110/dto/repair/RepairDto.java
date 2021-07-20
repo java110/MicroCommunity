@@ -109,6 +109,15 @@ public class RepairDto extends PageDto implements Serializable {
     //费用明细
     private String repairFee;
 
+    //综合评价得分
+    private String appraiseScore;
+    //上门速度评分
+    private String doorSpeedScore;
+    //维修员服务评分
+    private String repairmanServiceScore;
+    //平均分
+    private String average;
+
     public String getRepairName() {
         return repairName;
     }
@@ -213,7 +222,6 @@ public class RepairDto extends PageDto implements Serializable {
     public void setRepairTypeName(String repairTypeName) {
         this.repairTypeName = repairTypeName;
     }
-
 
     public String getStaffId() {
         return staffId;
@@ -423,7 +431,6 @@ public class RepairDto extends PageDto implements Serializable {
         this.maintenanceType = maintenanceType;
     }
 
-
     public String getReqSource() {
         return reqSource;
     }
@@ -470,5 +477,37 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRepairFee(String repairFee) {
         this.repairFee = repairFee;
+    }
+
+    public String getAppraiseScore() {
+        return appraiseScore;
+    }
+
+    public void setAppraiseScore(String appraiseScore) {
+        this.appraiseScore = appraiseScore;
+    }
+
+    public String getDoorSpeedScore() {
+        return doorSpeedScore;
+    }
+
+    public void setDoorSpeedScore(String doorSpeedScore) {
+        this.doorSpeedScore = doorSpeedScore;
+    }
+
+    public String getRepairmanServiceScore() {
+        return repairmanServiceScore;
+    }
+
+    public void setRepairmanServiceScore(String repairmanServiceScore) {
+        this.repairmanServiceScore = repairmanServiceScore;
+    }
+
+    public String getAverage() {
+        return average;
+    }
+
+    public void setAverage(String average) {
+        this.average = average;
     }
 }

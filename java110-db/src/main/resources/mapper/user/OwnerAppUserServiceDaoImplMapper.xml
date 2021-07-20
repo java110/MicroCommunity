@@ -136,7 +136,7 @@
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
         communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,
         td1.name stateName,t.user_id,t.user_id userId,t.app_type,t.app_type appType,t.create_time createTime,
-        bo.owner_id ownerId
+        bo.owner_id ownerId,bo.owner_type_cd ownerTypeCd
         from owner_app_user t,t_dict td1,building_owner bo
         where 1 =1
         and t.state = td1.status_cd

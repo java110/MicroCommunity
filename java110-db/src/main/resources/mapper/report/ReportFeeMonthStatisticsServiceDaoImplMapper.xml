@@ -283,7 +283,6 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -454,8 +453,7 @@
         left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name='pay_fee_config' and
         td.table_columns='fee_type_cd'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-
-        where t.status_cd = '0'
+        where t.status_cd = '0' and t.receivable_amount >= 0 and t.received_amount >= 0 and t.owe_amount >= 0
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -493,10 +491,10 @@
             and t.community_id= #{communityId}
         </if>
         <if test="startTime !=null">
-            and t.create_time &gt;= #{startTime}
+            and pfc.start_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null">
-            and t.create_time &lt;= #{endTime}
+            and pfc.start_time &lt;= #{endTime}
         </if>
         group by t.config_id,t.fee_name,pfc.start_time
         ) t
@@ -504,8 +502,8 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeBreakdown" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,pfc.start_time feeCreateTime,t.create_time
-        createTime,SUM(t.receivable_amount)
+        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,pfc.start_time feeStartTime,pfc.end_time
+        feeEndTime,SUM(t.receivable_amount)
         receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount) oweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -515,8 +513,7 @@
         left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name='pay_fee_config' and
         td.table_columns='fee_type_cd'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-
-        where t.status_cd = '0'
+        where t.status_cd = '0' and t.receivable_amount >= 0 and t.received_amount >= 0 and t.owe_amount >= 0
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -554,12 +551,13 @@
             and t.community_id= #{communityId}
         </if>
         <if test="startTime !=null">
-            and t.create_time &gt;= #{startTime}
+            and pfc.start_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null">
-            and t.create_time &lt;= #{endTime}
+            and pfc.start_time &lt;= #{endTime}
         </if>
         group by t.config_id,t.fee_name,pfc.start_time
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -575,7 +573,6 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -631,7 +628,7 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-        where t.status_cd = '0'
+        where t.status_cd = '0' and t.receivable_amount >=0 and t.receivable_amount >= 0
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -794,7 +791,6 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -861,7 +857,7 @@
         left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'
         left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and
         d.table_columns="prime_rate"
-        where t.status_cd = '0'
+        where t.status_cd = '0' and t.state not in ('1100','1300')
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -930,7 +926,7 @@
         d.table_columns="prime_rate"
         LEFT JOIN contract co on pf.payer_obj_id = co.contract_id and co.status_cd = '0' and pf.payer_obj_type='7777'
         LEFT JOIN c_business cb on t.b_id = cb.b_id
-        where t.status_cd = '0'
+        where t.status_cd = '0' and t.state not in ('1100','1300')
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -989,7 +985,7 @@
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
-        where t.status_cd = '0'
+        where t.status_cd = '0' and t.state not in ('1100','1300')
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -1054,7 +1050,7 @@
         left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'
         left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and
         d.table_columns="prime_rate"
-        where t.status_cd = '0'
+        where t.status_cd = '0' and t.state not in ('1100','1300')
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -1115,7 +1111,6 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -1468,8 +1463,10 @@
     </select>
 
     <select id="getRepairWithOutPage" parameterType="Map" resultType="Map">
-        select r.staff_id staffId,r.staff_name staffName,r.state, t.name stateName, count(*) amount from r_repair_user r
+        select r.staff_id staffId,r.staff_name staffName,r.state, t.name stateName,u.score, count(*) amount from
+        r_repair_user r
         left join t_dict t on t.table_name="r_repair_user" and t.table_columns="state" and t.status_cd=r.state
+        left join u_user u on u.user_id = r.staff_id and u.status_cd = '0'
         where r.state != '10005' and r.status_cd = '0'
         <if test="ruId != null and ruId != ''">
             and r.ru_id = #{ruId}

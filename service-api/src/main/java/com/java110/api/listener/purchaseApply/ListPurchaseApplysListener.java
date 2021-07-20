@@ -5,13 +5,13 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.dto.user.UserDto;
+import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -43,6 +43,9 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
 
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
+
+    @Autowired
+    private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -80,22 +83,22 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
         String userId = reqJson.getString("userId");
         //采购申请、物品领用（管理员查看所有，员工查看当前用户相关）
         //采购申请查看、采购待办查看、采购已办查看、物品领用查看、领用待办查看、领用已办查看（不用限制员工）
-        List<Map> privileges = new ArrayList<>() ;
-        if(purchaseApplyDto.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)){
+        List<Map> privileges = new ArrayList<>();
+        if (purchaseApplyDto.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)) {
             //采购申请所有记录权限
             BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
             basePrivilegeDto.setResource("/viewPurchaseApplyManage");
             basePrivilegeDto.setUserId(userId);
             privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         }
-        if(purchaseApplyDto.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_OUT)){
+        if (purchaseApplyDto.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_OUT)) {
             //物品领用所有记录权限
             BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
             basePrivilegeDto.setResource("/viewAllItemUse");
             basePrivilegeDto.setUserId(userId);
             privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         }
-        if (privileges.size()!=0 || (!StringUtil.isEmpty(reqJson.getString("applyOrderId"))) ) {
+        if (privileges.size() != 0 || (!StringUtil.isEmpty(reqJson.getString("applyOrderId")))) {
             purchaseApplyDto.setUserId("");
         }
         int count = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplysCount(purchaseApplyDto);
@@ -112,6 +115,13 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
                     BigDecimal purchaseTotalPrice = new BigDecimal(0);
                     Integer cursor = 0;
                     for (PurchaseApplyDetailVo purchaseApplyDetailVo : applyDetailList) {
+                        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
+                        resourceStoreDto.setResId(purchaseApplyDetailVo.getResId());
+                        List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+                        Assert.listOnlyOne(resourceStoreDtos,"查询物品信息错误！");
+                        //获取仓库名称
+                        String shName = resourceStoreDtos.get(0).getShName();
+                        purchaseApplyDetailVo.setShName(shName);
                         cursor++;
                         if (applyDetailList.size() > 1) {
                             resNames.append(cursor + "：" + purchaseApplyDetailVo.getResName() + "      ");
@@ -121,7 +131,7 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
                         BigDecimal price = new BigDecimal(purchaseApplyDetailVo.getPrice());
                         BigDecimal quantity = new BigDecimal(purchaseApplyDetailVo.getQuantity());
                         totalPrice = totalPrice.add(price.multiply(quantity));
-                        if(!StringUtil.isEmpty(purchaseApplyDetailVo.getPurchasePrice()) && !StringUtil.isEmpty(purchaseApplyDetailVo.getPurchaseQuantity())){
+                        if (!StringUtil.isEmpty(purchaseApplyDetailVo.getPurchasePrice()) && !StringUtil.isEmpty(purchaseApplyDetailVo.getPurchaseQuantity())) {
                             BigDecimal purchasePrice = new BigDecimal(purchaseApplyDetailVo.getPurchasePrice());
                             BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailVo.getPurchaseQuantity());
                             purchaseTotalPrice = purchaseTotalPrice.add(purchasePrice.multiply(purchaseQuantity));

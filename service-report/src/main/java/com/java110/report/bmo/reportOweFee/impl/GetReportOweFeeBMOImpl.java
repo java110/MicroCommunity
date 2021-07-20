@@ -135,9 +135,23 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPayerObjIds(payObjIds.toArray(new String[payObjIds.size()]));
         List<ReportOweFeeDto> allReportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
-
+        List<ReportOweFeeDto> reportOweFeeDtos = new ArrayList<>();
+        for (ReportOweFeeDto reportOweFee : allReportOweFeeDtos) {
+            ReportOweFeeDto reportOwe = new ReportOweFeeDto();
+            reportOwe.setOweId(reportOweFee.getOweId());
+            if (reportOweFee.getPayerObjType().equals("3333")) {
+                List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFeesByRoom(reportOwe);
+                reportOweFee.setOweId(reportOweFees.get(0).getOweId());
+                reportOweFee.setOwnerName(reportOweFees.get(0).getOwnerName());
+            } else if (reportOweFee.getPayerObjType().equals("6666")) {
+                List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFeesByCar(reportOwe);
+                reportOweFee.setOweId(reportOweFees.get(0).getOweId());
+                reportOweFee.setOwnerName(reportOweFees.get(0).getOwnerName());
+            }
+            reportOweFeeDtos.add(reportOweFee);
+        }
         for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
-            dealItem(tmpReportOweFeeDto, allReportOweFeeDtos);
+            dealItem(tmpReportOweFeeDto, reportOweFeeDtos);
         }
 
         if (configIds == null || configIds.length < 1) {

@@ -73,13 +73,13 @@ public class ListStaffRepairsListener extends AbstractServiceApiListener {
         String userId = reqJson.getString("userId");
         String viewListStaffRepairs = MappingCache.getValue("viewListStaffRepairs");
         List<Map> privileges = null;
-        if("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
+//        if("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
             //报修待办查看所有记录权限
             BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
             basePrivilegeDto.setResource("/viewListStaffRepairs");
             basePrivilegeDto.setUserId(userId);
             privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        }
+//        }
         if (privileges == null || privileges.size() == 0) {
             ownerRepairDto.setStaffId(reqJson.getString("userId"));
         }

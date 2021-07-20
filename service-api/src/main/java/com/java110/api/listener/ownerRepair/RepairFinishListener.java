@@ -49,6 +49,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +146,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                     ResourceStorePo resourceStorePo = new ResourceStorePo();
                     resourceStorePo.setResId(resId);
                     resourceStorePoList = resourceStoreServiceSMO.getResourceStores(resourceStorePo);//查询物品资源信息
+                    Assert.listOnlyOne(resourceStorePoList, "查询不到物品信息或查询到多个物品信息！");
                     outLowPrice = resourceStorePoList.get(0).getOutLowPrice(); //最低价
                     outHighPrice = resourceStorePoList.get(0).getOutHighPrice();//最高价
                 }
@@ -163,14 +165,14 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                         return;
                     }
                     if (userStorehouseDtoList.size() == 1) {
-                        nowStock = userStorehouseDtoList.get(0).getStock();
+                        //获取最小计量总数
+                        nowStock = userStorehouseDtoList.get(0).getMiniStock();
                     }
-                    if (Integer.parseInt(nowStock) < Integer.parseInt(useNumber)) {
+                    if (Double.parseDouble(nowStock) < Double.parseDouble(useNumber)) {
                         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "维修物料" + userStorehouseDtoList.get(0).getResName() + "库存不足，请您先申领物品！");
                         context.setResponseEntity(responseEntity);
                         return;
                     }
-
                 }
                 if (maintenanceType.equals("1001") && (!StringUtil.isEmpty(isCustom) && isCustom.equals("false"))) {
                     Double price = Double.parseDouble(paramIn.getString("price")); //获取价格
@@ -203,7 +205,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 Double useNumber_s = 0.0;
                 //费用明细
                 String repair = "";
-                DecimalFormat df = new DecimalFormat("#.00");
+                DecimalFormat df = new DecimalFormat("0.00");
                 List<ResourceStorePo> resourceStorePoList = new ArrayList<>();
                 List<UserStorehouseDto> userStorehouseDtoList = new ArrayList<>();
                 if (!StringUtil.isEmpty(paramIn.getString("price")) && !StringUtil.isEmpty(useNumber)) {
@@ -221,6 +223,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                     resourceStorePo.setResId(resId);
                     //查询物品资源信息
                     resourceStorePoList = resourceStoreServiceSMO.getResourceStores(resourceStorePo);
+                    Assert.listOnlyOne(resourceStorePoList, "查询不到物品信息或查询到多个物品信息！");
                     //用料
                     repairMaterials = resourceStorePoList.get(0).getResName() + "*" + useNumber;
                 } else {
@@ -236,13 +239,40 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                     userStorehouseDto.setUserId(userId);
                     //查询个人物品信息
                     userStorehouseDtoList = userStorehouseInnerServiceSMO.queryUserStorehouses(userStorehouseDto);
+                    Assert.listOnlyOne(userStorehouseDtoList, "查询不到个人物品信息或查询到多条信息！");
                     if (userStorehouseDtoList.size() == 1) {
-                        nowStock = userStorehouseDtoList.get(0).getStock();
+                        //最小计量总数
+                        nowStock = userStorehouseDtoList.get(0).getMiniStock();
                     }
                     //库存减少
                     UserStorehousePo userStorehousePo = new UserStorehousePo();
-                    Integer surplusStock = Integer.parseInt(nowStock) - Integer.parseInt(useNumber);
-                    userStorehousePo.setStock(String.valueOf(surplusStock));
+                    //计算个人物品剩余最小计量总数
+                    BigDecimal num1 = new BigDecimal(Double.parseDouble(nowStock));
+                    BigDecimal num2 = new BigDecimal(Double.parseDouble(useNumber));
+                    BigDecimal surplusStock = num1.subtract(num2);
+                    //最小计量单位数量
+                    double miniUnitStock = Double.parseDouble(userStorehouseDtoList.get(0).getMiniUnitStock());
+                    //获取物品单位
+                    if (StringUtil.isEmpty(userStorehouseDtoList.get(0).getUnitCode())) {
+                        throw new IllegalArgumentException("物品单位不能为空！");
+                    }
+                    String unitCode = userStorehouseDtoList.get(0).getUnitCode();
+                    //获取物品最小计量单位
+                    if (StringUtil.isEmpty(userStorehouseDtoList.get(0).getMiniUnitCode())) {
+                        throw new IllegalArgumentException("物品最小计量单位不能为空！");
+                    }
+                    String miniUnitCode = userStorehouseDtoList.get(0).getMiniUnitCode();
+                    if (unitCode.equals(miniUnitCode)) { //如果最小计量单位与物品单位相同，就不向上取整
+                        BigDecimal num3 = new BigDecimal(miniUnitStock);
+                        double newStock = surplusStock.divide(num3, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        userStorehousePo.setStock(String.valueOf(newStock));
+                    } else { //如果不相同就向上取整
+                        BigDecimal num3 = new BigDecimal(miniUnitStock);
+                        double newStock = surplusStock.divide(num3, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double ceil = Math.ceil(newStock);
+                        userStorehousePo.setStock(String.valueOf(ceil));
+                    }
+                    userStorehousePo.setMiniStock(String.valueOf(surplusStock.doubleValue()));
                     userStorehousePo.setUsId(userStorehouseDtoList.get(0).getUsId());
                     userStorehousePo.setResId(resId);
                     userStorehousePo.setUserId(userId);

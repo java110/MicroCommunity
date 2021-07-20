@@ -29,15 +29,15 @@ public class FeeReceiptDto extends PageDto implements Serializable {
     private String feeName;
     private String payObjId;
     private String payObjName;
+    private String qstartTime;
+    private String qendTime;
 
     //商户名称
     private String storeName;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getAmount() {
         return amount;
@@ -94,7 +94,6 @@ public class FeeReceiptDto extends PageDto implements Serializable {
     public void setObjType(String objType) {
         this.objType = objType;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -174,5 +173,21 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     public void setPayObjName(String payObjName) {
         this.payObjName = payObjName;
+    }
+
+    public String getQstartTime() {
+        return qstartTime;
+    }
+
+    public void setQstartTime(String qstartTime) {
+        this.qstartTime = qstartTime;
+    }
+
+    public String getQendTime() {
+        return qendTime;
+    }
+
+    public void setQendTime(String qendTime) {
+        this.qendTime = qendTime;
     }
 }

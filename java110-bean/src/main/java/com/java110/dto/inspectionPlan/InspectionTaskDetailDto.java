@@ -51,6 +51,8 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     //巡检点打卡时间
     private String inspectionTime;
+    private String inspectionStartTime;
+    private String inspectionEndTime;
 
     //签到状态
     private String inspectionState;
@@ -333,5 +335,21 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setInspectionTimeFlag(String inspectionTimeFlag) {
         this.inspectionTimeFlag = inspectionTimeFlag;
+    }
+
+    public String getInspectionStartTime() {
+        return inspectionStartTime;
+    }
+
+    public void setInspectionStartTime(String inspectionStartTime) {
+        this.inspectionStartTime = inspectionStartTime;
+    }
+
+    public String getInspectionEndTime() {
+        return inspectionEndTime;
+    }
+
+    public void setInspectionEndTime(String inspectionEndTime) {
+        this.inspectionEndTime = inspectionEndTime;
     }
 }

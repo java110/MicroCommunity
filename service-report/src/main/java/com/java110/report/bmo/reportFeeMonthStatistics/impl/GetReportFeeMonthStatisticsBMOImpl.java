@@ -59,9 +59,18 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     public ResponseEntity<String> queryReportFeeSummary(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummaryCount(reportFeeMonthStatisticsDto);
 
-        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = new ArrayList<>();
         if (count > 0) {
-            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
+            List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
+            for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsList) {
+                //获取应收金额
+                double receivableAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivableAmount());
+                //获取实收金额
+                double receivedAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivedAmount());
+                double chargeRate = (receivedAmount / receivableAmount) * 100.0;
+                reportFeeMonthStatistics.setChargeRate(String.format("%.2f", chargeRate) + "%");
+                reportFeeMonthStatisticsDtos.add(reportFeeMonthStatistics);
+            }
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
@@ -195,6 +204,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Override
     public ResponseEntity<String> queryPayFeeDetail(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+
         JSONObject countInfo = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetailCount(reportFeeMonthStatisticsDto);
 
         int count = Integer.parseInt(countInfo.get("count").toString());
@@ -283,7 +293,6 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     reportFeeMonthStatistics.setPreferentialAmount(reportFeeMonthStatistics.getDiscountPrice());
                 } else {
                     reportFeeMonthStatistics.setPreferentialAmount("0");
-
                 }
                 //减免金额
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("2")) {
@@ -325,7 +334,6 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 } else {
                     reportFeeMonthStatistics.setVacantHousingReduction("0");
                 }
-
                 if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(reportFeeMonthStatistics.getPayerObjType())) {
                     reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getFloorNum()
                             + "栋" + reportFeeMonthStatistics.getUnitNum()
@@ -336,11 +344,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getContractCode());
 
                 }
-
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getImportFeeName())) {
                     reportFeeMonthStatistics.setFeeName(reportFeeMonthStatistics.getImportFeeName());
                 }
-
                 //费用项目
                 reportFeeMonthStatistics.setFeeConfigDtos(feeConfigDtos);
                 reportList.add(reportFeeMonthStatistics);
@@ -530,6 +536,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     int dispatchAmount = 0;
                     //回访数量
                     int returnAmount = 0;
+                    //评分
+                    String score = "";
                     for (RepairUserDto repair : repairUserDtoList) {
                         //处理中状态
                         if (repair.getState().equals("10001")) {
@@ -554,6 +562,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                         } else if (repair.getState().equals("10008")) {  //已回访状态
                             int amount = Integer.parseInt(repair.getAmount());
                             returnAmount = returnAmount + amount;
+                        }
+                        if (!StringUtil.isEmpty(repair.getScore())) {
+                            score = repair.getScore();
                         }
                     }
                     //员工id
@@ -586,6 +597,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     repairUserInfo.setReturnNumber(Integer.toString(returnNumber));
                     //员工id和姓名信息集合
                     repairUserInfo.setRepairList(staffs);
+                    //员工评分
+                    repairUserInfo.setScore(score);
                     repairUserList.add(repairUserInfo);
                 } else {
                     continue;

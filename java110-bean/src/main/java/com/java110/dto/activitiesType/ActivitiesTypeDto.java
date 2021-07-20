@@ -1,6 +1,7 @@
 package com.java110.dto.activitiesType;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,11 @@ import java.util.Date;
 public class ActivitiesTypeDto extends PageDto implements Serializable {
 
     private String typeDesc;
-private String typeCd;
-private String typeName;
-private String defaultShow;
-private String communityId;
-private String seq;
+    private String typeCd;
+    private String typeName;
+    private String defaultShow;
+    private String communityId;
+    private String seq;
 
 
     private Date createTime;
@@ -30,37 +31,48 @@ private String seq;
     public String getTypeDesc() {
         return typeDesc;
     }
-public void setTypeDesc(String typeDesc) {
+
+    public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
     }
-public String getTypeCd() {
+
+    public String getTypeCd() {
         return typeCd;
     }
-public void setTypeCd(String typeCd) {
+
+    public void setTypeCd(String typeCd) {
         this.typeCd = typeCd;
     }
-public String getTypeName() {
+
+    public String getTypeName() {
         return typeName;
     }
-public void setTypeName(String typeName) {
+
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-public String getDefaultShow() {
+
+    public String getDefaultShow() {
         return defaultShow;
     }
-public void setDefaultShow(String defaultShow) {
+
+    public void setDefaultShow(String defaultShow) {
         this.defaultShow = defaultShow;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 

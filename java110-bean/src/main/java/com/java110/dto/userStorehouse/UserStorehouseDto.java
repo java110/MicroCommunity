@@ -28,9 +28,15 @@ public class UserStorehouseDto extends PageDto implements Serializable {
     private String rstName;
     private String specName;
     private String rssId;
-
+    private String unitCode;
+    private String unitCodeName;
+    private String miniUnitCode;
+    private String miniUnitCodeName;
+    private String miniUnitStock;
+    private String userName;
+    //最小计量总数
+    private String miniStock;
     private Date createTime;
-
     private String statusCd = "0";
 
     public String getResName() {
@@ -151,5 +157,61 @@ public class UserStorehouseDto extends PageDto implements Serializable {
 
     public void setRssId(String rssId) {
         this.rssId = rssId;
+    }
+
+    public String getUnitCode() {
+        return unitCode;
+    }
+
+    public void setUnitCode(String unitCode) {
+        this.unitCode = unitCode;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCode() {
+        return miniUnitCode;
+    }
+
+    public void setMiniUnitCode(String miniUnitCode) {
+        this.miniUnitCode = miniUnitCode;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getMiniStock() {
+        return miniStock;
+    }
+
+    public void setMiniStock(String miniStock) {
+        this.miniStock = miniStock;
+    }
+
+    public String getMiniUnitStock() {
+        return miniUnitStock;
+    }
+
+    public void setMiniUnitStock(String miniUnitStock) {
+        this.miniUnitStock = miniUnitStock;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

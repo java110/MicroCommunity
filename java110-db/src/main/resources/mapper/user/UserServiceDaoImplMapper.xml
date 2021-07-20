@@ -40,36 +40,46 @@
     <!--保存数据至过程表 bo_cust 中 -->
     <insert id="saveDataToBoCust" parameterType="com.java110.entity.user.BoCust">
         <![CDATA[
-            insert into bo_cust(boId,custId,name,email,cellphone,realName,sex,password,lanId,custAdress,custType,openId,state)
-            values(#{boId},#{custId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{custAdress},#{custType},#{openId},#{state})
+
+                    insert into bo_cust(boId,custId,name,email,cellphone,realName,sex,password,lanId,custAdress,custType,openId,state)
+                    values(#{boId},#{custId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{custAdress},#{custType},#{openId},#{state})
+
         ]]>
     </insert>
     <!-- 保存数据至过程表bo_cust_attr 中-->
     <insert id="saveDataToBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr">
         <![CDATA[
-            insert into bo_cust_attr(boId,custId,attrCd,value,state)
-            values(#{boId},#{custId},#{attrCd},#{value},#{state})
+
+                    insert into bo_cust_attr(boId,custId,attrCd,value,state)
+                    values(#{boId},#{custId},#{attrCd},#{value},#{state})
+
         ]]>
     </insert>
     <!-- 保存 实例客户信息 cust -->
     <insert id="saveDataToCust" parameterType="com.java110.entity.user.Cust">
         <![CDATA[
-            insert into cust(custId,name,email,cellphone,realName,sex,password,lanId,custAdress,custType,openId,status_cd)
-            values(#{custId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{custAdress},#{custType},#{openId},#{status_cd})
+
+                    insert into cust(custId,name,email,cellphone,realName,sex,password,lanId,custAdress,custType,openId,status_cd)
+                    values(#{custId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{custAdress},#{custType},#{openId},#{status_cd})
+
         ]]>
     </insert>
     <!-- 删除实例客户信息 cust -->
     <insert id="deleteDataToCust" parameterType="com.java110.entity.user.Cust">
         <![CDATA[
-           delete * from cust c where c.custId = #{custId}
+
+                   delete * from cust c where c.custId = #{custId}
+
         ]]>
     </insert>
 
     <!-- 保存 实例客户属性信息 cust_attr -->
     <insert id="saveDataToCustAttr" parameterType="com.java110.entity.user.CustAttr">
         <![CDATA[
-            insert into cust_attr(custId,attrCd,value,status_cd)
-            values(#{custId},#{attrCd},#{value},#{status_cd})
+
+                    insert into cust_attr(custId,attrCd,value,status_cd)
+                    values(#{custId},#{attrCd},#{value},#{status_cd})
+
         ]]>
     </insert>
     <!-- 删除实例客户信息 cust -->
@@ -204,6 +214,9 @@
         </if>
         <if test="tel !=null and tel != ''">
             ,u.tel= #{tel}
+        </if>
+        <if test="score !=null and score != ''">
+            ,u.score= #{score}
         </if>
         where 1 = 1
         <if test="bId != null and bId != ''">
@@ -489,7 +502,8 @@
     <select id="getStaffs" parameterType="Map" resultType="Map">
         select uo.org_id orgId,uo.org_name,uo.org_name orgName,u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,puo.org_id parentOrgId,puo.org_name parentOrgName,puo.belong_community_id belongCommunityId,
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,puo.org_id parentOrgId,puo.org_name
+        parentOrgName,puo.belong_community_id belongCommunityId,
         uosr.store_id storeId,uosr.rel_cd relCd
         from
         u_user u
@@ -541,7 +555,7 @@
     <select id="getUsers" parameterType="Map" resultType="Map">
         select u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd,u.b_id,u.level_cd levelCd
+        u.age,u.sex,u.tel,u.level_cd,u.b_id,u.level_cd levelCd,u.score
         from u_user u
         <if test="openId != null and openId !=''">
             ,u_user_attr ua
@@ -604,6 +618,9 @@
         </if>
         <if test="levelCd !=null and levelCd != ''">
             and u.level_cd= #{levelCd}
+        </if>
+        <if test='userFlag !=null and userFlag =="1"'>
+            and u.level_cd != '02'
         </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">

@@ -27,8 +27,8 @@ public class MeterWaterApi {
      */
     @RequestMapping(value = "/queryPreMeterWater", method = RequestMethod.GET)
     public ResponseEntity<String> queryPreMeterWater(@RequestParam(value = "communityId") String communityId,
-                                                     @RequestParam(value = "objId") String objId,
-                                                     @RequestParam(value = "objType") String objType,
+                                                     @RequestParam(value = "objId", required = false) String objId,
+                                                     @RequestParam(value = "objType", required = false) String objType,
                                                      @RequestParam(value = "roomNum", required = false) String roomNum,
                                                      @RequestParam(value = "meterType", required = false) String meterType) {
         MeterWaterDto meterWaterDto = new MeterWaterDto();

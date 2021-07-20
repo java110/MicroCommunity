@@ -22,7 +22,8 @@ public class UserPo implements Serializable {
     private String sex;
     private String tel;
     private String levelCd;
-    private String statusCd;
+    private String statusCd = "0";
+    private String score;
 
     public String getId() {
         return id;
@@ -118,5 +119,13 @@ public class UserPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
     }
 }

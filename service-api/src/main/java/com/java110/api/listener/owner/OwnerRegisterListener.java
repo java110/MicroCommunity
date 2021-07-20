@@ -146,12 +146,14 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
             String val = MappingCache.getValue(DOMAIN_COMMON, ID_CARD_SWITCH);
             //取出身份证
             String idCard = reqJson.getString("idCard");
+            String idCardErrorMsg ="";
             if ("1".equals(val) && !StringUtil.isEmpty(idCard)) {
                 ownerDto.setIdCard(idCard);
+                idCardErrorMsg="或者身份证号";
             }
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
-            Assert.listOnlyOne(ownerDtos, "填写业主信息错误");
+            Assert.listOnlyOne(ownerDtos, "填写业主信息错误，请确认，预留业主姓名、手机号"+idCardErrorMsg+"信息是否正确！");
 
             OwnerDto tmpOwnerDto = ownerDtos.get(0);
 

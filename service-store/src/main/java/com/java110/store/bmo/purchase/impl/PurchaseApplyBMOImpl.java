@@ -30,7 +30,7 @@ public class PurchaseApplyBMOImpl implements IPurchaseApplyBMO {
         }
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(purchaseApplyPo, PurchaseApplyDto.class);
         purchaseApplyDto.setCurrentUserId(purchaseApplyPo.getUserId());
-        if(!purchaseApplyPo.getWarehousingWay().equals(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT)){
+        if(!purchaseApplyPo.getWarehousingWay().equals(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT) && !purchaseApplyPo.getWarehousingWay().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT)){
             purchaseApplyUserInnerServiceSMOImpl.startProcess(purchaseApplyDto);
         }
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "采购申请成功");

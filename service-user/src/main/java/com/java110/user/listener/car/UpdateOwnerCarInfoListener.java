@@ -162,10 +162,10 @@ public class UpdateOwnerCarInfoListener extends AbstractOwnerCarBusinessServiceD
      */
     private void doBusinessOwnerCar(Business business, JSONObject businessOwnerCar) {
 
-        Assert.jsonObjectHaveKey(businessOwnerCar, "memberId", "businessOwnerCar 节点下没有包含 carId 节点");
+        Assert.jsonObjectHaveKey(businessOwnerCar, "memberId", "businessOwnerCar 节点下没有包含 memberId 节点");
 
         if (businessOwnerCar.getString("memberId").startsWith("-")) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "carId 错误，不能自动生成（必须已经存在的carId）" + businessOwnerCar);
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "memberId错误，不能自动生成（必须已经存在的memberId）" + businessOwnerCar);
         }
         //自动保存DEL
         autoSaveDelBusinessOwnerCar(business, businessOwnerCar);

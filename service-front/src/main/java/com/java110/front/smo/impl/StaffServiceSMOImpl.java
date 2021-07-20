@@ -1,7 +1,9 @@
 package com.java110.front.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.user.UserDto;
 import com.java110.entity.component.ComponentValidateResult;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
@@ -16,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * 员工服务类
@@ -49,7 +53,6 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         if (reqJson.containsKey("email") && !StringUtil.isEmpty(reqJson.getString("email"))) {
             Assert.isEmail(reqJson, "email", "不是有效的邮箱格式");
         }
-
 
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
 

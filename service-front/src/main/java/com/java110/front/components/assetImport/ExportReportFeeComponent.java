@@ -1,7 +1,6 @@
 package com.java110.front.components.assetImport;
 
 import com.java110.core.context.IPageData;
-import com.java110.front.smo.assetExport.IExportFeeManualCollectionSMO;
 import com.java110.front.smo.assetExport.IExportReportFeeSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +26,7 @@ public class ExportReportFeeComponent {
      * @return ResponseEntity 对象
      */
     public ResponseEntity<Object> exportData(IPageData pd) throws Exception {
-
         return exportExcelData.exportExcelData(pd);
     }
-
 
 }

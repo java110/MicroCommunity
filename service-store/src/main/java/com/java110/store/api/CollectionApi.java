@@ -19,6 +19,7 @@ import com.java110.store.bmo.collection.IResourceOutBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -119,6 +120,7 @@ public class CollectionApi {
     }
 
     /**
+     * 物品发放
      * {"resourceOuts":[],"applyOrderId":"152020071665420001","taskId":"237506","resOrderType":"20000",
      * "purchaseApplyDetailVo":[{"applyOrderId":"152020071665420001","id":"152020071690120002","price":"","quantity":"1",
      * "resCode":"002","resId":"852020070239060001","resName":"水性笔","stock":"2","purchaseQuantity":"2","purchaseRemark":""}]}
@@ -176,13 +178,20 @@ public class CollectionApi {
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             purchaseApplyDetailPo.setQuantity(purchaseApplyDetailPo.getPurchaseQuantity());
             purchaseApplyDetailPo.setRemark("直接出库");
-            purchaseApplyDetailPo.setOriginalStock(resourceStore.get("stock").toString());
+            purchaseApplyDetailPo.setOriginalStock(resourceStore.getString("stock"));
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
             //调整总库存
             ResourceStorePo resourceStorePo = new ResourceStorePo();
             resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
             resourceStorePo.setStock("-" + purchaseApplyDetailPo.getPurchaseQuantity());
             resourceStorePo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_OUT);
+            //计算出库后的最小计量总数
+            String oldMiniStock = resourceStore.getString("miniStock"); //获取原先的最小计量总数
+            String oldMiniUnitStock = resourceStore.getString("miniUnitStock"); //获取最小计量单位数量
+            String nowQuantity = purchaseApplyDetailPo.getPurchaseQuantity(); //获取出库数量
+            double nowMiniStock = Double.parseDouble(nowQuantity) * Double.parseDouble(oldMiniUnitStock); //计算当前出库的最小计量总数
+            double surplusMiniStock = Double.parseDouble(oldMiniStock) - nowMiniStock;
+            resourceStorePo.setMiniStock(String.valueOf(surplusMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
             //查询资源
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
@@ -191,6 +200,12 @@ public class CollectionApi {
             if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
                 continue;
             }
+            //获取物品单位
+            String unitCode = resourceStoreDtos.get(0).getUnitCode();
+            //获取物品最小计量单位
+            String miniUnitCode = resourceStoreDtos.get(0).getMiniUnitCode();
+            //获取物品最小计量单位数量
+            String miniUnitStock = resourceStoreDtos.get(0).getMiniUnitStock();
             //入库到个人仓库中
             UserStorehousePo userStorehousePo = new UserStorehousePo();
             userStorehousePo.setUsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
@@ -206,11 +221,39 @@ public class CollectionApi {
             List<UserStorehouseDto> userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
             if (userStorehouseDtos == null || userStorehouseDtos.size() < 1) {
                 userStorehousePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
+                if (!StringUtil.isEmpty(unitCode) && !StringUtil.isEmpty(miniUnitCode) && !StringUtil.isEmpty(miniUnitStock) && !unitCode.equals(miniUnitCode)) {
+                    //获取领取数量
+                    double purchaseQuantity = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity());
+                    //计算个人物品最小计量总数
+                    double quantity = purchaseQuantity * Double.parseDouble(miniUnitStock);
+                    userStorehousePo.setMiniStock(String.valueOf(quantity));
+                } else {
+                    userStorehousePo.setMiniStock(purchaseApplyDetailPo.getPurchaseQuantity());
+                }
                 userStorehouseInnerServiceSMOImpl.saveUserStorehouses(userStorehousePo);
             } else {
-                int total = Integer.parseInt(purchaseApplyDetailPo.getPurchaseQuantity()) + Integer.parseInt(userStorehouseDtos.get(0).getStock());
+                //获取个人物品领用后的库存
+                double total = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity()) + Double.parseDouble(userStorehouseDtos.get(0).getStock());
                 userStorehousePo.setStock(total + "");
                 userStorehousePo.setUsId(userStorehouseDtos.get(0).getUsId());
+                if (!StringUtil.isEmpty(unitCode) && !StringUtil.isEmpty(miniUnitCode) && !StringUtil.isEmpty(miniUnitStock) && !unitCode.equals(miniUnitCode)) {
+                    //获取本次领取数量
+                    double purchaseQuantity = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity());
+                    //计算本次领取的个人物品最小计量总数
+                    double quantity = purchaseQuantity * Double.parseDouble(miniUnitStock);
+                    double miniStock = 0.0;
+                    //获取个人物品原先的最小计量总数
+                    if (StringUtil.isEmpty(userStorehouseDtos.get(0).getMiniStock())) {
+                        throw new IllegalArgumentException("信息错误，个人物品最小计量总数不能为空！");
+                    } else {
+                        miniStock = Double.parseDouble(userStorehouseDtos.get(0).getMiniStock());
+                    }
+                    //计算领用后个人物品总的最小计量总数
+                    double miniQuantity = quantity + miniStock;
+                    userStorehousePo.setMiniStock(String.valueOf(miniQuantity));
+                } else {
+                    userStorehousePo.setMiniStock(String.valueOf(total));
+                }
                 userStorehouseInnerServiceSMOImpl.updateUserStorehouses(userStorehousePo);
             }
         }

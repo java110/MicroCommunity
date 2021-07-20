@@ -13,6 +13,15 @@
         )
     </insert>
 
+    <!-- 保存仓库调拨信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAllocationStorehouseInfo" parameterType="Map">
+        insert into allocation_storehouse(
+        as_id,b_id,sh_id_a,sh_id_z,res_id,res_name,store_id,stock,start_user_id,start_user_name,create_time,remark,apply_id,original_stock
+        ) values (
+        #{asId},#{bId},#{shIda},#{shIdz},#{resId},#{resName},#{storeId},#{stock},#{startUserId},#{startUserName},#{createTime},#{remark},#{applyId},#{originalStock}
+        )
+    </insert>
+
     <!-- 查询仓库调拨信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAllocationStorehouseInfo" parameterType="Map" resultType="Map">
         select t.as_id,t.as_id asId,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.sh_id_z,t.sh_id_z

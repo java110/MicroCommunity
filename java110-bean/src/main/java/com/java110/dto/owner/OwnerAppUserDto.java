@@ -56,6 +56,7 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     private String nickName;
     private String headImgUrl;
+    private String ownerTypeCd;
 
 
     public String getIdCard() {
@@ -273,5 +274,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setsCommunityTel(String sCommunityTel) {
         this.sCommunityTel = sCommunityTel;
+    }
+
+    public String getOwnerTypeCd() {
+        return ownerTypeCd;
+    }
+
+    public void setOwnerTypeCd(String ownerTypeCd) {
+        this.ownerTypeCd = ownerTypeCd;
     }
 }

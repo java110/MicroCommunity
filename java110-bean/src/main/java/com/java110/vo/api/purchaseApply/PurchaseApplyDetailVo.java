@@ -27,6 +27,7 @@ public class PurchaseApplyDetailVo {
     private String standardPrice;
     private String originalStock;
     private String supplierName;
+    private String shName;
 
 
     public String getApplyOrderId() {
@@ -211,6 +212,14 @@ public class PurchaseApplyDetailVo {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public String getShName() {
+        return shName;
+    }
+
+    public void setShName(String shName) {
+        this.shName = shName;
     }
 }
 

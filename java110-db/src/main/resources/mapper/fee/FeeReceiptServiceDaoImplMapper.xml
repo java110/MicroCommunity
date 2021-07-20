@@ -71,11 +71,16 @@
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
+        <if test="qstartTime !=null and qstartTime != ''">
+            and t.create_time &gt;= #{qstartTime}
+        </if>
+        <if test="qendTime !=null and qendTime != ''">
+            and t.create_time &lt;= #{qendTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 
@@ -136,9 +141,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
         UNION ALL
-
         SELECT
         CONCAT( f.floor_num, '栋', bu.unit_num, '单元', b.room_num, '室' ) AS objName,
         oc.car_num AS carNum,
@@ -240,7 +243,6 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 
@@ -272,7 +274,6 @@
         <if test="receiptId !=null and receiptId != ''">
             and t.receipt_id= #{receiptId}
         </if>
-
     </update>
 
     <!-- 查询收据数量 add by wuxw 2018-07-03 -->
@@ -318,8 +319,11 @@
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
-
-
+        <if test="qstartTime !=null and qstartTime != ''">
+            and t.create_time &gt;= #{qstartTime}
+        </if>
+        <if test="qendTime !=null and qendTime != ''">
+            and t.create_time &lt;= #{qendTime}
+        </if>
     </select>
-
 </mapper>

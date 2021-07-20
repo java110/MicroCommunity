@@ -25,11 +25,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String description;
     private String storeId;
     private String stock;
+    private String bId;
     private String resId;
     //10000 采购 20000出库
     private String resOrderType;
     //单位
     private String unitCode;
+    private String unitCodeName;
     //备注
     private String remark;
     //对外售价最低价格
@@ -40,7 +42,6 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String outPrice;
     //手机端是否显示(N否 Y是)
     private String showMobile;
-
     private String shId;
     private String warningStock;
     private String shType;
@@ -50,19 +51,21 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private Date createTime;
     private String rstId;
     private String rstName;
-
     private String statusCd = "0";
-
     private String shName;
-
     //规格id
     private String rssId;
-
     //规格名称
     private String rssName;
-
     //物品总价
     private String totalPrice;
+    //最小计量单位
+    private String miniUnitCode;
+    private String miniUnitCodeName;
+    //最小计量单位数量
+    private String miniUnitStock;
+    //最小计量总数
+    private String miniStock;
 
     public String getResName() {
         return resName;
@@ -295,5 +298,53 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getMiniUnitCode() {
+        return miniUnitCode;
+    }
+
+    public void setMiniUnitCode(String miniUnitCode) {
+        this.miniUnitCode = miniUnitCode;
+    }
+
+    public String getMiniUnitStock() {
+        return miniUnitStock;
+    }
+
+    public void setMiniUnitStock(String miniUnitStock) {
+        this.miniUnitStock = miniUnitStock;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getMiniStock() {
+        return miniStock;
+    }
+
+    public void setMiniStock(String miniStock) {
+        this.miniStock = miniStock;
     }
 }

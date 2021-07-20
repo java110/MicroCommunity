@@ -17,6 +17,7 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
 
     private String applyId;
     private String[] applyIds;
+    private String bId;
     private String startUserId;
     private String startUserName;
     private String applyCount;
@@ -245,5 +246,13 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
 
     public void setApplyTypeName(String applyTypeName) {
         this.applyTypeName = applyTypeName;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

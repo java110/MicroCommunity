@@ -206,6 +206,12 @@
         <if test="nowTime != null">
             and t.create_time &lt; #{nowTime}
         </if>
+        <if test="inspectionStartTime !=null and inspectionStartTime != ''">
+            and t.inspection_time &gt;= #{inspectionStartTime}
+        </if>
+        <if test="inspectionEndTime !=null and inspectionEndTime != ''">
+            and t.inspection_time &lt;= #{inspectionEndTime}
+        </if>
         order by t.sort_number desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -343,6 +349,12 @@
         </if>
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="inspectionStartTime !=null and inspectionStartTime != ''">
+            and t.inspection_time &gt;= #{inspectionStartTime}
+        </if>
+        <if test="inspectionEndTime !=null and inspectionEndTime != ''">
+            and t.inspection_time &lt;= #{inspectionEndTime}
         </if>
     </select>
 </mapper>

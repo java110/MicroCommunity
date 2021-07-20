@@ -121,6 +121,8 @@ public class FeeDiscountApi {
     @RequestMapping(value = "/queryFeeDiscount", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeDiscount(@RequestParam(value = "communityId") String communityId,
                                                    @RequestParam(value = "discountType", required = false) String discountType,
+                                                   @RequestParam(value = "discountName", required = false) String discountName,
+                                                   @RequestParam(value = "ruleName", required = false) String ruleName,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
         FeeDiscountDto feeDiscountDto = new FeeDiscountDto();
@@ -128,6 +130,8 @@ public class FeeDiscountApi {
         feeDiscountDto.setRow(row);
         feeDiscountDto.setCommunityId(communityId);
         feeDiscountDto.setDiscountType(discountType);
+        feeDiscountDto.setDiscountName(discountName);
+        feeDiscountDto.setRuleName(ruleName);
         return getFeeDiscountBMOImpl.get(feeDiscountDto);
     }
 

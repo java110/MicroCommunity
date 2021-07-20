@@ -55,6 +55,12 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         //获取请求数据
         JSONObject reqJson = dataFlowContext.getReqJson();
+        //获取开始时间
+        String startTime = reqJson.getString("startTime") + " 00:00:00";
+        //获取结束时间
+        String endTime = reqJson.getString("endTime") + " 23:59:59";
+        reqJson.put("startTime", startTime);
+        reqJson.put("endTime", endTime);
         validateFeeConfigData(reqJson);
 
         //查询总记录数
@@ -101,7 +107,7 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
      */
     private void validateFeeConfigData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-       // Assert.jsonObjectHaveKey(reqJson, "feeId", "请求中未包含feeId信息");
+        // Assert.jsonObjectHaveKey(reqJson, "feeId", "请求中未包含feeId信息");
 
 
     }
