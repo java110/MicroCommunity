@@ -52,6 +52,6 @@ public class GetMachineQrCodeAdapt extends DatabusAdaptImpl {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
         }
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
-        return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
+        return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"), paramOut.getString("data"));
     }
 }

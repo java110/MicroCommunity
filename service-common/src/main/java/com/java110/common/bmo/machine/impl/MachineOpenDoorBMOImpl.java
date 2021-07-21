@@ -137,6 +137,6 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
         }
 
         ResultVo resultVo = dataBusInnerServiceSMOImpl.getQRcode(reqJson);
-        return ResultVo.createResponseEntity(resultVo);
+        return ResultVo.createResponseEntity(resultVo.getCode(), resultVo.getMsg(), resultVo.getData());
     }
 }
