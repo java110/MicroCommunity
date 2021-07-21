@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="smsConfigServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存短信配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSmsConfigInfo" parameterType="Map">
+        insert into sms_config(
+access_key_id,sms_busi,sign_name,template_code,store_id,access_secret,sms_id,obj_id,sms_type,log_switch,region,remarks
+) values (
+#{accessKeyId},#{smsBusi},#{signName},#{templateCode},#{storeId},#{accessSecret},#{smsId},#{objId},#{smsType},#{logSwitch},#{region},#{remarks}
+)
+    </insert>
+
+
+
+    <!-- 查询短信配置信息 add by wuxw 2018-07-03 -->
+    <select id="getSmsConfigInfo" parameterType="Map" resultType="Map">
+        select  t.access_key_id,t.access_key_id accessKeyId,t.sms_busi,t.sms_busi smsBusi,t.sign_name,t.sign_name signName,t.status_cd,t.status_cd statusCd,t.template_code,t.template_code templateCode,t.store_id,t.store_id storeId,t.access_secret,t.access_secret accessSecret,t.sms_id,t.sms_id smsId,t.obj_id,t.obj_id objId,t.sms_type,t.sms_type smsType,t.log_switch,t.log_switch logSwitch,t.region,t.remarks 
+from sms_config t 
+where 1 =1 
+<if test="accessKeyId !=null and accessKeyId != ''">
+   and t.access_key_id= #{accessKeyId}
+</if> 
+<if test="smsBusi !=null and smsBusi != ''">
+   and t.sms_busi= #{smsBusi}
+</if> 
+<if test="signName !=null and signName != ''">
+   and t.sign_name= #{signName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="templateCode !=null and templateCode != ''">
+   and t.template_code= #{templateCode}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="accessSecret !=null and accessSecret != ''">
+   and t.access_secret= #{accessSecret}
+</if> 
+<if test="smsId !=null and smsId != ''">
+   and t.sms_id= #{smsId}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="smsType !=null and smsType != ''">
+   and t.sms_type= #{smsType}
+</if> 
+<if test="logSwitch !=null and logSwitch != ''">
+   and t.log_switch= #{logSwitch}
+</if> 
+<if test="region !=null and region != ''">
+   and t.region= #{region}
+</if> 
+<if test="remarks !=null and remarks != ''">
+   and t.remarks= #{remarks}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改短信配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateSmsConfigInfo" parameterType="Map">
+        update  sms_config t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="accessKeyId !=null and accessKeyId != ''">
+, t.access_key_id= #{accessKeyId}
+</if> 
+<if test="smsBusi !=null and smsBusi != ''">
+, t.sms_busi= #{smsBusi}
+</if> 
+<if test="signName !=null and signName != ''">
+, t.sign_name= #{signName}
+</if> 
+<if test="templateCode !=null and templateCode != ''">
+, t.template_code= #{templateCode}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="accessSecret !=null and accessSecret != ''">
+, t.access_secret= #{accessSecret}
+</if> 
+<if test="objId !=null and objId != ''">
+, t.obj_id= #{objId}
+</if> 
+<if test="smsType !=null and smsType != ''">
+, t.sms_type= #{smsType}
+</if> 
+<if test="logSwitch !=null and logSwitch != ''">
+, t.log_switch= #{logSwitch}
+</if> 
+<if test="region !=null and region != ''">
+, t.region= #{region}
+</if> 
+<if test="remarks !=null and remarks != ''">
+, t.remarks= #{remarks}
+</if> 
+ where 1=1 <if test="smsId !=null and smsId != ''">
+and t.sms_id= #{smsId}
+</if> 
+
+    </update>
+
+    <!-- 查询短信配置数量 add by wuxw 2018-07-03 -->
+     <select id="querySmsConfigsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from sms_config t 
+where 1 =1 
+<if test="accessKeyId !=null and accessKeyId != ''">
+   and t.access_key_id= #{accessKeyId}
+</if> 
+<if test="smsBusi !=null and smsBusi != ''">
+   and t.sms_busi= #{smsBusi}
+</if> 
+<if test="signName !=null and signName != ''">
+   and t.sign_name= #{signName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="templateCode !=null and templateCode != ''">
+   and t.template_code= #{templateCode}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="accessSecret !=null and accessSecret != ''">
+   and t.access_secret= #{accessSecret}
+</if> 
+<if test="smsId !=null and smsId != ''">
+   and t.sms_id= #{smsId}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="smsType !=null and smsType != ''">
+   and t.sms_type= #{smsType}
+</if> 
+<if test="logSwitch !=null and logSwitch != ''">
+   and t.log_switch= #{logSwitch}
+</if> 
+<if test="region !=null and region != ''">
+   and t.region= #{region}
+</if> 
+<if test="remarks !=null and remarks != ''">
+   and t.remarks= #{remarks}
+</if> 
+
+
+     </select>
+
+</mapper>

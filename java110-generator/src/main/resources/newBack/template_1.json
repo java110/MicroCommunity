@@ -1,54 +1,58 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "accountBondObjDetail",
-  "desc": "保证金明细",
-  "shareParam": "detailId",
-  "shareColumn": "detail_id",
-  "shareName": "acct",
-  "tableName": "account_bond_obj_detail",
+  "id": "smsId",
+  "name": "smsConfig",
+  "desc": "短信配置",
+  "shareParam": "objId",
+  "shareColumn": "obj_id",
+  "shareName": "common",
+  "tableName": "sms_config",
   "param": {
-    "detailId": "detail_id",
-    "bobjId": "bobj_id",
+    "smsId": "sms_id",
+    "storeId": "store_id",
     "objId": "obj_id",
-    "bondType": "bond_type",
-    "receivableAmount": "receivable_amount",
-    "receivedAmount": "received_amount",
-    "remark": "remark",
-    "state": "state",
-    "startTime": "start_time",
-    "endTime": "end_time",
-    "createTime": "create_time",
+    "smsType": "sms_type",
+    "smsBusi": "sms_busi",
+    "templateCode": "template_code",
+    "signName": "sign_name",
+    "accessSecret": "access_secret",
+    "accessKeyId": "access_key_id",
+    "region": "region",
+    "logSwitch": "log_switch",
+    "remarks": "remarks",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "bobjId",
-      "msg": "保证金ID不能为空"
-    },
-    {
       "code": "objId",
-      "msg": "保证对象ID类型不能为空"
+      "msg": "对象不能为空"
     },
     {
-      "code": "bondType",
-      "msg": "保证对象类型不能为空"
-    },{
-      "code": "receivableAmount",
-      "msg": "应收金额不能为空"
-    },{
-      "code": "receivedAmount",
-      "msg": "实收金额不能为空"
+      "code": "smsType",
+      "msg": "短信类型不能为空"
     },
     {
-      "code": "state",
-      "msg": "状态不能为空"
+      "code": "smsBusi",
+      "msg": "短信业务不能为空"
     },{
-      "code": "startTime",
-      "msg": "开始时间不能为空"
+      "code": "templateCode",
+      "msg": "短信模板不能为空"
     },{
-      "code": "endTime",
-      "msg": "结束时间不能为空"
+      "code": "signName",
+      "msg": "短信签名不能为空"
+    },
+    {
+      "code": "accessSecret",
+      "msg": "访问秘钥不能为空"
+    },{
+      "code": "accessKeyId",
+      "msg": "访问Key不能为空"
+    },{
+      "code": "region",
+      "msg": "区域不能为空"
+    },{
+      "code": "logSwitch",
+      "msg": "日志开关不能为空"
     }
   ]
 }
