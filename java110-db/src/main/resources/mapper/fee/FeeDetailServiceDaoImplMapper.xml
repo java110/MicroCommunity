@@ -109,11 +109,13 @@
         t.receivable_amount,t.receivable_amount receivableAmount,
         t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId ,t.create_time createTime,
-        t.state,d.name stateName,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime,pfa.`value` importFeeName,pfc.fee_name feeName
+        t.state,d.name stateName,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime,pfa.`value` importFeeName,pfc.fee_name feeName,
+        mw.cur_degrees curDegrees,mw.pre_degrees  preDegrees, mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime
         from pay_fee_detail t
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        LEFT JOIN meter_water mw on t.fee_id = mw.fee_id and mw.status_cd = '0' and mw.community_id = t.community_id
         <if test="ownerId != null and ownerId != ''">
             left join pay_fee_attrs pfao on pfao.fee_id = t.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
         </if>
