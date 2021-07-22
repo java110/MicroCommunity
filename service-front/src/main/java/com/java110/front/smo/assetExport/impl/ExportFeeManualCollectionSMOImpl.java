@@ -281,11 +281,13 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         subTitleCellStyle.setAlignment(HorizontalAlignment.CENTER);
         subTitleCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         row = sheet.createRow(1 + line);
+        Cell cell1 = row.createCell(1);
         if (fees != null && fees.size() > 0) {
-            row.createCell(1).setCellValue("业主：" + fees.getJSONObject(0).getString("ownerName"));
+            cell1.setCellValue("业主：" + fees.getJSONObject(0).getString("ownerName"));
         } else {
-            row.createCell(1).setCellValue("业主：无");
+            cell1.setCellValue("业主：无");
         }
+        cell1.setCellStyle(subTitleCellStyle);
 
         Cell cell2 = row.createCell(2);
         cell2.setCellValue("房号：" + room.getString("floorNum")
@@ -303,7 +305,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.setRowStyle(rowCellStyle);
 
         //设置表头之上
-        region = new CellRangeAddress(1 + line, 1 + line, 1, 3);
+        region = new CellRangeAddress(1 + line, 1 + line, 2, 3);
         sheet.addMergedRegion(region);
         region = new CellRangeAddress(1 + line, 1 + line, 5, 6);
         sheet.addMergedRegion(region);
@@ -315,7 +317,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         cell0 = row.createCell(0);
         cell0.setCellValue("收费名称");
         cell0.setCellStyle(cellStyle);
-        Cell cell1 = row.createCell(1);
+        cell1 = row.createCell(1);
         cell1.setCellValue("收费标准");
         cell1.setCellStyle(cellStyle);
         cell2 = row.createCell(2);
