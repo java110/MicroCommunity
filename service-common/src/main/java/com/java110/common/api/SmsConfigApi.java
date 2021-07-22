@@ -11,11 +11,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -41,7 +37,8 @@ public class SmsConfigApi {
      * @path /app/smsConfig/saveSmsConfig
      */
     @RequestMapping(value = "/saveSmsConfig", method = RequestMethod.POST)
-    public ResponseEntity<String> saveSmsConfig(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveSmsConfig(@RequestHeader(value = "store-id") String storeId,
+                                                @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
         Assert.hasKeyAndValue(reqJson, "smsType", "请求报文中未包含smsType");
@@ -55,6 +52,7 @@ public class SmsConfigApi {
 
 
         SmsConfigPo smsConfigPo = BeanConvertUtil.covertBean(reqJson, SmsConfigPo.class);
+        smsConfigPo.setStoreId(storeId);
         return saveSmsConfigBMOImpl.save(smsConfigPo);
     }
 
