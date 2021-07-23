@@ -1,6 +1,7 @@
 package com.java110.dto.feeCollectionOrder;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,14 +15,19 @@ import java.util.Date;
  **/
 public class FeeCollectionOrderDto extends PageDto implements Serializable {
 
+    //状态 W 等待催缴 ，D 催缴中  F 催缴完成
+    public static final String STATE_WAIT = "W";
+    public static final String STATE_DOING = "D";
+    public static final String STATE_FINISH = "F";
+
     private String orderId;
-private String staffName;
-private String state;
-private String communityId;
-private String collectionWay;
-private String staffId;
-private String remarks;
-private String collectionName;
+    private String staffName;
+    private String state;
+    private String communityId;
+    private String collectionWay;
+    private String staffId;
+    private String remarks;
+    private String collectionName;
 
 
     private Date createTime;
@@ -32,49 +38,64 @@ private String collectionName;
     public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getStaffName() {
+
+    public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCollectionWay() {
+
+    public String getCollectionWay() {
         return collectionWay;
     }
-public void setCollectionWay(String collectionWay) {
+
+    public void setCollectionWay(String collectionWay) {
         this.collectionWay = collectionWay;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-public String getRemarks() {
+
+    public String getRemarks() {
         return remarks;
     }
-public void setRemarks(String remarks) {
+
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
-public String getCollectionName() {
+
+    public String getCollectionName() {
         return collectionName;
     }
-public void setCollectionName(String collectionName) {
+
+    public void setCollectionName(String collectionName) {
         this.collectionName = collectionName;
     }
 

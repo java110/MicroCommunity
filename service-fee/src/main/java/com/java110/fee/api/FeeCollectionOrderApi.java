@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @RestController
 @RequestMapping(value = "/feeCollectionOrder")
 public class FeeCollectionOrderApi {
@@ -38,11 +37,13 @@ public class FeeCollectionOrderApi {
      * @path /app/feeCollectionOrder/saveFeeCollectionOrder
      */
     @RequestMapping(value = "/saveFeeCollectionOrder", method = RequestMethod.POST)
-    public ResponseEntity<String> saveFeeCollectionOrder(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveFeeCollectionOrder(
+            @RequestHeader(value = "user-id") String userId,
+            @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "collectionWay", "请求报文中未包含collectionWay");
-
+        reqJson.put("staffId", userId);
 
         FeeCollectionOrderPo feeCollectionOrderPo = BeanConvertUtil.covertBean(reqJson, FeeCollectionOrderPo.class);
         return saveFeeCollectionOrderBMOImpl.save(feeCollectionOrderPo);
