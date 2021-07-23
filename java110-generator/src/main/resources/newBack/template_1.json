@@ -1,58 +1,31 @@
 {
   "autoMove": true,
-  "id": "smsId",
-  "name": "smsConfig",
-  "desc": "短信配置",
-  "shareParam": "objId",
-  "shareColumn": "obj_id",
-  "shareName": "common",
-  "tableName": "sms_config",
+  "id": "orderId",
+  "name": "feeCollectionOrder",
+  "desc": "催缴单",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "fee_collection_order",
   "param": {
-    "smsId": "sms_id",
-    "storeId": "store_id",
-    "objId": "obj_id",
-    "smsType": "sms_type",
-    "smsBusi": "sms_busi",
-    "templateCode": "template_code",
-    "signName": "sign_name",
-    "accessSecret": "access_secret",
-    "accessKeyId": "access_key_id",
-    "region": "region",
-    "logSwitch": "log_switch",
+    "orderId": "order_id",
+    "collectionName": "collection_name",
+    "staffId": "staff_id",
+    "staffName": "staff_name",
+    "communityId": "community_id",
+    "collectionWay": "collection_way",
+    "state": "state",
     "remarks": "remarks",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "objId",
-      "msg": "对象不能为空"
+      "code": "communityId",
+      "msg": "小区不能为空"
     },
     {
-      "code": "smsType",
-      "msg": "短信类型不能为空"
-    },
-    {
-      "code": "smsBusi",
-      "msg": "短信业务不能为空"
-    },{
-      "code": "templateCode",
-      "msg": "短信模板不能为空"
-    },{
-      "code": "signName",
-      "msg": "短信签名不能为空"
-    },
-    {
-      "code": "accessSecret",
-      "msg": "访问秘钥不能为空"
-    },{
-      "code": "accessKeyId",
-      "msg": "访问Key不能为空"
-    },{
-      "code": "region",
-      "msg": "区域不能为空"
-    },{
-      "code": "logSwitch",
-      "msg": "日志开关不能为空"
+      "code": "collectionWay",
+      "msg": "催缴方式不能为空"
     }
   ]
 }
