@@ -34,6 +34,7 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
     private String payerObjType;
     private String payerObjId;
     private String[] payerObjIds;
+    private String hasOweFee;
     List<ReportOweFeeItemDto> items;
 
 
@@ -209,5 +210,13 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
 
     public void setConfigIds(String[] configIds) {
         this.configIds = configIds;
+    }
+
+    public String getHasOweFee() {
+        return hasOweFee;
+    }
+
+    public void setHasOweFee(String hasOweFee) {
+        this.hasOweFee = hasOweFee;
     }
 }
