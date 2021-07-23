@@ -1,6 +1,8 @@
 package com.java110.core.factory;
 
+import com.java110.dto.smsConfig.SmsConfigDto;
 import com.java110.utils.cache.MappingCache;
+import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Random;
@@ -36,6 +38,20 @@ public class SendSmsFactory {
             TencentSendMessageFactory.sendMessage(tel, code);
         }
     }
+
+    public static ResultVo sendOweFeeSms(String tel, SmsConfigDto smsConfigDto, Object param){
+
+        ResultVo resultVo = null;
+        if (SMS_COMPANY_ALI.equals(smsConfigDto.getSmsType().trim())) {
+            resultVo = AliSendMessageFactory.sendOweFeeSms(tel, param,smsConfigDto);
+        } else {
+            resultVo = TencentSendMessageFactory.sendOweFeeSms(tel, param,smsConfigDto);
+        }
+
+        return resultVo;
+    }
+
+
 
     /**
      * 生成验证码

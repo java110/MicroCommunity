@@ -1,29 +1,37 @@
 package com.java110.job.task.wechat;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.SendSmsFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeCollectionOrder.FeeCollectionOrderDto;
 import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
+import com.java110.dto.smsConfig.SmsConfigDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.Miniprogram;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
+import com.java110.intf.IFeeCollectionDetailInnerServiceSMO;
+import com.java110.intf.common.ISmsConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeCollectionOrderInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
+import com.java110.po.feeCollectionDetail.FeeCollectionDetailPo;
 import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.MappingCache;
@@ -31,6 +39,7 @@ import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +49,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -67,11 +75,20 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
 
     @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
     private IFeeCollectionOrderInnerServiceSMO feeCollectionOrderInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeCollectionDetailInnerServiceSMO feeCollectionDetailInnerServiceSMOImpl;
 
 
     @Autowired
     private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
+
+    @Autowired
+    private ISmsConfigInnerServiceSMO smsConfigInnerServiceSMOImpl;
 
     @Autowired
     private RestTemplate outRestTemplate;
@@ -173,18 +190,38 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
      * @param feeCollectionOrderDto
      */
     private void doPushMessage(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto) {
-
+        FeeCollectionDetailPo feeCollectionDetailPo = new FeeCollectionDetailPo();
+        ResultVo resultVo = null;
         switch (feeCollectionOrderDto.getCollectionWay()) {
             case FeeCollectionOrderDto.COLLECTION_WAY_SMS:
-                doSendSms(reportOweFeeDo, feeCollectionOrderDto);
+                resultVo = doSendSms(reportOweFeeDo, feeCollectionOrderDto);
+                feeCollectionDetailPo.setCollectionWay(FeeCollectionOrderDto.COLLECTION_WAY_SMS);
                 break;
             case FeeCollectionOrderDto.COLLECTION_WAY_WECHAT:
-                doSendWechat(reportOweFeeDo, feeCollectionOrderDto);
+                resultVo = doSendWechat(reportOweFeeDo, feeCollectionOrderDto);
+                feeCollectionDetailPo.setCollectionWay(FeeCollectionOrderDto.COLLECTION_WAY_WECHAT);
                 break;
             case FeeCollectionOrderDto.COLLECTION_WAY_WECHAT_SMS:
-                doSendWechatOrSms(reportOweFeeDo, feeCollectionOrderDto);
+                resultVo = doSendWechatOrSms(reportOweFeeDo, feeCollectionOrderDto, feeCollectionDetailPo);
                 break;
         }
+
+
+        feeCollectionDetailPo.setCollectionName(feeCollectionOrderDto.getCollectionName());
+        feeCollectionDetailPo.setCommunityId(feeCollectionOrderDto.getCommunityId());
+        feeCollectionDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        feeCollectionDetailPo.setFeeName(feeCollectionOrderDto.getCollectionName() + "欠费");
+        feeCollectionDetailPo.setOrderId(feeCollectionOrderDto.getOrderId());
+        feeCollectionDetailPo.setOweAmount(reportOweFeeDo.getAmountOwed());
+        feeCollectionDetailPo.setOwnerId(reportOweFeeDo.getOwnerId());
+        feeCollectionDetailPo.setOwnerName(reportOweFeeDo.getOwnerName());
+        feeCollectionDetailPo.setPayerObjId(reportOweFeeDo.getPayerObjId());
+        feeCollectionDetailPo.setPayerObjName(reportOweFeeDo.getPayerObjName());
+        feeCollectionDetailPo.setPayerObjType(reportOweFeeDo.getPayerObjType());
+        feeCollectionDetailPo.setState(resultVo.getCode() == ResultVo.CODE_OK ? FeeCollectionOrderDto.STATE_FINISH : FeeCollectionOrderDto.STATE_ERROR);
+        feeCollectionDetailPo.setRemarks(resultVo.getMsg().length() > 512 ? resultVo.getMsg().substring(0, 450) : resultVo.getMsg());
+        feeCollectionDetailInnerServiceSMOImpl.saveFeeCollectionDetail(feeCollectionDetailPo);
+
 
     }
 
@@ -194,13 +231,14 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
      * @param reportOweFeeDo
      * @param feeCollectionOrderDto
      */
-    private void doSendWechatOrSms(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto) {
+    private ResultVo doSendWechatOrSms(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto, FeeCollectionDetailPo feeCollectionDetailPo) {
         Map paramInfo = getOwnerAppUserDto(feeCollectionOrderDto.getCommunityId(), reportOweFeeDo.getOwnerId());
         if (paramInfo == null) {
-            doSendSms(reportOweFeeDo, feeCollectionOrderDto);
-            return;
+            feeCollectionDetailPo.setCollectionWay(FeeCollectionOrderDto.COLLECTION_WAY_SMS);
+            return doSendSms(reportOweFeeDo, feeCollectionOrderDto);
         }
-        doSendWechat(reportOweFeeDo, feeCollectionOrderDto, paramInfo);
+        feeCollectionDetailPo.setCollectionWay(FeeCollectionOrderDto.COLLECTION_WAY_WECHAT);
+        return doSendWechat(reportOweFeeDo, feeCollectionOrderDto, paramInfo);
     }
 
     /**
@@ -209,12 +247,12 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
      * @param reportOweFeeDo
      * @param feeCollectionOrderDto
      */
-    private void doSendWechat(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto) {
+    private ResultVo doSendWechat(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto) {
         Map paramInfo = getOwnerAppUserDto(feeCollectionOrderDto.getCommunityId(), reportOweFeeDo.getOwnerId());
         if (paramInfo == null) {
-            return;
+            return new ResultVo(ResultVo.CODE_ERROR, "业主未绑定");
         }
-        doSendWechat(reportOweFeeDo, feeCollectionOrderDto, paramInfo);
+        return doSendWechat(reportOweFeeDo, feeCollectionOrderDto, paramInfo);
     }
 
     /**
@@ -223,15 +261,15 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
      * @param reportOweFeeDo
      * @param feeCollectionOrderDto
      */
-    private void doSendWechat(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto, Map paramInfo) {
+    private ResultVo doSendWechat(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto, Map paramInfo) {
         if (paramInfo == null) {
-            return;
+            return new ResultVo(ResultVo.CODE_ERROR, "业主未绑定");
         }
         String templateId = paramInfo.get("templateId").toString();
         String url = paramInfo.get("url").toString();
         String oweRoomUrl = paramInfo.get("oweCarUrl").toString();
         String oweCarUrl = paramInfo.get("oweCarUrl").toString();
-        SmallWeChatDto weChatDto = (SmallWeChatDto)paramInfo.get("weChatDto");
+        SmallWeChatDto weChatDto = (SmallWeChatDto) paramInfo.get("weChatDto");
         Miniprogram miniprogram = paramInfo.get("oweCarUrl") == null ? null : (Miniprogram) paramInfo.get("oweCarUrl");
         List<OwnerAppUserDto> ownerAppUserDtos = (List<OwnerAppUserDto>) paramInfo.get("ownerAppUserDtos");
 
@@ -277,6 +315,8 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
                 }
             }
         }
+
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 
     /**
@@ -285,8 +325,45 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
      * @param reportOweFeeDo
      * @param feeCollectionOrderDto
      */
-    private void doSendSms(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto) {
+    private ResultVo doSendSms(ReportOweFeeDto reportOweFeeDo, FeeCollectionOrderDto feeCollectionOrderDto) {
 
+        SmsConfigDto smsConfigDto = new SmsConfigDto();
+        smsConfigDto.setObjId(feeCollectionOrderDto.getCommunityId());
+        smsConfigDto.setSmsBusi(SmsConfigDto.SMS_BUSI_OWE);
+        List<SmsConfigDto> smsConfigDtos = smsConfigInnerServiceSMOImpl.querySmsConfigs(smsConfigDto);
+
+        if (smsConfigDtos == null || smsConfigDtos.size() < 1) {
+            return new ResultVo(ResultVo.CODE_ERROR,"未配置短信信息");
+        }
+        Object paramIn = null;
+        if("ALI".equals(smsConfigDto.getSmsType())){
+            JSONObject param = new JSONObject();
+            param.put("user",reportOweFeeDo.getOwnerName());
+            param.put("house",reportOweFeeDo.getPayerObjName());
+            param.put("amountOwed",reportOweFeeDo.getAmountOwed());
+            paramIn = param;
+        }else{
+            paramIn = new String[]{
+                    reportOweFeeDo.getOwnerName(),
+                    reportOweFeeDo.getPayerObjName(),
+                    reportOweFeeDo.getAmountOwed()
+            };
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(feeCollectionOrderDto.getCommunityId());
+        ownerDto.setOwnerId(reportOweFeeDo.getOwnerId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+
+        if(ownerDtos == null || ownerDtos.size()<1){
+            return new ResultVo(ResultVo.CODE_ERROR,"业主不存在");
+        }
+        ResultVo resultVo = null;
+        for(OwnerDto ownerDto1 : ownerDtos){
+            resultVo = SendSmsFactory.sendOweFeeSms(ownerDto1.getLink(),smsConfigDto,paramIn);
+        }
+
+        return resultVo;
     }
 
     private Map getOwnerAppUserDto(String communityId, String memberId) {

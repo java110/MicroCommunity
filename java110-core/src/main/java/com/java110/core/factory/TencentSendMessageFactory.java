@@ -9,8 +9,10 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
+import com.java110.dto.smsConfig.SmsConfigDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.vo.ResultVo;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
@@ -77,14 +79,6 @@ public class TencentSendMessageFactory {
 
         //开始发送验证码
         logger.debug("发送号码为{}，短信码为{}", tel, code);
-//        String url = "https://sms.tencentcloudapi.com/?Action=SendSms" +
-//                "&PhoneNumberSet.0=+86" + tel +
-//                "&TemplateID=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "TemplateID") +
-//                "&Sign=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "Sign") +
-//                "&TemplateParamSet.0=" + code +
-//                "&SmsSdkAppid=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "SmsSdkAppid") +
-//                "&Version=2019-07-11";
-//        ResponseEntity<String> responseEntity = getRestTemplate().getForEntity(url, String.class);
 
         // 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey，见《创建secretId和secretKey》小节
         Credential cred = new Credential(MappingCache.getValue(TENCENT_SMS_DOMAIN, "secretId"),
@@ -110,6 +104,35 @@ public class TencentSendMessageFactory {
 
         logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + (sendSmsResponse != null ? sendSmsResponse.toString() : ""));
 
+
+    }
+
+    public static ResultVo sendOweFeeSms(String tel, Object param, SmsConfigDto smsConfigDto) {
+        // 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey，见《创建secretId和secretKey》小节
+        Credential cred = new Credential(smsConfigDto.getAccessSecret().trim(),
+                smsConfigDto.getAccessKeyId().trim());
+        // 实例化要请求产品(以cvm为例)的client对象
+        ClientProfile clientProfile = new ClientProfile();
+        clientProfile.setSignMethod(ClientProfile.SIGN_TC3_256);
+        SmsClient smsClient = new SmsClient(cred, smsConfigDto.getRegion().trim());//第二个ap-chongqing 填产品所在的区
+        SendSmsRequest sendSmsRequest = new SendSmsRequest();
+        sendSmsRequest.setSmsSdkAppid(smsConfigDto.getRemarks());//appId ,见《创建应用》小节
+        String[] phones = {"+86" + tel};  //发送短信的目标手机号，可填多个。
+        sendSmsRequest.setPhoneNumberSet(phones);
+        sendSmsRequest.setTemplateID(smsConfigDto.getTemplateCode());  //模版id,见《创建短信签名和模版》小节
+        String[] templateParam = (String[])param;//模版参数，从前往后对应的是模版的{1}、{2}等,见《创建短信签名和模版》小节
+        sendSmsRequest.setTemplateParamSet(templateParam);
+        sendSmsRequest.setSign(smsConfigDto.getSignName()); //签名内容，不是填签名id,见《创建短信签名和模版》小节
+        SendSmsResponse sendSmsResponse = null;
+        try {
+            sendSmsResponse = smsClient.SendSms(sendSmsRequest); //发送短信
+        } catch (TencentCloudSDKException e) {
+            logger.error("发送短信失败", e);
+        }
+
+        logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + (sendSmsResponse != null ? sendSmsResponse.toString() : ""));
+
+        return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
 
     }
 

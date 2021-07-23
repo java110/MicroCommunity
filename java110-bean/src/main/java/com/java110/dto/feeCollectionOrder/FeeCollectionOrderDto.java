@@ -19,6 +19,7 @@ public class FeeCollectionOrderDto extends PageDto implements Serializable {
     public static final String STATE_WAIT = "W";
     public static final String STATE_DOING = "D";
     public static final String STATE_FINISH = "F";
+    public static final String STATE_ERROR = "E";
 
     //催缴方式，001 仅短信方式  002 短信微信方式 003 仅微信方式
     public static final String COLLECTION_WAY_SMS = "001";

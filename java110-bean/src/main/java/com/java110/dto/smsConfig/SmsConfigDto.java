@@ -1,6 +1,7 @@
 package com.java110.dto.smsConfig;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,18 +15,22 @@ import java.util.Date;
  **/
 public class SmsConfigDto extends PageDto implements Serializable {
 
+    //短信业务 1001 欠费催缴 2002 工单通知
+    public static final String SMS_BUSI_OWE = "1001";
+    public static final String SMS_BUSI_ORDER_NOTICE = "2002";
+
     private String accessKeyId;
-private String smsBusi;
-private String signName;
-private String templateCode;
-private String storeId;
-private String accessSecret;
-private String smsId;
-private String objId;
-private String smsType;
-private String logSwitch;
-private String region;
-private String remarks;
+    private String smsBusi;
+    private String signName;
+    private String templateCode;
+    private String storeId;
+    private String accessSecret;
+    private String smsId;
+    private String objId;
+    private String smsType;
+    private String logSwitch;
+    private String region;
+    private String remarks;
 
 
     private Date createTime;
@@ -36,73 +41,96 @@ private String remarks;
     public String getAccessKeyId() {
         return accessKeyId;
     }
-public void setAccessKeyId(String accessKeyId) {
+
+    public void setAccessKeyId(String accessKeyId) {
         this.accessKeyId = accessKeyId;
     }
-public String getSmsBusi() {
+
+    public String getSmsBusi() {
         return smsBusi;
     }
-public void setSmsBusi(String smsBusi) {
+
+    public void setSmsBusi(String smsBusi) {
         this.smsBusi = smsBusi;
     }
-public String getSignName() {
+
+    public String getSignName() {
         return signName;
     }
-public void setSignName(String signName) {
+
+    public void setSignName(String signName) {
         this.signName = signName;
     }
-public String getTemplateCode() {
+
+    public String getTemplateCode() {
         return templateCode;
     }
-public void setTemplateCode(String templateCode) {
+
+    public void setTemplateCode(String templateCode) {
         this.templateCode = templateCode;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getAccessSecret() {
+
+    public String getAccessSecret() {
         return accessSecret;
     }
-public void setAccessSecret(String accessSecret) {
+
+    public void setAccessSecret(String accessSecret) {
         this.accessSecret = accessSecret;
     }
-public String getSmsId() {
+
+    public String getSmsId() {
         return smsId;
     }
-public void setSmsId(String smsId) {
+
+    public void setSmsId(String smsId) {
         this.smsId = smsId;
     }
-public String getObjId() {
+
+    public String getObjId() {
         return objId;
     }
-public void setObjId(String objId) {
+
+    public void setObjId(String objId) {
         this.objId = objId;
     }
-public String getSmsType() {
+
+    public String getSmsType() {
         return smsType;
     }
-public void setSmsType(String smsType) {
+
+    public void setSmsType(String smsType) {
         this.smsType = smsType;
     }
-public String getLogSwitch() {
+
+    public String getLogSwitch() {
         return logSwitch;
     }
-public void setLogSwitch(String logSwitch) {
+
+    public void setLogSwitch(String logSwitch) {
         this.logSwitch = logSwitch;
     }
-public String getRegion() {
+
+    public String getRegion() {
         return region;
     }
-public void setRegion(String region) {
+
+    public void setRegion(String region) {
         this.region = region;
     }
-public String getRemarks() {
+
+    public String getRemarks() {
         return remarks;
     }
-public void setRemarks(String remarks) {
+
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
