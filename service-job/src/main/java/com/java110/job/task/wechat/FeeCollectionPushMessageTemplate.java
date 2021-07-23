@@ -228,7 +228,6 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
             return;
         }
         String templateId = paramInfo.get("templateId").toString();
-        String accessToken = paramInfo.get("accessToken").toString();
         String url = paramInfo.get("url").toString();
         String oweRoomUrl = paramInfo.get("oweCarUrl").toString();
         String oweCarUrl = paramInfo.get("oweCarUrl").toString();
@@ -355,7 +354,6 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
 
         Map paramInfo = new HashMap();
         paramInfo.put("templateId", templateId);
-        paramInfo.put("accessToken", accessToken);
         paramInfo.put("url", url);
         paramInfo.put("miniprogram", miniprogram);
         paramInfo.put("oweCarUrl", oweCarUrl);
