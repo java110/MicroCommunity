@@ -1,19 +1,25 @@
 {
   "autoMove": true,
-  "id": "orderId",
-  "name": "feeCollectionOrder",
+  "id": "detailId",
+  "name": "feeCollectionDetail",
   "desc": "催缴单",
   "shareParam": "communityId",
   "shareColumn": "community_id",
   "shareName": "fee",
-  "tableName": "fee_collection_order",
+  "tableName": "fee_collection_detail",
   "param": {
+    "detailId": "detail_id",
     "orderId": "order_id",
     "collectionName": "collection_name",
-    "staffId": "staff_id",
-    "staffName": "staff_name",
+    "ownerId": "owner_id",
+    "ownerName": "owner_name",
+    "feeName": "fee_name",
+    "payerObjId": "payer_obj_id",
+    "payerObjName": "payer_obj_name",
+    "payerObjType": "payer_obj_type",
     "communityId": "community_id",
     "collectionWay": "collection_way",
+    "oweAmount": "owe_amount",
     "state": "state",
     "remarks": "remarks",
     "statusCd": "status_cd"
@@ -26,6 +32,10 @@
     {
       "code": "collectionWay",
       "msg": "催缴方式不能为空"
+    },
+    {
+      "code": "oweAmount",
+      "msg": "欠费金额不能为空"
     }
   ]
 }

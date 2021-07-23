@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeCollectionDetailServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存催缴单信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeCollectionDetailInfo" parameterType="Map">
+        insert into fee_collection_detail(
+order_id,detail_id,owner_id,collection_name,payer_obj_name,owner_name,fee_name,owe_amount,state,community_id,payer_obj_type,collection_way,remarks,payer_obj_id
+) values (
+#{orderId},#{detailId},#{ownerId},#{collectionName},#{payerObjName},#{ownerName},#{feeName},#{oweAmount},#{state},#{communityId},#{payerObjType},#{collectionWay},#{remarks},#{payerObjId}
+)
+    </insert>
+
+
+
+    <!-- 查询催缴单信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeCollectionDetailInfo" parameterType="Map" resultType="Map">
+        select  t.order_id,t.order_id orderId,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.collection_name,t.collection_name collectionName,t.payer_obj_name,t.payer_obj_name payerObjName,t.owner_name,t.owner_name ownerName,t.fee_name,t.fee_name feeName,t.owe_amount,t.owe_amount oweAmount,t.state,t.community_id,t.community_id communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.collection_way,t.collection_way collectionWay,t.remarks,t.payer_obj_id,t.payer_obj_id payerObjId 
+from fee_collection_detail t 
+where 1 =1 
+<if test="orderId !=null and orderId != ''">
+   and t.order_id= #{orderId}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="collectionName !=null and collectionName != ''">
+   and t.collection_name= #{collectionName}
+</if> 
+<if test="payerObjName !=null and payerObjName != ''">
+   and t.payer_obj_name= #{payerObjName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="feeName !=null and feeName != ''">
+   and t.fee_name= #{feeName}
+</if> 
+<if test="oweAmount !=null and oweAmount != ''">
+   and t.owe_amount= #{oweAmount}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="payerObjType !=null and payerObjType != ''">
+   and t.payer_obj_type= #{payerObjType}
+</if> 
+<if test="collectionWay !=null and collectionWay != ''">
+   and t.collection_way= #{collectionWay}
+</if> 
+<if test="remarks !=null and remarks != ''">
+   and t.remarks= #{remarks}
+</if> 
+<if test="payerObjId !=null and payerObjId != ''">
+   and t.payer_obj_id= #{payerObjId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改催缴单信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeCollectionDetailInfo" parameterType="Map">
+        update  fee_collection_detail t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="orderId !=null and orderId != ''">
+, t.order_id= #{orderId}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+, t.owner_id= #{ownerId}
+</if> 
+<if test="collectionName !=null and collectionName != ''">
+, t.collection_name= #{collectionName}
+</if> 
+<if test="payerObjName !=null and payerObjName != ''">
+, t.payer_obj_name= #{payerObjName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+, t.owner_name= #{ownerName}
+</if> 
+<if test="feeName !=null and feeName != ''">
+, t.fee_name= #{feeName}
+</if> 
+<if test="oweAmount !=null and oweAmount != ''">
+, t.owe_amount= #{oweAmount}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="payerObjType !=null and payerObjType != ''">
+, t.payer_obj_type= #{payerObjType}
+</if> 
+<if test="collectionWay !=null and collectionWay != ''">
+, t.collection_way= #{collectionWay}
+</if> 
+<if test="remarks !=null and remarks != ''">
+, t.remarks= #{remarks}
+</if> 
+<if test="payerObjId !=null and payerObjId != ''">
+, t.payer_obj_id= #{payerObjId}
+</if> 
+ where 1=1 <if test="detailId !=null and detailId != ''">
+and t.detail_id= #{detailId}
+</if> 
+
+    </update>
+
+    <!-- 查询催缴单数量 add by wuxw 2018-07-03 -->
+     <select id="queryFeeCollectionDetailsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from fee_collection_detail t 
+where 1 =1 
+<if test="orderId !=null and orderId != ''">
+   and t.order_id= #{orderId}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="collectionName !=null and collectionName != ''">
+   and t.collection_name= #{collectionName}
+</if> 
+<if test="payerObjName !=null and payerObjName != ''">
+   and t.payer_obj_name= #{payerObjName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="feeName !=null and feeName != ''">
+   and t.fee_name= #{feeName}
+</if> 
+<if test="oweAmount !=null and oweAmount != ''">
+   and t.owe_amount= #{oweAmount}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="payerObjType !=null and payerObjType != ''">
+   and t.payer_obj_type= #{payerObjType}
+</if> 
+<if test="collectionWay !=null and collectionWay != ''">
+   and t.collection_way= #{collectionWay}
+</if> 
+<if test="remarks !=null and remarks != ''">
+   and t.remarks= #{remarks}
+</if> 
+<if test="payerObjId !=null and payerObjId != ''">
+   and t.payer_obj_id= #{payerObjId}
+</if> 
+
+
+     </select>
+
+</mapper>
