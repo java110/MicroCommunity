@@ -97,10 +97,10 @@ public class FeeCollectionDetailApi {
      */
     @RequestMapping(value = "/queryFeeCollectionDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeCollectionDetail(@RequestParam(value = "communityId") String communityId,
-                                                           @RequestParam(value = "orderId") String orderId,
-                                                           @RequestParam(value = "ownerName") String ownerName,
-                                                           @RequestParam(value = "payerObjName") String payerObjName,
-                                                           @RequestParam(value = "collectionWay") String collectionWay,
+                                                           @RequestParam(value = "orderId",required = false) String orderId,
+                                                           @RequestParam(value = "ownerName",required = false) String ownerName,
+                                                           @RequestParam(value = "payerObjName",required = false) String payerObjName,
+                                                           @RequestParam(value = "collectionWay",required = false) String collectionWay,
                                                            @RequestParam(value = "page") int page,
                                                            @RequestParam(value = "row") int row) {
         FeeCollectionDetailDto feeCollectionDetailDto = new FeeCollectionDetailDto();
