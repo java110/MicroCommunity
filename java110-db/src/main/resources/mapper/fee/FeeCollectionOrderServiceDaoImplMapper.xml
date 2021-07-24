@@ -19,7 +19,8 @@
     <select id="getFeeCollectionOrderInfo" parameterType="Map" resultType="Map">
         select t.order_id,t.order_id orderId,t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd
         statusCd,t.state,t.community_id,t.community_id communityId,t.collection_way,t.collection_way
-        collectionWay,t.staff_id,t.staff_id staffId,t.remark,t.collection_name,t.collection_name collectionName
+        collectionWay,t.staff_id,t.staff_id staffId,t.remark,t.collection_name,t.collection_name collectionName,
+        t.create_time createTime
         from fee_collection_order t
         where 1 =1
         <if test="orderId !=null and orderId != ''">
