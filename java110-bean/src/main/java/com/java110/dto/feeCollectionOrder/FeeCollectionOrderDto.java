@@ -32,7 +32,7 @@ public class FeeCollectionOrderDto extends PageDto implements Serializable {
     private String communityId;
     private String collectionWay;
     private String staffId;
-    private String remarks;
+    private String remark;
     private String collectionName;
 
 
@@ -89,12 +89,12 @@ public class FeeCollectionOrderDto extends PageDto implements Serializable {
         this.staffId = staffId;
     }
 
-    public String getRemarks() {
-        return remarks;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getCollectionName() {
