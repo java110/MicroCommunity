@@ -26,7 +26,7 @@ public interface IShopVipAccountDetailServiceDao {
      * @param info
      * @throws DAOException DAO异常
      */
-    void saveShopVipAccountDetailInfo(Map info) throws DAOException;
+    int saveShopVipAccountDetailInfo(Map info) throws DAOException;
 
 
 
