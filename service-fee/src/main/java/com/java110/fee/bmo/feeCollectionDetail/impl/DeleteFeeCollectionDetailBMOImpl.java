@@ -2,7 +2,7 @@ package com.java110.fee.bmo.feeCollectionDetail.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.fee.bmo.feeCollectionDetail.IDeleteFeeCollectionDetailBMO;
-import com.java110.intf.IFeeCollectionDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeCollectionDetailInnerServiceSMO;
 import com.java110.po.feeCollectionDetail.FeeCollectionDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
