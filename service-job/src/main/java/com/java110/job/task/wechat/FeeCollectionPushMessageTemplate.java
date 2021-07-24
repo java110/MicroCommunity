@@ -21,8 +21,8 @@ import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.Miniprogram;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
-import com.java110.intf.IFeeCollectionDetailInnerServiceSMO;
 import com.java110.intf.common.ISmsConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeCollectionDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeCollectionOrderInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
@@ -333,16 +333,16 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
         List<SmsConfigDto> smsConfigDtos = smsConfigInnerServiceSMOImpl.querySmsConfigs(smsConfigDto);
 
         if (smsConfigDtos == null || smsConfigDtos.size() < 1) {
-            return new ResultVo(ResultVo.CODE_ERROR,"未配置短信信息");
+            return new ResultVo(ResultVo.CODE_ERROR, "未配置短信信息");
         }
         Object paramIn = null;
-        if("ALI".equals(smsConfigDto.getSmsType())){
+        if ("ALI".equals(smsConfigDto.getSmsType())) {
             JSONObject param = new JSONObject();
-            param.put("user",reportOweFeeDo.getOwnerName());
-            param.put("house",reportOweFeeDo.getPayerObjName());
-            param.put("amountOwed",reportOweFeeDo.getAmountOwed());
+            param.put("user", reportOweFeeDo.getOwnerName());
+            param.put("house", reportOweFeeDo.getPayerObjName());
+            param.put("amountOwed", reportOweFeeDo.getAmountOwed());
             paramIn = param;
-        }else{
+        } else {
             paramIn = new String[]{
                     reportOweFeeDo.getOwnerName(),
                     reportOweFeeDo.getPayerObjName(),
@@ -355,12 +355,12 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
         ownerDto.setOwnerId(reportOweFeeDo.getOwnerId());
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
 
-        if(ownerDtos == null || ownerDtos.size()<1){
-            return new ResultVo(ResultVo.CODE_ERROR,"业主不存在");
+        if (ownerDtos == null || ownerDtos.size() < 1) {
+            return new ResultVo(ResultVo.CODE_ERROR, "业主不存在");
         }
         ResultVo resultVo = null;
-        for(OwnerDto ownerDto1 : ownerDtos){
-            resultVo = SendSmsFactory.sendOweFeeSms(ownerDto1.getLink(),smsConfigDto,paramIn);
+        for (OwnerDto ownerDto1 : ownerDtos) {
+            resultVo = SendSmsFactory.sendOweFeeSms(ownerDto1.getLink(), smsConfigDto, paramIn);
         }
 
         return resultVo;
