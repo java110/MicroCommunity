@@ -45,7 +45,7 @@ public class SaveFeeCollectionOrderBMOImpl implements ISaveFeeCollectionOrderBMO
         feeCollectionOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
         feeCollectionOrderPo.setCollectionName(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B) + "催缴单");
         feeCollectionOrderPo.setState(FeeCollectionOrderDto.STATE_WAIT);
-        feeCollectionOrderPo.setStaffName(userDtos.get(0).getStaffName());
+        feeCollectionOrderPo.setStaffName(userDtos.get(0).getName());
         int flag = feeCollectionOrderInnerServiceSMOImpl.saveFeeCollectionOrder(feeCollectionOrderPo);
 
         if (flag > 0) {
