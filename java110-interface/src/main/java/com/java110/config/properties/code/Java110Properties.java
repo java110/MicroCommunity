@@ -84,12 +84,12 @@ public class Java110Properties {
         this.ftpUserPassword = ftpUserPassword;
     }
 
-    public int getFtpPort() {
-        return ftpPort;
-    }
-
     public void setFtpPort(int ftpPort) {
         this.ftpPort = ftpPort;
+    }
+
+    public int getFtpPort() {
+        return ftpPort;
     }
 
     public String getFtpPath() {
