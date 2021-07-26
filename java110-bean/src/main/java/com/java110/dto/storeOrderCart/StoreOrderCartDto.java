@@ -37,6 +37,7 @@ public class StoreOrderCartDto extends PageDto implements Serializable {
     private String cartNum;
     private String price;
     private String payPrice;
+    private String totalPrice;
     private String personId;
     private String personName;
     private String state;
@@ -203,5 +204,13 @@ public class StoreOrderCartDto extends PageDto implements Serializable {
 
     public void setProductSpecDetails(List<ProductSpecDetailDto> productSpecDetails) {
         this.productSpecDetails = productSpecDetails;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
