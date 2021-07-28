@@ -17,6 +17,7 @@ public class LogSystemErrorDto extends PageDto implements Serializable {
 
 
     public static final String ERR_TYPE_JOB = "JOB";
+    public static final String ERR_TYPE_OWE_FEE = "OWE_FEE";
     public static final String ERR_TYPE_ACCOUNT = "ACCOUNT";
 
     private String msg;

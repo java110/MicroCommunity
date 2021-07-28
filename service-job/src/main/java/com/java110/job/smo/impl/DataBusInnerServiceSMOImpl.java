@@ -32,6 +32,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     private static final Logger logger = LoggerFactory.getLogger(DataBusInnerServiceSMOImpl.class);
 
     public static final String DEFAULT_OPEN_DOOR_PROTOCOL = "openDoorAdapt";//吸墨门禁
+    public static final String DEFAULT_GET_QRCODE_PROTOCOL = "getMachineQrCodeAdapt";//获取二维码
     public static final String DEFAULT_START_MACHINE_PROTOCOL = "restartMachineAdapt";//吸墨门禁
     public static final String DEFAULT_RESEND_IOT_PROTOCOL = "reSendIotAdapt";//重新送数据
     public static final String DEFAULT_GET_TEMP_CAR_FEE_ORDER_PROTOCOL = "getTempCarFeeOrderAdapt";//重新送数据
@@ -53,6 +54,13 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.openDoor(reqJson);
 
+    }
+
+
+    @Override
+    public ResultVo getQRcode(@RequestBody JSONObject reqJson) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_GET_QRCODE_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.getQRcode(reqJson);
     }
 
     @Override
@@ -102,6 +110,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
             }
         }
     }
+
 
     /**
      * 处理业务类

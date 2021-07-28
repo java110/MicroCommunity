@@ -103,21 +103,23 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        //获取手机号(判断手机号是否重复)
-        String link = reqJson.getString("link");
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setLink(link);
-        ownerDto.setCommunityId(reqJson.getString("communityId"));
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
-        Assert.listIsNull(ownerDtos, "手机号重复，请重新输入");
-        //获取身份证号(判断身份证号是否重复)
-        String idCard = reqJson.getString("idCard");
-        if (!StringUtil.isEmpty(idCard) ) {
-            OwnerDto owner = new OwnerDto();
-            owner.setIdCard(idCard);
-            owner.setCommunityId(reqJson.getString("communityId"));
-            List<OwnerDto> owners = ownerInnerServiceSMOImpl.queryAllOwners(owner);
-            Assert.listIsNull(owners, "身份证号重复，请重新输入");
+        if (!reqJson.containsKey("source") || !"BatchImport".equals(reqJson.getString("source"))) {
+            //获取手机号(判断手机号是否重复)
+            String link = reqJson.getString("link");
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setLink(link);
+            ownerDto.setCommunityId(reqJson.getString("communityId"));
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
+            Assert.listIsNull(ownerDtos, "手机号重复，请重新输入");
+            //获取身份证号(判断身份证号是否重复)
+            String idCard = reqJson.getString("idCard");
+            if (!StringUtil.isEmpty(idCard)) {
+                OwnerDto owner = new OwnerDto();
+                owner.setIdCard(idCard);
+                owner.setCommunityId(reqJson.getString("communityId"));
+                List<OwnerDto> owners = ownerInnerServiceSMOImpl.queryAllOwners(owner);
+                Assert.listIsNull(owners, "身份证号重复，请重新输入");
+            }
         }
         //生成memberId
         generateMemberId(reqJson);

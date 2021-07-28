@@ -64,6 +64,23 @@ public class MachineApi {
     }
 
     /**
+     * 设备二维码
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /machine/getQRcode
+     * @path /app/machine/getQRcode
+     */
+    @RequestMapping(value = "/getQRcode", method = RequestMethod.POST)
+    public ResponseEntity<String> getQRcode(@RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
+        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含用户信息");
+        Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备信息");
+
+        return machineOpenDoorBMOImpl.getQRcode(reqJson);
+    }
+
+    /**
      * 设备开门功能
      *
      * @param reqJson

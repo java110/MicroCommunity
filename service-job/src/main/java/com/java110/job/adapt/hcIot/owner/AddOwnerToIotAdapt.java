@@ -162,6 +162,7 @@ public class AddOwnerToIotAdapt extends DatabusAdaptImpl {
             postParameters.put("endTime", DateUtil.LAST_TIME);
             postParameters.put("name", ownerPo.getName());
             postParameters.put("idNumber", ownerPo.getIdCard());
+            postParameters.put("link",ownerPo.getLink());
             postParameters.put("machineCode", tmpMachineDto.getMachineCode());
             postParameters.put("extMachineId", tmpMachineDto.getMachineId());
             postParameters.put("extCommunityId", tmpMachineDto.getCommunityId());

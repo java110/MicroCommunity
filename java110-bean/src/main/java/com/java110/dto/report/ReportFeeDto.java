@@ -92,6 +92,10 @@ public class ReportFeeDto extends PageDto implements Serializable {
     private String storeName;
     private String storeTypeCd;
 
+    private String roomSubType;
+    private String roomRent;
+    private String roomArea;
+
 
 
 
@@ -509,5 +513,29 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     public void setMwPrice(String mwPrice) {
         this.mwPrice = mwPrice;
+    }
+
+    public String getRoomSubType() {
+        return roomSubType;
+    }
+
+    public void setRoomSubType(String roomSubType) {
+        this.roomSubType = roomSubType;
+    }
+
+    public String getRoomRent() {
+        return roomRent;
+    }
+
+    public void setRoomRent(String roomRent) {
+        this.roomRent = roomRent;
+    }
+
+    public String getRoomArea() {
+        return roomArea;
+    }
+
+    public void setRoomArea(String roomArea) {
+        this.roomArea = roomArea;
     }
 }

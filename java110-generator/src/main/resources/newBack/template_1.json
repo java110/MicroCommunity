@@ -1,54 +1,41 @@
 {
   "autoMove": true,
   "id": "detailId",
-  "name": "accountBondObjDetail",
-  "desc": "保证金明细",
-  "shareParam": "detailId",
-  "shareColumn": "detail_id",
-  "shareName": "acct",
-  "tableName": "account_bond_obj_detail",
+  "name": "feeCollectionDetail",
+  "desc": "催缴单",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "fee",
+  "tableName": "fee_collection_detail",
   "param": {
     "detailId": "detail_id",
-    "bobjId": "bobj_id",
-    "objId": "obj_id",
-    "bondType": "bond_type",
-    "receivableAmount": "receivable_amount",
-    "receivedAmount": "received_amount",
-    "remark": "remark",
+    "orderId": "order_id",
+    "collectionName": "collection_name",
+    "ownerId": "owner_id",
+    "ownerName": "owner_name",
+    "feeName": "fee_name",
+    "payerObjId": "payer_obj_id",
+    "payerObjName": "payer_obj_name",
+    "payerObjType": "payer_obj_type",
+    "communityId": "community_id",
+    "collectionWay": "collection_way",
+    "oweAmount": "owe_amount",
     "state": "state",
-    "startTime": "start_time",
-    "endTime": "end_time",
-    "createTime": "create_time",
+    "remarks": "remarks",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "bobjId",
-      "msg": "保证金ID不能为空"
+      "code": "communityId",
+      "msg": "小区不能为空"
     },
     {
-      "code": "objId",
-      "msg": "保证对象ID类型不能为空"
+      "code": "collectionWay",
+      "msg": "催缴方式不能为空"
     },
     {
-      "code": "bondType",
-      "msg": "保证对象类型不能为空"
-    },{
-      "code": "receivableAmount",
-      "msg": "应收金额不能为空"
-    },{
-      "code": "receivedAmount",
-      "msg": "实收金额不能为空"
-    },
-    {
-      "code": "state",
-      "msg": "状态不能为空"
-    },{
-      "code": "startTime",
-      "msg": "开始时间不能为空"
-    },{
-      "code": "endTime",
-      "msg": "结束时间不能为空"
+      "code": "oweAmount",
+      "msg": "欠费金额不能为空"
     }
   ]
 }

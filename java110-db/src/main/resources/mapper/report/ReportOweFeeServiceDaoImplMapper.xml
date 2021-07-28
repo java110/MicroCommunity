@@ -43,6 +43,9 @@
         <if test="amountOwed !=null and amountOwed != ''">
             and t.amount_owed= #{amountOwed}
         </if>
+        <if test='hasOweFee !=null and hasOweFee == "Y"'>
+            and t.amount_owed &gt; 0
+        </if>
         <if test="payerObjName !=null and payerObjName != ''">
             and t.payer_obj_name= #{payerObjName}
         </if>
@@ -181,6 +184,9 @@
         </if>
         <if test="amountOwed !=null and amountOwed != ''">
             and t.amount_owed= #{amountOwed}
+        </if>
+        <if test='hasOweFee !=null and hasOweFee == "Y"'>
+            and t.amount_owed &gt; 0
         </if>
         <if test="payerObjName !=null and payerObjName != ''">
             and t.payer_obj_name= #{payerObjName}

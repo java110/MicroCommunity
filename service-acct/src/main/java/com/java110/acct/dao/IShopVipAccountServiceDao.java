@@ -47,7 +47,7 @@ public interface IShopVipAccountServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    void updateShopVipAccountInfo(Map info) throws DAOException;
+    int updateShopVipAccountInfo(Map info) throws DAOException;
 
 
     /**

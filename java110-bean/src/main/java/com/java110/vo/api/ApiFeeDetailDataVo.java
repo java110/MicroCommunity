@@ -31,6 +31,11 @@ public class ApiFeeDetailDataVo extends Vo {
     private String startTime;
     private String endTime;
     private String feeName;
+    private String curDegrees;
+    private String preDegrees;
+
+    private Date preReadingTime;
+    private Date curReadingTime;
 
 
     public String getPrimeRate() {
@@ -144,5 +149,37 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setFeeName(String feeName) {
         this.feeName = feeName;
+    }
+
+    public String getCurDegrees() {
+        return curDegrees;
+    }
+
+    public void setCurDegrees(String curDegrees) {
+        this.curDegrees = curDegrees;
+    }
+
+    public String getPreDegrees() {
+        return preDegrees;
+    }
+
+    public void setPreDegrees(String preDegrees) {
+        this.preDegrees = preDegrees;
+    }
+
+    public Date getPreReadingTime() {
+        return preReadingTime;
+    }
+
+    public void setPreReadingTime(Date preReadingTime) {
+        this.preReadingTime = preReadingTime;
+    }
+
+    public Date getCurReadingTime() {
+        return curReadingTime;
+    }
+
+    public void setCurReadingTime(Date curReadingTime) {
+        this.curReadingTime = curReadingTime;
     }
 }

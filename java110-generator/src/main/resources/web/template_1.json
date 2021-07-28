@@ -1,61 +1,80 @@
 {
-  "templateName":"保证金对象",
-  "templateCode":"accountBondObj",
-  "templateKey":"bobjId",
-  "templateKeyName":"保证金对象ID",
-  "searchCode": "bobjId",
-  "searchName": "保证金对象ID",
-  "directories": "acct",
+  "templateName":"催缴记录",
+  "templateCode":"feeCollectionOrder",
+  "templateKey":"orderId",
+  "templateKeyName":"记录编号",
+  "searchCode": "orderId",
+  "searchName": "记录编号",
+  "directories": "property",
   "conditions": [
+    {
+      "name": "名称",
+      "inputType": "input",
+      "code": "collectionName",
+      "whereCondition": "equal"
+    },{
+      "name": "催缴人",
+      "inputType": "input",
+      "code": "staffName",
+      "whereCondition": "equal"
+    },{
+      "name": "催缴方式",
+      "inputType": "input",
+      "code": "collectionWay",
+      "whereCondition": "equal"
+    }
   ],
   "columns":[
     {
-      "code":"bondId",
-      "cnCode":"保证金",
-      "desc":"必填，请填写保证金",
+      "code":"collectionName",
+      "cnCode":"催缴名称",
+      "desc":"必填，请填写催缴名称",
       "required":true,
       "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"催缴名称超过64位",
+      "show": true
+    },
+    {
+      "code": "staffName",
+      "cnCode":"催缴人",
+      "desc":"必填，请填写催缴人",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"催缴人不能为空",
+      "show": true
+    },
+    {
+      "code": "collectionWay",
+      "cnCode":"催缴方式",
+      "desc":"必填，请填写催缴方式",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"001,002,003",
+      "selectValueName":"仅短信方式,短信微信方式,仅微信方式",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"催缴方式超过64位",
+      "show": true
+    },
+    {
+      "code":"remark",
+      "cnCode":"备注",
+      "desc":"可填，请填写备注",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
       "inputType":"input",
-      "limit":"maxin",
-      "limitParam":"1,20",
-      "limitErrInfo":"保证金名称超长了",
-      "show": true
-    },
-    {
-      "code": "objId",
-      "cnCode":"保证金对象ID",
-      "desc":"必填，请填写保证金对象ID",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"保证金金额格式有误",
-      "show": true
-    },
-    {
-      "code": "receivableAmount",
-      "cnCode":"应收金额",
-      "desc":"必填，请填写应收金额",
-      "required":false,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"不是有效数字格式",
-      "show": true
-    },
-    {
-      "code": "receivedAmount",
-      "cnCode":"实收金额",
-      "desc":"必填，请填写实收金额",
-      "required":false,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"不是有效数字格式",
-      "show": true
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200",
+      "show": false
     }
   ]
 }

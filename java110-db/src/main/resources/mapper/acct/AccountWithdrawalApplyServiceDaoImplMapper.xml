@@ -11,9 +11,9 @@
     <!-- 保存账户提现信息 add by wuxw 2018-07-03 -->
     <insert id="saveAccountWithdrawalApplyInfo" parameterType="Map">
         insert into account_withdrawal_apply(
-    apply_id,apply_user_name,amount,context,acct_id,state,apply_user_tel,apply_user_id,bank_id
+    apply_id,apply_user_name,amount,context,acct_id,state,apply_user_tel,apply_user_id,bank_id,obj_id
     ) values (
-    #{applyId},#{applyUserName},#{amount},#{context},#{acctId},#{state},#{applyUserTel},#{applyUserId},#{bankId}
+    #{applyId},#{applyUserName},#{amount},#{context},#{acctId},#{state},#{applyUserTel},#{applyUserId},#{bankId},#{objId}
     )
     </insert>
 
@@ -24,7 +24,8 @@
     select  t.apply_id,t.apply_id applyId,t.apply_user_name,t.apply_user_name applyUserName,
     t.amount,t.create_time,t.create_time createTime,t.context,t.acct_id,t.acct_id acctId,
     t.status_cd,t.status_cd statusCd,t.state,t.apply_user_tel,t.apply_user_tel applyUserTel,
-    t.apply_user_id,t.apply_user_id applyUserId,t1.`name` stateName,t.bank_id bankId,ab.bank_code bankCode,ab.bank_name bankName
+    t.apply_user_id,t.apply_user_id applyUserId,t1.`name` stateName,t.bank_id bankId,ab.bank_code bankCode,
+    ab.bank_name bankName,t.obj_id objId
     from account_withdrawal_apply t LEFT JOIN  account_bank ab on t.bank_id = ab.bank_id  left join t_dict t1 on t.state = t1.status_cd
     where t1.table_name='account_withdrawal_apply'
       and t1.table_columns='state'
@@ -40,6 +41,9 @@
 <if test="createTime !=null and createTime != ''">
    and t.create_time= #{createTime}
 </if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if>
 <if test="context !=null and context != ''">
    and t.context= #{context}
 </if> 
@@ -88,6 +92,9 @@ order by t.create_time desc
 </if> 
 <if test="acctId !=null and acctId != ''">
 , t.acct_id= #{acctId}
+</if>
+<if test="objId !=null and objId != ''">
+, t.obj_id= #{objId}
 </if>
     <if test="bankId !=null and bankId != ''">
         , t.bank_id= #{bankId}
@@ -138,7 +145,10 @@ where 1 =1
 </if> 
 <if test="state !=null and state != ''">
    and t.state= #{state}
-</if> 
+</if>
+ <if test="objId !=null and objId != ''">
+     and t.obj_id= #{objId}
+ </if>
 <if test="applyUserTel !=null and applyUserTel != ''">
    and t.apply_user_tel= #{applyUserTel}
 </if> 
@@ -153,7 +163,7 @@ where 1 =1
     <select id="listStateWithdrawalApplys" parameterType="Map" resultType="Map">
         select  t.apply_id,t.apply_id applyId,t.apply_user_name,t.apply_user_name applyUserName,t.amount,t.create_time,t.create_time createTime,
         t.context,t.acct_id,t.acct_id acctId,t.status_cd,t.status_cd statusCd,t.state,t.apply_user_tel,t.apply_user_tel applyUserTel,
-        t.apply_user_id,t.apply_user_id applyUserId,t1.`name` stateName,t.bank_id bankId
+        t.apply_user_id,t.apply_user_id applyUserId,t1.`name` stateName,t.bank_id bankId,t.obj_id objId
         from account_withdrawal_apply t left join t_dict t1 on t.state = t1.status_cd
         where t1.table_name='account_withdrawal_apply'
         and t1.table_columns='state'
@@ -165,6 +175,9 @@ where 1 =1
         </if>
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
         </if>
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
@@ -216,6 +229,9 @@ where 1 =1
         </if>
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
         </if>
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}

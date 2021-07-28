@@ -197,7 +197,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         String[] feePrintRemarks = null;
         if (feePrint != null) {
             feePrintRemarks = feePrint.getString("content").toLowerCase().replace("</br>", "").split("\n");
-        }else{
+        } else {
             feePrintRemarks = new String[]{""};
         }
         int defaultRowHeight = 280;
@@ -244,7 +244,11 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         Row row = sheet.createRow(0 + line);
         Cell cell0 = row.createCell(0);
         //cell0.setCellValue("缴费通知单totalHeight:" + totalHeight + "-totalPageHeight:" + totalPageHeight + "-curPageHeight:" + curPageHeight + "-freePageHeight:" + freePageHeight + "-line:" + line);
-        cell0.setCellValue("缴费通知单");
+        if (feePrint != null) {
+            cell0.setCellValue(feePrint.getString("printName") + "缴费通知单");
+        } else {
+            cell0.setCellValue("缴费通知单");
+        }
         //标题设置字体
         Font font = workbook.createFont();
         font.setFontName("黑体");
@@ -277,14 +281,20 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         subTitleCellStyle.setAlignment(HorizontalAlignment.CENTER);
         subTitleCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         row = sheet.createRow(1 + line);
-
         Cell cell1 = row.createCell(1);
-        cell1.setCellValue("房号：" + room.getString("floorNum")
-                + "-" + room.getString("unitNum")
-                + "-" + room.getString("roomNum"));
+        if (fees != null && fees.size() > 0) {
+            cell1.setCellValue("业主：" + fees.getJSONObject(0).getString("ownerName"));
+        } else {
+            cell1.setCellValue("业主：无");
+        }
         cell1.setCellStyle(subTitleCellStyle);
 
-        row.createCell(2).setCellValue("");
+        Cell cell2 = row.createCell(2);
+        cell2.setCellValue("房号：" + room.getString("floorNum")
+                + "-" + room.getString("unitNum")
+                + "-" + room.getString("roomNum"));
+        cell2.setCellStyle(subTitleCellStyle);
+
         row.createCell(3).setCellValue("");
         row.createCell(4).setCellValue("");
         Cell cell5 = row.createCell(5);
@@ -295,7 +305,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         row.setRowStyle(rowCellStyle);
 
         //设置表头之上
-        region = new CellRangeAddress(1 + line, 1 + line, 1, 3);
+        region = new CellRangeAddress(1 + line, 1 + line, 2, 3);
         sheet.addMergedRegion(region);
         region = new CellRangeAddress(1 + line, 1 + line, 5, 6);
         sheet.addMergedRegion(region);
@@ -310,7 +320,7 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
         cell1 = row.createCell(1);
         cell1.setCellValue("收费标准");
         cell1.setCellStyle(cellStyle);
-        Cell cell2 = row.createCell(2);
+        cell2 = row.createCell(2);
         cell2.setCellValue("数量/面积");
         cell2.setCellStyle(cellStyle);
         Cell cell3 = row.createCell(3);
@@ -347,7 +357,11 @@ public class ExportFeeManualCollectionSMOImpl extends BaseComponentSMO implement
             cell2.setCellValue(room.getString("builtUpArea"));
             cell2.setCellStyle(cellStyle);
             cell3 = row.createCell(3);
-            cell3.setCellValue(startTime + "至" + endTime);
+            if (feeObj.containsKey("curDegrees")) {
+                cell3.setCellValue(startTime + "至" + endTime + " " + feeObj.getString("preDegrees") + "至" + feeObj.getString("curDegrees"));
+            } else {
+                cell3.setCellValue(startTime + "至" + endTime);
+            }
             cell3.setCellStyle(cellStyle);
             cell4 = row.createCell(4);
             cell4.setCellValue(feeObj.getString("feePrice"));

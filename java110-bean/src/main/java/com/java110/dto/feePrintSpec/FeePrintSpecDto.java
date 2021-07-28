@@ -16,6 +16,7 @@ import java.util.Date;
 public class FeePrintSpecDto extends PageDto implements Serializable {
 
     private String printId;
+    private String printName;
     private String content;
     private String specCd;
     private String communityId;
@@ -82,5 +83,13 @@ public class FeePrintSpecDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPrintName() {
+        return printName;
+    }
+
+    public void setPrintName(String printName) {
+        this.printName = printName;
     }
 }

@@ -437,6 +437,14 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         } else if ("2002".equals(computingFormula)) { // 固定费用
             BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        } else if ("3003".equals(computingFormula)) { // 固定费用
+            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+            BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDto.getRoomArea()));
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+            feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(3, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        } else if ("1101".equals(computingFormula)) { // 租金
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
+            feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else {
             feePrice = -1.00;
         }
@@ -473,6 +481,10 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         } else if ("2002".equals(computingFormula)) { // 固定费用
             BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
             feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        } else if ("3003".equals(computingFormula)) { // 固定费用
+            feePrice = 0;
+        } else if ("1101".equals(computingFormula)) { // 租金
+            feePrice = 0;
         } else {
             feePrice = -1.00;
         }

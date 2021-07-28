@@ -32,7 +32,10 @@ public class ApiRoomDataVo implements Serializable {
     private String apartment;
     private String apartmentName;
     private String roomType;
-
+    private String roomSubType;
+    private String roomRent;
+    private String roomArea;
+    private String roomSubTypeName;
     private String ownerId;
     private String ownerName;
     private String idCard;
@@ -216,5 +219,37 @@ public class ApiRoomDataVo implements Serializable {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public String getRoomSubType() {
+        return roomSubType;
+    }
+
+    public void setRoomSubType(String roomSubType) {
+        this.roomSubType = roomSubType;
+    }
+
+    public String getRoomRent() {
+        return roomRent;
+    }
+
+    public void setRoomRent(String roomRent) {
+        this.roomRent = roomRent;
+    }
+
+    public String getRoomArea() {
+        return roomArea;
+    }
+
+    public void setRoomArea(String roomArea) {
+        this.roomArea = roomArea;
+    }
+
+    public String getRoomSubTypeName() {
+        return roomSubTypeName;
+    }
+
+    public void setRoomSubTypeName(String roomSubTypeName) {
+        this.roomSubTypeName = roomSubTypeName;
     }
 }

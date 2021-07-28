@@ -74,6 +74,9 @@ public class IotConstant {
 
     //开门接口
     public static final String OPEN_DOOR = "/extApi/machine/openDoor";
+
+    //获取二维码
+    public static final String GET_QRCODE = "/extApi/machine/getQRcode";
     //重启接口
     public static final String RESTART_MACHINE = "/extApi/machine/restartMachine";
 

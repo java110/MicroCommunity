@@ -26,10 +26,14 @@ private String applyUserTel;
 private String applyUserId;
 private String stateName;
 private String bankId;
+private String objId;
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    public AccountWithdrawalApplyDto() {
+    }
 
 
     public String getApplyId() {
@@ -112,5 +116,13 @@ public void setApplyUserId(String applyUserId) {
 
     public void setBankId(String bankId) {
         this.bankId = bankId;
+    }
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
     }
 }

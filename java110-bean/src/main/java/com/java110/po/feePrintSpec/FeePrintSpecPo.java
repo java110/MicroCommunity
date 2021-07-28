@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class FeePrintSpecPo implements Serializable {
 
     private String printId;
+    private String printName;
     private String content;
     private String specCd;
     private String statusCd = "0";
@@ -59,5 +60,11 @@ public class FeePrintSpecPo implements Serializable {
         this.qrImg = qrImg;
     }
 
+    public String getPrintName() {
+        return printName;
+    }
 
+    public void setPrintName(String printName) {
+        this.printName = printName;
+    }
 }

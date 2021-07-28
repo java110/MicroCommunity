@@ -46,6 +46,8 @@ public interface IDatabusAdapt {
      */
     ResultVo openDoor(JSONObject paramIn);
 
+
+    ResultVo getQRcode(JSONObject reqJson);
     /**
      * 重启设备
      *
@@ -67,4 +69,5 @@ public interface IDatabusAdapt {
      * @param customBusinessDatabusDto
      */
     void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto);
+
 }

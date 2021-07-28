@@ -53,7 +53,7 @@ public class SaveAccountWithdrawalApplyBMOImpl implements ISaveAccountWithdrawal
             accountDetailPo.setAcctId( accountWithdrawalApplyPo.getAcctId() );
             accountDetailPo.setAmount( accountWithdrawalApplyPo.getAmount() );
             accountDetailPo.setRemark( accountWithdrawalApplyPo.getContext() );
-            accountDetailPo.setObjId( reqJson.getString( "objId" ) );
+            accountDetailPo.setObjId( reqJson.getString( "acctObjId" ) );
             //商户类型
             accountDetailPo.setObjType( "7007");
             //调用扣款接口进行扣款

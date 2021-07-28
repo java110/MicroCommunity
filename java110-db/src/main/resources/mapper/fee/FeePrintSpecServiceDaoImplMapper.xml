@@ -8,9 +8,9 @@
     <!-- 保存打印说明信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeePrintSpecInfo" parameterType="Map">
         insert into fee_print_spec(
-        print_id,content,spec_cd,community_id,qr_img
+        print_id,content,spec_cd,community_id,qr_img,print_name
         ) values (
-        #{printId},#{content},#{specCd},#{communityId},#{qrImg}
+        #{printId},#{content},#{specCd},#{communityId},#{qrImg},#{printName}
         )
     </insert>
 
@@ -18,7 +18,8 @@
     <!-- 查询打印说明信息 add by wuxw 2018-07-03 -->
     <select id="getFeePrintSpecInfo" parameterType="Map" resultType="Map">
         select t.print_id,t.print_id printId,t.content,t.spec_cd,t.spec_cd
-        specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.qr_img,t.qr_img qrImg
+        specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,
+        t.qr_img,t.qr_img qrImg,t.print_name printName
         from fee_print_spec t
         where 1 =1
         <if test="printId !=null and printId != ''">
@@ -64,6 +65,9 @@
         </if>
         <if test="qrImg !=null and qrImg != ''">
             , t.qr_img= #{qrImg}
+        </if>
+        <if test="printName !=null and printName != ''">
+            , t.print_name= #{printName}
         </if>
         where 1=1
         <if test="printId !=null and printId != ''">

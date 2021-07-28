@@ -433,6 +433,7 @@ public class DateUtil {
         return dateStr;
     }
 
+
     public static int getYear() {
         Date date = getCurrentDate();
         Calendar calendar = Calendar.getInstance();

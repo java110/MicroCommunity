@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeCollectionOrderServiceDaoImpl">
+
+
+    <!-- 保存催缴单信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeCollectionOrderInfo" parameterType="Map">
+        insert into fee_collection_order(
+        order_id,staff_name,state,community_id,collection_way,staff_id,remark,collection_name
+        ) values (
+        #{orderId},#{staffName},#{state},#{communityId},#{collectionWay},#{staffId},#{remark},#{collectionName}
+        )
+    </insert>
+
+
+    <!-- 查询催缴单信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeCollectionOrderInfo" parameterType="Map" resultType="Map">
+        select t.order_id,t.order_id orderId,t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd
+        statusCd,t.state,t.community_id,t.community_id communityId,t.collection_way,t.collection_way
+        collectionWay,t.staff_id,t.staff_id staffId,t.remark,t.collection_name,t.collection_name collectionName,
+        t.create_time createTime
+        from fee_collection_order t
+        where 1 =1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="collectionWay !=null and collectionWay != ''">
+            and t.collection_way= #{collectionWay}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="collectionName !=null and collectionName != ''">
+            and t.collection_name= #{collectionName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改催缴单信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeeCollectionOrderInfo" parameterType="Map">
+        update fee_collection_order t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="collectionWay !=null and collectionWay != ''">
+            , t.collection_way= #{collectionWay}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="collectionName !=null and collectionName != ''">
+            , t.collection_name= #{collectionName}
+        </if>
+        where 1=1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+
+    </update>
+
+    <!-- 查询催缴单数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeCollectionOrdersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_collection_order t
+        where 1 =1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="collectionWay !=null and collectionWay != ''">
+            and t.collection_way= #{collectionWay}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="collectionName !=null and collectionName != ''">
+            and t.collection_name= #{collectionName}
+        </if>
+
+
+    </select>
+
+</mapper>
