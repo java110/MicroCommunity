@@ -8,12 +8,16 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
+import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeAddRoomBindingConstant;
+import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,9 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -102,6 +109,18 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
             }
         }
         if (!hasKey(viewFloorInfo, "floorId")) {
+            //获取楼栋编码
+            String floorNum = viewFloorInfo.getString("floorNum");
+            //获取小区id
+            String communityId = viewFloorInfo.getString("communityId");
+            //判断楼栋编号是否重复
+            FloorDto floorDto = new FloorDto();
+            floorDto.setFloorNum(floorNum);
+            floorDto.setCommunityId(communityId);
+            int floorCount = floorInnerServiceSMOImpl.queryFloorsCount(floorDto);
+            if (floorCount > 0) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋编号已经存在");
+            }
             viewFloorInfo.put("floorId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
             viewFloorInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             roomBMOImpl.addBusinessFloor(viewFloorInfo, context);

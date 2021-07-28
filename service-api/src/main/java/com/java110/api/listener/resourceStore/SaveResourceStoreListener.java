@@ -32,6 +32,13 @@ public class SaveResourceStoreListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        //获取最低收费标准
+        double outLowPrice = Double.parseDouble(reqJson.getString("outLowPrice"));
+        //获取最高收费标准
+        double outHighPrice = Double.parseDouble(reqJson.getString("outHighPrice"));
+        if (outLowPrice > outHighPrice) {
+            throw new IllegalArgumentException("最低收费标准不能大于最高收费标准！");
+        }
         resourceStoreBMOImpl.addResourceStore(reqJson, context);
     }
 

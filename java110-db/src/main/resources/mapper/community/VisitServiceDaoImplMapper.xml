@@ -157,10 +157,10 @@
         <if test="visitEndTime !=null and visitEndTime !='' ">
             and t.visit_time &lt;= #{visitEndTime}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 

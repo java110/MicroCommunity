@@ -82,7 +82,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
         for (RoomDto room : rooms) {
             try {
-                room.setApartmentName(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 4).toString()));
+                room.setApartmentName(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 5).toString()));
             } catch (Exception e) {
                 logger.error("设置房屋户型失败", e);
             }

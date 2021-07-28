@@ -68,15 +68,22 @@ public class ListAllocationStoreHisAuditOrders extends AbstractServiceApiListene
 
         List<AllocationStorehouseApplyDto> purchaseApplyDtos = null;
 
+        int size = 0;
+
         if (count > 0) {
             purchaseApplyDtos = allocationStorehouseUserInnerServiceSMOImpl.getUserHistoryTasks(auditUser);
+            AuditUser auditUser1 = new AuditUser();
+            auditUser1.setUserId(reqJson.getString("userId"));
+            auditUser1.setStoreId(reqJson.getString("storeId"));
+            List<AllocationStorehouseApplyDto> userHistoryTasks = allocationStorehouseUserInnerServiceSMOImpl.getUserHistoryTasks(auditUser1);
+            size = userHistoryTasks.size();
         } else {
             purchaseApplyDtos = new ArrayList<>();
         }
 
         ResponseEntity responseEntity
-                = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")),
-                (int) count,
+                = ResultVo.createResponseEntity((int) Math.ceil((double) size / (double) reqJson.getInteger("row")),
+                size,
                 purchaseApplyDtos);
         context.setResponseEntity(responseEntity);
     }

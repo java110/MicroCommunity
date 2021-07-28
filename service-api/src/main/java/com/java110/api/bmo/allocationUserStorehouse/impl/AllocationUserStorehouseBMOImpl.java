@@ -95,25 +95,22 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                 UserStorehousePo userStorehousePo = new UserStorehousePo();
                 userStorehousePo.setUsId(usId);
                 //转赠后个人物品最小计量总数
-                BigDecimal num1 = new BigDecimal(Double.parseDouble(miniStock));
-                BigDecimal num2 = new BigDecimal(Double.parseDouble(giveQuantity));
-                double quantity = num1.subtract(num2).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-                if (quantity == 0.0) {
-                    userStorehousePo.setMiniStock(String.valueOf(quantity));
+                BigDecimal num1 = new BigDecimal(miniStock);
+                BigDecimal num2 = new BigDecimal(giveQuantity);
+                BigDecimal quantity = num1.subtract(num2);
+                if (quantity.doubleValue() == 0.0) {
+                    userStorehousePo.setMiniStock("0");
                     userStorehousePo.setStock("0");
                 } else {
                     userStorehousePo.setMiniStock(String.valueOf(quantity));
                     BigDecimal reduceNum = num1.subtract(num2);
                     if (unitCode.equals(miniUnitCode)) { //如果物品单位与最小计量单位相同，就不向上取整
-                        //用转赠后最小计量总数除以最小计量单位数量，获取转赠后的库存数
-                        BigDecimal num3 = new BigDecimal(Double.parseDouble(miniUnitStock));
-                        double unitStock = reduceNum.divide(num3, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        userStorehousePo.setStock(String.valueOf(unitStock));
+                        userStorehousePo.setStock(String.valueOf(reduceNum));
                     } else { //如果物品最小计量单位与物品单位不同，就向上取整
                         //用转赠后最小计量总数除以最小计量单位数量，并向上取整，获取转赠后的库存数
-                        BigDecimal num3 = new BigDecimal(Double.parseDouble(miniUnitStock));
-                        double unitStock = reduceNum.divide(num3, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        double stockNumber = Math.ceil(unitStock);
+                        BigDecimal num3 = new BigDecimal(miniUnitStock);
+                        BigDecimal unitStock = reduceNum.divide(num3, 2, BigDecimal.ROUND_HALF_UP);
+                        Integer stockNumber = (int) Math.ceil(unitStock.doubleValue());
                         userStorehousePo.setStock(String.valueOf(stockNumber));
                     }
                 }
@@ -127,10 +124,10 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                 if (userStorehouses != null && userStorehouses.size() == 1) {
                     UserStorehousePo userStorePo = new UserStorehousePo();
                     //计算接受用户的最小计量总数
-                    BigDecimal num4 = new BigDecimal(Double.parseDouble(userStorehouses.get(0).getMiniStock()));
-                    BigDecimal num5 = new BigDecimal(Double.parseDouble(giveQuantity));
+                    BigDecimal num4 = new BigDecimal(userStorehouses.get(0).getMiniStock());
+                    BigDecimal num5 = new BigDecimal(giveQuantity);
                     BigDecimal addNum = num4.add(num5);
-                    double acceptMiniStock = num4.add(num5).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();;
+                    BigDecimal acceptMiniStock = num4.add(num5);
                     userStorePo.setMiniStock(String.valueOf(acceptMiniStock));
                     //获取物品单位
                     if (StringUtil.isEmpty(userStorehouses.get(0).getUnitCode())) {
@@ -143,12 +140,13 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                     }
                     String miniUnitCode1 = userStorehouses.get(0).getMiniUnitCode();
                     //计算接受用户的库存数量
-                    BigDecimal num6 = new BigDecimal(Double.parseDouble(miniUnitStock));
-                    double unitStock = addNum.divide(num6, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    BigDecimal num6 = new BigDecimal(miniUnitStock);
+                    BigDecimal unitStock = addNum.divide(num6, 2, BigDecimal.ROUND_HALF_UP);
                     if (unitCode1.equals(miniUnitCode1)) { //如果物品单位与物品最小计量单位相同，就不向上取整
-                        userStorePo.setStock(String.valueOf(unitStock));
+                        //如果物品单位与最小计量单位相同，物品库存就等于最小计量总数
+                        userStorePo.setStock(String.valueOf(acceptMiniStock));
                     } else { //如果物品单位与物品最小计量单位不同，就向上取整
-                        double stockNumber = Math.ceil(unitStock);
+                        Integer stockNumber = (int) Math.ceil(unitStock.doubleValue());
                         userStorePo.setStock(String.valueOf(stockNumber));
                     }
                     userStorePo.setUsId(userStorehouses.get(0).getUsId());
@@ -158,18 +156,18 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                     throw new IllegalArgumentException("查询个人物品信息错误！");
                 } else {
                     //计算转赠后库存数量
-                    BigDecimal num7 = new BigDecimal(Double.parseDouble(giveQuantity));
-                    BigDecimal num8 = new BigDecimal(Double.parseDouble(miniUnitStock));
-                    double unitStock = num7.divide(num8, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    BigDecimal num7 = new BigDecimal(giveQuantity);
+                    BigDecimal num8 = new BigDecimal(miniUnitStock);
+                    BigDecimal unitStock = num7.divide(num8, 2, BigDecimal.ROUND_HALF_UP);
                     UserStorehousePo userStorePo = new UserStorehousePo();
                     userStorePo.setUsId("-1");
                     userStorePo.setResId(resId);
                     userStorePo.setResName(resName);
                     userStorePo.setStoreId(storeId);
                     if (unitCode.equals(miniUnitCode)) { //如果物品单位与物品最小计量单位相同，就不向上取整
-                        userStorePo.setStock(String.valueOf(unitStock));
+                        userStorePo.setStock(String.valueOf(num7));
                     } else { //如果物品单位与物品最小计量单位不同，就向上取整
-                        double stockNumber = Math.ceil(unitStock);
+                        Integer stockNumber = (int) Math.ceil(unitStock.doubleValue());
                         userStorePo.setStock(String.valueOf(stockNumber));
                     }
                     userStorePo.setMiniStock(giveQuantity);

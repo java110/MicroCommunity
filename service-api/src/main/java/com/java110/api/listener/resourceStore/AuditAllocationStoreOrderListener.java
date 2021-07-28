@@ -26,6 +26,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -148,18 +149,20 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     Assert.listOnlyOne(originalResourceStoreDtos, "原仓库记录不存在");
                     ResourceStoreDto resourceStoreDto1 = resourceStoreDtos.get(0);
                     //计算库存
-                    resourceStoreDto1.setStock((Double.parseDouble(resourceStoreDtos.get(0).getStock()) + Double.parseDouble(allocationStorehouseDto.getStock())) + "");
+                    BigDecimal stock1 = new BigDecimal(resourceStoreDtos.get(0).getStock());
+                    BigDecimal stock2 = new BigDecimal(allocationStorehouseDto.getStock());
+                    resourceStoreDto1.setStock(stock1.add(stock2).toString());
                     //计算最小计量总数
                     if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())) {
                         throw new IllegalArgumentException("最小计量总数不能为空！");
                     }
-                    String miniStock = resourceStoreDtos.get(0).getMiniStock(); //获取原最小计量总数
+                    BigDecimal miniStock = new BigDecimal(resourceStoreDtos.get(0).getMiniStock()); //获取原最小计量总数
                     if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniUnitStock())) {
                         throw new IllegalArgumentException("最小计量单位数量不能为空！");
                     }
-                    String miniUnitStock = resourceStoreDtos.get(0).getMiniUnitStock(); //获取最小计量单位数量
-                    double nowMiniStock = Double.parseDouble(allocationStorehouseDto.getStock()) * Double.parseDouble(miniUnitStock); //计算调拨的最小计量总数
-                    double newMiniStock = Double.parseDouble(miniStock) + Double.parseDouble(String.valueOf(nowMiniStock));
+                    BigDecimal miniUnitStock = new BigDecimal(resourceStoreDtos.get(0).getMiniUnitStock()); //获取最小计量单位数量
+                    BigDecimal nowMiniStock = stock2.multiply(miniUnitStock); //计算调拨的最小计量总数
+                    BigDecimal newMiniStock = miniStock.add(nowMiniStock);
                     resourceStoreDto1.setMiniStock(String.valueOf(newMiniStock));
                     resourceStorePo = BeanConvertUtil.covertBean(resourceStoreDto1, ResourceStorePo.class);
                     resourceStorePo.setAveragePrice(originalResourceStoreDtos.get(0).getAveragePrice());
@@ -190,9 +193,10 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniUnitStock())) {
                         throw new IllegalArgumentException("最小计量单位数量不能为空！");
                     }
-                    String miniUnitStock = resourceStoreDtos.get(0).getMiniUnitStock();
+                    BigDecimal miniUnitStock = new BigDecimal(resourceStoreDtos.get(0).getMiniUnitStock());
+                    BigDecimal stock = new BigDecimal(allocationStorehouseDto.getStock());
                     //计算最小计量单位总数
-                    double miniStock = Double.parseDouble(allocationStorehouseDto.getStock()) * Double.parseDouble(miniUnitStock);
+                    BigDecimal miniStock = stock.multiply(miniUnitStock);
                     resourceStorePo.setMiniStock(String.valueOf(miniStock));
                     resourceStorePo.setShId(allocationStorehouseDto.getShIdz());
                     resourceStorePo.setPrice(resourceStoreDtos.get(0).getPrice());
@@ -247,23 +251,24 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
             ResourceStorePo resourceStorePo = new ResourceStorePo();
             resourceStorePo.setResId(allocationStorehouseDto.getResId());
             //获取库存数量
-            double resourceStoreStock = Double.parseDouble(resourceStoreDtos.get(0).getStock());
+            BigDecimal resourceStoreStock = new BigDecimal(resourceStoreDtos.get(0).getStock());
             //获取调拨的数量
-            double storehouseStock = Double.parseDouble(allocationStorehouseDto.getStock());
+            BigDecimal storehouseStock = new BigDecimal(allocationStorehouseDto.getStock());
             //库存数量
-            double stock = resourceStoreStock + storehouseStock;
+            BigDecimal stock = resourceStoreStock.add(storehouseStock);
             resourceStorePo.setStock(String.valueOf(stock));
             //计算最小计量总数
             if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())) {
                 throw new IllegalArgumentException("最小计量总数不能为空！");
             }
-            String miniStock = resourceStoreDtos.get(0).getMiniStock(); //获取物品表的最小计量总数
+            BigDecimal miniStock = new BigDecimal(resourceStoreDtos.get(0).getMiniStock()); //获取物品表的最小计量总数
             if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniUnitStock())) {
                 throw new IllegalArgumentException("最小计量单位数量不能为空！");
             }
-            String miniUnitStock = resourceStoreDtos.get(0).getMiniUnitStock(); //获取最小计量单位数量
-            double nowMiniStock = Double.parseDouble(allocationStorehouseDto.getStock()) * Double.parseDouble(miniUnitStock); //计算当前的最小计量总数
-            double newMiniStock = Double.parseDouble(miniStock) + Double.parseDouble(String.valueOf(nowMiniStock));
+            BigDecimal miniUnitStock = new BigDecimal(resourceStoreDtos.get(0).getMiniUnitStock()); //获取最小计量单位数量
+            BigDecimal stock1 = new BigDecimal(allocationStorehouseDto.getStock()); //获取最小计量单位数量
+            BigDecimal nowMiniStock = stock1.multiply(miniUnitStock); //计算当前的最小计量总数
+            BigDecimal newMiniStock = miniStock.add(nowMiniStock);
             resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
             super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
         }

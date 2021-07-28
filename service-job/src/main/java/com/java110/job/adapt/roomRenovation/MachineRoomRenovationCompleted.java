@@ -143,24 +143,26 @@ public class MachineRoomRenovationCompleted extends DatabusAdaptImpl {
                 staffAppAuthDto.setStaffId(userDto.getUserId());
                 staffAppAuthDto.setAppType("WECHAT");
                 List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
-                String openId = staffAppAuthDtos.get(0).getOpenId();
-                Data data = new Data();
-                PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-                templateMessage.setTemplate_id(templateId);
-                templateMessage.setTouser(openId);
-                data.setFirst(new Content("尊敬的管理员，您好！有新的房屋装修验收申请需要您处理，申请信息如下："));
-                data.setKeyword1(new Content(paramIn.getString("personName") + "-" + paramIn.getString("personTel")));
-                data.setKeyword2(new Content(communityDto.getName() + roomName[0] + "栋" + roomName[1] + "单元" + roomName[2] + "室"));
-                data.setKeyword3(new Content(paramIn.getString("startTime") + "至" + paramIn.getString("endTime")));
-                data.setKeyword4(new Content(paramIn.getString("remark")));
-                data.setKeyword5(new Content("待验收"));
-                data.setRemark(new Content("感谢您的使用。"));
-                templateMessage.setData(data);
-                String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-                templateMessage.setUrl(wechatUrl);
-                logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-                logger.info("微信模板返回内容:{}", responseEntity);
+                if (staffAppAuthDtos != null && staffAppAuthDtos.size() > 0) {
+                    String openId = staffAppAuthDtos.get(0).getOpenId();
+                    Data data = new Data();
+                    PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+                    templateMessage.setTemplate_id(templateId);
+                    templateMessage.setTouser(openId);
+                    data.setFirst(new Content("尊敬的管理员，您好！有新的房屋装修验收申请需要您处理，申请信息如下："));
+                    data.setKeyword1(new Content(paramIn.getString("personName") + "-" + paramIn.getString("personTel")));
+                    data.setKeyword2(new Content(communityDto.getName() + roomName[0] + "栋" + roomName[1] + "单元" + roomName[2] + "室"));
+                    data.setKeyword3(new Content(paramIn.getString("startTime") + "至" + paramIn.getString("endTime")));
+                    data.setKeyword4(new Content(paramIn.getString("remark")));
+                    data.setKeyword5(new Content("待验收"));
+                    data.setRemark(new Content("感谢您的使用。"));
+                    templateMessage.setData(data);
+                    String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                    templateMessage.setUrl(wechatUrl);
+                    logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+                    ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+                    logger.info("微信模板返回内容:{}", responseEntity);
+                }
             }
         }
     }

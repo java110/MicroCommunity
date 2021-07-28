@@ -18,6 +18,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.common.protocol.types.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,19 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
         }
         //获取手机号(判断手机号是否重复)
         String link = reqJson.getString("link");
+        if (link.length() != 11) {
+            throw new IllegalArgumentException("手机号输入不正确！");
+        }
+        if (!StringUtil.isEmpty(link) && link.contains("*")) {
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setOwnerId(reqJson.getString("ownerId"));
+            //业主
+            ownerDto.setOwnerTypeCd("1001");
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+            Assert.listOnlyOne(ownerDtos, "查询业主信息错误！");
+            link = ownerDtos.get(0).getLink();
+            reqJson.put("link", link);
+        }
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setLink(link);
         ownerDto.setCommunityId(reqJson.getString("communityId"));
@@ -99,6 +113,16 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
         }
         //获取身份证号(判断身份证号是否重复)
         String idCard = reqJson.getString("idCard");
+        if (!StringUtil.isEmpty(idCard) && idCard.contains("*")) {
+            OwnerDto owner = new OwnerDto();
+            owner.setOwnerId(reqJson.getString("ownerId"));
+            //业主
+            owner.setOwnerTypeCd("1001");
+            List<OwnerDto> owners = ownerInnerServiceSMOImpl.queryOwners(owner);
+            Assert.listOnlyOne(owners, "查询业主信息错误！");
+            idCard = owners.get(0).getIdCard();
+            reqJson.put("idCard", idCard);
+        }
         if (!StringUtil.isEmpty(idCard)) {
             OwnerDto owner = new OwnerDto();
             owner.setIdCard(idCard);

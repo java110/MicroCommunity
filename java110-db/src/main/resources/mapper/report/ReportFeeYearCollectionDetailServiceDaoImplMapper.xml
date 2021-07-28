@@ -47,6 +47,12 @@
         <if test="collectionId !=null and collectionId != ''">
             and t.collection_id= #{collectionId}
         </if>
+        <if test="collectionIds !=null ">
+            and t.collection_id in
+            <foreach collection="collectionIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by t.collection_year
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

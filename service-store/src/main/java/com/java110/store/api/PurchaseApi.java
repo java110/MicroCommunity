@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -173,20 +174,20 @@ public class PurchaseApi {
             resourceStorePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
             resourceStorePo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
             //获取采购数量
-            double purchaseQuantity = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity());
+            BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailPo.getPurchaseQuantity());
             //获取原有最小计量总数
-            double miniStock = Double.parseDouble(resourceStore.getString("miniStock"));
+            BigDecimal miniStock = new BigDecimal(resourceStore.getString("miniStock"));
             //获取最小单位数量
-            double newMiniStock = 0.0;
+            BigDecimal newMiniStock = new BigDecimal(0);
             if (StringUtil.isEmpty(resourceStore.getString("miniUnitStock"))) {
                 throw new IllegalArgumentException("最小计量单位数量不能为空！");
             }
-            double miniUnitStock = Double.parseDouble(resourceStore.getString("miniUnitStock"));
+            BigDecimal miniUnitStock = new BigDecimal(resourceStore.getString("miniUnitStock"));
             //计算最小计量总数
             if (StringUtil.isEmpty(resourceStore.getString("miniStock"))) {
-                newMiniStock = purchaseQuantity * miniUnitStock;
+                newMiniStock = purchaseQuantity.multiply(miniUnitStock);
             } else {
-                newMiniStock = (purchaseQuantity * miniUnitStock) + miniStock;
+                newMiniStock = (purchaseQuantity.multiply(miniUnitStock)).add(miniStock);
             }
             resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
@@ -225,7 +226,7 @@ public class PurchaseApi {
             throw new IllegalArgumentException("映射值为空！");
         }
         int number = Integer.parseInt(value);
-        if (count > number) {
+        if (count >= number) {
             throw new IllegalArgumentException("本月紧急采购次数已超过" + number + "次，请下月再使用！");
         }
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
@@ -327,19 +328,19 @@ public class PurchaseApi {
                 resourceStorePo1.setResOrderType(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT);
                 resourceStorePo1.setOperationType(PurchaseApplyDto.WEIGHTED_MEAN_FALSE);
                 //获取紧急采购数量
-                double purchaseQuantity = Double.parseDouble(purchaseApplyDetailPo.getQuantity());
+                BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailPo.getQuantity());
                 //获取原有最小计量总数
-                if(StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())){
+                if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())) {
                     throw new IllegalArgumentException("最小计量总数不能为空！");
                 }
-                double miniStock = Double.parseDouble(resourceStoreDtos.get(0).getMiniStock());
+                BigDecimal miniStock = new BigDecimal(resourceStoreDtos.get(0).getMiniStock());
                 //获取最小计量单位数量
                 if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniUnitStock())) {
                     throw new IllegalArgumentException("最小计量单位数量不能为空！");
                 }
-                double miniUnitStock = Double.parseDouble(resourceStoreDtos.get(0).getMiniUnitStock());
+                BigDecimal miniUnitStock = new BigDecimal(resourceStoreDtos.get(0).getMiniUnitStock());
                 //计算最小计量总数
-                double newMiniStock = (purchaseQuantity * miniUnitStock) + miniStock;
+                BigDecimal newMiniStock = purchaseQuantity.multiply(miniUnitStock).add(miniStock);
                 resourceStorePo1.setMiniStock(String.valueOf(newMiniStock));
                 resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo1);
             } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
@@ -390,14 +391,14 @@ public class PurchaseApi {
                 resourceStoreDto1.setStock(purchaseApplyDetailPo.getQuantity());
                 resourceStoreDto1.setCreateTime(new Date());
                 //获取紧急采购数量
-                double purchaseQuantity = Double.parseDouble(purchaseApplyDetailPo.getQuantity());
+                BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailPo.getQuantity());
                 //获取最小计量单位数量
                 if (StringUtil.isEmpty(resourceStore.getString("miniUnitStock"))) {
                     throw new IllegalArgumentException("最小计量单位数量不能为空！");
                 }
-                double miniUnitStock = Double.parseDouble(resourceStore.getString("miniUnitStock"));
+                BigDecimal miniUnitStock = new BigDecimal(resourceStore.getString("miniUnitStock"));
                 //计算最小计量总数
-                double miniStock = purchaseQuantity * miniUnitStock;
+                BigDecimal miniStock = purchaseQuantity.multiply(miniUnitStock);
                 resourceStoreDto1.setMiniStock(String.valueOf(miniStock));
                 resourceStoreInnerServiceSMOImpl.saveResourceStore(resourceStoreDto1);
             }

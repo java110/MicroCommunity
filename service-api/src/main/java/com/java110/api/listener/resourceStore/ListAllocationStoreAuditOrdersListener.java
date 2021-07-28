@@ -68,15 +68,24 @@ public class ListAllocationStoreAuditOrdersListener extends AbstractServiceApiLi
 
         List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtos = null;
 
+        int size = 0;
+
         if (count > 0) {
             allocationStorehouseApplyDtos = allocationStorehouseUserInnerServiceSMOImpl.getUserTasks(auditUser);
+            if (allocationStorehouseApplyDtos.size() > 0) {
+                AuditUser auditUser1 = new AuditUser();
+                auditUser1.setUserId(reqJson.getString("userId"));
+                auditUser1.setStoreId(reqJson.getString("storeId"));
+                List<AllocationStorehouseApplyDto> userTasks = allocationStorehouseUserInnerServiceSMOImpl.getUserTasks(auditUser1);
+                size = userTasks.size();
+            }
         } else {
             allocationStorehouseApplyDtos = new ArrayList<>();
         }
 
         ResponseEntity responseEntity
-                = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")),
-                (int) count,
+                = ResultVo.createResponseEntity((int) Math.ceil((double) size / (double) reqJson.getInteger("row")),
+                size,
                 allocationStorehouseApplyDtos);
         context.setResponseEntity(responseEntity);
     }

@@ -171,24 +171,26 @@ public class MachineAdoptApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             staffAppAuthDto.setStaffId(userDto.getUserId());
             staffAppAuthDto.setAppType("WECHAT");
             List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
-            String openId = staffAppAuthDtos.get(0).getOpenId();
-            Data data = new Data();
-            PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-            templateMessage.setTemplate_id(templateId);
-            templateMessage.setTouser(openId);
-            data.setFirst(new Content("空置房审申请，审批信息如下："));
-            data.setKeyword1(new Content(paramIn.getString("ardId")));
-            data.setKeyword2(new Content("空置房申请-审批"));
-            data.setKeyword3(new Content(paramIn.getString("createUserName")));
-            data.setKeyword4(new Content(paramIn.getString("createUserName") + "提交空置房申请需审批"));
-            data.setKeyword5(new Content(paramIn.getString("stateName")));
-            data.setRemark(new Content("请及时处理！"));
-            templateMessage.setData(data);
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-            templateMessage.setUrl(wechatUrl);
-            logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-            ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-            logger.info("微信模板返回内容:{}", responseEntity);
+            if (staffAppAuthDtos != null && staffAppAuthDtos.size() > 0) {
+                String openId = staffAppAuthDtos.get(0).getOpenId();
+                Data data = new Data();
+                PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+                templateMessage.setTemplate_id(templateId);
+                templateMessage.setTouser(openId);
+                data.setFirst(new Content("空置房审申请，审批信息如下："));
+                data.setKeyword1(new Content(paramIn.getString("ardId")));
+                data.setKeyword2(new Content("空置房申请-审批"));
+                data.setKeyword3(new Content(paramIn.getString("createUserName")));
+                data.setKeyword4(new Content(paramIn.getString("createUserName") + "提交空置房申请需审批"));
+                data.setKeyword5(new Content(paramIn.getString("stateName")));
+                data.setRemark(new Content("请及时处理！"));
+                templateMessage.setData(data);
+                String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                templateMessage.setUrl(wechatUrl);
+                logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+                ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+                logger.info("微信模板返回内容:{}", responseEntity);
+            }
         }
     }
 

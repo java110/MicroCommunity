@@ -69,7 +69,7 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         reqJson.put("advertId", advertId);
         reqJson.put("state", "1000");
         reqJson.put("createTime", new Date());
-        reqJson.put("communityId", "9999");
+//        reqJson.put("communityId", "9999");
         AdvertPo advertPo = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
         super.insert(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT);
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
@@ -122,8 +122,8 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         fileRelPo.setSaveWay("40000".equals(relTypeCd) ? "table" : "ftp");
         fileRelPo.setFileRelId("-1");
         fileRelPo.setObjId(paramInJson.getString("advertId"));
-        fileRelPo.setFileRealName(paramInJson.getString("advertPhotoId"));
-        fileRelPo.setFileSaveName(paramInJson.getString("fileSaveName"));
+        fileRelPo.setFileRealName(paramInJson.getString("vedioName"));
+        fileRelPo.setFileSaveName(paramInJson.getString("vedioName"));
         super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
     }
 

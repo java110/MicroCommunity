@@ -444,15 +444,19 @@ public class RoomRenovationApi {
             roomDto.setRoomId(reqJson.getString("roomId"));
             //状态变为已装修
             roomDto.setState("2005");
+            //验收成功
+            roomRenovationDetailPo.setState("3000");
             saveRoomRenovationDetailBMOImpl.save(roomRenovationDetailPo);
             return updateRoomRenovationBMOImpl.updateRoom(roomDto);
-        } else if (roomRenovationDetailPo.getState().equals("6000")) {
-            RoomDto roomDto = new RoomDto();
-            roomDto.setRoomId(reqJson.getString("roomId"));
-            //状态变为已交房
-            roomDto.setState("2003");
-            saveRoomRenovationDetailBMOImpl.save(roomRenovationDetailPo);
-            return updateRoomRenovationBMOImpl.updateRoom(roomDto);
+        } else if (roomRenovationDetailPo.getState().equals("6000")) { //验收失败装修状态变为装修中
+            RoomRenovationPo roomRenovation = new RoomRenovationPo();
+            roomRenovation.setrId(roomRenovationDetailPo.getrId());
+            roomRenovation.setState("3000");
+            //验收失败把房屋状态变为装修中，让业主装修整改
+            updateRoomRenovationBMOImpl.update(roomRenovation);
+            //验收失败
+            roomRenovationDetailPo.setState("4000");
+            return saveRoomRenovationDetailBMOImpl.save(roomRenovationDetailPo);
         } else {
             return saveRoomRenovationDetailBMOImpl.save(roomRenovationDetailPo);
         }

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service("resourceEnterBMOImpl")
@@ -51,16 +52,17 @@ public class ResourceEnterBMOImpl implements IResourceEnterBMO {
                 throw new IllegalArgumentException("最小计量单位数量不能为空！");
             }
             //获取最小计量单位数量
-            String miniUnitStock = resourceStoreDtos.get(0).getMiniUnitStock();
+            BigDecimal miniUnitStock = new BigDecimal(resourceStoreDtos.get(0).getMiniUnitStock());
             if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())) {
                 throw new IllegalArgumentException("最小计量总数不能为空！");
             }
             //获取采购前物品最小计量总数
-            String miniStock = resourceStoreDtos.get(0).getMiniStock();
+            BigDecimal miniStock = new BigDecimal(resourceStoreDtos.get(0).getMiniStock());
             //计算采购的物品最小计量总数
-            double purchaseMiniStock = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity()) * Double.parseDouble(miniUnitStock);
+            BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailPo.getPurchaseQuantity());
+            BigDecimal purchaseMiniStock = purchaseQuantity.multiply(miniUnitStock);
             //计算采购后物品最小计量总数
-            double nowMiniStock = Double.parseDouble(miniStock) + purchaseMiniStock;
+            BigDecimal nowMiniStock = miniStock.add(purchaseMiniStock);
             resourceStorePo.setMiniStock(String.valueOf(nowMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
         }

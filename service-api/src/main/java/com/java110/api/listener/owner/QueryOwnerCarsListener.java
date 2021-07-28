@@ -7,10 +7,13 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -26,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName OwnerDto
@@ -40,6 +44,9 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
 
     @Autowired
@@ -92,11 +99,16 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
         //查询总记录数
         int total = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class));
+        int count = 0;
         List<OwnerCarDto> ownerCarDtoList = null;
 
         if (total > 0) {
-            ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class));
-
+            OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
+            ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            ownerCarDto.setPage(PageDto.DEFAULT_PAGE);
+            //查询所有业主车辆数据
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            count = ownerCarDtos.size();
             //小区20条时刷房屋和车位信息
             if (row < 20) {
                 freshPs(ownerCarDtoList);
@@ -105,8 +117,24 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
         } else {
             ownerCarDtoList = new ArrayList<>();
         }
+        //查询是否有脱敏权限
+        List<Map> privileges = null;
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/roomCreateFee");
+        basePrivilegeDto.setUserId(dataFlowContext.getUserId());
+        privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges == null || privileges.size() == 0) {
+            for (OwnerCarDto ownerCarDto : ownerCarDtoList) {
 
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerCarDtoList);
+                String link = ownerCarDto.getLink();
+                if (!StringUtil.isEmpty(link)) {
+                    link = link.substring(0, 3) + "****" + link.substring(7);
+                    ownerCarDto.setLink(link);
+                }
+            }
+        }
+
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) row), count, ownerCarDtoList);
         dataFlowContext.setResponseEntity(responseEntity);
     }
 

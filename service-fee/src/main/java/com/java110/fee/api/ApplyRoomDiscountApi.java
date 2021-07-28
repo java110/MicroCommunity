@@ -78,6 +78,14 @@ public class ApplyRoomDiscountApi {
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "applyType", "请求报文中未包含applyType");
+        if (!StringUtil.isEmpty(reqJson.getString("startTime"))) {
+            String startTime = reqJson.getString("startTime") + " 00:00:00";
+            reqJson.put("startTime", startTime);
+        }
+        if (!StringUtil.isEmpty(reqJson.getString("endTime"))) {
+            String endTime = reqJson.getString("endTime") + " 23:59:59";
+            reqJson.put("endTime", endTime);
+        }
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
         ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
         applyRoomDiscountDto.setCommunityId(applyRoomDiscountPo.getCommunityId());

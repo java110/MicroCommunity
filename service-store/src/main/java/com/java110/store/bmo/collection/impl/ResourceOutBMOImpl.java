@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service("resourceOutBMOImpl")
@@ -62,16 +63,17 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
             if (StringUtil.isEmpty(resourceStores.get(0).getMiniStock())) {
                 throw new IllegalArgumentException("最小计量总数不能为空！");
             }
-            String miniStock1 = resourceStores.get(0).getMiniStock();
+            BigDecimal miniStock1 = new BigDecimal(resourceStores.get(0).getMiniStock());
+            BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailPo.getPurchaseQuantity());
             if (StringUtil.isEmpty(resourceStores.get(0).getMiniUnitStock())) {
                 throw new IllegalArgumentException("最小计量单位数量不能为空！");
             }
             //获取物品最小计量单位数量
-            String miniUnitStock1 = resourceStores.get(0).getMiniUnitStock();
+            BigDecimal miniUnitStock1 = new BigDecimal(resourceStores.get(0).getMiniUnitStock());
             //计算领用物品的最小计量总数
-            double applyQuantity = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity()) * Double.parseDouble(miniUnitStock1);
+            BigDecimal applyQuantity = purchaseQuantity.multiply(miniUnitStock1);
             //计算物品领用后剩余的最小计量总数
-            double newMiniStock = Double.parseDouble(miniStock1) - applyQuantity;
+            BigDecimal newMiniStock = miniStock1.subtract(applyQuantity);
             resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
@@ -104,9 +106,10 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
                 userStorehousePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
                 if (!StringUtil.isEmpty(unitCode) && !StringUtil.isEmpty(miniUnitCode) && !StringUtil.isEmpty(miniUnitStock) && !unitCode.equals(miniUnitCode)) {
                     //获取领取数量
-                    double purchaseQuantity = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity());
+                    BigDecimal purchaseQuantity2 = new BigDecimal(purchaseApplyDetailPo.getPurchaseQuantity());
+                    BigDecimal miniUnitStock2 = new BigDecimal(miniUnitStock);
                     //计算个人物品最小计量总数
-                    double quantity = purchaseQuantity * Double.parseDouble(miniUnitStock);
+                    BigDecimal quantity = purchaseQuantity2.multiply(miniUnitStock2);
                     userStorehousePo.setMiniStock(String.valueOf(quantity));
                 } else {
                     userStorehousePo.setMiniStock(purchaseApplyDetailPo.getPurchaseQuantity());
@@ -114,23 +117,25 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
                 userStorehouseInnerServiceSMOImpl.saveUserStorehouses(userStorehousePo);
             } else {
                 //获取个人物品领用后的库存
-                double total = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity()) + Double.parseDouble(userStorehouseDtos.get(0).getStock());
-                userStorehousePo.setStock(total + "");
+                BigDecimal purchaseQuantity3 = new BigDecimal(purchaseApplyDetailPo.getPurchaseQuantity());
+                BigDecimal stock3 = new BigDecimal(userStorehouseDtos.get(0).getStock());
+                BigDecimal total = purchaseQuantity3.add(stock3);
+                userStorehousePo.setStock(total.toString());
                 userStorehousePo.setUsId(userStorehouseDtos.get(0).getUsId());
                 if (!StringUtil.isEmpty(unitCode) && !StringUtil.isEmpty(miniUnitCode) && !StringUtil.isEmpty(miniUnitStock) && !unitCode.equals(miniUnitCode)) {
                     //获取本次领取数量
-                    double purchaseQuantity = Double.parseDouble(purchaseApplyDetailPo.getPurchaseQuantity());
+                    BigDecimal miniUnitStock3 = new BigDecimal(miniUnitStock);
                     //计算本次领取的个人物品最小计量总数
-                    double quantity = purchaseQuantity * Double.parseDouble(miniUnitStock);
-                    double miniStock = 0.0;
+                    BigDecimal quantity = purchaseQuantity3.multiply(miniUnitStock3);
+                    BigDecimal miniStock = new BigDecimal(0);
                     //获取个人物品原先的最小计量总数
                     if (StringUtil.isEmpty(userStorehouseDtos.get(0).getMiniStock())) {
                         throw new IllegalArgumentException("信息错误，个人物品最小计量总数不能为空！");
                     } else {
-                        miniStock = Double.parseDouble(userStorehouseDtos.get(0).getMiniStock());
+                        miniStock = new BigDecimal(userStorehouseDtos.get(0).getMiniStock());
                     }
                     //计算领用后个人物品总的最小计量总数
-                    double miniQuantity = quantity + miniStock;
+                    BigDecimal miniQuantity = quantity.add(miniStock);
                     userStorehousePo.setMiniStock(String.valueOf(miniQuantity));
                 } else {
                     userStorehousePo.setMiniStock(String.valueOf(total));

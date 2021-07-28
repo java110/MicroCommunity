@@ -92,10 +92,11 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             info.put("storeId", resourceStorePo.getStoreId());
             List<Map> stores = resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(info);
             Assert.listOnlyOne(stores, "不存在该物品");
-            Double stock = Double.parseDouble(stores.get(0).get("stock").toString());
-            Double newStock = Double.parseDouble(resourceStorePo.getStock());
-            Double totalStock = stock + newStock;
-            if (totalStock < 0) {
+            BigDecimal stock = new BigDecimal(stores.get(0).get("stock").toString());
+            BigDecimal newStock = new BigDecimal(resourceStorePo.getStock().toString());
+            BigDecimal totalStock = stock.add(newStock);
+            BigDecimal zeroStock = new BigDecimal (0);
+            if (totalStock.compareTo(zeroStock)== -1) {
                 throw new IllegalArgumentException("库存不足，参数有误");
             }
             //入库操作 对物品进行加权平均
@@ -103,18 +104,16 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                     || (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT) && resourceStorePo.getOperationType().equals(PurchaseApplyDto.WEIGHTED_MEAN_TRUE))) {
                 //获取原均价
                 Object averageOldPrice = stores.get(0).get("averagePrice");
-                Double price = 0.0;
+                BigDecimal price = new BigDecimal(0);
                 if (averageOldPrice != null) {
-                    price = Double.parseDouble(averageOldPrice.toString());
+                    price = new BigDecimal(averageOldPrice.toString());
                 }
                 //获取现在采购的价格
-                Double newPrice = Double.parseDouble(resourceStorePo.getPurchasePrice());
+                BigDecimal newPrice = new BigDecimal(resourceStorePo.getPurchasePrice());
                 //获取均价
-                double averagePrice = ((newPrice * newStock) + (price * stock)) / totalStock;
-                BigDecimal b0 = new BigDecimal(averagePrice);
-                //四舍五入保留两位
-                double f0 = b0.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                resourceStorePo.setAveragePrice(String.valueOf(f0));
+                BigDecimal averagePriceTotal = ((newPrice.multiply(newStock)).add(price.multiply(stock)));
+                BigDecimal averagePrice=averagePriceTotal.divide(totalStock,2,BigDecimal.ROUND_HALF_UP);
+                resourceStorePo.setAveragePrice(averagePrice.toString());
             }
             if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT) && resourceStorePo.getOperationType().equals(PurchaseApplyDto.WEIGHTED_MEAN_TRUE)) {
                 resourceStorePo.setStock(stock + "");

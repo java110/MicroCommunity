@@ -21,10 +21,10 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +86,11 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(data.getString("communityId"));
         List<CommunityDto> communityDtos = communityInnerServiceSMO.queryCommunitys(communityDto);
+        //查询房屋业主信息
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setRoomId(data.getString("roomId"));
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMO.queryOwnerRoomRels(ownerRoomRelDto);
+        Assert.listOnlyOne(ownerRoomRelDtos, "查询房屋业主错误！");
         //申请人姓名
         String personName = data.getString("personName");
         //申请联系电话
@@ -100,8 +105,6 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
         String endTime = data.getString("endTime");
         //备注
         String remark = data.getString("remark");
-        //获取当前用户id
-        String userId = data.getString("userId");
         JSONObject paramIn = new JSONObject();
         paramIn.put("personName", personName);
         paramIn.put("personTel", personTel);
@@ -110,7 +113,7 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
         paramIn.put("startTime", startTime);
         paramIn.put("endTime", endTime);
         paramIn.put("remark", remark);
-        paramIn.put("userId", userId);
+        paramIn.put("userId", ownerRoomRelDtos.get(0).getOwnerId());
         //给员工推送消息
         publishMsg(paramIn, communityDtos.get(0));
         //给业主推送信息
@@ -163,24 +166,28 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
                 staffAppAuthDto.setStaffId(userDto.getUserId());
                 staffAppAuthDto.setAppType("WECHAT");
                 List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
-                String openId = staffAppAuthDtos.get(0).getOpenId();
-                Data data = new Data();
-                PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-                templateMessage.setTemplate_id(templateId);
-                templateMessage.setTouser(openId);
-                data.setFirst(new Content("尊敬的管理员，您好！有新的装修申请需要您处理，申请信息如下："));
-                data.setKeyword1(new Content(paramIn.getString("personName") + "-" + paramIn.getString("personTel")));
-                data.setKeyword2(new Content(communityDto.getName() + roomName[0] + "栋" + roomName[1] + "单元" + roomName[2] + "室"));
-                data.setKeyword3(new Content(paramIn.getString("startTime") + "至" + paramIn.getString("endTime")));
-                data.setKeyword4(new Content(paramIn.getString("remark")));
-                data.setKeyword5(new Content("待审核"));
-                data.setRemark(new Content("感谢您的使用。"));
-                templateMessage.setData(data);
-                String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-                templateMessage.setUrl(wechatUrl);
-                logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-                logger.info("微信模板返回内容:{}", responseEntity);
+                if (staffAppAuthDtos != null && staffAppAuthDtos.size() > 0) {
+                    String openId = staffAppAuthDtos.get(0).getOpenId();
+                    Data data = new Data();
+                    PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+                    templateMessage.setTemplate_id(templateId);
+                    templateMessage.setTouser(openId);
+                    data.setFirst(new Content("尊敬的管理员，您好！有新的装修申请需要您处理，申请信息如下："));
+                    data.setKeyword1(new Content(paramIn.getString("personName") + "-" + paramIn.getString("personTel")));
+                    data.setKeyword2(new Content(communityDto.getName() + roomName[0] + "栋" + roomName[1] + "单元" + roomName[2] + "室"));
+                    data.setKeyword3(new Content(paramIn.getString("startTime") + "至" + paramIn.getString("endTime")));
+                    data.setKeyword4(new Content(paramIn.getString("remark")));
+                    data.setKeyword5(new Content("待审核"));
+                    data.setRemark(new Content("感谢您的使用。"));
+                    templateMessage.setData(data);
+                    String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                    templateMessage.setUrl(wechatUrl);
+                    logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+                    ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+                    logger.info("微信模板返回内容:{}", responseEntity);
+                } else {
+                    continue;
+                }
             }
         }
     }
