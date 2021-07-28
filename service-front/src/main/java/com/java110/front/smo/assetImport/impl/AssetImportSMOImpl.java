@@ -493,6 +493,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("sex", owner.getSex());
             paramIn.put("ownerTypeCd", "1001");
             paramIn.put("idCard", owner.getIdCard());
+            paramIn.put("source","BatchImport");
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
