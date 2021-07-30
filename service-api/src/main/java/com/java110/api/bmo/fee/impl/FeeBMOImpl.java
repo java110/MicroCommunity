@@ -295,6 +295,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
         }
         feeInfo.setEndTime(endCalender.getTime());
+        //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
+        if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000) {
+            throw new IllegalArgumentException("缴费超过了 费用项结束时间");
+        }
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
@@ -372,7 +376,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-        feeDto = feeDtos.get(0);
+
         paramInJson.put("feeInfo", feeDto);
         businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         Date endTime = feeDto.getEndTime();
@@ -436,6 +440,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         endCalender.setTime(endTime);
         endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
         feeInfo.setEndTime(endCalender.getTime());
+        //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
+        if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000) {
+            throw new IllegalArgumentException("缴费超过了 费用项结束时间");
+        }
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));

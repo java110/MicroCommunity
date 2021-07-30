@@ -15,7 +15,6 @@ import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,7 +185,13 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
 
                     // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
                     if (FeeFlagTypeConstant.CYCLE.equals(feeInfo.get(0).get("feeFlag"))) {
-                        if (((Date) businessFeeInfo.get("endTime")).after((Date) feeInfo.get(0).get("configEndTime"))) {
+                        //这里 容错五天时间
+                        Date configEndTime = (Date) feeInfo.get(0).get("configEndTime");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(configEndTime);
+                        calendar.add(Calendar.DAY_OF_MONTH, -5);
+                        configEndTime = calendar.getTime();
+                        if (((Date) businessFeeInfo.get("endTime")).after(configEndTime)) {
                             businessFeeInfo.put("state", FeeStateConstant.END);
                             businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
                         }
