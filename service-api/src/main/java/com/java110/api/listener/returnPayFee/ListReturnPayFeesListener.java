@@ -66,22 +66,10 @@ public class ListReturnPayFeesListener extends AbstractServiceApiListener {
 
         int count = returnPayFeeInnerServiceSMOImpl.queryReturnPayFeesCount(returnPayFeeDto);
 
-        List<ApiReturnPayFeeDataVo> returnPayFees = new ArrayList<>();
+        List<ApiReturnPayFeeDataVo> returnPayFees = null;
 
         if (count > 0) {
-            List<ApiReturnPayFeeDataVo> apiReturnPayFeeDataVos = BeanConvertUtil.covertBeanList(returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto), ApiReturnPayFeeDataVo.class);
-            for (ApiReturnPayFeeDataVo apiReturnPayFeeDataVo : apiReturnPayFeeDataVos) {
-                //获取周期
-                String cycles = apiReturnPayFeeDataVo.getCycles();
-                //获取应付金额
-                String receivableAmount = apiReturnPayFeeDataVo.getReceivableAmount();
-                //获取实付金额
-                String receivedAmount = apiReturnPayFeeDataVo.getReceivedAmount();
-                apiReturnPayFeeDataVo.setCycles(cycles.substring(1));
-                apiReturnPayFeeDataVo.setReceivableAmount(receivableAmount.substring(1));
-                apiReturnPayFeeDataVo.setReceivedAmount(receivedAmount.substring(1));
-                returnPayFees.add(apiReturnPayFeeDataVo);
-            }
+            returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto), ApiReturnPayFeeDataVo.class);
         } else {
             returnPayFees = new ArrayList<>();
         }

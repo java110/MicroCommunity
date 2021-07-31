@@ -376,7 +376,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-
+        feeDto = feeDtos.get(0);
         paramInJson.put("feeInfo", feeDto);
         businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         Date endTime = feeDto.getEndTime();
