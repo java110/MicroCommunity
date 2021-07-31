@@ -69,16 +69,19 @@ public class SaveUserListener extends AbstractServiceApiPlusListener {
             userId = GenerateCodeFactory.getUserId();
             reqJson.put("userId", userId);
         }
+        String staffDefaultPassword = reqJson.getString("password");
+        if (StringUtil.isEmpty(staffDefaultPassword)) {
+            //设置默认密码
+            staffDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
+            Assert.hasLength(staffDefaultPassword, "映射表中未设置默认密码，请检查" + MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
+        }
 
-        //设置默认密码
-        String staffDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
-        Assert.hasLength(staffDefaultPassword, "映射表中未设置默认密码，请检查" + MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
         staffDefaultPassword = AuthenticationFactory.passwdMd5(staffDefaultPassword);
         reqJson.put("password", staffDefaultPassword);
         UserPo userPo = BeanConvertUtil.covertBean(reqJson, UserPo.class);
         super.insert(context, userPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
 
-        if(!StringUtil.isEmpty(reqJson.getString("extUserId"))) {
+        if (!StringUtil.isEmpty(reqJson.getString("extUserId"))) {
             UserAttrPo userAttrPo = new UserAttrPo();
             userAttrPo.setUserId(reqJson.getString("userId"));
             userAttrPo.setAttrId("-1");
