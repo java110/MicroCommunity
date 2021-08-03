@@ -1,41 +1,34 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "feeCollectionDetail",
-  "desc": "催缴单",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "fee",
-  "tableName": "fee_collection_detail",
+  "id": "msgId",
+  "name": "storeMsg",
+  "desc": "商户消息",
+  "shareParam": "shareId",
+  "shareColumn": "share_id",
+  "shareName": "store",
+  "tableName": "store_msg",
   "param": {
-    "detailId": "detail_id",
-    "orderId": "order_id",
-    "collectionName": "collection_name",
-    "ownerId": "owner_id",
-    "ownerName": "owner_name",
-    "feeName": "fee_name",
-    "payerObjId": "payer_obj_id",
-    "payerObjName": "payer_obj_name",
-    "payerObjType": "payer_obj_type",
-    "communityId": "community_id",
-    "collectionWay": "collection_way",
-    "oweAmount": "owe_amount",
-    "state": "state",
-    "remarks": "remarks",
+    "msgId": "msg_id",
+    "msgType": "msg_type",
+    "title": "title",
+    "msgFlag": "msg_flag",
+    "content": "content",
+    "viewId": "view_id",
+    "shareId": "share_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "communityId",
-      "msg": "小区不能为空"
+      "code": "shareId",
+      "msg": "分片不能为空"
     },
     {
-      "code": "collectionWay",
-      "msg": "催缴方式不能为空"
+      "code": "msgFlag",
+      "msg": "消息标识不能为空"
     },
     {
-      "code": "oweAmount",
-      "msg": "欠费金额不能为空"
+      "code": "title",
+      "msg": "标题不能为空"
     }
   ]
 }
