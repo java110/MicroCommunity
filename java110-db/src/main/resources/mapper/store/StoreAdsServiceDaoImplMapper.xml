@@ -20,7 +20,7 @@
         select t.ad_name,t.ad_name adName,t.ad_type,t.ad_type adType,t.share_id,t.share_id
         shareId,t.start_time,t.start_time startTime,t.page_url,t.page_url pageUrl,t.status_cd,t.status_cd
         statusCd,t.state,t.end_time,t.end_time endTime,t.advert_type,t.advert_type advertType,t.ads_id,t.ads_id
-        adsId,t.seq,t.url
+        adsId,t.seq,t.url,t.create_time createTime
         from store_ads t
         where 1 =1
         <if test="adName !=null and adName != ''">

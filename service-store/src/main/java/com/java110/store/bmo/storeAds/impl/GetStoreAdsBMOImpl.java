@@ -3,6 +3,8 @@ package com.java110.store.bmo.storeAds.impl;
 import com.java110.dto.storeAds.StoreAdsDto;
 import com.java110.intf.store.IStoreAdsInnerServiceSMO;
 import com.java110.store.bmo.storeAds.IGetStoreAdsBMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,7 @@ public class GetStoreAdsBMOImpl implements IGetStoreAdsBMO {
         List<StoreAdsDto> storeAdsDtos = null;
         if (count > 0) {
             storeAdsDtos = storeAdsInnerServiceSMOImpl.queryStoreAdss(storeAdsDto);
+            freshAdsUrl(storeAdsDtos);
         } else {
             storeAdsDtos = new ArrayList<>();
         }
@@ -39,6 +42,14 @@ public class GetStoreAdsBMOImpl implements IGetStoreAdsBMO {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    private void freshAdsUrl(List<StoreAdsDto> storeAdsDtos) {
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
+        for (StoreAdsDto tmpStoreAdsDto : storeAdsDtos) {
+            tmpStoreAdsDto.setUrl(imgUrl + tmpStoreAdsDto.getUrl());
+        }
     }
 
 }
