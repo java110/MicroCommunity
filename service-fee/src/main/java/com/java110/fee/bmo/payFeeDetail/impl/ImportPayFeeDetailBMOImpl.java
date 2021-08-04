@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.payFeeDetail.IImportPayFeeBMODetail;
@@ -229,7 +230,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
                 doImportFeeDetail(tmpFeeDto, importRoomFee);
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -264,6 +265,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         payFeeDetailPo.setRemark(importRoomFee.getRemark());
         payFeeDetailPo.setCreateTime(importRoomFee.getCreateTime());
+        payFeeDetailPo.setState("1400");
         int saved = feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
 
         if (saved < 1) {
