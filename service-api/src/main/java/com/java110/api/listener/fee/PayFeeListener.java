@@ -264,11 +264,11 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
         List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
-        if (feeReceiptDetailDtos != null || feeReceiptDetailDtos.size() > 0) {
+        if (feeReceiptDetailDtos != null && feeReceiptDetailDtos.size() > 0) {
             dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos.get(0)));
             return;
         }
-        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailPo));
+        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDto));
     }
 
 
