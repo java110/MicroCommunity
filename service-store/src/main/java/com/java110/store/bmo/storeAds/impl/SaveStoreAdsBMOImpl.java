@@ -35,6 +35,8 @@ public class SaveStoreAdsBMOImpl implements ISaveStoreAdsBMO {
             throw new IllegalArgumentException("未包含图片信息");
         }
 
+        storeAdsPo.setState("2000");
+
         //保存图片
         FileDto fileDto = new FileDto();
         fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
