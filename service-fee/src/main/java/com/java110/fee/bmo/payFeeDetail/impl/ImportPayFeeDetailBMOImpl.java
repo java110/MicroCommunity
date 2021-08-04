@@ -117,7 +117,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
     private void importCarFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId) {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setFeeName(importRoomFee.getFeeName());
+        feeConfigDto.setFeeNameEq(importRoomFee.getFeeName());
         feeConfigDto.setCommunityId(importRoomFee.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 

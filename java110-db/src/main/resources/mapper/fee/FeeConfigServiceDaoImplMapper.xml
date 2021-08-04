@@ -170,6 +170,9 @@
         <if test="feeName !=null and feeName != ''">
             and t.fee_name like '%${feeName}%'
         </if>
+        <if test="feeNameEq !=null and feeNameEq != ''">
+            and t.fee_name = #{feeNameEq}
+        </if>
         <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
