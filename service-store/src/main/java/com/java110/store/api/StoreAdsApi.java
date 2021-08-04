@@ -103,7 +103,7 @@ public class StoreAdsApi {
      * @path /app/storeAds/queryStoreAds
      */
     @RequestMapping(value = "/queryStoreAds", method = RequestMethod.GET)
-    public ResponseEntity<String> queryStoreAds(@RequestParam(value = "communityId") String shareId,
+    public ResponseEntity<String> queryStoreAds(@RequestParam(value = "shareId") String shareId,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         StoreAdsDto storeAdsDto = new StoreAdsDto();
