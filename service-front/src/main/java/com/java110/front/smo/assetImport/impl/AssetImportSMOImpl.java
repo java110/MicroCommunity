@@ -159,7 +159,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         assetImportLogDto.setSuccessCount(0L);
         assetImportLogDto.setErrorCount(0L);
         assetImportLogDto.setCommunityId(result.getCommunityId());
-        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_FEE_IMPORT);
         List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
         assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
         long successCount = 0L;
@@ -239,7 +239,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         assetImportLogDto.setSuccessCount(0L);
         assetImportLogDto.setErrorCount(0L);
         assetImportLogDto.setCommunityId(result.getCommunityId());
-        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_AREA_PARKING_IMPORT);
         List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
         assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
         long successCount = 0L;
@@ -426,7 +426,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         assetImportLogDto.setSuccessCount(0L);
         assetImportLogDto.setErrorCount(0L);
         assetImportLogDto.setCommunityId(result.getCommunityId());
-        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_ROOM_IMPORT);
         List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
         assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
         long successCount = 0L;
@@ -731,7 +731,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         assetImportLogDto.setSuccessCount(0L);
         assetImportLogDto.setErrorCount(0L);
         assetImportLogDto.setCommunityId(result.getCommunityId());
-        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_OWENR_IMPORT);
         List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
         assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
         long successCount = 0L;
@@ -820,7 +820,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         assetImportLogDto.setSuccessCount(0L);
         assetImportLogDto.setErrorCount(0L);
         assetImportLogDto.setCommunityId(result.getCommunityId());
-        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_FLOOR_UNIT_IMPORT);
         List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
         assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
         long successCount = 0L;

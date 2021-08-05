@@ -18,10 +18,24 @@ import java.util.List;
 public class AssetImportLogDto extends PageDto implements Serializable {
 
     //1001 资产导入 2002 缴费历史导入
-    public static final String LOG_TYPE_ASSET_IMPORT = "1001";
+
+    /**
+     * 1001	楼栋单元
+     * 2002	缴费历史
+     * 3003	业主信息
+     * 4004	房屋信息
+     * 5005	费用信息
+     * 6006	车位车辆
+     */
+    public static final String LOG_TYPE_FLOOR_UNIT_IMPORT = "1001";
     public static final String LOG_TYPE_HISTORY_FEE_IMPORT = "2002";
+    public static final String LOG_TYPE_OWENR_IMPORT = "3003";
+    public static final String LOG_TYPE_ROOM_IMPORT = "4004";
+    public static final String LOG_TYPE_FEE_IMPORT = "5005";
+    public static final String LOG_TYPE_AREA_PARKING_IMPORT = "6006";
 
     private String logType;
+    private String logTypeName;
     private Long successCount;
     private String logId;
     private String remark;
@@ -111,5 +125,13 @@ public class AssetImportLogDto extends PageDto implements Serializable {
 
     public void setAssetImportLogDetailDtos(List<AssetImportLogDetailDto> assetImportLogDetailDtos) {
         this.assetImportLogDetailDtos = assetImportLogDetailDtos;
+    }
+
+    public String getLogTypeName() {
+        return logTypeName;
+    }
+
+    public void setLogTypeName(String logTypeName) {
+        this.logTypeName = logTypeName;
     }
 }

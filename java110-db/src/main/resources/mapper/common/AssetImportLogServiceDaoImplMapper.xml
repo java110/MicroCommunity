@@ -19,8 +19,9 @@
     <select id="getAssetImportLogInfo" parameterType="Map" resultType="Map">
         select t.log_type,t.log_type logType,t.success_count,t.success_count successCount,t.log_id,t.log_id
         logId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.error_count,t.error_count errorCount,t.create_time createTime
+        communityId,t.error_count,t.error_count errorCount,t.create_time createTime,td.`name` logTypeName
         from asset_import_log t
+        LEFT JOIN t_dict td on t.log_type = td.status_cd and td.table_name = 'asset_import_log' and td.table_columns = 'log_type'
         where 1 =1
         <if test="logType !=null and logType != ''">
             and t.log_type= #{logType}
