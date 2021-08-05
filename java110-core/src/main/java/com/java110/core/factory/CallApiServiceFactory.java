@@ -226,8 +226,10 @@ public class CallApiServiceFactory {
         try {
             responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            logger.error("调用中心服务失败",e);
             responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
         } catch (Exception e) {
+            logger.error("调用中心服务失败",e);
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);
