@@ -36,7 +36,6 @@ public class InitializeBuildingUnitApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         String communityId = reqJson.getString("communityId");
         String userPassword = reqJson.getString("devPassword");
-        initializeBuildingUnitBmoImpl.deleteBuildingUnit(communityId,userId,userPassword);
-        return null;
+        return initializeBuildingUnitBmoImpl.deleteBuildingUnit(communityId,userId,userPassword);
     }
 }
