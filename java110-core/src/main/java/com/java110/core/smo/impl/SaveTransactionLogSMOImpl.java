@@ -46,6 +46,7 @@ public class SaveTransactionLogSMOImpl implements ISaveTransactionLogSMO {
         IPageData newPd = PageData.newInstance().builder("-1", "批量日志", "", "",
                 "", "", apiUrl, "",
                 AppDto.WEB_APP_ID);
+
         CallApiServiceFactory.callCenterService(restTemplate, newPd, JSONObject.toJSONString(assetImportLogDto), apiUrl, HttpMethod.POST);
     }
 }
