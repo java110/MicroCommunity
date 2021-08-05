@@ -43,30 +43,30 @@ public class InitializeBuildingUnitSMOImpl extends BaseServiceSMO implements Iin
     private IInitializeBuildingUnitDao initializeBuildingUnitDaoImpl;
 
     @Override
-    public int deleteBuildingUnit(Map floorIds) {
+    public int deleteBuildingUnit(@RequestBody Map floorIds) {
         int deleteFlag = initializeBuildingUnitDaoImpl.deleteBuildingUnit(floorIds);
         return deleteFlag;
     }
 
     @Override
-    public int deletefFloor(Map communityId) {
+    public int deletefFloor(@RequestBody Map communityId) {
         int deleteFlag = initializeBuildingUnitDaoImpl.deletefFloor(communityId);
         return deleteFlag;
     }
 
     @Override
-    public int deleteBuildingRoom(Map communityId) {
+    public int deleteBuildingRoom(@RequestBody Map communityId) {
         int deleteFlag = initializeBuildingUnitDaoImpl.deleteBuildingRoom(communityId);
         return deleteFlag;
     }
 
     @Override
-    public int deleteParkingArea(Map communityId) {
+    public int deleteParkingArea(@RequestBody Map communityId) {
         int deleteFlag = initializeBuildingUnitDaoImpl.deleteParkingArea(communityId);
         return deleteFlag;
     }
     @Override
-    public int deleteParkingSpace(Map communityId) {
+    public int deleteParkingSpace(@RequestBody Map communityId) {
         int deleteFlag = initializeBuildingUnitDaoImpl.deleteParkingSpace(communityId);
         return deleteFlag;
     }
