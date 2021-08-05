@@ -1,7 +1,6 @@
 package com.java110.core.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.CallApiServiceFactory;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @ClassName SaveTransactionLogSMOImpl

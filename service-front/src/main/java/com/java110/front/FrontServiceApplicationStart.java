@@ -63,7 +63,7 @@ import java.nio.charset.Charset;
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @EnableCaching
-@EnableFeignClients(basePackages = {"com.java110.intf.order","com.java110.core.smo"})
+@EnableFeignClients(basePackages = {"com.java110.intf.order"})
 public class FrontServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(FrontServiceApplicationStart.class);
