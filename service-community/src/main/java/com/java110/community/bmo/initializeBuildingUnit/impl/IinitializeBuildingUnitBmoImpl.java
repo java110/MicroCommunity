@@ -70,20 +70,22 @@ public class IinitializeBuildingUnitBmoImpl implements IinitializeBuildingUnitBm
         floorDto.setCommunityId(communityId);
         List<FloorDto> floorDtos =  floorInnerServiceSMOImpl.queryFloors(floorDto);
         List floors = new ArrayList();
+        int communitys = 0;
         if(null != floorDtos && floorDtos.size() > 0){
             for (FloorDto floorDtotmp: floorDtos){
                 floors.add(floorDtotmp.getFloorId());
             }
+            Map floorIds = new HashMap<String,String []>();
+            floorIds.put("floorIds",floors.toArray(new String[floors.size()]));
+            //单元
+            communitys = initializeBuildingUnitSMOImpl.deleteBuildingUnit(floorIds);
         }
-        Map floorIds = new HashMap<String,String []>();
-        floorIds.put("floorIds",floors.toArray(new String[floors.size()]));
-        //单元
-        int communitys = initializeBuildingUnitSMOImpl.deleteBuildingUnit(floorIds);
 
+        massage.append( "开始格式化小区数据：" );
         if(communitys > 0){
             massage.append("单元初始化成功【"+communitys+"】");
             Map communityIds = new HashMap<String,String []>();
-            floorIds.put("communityId",communityId);
+            communityIds.put("communityId",communityId);
             //楼栋
             int deleteFlag = initializeBuildingUnitSMOImpl.deletefFloor(communityIds);
             if(deleteFlag > 0){
