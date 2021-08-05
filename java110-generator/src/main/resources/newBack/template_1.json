@@ -1,19 +1,19 @@
 {
   "autoMove": true,
-  "id": "logId",
-  "name": "assetImportLog",
-  "desc": "批量操作日志",
+  "id": "detailId",
+  "name": "assetImportLogDetail",
+  "desc": "批量操作日志详情",
   "shareParam": "communityId",
   "shareColumn": "community_id",
   "shareName": "common",
-  "tableName": "asset_import_log",
+  "tableName": "asset_import_log_detail",
   "param": {
+    "detailId": "detail_id",
     "logId": "log_id",
     "communityId": "community_id",
-    "logType": "log_type",
-    "successCount": "success_count",
-    "errorCount": "error_count",
-    "remark": "remark",
+    "state": "state",
+    "message": "message",
+    "objName": "obj_name",
     "statusCd": "status_cd"
   },
   "required": [
