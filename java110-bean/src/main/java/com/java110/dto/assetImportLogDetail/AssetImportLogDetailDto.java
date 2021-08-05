@@ -1,6 +1,7 @@
 package com.java110.dto.assetImportLogDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,11 @@ import java.util.Date;
 public class AssetImportLogDetailDto extends PageDto implements Serializable {
 
     private String detailId;
-private String logId;
-private String state;
-private String objName;
-private String communityId;
-private String message;
+    private String logId;
+    private String state;
+    private String objName;
+    private String communityId;
+    private String message;
 
 
     private Date createTime;
@@ -30,37 +31,48 @@ private String message;
     public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getLogId() {
+
+    public String getLogId() {
         return logId;
     }
-public void setLogId(String logId) {
+
+    public void setLogId(String logId) {
         this.logId = logId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getObjName() {
+
+    public String getObjName() {
         return objName;
     }
-public void setObjName(String objName) {
+
+    public void setObjName(String objName) {
         this.objName = objName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getMessage() {
+
+    public String getMessage() {
         return message;
     }
-public void setMessage(String message) {
+
+    public void setMessage(String message) {
         this.message = message;
     }
 

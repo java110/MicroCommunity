@@ -50,4 +50,7 @@ public interface IAssetImportLogDetailInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAssetImportLogDetailsCount", method = RequestMethod.POST)
     int queryAssetImportLogDetailsCount(@RequestBody AssetImportLogDetailDto assetImportLogDetailDto);
+
+    @RequestMapping(value = "/saveAssetImportLogDetails", method = RequestMethod.POST)
+    int saveAssetImportLogDetails(@RequestBody List<AssetImportLogDetailPo> assetImportLogDetailPos);
 }

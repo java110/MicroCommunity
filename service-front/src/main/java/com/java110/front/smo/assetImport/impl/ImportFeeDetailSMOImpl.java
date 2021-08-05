@@ -5,6 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.ISaveTransactionLogSMO;
+import com.java110.dto.assetImportLog.AssetImportLogDto;
+import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.entity.component.ComponentValidateResult;
@@ -49,6 +52,9 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private ISaveTransactionLogSMO saveTransactionLogSMOImpl;
+
     @Override
     public ResponseEntity<String> importExcelData(IPageData pd, MultipartFile uploadFile) throws Exception {
 
@@ -66,7 +72,7 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
             if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(paramIn.getString("objType"))) {
                 //获取楼信息
                 getRooms(workbook, rooms);
-            }else {
+            } else {
                 //获取楼信息
                 getCars(workbook, rooms);
             }
@@ -158,24 +164,45 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
         data.put("storeId", result.getStoreId());
         data.put("userId", result.getUserId());
         data.put("communityId", result.getCommunityId());
+        AssetImportLogDto assetImportLogDto = new AssetImportLogDto();
+        assetImportLogDto.setSuccessCount(0L);
+        assetImportLogDto.setErrorCount(0L);
+        assetImportLogDto.setCommunityId(result.getCommunityId());
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
+        assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
+        try {
+            List<ImportRoomFee> tmpImportRoomFees = new ArrayList<>();
+            for (int roomIndex = 0; roomIndex < roomFees.size(); roomIndex++) {
 
-        List<ImportRoomFee> tmpImportRoomFees = new ArrayList<>();
-        for (int roomIndex = 0; roomIndex < roomFees.size(); roomIndex++) {
+                tmpImportRoomFees.add(roomFees.get(roomIndex));
 
-            tmpImportRoomFees.add(roomFees.get(roomIndex));
+                if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
 
-            if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
+                    createRoomFee(pd, tmpImportRoomFees, data, assetImportLogDto);
 
-                createRoomFee(pd, tmpImportRoomFees, data);
-
-                tmpImportRoomFees = new ArrayList<>();
+                    tmpImportRoomFees = new ArrayList<>();
+                }
             }
-        }
-        if (tmpImportRoomFees != null && tmpImportRoomFees.size() > 0) {
 
-            createRoomFee(pd, tmpImportRoomFees, data);
+            if (tmpImportRoomFees != null && tmpImportRoomFees.size() > 0) {
+
+                createRoomFee(pd, tmpImportRoomFees, data, assetImportLogDto);
+            }
+        } finally {
+            //存入导入日志
+            saveImportLog(assetImportLogDto);
         }
         return ResultVo.success();
+    }
+
+    /**
+     * 保存日志
+     *
+     * @param assetImportLogDto
+     */
+    private void saveImportLog(AssetImportLogDto assetImportLogDto) {
+        saveTransactionLogSMOImpl.saveAssetImportLog(assetImportLogDto);
     }
 
     /**
@@ -184,14 +211,39 @@ public class ImportFeeDetailSMOImpl extends BaseComponentSMO implements IImportF
      * @param pd
      * @param tmpImportRoomFee
      */
-    private void createRoomFee(IPageData pd, List<ImportRoomFee> tmpImportRoomFee, JSONObject data) {
+    private void createRoomFee(IPageData pd, List<ImportRoomFee> tmpImportRoomFee, JSONObject data, AssetImportLogDto assetImportLogDto) {
+        Long successCount = assetImportLogDto.getSuccessCount();
+        Long failCount = assetImportLogDto.getErrorCount();
 
+        List<AssetImportLogDetailDto> assetImportLogDetailDtos = assetImportLogDto.getAssetImportLogDetailDtos();
+        AssetImportLogDetailDto assetImportLogDetailDto = null;
         JSONArray importRoomFees = JSONArray.parseArray(JSONObject.toJSONString(tmpImportRoomFee));
         data.put("importRoomFees", importRoomFees);
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/payFeeDetail/importPayFeeDetail";
 
-        this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            failCount += importRoomFees.size();
+            assetImportLogDetailDto = new AssetImportLogDetailDto();
+            assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+            if (Assert.isJsonObject(responseEntity.getBody())) {
+                JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                assetImportLogDetailDto.setState(paramOut.getString("code"));
+                assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+            } else {
+                assetImportLogDetailDto.setState("F");
+                assetImportLogDetailDto.setMessage(responseEntity.getBody());
+            }
+            assetImportLogDetailDto.setObjName("无");
+            assetImportLogDetailDtos.add(assetImportLogDetailDto);
+        } else {
+            successCount += importRoomFees.size();
+        }
+
+        assetImportLogDto.setSuccessCount(successCount);
+        assetImportLogDto.setErrorCount(failCount);
     }
 
 

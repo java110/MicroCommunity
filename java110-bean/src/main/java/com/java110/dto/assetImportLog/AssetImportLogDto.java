@@ -1,8 +1,11 @@
 package com.java110.dto.assetImportLog;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -14,12 +17,18 @@ import java.util.Date;
  **/
 public class AssetImportLogDto extends PageDto implements Serializable {
 
+    //1001 资产导入 2002 缴费历史导入
+    public static final String LOG_TYPE_ASSET_IMPORT = "1001";
+    public static final String LOG_TYPE_HISTORY_FEE_IMPORT = "2002";
+
     private String logType;
-private String successCount;
-private String logId;
-private String remark;
-private String communityId;
-private String errorCount;
+    private Long successCount;
+    private String logId;
+    private String remark;
+    private String communityId;
+    private Long errorCount;
+
+    List<AssetImportLogDetailDto> assetImportLogDetailDtos;
 
 
     private Date createTime;
@@ -30,39 +39,38 @@ private String errorCount;
     public String getLogType() {
         return logType;
     }
-public void setLogType(String logType) {
+
+    public void setLogType(String logType) {
         this.logType = logType;
     }
-public String getSuccessCount() {
-        return successCount;
-    }
-public void setSuccessCount(String successCount) {
-        this.successCount = successCount;
-    }
-public String getLogId() {
+
+
+
+    public String getLogId() {
         return logId;
     }
-public void setLogId(String logId) {
+
+    public void setLogId(String logId) {
         this.logId = logId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getErrorCount() {
-        return errorCount;
-    }
-public void setErrorCount(String errorCount) {
-        this.errorCount = errorCount;
-    }
+
+
 
 
     public Date getCreateTime() {
@@ -79,5 +87,29 @@ public void setErrorCount(String errorCount) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public Long getSuccessCount() {
+        return successCount;
+    }
+
+    public void setSuccessCount(Long successCount) {
+        this.successCount = successCount;
+    }
+
+    public Long getErrorCount() {
+        return errorCount;
+    }
+
+    public void setErrorCount(Long errorCount) {
+        this.errorCount = errorCount;
+    }
+
+    public List<AssetImportLogDetailDto> getAssetImportLogDetailDtos() {
+        return assetImportLogDetailDtos;
+    }
+
+    public void setAssetImportLogDetailDtos(List<AssetImportLogDetailDto> assetImportLogDetailDtos) {
+        this.assetImportLogDetailDtos = assetImportLogDetailDtos;
     }
 }

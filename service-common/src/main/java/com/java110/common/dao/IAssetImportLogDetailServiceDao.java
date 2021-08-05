@@ -58,4 +58,10 @@ public interface IAssetImportLogDetailServiceDao {
      */
     int queryAssetImportLogDetailsCount(Map info);
 
+    /**
+     * 批量保存
+     * @param info
+     * @return
+     */
+    int saveAssetImportLogDetails(Map info);
 }

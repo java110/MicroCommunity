@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -71,6 +73,13 @@ public class AssetImportLogDetailInnerServiceSMOImpl extends BaseServiceSMO impl
     @Override
     public int queryAssetImportLogDetailsCount(@RequestBody AssetImportLogDetailDto assetImportLogDetailDto) {
         return assetImportLogDetailServiceDaoImpl.queryAssetImportLogDetailsCount(BeanConvertUtil.beanCovertMap(assetImportLogDetailDto));
+    }
+
+    @Override
+    public int saveAssetImportLogDetails(@RequestBody List<AssetImportLogDetailPo> assetImportLogDetailPos) {
+        Map info = new HashMap();
+        info.put("assetImportLogDetailPos",assetImportLogDetailPos);
+        return assetImportLogDetailServiceDaoImpl.saveAssetImportLogDetails(info);
     }
 
     public IAssetImportLogDetailServiceDao getAssetImportLogDetailServiceDaoImpl() {

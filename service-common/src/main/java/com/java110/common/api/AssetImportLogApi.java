@@ -41,9 +41,7 @@ public class AssetImportLogApi {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
-
-        AssetImportLogPo assetImportLogPo = BeanConvertUtil.covertBean(reqJson, AssetImportLogPo.class);
-        return saveAssetImportLogBMOImpl.save(assetImportLogPo);
+        return saveAssetImportLogBMOImpl.save(reqJson);
     }
 
     /**
