@@ -19,7 +19,7 @@
     <select id="getAssetImportLogInfo" parameterType="Map" resultType="Map">
         select t.log_type,t.log_type logType,t.success_count,t.success_count successCount,t.log_id,t.log_id
         logId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.error_count,t.error_count errorCount
+        communityId,t.error_count,t.error_count errorCount,t.create_time createTime
         from asset_import_log t
         where 1 =1
         <if test="logType !=null and logType != ''">
