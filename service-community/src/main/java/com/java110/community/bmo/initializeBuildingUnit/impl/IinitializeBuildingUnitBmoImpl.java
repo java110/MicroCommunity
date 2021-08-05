@@ -15,7 +15,7 @@
  */
 package com.java110.community.bmo.initializeBuildingUnit.impl;
 
-import com.java110.community.bmo.initializeBuildingUnit.IinitializeBuildingUnit;
+import com.java110.community.bmo.initializeBuildingUnit.IinitializeBuildingUnitBmo;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.dto.FloorDto;
 import com.java110.dto.user.UserDto;
@@ -42,7 +42,7 @@ import java.util.Map;
  * 文档参考：http://www.homecommunity.cn
  */
 @Service
-public class IinitializeBuildingUnitImpl implements IinitializeBuildingUnit {
+public class IinitializeBuildingUnitBmoImpl implements IinitializeBuildingUnitBmo {
 
     @Autowired
     private IinitializeBuildingUnitSMO initializeBuildingUnitSMOImpl;
@@ -149,5 +149,13 @@ public class IinitializeBuildingUnitImpl implements IinitializeBuildingUnit {
 
     public void setInitializePayFeeInnerServiceSMOImpl(IInitializePayFeeInnerServiceSMO initializePayFeeInnerServiceSMOImpl) {
         this.initializePayFeeInnerServiceSMOImpl = initializePayFeeInnerServiceSMOImpl;
+    }
+
+    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
+        return UserInnerServiceSMOImpl;
+    }
+
+    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
+        UserInnerServiceSMOImpl = userInnerServiceSMOImpl;
     }
 }

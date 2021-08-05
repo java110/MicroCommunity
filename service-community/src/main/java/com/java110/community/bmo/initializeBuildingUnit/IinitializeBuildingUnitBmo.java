@@ -24,7 +24,7 @@ import org.springframework.http.ResponseEntity;
  * <p>
  * 文档参考：http://www.homecommunity.cn
  */
-public interface IinitializeBuildingUnit {
+public interface IinitializeBuildingUnitBmo {
 
     /**
      * 查询商户入驻 小区信息

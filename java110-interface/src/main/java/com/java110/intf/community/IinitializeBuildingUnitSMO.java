@@ -21,7 +21,7 @@ import java.util.Map;
  * add by wuxw 2019/4/24
  **/
 @FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/initializeBuildingUnitApi")
+@RequestMapping("/initializeApi")
 public interface IinitializeBuildingUnitSMO {
 
     /**

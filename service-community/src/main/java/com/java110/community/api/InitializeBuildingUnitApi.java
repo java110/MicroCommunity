@@ -1,7 +1,7 @@
 package com.java110.community.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.community.bmo.initializeBuildingUnit.IinitializeBuildingUnit;
+import com.java110.community.bmo.initializeBuildingUnit.IinitializeBuildingUnitBmo;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class InitializeBuildingUnitApi {
 
     @Autowired
-    private IinitializeBuildingUnit initializeBuildingUnitImpl;
+    private IinitializeBuildingUnitBmo initializeBuildingUnitBmoImpl;
     /**
      * 初始化
      *
@@ -36,7 +36,7 @@ public class InitializeBuildingUnitApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         String communityId = reqJson.getString("communityId");
         String userPassword = reqJson.getString("devPassword");
-        initializeBuildingUnitImpl.deleteBuildingUnit(communityId,userId,userPassword);
+        initializeBuildingUnitBmoImpl.deleteBuildingUnit(communityId,userId,userPassword);
         return null;
     }
 }
