@@ -99,16 +99,13 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
         //查询总记录数
         int total = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class));
-        int count = 0;
+//        int count = 0;
         List<OwnerCarDto> ownerCarDtoList = null;
 
         if (total > 0) {
             OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
             ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-            ownerCarDto.setPage(PageDto.DEFAULT_PAGE);
-            //查询所有业主车辆数据
-            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-            count = ownerCarDtos.size();
+
             //小区20条时刷房屋和车位信息
             if (row < 20) {
                 freshPs(ownerCarDtoList);
@@ -134,7 +131,7 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
             }
         }
 
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) row), count, ownerCarDtoList);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerCarDtoList);
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
