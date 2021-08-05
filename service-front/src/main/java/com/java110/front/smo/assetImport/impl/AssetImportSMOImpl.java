@@ -863,19 +863,6 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                     assetImportLogDto.setErrorCount(failCount);
                     continue;
                 } else {
-                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
-                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
-                        assetImportLogDetailDto = new AssetImportLogDetailDto();
-                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
-                        assetImportLogDetailDto.setState(body.getString("code"));
-                        assetImportLogDetailDto.setMessage(body.getString("msg"));
-                        assetImportLogDetailDto.setObjName(importFloor.getFloorNum() + "栋");
-                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
-                        failCount += 1;
-                        assetImportLogDto.setSuccessCount(successCount);
-                        assetImportLogDto.setErrorCount(failCount);
-                        continue;
-                    }
                     successCount += 1;
                     assetImportLogDto.setSuccessCount(successCount);
                     assetImportLogDto.setErrorCount(failCount);
