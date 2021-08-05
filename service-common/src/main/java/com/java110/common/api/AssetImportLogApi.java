@@ -31,14 +31,14 @@ public class AssetImportLogApi {
     /**
      * 微信保存消息模板
      *
-     * @param reqJson
+     * @param reqJsonStr
      * @return
      * @serviceCode /assetImportLog/saveAssetImportLog
      * @path /app/assetImportLog/saveAssetImportLog
      */
     @RequestMapping(value = "/saveAssetImportLog", method = RequestMethod.POST)
-    public ResponseEntity<String> saveAssetImportLog(@RequestBody JSONObject reqJson) {
-
+    public ResponseEntity<String> saveAssetImportLog(@RequestBody String reqJsonStr) {
+        JSONObject reqJson = JSONObject.parseObject(reqJsonStr);
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
         return saveAssetImportLogBMOImpl.save(reqJson);
