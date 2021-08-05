@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.*;
  **/
 
 @RestController
-@RequestMapping(value = "/InitializeBuildingUnit")
+@RequestMapping(value = "/initializeBuildingUnit")
 public class InitializeBuildingUnitApi {
 
     @Autowired
-    private IinitializeBuildingUnit IinitializeBuildingUnitImpl;
+    private IinitializeBuildingUnit initializeBuildingUnitImpl;
     /**
      * 初始化
      *
      * @param reqJson
      * @return
-     * @Service /InitializeBuildingUnit/deleteBuildingUnit
+     * @Service /initializeBuildingUnit/deleteBuildingUnit
      * @path /app/InitializeBuildingUnit/deleteBuildingUnit
      */
     @RequestMapping(value = "/deleteBuildingUnit", method = RequestMethod.POST)
@@ -36,7 +36,7 @@ public class InitializeBuildingUnitApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         String communityId = reqJson.getString("communityId");
         String userPassword = reqJson.getString("devPassword");
-        IinitializeBuildingUnitImpl.deleteBuildingUnit(communityId,userId,userPassword);
+        initializeBuildingUnitImpl.deleteBuildingUnit(communityId,userId,userPassword);
         return null;
     }
 }
