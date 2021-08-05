@@ -34,7 +34,7 @@ import java.util.Map;
  * 用户服务信息管理业务信息实现
  * Created by wuxw on 2017/4/5.
  */
-@Transactional
+@Service
 public class InitializeBuildingUnitSMOImpl extends BaseServiceSMO implements IinitializeBuildingUnitSMO {
 
     private static Logger logger = LoggerFactory.getLogger(InitializeBuildingUnitSMOImpl.class);
