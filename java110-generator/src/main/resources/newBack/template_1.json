@@ -1,50 +1,25 @@
 {
   "autoMove": true,
-  "id": "adsId",
-  "name": "storeAds",
-  "desc": "商户广告",
-  "shareParam": "shareId",
-  "shareColumn": "share_id",
-  "shareName": "store",
-  "tableName": "store_ads",
+  "id": "logId",
+  "name": "assetImportLog",
+  "desc": "批量操作日志",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "common",
+  "tableName": "asset_import_log",
   "param": {
-    "adsId": "ads_id",
-    "adName": "ad_name",
-    "adType": "ad_type",
-    "shareId": "share_id",
-    "state": "state",
-    "seq": "seq",
-    "startTime": "start_time",
-    "endTime": "end_time",
-    "advertType": "advert_type",
-    "pageUrl": "page_url",
-    "url": "url",
+    "logId": "log_id",
+    "communityId": "community_id",
+    "logType": "log_type",
+    "successCount": "success_count",
+    "errorCount": "error_count",
+    "remark": "remark",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "adName",
-      "msg": "广告名称不能为空"
-    },
-    {
-      "code": "startTime",
-      "msg": "开始时间不能为空"
-    },
-    {
-      "code": "endTime",
-      "msg": "结束时间不能为空"
-    },
-    {
-      "code": "advertType",
-      "msg": "发布类型不能为空"
-    },
-    {
-      "code": "adType",
-      "msg": "广告类型不能为空"
-    },
-    {
-      "code": "url",
-      "msg": "地址不能为空"
+      "code": "communityId",
+      "msg": "小区不能为空"
     }
   ]
 }
