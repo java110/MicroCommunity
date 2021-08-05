@@ -39,7 +39,7 @@ public class SaveAssetImportLogBMOImpl implements ISaveAssetImportLogBMO {
         assetImportLogPo.setCommunityId(reqJson.getString("communityId"));
         assetImportLogPo.setErrorCount(reqJson.getString("errorCount"));
         assetImportLogPo.setLogType(reqJson.getString("logType"));
-        assetImportLogPo.setSuccessCount("successCount");
+        assetImportLogPo.setSuccessCount(reqJson.getString("successCount"));
         int flag = assetImportLogInnerServiceSMOImpl.saveAssetImportLog(assetImportLogPo);
 
         if (flag < 1) {
