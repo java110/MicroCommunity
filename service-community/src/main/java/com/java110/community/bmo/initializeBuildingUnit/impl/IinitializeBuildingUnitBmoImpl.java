@@ -77,47 +77,63 @@ public class IinitializeBuildingUnitBmoImpl implements IinitializeBuildingUnitBm
             }
             Map floorIds = new HashMap<String,String []>();
             floorIds.put("floorIds",floors.toArray(new String[floors.size()]));
+            massage.append( "开始格式化小区数据：" );
             //单元
             communitys = initializeBuildingUnitSMOImpl.deleteBuildingUnit(floorIds);
         }
 
-        massage.append( "开始格式化小区数据：" );
         if(communitys > 0){
             massage.append("单元初始化成功【"+communitys+"】");
-            Map communityIds = new HashMap<String,String []>();
-            communityIds.put("communityId",communityId);
-            //楼栋
-            int deleteFlag = initializeBuildingUnitSMOImpl.deletefFloor(communityIds);
-            if(deleteFlag > 0){
-                massage.append("楼栋初始化成功【"+deleteFlag+"】");
-            }
-            //房屋
-            int deleteFlagRoot = initializeBuildingUnitSMOImpl.deleteBuildingRoom(communityIds);
-            if(deleteFlagRoot > 0){
-                massage.append("房屋初始化成功【"+deleteFlagRoot+"】");
-            }
-            //业主
-            int deleteFlagOwner = initializeOwnerInnerServiceSMOImpl.deleteBuildingOwner(communityIds);
-            if(deleteFlagOwner > 0){
-                massage.append("业主初始化成功【"+deleteFlagOwner+"】");
-            }
-            //费用
-            int deleteFlagFee = initializePayFeeInnerServiceSMOImpl.deletePayFee(communityIds);
-            if(deleteFlagFee > 0){
-                massage.append("费用初始化成功【"+deleteFlagFee+"】");
-            }
-
-            //停车场
-            int deleteFlagArea = initializeBuildingUnitSMOImpl.deleteParkingArea(communityIds);
-            if(deleteFlagArea > 0){
-                massage.append("停车场初始化成功【"+deleteFlagArea+"】");
-            }
-            //停车位
-            int deleteFlagSpace = initializeBuildingUnitSMOImpl.deleteParkingSpace(communityIds);
-            if(deleteFlagSpace > 0){
-                massage.append("停车位初始化成功【"+deleteFlagSpace+"】");
-            }
+        }else {
+            massage.append("单元初始化失败");
         }
+
+        Map communityIds = new HashMap<String,String []>();
+        communityIds.put("communityId",communityId);
+        //楼栋
+        int deleteFlag = initializeBuildingUnitSMOImpl.deletefFloor(communityIds);
+        if(deleteFlag > 0){
+            massage.append("楼栋初始化成功【"+deleteFlag+"】");
+        }else {
+            massage.append("楼栋初始化失败");
+        }
+        //房屋
+        int deleteFlagRoot = initializeBuildingUnitSMOImpl.deleteBuildingRoom(communityIds);
+        if(deleteFlagRoot > 0){
+            massage.append("房屋初始化成功【"+deleteFlagRoot+"】");
+        }else {
+            massage.append("房屋初始化失败");
+        }
+        //业主
+        int deleteFlagOwner = initializeOwnerInnerServiceSMOImpl.deleteBuildingOwner(communityIds);
+        if(deleteFlagOwner > 0){
+            massage.append("业主初始化成功【"+deleteFlagOwner+"】");
+        }else {
+            massage.append("业主初始化失败");
+        }
+        //费用
+        int deleteFlagFee = initializePayFeeInnerServiceSMOImpl.deletePayFee(communityIds);
+        if(deleteFlagFee > 0){
+            massage.append("费用初始化成功【"+deleteFlagFee+"】");
+        }else {
+            massage.append("费用初始化失败");
+        }
+
+        //停车场
+        int deleteFlagArea = initializeBuildingUnitSMOImpl.deleteParkingArea(communityIds);
+        if(deleteFlagArea > 0){
+            massage.append("停车场初始化成功【"+deleteFlagArea+"】");
+        }else {
+            massage.append("停车场初始化失败");
+        }
+        //停车位
+        int deleteFlagSpace = initializeBuildingUnitSMOImpl.deleteParkingSpace(communityIds);
+        if(deleteFlagSpace > 0){
+            massage.append("停车位初始化成功【"+deleteFlagSpace+"】");
+        }else {
+            massage.append("停车位初始化失败");
+        }
+
         return ResultVo.createResponseEntity(massage);
     }
 
