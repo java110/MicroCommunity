@@ -100,8 +100,8 @@ public class ReportInfoSettingApi {
      */
     @RequestMapping(value = "/queryReportInfoSetting", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoSetting(@RequestParam(value = "communityId") String communityId,
-                                                         @RequestParam(value = "name") String name,
-                                                         @RequestParam(value = "settingId") String settingId,
+                                                         @RequestParam(value = "name",required = false) String name,
+                                                         @RequestParam(value = "settingId",required = false) String settingId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ReportInfoSettingDto reportInfoSettingDto = new ReportInfoSettingDto();

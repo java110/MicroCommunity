@@ -116,10 +116,10 @@ public class ReportInfoSettingTitleApi {
      */
     @RequestMapping(value = "/querySettingTitle", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoSettingTitle(@RequestParam(value = "communityId") String communityId,
-                                                              @RequestParam(value = "titleType") String titleType,
-                                                              @RequestParam(value = "title") String title,
-                                                              @RequestParam(value = "titleId") String titleId,
-                                                              @RequestParam(value = "settingid") String settingid,
+                                                              @RequestParam(value = "titleType",required = false) String titleType,
+                                                              @RequestParam(value = "title",required = false) String title,
+                                                              @RequestParam(value = "titleId",required = false) String titleId,
+                                                              @RequestParam(value = "settingid",required = false) String settingid,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ReportInfoSettingTitleDto reportInfoSettingTitleDto = new ReportInfoSettingTitleDto();
