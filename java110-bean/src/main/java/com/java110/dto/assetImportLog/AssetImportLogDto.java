@@ -22,6 +22,7 @@ public class AssetImportLogDto extends PageDto implements Serializable {
     public static final String LOG_TYPE_HISTORY_FEE_IMPORT = "2002";
 
     private String logType;
+    private String logTypeName;
     private Long successCount;
     private String logId;
     private String remark;
@@ -111,5 +112,13 @@ public class AssetImportLogDto extends PageDto implements Serializable {
 
     public void setAssetImportLogDetailDtos(List<AssetImportLogDetailDto> assetImportLogDetailDtos) {
         this.assetImportLogDetailDtos = assetImportLogDetailDtos;
+    }
+
+    public String getLogTypeName() {
+        return logTypeName;
+    }
+
+    public void setLogTypeName(String logTypeName) {
+        this.logTypeName = logTypeName;
     }
 }

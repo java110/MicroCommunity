@@ -4,12 +4,23 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.dto.RoomDto;
-import com.java110.entity.assetImport.*;
+import com.java110.dto.assetImportLog.AssetImportLogDto;
+import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
+import com.java110.entity.assetImport.ImportFee;
+import com.java110.entity.assetImport.ImportFloor;
+import com.java110.entity.assetImport.ImportOwner;
+import com.java110.entity.assetImport.ImportParkingSpace;
+import com.java110.entity.assetImport.ImportRoom;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
 import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.util.*;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.CommonUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ImportExcelUtils;
+import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -41,6 +52,9 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private ISaveTransactionLogSMO saveTransactionLogSMOImpl;
 
     @Override
     public ResponseEntity<String> importExcelData(IPageData pd, MultipartFile uploadFile) throws Exception {
@@ -140,24 +154,69 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         JSONObject paramIn = null;
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
-        for (ImportFee fee : fees) {
-            JSONObject savedFeeConfigInfo = getExistsFee(pd, result, fee);
-            if (savedFeeConfigInfo != null) {
-                continue;
+
+        AssetImportLogDto assetImportLogDto = new AssetImportLogDto();
+        assetImportLogDto.setSuccessCount(0L);
+        assetImportLogDto.setErrorCount(0L);
+        assetImportLogDto.setCommunityId(result.getCommunityId());
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
+        assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
+        long successCount = 0L;
+        long failCount = 0L;
+        AssetImportLogDetailDto assetImportLogDetailDto = null;
+        try {
+            for (ImportFee fee : fees) {
+                JSONObject savedFeeConfigInfo = getExistsFee(pd, result, fee);
+                if (savedFeeConfigInfo != null) {
+                    successCount += 1;
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                    continue;
+                }
+                //paramIn = new JSONObject();
+                //保存 费用项
+
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.saveFeeConfig";
+
+                paramIn = JSONObject.parseObject(JSONObject.toJSONString(fee));
+                paramIn.put("communityId", result.getCommunityId());
+
+                responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+                if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                    /***************************************导入日志记录****************************************************/
+                    failCount += 1;
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(fee.getFeeName());
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                } else {
+                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        assetImportLogDetailDto.setState(body.getString("code"));
+                        assetImportLogDetailDto.setMessage(body.getString("msg"));
+                        assetImportLogDetailDto.setObjName(fee.getFeeName());
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        failCount += 1;
+                    } else {
+                        successCount += 1;
+                    }
+                }
+                assetImportLogDto.setSuccessCount(successCount);
+                assetImportLogDto.setErrorCount(failCount);
             }
-
-            //paramIn = new JSONObject();
-            //保存 费用项
-
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.saveFeeConfig";
-
-            paramIn = JSONObject.parseObject(JSONObject.toJSONString(fee));
-            paramIn.put("communityId", result.getCommunityId());
-
-            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                continue;
-            }
+        } finally {
+            saveTransactionLogSMOImpl.saveAssetImportLog(assetImportLogDto);
         }
 
         return responseEntity;
@@ -176,75 +235,190 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         JSONObject paramIn = null;
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
-        for (ImportParkingSpace parkingSpace : parkingSpaces) {
-            responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
-            JSONObject savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
-            paramIn = new JSONObject();
-            // 如果不存在，才插入
-            if (savedParkingAreaInfo == null) {
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.saveParkingArea";
+        AssetImportLogDto assetImportLogDto = new AssetImportLogDto();
+        assetImportLogDto.setSuccessCount(0L);
+        assetImportLogDto.setErrorCount(0L);
+        assetImportLogDto.setCommunityId(result.getCommunityId());
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
+        assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
+        long successCount = 0L;
+        long failCount = 0L;
+        AssetImportLogDetailDto assetImportLogDetailDto = null;
+        try {
+            for (ImportParkingSpace parkingSpace : parkingSpaces) {
+                responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
+                JSONObject savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
+                paramIn = new JSONObject();
+                // 如果不存在，才插入
+                if (savedParkingAreaInfo == null) {
+                    apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.saveParkingArea";
+                    paramIn.put("communityId", result.getCommunityId());
+                    paramIn.put("typeCd", parkingSpace.getTypeCd());
+                    paramIn.put("num", parkingSpace.getPaNum());
+
+                    responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+                    savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
+                }
+                if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+                    failCount += 1;
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(parkingSpace.getPaNum());
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                    continue;
+                } else {
+                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        assetImportLogDetailDto.setState(body.getString("code"));
+                        assetImportLogDetailDto.setMessage(body.getString("msg"));
+                        assetImportLogDetailDto.setObjName(parkingSpace.getPaNum());
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        failCount += 1;
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
+                        continue;
+                    } else {
+                        successCount += 1;
+                    }
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                }
+
+                JSONObject savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
+                if (savedParkingSpaceInfo != null) {
+                    continue;
+                }
+
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace";
+
+                paramIn.put("paId", savedParkingAreaInfo.getString("paId"));
                 paramIn.put("communityId", result.getCommunityId());
+                paramIn.put("userId", result.getUserId());
+                paramIn.put("num", parkingSpace.getPsNum());
+                paramIn.put("area", parkingSpace.getArea());
                 paramIn.put("typeCd", parkingSpace.getTypeCd());
-                paramIn.put("num", parkingSpace.getPaNum());
+                paramIn.put("parkingType", "1");
 
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-                savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
+                if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(parkingSpace.getPaNum());
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                    failCount +=1;
+                    successCount = successCount >0? successCount -1:successCount;
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                    continue;
+                } else {
+                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        assetImportLogDetailDto.setState(body.getString("code"));
+                        assetImportLogDetailDto.setMessage(body.getString("msg"));
+                        assetImportLogDetailDto.setObjName(parkingSpace.getPaNum());
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
+                        failCount +=1;
+                        successCount = successCount >0? successCount -1:successCount;
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
+                        continue;
+                    }
+                }
+
+                savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
+                if (savedParkingSpaceInfo == null) {
+                    continue;
+                }
+
+                //是否有业主信息
+                if (parkingSpace.getImportOwner() == null) {
+                    continue;
+                }
+
+                paramIn.clear();
+
+                paramIn.put("communityId", result.getCommunityId());
+                paramIn.put("ownerId", parkingSpace.getImportOwner().getOwnerId());
+                paramIn.put("userId", result.getUserId());
+                paramIn.put("carNum", parkingSpace.getCarNum());
+                paramIn.put("carBrand", parkingSpace.getCarBrand());
+                paramIn.put("carType", parkingSpace.getCarType());
+                paramIn.put("carColor", parkingSpace.getCarColor());
+                paramIn.put("psId", savedParkingSpaceInfo.getString("psId"));
+                paramIn.put("storeId", result.getStoreId());
+                paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
+                paramIn.put("startTime", parkingSpace.getStartTime());
+                paramIn.put("endTime", parkingSpace.getEndTime());
+
+                if ("H".equals(parkingSpace.getSellOrHire())) {
+                    paramIn.put("cycles", "0");
+                }
+
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace";
+                responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+
+                if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                    /***************************************导入日志记录****************************************************/
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(parkingSpace.getCarNum());
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                    failCount +=1;
+                    successCount = successCount >0? successCount -1:successCount;
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                } else {
+                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        assetImportLogDetailDto.setState(body.getString("code"));
+                        assetImportLogDetailDto.setMessage(body.getString("msg"));
+                        assetImportLogDetailDto.setObjName(parkingSpace.getCarNum());
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        failCount +=1;
+                        successCount = successCount >0? successCount -1:successCount;
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
+                    }
+                }
             }
-            if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
-                continue;
-            }
+        } catch (Exception e) {
+            saveTransactionLogSMOImpl.saveAssetImportLog(assetImportLogDto);
 
-            JSONObject savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
-            if (savedParkingSpaceInfo != null) {
-                continue;
-            }
-
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace";
-
-            paramIn.put("paId", savedParkingAreaInfo.getString("paId"));
-            paramIn.put("communityId", result.getCommunityId());
-            paramIn.put("userId", result.getUserId());
-            paramIn.put("num", parkingSpace.getPsNum());
-            paramIn.put("area", parkingSpace.getArea());
-            paramIn.put("typeCd", parkingSpace.getTypeCd());
-            paramIn.put("parkingType", "1");
-
-            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                continue;
-            }
-
-            savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
-            if (savedParkingSpaceInfo == null) {
-                continue;
-            }
-
-            //是否有业主信息
-            if (parkingSpace.getImportOwner() == null) {
-                continue;
-            }
-
-            paramIn.clear();
-
-            paramIn.put("communityId", result.getCommunityId());
-            paramIn.put("ownerId", parkingSpace.getImportOwner().getOwnerId());
-            paramIn.put("userId", result.getUserId());
-            paramIn.put("carNum", parkingSpace.getCarNum());
-            paramIn.put("carBrand", parkingSpace.getCarBrand());
-            paramIn.put("carType", parkingSpace.getCarType());
-            paramIn.put("carColor", parkingSpace.getCarColor());
-            paramIn.put("psId", savedParkingSpaceInfo.getString("psId"));
-            paramIn.put("storeId", result.getStoreId());
-            paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
-            paramIn.put("startTime", parkingSpace.getStartTime());
-            paramIn.put("endTime", parkingSpace.getEndTime());
-
-            if ("H".equals(parkingSpace.getSellOrHire())) {
-                paramIn.put("cycles", "0");
-            }
-
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace";
-            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
         }
 
         return responseEntity;
@@ -264,98 +438,200 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         JSONObject paramIn = null;
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
-        for (ImportRoom room : rooms) {
-            JSONObject savedRoomInfo = getExistsRoom(pd, result, room);
-            if (savedRoomInfo != null) {
-                continue;
-            }
+        AssetImportLogDto assetImportLogDto = new AssetImportLogDto();
+        assetImportLogDto.setSuccessCount(0L);
+        assetImportLogDto.setErrorCount(0L);
+        assetImportLogDto.setCommunityId(result.getCommunityId());
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
+        assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
+        long successCount = 0L;
+        long failCount = 0L;
+        AssetImportLogDetailDto assetImportLogDetailDto = null;
+        try {
+            for (ImportRoom room : rooms) {
+                JSONObject savedRoomInfo = getExistsRoom(pd, result, room);
+                if (savedRoomInfo != null) {
+                    continue;
+                }
 
-            paramIn = new JSONObject();
-
-
-            //保存 房屋
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.saveRoom";
-
-            paramIn.put("communityId", result.getCommunityId());
-            paramIn.put("unitId", room.getFloor().getUnitId());
-            paramIn.put("roomNum", room.getRoomNum());
-            paramIn.put("layer", room.getLayer());
-            paramIn.put("section", "1");
-            paramIn.put("apartment", room.getSection());
-            paramIn.put("state", "2002");
-            paramIn.put("builtUpArea", room.getBuiltUpArea());
-            paramIn.put("feeCoefficient", "1.00");
-            paramIn.put("roomSubType", room.getRoomSubType());
-            paramIn.put("roomArea", room.getRoomArea());
-            paramIn.put("roomRent", room.getRoomRent());
-            paramIn.put("roomType", "0".equals(room.getFloor().getUnitNum()) ? RoomDto.ROOM_TYPE_SHOPS : RoomDto.ROOM_TYPE_SHOPS);
+                paramIn = new JSONObject();
 
 
+                //保存 房屋
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.saveRoom";
 
-            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                continue;
-            }
+                paramIn.put("communityId", result.getCommunityId());
+                paramIn.put("unitId", room.getFloor().getUnitId());
+                paramIn.put("roomNum", room.getRoomNum());
+                paramIn.put("layer", room.getLayer());
+                paramIn.put("section", "1");
+                paramIn.put("apartment", room.getSection());
+                paramIn.put("state", "2002");
+                paramIn.put("builtUpArea", room.getBuiltUpArea());
+                paramIn.put("feeCoefficient", "1.00");
+                paramIn.put("roomSubType", room.getRoomSubType());
+                paramIn.put("roomArea", room.getRoomArea());
+                paramIn.put("roomRent", room.getRoomRent());
+                paramIn.put("roomType", "0".equals(room.getFloor().getUnitNum()) ? RoomDto.ROOM_TYPE_SHOPS : RoomDto.ROOM_TYPE_SHOPS);
 
-            savedRoomInfo = getExistsRoom(pd, result, room);
-            if (savedRoomInfo == null) {
-                continue;
-            }
 
-            if (room.getImportOwner() == null) {
-                continue;
-            }
-            paramIn.clear();
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.sellRoom";
-            paramIn.put("communityId", result.getCommunityId());
-            paramIn.put("ownerId", room.getImportOwner().getOwnerId());
-            paramIn.put("roomId", savedRoomInfo.getString("roomId"));
-            paramIn.put("state", "2001");
-            paramIn.put("storeId", result.getStoreId());
-            if (!StringUtil.isEmpty(room.getRoomFeeId()) && "0".equals(room.getRoomFeeId())) {
-                paramIn.put("feeEndDate", room.getFeeEndDate());
-            }
-            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                continue;
-            }
-            //创建费用
-            if (StringUtil.isEmpty(room.getRoomFeeId()) || "0".equals(room.getRoomFeeId())) {
-                continue;
-            }
-            String[] feeIds = room.getRoomFeeId().split("#");
-
-            for (int feeIndex = 0; feeIndex < feeIds.length; feeIndex++) {
-                String feeId = feeIds[feeIndex];
-                ImportFee tmpFee = null;
-                for (ImportFee fee : fees) {
-                    if (feeId.equals(fee.getId())) {
-                        tmpFee = fee;
+                responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+                if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                    failCount += 1;
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(room.getRoomNum() + "室");
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                    continue;
+                } else {
+                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        assetImportLogDetailDto.setState(body.getString("code"));
+                        assetImportLogDetailDto.setMessage(body.getString("msg"));
+                        assetImportLogDetailDto.setObjName(room.getRoomNum() + "室");
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        failCount += 1;
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
+                        continue;
+                    } else {
+                        successCount += 1;
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
                     }
                 }
 
-                if (tmpFee == null) {
-                    continue;//没有费用项，可能写错了
+                savedRoomInfo = getExistsRoom(pd, result, room);
+                if (savedRoomInfo == null) {
+                    continue;
                 }
-
-                JSONObject ttFee = getExistsFee(pd, result, tmpFee);
-
-                if (ttFee == null) {
-                    continue;//没有费用项，可能写错了
+                if (room.getImportOwner() == null) {
+                    continue;
                 }
-
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.saveRoomCreateFee";
+                paramIn.clear();
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.sellRoom";
                 paramIn.put("communityId", result.getCommunityId());
-                paramIn.put("locationTypeCd", "3000");
-                paramIn.put("locationObjId", savedRoomInfo.getString("roomId"));
-                paramIn.put("configId", ttFee.getString("configId"));
+                paramIn.put("ownerId", room.getImportOwner().getOwnerId());
+                paramIn.put("roomId", savedRoomInfo.getString("roomId"));
+                paramIn.put("state", "2001");
                 paramIn.put("storeId", result.getStoreId());
-                paramIn.put("feeEndDate", room.getFeeEndDate().split("#")[feeIndex]);
-                paramIn.put("startTime", paramIn.getString("feeEndDate"));
-
+                if (!StringUtil.isEmpty(room.getRoomFeeId()) && "0".equals(room.getRoomFeeId())) {
+                    paramIn.put("feeEndDate", room.getFeeEndDate());
+                }
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-            }
+                if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(room.getRoomNum() + "室");
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                    continue;
+                } else {
+                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        assetImportLogDetailDto.setState(body.getString("code"));
+                        assetImportLogDetailDto.setMessage(body.getString("msg"));
+                        assetImportLogDetailDto.setObjName(room.getRoomNum() + "室");
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        continue;
+                    }
+                }
+                //创建费用
+                if (StringUtil.isEmpty(room.getRoomFeeId()) || "0".equals(room.getRoomFeeId())) {
+                    continue;
+                }
+                String[] feeIds = room.getRoomFeeId().split("#");
 
+                for (int feeIndex = 0; feeIndex < feeIds.length; feeIndex++) {
+                    String feeId = feeIds[feeIndex];
+                    ImportFee tmpFee = null;
+                    for (ImportFee fee : fees) {
+                        if (feeId.equals(fee.getId())) {
+                            tmpFee = fee;
+                        }
+                    }
+
+                    if (tmpFee == null) {
+                        continue;//没有费用项，可能写错了
+                    }
+
+                    JSONObject ttFee = getExistsFee(pd, result, tmpFee);
+
+                    if (ttFee == null) {
+                        continue;//没有费用项，可能写错了
+                    }
+
+                    apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.saveRoomCreateFee";
+                    paramIn.put("communityId", result.getCommunityId());
+                    paramIn.put("locationTypeCd", "3000");
+                    paramIn.put("locationObjId", savedRoomInfo.getString("roomId"));
+                    paramIn.put("configId", ttFee.getString("configId"));
+                    paramIn.put("storeId", result.getStoreId());
+                    paramIn.put("feeEndDate", room.getFeeEndDate().split("#")[feeIndex]);
+                    paramIn.put("startTime", paramIn.getString("feeEndDate"));
+
+                    responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+
+                    if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                        /***************************************导入日志记录****************************************************/
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        if (Assert.isJsonObject(responseEntity.getBody())) {
+                            JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                            assetImportLogDetailDto.setState(paramOut.getString("code"));
+                            assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                        } else {
+                            assetImportLogDetailDto.setState("F");
+                            assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                        }
+                        assetImportLogDetailDto.setObjName(room.getRoomNum() + "室");
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        failCount +=1;
+                        successCount = successCount >0? successCount -1:successCount;
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
+                    } else {
+                        JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                        if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                            assetImportLogDetailDto = new AssetImportLogDetailDto();
+                            assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                            assetImportLogDetailDto.setState(body.getString("code"));
+                            assetImportLogDetailDto.setMessage(body.getString("msg"));
+                            assetImportLogDetailDto.setObjName(room.getRoomNum() + "室");
+                            assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                            failCount +=1;
+                            successCount = successCount >0? successCount -1:successCount;
+                            assetImportLogDto.setSuccessCount(successCount);
+                            assetImportLogDto.setErrorCount(failCount);
+                        }
+                    }
+                }
+
+            }
+        } finally {
+            saveTransactionLogSMOImpl.saveAssetImportLog(assetImportLogDto);
         }
 
         return responseEntity;
@@ -473,37 +749,77 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         JSONObject paramIn = null;
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
+        AssetImportLogDto assetImportLogDto = new AssetImportLogDto();
+        assetImportLogDto.setSuccessCount(0L);
+        assetImportLogDto.setErrorCount(0L);
+        assetImportLogDto.setCommunityId(result.getCommunityId());
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
+        assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
+        long successCount = 0L;
+        long failCount = 0L;
+        AssetImportLogDetailDto assetImportLogDetailDto = null;
+        try {
+            for (ImportOwner owner : owners) {
+                JSONObject savedOwnerInfo = getExistsOwner(pd, result, owner);
 
-        for (ImportOwner owner : owners) {
-            JSONObject savedOwnerInfo = getExistsOwner(pd, result, owner);
-
-            if (savedOwnerInfo != null) {
-                owner.setOwnerId(savedOwnerInfo.getString("ownerId"));
-                continue;
-            }
-            paramIn = new JSONObject();
-
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.saveOwner";
-
-            paramIn.put("communityId", result.getCommunityId());
-            paramIn.put("userId", result.getUserId());
-            paramIn.put("name", owner.getOwnerName());
-            paramIn.put("age", owner.getAge());
-            paramIn.put("link", owner.getTel());
-            paramIn.put("sex", owner.getSex());
-            paramIn.put("ownerTypeCd", "1001");
-            paramIn.put("idCard", owner.getIdCard());
-            paramIn.put("source","BatchImport");
-            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-
-            if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                JSONObject body = JSONObject.parseObject(responseEntity.getBody());
-                if (body.containsKey("code") && body.getIntValue("code") != 0) {
-                    throw new IllegalArgumentException(body.getString("msg"));
+                if (savedOwnerInfo != null) {
+                    owner.setOwnerId(savedOwnerInfo.getString("ownerId"));
+                    continue;
                 }
-                savedOwnerInfo = getExistsOwner(pd, result, owner);
-                owner.setOwnerId(savedOwnerInfo.getString("ownerId"));
+                paramIn = new JSONObject();
+
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.saveOwner";
+
+                paramIn.put("communityId", result.getCommunityId());
+                paramIn.put("userId", result.getUserId());
+                paramIn.put("name", owner.getOwnerName());
+                paramIn.put("age", owner.getAge());
+                paramIn.put("link", owner.getTel());
+                paramIn.put("sex", owner.getSex());
+                paramIn.put("ownerTypeCd", "1001");
+                paramIn.put("idCard", owner.getIdCard());
+                paramIn.put("source", "BatchImport");
+                responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+
+                /***************************************导入日志记录****************************************************/
+                if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        assetImportLogDetailDto.setState(body.getString("code"));
+                        assetImportLogDetailDto.setMessage(body.getString("msg"));
+                        assetImportLogDetailDto.setObjName(owner.getOwnerName());
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        failCount += 1;
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
+                        throw new IllegalArgumentException(body.getString("msg"));
+                    }
+                    savedOwnerInfo = getExistsOwner(pd, result, owner);
+                    owner.setOwnerId(savedOwnerInfo.getString("ownerId"));
+                    successCount += 1;
+                } else {
+                    failCount += 1;
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(owner.getOwnerName());
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                }
+                assetImportLogDto.setSuccessCount(successCount);
+                assetImportLogDto.setErrorCount(failCount);
             }
+        } finally {
+            saveTransactionLogSMOImpl.saveAssetImportLog(assetImportLogDto);
         }
 
         return responseEntity;
@@ -521,53 +837,121 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         JSONObject paramIn = null;
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
-        for (ImportFloor importFloor : floors) {
-            paramIn = new JSONObject();
-            //先保存 楼栋信息
-            JSONObject savedFloorInfo = getExistsFloor(pd, result, importFloor);
-            // 如果不存在，才插入
-            if (savedFloorInfo == null) {
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.saveFloor";
+
+        AssetImportLogDto assetImportLogDto = new AssetImportLogDto();
+        assetImportLogDto.setSuccessCount(0L);
+        assetImportLogDto.setErrorCount(0L);
+        assetImportLogDto.setCommunityId(result.getCommunityId());
+        assetImportLogDto.setLogType(AssetImportLogDto.LOG_TYPE_HISTORY_FEE_IMPORT);
+        List<AssetImportLogDetailDto> assetImportLogDetailDtos = new ArrayList<>();
+        assetImportLogDto.setAssetImportLogDetailDtos(assetImportLogDetailDtos);
+        long successCount = 0L;
+        long failCount = 0L;
+        AssetImportLogDetailDto assetImportLogDetailDto = null;
+        try {
+            for (ImportFloor importFloor : floors) {
+                paramIn = new JSONObject();
+                //先保存 楼栋信息
+                JSONObject savedFloorInfo = getExistsFloor(pd, result, importFloor);
+                // 如果不存在，才插入
+                if (savedFloorInfo == null) {
+                    apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.saveFloor";
+                    paramIn.put("communityId", result.getCommunityId());
+                    paramIn.put("floorNum", importFloor.getFloorNum());
+                    paramIn.put("userId", result.getUserId());
+                    paramIn.put("name", importFloor.getFloorNum() + "栋");
+                    paramIn.put("floorArea", 1.00);
+
+                    responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+                    savedFloorInfo = getExistsFloor(pd, result, importFloor);
+                }
+
+                /***************************************导入日志记录****************************************************/
+                if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+                    failCount += 1;
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(importFloor.getFloorNum() + "栋");
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                    continue;
+                } else {
+                    successCount += 1;
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                }
+
+
+                if (savedFloorInfo == null) {
+                    continue;
+                }
+                importFloor.setFloorId(savedFloorInfo.getString("floorId"));
+                paramIn.clear();
+                //判断单元信息是否已经存在，如果存在则不保存数据unit.queryUnits
+                JSONObject savedUnitInfo = getExistsUnit(pd, result, importFloor);
+                if (savedUnitInfo != null) {
+                    importFloor.setUnitId(savedUnitInfo.getString("unitId"));
+                    continue;
+                }
+
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.saveUnit";
+
                 paramIn.put("communityId", result.getCommunityId());
-                paramIn.put("floorNum", importFloor.getFloorNum());
-                paramIn.put("userId", result.getUserId());
-                paramIn.put("name", importFloor.getFloorNum() + "栋");
-                paramIn.put("floorArea", 1.00);
-
+                paramIn.put("floorId", savedFloorInfo.getString("floorId"));
+                paramIn.put("unitNum", importFloor.getUnitNum());
+                paramIn.put("layerCount", importFloor.getLayerCount());
+                paramIn.put("lift", importFloor.getLift());
+                paramIn.put("unitArea", 1.00);
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-                savedFloorInfo = getExistsFloor(pd, result, importFloor);
-            }
-            if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
-                continue;
-            }
-
-
-            if (savedFloorInfo == null) {
-                continue;
-            }
-            importFloor.setFloorId(savedFloorInfo.getString("floorId"));
-            paramIn.clear();
-            //判断单元信息是否已经存在，如果存在则不保存数据unit.queryUnits
-            JSONObject savedUnitInfo = getExistsUnit(pd, result, importFloor);
-            if (savedUnitInfo != null) {
+                /****************************** 开始记录失败日志 *******************************/
+                if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+                    assetImportLogDetailDto = new AssetImportLogDetailDto();
+                    assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                    if (Assert.isJsonObject(responseEntity.getBody())) {
+                        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+                        assetImportLogDetailDto.setState(paramOut.getString("code"));
+                        assetImportLogDetailDto.setMessage(paramOut.getString("msg"));
+                    } else {
+                        assetImportLogDetailDto.setState("F");
+                        assetImportLogDetailDto.setMessage(responseEntity.getBody());
+                    }
+                    assetImportLogDetailDto.setObjName(importFloor.getFloorNum() + "栋" + importFloor.getUnitNum() + "单元");
+                    assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                    failCount +=1;
+                    successCount = successCount >0? successCount -1:successCount;
+                    assetImportLogDto.setSuccessCount(successCount);
+                    assetImportLogDto.setErrorCount(failCount);
+                } else {
+                    JSONObject body = JSONObject.parseObject(responseEntity.getBody());
+                    if (body.containsKey("code") && body.getIntValue("code") != 0) {
+                        assetImportLogDetailDto = new AssetImportLogDetailDto();
+                        assetImportLogDetailDto.setCommunityId(assetImportLogDto.getCommunityId());
+                        assetImportLogDetailDto.setState(body.getString("code"));
+                        assetImportLogDetailDto.setMessage(body.getString("msg"));
+                        assetImportLogDetailDto.setObjName(importFloor.getFloorNum() + "栋" + importFloor.getUnitNum() + "单元");
+                        assetImportLogDetailDtos.add(assetImportLogDetailDto);
+                        failCount +=1;
+                        successCount = successCount >0? successCount -1:successCount;
+                        assetImportLogDto.setSuccessCount(successCount);
+                        assetImportLogDto.setErrorCount(failCount);
+                    }
+                }
+                //将unitId 刷入ImportFloor对象
+                savedUnitInfo = getExistsUnit(pd, result, importFloor);
                 importFloor.setUnitId(savedUnitInfo.getString("unitId"));
-                continue;
+
             }
-
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.saveUnit";
-
-            paramIn.put("communityId", result.getCommunityId());
-            paramIn.put("floorId", savedFloorInfo.getString("floorId"));
-            paramIn.put("unitNum", importFloor.getUnitNum());
-            paramIn.put("layerCount", importFloor.getLayerCount());
-            paramIn.put("lift", importFloor.getLift());
-            paramIn.put("unitArea", 1.00);
-            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-
-            //将unitId 刷入ImportFloor对象
-            savedUnitInfo = getExistsUnit(pd, result, importFloor);
-            importFloor.setUnitId(savedUnitInfo.getString("unitId"));
-
+        } finally {
+            saveTransactionLogSMOImpl.saveAssetImportLog(assetImportLogDto);
         }
         return responseEntity;
     }

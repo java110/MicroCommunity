@@ -27,7 +27,7 @@ public class AssetImportComponent {
     private IAssetExportSMO assetExportSMOImpl;
 
     /**
-     * 添加应用数据
+     * 资产导入方法 将Excel中的数据直接导入到表里
      *
      * @param pd 页面数据封装
      * @return ResponseEntity 对象

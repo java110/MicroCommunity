@@ -31,9 +31,9 @@ public class InitializeOwnerServiceDaoImpl extends BaseServiceDao implements IIn
 
         int deleteFlag = sqlSessionTemplate.delete("initializeOwnerServiceDaoImpl.deleteBuildingOwner", info);
 
-        if (deleteFlag < 1) {
+    /*    if (deleteFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "building_owner初始化失败：" + JSONObject.toJSONString(info));
-        }
+        }*/
         return deleteFlag;
     }
 }
