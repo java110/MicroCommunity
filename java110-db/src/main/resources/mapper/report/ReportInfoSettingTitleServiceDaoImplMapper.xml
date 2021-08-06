@@ -39,6 +39,9 @@ where 1 =1
 <if test="title !=null and title != ''">
    and t.title= #{title}
 </if> 
+<if test="titleLike !=null and titleLike != ''">
+   and t.title like concat('%',#{titleLike},'%')
+</if>
 <if test="communityId !=null and communityId != ''">
    and t.community_id= #{communityId}
 </if> 
@@ -108,6 +111,9 @@ where 1 =1
 <if test="title !=null and title != ''">
    and t.title= #{title}
 </if> 
+<if test="titleLike !=null and titleLike != ''">
+   and t.title like concat('%',#{titleLike},'%')
+</if>
 <if test="communityId !=null and communityId != ''">
    and t.community_id= #{communityId}
 </if> 

@@ -43,7 +43,6 @@ public class ReportInfoSettingApi {
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含remark");
 
 
         ReportInfoSettingPo reportInfoSettingPo = BeanConvertUtil.covertBean(reqJson, ReportInfoSettingPo.class);
@@ -101,12 +100,16 @@ public class ReportInfoSettingApi {
      */
     @RequestMapping(value = "/queryReportInfoSetting", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoSetting(@RequestParam(value = "communityId") String communityId,
+                                                         @RequestParam(value = "name") String name,
+                                                         @RequestParam(value = "settingId") String settingId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ReportInfoSettingDto reportInfoSettingDto = new ReportInfoSettingDto();
         reportInfoSettingDto.setPage(page);
         reportInfoSettingDto.setRow(row);
         reportInfoSettingDto.setCommunityId(communityId);
+        reportInfoSettingDto.setNameLike(name);
+        reportInfoSettingDto.setSettingId(settingId);
         return getReportInfoSettingBMOImpl.get(reportInfoSettingDto);
     }
 }

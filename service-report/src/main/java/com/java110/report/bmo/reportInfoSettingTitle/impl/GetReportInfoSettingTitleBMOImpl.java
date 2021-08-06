@@ -1,6 +1,10 @@
 package com.java110.report.bmo.reportInfoSettingTitle.impl;
 
+import com.java110.dto.questionAnswerTitle.QuestionAnswerTitleDto;
+import com.java110.dto.questionAnswerTitleValue.QuestionAnswerTitleValueDto;
+import com.java110.dto.reportInfoSettingTitleValue.ReportInfoSettingTitleValueDto;
 import com.java110.intf.report.IReportInfoSettingTitleInnerServiceSMO;
+import com.java110.intf.report.IReportInfoSettingTitleValueInnerServiceSMO;
 import com.java110.report.bmo.reportInfoSettingTitle.IGetReportInfoSettingTitleBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +21,8 @@ public class GetReportInfoSettingTitleBMOImpl implements IGetReportInfoSettingTi
 
     @Autowired
     private IReportInfoSettingTitleInnerServiceSMO reportInfoSettingTitleInnerServiceSMOImpl;
-
+    @Autowired
+    private IReportInfoSettingTitleValueInnerServiceSMO reportInfoSettingTitleValueInnerServiceSMOImpl;
     /**
      *
      *
@@ -32,6 +37,7 @@ public class GetReportInfoSettingTitleBMOImpl implements IGetReportInfoSettingTi
         List<ReportInfoSettingTitleDto> reportInfoSettingTitleDtos = null;
         if (count > 0) {
             reportInfoSettingTitleDtos = reportInfoSettingTitleInnerServiceSMOImpl.queryReportInfoSettingTitles(reportInfoSettingTitleDto);
+            refreshTitileValues(reportInfoSettingTitleDtos);
         } else {
             reportInfoSettingTitleDtos = new ArrayList<>();
         }
@@ -41,6 +47,38 @@ public class GetReportInfoSettingTitleBMOImpl implements IGetReportInfoSettingTi
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+
+    private void refreshTitileValues(List<ReportInfoSettingTitleDto> reportInfoSettingTitleDtos) {
+
+        if (reportInfoSettingTitleDtos == null || reportInfoSettingTitleDtos.size() < 1) {
+            return;
+        }
+
+        List<String> titleIds = new ArrayList<>();
+        for (ReportInfoSettingTitleDto reportInfoSettingTitleDto : reportInfoSettingTitleDtos) {
+            titleIds.add(reportInfoSettingTitleDto.getTitleId());
+        }
+
+        ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto = new ReportInfoSettingTitleValueDto();
+        reportInfoSettingTitleValueDto.setTitleIds(titleIds.toArray(new String[titleIds.size()]));
+        reportInfoSettingTitleValueDto.setCommunityId(reportInfoSettingTitleDtos.get(0).getCommunityId());
+        List<ReportInfoSettingTitleValueDto> reportInfoSettingTitleValueDtos
+                = reportInfoSettingTitleValueInnerServiceSMOImpl.queryReportInfoSettingTitleValues(reportInfoSettingTitleValueDto);
+
+        List<ReportInfoSettingTitleValueDto> tmpReportInfoSettingTitleValueDtos = null;
+        for (ReportInfoSettingTitleDto reportInfoSettingTitleDto : reportInfoSettingTitleDtos) {
+            tmpReportInfoSettingTitleValueDtos = new ArrayList<>();
+            for (ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto1 : reportInfoSettingTitleValueDtos) {
+                if (reportInfoSettingTitleDto.getTitleId().equals(reportInfoSettingTitleValueDto1.getTitleId())) {
+                    tmpReportInfoSettingTitleValueDtos.add(reportInfoSettingTitleValueDto1);
+                }
+            }
+            reportInfoSettingTitleDto.setReportInfoSettingTitleValueDtos(tmpReportInfoSettingTitleValueDtos);
+        }
+
+
     }
 
 }

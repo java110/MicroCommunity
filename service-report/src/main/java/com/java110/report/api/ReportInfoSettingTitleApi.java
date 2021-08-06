@@ -1,6 +1,8 @@
 package com.java110.report.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.questionAnswerTitle.QuestionAnswerTitleDto;
 import com.java110.dto.reportInfoSettingTitle.ReportInfoSettingTitleDto;
 import com.java110.po.reportInfoSettingTitle.ReportInfoSettingTitlePo;
 import com.java110.report.bmo.reportInfoSettingTitle.IDeleteReportInfoSettingTitleBMO;
@@ -43,10 +45,17 @@ public class ReportInfoSettingTitleApi {
         Assert.hasKeyAndValue(reqJson, "titleType", "请求报文中未包含titleType");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        JSONArray titleValues = null;
+        if (!ReportInfoSettingTitleDto.TITLE_TYPE_QUESTIONS.equals(reqJson.getString("titleType"))) {
+            titleValues = reqJson.getJSONArray("titleValues");
 
+            if (titleValues.size() < 1) {
+                throw new IllegalArgumentException("未包含选项");
+            }
+        }
 
         ReportInfoSettingTitlePo reportInfoSettingTitlePo = BeanConvertUtil.covertBean(reqJson, ReportInfoSettingTitlePo.class);
-        return saveReportInfoSettingTitleBMOImpl.save(reportInfoSettingTitlePo);
+        return saveReportInfoSettingTitleBMOImpl.save(reportInfoSettingTitlePo,titleValues);
     }
 
     /**
@@ -65,11 +74,19 @@ public class ReportInfoSettingTitleApi {
         Assert.hasKeyAndValue(reqJson, "titleType", "请求报文中未包含titleType");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "titleId", "titleId不能为空");
+        JSONArray titleValues = null;
+        if (!ReportInfoSettingTitleDto.TITLE_TYPE_QUESTIONS.equals(reqJson.getString("titleType"))) {
+            titleValues = reqJson.getJSONArray("titleValues");
 
+            if (titleValues.size() < 1) {
+                throw new IllegalArgumentException("未包含选项");
+            }
+        }
 
         ReportInfoSettingTitlePo reportInfoSettingTitlePo = BeanConvertUtil.covertBean(reqJson, ReportInfoSettingTitlePo.class);
-        return updateReportInfoSettingTitleBMOImpl.update(reportInfoSettingTitlePo);
+        deleteReportInfoSettingTitleBMOImpl.delete(reportInfoSettingTitlePo);
+
+        return saveReportInfoSettingTitleBMOImpl.save(reportInfoSettingTitlePo,titleValues);
     }
 
     /**
@@ -99,11 +116,19 @@ public class ReportInfoSettingTitleApi {
      */
     @RequestMapping(value = "/querySettingTitle", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoSettingTitle(@RequestParam(value = "communityId") String communityId,
+                                                              @RequestParam(value = "titleType") String titleType,
+                                                              @RequestParam(value = "title") String title,
+                                                              @RequestParam(value = "titleId") String titleId,
+                                                              @RequestParam(value = "settingid") String settingid,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ReportInfoSettingTitleDto reportInfoSettingTitleDto = new ReportInfoSettingTitleDto();
         reportInfoSettingTitleDto.setPage(page);
         reportInfoSettingTitleDto.setRow(row);
+        reportInfoSettingTitleDto.setTitleType(titleType);
+        reportInfoSettingTitleDto.setTitleLike(title);
+        reportInfoSettingTitleDto.setTitleId(titleId);
+        reportInfoSettingTitleDto.setSettingId(settingid);
         reportInfoSettingTitleDto.setCommunityId(communityId);
         return getReportInfoSettingTitleBMOImpl.get(reportInfoSettingTitleDto);
     }

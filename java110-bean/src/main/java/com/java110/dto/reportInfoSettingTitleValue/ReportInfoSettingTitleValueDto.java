@@ -19,7 +19,7 @@ private String titleId;
 private String communityId;
 private String qaValue;
 private String seq;
-
+    private String[] titleIds;
 
     private Date createTime;
 
@@ -72,5 +72,13 @@ public void setSeq(String seq) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getTitleIds() {
+        return titleIds;
+    }
+
+    public void setTitleIds(String[] titleIds) {
+        this.titleIds = titleIds;
     }
 }

@@ -33,6 +33,9 @@ where 1 =1
 <if test="name !=null and name != ''">
    and t.name= #{name}
 </if> 
+<if test="nameLike !=null and nameLike != ''">
+   and t.name like concat('%',#{nameLike},'%')
+</if>
 <if test="startTime !=null and startTime != ''">
    and t.start_time= #{startTime}
 </if> 
@@ -108,6 +111,9 @@ where 1 =1
 <if test="name !=null and name != ''">
    and t.name= #{name}
 </if> 
+<if test="nameLike !=null and nameLike != ''">
+   and t.name like concat('%',#{nameLike},'%')
+</if>
 <if test="startTime !=null and startTime != ''">
    and t.start_time= #{startTime}
 </if> 

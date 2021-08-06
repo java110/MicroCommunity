@@ -16,6 +16,7 @@ public class ReportInfoSettingDto extends PageDto implements Serializable {
 
     private String reportType;
 private String name;
+private String nameLike;
 private String startTime;
 private String remark;
 private String endTime;
@@ -86,5 +87,13 @@ public void setSettingId(String settingId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getNameLike() {
+        return nameLike;
+    }
+
+    public void setNameLike(String nameLike) {
+        this.nameLike = nameLike;
     }
 }

@@ -32,7 +32,13 @@ where 1 =1
 </if> 
 <if test="titleId !=null and titleId != ''">
    and t.title_id= #{titleId}
-</if> 
+</if>
+        <if test="titleIds !=null">
+            and t.title_id in
+            <foreach collection="titleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
 <if test="statusCd !=null and statusCd != ''">
    and t.status_cd= #{statusCd}
 </if> 
