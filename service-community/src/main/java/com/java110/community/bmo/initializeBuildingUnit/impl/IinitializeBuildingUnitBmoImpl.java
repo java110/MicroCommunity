@@ -88,7 +88,7 @@ public class IinitializeBuildingUnitBmoImpl implements IinitializeBuildingUnitBm
             massage.append("单元初始化失败");
         }
 
-        Map communityIds = new HashMap<String,String []>();
+        Map communityIds = new HashMap<String,String>();
         communityIds.put("communityId",communityId);
         //楼栋
         int deleteFlag = initializeBuildingUnitSMOImpl.deletefFloor(communityIds);

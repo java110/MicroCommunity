@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportInfoAnswerServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportInfoAnswerInfo" parameterType="Map">
+        insert into report_info_answer(
+person_name,user_an_id,person_id,community_id,setting_id
+) values (
+#{personName},#{userAnId},#{personId},#{communityId},#{settingId}
+)
+    </insert>
+
+
+
+    <!-- 查询批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <select id="getReportInfoAnswerInfo" parameterType="Map" resultType="Map">
+        select  t.person_name,t.person_name personName,t.create_time,t.create_time createTime,t.user_an_id,t.user_an_id userAnId,t.person_id,t.person_id personId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.setting_id,t.setting_id settingId 
+from report_info_answer t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="userAnId !=null and userAnId != ''">
+   and t.user_an_id= #{userAnId}
+</if> 
+<if test="personId !=null and personId != ''">
+   and t.person_id= #{personId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportInfoAnswerInfo" parameterType="Map">
+        update  report_info_answer t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="personName !=null and personName != ''">
+, t.person_name= #{personName}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="personId !=null and personId != ''">
+, t.person_id= #{personId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+, t.setting_id= #{settingId}
+</if> 
+ where 1=1 <if test="userAnId !=null and userAnId != ''">
+and t.user_an_id= #{userAnId}
+</if> 
+
+    </update>
+
+    <!-- 查询批量操作日志详情数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportInfoAnswersCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_info_answer t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="userAnId !=null and userAnId != ''">
+   and t.user_an_id= #{userAnId}
+</if> 
+<if test="personId !=null and personId != ''">
+   and t.person_id= #{personId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+
+
+     </select>
+
+</mapper>

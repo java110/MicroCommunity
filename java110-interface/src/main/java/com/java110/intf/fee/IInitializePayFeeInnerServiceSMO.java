@@ -20,7 +20,7 @@ import java.util.Map;
  * add by wuxw 2019/4/24
  **/
 @FeignClient(name = "fee-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/IInitializePayFeeApi")
+@RequestMapping("/initializePayFeeApi")
 public interface IInitializePayFeeInnerServiceSMO {
 
     /**

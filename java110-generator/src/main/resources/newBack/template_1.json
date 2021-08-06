@@ -1,25 +1,52 @@
 {
   "autoMove": true,
-  "id": "detailId",
-  "name": "assetImportLogDetail",
+  "id": "anValueId",
+  "name": "reportInfoAnswerValue",
   "desc": "批量操作日志详情",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "shareName": "common",
-  "tableName": "asset_import_log_detail",
+  "shareName": "report",
+  "tableName": "report_info_answer_value",
   "param": {
-    "detailId": "detail_id",
-    "logId": "log_id",
+    "anValueId": "an_value_id",
+    "userAnId": "user_an_id",
+    "settingId": "setting_id",
+    "titleId": "title_id",
+    "valueId": "value_id",
+    "valueContent": "value_content",
     "communityId": "community_id",
-    "state": "state",
-    "message": "message",
-    "objName": "obj_name",
+    "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
+      "code": "anValueId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "userAnId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "settingId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "titleId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "valueId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "valueContent",
+      "msg": "小区不能为空"
+    },
+    {
       "code": "communityId",
       "msg": "小区不能为空"
     }
+
   ]
 }
