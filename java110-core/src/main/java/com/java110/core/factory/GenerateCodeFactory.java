@@ -211,6 +211,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_bobjId = "77";
     public static final String CODE_PREFIX_smsId = "78";
     public static final String CODE_PREFIX_adsId = "78";
+    public static final String CODE_PREFIX_backId = "78";
 
 
 
