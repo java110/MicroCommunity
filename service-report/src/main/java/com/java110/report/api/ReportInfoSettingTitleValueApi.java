@@ -29,12 +29,12 @@ public class ReportInfoSettingTitleValueApi {
 
     /**
      * 微信保存消息模板
-     * @serviceCode /reportInfoSettingTitleValue/saveReportInfoSettingTitleValue
+     * @serviceCode /reportInfoSettingTitleValue/saveSettingTitleValue
      * @path /app/reportInfoSettingTitleValue/saveReportInfoSettingTitleValue
      * @param reqJson
      * @return
      */
-    @RequestMapping(value = "/saveReportInfoSettingTitleValue", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveSettingTitleValue", method = RequestMethod.POST)
     public ResponseEntity<String> saveReportInfoSettingTitleValue(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "valueId", "请求报文中未包含valueId");
@@ -50,12 +50,12 @@ public class ReportInfoSettingTitleValueApi {
 
     /**
      * 微信修改消息模板
-     * @serviceCode /reportInfoSettingTitleValue/updateReportInfoSettingTitleValue
+     * @serviceCode /reportInfoSettingTitleValue/updateTitleValue
      * @path /app/reportInfoSettingTitleValue/updateReportInfoSettingTitleValue
      * @param reqJson
      * @return
      */
-    @RequestMapping(value = "/updateReportInfoSettingTitleValue", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateTitleValue", method = RequestMethod.POST)
     public ResponseEntity<String> updateReportInfoSettingTitleValue(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "valueId", "请求报文中未包含valueId");
@@ -72,12 +72,12 @@ public class ReportInfoSettingTitleValueApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /reportInfoSettingTitleValue/deleteReportInfoSettingTitleValue
+     * @serviceCode /reportInfoSettingTitleValue/deleteTitleValue
      * @path /app/reportInfoSettingTitleValue/deleteReportInfoSettingTitleValue
      * @param reqJson
      * @return
      */
-    @RequestMapping(value = "/deleteReportInfoSettingTitleValue", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteTitleValue", method = RequestMethod.POST)
     public ResponseEntity<String> deleteReportInfoSettingTitleValue(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
@@ -90,12 +90,12 @@ public class ReportInfoSettingTitleValueApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /reportInfoSettingTitleValue/queryReportInfoSettingTitleValue
+     * @serviceCode /reportInfoSettingTitleValue/queryTitleValue
      * @path /app/reportInfoSettingTitleValue/queryReportInfoSettingTitleValue
      * @param communityId 小区ID
      * @return
      */
-    @RequestMapping(value = "/queryReportInfoSettingTitleValue", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryTitleValue", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoSettingTitleValue(@RequestParam(value = "communityId") String communityId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {

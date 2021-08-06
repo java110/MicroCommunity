@@ -51,12 +51,12 @@ public class ReportInfoSettingTitleApi {
 
     /**
      * 微信修改消息模板
-     * @serviceCode /reportInfoSettingTitle/updateReportInfoSettingTitle
+     * @serviceCode /reportInfoSettingTitle/updateSettingTitle
      * @path /app/reportInfoSettingTitle/updateReportInfoSettingTitle
      * @param reqJson
      * @return
      */
-    @RequestMapping(value = "/updateReportInfoSettingTitle", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateSettingTitle", method = RequestMethod.POST)
     public ResponseEntity<String> updateReportInfoSettingTitle(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "titleId", "请求报文中未包含titleId");
@@ -74,12 +74,12 @@ public class ReportInfoSettingTitleApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /reportInfoSettingTitle/deleteReportInfoSettingTitle
+     * @serviceCode /reportInfoSettingTitle/deleteSettingTitle
      * @path /app/reportInfoSettingTitle/deleteReportInfoSettingTitle
      * @param reqJson
      * @return
      */
-    @RequestMapping(value = "/deleteReportInfoSettingTitle", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteSettingTitle", method = RequestMethod.POST)
     public ResponseEntity<String> deleteReportInfoSettingTitle(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
@@ -92,12 +92,12 @@ public class ReportInfoSettingTitleApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /reportInfoSettingTitle/queryReportInfoSettingTitle
+     * @serviceCode /reportInfoSettingTitle/querySettingTitle
      * @path /app/reportInfoSettingTitle/queryReportInfoSettingTitle
      * @param communityId 小区ID
      * @return
      */
-    @RequestMapping(value = "/queryReportInfoSettingTitle", method = RequestMethod.GET)
+    @RequestMapping(value = "/querySettingTitle", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoSettingTitle(@RequestParam(value = "communityId") String communityId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
