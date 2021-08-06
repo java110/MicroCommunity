@@ -40,7 +40,7 @@ public class InitializeOwnerInnerServiceSMOImpl extends BaseServiceSMO implement
     @Autowired
     private IInitializeOwneServiceDao initializeOwnerServiceDaoImpl;
     @Override
-    public int deleteBuildingOwner(Map communityId) {
+    public int deleteBuildingOwner(@RequestBody Map communityId) {
         int deleteFast = initializeOwnerServiceDaoImpl.deleteBuildingOwner(communityId);
         return deleteFast;
     }

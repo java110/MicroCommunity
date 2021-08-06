@@ -33,7 +33,7 @@ public class InitializePayFeeInnerServiceSMOImpl extends BaseServiceSMO implemen
 
 
     @Override
-    public int deletePayFee(Map communityId) {
+    public int deletePayFee(@RequestBody Map communityId) {
         int deleteFee = initializePayFeeServiceDaoImpl.deletePayFee(communityId);
         return deleteFee;
     }
