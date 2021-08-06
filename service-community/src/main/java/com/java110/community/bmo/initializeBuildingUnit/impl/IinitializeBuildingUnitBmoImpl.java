@@ -82,57 +82,30 @@ public class IinitializeBuildingUnitBmoImpl implements IinitializeBuildingUnitBm
             communitys = initializeBuildingUnitSMOImpl.deleteBuildingUnit(floorIds);
         }
 
-        if(communitys > 0){
-            massage.append("单元初始化成功【"+communitys+"】");
-        }else {
-            massage.append("单元初始化失败");
-        }
+        massage.append("单元初始化完成，清理数据【"+communitys+"】条！");
 
         Map communityIds = new HashMap<String,String>();
         communityIds.put("communityId",communityId);
         //楼栋
         int deleteFlag = initializeBuildingUnitSMOImpl.deletefFloor(communityIds);
-        if(deleteFlag > 0){
-            massage.append("楼栋初始化成功【"+deleteFlag+"】");
-        }else {
-            massage.append("楼栋初始化失败");
-        }
+        massage.append("楼栋初始化完成，清理数据【"+deleteFlag+"】条！");
         //房屋
         int deleteFlagRoot = initializeBuildingUnitSMOImpl.deleteBuildingRoom(communityIds);
-        if(deleteFlagRoot > 0){
-            massage.append("房屋初始化成功【"+deleteFlagRoot+"】");
-        }else {
-            massage.append("房屋初始化失败");
-        }
+        massage.append("房屋初始化完成，清理数据【"+deleteFlagRoot+"】条！");
         //业主
         int deleteFlagOwner = initializeOwnerInnerServiceSMOImpl.deleteBuildingOwner(communityIds);
-        if(deleteFlagOwner > 0){
-            massage.append("业主初始化成功【"+deleteFlagOwner+"】");
-        }else {
-            massage.append("业主初始化失败");
-        }
+        massage.append("业主初始化完成，清理数据【"+deleteFlagOwner+"】条！");
         //费用
         int deleteFlagFee = initializePayFeeInnerServiceSMOImpl.deletePayFee(communityIds);
-        if(deleteFlagFee > 0){
-            massage.append("费用初始化成功【"+deleteFlagFee+"】");
-        }else {
-            massage.append("费用初始化失败");
-        }
+        massage.append("费用初始化完成，清理数据【"+deleteFlagFee+"】条！");
 
         //停车场
         int deleteFlagArea = initializeBuildingUnitSMOImpl.deleteParkingArea(communityIds);
-        if(deleteFlagArea > 0){
-            massage.append("停车场初始化成功【"+deleteFlagArea+"】");
-        }else {
-            massage.append("停车场初始化失败");
-        }
+        massage.append("停车场初始化完成，清理数据【"+deleteFlagArea+"】条！");
+
         //停车位
         int deleteFlagSpace = initializeBuildingUnitSMOImpl.deleteParkingSpace(communityIds);
-        if(deleteFlagSpace > 0){
-            massage.append("停车位初始化成功【"+deleteFlagSpace+"】");
-        }else {
-            massage.append("停车位初始化失败");
-        }
+        massage.append("停车位初始化完成，清理数据【"+deleteFlagSpace+"】条！");
 
         return ResultVo.createResponseEntity(massage);
     }
