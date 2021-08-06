@@ -1,7 +1,7 @@
 package com.java110.acct.bmo.shopVipAccountDetail.impl;
 
 import com.java110.acct.bmo.shopVipAccountDetail.IGetShopVipAccountDetailBMO;
-import com.java110.dto.shopVipAccountDetail.ShopVipAccountDetailDto;
+import com.java110.dto.shopVipAccount.ShopVipAccountDetailDto;
 import com.java110.intf.acct.IShopVipAccountDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
