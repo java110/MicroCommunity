@@ -211,12 +211,11 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_bobjId = "77";
     public static final String CODE_PREFIX_smsId = "78";
     public static final String CODE_PREFIX_adsId = "78";
-<<<<<<< HEAD
     public static final String CODE_PREFIX_userAnId = "88";
     public static final String CODE_PREFIX_anValueId = "68";
-=======
+
     public static final String CODE_PREFIX_backId = "78";
->>>>>>> 7e621d56f2efc96f42a47ba3e5a62af69c6dd043
+
 
 
 
