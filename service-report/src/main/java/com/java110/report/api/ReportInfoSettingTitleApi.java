@@ -39,7 +39,6 @@ public class ReportInfoSettingTitleApi {
     @RequestMapping(value = "/saveReportInfoSettingTitle", method = RequestMethod.POST)
     public ResponseEntity<String> saveReportInfoSettingTitle(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "titleId", "请求报文中未包含titleId");
         Assert.hasKeyAndValue(reqJson, "settingId", "请求报文中未包含settingId");
         Assert.hasKeyAndValue(reqJson, "title", "请求报文中未包含title");
         Assert.hasKeyAndValue(reqJson, "titleType", "请求报文中未包含titleType");

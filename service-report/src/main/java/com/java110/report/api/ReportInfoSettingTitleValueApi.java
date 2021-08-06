@@ -38,7 +38,6 @@ public class ReportInfoSettingTitleValueApi {
     public ResponseEntity<String> saveReportInfoSettingTitleValue(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "valueId", "请求报文中未包含valueId");
-        Assert.hasKeyAndValue(reqJson, "titleId", "请求报文中未包含titleId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "qaValue", "请求报文中未包含qaValue");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
