@@ -1,5 +1,6 @@
 {
   "autoMove": true,
+<<<<<<< HEAD
   "id": "anValueId",
   "name": "reportInfoAnswerValue",
   "desc": "批量操作日志详情",
@@ -16,6 +17,27 @@
     "valueContent": "value_content",
     "communityId": "community_id",
     "createTime": "create_time",
+=======
+  "id": "backId",
+  "name": "reportInfoBackCity",
+  "desc": "返省上报",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "report",
+  "tableName": "report_info_back_city",
+  "param": {
+    "backId": "back_id",
+    "name": "name",
+    "communityId": "community_id",
+    "idCard": "id_card",
+    "tel": "tel",
+    "source": "source",
+    "sourceCity": "source_city",
+    "sourceCityName": "source_city_name",
+    "backTime": "back_time",
+    "userId": "user_id",
+    "remark": "remark",
+>>>>>>> 7e621d56f2efc96f42a47ba3e5a62af69c6dd043
     "statusCd": "status_cd"
   },
   "required": [
