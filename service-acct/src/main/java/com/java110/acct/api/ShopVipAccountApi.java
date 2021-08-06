@@ -9,6 +9,7 @@ import com.java110.acct.bmo.shopVipAccountDetail.IDeleteShopVipAccountDetailBMO;
 import com.java110.acct.bmo.shopVipAccountDetail.IGetShopVipAccountDetailBMO;
 import com.java110.acct.bmo.shopVipAccountDetail.ISaveShopVipAccountDetailBMO;
 import com.java110.acct.bmo.shopVipAccountDetail.IUpdateShopVipAccountDetailBMO;
+import com.java110.dto.shopVipAccount.ShopUserAccountVipDto;
 import com.java110.dto.shopVipAccount.ShopVipAccountDto;
 import com.java110.dto.shopVipAccount.ShopVipAccountDetailDto;
 import com.java110.po.shopVipAccount.ShopVipAccountPo;
@@ -202,23 +203,5 @@ public class ShopVipAccountApi {
     }
 
 
-    /**
-     * 微信删除消息模板
-     *
-     * @param shopId 小区ID
-     * @return
-     * @serviceCode /shopVipAccount/queryShopUserAccountAndVip
-     * @path /app/shopVipAccount/queryShopUserAccountAndVip
-     */
-    @RequestMapping(value = "/queryShopUserAccountAndVip", method = RequestMethod.GET)
-    public ResponseEntity<String> queryShopUserAccountAndVip(@RequestParam(value = "shopId") String shopId,
-                                                             @RequestParam(value = "userId") String userId,
-                                                            @RequestParam(value = "page") int page,
-                                                            @RequestParam(value = "row") int row) {
-        ShopVipAccountDetailDto shopVipAccountDetailDto = new ShopVipAccountDetailDto();
-        shopVipAccountDetailDto.setPage(page);
-        shopVipAccountDetailDto.setRow(row);
-        shopVipAccountDetailDto.setShopId(shopId);
-        return getShopVipAccountDetailBMOImpl.get(shopVipAccountDetailDto);
-    }
+
 }

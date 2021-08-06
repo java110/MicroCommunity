@@ -5,6 +5,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.report.IReportInfoBackCityInnerServiceSMO;
 import com.java110.po.reportInfoBackCity.ReportInfoBackCityPo;
 import com.java110.report.bmo.reportInfoBackCity.ISaveReportInfoBackCityBMO;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,10 @@ public class SaveReportInfoBackCityBMOImpl implements ISaveReportInfoBackCityBMO
      */
     @Java110Transactional
     public ResponseEntity<String> save(ReportInfoBackCityPo reportInfoBackCityPo) {
+
+        if(StringUtil.isEmpty(reportInfoBackCityPo.getUserId())){
+            reportInfoBackCityPo.setUserId("-1");
+        }
 
         reportInfoBackCityPo.setBackId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_backId));
         int flag = reportInfoBackCityInnerServiceSMOImpl.saveReportInfoBackCity(reportInfoBackCityPo);

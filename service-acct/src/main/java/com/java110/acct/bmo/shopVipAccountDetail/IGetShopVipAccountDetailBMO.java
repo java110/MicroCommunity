@@ -1,4 +1,5 @@
 package com.java110.acct.bmo.shopVipAccountDetail;
+import com.java110.dto.shopVipAccount.ShopUserAccountVipDto;
 import com.java110.dto.shopVipAccount.ShopVipAccountDetailDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetShopVipAccountDetailBMO {
@@ -11,6 +12,7 @@ public interface IGetShopVipAccountDetailBMO {
      * @return
      */
     ResponseEntity<String> get(ShopVipAccountDetailDto shopVipAccountDetailDto);
+
 
 
 }
