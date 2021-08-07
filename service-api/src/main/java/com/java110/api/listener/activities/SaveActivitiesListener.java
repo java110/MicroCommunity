@@ -91,15 +91,15 @@ public class SaveActivitiesListener extends AbstractServiceApiPlusListener {
         ActivitiesTypeDto activitiesTypeDto = new ActivitiesTypeDto();
         activitiesTypeDto.setCommunityId(reqJson.getString("communityId"));
         activitiesTypeDto.setTypeCd(reqJson.getString("typeCd"));
-        List<ActivitiesTypeDto> activitiesTypeDtos = activitiesTypeInnerServiceSMOImpl.queryActivitiesTypes(activitiesTypeDto);
+        List<ActivitiesTypeDto> oneActivitiesTypeDtos = activitiesTypeInnerServiceSMOImpl.queryActivitiesTypes(activitiesTypeDto);
 
-        Assert.listOnlyOne(activitiesTypeDtos, "通知类型不存在");
-
+        Assert.listOnlyOne(oneActivitiesTypeDtos, "通知类型不存在");
+        List<ActivitiesTypeDto> activitiesTypeDtos = null;
         for (ApiCommunityDataVo apiCommunityDataVo : communityDataVos) {
             reqJson.put("communityId", apiCommunityDataVo.getCommunityId());
             activitiesTypeDto = new ActivitiesTypeDto();
             activitiesTypeDto.setCommunityId(reqJson.getString("communityId"));
-            activitiesTypeDto.setTypeCd(activitiesTypeDtos.get(0).getTypeName());
+            activitiesTypeDto.setTypeName(oneActivitiesTypeDtos.get(0).getTypeName());
             activitiesTypeDtos = activitiesTypeInnerServiceSMOImpl.queryActivitiesTypes(activitiesTypeDto);
             if (activitiesTypeDtos == null || activitiesTypeDtos.size() < 1) {
                 continue;
