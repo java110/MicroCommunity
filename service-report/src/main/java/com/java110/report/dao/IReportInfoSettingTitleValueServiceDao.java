@@ -36,6 +36,14 @@ public interface IReportInfoSettingTitleValueServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getReportInfoSettingTitleValueInfo(Map info) throws DAOException;
+    /**
+     * 查询批量操作日志详情信息（instance过程）
+     * 根据bId 查询批量操作日志详情信息
+     * @param info bId 信息
+     * @return 批量操作日志详情信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getReportInfoSettingTitleValueInfoResult(Map info) throws DAOException;
 
 
 

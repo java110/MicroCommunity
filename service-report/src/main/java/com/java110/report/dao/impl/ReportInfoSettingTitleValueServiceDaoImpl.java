@@ -59,6 +59,20 @@ public class ReportInfoSettingTitleValueServiceDaoImpl extends BaseServiceDao im
 
         return businessReportInfoSettingTitleValueInfos;
     }
+    /**
+     * 查询批量操作日志详情信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getReportInfoSettingTitleValueInfoResult(Map info) throws DAOException {
+        logger.debug("查询批量操作日志详情信息 入参 info : {}",info);
+
+        List<Map> businessReportInfoSettingTitleValueInfos = sqlSessionTemplate.selectList("reportInfoSettingTitleValueServiceDaoImpl.getReportInfoSettingTitleValueInfoResult",info);
+
+        return businessReportInfoSettingTitleValueInfos;
+    }
 
 
     /**

@@ -41,6 +41,15 @@ public interface IReportInfoSettingTitleValueInnerServiceSMO {
      */
     @RequestMapping(value = "/queryReportInfoSettingTitleValues", method = RequestMethod.POST)
     List<ReportInfoSettingTitleValueDto> queryReportInfoSettingTitleValues(@RequestBody ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto);
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param reportInfoSettingTitleValueDto 数据对象分享
+     * @return ReportInfoSettingTitleValueDto 对象数据
+     */
+    @RequestMapping(value = "/getReportInfoSettingTitleValueInfoResult", method = RequestMethod.POST)
+    List<ReportInfoSettingTitleValueDto> getReportInfoSettingTitleValueInfoResult(@RequestBody ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto);
 
     /**
      * 查询<p>小区楼</p>总记录数

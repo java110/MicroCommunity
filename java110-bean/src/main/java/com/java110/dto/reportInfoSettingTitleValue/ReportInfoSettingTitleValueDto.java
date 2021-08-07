@@ -18,6 +18,7 @@ public class ReportInfoSettingTitleValueDto extends PageDto implements Serializa
 private String titleId;
 private String communityId;
 private String qaValue;
+private String userCount;
 private String seq;
     private String[] titleIds;
 
@@ -80,5 +81,13 @@ public void setSeq(String seq) {
 
     public void setTitleIds(String[] titleIds) {
         this.titleIds = titleIds;
+    }
+
+    public String getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(String userCount) {
+        this.userCount = userCount;
     }
 }

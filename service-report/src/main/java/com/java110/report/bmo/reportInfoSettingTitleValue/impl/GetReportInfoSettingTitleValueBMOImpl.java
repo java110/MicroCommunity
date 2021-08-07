@@ -43,4 +43,17 @@ public class GetReportInfoSettingTitleValueBMOImpl implements IGetReportInfoSett
         return responseEntity;
     }
 
+    /**
+     *
+     *
+     * @param  reportInfoSettingTitleValueDto
+     * @return 订单服务能够接受的报文
+     */
+    public ResponseEntity<String> getReportInfoSettingTitleValueInfoResult(ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto) {
+
+
+        List<ReportInfoSettingTitleValueDto> reportInfoSettingTitleValueDtos =  reportInfoSettingTitleValueDtos = reportInfoSettingTitleValueInnerServiceSMOImpl.getReportInfoSettingTitleValueInfoResult(reportInfoSettingTitleValueDto);
+        return ResultVo.createResponseEntity(reportInfoSettingTitleValueDtos);
+    }
+
 }

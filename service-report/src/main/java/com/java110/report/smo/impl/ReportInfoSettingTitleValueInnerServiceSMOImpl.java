@@ -68,6 +68,21 @@ public class ReportInfoSettingTitleValueInnerServiceSMOImpl extends BaseServiceS
 
         return reportInfoSettingTitleValues;
     }
+    @Override
+    public List<ReportInfoSettingTitleValueDto> getReportInfoSettingTitleValueInfoResult(@RequestBody  ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto) {
+
+        //校验是否传了 分页信息
+
+        int page = reportInfoSettingTitleValueDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportInfoSettingTitleValueDto.setPage((page - 1) * reportInfoSettingTitleValueDto.getRow());
+        }
+
+        List<ReportInfoSettingTitleValueDto> reportInfoSettingTitleValues = BeanConvertUtil.covertBeanList(reportInfoSettingTitleValueServiceDaoImpl.getReportInfoSettingTitleValueInfoResult(BeanConvertUtil.beanCovertMap(reportInfoSettingTitleValueDto)), ReportInfoSettingTitleValueDto.class);
+
+        return reportInfoSettingTitleValues;
+    }
 
 
     @Override

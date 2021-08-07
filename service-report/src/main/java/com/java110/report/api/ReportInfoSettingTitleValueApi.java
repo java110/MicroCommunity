@@ -106,4 +106,23 @@ public class ReportInfoSettingTitleValueApi {
         reportInfoSettingTitleValueDto.setCommunityId(communityId);
         return getReportInfoSettingTitleValueBMOImpl.get(reportInfoSettingTitleValueDto);
     }
+    /**
+     * 微信删除消息模板
+     * @serviceCode /reportInfoSettingTitleValue/queryTitleValueInfoResult
+     * @path /app/reportInfoSettingTitleValue/queryReportInfoSettingTitleValue
+     * @param communityId 小区ID
+     * @return
+     */
+    @RequestMapping(value = "/queryTitleValueInfoResult", method = RequestMethod.GET)
+    public ResponseEntity<String> getReportInfoSettingTitleValueInfoResult(@RequestParam(value = "communityId") String communityId,
+                                                                   @RequestParam(value = "titleId") String titleId,
+                                                      @RequestParam(value = "page") int page,
+                                                      @RequestParam(value = "row") int row) {
+        ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto = new ReportInfoSettingTitleValueDto();
+        reportInfoSettingTitleValueDto.setPage(page);
+        reportInfoSettingTitleValueDto.setRow(row);
+        reportInfoSettingTitleValueDto.setTitleId(titleId);
+        reportInfoSettingTitleValueDto.setCommunityId(communityId);
+        return getReportInfoSettingTitleValueBMOImpl.getReportInfoSettingTitleValueInfoResult(reportInfoSettingTitleValueDto);
+    }
 }
