@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Synchronized;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.notice.NoticeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
@@ -26,10 +28,13 @@ import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
+import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.po.transactionLog.TransactionLogPo;
+import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +82,9 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
+
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
     private static String getUser = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN";
@@ -93,6 +101,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             try {
                 publishMsg(taskDto, communityDto);
             } catch (Exception e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_NOTICE);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("推送消息失败", e);
             }
         }
@@ -145,6 +158,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             try {
                 doSentWechat(tmpNotice, templateId, accessToken, weChatDto);
             } catch (Exception e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_NOTICE);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("通知异常", e);
             }
         }
@@ -175,11 +193,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
 
     private void doSentWechat(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) throws Exception {
 
-        Date startTime = DateUtil.getDateFromString(noticeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A);
-        Date nowTime = DateUtil.getCurrentDate();
-        if (startTime.getTime() > nowTime.getTime()) { //还没有到时间
-            return;
-        }
+//        Date startTime = DateUtil.getDateFromString(noticeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A);
+//        Date nowTime = DateUtil.getCurrentDate();
+//        if (startTime.getTime() > nowTime.getTime()) { //还没有到时间
+//            return;
+//        }
 
 
         String objType = noticeDto.getObjType();
@@ -324,6 +342,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
                 logger.info("微信模板返回内容:{}", responseEntity);
             } catch (Exception e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_NOTICE);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("发送失败", e);
             } finally {
                 doSaveLog(startTime, DateUtil.getCurrentDate(), "/pages/notice/detail/detail", JSON.toJSONString(templateMessage), responseEntity, appUserDto.getOpenId());
@@ -399,6 +422,11 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
                 logger.info("微信模板返回内容:{}", responseEntity);
             } catch (Exception e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_NOTICE);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("发送失败", e);
             } finally {
                 doSaveLog(startTime, DateUtil.getCurrentDate(), "/pages/notice/detail/detail", JSON.toJSONString(templateMessage), responseEntity, openId);
