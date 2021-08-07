@@ -35,9 +35,9 @@ public class InitializeBuildingUnitDaoImpl extends BaseServiceDao implements IIn
 
         int deleteFlag = sqlSessionTemplate.delete("initializeBuildingUnitDaoImpl.deleteBuildingUnit", info);
 
-        if (deleteFlag < 1) {
+/*        if (deleteFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "building_unit初始化失败：" + JSONObject.toJSONString(info));
-        }
+        }*/
         return deleteFlag;
     }
     /**
@@ -51,9 +51,9 @@ public class InitializeBuildingUnitDaoImpl extends BaseServiceDao implements IIn
 
         int deleteFlag = sqlSessionTemplate.delete("initializeBuildingUnitDaoImpl.deletefFloor", info);
 
-        if (deleteFlag < 1) {
+/*        if (deleteFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "f_floor初始化失败：" + JSONObject.toJSONString(info));
-        }
+        }*/
         return deleteFlag;
     }
     /**
@@ -67,9 +67,9 @@ public class InitializeBuildingUnitDaoImpl extends BaseServiceDao implements IIn
 
         int deleteFlag = sqlSessionTemplate.delete("initializeBuildingUnitDaoImpl.deleteBuildingRoom", info);
 
-        if (deleteFlag < 1) {
+ /*       if (deleteFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "f_floor初始化失败：" + JSONObject.toJSONString(info));
-        }
+        }*/
         return deleteFlag;
     }
 
@@ -78,9 +78,9 @@ public class InitializeBuildingUnitDaoImpl extends BaseServiceDao implements IIn
 
         int deleteFlag = sqlSessionTemplate.delete("initializeBuildingUnitDaoImpl.deleteParkingArea", info);
 
-        if (deleteFlag < 1) {
+  /*      if (deleteFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "f_floor初始化失败：" + JSONObject.toJSONString(info));
-        }
+        }*/
         return deleteFlag;
     }
     /**
@@ -94,9 +94,9 @@ public class InitializeBuildingUnitDaoImpl extends BaseServiceDao implements IIn
 
         int deleteFlag = sqlSessionTemplate.delete("initializeBuildingUnitDaoImpl.deleteParkingSpace", info);
 
-        if (deleteFlag < 1) {
+  /*      if (deleteFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "f_floor初始化失败：" + JSONObject.toJSONString(info));
-        }
+        }*/
         return deleteFlag;
     }
 

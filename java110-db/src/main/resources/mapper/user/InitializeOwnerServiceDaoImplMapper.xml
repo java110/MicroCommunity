@@ -6,7 +6,7 @@
 
     <!-- 初始化数据 add by wuxw 2018-07-03 -->
     <delete id="deleteBuildingOwner" parameterType="Map">
-        　delete from building_owner t where 1=1
-            and t.community_id = #{communityId}
+        delete from building_owner where 1=1
+            and community_id = #{communityId}
     </delete>
 </mapper>

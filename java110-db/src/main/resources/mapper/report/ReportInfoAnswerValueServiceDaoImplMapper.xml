@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportInfoAnswerValueServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportInfoAnswerValueInfo" parameterType="Map">
+        insert into report_info_answer_value(
+value_id,user_an_id,title_id,an_value_id,value_content,community_id,setting_id
+) values (
+#{valueId},#{userAnId},#{titleId},#{anValueId},#{valueContent},#{communityId},#{settingId}
+)
+    </insert>
+
+
+
+    <!-- 查询批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <select id="getReportInfoAnswerValueInfo" parameterType="Map" resultType="Map">
+        select  t.value_id,t.value_id valueId,t.create_time,t.create_time createTime,t.user_an_id,t.user_an_id userAnId,t.title_id,t.title_id titleId,t.an_value_id,t.an_value_id anValueId,t.value_content,t.value_content valueContent,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.setting_id,t.setting_id settingId 
+from report_info_answer_value t 
+where 1 =1 
+<if test="valueId !=null and valueId != ''">
+   and t.value_id= #{valueId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="userAnId !=null and userAnId != ''">
+   and t.user_an_id= #{userAnId}
+</if> 
+<if test="titleId !=null and titleId != ''">
+   and t.title_id= #{titleId}
+</if> 
+<if test="anValueId !=null and anValueId != ''">
+   and t.an_value_id= #{anValueId}
+</if> 
+<if test="valueContent !=null and valueContent != ''">
+   and t.value_content= #{valueContent}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportInfoAnswerValueInfo" parameterType="Map">
+        update  report_info_answer_value t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="valueId !=null and valueId != ''">
+, t.value_id= #{valueId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="userAnId !=null and userAnId != ''">
+, t.user_an_id= #{userAnId}
+</if> 
+<if test="titleId !=null and titleId != ''">
+, t.title_id= #{titleId}
+</if> 
+<if test="valueContent !=null and valueContent != ''">
+, t.value_content= #{valueContent}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+, t.setting_id= #{settingId}
+</if> 
+ where 1=1 <if test="anValueId !=null and anValueId != ''">
+and t.an_value_id= #{anValueId}
+</if> 
+
+    </update>
+
+    <!-- 查询批量操作日志详情数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportInfoAnswerValuesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_info_answer_value t 
+where 1 =1 
+<if test="valueId !=null and valueId != ''">
+   and t.value_id= #{valueId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="userAnId !=null and userAnId != ''">
+   and t.user_an_id= #{userAnId}
+</if> 
+<if test="titleId !=null and titleId != ''">
+   and t.title_id= #{titleId}
+</if> 
+<if test="anValueId !=null and anValueId != ''">
+   and t.an_value_id= #{anValueId}
+</if> 
+<if test="valueContent !=null and valueContent != ''">
+   and t.value_content= #{valueContent}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+
+
+     </select>
+
+</mapper>

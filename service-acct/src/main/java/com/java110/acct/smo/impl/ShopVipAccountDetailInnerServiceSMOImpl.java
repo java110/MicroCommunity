@@ -4,7 +4,7 @@ package com.java110.acct.smo.impl;
 import com.java110.acct.dao.IShopVipAccountDetailServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.shopVipAccountDetail.ShopVipAccountDetailDto;
+import com.java110.dto.shopVipAccount.ShopVipAccountDetailDto;
 import com.java110.intf.acct.IShopVipAccountDetailInnerServiceSMO;
 import com.java110.po.shopVipAccountDetail.ShopVipAccountDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
