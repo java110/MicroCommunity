@@ -99,7 +99,7 @@ public class SaveActivitiesListener extends AbstractServiceApiPlusListener {
             reqJson.put("communityId", apiCommunityDataVo.getCommunityId());
             activitiesTypeDto = new ActivitiesTypeDto();
             activitiesTypeDto.setCommunityId(reqJson.getString("communityId"));
-            activitiesTypeDto.setTypeCd(oneActivitiesTypeDtos.get(0).getTypeName());
+            activitiesTypeDto.setTypeName(oneActivitiesTypeDtos.get(0).getTypeName());
             activitiesTypeDtos = activitiesTypeInnerServiceSMOImpl.queryActivitiesTypes(activitiesTypeDto);
             if (activitiesTypeDtos == null || activitiesTypeDtos.size() < 1) {
                 continue;
