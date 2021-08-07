@@ -96,11 +96,13 @@ public class ReportInfoSettingTitleValueApi {
      */
     @RequestMapping(value = "/queryTitleValue", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoSettingTitleValue(@RequestParam(value = "communityId") String communityId,
+                                                                   @RequestParam(value = "titleId") String titleId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto = new ReportInfoSettingTitleValueDto();
         reportInfoSettingTitleValueDto.setPage(page);
         reportInfoSettingTitleValueDto.setRow(row);
+        reportInfoSettingTitleValueDto.setTitleId(titleId);
         reportInfoSettingTitleValueDto.setCommunityId(communityId);
         return getReportInfoSettingTitleValueBMOImpl.get(reportInfoSettingTitleValueDto);
     }
