@@ -31,33 +31,33 @@ value_id,user_an_id,title_id,an_value_id,value_content,community_id,setting_id
         LEFT JOIN t_dict td on st.report_type = td.status_cd and td.table_name = 'report_info_setting' and td.table_columns = 'report_type'
         where 1=1
 <if test="valueId !=null and valueId != ''">
-   and t.value_id= #{valueId}
+   and av.value_id= #{valueId}
 </if> 
 <if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
+   and av.create_time= #{createTime}
 </if> 
 <if test="userAnId !=null and userAnId != ''">
-   and t.user_an_id= #{userAnId}
+   and av.user_an_id= #{userAnId}
 </if> 
 <if test="titleId !=null and titleId != ''">
-   and t.title_id= #{titleId}
+   and av.title_id= #{titleId}
 </if> 
 <if test="anValueId !=null and anValueId != ''">
-   and t.an_value_id= #{anValueId}
+   and av.an_value_id= #{anValueId}
 </if> 
 <if test="valueContent !=null and valueContent != ''">
-   and t.value_content= #{valueContent}
+   and av.value_content= #{valueContent}
 </if> 
 <if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
+   and av.status_cd= #{statusCd}
 </if> 
 <if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
+   and av.community_id= #{communityId}
 </if> 
 <if test="settingId !=null and settingId != ''">
-   and t.setting_id= #{settingId}
+   and av.setting_id= #{settingId}
 </if> 
-order by t.create_time desc
+order by av.create_time desc
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 
@@ -111,31 +111,31 @@ and t.an_value_id= #{anValueId}
          LEFT JOIN t_dict td on st.report_type = td.status_cd and td.table_name = 'report_info_setting' and td.table_columns = 'report_type'
          where 1=1
 <if test="valueId !=null and valueId != ''">
-   and t.value_id= #{valueId}
+   and av.value_id= #{valueId}
 </if> 
 <if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
+   and av.create_time= #{createTime}
 </if> 
 <if test="userAnId !=null and userAnId != ''">
-   and t.user_an_id= #{userAnId}
+   and av.user_an_id= #{userAnId}
 </if> 
 <if test="titleId !=null and titleId != ''">
-   and t.title_id= #{titleId}
+   and av.title_id= #{titleId}
 </if> 
 <if test="anValueId !=null and anValueId != ''">
-   and t.an_value_id= #{anValueId}
+   and av.an_value_id= #{anValueId}
 </if> 
 <if test="valueContent !=null and valueContent != ''">
-   and t.value_content= #{valueContent}
+   and av.value_content= #{valueContent}
 </if> 
 <if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
+   and av.status_cd= #{statusCd}
 </if> 
 <if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
+   and av.community_id= #{communityId}
 </if> 
 <if test="settingId !=null and settingId != ''">
-   and t.setting_id= #{settingId}
+   and av.setting_id= #{settingId}
 </if> 
 
 
