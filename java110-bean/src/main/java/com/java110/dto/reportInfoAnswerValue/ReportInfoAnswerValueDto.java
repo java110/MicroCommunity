@@ -23,6 +23,15 @@ private String communityId;
 private String settingId;
 
 
+private String userName;
+private String repName;
+private String repTitle;
+private String repValue;
+private String reType;
+private String repTypeName;
+
+
+
     private Date createTime;
 
     private String statusCd = "0";
@@ -86,5 +95,53 @@ public void setSettingId(String settingId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getRepName() {
+        return repName;
+    }
+
+    public void setRepName(String repName) {
+        this.repName = repName;
+    }
+
+    public String getRepTitle() {
+        return repTitle;
+    }
+
+    public void setRepTitle(String repTitle) {
+        this.repTitle = repTitle;
+    }
+
+    public String getRepValue() {
+        return repValue;
+    }
+
+    public void setRepValue(String repValue) {
+        this.repValue = repValue;
+    }
+
+    public String getReType() {
+        return reType;
+    }
+
+    public void setReType(String reType) {
+        this.reType = reType;
+    }
+
+    public String getRepTypeName() {
+        return repTypeName;
+    }
+
+    public void setRepTypeName(String repTypeName) {
+        this.repTypeName = repTypeName;
     }
 }

@@ -108,12 +108,12 @@ public class ReportInfoSettingTitleValueApi {
     }
     /**
      * 微信删除消息模板
-     * @serviceCode /reportInfoSettingTitleValue/queryTitleValueInfoResult
+     * @serviceCode /reportInfoSettingTitleValue/queryTitleValueResult
      * @path /app/reportInfoSettingTitleValue/queryReportInfoSettingTitleValue
      * @param communityId 小区ID
      * @return
      */
-    @RequestMapping(value = "/queryTitleValueInfoResult", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryTitleValueResult", method = RequestMethod.GET)
     public ResponseEntity<String> getReportInfoSettingTitleValueInfoResult(@RequestParam(value = "communityId") String communityId,
                                                                    @RequestParam(value = "titleId") String titleId,
                                                       @RequestParam(value = "page") int page,

@@ -21,9 +21,15 @@ value_id,user_an_id,title_id,an_value_id,value_content,community_id,setting_id
 
     <!-- 查询批量操作日志详情信息 add by wuxw 2018-07-03 -->
     <select id="getReportInfoAnswerValueInfo" parameterType="Map" resultType="Map">
-        select  t.value_id,t.value_id valueId,t.create_time,t.create_time createTime,t.user_an_id,t.user_an_id userAnId,t.title_id,t.title_id titleId,t.an_value_id,t.an_value_id anValueId,t.value_content,t.value_content valueContent,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.setting_id,t.setting_id settingId 
-from report_info_answer_value t 
-where 1 =1 
+        select ra.person_name userName,st.name repName,tt.title repTitle,tv.qa_value repValue,av.value_content valueContent,
+        av.create_time createTime,st.report_type reType,td.`name` repTypeName from
+        report_info_answer_value av
+        LEFT JOIN report_info_answer ra on av.user_an_id = ra.user_an_id and ra.status_cd=0
+        LEFT JOIN report_info_setting_title_value tv on av.value_id = tv.value_id  and tv.status_cd=0
+        LEFT JOIN report_info_setting_title tt on av.title_id = av.title_id and tt.status_cd=0
+        LEFT JOIN report_info_setting st on av.setting_id = st.setting_id and st.status_cd=0
+        LEFT JOIN t_dict td on st.report_type = td.status_cd and td.table_name = 'report_info_setting' and td.table_columns = 'report_type'
+        where 1=1
 <if test="valueId !=null and valueId != ''">
    and t.value_id= #{valueId}
 </if> 
@@ -96,9 +102,14 @@ and t.an_value_id= #{anValueId}
 
     <!-- 查询批量操作日志详情数量 add by wuxw 2018-07-03 -->
      <select id="queryReportInfoAnswerValuesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from report_info_answer_value t 
-where 1 =1 
+         select count(1) count  from
+         report_info_answer_value av
+         LEFT JOIN report_info_answer ra on av.user_an_id = ra.user_an_id and ra.status_cd=0
+         LEFT JOIN report_info_setting_title_value tv on av.value_id = tv.value_id  and tv.status_cd=0
+         LEFT JOIN report_info_setting_title tt on av.title_id = av.title_id and tt.status_cd=0
+         LEFT JOIN report_info_setting st on av.setting_id = st.setting_id and st.status_cd=0
+         LEFT JOIN t_dict td on st.report_type = td.status_cd and td.table_name = 'report_info_setting' and td.table_columns = 'report_type'
+         where 1=1
 <if test="valueId !=null and valueId != ''">
    and t.value_id= #{valueId}
 </if> 
