@@ -101,14 +101,20 @@ public class ReportInfoAnswerValueApi {
      */
     @RequestMapping(value = "/queryReportInfoAnswerValue", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoAnswerValue(@RequestParam(value = "communityId") String communityId,
-                                                             @RequestParam(value = "titleId") String titleId,
+                                                             @RequestParam(value = "userName",required = false) String userName,
+                                                             @RequestParam(value = "repName",required = false) String repName,
+                                                             @RequestParam(value = "repTitle",required = false) String repTitle,
+                                                             @RequestParam(value = "valueContent",required = false) String valueContent,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ReportInfoAnswerValueDto reportInfoAnswerValueDto = new ReportInfoAnswerValueDto();
         reportInfoAnswerValueDto.setPage(page);
         reportInfoAnswerValueDto.setRow(row);
         reportInfoAnswerValueDto.setCommunityId(communityId);
-        reportInfoAnswerValueDto.setTitleId(titleId);
+        reportInfoAnswerValueDto.setUserName(userName);
+        reportInfoAnswerValueDto.setRepName(repName);
+        reportInfoAnswerValueDto.setRepTitle(repTitle);
+        reportInfoAnswerValueDto.setValueContent(valueContent);
         return getReportInfoAnswerValueBMOImpl.get(reportInfoAnswerValueDto);
     }
 }
