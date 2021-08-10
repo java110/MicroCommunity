@@ -9,8 +9,9 @@ import com.java110.acct.bmo.shopVipAccountDetail.IDeleteShopVipAccountDetailBMO;
 import com.java110.acct.bmo.shopVipAccountDetail.IGetShopVipAccountDetailBMO;
 import com.java110.acct.bmo.shopVipAccountDetail.ISaveShopVipAccountDetailBMO;
 import com.java110.acct.bmo.shopVipAccountDetail.IUpdateShopVipAccountDetailBMO;
+import com.java110.dto.shopVipAccount.ShopUserAccountVipDto;
 import com.java110.dto.shopVipAccount.ShopVipAccountDto;
-import com.java110.dto.shopVipAccountDetail.ShopVipAccountDetailDto;
+import com.java110.dto.shopVipAccount.ShopVipAccountDetailDto;
 import com.java110.po.shopVipAccount.ShopVipAccountPo;
 import com.java110.po.shopVipAccountDetail.ShopVipAccountDetailPo;
 import com.java110.utils.util.Assert;
@@ -200,4 +201,7 @@ public class ShopVipAccountApi {
         shopVipAccountDetailDto.setShopId(shopId);
         return getShopVipAccountDetailBMOImpl.get(shopVipAccountDetailDto);
     }
+
+
+
 }

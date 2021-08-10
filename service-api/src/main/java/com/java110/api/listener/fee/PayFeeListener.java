@@ -268,11 +268,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
         if (feeReceiptDetailDtos != null && feeReceiptDetailDtos.size() > 0) {
-            FeeReceiptDetailDto feeReceiptDetailDto1 = feeReceiptDetailDtos.get(0);
-            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDto1));
+            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos.get(0)));
             return;
         }
-
         //修改折扣申请状态，空置房折扣只能用一次
         String selectDiscount = paramObj.getString("selectDiscount");
         JSONArray params = JSONArray.parseArray(selectDiscount);
@@ -286,7 +284,8 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
                 applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
             }
         }
-        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailPo));
+        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDto));
+
     }
 
 

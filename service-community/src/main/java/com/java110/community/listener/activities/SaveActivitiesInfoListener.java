@@ -90,7 +90,7 @@ public class SaveActivitiesInfoListener extends AbstractActivitiesBusinessServic
         //活动信息
         List<Map> businessActivitiesInfo = activitiesServiceDaoImpl.getBusinessActivitiesInfo(info);
         if( businessActivitiesInfo != null && businessActivitiesInfo.size() >0) {
-            reFreshShareColumn(info, businessActivitiesInfo.get(0));
+            //reFreshShareColumn(info, businessActivitiesInfo.get(0));
             activitiesServiceDaoImpl.saveActivitiesInfoInstance(info);
             if(businessActivitiesInfo.size() == 1) {
                 dataFlowContext.addParamOut("activitiesId", businessActivitiesInfo.get(0).get("activities_id"));

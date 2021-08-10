@@ -9,6 +9,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.report.IGeneratorOweFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.logSystemError.LogSystemErrorPo;
@@ -77,13 +78,18 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
     @Autowired
     private IReportOweFeeServiceDao reportOweFeeServiceDaoImpl;
 
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
     @Override
     public int generatorOweData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
 
         CommunityDto communityDto = new CommunityDto();
 
-        List<CommunityDto> communityDtos = BeanConvertUtil.covertBeanList(
-                reportCommunityServiceDaoImpl.getCommunitys(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);
+//        List<CommunityDto> communityDtos = BeanConvertUtil.covertBeanList(
+//                reportCommunityServiceDaoImpl.getCommunitys(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);
+
+        List<CommunityDto> communityDtos =communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
         for (CommunityDto tmpCommunityDto : communityDtos) {
             reportFeeMonthStatisticsPo.setCommunityId(tmpCommunityDto.getCommunityId());

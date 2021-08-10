@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="initializeBuildingUnitDaoImpl">
+
+    <!-- 初始化数据 add by wuxw 2018-07-03 -->
+    <delete id="deleteBuildingUnit" parameterType="Map">
+        delete from building_unit where 1=1
+            and floor_id in
+            <foreach collection="floorIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+    </delete>
+
+    <!-- 初始化数据 add by wuxw 2018-07-03 -->
+    <delete id="deletefFloor" parameterType="Map">
+        delete from f_floor where 1=1
+            and community_id = #{communityId}
+    </delete>
+    <!-- 初始化数据 add by wuxw 2018-07-03 -->
+    <delete id="deleteBuildingRoom" parameterType="Map">
+        delete from building_room where 1=1
+            and community_id = #{communityId}
+    </delete>
+    <!-- 初始化数据 add by wuxw 2018-07-03 -->
+    <delete id="deleteParkingArea" parameterType="Map">
+        delete from parking_area where 1=1
+            and community_id = #{communityId}
+    </delete>
+    <!-- 初始化数据 add by wuxw 2018-07-03 -->
+    <delete id="deleteParkingSpace" parameterType="Map">
+        delete from parking_space where 1=1
+            and community_id = #{communityId}
+    </delete>
+</mapper>

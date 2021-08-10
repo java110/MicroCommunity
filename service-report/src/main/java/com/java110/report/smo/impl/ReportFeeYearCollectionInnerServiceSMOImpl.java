@@ -144,6 +144,7 @@ public class ReportFeeYearCollectionInnerServiceSMOImpl extends BaseServiceSMO i
                 = reportFeeYearCollectionDetailInnerServiceSMOImpl.queryReportFeeYearCollectionDetails(reportFeeYearCollectionDetailDto);
 
         List<ReportFeeYearCollectionDetailDto> tmpReportFeeYearCollectionDetailDtos = null;
+        //循环 主表
         for (ReportFeeYearCollectionDto reportFeeYearCollectionDto : reportFeeYearCollections) {
             tmpReportFeeYearCollectionDetailDtos = new ArrayList<>();
             for (ReportFeeYearCollectionDetailDto tmpReportFeeYearCollectionDetailDto : reportFeeYearCollectionDetailDtos) {

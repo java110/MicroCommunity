@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeMsgServiceDaoImpl">
+
+
+    <!-- 保存商户消息信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreMsgInfo" parameterType="Map">
+        insert into store_msg(
+        msg_type,view_id,msg_id,share_id,title,msg_flag,content
+        ) values (
+        #{msgType},#{viewId},#{msgId},#{shareId},#{title},#{msgFlag},#{content}
+        )
+    </insert>
+
+
+    <!-- 查询商户消息信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreMsgInfo" parameterType="Map" resultType="Map">
+        select t.msg_type,t.msg_type msgType,t.view_id,t.view_id viewId,t.msg_id,t.msg_id msgId,t.share_id,t.share_id
+        shareId,t.status_cd,t.status_cd statusCd,t.title,t.msg_flag,t.msg_flag msgFlag,t.content,t.create_time createTime
+        from store_msg t
+        where 1 =1
+        <if test="msgType !=null and msgType != ''">
+            and t.msg_type= #{msgType}
+        </if>
+        <if test="viewId !=null and viewId != ''">
+            and t.view_id= #{viewId}
+        </if>
+        <if test="msgId !=null and msgId != ''">
+            and t.msg_id= #{msgId}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            and t.share_id= #{shareId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="title !=null and title != ''">
+            and t.title= #{title}
+        </if>
+        <if test="msgFlag !=null and msgFlag != ''">
+            and t.msg_flag= #{msgFlag}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改商户消息信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreMsgInfo" parameterType="Map">
+        update store_msg t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="msgType !=null and msgType != ''">
+            , t.msg_type= #{msgType}
+        </if>
+        <if test="viewId !=null and viewId != ''">
+            , t.view_id= #{viewId}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            , t.share_id= #{shareId}
+        </if>
+        <if test="title !=null and title != ''">
+            , t.title= #{title}
+        </if>
+        <if test="msgFlag !=null and msgFlag != ''">
+            , t.msg_flag= #{msgFlag}
+        </if>
+        <if test="content !=null and content != ''">
+            , t.content= #{content}
+        </if>
+        where 1=1
+        <if test="msgId !=null and msgId != ''">
+            and t.msg_id= #{msgId}
+        </if>
+
+    </update>
+
+    <!-- 查询商户消息数量 add by wuxw 2018-07-03 -->
+    <select id="queryStoreMsgsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from store_msg t
+        where 1 =1
+        <if test="msgType !=null and msgType != ''">
+            and t.msg_type= #{msgType}
+        </if>
+        <if test="viewId !=null and viewId != ''">
+            and t.view_id= #{viewId}
+        </if>
+        <if test="msgId !=null and msgId != ''">
+            and t.msg_id= #{msgId}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            and t.share_id= #{shareId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="title !=null and title != ''">
+            and t.title= #{title}
+        </if>
+        <if test="msgFlag !=null and msgFlag != ''">
+            and t.msg_flag= #{msgFlag}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+
+
+    </select>
+
+</mapper>

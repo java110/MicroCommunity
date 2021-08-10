@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportInfoSettingTitleServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存进出上报题目设置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportInfoSettingTitleInfo" parameterType="Map">
+        insert into report_info_setting_title(
+title_type,title_id,title,community_id,seq,setting_id
+) values (
+#{titleType},#{titleId},#{title},#{communityId},#{seq},#{settingId}
+)
+    </insert>
+
+
+
+    <!-- 查询进出上报题目设置信息 add by wuxw 2018-07-03 -->
+    <select id="getReportInfoSettingTitleInfo" parameterType="Map" resultType="Map">
+        select  t.title_type,t.title_type titleType,t.create_time,t.create_time createTime,t.title_id,t.title_id titleId,t.status_cd,t.status_cd statusCd,t.title,t.community_id,t.community_id communityId,t.seq,t.setting_id,t.setting_id settingId 
+from report_info_setting_title t 
+where 1 =1 
+<if test="titleType !=null and titleType != ''">
+   and t.title_type= #{titleType}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="titleId !=null and titleId != ''">
+   and t.title_id= #{titleId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="titleLike !=null and titleLike != ''">
+   and t.title like concat('%',#{titleLike},'%')
+</if>
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改进出上报题目设置信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportInfoSettingTitleInfo" parameterType="Map">
+        update  report_info_setting_title t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="titleType !=null and titleType != ''">
+, t.title_type= #{titleType}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="title !=null and title != ''">
+, t.title= #{title}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="seq !=null and seq != ''">
+, t.seq= #{seq}
+</if> 
+<if test="settingId !=null and settingId != ''">
+, t.setting_id= #{settingId}
+</if> 
+ where 1=1 <if test="titleId !=null and titleId != ''">
+and t.title_id= #{titleId}
+</if> 
+
+    </update>
+
+    <!-- 查询进出上报题目设置数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportInfoSettingTitlesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_info_setting_title t 
+where 1 =1 
+<if test="titleType !=null and titleType != ''">
+   and t.title_type= #{titleType}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="titleId !=null and titleId != ''">
+   and t.title_id= #{titleId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="titleLike !=null and titleLike != ''">
+   and t.title like concat('%',#{titleLike},'%')
+</if>
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+
+
+     </select>
+
+</mapper>

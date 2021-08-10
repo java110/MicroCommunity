@@ -1,4 +1,4 @@
-package com.java110.dto.shopVipAccountDetail;
+package com.java110.dto.shopVipAccount;
 
 import com.java110.dto.PageDto;
 import java.io.Serializable;

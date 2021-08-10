@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="initializePayFeeServiceDaoImpl">
+    <!-- 初始化数据 add by wuxw 2018-07-03 -->
+    <delete id="deletePayFee" parameterType="Map">
+        delete from pay_fee  where 1=1
+        and community_id = #{communityId}
+    </delete>
+</mapper>

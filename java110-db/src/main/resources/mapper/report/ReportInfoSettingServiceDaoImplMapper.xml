@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportInfoSettingServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存进出上报信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportInfoSettingInfo" parameterType="Map">
+        insert into report_info_setting(
+report_type,name,start_time,remark,end_time,community_id,setting_id
+) values (
+#{reportType},#{name},#{startTime},#{remark},#{endTime},#{communityId},#{settingId}
+)
+    </insert>
+
+
+
+    <!-- 查询进出上报信息 add by wuxw 2018-07-03 -->
+    <select id="getReportInfoSettingInfo" parameterType="Map" resultType="Map">
+        select  t.report_type,t.report_type reportType,t.create_time,t.create_time createTime,t.name,t.start_time,t.start_time startTime,t.remark,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.setting_id,t.setting_id settingId 
+from report_info_setting t 
+where 1 =1 
+<if test="reportType !=null and reportType != ''">
+   and t.report_type= #{reportType}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="nameLike !=null and nameLike != ''">
+   and t.name like concat('%',#{nameLike},'%')
+</if>
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改进出上报信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportInfoSettingInfo" parameterType="Map">
+        update  report_info_setting t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="reportType !=null and reportType != ''">
+, t.report_type= #{reportType}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="settingId !=null and settingId != ''">
+and t.setting_id= #{settingId}
+</if> 
+
+    </update>
+
+    <!-- 查询进出上报数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportInfoSettingsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_info_setting t 
+where 1 =1 
+<if test="reportType !=null and reportType != ''">
+   and t.report_type= #{reportType}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="nameLike !=null and nameLike != ''">
+   and t.name like concat('%',#{nameLike},'%')
+</if>
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+
+
+     </select>
+
+</mapper>

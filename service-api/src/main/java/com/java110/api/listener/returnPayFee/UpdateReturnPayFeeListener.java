@@ -83,18 +83,14 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
 
             Assert.listOnlyOne(feeDtos, "费用不存在");
             FeeDto feeDto1 = feeDtos.get(0);
-            Calendar endCalender = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            endCalender.setTime(feeDto1.getEndTime());
-            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
-            reqJson.put("endTime", sdf.format(endCalender.getTime()));
+            reqJson.put("endTime", DateUtil.getFormatTimeString(feeDetailDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
             reqJson.put("amount", feeDto1.getAmount());
             reqJson.put("feeTypeCd", feeDto1.getFeeTypeCd());
             reqJson.put("communityId", feeDto1.getCommunityId());
             reqJson.put("payerObjId", feeDto1.getPayerObjId());
             reqJson.put("incomeObjId", feeDto1.getIncomeObjId());
-            endCalender.setTime(feeDto1.getStartTime());
-            reqJson.put("startTime", sdf.format(endCalender.getTime()));
+            reqJson.put("startTime", sdf.format(feeDto1.getStartTime()));
             reqJson.put("userId", feeDto1.getUserId());
             reqJson.put("feeFlag", feeDto1.getFeeFlag());
             reqJson.put("statusCd", feeDto1.getStatusCd());

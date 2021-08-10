@@ -1,8 +1,14 @@
 package com.java110.acct.bmo.shopVipAccountDetail.impl;
 
 import com.java110.acct.bmo.shopVipAccountDetail.IGetShopVipAccountDetailBMO;
-import com.java110.dto.shopVipAccountDetail.ShopVipAccountDetailDto;
+import com.java110.dto.shopVipAccount.ShopUserAccountVipDto;
+import com.java110.dto.shopVipAccount.ShopVipAccountDetailDto;
+import com.java110.dto.shopVipAccount.ShopVipAccountDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IShopVipAccountDetailInnerServiceSMO;
+import com.java110.intf.acct.IShopVipAccountInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +23,8 @@ public class GetShopVipAccountDetailBMOImpl implements IGetShopVipAccountDetailB
 
     @Autowired
     private IShopVipAccountDetailInnerServiceSMO shopVipAccountDetailInnerServiceSMOImpl;
+
+
 
     /**
      * @param shopVipAccountDetailDto
@@ -40,5 +48,6 @@ public class GetShopVipAccountDetailBMOImpl implements IGetShopVipAccountDetailB
 
         return responseEntity;
     }
+
 
 }

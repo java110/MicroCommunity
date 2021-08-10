@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="assetImportLogServiceDaoImpl">
+
+
+    <!-- 保存批量操作日志信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAssetImportLogInfo" parameterType="Map">
+        insert into asset_import_log(
+        log_type,success_count,log_id,remark,community_id,error_count
+        ) values (
+        #{logType},#{successCount},#{logId},#{remark},#{communityId},#{errorCount}
+        )
+    </insert>
+
+
+    <!-- 查询批量操作日志信息 add by wuxw 2018-07-03 -->
+    <select id="getAssetImportLogInfo" parameterType="Map" resultType="Map">
+        select t.log_type,t.log_type logType,t.success_count,t.success_count successCount,t.log_id,t.log_id
+        logId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.error_count,t.error_count errorCount,t.create_time createTime,td.`name` logTypeName
+        from asset_import_log t
+        LEFT JOIN t_dict td on t.log_type = td.status_cd and td.table_name = 'asset_import_log' and td.table_columns = 'log_type'
+        where 1 =1
+        <if test="logType !=null and logType != ''">
+            and t.log_type= #{logType}
+        </if>
+        <if test="successCount !=null and successCount != ''">
+            and t.success_count= #{successCount}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="errorCount !=null and errorCount != ''">
+            and t.error_count= #{errorCount}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改批量操作日志信息 add by wuxw 2018-07-03 -->
+    <update id="updateAssetImportLogInfo" parameterType="Map">
+        update asset_import_log t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="logType !=null and logType != ''">
+            , t.log_type= #{logType}
+        </if>
+        <if test="successCount !=null and successCount != ''">
+            , t.success_count= #{successCount}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="errorCount !=null and errorCount != ''">
+            , t.error_count= #{errorCount}
+        </if>
+        where 1=1
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+
+    </update>
+
+    <!-- 查询批量操作日志数量 add by wuxw 2018-07-03 -->
+    <select id="queryAssetImportLogsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from asset_import_log t
+        where 1 =1
+        <if test="logType !=null and logType != ''">
+            and t.log_type= #{logType}
+        </if>
+        <if test="successCount !=null and successCount != ''">
+            and t.success_count= #{successCount}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="errorCount !=null and errorCount != ''">
+            and t.error_count= #{errorCount}
+        </if>
+
+
+    </select>
+
+</mapper>

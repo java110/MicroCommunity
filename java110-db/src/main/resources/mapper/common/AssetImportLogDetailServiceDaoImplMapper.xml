@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="assetImportLogDetailServiceDaoImpl">
+
+
+    <!-- 保存批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAssetImportLogDetailInfo" parameterType="Map">
+        insert into asset_import_log_detail(
+        detail_id,log_id,state,obj_name,community_id,message
+        ) values (
+        #{detailId},#{logId},#{state},#{objName},#{communityId},#{message}
+        )
+    </insert>
+    <insert id="saveAssetImportLogDetails" parameterType="Map">
+        insert into asset_import_log_detail(
+        detail_id,log_id,state,obj_name,community_id,message
+        ) values
+        <foreach collection="assetImportLogDetailPos" item="item" separator=",">
+            (#{item.detailId},#{item.logId},#{item.state},#{item.objName},#{item.communityId},#{item.message})
+        </foreach>
+    </insert>
+
+
+
+    <!-- 查询批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <select id="getAssetImportLogDetailInfo" parameterType="Map" resultType="Map">
+        select t.detail_id,t.detail_id detailId,t.log_id,t.log_id logId,t.status_cd,t.status_cd
+        statusCd,t.state,t.obj_name,t.obj_name objName,t.community_id,t.community_id communityId,t.message
+        from asset_import_log_detail t
+        where 1 =1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改批量操作日志详情信息 add by wuxw 2018-07-03 -->
+    <update id="updateAssetImportLogDetailInfo" parameterType="Map">
+        update asset_import_log_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="logId !=null and logId != ''">
+            , t.log_id= #{logId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="message !=null and message != ''">
+            , t.message= #{message}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+
+    </update>
+
+    <!-- 查询批量操作日志详情数量 add by wuxw 2018-07-03 -->
+    <select id="queryAssetImportLogDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from asset_import_log_detail t
+        where 1 =1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+
+
+    </select>
+
+</mapper>

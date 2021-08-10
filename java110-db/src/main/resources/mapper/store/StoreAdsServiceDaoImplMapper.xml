@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeAdsServiceDaoImpl">
+
+
+    <!-- 保存商户广告信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreAdsInfo" parameterType="Map">
+        insert into store_ads(
+        ad_name,ad_type,share_id,start_time,page_url,state,end_time,advert_type,ads_id,seq,url
+        ) values (
+        #{adName},#{adType},#{shareId},#{startTime},#{pageUrl},#{state},#{endTime},#{advertType},#{adsId},#{seq},#{url}
+        )
+    </insert>
+
+
+    <!-- 查询商户广告信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreAdsInfo" parameterType="Map" resultType="Map">
+        select t.ad_name,t.ad_name adName,t.ad_type,t.ad_type adType,t.share_id,t.share_id
+        shareId,t.start_time,t.start_time startTime,t.page_url,t.page_url pageUrl,t.status_cd,t.status_cd
+        statusCd,t.state,t.end_time,t.end_time endTime,t.advert_type,t.advert_type advertType,t.ads_id,t.ads_id
+        adsId,t.seq,t.url,t.create_time createTime
+        from store_ads t
+        where 1 =1
+        <if test="adName !=null and adName != ''">
+            and t.ad_name= #{adName}
+        </if>
+        <if test="adType !=null and adType != ''">
+            and t.ad_type= #{adType}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            and t.share_id= #{shareId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type= #{advertType}
+        </if>
+        <if test="adsId !=null and adsId != ''">
+            and t.ads_id= #{adsId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="url !=null and url != ''">
+            and t.url= #{url}
+        </if>
+        order by t.seq
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改商户广告信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreAdsInfo" parameterType="Map">
+        update store_ads t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="adName !=null and adName != ''">
+            , t.ad_name= #{adName}
+        </if>
+        <if test="adType !=null and adType != ''">
+            , t.ad_type= #{adType}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            , t.share_id= #{shareId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            , t.page_url= #{pageUrl}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            , t.advert_type= #{advertType}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        <if test="url !=null and url != ''">
+            , t.url= #{url}
+        </if>
+        where 1=1
+        <if test="adsId !=null and adsId != ''">
+            and t.ads_id= #{adsId}
+        </if>
+
+    </update>
+
+    <!-- 查询商户广告数量 add by wuxw 2018-07-03 -->
+    <select id="queryStoreAdssCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from store_ads t
+        where 1 =1
+        <if test="adName !=null and adName != ''">
+            and t.ad_name= #{adName}
+        </if>
+        <if test="adType !=null and adType != ''">
+            and t.ad_type= #{adType}
+        </if>
+        <if test="shareId !=null and shareId != ''">
+            and t.share_id= #{shareId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type= #{advertType}
+        </if>
+        <if test="adsId !=null and adsId != ''">
+            and t.ads_id= #{adsId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="url !=null and url != ''">
+            and t.url= #{url}
+        </if>
+
+
+    </select>
+
+</mapper>

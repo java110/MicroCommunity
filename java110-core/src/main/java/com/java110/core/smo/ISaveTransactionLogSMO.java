@@ -1,5 +1,6 @@
 package com.java110.core.smo;
 
+import com.java110.dto.assetImportLog.AssetImportLogDto;
 import com.java110.po.transactionLog.TransactionLogPo;
 
 /**
@@ -15,4 +16,10 @@ public interface ISaveTransactionLogSMO {
     public void saveLog(TransactionLogPo transactionLogPo);
 
 
+    /**
+     * 保存 批量导入功能
+     *
+     * @param assetImportLogDto
+     */
+    void saveAssetImportLog(AssetImportLogDto assetImportLogDto);
 }
