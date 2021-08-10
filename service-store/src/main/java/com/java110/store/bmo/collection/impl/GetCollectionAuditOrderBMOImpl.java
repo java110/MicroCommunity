@@ -55,10 +55,7 @@ public class GetCollectionAuditOrderBMOImpl implements IGetCollectionAuditOrderB
             auditOrders = new ArrayList<>();
         }
 
-
-
         return ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) auditUser.getRow()),(int) count,auditOrders);
-
 
     }
 }

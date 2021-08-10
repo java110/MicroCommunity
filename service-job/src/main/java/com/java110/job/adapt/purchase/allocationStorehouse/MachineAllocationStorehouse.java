@@ -168,7 +168,8 @@ public class MachineAllocationStorehouse extends DatabusAdaptImpl {
                 data.setRemark(new Content("请及时处理！"));
             }
             templateMessage.setData(data);
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            //获取员工公众号地址
+            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

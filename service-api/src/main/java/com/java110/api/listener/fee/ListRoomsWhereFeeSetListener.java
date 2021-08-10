@@ -16,6 +16,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,9 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
         if (total > 0) {
             List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
             String userId = context.getUserId();
-            refreshRoomOwners(userId, reqJson.getString("communityId"), roomDtoList);
+            //获取手机号、身份证号加密标识
+            String flag = reqJson.getString("flag");
+            refreshRoomOwners(userId, reqJson.getString("communityId"), roomDtoList, flag);
 
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         }
@@ -149,7 +152,6 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
                 }
             }
         }
-
         return roomDtos;
     }
 
@@ -158,7 +160,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
      *
      * @param roomDtos
      */
-    private void refreshRoomOwners(String userId, String communityId, List<RoomDto> roomDtos) {
+    private void refreshRoomOwners(String userId, String communityId, List<RoomDto> roomDtos, String flag) {
         List<String> roomIds = new ArrayList<>();
         for (RoomDto roomDto : roomDtos) {
             roomIds.add(roomDto.getRoomId());
@@ -175,12 +177,12 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
                     roomDto.setOwnerName(tmpOwnerDto.getName());
                     //对业主身份证号隐藏处理
                     String idCard = tmpOwnerDto.getIdCard();
-                    if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                    if (mark.size() == 0 && idCard != null && !idCard.equals("") && StringUtil.isEmpty(flag)) {
                         idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
                     }
                     //对业主手机号隐藏处理
                     String link = tmpOwnerDto.getLink();
-                    if (mark.size() == 0 && link != null && !link.equals("")) {
+                    if (mark.size() == 0 && link != null && !link.equals("") && StringUtil.isEmpty(flag)) {
                         link = link.substring(0, 3) + "****" + link.substring(7);
                     }
                     roomDto.setIdCard(idCard);

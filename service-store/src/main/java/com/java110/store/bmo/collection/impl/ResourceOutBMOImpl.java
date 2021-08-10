@@ -74,6 +74,9 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
             BigDecimal applyQuantity = purchaseQuantity.multiply(miniUnitStock1);
             //计算物品领用后剩余的最小计量总数
             BigDecimal newMiniStock = miniStock1.subtract(applyQuantity);
+            if (newMiniStock.compareTo(BigDecimal.ZERO) == -1) {
+                throw new IllegalArgumentException("物品库存已经不足，请确认物品库存！");
+            }
             resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();

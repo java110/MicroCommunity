@@ -425,6 +425,22 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return roomInfos;
     }
 
+    @Override
+    public List<Map> queryPayFeeDeposit(Map info) {
+        logger.debug("查询押金统计信息 入参 info : {}", info);
 
+        List<Map> deposits = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDeposit", info);
+
+        return deposits;
+    }
+
+    @Override
+    public List<Map> queryFeeDepositAmount(Map info) {
+        logger.debug("查询押金退费总金额信息 入参 info : {}", info);
+
+        List<Map> deposits = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeDepositAmount", info);
+
+        return deposits;
+    }
 
 }

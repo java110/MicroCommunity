@@ -3,6 +3,7 @@ package com.java110.report.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.RoomDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.bmo.reportFeeMonthStatistics.IDeleteReportFeeMonthStatisticsBMO;
@@ -316,6 +317,8 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "roomId", required = false) String roomId,
                                                     @RequestParam(value = "roomNum", required = false) String roomNum,
                                                     @RequestParam(value = "primeRate", required = false) String primeRate,
+                                                    @RequestParam(value = "state", required = false) String state,
+                                                    @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
                                                     @RequestParam(value = "configId", required = false) String configId,
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
@@ -332,10 +335,51 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setRoomId(roomId);
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
         reportFeeMonthStatisticsDto.setPrimeRate(primeRate);
+        reportFeeMonthStatisticsDto.setState(state);
+        reportFeeMonthStatisticsDto.setFeeTypeCd(feeTypeCd);
         reportFeeMonthStatisticsDto.setConfigId(configId);
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         return getReportFeeMonthStatisticsBMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
+    }
+
+    /**
+     * 押金报表
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryPayFeeDeposit
+     * @path /app/reportFeeMonthStatistics/queryPayFeeDeposit
+     */
+    @RequestMapping(value = "/queryPayFeeDeposit", method = RequestMethod.GET)
+    public ResponseEntity<String> queryPayFeeDeposit(@RequestParam(value = "communityId") String communityId,
+                                                     @RequestParam(value = "configId", required = false) String configId,
+                                                     @RequestParam(value = "feeId", required = false) String feeId,
+                                                     @RequestParam(value = "startTime", required = false) String startTime,
+                                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                                     @RequestParam(value = "payerObjType", required = false) String payerObjType,
+                                                     @RequestParam(value = "state", required = false) String state,
+                                                     @RequestParam(value = "detailState", required = false) String detailState,
+                                                     @RequestParam(value = "floorId", required = false) String floorId,
+                                                     @RequestParam(value = "unitId", required = false) String unitId,
+                                                     @RequestParam(value = "roomNum", required = false) String roomNum,
+                                                     @RequestParam(value = "page") int page,
+                                                     @RequestParam(value = "row") int row) {
+        ReportDeposit reportDeposit = new ReportDeposit();
+        reportDeposit.setPage(page);
+        reportDeposit.setRow(row);
+        reportDeposit.setConfigId(configId);
+        reportDeposit.setFeeId(feeId);
+        reportDeposit.setFeeStartTime(startTime);
+        reportDeposit.setFeeEndTime(endTime);
+        reportDeposit.setPayerObjType(payerObjType);
+        reportDeposit.setState(state);
+        reportDeposit.setDetailState(detailState);
+        reportDeposit.setCommunityId(communityId);
+        reportDeposit.setFloorId(floorId);
+        reportDeposit.setUnitId(unitId);
+        reportDeposit.setRoomNum(roomNum);
+        return getReportFeeMonthStatisticsBMOImpl.queryPayFeeDeposit(reportDeposit);
     }
 
     /**

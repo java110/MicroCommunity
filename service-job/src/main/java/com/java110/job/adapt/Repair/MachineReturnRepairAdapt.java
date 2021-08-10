@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
@@ -14,7 +13,6 @@ import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.staffAppAuth.StaffAppAuthDto;
-import com.java110.dto.user.UserDto;
 import com.java110.entity.order.Business;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
@@ -23,7 +21,6 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairSettingInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
-import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.*;
@@ -75,9 +72,6 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private RestTemplate outRestTemplate;
-
-    @Autowired
-    private IPrivilegeInnerServiceSMO privilegeInnerServiceSMO;
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMO;
@@ -133,11 +127,17 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             String staffName = repairUserDtos.get(0).getStaffName();
             //退单备注
             String returnContext = repairUserDtos.get(0).getContext();
+            //上级操作人
+            String preStaffId = repairUserDtos.get(0).getPreStaffId();
+            //上级操作人姓名
+            String preStaffName = repairUserDtos.get(0).getPreStaffName();
             paramIn.put("repairTypeName", repairTypeName);
             paramIn.put("repairObjName", repairObjName);
             paramIn.put("staffName", staffName);
             paramIn.put("context", context);
             paramIn.put("returnContext", returnContext);
+            paramIn.put("preStaffId", preStaffId);
+            paramIn.put("preStaffName", preStaffName);
             sendReturnMessage(paramIn, communityDtos.get(0));
         } else if (state.equals("10002")) {     //结单
             //获取用户id
@@ -225,17 +225,13 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
             return;
         }
-        // 根据特定权限查询 有该权限的 员工
-        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-        basePrivilegeDto.setResource("/wechatRepairRegistration");
-        List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         String url = sendMsgUrl + accessToken;
-        for (UserDto userDto : userDtos) {
-            //根据 userId 查询到openId
-            StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
-            staffAppAuthDto.setStaffId(userDto.getUserId());
-            staffAppAuthDto.setAppType("WECHAT");
-            List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+        //根据 userId 查询到openId
+        StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
+        staffAppAuthDto.setStaffId(paramIn.getString("preStaffId"));
+        staffAppAuthDto.setAppType("WECHAT");
+        List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+        if (staffAppAuthDtos.size() > 0) {
             String openId = staffAppAuthDtos.get(0).getOpenId();
             Data data = new Data();
             PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
@@ -251,7 +247,8 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             data.setKeyword3(new Content(paramIn.getString("context")));
             data.setRemark(new Content(paramIn.getString("returnContext")));
             templateMessage.setData(data);
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            //获取员工公众号地址
+            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -260,7 +257,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
     }
 
     /**
-     * 结单给管理员推送信息
+     * 结单给业主推送信息
      *
      * @param paramIn
      * @param communityDto
@@ -319,6 +316,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
                 data.setKeyword4(new Content(paramIn.getString("time")));
                 data.setRemark(new Content("请点击查看详情，对我们的工作进行评价，以便提供更优质的服务，感谢您的配合和使用，祝您生活愉快，阖家欢乐！"));
                 templateMessage.setData(data);
+                //获取业主公众号地址
                 String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
                 templateMessage.setUrl(wechatUrl);
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -389,6 +387,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             data.setKeyword5(new Content(paramIn.getString("price") + "元"));
             data.setRemark(new Content("请您及时缴费，感谢您的配合和使用，祝您生活愉快，阖家欢乐！"));
             templateMessage.setData(data);
+            //获取业主公众号地址
             String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));

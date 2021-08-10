@@ -35,12 +35,13 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
     private String stateName;
     private String communityId;
     private String discountId;
-
+    //是否可用
+    private String inUse;
+    private String discountName;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getApplyType() {
         return applyType;
@@ -57,7 +58,6 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
     public void setArdId(String ardId) {
         this.ardId = ardId;
     }
-
 
     public String getCheckUserId() {
         return checkUserId;
@@ -147,7 +147,6 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
         this.discountId = discountId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -202,5 +201,21 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
 
     public void setApplyTypeName(String applyTypeName) {
         this.applyTypeName = applyTypeName;
+    }
+
+    public String getInUse() {
+        return inUse;
+    }
+
+    public void setInUse(String inUse) {
+        this.inUse = inUse;
+    }
+
+    public String getDiscountName() {
+        return discountName;
+    }
+
+    public void setDiscountName(String discountName) {
+        this.discountName = discountName;
     }
 }

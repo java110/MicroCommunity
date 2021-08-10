@@ -1,14 +1,18 @@
 package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsTotalDto;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -19,9 +23,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Service("getReportFeeMonthStatisticsBMOImpl")
@@ -31,6 +37,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Autowired
     private IReportFeeMonthStatisticsInnerServiceSMO reportFeeMonthStatisticsInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     /**
      * @param reportFeeMonthStatisticsDto
@@ -230,9 +239,17 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         Double allVacantHousingDiscount = 0.0;
         //空置房减免(大计)
         Double allVacantHousingReduction = 0.0;
+        int size = 0;
         if (count > 0) {
             //查询缴费明细
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
+            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
+                //查询所有缴费明细记录
+                ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 = BeanConvertUtil.covertBean(reportFeeMonthStatisticsDto, ReportFeeMonthStatisticsDto.class);
+                reportFeeMonthStatisticsDto1.setPage(PageDto.DEFAULT_PAGE);
+                List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos1 = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto1);
+                size = reportFeeMonthStatisticsDtos1.size();
+            }
             //查询应收、实收总金额(大计)
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryAllPayFeeDetail(reportFeeMonthStatisticsDto);
             //查询(优惠、减免、滞纳金、空置房打折、空置房减免金额等)大计总金额
@@ -385,7 +402,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             reportFeeMonthStatisticsTotalDto = new ReportFeeMonthStatisticsTotalDto();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList, reportFeeMonthStatisticsTotalDto);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) size / (double) reportFeeMonthStatisticsDto.getRow()), size, reportList, reportFeeMonthStatisticsTotalDto);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
@@ -644,6 +661,102 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         }
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) roomDto.getRow()), count, roomDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> queryPayFeeDeposit(ReportDeposit reportDeposit) {
+        //查询押金
+        List<ReportDeposit> reportDeposits = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDeposit(reportDeposit);
+        //查询押金退费总金额
+        List<ReportDeposit> reportDepositAmounts = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeDepositAmount(reportDeposit);
+
+        //查询押金费用项
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(reportDeposit.getCommunityId());
+        feeConfigDto.setFeeTypeCd("888800010006");
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        List<ReportDeposit> newReportDeposits = new ArrayList<>();
+        BigDecimal unpaidfeeAmount = new BigDecimal(0);//未交费
+        BigDecimal unpaidfeeAmounts = new BigDecimal(0);//未缴费总金额
+        BigDecimal paidfeeAmount = new BigDecimal(0);//已缴费
+        BigDecimal paidfeeAmounts = new BigDecimal(0);//已缴费总金额
+        BigDecimal refundedAmount = new BigDecimal(0);//已退费
+        BigDecimal refundedAmounts = new BigDecimal(0);//已退费总金额
+        BigDecimal refundInProgressAmount = new BigDecimal(0); //退费中
+        BigDecimal refundInProgressAmounts = new BigDecimal(0);//退费中总金额
+        BigDecimal refundFailedAmount = new BigDecimal(0); //退费失败
+        BigDecimal refundFailedAmounts = new BigDecimal(0);//退费失败总金额
+        for (ReportDeposit deposit : reportDeposits) {
+            deposit.setFeeConfigDtos(feeConfigDtos);
+            newReportDeposits.add(deposit);
+            if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(deposit.getPayerObjType())) {
+                deposit.setObjName(deposit.getFloorNum()
+                        + "栋" + deposit.getUnitNum()
+                        + "单元" + deposit.getRoomNum() + "室");
+            } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(deposit.getPayerObjType())) {
+                deposit.setObjName(deposit.getCarNum());
+            }
+            //收费中（未交费）
+            if ("2008001".equals(deposit.getState())) {
+                unpaidfeeAmount = unpaidfeeAmount.add(new BigDecimal(deposit.getAdditionalAmount()));
+            }
+            //收费结束（已收费）
+            if ("2009001".equals(deposit.getState()) && !StringUtil.isEmpty(deposit.getDetailState()) && "1400".equals(deposit.getDetailState())) {
+                paidfeeAmount = paidfeeAmount.add(new BigDecimal(deposit.getAdditionalAmount()));
+            }
+            if (!StringUtil.isEmpty(deposit.getDetailState()) && "1100".equals(deposit.getDetailState())) {//已退费
+                refundedAmount = refundedAmount.add(new BigDecimal(deposit.getAdditionalAmount()));
+            }
+            if (!StringUtil.isEmpty(deposit.getDetailState()) && "1000".equals(deposit.getDetailState())) {//退费中
+                refundInProgressAmount = refundInProgressAmount.add(new BigDecimal(deposit.getAdditionalAmount()));
+            }
+            if (!StringUtil.isEmpty(deposit.getDetailState()) && "1200".equals(deposit.getDetailState())) {//退费失败
+                refundFailedAmount = refundFailedAmount.add(new BigDecimal(deposit.getAdditionalAmount()));
+            }
+        }
+        for (ReportDeposit reportDeposit1 : reportDepositAmounts) {
+            if (StringUtil.isEmpty(reportDeposit1.getAllAmount())) {
+                throw new IllegalArgumentException("查询总金额错误！");
+            }
+            //获取总金额
+            BigDecimal bd = new BigDecimal(reportDeposit1.getAllAmount());
+            if (StringUtil.isEmpty(reportDeposit1.getDetailState())) { //获取未缴费总金额
+                unpaidfeeAmounts = bd;
+            } else if (reportDeposit1.getDetailState().equals("1000")) { //获取退费中总金额
+                refundInProgressAmounts = bd;
+            } else if (reportDeposit1.getDetailState().equals("1100")) { //获取已退费总金额
+                refundedAmounts = bd;
+            } else if (reportDeposit1.getDetailState().equals("1200")) { //获取退费失败总金额
+                refundFailedAmounts = bd;
+            } else if (reportDeposit1.getDetailState().equals("1400")) { //获取已缴费总金额
+                paidfeeAmounts = bd;
+            }
+        }
+        HashMap<String, String> mp = new HashMap<>();
+        mp.put("unpaidfeeAmount", unpaidfeeAmount.toString());
+        mp.put("paidfeeAmount", paidfeeAmount.toString());
+        mp.put("refundedAmount", refundedAmount.toString());
+        mp.put("refundInProgressAmount", refundInProgressAmount.toString());
+        mp.put("refundFailedAmount", refundFailedAmount.toString());
+        mp.put("unpaidfeeAmounts", unpaidfeeAmounts.toString());
+        mp.put("paidfeeAmounts", paidfeeAmounts.toString());
+        mp.put("refundedAmounts", refundedAmounts.toString());
+        mp.put("refundInProgressAmounts", refundInProgressAmounts.toString());
+        mp.put("refundFailedAmounts", refundFailedAmounts.toString());
+        int size = 0;
+        if (newReportDeposits != null && newReportDeposits.size() > 0) {
+            //查询所有条数
+            reportDeposit.setPage(PageDto.DEFAULT_PAGE);
+            List<ReportDeposit> reportDeposits1 = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDeposit(reportDeposit);
+            size = reportDeposits1.size();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) size / (double) reportDeposit.getRow()), size, newReportDeposits, mp);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

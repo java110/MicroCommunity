@@ -56,6 +56,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -146,6 +150,17 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         }
     }
 
+    private String subDay(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dt = sdf.parse(date);
+        Calendar rightNow = Calendar.getInstance();
+        rightNow.setTime(dt);
+        rightNow.add(Calendar.DAY_OF_MONTH, -1);
+        Date dt1 = rightNow.getTime();
+        String reStr = sdf.format(dt1);
+        return reStr;
+    }
+
     private void doSendPayFeeDetail(Business business, JSONObject businessPayFeeDetail) {
         //查询缴费明细
         PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessPayFeeDetail, PayFeeDetailPo.class);
@@ -166,6 +181,11 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String startTime = DateUtil.dateTimeToDate(payFeeDetailPo.getStartTime());
         //获取用户缴费到期时间
         String endTime = DateUtil.dateTimeToDate(payFeeDetailPo.getEndTime());
+        try {
+            endTime = subDay(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         //获取用户缴费金额
         String receivedAmount = payFeeDetailPo.getReceivedAmount();
         //获取费用类型
@@ -291,7 +311,8 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
                     data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
                     data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
                     templateMessage.setData(data);
-                    String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                    //获取员工公众号地址
+                    String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
                     templateMessage.setUrl(wechatUrl);
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -368,7 +389,8 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
             data.setRemark(new Content("请与客服管家核实费用"));
             templateMessage.setData(data);
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            //获取员工公众号地址
+            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -470,6 +492,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
             data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
             templateMessage.setData(data);
+            //获取业主公众号地址
             String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));

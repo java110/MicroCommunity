@@ -5,6 +5,7 @@ import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -318,4 +319,19 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryNoFeeRooms", method = RequestMethod.POST)
     List<RoomDto> queryNoFeeRooms(@RequestBody RoomDto roomDto);
+
+    /**
+     * 查询押金
+     *
+     * @param reportDeposit
+     * @return
+     */
+    @RequestMapping(value = "/queryFeeDeposit", method = RequestMethod.POST)
+    List<ReportDeposit> queryPayFeeDeposit(@RequestBody ReportDeposit reportDeposit);
+
+    /**
+     * 查询押金退费总金额
+     */
+    @RequestMapping(value = "/queryFeeDepositAmount", method = RequestMethod.POST)
+    List<ReportDeposit> queryFeeDepositAmount(@RequestBody ReportDeposit reportDeposit);
 }

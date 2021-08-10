@@ -107,6 +107,13 @@ public class PurchaseApi {
     @RequestMapping(value = "/resourceEnter", method = RequestMethod.POST)
     public ResponseEntity<String> resourceEnter(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单ID为空");
+        PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
+        purchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
+        purchaseApplyDto.setStatusCd("0");
+        List<PurchaseApplyDto> purchaseApplyDtoList = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
+        if(purchaseApplyDtoList!=null && PurchaseApplyDto.STATE_AUDITED.equals(purchaseApplyDtoList.get(0).getState())){
+            throw new IllegalArgumentException("该订单已经处理，请刷新确认订单状态！");
+        }
         JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
         for (int detailIndex = 0; detailIndex < purchaseApplyDetails.size(); detailIndex++) {

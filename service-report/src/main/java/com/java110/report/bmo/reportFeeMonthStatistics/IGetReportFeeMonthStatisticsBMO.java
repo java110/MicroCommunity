@@ -2,6 +2,7 @@ package com.java110.report.bmo.reportFeeMonthStatistics;
 
 import com.java110.dto.RoomDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import org.springframework.http.ResponseEntity;
 
@@ -68,4 +69,11 @@ public interface IGetReportFeeMonthStatisticsBMO {
      * @return
      */
     ResponseEntity<String> queryNoFeeRooms(RoomDto roomDto);
+
+    /**
+     * 查询押金
+     * @param reportDeposit
+     * @return
+     */
+    ResponseEntity<String> queryPayFeeDeposit(ReportDeposit reportDeposit);
 }

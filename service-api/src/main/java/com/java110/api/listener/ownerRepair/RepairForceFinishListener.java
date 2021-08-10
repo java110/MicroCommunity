@@ -76,6 +76,12 @@ public class RepairForceFinishListener extends AbstractServiceApiPlusListener {
         repairDto.setState(RepairDto.STATE_TAKING);
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
         Assert.listOnlyOne(repairDtos, "当前没有需要处理订单");
+        if (repairDtos != null && repairDtos.size() != 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "非常抱歉当前不能退单！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+
 
         //查询正在处理 工单的师傅
         RepairUserDto repairUserDto = new RepairUserDto();
