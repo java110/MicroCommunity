@@ -41,6 +41,7 @@ public class ComputeDiscountDto extends PageDto implements Serializable {
     private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
     private double discountPrice;
+    private String ardId;
 
 
     public String getDiscountId() {
@@ -105,5 +106,13 @@ public class ComputeDiscountDto extends PageDto implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getArdId() {
+        return ardId;
+    }
+
+    public void setArdId(String ardId) {
+        this.ardId = ardId;
     }
 }

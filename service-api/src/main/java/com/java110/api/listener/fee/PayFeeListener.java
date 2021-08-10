@@ -20,11 +20,9 @@ import com.java110.entity.center.AppService;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
@@ -36,6 +34,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +92,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMO;
 
+    @Autowired
+    private IApplyRoomDiscountInnerServiceSMO applyRoomDiscountInnerServiceSMOImpl;
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_PAY_FEE;
@@ -139,6 +141,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
                 }
             }
         }
+
         //为停车费单独处理
         if (paramObj.containsKey("carPayerObjType") && FeeDto.PAYER_OBJ_TYPE_CAR.equals(paramObj.getString("carPayerObjType"))) {
             Date feeEndTime = (Date) paramObj.get("carFeeEndTime");
@@ -264,9 +267,24 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
         List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
-        if (feeReceiptDetailDtos != null || feeReceiptDetailDtos.size() > 0) {
-            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos.get(0)));
+        if (feeReceiptDetailDtos != null && feeReceiptDetailDtos.size() > 0) {
+            FeeReceiptDetailDto feeReceiptDetailDto1 = feeReceiptDetailDtos.get(0);
+            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDto1));
             return;
+        }
+
+        //修改折扣申请状态，空置房折扣只能用一次
+        String selectDiscount = paramObj.getString("selectDiscount");
+        JSONArray params = JSONArray.parseArray(selectDiscount);
+        for (int index = 0; index < params.size(); index++) {
+            JSONObject param = params.getJSONObject(index);
+            if (!StringUtil.isEmpty(param.getString("ardId"))) {
+                ApplyRoomDiscountPo applyRoomDiscountPo = new ApplyRoomDiscountPo();
+                //空置房优惠不可用
+                applyRoomDiscountPo.setInUse("1");
+                applyRoomDiscountPo.setArdId(param.getString("ardId"));
+                applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
+            }
         }
         dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailPo));
     }

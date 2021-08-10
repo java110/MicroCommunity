@@ -124,7 +124,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
         if (user.getPage() >= 1) {
-            user.setPage(user.getPage() - 1);
+            user.setPage((user.getPage() - 1) * user.getRow());
         }
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
             list = query.listPage(user.getPage(), user.getRow());

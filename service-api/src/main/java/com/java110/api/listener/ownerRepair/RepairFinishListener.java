@@ -265,14 +265,20 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                     if (unitCode.equals(miniUnitCode)) { //如果最小计量单位与物品单位相同，就不向上取整
                         BigDecimal num3 = new BigDecimal(miniUnitStock);
                         double newStock = surplusStock.divide(num3, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        userStorehousePo.setStock(String.valueOf(newStock));
+                        int remainingInventory = new Double(newStock).intValue();
+                        userStorehousePo.setStock(String.valueOf(remainingInventory));
                     } else { //如果不相同就向上取整
                         BigDecimal num3 = new BigDecimal(miniUnitStock);
                         double newStock = surplusStock.divide(num3, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         double ceil = Math.ceil(newStock);
-                        userStorehousePo.setStock(String.valueOf(ceil));
+                        int remainingInventory = new Double(ceil).intValue();
+                        userStorehousePo.setStock(String.valueOf(remainingInventory));
                     }
-                    userStorehousePo.setMiniStock(String.valueOf(surplusStock.doubleValue()));
+                    if (useNumber.contains(".") || nowStock.contains(".")) { //如果传过来的使用数量为小数，或原有库存数量有小数，就保留小数
+                        userStorehousePo.setMiniStock(String.valueOf(surplusStock.doubleValue()));
+                    } else { //如果传来的使用数量为整数，且原有库存数量为整数，就取整
+                        userStorehousePo.setMiniStock(String.valueOf(surplusStock.intValue()));
+                    }
                     userStorehousePo.setUsId(userStorehouseDtoList.get(0).getUsId());
                     userStorehousePo.setResId(resId);
                     userStorehousePo.setUserId(userId);

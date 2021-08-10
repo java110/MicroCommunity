@@ -25,8 +25,8 @@ public class FeeDto extends PageDto implements Serializable {
     public static final String PAYER_OBJ_TYPE_CAR = "6666";//是车位
     public static final String PAYER_OBJ_TYPE_RENTING = "9999";//房源ID
 
-    public static final String FEE_FLAG_ONCE = "2006012";
-    public static final String FEE_FLAG_CYCLE = "1003006";
+    public static final String FEE_FLAG_ONCE = "2006012";//一次性费用
+    public static final String FEE_FLAG_CYCLE = "1003006";//周期性费用
     public static final String REDIS_PAY_OWE_FEE = "PAY_OWE_FEE_";
 
     private String amount;

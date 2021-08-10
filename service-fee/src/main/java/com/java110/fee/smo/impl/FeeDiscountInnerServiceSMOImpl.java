@@ -169,6 +169,9 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             List<ComputeDiscountDto> computeDiscountDtoList = new ArrayList<>();
             for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
                 computeDiscountDto.setValue(value);
+                if (!StringUtil.isEmpty(computeDiscountDto.getDiscountType()) && "3003".equals(computeDiscountDto.getDiscountType())) {
+                    computeDiscountDto.setArdId(feeDetailDto.getArdId());
+                }
                 computeDiscountDtoList.add(computeDiscountDto);
             }
             return computeDiscountDtos;
@@ -195,6 +198,9 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         List<ComputeDiscountDto> computeDiscountDtoList = new ArrayList<>();
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
             computeDiscountDto.setValue(value);
+            if (!StringUtil.isEmpty(computeDiscountDto.getDiscountType()) && "3003".equals(computeDiscountDto.getDiscountType())) {
+                computeDiscountDto.setArdId(feeDetailDto.getArdId());
+            }
             computeDiscountDtoList.add(computeDiscountDto);
         }
         return computeDiscountDtoList;
@@ -206,6 +212,8 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
             //审核已通过
             applyRoomDiscountDto.setState("4");
+            //是否可用状态标识(0表示在用；1表示不可用)
+            applyRoomDiscountDto.setInUse("0");
             //小区ID
             applyRoomDiscountDto.setCommunityId(feeDetailDto.getCommunityId());
             //房屋id
@@ -225,6 +233,8 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             if (applyRoomDiscountDtos != null && applyRoomDiscountDtos.size() > 0) {
                 //获取优惠id
                 String discountId = applyRoomDiscountDtos.get(0).getDiscountId();
+                String ardId = applyRoomDiscountDtos.get(0).getArdId();
+                feeDetailDto.setArdId(ardId);
                 PayFeeConfigDiscountDto payFeeConfigDiscount = new PayFeeConfigDiscountDto();
                 payFeeConfigDiscount.setCommunityId(applyRoomDiscountDtos.get(0).getCommunityId());
                 payFeeConfigDiscount.setDiscountId(discountId);

@@ -84,7 +84,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
         logger.debug("ServiceDataFlowEvent : {}", event);
         List<RoomDto> roomDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
@@ -153,7 +153,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         dealRoomFee(roomDtos, context, reqJson, event);
     }
 
-    private void dealRoomFee(List<RoomDto> roomDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) {
+    private void dealRoomFee(List<RoomDto> roomDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) throws ParseException {
         AppService service = event.getAppService();
         List<String> roomIds = new ArrayList<>();
         for (RoomDto roomDto : roomDtos) {

@@ -49,7 +49,6 @@ public class ListItemOutAuditHistoryOrdersListener extends AbstractServiceApiLis
     }
 
 
-
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");

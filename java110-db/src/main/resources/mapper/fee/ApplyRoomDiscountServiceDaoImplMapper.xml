@@ -8,9 +8,10 @@
     <!-- 保存房屋折扣申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveApplyRoomDiscountInfo" parameterType="Map">
         insert into apply_room_discount(
-        apply_type,ard_id,create_user_name,create_user_tel,create_remark,check_user_id,check_remark,room_id,room_name,review_user_id,review_remark,start_time,end_time,state,community_id,discount_id
+        apply_type,ard_id,create_user_name,create_user_tel,create_remark,check_user_id,check_remark,room_id,room_name,review_user_id,review_remark,start_time,end_time,state,community_id,discount_id,in_use
         ) values (
-        #{applyType},#{ardId},#{createUserName},#{createUserTel},#{createRemark},#{checkUserId},#{checkRemark},#{roomId},#{roomName},#{reviewUserId},#{reviewRemark},#{startTime},#{endTime},#{state},#{communityId},#{discountId}
+        #{applyType},#{ardId},#{createUserName},#{createUserTel},#{createRemark},#{checkUserId},#{checkRemark},#{roomId},#{roomName},#{reviewUserId},#{reviewRemark},#{startTime},#{endTime},#{state},
+        #{communityId},#{discountId},#{inUse}
         )
     </insert>
 
@@ -23,14 +24,12 @@
         statusCd,t.check_remark,t.check_remark checkRemark,t.room_id,t.room_id roomId,t.room_name,t.room_name
         roomName,t.review_user_id,t.review_user_id reviewUserId,t.review_remark,t.review_remark
         reviewRemark,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id
-        discountId,
-        ardt.type_name applyTypeName
+        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId,t.in_use,t.in_use inUse,
+        ardt.type_name applyTypeName,fd.discount_name discountName
         from apply_room_discount t
-        left join t_dict td on t.state = td.status_cd and td.table_name='apply_room_discount' and td.table_columns =
-        'state'
-        left join apply_room_discount_type ardt on t.apply_type = ardt.apply_type and t.community_id = ardt.community_id
-        and ardt.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name='apply_room_discount' and td.table_columns ='state'
+        left join apply_room_discount_type ardt on t.apply_type = ardt.apply_type and t.community_id = ardt.community_id and ardt.status_cd = '0'
+        left join fee_discount fd on t.discount_id=fd.discount_id
         where t.status_cd = '0'
         <if test="applyType !=null and applyType != ''">
             and t.apply_type= #{applyType}
@@ -79,6 +78,9 @@
         </if>
         <if test="discountId !=null and discountId != ''">
             and t.discount_id= #{discountId}
+        </if>
+        <if test="inUse !=null and inUse != ''">
+            and t.in_use= #{inUse}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -148,6 +150,9 @@
         <if test="discountId !=null and discountId != ''">
             and t.discount_id= #{discountId}
         </if>
+        <if test="inUse !=null and inUse != ''">
+            and t.in_use= #{inUse}
+        </if>
         order by t.create_time desc limit 0,1
     </select>
 
@@ -197,11 +202,13 @@
         <if test="discountId !=null and discountId != ''">
             , t.discount_id= #{discountId}
         </if>
+        <if test="inUse !=null and inUse != ''">
+            , t.in_use= #{inUse}
+        </if>
         where 1=1
         <if test="ardId !=null and ardId != ''">
             and t.ard_id= #{ardId}
         </if>
-
     </update>
 
     <!-- 查询房屋折扣申请数量 add by wuxw 2018-07-03 -->
@@ -257,8 +264,9 @@
         <if test="discountId !=null and discountId != ''">
             and t.discount_id= #{discountId}
         </if>
-
-
+        <if test="inUse !=null and inUse != ''">
+            and t.in_use= #{inUse}
+        </if>
     </select>
 
 </mapper>

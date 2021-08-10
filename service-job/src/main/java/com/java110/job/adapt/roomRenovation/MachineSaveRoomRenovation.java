@@ -180,7 +180,8 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
                     data.setKeyword5(new Content("待审核"));
                     data.setRemark(new Content("感谢您的使用。"));
                     templateMessage.setData(data);
-                    String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                    //获取员工公众号地址
+                    String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
                     templateMessage.setUrl(wechatUrl);
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -277,6 +278,7 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
             data.setKeyword4(new Content(paramIn.getString("startTime") + "至" + paramIn.getString("endTime")));
             data.setRemark(new Content("物业联系电话：" + tel + "，请到物业管理处或通过手机缴纳装修押金！"));
             templateMessage.setData(data);
+            //获取业主公众号地址
             String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));

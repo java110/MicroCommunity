@@ -21,11 +21,9 @@ import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeDiscountInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
@@ -35,6 +33,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +88,12 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private IApplyRoomDiscountInnerServiceSMO applyRoomDiscountInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeDetailInnerServiceSMO iFeeDetailInnerServiceSMO;
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_PAY_FEE_PRE;
@@ -126,7 +131,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         } else if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {  //微信公众号支付
             paramObj.put("primeRate", "6");
             paramObj.put("remark", "线上公众号支付");
-        }else{
+        } else {
             paramObj.put("primeRate", "5");
             paramObj.put("remark", "线上小程序支付");
         }
@@ -140,7 +145,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
             addDiscount(paramObj, businesses, dataFlowContext);
         }
 
-        dealOwnerCartEndTime(paramObj,businesses);
+        dealOwnerCartEndTime(paramObj, businesses);
 
         //判断是否有派单属性ID
         FeeAttrDto feeAttrDto = new FeeAttrDto();
@@ -178,8 +183,8 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
             repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
             //如果是待评价状态，就更新结束时间
             repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            DecimalFormat df = new DecimalFormat("#.00");
-            BigDecimal payment_amount=new BigDecimal(paramObj.getString("receivableAmount"));
+            DecimalFormat df = new DecimalFormat("0.00");
+            BigDecimal payment_amount = new BigDecimal(paramObj.getString("receivableAmount"));
             repairUserPo.setContext("已支付" + df.format(payment_amount) + "元");
             //新增待评价状态
             JSONObject object = JSONObject.parseObject("{\"datas\":{}}");
@@ -221,7 +226,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
-    private void dealOwnerCartEndTime(JSONObject paramObj,JSONArray businesses) {
+    private void dealOwnerCartEndTime(JSONObject paramObj, JSONArray businesses) {
         //为停车费单独处理
         if (paramObj.containsKey("carPayerObjType")
                 && FeeDto.PAYER_OBJ_TYPE_CAR.equals(paramObj.getString("carPayerObjType"))) {
@@ -280,6 +285,20 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
         JSONObject discountBusiness = null;
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+            if (!StringUtil.isEmpty(computeDiscountDto.getArdId())) {
+                //查询 pay_fee_detail 是否缴费
+                FeeDetailDto feeDetailDto = new FeeDetailDto();
+                feeDetailDto.setDetailId(paramObj.getString("detailId"));
+                List<FeeDetailDto> feeDetailDtoList = iFeeDetailInnerServiceSMO.queryFeeDetails(feeDetailDto);
+                logger.info("======使用空置房优惠信息======ardId======" + computeDiscountDto.getArdId());
+                if (feeDetailDtoList != null && feeDetailDtoList.size() == 1) {
+                    ApplyRoomDiscountPo applyRoomDiscountPo = new ApplyRoomDiscountPo();
+                    //空置房优惠不可用
+                    applyRoomDiscountPo.setInUse("1");
+                    applyRoomDiscountPo.setArdId(computeDiscountDto.getArdId());
+                    applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
+                }
+            }
             if (computeDiscountDto.getDiscountPrice() <= 0) {
                 continue;
             }

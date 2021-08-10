@@ -1,6 +1,7 @@
 package com.java110.dto.feeCollectionDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,19 +16,19 @@ import java.util.Date;
 public class FeeCollectionDetailDto extends PageDto implements Serializable {
 
     private String orderId;
-private String detailId;
-private String ownerId;
-private String collectionName;
-private String payerObjName;
-private String ownerName;
-private String feeName;
-private String oweAmount;
-private String state;
-private String communityId;
-private String payerObjType;
-private String collectionWay;
-private String remarks;
-private String payerObjId;
+    private String detailId;
+    private String ownerId;
+    private String collectionName;
+    private String payerObjName;
+    private String ownerName;
+    private String feeName;
+    private String oweAmount;
+    private String state;
+    private String communityId;
+    private String payerObjType;
+    private String collectionWay;
+    private String remarks;
+    private String payerObjId;
 
 
     private Date createTime;
@@ -38,85 +39,112 @@ private String payerObjId;
     public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getCollectionName() {
+
+    public String getCollectionName() {
         return collectionName;
     }
-public void setCollectionName(String collectionName) {
+
+    public void setCollectionName(String collectionName) {
         this.collectionName = collectionName;
     }
-public String getPayerObjName() {
+
+    public String getPayerObjName() {
         return payerObjName;
     }
-public void setPayerObjName(String payerObjName) {
+
+    public void setPayerObjName(String payerObjName) {
         this.payerObjName = payerObjName;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getFeeName() {
+
+    public String getFeeName() {
         return feeName;
     }
-public void setFeeName(String feeName) {
+
+    public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-public String getOweAmount() {
+
+    public String getOweAmount() {
         return oweAmount;
     }
-public void setOweAmount(String oweAmount) {
+
+    public void setOweAmount(String oweAmount) {
         this.oweAmount = oweAmount;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getPayerObjType() {
+
+    public String getPayerObjType() {
         return payerObjType;
     }
-public void setPayerObjType(String payerObjType) {
+
+    public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
     }
-public String getCollectionWay() {
+
+    public String getCollectionWay() {
         return collectionWay;
     }
-public void setCollectionWay(String collectionWay) {
+
+    public void setCollectionWay(String collectionWay) {
         this.collectionWay = collectionWay;
     }
-public String getRemarks() {
+
+    public String getRemarks() {
         return remarks;
     }
-public void setRemarks(String remarks) {
+
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
-public String getPayerObjId() {
+
+    public String getPayerObjId() {
         return payerObjId;
     }
-public void setPayerObjId(String payerObjId) {
+
+    public void setPayerObjId(String payerObjId) {
         this.payerObjId = payerObjId;
     }
 

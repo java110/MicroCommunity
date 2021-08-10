@@ -95,12 +95,16 @@ public class ApplyRoomDiscountApi {
         //获取本次填写的开始时间
         Date startDate = simpleDateFormat.parse(applyRoomDiscountPo.getStartTime());
         if (applyRoomDiscountDtos.size() == 0) {
+            //空置房优惠可用
+            applyRoomDiscountPo.setInUse("0");
             return saveApplyRoomDiscountBMOImpl.save(applyRoomDiscountPo);
         } else if (applyRoomDiscountDtos.size() > 0) {
             //取出结束时间
             String endTime = applyRoomDiscountDtos.get(0).getEndTime();
             Date finishTime = simpleDateFormat.parse(endTime);
             if (startDate.getTime() - finishTime.getTime() >= 0) {
+                //空置房优惠可用
+                applyRoomDiscountPo.setInUse("0");
                 return saveApplyRoomDiscountBMOImpl.save(applyRoomDiscountPo);
             } else {
                 throw new UnsupportedOperationException("该时间段已经申请过空置房，请重新输入空置房申请开始和结束时间");

@@ -185,7 +185,8 @@ public class MachineAdoptApplyRoomDiscountAdapt extends DatabusAdaptImpl {
                 data.setKeyword5(new Content(paramIn.getString("stateName")));
                 data.setRemark(new Content("请及时处理！"));
                 templateMessage.setData(data);
-                String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                //获取员工公众号地址
+                String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
                 templateMessage.setUrl(wechatUrl);
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                 ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -262,6 +263,7 @@ public class MachineAdoptApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             data.setKeyword3(new Content(paramIn.getString("checkRemark")));
             data.setRemark(new Content("空置房申请验房已通过，系统已为您安排下一步审核流程，请耐心等待！"));
             templateMessage.setData(data);
+            //获取业主公众号地址
             String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -338,6 +340,7 @@ public class MachineAdoptApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             data.setKeyword3(new Content(paramIn.getString("checkRemark")));
             data.setRemark(new Content("感谢您的使用，如有疑问请联系相关物业人员。"));
             templateMessage.setData(data);
+            //获取业主公众号地址
             String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));

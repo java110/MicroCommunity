@@ -23,6 +23,9 @@ public class ApplyRoomDiscountPo implements Serializable {
     private String communityId;
     private String discountId;
 
+    //是否可用状态
+    private String inUse;
+
     public String getApplyType() {
         return applyType;
     }
@@ -158,5 +161,13 @@ public class ApplyRoomDiscountPo implements Serializable {
 
     public void setCreateRemark(String createRemark) {
         this.createRemark = createRemark;
+    }
+
+    public String getInUse() {
+        return inUse;
+    }
+
+    public void setInUse(String inUse) {
+        this.inUse = inUse;
     }
 }

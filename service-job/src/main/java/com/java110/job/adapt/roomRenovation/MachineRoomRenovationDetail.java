@@ -210,6 +210,7 @@ public class MachineRoomRenovationDetail extends DatabusAdaptImpl {
             data.setKeyword3(new Content(paramIn.getString("createTime")));
             data.setRemark(new Content("如有任何疑问，请咨询" + communityDto.getName() + "客服部，咨询电话：" + tel + "。"));
             templateMessage.setData(data);
+            //获取业主公众号地址
             String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));

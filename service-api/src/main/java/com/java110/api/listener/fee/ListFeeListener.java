@@ -95,8 +95,8 @@ public class ListFeeListener extends AbstractServiceApiListener {
         List<ApiFeeDataVo> fees = null;
 
         if (count > 0) {
-            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-            computeFeePrice(feeDtos);
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);//查询费用项目
+            computeFeePrice(feeDtos);//计算费用
             fees = BeanConvertUtil.covertBeanList(feeDtos, ApiFeeDataVo.class);
             freshFeeAttrs(fees, feeDtos);
         } else {
@@ -127,7 +127,6 @@ public class ListFeeListener extends AbstractServiceApiListener {
                 Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto);
                 Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
                 double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-                //一次性费用
                 if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
                     computeFeePriceByRoom(feeDto, oweMonth);
                 } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关

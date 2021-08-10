@@ -6,6 +6,8 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
+
 /**
  * 主要目的将soService 方法拆分为校验部分 和业务处理部分
  * Created by wuxw on 2018/11/15.
@@ -19,7 +21,7 @@ public abstract class AbstractServiceApiListener extends AbstractServiceApiDataF
      * 业务处理
      * @param event
      */
-    public final void soService(ServiceDataFlowEvent event) {
+    public final void soService(ServiceDataFlowEvent event) throws ParseException {
 
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         //获取请求数据
@@ -50,7 +52,7 @@ public abstract class AbstractServiceApiListener extends AbstractServiceApiDataF
      * @param context 数据上文对象
      * @param reqJson 请求报文
      */
-    protected abstract void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson);
+    protected abstract void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException;
 
 
     @Override

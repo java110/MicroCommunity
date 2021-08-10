@@ -98,12 +98,18 @@ public class FeeCollectionOrderApi {
      */
     @RequestMapping(value = "/queryFeeCollectionOrder", method = RequestMethod.GET)
     public ResponseEntity<String> queryFeeCollectionOrder(@RequestParam(value = "communityId") String communityId,
+                                                          @RequestParam(value = "state",required = false) String state,
+                                                          @RequestParam(value = "staffName",required = false) String staffName,
+                                                          @RequestParam(value = "collectionWay",required = false) String collectionWay,
                                                           @RequestParam(value = "page") int page,
                                                           @RequestParam(value = "row") int row) {
         FeeCollectionOrderDto feeCollectionOrderDto = new FeeCollectionOrderDto();
         feeCollectionOrderDto.setPage(page);
         feeCollectionOrderDto.setRow(row);
         feeCollectionOrderDto.setCommunityId(communityId);
+        feeCollectionOrderDto.setState(state);
+        feeCollectionOrderDto.setStaffName(staffName);
+        feeCollectionOrderDto.setCollectionWay(collectionWay);
         return getFeeCollectionOrderBMOImpl.get(feeCollectionOrderDto);
     }
 }
