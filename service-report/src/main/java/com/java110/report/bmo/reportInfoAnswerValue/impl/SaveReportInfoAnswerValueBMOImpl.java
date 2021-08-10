@@ -1,5 +1,6 @@
 package com.java110.report.bmo.reportInfoAnswerValue.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.report.IReportInfoAnswerValueInnerServiceSMO;
@@ -23,7 +24,8 @@ public class SaveReportInfoAnswerValueBMOImpl implements ISaveReportInfoAnswerVa
      * @return 订单服务能够接受的报文
      */
     @Java110Transactional
-    public ResponseEntity<String> save(ReportInfoAnswerValuePo reportInfoAnswerValuePo) {
+    public ResponseEntity<String> save(ReportInfoAnswerValuePo reportInfoAnswerValuePo, JSONArray questionAnswerTitles) {
+
 
         reportInfoAnswerValuePo.setAnValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_anValueId));
         int flag = reportInfoAnswerValueInnerServiceSMOImpl.saveReportInfoAnswerValue(reportInfoAnswerValuePo);
