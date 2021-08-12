@@ -136,6 +136,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
             OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setCarTypeCd("1001"); //业主车辆
             ownerCarDto.setCommunityId(feeDto.getCommunityId());
             ownerCarDto.setCarId(feeDto.getPayerObjId());
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);

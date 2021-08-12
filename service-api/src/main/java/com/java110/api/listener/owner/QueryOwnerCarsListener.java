@@ -104,6 +104,7 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
         if (total > 0) {
             OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
+            ownerCarDto.setCarTypeCd("1001"); //业主车辆
             ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
             //小区20条时刷房屋和车位信息

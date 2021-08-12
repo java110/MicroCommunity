@@ -143,6 +143,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
 
     private void computeFeePriceByCar(FeeDto feeDto, double oweMonth) {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCarTypeCd("1001"); //业主车辆
         ownerCarDto.setCommunityId(feeDto.getCommunityId());
         ownerCarDto.setCarId(feeDto.getPayerObjId());
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);

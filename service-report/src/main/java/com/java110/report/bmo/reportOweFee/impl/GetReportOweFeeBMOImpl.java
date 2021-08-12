@@ -1,5 +1,6 @@
 package com.java110.report.bmo.reportOweFee.impl;
 
+import com.java110.dto.PageDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
@@ -34,15 +35,28 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
 
         int count = reportOweFeeInnerServiceSMOImpl.queryReportOweFeesCount(reportOweFeeDto);
 
-        List<ReportOweFeeDto> reportOweFeeDtos = null;
+        List<ReportOweFeeDto> reportOweFeeDtos = new ArrayList<>();
         if (count > 0) {
-            reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
-            refreshReportOwe(reportOweFeeDtos, reportOweFeeDto.getConfigIds());
+            reportOweFeeDto.setPage(PageDto.DEFAULT_PAGE);
+            List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
+            refreshReportOwe(reportOweFees, reportOweFeeDto.getConfigIds());
+            for (ReportOweFeeDto reportOweFee : reportOweFees) {
+                //获取欠费总金额
+                String amountOwed = reportOweFee.getAmountOwed();
+                if (!StringUtil.isEmpty(amountOwed)) {
+                    double amountOwedMoney = Double.parseDouble(amountOwed);
+                    if (amountOwedMoney > 0.0) {
+                        reportOweFeeDtos.add(reportOweFee);
+                    } else {
+                        continue;
+                    }
+                }
+            }
         } else {
             reportOweFeeDtos = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportOweFeeDto.getRow()), count, reportOweFeeDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) reportOweFeeDtos.size() / (double) reportOweFeeDto.getRow()), reportOweFeeDtos.size(), reportOweFeeDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
@@ -57,7 +71,6 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
      */
     @Override
     public ResponseEntity<String> getAllFees(ReportOweFeeDto reportOweFeeDto) {
-        //
         List<ReportOweFeeDto> allReportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
         if (allReportOweFeeDtos == null || allReportOweFeeDtos.size() < 1) {
             return ResultVo.createResponseEntity(allReportOweFeeDtos);
@@ -208,7 +221,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 oldAmount = oldAmount.add(new BigDecimal(Double.parseDouble(reportOweFeeDto.getAmountOwed()))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 reportOweFeeItemDto.setAmountOwed(oldAmount.doubleValue() + "");
             }
-            if(!StringUtil.isEmpty(reportOweFeeDto.getOwnerName()) && StringUtil.isEmpty(oldReportOweFeeDto.getOwnerName())) {
+            if (!StringUtil.isEmpty(reportOweFeeDto.getOwnerName()) && StringUtil.isEmpty(oldReportOweFeeDto.getOwnerName())) {
                 oldReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
             }
             oldReportOweFeeDto.setUpdateTime(reportOweFeeDto.getUpdateTime());

@@ -262,7 +262,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("1101".equals(computingFormula)) { // 租金
                 feeReceiptDetailPo.setArea("");
                 feeReceiptDetailPo.setSquarePrice(roomDto.getRoomRent());
-            }else if ("4004".equals(computingFormula)) {
+            } else if ("4004".equals(computingFormula)) {
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 } else {
@@ -322,7 +322,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("1101".equals(computingFormula)) { // 租金
                 feeReceiptDetailPo.setArea("");
                 feeReceiptDetailPo.setSquarePrice("0");
-            }else if ("4004".equals(computingFormula)) {
+            } else if ("4004".equals(computingFormula)) {
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 } else {
@@ -399,7 +399,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
                 feeReceiptDetailPo.setArea(builtUpArea.doubleValue() + "");
                 feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
-            }else if ("4004".equals(computingFormula)) {
+            } else if ("4004".equals(computingFormula)) {
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 } else {
@@ -789,7 +789,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("1101".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getRoomRent()));
                 feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN);
-            }else if ("4004".equals(computingFormula)) {
+            } else if ("4004".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
@@ -841,7 +841,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 feePrice = new BigDecimal(0);
             } else if ("1101".equals(computingFormula)) { // 租金
                 feePrice = new BigDecimal(0);
-            }else if ("4004".equals(computingFormula)) {
+            } else if ("4004".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(tmpReportFeeDto.getAmount()));
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(tmpReportFeeDto.getCurDegrees())) {
@@ -959,6 +959,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             String computingFormula = feeDto.getComputingFormula();
 
             OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setCarTypeCd("1001"); //业主车辆
             ownerCarDto.setCommunityId(feeDto.getCommunityId());
             ownerCarDto.setCarId(feeDto.getPayerObjId());
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
@@ -987,7 +988,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("1101".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
                 feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN);
-            }else if ("4004".equals(computingFormula)) {
+            } else if ("4004".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
@@ -1055,7 +1056,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if ("1101".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
                 feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN);
-            }else if ("4004".equals(computingFormula)) {  //动态费用
+            } else if ("4004".equals(computingFormula)) {  //动态费用
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
             } else if ("5005".equals(computingFormula)) {  //(本期度数-上期度数)*单价+附加费
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
@@ -1232,6 +1233,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     /**
      * 计算 计费结束时间和 欠费月份（可能存在小数点）
+     *
      * @param feeDto
      * @param ownerCarDto
      * @return
@@ -1318,7 +1320,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     /**
      * 计算 两个时间点月份
-     * @param fromDate  开始时间
+     *
+     * @param fromDate 开始时间
      * @param toDate   结束时间
      * @return
      */

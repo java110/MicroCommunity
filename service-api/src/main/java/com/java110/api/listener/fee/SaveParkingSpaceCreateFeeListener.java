@@ -118,6 +118,7 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
             ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         } else if ("2000".equals(reqJson.getString("locationTypeCd"))) {//车辆
             //ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            ownerCarDto.setCarTypeCd("1001"); //1001 业主车辆   1002 成员车辆
             ownerCarDto.setCommunityId(reqJson.getString("communityId"));
             ownerCarDto.setCarId(reqJson.getString("locationObjId"));
             ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
