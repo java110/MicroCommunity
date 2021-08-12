@@ -16,6 +16,9 @@ import java.util.List;
 public class UserDto extends PageDto implements Serializable {
 
     public static final String LEVEL_CD_MALL = "03";//商城用户
+    public static final String LEVEL_CD_ADMIN = "00";//商城用户
+    public static final String LEVEL_CD_STAFF = "01";//商城用户
+    public static final String LEVEL_CD_USER = "02";//商城用户
 
     private String userId;
 
@@ -38,6 +41,7 @@ public class UserDto extends PageDto implements Serializable {
     private String sex;
 
     private String levelCd;
+    private String[] levelCds;
 
     private String storeId;
 
@@ -315,5 +319,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setUserFlag(String userFlag) {
         this.userFlag = userFlag;
+    }
+
+    public String[] getLevelCds() {
+        return levelCds;
+    }
+
+    public void setLevelCds(String[] levelCds) {
+        this.levelCds = levelCds;
     }
 }
