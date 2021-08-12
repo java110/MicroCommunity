@@ -114,7 +114,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         /*if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
             roomDto.setState(RoomDto.STATE_SELL);
         }*/
-        if (reqJson.containsKey("roomState") && reqJson.getString("roomState").contains(",")) {
+        if (reqJson.containsKey("roomState")
+                && (reqJson.getString("roomState").contains(",") || !StringUtil.isEmpty(reqJson.getString("roomState")))) {
             String states = reqJson.getString("roomState");
             roomDto.setStates(states.split(","));
         }

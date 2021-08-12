@@ -619,6 +619,12 @@
         <if test="levelCd !=null and levelCd != ''">
             and u.level_cd= #{levelCd}
         </if>
+        <if test="levelCds != null">
+            and u.level_cd in
+            <foreach collection="levelCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test='userFlag !=null and userFlag =="1"'>
             and u.level_cd != '02'
         </if>

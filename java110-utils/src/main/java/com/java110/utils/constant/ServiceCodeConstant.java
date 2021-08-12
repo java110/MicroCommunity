@@ -258,6 +258,10 @@ public class ServiceCodeConstant {
      * 用户登录服务处理
      */
     public static final String SERVICE_CODE_USER_SERVICE_LOGIN = "user.service.login";
+    /**
+     * 用户登录服务处理
+     */
+    public static final String SERVICE_CODE_PC_USER_LOGIN = "login.pcUserLogin";
 
     /**
      * 管理员免密登录
