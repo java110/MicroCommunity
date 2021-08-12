@@ -137,12 +137,12 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setCommunityId(communityDto.getCommunityId());
         reportOweFeeDto.setHasOweFee("Y");
-        long oweCount = reportOweFeeInnerServiceSMOImpl.queryReportOweFeesCount(reportOweFeeDto);
+        int oweCount = reportOweFeeInnerServiceSMOImpl.queryReportOweFeesCount(reportOweFeeDto);
         if (oweCount == 0) {
             return;
         }
 
-        double maxPage = Math.ceil(oweCount / DEFAULT_FEE_COUNT);
+        int maxPage = (int) Math.ceil(oweCount * 1.0 / DEFAULT_FEE_COUNT);
 
         for (int roomIndex = 1; roomIndex <= maxPage; roomIndex++) {
             try {
