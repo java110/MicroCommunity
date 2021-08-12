@@ -183,9 +183,6 @@
         <if test="headerImg !=null and headerImg != ''">
             and t.header_img= #{headerImg}
         </if>
-        <if test="endTimeFlag == null or endTimeFlag == ''">
-            and t.end_time > now()
-        </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>

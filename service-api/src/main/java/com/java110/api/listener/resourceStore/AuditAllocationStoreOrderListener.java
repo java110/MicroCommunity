@@ -175,6 +175,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                         resourceStorePo.setMiniUnitStock(originalResourceStoreDtos.get(0).getMiniUnitStock());
                     }
                     super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
+                    commit(dataFlowContext);
                 } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
                     ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "物品信息查询到多条，请核实后再处理！");
                     dataFlowContext.setResponseEntity(responseEntity);
@@ -212,6 +213,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     resourceStorePo.setMiniUnitCode(resourceStoreDtos.get(0).getMiniUnitCode());
                     resourceStorePo.setMiniUnitStock(resourceStoreDtos.get(0).getMiniUnitStock());
                     super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
+                    commit(dataFlowContext);
                 }
             }
         }

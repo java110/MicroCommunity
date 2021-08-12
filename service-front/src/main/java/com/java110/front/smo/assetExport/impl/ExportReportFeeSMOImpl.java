@@ -76,6 +76,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
     public static final String ALLOCATION_USER_STORE_HOUSE_MANAGE = "allocationUserStorehouseManage";
     public static final String RESOURCE_STORE_USE_RECORD_MANAGE = "resourceStoreUseRecordManage";
     public static final String RESOURCE_STAFF_FEE_MANAGE = "staffFeeManage";
+    public static final String REPORT_PAY_FEE_DEPOSIT = "reportPayFeeDeposit";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -164,6 +165,9 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
                 break;
             case RESOURCE_STAFF_FEE_MANAGE:
                 staffFeeManage(pd, result, workbook);
+                break;
+            case REPORT_PAY_FEE_DEPOSIT:
+                reportPayFeeDeposit(pd, result, workbook);
                 break;
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -334,19 +338,22 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("订单号");
         row.createCell(1).setCellValue("房号");
-        row.createCell(2).setCellValue("费用项");
-        row.createCell(3).setCellValue("支付方式");
-        row.createCell(4).setCellValue("缴费开始时间");
-        row.createCell(5).setCellValue("缴费结束时间");
-        row.createCell(6).setCellValue("缴费时间");
-        row.createCell(7).setCellValue("应收金额");
-        row.createCell(8).setCellValue("实收金额");
-        row.createCell(9).setCellValue("优惠金额");
-        row.createCell(10).setCellValue("减免金额");
-        row.createCell(11).setCellValue("滞纳金");
-        row.createCell(12).setCellValue("空置房打折金额");
-        row.createCell(13).setCellValue("空置房减免金额");
-        row.createCell(14).setCellValue("业主");
+        row.createCell(2).setCellValue("业主");
+        row.createCell(3).setCellValue("费用项");
+        row.createCell(4).setCellValue("费用类型");
+        row.createCell(5).setCellValue("费用状态");
+        row.createCell(6).setCellValue("支付方式");
+        row.createCell(7).setCellValue("费用开始时间");
+        row.createCell(8).setCellValue("费用结束时间");
+        row.createCell(9).setCellValue("缴费时间");
+        row.createCell(10).setCellValue("应收金额");
+        row.createCell(11).setCellValue("实收金额");
+        row.createCell(12).setCellValue("优惠金额");
+        row.createCell(13).setCellValue("减免金额");
+        row.createCell(14).setCellValue("滞纳金");
+        row.createCell(15).setCellValue("空置房打折金额");
+        row.createCell(16).setCellValue("空置房减免金额");
+//        row.createCell(14).setCellValue("业主");
         //查询楼栋信息
         JSONArray rooms = this.getReportPayFeeDetail(pd, result);
         if (rooms == null || rooms.size() == 0) {
@@ -358,20 +365,21 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("oId"));
             row.createCell(1).setCellValue(dataObj.getString("objName"));
-            row.createCell(2).setCellValue(dataObj.getString("feeName"));
-            row.createCell(3).setCellValue(dataObj.getString("primeRate"));
-            row.createCell(4).setCellValue(dataObj.getString("startTime"));
-            row.createCell(5).setCellValue(dataObj.getString("endTime"));
-            row.createCell(6).setCellValue(dataObj.getString("createTime"));
-            row.createCell(7).setCellValue(dataObj.getDouble("receivableAmount"));
-            row.createCell(8).setCellValue(dataObj.getDouble("receivedAmount"));
-            row.createCell(9).setCellValue(dataObj.getDouble("preferentialAmount"));
-            row.createCell(10).setCellValue(dataObj.getDouble("deductionAmount"));
-            row.createCell(11).setCellValue(dataObj.getDouble("lateFee"));
-            row.createCell(12).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
-            row.createCell(13).setCellValue(dataObj.getDouble("vacantHousingReduction"));
-            row.createCell(14).setCellValue(dataObj.getString("ownerName"));
-
+            row.createCell(2).setCellValue(dataObj.getString("ownerName"));
+            row.createCell(3).setCellValue(dataObj.getString("feeName"));
+            row.createCell(4).setCellValue(dataObj.getString("feeTypeCdName"));
+            row.createCell(5).setCellValue(dataObj.getString("stateName"));
+            row.createCell(6).setCellValue(dataObj.getString("primeRate"));
+            row.createCell(7).setCellValue(dataObj.getString("startTime"));
+            row.createCell(8).setCellValue(dataObj.getString("endTime"));
+            row.createCell(9).setCellValue(dataObj.getString("createTime"));
+            row.createCell(10).setCellValue(dataObj.getDouble("receivableAmount"));
+            row.createCell(11).setCellValue(dataObj.getDouble("receivedAmount"));
+            row.createCell(12).setCellValue(dataObj.getDouble("preferentialAmount"));
+            row.createCell(13).setCellValue(dataObj.getDouble("deductionAmount"));
+            row.createCell(14).setCellValue(dataObj.getDouble("lateFee"));
+            row.createCell(15).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
+            row.createCell(16).setCellValue(dataObj.getDouble("vacantHousingReduction"));
         }
     }
 
@@ -910,6 +918,51 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         }
     }
 
+    //押金报表导出
+    private void reportPayFeeDeposit(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+        Sheet sheet = workbook.createSheet("押金报表");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("费用ID");
+        row.createCell(1).setCellValue("房号");
+        row.createCell(2).setCellValue("业主");
+        row.createCell(3).setCellValue("费用类型");
+        row.createCell(4).setCellValue("费用项");
+        row.createCell(5).setCellValue("费用开始时间");
+        row.createCell(6).setCellValue("费用结束时间");
+        row.createCell(7).setCellValue("创建时间");
+        row.createCell(8).setCellValue("付费对象类型");
+        row.createCell(9).setCellValue("付款方ID");
+        row.createCell(10).setCellValue("应收金额");
+        row.createCell(11).setCellValue("状态");
+        row.createCell(12).setCellValue("退费状态");
+        JSONArray reportPayFeeDeposits = this.getReportPayFeeDeposit(pd, result);
+        if (reportPayFeeDeposits == null || reportPayFeeDeposits.size() == 0) {
+            return;
+        }
+        JSONObject dataObj = null;
+        for (int roomIndex = 0; roomIndex < reportPayFeeDeposits.size(); roomIndex++) {
+            row = sheet.createRow(roomIndex + 1);
+            dataObj = reportPayFeeDeposits.getJSONObject(roomIndex);
+            row.createCell(0).setCellValue(dataObj.getString("feeId"));
+            row.createCell(1).setCellValue(dataObj.getString("objName"));
+            row.createCell(2).setCellValue(dataObj.getString("ownerName"));
+            row.createCell(3).setCellValue(dataObj.getString("feeTypeCdName"));
+            row.createCell(4).setCellValue(dataObj.getString("feeName"));
+            row.createCell(5).setCellValue(dataObj.getString("startTime"));
+            row.createCell(6).setCellValue(dataObj.getString("deadlineTime"));
+            row.createCell(7).setCellValue(dataObj.getString("createTime"));
+            row.createCell(8).setCellValue(dataObj.getString("payerObjTypeName"));
+            row.createCell(9).setCellValue(dataObj.getString("payerObjId"));
+            row.createCell(10).setCellValue(dataObj.getString("additionalAmount"));
+            row.createCell(11).setCellValue(dataObj.getString("stateName"));
+            if (dataObj.getString("state").equals("2009001")) {
+                row.createCell(12).setCellValue(dataObj.getString("detailStateName"));
+            } else {
+                row.createCell(12).setCellValue("未缴费");
+            }
+        }
+    }
+
 
     private void reportYearCollection(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("费用台账");
@@ -1349,6 +1402,29 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             return null;
         }
         return savedStaffFeeManages.getJSONArray("staffFees");
+    }
+
+    private JSONArray getReportPayFeeDeposit(IPageData pd, ComponentValidateResult result) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        reqJson.put("page", 1);
+        reqJson.put("row", 10000);
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/reportFeeMonthStatistics/queryPayFeeDeposit" + mapToUrlParam(reqJson);
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+        JSONObject savedReportPayFeeDeposits = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
+        //获取限制条数的值
+        int number = Integer.parseInt(MappingCache.getValue(DOMAIN_COMMON, EXPORT_NUMBER));
+        if (savedReportPayFeeDeposits.getJSONArray("data").size() > number) {
+            throw new IllegalArgumentException("导出数据超过限制条数" + number + "条，无法继续导出操作！");
+        }
+        if (!savedReportPayFeeDeposits.containsKey("data")) {
+            return null;
+        }
+        return savedReportPayFeeDeposits.getJSONArray("data");
     }
 
     private JSONArray getReportYearCollection(IPageData pd, ComponentValidateResult result) {

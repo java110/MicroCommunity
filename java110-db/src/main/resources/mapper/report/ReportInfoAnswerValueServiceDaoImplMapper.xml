@@ -33,6 +33,18 @@ value_id,user_an_id,title_id,an_value_id,value_content,community_id,setting_id
 <if test="valueId !=null and valueId != ''">
    and av.value_id= #{valueId}
 </if> 
+<if test="userName !=null and userName != ''">
+   and ra.person_name= #{userName}
+</if>
+<if test="repName !=null and repName != ''">
+   and st.name= #{repName}
+</if>
+<if test="repTitle !=null and repTitle != ''">
+   and tt.title like concat('%',#{repTitle},'%')
+</if>
+<if test="valueContent !=null and valueContent != ''">
+   and av.value_content like concat('%',#{valueContent},'%')
+</if>
 <if test="createTime !=null and createTime != ''">
    and av.create_time= #{createTime}
 </if> 
@@ -57,7 +69,7 @@ value_id,user_an_id,title_id,an_value_id,value_content,community_id,setting_id
 <if test="settingId !=null and settingId != ''">
    and av.setting_id= #{settingId}
 </if> 
-order by av.create_time desc
+order by ra.person_name,tt.title,av.create_time desc
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 

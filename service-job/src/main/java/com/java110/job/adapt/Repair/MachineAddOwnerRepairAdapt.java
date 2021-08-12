@@ -168,7 +168,8 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             data.setKeyword3(new Content(paramIn.getString("context")));
             data.setRemark(new Content("请您及时确认信息，并安排相关人员进行处理，感谢您的使用！"));
             templateMessage.setData(data);
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            //获取员工公众号地址
+            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

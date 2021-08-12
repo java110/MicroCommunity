@@ -26,7 +26,7 @@
     <select id="getBusinessParkingSpaceInfo" parameterType="Map" resultType="Map">
         select t.area,t.operate,t.num,t.ps_id,t.ps_id
         psId,t.pa_id,t.pa_id
-        paId,t.remark,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
+        paId,t.remark,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.parking_type,t.parking_type parkingType
         from business_parking_space t
         where 1 =1
         <if test="area !=null and area != ''">
@@ -57,6 +57,9 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="parkingType !=null and parkingType != ''">
+            and t.parking_type= #{parkingType}
         </if>
     </select>
 
@@ -92,6 +95,9 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="parkingType !=null and parkingType != ''">
+            and t.parking_type= #{parkingType}
         </if>
     </insert>
 

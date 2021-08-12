@@ -84,6 +84,9 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     //费用类型
     private String feeTypeCd;
 
+    //费用类型名称
+    private String feeTypeCdName;
+
     //打折金额（包括打折、减免、滞纳金、空置房打折、空置房减免金额等）
     private String discountPrice;
 
@@ -107,6 +110,12 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     //收费率
     private String chargeRate;
+
+    //状态
+    private String state;
+
+    //状态名称
+    private String stateName;
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -538,5 +547,29 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setChargeRate(String chargeRate) {
         this.chargeRate = chargeRate;
+    }
+
+    public String getFeeTypeCdName() {
+        return feeTypeCdName;
+    }
+
+    public void setFeeTypeCdName(String feeTypeCdName) {
+        this.feeTypeCdName = feeTypeCdName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

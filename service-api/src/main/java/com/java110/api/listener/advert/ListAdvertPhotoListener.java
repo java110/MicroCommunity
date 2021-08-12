@@ -19,6 +19,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -75,8 +77,13 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
 
 
         //如果是大门 则只获取小区的广告
-
         AdvertDto advertDto = BeanConvertUtil.covertBean(reqJson, AdvertDto.class);
+        if(!StringUtil.isEmpty("clientType") && "H5".equals(reqJson.get("clientType"))){
+            Date day=new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            advertDto.setStartTime(df.format(day));
+            advertDto.setEndTime(df.format(day));
+        }
         List<AdvertDto> advertDtos = advertInnerServiceSMOImpl.queryAdverts(advertDto);
 
         if (advertDtos != null && advertDtos.size() != 0) {

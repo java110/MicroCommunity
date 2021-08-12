@@ -664,13 +664,20 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addRoomFee(RoomDto roomDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public JSONObject addRoomFee(RoomDto roomDto, JSONObject paramInJson, DataFlowContext dataFlowContext) throws ParseException {
         String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
         if (paramInJson.containsKey("feeEndDate")) {
             time = paramInJson.getString("feeEndDate");
         } else if (paramInJson.containsKey("startTime")) {
             time = paramInJson.getString("startTime");
         }
+        //获取费用标识
+        String feeFlag = paramInJson.getString("feeFlag");
+        //查询费用项
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(paramInJson.getString("configId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        Assert.listOnlyOne(feeConfigDtos, "查询费用项错误！");
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);

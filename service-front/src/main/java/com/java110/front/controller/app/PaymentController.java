@@ -63,6 +63,10 @@ public class PaymentController extends BaseController {
 
     @Autowired
     private IToQrPayOweFeeSMO toQrPayOweFeeSMOImpl;
+    @Autowired
+    private IToPayInGoOutSMO toPayInGoOutSMOImpl;
+    @Autowired
+    private IToPayBackCitySMO toPayBackCitySMOImpl;
 
     /**
      * <p>统一下单入口</p>
@@ -105,6 +109,46 @@ public class PaymentController extends BaseController {
         return toPayOweFeeSMOImpl.toPay(newPd);
     }
 
+    /**
+     * <p>统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/toQrInGoOutPay", method = RequestMethod.POST)
+    public ResponseEntity<String> toQrInGoOutPay(@RequestBody String postInfo, HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        String appId = request.getHeader("APP_ID");
+        if (StringUtil.isEmpty(appId)) {
+            appId = request.getHeader("APP-ID");
+        }
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                appId);
+        return toPayInGoOutSMOImpl.toPay(newPd);
+    }
+    /**
+     * <p>统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/toQrBackCityPay", method = RequestMethod.POST)
+    public ResponseEntity<String> toQrBackCityPay(@RequestBody String postInfo, HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        String appId = request.getHeader("APP_ID");
+        if (StringUtil.isEmpty(appId)) {
+            appId = request.getHeader("APP-ID");
+        }
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                appId);
+        return toPayBackCitySMOImpl.toPay(newPd);
+    }
     /**
      * <p>统一下单入口</p>
      *

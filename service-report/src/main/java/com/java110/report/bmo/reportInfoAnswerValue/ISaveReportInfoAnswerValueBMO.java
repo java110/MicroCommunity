@@ -1,5 +1,6 @@
 package com.java110.report.bmo.reportInfoAnswerValue;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.po.reportInfoAnswerValue.ReportInfoAnswerValuePo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveReportInfoAnswerValueBMO {
@@ -11,7 +12,7 @@ public interface ISaveReportInfoAnswerValueBMO {
      * @param reportInfoAnswerValuePo
      * @return
      */
-    ResponseEntity<String> save(ReportInfoAnswerValuePo reportInfoAnswerValuePo);
+    ResponseEntity<String> save(ReportInfoAnswerValuePo reportInfoAnswerValuePo, JSONArray questionAnswerTitles);
 
 
 }

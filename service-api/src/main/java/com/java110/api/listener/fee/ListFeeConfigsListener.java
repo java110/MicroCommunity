@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.PageDto;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.feeConfig.ApiFeeConfigDataVo;
 import com.java110.vo.api.feeConfig.ApiFeeConfigVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,10 @@ public class ListFeeConfigsListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         FeeConfigDto feeConfigDto = BeanConvertUtil.covertBean(reqJson, FeeConfigDto.class);
+
+        if(!StringUtil.isEmpty(reqJson.getString("isFlag")) && reqJson.getString("isFlag").equals("0")){
+            feeConfigDto.setPage(PageDto.DEFAULT_PAGE);
+        }
 
         int count = feeConfigInnerServiceSMOImpl.queryFeeConfigsCount(feeConfigDto);
 

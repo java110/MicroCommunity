@@ -1,5 +1,6 @@
 package com.java110.report.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.reportInfoAnswerValue.ReportInfoAnswerValueDto;
 import com.java110.po.reportInfoAnswerValue.ReportInfoAnswerValuePo;
@@ -35,7 +36,7 @@ public class ReportInfoAnswerValueApi {
      * @return
      */
     @RequestMapping(value = "/saveReportInfoAnswerValue", method = RequestMethod.POST)
-    public ResponseEntity<String> saveReportInfoAnswerValue(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveReportInfoAnswerValue(@RequestHeader(value = "user-id") String userId,@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "anValueId", "请求报文中未包含anValueId");
         Assert.hasKeyAndValue(reqJson, "userAnId", "请求报文中未包含userAnId");
@@ -44,10 +45,21 @@ public class ReportInfoAnswerValueApi {
         Assert.hasKeyAndValue(reqJson, "valueId", "请求报文中未包含valueId");
         Assert.hasKeyAndValue(reqJson, "valueContent", "请求报文中未包含valueContent");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKey(reqJson, "questionAnswerTitles", "未包含回答项");
+        JSONArray questionAnswerTitles = reqJson.getJSONArray("questionAnswerTitles");
 
+        if (questionAnswerTitles == null || questionAnswerTitles.size() < 1) {
+            throw new IllegalArgumentException("未包含答案");
+        }
+        JSONObject titleObj = null;
+        for (int questionAnswerTitleIndex = 0; questionAnswerTitleIndex < questionAnswerTitles.size(); questionAnswerTitleIndex++) {
+            titleObj = questionAnswerTitles.getJSONObject(questionAnswerTitleIndex);
+            Assert.hasKeyAndValue(titleObj, "valueContent", titleObj.getString("qaTitle") + ",未填写答案");
+        }
 
         ReportInfoAnswerValuePo reportInfoAnswerValuePo = BeanConvertUtil.covertBean(reqJson, ReportInfoAnswerValuePo.class);
-        return saveReportInfoAnswerValueBMOImpl.save(reportInfoAnswerValuePo);
+
+        return saveReportInfoAnswerValueBMOImpl.save(reportInfoAnswerValuePo,questionAnswerTitles);
     }
 
     /**
@@ -101,14 +113,20 @@ public class ReportInfoAnswerValueApi {
      */
     @RequestMapping(value = "/queryReportInfoAnswerValue", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoAnswerValue(@RequestParam(value = "communityId") String communityId,
-                                                             @RequestParam(value = "titleId") String titleId,
+                                                             @RequestParam(value = "userName",required = false) String userName,
+                                                             @RequestParam(value = "repName",required = false) String repName,
+                                                             @RequestParam(value = "repTitle",required = false) String repTitle,
+                                                             @RequestParam(value = "valueContent",required = false) String valueContent,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ReportInfoAnswerValueDto reportInfoAnswerValueDto = new ReportInfoAnswerValueDto();
         reportInfoAnswerValueDto.setPage(page);
         reportInfoAnswerValueDto.setRow(row);
         reportInfoAnswerValueDto.setCommunityId(communityId);
-        reportInfoAnswerValueDto.setTitleId(titleId);
+        reportInfoAnswerValueDto.setUserName(userName);
+        reportInfoAnswerValueDto.setRepName(repName);
+        reportInfoAnswerValueDto.setRepTitle(repTitle);
+        reportInfoAnswerValueDto.setValueContent(valueContent);
         return getReportInfoAnswerValueBMOImpl.get(reportInfoAnswerValueDto);
     }
 }

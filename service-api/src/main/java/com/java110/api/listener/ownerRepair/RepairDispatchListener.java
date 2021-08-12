@@ -156,14 +156,13 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserDto.setStaffId(userId);
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
         Assert.listOnlyOne(repairUserDtos, "当前用户没有需要处理订单");
-        //把自己改成退单
+        String ruId = repairUserDtos.get(0).getRuId();
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setState(RepairUserDto.STATE_BACK);
         repairUserPo.setContext(reqJson.getString("context"));
         repairUserPo.setCommunityId(reqJson.getString("communityId"));
-        super.update(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
         //处理人信息
         repairUserPo = new RepairUserPo();
         repairUserPo.setRuId("-1");
@@ -185,11 +184,30 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
                     || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())
             ) {
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_WAIT);
+                //把自己改成退单
+                RepairUserPo repairUser = new RepairUserPo();
+                repairUser.setRuId(ruId);
+                repairUser.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUser.setState(RepairUserDto.STATE_BACK);
+                repairUser.setContext(reqJson.getString("context"));
+                repairUser.setCommunityId(reqJson.getString("communityId"));
+                super.update(context, repairUser, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
                 return;
             } else {
-                throw new IllegalArgumentException("非常抱歉当前不能退单");
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "非常抱歉当前不能退单！");
+                context.setResponseEntity(responseEntity);
+                return;
             }
         }
+
+        //把自己改成退单
+        RepairUserPo repairUser = new RepairUserPo();
+        repairUser.setRuId(ruId);
+        repairUser.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        repairUser.setState(RepairUserDto.STATE_BACK);
+        repairUser.setContext(reqJson.getString("context"));
+        repairUser.setCommunityId(reqJson.getString("communityId"));
+        super.update(context, repairUser, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
 
         repairUserPo.setPreStaffId(repairUserDtos.get(0).getPreStaffId());
         repairUserPo.setPreStaffName(repairUserDtos.get(0).getPreStaffName());

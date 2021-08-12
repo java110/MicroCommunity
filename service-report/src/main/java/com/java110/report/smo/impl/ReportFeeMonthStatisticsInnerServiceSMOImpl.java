@@ -8,6 +8,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
@@ -409,6 +410,24 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         return rooms;
     }
 
+    @Override
+    public List<ReportDeposit> queryPayFeeDeposit(@RequestBody ReportDeposit reportDeposit) {
+        int page = reportDeposit.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportDeposit.setPage((page - 1) * reportDeposit.getRow());
+        }
+        List<ReportDeposit> deposits = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDeposit(BeanConvertUtil.beanCovertMap(reportDeposit)),
+                ReportDeposit.class);
+        return deposits;
+    }
+
+    @Override
+    public List<ReportDeposit> queryFeeDepositAmount(@RequestBody ReportDeposit reportDeposit) {
+        List<ReportDeposit> deposits = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryFeeDepositAmount(BeanConvertUtil.beanCovertMap(reportDeposit)),
+                ReportDeposit.class);
+        return deposits;
+    }
 
     public IReportFeeMonthStatisticsServiceDao getReportFeeMonthStatisticsServiceDaoImpl() {
         return reportFeeMonthStatisticsServiceDaoImpl;

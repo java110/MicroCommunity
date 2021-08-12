@@ -192,6 +192,9 @@ public class CollectionApi {
             BigDecimal nowQuantity = new BigDecimal(purchaseApplyDetailPo.getPurchaseQuantity()); //获取出库数量
             BigDecimal nowMiniStock = nowQuantity.multiply(oldMiniUnitStock); //计算当前出库的最小计量总数
             BigDecimal surplusMiniStock = oldMiniStock.subtract(nowMiniStock);
+            if (surplusMiniStock.compareTo(BigDecimal.ZERO) == -1) {
+                throw new IllegalArgumentException("物品库存已经不足，请确认物品库存！");
+            }
             resourceStorePo.setMiniStock(String.valueOf(surplusMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
             //查询资源

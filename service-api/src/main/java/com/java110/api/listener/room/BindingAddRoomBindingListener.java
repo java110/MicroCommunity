@@ -119,7 +119,7 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
             floorDto.setCommunityId(communityId);
             int floorCount = floorInnerServiceSMOImpl.queryFloorsCount(floorDto);
             if (floorCount > 0) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋编号已经存在");
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋已经存在");
             }
             viewFloorInfo.put("floorId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
             viewFloorInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
@@ -127,22 +127,48 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
             roomBMOImpl.addCommunityMember(viewFloorInfo, context);
         }
         if (!hasKey(viewUnitInfo, "unitId")) {
+            if (viewFloorInfo.containsKey("floorId") && !StringUtil.isEmpty(viewFloorInfo.getString("floorId"))) { //如果前端选择的楼栋，而不是新增楼栋，就判断该楼栋下单元是否重复
+                //获取楼栋id
+                String floorId1 = viewFloorInfo.getString("floorId");
+                //获取小区id
+                String communityId = viewUnitInfo.getString("communityId");
+                //获取单元编号
+                String unitNum = viewUnitInfo.getString("unitNum");
+                UnitDto unitDto = new UnitDto();
+                unitDto.setFloorId(floorId1);
+                unitDto.setCommunityId(communityId);
+                unitDto.setUnitNum(unitNum);
+                int unitCount = unitInnerServiceSMOImpl.queryUnitsCount(unitDto);
+                if (unitCount > 0) {
+                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "单元已经存在");
+                }
+            }
             viewUnitInfo.put("unitId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_unitId));
             viewUnitInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             viewUnitInfo.put("floorId", viewFloorInfo.getString("floorId"));
             roomBMOImpl.addBusinessUnit(viewUnitInfo, context);
         }
         if (!hasKey(addRoomView, "roomId")) {
+            if (viewUnitInfo.containsKey("unitId") && !StringUtil.isEmpty(viewUnitInfo.getString("unitId"))) { //如果前端选择的单元，而不是添加的，就判断该楼栋单元下房屋是否重复
+                //获取单元id
+                String unitId1 = viewUnitInfo.getString("unitId");
+                RoomDto roomDto = new RoomDto();
+                roomDto.setUnitId(unitId1);
+                roomDto.setRoomNum(addRoomView.getString("roomNum"));
+                roomDto.setCommunityId(addRoomView.getString("communityId"));
+                int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
+                if (roomCount > 0) {
+                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "房屋已经存在");
+                }
+            }
             addRoomView.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
             addRoomView.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             addRoomView.put("unitId", viewUnitInfo.getString("unitId"));
             addRoomView.put("roomType", RoomDto.ROOM_TYPE_ROOM);
-
             roomBMOImpl.addBusinessRoom(addRoomView, context);
             //处理房屋属性
             dealRoomAttr(addRoomView, context);
         }
-
 
         commit(context);
 

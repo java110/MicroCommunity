@@ -84,7 +84,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
         logger.debug("ServiceDataFlowEvent : {}", event);
         List<RoomDto> roomDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
@@ -114,7 +114,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         /*if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
             roomDto.setState(RoomDto.STATE_SELL);
         }*/
-        if (reqJson.containsKey("roomState") && reqJson.getString("roomState").contains(",")) {
+        if (reqJson.containsKey("roomState")
+                && (reqJson.getString("roomState").contains(",") || !StringUtil.isEmpty(reqJson.getString("roomState")))) {
             String states = reqJson.getString("roomState");
             roomDto.setStates(states.split(","));
         }
@@ -153,7 +154,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         dealRoomFee(roomDtos, context, reqJson, event);
     }
 
-    private void dealRoomFee(List<RoomDto> roomDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) {
+    private void dealRoomFee(List<RoomDto> roomDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) throws ParseException {
         AppService service = event.getAppService();
         List<String> roomIds = new ArrayList<>();
         for (RoomDto roomDto : roomDtos) {

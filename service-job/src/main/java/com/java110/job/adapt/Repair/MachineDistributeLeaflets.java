@@ -231,7 +231,8 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             data.setKeyword4(new Content(paramIn.getString("context") + "\r\n" + "报修位置：" + paramIn.getString("repairObjName")));
             data.setRemark(new Content(paramIn.getString("preStaffName") + "转单给您，请及时登录公众号接单确认！"));
             templateMessage.setData(data);
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            //获取员工公众号地址
+            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -298,7 +299,8 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             data.setKeyword4(new Content(paramIn.getString("context") + "\r\n" + "报修位置：" + address));
             data.setRemark(new Content("请及时登录公众号接单确认！"));
             templateMessage.setData(data);
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            //获取员工公众号地址
+            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -371,6 +373,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 data.setKeyword4(new Content(paramIn.getString("time")));
                 data.setRemark(new Content("您的报修已受理，请保持电话畅通，以便维修人员及时跟您取得联系！感谢您的使用！"));
                 templateMessage.setData(data);
+                //获取业主公众号地址
                 String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
                 templateMessage.setUrl(wechatUrl);
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -439,7 +442,8 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         data.setKeyword4(new Content(paramIn.getString("context") + "\r\n" + "报修位置：" + address));
         data.setRemark(new Content("请及时与客户取得联系！"));
         templateMessage.setData(data);
-        String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+        //获取员工公众号地址
+        String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
         templateMessage.setUrl(wechatUrl);
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

@@ -98,7 +98,7 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
         if (user.getPage() >= 1) {
-            user.setPage(user.getPage() - 1);
+            user.setPage((user.getPage() - 1) * user.getRow());
         }
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
             list = query.listPage(user.getPage(), user.getRow());
@@ -260,7 +260,6 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
             taskBusinessKeyMap.put(business_key, task.getId());
         }
 
-        //查询 投诉信息
         PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
         purchaseApplyDto.setStoreId(user.getStoreId());
         purchaseApplyDto.setApplyOrderIds(applyOrderIds.toArray(new String[applyOrderIds.size()]));

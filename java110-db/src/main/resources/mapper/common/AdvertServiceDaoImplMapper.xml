@@ -204,13 +204,13 @@
             and t.advert_id= #{advertId}
         </if>
         <if test="startTime !=null ">
-            and t.start_time= #{startTime}
+            and t.start_time &lt;= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.end_time &gt;= #{endTime}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
-        </if>
-        <if test="endTime !=null ">
-            and t.end_time= #{endTime}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

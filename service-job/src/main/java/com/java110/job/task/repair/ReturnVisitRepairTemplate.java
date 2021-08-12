@@ -12,9 +12,11 @@ import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -250,8 +252,12 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
             Date startTime = repairUserDtoList.get(0).getStartTime();
             //获取当前时间
             Date nowTime = new Date();
-            //判断时间是否超过了两天
-            if ((nowTime.getTime() - startTime.getTime()) > 2 * 1000 * 60 * 60 * 24) {
+            //默认48小时
+            Integer autoEvaluateHour = 48;
+            if (StringUtil.isEmpty(MappingCache.getValue("autoEvaluateHour"))) {
+                autoEvaluateHour = Integer.valueOf(MappingCache.getValue("autoEvaluateHour"));
+            }
+            if ((nowTime.getTime() - startTime.getTime()) > autoEvaluateHour * 1000 * 60 * 60) {
                 //超过两天未评价，状态变为待回访状态
                 RepairPoolPo repairPoolPo = new RepairPoolPo();
                 repairPoolPo.setRepairId(tmpRepairDto.getRepairId());
