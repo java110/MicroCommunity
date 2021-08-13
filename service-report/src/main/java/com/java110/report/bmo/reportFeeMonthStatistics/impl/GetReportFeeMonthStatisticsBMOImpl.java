@@ -132,6 +132,14 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeBreakdown(reportFeeMonthStatisticsDto);
+            ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeBreakdownMajor(reportFeeMonthStatisticsDto);
+            if(reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size()> 0){
+                for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos){
+                    reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
+                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
+                    reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
+                }
+            }
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
