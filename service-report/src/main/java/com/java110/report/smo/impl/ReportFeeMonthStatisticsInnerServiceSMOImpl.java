@@ -103,6 +103,14 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     }
 
     @Override
+    public ReportFeeMonthStatisticsDto queryReportFeeSummaryMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatistics = BeanConvertUtil.covertBean(
+                reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryMajor(
+                        BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+        return reportFeeMonthStatistics;
+    }
+
+    @Override
     public int queryReportFloorUnitFeeSummaryCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         return reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
     }

@@ -79,6 +79,9 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     //实收总金额(大计)
     private String allReceivedAmount;
 
+    //实收总金额(大计)
+    private String allOweAmount;
+
     private List<FeeConfigDto> FeeConfigDtos;
 
     //费用类型
@@ -571,5 +574,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getAllOweAmount() {
+        return allOweAmount;
+    }
+
+    public void setAllOweAmount(String allOweAmount) {
+        this.allOweAmount = allOweAmount;
     }
 }

@@ -80,6 +80,14 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 reportFeeMonthStatistics.setChargeRate(String.format("%.2f", chargeRate) + "%");
                 reportFeeMonthStatisticsDtos.add(reportFeeMonthStatistics);
             }
+            ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummaryMajor(reportFeeMonthStatisticsDto);
+            if(reportFeeMonthStatisticsList != null && reportFeeMonthStatisticsList.size()> 0){
+                for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsList){
+                    reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
+                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
+                    reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
+                }
+            }
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
