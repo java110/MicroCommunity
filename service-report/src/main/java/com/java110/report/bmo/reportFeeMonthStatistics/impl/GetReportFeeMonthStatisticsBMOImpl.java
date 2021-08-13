@@ -84,7 +84,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             if(reportFeeMonthStatisticsList != null && reportFeeMonthStatisticsList.size()> 0){
                 for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsList){
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
-                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
+                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
                 }
             }
@@ -110,7 +110,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             if(reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size()> 0){
                 for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos){
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
-                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
+                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
                 }
             }
@@ -136,7 +136,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             if(reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size()> 0){
                 for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos){
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
-                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
+                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
                 }
             }
