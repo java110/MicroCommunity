@@ -10,9 +10,17 @@
         business_pay_fee_detail(
         operate,prime_rate,detail_id,
         receivable_amount,cycles,remark,
-        received_amount,community_id,b_id,fee_id,state,start_time,end_time) values (
+        received_amount,community_id,b_id,fee_id,state,start_time,end_time
+        <if test="createTime != null">
+            ,create_time
+        </if>
+        ) values (
         #{operate},#{primeRate},#{detailId},#{receivableAmount},
-        #{cycles},#{remark},#{receivedAmount},#{communityId},#{bId},#{feeId},#{state},#{startTime},#{endTime})
+        #{cycles},#{remark},#{receivedAmount},#{communityId},#{bId},#{feeId},#{state},#{startTime},#{endTime}
+        <if test="createTime != null">
+            ,#{createTime}
+        </if>
+        )
     </insert>
 
 
@@ -65,9 +73,9 @@
     <insert id="saveFeeDetailInfoInstance" parameterType="Map">
         insert into
         pay_fee_detail(
-        prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state,start_time,end_time)
+        prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state,start_time,end_time,create_time)
         select
-        t.prime_rate,t.detail_id,t.receivable_amount,t.cycles,t.remark,'0',t.received_amount,t.community_id,t.b_id,t.fee_id,state,t.start_time,t.end_time
+        t.prime_rate,t.detail_id,t.receivable_amount,t.cycles,t.remark,'0',t.received_amount,t.community_id,t.b_id,t.fee_id,state,t.start_time,t.end_time,t.create_time
         from business_pay_fee_detail t where 1=1
         and t.operate= 'ADD'
         <if test="primeRate !=null and primeRate != ''">
