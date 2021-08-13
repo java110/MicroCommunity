@@ -353,4 +353,19 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     List<ReportDeposit> queryFeeDepositAmount(@RequestBody ReportDeposit reportDeposit);
 
 
+    /**
+     * 查询华宁物业 欠费总数
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryHuaningOweFeeCount", method = RequestMethod.POST)
+    int queryHuaningOweFeeCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询华宁物业 欠费明细 按楼栋 group by
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryHuaningOweFee", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryHuaningOweFee(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 }

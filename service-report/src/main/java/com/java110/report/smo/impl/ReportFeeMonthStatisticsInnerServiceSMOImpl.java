@@ -461,6 +461,23 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         return deposits;
     }
 
+    @Override
+    public int queryHuaningOweFeeCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+    }
+
+    @Override
+    public List<ReportFeeMonthStatisticsDto> queryHuaningOweFee(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        int page = reportFeeMonthStatisticsDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportFeeMonthStatisticsDto.setPage((page - 1) * reportFeeMonthStatisticsDto.getRow());
+        }
+        List<ReportFeeMonthStatisticsDto> deposits = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFee(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
+                ReportFeeMonthStatisticsDto.class);
+        return deposits;
+    }
+
     public IReportFeeMonthStatisticsServiceDao getReportFeeMonthStatisticsServiceDaoImpl() {
         return reportFeeMonthStatisticsServiceDaoImpl;
     }

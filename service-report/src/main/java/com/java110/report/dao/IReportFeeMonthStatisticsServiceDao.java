@@ -310,4 +310,8 @@ public interface IReportFeeMonthStatisticsServiceDao {
     Map queryFeeBreakdownMajor(Map beanCovertMap);
 
     Map queryOweFeeDetailMajor(Map beanCovertMap);
+
+    int queryHuaningOweFeeCount(Map beanCovertMap);
+
+    List<Map> queryHuaningOweFee(Map beanCovertMap);
 }

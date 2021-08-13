@@ -76,4 +76,11 @@ public interface IGetReportFeeMonthStatisticsBMO {
      * @return
      */
     ResponseEntity<String> queryPayFeeDeposit(ReportDeposit reportDeposit);
+
+    /**
+     * 查询华宁物业欠费 统计
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    ResponseEntity<String> queryHuaningOweFee(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 }

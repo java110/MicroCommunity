@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 @RestController
@@ -589,6 +587,31 @@ public class ReportFeeMonthStatisticsApi {
         roomDto.setPage(page);
         roomDto.setRow(row);
         return getReportFeeMonthStatisticsBMOImpl.queryNoFeeRooms(roomDto);
+    }
+
+
+    /**
+     * 查询华宁物业 欠费统计报表
+     * 作者： 吴学文
+     * 时间：2021-08-13
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryHuaningOweFee
+     * @path /app/reportFeeMonthStatistics/queryHuaningOweFee
+     */
+    @RequestMapping(value = "/queryHuaningOweFee", method = RequestMethod.GET)
+    public ResponseEntity<String> queryHuaningOweFee(
+            @RequestParam(value = "communityId") String communityId,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "row") int row
+    ) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setCommunityId(communityId);
+        reportFeeMonthStatisticsDto.setPage(page);
+        reportFeeMonthStatisticsDto.setRow(row);
+        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
+        return getReportFeeMonthStatisticsBMOImpl.queryHuaningOweFee(reportFeeMonthStatisticsDto);
     }
 
 }

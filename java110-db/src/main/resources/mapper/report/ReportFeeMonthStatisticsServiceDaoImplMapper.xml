@@ -2095,4 +2095,81 @@
         group by pfd.state
     </select>
 
+
+    <select id="queryHuaningOweFeeCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from (
+        select f.floor_num floorNum,SUM(t.owe_amount) oweAmount,SUM(curT.owe_amount) curOweAmount
+        from report_fee_month_statistics t
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join building_unit curBu on curBu.floor_id = f.floor_id and bu.status_cd = '0'
+        left join building_room curBr on curBr.unit_id = curBu.unit_id and br.status_cd = '0'
+        inner join report_fee_month_statistics curT on curT.obj_id = curBr.room_id
+        where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="feeYear !=null and feeYear != ''">
+            and curT.fee_year= #{feeYear}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        GROUP BY f.floor_num
+        ) t
+    </select>
+
+    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
+    <select id="queryHuaningOweFee" parameterType="Map" resultType="Map">
+        select f.floor_num floorNum,SUM(t.owe_amount) oweAmount,SUM(curT.owe_amount) curOweAmount
+        from report_fee_month_statistics t
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join building_unit curBu on curBu.floor_id = f.floor_id and bu.status_cd = '0'
+        left join building_room curBr on curBr.unit_id = curBu.unit_id and br.status_cd = '0'
+        inner join report_fee_month_statistics curT on curT.obj_id = curBr.room_id
+        where t.status_cd = '0'
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="feeYear !=null and feeYear != ''">
+            and curT.fee_year= #{feeYear}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        GROUP BY f.floor_num
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
 </mapper>
