@@ -101,6 +101,9 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     @RequestMapping(value = "/queryReportFloorUnitFeeSummary", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryReportFloorUnitFeeSummary(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
+    @RequestMapping(value = "/queryReportFloorUnitFeeSummaryMajor", method = RequestMethod.POST)
+    ReportFeeMonthStatisticsDto queryReportFloorUnitFeeSummaryMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询费用汇总表个数
      *
@@ -343,4 +346,5 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeeDepositAmount", method = RequestMethod.POST)
     List<ReportDeposit> queryFeeDepositAmount(@RequestBody ReportDeposit reportDeposit);
+
 }

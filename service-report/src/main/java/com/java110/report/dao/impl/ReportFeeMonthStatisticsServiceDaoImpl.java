@@ -161,6 +161,15 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     }
 
     @Override
+    public Map queryReportFloorUnitFeeSummaryMajor(Map info) {
+        logger.debug("查询费用月统计信息 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryMajor", info);
+
+        return businessReportFeeMonthStatisticsInfos.get(0);
+    }
+
+    @Override
     public int queryFeeBreakdownCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 

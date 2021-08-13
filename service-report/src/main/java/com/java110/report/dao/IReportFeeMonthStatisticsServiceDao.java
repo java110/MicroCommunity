@@ -304,4 +304,6 @@ public interface IReportFeeMonthStatisticsServiceDao {
     List<Map> queryFeeDepositAmount(Map beanCovertMap);
 
     Map queryReportFeeSummaryMajor(Map beanCovertMap);
+
+    Map queryReportFloorUnitFeeSummaryMajor(Map beanCovertMap);
 }
