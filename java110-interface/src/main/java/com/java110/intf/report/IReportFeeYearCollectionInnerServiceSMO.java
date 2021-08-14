@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IReportFeeYearCollectionInnerServiceSMO
@@ -50,4 +51,10 @@ public interface IReportFeeYearCollectionInnerServiceSMO {
      */
     @RequestMapping(value = "/queryReportFeeYearCollectionsCount", method = RequestMethod.POST)
     int queryReportFeeYearCollectionsCount(@RequestBody ReportFeeYearCollectionDto reportFeeYearCollectionDto);
+
+    @RequestMapping(value = "/queryReportFeeYearCollectionsCount", method = RequestMethod.POST)
+    List<Map> getReportFeeYearCollectionInfo(@RequestBody Map beanCovertMap);
+
+    @RequestMapping(value = "/saveReportFeeYearCollectionInfo", method = RequestMethod.POST)
+    void saveReportFeeYearCollectionInfo(@RequestBody Map beanCovertMap);
 }
