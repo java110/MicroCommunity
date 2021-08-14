@@ -318,4 +318,8 @@ public interface IReportFeeMonthStatisticsServiceDao {
     int queryHuaningPayFeeCount(Map paramInfo);
 
     List<Map> queryHuaningPayFee(Map beanCovertMap);
+    int queryHuaningPayFeeTwoCount(Map paramInfo);
+
+    List<Map> queryHuaningPayFeeTwo(Map beanCovertMap);
+
 }

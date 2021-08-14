@@ -840,6 +840,31 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     }
 
     @Override
+    public ResponseEntity<String> queryHuaningPayFeeTwo(Map paramInfo) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, (int) paramInfo.get("year"));
+        calendar.set(Calendar.MONTH, (int) paramInfo.get("month") - 1);
+        paramInfo.put("yearMonth", DateUtil.getFormatTimeString(calendar.getTime(), "YYYY-MM"));
+        calendar.add(Calendar.MONTH, 1);
+        paramInfo.put("nextYear", calendar.get(Calendar.YEAR));
+        paramInfo.put("nextMonth", calendar.get(Calendar.MONTH) + 1);
+        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningPayFeeTwoCount(paramInfo);
+
+        List<Map> reportFeeMonthStatisticsDtos = null;
+        if (count > 0) {
+            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningPayFeeTwo(paramInfo);
+        } else {
+            reportFeeMonthStatisticsDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramInfo.get("row")), count, reportFeeMonthStatisticsDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
     public ResponseEntity<String> queryPrePayment(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
 
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPrePaymentNewCount(reportFeeMonthStatisticsDto);
