@@ -2196,8 +2196,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        GROUP BY f.floor_num
-        ) t
+        GROUP BY t.floor_num
+        ) tt
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
@@ -2221,7 +2221,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        GROUP BY f.floor_num
+        GROUP BY t.floor_num
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
