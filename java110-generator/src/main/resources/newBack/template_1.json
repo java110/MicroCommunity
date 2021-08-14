@@ -1,22 +1,23 @@
 {
   "autoMove": true,
-  "id": "cdId",
-  "name": "reportFeeMonthCollectionDetail",
+  "id": "monthId",
+  "name": "payFeeDetailMonth",
   "desc": "月缴费表",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "shareName": "report",
-  "tableName": "report_fee_month_collection_detail",
+  "shareName": "fee",
+  "tableName": "pay_fee_detail_month",
   "param": {
-    "cdId": "cd_id",
+    "monthId": "month_id",
+    "feeId": "fee_id",
     "detailId": "detail_id",
-    "collectionId": "collection_id",
-    "collectionYear": "collection_year",
-    "collectionMonth": "collection_month",
     "communityId": "community_id",
+    "detailYear": "detail_year",
+    "detailMonth": "detail_month",
     "receivableAmount": "receivable_amount",
     "receivedAmount": "received_amount",
     "discountAmount": "discount_amount",
+    "remark": "remark",
     "statusCd": "status_cd"
   },
   "required": [
@@ -25,11 +26,11 @@
       "msg": "缴费ID不能为空"
     },
     {
-      "code": "collectionYear",
+      "code": "detailYear",
       "msg": "年份不能为空"
     },
     {
-      "code": "collectionMonth",
+      "code": "detailMonth",
       "msg": "月份不能为空"
     }
   ]
