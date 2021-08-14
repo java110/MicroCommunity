@@ -1,35 +1,23 @@
-package com.java110.job.adapt.payment.fee;
+package com.java110.job.adapt.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDetailDto;
-import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.job.adapt.payment.fee.asyn.IPayFeeDetailToMonth;
+import com.java110.job.adapt.fee.asyn.IPayFeeDetailToMonth;
 import com.java110.po.fee.PayFeeDetailPo;
-import com.java110.po.feeReceipt.FeeReceiptPo;
-import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

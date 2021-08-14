@@ -26,6 +26,10 @@ public interface IPayFeeDetailMonthInnerServiceSMO {
     @RequestMapping(value = "/savePayFeeDetailMonth", method = RequestMethod.POST)
     public int savePayFeeDetailMonth(@RequestBody PayFeeDetailMonthPo payFeeDetailMonthPo);
 
+    @RequestMapping(value = "/savePayFeeDetailMonths", method = RequestMethod.POST)
+    public int savePayFeeDetailMonths(@RequestBody List<PayFeeDetailMonthPo> payFeeDetailMonthPos);
+
+
     @RequestMapping(value = "/updatePayFeeDetailMonth", method = RequestMethod.POST)
     public int updatePayFeeDetailMonth(@RequestBody  PayFeeDetailMonthPo payFeeDetailMonthPo);
 

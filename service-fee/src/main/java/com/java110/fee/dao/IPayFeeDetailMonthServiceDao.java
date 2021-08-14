@@ -28,6 +28,8 @@ public interface IPayFeeDetailMonthServiceDao {
      */
     void savePayFeeDetailMonthInfo(Map info) throws DAOException;
 
+    int savePayFeeDetailMonthInfos(Map info);
+
 
 
 
@@ -57,5 +59,6 @@ public interface IPayFeeDetailMonthServiceDao {
      * @return 月缴费表数量
      */
     int queryPayFeeDetailMonthsCount(Map info);
+
 
 }

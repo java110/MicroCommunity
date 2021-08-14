@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -33,6 +35,15 @@ public class PayFeeDetailMonthInnerServiceSMOImpl extends BaseServiceSMO impleme
     public int savePayFeeDetailMonth(@RequestBody PayFeeDetailMonthPo payFeeDetailMonthPo) {
         int saveFlag = 1;
         payFeeDetailMonthServiceDaoImpl.savePayFeeDetailMonthInfo(BeanConvertUtil.beanCovertMap(payFeeDetailMonthPo));
+        return saveFlag;
+    }
+
+    @Override
+    public int savePayFeeDetailMonths(@RequestBody List<PayFeeDetailMonthPo> payFeeDetailMonthPos) {
+        int saveFlag = 1;
+        Map info = new HashMap();
+        info.put("payFeeDetailMonthPos",payFeeDetailMonthPos);
+        payFeeDetailMonthServiceDaoImpl.savePayFeeDetailMonthInfos(info);
         return saveFlag;
     }
 
