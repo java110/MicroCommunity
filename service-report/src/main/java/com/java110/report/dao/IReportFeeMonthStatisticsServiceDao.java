@@ -314,4 +314,8 @@ public interface IReportFeeMonthStatisticsServiceDao {
     int queryHuaningOweFeeCount(Map beanCovertMap);
 
     List<Map> queryHuaningOweFee(Map beanCovertMap);
+
+    int queryHuaningPayFeeCount(Map paramInfo);
+
+    List<Map> queryHuaningPayFee(Map beanCovertMap);
 }

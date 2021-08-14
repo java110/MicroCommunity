@@ -16,9 +16,15 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/reportFeeMonthStatistics")
@@ -613,5 +619,33 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningOweFee(reportFeeMonthStatisticsDto);
     }
+
+    /**
+     * 查询华宁物业 欠费统计报表
+     * 作者： 吴学文
+     * 时间：2021-08-13
+     *
+     * @param communityId 小区ID
+     * @return
+     * @serviceCode /reportFeeMonthStatistics/queryHuaningPayFee
+     * @path /app/reportFeeMonthStatistics/queryHuaningPayFee
+     */
+    @RequestMapping(value = "/queryHuaningPayFee", method = RequestMethod.GET)
+    public ResponseEntity<String> queryHuaningPayFee(
+            @RequestParam(value = "communityId") String communityId,
+            @RequestParam(value = "year") int year,
+            @RequestParam(value = "month") int month,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "row") int row
+    ) {
+        Map paramInfo = new HashMap();
+        paramInfo.put("communityId", communityId);
+        paramInfo.put("year", year);
+        paramInfo.put("month", month);
+        paramInfo.put("page", page);
+        paramInfo.put("row", row);
+        return getReportFeeMonthStatisticsBMOImpl.queryHuaningPayFee(paramInfo);
+    }
+
 
 }

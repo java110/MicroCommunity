@@ -26,9 +26,11 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("getReportFeeMonthStatisticsBMOImpl")
 public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthStatisticsBMO {
@@ -81,8 +83,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 reportFeeMonthStatisticsDtos.add(reportFeeMonthStatistics);
             }
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummaryMajor(reportFeeMonthStatisticsDto);
-            if(reportFeeMonthStatisticsList != null && reportFeeMonthStatisticsList.size()> 0){
-                for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsList){
+            if (reportFeeMonthStatisticsList != null && reportFeeMonthStatisticsList.size() > 0) {
+                for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsList) {
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
                     reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
@@ -107,8 +109,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFloorUnitFeeSummary(reportFeeMonthStatisticsDto);
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFloorUnitFeeSummaryMajor(reportFeeMonthStatisticsDto);
-            if(reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size()> 0){
-                for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos){
+            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
+                for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
                     reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
@@ -133,8 +135,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeBreakdown(reportFeeMonthStatisticsDto);
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeBreakdownMajor(reportFeeMonthStatisticsDto);
-            if(reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size()> 0){
-                for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos){
+            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
+                for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
                     reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
@@ -223,8 +225,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryOweFeeDetailMajor(reportFeeMonthStatisticsDto);
-            if(reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size()> 0){
-                for(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos){
+            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
+                for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
                     reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
@@ -806,6 +808,31 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         }
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> queryHuaningPayFee(Map paramInfo) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, (int) paramInfo.get("year"));
+        calendar.set(Calendar.MONTH, (int) paramInfo.get("month") - 1);
+        paramInfo.put("yearMonth", DateUtil.getFormatTimeString(calendar.getTime(), "YYYY-MM"));
+        calendar.add(Calendar.MONTH, 1);
+        paramInfo.put("nextYear", calendar.get(Calendar.YEAR));
+        paramInfo.put("nextMonth", calendar.get(Calendar.MONTH) + 1);
+        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningPayFeeCount(paramInfo);
+
+        List<Map> reportFeeMonthStatisticsDtos = null;
+        if (count > 0) {
+            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningPayFee(paramInfo);
+        } else {
+            reportFeeMonthStatisticsDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramInfo.get("row")), count, reportFeeMonthStatisticsDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

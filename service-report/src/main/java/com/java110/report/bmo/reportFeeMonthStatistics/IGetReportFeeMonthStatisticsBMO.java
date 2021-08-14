@@ -6,6 +6,8 @@ import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 public interface IGetReportFeeMonthStatisticsBMO {
 
 
@@ -83,4 +85,11 @@ public interface IGetReportFeeMonthStatisticsBMO {
      * @return
      */
     ResponseEntity<String> queryHuaningOweFee(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询华宁物业缴费 统计
+     * @param paramInfo
+     * @return
+     */
+    ResponseEntity<String> queryHuaningPayFee(Map paramInfo);
 }

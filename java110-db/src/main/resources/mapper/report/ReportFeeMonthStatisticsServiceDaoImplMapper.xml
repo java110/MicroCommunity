@@ -2172,4 +2172,58 @@
             limit #{page}, #{row}
         </if>
     </select>
+
+
+    <select id="queryHuaningPayFeeCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from (
+        select t.floor_num floorNum,sum(pfdm.receivable_amount) receivableAmount ,
+        sum(pfdm.received_amount) receivedAmount,SUM(pfdm1.received_amount) receivedAmount1,
+        SUM(pfdm2.received_amount) receivedAmount2,SUM(pfdm3.received_amount) receivedAmount3,
+        SUM(pfdm3.received_amount) receivedAmount4
+        from f_floor t
+        LEFT JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
+        LEFT JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        LEFT JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
+        LEFT join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
+        LEFT JOIN pay_fee_detail_month pfdm on  pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and pfdm.status_cd = '0'
+        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month = #{month}
+        LEFT JOIN pay_fee_detail_month pfdm3 on  pf.fee_id = pfdm3.fee_id and pfd.detail_id = pfdm3.detail_id and pfdm3.status_cd = '0' and pfdm3.detail_year = #{nextYear} and pfdm3.detail_month = #{nextMonth}
+        LEFT JOIN pay_fee_detail_month pfdm4 on  pf.fee_id = pfdm4.fee_id and pfd.detail_id = pfdm4.detail_id and pfdm4.status_cd = '0' and pfdm4.detail_year &lt; #{year}
+        where 1=1
+        and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        GROUP BY f.floor_num
+        ) t
+    </select>
+
+    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
+    <select id="queryHuaningPayFee" parameterType="Map" resultType="Map">
+        select t.floor_num floorNum,sum(pfdm.receivable_amount) receivableAmount ,
+        sum(pfdm.received_amount) receivedAmount,SUM(pfdm1.received_amount) receivedAmount1,
+        SUM(pfdm2.received_amount) receivedAmount2,SUM(pfdm3.received_amount) receivedAmount3,
+        SUM(pfdm3.received_amount) receivedAmount4
+        from f_floor t
+        LEFT JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
+        LEFT JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        LEFT JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
+        LEFT join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
+        LEFT JOIN pay_fee_detail_month pfdm on  pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and pfdm.status_cd = '0'
+        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month = #{month}
+        LEFT JOIN pay_fee_detail_month pfdm3 on  pf.fee_id = pfdm3.fee_id and pfd.detail_id = pfdm3.detail_id and pfdm3.status_cd = '0' and pfdm3.detail_year = #{nextYear} and pfdm3.detail_month = #{nextMonth}
+        LEFT JOIN pay_fee_detail_month pfdm4 on  pf.fee_id = pfdm4.fee_id and pfd.detail_id = pfdm4.detail_id and pfdm4.status_cd = '0' and pfdm4.detail_year &lt; #{year}
+        where 1=1
+        and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        GROUP BY f.floor_num
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
 </mapper>

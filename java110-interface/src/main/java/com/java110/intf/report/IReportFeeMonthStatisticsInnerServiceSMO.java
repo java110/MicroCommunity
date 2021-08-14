@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IReportFeeMonthStatisticsInnerServiceSMO
@@ -368,4 +369,10 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryHuaningOweFee", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryHuaningOweFee(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    @RequestMapping(value = "/queryHuaningPayFeeCount", method = RequestMethod.POST)
+    int queryHuaningPayFeeCount(@RequestBody Map paramInfo);
+
+    @RequestMapping(value = "/queryHuaningPayFee", method = RequestMethod.POST)
+    List<Map> queryHuaningPayFee(@RequestBody Map paramInfo);
 }

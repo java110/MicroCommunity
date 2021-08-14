@@ -17,7 +17,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
@@ -462,12 +461,12 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     }
 
     @Override
-    public int queryHuaningOweFeeCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+    public int queryHuaningOweFeeCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
     }
 
     @Override
-    public List<ReportFeeMonthStatisticsDto> queryHuaningOweFee(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+    public List<ReportFeeMonthStatisticsDto> queryHuaningOweFee(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         int page = reportFeeMonthStatisticsDto.getPage();
 
         if (page != PageDto.DEFAULT_PAGE) {
@@ -475,6 +474,22 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         }
         List<ReportFeeMonthStatisticsDto> deposits = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFee(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
                 ReportFeeMonthStatisticsDto.class);
+        return deposits;
+    }
+
+    @Override
+    public int queryHuaningPayFeeCount(@RequestBody Map paramInfo) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCount(paramInfo);
+    }
+
+    @Override
+    public List<Map> queryHuaningPayFee(@RequestBody Map paramInfo) {
+        int page = (int)paramInfo.get("page");
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
+        }
+        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee(BeanConvertUtil.beanCovertMap(paramInfo));
         return deposits;
     }
 
