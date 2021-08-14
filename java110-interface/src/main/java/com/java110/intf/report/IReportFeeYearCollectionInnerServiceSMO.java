@@ -52,7 +52,7 @@ public interface IReportFeeYearCollectionInnerServiceSMO {
     @RequestMapping(value = "/queryReportFeeYearCollectionsCount", method = RequestMethod.POST)
     int queryReportFeeYearCollectionsCount(@RequestBody ReportFeeYearCollectionDto reportFeeYearCollectionDto);
 
-    @RequestMapping(value = "/queryReportFeeYearCollectionsCount", method = RequestMethod.POST)
+    @RequestMapping(value = "/getReportFeeYearCollectionInfo", method = RequestMethod.POST)
     List<Map> getReportFeeYearCollectionInfo(@RequestBody Map beanCovertMap);
 
     @RequestMapping(value = "/saveReportFeeYearCollectionInfo", method = RequestMethod.POST)
