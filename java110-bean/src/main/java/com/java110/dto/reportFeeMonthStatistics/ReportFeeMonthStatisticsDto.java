@@ -30,6 +30,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String objId;
     private String feeName;
     private String oweAmount;
+    private String curOweAmount;
     private String communityId;
     private String feeCreateTime;
     private String feeStartTime;
@@ -582,5 +583,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setAllOweAmount(String allOweAmount) {
         this.allOweAmount = allOweAmount;
+    }
+
+    public String getCurOweAmount() {
+        return curOweAmount;
+    }
+
+    public void setCurOweAmount(String curOweAmount) {
+        this.curOweAmount = curOweAmount;
     }
 }
