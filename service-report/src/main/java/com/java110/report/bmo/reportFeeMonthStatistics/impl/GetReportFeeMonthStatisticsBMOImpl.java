@@ -1,6 +1,7 @@
 package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
@@ -42,6 +43,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
 
     /**
      * @param reportFeeMonthStatisticsDto
@@ -862,6 +866,66 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> queryHuaningOweFeeDetail(Map paramInfo) {
+        Calendar calendar = Calendar.getInstance();
+        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFeeDetailCount(paramInfo);
+        List<Map> reportFeeMonthStatisticsDtos = null;
+        if (count > 0) {
+            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFeeDetail(paramInfo);
+            refreshOweFee(reportFeeMonthStatisticsDtos, paramInfo);
+        } else {
+            reportFeeMonthStatisticsDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramInfo.get("row")), count, reportFeeMonthStatisticsDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    private void refreshOweFee(List<Map> reportFeeMonthStatisticsDtos, Map paramInfo) {
+        Date startTime = null;
+        Date endTime = null;
+        Calendar calendar = Calendar.getInstance();
+        int curMonth = calendar.get(Calendar.MONTH) + 1;
+        calendar.set(Calendar.MONTH, 0);
+        Date curStart = calendar.getTime();
+
+
+        for (Map paramIn : reportFeeMonthStatisticsDtos) {
+
+            startTime = (Date) paramIn.get("startTime");
+            endTime = (Date) paramIn.get("startTime");
+            double money = (double) paramIn.get("oweAmount");
+            double month = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+            if (month < 1) {
+                paramIn.put("btAmount", 0);
+                paramIn.put("bfAmount", 0);
+                continue;
+            }
+
+            //每月金额
+            BigDecimal monthAmount = new BigDecimal(money).divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN);
+
+            if (startTime.getTime() < curStart.getTime()) {
+                BigDecimal btAmountDec = monthAmount.multiply(new BigDecimal(curMonth)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                paramIn.put("btAmount", btAmountDec.doubleValue());
+                double preMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, curStart));
+                BigDecimal bfAmountDec = monthAmount.multiply(new BigDecimal(preMonth)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                paramIn.put("bfAmount", bfAmountDec.doubleValue());
+                continue;
+            }
+
+            if (startTime.getTime() >= curStart.getTime()) {
+                paramIn.put("btAmount", money);
+                paramIn.put("bfAmount", 0);
+            }
+        }
+
     }
 
     @Override

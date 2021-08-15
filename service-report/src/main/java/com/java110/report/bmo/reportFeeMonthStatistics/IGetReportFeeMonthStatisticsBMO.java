@@ -94,4 +94,6 @@ public interface IGetReportFeeMonthStatisticsBMO {
     ResponseEntity<String> queryHuaningPayFee(Map paramInfo);
 
     ResponseEntity<String> queryHuaningPayFeeTwo(Map paramInfo);
+
+    ResponseEntity<String> queryHuaningOweFeeDetail(Map paramInfo);
 }

@@ -382,4 +382,9 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     @RequestMapping(value = "/queryHuaningPayFeeTwo", method = RequestMethod.POST)
     List<Map> queryHuaningPayFeeTwo(@RequestBody Map paramInfo);
 
+    @RequestMapping(value = "/queryHuaningOweFeeDetailCount", method = RequestMethod.POST)
+    int queryHuaningOweFeeDetailCount(@RequestBody Map paramInfo);
+
+    @RequestMapping(value = "/queryHuaningOweFeeDetail", method = RequestMethod.POST)
+    List<Map> queryHuaningOweFeeDetail(@RequestBody Map paramInfo);
 }
