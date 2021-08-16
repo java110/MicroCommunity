@@ -489,7 +489,7 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         if (page != PageDto.DEFAULT_PAGE) {
             paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
         }
-        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee(BeanConvertUtil.beanCovertMap(paramInfo));
+        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee(paramInfo);
         return deposits;
     }
     @Override
@@ -504,7 +504,7 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         if (page != PageDto.DEFAULT_PAGE) {
             paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
         }
-        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwo(BeanConvertUtil.beanCovertMap(paramInfo));
+        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwo(paramInfo);
         return deposits;
     }
 
@@ -520,7 +520,7 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         if (page != PageDto.DEFAULT_PAGE) {
             paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
         }
-        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetail(BeanConvertUtil.beanCovertMap(paramInfo));
+        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetail(paramInfo);
         return deposits;
     }
 
