@@ -44,6 +44,7 @@ public class OaWorkflowApi {
 
 
         OaWorkflowPo oaWorkflowPo = BeanConvertUtil.covertBean(reqJson, OaWorkflowPo.class);
+        oaWorkflowPo.setStoreId(storeId);
         return saveOaWorkflowBMOImpl.save(oaWorkflowPo);
     }
 
