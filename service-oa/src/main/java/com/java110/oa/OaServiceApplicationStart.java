@@ -44,28 +44,16 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {
-        "com.java110.service",
-        "com.java110.common",
-        "com.java110.core",
-        "com.java110.config.properties.code",
-        "com.java110.db"},
-        exclude = {LiquibaseAutoConfiguration.class,
-                org.activiti.spring.boot.SecurityAutoConfiguration.class,
-                org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class}
-        )
+@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.oa",
+        "com.java110.core", "com.java110.config.properties.code", "com.java110.db"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.oa.listener"})
-@EnableFeignClients(basePackages = {
-        "com.java110.intf.user",
-        "com.java110.intf.store",
-        "com.java110.intf.fee",
-        "com.java110.intf.community",
-        "com.java110.intf.job",
+@EnableFeignClients(basePackages = {"com.java110.intf.user",
         "com.java110.intf.order",
-        "com.java110.intf.report"
-})
+        "com.java110.intf.community",
+        "com.java110.intf.common",
+        "com.java110.intf.store"})
 public class OaServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(OaServiceApplicationStart.class);
