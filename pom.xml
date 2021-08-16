@@ -26,7 +26,6 @@
         <module>service-common</module>
         <module>service-report</module>
         <module>service-front</module>
-        <module>service-goods</module>
         <module>java110-generator</module>
         <module>service-acct</module>
 
