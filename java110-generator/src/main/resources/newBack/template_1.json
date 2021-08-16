@@ -1,37 +1,31 @@
 {
   "autoMove": true,
-  "id": "monthId",
-  "name": "payFeeDetailMonth",
-  "desc": "月缴费表",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "fee",
-  "tableName": "pay_fee_detail_month",
+  "id": "flowId",
+  "name": "oaWorkflow",
+  "desc": "OA工作流",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "oa",
+  "tableName": "oa_workflow",
   "param": {
-    "monthId": "month_id",
-    "feeId": "fee_id",
-    "detailId": "detail_id",
-    "communityId": "community_id",
-    "detailYear": "detail_year",
-    "detailMonth": "detail_month",
-    "receivableAmount": "receivable_amount",
-    "receivedAmount": "received_amount",
-    "discountAmount": "discount_amount",
-    "remark": "remark",
+    "flowId": "flow_id",
+    "flowName": "flow_name",
+    "describle": "describle",
+    "storeId": "store_id",
+    "flowType": "flow_type",
+    "modelId": "model_id",
+    "flowKey": "flow_key",
+    "processDefinitionKey": "process_definition_key",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "detailId",
-      "msg": "缴费ID不能为空"
+      "code": "flowName",
+      "msg": "流程名称不能为空"
     },
     {
-      "code": "detailYear",
-      "msg": "年份不能为空"
-    },
-    {
-      "code": "detailMonth",
-      "msg": "月份不能为空"
+      "code": "flowType",
+      "msg": "流程类型不能为空"
     }
   ]
 }
