@@ -37,37 +37,49 @@
             <artifactId>activiti-spring-boot-starter-basic</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-json-converter</artifactId>
-			<version>6.0.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.activiti</groupId>
-					<artifactId>activiti-bpmn-model</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.xmlgraphics</groupId>
-			<artifactId>batik-codec</artifactId>
-			<version>1.7</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.xmlgraphics</groupId>
-			<artifactId>batik-css</artifactId>
-			<version>1.7</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.xmlgraphics</groupId>
-			<artifactId>batik-svg-dom</artifactId>
-			<version>1.7</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.xmlgraphics</groupId>
-			<artifactId>batik-svggen</artifactId>
-			<version>1.7</version>
-		</dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-json-converter</artifactId>
+            <version>6.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.activiti</groupId>
+                    <artifactId>activiti-bpmn-model</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-codec</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-css</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-svg-dom</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-svggen</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.activiti</groupId>-->
+<!--            <artifactId>activiti-app-rest</artifactId>-->
+<!--            <version>6.0.0</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>slf4j-api</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
 
     </dependencies>
@@ -75,41 +87,41 @@
     <build>
         <finalName>service-common</finalName>
 
-	        <plugins>
-	            <plugin>
-	                <groupId>org.apache.maven.plugins</groupId>
-	                <artifactId>maven-dependency-plugin</artifactId>
-	                <version>2.10</version>
-	                <executions>
-	                    <execution>
-	                        <id>unpack</id>
-	                        <phase>generate-resources</phase>
-	                        <goals>
-	                            <goal>unpack</goal>
-	                        </goals>
-	                        <configuration>
-	                            <artifactItems>
-	                                <artifactItem>
-	                                    <groupId>com.java110</groupId>
-	                                    <artifactId>java110-interface</artifactId>
-	                                    <version>${microcommunity.version}</version>
-	                                    <type>jar</type>
-	                                    <overWrite>true</overWrite>
-	                                    <outputDirectory>${project.build.directory}/classes</outputDirectory>
-	                                </artifactItem>
-	                            </artifactItems>
-	                        </configuration>
-	                    </execution>
-	                </executions>
-	            </plugin>
-	            <plugin>
-	                <groupId>org.springframework.boot</groupId>
-	                <artifactId>spring-boot-maven-plugin</artifactId>
-	                <configuration>
-	                    <mainClass>com.java110.common.CommonServiceApplicationStart</mainClass>
-	                </configuration>
-	            </plugin>
-	        </plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.java110</groupId>
+                                    <artifactId>java110-interface</artifactId>
+                                    <version>${microcommunity.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.java110.common.CommonServiceApplicationStart</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
 
     </build>
 </project>
