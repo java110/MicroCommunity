@@ -88,7 +88,5 @@ public class OaServiceApplicationStart {
         ApplicationContext context = SpringApplication.run(OaServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
 
-        //初始化 activity 流程
-        //DeploymentActivity.deploymentProcess();
     }
 }
