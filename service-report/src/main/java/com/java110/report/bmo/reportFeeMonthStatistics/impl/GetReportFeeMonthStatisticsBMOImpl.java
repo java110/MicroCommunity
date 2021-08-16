@@ -900,7 +900,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
             startTime = (Date) paramIn.get("startTime");
             endTime = (Date) paramIn.get("startTime");
-            double money = (double) paramIn.get("oweAmount");
+            BigDecimal money = (BigDecimal) paramIn.get("oweAmount");
             double month = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
             if (month < 1) {
                 paramIn.put("btAmount", 0);
@@ -909,7 +909,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             }
 
             //每月金额
-            BigDecimal monthAmount = new BigDecimal(money).divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN);
+            BigDecimal monthAmount = money.divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN);
 
             if (startTime.getTime() < curStart.getTime()) {
                 BigDecimal btAmountDec = monthAmount.multiply(new BigDecimal(curMonth)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
@@ -921,7 +921,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             }
 
             if (startTime.getTime() >= curStart.getTime()) {
-                paramIn.put("btAmount", money);
+                paramIn.put("btAmount", money.doubleValue());
                 paramIn.put("bfAmount", 0);
             }
         }
