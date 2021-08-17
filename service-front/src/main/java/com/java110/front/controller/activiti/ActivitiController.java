@@ -17,9 +17,14 @@ package com.java110.front.controller.activiti;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.oaWorkflow.StencilsetJson;
+import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.front.smo.activiti.IModelSMO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.xml.ws.Response;
 
 /**
  * @desc add by 吴学文 8:38
@@ -55,5 +60,27 @@ public class ActivitiController {
     public String stencilset(@RequestParam(value = "version", required = false) String version) {
 
         return StencilsetJson.JSON;
+    }
+
+    /**
+     * 更新流程
+     *
+     * @param modelId     模型ID
+     * @param name        流程模型名称
+     * @param description
+     * @param json_xml    流程文件
+     * @param svg_xml     图片
+     */
+    @RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.PUT)
+    public ResponseEntity<String> saveModel(@PathVariable String modelId
+            , String name, String description
+            , String json_xml, String svg_xml) {
+
+        WorkflowModelDto workflowModelDto = new WorkflowModelDto();
+        workflowModelDto.setDescription(description);
+        workflowModelDto.setJson_xml(json_xml);
+        workflowModelDto.setSvg_xml(svg_xml);
+        workflowModelDto.setName(name);
+        return modelSMOImpl.saveModel(workflowModelDto);
     }
 }

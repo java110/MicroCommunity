@@ -14,6 +14,7 @@ package com.java110.front.smo.activiti;/*
  * limitations under the License.
  */
 
+import com.java110.dto.workflow.WorkflowModelDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -27,4 +28,5 @@ public interface IModelSMO {
      */
     ResponseEntity<String> getJson(String modelId);
 
+    ResponseEntity<String> saveModel(WorkflowModelDto workflowModelDto);
 }

@@ -20,6 +20,7 @@ import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.front.smo.activiti.IModelSMO;
 import com.java110.utils.constant.ServiceConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +43,24 @@ public class ModelSMOImpl extends AbstractComponentSMO implements IModelSMO {
         IPageData pd = PageData.newInstance().builder("-1", "-1", "", "",
                 "", "", "", "", AppDto.WEB_APP_ID);
         ///workflow/getEditorJson
-       ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/workflow/getEditorJson?modelId="+modelId,
+        ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/workflow/getEditorJson?modelId=" + modelId,
                 HttpMethod.GET);
 
         return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> saveModel(WorkflowModelDto workflowModelDto) {
+        IPageData pd = PageData.newInstance().builder("-1", "-1", "", "",
+                "", "", "", "", AppDto.WEB_APP_ID);
+        ///workflow/getEditorJson
+        ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, JSONObject.toJSONString(workflowModelDto),
+                ServiceConstant.SERVICE_API_URL + "/api/workflow/saveModel",
+                HttpMethod.GET);
+
+        return responseEntity;
+
     }
 
 
