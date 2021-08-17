@@ -15,6 +15,7 @@
  */
 package com.java110.front.controller.activiti;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.front.smo.activiti.IModelSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,8 @@ public class ActivitiController {
     @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
     public String queryJson(@PathVariable String modelId) {
 
-        return modelSMOImpl.getJson(modelId).getBody();
+        JSONObject paramOut = JSONObject.parseObject(modelSMOImpl.getJson(modelId).getBody());
+
+        return paramOut.getJSONObject("data").toJSONString();
     }
 }
