@@ -38,7 +38,7 @@ public class ModelController {
      * @param modelId
      * @return
      */
-    @RequestMapping(value = "/model/${modelId}/json", method = RequestMethod.GET)
+    @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET)
     public ResponseEntity<String> queryJson(@PathVariable String modelId) {
 
         return modelSMOImpl.getJson(modelId);
