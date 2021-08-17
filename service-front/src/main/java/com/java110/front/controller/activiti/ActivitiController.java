@@ -27,7 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @desc add by 吴学文 8:38
  */
 @RestController
-public class ModelController {
+@RequestMapping(value = "/app/activiti")
+public class ActivitiController {
 
     @Autowired
     private IModelSMO modelSMOImpl;
