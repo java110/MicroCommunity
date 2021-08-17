@@ -19,5 +19,5 @@ package com.java110.dto.oaWorkflow;
  * @desc add by 吴学文 11:31
  */
 public class StencilsetJson {
-    public String JSON = "";
+    public static String JSON = "";
 }
