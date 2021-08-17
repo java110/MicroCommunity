@@ -29,12 +29,7 @@ import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.bpmn.model.StartEvent;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.editor.constants.ModelDataJsonConstants;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricActivityInstanceQuery;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -44,12 +39,19 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.task.Comment;
 import org.activiti.image.ProcessDiagramGenerator;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -556,9 +558,6 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
             // 需要转换成HistoricActivityInstance
             HistoricActivityInstance activityInstance = (HistoricActivityInstance) iterator
                     .next();
-//            if (activityInstance.getEndTime() == null) {
-//                continue;
-//            }
 
             tmpWorkflowAuditInfoDto = new WorkflowAuditInfoDto();
             tmpWorkflowAuditInfoDto.setAuditName(activityInstance.getActivityName());
@@ -630,6 +629,8 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         }
         logger.info("创建模型完善ModelEditorSource结束");
     }
+
+
 
     /**
      * @param processInstanceId
