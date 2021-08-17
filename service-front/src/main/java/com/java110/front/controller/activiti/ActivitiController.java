@@ -39,7 +39,7 @@ public class ActivitiController {
      * @param modelId
      * @return
      */
-    @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET)
+    @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
     public ResponseEntity<String> queryJson(@PathVariable String modelId) {
 
         return modelSMOImpl.getJson(modelId);
