@@ -1,24 +1,37 @@
 package com.java110.common.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.java110.common.bmo.workflow.IQueryWorkFlowFirstStaffBMO;
 import com.java110.dto.workflow.WorkflowDto;
+import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.engine.ActivitiException;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,10 +48,13 @@ public class WorkflowApi {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+
     String MODEL_ID = "modelId";
     String MODEL_NAME = "name";
     String MODEL_REVISION = "revision";
     String MODEL_DESCRIPTION = "description";
+
 
 
     @Autowired
@@ -59,29 +75,25 @@ public class WorkflowApi {
     /**
      * 更新流程
      *
-     * @param modelId     模型ID
-     * @param name        流程模型名称
-     * @param description
-     * @param json_xml    流程文件
-     * @param svg_xml     图片
+     * @param reqJson 模型ID
+     * @ServiceCode /workflow/saveModel
      */
-    @RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.PUT)
+    @RequestMapping(value = "/saveModel", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public void saveModel(@PathVariable String modelId
-            , String name, String description
-            , String json_xml, String svg_xml) {
+    public ResponseEntity<String> saveModel(@RequestBody JSONObject reqJson) {
+        WorkflowModelDto workflowModelDto = BeanConvertUtil.covertBean(reqJson, WorkflowModelDto.class);
         try {
-            Model model = repositoryService.getModel(modelId);
+            Model model = repositoryService.getModel(workflowModelDto.getModelId());
             ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
-            modelJson.put(MODEL_NAME, name);
-            modelJson.put(MODEL_DESCRIPTION, description);
+            modelJson.put(MODEL_NAME, workflowModelDto.getName());
+            modelJson.put(MODEL_DESCRIPTION, workflowModelDto.getDescription());
             modelJson.put(ModelDataJsonConstants.MODEL_REVISION, model.getVersion() + 1);
             model.setMetaInfo(modelJson.toString());
-            model.setName(name);
+            model.setName(workflowModelDto.getName());
             repositoryService.saveModel(model);
-            repositoryService.addModelEditorSource(model.getId(), json_xml.getBytes("utf-8"));
+            repositoryService.addModelEditorSource(model.getId(), workflowModelDto.getJson_xml().getBytes("utf-8"));
 
-            InputStream svgStream = new ByteArrayInputStream(svg_xml.getBytes("utf-8"));
+            InputStream svgStream = new ByteArrayInputStream(workflowModelDto.getSvg_xml().getBytes("utf-8"));
             TranscoderInput input = new TranscoderInput(svgStream);
 
             PNGTranscoder transcoder = new PNGTranscoder();
@@ -94,18 +106,25 @@ public class WorkflowApi {
             final byte[] result = outStream.toByteArray();
             repositoryService.addModelEditorSourceExtra(model.getId(), result);
             outStream.close();
+
+
         } catch (Exception e) {
             logger.error("Error saving model", e);
             throw new ActivitiException("Error saving model", e);
         }
+
+        //部署model
+        return queryWorkFlowFirstStaffBMOImpl.deployModel(workflowModelDto);
+
     }
 
 
     /**
      * 获取model的节点信息，编辑器根据返回的json进行绘图
-     * @ServiceCode /workflow/getEditorJson
+     *
      * @param modelId
      * @return
+     * @ServiceCode /workflow/getEditorJson
      */
     @SuppressWarnings("deprecation")
     @RequestMapping(value = "/getEditorJson", method = RequestMethod.GET)
@@ -131,7 +150,6 @@ public class WorkflowApi {
         }
         return new ResponseEntity(modelNode.toString(), HttpStatus.OK);
     }
-
 
 
 }

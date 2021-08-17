@@ -2,6 +2,7 @@ package com.java110.common.bmo.workflow;
 
 import com.java110.dto.user.StaffDto;
 import com.java110.dto.workflow.WorkflowDto;
+import com.java110.dto.workflow.WorkflowModelDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IQueryWorkFlowFirstStaffBMO {
@@ -12,4 +13,6 @@ public interface IQueryWorkFlowFirstStaffBMO {
      * @return
      */
     ResponseEntity<String> query(WorkflowDto workflowDto);
+
+    ResponseEntity<String> deployModel(WorkflowModelDto workflowModelDto);
 }

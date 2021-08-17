@@ -22,6 +22,8 @@ public class WorkflowModelDto implements Serializable {
     private String json_xml;
     private String svg_xml;
 
+    private String deploymentId;
+
     public String getName() {
         return name;
     }
@@ -68,5 +70,13 @@ public class WorkflowModelDto implements Serializable {
 
     public void setSvg_xml(String svg_xml) {
         this.svg_xml = svg_xml;
+    }
+
+    public String getDeploymentId() {
+        return deploymentId;
+    }
+
+    public void setDeploymentId(String deploymentId) {
+        this.deploymentId = deploymentId;
     }
 }

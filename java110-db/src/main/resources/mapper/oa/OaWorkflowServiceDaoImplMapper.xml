@@ -73,9 +73,7 @@
         <if test="flowKey !=null and flowKey != ''">
             , t.flow_key= #{flowKey}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="flowName !=null and flowName != ''">
             , t.flow_name= #{flowName}
         </if>
@@ -88,6 +86,9 @@
         where 1=1
         <if test="flowId !=null and flowId != ''">
             and t.flow_id= #{flowId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>
