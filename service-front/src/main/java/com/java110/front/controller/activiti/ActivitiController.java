@@ -40,8 +40,8 @@ public class ActivitiController {
      * @return
      */
     @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
-    public ResponseEntity<String> queryJson(@PathVariable String modelId) {
+    public String queryJson(@PathVariable String modelId) {
 
-        return modelSMOImpl.getJson(modelId);
+        return modelSMOImpl.getJson(modelId).getBody();
     }
 }
