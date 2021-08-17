@@ -14,6 +14,7 @@ package com.java110.front.smo.activiti;/*
  * limitations under the License.
  */
 
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
 public interface IModelSMO {
@@ -25,4 +26,5 @@ public interface IModelSMO {
      * @return
      */
     ResponseEntity<String> getJson(String modelId);
+
 }

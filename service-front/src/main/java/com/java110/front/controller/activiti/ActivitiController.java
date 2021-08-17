@@ -16,13 +16,10 @@
 package com.java110.front.controller.activiti;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.oaWorkflow.StencilsetJson;
 import com.java110.front.smo.activiti.IModelSMO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @desc add by 吴学文 8:38
@@ -40,11 +37,23 @@ public class ActivitiController {
      * @param modelId
      * @return
      */
-    @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String queryJson(@PathVariable String modelId) {
 
         JSONObject paramOut = JSONObject.parseObject(modelSMOImpl.getJson(modelId).getBody());
 
         return paramOut.getJSONObject("data").toJSONString();
+    }
+
+    /**
+     * 查询工作流json
+     *
+     * @param version
+     * @return
+     */
+    @RequestMapping(value = "/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String stencilset(@RequestParam(value = "version", required = false) String version) {
+
+        return StencilsetJson.JSON;
     }
 }
