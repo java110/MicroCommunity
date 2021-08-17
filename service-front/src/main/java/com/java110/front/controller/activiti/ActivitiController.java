@@ -71,7 +71,7 @@ public class ActivitiController {
      * @param json_xml    流程文件
      * @param svg_xml     图片
      */
-    @RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.PUT)
+    @RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.POST)
     public ResponseEntity<String> saveModel(@PathVariable String modelId
             , String name, String description
             , String json_xml, String svg_xml) {
