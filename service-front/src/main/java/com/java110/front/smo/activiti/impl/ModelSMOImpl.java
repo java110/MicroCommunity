@@ -57,7 +57,7 @@ public class ModelSMOImpl extends AbstractComponentSMO implements IModelSMO {
         ///workflow/getEditorJson
         ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, JSONObject.toJSONString(workflowModelDto),
                 ServiceConstant.SERVICE_API_URL + "/api/workflow/saveModel",
-                HttpMethod.GET);
+                HttpMethod.POST);
 
         return responseEntity;
 
