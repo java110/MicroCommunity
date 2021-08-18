@@ -10,6 +10,7 @@ import com.java110.common.dao.IWorkflowStepStaffServiceDao;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
@@ -208,10 +209,22 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         oaWorkflowXmlPo.setBpmnXml(workflowModelDto.getJson_xml());
         oaWorkflowXmlPo.setFlowId(oaWorkflowDtos.get(0).getFlowId());
         oaWorkflowXmlPo.setSvgXml(workflowModelDto.getSvg_xml());
-        oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_xmlId));
-        int flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
+        //查询部署
+
+        OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
+        oaWorkflowXmlDto.setFlowId(oaWorkflowDtos.get(0).getFlowId());
+        oaWorkflowXmlDto.setStoreId(oaWorkflowDtos.get(0).getStoreId());
+        List<OaWorkflowXmlDto> oaWorkflowXmlDtos = oaWorkflowXmlInnerServiceSMOImpl.queryOaWorkflowXmls(oaWorkflowXmlDto);
+        int flag = 0;
+        if(oaWorkflowXmlDtos == null || oaWorkflowXmlDtos.size() < 1){
+            oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_xmlId));
+            flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
+        }else{
+            oaWorkflowXmlPo.setXmlId(oaWorkflowXmlDtos.get(0).getXmlId());
+            flag = oaWorkflowXmlInnerServiceSMOImpl.updateOaWorkflowXml(oaWorkflowXmlPo);
+        }
         if (flag < 1) {
-            throw new IllegalArgumentException("保存流程图");
+            throw new IllegalArgumentException("流程图处理失败");
         }
 
         try {
