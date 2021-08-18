@@ -82,39 +82,8 @@ public class WorkflowApi {
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<String> saveModel(@RequestBody JSONObject reqJson) {
         WorkflowModelDto workflowModelDto = BeanConvertUtil.covertBean(reqJson, WorkflowModelDto.class);
-        try {
-            Model model = repositoryService.getModel(workflowModelDto.getModelId());
-            ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
-            modelJson.put(MODEL_NAME, workflowModelDto.getName());
-            modelJson.put(MODEL_DESCRIPTION, workflowModelDto.getDescription());
-            modelJson.put(ModelDataJsonConstants.MODEL_REVISION, model.getVersion() + 1);
-            model.setMetaInfo(modelJson.toString());
-            model.setName(workflowModelDto.getName());
-            repositoryService.saveModel(model);
-            repositoryService.addModelEditorSource(model.getId(), workflowModelDto.getJson_xml().getBytes("utf-8"));
-
-            InputStream svgStream = new ByteArrayInputStream(workflowModelDto.getSvg_xml().getBytes("utf-8"));
-            TranscoderInput input = new TranscoderInput(svgStream);
-
-            PNGTranscoder transcoder = new PNGTranscoder();
-            // Setup output
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            TranscoderOutput output = new TranscoderOutput(outStream);
-
-            // Do the transformation
-            transcoder.transcode(input, output);
-            final byte[] result = outStream.toByteArray();
-            repositoryService.addModelEditorSourceExtra(model.getId(), result);
-            outStream.close();
-
-
-        } catch (Exception e) {
-            logger.error("Error saving model", e);
-            throw new ActivitiException("Error saving model", e);
-        }
-
         //部署model
-        return queryWorkFlowFirstStaffBMOImpl.deployModel(workflowModelDto);
+        return queryWorkFlowFirstStaffBMOImpl.saveModel(workflowModelDto);
 
     }
 

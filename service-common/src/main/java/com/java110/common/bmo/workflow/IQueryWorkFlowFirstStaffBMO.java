@@ -15,4 +15,6 @@ public interface IQueryWorkFlowFirstStaffBMO {
     ResponseEntity<String> query(WorkflowDto workflowDto);
 
     ResponseEntity<String> deployModel(WorkflowModelDto workflowModelDto);
+
+    ResponseEntity<String> saveModel(WorkflowModelDto workflowModelDto);
 }

@@ -12,6 +12,8 @@ import java.io.Serializable;
  **/
 public class WorkflowModelDto implements Serializable {
 
+    private String flowId;
+
     private String name;
 
     private String key;
@@ -78,5 +80,13 @@ public class WorkflowModelDto implements Serializable {
 
     public void setDeploymentId(String deploymentId) {
         this.deploymentId = deploymentId;
+    }
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
     }
 }

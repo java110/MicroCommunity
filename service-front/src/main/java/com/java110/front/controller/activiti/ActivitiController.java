@@ -66,21 +66,15 @@ public class ActivitiController {
      * 更新流程
      *
      * @param modelId     模型ID
-     * @param name        流程模型名称
-     * @param description
-     * @param json_xml    流程文件
-     * @param svg_xml     图片
+     * @param xmlJson        流程模型名称
      */
     @RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.POST)
     public ResponseEntity<String> saveModel(@PathVariable String modelId
-            , String name, String description
-            , String json_xml, String svg_xml) {
-
+            , @RequestBody String xmlJson) {
+        JSONObject paramJson = JSONObject.parseObject(xmlJson);
         WorkflowModelDto workflowModelDto = new WorkflowModelDto();
-        workflowModelDto.setDescription(description);
-        workflowModelDto.setJson_xml(json_xml);
-        workflowModelDto.setSvg_xml(svg_xml);
-        workflowModelDto.setName(name);
+        workflowModelDto.setJson_xml(paramJson.getString("xml"));
+        workflowModelDto.setModelId(modelId);
         return modelSMOImpl.saveModel(workflowModelDto);
     }
 }
