@@ -1,31 +1,28 @@
 {
   "autoMove": true,
-  "id": "flowId",
-  "name": "oaWorkflow",
-  "desc": "OA工作流",
+  "id": "xmlId",
+  "name": "oaWorkflowXml",
+  "desc": "OA流程图",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "oa",
-  "tableName": "oa_workflow",
+  "tableName": "oa_workflow_xml",
   "param": {
+    "xmlId": "xml_id",
     "flowId": "flow_id",
-    "flowName": "flow_name",
-    "describle": "describle",
     "storeId": "store_id",
-    "flowType": "flow_type",
-    "modelId": "model_id",
-    "flowKey": "flow_key",
-    "processDefinitionKey": "process_definition_key",
+    "bpmnXml": "bpmn_xml",
+    "svgXml": "svg_xml",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "flowName",
-      "msg": "流程名称不能为空"
+      "code": "flowId",
+      "msg": "流程不能为空"
     },
     {
-      "code": "flowType",
-      "msg": "流程类型不能为空"
+      "code": "bpmnXml",
+      "msg": "流程图不能为空"
     }
   ]
 }

@@ -23,6 +23,7 @@ public class WorkflowModelDto implements Serializable {
     private String description;
     private String json_xml;
     private String svg_xml;
+    private String storeId;
 
     private String deploymentId;
 
@@ -88,5 +89,13 @@ public class WorkflowModelDto implements Serializable {
 
     public void setFlowId(String flowId) {
         this.flowId = flowId;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 }

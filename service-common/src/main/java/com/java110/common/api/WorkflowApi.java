@@ -80,8 +80,10 @@ public class WorkflowApi {
      */
     @RequestMapping(value = "/saveModel", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<String> saveModel(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveModel(
+                                            @RequestBody JSONObject reqJson) {
         WorkflowModelDto workflowModelDto = BeanConvertUtil.covertBean(reqJson, WorkflowModelDto.class);
+
         //部署model
         return queryWorkFlowFirstStaffBMOImpl.saveModel(workflowModelDto);
 

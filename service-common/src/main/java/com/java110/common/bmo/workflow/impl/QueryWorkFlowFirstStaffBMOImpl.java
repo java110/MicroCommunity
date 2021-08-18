@@ -3,18 +3,21 @@ package com.java110.common.bmo.workflow.impl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.java110.common.api.WorkflowApi;
 import com.java110.common.bmo.workflow.IQueryWorkFlowFirstStaffBMO;
 import com.java110.common.dao.IWorkflowServiceDao;
 import com.java110.common.dao.IWorkflowStepServiceDao;
 import com.java110.common.dao.IWorkflowStepStaffServiceDao;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.intf.user.IOrgInnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
+import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -66,11 +69,13 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
     private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
     @Autowired
+    private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
+
+    @Autowired
     private RepositoryService repositoryService;
 
     @Autowired
     private ObjectMapper objectMapper;
-
 
 
     String MODEL_ID = "modelId";
@@ -189,6 +194,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
     }
 
     @Override
+    @Java110Transactional
     public ResponseEntity<String> saveModel(WorkflowModelDto workflowModelDto) {
         //根据
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
@@ -196,6 +202,18 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
 
         Assert.listOnlyOne(oaWorkflowDtos, "未包含流程");
+
+        OaWorkflowXmlPo oaWorkflowXmlPo = new OaWorkflowXmlPo();
+        oaWorkflowXmlPo.setStoreId(oaWorkflowDtos.get(0).getStoreId());
+        oaWorkflowXmlPo.setBpmnXml(workflowModelDto.getJson_xml());
+        oaWorkflowXmlPo.setFlowId(oaWorkflowDtos.get(0).getFlowId());
+        oaWorkflowXmlPo.setSvgXml(workflowModelDto.getSvg_xml());
+        oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_xmlId));
+        int flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("保存流程图");
+        }
+
         try {
             Model model = repositoryService.getModel(workflowModelDto.getModelId());
             ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
@@ -220,7 +238,6 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             final byte[] result = outStream.toByteArray();
             repositoryService.addModelEditorSourceExtra(model.getId(), result);
             outStream.close();
-
 
         } catch (Exception e) {
             logger.error("Error saving model", e);
