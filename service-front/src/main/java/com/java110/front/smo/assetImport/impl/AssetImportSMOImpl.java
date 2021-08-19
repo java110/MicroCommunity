@@ -8,19 +8,12 @@ import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.assetImportLog.AssetImportLogDto;
 import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
-import com.java110.entity.assetImport.ImportFee;
-import com.java110.entity.assetImport.ImportFloor;
-import com.java110.entity.assetImport.ImportOwner;
-import com.java110.entity.assetImport.ImportParkingSpace;
-import com.java110.entity.assetImport.ImportRoom;
+import com.java110.entity.assetImport.*;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
 import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.CommonUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ImportExcelUtils;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
+import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -247,7 +240,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         AssetImportLogDetailDto assetImportLogDetailDto = null;
         try {
             for (ImportParkingSpace parkingSpace : parkingSpaces) {
-                responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
+                responseEntity = ResultVo.success();
                 JSONObject savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
                 paramIn = new JSONObject();
                 // 如果不存在，才插入
@@ -326,8 +319,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                     }
                     assetImportLogDetailDto.setObjName(parkingSpace.getPaNum());
                     assetImportLogDetailDtos.add(assetImportLogDetailDto);
-                    failCount +=1;
-                    successCount = successCount >0? successCount -1:successCount;
+                    failCount += 1;
+                    successCount = successCount > 0 ? successCount - 1 : successCount;
                     assetImportLogDto.setSuccessCount(successCount);
                     assetImportLogDto.setErrorCount(failCount);
                     continue;
@@ -342,8 +335,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                         assetImportLogDetailDtos.add(assetImportLogDetailDto);
                         assetImportLogDto.setSuccessCount(successCount);
                         assetImportLogDto.setErrorCount(failCount);
-                        failCount +=1;
-                        successCount = successCount >0? successCount -1:successCount;
+                        failCount += 1;
+                        successCount = successCount > 0 ? successCount - 1 : successCount;
                         assetImportLogDto.setSuccessCount(successCount);
                         assetImportLogDto.setErrorCount(failCount);
                         continue;
@@ -396,8 +389,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                     }
                     assetImportLogDetailDto.setObjName(parkingSpace.getCarNum());
                     assetImportLogDetailDtos.add(assetImportLogDetailDto);
-                    failCount +=1;
-                    successCount = successCount >0? successCount -1:successCount;
+                    failCount += 1;
+                    successCount = successCount > 0 ? successCount - 1 : successCount;
                     assetImportLogDto.setSuccessCount(successCount);
                     assetImportLogDto.setErrorCount(failCount);
                 } else {
@@ -409,16 +402,17 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                         assetImportLogDetailDto.setMessage(body.getString("msg"));
                         assetImportLogDetailDto.setObjName(parkingSpace.getCarNum());
                         assetImportLogDetailDtos.add(assetImportLogDetailDto);
-                        failCount +=1;
-                        successCount = successCount >0? successCount -1:successCount;
+                        failCount += 1;
+                        successCount = successCount > 0 ? successCount - 1 : successCount;
                         assetImportLogDto.setSuccessCount(successCount);
                         assetImportLogDto.setErrorCount(failCount);
                     }
                 }
             }
         } catch (Exception e) {
+            logger.error("导入车位异常", e);
             saveTransactionLogSMOImpl.saveAssetImportLog(assetImportLogDto);
-
+            throw e;
         }
 
         return responseEntity;
@@ -608,8 +602,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                         }
                         assetImportLogDetailDto.setObjName(room.getRoomNum() + "室");
                         assetImportLogDetailDtos.add(assetImportLogDetailDto);
-                        failCount +=1;
-                        successCount = successCount >0? successCount -1:successCount;
+                        failCount += 1;
+                        successCount = successCount > 0 ? successCount - 1 : successCount;
                         assetImportLogDto.setSuccessCount(successCount);
                         assetImportLogDto.setErrorCount(failCount);
                     } else {
@@ -621,8 +615,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                             assetImportLogDetailDto.setMessage(body.getString("msg"));
                             assetImportLogDetailDto.setObjName(room.getRoomNum() + "室");
                             assetImportLogDetailDtos.add(assetImportLogDetailDto);
-                            failCount +=1;
-                            successCount = successCount >0? successCount -1:successCount;
+                            failCount += 1;
+                            successCount = successCount > 0 ? successCount - 1 : successCount;
                             assetImportLogDto.setSuccessCount(successCount);
                             assetImportLogDto.setErrorCount(failCount);
                         }
@@ -926,8 +920,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                     }
                     assetImportLogDetailDto.setObjName(importFloor.getFloorNum() + "栋" + importFloor.getUnitNum() + "单元");
                     assetImportLogDetailDtos.add(assetImportLogDetailDto);
-                    failCount +=1;
-                    successCount = successCount >0? successCount -1:successCount;
+                    failCount += 1;
+                    successCount = successCount > 0 ? successCount - 1 : successCount;
                     assetImportLogDto.setSuccessCount(successCount);
                     assetImportLogDto.setErrorCount(failCount);
                 } else {
@@ -939,8 +933,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                         assetImportLogDetailDto.setMessage(body.getString("msg"));
                         assetImportLogDetailDto.setObjName(importFloor.getFloorNum() + "栋" + importFloor.getUnitNum() + "单元");
                         assetImportLogDetailDtos.add(assetImportLogDetailDto);
-                        failCount +=1;
-                        successCount = successCount >0? successCount -1:successCount;
+                        failCount += 1;
+                        successCount = successCount > 0 ? successCount - 1 : successCount;
                         assetImportLogDto.setSuccessCount(successCount);
                         assetImportLogDto.setErrorCount(failCount);
                     }

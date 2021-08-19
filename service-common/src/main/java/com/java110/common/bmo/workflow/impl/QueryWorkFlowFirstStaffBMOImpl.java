@@ -1,44 +1,56 @@
 package com.java110.common.bmo.workflow.impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.java110.common.bmo.workflow.IQueryWorkFlowFirstStaffBMO;
 import com.java110.common.dao.IWorkflowServiceDao;
 import com.java110.common.dao.IWorkflowStepServiceDao;
 import com.java110.common.dao.IWorkflowStepStaffServiceDao;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.intf.user.IOrgInnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
+import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
+import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service("queryWorkFlowFirstStaffServiceImpl")
 public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffBMO {
-
+    private static final Logger logger = LoggerFactory.getLogger(QueryWorkFlowFirstStaffBMOImpl.class);
     @Autowired
     private IWorkflowServiceDao workflowServiceDaoImpl;
 
@@ -53,6 +65,22 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
     @Autowired
     private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
+
+    @Autowired
+    private RepositoryService repositoryService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+
+    String MODEL_ID = "modelId";
+    String MODEL_NAME = "name";
+    String MODEL_REVISION = "revision";
+    String MODEL_DESCRIPTION = "description";
+
 
     @Override
     public ResponseEntity<String> query(WorkflowDto workflowDto) {
@@ -122,10 +150,11 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         try {
             Model modelData = repositoryService.getModel(workflowModelDto.getModelId());
             byte[] bpmnBytes = null;
-            JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(workflowModelDto.getModelId()));
-            BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
-            BpmnModel model = jsonConverter.convertToBpmnModel(editorNode);
-            bpmnBytes = new BpmnXMLConverter().convertToXML(model);
+            //JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(workflowModelDto.getModelId()));
+            //BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+            //BpmnModel model = jsonConverter.convertToBpmnModel(editorNode);
+            //bpmnBytes = new BpmnXMLConverter().convertToXML(model);
+            bpmnBytes = repositoryService.getModelEditorSource(workflowModelDto.getModelId());
             String encoded = Base64Convert.byteToBase64(bpmnBytes);
             byte[] decoded = Base64Convert.base64ToByte(encoded);
             String xml = new String(decoded);
@@ -135,7 +164,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
                     .addInputStream(processName, in).deploy();
             deploymentid = deployment.getId();
         } catch (Exception e) {
-            System.out.println(e);
+            throw new IllegalArgumentException(e);
         }
         Assert.isTrue(!StringUtil.isEmpty(deploymentid), "流程部署出错");
         ProcessDefinition processDefinition = repositoryService
@@ -149,6 +178,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         oaWorkflowPo.setFlowId(oaWorkflowDtos.get(0).getFlowId());
         oaWorkflowPo.setStoreId(oaWorkflowDtos.get(0).getStoreId());
         oaWorkflowPo.setProcessDefinitionKey(deploymentid);
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_COMPLAINT);
         oaWorkflowInnerServiceSMOImpl.updateOaWorkflow(oaWorkflowPo);
 //        //部署历史表
 //        List<DeployHistoryEntity> deployHistoryEntities = deployHistoryRepository.getDeployHistoryByDeptWithProcessKeyId(deptWithProcessKeyId);
@@ -160,6 +190,73 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 //            }
 //            deployHistoryRepository.update(deployHistoryEntity);
 //        }
+        return ResultVo.success();
+    }
+
+    @Override
+    @Java110Transactional
+    public ResponseEntity<String> saveModel(WorkflowModelDto workflowModelDto) {
+        //根据
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setModelId(workflowModelDto.getModelId());
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        Assert.listOnlyOne(oaWorkflowDtos, "未包含流程");
+
+        OaWorkflowXmlPo oaWorkflowXmlPo = new OaWorkflowXmlPo();
+        oaWorkflowXmlPo.setStoreId(oaWorkflowDtos.get(0).getStoreId());
+        oaWorkflowXmlPo.setBpmnXml(workflowModelDto.getJson_xml());
+        oaWorkflowXmlPo.setFlowId(oaWorkflowDtos.get(0).getFlowId());
+        oaWorkflowXmlPo.setSvgXml(workflowModelDto.getSvg_xml());
+        //查询部署
+
+        OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
+        oaWorkflowXmlDto.setFlowId(oaWorkflowDtos.get(0).getFlowId());
+        oaWorkflowXmlDto.setStoreId(oaWorkflowDtos.get(0).getStoreId());
+
+        List<OaWorkflowXmlDto> oaWorkflowXmlDtos = oaWorkflowXmlInnerServiceSMOImpl.queryOaWorkflowXmls(oaWorkflowXmlDto);
+        int flag = 0;
+        if (oaWorkflowXmlDtos == null || oaWorkflowXmlDtos.size() < 1) {
+            oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_xmlId));
+            flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
+        } else {
+            oaWorkflowXmlPo.setXmlId(oaWorkflowXmlDtos.get(0).getXmlId());
+            flag = oaWorkflowXmlInnerServiceSMOImpl.updateOaWorkflowXml(oaWorkflowXmlPo);
+        }
+        if (flag < 1) {
+            throw new IllegalArgumentException("流程图处理失败");
+        }
+
+        try {
+            Model model = repositoryService.getModel(workflowModelDto.getModelId());
+            ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
+            modelJson.put(MODEL_NAME, oaWorkflowDtos.get(0).getFlowName());
+            modelJson.put(MODEL_DESCRIPTION, oaWorkflowDtos.get(0).getDescrible());
+            modelJson.put(ModelDataJsonConstants.MODEL_REVISION, model.getVersion() + 1);
+            model.setMetaInfo(modelJson.toString());
+            model.setName(oaWorkflowDtos.get(0).getFlowName());
+            repositoryService.saveModel(model);
+            repositoryService.addModelEditorSource(model.getId(), workflowModelDto.getJson_xml().getBytes("utf-8"));
+
+            InputStream svgStream = new ByteArrayInputStream(workflowModelDto.getSvg_xml().getBytes("utf-8"));
+            TranscoderInput input = new TranscoderInput(svgStream);
+
+            PNGTranscoder transcoder = new PNGTranscoder();
+            // Setup output
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            TranscoderOutput output = new TranscoderOutput(outStream);
+
+            // Do the transformation
+            transcoder.transcode(input, output);
+            final byte[] result = outStream.toByteArray();
+            repositoryService.addModelEditorSourceExtra(model.getId(), result);
+            outStream.close();
+
+        } catch (Exception e) {
+            logger.error("Error saving model", e);
+            throw new ActivitiException("Error saving model", e);
+        }
+
         return ResultVo.success();
     }
 

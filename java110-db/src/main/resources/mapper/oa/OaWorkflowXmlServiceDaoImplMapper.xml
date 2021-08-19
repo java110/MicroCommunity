@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="oaWorkflowXmlServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存OA流程图信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOaWorkflowXmlInfo" parameterType="Map">
+        insert into oa_workflow_xml(
+xml_id,store_id,bpmn_xml,flow_id,svg_xml
+) values (
+#{xmlId},#{storeId},#{bpmnXml},#{flowId},#{svgXml}
+)
+    </insert>
+
+
+
+    <!-- 查询OA流程图信息 add by wuxw 2018-07-03 -->
+    <select id="getOaWorkflowXmlInfo" parameterType="Map" resultType="Map">
+        select  t.status_cd,t.status_cd statusCd,t.xml_id,t.xml_id xmlId,t.store_id,t.store_id storeId,t.bpmn_xml,t.bpmn_xml bpmnXml,t.flow_id,t.flow_id flowId,t.svg_xml,t.svg_xml svgXml 
+from oa_workflow_xml t 
+where 1 =1 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="xmlId !=null and xmlId != ''">
+   and t.xml_id= #{xmlId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bpmnXml !=null and bpmnXml != ''">
+   and t.bpmn_xml= #{bpmnXml}
+</if> 
+<if test="flowId !=null and flowId != ''">
+   and t.flow_id= #{flowId}
+</if> 
+<if test="svgXml !=null and svgXml != ''">
+   and t.svg_xml= #{svgXml}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改OA流程图信息 add by wuxw 2018-07-03 -->
+    <update id="updateOaWorkflowXmlInfo" parameterType="Map">
+        update  oa_workflow_xml t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="bpmnXml !=null and bpmnXml != ''">
+, t.bpmn_xml= #{bpmnXml}
+</if> 
+<if test="flowId !=null and flowId != ''">
+, t.flow_id= #{flowId}
+</if> 
+<if test="svgXml !=null and svgXml != ''">
+, t.svg_xml= #{svgXml}
+</if> 
+ where 1=1 <if test="xmlId !=null and xmlId != ''">
+and t.xml_id= #{xmlId}
+</if> 
+
+    </update>
+
+    <!-- 查询OA流程图数量 add by wuxw 2018-07-03 -->
+     <select id="queryOaWorkflowXmlsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from oa_workflow_xml t 
+where 1 =1 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="xmlId !=null and xmlId != ''">
+   and t.xml_id= #{xmlId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bpmnXml !=null and bpmnXml != ''">
+   and t.bpmn_xml= #{bpmnXml}
+</if> 
+<if test="flowId !=null and flowId != ''">
+   and t.flow_id= #{flowId}
+</if> 
+<if test="svgXml !=null and svgXml != ''">
+   and t.svg_xml= #{svgXml}
+</if> 
+
+
+     </select>
+
+</mapper>
