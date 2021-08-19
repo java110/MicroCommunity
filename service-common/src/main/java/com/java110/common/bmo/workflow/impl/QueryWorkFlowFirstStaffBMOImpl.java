@@ -1,6 +1,5 @@
 package com.java110.common.bmo.workflow.impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.java110.common.bmo.workflow.IQueryWorkFlowFirstStaffBMO;
@@ -24,8 +23,6 @@ import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.ActivitiException;
@@ -153,10 +150,11 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         try {
             Model modelData = repositoryService.getModel(workflowModelDto.getModelId());
             byte[] bpmnBytes = null;
-            JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(workflowModelDto.getModelId()));
-            BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
-            BpmnModel model = jsonConverter.convertToBpmnModel(editorNode);
-            bpmnBytes = new BpmnXMLConverter().convertToXML(model);
+            //JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(workflowModelDto.getModelId()));
+            //BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+            //BpmnModel model = jsonConverter.convertToBpmnModel(editorNode);
+            //bpmnBytes = new BpmnXMLConverter().convertToXML(model);
+            bpmnBytes = repositoryService.getModelEditorSource(workflowModelDto.getModelId());
             String encoded = Base64Convert.byteToBase64(bpmnBytes);
             byte[] decoded = Base64Convert.base64ToByte(encoded);
             String xml = new String(decoded);
@@ -218,10 +216,10 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
         List<OaWorkflowXmlDto> oaWorkflowXmlDtos = oaWorkflowXmlInnerServiceSMOImpl.queryOaWorkflowXmls(oaWorkflowXmlDto);
         int flag = 0;
-        if(oaWorkflowXmlDtos == null || oaWorkflowXmlDtos.size() < 1){
+        if (oaWorkflowXmlDtos == null || oaWorkflowXmlDtos.size() < 1) {
             oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_xmlId));
             flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
-        }else{
+        } else {
             oaWorkflowXmlPo.setXmlId(oaWorkflowXmlDtos.get(0).getXmlId());
             flag = oaWorkflowXmlInnerServiceSMOImpl.updateOaWorkflowXml(oaWorkflowXmlPo);
         }
