@@ -94,7 +94,6 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/deleteOaWorkflow", method = RequestMethod.POST)
     public ResponseEntity<String> deleteOaWorkflow(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "flowId", "flowId不能为空");
 
