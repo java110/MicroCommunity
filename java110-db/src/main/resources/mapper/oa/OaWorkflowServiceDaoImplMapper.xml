@@ -8,9 +8,9 @@
     <!-- 保存OA工作流信息 add by wuxw 2018-07-03 -->
     <insert id="saveOaWorkflowInfo" parameterType="Map">
         insert into oa_workflow(
-        describle,model_id,flow_key,store_id,flow_id,flow_name,flow_type,process_definition_key
+        describle,model_id,flow_key,store_id,flow_id,flow_name,flow_type,process_definition_key,state
         ) values (
-        #{describle},#{modelId},#{flowKey},#{storeId},#{flowId},#{flowName},#{flowType},#{processDefinitionKey}
+        #{describle},#{modelId},#{flowKey},#{storeId},#{flowId},#{flowName},#{flowType},#{processDefinitionKey},#{state}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.describle,t.model_id,t.model_id modelId,t.status_cd,t.status_cd statusCd,t.flow_key,t.flow_key
         flowKey,t.store_id,t.store_id storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name
         flowName,t.flow_type,t.flow_type flowType,t.process_definition_key,t.process_definition_key processDefinitionKey,
-        t.create_time createTime
+        t.create_time createTime,t.state
         from oa_workflow t
         where 1 =1
         <if test="describle !=null and describle != ''">
@@ -43,6 +43,9 @@
         </if>
         <if test="flowName !=null and flowName != ''">
             and t.flow_name= #{flowName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
         <if test="flowType !=null and flowType != ''">
             and t.flow_type= #{flowType}
@@ -72,6 +75,9 @@
         </if>
         <if test="flowKey !=null and flowKey != ''">
             , t.flow_key= #{flowKey}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
         </if>
 
         <if test="flowName !=null and flowName != ''">
@@ -115,6 +121,9 @@
         </if>
         <if test="flowId !=null and flowId != ''">
             and t.flow_id= #{flowId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
         <if test="flowName !=null and flowName != ''">
             and t.flow_name= #{flowName}

@@ -2,6 +2,7 @@ package com.java110.oa.bmo.oaWorkflow.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
@@ -39,6 +40,7 @@ public class SaveOaWorkflowBMOImpl implements ISaveOaWorkflowBMO {
 
         oaWorkflowPo.setModelId(workflowModelDto.getModelId());
         oaWorkflowPo.setFlowKey(workflowModelDto.getKey());
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
         int flag = oaWorkflowInnerServiceSMOImpl.saveOaWorkflow(oaWorkflowPo);
 
         if (flag > 0) {

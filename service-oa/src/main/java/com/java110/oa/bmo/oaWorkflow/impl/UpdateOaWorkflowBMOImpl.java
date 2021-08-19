@@ -1,6 +1,7 @@
 package com.java110.oa.bmo.oaWorkflow.impl;
 
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflow.IUpdateOaWorkflowBMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
@@ -21,7 +22,8 @@ public class UpdateOaWorkflowBMOImpl implements IUpdateOaWorkflowBMO {
      */
     @Java110Transactional
     public ResponseEntity<String> update(OaWorkflowPo oaWorkflowPo) {
-
+        //只要已修改 就 状态刷为待部署
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
         int flag = oaWorkflowInnerServiceSMOImpl.updateOaWorkflow(oaWorkflowPo);
 
         if (flag > 0) {

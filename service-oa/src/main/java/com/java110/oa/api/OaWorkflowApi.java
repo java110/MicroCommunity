@@ -113,7 +113,7 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflow", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflow(@RequestHeader(value = "store-id") String storeId,
-                                                  @RequestParam(value="flowId") String flowId,
+                                                  @RequestParam(value="flowId",required = false) String flowId,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row) {
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();

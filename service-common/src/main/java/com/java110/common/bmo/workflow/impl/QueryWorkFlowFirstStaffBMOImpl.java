@@ -180,6 +180,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         oaWorkflowPo.setFlowId(oaWorkflowDtos.get(0).getFlowId());
         oaWorkflowPo.setStoreId(oaWorkflowDtos.get(0).getStoreId());
         oaWorkflowPo.setProcessDefinitionKey(deploymentid);
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_COMPLAINT);
         oaWorkflowInnerServiceSMOImpl.updateOaWorkflow(oaWorkflowPo);
 //        //部署历史表
 //        List<DeployHistoryEntity> deployHistoryEntities = deployHistoryRepository.getDeployHistoryByDeptWithProcessKeyId(deptWithProcessKeyId);
@@ -214,6 +215,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
         oaWorkflowXmlDto.setFlowId(oaWorkflowDtos.get(0).getFlowId());
         oaWorkflowXmlDto.setStoreId(oaWorkflowDtos.get(0).getStoreId());
+
         List<OaWorkflowXmlDto> oaWorkflowXmlDtos = oaWorkflowXmlInnerServiceSMOImpl.queryOaWorkflowXmls(oaWorkflowXmlDto);
         int flag = 0;
         if(oaWorkflowXmlDtos == null || oaWorkflowXmlDtos.size() < 1){
@@ -257,7 +259,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             throw new ActivitiException("Error saving model", e);
         }
 
-        return deployModel(workflowModelDto);
+        return ResultVo.success();
     }
 
 }

@@ -90,6 +90,24 @@ public class WorkflowApi {
 
     }
 
+    /**
+     * 部署流程
+     *
+     * @param reqString 模型ID
+     * @ServiceCode /workflow/deployModel
+     */
+    @RequestMapping(value = "/deployModel", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity<String> deployModel(
+            @RequestBody String reqString) {
+        JSONObject reqJson = JSONObject.parseObject(reqString);
+        WorkflowModelDto workflowModelDto = BeanConvertUtil.covertBean(reqJson, WorkflowModelDto.class);
+
+        //部署model
+        return queryWorkFlowFirstStaffBMOImpl.deployModel(workflowModelDto);
+
+    }
+
 
     /**
      * 获取model的节点信息，编辑器根据返回的json进行绘图
