@@ -166,7 +166,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
                     .addInputStream(processName, in).deploy();
             deploymentid = deployment.getId();
         } catch (Exception e) {
-            System.out.println(e);
+            throw new IllegalArgumentException(e);
         }
         Assert.isTrue(!StringUtil.isEmpty(deploymentid), "流程部署出错");
         ProcessDefinition processDefinition = repositoryService
