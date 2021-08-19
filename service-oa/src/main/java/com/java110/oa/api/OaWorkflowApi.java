@@ -113,12 +113,14 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflow", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflow(@RequestHeader(value = "store-id") String storeId,
+                                                  @RequestParam(value="flowId") String flowId,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row) {
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setPage(page);
         oaWorkflowDto.setRow(row);
         oaWorkflowDto.setStoreId(storeId);
+        oaWorkflowDto.setFlowId(flowId);
         return getOaWorkflowBMOImpl.get(oaWorkflowDto);
     }
 
@@ -198,12 +200,14 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflowXml", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflowXml(@RequestHeader(value = "store-id") String storeId,
+                                                     @RequestParam(value="flowId") String flowId,
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) {
         OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
         oaWorkflowXmlDto.setPage(page);
         oaWorkflowXmlDto.setRow(row);
         oaWorkflowXmlDto.setStoreId(storeId);
+        oaWorkflowXmlDto.setFlowId(flowId);
         return getOaWorkflowXmlBMOImpl.get(oaWorkflowXmlDto);
     }
 }

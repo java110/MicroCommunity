@@ -75,13 +75,14 @@ public class WorkflowApi {
     /**
      * 更新流程
      *
-     * @param reqJson 模型ID
+     * @param reqString 模型ID
      * @ServiceCode /workflow/saveModel
      */
     @RequestMapping(value = "/saveModel", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<String> saveModel(
-                                            @RequestBody JSONObject reqJson) {
+                                            @RequestBody String reqString) {
+        JSONObject reqJson = JSONObject.parseObject(reqString);
         WorkflowModelDto workflowModelDto = BeanConvertUtil.covertBean(reqJson, WorkflowModelDto.class);
 
         //部署model

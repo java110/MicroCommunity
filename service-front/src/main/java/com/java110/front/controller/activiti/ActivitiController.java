@@ -74,6 +74,7 @@ public class ActivitiController {
         JSONObject paramJson = JSONObject.parseObject(xmlJson);
         WorkflowModelDto workflowModelDto = new WorkflowModelDto();
         workflowModelDto.setJson_xml(paramJson.getString("xml"));
+        workflowModelDto.setSvg_xml(paramJson.getString("svg"));
         workflowModelDto.setModelId(modelId);
         return modelSMOImpl.saveModel(workflowModelDto);
     }

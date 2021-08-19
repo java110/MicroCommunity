@@ -1,6 +1,7 @@
 package com.java110.dto.oaWorkflowXml;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,10 @@ import java.util.Date;
 public class OaWorkflowXmlDto extends PageDto implements Serializable {
 
     private String xmlId;
-private String storeId;
-private String bpmnXml;
-private String flowId;
-private String svgXml;
+    private String storeId;
+    private String bpmnXml;
+    private String flowId;
+    private String svgXml;
 
 
     private Date createTime;
@@ -29,31 +30,40 @@ private String svgXml;
     public String getXmlId() {
         return xmlId;
     }
-public void setXmlId(String xmlId) {
+
+    public void setXmlId(String xmlId) {
         this.xmlId = xmlId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getBpmnXml() {
+
+    public String getBpmnXml() {
         return bpmnXml;
     }
-public void setBpmnXml(String bpmnXml) {
+
+    public void setBpmnXml(String bpmnXml) {
         this.bpmnXml = bpmnXml;
     }
-public String getFlowId() {
+
+    public String getFlowId() {
         return flowId;
     }
-public void setFlowId(String flowId) {
+
+    public void setFlowId(String flowId) {
         this.flowId = flowId;
     }
-public String getSvgXml() {
+
+    public String getSvgXml() {
         return svgXml;
     }
-public void setSvgXml(String svgXml) {
+
+    public void setSvgXml(String svgXml) {
         this.svgXml = svgXml;
     }
 
