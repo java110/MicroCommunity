@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 打折无欠费规则
@@ -95,7 +96,7 @@ public class DiscountWithoutArrearsRule implements IComputeDiscount {
             //天数不大于1天时按1天来算
             day = (date.getTime() - endTime.getTime()) / (1000 * 60 * 60 * 24) + 1;
         }
-        if (day >= arrearsDay) {
+        if (day > arrearsDay) {
             ComputeDiscountDto computeDiscountDto = new ComputeDiscountDto();
             computeDiscountDto.setDiscountId(feeDiscountDto.getDiscountId());
             computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_D);
@@ -106,8 +107,8 @@ public class DiscountWithoutArrearsRule implements IComputeDiscount {
             computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
             return computeDiscountDto;
         }
-        double price = computeFeeSMOImpl.getFeePrice(feeDtos.get(0));
-        BigDecimal priceDec = new BigDecimal(price);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDtos.get(0));
+        BigDecimal priceDec = new BigDecimal(feePriceAll.get("feePrice").toString());
         BigDecimal cycleDec = new BigDecimal(feeDiscountDto.getCycles());
         double discountPrice = priceDec.multiply(cycleDec).multiply(new BigDecimal(1.0 - rate)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 

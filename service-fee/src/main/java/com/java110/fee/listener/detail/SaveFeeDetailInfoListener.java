@@ -2,6 +2,9 @@ package com.java110.fee.listener.detail;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
+import com.java110.intf.fee.IApplyRoomDiscountInnerServiceSMO;
+import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -26,12 +29,15 @@ import java.util.Map;
  */
 @Java110Listener("saveFeeDetailInfoListener")
 @Transactional
-public class SaveFeeDetailInfoListener extends AbstractFeeDetailBusinessServiceDataFlowListener{
+public class SaveFeeDetailInfoListener extends AbstractFeeDetailBusinessServiceDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(SaveFeeDetailInfoListener.class);
 
     @Autowired
     private IFeeDetailServiceDao feeDetailServiceDaoImpl;
+
+    @Autowired
+    private IApplyRoomDiscountInnerServiceSMO applyRoomDiscountInnerServiceSMOImpl;
 
     @Override
     public int getOrder() {
@@ -45,29 +51,30 @@ public class SaveFeeDetailInfoListener extends AbstractFeeDetailBusinessServiceD
 
     /**
      * 保存费用明细信息 business 表中
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessFeeDetail 节点
-        if(data.containsKey(PayFeeDetailPo.class.getSimpleName())){
+        if (data.containsKey(PayFeeDetailPo.class.getSimpleName())) {
             Object bObj = data.get(PayFeeDetailPo.class.getSimpleName());
             JSONArray businessFeeDetails = null;
-            if(bObj instanceof JSONObject){
+            if (bObj instanceof JSONObject) {
                 businessFeeDetails = new JSONArray();
                 businessFeeDetails.add(bObj);
-            }else {
-                businessFeeDetails = (JSONArray)bObj;
+            } else {
+                businessFeeDetails = (JSONArray) bObj;
             }
             //JSONObject businessFeeDetail = data.getJSONObject("businessFeeDetail");
-            for (int bFeeDetailIndex = 0; bFeeDetailIndex < businessFeeDetails.size();bFeeDetailIndex++) {
+            for (int bFeeDetailIndex = 0; bFeeDetailIndex < businessFeeDetails.size(); bFeeDetailIndex++) {
                 JSONObject businessFeeDetail = businessFeeDetails.getJSONObject(bFeeDetailIndex);
                 doBusinessFeeDetail(business, businessFeeDetail);
-                if(bObj instanceof JSONObject) {
+                if (bObj instanceof JSONObject) {
                     dataFlowContext.addParamOut("detailId", businessFeeDetail.getString("detailId"));
                 }
             }
@@ -76,23 +83,35 @@ public class SaveFeeDetailInfoListener extends AbstractFeeDetailBusinessServiceD
 
     /**
      * business 数据转移到 instance
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_ADD);
+        info.put("bId", business.getbId());
+        info.put("operate", StatusConstant.OPERATE_ADD);
 
         //费用明细信息
         List<Map> businessFeeDetailInfo = feeDetailServiceDaoImpl.getBusinessFeeDetailInfo(info);
-        if( businessFeeDetailInfo != null && businessFeeDetailInfo.size() >0) {
+        if (businessFeeDetailInfo != null && businessFeeDetailInfo.size() > 0) {
             reFreshShareColumn(info, businessFeeDetailInfo.get(0));
             feeDetailServiceDaoImpl.saveFeeDetailInfoInstance(info);
-            if(businessFeeDetailInfo.size() == 1) {
+
+            //更新优惠申请
+            ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
+            applyRoomDiscountDto.setbId(business.getbId());
+            List<ApplyRoomDiscountDto> applyRoomDiscountDtos = applyRoomDiscountInnerServiceSMOImpl.queryApplyRoomDiscounts(applyRoomDiscountDto);
+            if (applyRoomDiscountDtos != null && applyRoomDiscountDtos.size() == 1) {
+                ApplyRoomDiscountPo applyRoomDiscountPo = new ApplyRoomDiscountPo();
+                applyRoomDiscountPo.setArdId(applyRoomDiscountDtos.get(0).getArdId());
+                applyRoomDiscountPo.setInUse("1");
+                applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
+            }
+            if (businessFeeDetailInfo.size() == 1) {
                 dataFlowContext.addParamOut("detailId", businessFeeDetailInfo.get(0).get("detail_id"));
             }
         }
@@ -117,49 +136,51 @@ public class SaveFeeDetailInfoListener extends AbstractFeeDetailBusinessServiceD
 
         info.put("communityId", businessInfo.get("community_id"));
     }
+
     /**
      * 撤单
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doRecover(DataFlowContext dataFlowContext, Business business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        info.put("bId", bId);
+        info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         Map paramIn = new HashMap();
-        paramIn.put("bId",bId);
-        paramIn.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+        paramIn.put("bId", bId);
+        paramIn.put("statusCd", StatusConstant.STATUS_CD_INVALID);
         //费用明细信息
         List<Map> feeDetailInfo = feeDetailServiceDaoImpl.getFeeDetailInfo(info);
-        if(feeDetailInfo != null && feeDetailInfo.size() > 0){
+        if (feeDetailInfo != null && feeDetailInfo.size() > 0) {
             reFreshShareColumn(paramIn, feeDetailInfo.get(0));
             feeDetailServiceDaoImpl.updateFeeDetailInfoInstance(paramIn);
         }
     }
 
 
-
     /**
      * 处理 businessFeeDetail 节点
-     * @param business 总的数据节点
+     *
+     * @param business          总的数据节点
      * @param businessFeeDetail 费用明细节点
      */
-    private void doBusinessFeeDetail(Business business,JSONObject businessFeeDetail){
+    private void doBusinessFeeDetail(Business business, JSONObject businessFeeDetail) {
 
-        Assert.jsonObjectHaveKey(businessFeeDetail,"detailId","businessFeeDetail 节点下没有包含 detailId 节点");
+        Assert.jsonObjectHaveKey(businessFeeDetail, "detailId", "businessFeeDetail 节点下没有包含 detailId 节点");
 
-        if(businessFeeDetail.getString("detailId").startsWith("-")){
+        if (businessFeeDetail.getString("detailId").startsWith("-")) {
             //刷新缓存
             //flushFeeDetailId(business.getDatas());
 
-            businessFeeDetail.put("detailId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+            businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
 
         }
 
-        businessFeeDetail.put("bId",business.getbId());
+        businessFeeDetail.put("bId", business.getbId());
         businessFeeDetail.put("operate", StatusConstant.OPERATE_ADD);
         //保存费用明细信息
         feeDetailServiceDaoImpl.saveBusinessFeeDetailInfo(businessFeeDetail);

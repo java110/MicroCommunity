@@ -128,11 +128,11 @@ public class WechatPayAdapt implements IPayAdapt {
             }
             resultMap.put("code", "0");
             resultMap.put("msg", "下单成功");
-            logger.info("【小程序支付】统一下单成功，返回参数:" + resultMap);
+            logger.info("【小程序支付】统一下单成功，返回参数:" + resultMap + "===notifyUrl===" + notifyUrl);
         } else {
             resultMap.put("code", resMap.get("return_code"));
             resultMap.put("msg", resMap.get("return_msg"));
-            logger.info("【小程序支付】统一下单失败，失败原因:" + resMap.get("return_msg"));
+            logger.info("【小程序支付】统一下单失败，失败原因:" + resMap.get("return_msg") + "===code===" + resMap.get("return_code") + "===notifyUrl===" + notifyUrl);
         }
         return resultMap;
     }

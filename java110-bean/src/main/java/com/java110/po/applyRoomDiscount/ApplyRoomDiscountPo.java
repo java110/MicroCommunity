@@ -26,6 +26,8 @@ public class ApplyRoomDiscountPo implements Serializable {
     //是否可用状态
     private String inUse;
 
+    private String bId;
+
     public String getApplyType() {
         return applyType;
     }
@@ -169,5 +171,13 @@ public class ApplyRoomDiscountPo implements Serializable {
 
     public void setInUse(String inUse) {
         this.inUse = inUse;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

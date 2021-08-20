@@ -123,7 +123,9 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
                 List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
                 //收费结束
                 if (FeeDto.STATE_FINISH.equals(feeDtos.get(0).getState())) {
-                    throw new IllegalArgumentException("收费结束，不能退单");
+                    ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "收费结束，不能退单！");
+                    context.setResponseEntity(responseEntity);
+                    return;
                 }
 
                 PayFeePo payFeePo = new PayFeePo();
@@ -155,7 +157,11 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserDto.setState(RepairUserDto.STATE_DOING);
         repairUserDto.setStaffId(userId);
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        Assert.listOnlyOne(repairUserDtos, "当前用户没有需要处理订单");
+        if (repairUserDtos != null && repairUserDtos.size() != 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         String ruId = repairUserDtos.get(0).getRuId();
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
@@ -235,7 +241,11 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserDto.setState(RepairUserDto.STATE_DOING);
         repairUserDto.setStaffId(userId);
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        Assert.listOnlyOne(repairUserDtos, "当前用户没有需要处理订单");
+        if (repairUserDtos != null && repairUserDtos.size() != 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         //插入派单者的信息
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(repairUserDtos.get(0).getRuId());

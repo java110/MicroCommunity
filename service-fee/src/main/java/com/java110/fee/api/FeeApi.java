@@ -12,6 +12,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.InitConfigDataException;
 import com.java110.utils.exception.InitDataFlowContextException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,17 +181,18 @@ public class FeeApi extends BaseController {
         feeDto.setCommunityId(communityId);
         return queryOweFeeImpl.query(feeDto);
     }
+
     /**
      * 查询欠费费用
      *
-     * @param roomId    房屋ID
+     * @param roomId      房屋ID
      * @param communityId 小区ID
      * @return
      * @path /app/feeApi/listAllRoomOweFees
      */
     @RequestMapping(value = "/listAllRoomOweFees", method = RequestMethod.GET)
     public ResponseEntity<String> listAllRoomOweFees(
-            @RequestParam(value = "roomId",required = false) String roomId,
+            @RequestParam(value = "roomId", required = false) String roomId,
             @RequestParam(value = "communityId") String communityId) {
         FeeDto feeDto = new FeeDto();
         feeDto.setPayerObjId(roomId);
@@ -204,16 +206,21 @@ public class FeeApi extends BaseController {
      *
      * @param feeId       费用ID
      * @param communityId 小区ID
+     * @param cycle       周期
      * @return
      * @path /app/feeApi/listFeeObj
      */
     @RequestMapping(value = "/listFeeObj", method = RequestMethod.GET)
     public ResponseEntity<String> listFeeObj(
             @RequestParam(value = "feeId") String feeId,
+            @RequestParam(value = "cycle", required = false) String cycle,
             @RequestParam(value = "communityId") String communityId) {
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(feeId);
         feeDto.setCommunityId(communityId);
+        if (!StringUtil.isEmpty(cycle)) {
+            feeDto.setCycle(cycle);
+        }
         return queryOweFeeImpl.listFeeObj(feeDto);
     }
 
@@ -293,6 +300,7 @@ public class FeeApi extends BaseController {
      * 车辆费用导入
      * /feeApi/importCarFees
      * path /app/feeApi/importCarFees
+     *
      * @param reqString
      * @return
      */
@@ -312,6 +320,7 @@ public class FeeApi extends BaseController {
      * 合同费用导入
      * /feeApi/importContractFees
      * path /app/feeApi/importContractFees
+     *
      * @param reqString
      * @return
      */

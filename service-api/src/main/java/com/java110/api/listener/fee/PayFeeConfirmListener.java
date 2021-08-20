@@ -7,28 +7,20 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.order.BusinessDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.order.IOrderInnerServiceSMO;
-import com.java110.po.feeReceipt.FeeReceiptPo;
-import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +46,6 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
     private static Logger logger = LoggerFactory.getLogger(PayFeeConfirmListener.class);
 
     @Autowired
-    private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
-
-    @Autowired
-    private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
-
-    @Autowired
     private IFeeBMO feeBMOImpl;
 
     @Autowired
@@ -71,8 +57,6 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IOrderInnerServiceSMO orderInnerServiceSMOImpl;
 
-    @Autowired
-    private IComputeFeeSMO computeFeeSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -115,7 +99,6 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
         businessDto.setoId(paramObj.getString("oId"));
         businessDto.setBusinessTypeCd("600100040001");
         List<BusinessDto> businessDtos = orderInnerServiceSMOImpl.querySameOrderBusiness(businessDto);
-
         if (businessDtos == null || businessDtos.size() < 1) {
             dataFlowContext.setResponseEntity(responseEntity);
             return;

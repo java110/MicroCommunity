@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @desc add by 吴学文 12:43
@@ -84,9 +85,9 @@ public class LateFeeByMonthRule implements IComputeDiscount {
         //查询费用
         Double month = computeFeeSMOImpl.dayCompare(endTime, curTime);
 
-        double price = computeFeeSMOImpl.getFeePrice(feeDtos.get(0));
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDtos.get(0));
 
-        BigDecimal priceDec = new BigDecimal(price);
+        BigDecimal priceDec = new BigDecimal(feePriceAll.get("feePrice").toString());
 
         BigDecimal monthDec = new BigDecimal(month);
 

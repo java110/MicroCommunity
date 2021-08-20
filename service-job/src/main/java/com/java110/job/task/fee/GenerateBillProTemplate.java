@@ -243,8 +243,8 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         if (oweMonth <= 0.0) {
             return;
         }
-        double tmpFeePrice = computeFeeSMOImpl.getFeePrice(feeDto);
-        feeDto.setFeePrice(tmpFeePrice);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
+        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         if (feeDto.getFeePrice() <= 0) {
             return;//这个没有欠费可算
         }

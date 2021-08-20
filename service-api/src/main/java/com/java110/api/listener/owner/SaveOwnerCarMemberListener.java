@@ -104,10 +104,11 @@ public class SaveOwnerCarMemberListener extends AbstractServiceApiPlusListener {
         //校验车牌号是否存在
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setCarTypeCd("1001"); //业主车辆
         ownerCarDto.setCarId(reqJson.getString("carId"));
         ownerCarDto.setStatusCd("0");
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        if(ownerCarDtos.isEmpty() || ownerCarDtos.size()==0){
+        if (ownerCarDtos.isEmpty() || ownerCarDtos.size() == 0) {
             throw new IllegalArgumentException("主车辆不存在");
         }
 

@@ -1,13 +1,11 @@
 package com.java110.api.listener.owner;
 
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -47,7 +45,6 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
-
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -104,7 +101,6 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
         if (total > 0) {
             OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
-            ownerCarDto.setCarTypeCd("1001"); //业主车辆
             ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
             //小区20条时刷房屋和车位信息

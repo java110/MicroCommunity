@@ -41,6 +41,8 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
 
     private Date createTime;
 
+    private String bId;
+
     private String statusCd = "0";
 
     public String getApplyType() {
@@ -217,5 +219,13 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
 
     public void setDiscountName(String discountName) {
         this.discountName = discountName;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

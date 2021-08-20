@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 空置房打折规则
@@ -78,9 +79,9 @@ public class VacantHousingDiscountImpl implements IComputeDiscount {
         feeDto.setFeeId(feeDiscountDto.getFeeId());
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        double price = computeFeeSMOImpl.getFeePrice(feeDtos.get(0));
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDtos.get(0));
 
-        BigDecimal priceDec = new BigDecimal(price);
+        BigDecimal priceDec = new BigDecimal(feePriceAll.get("feePrice").toString());
 
         //BigDecimal cycleDec = new BigDecimal(month);
         //2021-03-05 根据缴费 时长来算 不应该按 至少缴费来算

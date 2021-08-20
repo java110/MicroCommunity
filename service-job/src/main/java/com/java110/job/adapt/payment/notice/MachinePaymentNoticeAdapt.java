@@ -192,6 +192,8 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String feeTypeCd = feeDtos.get(0).getFeeTypeCd();
         //获取付费对象类型
         String payerObjType = feeDtos.get(0).getPayerObjType();
+        //获取状态
+        String state = payFeeDetailPo.getState();
         //车牌号
         String carNum = "";
         //停车场
@@ -220,15 +222,17 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         paramIn.put("carNum", carNum);
         paramIn.put("num", num);
         paramIn.put("spaceNum", spaceNum);
+        paramIn.put("state", state);
         //给业主推送消息
         sendMessage(paramIn, communityDtos.get(0), payFeeDetailPo);
-        if (feeTypeCd.equals("888800010012")) {
+        if (!StringUtil.isEmpty(state) && !state.equals("1300") && feeTypeCd.equals("888800010012")) {
             //给处理报修完结单的维修师傅推送消息
             sendMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
         }
-        //给员工推送消息
-        publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
-
+        if (!StringUtil.isEmpty(state) && !state.equals("1300")) {
+            //给员工推送消息
+            publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
+        }
     }
 
     /**
@@ -480,7 +484,11 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
             templateMessage.setTemplate_id(templateId);
             templateMessage.setTouser(openId);
-            data.setFirst(new Content("本次缴费已到账"));
+            if (!StringUtil.isEmpty(paramIn.getString("state")) && paramIn.getString("state").equals("1300")) {
+                data.setFirst(new Content("本次退费已到账"));
+            } else {
+                data.setFirst(new Content("本次缴费已到账"));
+            }
             if (payerObjType.equals("3333")) {  //房屋
                 data.setKeyword1(new Content(paramIn.getString("payFeeRoom")));
                 data.setKeyword2(new Content(paramIn.getString("feeTypeCdName")));
@@ -489,7 +497,14 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
                 data.setKeyword2(new Content(paramIn.getString("feeTypeCdName") + "-" + paramIn.getString("carNum")));
             }
             data.setKeyword3(new Content(paramIn.getString("payFeeTime")));
-            data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
+            if (!StringUtil.isEmpty(paramIn.getString("state")) && paramIn.getString("state").equals("1300")) {
+                //获取退费金额
+                double receivedAmount = Double.parseDouble(paramIn.getString("receivedAmount"));
+                double money = receivedAmount * (-1.00);
+                data.setKeyword4(new Content("退费" + money + "元"));
+            } else {
+                data.setKeyword4(new Content(paramIn.getString("receivedAmount") + "元"));
+            }
             data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
             templateMessage.setData(data);
             //获取业主公众号地址

@@ -33,6 +33,16 @@ public interface IFeeDetailInnerServiceSMO {
     List<FeeDetailDto> queryFeeDetails(@RequestBody FeeDetailDto feeDetailDto);
 
     /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param feeDetailDto 数据对象分享
+     * @return FeeDetailDto 对象数据
+     */
+    @RequestMapping(value = "/queryBusinessFeeDetails", method = RequestMethod.POST)
+    List<FeeDetailDto> queryBusinessFeeDetails(@RequestBody FeeDetailDto feeDetailDto);
+
+    /**
      * 查询<p>小区楼</p>总记录数
      *
      * @param feeDetailDto 数据对象分享

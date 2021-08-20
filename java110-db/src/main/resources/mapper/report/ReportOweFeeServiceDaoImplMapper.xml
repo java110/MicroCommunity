@@ -30,7 +30,6 @@
         <if test="updateTime !=null and updateTime != ''">
             and t.update_time= #{updateTime}
         </if>
-
         <if test="oweId !=null and oweId != ''">
             and t.owe_id= #{oweId}
         </if>

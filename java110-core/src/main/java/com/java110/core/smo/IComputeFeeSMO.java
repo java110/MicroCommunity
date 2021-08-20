@@ -121,10 +121,10 @@ public interface IComputeFeeSMO {
      *
      * @return
      */
-    double getFeePrice(FeeDto feeDto);
+    public Map getFeePrice(FeeDto feeDto);
 
 
-    public double getFeePrice(FeeDto feeDto, RoomDto roomDto);
+    public Map getFeePrice(FeeDto feeDto, RoomDto roomDto);
 
     /**
      * 时间差 按天折算

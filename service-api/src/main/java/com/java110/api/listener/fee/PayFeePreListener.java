@@ -126,13 +126,13 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         String appId = event.getDataFlowContext().getAppId();
 
         if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) {  //微信小程序支付
-            paramObj.put("primeRate", "5");
+            paramObj.put("primeRate", "6");
             paramObj.put("remark", "线上小程序支付");
         } else if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {  //微信公众号支付
-            paramObj.put("primeRate", "6");
+            paramObj.put("primeRate", "5");
             paramObj.put("remark", "线上公众号支付");
         } else {
-            paramObj.put("primeRate", "5");
+            paramObj.put("primeRate", "6");
             paramObj.put("remark", "线上小程序支付");
         }
 
@@ -213,6 +213,28 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS, Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
+        //查询 pay_fee_detail 是否缴费
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setDetailId(paramObj.getString("detailId"));
+        List<FeeDetailDto> feeDetailDtoList = iFeeDetailInnerServiceSMO.queryBusinessFeeDetails(feeDetailDto);
+        if (feeDetailDtoList != null && feeDetailDtoList.size() == 1) {
+            //获取bId
+            String bId = feeDetailDtoList.get(0).getbId();
+            //获取优惠
+            List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
+            if (computeDiscountDtos != null) {
+                for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+                    if (!StringUtil.isEmpty(computeDiscountDto.getArdId())) {
+                        ApplyRoomDiscountPo applyRoomDiscountPo = new ApplyRoomDiscountPo();
+                        //将业务id更新到空置房优惠里面
+                        applyRoomDiscountPo.setbId(bId);
+                        applyRoomDiscountPo.setArdId(computeDiscountDto.getArdId());
+                        applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
+                    }
+                }
+            }
+
+        }
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);
             return;
@@ -285,20 +307,6 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
         JSONObject discountBusiness = null;
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
-            if (!StringUtil.isEmpty(computeDiscountDto.getArdId())) {
-                //查询 pay_fee_detail 是否缴费
-                FeeDetailDto feeDetailDto = new FeeDetailDto();
-                feeDetailDto.setDetailId(paramObj.getString("detailId"));
-                List<FeeDetailDto> feeDetailDtoList = iFeeDetailInnerServiceSMO.queryFeeDetails(feeDetailDto);
-                logger.info("======使用空置房优惠信息======ardId======" + computeDiscountDto.getArdId());
-                if (feeDetailDtoList != null && feeDetailDtoList.size() == 1) {
-                    ApplyRoomDiscountPo applyRoomDiscountPo = new ApplyRoomDiscountPo();
-                    //空置房优惠不可用
-                    applyRoomDiscountPo.setInUse("1");
-                    applyRoomDiscountPo.setArdId(computeDiscountDto.getArdId());
-                    applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
-                }
-            }
             if (computeDiscountDto.getDiscountPrice() <= 0) {
                 continue;
             }

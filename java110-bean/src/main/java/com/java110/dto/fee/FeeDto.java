@@ -124,6 +124,9 @@ public class FeeDto extends PageDto implements Serializable {
     //查询出的数量
     private int count;
 
+    private String carTypeCd;
+    private String cycle;
+    private double feeTotalPrice;
 
     public String getAmount() {
         return amount;
@@ -588,5 +591,29 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setMwPrice(String mwPrice) {
         this.mwPrice = mwPrice;
+    }
+
+    public String getCarTypeCd() {
+        return carTypeCd;
+    }
+
+    public void setCarTypeCd(String carTypeCd) {
+        this.carTypeCd = carTypeCd;
+    }
+
+    public String getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
+    }
+
+    public double getFeeTotalPrice() {
+        return feeTotalPrice;
+    }
+
+    public void setFeeTotalPrice(double feeTotalPrice) {
+        this.feeTotalPrice = feeTotalPrice;
     }
 }

@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="payFeeConfigDiscountServiceDaoImpl">
 
-
     <!-- 保存费用项折扣信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeConfigDiscountInfo" parameterType="Map">
         insert into pay_fee_config_discount(
@@ -13,7 +12,6 @@
         #{configDiscountId},#{configId},#{discountId},#{communityId},#{startTime},#{endTime},#{payMaxEndTime}
         )
     </insert>
-
 
     <!-- 查询费用项折扣信息 add by wuxw 2018-07-03 -->
     <select id="getPayFeeConfigDiscountInfo" parameterType="Map" resultType="Map">
@@ -48,9 +46,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改费用项折扣信息 add by wuxw 2018-07-03 -->
     <update id="updatePayFeeConfigDiscountInfo" parameterType="Map">
@@ -71,7 +67,6 @@
         <if test="configDiscountId !=null and configDiscountId != ''">
             and t.config_discount_id= #{configDiscountId}
         </if>
-
     </update>
 
     <!-- 查询费用项折扣数量 add by wuxw 2018-07-03 -->
@@ -94,8 +89,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
-
     </select>
 
 </mapper>

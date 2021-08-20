@@ -170,7 +170,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         int hours = 0;
         Date targetEndTime = null;
         BigDecimal cycles = null;
-        BigDecimal feePrice = new BigDecimal(computeFeeSMOImpl.getFeePrice(feeDto));
+        Map feePriceAll=computeFeeSMOImpl.getFeePrice(feeDto);
+        BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
         if ("-101".equals(paramInJson.getString("cycles"))) {
             Date endTime = feeDto.getEndTime();
             Calendar endCalender = Calendar.getInstance();
@@ -228,7 +229,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeDto = feeDtos.get(0);
         businessFeeDetail.put("startTime", paramInJson.getString("startTime"));
         BigDecimal cycles = null;
-        BigDecimal feePrice = new BigDecimal(computeFeeSMOImpl.getFeePrice(feeDto));
+        Map feePriceAll=computeFeeSMOImpl.getFeePrice(feeDto);
+        BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
         Date endTime = feeDto.getEndTime();
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
@@ -405,9 +407,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
         double feePrice = 0.0;
 
-        feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
 
-        BigDecimal receivableAmount = new BigDecimal(feePrice);
+        BigDecimal receivableAmount = new BigDecimal(feePriceAll.get("feePrice").toString());
         BigDecimal cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
         double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         double discountPrice = paramInJson.getDouble("discountPrice");

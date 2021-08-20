@@ -14,9 +14,11 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -79,7 +81,6 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
-
     @Autowired
     private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
 
@@ -94,6 +95,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IApplyRoomDiscountInnerServiceSMO applyRoomDiscountInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -148,7 +152,24 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
             ownerCarDto.setCommunityId(paramObj.getString("communityId"));
             ownerCarDto.setCarId(paramObj.getString("carPayerObjId"));
+            ownerCarDto.setCarTypeCd("1001"); //业主车辆
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            Assert.listOnlyOne(ownerCarDtos, "查询业主错误！");
+            //获取车位id
+            String psId = ownerCarDtos.get(0).getPsId();
+            //获取车辆状态(1001 正常状态，2002 欠费状态  3003 车位释放)
+            String carState = ownerCarDtos.get(0).getState();
+            if (!StringUtil.isEmpty(psId) && !StringUtil.isEmpty(carState) && carState.equals("3003")) {
+                ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+                parkingSpaceDto.setPsId(psId);
+                List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+                Assert.listOnlyOne(parkingSpaceDtos, "查询车位信息错误！");
+                //获取车位状态(出售 S，出租 H ，空闲 F)
+                String state = parkingSpaceDtos.get(0).getState();
+                if (!StringUtil.isEmpty(state) && !state.equals("F")) {
+                    throw new IllegalArgumentException("车位已被使用，不能再缴费！");
+                }
+            }
             //车位费用续租
             if (ownerCarDtos != null) {
                 for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {

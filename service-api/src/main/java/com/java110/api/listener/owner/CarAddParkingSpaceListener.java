@@ -8,6 +8,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -44,6 +45,9 @@ public class CarAddParkingSpaceListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IParkingSpaceBMO parkingSpaceBMOImpl;
 
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_CAR_ADD_PARKING_SPACE;
@@ -74,9 +78,9 @@ public class CarAddParkingSpaceListener extends AbstractServiceApiPlusListener {
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         Assert.listOnlyOne(ownerCarDtos, "未找到车辆信息");
 
-        String psId = ownerCarDtos.get(0).getPsId();
+        String state = ownerCarDtos.get(0).getState();
 
-        if (!StringUtil.isEmpty(psId) && !"-1".equals(psId)) {
+        if (!StringUtil.isEmpty(state) && !state.equals(OwnerCarDto.STATE_FINISH)) {
             throw new IllegalArgumentException("已有车位无需续租");
         }
     }
@@ -85,6 +89,15 @@ public class CarAddParkingSpaceListener extends AbstractServiceApiPlusListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(reqJson, OwnerCarPo.class);
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setPsId(ownerCarPo.getPsId());
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        Assert.listOnlyOne(parkingSpaceDtos, "查询车位信息错误！");
+        //获取车位状态(出售 S，出租 H ，空闲 F)
+        String state = parkingSpaceDtos.get(0).getState();
+        if (!StringUtil.isEmpty(state) && !state.equals("F")) { //如果车位状态不是空闲的，就不能续租
+            throw new IllegalArgumentException("车位已被使用，无法继续续租！");
+        }
         ownerCarPo.setState(OwnerCarDto.STATE_NORMAL);
         super.update(context, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR);
         reqJson.put("carNumType", ParkingSpaceDto.STATE_HIRE);

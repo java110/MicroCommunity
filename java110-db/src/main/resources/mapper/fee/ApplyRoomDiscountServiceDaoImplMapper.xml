@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="applyRoomDiscountServiceDaoImpl">
 
-
     <!-- 保存房屋折扣申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveApplyRoomDiscountInfo" parameterType="Map">
         insert into apply_room_discount(
@@ -14,7 +13,6 @@
         #{communityId},#{discountId},#{inUse}
         )
     </insert>
-
 
     <!-- 查询房屋折扣申请信息 add by wuxw 2018-07-03 -->
     <select id="getApplyRoomDiscountInfo" parameterType="Map" resultType="Map">
@@ -81,6 +79,9 @@
         </if>
         <if test="inUse !=null and inUse != ''">
             and t.in_use= #{inUse}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -204,6 +205,9 @@
         </if>
         <if test="inUse !=null and inUse != ''">
             , t.in_use= #{inUse}
+        </if>
+        <if test="bId !=null and bId != ''">
+            , t.b_id= #{bId}
         </if>
         where 1=1
         <if test="ardId !=null and ardId != ''">

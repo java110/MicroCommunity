@@ -1,6 +1,5 @@
 package com.java110.report.bmo.reportOweFee.impl;
 
-import com.java110.dto.PageDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
@@ -32,31 +31,18 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
      */
     public ResponseEntity<String> get(ReportOweFeeDto reportOweFeeDto) {
 
-
+        reportOweFeeDto.setHasOweFee("Y");
         int count = reportOweFeeInnerServiceSMOImpl.queryReportOweFeesCount(reportOweFeeDto);
 
-        List<ReportOweFeeDto> reportOweFeeDtos = new ArrayList<>();
+        List<ReportOweFeeDto> reportOweFeeDtos = null;
         if (count > 0) {
-            reportOweFeeDto.setPage(PageDto.DEFAULT_PAGE);
-            List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
-            refreshReportOwe(reportOweFees, reportOweFeeDto.getConfigIds());
-            for (ReportOweFeeDto reportOweFee : reportOweFees) {
-                //获取欠费总金额
-                String amountOwed = reportOweFee.getAmountOwed();
-                if (!StringUtil.isEmpty(amountOwed)) {
-                    double amountOwedMoney = Double.parseDouble(amountOwed);
-                    if (amountOwedMoney > 0.0) {
-                        reportOweFeeDtos.add(reportOweFee);
-                    } else {
-                        continue;
-                    }
-                }
-            }
+            reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
+            refreshReportOwe(reportOweFeeDtos, reportOweFeeDto.getConfigIds());
         } else {
             reportOweFeeDtos = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) reportOweFeeDtos.size() / (double) reportOweFeeDto.getRow()), reportOweFeeDtos.size(), reportOweFeeDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportOweFeeDto.getRow()), count, reportOweFeeDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

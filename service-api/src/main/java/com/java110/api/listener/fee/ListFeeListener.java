@@ -17,6 +17,7 @@ import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.fee.ApiFeeDataVo;
 import com.java110.vo.api.fee.ApiFeeVo;
 import org.slf4j.Logger;
@@ -92,12 +93,20 @@ public class ListFeeListener extends AbstractServiceApiListener {
 
         int count = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
 
-        List<ApiFeeDataVo> fees = null;
+        List<ApiFeeDataVo> fees = new ArrayList<>();
 
         if (count > 0) {
             List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);//查询费用项目
             computeFeePrice(feeDtos);//计算费用
-            fees = BeanConvertUtil.covertBeanList(feeDtos, ApiFeeDataVo.class);
+            List<ApiFeeDataVo> apiFeeDataVos = BeanConvertUtil.covertBeanList(feeDtos, ApiFeeDataVo.class);
+            for (ApiFeeDataVo apiFeeDataVo : apiFeeDataVos) {
+                //获取付费对象类型
+                String payerObjType = apiFeeDataVo.getPayerObjType();
+                if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) {
+                    apiFeeDataVo.setCarTypeCd("1001");
+                }
+                fees.add(apiFeeDataVo);
+            }
             freshFeeAttrs(fees, feeDtos);
         } else {
             fees = new ArrayList<>();
@@ -159,8 +168,8 @@ public class ListFeeListener extends AbstractServiceApiListener {
         }
         String computingFormula = feeDto.getComputingFormula();
         double feePrice = 0.00;
-        feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
-        feeDto.setFeePrice(feePrice);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
+        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
@@ -181,8 +190,8 @@ public class ListFeeListener extends AbstractServiceApiListener {
     private void computeFeePriceByRoom(FeeDto feeDto, double oweMonth) {
         String computingFormula = feeDto.getComputingFormula();
         double feePrice = 0.00;
-        feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
-        feeDto.setFeePrice(feePrice);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
+        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
@@ -203,8 +212,8 @@ public class ListFeeListener extends AbstractServiceApiListener {
     private void computeFeePriceByContract(FeeDto feeDto, double oweMonth) {
         String computingFormula = feeDto.getComputingFormula();
         double feePrice = 0.00;
-        feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
-        feeDto.setFeePrice(feePrice);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
+        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");

@@ -2,6 +2,7 @@ package com.java110.fee.bmo.payFeeConfigDiscount.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
 import com.java110.fee.bmo.payFeeConfigDiscount.ISavePayFeeConfigDiscountBMO;
 import com.java110.intf.fee.IPayFeeConfigDiscountInnerServiceSMO;
 import com.java110.po.payFeeConfigDiscount.PayFeeConfigDiscountPo;
@@ -24,6 +25,14 @@ public class SavePayFeeConfigDiscountBMOImpl implements ISavePayFeeConfigDiscoun
      */
     @Java110Transactional
     public ResponseEntity<String> save(PayFeeConfigDiscountPo payFeeConfigDiscountPo) {
+
+        PayFeeConfigDiscountDto payFeeConfigDiscountDto = new PayFeeConfigDiscountDto();
+        payFeeConfigDiscountDto.setConfigId(payFeeConfigDiscountPo.getConfigId());
+        payFeeConfigDiscountDto.setDiscountId(payFeeConfigDiscountPo.getDiscountId());
+        int i = payFeeConfigDiscountInnerServiceSMOImpl.queryPayFeeConfigDiscountsCount(payFeeConfigDiscountDto);
+        if (i > 0) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败，不能添加相同的折扣！");
+        }
 
         payFeeConfigDiscountPo.setConfigDiscountId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configDiscountId));
         int flag = payFeeConfigDiscountInnerServiceSMOImpl.savePayFeeConfigDiscount(payFeeConfigDiscountPo);

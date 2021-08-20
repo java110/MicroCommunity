@@ -38,6 +38,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 欠费缴费实现类
@@ -230,7 +231,8 @@ public class PayOweFeeImpl implements IPayOweFee {
         feeDto = feeDtos.get(0);
         paramInJson.put("feeInfo", feeDto);
         payFeeDetailPo.setStartTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-        BigDecimal feePrice = new BigDecimal(computeFeeSMOImpl.getFeePrice(feeDto));
+        Map feePriceAll=computeFeeSMOImpl.getFeePrice(feeDto);
+        BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
 
         BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("feePrice")));
         BigDecimal cycles = receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_EVEN);

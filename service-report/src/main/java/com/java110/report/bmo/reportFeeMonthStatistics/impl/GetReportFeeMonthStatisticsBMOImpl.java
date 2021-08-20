@@ -5,13 +5,20 @@ import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsTotalDto;
+import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -40,6 +47,15 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     /**
      * @param reportFeeMonthStatisticsDto
@@ -366,6 +382,25 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 }
                 //费用项目
                 reportFeeMonthStatistics.setFeeConfigDtos(feeConfigDtos);
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getRepairId())) {
+                    RepairDto repairDto = new RepairDto();
+                    repairDto.setRepairId(reportFeeMonthStatistics.getRepairId());
+                    //查询报修单
+                    List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
+                    Assert.listOnlyOne(repairDtos, "查询报修单错误！");
+                    if (!StringUtil.isEmpty(repairDtos.get(0).getRepairObjType()) && repairDtos.get(0).getRepairObjType().equals("004")) {
+                        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+                        ownerRoomRelDto.setRoomId(repairDtos.get(0).getRepairObjId());
+                        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+                        Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
+                        OwnerDto ownerDto = new OwnerDto();
+                        ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
+                        ownerDto.setOwnerTypeCd("1001"); //业主本人
+                        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+                        Assert.listOnlyOne(ownerDtos, "查询业主信息错误！");
+                        reportFeeMonthStatistics.setOwnerName(ownerDtos.get(0).getName());
+                    }
+                }
                 reportList.add(reportFeeMonthStatistics);
             }
             //应收总金额(小计)

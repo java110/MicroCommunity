@@ -8,6 +8,7 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.repair.RepairDto;
@@ -24,6 +25,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +104,7 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         //校验数据
         validate(paramIn);
         JSONObject paramObj = JSONObject.parseObject(paramIn);
+        logger.info("======欠费缴费返回======："+JSONArray.toJSONString(paramObj));
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
@@ -113,7 +116,15 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObj = fees.getJSONObject(feeIndex);
             feeObj.put("communityId", paramObj.getString("communityId"));
-            feeObj.put("remark", paramObj.getString("remark"));
+            String remark = paramObj.getString("remark");
+            String paySource = "现场收银台支付";
+            if (!StringUtil.isEmpty(remark)) {
+                remark = "-" + remark;
+            } else {
+                remark = "";
+            }
+            feeObj.put("remark", paySource + remark);
+
             getFeeReceiptDetailPo(dataFlowContext, feeObj, businesses, feeReceiptDetailPos, feeReceiptPos);
         }
 
@@ -139,9 +150,9 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
         feeReceiptDetailDto.setDetailIds(detailIds.toArray(new String[detailIds.size()]));
         feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
-        try{
+        try {
             Thread.currentThread().sleep(2000);
-        }catch(InterruptedException ie){
+        } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
         List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
@@ -151,10 +162,15 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
     }
 
     private void getFeeReceiptDetailPo(DataFlowContext dataFlowContext, JSONObject paramObj, JSONArray businesses, List<FeeReceiptDetailPo> feeReceiptDetailPos, List<FeeReceiptPo> feeReceiptPos) {
-        if(!paramObj.containsKey("primeRate")) {
+        if (!paramObj.containsKey("primeRate")) {
             paramObj.put("primeRate", "6");
         }
-        //paramObj.put("remark", "微信支付");
+        String appId = dataFlowContext.getAppId();
+        logger.info("======支付方式======：" + appId + "+======+" + paramObj.containsKey("primeRate")+"======:"+JSONArray.toJSONString(dataFlowContext));
+        if (AppDto.OWNER_WECHAT_PAY.equals(appId)) {  //微信支付（欠费缴费无法区分小程序还是微信公众号）
+            paramObj.put("remark", "微信支付");
+        }
+        paramObj.put("state","1400");
         businesses.add(feeBMOImpl.addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos));
         businesses.add(feeBMOImpl.modifyOweFee(paramObj, dataFlowContext));
 

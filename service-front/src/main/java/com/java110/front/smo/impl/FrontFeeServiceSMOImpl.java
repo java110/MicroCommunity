@@ -27,7 +27,6 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
 
     private static Logger logger = LoggerFactory.getLogger(FrontFeeServiceSMOImpl.class);
 
-
     @Autowired
     private RestTemplate restTemplate;
 
@@ -73,8 +72,6 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
             responseEntity = new ResponseEntity<String>("[]", HttpStatus.OK);
 
         }
-
-
         return responseEntity;
     }
 
@@ -118,8 +115,6 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
             responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
 
         }
-
-
         return responseEntity;
     }
 
@@ -151,8 +146,6 @@ public class FrontFeeServiceSMOImpl extends BaseComponentSMO implements IFeeServ
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/fee.payFee",
                 HttpMethod.POST);
-
-
         return responseEntity;
     }
 

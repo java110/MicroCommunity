@@ -119,8 +119,14 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         if (feeDtos == null || feeDtos.size() < 1) {
             return ResultVo.success();
         }
-
+        String cycel = null;
+        if (!StringUtil.isEmpty(feeDto.getCycle())) {
+            cycel = feeDto.getCycle();
+        }
         feeDto = feeDtos.get(0);
+        if (!StringUtil.isEmpty(cycel)) {
+            feeDto.setCycle(cycel);
+        }
 
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
             RoomDto roomDto = new RoomDto();
@@ -153,8 +159,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feeDto.setPayerObjName(ownerCarDto.getCarNum() + "(" + parkingSpaceDto.getAreaNum() + "停车场" + parkingSpaceDto.getNum() + "车位)");
             feeDto.setBuiltUpArea(parkingSpaceDto.getArea());
         }
-        double feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
-        feeDto.setFeePrice(feePrice);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
+        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
+        feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
         //应收款取值
         String val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
         feeDto.setVal(val);

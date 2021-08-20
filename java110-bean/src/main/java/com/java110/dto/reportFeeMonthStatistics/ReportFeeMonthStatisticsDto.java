@@ -117,6 +117,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     //状态名称
     private String stateName;
 
+    private String repairId;
+
     public String getReceivableAmount() {
         return receivableAmount;
     }
@@ -571,5 +573,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getRepairId() {
+        return repairId;
+    }
+
+    public void setRepairId(String repairId) {
+        this.repairId = repairId;
     }
 }

@@ -160,7 +160,7 @@ public class MachineAdoptApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
             return;
         }
-        // 根据特定权限查询 有该权限的 员工
+        // 根据特定权限查询 有该权限的员工
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
         basePrivilegeDto.setResource("/wechatHousingApproval");
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);

@@ -50,6 +50,23 @@ public class FeeDetailInnerServiceSMOImpl extends BaseServiceSMO implements IFee
         return feeDetails;
     }
 
+    @Override
+    public List<FeeDetailDto> queryBusinessFeeDetails(@RequestBody FeeDetailDto feeDetailDto) {
+
+        //校验是否传了 分页信息
+
+        int page = feeDetailDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDetailDto.setPage((page - 1) * feeDetailDto.getRow());
+        }
+
+        List<FeeDetailDto> feeDetails = BeanConvertUtil.covertBeanList(feeDetailServiceDaoImpl.getBusinessFeeDetailInfo(BeanConvertUtil.beanCovertMap(feeDetailDto)), FeeDetailDto.class);
+
+        refreshFeeDetail(feeDetails);
+        return feeDetails;
+    }
+
     private void refreshFeeDetail(List<FeeDetailDto> feeDetails) {
         if(feeDetails == null || feeDetails.size() < 1){
             return ;

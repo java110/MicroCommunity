@@ -12,6 +12,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiFeeDetailDataVo;
 import com.java110.vo.api.ApiFeeDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +57,15 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         //获取请求数据
         JSONObject reqJson = dataFlowContext.getReqJson();
         //获取开始时间
-        String startTime = reqJson.getString("startTime") + " 00:00:00";
+        if (!StringUtil.isEmpty(reqJson.getString("startTime"))) {
+            String startTime = reqJson.getString("startTime") + " 00:00:00";
+            reqJson.put("startTime", startTime);
+        }
         //获取结束时间
-        String endTime = reqJson.getString("endTime") + " 23:59:59";
-        reqJson.put("startTime", startTime);
-        reqJson.put("endTime", endTime);
+        if (!StringUtil.isEmpty(reqJson.getString("endTime"))) {
+            String endTime = reqJson.getString("endTime") + " 23:59:59";
+            reqJson.put("endTime", endTime);
+        }
         validateFeeConfigData(reqJson);
 
         //查询总记录数
