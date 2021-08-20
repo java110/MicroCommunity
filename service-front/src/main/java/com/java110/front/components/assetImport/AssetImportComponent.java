@@ -33,7 +33,6 @@ public class AssetImportComponent {
      * @return ResponseEntity 对象
      */
     public ResponseEntity<String> importData(IPageData pd, MultipartFile uploadFile) throws Exception{
-
         return assetImportSMOImpl.importExcelData(pd,uploadFile);
     }
 

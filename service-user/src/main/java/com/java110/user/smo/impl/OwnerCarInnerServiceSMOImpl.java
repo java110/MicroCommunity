@@ -103,6 +103,7 @@ public class OwnerCarInnerServiceSMOImpl extends BaseServiceSMO implements IOwne
         Map<String, Object> info = new HashMap<>();
         info.put("carNums", carNums.toArray(new String[carNums.size()]));
         info.put("communityId", tmpImportCarFees.get(0).getCommunityId());
+        info.put("statusCd", "0");
         List<OwnerCarDto> ownerCarDtos = BeanConvertUtil.covertBeanList(ownerCarServiceDaoImpl.getOwnerCarInfo(info), OwnerCarDto.class);
 
         for (OwnerCarDto ownerCarDto : ownerCarDtos) {
