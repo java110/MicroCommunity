@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
@@ -65,7 +62,9 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
             return;
         }
 
-        double feePrice = computeFeeSMOImpl.getFeePrice(feeDto);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
+
+        Double feePrice = Double.parseDouble(feePriceAll.get("feePrice").toString());
 
         BigDecimal totalRecDec = new BigDecimal(businessPayFeeDetail.getDouble("receivedAmount"));
         //每月平均值
