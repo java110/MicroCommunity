@@ -319,7 +319,7 @@
             AND ppr.status_cd = '0'
             )
         </if>
-        order by t.m_id desc
+        order by t.seq
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
