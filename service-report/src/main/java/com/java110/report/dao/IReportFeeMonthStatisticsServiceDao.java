@@ -302,4 +302,27 @@ public interface IReportFeeMonthStatisticsServiceDao {
     List<Map> queryPayFeeDeposit(Map beanCovertMap);
 
     List<Map> queryFeeDepositAmount(Map beanCovertMap);
+
+    Map queryReportFeeSummaryMajor(Map beanCovertMap);
+
+    Map queryReportFloorUnitFeeSummaryMajor(Map beanCovertMap);
+
+    Map queryFeeBreakdownMajor(Map beanCovertMap);
+
+    Map queryOweFeeDetailMajor(Map beanCovertMap);
+
+    int queryHuaningOweFeeCount(Map beanCovertMap);
+
+    List<Map> queryHuaningOweFee(Map beanCovertMap);
+
+    int queryHuaningPayFeeCount(Map paramInfo);
+
+    List<Map> queryHuaningPayFee(Map beanCovertMap);
+    int queryHuaningPayFeeTwoCount(Map paramInfo);
+
+    List<Map> queryHuaningPayFeeTwo(Map beanCovertMap);
+
+    int queryHuaningOweFeeDetailCount(Map paramInfo);
+
+    List<Map> queryHuaningOweFeeDetail(Map beanCovertMap);
 }

@@ -1,46 +1,28 @@
 {
   "autoMove": true,
-  "id": "titleId",
-  "name": "reportInfoSettingTitle",
-  "desc": "进出上报题目设置",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "report",
-  "tableName": "report_info_setting_title",
+  "id": "xmlId",
+  "name": "oaWorkflowXml",
+  "desc": "OA流程图",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "oa",
+  "tableName": "oa_workflow_xml",
   "param": {
-    "titleId": "title_id",
-    "settingId": "setting_id",
-    "title": "title",
-    "titleType": "title_type",
-    "seq": "seq",
-    "communityId": "community_id",
-    "createTime": "create_time",
+    "xmlId": "xml_id",
+    "flowId": "flow_id",
+    "storeId": "store_id",
+    "bpmnXml": "bpmn_xml",
+    "svgXml": "svg_xml",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "titleId",
-      "msg": "合同ID不能为空"
+      "code": "flowId",
+      "msg": "流程不能为空"
     },
     {
-      "code": "settingId",
-      "msg": "商户ID不能为空"
-    },
-    {
-      "code": "title",
-      "msg": "用户规格不能为空"
-    },
-    {
-      "code": "titleType",
-      "msg": "用户规格不能为空"
-    },
-    {
-      "code": "seq",
-      "msg": "用户规格不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "用户规格不能为空"
+      "code": "bpmnXml",
+      "msg": "流程图不能为空"
     }
   ]
 }

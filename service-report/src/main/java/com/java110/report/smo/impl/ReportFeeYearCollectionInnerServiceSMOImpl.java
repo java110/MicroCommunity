@@ -167,6 +167,16 @@ public class ReportFeeYearCollectionInnerServiceSMOImpl extends BaseServiceSMO i
         return reportFeeYearCollectionServiceDaoImpl.queryReportFeeYearCollectionsCount(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionDto));
     }
 
+    @Override
+    public List<Map> getReportFeeYearCollectionInfo(@RequestBody Map beanCovertMap) {
+        return reportFeeYearCollectionServiceDaoImpl.getReportFeeYearCollectionInfo(beanCovertMap);
+    }
+
+    @Override
+    public void saveReportFeeYearCollectionInfo(@RequestBody Map beanCovertMap) {
+         reportFeeYearCollectionServiceDaoImpl.saveReportFeeYearCollectionInfo(beanCovertMap);
+    }
+
     public IReportFeeYearCollectionServiceDao getReportFeeYearCollectionServiceDaoImpl() {
         return reportFeeYearCollectionServiceDaoImpl;
     }

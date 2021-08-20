@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IReportFeeMonthStatisticsInnerServiceSMO
@@ -75,6 +76,15 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     List<ReportFeeMonthStatisticsDto> queryReportFeeSummary(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
+     * 查询费用汇总表 大计
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryReportFeeSummaryMajor", method = RequestMethod.POST)
+    ReportFeeMonthStatisticsDto queryReportFeeSummaryMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
      * 查询费用汇总表个数
      *
      * @param reportFeeMonthStatisticsDto
@@ -91,6 +101,9 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryReportFloorUnitFeeSummary", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryReportFloorUnitFeeSummary(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    @RequestMapping(value = "/queryReportFloorUnitFeeSummaryMajor", method = RequestMethod.POST)
+    ReportFeeMonthStatisticsDto queryReportFloorUnitFeeSummaryMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
      * 查询费用汇总表个数
@@ -109,6 +122,9 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeeBreakdown", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryFeeBreakdown(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    @RequestMapping(value = "/queryFeeBreakdownMajor", method = RequestMethod.POST)
+    ReportFeeMonthStatisticsDto queryFeeBreakdownMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
      * 查询费用汇总表个数
@@ -173,6 +189,8 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     @RequestMapping(value = "/queryOweFeeDetail", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryOweFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
+    @RequestMapping(value = "/queryOweFeeDetailMajor", method = RequestMethod.POST)
+    ReportFeeMonthStatisticsDto queryOweFeeDetailMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
     /**
      * 查询费用汇总表个数
      *
@@ -334,4 +352,39 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeeDepositAmount", method = RequestMethod.POST)
     List<ReportDeposit> queryFeeDepositAmount(@RequestBody ReportDeposit reportDeposit);
+
+
+    /**
+     * 查询华宁物业 欠费总数
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryHuaningOweFeeCount", method = RequestMethod.POST)
+    int queryHuaningOweFeeCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询华宁物业 欠费明细 按楼栋 group by
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryHuaningOweFee", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryHuaningOweFee(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    @RequestMapping(value = "/queryHuaningPayFeeCount", method = RequestMethod.POST)
+    int queryHuaningPayFeeCount(@RequestBody Map paramInfo);
+
+    @RequestMapping(value = "/queryHuaningPayFee", method = RequestMethod.POST)
+    List<Map> queryHuaningPayFee(@RequestBody Map paramInfo);
+
+    @RequestMapping(value = "/queryHuaningPayFeeTwoCount", method = RequestMethod.POST)
+    int queryHuaningPayFeeTwoCount(@RequestBody Map paramInfo);
+
+    @RequestMapping(value = "/queryHuaningPayFeeTwo", method = RequestMethod.POST)
+    List<Map> queryHuaningPayFeeTwo(@RequestBody Map paramInfo);
+
+    @RequestMapping(value = "/queryHuaningOweFeeDetailCount", method = RequestMethod.POST)
+    int queryHuaningOweFeeDetailCount(@RequestBody Map paramInfo);
+
+    @RequestMapping(value = "/queryHuaningOweFeeDetail", method = RequestMethod.POST)
+    List<Map> queryHuaningOweFeeDetail(@RequestBody Map paramInfo);
 }

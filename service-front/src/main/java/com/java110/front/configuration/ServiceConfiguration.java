@@ -48,6 +48,10 @@ public class ServiceConfiguration {
         exclusions.append("/app/activitiesType/queryActivitiesType,");//查询大类
         exclusions.append("/app/product/queryProductLabel,");//查询大类
         exclusions.append("/app/loginStaffWechatAuth,");//查询大类
+        exclusions.append("/app/reportInfoSetting/queryReportInfoSetting,");//查询疫情
+        exclusions.append("/app/reportInfoSettingTitle/querySettingTitle,");//查询疫情问卷详情
+        exclusions.append("/app/reportInfoBackCity/saveReportInfoBackCity,");//返省人员信息上报
+        exclusions.append("/app/reportInfoAnswerValue/saveReportInfoAnswerValue,");//保存疫情问卷
         exclusions.append("/app/staffAuth");//查询大类
 
 

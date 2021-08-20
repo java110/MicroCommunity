@@ -3,6 +3,7 @@ package com.java110.intf.common;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.workflow.WorkflowAuditInfoDto;
 import com.java110.dto.workflow.WorkflowDto;
+import com.java110.dto.workflow.WorkflowModelDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,4 +62,14 @@ public interface IWorkflowInnerServiceSMO {
      */
     @RequestMapping(value = "/queryWorkflowAuditHistory", method = RequestMethod.POST)
     List<WorkflowAuditInfoDto> queryWorkflowAuditHistory(@RequestBody WorkflowAuditInfoDto workflowAuditInfoDto);
+
+    /**
+     * 创建模型
+     * @param workflowModelDto
+     * @return
+     */
+    @RequestMapping(value = "/createModel", method = RequestMethod.POST)
+    WorkflowModelDto createModel(@RequestBody WorkflowModelDto workflowModelDto);
+
+
 }

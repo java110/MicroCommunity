@@ -1,23 +1,34 @@
 package com.java110.common.smo.impl;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.java110.common.dao.IWorkflowServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.common.IWorkflowInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowAuditInfoDto;
 import com.java110.dto.workflow.WorkflowDto;
+import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.dto.workflow.WorkflowStepDto;
 import com.java110.dto.workflow.WorkflowStepStaffDto;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.bpmn.BpmnAutoLayout;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.EndEvent;
+import org.activiti.bpmn.model.ExclusiveGateway;
+import org.activiti.bpmn.model.FlowNode;
+import org.activiti.bpmn.model.ParallelGateway;
 import org.activiti.bpmn.model.Process;
-import org.activiti.bpmn.model.*;
+import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.bpmn.model.StartEvent;
+import org.activiti.bpmn.model.UserTask;
+import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricActivityInstanceQuery;
@@ -25,14 +36,22 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.task.Comment;
 import org.activiti.image.ProcessDiagramGenerator;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -70,6 +89,9 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public List<WorkflowDto> queryWorkflows(@RequestBody WorkflowDto workflowDto) {
@@ -536,9 +558,6 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
             // 需要转换成HistoricActivityInstance
             HistoricActivityInstance activityInstance = (HistoricActivityInstance) iterator
                     .next();
-//            if (activityInstance.getEndTime() == null) {
-//                continue;
-//            }
 
             tmpWorkflowAuditInfoDto = new WorkflowAuditInfoDto();
             tmpWorkflowAuditInfoDto.setAuditName(activityInstance.getActivityName());
@@ -569,6 +588,49 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
         }
         return workflowAuditInfoDtos;
     }
+
+    @Override
+    public WorkflowModelDto createModel(@RequestBody  WorkflowModelDto workflowModelDto) {
+        logger.info("创建模型入参name：{},key:{}", workflowModelDto.getName(), workflowModelDto.getKey());
+        Model model = repositoryService.newModel();
+        ObjectNode modelNode = objectMapper.createObjectNode();
+        modelNode.put(ModelDataJsonConstants.MODEL_NAME, workflowModelDto.getName());
+        modelNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, "");
+        modelNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
+        model.setName(workflowModelDto.getName());
+        model.setKey(workflowModelDto.getKey());
+        model.setMetaInfo(modelNode.toString());
+        repositoryService.saveModel(model);
+        createObjectNode(model.getId());
+        logger.info("创建模型结束，返回模型ID：{}", model.getId());
+        workflowModelDto.setModelId(model.getId());
+        return workflowModelDto;
+    }
+
+
+    /**
+     * 创建模型时完善ModelEditorSource
+     *
+     * @param modelId
+     */
+    @SuppressWarnings("deprecation")
+    private void createObjectNode(String modelId) {
+        logger.info("创建模型完善ModelEditorSource入参模型ID：{}", modelId);
+        ObjectNode editorNode = objectMapper.createObjectNode();
+        editorNode.put("id", "canvas");
+        editorNode.put("resourceId", "canvas");
+        ObjectNode stencilSetNode = objectMapper.createObjectNode();
+        stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
+        editorNode.put("stencilset", stencilSetNode);
+        try {
+            repositoryService.addModelEditorSource(modelId, editorNode.toString().getBytes("utf-8"));
+        } catch (Exception e) {
+            logger.info("创建模型时完善ModelEditorSource服务异常：{}", e);
+        }
+        logger.info("创建模型完善ModelEditorSource结束");
+    }
+
+
 
     /**
      * @param processInstanceId

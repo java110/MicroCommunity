@@ -103,6 +103,14 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     }
 
     @Override
+    public ReportFeeMonthStatisticsDto queryReportFeeSummaryMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatistics = BeanConvertUtil.covertBean(
+                reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryMajor(
+                        BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+        return reportFeeMonthStatistics;
+    }
+
+    @Override
     public int queryReportFloorUnitFeeSummaryCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         return reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
     }
@@ -120,6 +128,13 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummary(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
 
         return reportFeeMonthStatisticss;
+    }
+    @Override
+    public ReportFeeMonthStatisticsDto queryReportFloorUnitFeeSummaryMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatistics = BeanConvertUtil.covertBean(
+                reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryMajor(
+                        BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+        return reportFeeMonthStatistics;
     }
 
     @Override
@@ -140,6 +155,14 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdown(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
 
         return reportFeeMonthStatisticss;
+    }
+
+    @Override
+    public ReportFeeMonthStatisticsDto queryFeeBreakdownMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatistics = BeanConvertUtil.covertBean(
+                reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownMajor(
+                        BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+        return reportFeeMonthStatistics;
     }
 
     @Override
@@ -206,6 +229,14 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetail(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
 
         return reportFeeMonthStatisticss;
+    }
+
+    @Override
+    public ReportFeeMonthStatisticsDto queryOweFeeDetailMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        ReportFeeMonthStatisticsDto reportFeeMonthStatistics = BeanConvertUtil.covertBean(
+                reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetailMajor(
+                        BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+        return reportFeeMonthStatistics;
     }
 
     @Override
@@ -426,6 +457,70 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     public List<ReportDeposit> queryFeeDepositAmount(@RequestBody ReportDeposit reportDeposit) {
         List<ReportDeposit> deposits = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryFeeDepositAmount(BeanConvertUtil.beanCovertMap(reportDeposit)),
                 ReportDeposit.class);
+        return deposits;
+    }
+
+    @Override
+    public int queryHuaningOweFeeCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+    }
+
+    @Override
+    public List<ReportFeeMonthStatisticsDto> queryHuaningOweFee(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        int page = reportFeeMonthStatisticsDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportFeeMonthStatisticsDto.setPage((page - 1) * reportFeeMonthStatisticsDto.getRow());
+        }
+        List<ReportFeeMonthStatisticsDto> deposits = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFee(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
+                ReportFeeMonthStatisticsDto.class);
+        return deposits;
+    }
+
+    @Override
+    public int queryHuaningPayFeeCount(@RequestBody Map paramInfo) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCount(paramInfo);
+    }
+
+    @Override
+    public List<Map> queryHuaningPayFee(@RequestBody Map paramInfo) {
+        int page = (int)paramInfo.get("page");
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
+        }
+        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee(paramInfo);
+        return deposits;
+    }
+    @Override
+    public int queryHuaningPayFeeTwoCount(@RequestBody Map paramInfo) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwoCount(paramInfo);
+    }
+
+    @Override
+    public List<Map> queryHuaningPayFeeTwo(@RequestBody Map paramInfo) {
+        int page = (int)paramInfo.get("page");
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
+        }
+        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwo(paramInfo);
+        return deposits;
+    }
+
+    @Override
+    public int queryHuaningOweFeeDetailCount(@RequestBody Map paramInfo) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetailCount(paramInfo);
+    }
+
+    @Override
+    public List<Map> queryHuaningOweFeeDetail(@RequestBody Map paramInfo) {
+        int page = (int)paramInfo.get("page");
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
+        }
+        List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetail(paramInfo);
         return deposits;
     }
 

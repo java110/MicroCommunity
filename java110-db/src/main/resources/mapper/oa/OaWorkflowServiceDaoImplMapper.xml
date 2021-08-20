@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="oaWorkflowServiceDaoImpl">
+
+
+    <!-- 保存OA工作流信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOaWorkflowInfo" parameterType="Map">
+        insert into oa_workflow(
+        describle,model_id,flow_key,store_id,flow_id,flow_name,flow_type,process_definition_key,state
+        ) values (
+        #{describle},#{modelId},#{flowKey},#{storeId},#{flowId},#{flowName},#{flowType},#{processDefinitionKey},#{state}
+        )
+    </insert>
+
+
+    <!-- 查询OA工作流信息 add by wuxw 2018-07-03 -->
+    <select id="getOaWorkflowInfo" parameterType="Map" resultType="Map">
+        select t.describle,t.model_id,t.model_id modelId,t.status_cd,t.status_cd statusCd,t.flow_key,t.flow_key
+        flowKey,t.store_id,t.store_id storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name
+        flowName,t.flow_type,t.flow_type flowType,t.process_definition_key,t.process_definition_key processDefinitionKey,
+        t.create_time createTime,t.state
+        from oa_workflow t
+        where 1 =1
+        <if test="describle !=null and describle != ''">
+            and t.describle= #{describle}
+        </if>
+        <if test="modelId !=null and modelId != ''">
+            and t.model_id= #{modelId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="flowKey !=null and flowKey != ''">
+            and t.flow_key= #{flowKey}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="flowName !=null and flowName != ''">
+            and t.flow_name= #{flowName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="flowType !=null and flowType != ''">
+            and t.flow_type= #{flowType}
+        </if>
+        <if test="processDefinitionKey !=null and processDefinitionKey != ''">
+            and t.process_definition_key= #{processDefinitionKey}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改OA工作流信息 add by wuxw 2018-07-03 -->
+    <update id="updateOaWorkflowInfo" parameterType="Map">
+        update oa_workflow t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="describle !=null and describle != ''">
+            , t.describle= #{describle}
+        </if>
+        <if test="modelId !=null and modelId != ''">
+            , t.model_id= #{modelId}
+        </if>
+        <if test="flowKey !=null and flowKey != ''">
+            , t.flow_key= #{flowKey}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+
+        <if test="flowName !=null and flowName != ''">
+            , t.flow_name= #{flowName}
+        </if>
+        <if test="flowType !=null and flowType != ''">
+            , t.flow_type= #{flowType}
+        </if>
+        <if test="processDefinitionKey !=null and processDefinitionKey != ''">
+            , t.process_definition_key= #{processDefinitionKey}
+        </if>
+        where 1=1
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询OA工作流数量 add by wuxw 2018-07-03 -->
+    <select id="queryOaWorkflowsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from oa_workflow t
+        where 1 =1
+        <if test="describle !=null and describle != ''">
+            and t.describle= #{describle}
+        </if>
+        <if test="modelId !=null and modelId != ''">
+            and t.model_id= #{modelId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="flowKey !=null and flowKey != ''">
+            and t.flow_key= #{flowKey}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="flowName !=null and flowName != ''">
+            and t.flow_name= #{flowName}
+        </if>
+        <if test="flowType !=null and flowType != ''">
+            and t.flow_type= #{flowType}
+        </if>
+        <if test="processDefinitionKey !=null and processDefinitionKey != ''">
+            and t.process_definition_key= #{processDefinitionKey}
+        </if>
+
+
+    </select>
+
+</mapper>
