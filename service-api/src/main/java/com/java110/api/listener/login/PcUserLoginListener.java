@@ -101,6 +101,7 @@ public class PcUserLoginListener extends AbstractServiceApiDataFlowListener {
         userDto.setLevelCds(new String[]{UserDto.LEVEL_CD_ADMIN, UserDto.LEVEL_CD_STAFF});
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
         if (userDtos == null || userDtos.size() < 1) {
+            userDto.setName("");
             userDto.setTel(paramInJson.getString("username"));
             userDtos = userInnerServiceSMOImpl.getUsers(userDto);
         }
