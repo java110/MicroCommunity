@@ -15,6 +15,7 @@ import java.util.Date;
  **/
 public class OaWorkflowFormDto extends PageDto implements Serializable {
 
+    public static final String TABLE_PRE = "oa_";
     private String formId;
     private String formJson;
     private String storeId;

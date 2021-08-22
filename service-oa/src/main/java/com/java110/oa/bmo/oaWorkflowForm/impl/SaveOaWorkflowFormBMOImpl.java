@@ -3,6 +3,7 @@ package com.java110.oa.bmo.oaWorkflowForm.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.ISaveOaWorkflowFormBMO;
@@ -46,8 +47,12 @@ public class SaveOaWorkflowFormBMOImpl implements ISaveOaWorkflowFormBMO {
         oaWorkflowFormPo.setFormId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_formId));
         //设置版本
         oaWorkflowFormPo.setVersion(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
-
-        oaWorkflowFormPo.setTableName(PinYinUtil.getFirstSpell(oaWorkflowDtos.get(0).getFlowName() + oaWorkflowFormPo.getVersion()));
+        String tableName = PinYinUtil.getFirstSpell(oaWorkflowDtos.get(0).getFlowName() + oaWorkflowFormPo.getVersion());
+        oaWorkflowFormPo.setTableName(OaWorkflowFormDto.TABLE_PRE + tableName);
+        if (oaWorkflowFormPo.getTableName().length() > 60) { // 表名超长处理
+            tableName = tableName.substring(tableName.length() - 30);
+            oaWorkflowFormPo.setTableName(OaWorkflowFormDto.TABLE_PRE + tableName);
+        }
 
         int flag = oaWorkflowFormInnerServiceSMOImpl.saveOaWorkflowForm(oaWorkflowFormPo);
 
