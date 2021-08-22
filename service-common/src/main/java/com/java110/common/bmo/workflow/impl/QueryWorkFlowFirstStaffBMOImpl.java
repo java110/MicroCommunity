@@ -216,10 +216,10 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         Assert.listOnlyOne(oaWorkflowFormDtos, "未设置表单");
         //查询表是否存在
 
-        int count = oaWorkflowFormInnerServiceSMOImpl.hasTable(oaWorkflowFormDtos.get(0).getTableName());
-        if (count > 0) { // 已经部署过不用再部署
-            return;
-        }
+//        int count = oaWorkflowFormInnerServiceSMOImpl.hasTable(oaWorkflowFormDtos.get(0).getTableName());
+//        if (count > 0) { // 已经部署过不用再部署
+//            return;
+//        }
 
         String formJson = oaWorkflowFormDtos.get(0).getFormJson();
 
@@ -229,7 +229,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
         JSONArray components = form.getJSONArray("components");
         JSONObject component = null;
-        StringBuffer sql = new StringBuffer("create table ");
+        StringBuffer sql = new StringBuffer("create table if not exists ");
         sql.append(oaWorkflowFormDtos.get(0).getTableName());
         sql.append(" (");
         boolean isVarchar = false;
@@ -291,7 +291,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         }
         sql.append(" )");
         logger.debug("部署表单sql" + sql.toString());
-        count = oaWorkflowFormInnerServiceSMOImpl.createTable(sql.toString());
+        int count = oaWorkflowFormInnerServiceSMOImpl.createTable(sql.toString());
         if (count < 1) { // 已经部署过不用再部署
             throw new IllegalArgumentException("部署表单失败");
         }
