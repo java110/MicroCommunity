@@ -6,6 +6,7 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.ISaveOaWorkflowFormBMO;
+import com.java110.po.oaWorkflow.OaWorkflowPo;
 import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -37,7 +38,7 @@ public class SaveOaWorkflowFormBMOImpl implements ISaveOaWorkflowFormBMO {
         //查询 流程存在不存在
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setFlowId(oaWorkflowFormPo.getFlowId());
-        oaWorkflowDto.setStoreId(oaWorkflowFormPo.getFormId());
+        oaWorkflowDto.setStoreId(oaWorkflowFormPo.getStoreId());
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
 
         Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
@@ -46,15 +47,23 @@ public class SaveOaWorkflowFormBMOImpl implements ISaveOaWorkflowFormBMO {
         //设置版本
         oaWorkflowFormPo.setVersion(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
 
-        oaWorkflowFormPo.setTableName(PinYinUtil.getFirstSpell(oaWorkflowDtos.get(0).getFlowName()+oaWorkflowFormPo.getVersion()));
+        oaWorkflowFormPo.setTableName(PinYinUtil.getFirstSpell(oaWorkflowDtos.get(0).getFlowName() + oaWorkflowFormPo.getVersion()));
 
         int flag = oaWorkflowFormInnerServiceSMOImpl.saveOaWorkflowForm(oaWorkflowFormPo);
 
-        if (flag > 0) {
-            return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+        if (flag < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
-        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
+        oaWorkflowPo.setFlowId(oaWorkflowFormPo.getFlowId());
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
+        flag = oaWorkflowInnerServiceSMOImpl.updateOaWorkflow(oaWorkflowPo);
+        if (flag < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        }
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+
     }
 
 }

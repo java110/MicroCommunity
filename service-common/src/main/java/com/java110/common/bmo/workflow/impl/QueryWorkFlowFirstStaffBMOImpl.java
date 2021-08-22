@@ -257,6 +257,14 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             throw new ActivitiException("Error saving model", e);
         }
 
+        OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
+        oaWorkflowPo.setFlowId(oaWorkflowDtos.get(0).getFlowId());
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
+        flag = oaWorkflowInnerServiceSMOImpl.updateOaWorkflow(oaWorkflowPo);
+        if (flag < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        }
+
         return ResultVo.success();
     }
 
