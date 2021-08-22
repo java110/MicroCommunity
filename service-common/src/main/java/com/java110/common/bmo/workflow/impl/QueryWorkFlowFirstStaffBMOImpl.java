@@ -273,7 +273,8 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
                     sql.append("(");
                     sql.append(validate.getIntValue("maxLength"));
                     sql.append(") ");
-                } else if (isVarchar) {
+                }
+                if (isVarchar && !validate.containsKey("maxLength")) {
                     sql.append("(64) ");
                 }
                 if (validate.containsKey("required") && validate.getBoolean("required")) {
@@ -283,15 +284,11 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
             sql.append(" comment '");
             sql.append(component.getString("label"));
-            sql.append("'");
-
-            if (componentIndex != components.size() - 1) {
-                sql.append(",");
-            }
+            sql.append("',");
         }
-        sql.append(" )");
-        logger.debug("部署表单sql" + sql.toString());
-        int count = oaWorkflowFormInnerServiceSMOImpl.createTable(sql.toString());
+        String sqlStr = sql.toString().substring(0,sql.toString().length()-1) + ")";
+        logger.debug("部署表单sql" + sqlStr);
+        int count = oaWorkflowFormInnerServiceSMOImpl.createTable(sqlStr);
         if (count < 1) { // 已经部署过不用再部署
             throw new IllegalArgumentException("部署表单失败");
         }
