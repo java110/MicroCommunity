@@ -75,7 +75,13 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
             }
             if (!noBindOwnerResponseMessage.contains("wAppId=")) {
                 if (noBindOwnerResponseMessage.indexOf("W_APP_ID") > 0) {
-                    noBindOwnerResponseMessage = noBindOwnerResponseMessage.replace("W_APP_ID","wAppId=" +WechatFactory.getAppId(wId));
+                    noBindOwnerResponseMessage = noBindOwnerResponseMessage.replace("W_APP_ID", "wAppId=" + WechatFactory.getAppId(wId));
+                } else {
+                    if (noBindOwnerResponseMessage.indexOf("?") > -1) {
+                        noBindOwnerResponseMessage += ("&wAppId=" + WechatFactory.getAppId(wId));
+                    } else {
+                        noBindOwnerResponseMessage += ("?wAppId=" + WechatFactory.getAppId(wId));
+                    }
                 }
             }
 
