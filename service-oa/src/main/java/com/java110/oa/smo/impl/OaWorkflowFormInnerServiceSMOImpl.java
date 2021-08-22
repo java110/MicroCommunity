@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -71,6 +73,27 @@ public class OaWorkflowFormInnerServiceSMOImpl extends BaseServiceSMO implements
     @Override
     public int queryOaWorkflowFormsCount(@RequestBody OaWorkflowFormDto oaWorkflowFormDto) {
         return oaWorkflowFormServiceDaoImpl.queryOaWorkflowFormsCount(BeanConvertUtil.beanCovertMap(oaWorkflowFormDto));
+    }
+
+    @Override
+    public int hasTable(@RequestBody String table) {
+        Map info = new HashMap();
+        info.put("tableName", table);
+        List<Map> rows = oaWorkflowFormServiceDaoImpl.hasTable(info);
+        if (rows == null) {
+            return 0;
+        }
+
+        return rows.size();
+    }
+
+    @Override
+    public int createTable(@RequestBody String sql) {
+        Map info = new HashMap();
+        info.put("sql", sql);
+        int flag = oaWorkflowFormServiceDaoImpl.createTable(info);
+
+        return flag;
     }
 
     public IOaWorkflowFormServiceDao getOaWorkflowFormServiceDaoImpl() {

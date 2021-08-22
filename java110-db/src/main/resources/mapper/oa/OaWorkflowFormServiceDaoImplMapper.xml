@@ -107,4 +107,15 @@
 
     </select>
 
+    <!-- 查询OA表单数量 add by wuxw 2018-07-03 -->
+    <select id="hasTable" parameterType="Map" resultType="Map">
+        select * from information_schema.tables where table_name = #{tableName}
+    </select>
+
+    <update id="createTable" parameterType="Map">
+        ${sql}
+    </update>
+
+
+
 </mapper>

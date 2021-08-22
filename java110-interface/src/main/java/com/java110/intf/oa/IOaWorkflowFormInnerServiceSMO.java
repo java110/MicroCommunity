@@ -50,4 +50,16 @@ public interface IOaWorkflowFormInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOaWorkflowFormsCount", method = RequestMethod.POST)
     int queryOaWorkflowFormsCount(@RequestBody OaWorkflowFormDto oaWorkflowFormDto);
+
+    /**
+     *  是否有表
+     *
+     * @param table 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/hasTable", method = RequestMethod.POST)
+    int hasTable(@RequestBody String table);
+
+    @RequestMapping(value = "/createTable", method = RequestMethod.POST)
+    int createTable(@RequestBody String sql);
 }

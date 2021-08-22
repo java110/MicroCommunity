@@ -58,4 +58,12 @@ public interface IOaWorkflowFormServiceDao {
      */
     int queryOaWorkflowFormsCount(Map info);
 
+    /**
+     * 查询是否有表
+     * @param info
+     * @return
+     */
+    List<Map> hasTable(Map info);
+
+    int createTable(Map info);
 }

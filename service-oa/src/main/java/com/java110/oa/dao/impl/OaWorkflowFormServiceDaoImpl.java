@@ -94,5 +94,26 @@ public class OaWorkflowFormServiceDaoImpl extends BaseServiceDao implements IOaW
         return Integer.parseInt(businessOaWorkflowFormInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询是否有表
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> hasTable(Map info) {
+        List<Map> rows = sqlSessionTemplate.selectList("oaWorkflowFormServiceDaoImpl.hasTable", info);
+        return  rows;
+    }
+    /**
+     * 查询是否有表
+     * @param info
+     * @return
+     */
+    @Override
+    public int createTable(Map info) {
+        int flag = sqlSessionTemplate.update("oaWorkflowFormServiceDaoImpl.createTable", info);
+        return  flag;
+    }
+
 
 }

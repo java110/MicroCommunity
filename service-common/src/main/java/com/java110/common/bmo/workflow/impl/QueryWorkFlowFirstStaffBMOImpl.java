@@ -1,5 +1,7 @@
 package com.java110.common.bmo.workflow.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.java110.common.bmo.workflow.IQueryWorkFlowFirstStaffBMO;
@@ -9,10 +11,12 @@ import com.java110.common.dao.IWorkflowStepStaffServiceDao;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.intf.user.IOrgInnerServiceSMO;
@@ -24,7 +28,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.activiti.editor.constants.ModelDataJsonConstants;
-import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
@@ -68,6 +71,9 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
     @Autowired
     private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowFormInnerServiceSMO oaWorkflowFormInnerServiceSMOImpl;
 
     @Autowired
     private RepositoryService repositoryService;
@@ -146,14 +152,13 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
         Assert.listOnlyOne(oaWorkflowDtos, "未包含流程");
 
+        //表单 部署
+        deployForm(oaWorkflowDtos.get(0));
+
         String deploymentid = "";
         try {
             Model modelData = repositoryService.getModel(workflowModelDto.getModelId());
             byte[] bpmnBytes = null;
-            //JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(workflowModelDto.getModelId()));
-            //BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
-            //BpmnModel model = jsonConverter.convertToBpmnModel(editorNode);
-            //bpmnBytes = new BpmnXMLConverter().convertToXML(model);
             bpmnBytes = repositoryService.getModelEditorSource(workflowModelDto.getModelId());
             String encoded = Base64Convert.byteToBase64(bpmnBytes);
             byte[] decoded = Base64Convert.base64ToByte(encoded);
@@ -190,7 +195,106 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 //            }
 //            deployHistoryRepository.update(deployHistoryEntity);
 //        }
+
+
         return ResultVo.success();
+    }
+
+    /**
+     * 部署表单
+     *
+     * @param oaWorkflowDto
+     */
+    private void deployForm(OaWorkflowDto oaWorkflowDto) {
+        if (StringUtil.isEmpty(oaWorkflowDto.getCurFormId())) {
+            throw new IllegalArgumentException("未设置表单");
+        }
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setFormId(oaWorkflowDto.getCurFormId());
+        oaWorkflowFormDto.setStoreId(oaWorkflowDto.getStoreId());
+        List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
+        Assert.listOnlyOne(oaWorkflowFormDtos, "未设置表单");
+        //查询表是否存在
+
+        int count = oaWorkflowFormInnerServiceSMOImpl.hasTable(oaWorkflowFormDtos.get(0).getTableName());
+        if (count > 0) { // 已经部署过不用再部署
+            return;
+        }
+
+        String formJson = oaWorkflowFormDtos.get(0).getFormJson();
+
+        Assert.isJsonObject(formJson, "表单设计出错，请重新设计");
+
+        JSONObject form = JSONObject.parseObject(formJson);
+
+        JSONArray components = form.getJSONArray("components");
+        JSONObject component = null;
+        StringBuffer sql = new StringBuffer("create table ");
+        sql.append(oaWorkflowFormDtos.get(0).getTableName());
+        sql.append(" (");
+        boolean isVarchar = false;
+        JSONObject validate = null;
+        for (int componentIndex = 0; componentIndex < components.size(); componentIndex++) {
+            component = components.getJSONObject(componentIndex);
+            if ("text".equals(component.getString("type"))
+                    || "button".equals(component.getString("type"))) {
+                continue;
+            }
+            isVarchar = false;
+            sql.append(component.getString("key"));
+            sql.append(" ");
+            if ("number".equals(component.getString("type"))) {
+                sql.append(" bigint");
+            } else if ("textfield".equals(component.getString("type"))) {
+                sql.append(" varchar");
+                isVarchar = true;
+            } else if ("checkbox".equals(component.getString("type"))) {
+                sql.append(" varchar");
+                isVarchar = true;
+            } else if ("radio".equals(component.getString("type"))) {
+                sql.append(" varchar");
+                isVarchar = true;
+            } else if ("select".equals(component.getString("type"))) {
+                sql.append(" varchar");
+                isVarchar = true;
+            } else if ("textarea".equals(component.getString("type"))) {
+                sql.append(" longtext");
+            } else if ("textdate".equals(component.getString("type"))) {
+                sql.append(" date");
+            } else if ("textdatetime".equals(component.getString("type"))) {
+                sql.append(" time");
+            } else {
+                throw new IllegalArgumentException("不支持的类型");
+            }
+
+            if (component.containsKey("validate")) {
+                validate = component.getJSONObject("validate");
+                if (isVarchar && validate.containsKey("maxLength")) {
+                    sql.append("(");
+                    sql.append(validate.getIntValue("maxLength"));
+                    sql.append(") ");
+                } else if (isVarchar) {
+                    sql.append("(64) ");
+                }
+                if (validate.containsKey("required") && validate.getBoolean("required")) {
+                    sql.append(" not null ");
+                }
+            }
+
+            sql.append(" comment '");
+            sql.append(component.getString("label"));
+            sql.append("'");
+
+            if (componentIndex != components.size() - 1) {
+                sql.append(",");
+            }
+        }
+        sql.append(" )");
+        logger.debug("部署表单sql" + sql.toString());
+        count = oaWorkflowFormInnerServiceSMOImpl.createTable(sql.toString());
+        if (count < 1) { // 已经部署过不用再部署
+            throw new IllegalArgumentException("部署表单失败");
+        }
     }
 
     @Override
