@@ -2,16 +2,22 @@ package com.java110.oa.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.oa.bmo.oaWorkflow.IDeleteOaWorkflowBMO;
 import com.java110.oa.bmo.oaWorkflow.IGetOaWorkflowBMO;
 import com.java110.oa.bmo.oaWorkflow.ISaveOaWorkflowBMO;
 import com.java110.oa.bmo.oaWorkflow.IUpdateOaWorkflowBMO;
+import com.java110.oa.bmo.oaWorkflowForm.IDeleteOaWorkflowFormBMO;
+import com.java110.oa.bmo.oaWorkflowForm.IGetOaWorkflowFormBMO;
+import com.java110.oa.bmo.oaWorkflowForm.ISaveOaWorkflowFormBMO;
+import com.java110.oa.bmo.oaWorkflowForm.IUpdateOaWorkflowFormBMO;
 import com.java110.oa.bmo.oaWorkflowXml.IDeleteOaWorkflowXmlBMO;
 import com.java110.oa.bmo.oaWorkflowXml.IGetOaWorkflowXmlBMO;
 import com.java110.oa.bmo.oaWorkflowXml.ISaveOaWorkflowXmlBMO;
 import com.java110.oa.bmo.oaWorkflowXml.IUpdateOaWorkflowXmlBMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
+import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
 import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -42,6 +48,16 @@ public class OaWorkflowApi {
 
     @Autowired
     private IGetOaWorkflowXmlBMO getOaWorkflowXmlBMOImpl;
+
+    @Autowired
+    private ISaveOaWorkflowFormBMO saveOaWorkflowFormBMOImpl;
+    @Autowired
+    private IUpdateOaWorkflowFormBMO updateOaWorkflowFormBMOImpl;
+    @Autowired
+    private IDeleteOaWorkflowFormBMO deleteOaWorkflowFormBMOImpl;
+
+    @Autowired
+    private IGetOaWorkflowFormBMO getOaWorkflowFormBMOImpl;
 
     /**
      * 微信保存消息模板
@@ -112,7 +128,7 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflow", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflow(@RequestHeader(value = "store-id") String storeId,
-                                                  @RequestParam(value="flowId",required = false) String flowId,
+                                                  @RequestParam(value = "flowId", required = false) String flowId,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row) {
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
@@ -122,8 +138,6 @@ public class OaWorkflowApi {
         oaWorkflowDto.setFlowId(flowId);
         return getOaWorkflowBMOImpl.get(oaWorkflowDto);
     }
-
-
 
 
     /**
@@ -199,7 +213,7 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflowXml", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflowXml(@RequestHeader(value = "store-id") String storeId,
-                                                     @RequestParam(value="flowId") String flowId,
+                                                     @RequestParam(value = "flowId") String flowId,
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) {
         OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
@@ -208,5 +222,88 @@ public class OaWorkflowApi {
         oaWorkflowXmlDto.setStoreId(storeId);
         oaWorkflowXmlDto.setFlowId(flowId);
         return getOaWorkflowXmlBMOImpl.get(oaWorkflowXmlDto);
+    }
+
+    /**
+     * 微信保存消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /oaWorkflow/saveOaWorkflowForm
+     * @path /app/oaWorkflow/saveOaWorkflowForm
+     */
+    @RequestMapping(value = "/saveOaWorkflowForm", method = RequestMethod.POST)
+    public ResponseEntity<String> saveOaWorkflowForm(@RequestHeader(value = "store-id") String storeId,
+                                                     @RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "flowId", "请求报文中未包含flowId");
+        Assert.hasKeyAndValue(reqJson, "formJson", "请求报文中未包含formJson");
+
+
+        OaWorkflowFormPo oaWorkflowFormPo = BeanConvertUtil.covertBean(reqJson, OaWorkflowFormPo.class);
+        oaWorkflowFormPo.setStoreId(storeId);
+        return saveOaWorkflowFormBMOImpl.save(oaWorkflowFormPo);
+    }
+
+    /**
+     * 微信修改消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /oaWorkflow/updateOaWorkflowForm
+     * @path /app/oaWorkflow/updateOaWorkflowForm
+     */
+    @RequestMapping(value = "/updateOaWorkflowForm", method = RequestMethod.POST)
+    public ResponseEntity<String> updateOaWorkflowForm(@RequestHeader(value = "store-id") String storeId,
+                                                       @RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "flowId", "请求报文中未包含flowId");
+        Assert.hasKeyAndValue(reqJson, "formJson", "请求报文中未包含formJson");
+        Assert.hasKeyAndValue(reqJson, "formId", "formId不能为空");
+
+        OaWorkflowFormPo oaWorkflowFormPo = BeanConvertUtil.covertBean(reqJson, OaWorkflowFormPo.class);
+        oaWorkflowFormPo.setStoreId(storeId);
+        return updateOaWorkflowFormBMOImpl.update(oaWorkflowFormPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /oaWorkflow/deleteOaWorkflowForm
+     * @path /app/oaWorkflow/deleteOaWorkflowForm
+     */
+    @RequestMapping(value = "/deleteOaWorkflowForm", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteOaWorkflowForm(@RequestHeader(value = "store-id") String storeId,
+                                                       @RequestBody JSONObject reqJson) {
+
+        Assert.hasKeyAndValue(reqJson, "xmlId", "xmlId不能为空");
+
+
+        OaWorkflowFormPo oaWorkflowFormPo = BeanConvertUtil.covertBean(reqJson, OaWorkflowFormPo.class);
+        oaWorkflowFormPo.setStoreId(storeId);
+        return deleteOaWorkflowFormBMOImpl.delete(oaWorkflowFormPo);
+    }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /oaWorkflow/queryOaWorkflowForm
+     * @path /app/oaWorkflow/queryOaWorkflowForm
+     */
+    @RequestMapping(value = "/queryOaWorkflowForm", method = RequestMethod.GET)
+    public ResponseEntity<String> queryOaWorkflowForm(@RequestHeader(value = "store-id") String storeId,
+                                                      @RequestParam(value = "flowId", required = false) String flowId,
+                                                      @RequestParam(value = "page") int page,
+                                                      @RequestParam(value = "row") int row) {
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setPage(page);
+        oaWorkflowFormDto.setRow(row);
+        oaWorkflowFormDto.setStoreId(storeId);
+        oaWorkflowFormDto.setFlowId(flowId);
+        return getOaWorkflowFormBMOImpl.get(oaWorkflowFormDto);
     }
 }

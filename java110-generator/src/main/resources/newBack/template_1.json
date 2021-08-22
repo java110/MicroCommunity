@@ -1,18 +1,19 @@
 {
   "autoMove": true,
   "id": "xmlId",
-  "name": "oaWorkflowXml",
-  "desc": "OA流程图",
+  "name": "oaWorkflowForm",
+  "desc": "OA表单",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "oa",
-  "tableName": "oa_workflow_xml",
+  "tableName": "oa_workflow_form",
   "param": {
-    "xmlId": "xml_id",
+    "formId": "form_id",
     "flowId": "flow_id",
     "storeId": "store_id",
-    "bpmnXml": "bpmn_xml",
-    "svgXml": "svg_xml",
+    "formJson": "form_json",
+    "tableName": "table_name",
+    "version": "version",
     "statusCd": "status_cd"
   },
   "required": [
@@ -21,7 +22,7 @@
       "msg": "流程不能为空"
     },
     {
-      "code": "bpmnXml",
+      "code": "formJson",
       "msg": "流程图不能为空"
     }
   ]
