@@ -27,7 +27,7 @@ public class OaWorkflowDto extends PageDto implements Serializable {
     private String flowType;
     private String processDefinitionKey;
     private String state;
-
+    private String curFormId;
 
     private Date createTime;
 
@@ -121,5 +121,13 @@ public class OaWorkflowDto extends PageDto implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getCurFormId() {
+        return curFormId;
+    }
+
+    public void setCurFormId(String curFormId) {
+        this.curFormId = curFormId;
     }
 }

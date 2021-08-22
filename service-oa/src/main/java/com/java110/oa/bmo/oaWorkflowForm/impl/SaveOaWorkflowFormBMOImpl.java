@@ -58,6 +58,7 @@ public class SaveOaWorkflowFormBMOImpl implements ISaveOaWorkflowFormBMO {
         OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
         oaWorkflowPo.setFlowId(oaWorkflowFormPo.getFlowId());
         oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
+        oaWorkflowPo.setCurFormId(oaWorkflowFormPo.getFormId());
         flag = oaWorkflowInnerServiceSMOImpl.updateOaWorkflow(oaWorkflowPo);
         if (flag < 1) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");

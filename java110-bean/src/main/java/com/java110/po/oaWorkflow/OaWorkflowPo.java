@@ -14,6 +14,7 @@ public class OaWorkflowPo implements Serializable {
     private String flowType;
     private String state;
     private String processDefinitionKey;
+    private String curFormId;
 
     public String getDescrible() {
         return describle;
@@ -93,5 +94,14 @@ public class OaWorkflowPo implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+
+    public String getCurFormId() {
+        return curFormId;
+    }
+
+    public void setCurFormId(String curFormId) {
+        this.curFormId = curFormId;
     }
 }

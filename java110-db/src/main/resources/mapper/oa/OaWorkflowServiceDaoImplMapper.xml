@@ -20,7 +20,7 @@
         select t.describle,t.model_id,t.model_id modelId,t.status_cd,t.status_cd statusCd,t.flow_key,t.flow_key
         flowKey,t.store_id,t.store_id storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name
         flowName,t.flow_type,t.flow_type flowType,t.process_definition_key,t.process_definition_key processDefinitionKey,
-        t.create_time createTime,t.state
+        t.create_time createTime,t.state,t.cur_form_id curFormId
         from oa_workflow t
         where 1 =1
         <if test="describle !=null and describle != ''">
@@ -49,6 +49,9 @@
         </if>
         <if test="flowType !=null and flowType != ''">
             and t.flow_type= #{flowType}
+        </if>
+        <if test="curFormId !=null and curFormId != ''">
+            and t.cur_form_id= #{curFormId}
         </if>
         <if test="processDefinitionKey !=null and processDefinitionKey != ''">
             and t.process_definition_key= #{processDefinitionKey}
@@ -85,6 +88,9 @@
         </if>
         <if test="flowType !=null and flowType != ''">
             , t.flow_type= #{flowType}
+        </if>
+        <if test="curFormId !=null and curFormId != ''">
+            , t.cur_form_id= #{curFormId}
         </if>
         <if test="processDefinitionKey !=null and processDefinitionKey != ''">
             , t.process_definition_key= #{processDefinitionKey}
@@ -130,6 +136,9 @@
         </if>
         <if test="flowType !=null and flowType != ''">
             and t.flow_type= #{flowType}
+        </if>
+        <if test="curFormId !=null and curFormId != ''">
+            and t.cur_form_id= #{curFormId}
         </if>
         <if test="processDefinitionKey !=null and processDefinitionKey != ''">
             and t.process_definition_key= #{processDefinitionKey}
