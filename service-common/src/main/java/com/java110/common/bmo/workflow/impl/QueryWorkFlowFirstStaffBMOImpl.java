@@ -281,6 +281,9 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
                     sql.append(" not null ");
                 }
             }
+            if(!component.containsKey("validate") && isVarchar){
+                sql.append("(64) ");
+            }
 
             sql.append(" comment '");
             sql.append(component.getString("label"));
