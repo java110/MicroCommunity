@@ -232,6 +232,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         StringBuffer sql = new StringBuffer("create table if not exists ");
         sql.append(oaWorkflowFormDtos.get(0).getTableName());
         sql.append(" (");
+        sql.append("id varchar(30) NOT NULL PRIMARY KEY COMMENT '主键ID',");
         boolean isVarchar = false;
         JSONObject validate = null;
         for (int componentIndex = 0; componentIndex < components.size(); componentIndex++) {
@@ -281,7 +282,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
                     sql.append(" not null ");
                 }
             }
-            if(!component.containsKey("validate") && isVarchar){
+            if (!component.containsKey("validate") && isVarchar) {
                 sql.append("(64) ");
             }
 
@@ -289,12 +290,16 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             sql.append(component.getString("label"));
             sql.append("',");
         }
-        String sqlStr = sql.toString().substring(0,sql.toString().length()-1) + ")";
-        logger.debug("部署表单sql" + sqlStr);
-        int count = oaWorkflowFormInnerServiceSMOImpl.createTable(sqlStr);
-        if (count < 1) { // 已经部署过不用再部署
-            throw new IllegalArgumentException("部署表单失败");
-        }
+        sql.append("create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',");
+        sql.append("status_cd varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'");
+        sql.append(")");
+        logger.debug("部署表单sql" + sql.toString());
+        oaWorkflowFormInnerServiceSMOImpl.createTable(sql.toString());
+
+//       int count = oaWorkflowFormInnerServiceSMOImpl.createTable(sqlStr);
+//        if (count < 1) { // 已经部署过不用再部署
+//            throw new IllegalArgumentException("部署表单失败");
+//        }
     }
 
     @Override
