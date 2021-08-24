@@ -15,6 +15,7 @@
  */
 package com.java110.front.controller.app;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
@@ -129,6 +130,7 @@ public class PaymentController extends BaseController {
                 appId);
         return toPayInGoOutSMOImpl.toPay(newPd);
     }
+
     /**
      * <p>统一下单入口</p>
      *
@@ -149,6 +151,7 @@ public class PaymentController extends BaseController {
                 appId);
         return toPayBackCitySMOImpl.toPay(newPd);
     }
+
     /**
      * <p>统一下单入口</p>
      *
@@ -182,9 +185,25 @@ public class PaymentController extends BaseController {
         logger.debug("微信支付回调报文" + postInfo);
 
         return toNotifySMOImpl.toNotify(postInfo, request);
-
-
     }
+
+    /**
+     * <p>支付回调Api</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/notifyChinaUms", method = RequestMethod.POST)
+    public ResponseEntity<String> notifyChinaUms(HttpServletRequest request) {
+        JSONObject paramIn = new JSONObject();
+        for(String key :request.getParameterMap().keySet()){
+            paramIn.put(key,request.getParameter(key));
+        }
+        logger.debug("微信支付回调报文" + paramIn.toJSONString());
+
+        return toNotifySMOImpl.toNotify(paramIn.toJSONString(), request);
+    }
+
 
     /**
      * <p>出租统一下单入口</p>
@@ -204,6 +223,23 @@ public class PaymentController extends BaseController {
                 "", "", "", pd.getSessionId(),
                 appId);
         return rentingToPaySMOImpl.toPay(newPd);
+    }
+
+    /**
+     * <p>欠费银联回调</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/oweFeeNotifyChinaUms", method = RequestMethod.POST)
+    public ResponseEntity<String> oweFeeNotifyChinaUms( HttpServletRequest request) {
+        JSONObject paramIn = new JSONObject();
+        for(String key :request.getParameterMap().keySet()){
+            paramIn.put(key,request.getParameter(key));
+        }
+        logger.debug("微信支付回调报文" + paramIn.toJSONString());
+
+        return oweFeeToNotifySMOImpl.toNotify(paramIn.toJSONString(), request);
     }
 
     /**
