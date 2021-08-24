@@ -1,6 +1,9 @@
 package com.java110.oa.bmo.oaWorkflowForm;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
+
 public interface IGetOaWorkflowFormBMO {
 
 
@@ -13,5 +16,5 @@ public interface IGetOaWorkflowFormBMO {
     ResponseEntity<String> get(OaWorkflowFormDto oaWorkflowFormDto);
 
 
-    ResponseEntity<String> queryOaWorkflowFormData(OaWorkflowFormDto oaWorkflowFormDto);
+    ResponseEntity<String> queryOaWorkflowFormData(Map paramIn);
 }

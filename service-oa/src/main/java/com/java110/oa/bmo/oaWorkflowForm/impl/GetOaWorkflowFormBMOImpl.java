@@ -55,19 +55,22 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
      * {"key":"textdate1","label":"日期","type":"textdate"},
      * {"key":"textdatetime1","label":"时间","type":"textdatetime"},
      * {"action":"submit","key":"button1","label":"Button","type":"button"}],"type":"default"}
-     * @param oaWorkflowFormDto
+     * @param paramIn
      * @return
      */
     @Override
-    public ResponseEntity<String> queryOaWorkflowFormData(OaWorkflowFormDto oaWorkflowFormDto) {
+    public ResponseEntity<String> queryOaWorkflowFormData(Map paramIn) {
+
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setFlowId(paramIn.get("flowId").toString());
+        oaWorkflowFormDto.setStoreId(paramIn.get("storeId").toString());
+        oaWorkflowFormDto.setRow(1);
+        oaWorkflowFormDto.setPage(1);
         List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
 
         Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
 
-        String formJson = oaWorkflowFormDtos.get(0).getFormJson();
-
-        JSONObject formObj = JSONObject.parseObject(formJson);
-        Map paramIn = new HashMap();
+        paramIn.put("tableName",oaWorkflowFormDtos.get(0).getTableName());
 
         int count = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDataCount(paramIn);
 

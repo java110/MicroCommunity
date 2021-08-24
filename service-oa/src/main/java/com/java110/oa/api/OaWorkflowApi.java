@@ -21,9 +21,13 @@ import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
 import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import org.bouncycastle.jcajce.provider.digest.MD2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/oaWorkflow")
@@ -320,13 +324,19 @@ public class OaWorkflowApi {
     @RequestMapping(value = "/queryOaWorkflowFormData", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflowFormData(@RequestHeader(value = "store-id") String storeId,
                                                       @RequestParam(value = "flowId", required = false) String flowId,
+                                                      @RequestParam(value = "startTime", required = false) String startTime,
+                                                      @RequestParam(value = "endTime", required = false) String endTime,
+                                                      @RequestParam(value = "createUserName", required = false) String createUserName,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
-        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
-        oaWorkflowFormDto.setPage(page);
-        oaWorkflowFormDto.setRow(row);
-        oaWorkflowFormDto.setStoreId(storeId);
-        oaWorkflowFormDto.setFlowId(flowId);
-        return getOaWorkflowFormBMOImpl.queryOaWorkflowFormData(oaWorkflowFormDto);
+        Map paramIn = new HashMap();
+        paramIn.put("page",page);
+        paramIn.put("row",row);
+        paramIn.put("createUserName",createUserName);
+        paramIn.put("endTime",endTime);
+        paramIn.put("startTime",startTime);
+        paramIn.put("flowId",flowId);
+        paramIn.put("storeId",storeId);
+        return getOaWorkflowFormBMOImpl.queryOaWorkflowFormData(paramIn);
     }
 }
