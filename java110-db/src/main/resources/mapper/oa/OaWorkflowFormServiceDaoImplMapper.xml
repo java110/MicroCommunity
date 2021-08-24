@@ -121,7 +121,7 @@
     <!-- 查询OA表单数量 add by wuxw 2018-07-03 -->
     <select id="queryOaWorkflowFormDataCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from #{tableName} t
+        from ${tableName} t
         where 1 =1
             and t.store_id = #{storeId}
             and t.status_cd= '0'
@@ -142,7 +142,7 @@
     <!-- 查询OA表单数量 add by wuxw 2018-07-03 -->
     <select id="queryOaWorkflowFormDatas" parameterType="Map" resultType="Map">
         select t.*
-        from #{tableName} t
+        from ${tableName} t
         where 1 =1
         and t.store_id = #{storeId}
         and t.status_cd= '0'
