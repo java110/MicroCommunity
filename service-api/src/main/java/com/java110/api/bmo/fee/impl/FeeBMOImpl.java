@@ -298,7 +298,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         }
         feeInfo.setEndTime(endCalender.getTime());
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
-        if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000) {
+        if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000L) {
             throw new IllegalArgumentException("缴费超过了 费用项结束时间");
         }
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
@@ -443,7 +443,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
         feeInfo.setEndTime(endCalender.getTime());
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
-        if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000) {
+        if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000L) {
             throw new IllegalArgumentException("缴费超过了 费用项结束时间" + JSONObject.toJSONString(feeInfo) + "|||" + paramInJson.getString("cycles"));
         }
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
@@ -459,16 +459,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         return business;
     }
 
-    public static void main(String[] args) throws Exception {
-        Date endTime = DateUtil.getDateFromString("2021-07-31 16:00:00", DateUtil.DATE_FORMATE_STRING_A);
-        Date configEndTime = DateUtil.getDateFromString("2021-08-31 15:05:45", DateUtil.DATE_FORMATE_STRING_A);
-        Calendar endCalender = Calendar.getInstance();
-        endCalender.setTime(endTime);
-        endCalender.add(Calendar.MONTH, Integer.parseInt("1"));
-        if (endCalender.getTime().getTime() - configEndTime.getTime() > 30 * 24 * 60 * 60 * 1000) {
-            throw new IllegalArgumentException("缴费超过了 费用项结束时间");
-        }
-    }
 
     public JSONObject modifyTempCarInout(JSONObject reqJson, DataFlowContext context) {
         FeeDto feeDto = (FeeDto) reqJson.get("feeInfo");
