@@ -290,6 +290,8 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             sql.append(component.getString("label"));
             sql.append("',");
         }
+        sql.append("create_user_id varchar(30) not null COMMENT '创建人ID',");
+        sql.append("create_user_name varchar(64) not null COMMENT '创建人',");
         sql.append("create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',");
         sql.append("status_cd varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'");
         sql.append(")");
