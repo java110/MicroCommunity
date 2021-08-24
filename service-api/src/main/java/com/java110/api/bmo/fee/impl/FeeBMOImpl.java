@@ -170,7 +170,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         int hours = 0;
         Date targetEndTime = null;
         BigDecimal cycles = null;
-        Map feePriceAll=computeFeeSMOImpl.getFeePrice(feeDto);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
         if ("-101".equals(paramInJson.getString("cycles"))) {
             Date endTime = feeDto.getEndTime();
@@ -229,7 +229,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeDto = feeDtos.get(0);
         businessFeeDetail.put("startTime", paramInJson.getString("startTime"));
         BigDecimal cycles = null;
-        Map feePriceAll=computeFeeSMOImpl.getFeePrice(feeDto);
+        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
         Date endTime = feeDto.getEndTime();
         Calendar endCalender = Calendar.getInstance();
@@ -444,7 +444,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeInfo.setEndTime(endCalender.getTime());
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
         if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000) {
-            throw new IllegalArgumentException("缴费超过了 费用项结束时间");
+            throw new IllegalArgumentException("缴费超过了 费用项结束时间" + JSONObject.toJSONString(feeInfo) + "|||" + paramInJson.getString("cycles"));
         }
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
@@ -457,6 +457,17 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         paramInJson.put("carPayerObjType", feeInfo.getPayerObjType());
         paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
         return business;
+    }
+
+    public static void main(String[] args) throws Exception {
+        Date endTime = DateUtil.getDateFromString("2021-07-31 16:00:00", DateUtil.DATE_FORMATE_STRING_A);
+        Date configEndTime = DateUtil.getDateFromString("2021-08-31 15:05:45", DateUtil.DATE_FORMATE_STRING_A);
+        Calendar endCalender = Calendar.getInstance();
+        endCalender.setTime(endTime);
+        endCalender.add(Calendar.MONTH, Integer.parseInt("1"));
+        if (endCalender.getTime().getTime() - configEndTime.getTime() > 30 * 24 * 60 * 60 * 1000) {
+            throw new IllegalArgumentException("缴费超过了 费用项结束时间");
+        }
     }
 
     public JSONObject modifyTempCarInout(JSONObject reqJson, DataFlowContext context) {
