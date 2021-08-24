@@ -13,4 +13,5 @@ public interface IGetOaWorkflowFormBMO {
     ResponseEntity<String> get(OaWorkflowFormDto oaWorkflowFormDto);
 
 
+    ResponseEntity<String> queryOaWorkflowFormData(OaWorkflowFormDto oaWorkflowFormDto);
 }

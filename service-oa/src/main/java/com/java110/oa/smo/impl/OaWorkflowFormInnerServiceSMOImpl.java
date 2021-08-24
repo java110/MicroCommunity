@@ -96,6 +96,26 @@ public class OaWorkflowFormInnerServiceSMOImpl extends BaseServiceSMO implements
         return flag;
     }
 
+    @Override
+    public int queryOaWorkflowFormDataCount(@RequestBody Map paramIn) {
+        return oaWorkflowFormServiceDaoImpl.queryOaWorkflowFormDataCount(paramIn);
+    }
+
+    @Override
+    public List<Map> queryOaWorkflowFormDatas(@RequestBody Map paramIn) {
+
+        //校验是否传了 分页信息
+
+        int page = (int)paramIn.get("page");
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            paramIn.put("page",(page - 1) * (int)paramIn.get("row"));
+        }
+        List<Map> info = oaWorkflowFormServiceDaoImpl.queryOaWorkflowFormDatas(paramIn);
+
+        return info;
+    }
+
     public IOaWorkflowFormServiceDao getOaWorkflowFormServiceDaoImpl() {
         return oaWorkflowFormServiceDaoImpl;
     }

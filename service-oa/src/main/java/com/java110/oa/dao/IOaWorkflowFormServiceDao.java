@@ -66,4 +66,8 @@ public interface IOaWorkflowFormServiceDao {
     List<Map> hasTable(Map info);
 
     int createTable(Map info);
+
+    int queryOaWorkflowFormDataCount(Map paramIn);
+
+    List<Map> queryOaWorkflowFormDatas(Map paramIn);
 }

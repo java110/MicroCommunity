@@ -308,4 +308,25 @@ public class OaWorkflowApi {
         oaWorkflowFormDto.setFlowId(flowId);
         return getOaWorkflowFormBMOImpl.get(oaWorkflowFormDto);
     }
+
+    /**
+     * 微信删除消息模板
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /oaWorkflow/queryOaWorkflowFormData
+     * @path /app/oaWorkflow/queryOaWorkflowFormData
+     */
+    @RequestMapping(value = "/queryOaWorkflowFormData", method = RequestMethod.GET)
+    public ResponseEntity<String> queryOaWorkflowFormData(@RequestHeader(value = "store-id") String storeId,
+                                                      @RequestParam(value = "flowId", required = false) String flowId,
+                                                      @RequestParam(value = "page") int page,
+                                                      @RequestParam(value = "row") int row) {
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setPage(page);
+        oaWorkflowFormDto.setRow(row);
+        oaWorkflowFormDto.setStoreId(storeId);
+        oaWorkflowFormDto.setFlowId(flowId);
+        return getOaWorkflowFormBMOImpl.queryOaWorkflowFormData(oaWorkflowFormDto);
+    }
 }

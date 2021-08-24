@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IOaWorkflowFormInnerServiceSMO
@@ -62,4 +63,15 @@ public interface IOaWorkflowFormInnerServiceSMO {
 
     @RequestMapping(value = "/createTable", method = RequestMethod.POST)
     int createTable(@RequestBody String sql);
+
+    /**
+     * 查询数据总记录数
+     * @param oaWorkflowFormDto
+     * @return
+     */
+    @RequestMapping(value = "/queryOaWorkflowFormDataCount", method = RequestMethod.POST)
+    int queryOaWorkflowFormDataCount(@RequestBody Map oaWorkflowFormDto);
+
+    @RequestMapping(value = "/queryOaWorkflowFormDatas", method = RequestMethod.POST)
+    List<Map> queryOaWorkflowFormDatas(@RequestBody Map paramIn);
 }

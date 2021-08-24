@@ -115,5 +115,26 @@ public class OaWorkflowFormServiceDaoImpl extends BaseServiceDao implements IOaW
         return  flag;
     }
 
+    @Override
+    public int queryOaWorkflowFormDataCount(Map paramIn) {
+        logger.debug("查询queryOaWorkflowFormDataCount数据 入参 info : {}",paramIn);
+
+        List<Map> businessOaWorkflowFormInfos = sqlSessionTemplate.selectList("oaWorkflowFormServiceDaoImpl.queryOaWorkflowFormDataCount", paramIn);
+        if (businessOaWorkflowFormInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessOaWorkflowFormInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryOaWorkflowFormDatas(Map paramIn) {
+        logger.debug("查询queryOaWorkflowFormDatas信息 入参 info : {}",paramIn);
+
+        List<Map> businessOaWorkflowFormInfos = sqlSessionTemplate.selectList("oaWorkflowFormServiceDaoImpl.queryOaWorkflowFormDatas",paramIn);
+
+        return businessOaWorkflowFormInfos;
+    }
+
 
 }
