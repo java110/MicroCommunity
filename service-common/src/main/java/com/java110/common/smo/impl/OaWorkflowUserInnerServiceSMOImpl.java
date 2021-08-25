@@ -75,8 +75,9 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         return reqJson;
     }
 
+    //WorkflowDto.DEFAULT_PROCESS +
     private String getWorkflowDto(String processDefinitionKey) {
-        return WorkflowDto.DEFAULT_PROCESS + processDefinitionKey;
+        return  processDefinitionKey;
     }
 
     /**
