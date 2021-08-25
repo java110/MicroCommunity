@@ -10,7 +10,6 @@ import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
-import com.java110.intf.store.IComplaintInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -140,6 +139,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
             taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("id", business_key);
             tasks.add(taskBusinessKeyMap);
         }
         return tasks;
@@ -268,9 +268,9 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         List<Task> tasks = taskService.createTaskQuery().processInstanceBusinessKey(reqJson.getString("id")).list();
 
         if (tasks == null || tasks.size() == 0) {
-            reqJson.put("currentUserId","");
-            reqJson.put("currentUserName","");
-            reqJson.put("currentUserTel","");
+            reqJson.put("currentUserId", "");
+            reqJson.put("currentUserName", "");
+            reqJson.put("currentUserTel", "");
             return reqJson;
         }
         String userIds = "";
@@ -293,10 +293,10 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         userTels = userTels.endsWith("/") ? userTels.substring(0, userTels.length() - 1) : userTels;
         taskIds = taskIds.endsWith("/") ? taskIds.substring(0, taskIds.length() - 1) : taskIds;
 
-        reqJson.put("currentUserId",userIds);
-        reqJson.put("currentUserName",userNames);
-        reqJson.put("currentUserTel",userTels);
-        reqJson.put("taskId",taskIds);
+        reqJson.put("currentUserId", userIds);
+        reqJson.put("currentUserName", userNames);
+        reqJson.put("currentUserTel", userTels);
+        reqJson.put("taskId", taskIds);
         return reqJson;
 
     }

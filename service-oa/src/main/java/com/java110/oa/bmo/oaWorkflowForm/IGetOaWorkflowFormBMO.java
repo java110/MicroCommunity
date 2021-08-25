@@ -1,4 +1,5 @@
 package com.java110.oa.bmo.oaWorkflowForm;
+
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,8 @@ public interface IGetOaWorkflowFormBMO {
     /**
      * 查询OA表单
      * add by wuxw
-     * @param  oaWorkflowFormDto
+     *
+     * @param oaWorkflowFormDto
      * @return
      */
     ResponseEntity<String> get(OaWorkflowFormDto oaWorkflowFormDto);
@@ -21,8 +23,24 @@ public interface IGetOaWorkflowFormBMO {
 
     /**
      * 保存表单数据
+     *
      * @param reqJson
      * @return
      */
     ResponseEntity<String> saveOaWorkflowFormData(JSONObject reqJson);
+
+    /**
+     * 查询工作流待办
+     *
+     * @param paramIn
+     * @return
+     */
+    ResponseEntity<String> queryOaWorkflowUserTaskFormData(JSONObject paramIn);
+
+    /**
+     * 查询工作流程已办
+     * @param paramIn
+     * @return
+     */
+    ResponseEntity<String> queryOaWorkflowUserHisTaskFormData(JSONObject paramIn);
 }

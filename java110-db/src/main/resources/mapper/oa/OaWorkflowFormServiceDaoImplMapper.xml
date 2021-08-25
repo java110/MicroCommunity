@@ -154,6 +154,12 @@
         <if test="id !=null and id != ''">
             and t.id = #{id}
         </if>
+        <if test="ids != null">
+            and t.id in
+            <foreach collection="ids" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="createUserName !=null and createUserName != ''">
             and t.create_user_name = #{createUserName}
         </if>

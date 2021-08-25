@@ -5,6 +5,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.user.UserDto;
+import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -158,6 +160,114 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         oaWorkflowUserInnerServiceSMOImpl.startProcess(reqJson);
 
         return ResultVo.success();
+    }
+
+    /**
+     * 查询工作流待办
+     *
+     * @param paramIn
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> queryOaWorkflowUserTaskFormData(JSONObject paramIn) {
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setStoreId(paramIn.getString("storeId"));
+        oaWorkflowDto.setFlowId(paramIn.getString("flowId"));
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setProcessDefinitionKey(oaWorkflowDtos.get(0).getProcessDefinitionKey());
+        auditUser.setUserId(paramIn.getString("userId"));
+        auditUser.setStoreId(paramIn.getString("storeId"));
+        auditUser.setPage(paramIn.getInteger("page"));
+        auditUser.setRow(paramIn.getInteger("row"));
+
+        long count = oaWorkflowUserInnerServiceSMOImpl.getUserTaskCount(auditUser);
+
+        List<JSONObject> datas = null;
+
+        if (count > 0) {
+            datas = oaWorkflowUserInnerServiceSMOImpl.getUserTasks(auditUser);
+            //刷新 表单数据
+            freshFormData(datas, paramIn);
+        } else {
+            datas = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramIn.getInteger("row")), count, datas);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * 查询工作流待办
+     *
+     * @param paramIn
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> queryOaWorkflowUserHisTaskFormData(JSONObject paramIn) {
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setStoreId(paramIn.getString("storeId"));
+        oaWorkflowDto.setFlowId(paramIn.getString("flowId"));
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setProcessDefinitionKey(oaWorkflowDtos.get(0).getProcessDefinitionKey());
+        auditUser.setUserId(paramIn.getString("userId"));
+        auditUser.setStoreId(paramIn.getString("storeId"));
+        auditUser.setPage(paramIn.getInteger("page"));
+        auditUser.setRow(paramIn.getInteger("row"));
+
+        long count = oaWorkflowUserInnerServiceSMOImpl.getUserHistoryTaskCount(auditUser);
+
+        List<JSONObject> datas = null;
+
+        if (count > 0) {
+            datas = oaWorkflowUserInnerServiceSMOImpl.getUserHistoryTasks(auditUser);
+            //刷新 表单数据
+            freshFormData(datas, paramIn);
+        } else {
+            datas = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramIn.getInteger("row")), count, datas);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * 刷入表单数据
+     *
+     * @param datas
+     */
+    private void freshFormData(List<JSONObject> datas, JSONObject paramIn) {
+        List<String> ids = new ArrayList<>();
+        for (JSONObject data : datas) {
+            ids.add(data.getString("id"));
+        }
+        if (ids.size() < 1) {
+            return;
+        }
+
+        Map paramMap = new HashMap();
+        paramMap.put("storeId", paramIn.getString("storeId"));
+        paramMap.put("ids", ids.toArray(new String[ids.size()]));
+        List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
+
+        for (JSONObject data : datas) {
+            for (Map form : formDatas) {
+                if (data.getString("id").equals(form.get("id"))) {
+                    data.putAll(form);
+                }
+            }
+        }
     }
 
 }

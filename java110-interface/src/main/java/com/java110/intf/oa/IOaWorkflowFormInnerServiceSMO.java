@@ -80,5 +80,6 @@ public interface IOaWorkflowFormInnerServiceSMO {
      * 保存表单数据
      * @param reqJson
      */
+    @RequestMapping(value = "/saveOaWorkflowFormData", method = RequestMethod.POST)
     int saveOaWorkflowFormData(@RequestBody JSONObject reqJson);
 }

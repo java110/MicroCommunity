@@ -51,7 +51,7 @@ public class ResultVo implements Serializable {
     private int records;
 
     // 总记录数
-    private int total;
+    private long total;
 
     //状态
     private int code;
@@ -83,6 +83,14 @@ public class ResultVo implements Serializable {
     }
 
     public ResultVo(int records, int total, Object data) {
+        this.code = CODE_OK;
+        this.msg = MSG_OK;
+        this.records = records;
+        this.total = total;
+        this.data = data;
+    }
+
+    public ResultVo(int records, long total, Object data) {
         this.code = CODE_OK;
         this.msg = MSG_OK;
         this.records = records;
@@ -147,7 +155,7 @@ public class ResultVo implements Serializable {
         this.records = records;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 
