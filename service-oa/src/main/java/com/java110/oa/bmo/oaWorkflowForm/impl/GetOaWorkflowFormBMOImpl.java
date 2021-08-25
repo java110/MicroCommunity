@@ -99,7 +99,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
             datas = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) oaWorkflowFormDto.getRow()), count, datas);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramIn.get("row")), count, datas);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
