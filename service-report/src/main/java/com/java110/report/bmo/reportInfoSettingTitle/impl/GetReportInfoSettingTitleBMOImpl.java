@@ -80,5 +80,4 @@ public class GetReportInfoSettingTitleBMOImpl implements IGetReportInfoSettingTi
 
 
     }
-
 }
