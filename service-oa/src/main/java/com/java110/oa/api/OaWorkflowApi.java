@@ -21,12 +21,14 @@ import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
 import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import org.bouncycastle.jcajce.provider.digest.MD2;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -323,20 +325,48 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflowFormData", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflowFormData(@RequestHeader(value = "store-id") String storeId,
-                                                      @RequestParam(value = "flowId", required = false) String flowId,
-                                                      @RequestParam(value = "startTime", required = false) String startTime,
-                                                      @RequestParam(value = "endTime", required = false) String endTime,
-                                                      @RequestParam(value = "createUserName", required = false) String createUserName,
-                                                      @RequestParam(value = "page") int page,
-                                                      @RequestParam(value = "row") int row) {
+                                                          @RequestParam(value = "flowId", required = false) String flowId,
+                                                          @RequestParam(value = "startTime", required = false) String startTime,
+                                                          @RequestParam(value = "endTime", required = false) String endTime,
+                                                          @RequestParam(value = "createUserName", required = false) String createUserName,
+                                                          @RequestParam(value = "page") int page,
+                                                          @RequestParam(value = "row") int row) {
         Map paramIn = new HashMap();
-        paramIn.put("page",page);
-        paramIn.put("row",row);
-        paramIn.put("createUserName",createUserName);
-        paramIn.put("endTime",endTime);
-        paramIn.put("startTime",startTime);
-        paramIn.put("flowId",flowId);
-        paramIn.put("storeId",storeId);
+        paramIn.put("page", page);
+        paramIn.put("row", row);
+        paramIn.put("createUserName", createUserName);
+        paramIn.put("endTime", endTime);
+        paramIn.put("startTime", startTime);
+        paramIn.put("flowId", flowId);
+        paramIn.put("storeId", storeId);
         return getOaWorkflowFormBMOImpl.queryOaWorkflowFormData(paramIn);
+    }
+
+    /**
+     * 保存流程数据
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /oaWorkflow/saveOaWorkflowFormData
+     * @path /app/oaWorkflow/saveOaWorkflowFormData
+     */
+    @RequestMapping(value = "/saveOaWorkflowFormData", method = RequestMethod.POST)
+    public ResponseEntity<String> saveOaWorkflowFormData(@RequestHeader(value = "store-id") String storeId,
+                                                         @RequestHeader(value = "user-id") String userId,
+                                                         @RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "flowId", "flowId不能为空");
+        List<String> columns = new ArrayList<>();
+        List<String> values = new ArrayList<>();
+        for (String key : reqJson.keySet()) {
+            if ("flowId".equals(key)) {
+                continue;
+            }
+            columns.add(key);
+            values.add(reqJson.getString(key));
+        }
+        reqJson.put("columns",columns.toArray(new String[columns.size()]));
+        reqJson.put("values",columns.toArray(new String[values.size()]));
+        reqJson.put("storeId", storeId);
+        return getOaWorkflowFormBMOImpl.saveOaWorkflowFormData(reqJson);
     }
 }

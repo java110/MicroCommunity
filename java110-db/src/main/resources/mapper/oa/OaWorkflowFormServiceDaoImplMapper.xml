@@ -73,7 +73,7 @@
             , t.table_name= #{tableName}
         </if>
         where 1=1
-            and t.form_id= #{formId}
+        and t.form_id= #{formId}
 
     </update>
 
@@ -117,14 +117,13 @@
     </update>
 
 
-
     <!-- 查询OA表单数量 add by wuxw 2018-07-03 -->
     <select id="queryOaWorkflowFormDataCount" parameterType="Map" resultType="Map">
         select count(1) count
         from ${tableName} t
         where 1 =1
-            and t.store_id = #{storeId}
-            and t.status_cd= '0'
+        and t.store_id = #{storeId}
+        and t.status_cd= '0'
         <if test="startTime !=null and startTime != ''">
             and t.create_time &gt; #{startTime}
         </if>
@@ -163,5 +162,20 @@
             limit #{page}, #{row}
         </if>
     </select>
+
+    <!-- 保存表单数据 -->
+    <insert id="saveOaWorkflowFormDataInfo" parameterType="Map">
+        insert into ${tableName} (
+        <foreach collection="columns" item="item" separator=",">
+            ${item}
+        </foreach>
+        id,create_user_id,create_user_name,state
+        )values(
+        <foreach collection="values" item="valueItem" separator=",">
+            #{valueItem}
+        </foreach>,
+        #{id},#{state},#{createUserId},#{createUserName}
+        )
+    </insert>
 
 </mapper>

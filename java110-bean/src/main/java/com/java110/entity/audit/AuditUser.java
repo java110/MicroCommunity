@@ -27,6 +27,8 @@ public class AuditUser extends PageDto implements Serializable {
     //流程对象编码
     private String objCode;
 
+    private String processDefinitionKey;
+
 
     public String getObjCode() {
         return objCode;
@@ -82,5 +84,13 @@ public class AuditUser extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getProcessDefinitionKey() {
+        return processDefinitionKey;
+    }
+
+    public void setProcessDefinitionKey(String processDefinitionKey) {
+        this.processDefinitionKey = processDefinitionKey;
     }
 }

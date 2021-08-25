@@ -1,6 +1,7 @@
 package com.java110.oa.smo.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
@@ -114,6 +115,11 @@ public class OaWorkflowFormInnerServiceSMOImpl extends BaseServiceSMO implements
         List<Map> info = oaWorkflowFormServiceDaoImpl.queryOaWorkflowFormDatas(paramIn);
 
         return info;
+    }
+
+    @Override
+    public int saveOaWorkflowFormData(@RequestBody JSONObject reqJson) {
+        return oaWorkflowFormServiceDaoImpl.saveOaWorkflowFormDataInfo(BeanConvertUtil.beanCovertMap(reqJson));
     }
 
     public IOaWorkflowFormServiceDao getOaWorkflowFormServiceDaoImpl() {

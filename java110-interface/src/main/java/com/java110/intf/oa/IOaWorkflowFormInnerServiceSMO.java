@@ -1,5 +1,6 @@
 package com.java110.intf.oa;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
@@ -74,4 +75,10 @@ public interface IOaWorkflowFormInnerServiceSMO {
 
     @RequestMapping(value = "/queryOaWorkflowFormDatas", method = RequestMethod.POST)
     List<Map> queryOaWorkflowFormDatas(@RequestBody Map paramIn);
+
+    /**
+     * 保存表单数据
+     * @param reqJson
+     */
+    int saveOaWorkflowFormData(@RequestBody JSONObject reqJson);
 }

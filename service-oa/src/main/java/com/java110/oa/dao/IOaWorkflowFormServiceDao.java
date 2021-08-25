@@ -70,4 +70,11 @@ public interface IOaWorkflowFormServiceDao {
     int queryOaWorkflowFormDataCount(Map paramIn);
 
     List<Map> queryOaWorkflowFormDatas(Map paramIn);
+
+    /**
+     * 保存数据
+     * @param paramIn
+     * @return
+     */
+    int saveOaWorkflowFormDataInfo(Map paramIn);
 }

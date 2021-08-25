@@ -136,5 +136,13 @@ public class OaWorkflowFormServiceDaoImpl extends BaseServiceDao implements IOaW
         return businessOaWorkflowFormInfos;
     }
 
+    @Override
+    public int saveOaWorkflowFormDataInfo(Map paramIn) {
+        logger.debug("保存saveOaWorkflowFormDataInfo 入参 info : {}",paramIn);
+
+        int saveFlag = sqlSessionTemplate.insert("oaWorkflowFormServiceDaoImpl.saveOaWorkflowFormDataInfo",paramIn);
+        return saveFlag;
+    }
+
 
 }
