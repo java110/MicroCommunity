@@ -325,6 +325,7 @@ public class OaWorkflowApi {
     @RequestMapping(value = "/queryOaWorkflowFormData", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflowFormData(@RequestHeader(value = "store-id") String storeId,
                                                           @RequestParam(value = "flowId", required = false) String flowId,
+                                                          @RequestParam(value = "id", required = false) String id,
                                                           @RequestParam(value = "startTime", required = false) String startTime,
                                                           @RequestParam(value = "endTime", required = false) String endTime,
                                                           @RequestParam(value = "createUserName", required = false) String createUserName,
@@ -338,6 +339,7 @@ public class OaWorkflowApi {
         paramIn.put("startTime", startTime);
         paramIn.put("flowId", flowId);
         paramIn.put("storeId", storeId);
+        paramIn.put("id", id);
         return getOaWorkflowFormBMOImpl.queryOaWorkflowFormData(paramIn);
     }
 
