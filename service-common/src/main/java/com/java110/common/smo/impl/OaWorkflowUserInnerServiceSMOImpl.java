@@ -65,7 +65,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         Map<String, Object> variables = new HashMap<String, Object>();
         //variables.put("reqJson", reqJson);
         variables.put("startUserId", reqJson.getString("createUserId"));
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById(getWorkflowDto(reqJson.getString("processDefinitionId")), reqJson.getString("id"), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceById(getWorkflowDto(reqJson.getString("processDefinitionKey")), reqJson.getString("id"), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
