@@ -175,12 +175,12 @@
         <foreach collection="columns" item="item" separator=",">
             ${item}
         </foreach>
-        id,create_user_id,create_user_name,state
+        ,id,create_user_id,create_user_name,state
         )values(
         <foreach collection="values" item="valueItem" separator=",">
             #{valueItem}
-        </foreach>,
-        #{id},#{state},#{createUserId},#{createUserName}
+        </foreach>
+        ,#{id},#{state},#{createUserId},#{createUserName}
         )
     </insert>
 
