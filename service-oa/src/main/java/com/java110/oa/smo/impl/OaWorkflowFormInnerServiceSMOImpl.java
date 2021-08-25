@@ -119,7 +119,10 @@ public class OaWorkflowFormInnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Override
     public int saveOaWorkflowFormData(@RequestBody JSONObject reqJson) {
-        return oaWorkflowFormServiceDaoImpl.saveOaWorkflowFormDataInfo(BeanConvertUtil.beanCovertMap(reqJson));
+        Map info = BeanConvertUtil.beanCovertMap(reqJson);
+        info.put("columns",reqJson.get("columns"));
+        info.put("values",reqJson.get("values"));
+        return oaWorkflowFormServiceDaoImpl.saveOaWorkflowFormDataInfo(info);
     }
 
     @Override
