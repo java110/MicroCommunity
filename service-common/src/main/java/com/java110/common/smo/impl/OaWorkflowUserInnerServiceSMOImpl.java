@@ -65,7 +65,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         Map<String, Object> variables = new HashMap<String, Object>();
         //variables.put("reqJson", reqJson);
         variables.put("startUserId", reqJson.getString("createUserId"));
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById(getWorkflowDto(reqJson.getString("processDefinitionKey")), reqJson.getString("id"), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(reqJson.getString("flowId")), reqJson.getString("id"), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
@@ -75,9 +75,8 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         return reqJson;
     }
 
-    //WorkflowDto.DEFAULT_PROCESS +
-    private String getWorkflowDto(String processDefinitionId) {
-        return  processDefinitionId;
+    private String getWorkflowDto(String flowId) {
+        return WorkflowDto.DEFAULT_PROCESS + flowId;
     }
 
     /**
@@ -108,7 +107,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionId(getWorkflowDto(user.getProcessDefinitionKey()));
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getProcessDefinitionKey()));
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -120,7 +119,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
      */
     public List<JSONObject> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionId(getWorkflowDto(user.getProcessDefinitionKey()));
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getProcessDefinitionKey()));
         ;
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
@@ -156,11 +155,11 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     public long getUserHistoryTaskCount(@RequestBody AuditUser user) {
         HistoryService historyService = processEngine.getHistoryService();
 //        Query query = historyService.createHistoricTaskInstanceQuery()
-//                .processDefinitionId("complaint")
+//                .processDefinitionKey("complaint")
 //                .taskAssignee(user.getUserId());
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionId(getWorkflowDto(user.getProcessDefinitionKey()))
+                .processDefinitionKey(getWorkflowDto(user.getProcessDefinitionKey()))
                 .taskAssignee(user.getUserId())
                 .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
@@ -183,7 +182,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         HistoryService historyService = processEngine.getHistoryService();
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionId(getWorkflowDto(user.getProcessDefinitionKey()))
+                .processDefinitionKey(getWorkflowDto(user.getProcessDefinitionKey()))
                 .taskAssignee(user.getUserId())
                 .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {

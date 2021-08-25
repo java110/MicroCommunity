@@ -343,6 +343,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             modelJson.put(ModelDataJsonConstants.MODEL_REVISION, model.getVersion() + 1);
             model.setMetaInfo(modelJson.toString());
             model.setName(oaWorkflowDtos.get(0).getFlowName());
+            model.setKey("java110_" + oaWorkflowDtos.get(0).getFlowId());
             repositoryService.saveModel(model);
             repositoryService.addModelEditorSource(model.getId(), workflowModelDto.getJson_xml().getBytes("utf-8"));
 
