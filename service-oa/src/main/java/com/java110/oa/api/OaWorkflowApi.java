@@ -364,7 +364,7 @@ public class OaWorkflowApi {
             values.add(reqJson.getString(key));
         }
         reqJson.put("columns", columns.toArray(new String[columns.size()]));
-        reqJson.put("values", columns.toArray(new String[values.size()]));
+        reqJson.put("values", values.toArray(new String[values.size()]));
         reqJson.put("storeId", storeId);
         reqJson.put("userId", userId);
         return getOaWorkflowFormBMOImpl.saveOaWorkflowFormData(reqJson);
