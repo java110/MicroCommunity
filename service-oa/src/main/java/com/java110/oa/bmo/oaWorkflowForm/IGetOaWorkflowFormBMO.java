@@ -39,8 +39,17 @@ public interface IGetOaWorkflowFormBMO {
 
     /**
      * 查询工作流程已办
+     *
      * @param paramIn
      * @return
      */
     ResponseEntity<String> queryOaWorkflowUserHisTaskFormData(JSONObject paramIn);
+
+    /**
+     * 审核 工作流
+     *
+     * @param reqJson
+     * @return
+     */
+    ResponseEntity<String> auditOaWorkflow(JSONObject reqJson);
 }

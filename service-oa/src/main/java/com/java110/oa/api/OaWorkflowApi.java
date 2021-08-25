@@ -366,6 +366,7 @@ public class OaWorkflowApi {
         reqJson.put("columns", columns.toArray(new String[columns.size()]));
         reqJson.put("values", columns.toArray(new String[values.size()]));
         reqJson.put("storeId", storeId);
+        reqJson.put("userId", userId);
         return getOaWorkflowFormBMOImpl.saveOaWorkflowFormData(reqJson);
     }
 
@@ -408,13 +409,13 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflowUserHisTaskFormData", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflowUserHisTaskFormData(@RequestHeader(value = "store-id") String storeId,
-                                                                  @RequestHeader(value = "user-id") String userId,
-                                                                  @RequestParam(value = "flowId", required = false) String flowId,
-                                                                  @RequestParam(value = "startTime", required = false) String startTime,
-                                                                  @RequestParam(value = "endTime", required = false) String endTime,
-                                                                  @RequestParam(value = "createUserName", required = false) String createUserName,
-                                                                  @RequestParam(value = "page") int page,
-                                                                  @RequestParam(value = "row") int row) {
+                                                                     @RequestHeader(value = "user-id") String userId,
+                                                                     @RequestParam(value = "flowId", required = false) String flowId,
+                                                                     @RequestParam(value = "startTime", required = false) String startTime,
+                                                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                                                     @RequestParam(value = "createUserName", required = false) String createUserName,
+                                                                     @RequestParam(value = "page") int page,
+                                                                     @RequestParam(value = "row") int row) {
         JSONObject paramIn = new JSONObject();
         paramIn.put("page", page);
         paramIn.put("row", row);
@@ -425,5 +426,27 @@ public class OaWorkflowApi {
         paramIn.put("storeId", storeId);
         paramIn.put("userId", userId);
         return getOaWorkflowFormBMOImpl.queryOaWorkflowUserHisTaskFormData(paramIn);
+    }
+
+    /**
+     * 保存流程数据
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /oaWorkflow/auditOaWorkflow
+     * @path /app/oaWorkflow/auditOaWorkflow
+     */
+    @RequestMapping(value = "/auditOaWorkflow", method = RequestMethod.POST)
+    public ResponseEntity<String> auditOaWorkflow(@RequestHeader(value = "store-id") String storeId,
+                                                  @RequestHeader(value = "user-id") String userId,
+                                                  @RequestBody JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "flowId", "flowId不能为空");
+        Assert.hasKeyAndValue(reqJson, "id", "id不能为空");
+        Assert.hasKeyAndValue(reqJson, "taskId", "任务不能为空");
+        Assert.hasKeyAndValue(reqJson, "auditMessage", "审核意见不能为空");
+        Assert.hasKeyAndValue(reqJson, "auditCode", "审核状态不能为空");
+        reqJson.put("storeId", storeId);
+        reqJson.put("userId", userId);
+        return getOaWorkflowFormBMOImpl.auditOaWorkflow(reqJson);
     }
 }

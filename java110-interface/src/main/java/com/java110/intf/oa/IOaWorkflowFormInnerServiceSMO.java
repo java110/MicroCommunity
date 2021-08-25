@@ -29,14 +29,13 @@ public interface IOaWorkflowFormInnerServiceSMO {
     public int saveOaWorkflowForm(@RequestBody OaWorkflowFormPo oaWorkflowFormPo);
 
     @RequestMapping(value = "/updateOaWorkflowForm", method = RequestMethod.POST)
-    public int updateOaWorkflowForm(@RequestBody  OaWorkflowFormPo oaWorkflowFormPo);
+    public int updateOaWorkflowForm(@RequestBody OaWorkflowFormPo oaWorkflowFormPo);
 
     @RequestMapping(value = "/deleteOaWorkflowForm", method = RequestMethod.POST)
-    public int deleteOaWorkflowForm(@RequestBody  OaWorkflowFormPo oaWorkflowFormPo);
+    public int deleteOaWorkflowForm(@RequestBody OaWorkflowFormPo oaWorkflowFormPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param oaWorkflowFormDto 数据对象分享
      * @return OaWorkflowFormDto 对象数据
@@ -54,7 +53,7 @@ public interface IOaWorkflowFormInnerServiceSMO {
     int queryOaWorkflowFormsCount(@RequestBody OaWorkflowFormDto oaWorkflowFormDto);
 
     /**
-     *  是否有表
+     * 是否有表
      *
      * @param table 数据对象分享
      * @return 小区下的小区楼记录数
@@ -67,6 +66,7 @@ public interface IOaWorkflowFormInnerServiceSMO {
 
     /**
      * 查询数据总记录数
+     *
      * @param oaWorkflowFormDto
      * @return
      */
@@ -78,8 +78,17 @@ public interface IOaWorkflowFormInnerServiceSMO {
 
     /**
      * 保存表单数据
+     *
      * @param reqJson
      */
     @RequestMapping(value = "/saveOaWorkflowFormData", method = RequestMethod.POST)
     int saveOaWorkflowFormData(@RequestBody JSONObject reqJson);
+
+    /**
+     * 修改表单数据
+     *
+     * @param reqJson
+     */
+    @RequestMapping(value = "/updateOaWorkflowFormData", method = RequestMethod.POST)
+    int updateOaWorkflowFormData(@RequestBody JSONObject reqJson);
 }

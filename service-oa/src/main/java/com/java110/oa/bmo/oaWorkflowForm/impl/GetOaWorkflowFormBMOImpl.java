@@ -242,6 +242,33 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> auditOaWorkflow(JSONObject reqJson) {
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDto.setFlowId(reqJson.getString("flowId"));
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
+
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setFlowId(reqJson.get("flowId").toString());
+        oaWorkflowFormDto.setStoreId(reqJson.get("storeId").toString());
+        oaWorkflowFormDto.setRow(1);
+        oaWorkflowFormDto.setPage(1);
+        List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
+        Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
+
+
+        reqJson.put("createUserId", reqJson.getString("userId"));
+        boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
+        if (isLastTask) {
+            reqJson.put("state", "1005");
+            reqJson.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
+            oaWorkflowFormInnerServiceSMOImpl.updateOaWorkflowFormData(reqJson);
+        }
+        return ResultVo.success();
+    }
+
     /**
      * 刷入表单数据
      *
