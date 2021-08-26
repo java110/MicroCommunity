@@ -54,17 +54,17 @@ public class SaveReportInfoAnswerValueBMOImpl implements ISaveReportInfoAnswerVa
     @Java110Transactional
     public ResponseEntity<String> save(JSONObject reqJson,String userId) {
 
-        UserDto userDto = new UserDto();
+       /* UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         List<UserDto> userDtoList = userInnerServiceSMOImpl.getUsers(userDto);
         if (userDtoList == null || userDtoList.size() < 1) {
             throw new IllegalArgumentException("查询用户信息失败！");
-        }
+        }*/
         ReportInfoAnswerPo reportInfoAnswerPo = new ReportInfoAnswerPo();
         reportInfoAnswerPo.setUserAnId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_userAnId));
         reportInfoAnswerPo.setSettingId(reqJson.getString("settingId"));
-        reportInfoAnswerPo.setPersonId(userDtoList.get(0).getUserId());
-        reportInfoAnswerPo.setPersonName(userDtoList.get(0).getName());
+        reportInfoAnswerPo.setPersonId("-1");
+        reportInfoAnswerPo.setPersonName("未知");
         reportInfoAnswerPo.setCommunityId(reqJson.getString("communityId"));
         int flag = reportInfoAnswerInnerServiceSMOImpl.saveReportInfoAnswer(reportInfoAnswerPo);
         if (flag < 1) {
