@@ -29,6 +29,7 @@ public class AuditUser extends PageDto implements Serializable {
 
     private String processDefinitionKey;
 
+    private String flowId;
 
     public String getObjCode() {
         return objCode;
@@ -92,5 +93,13 @@ public class AuditUser extends PageDto implements Serializable {
 
     public void setProcessDefinitionKey(String processDefinitionKey) {
         this.processDefinitionKey = processDefinitionKey;
+    }
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
     }
 }

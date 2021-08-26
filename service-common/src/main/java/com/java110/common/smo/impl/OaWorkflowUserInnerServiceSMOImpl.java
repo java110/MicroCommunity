@@ -108,7 +108,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getProcessDefinitionKey()));
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getFlowId()));
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -120,8 +120,8 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
      */
     public List<JSONObject> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getProcessDefinitionKey()));
-        ;
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getFlowId()));
+
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
@@ -160,7 +160,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
 //                .taskAssignee(user.getUserId());
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey(getWorkflowDto(user.getProcessDefinitionKey()))
+                .processDefinitionKey(getWorkflowDto(user.getFlowId()))
                 .taskAssignee(user.getUserId())
                 .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
@@ -183,7 +183,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         HistoryService historyService = processEngine.getHistoryService();
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey(getWorkflowDto(user.getProcessDefinitionKey()))
+                .processDefinitionKey(getWorkflowDto(user.getFlowId()))
                 .taskAssignee(user.getUserId())
                 .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {

@@ -179,6 +179,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
         AuditUser auditUser = new AuditUser();
         auditUser.setProcessDefinitionKey(oaWorkflowDtos.get(0).getProcessDefinitionKey());
+        auditUser.setFlowId(paramIn.getString("flowId"));
         auditUser.setUserId(paramIn.getString("userId"));
         auditUser.setStoreId(paramIn.getString("storeId"));
         auditUser.setPage(paramIn.getInteger("page"));
@@ -219,6 +220,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
         AuditUser auditUser = new AuditUser();
         auditUser.setProcessDefinitionKey(oaWorkflowDtos.get(0).getProcessDefinitionKey());
+        auditUser.setFlowId(paramIn.getString("flowId"));
         auditUser.setUserId(paramIn.getString("userId"));
         auditUser.setStoreId(paramIn.getString("storeId"));
         auditUser.setPage(paramIn.getInteger("page"));
