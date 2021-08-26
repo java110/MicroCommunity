@@ -64,7 +64,7 @@ public class SaveReportInfoAnswerValueBMOImpl implements ISaveReportInfoAnswerVa
         reportInfoAnswerPo.setUserAnId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_userAnId));
         reportInfoAnswerPo.setSettingId(reqJson.getString("settingId"));
         reportInfoAnswerPo.setPersonId(StringUtil.isNullOrNone(reqJson.getString("personId")) == true?"-1":reqJson.getString("personId"));
-        reportInfoAnswerPo.setPersonName(StringUtil.isNullOrNone(reqJson.getString("personName")) == true?"-1":reqJson.getString("personName"));
+        reportInfoAnswerPo.setPersonName(StringUtil.isNullOrNone(reqJson.getString("personName")) == true?"未知":reqJson.getString("personName"));
         reportInfoAnswerPo.setCommunityId(reqJson.getString("communityId"));
         int flag = reportInfoAnswerInnerServiceSMOImpl.saveReportInfoAnswer(reportInfoAnswerPo);
         if (flag < 1) {
