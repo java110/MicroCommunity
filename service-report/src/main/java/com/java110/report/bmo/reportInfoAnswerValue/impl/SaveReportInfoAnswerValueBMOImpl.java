@@ -149,7 +149,7 @@ public class SaveReportInfoAnswerValueBMOImpl implements ISaveReportInfoAnswerVa
                 ReportInfoAnswerValuePo reportInfoAnswerValuePo = new ReportInfoAnswerValuePo();
                 reportInfoAnswerValuePo.setAnValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_anValueId));
                 reportInfoAnswerValuePo.setUserAnId(reportInfoAnswerPo.getUserAnId());
-                reportInfoAnswerValuePo.setValueId(valueContent);
+                reportInfoAnswerValuePo.setValueId("-1");
                 reportInfoAnswerValuePo.setSettingId(reqJson.getString("settingId"));
                 reportInfoAnswerValuePo.setTitleId(titleObj.getString("titleId"));
                 reportInfoAnswerValuePo.setCommunityId(titleObj.getString("communityId"));
