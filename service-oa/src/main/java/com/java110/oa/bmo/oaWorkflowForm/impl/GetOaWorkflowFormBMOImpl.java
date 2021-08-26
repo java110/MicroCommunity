@@ -177,6 +177,14 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
         Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
 
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setFlowId(paramIn.get("flowId").toString());
+        oaWorkflowFormDto.setStoreId(paramIn.get("storeId").toString());
+        oaWorkflowFormDto.setRow(1);
+        oaWorkflowFormDto.setPage(1);
+        List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
+        Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
+
         AuditUser auditUser = new AuditUser();
         auditUser.setProcessDefinitionKey(oaWorkflowDtos.get(0).getProcessDefinitionKey());
         auditUser.setFlowId(paramIn.getString("flowId"));
@@ -192,7 +200,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         if (count > 0) {
             datas = oaWorkflowUserInnerServiceSMOImpl.getUserTasks(auditUser);
             //刷新 表单数据
-            freshFormData(datas, paramIn);
+            freshFormData(datas, paramIn, oaWorkflowFormDtos.get(0));
         } else {
             datas = new ArrayList<>();
         }
@@ -218,6 +226,14 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
         Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
 
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setFlowId(paramIn.get("flowId").toString());
+        oaWorkflowFormDto.setStoreId(paramIn.get("storeId").toString());
+        oaWorkflowFormDto.setRow(1);
+        oaWorkflowFormDto.setPage(1);
+        List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
+        Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
+
         AuditUser auditUser = new AuditUser();
         auditUser.setProcessDefinitionKey(oaWorkflowDtos.get(0).getProcessDefinitionKey());
         auditUser.setFlowId(paramIn.getString("flowId"));
@@ -233,7 +249,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         if (count > 0) {
             datas = oaWorkflowUserInnerServiceSMOImpl.getUserHistoryTasks(auditUser);
             //刷新 表单数据
-            freshFormData(datas, paramIn);
+            freshFormData(datas, paramIn,oaWorkflowFormDtos.get(0));
         } else {
             datas = new ArrayList<>();
         }
@@ -261,7 +277,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
 
 
-        reqJson.put("createUserId", reqJson.getString("userId"));
+        reqJson.put("nextUserId", reqJson.getString("taskId"));
         boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
         if (isLastTask) {
             reqJson.put("state", "1005");
@@ -276,7 +292,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
      *
      * @param datas
      */
-    private void freshFormData(List<JSONObject> datas, JSONObject paramIn) {
+    private void freshFormData(List<JSONObject> datas, JSONObject paramIn, OaWorkflowFormDto oaWorkflowFormDto) {
         List<String> ids = new ArrayList<>();
         for (JSONObject data : datas) {
             ids.add(data.getString("id"));
@@ -288,6 +304,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         Map paramMap = new HashMap();
         paramMap.put("storeId", paramIn.getString("storeId"));
         paramMap.put("ids", ids.toArray(new String[ids.size()]));
+        paramMap.put("tableName", oaWorkflowFormDto.getTableName());
         paramMap.put("page", 1);
         paramMap.put("row", ids.size());
         List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);

@@ -431,7 +431,7 @@ public class OaWorkflowApi {
     }
 
     /**
-     * 保存流程数据
+     * 审核流程
      *
      * @param storeId 小区ID
      * @return
@@ -440,7 +440,6 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/auditOaWorkflow", method = RequestMethod.POST)
     public ResponseEntity<String> auditOaWorkflow(@RequestHeader(value = "store-id") String storeId,
-                                                  @RequestHeader(value = "user-id") String userId,
                                                   @RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "flowId", "flowId不能为空");
         Assert.hasKeyAndValue(reqJson, "id", "id不能为空");
@@ -448,7 +447,6 @@ public class OaWorkflowApi {
         Assert.hasKeyAndValue(reqJson, "auditMessage", "审核意见不能为空");
         Assert.hasKeyAndValue(reqJson, "auditCode", "审核状态不能为空");
         reqJson.put("storeId", storeId);
-        reqJson.put("userId", userId);
         return getOaWorkflowFormBMOImpl.auditOaWorkflow(reqJson);
     }
 }
