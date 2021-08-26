@@ -410,7 +410,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         for (Element userTask : userTasks) {
             Attribute assignee = userTask.attribute("assignee");
             if (assignee == null) {
-                userTask.addAttribute("camunda:assignee", "${nextUserId}");
+                userTask.addAttribute("assignee", "${nextUserId}");
             }
         }
 
