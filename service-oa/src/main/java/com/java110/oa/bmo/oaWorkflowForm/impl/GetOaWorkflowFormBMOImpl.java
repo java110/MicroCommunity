@@ -288,6 +288,8 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         Map paramMap = new HashMap();
         paramMap.put("storeId", paramIn.getString("storeId"));
         paramMap.put("ids", ids.toArray(new String[ids.size()]));
+        paramMap.put("page", 1);
+        paramMap.put("row", ids.size());
         List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
 
         for (JSONObject data : datas) {
