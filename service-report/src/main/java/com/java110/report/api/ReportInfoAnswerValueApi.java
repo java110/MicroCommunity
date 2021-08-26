@@ -38,28 +38,22 @@ public class ReportInfoAnswerValueApi {
     @RequestMapping(value = "/saveReportInfoAnswerValue", method = RequestMethod.POST)
     public ResponseEntity<String> saveReportInfoAnswerValue(@RequestHeader(value = "user-id") String userId,@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "anValueId", "请求报文中未包含anValueId");
-        Assert.hasKeyAndValue(reqJson, "userAnId", "请求报文中未包含userAnId");
+        Assert.hasKeyAndValue(reqJson, "questionAnswerTitles", "请求报文中未包含回答项");
         Assert.hasKeyAndValue(reqJson, "settingId", "请求报文中未包含settingId");
-        Assert.hasKeyAndValue(reqJson, "titleId", "请求报文中未包含titleId");
-        Assert.hasKeyAndValue(reqJson, "valueId", "请求报文中未包含valueId");
-        Assert.hasKeyAndValue(reqJson, "valueContent", "请求报文中未包含valueContent");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKey(reqJson, "questionAnswerTitles", "未包含回答项");
+
         JSONArray questionAnswerTitles = reqJson.getJSONArray("questionAnswerTitles");
 
         if (questionAnswerTitles == null || questionAnswerTitles.size() < 1) {
-            throw new IllegalArgumentException("未包含答案");
+            throw new IllegalArgumentException("未包含题目及答案");
         }
         JSONObject titleObj = null;
         for (int questionAnswerTitleIndex = 0; questionAnswerTitleIndex < questionAnswerTitles.size(); questionAnswerTitleIndex++) {
             titleObj = questionAnswerTitles.getJSONObject(questionAnswerTitleIndex);
-            Assert.hasKeyAndValue(titleObj, "valueContent", titleObj.getString("qaTitle") + ",未填写答案");
+            Assert.hasKeyAndValue(titleObj, "valueContent", titleObj.getString("title") + ",未填写答案");
         }
 
-        ReportInfoAnswerValuePo reportInfoAnswerValuePo = BeanConvertUtil.covertBean(reqJson, ReportInfoAnswerValuePo.class);
-
-        return saveReportInfoAnswerValueBMOImpl.save(reportInfoAnswerValuePo,questionAnswerTitles);
+        return saveReportInfoAnswerValueBMOImpl.save(reqJson,userId);
     }
 
     /**

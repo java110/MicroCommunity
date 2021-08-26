@@ -14,6 +14,10 @@ import java.util.Date;
  **/
 public class ReportInfoAnswerValueDto extends PageDto implements Serializable {
 
+    public static final String TITLETYPE_RADIO ="1001";
+    public static final String TITLETYPE_CHECKBOX ="2002";
+    public static final String ITLETYPE_TEXTAREA ="3003";
+
     private String valueId;
 private String userAnId;
 private String titleId;
