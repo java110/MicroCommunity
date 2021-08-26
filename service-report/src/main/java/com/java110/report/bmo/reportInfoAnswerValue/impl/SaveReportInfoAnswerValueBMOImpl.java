@@ -160,14 +160,10 @@ public class SaveReportInfoAnswerValueBMOImpl implements ISaveReportInfoAnswerVa
                     return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存失败");
                 }
             }
-
-            if (flag > 0) {
-                return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
-            }
         }
 
 
-        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
     }
 
 }
