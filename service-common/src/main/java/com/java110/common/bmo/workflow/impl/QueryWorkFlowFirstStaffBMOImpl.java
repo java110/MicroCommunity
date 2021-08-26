@@ -410,8 +410,13 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         for (Element userTask : userTasks) {
             Attribute assignee = userTask.attribute("assignee");
             if (assignee == null) {
-                userTask.addAttribute("assignee", "${nextUserId}");
+                userTask.addAttribute("activiti:assignee", "${nextUserId}");
             }
+        }
+
+        Attribute activiti = rootElement.attribute("activiti");
+        if (activiti == null) {
+            rootElement.addAttribute("xmlns:activiti", "http://activiti.org/bpmn");
         }
 
         Attribute processId = process.attribute("id");
@@ -436,12 +441,16 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
         Element rootElement = doc.getRootElement();
         Element process = rootElement.element("process");
-        List<Element> userTasks = process.elements("userTask1");
+        List<Element> userTasks = process.elements("userTask");
         for (Element userTask : userTasks) {
             Attribute assignee = userTask.attribute("assignee");
             if (assignee == null) {
-                userTask.addAttribute("camunda:assignee", "${createUserId}");
+                userTask.addAttribute("activiti:assignee", "${createUserId}");
             }
+        }
+        Attribute activiti = rootElement.attribute("activiti");
+        if (activiti == null) {
+            rootElement.addAttribute("xmlns:activiti", "http://activiti.org/bpmn");
         }
 
         Attribute processId = process.attribute("id");
