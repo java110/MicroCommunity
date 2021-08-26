@@ -33,6 +33,7 @@ private String repTitle;
 private String repValue;
 private String reType;
 private String repTypeName;
+private String personName;
 
 
 
@@ -147,5 +148,13 @@ public void setSettingId(String settingId) {
 
     public void setRepTypeName(String repTypeName) {
         this.repTypeName = repTypeName;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 }

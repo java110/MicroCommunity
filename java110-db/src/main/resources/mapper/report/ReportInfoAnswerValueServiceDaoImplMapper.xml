@@ -68,7 +68,7 @@ value_id,user_an_id,title_id,an_value_id,value_content,community_id,setting_id
 <if test="settingId !=null and settingId != ''">
    and av.setting_id= #{settingId}
 </if> 
-order by tt.title,av.create_time desc
+order by an.person_name,tt.title,av.create_time desc
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 
