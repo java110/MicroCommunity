@@ -89,6 +89,7 @@ public class SaveReportInfoAnswerValueBMOImpl implements ISaveReportInfoAnswerVa
                     reportInfoAnswerValuePo.setAnValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_anValueId));
                     reportInfoAnswerValuePo.setUserAnId(reportInfoAnswerPo.getUserAnId());
                     reportInfoAnswerValuePo.setValueId(valueContent.getString(checkBoxIndex));
+                    reportInfoAnswerValuePo.setSettingId(reqJson.getString("settingId"));
                     reportInfoAnswerValuePo.setTitleId(titleObj.getString("titleId"));
                     reportInfoAnswerValuePo.setCommunityId(titleObj.getString("communityId"));
                     ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto = new ReportInfoSettingTitleValueDto();
@@ -121,6 +122,7 @@ public class SaveReportInfoAnswerValueBMOImpl implements ISaveReportInfoAnswerVa
                 reportInfoAnswerValuePo.setValueId(valueContent);
                 reportInfoAnswerValuePo.setTitleId(titleObj.getString("titleId"));
                 reportInfoAnswerValuePo.setCommunityId(titleObj.getString("communityId"));
+                reportInfoAnswerValuePo.setSettingId(reqJson.getString("settingId"));
                 ReportInfoSettingTitleValueDto reportInfoSettingTitleValueDto = new ReportInfoSettingTitleValueDto();
 
 
@@ -148,6 +150,7 @@ public class SaveReportInfoAnswerValueBMOImpl implements ISaveReportInfoAnswerVa
                 reportInfoAnswerValuePo.setAnValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_anValueId));
                 reportInfoAnswerValuePo.setUserAnId(reportInfoAnswerPo.getUserAnId());
                 reportInfoAnswerValuePo.setValueId(valueContent);
+                reportInfoAnswerValuePo.setSettingId(reqJson.getString("settingId"));
                 reportInfoAnswerValuePo.setTitleId(titleObj.getString("titleId"));
                 reportInfoAnswerValuePo.setCommunityId(titleObj.getString("communityId"));
                 reportInfoAnswerValuePo.setValueContent(valueContent);
