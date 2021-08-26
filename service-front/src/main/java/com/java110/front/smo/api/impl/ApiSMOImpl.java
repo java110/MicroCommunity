@@ -78,6 +78,11 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
         HttpHeaders header = new HttpHeaders();
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
+        for (String key : headers.keySet()
+        ) {
+            header.add(key, headers.get(key));
+        }
+
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         if (!StringUtil.isEmpty(result.getUserId())) {
             header.add("user-id", result.getUserId());
@@ -104,11 +109,6 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
             throw new IllegalArgumentException("不支持的请求方式" + headers.get(CommonConstant.HTTP_METHOD));
         }
 
-
-        for (String key : headers.keySet()
-        ) {
-            header.add(key, headers.get(key));
-        }
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(body, header);
         logger.debug("请求后端url" + url);
