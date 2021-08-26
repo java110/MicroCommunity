@@ -39,7 +39,6 @@ public class ReportInfoAnswerValueApi {
     public ResponseEntity<String> saveReportInfoAnswerValue(@RequestHeader(value = "user-id") String userId,@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "questionAnswerTitles", "请求报文中未包含回答项");
-        Assert.hasKeyAndValue(reqJson, "reportInfoSettings", "请求报文中未包含项目类型");
         Assert.hasKeyAndValue(reqJson, "settingId", "请求报文中未包含settingId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
