@@ -38,6 +38,10 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -301,6 +305,13 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 //        }
     }
 
+    /**
+     * 创建model
+     * 微信 17797173942
+     *
+     * @param workflowModelDto
+     * @return
+     */
     @Override
     @Java110Transactional
     public ResponseEntity<String> saveModel(WorkflowModelDto workflowModelDto) {
@@ -310,6 +321,10 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
 
         Assert.listOnlyOne(oaWorkflowDtos, "未包含流程");
+        workflowModelDto.setFlowId(oaWorkflowDtos.get(0).getFlowId());
+
+        //这里决定对bpmn xml 文件做过滤处理
+        dealBpmnXml(workflowModelDto);
 
         OaWorkflowXmlPo oaWorkflowXmlPo = new OaWorkflowXmlPo();
         oaWorkflowXmlPo.setStoreId(oaWorkflowDtos.get(0).getStoreId());
@@ -317,7 +332,6 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         oaWorkflowXmlPo.setFlowId(oaWorkflowDtos.get(0).getFlowId());
         oaWorkflowXmlPo.setSvgXml(workflowModelDto.getSvg_xml());
         //查询部署
-
         OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
         oaWorkflowXmlDto.setFlowId(oaWorkflowDtos.get(0).getFlowId());
         oaWorkflowXmlDto.setStoreId(oaWorkflowDtos.get(0).getStoreId());
@@ -375,6 +389,135 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         }
 
         return ResultVo.success();
+    }
+
+    /**
+     * 过滤BpmnXml
+     *
+     * @param workflowModelDto
+     */
+    private void dealBpmnXml(WorkflowModelDto workflowModelDto) {
+        String bpmnXml = workflowModelDto.getJson_xml();
+        Document doc = null;
+        try {
+            doc = DocumentHelper.parseText(bpmnXml);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+        Element rootElement = doc.getRootElement();
+        Element process = rootElement.element("process");
+        List<Element> userTasks = process.elements("userTask");
+        for (Element userTask : userTasks) {
+            Attribute assignee = userTask.attribute("assignee");
+            if (assignee == null) {
+                userTask.addAttribute("camunda:assignee", "${nextUserId}");
+            }
+        }
+
+        Attribute processId = process.attribute("id");
+        if (processId == null) {
+            workflowModelDto.setJson_xml(rootElement.asXML());
+            return;
+        }
+        String processIdValue = processId.getValue();
+        String newXml = rootElement.asXML();
+        newXml = newXml.replaceAll(processIdValue, "java110_" + workflowModelDto.getFlowId());
+        workflowModelDto.setJson_xml(newXml);
+    }
+
+    public static void main(String[] args) {
+        String xml = getXml();
+        Document doc = null;
+        try {
+            doc = DocumentHelper.parseText(xml);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+
+        Element rootElement = doc.getRootElement();
+        Element process = rootElement.element("process");
+        List<Element> userTasks = process.elements("userTask1");
+        for (Element userTask : userTasks) {
+            Attribute assignee = userTask.attribute("assignee");
+            if (assignee == null) {
+                userTask.addAttribute("camunda:assignee", "${createUserId}");
+            }
+        }
+
+        Attribute processId = process.attribute("id");
+        if (processId == null) {
+            return;
+        }
+        String processIdValue = processId.getValue();
+        String newXml = rootElement.asXML();
+        newXml = newXml.replaceAll(processIdValue, "你好兄弟");
+
+
+        System.out.printf("xml=\n" + newXml);
+
+
+    }
+
+    private static String getXml() {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" id=\"sample-diagram\" targetNamespace=\"http://bpmn.io/schema/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n" +
+                "  <bpmn2:process id=\"java110_752021081769600001\" name=\"请假流程\" isExecutable=\"true\">\n" +
+                "    <bpmn2:sequenceFlow id=\"Flow_1gyk5nu\" sourceRef=\"StartEvent_1\" targetRef=\"Activity_0d63gnp\" />\n" +
+                "    <bpmn2:userTask id=\"Activity_0d63gnp\" name=\"测试审核\">\n" +
+                "      <bpmn2:incoming>Flow_1gyk5nu</bpmn2:incoming>\n" +
+                "      <bpmn2:outgoing>Flow_0vajlrg</bpmn2:outgoing>\n" +
+                "    </bpmn2:userTask>\n" +
+                "    <bpmn2:endEvent id=\"Event_1wbhsi9\" name=\"结束节点\">\n" +
+                "      <bpmn2:incoming>Flow_1pn6kje</bpmn2:incoming>\n" +
+                "      <bpmn2:terminateEventDefinition id=\"TerminateEventDefinition_05gt98d\" />\n" +
+                "    </bpmn2:endEvent>\n" +
+                "    <bpmn2:startEvent id=\"StartEvent_1\" name=\"开始\">\n" +
+                "      <bpmn2:outgoing>Flow_1gyk5nu</bpmn2:outgoing>\n" +
+                "    </bpmn2:startEvent>\n" +
+                "    <bpmn2:task id=\"Activity_0zilrzy\" name=\"优化\">\n" +
+                "      <bpmn2:incoming>Flow_0vajlrg</bpmn2:incoming>\n" +
+                "      <bpmn2:outgoing>Flow_1pn6kje</bpmn2:outgoing>\n" +
+                "    </bpmn2:task>\n" +
+                "    <bpmn2:sequenceFlow id=\"Flow_0vajlrg\" sourceRef=\"Activity_0d63gnp\" targetRef=\"Activity_0zilrzy\" />\n" +
+                "    <bpmn2:sequenceFlow id=\"Flow_1pn6kje\" sourceRef=\"Activity_0zilrzy\" targetRef=\"Event_1wbhsi9\" />\n" +
+                "  </bpmn2:process>\n" +
+                "  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n" +
+                "    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"java110_752021081769600001\">\n" +
+                "      <bpmndi:BPMNEdge id=\"Flow_1pn6kje_di\" bpmnElement=\"Flow_1pn6kje\">\n" +
+                "        <di:waypoint x=\"760\" y=\"370\" />\n" +
+                "        <di:waypoint x=\"922\" y=\"370\" />\n" +
+                "      </bpmndi:BPMNEdge>\n" +
+                "      <bpmndi:BPMNEdge id=\"Flow_0vajlrg_di\" bpmnElement=\"Flow_0vajlrg\">\n" +
+                "        <di:waypoint x=\"600\" y=\"258\" />\n" +
+                "        <di:waypoint x=\"630\" y=\"258\" />\n" +
+                "        <di:waypoint x=\"630\" y=\"370\" />\n" +
+                "        <di:waypoint x=\"660\" y=\"370\" />\n" +
+                "      </bpmndi:BPMNEdge>\n" +
+                "      <bpmndi:BPMNEdge id=\"Flow_1gyk5nu_di\" bpmnElement=\"Flow_1gyk5nu\">\n" +
+                "        <di:waypoint x=\"448\" y=\"258\" />\n" +
+                "        <di:waypoint x=\"500\" y=\"258\" />\n" +
+                "      </bpmndi:BPMNEdge>\n" +
+                "      <bpmndi:BPMNShape id=\"Activity_1kyok5a_di\" bpmnElement=\"Activity_0d63gnp\">\n" +
+                "        <dc:Bounds x=\"500\" y=\"218\" width=\"100\" height=\"80\" />\n" +
+                "      </bpmndi:BPMNShape>\n" +
+                "      <bpmndi:BPMNShape id=\"Event_09dr7i8_di\" bpmnElement=\"Event_1wbhsi9\">\n" +
+                "        <dc:Bounds x=\"922\" y=\"352\" width=\"36\" height=\"36\" />\n" +
+                "        <bpmndi:BPMNLabel>\n" +
+                "          <dc:Bounds x=\"919\" y=\"395\" width=\"43\" height=\"14\" />\n" +
+                "        </bpmndi:BPMNLabel>\n" +
+                "      </bpmndi:BPMNShape>\n" +
+                "      <bpmndi:BPMNShape id=\"Event_1ng8kt4_di\" bpmnElement=\"StartEvent_1\">\n" +
+                "        <dc:Bounds x=\"412\" y=\"240\" width=\"36\" height=\"36\" />\n" +
+                "        <bpmndi:BPMNLabel>\n" +
+                "          <dc:Bounds x=\"419\" y=\"283\" width=\"22\" height=\"14\" />\n" +
+                "        </bpmndi:BPMNLabel>\n" +
+                "      </bpmndi:BPMNShape>\n" +
+                "      <bpmndi:BPMNShape id=\"Activity_0zilrzy_di\" bpmnElement=\"Activity_0zilrzy\">\n" +
+                "        <dc:Bounds x=\"660\" y=\"330\" width=\"100\" height=\"80\" />\n" +
+                "      </bpmndi:BPMNShape>\n" +
+                "    </bpmndi:BPMNPlane>\n" +
+                "  </bpmndi:BPMNDiagram>\n" +
+                "</bpmn2:definitions>";
     }
 
 }
