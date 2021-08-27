@@ -24,7 +24,6 @@ import com.java110.po.reportOweFee.ReportOweFeePo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
-import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +39,8 @@ import java.util.List;
  **/
 @Component
 public class GenerateOweFeeTemplate extends TaskSystemQuartz {
+
+    public static final double DEFAULT_ROW = 200.0;
 
 
     @Autowired
@@ -125,26 +126,43 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
     private void GenerateOweFeeByFeeConfig(TaskDto taskDto, FeeConfigDto feeConfigDto) throws Exception {
 
         //当前费用项是否
-
         FeeDto feeDto = new FeeDto();
         feeDto.setConfigId(feeConfigDto.getConfigId());
         feeDto.setCommunityId(feeConfigDto.getCommunityId());
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        //没有关联费用
-        if (feeDto == null || feeDtos.size() < 1) {
-            return;
-        }
-        for (FeeDto tmpFeeDto : feeDtos) {
+        //先查询总数
+        int count = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
+
+        double record = Math.ceil(count / DEFAULT_ROW);
+
+        for (int page = 1; page <= record; page++) {
             try {
-                generateFee(tmpFeeDto, feeConfigDto);
+                feeDto.setPage(page);
+                feeDto.setRow(new Double(DEFAULT_ROW).intValue());
+                List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+                //没有关联费用
+                if (feeDto == null || feeDtos.size() < 1) {
+                    continue;
+                }
+                for (FeeDto tmpFeeDto : feeDtos) {
+                    try {
+                        generateFee(tmpFeeDto, feeConfigDto);
+                    } catch (Exception e) {
+                        LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                        logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                        logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                        logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                        saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
+                        logger.error("生成费用失败", e);
+                    }
+                }
             } catch (Exception e) {
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
                 logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
                 logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
                 logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
                 saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
-                logger.error("生成费用失败", e);
+                logger.error("费用出账失败" + feeConfigDto.getConfigId(), e);
             }
         }
 
