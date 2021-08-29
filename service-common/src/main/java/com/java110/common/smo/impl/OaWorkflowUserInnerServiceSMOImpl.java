@@ -156,6 +156,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
             taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("taskId", task.getId());
             taskBusinessKeyMap.put("id", business_key);
             tasks.add(taskBusinessKeyMap);
         }
@@ -220,14 +221,18 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         List<JSONObject> tasks = new ArrayList<>();
         List<String> complaintIds = new ArrayList<>();
         for (HistoricTaskInstance task : list) {
+            taskBusinessKeyMap = new JSONObject();
             String processInstanceId = task.getProcessInstanceId();
             //3.使用流程实例，查询
             HistoricProcessInstance pi = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
             taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("taskId", task.getId());
+            taskBusinessKeyMap.put("id", business_key);
             tasks.add(taskBusinessKeyMap);
         }
+
         return tasks;
     }
 
