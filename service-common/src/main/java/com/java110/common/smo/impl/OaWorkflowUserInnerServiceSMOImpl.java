@@ -240,6 +240,9 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     public boolean completeTask(@RequestBody JSONObject reqJson) {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
+        if (task == null) {
+            throw new IllegalArgumentException("任务已处理");
+        }
         String processInstanceId = task.getProcessInstanceId();
         Authentication.setAuthenticatedUserId(reqJson.getString("nextUserId"));
         taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
