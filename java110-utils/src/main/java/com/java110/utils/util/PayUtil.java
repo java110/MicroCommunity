@@ -109,6 +109,19 @@ public class PayUtil {
     /**
      * 创建签名Sign
      *
+     * {sdfsfsd}123123123  md5
+     *
+     * {
+     *
+     *     heaer:{
+     *         serviceCode:''，
+     *         sign:'sddd'
+     *     },
+     *     body:{
+     *         sssssss
+     *     }
+     * }
+     *
      * @param key
      * @param parameters
      * @return

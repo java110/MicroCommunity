@@ -460,7 +460,7 @@ public class OaWorkflowApi {
      * @serviceCode /oaWorkflow/getNextTask
      * @path /app/oaWorkflow/getNextTask
      */
-    @RequestMapping(value = "/getNextTask", method = RequestMethod.POST)
+    @RequestMapping(value = "/getNextTask", method = RequestMethod.GET)
     public ResponseEntity<String> getNextTask(@RequestHeader(value = "store-id") String storeId,
                                                   @RequestHeader(value = "user-id") String userId,
                                                   @RequestParam(value = "taskId") String taskId) {
