@@ -16,8 +16,9 @@ import java.util.Date;
 public class OaWorkflowDataDto extends PageDto implements Serializable {
 
     public static final String EVENT_COMMIT = "C";
-    public static final String EVENT_TRANSFER = "C";
+    public static final String EVENT_TRANSFER = "T";
 
+    private String id;
     private String dataId;
     private String businessKey;
     private String context;
@@ -148,5 +149,13 @@ public class OaWorkflowDataDto extends PageDto implements Serializable {
 
     public void setHis(String his) {
         this.his = his;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
