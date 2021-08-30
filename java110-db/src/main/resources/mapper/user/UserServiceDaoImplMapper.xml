@@ -545,6 +545,12 @@
         <if test="bId != null and bId !=''">
             and u.b_id = #{bId}
         </if>
+        <if test="userIds != null and userIds != null">
+            and u.user_id in
+            <foreach collection="userIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
