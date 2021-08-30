@@ -423,12 +423,17 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             //排除非用户任务接点
             if (targetFlowElement instanceof UserTask) {
                 //判断输出节点的el表达式
-//                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
-//                    //true 获取输出节点名称
-//                    taskObj.put("name",outgoingFlow.getTargetFlowElement().getName());
-//                }else{
-                taskObj.put("name", outgoingFlow.getTargetFlowElement().getName());
-//                }
+                Map vars = new HashMap();
+                vars.put("auditCode","1200");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    //true 获取输出节点名称
+                    taskObj.put("back",outgoingFlow.getTargetFlowElement().getName());
+                }
+                vars.put("auditCode","1400");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    //true 获取输出节点名称
+                    taskObj.put("backIndex",outgoingFlow.getTargetFlowElement().getName());
+                }
                 tasks.add(taskObj);
             }
         }
