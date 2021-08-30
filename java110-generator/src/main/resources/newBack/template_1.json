@@ -1,29 +1,33 @@
 {
   "autoMove": true,
-  "id": "xmlId",
-  "name": "oaWorkflowForm",
-  "desc": "OA表单",
+  "id": "dataId",
+  "name": "oaWorkflowData",
+  "desc": "OA表单审批数据",
   "shareParam": "storeId",
   "shareColumn": "store_id",
   "shareName": "oa",
-  "tableName": "oa_workflow_form",
+  "tableName": "oa_workflow_data",
   "param": {
-    "formId": "form_id",
-    "flowId": "flow_id",
+    "dataId": "data_id",
+    "businessKey": "business_key",
     "storeId": "store_id",
-    "formJson": "form_json",
-    "tableName": "table_name",
-    "version": "version",
+    "context": "context",
+    "staffId": "staff_id",
+    "staffName": "staff_name",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "event": "event",
+    "preDataId": "pre_data_id",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "flowId",
-      "msg": "流程不能为空"
+      "code": "businessKey",
+      "msg": "业务不能为空"
     },
     {
-      "code": "formJson",
-      "msg": "流程图不能为空"
+      "code": "context",
+      "msg": "审批内容不能为空"
     }
   ]
 }

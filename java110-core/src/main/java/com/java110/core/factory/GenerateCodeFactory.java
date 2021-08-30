@@ -218,6 +218,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_monthId = "79";
     public static final String CODE_PREFIX_xmlId = "79";
     public static final String CODE_PREFIX_formId = "80";
+    public static final String CODE_PREFIX_dataId = "81";
 
 
 
