@@ -253,14 +253,14 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
         long count = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatasCount(oaWorkflowDataDto);
 
-        List<JSONObject> datas = null;
-
+        List<JSONObject> datas = new ArrayList<>();
         if (count > 0) {
-            datas = BeanConvertUtil.covertBeanList(oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto), JSONObject.class);
+            List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
+            for(OaWorkflowDataDto oaWorkflowDataDto1 : oaWorkflowDataDtos){
+                datas.add(BeanConvertUtil.beanCovertJson(oaWorkflowDataDto1));
+            }
             //刷新 表单数据
             freshFormData(datas, paramIn, oaWorkflowFormDtos.get(0));
-        } else {
-            datas = new ArrayList<>();
         }
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramIn.getInteger("row")), count, datas);
