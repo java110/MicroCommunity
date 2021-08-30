@@ -3,15 +3,19 @@ package com.java110.oa.bmo.oaWorkflowForm.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.user.UserDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.IGetOaWorkflowFormBMO;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +43,10 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
     @Autowired
     private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowDataInnerServiceSMO oaWorkflowDataInnerServiceSMOImpl;
+
 
     /**
      * @param oaWorkflowFormDto
@@ -234,20 +243,20 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
         Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
 
-        AuditUser auditUser = new AuditUser();
-        auditUser.setProcessDefinitionKey(oaWorkflowDtos.get(0).getProcessDefinitionKey());
-        auditUser.setFlowId(paramIn.getString("flowId"));
-        auditUser.setUserId(paramIn.getString("userId"));
-        auditUser.setStoreId(paramIn.getString("storeId"));
-        auditUser.setPage(paramIn.getInteger("page"));
-        auditUser.setRow(paramIn.getInteger("row"));
+        OaWorkflowDataDto oaWorkflowDataDto = new OaWorkflowDataDto();
+        oaWorkflowDataDto.setFlowId(paramIn.getString("flowId"));
+        oaWorkflowDataDto.setStaffId(paramIn.getString("userId"));
+        oaWorkflowDataDto.setStoreId(paramIn.getString("storeId"));
+        oaWorkflowDataDto.setPage(paramIn.getInteger("page"));
+        oaWorkflowDataDto.setRow(paramIn.getInteger("row"));
+        oaWorkflowDataDto.setHis("Y");
 
-        long count = oaWorkflowUserInnerServiceSMOImpl.getUserHistoryTaskCount(auditUser);
+        long count = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatasCount(oaWorkflowDataDto);
 
         List<JSONObject> datas = null;
 
         if (count > 0) {
-            datas = oaWorkflowUserInnerServiceSMOImpl.getUserHistoryTasks(auditUser);
+            datas = BeanConvertUtil.covertBeanList(oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto), JSONObject.class);
             //刷新 表单数据
             freshFormData(datas, paramIn, oaWorkflowFormDtos.get(0));
         } else {
@@ -262,12 +271,14 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
     @Override
     public ResponseEntity<String> auditOaWorkflow(JSONObject reqJson) {
+        //查询流程是否存在
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setStoreId(reqJson.getString("storeId"));
         oaWorkflowDto.setFlowId(reqJson.getString("flowId"));
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
         Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
 
+        //流程表单是否存在
         OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
         oaWorkflowFormDto.setFlowId(reqJson.get("flowId").toString());
         oaWorkflowFormDto.setStoreId(reqJson.get("storeId").toString());
@@ -276,29 +287,42 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
         Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
 
+        //流程数据是否存在
+        Map paramMap = new HashMap();
+        paramMap.put("storeId", reqJson.getString("storeId"));
+        paramMap.put("id", reqJson.getString("id"));
+        paramMap.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
+        paramMap.put("page", 1);
+        paramMap.put("row", 1);
+        List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
+
+        Assert.listOnlyOne(formDatas, "工单数据不存在");
+
+        reqJson.put("startUserId", formDatas.get(0).get("create_user_id"));
+
         //业务办理
         if ("1100".equals(reqJson.getString("auditCode"))) { //办理操作
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
             if (isLastTask) {
-                reqJson.put("state", "1005");
+                reqJson.put("state", "1005"); //工单结束
             } else {
-                reqJson.put("state", "1002");
+                reqJson.put("state", "1002"); //工单审核
             }
             reqJson.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
             oaWorkflowFormInnerServiceSMOImpl.updateOaWorkflowFormData(reqJson);
+            //完成当前流程 插入下一处理人
         } else if ("1300".equals(reqJson.getString("auditCode"))) { //转单操作
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             oaWorkflowUserInnerServiceSMOImpl.changeTaskToOtherUser(reqJson);
-            reqJson.put("state", "1004");
+            reqJson.put("state", "1004"); //工单转单
             reqJson.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
             oaWorkflowFormInnerServiceSMOImpl.updateOaWorkflowFormData(reqJson);
         } else if ("1200".equals(reqJson.getString("auditCode"))
                 || "1400".equals(reqJson.getString("auditCode"))
         ) { //退回操作
-            reqJson.put("nextUserId", reqJson.getString("staffId"));
-            oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
-            reqJson.put("state", "1003");
+            oaWorkflowUserInnerServiceSMOImpl.goBackTask(reqJson);
+            reqJson.put("state", "1003"); //工单退单
             reqJson.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
             oaWorkflowFormInnerServiceSMOImpl.updateOaWorkflowFormData(reqJson);
         } else {
@@ -313,6 +337,47 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
     public ResponseEntity<String> getNextTask(JSONObject reqJson) {
         List<JSONObject> tasks = oaWorkflowUserInnerServiceSMOImpl.nextAllNodeTaskList(reqJson);
         return ResultVo.createResponseEntity(tasks);
+    }
+
+    @Override
+    public ResponseEntity<String> queryOaWorkflowUser(JSONObject paramIn) {
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setStoreId(paramIn.getString("storeId"));
+        oaWorkflowDto.setFlowId(paramIn.getString("flowId"));
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
+
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setFlowId(paramIn.get("flowId").toString());
+        oaWorkflowFormDto.setStoreId(paramIn.get("storeId").toString());
+        oaWorkflowFormDto.setRow(1);
+        oaWorkflowFormDto.setPage(1);
+        List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
+        Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
+
+        OaWorkflowDataDto oaWorkflowDataDto = new OaWorkflowDataDto();
+        oaWorkflowDataDto.setFlowId(paramIn.getString("flowId"));
+        oaWorkflowDataDto.setBusinessKey(paramIn.getString("id"));
+        oaWorkflowDataDto.setStoreId(paramIn.getString("storeId"));
+        oaWorkflowDataDto.setPage(paramIn.getInteger("page"));
+        oaWorkflowDataDto.setRow(paramIn.getInteger("row"));
+
+        long count = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatasCount(oaWorkflowDataDto);
+
+        List<JSONObject> datas = null;
+
+        if (count > 0) {
+            datas = BeanConvertUtil.covertBeanList(oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto), JSONObject.class);
+            //刷新 表单数据
+            freshFormData(datas, paramIn, oaWorkflowFormDtos.get(0));
+        } else {
+            datas = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramIn.getInteger("row")), count, datas);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
     }
 
     /**
@@ -336,14 +401,43 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         paramMap.put("page", 1);
         paramMap.put("row", ids.size());
         List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
-
+        long duration = 0L;
         for (JSONObject data : datas) {
             for (Map form : formDatas) {
                 if (data.getString("id").equals(form.get("id"))) {
                     data.putAll(form);
                 }
             }
+
+            if (data.containsKey("startTime") && data.containsKey("endTime")) {
+                try {
+                    if (data.getString("endTime") == null) {
+                        duration = DateUtil.getCurrentDate().getTime() - DateUtil.getDateFromString(data.getString("startTime"), DateUtil.DATE_FORMATE_STRING_A).getTime();
+                    } else {
+                        duration = DateUtil.getDateFromString(data.getString("endTime"), DateUtil.DATE_FORMATE_STRING_A).getTime()
+                                - DateUtil.getDateFromString(data.getString("startTime"), DateUtil.DATE_FORMATE_STRING_A).getTime();
+                    }
+                } catch (Exception e) {
+                    duration = 0;
+                }
+                data.put("duration", getCostTime(duration));
+            }
         }
+    }
+
+    public String getCostTime(Long time) {
+        if (time == null) {
+            return "00:00";
+        }
+        long hours = time / (1000 * 60 * 60);
+        long minutes = (time - hours * (1000 * 60 * 60)) / (1000 * 60);
+        String diffTime = "";
+        if (minutes < 10) {
+            diffTime = hours + ":0" + minutes;
+        } else {
+            diffTime = hours + ":" + minutes;
+        }
+        return diffTime;
     }
 
 }

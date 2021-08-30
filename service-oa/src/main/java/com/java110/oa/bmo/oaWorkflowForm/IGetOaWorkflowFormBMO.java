@@ -59,4 +59,11 @@ public interface IGetOaWorkflowFormBMO {
      * @return
      */
     ResponseEntity<String> getNextTask(JSONObject reqJson);
+
+    /**
+     * 查询审批流程
+     * @param paramIn
+     * @return
+     */
+    ResponseEntity<String> queryOaWorkflowUser(JSONObject paramIn);
 }

@@ -453,6 +453,31 @@ public class OaWorkflowApi {
     }
 
     /**
+     * 查询已办
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /oaWorkflow/queryOaWorkflowUser
+     * @path /app/oaWorkflow/queryOaWorkflowUser
+     */
+    @RequestMapping(value = "/queryOaWorkflowUser", method = RequestMethod.GET)
+    public ResponseEntity<String> queryOaWorkflowUser(@RequestHeader(value = "store-id") String storeId,
+                                                                     @RequestHeader(value = "user-id") String userId,
+                                                                     @RequestParam(value = "flowId", required = false) String flowId,
+                                                                     @RequestParam(value = "id", required = false) String id,
+                                                                     @RequestParam(value = "page") int page,
+                                                                     @RequestParam(value = "row") int row) {
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("page", page);
+        paramIn.put("row", row);
+        paramIn.put("flowId", flowId);
+        paramIn.put("id", id);
+        paramIn.put("storeId", storeId);
+        paramIn.put("userId", userId);
+        return getOaWorkflowFormBMOImpl.queryOaWorkflowUser(paramIn);
+    }
+
+    /**
      * 审核流程
      *
      * @param storeId 小区ID

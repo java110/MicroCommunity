@@ -3,26 +3,36 @@ package com.java110.common.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
+import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import org.activiti.bpmn.model.*;
-import org.activiti.engine.*;
-import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.FlowElement;
+import org.activiti.bpmn.model.FlowNode;
+import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.bpmn.model.UserTask;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.query.Query;
-import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
@@ -63,6 +73,9 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Autowired
     private RepositoryService repositoryService;
+
+    @Autowired
+    private IOaWorkflowDataInnerServiceSMO oaWorkflowDataInnerServiceSMOImpl;
 
 
     /**
@@ -237,6 +250,10 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         if (task == null) {
             throw new IllegalArgumentException("任务已处理");
         }
+
+        //扩展 工作流功能
+        doTaskAuditAgree(reqJson);
+
         String processInstanceId = task.getProcessInstanceId();
         Authentication.setAuthenticatedUserId(reqJson.getString("nextUserId"));
         taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
@@ -251,13 +268,113 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         return false;
     }
 
+    /**
+     * 处理 审核状态
+     *
+     * @param reqJson
+     */
+    private void doTaskAuditAgree(JSONObject reqJson) {
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("nextUserId"));
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(users, "用户不存在");
+
+        String preDataId = "-1";
+        //查询当前节点
+        OaWorkflowDataDto oaWorkflowDataDto = new OaWorkflowDataDto();
+        oaWorkflowDataDto.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDataDto.setBusinessKey(reqJson.getString("id"));
+        oaWorkflowDataDto.setPage(1);
+        oaWorkflowDataDto.setRow(1);
+        List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
+
+        OaWorkflowDataPo oaWorkflowDataPo = null;
+        if (oaWorkflowDataDtos == null || oaWorkflowDataDtos.size() < 1) {
+            oaWorkflowDataPo = new OaWorkflowDataPo();
+            oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
+            oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));
+            oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+            oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
+            oaWorkflowDataPo.setEvent(OaWorkflowDataDto.EVENT_COMMIT);
+            oaWorkflowDataPo.setPreDataId(preDataId);
+            oaWorkflowDataPo.setStaffId(reqJson.getString("nextUserId"));
+            oaWorkflowDataPo.setStaffName(users.get(0).getName());
+            oaWorkflowDataPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            oaWorkflowDataPo.setStoreId(reqJson.getString("storeId"));
+            oaWorkflowDataInnerServiceSMOImpl.saveOaWorkflowData(oaWorkflowDataPo);
+            return;
+        }
+        //修改 当前 为完成
+        oaWorkflowDataPo = new OaWorkflowDataPo();
+        oaWorkflowDataPo.setDataId(oaWorkflowDataDtos.get(0).getDataId());
+        oaWorkflowDataPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataInnerServiceSMOImpl.updateOaWorkflowData(oaWorkflowDataPo);
+
+        oaWorkflowDataPo = new OaWorkflowDataPo();
+        oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
+        oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));
+        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+        oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
+        oaWorkflowDataPo.setEvent(OaWorkflowDataDto.EVENT_COMMIT);
+        oaWorkflowDataPo.setPreDataId(oaWorkflowDataDtos.get(0).getDataId());
+        oaWorkflowDataPo.setStaffId(reqJson.getString("nextUserId"));
+        oaWorkflowDataPo.setStaffName(users.get(0).getName());
+        oaWorkflowDataPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataPo.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDataInnerServiceSMOImpl.saveOaWorkflowData(oaWorkflowDataPo);
+    }
+
+    /**
+     * 转办
+     *
+     * @param reqJson
+     * @return
+     */
     public boolean changeTaskToOtherUser(@RequestBody JSONObject reqJson) {
+
+        //查询当前节点
+        OaWorkflowDataDto oaWorkflowDataDto = new OaWorkflowDataDto();
+        oaWorkflowDataDto.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDataDto.setBusinessKey(reqJson.getString("id"));
+        oaWorkflowDataDto.setPage(1);
+        oaWorkflowDataDto.setRow(1);
+        List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
+
+        Assert.listOnlyOne(oaWorkflowDataDtos, "数据错误未包含上级数据");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("nextUserId"));
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(users, "用户不存在");
+
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
         String processInstanceId = task.getProcessInstanceId();
         taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
         taskService.setAssignee(reqJson.getString("taskId"), reqJson.getString("nextUserId"));
         //taskService.setOwner(reqJson.getString("taskId"), reqJson.getString("nextUserId"));
+
+        OaWorkflowDataPo oaWorkflowDataPo = null;
+        //修改 当前 为完成
+        oaWorkflowDataPo = new OaWorkflowDataPo();
+        oaWorkflowDataPo.setDataId(oaWorkflowDataDtos.get(0).getDataId());
+        oaWorkflowDataPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataInnerServiceSMOImpl.updateOaWorkflowData(oaWorkflowDataPo);
+
+        oaWorkflowDataPo = new OaWorkflowDataPo();
+        oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
+        oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));
+        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+        oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
+        oaWorkflowDataPo.setEvent(OaWorkflowDataDto.EVENT_TRANSFER);
+        oaWorkflowDataPo.setPreDataId(oaWorkflowDataDtos.get(0).getDataId());
+        oaWorkflowDataPo.setStaffId(reqJson.getString("nextUserId"));
+        oaWorkflowDataPo.setStaffName(users.get(0).getName());
+        oaWorkflowDataPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataPo.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDataInnerServiceSMOImpl.saveOaWorkflowData(oaWorkflowDataPo);
         return true;
     }
 
@@ -265,74 +382,75 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
         if (task == null) {
-            throw new IllegalArgumentException("流程未启动或已执行完成，无法退回");
-        }
-        List<HistoricTaskInstance> htiList = historyService.createHistoricTaskInstanceQuery()
-                .processInstanceBusinessKey(reqJson.getString("id"))
-                .orderByTaskCreateTime()
-                .asc()
-                .list();
-        String myTaskId = null;
-        HistoricTaskInstance myTask = null;
-        for (HistoricTaskInstance hti : htiList) {
-            if (reqJson.getString("curUserId").equals(hti.getAssignee())) {
-                myTaskId = hti.getId();
-                myTask = hti;
-                break;
-            }
-        }
-        if (null == myTaskId) {
-            throw new IllegalArgumentException("该任务非当前用户提交，无法退回");
+            throw new IllegalArgumentException("任务已处理");
         }
 
-        String processDefinitionId = myTask.getProcessDefinitionId();
-        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
-        BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
-
-        //变量
-//		Map<String, VariableInstance> variables = runtimeService.getVariableInstances(currentTask.getExecutionId());
-        String myActivityId = null;
-        List<HistoricActivityInstance> haiList = historyService.createHistoricActivityInstanceQuery()
-                .executionId(myTask.getExecutionId()).finished().list();
-        for (HistoricActivityInstance hai : haiList) {
-            if (myTaskId.equals(hai.getTaskId())) {
-                myActivityId = hai.getActivityId();
-                break;
-            }
+        String event = doTaskAuditUnAgree(reqJson);
+        if (OaWorkflowDataDto.EVENT_COMMIT.equals(event)) { //提交状态
+            String processInstanceId = task.getProcessInstanceId();
+            Authentication.setAuthenticatedUserId(reqJson.getString("nextUserId"));
+            taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
+            Map<String, Object> variables = new HashMap<String, Object>();
+            variables.put("nextUserId", reqJson.getString("nextUserId"));
+            variables.put("auditCode", reqJson.getString("auditCode"));
+            taskService.complete(reqJson.getString("taskId"), variables);
+        } else { //转单
+            taskService.setAssignee(reqJson.getString("taskId"), reqJson.getString("nextUserId"));
         }
-        FlowNode myFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(myActivityId);
-
-
-        Execution execution = runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult();
-        String activityId = execution.getActivityId();
-        logger.warn("------->> activityId:" + activityId);
-        FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(activityId);
-
-        //记录原活动方向
-        List<SequenceFlow> oriSequenceFlows = new ArrayList<SequenceFlow>();
-        oriSequenceFlows.addAll(flowNode.getOutgoingFlows());
-
-        //清理活动方向
-        flowNode.getOutgoingFlows().clear();
-        //建立新方向
-        List<SequenceFlow> newSequenceFlowList = new ArrayList<SequenceFlow>();
-        SequenceFlow newSequenceFlow = new SequenceFlow();
-        newSequenceFlow.setId("newSequenceFlowId");
-        newSequenceFlow.setSourceFlowElement(flowNode);
-        newSequenceFlow.setTargetFlowElement(myFlowNode);
-        newSequenceFlowList.add(newSequenceFlow);
-        flowNode.setOutgoingFlows(newSequenceFlowList);
-
-        Authentication.setAuthenticatedUserId(reqJson.getString("curUserId"));
-        taskService.addComment(task.getId(), task.getProcessInstanceId(), "退回，" + reqJson.getString("auditMessage"));
-
-        Map<String, Object> currentVariables = new HashMap<String, Object>();
-        currentVariables.put("applier", reqJson.getString("curUserId"));
-        //完成任务
-        taskService.complete(task.getId(), currentVariables);
-        //恢复原方向
-        flowNode.setOutgoingFlows(oriSequenceFlows);
         return true;
+    }
+
+    /**
+     * 审核不同意 退回
+     *
+     * @param reqJson
+     */
+    private String doTaskAuditUnAgree(JSONObject reqJson) {
+        //查询当前节点
+        OaWorkflowDataDto oaWorkflowDataDto = new OaWorkflowDataDto();
+        oaWorkflowDataDto.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDataDto.setBusinessKey(reqJson.getString("id"));
+        oaWorkflowDataDto.setPage(1);
+        oaWorkflowDataDto.setRow(1);
+        List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
+
+        Assert.listOnlyOne(oaWorkflowDataDtos, "没有上级处理人");
+
+        if ("-1".equals(oaWorkflowDataDtos.get(0).getPreDataId())) {
+            throw new IllegalArgumentException("没有上级处理人");
+        }
+
+        oaWorkflowDataDto = new OaWorkflowDataDto();
+        oaWorkflowDataDto.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDataDto.setDataId(reqJson.getString(oaWorkflowDataDtos.get(0).getPreDataId()));
+        oaWorkflowDataDto.setPage(1);
+        oaWorkflowDataDto.setRow(1);
+        List<OaWorkflowDataDto> preOaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
+
+        //将现在节点处理为完成
+        OaWorkflowDataPo oaWorkflowDataPo = new OaWorkflowDataPo();
+        oaWorkflowDataPo.setDataId(oaWorkflowDataDtos.get(0).getDataId());
+        oaWorkflowDataPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataInnerServiceSMOImpl.updateOaWorkflowData(oaWorkflowDataPo);
+
+        reqJson.put("nextUserId", preOaWorkflowDataDtos.get(0).getStaffId());
+        if ("1400".equals(reqJson.getString("auditCode"))) {
+            reqJson.put("nextUserId", reqJson.getString("createUserId"));
+        }
+        oaWorkflowDataPo = new OaWorkflowDataPo();
+        oaWorkflowDataPo.setBusinessKey(preOaWorkflowDataDtos.get(0).getBusinessKey());
+        oaWorkflowDataPo.setFlowId(preOaWorkflowDataDtos.get(0).getFlowId());
+        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+        oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
+        oaWorkflowDataPo.setEvent(preOaWorkflowDataDtos.get(0).getEvent());
+        oaWorkflowDataPo.setPreDataId(oaWorkflowDataDtos.get(0).getPreDataId());
+        oaWorkflowDataPo.setStaffId(reqJson.getString("nextUserId"));
+        oaWorkflowDataPo.setStaffName(preOaWorkflowDataDtos.get(0).getStaffName());
+        oaWorkflowDataPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataPo.setStoreId(preOaWorkflowDataDtos.get(0).getStoreId());
+        oaWorkflowDataInnerServiceSMOImpl.saveOaWorkflowData(oaWorkflowDataPo);
+
+        return oaWorkflowDataDtos.get(0).getEvent();
     }
 
     public List<AuditMessageDto> getAuditMessage(@RequestBody JSONObject reqJson) {
@@ -423,15 +541,15 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             if (targetFlowElement instanceof UserTask) {
                 //判断输出节点的el表达式
                 Map vars = new HashMap();
-                vars.put("auditCode","1200");
+                vars.put("auditCode", "1200");
                 if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
                     //true 获取输出节点名称
-                    taskObj.put("back",outgoingFlow.getTargetFlowElement().getName());
+                    taskObj.put("back", outgoingFlow.getTargetFlowElement().getName());
                 }
-                vars.put("auditCode","1400");
+                vars.put("auditCode", "1400");
                 if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
                     //true 获取输出节点名称
-                    taskObj.put("backIndex",outgoingFlow.getTargetFlowElement().getName());
+                    taskObj.put("backIndex", outgoingFlow.getTargetFlowElement().getName());
                 }
             }
         }
