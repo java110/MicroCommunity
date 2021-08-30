@@ -89,6 +89,12 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         //variables.put("reqJson", reqJson);
         variables.put("startUserId", reqJson.getString("createUserId"));
         variables.put("nextUserId", reqJson.getString("createUserId"));
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("nextUserId"));
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(users, "用户不存在");
+
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(reqJson.getString("flowId")), reqJson.getString("id"), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
@@ -96,6 +102,20 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         reqJson.put("processInstanceId", processInstanceId);
         //第一个节点自动提交
         //autoFinishFirstTask(reqJson);
+        //刷入扩展表
+        OaWorkflowDataPo oaWorkflowDataPo = null;
+        oaWorkflowDataPo = new OaWorkflowDataPo();
+        oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
+        oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));
+        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+        oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
+        oaWorkflowDataPo.setEvent(OaWorkflowDataDto.EVENT_COMMIT);
+        oaWorkflowDataPo.setPreDataId("-1");
+        oaWorkflowDataPo.setStaffId(reqJson.getString("nextUserId"));
+        oaWorkflowDataPo.setStaffName(users.get(0).getName());
+        oaWorkflowDataPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataPo.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDataInnerServiceSMOImpl.saveOaWorkflowData(oaWorkflowDataPo);
         return reqJson;
     }
 
