@@ -168,8 +168,6 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         reqJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
         oaWorkflowUserInnerServiceSMOImpl.startProcess(reqJson);
 
-
-
         return ResultVo.success();
     }
 

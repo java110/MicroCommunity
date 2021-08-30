@@ -90,7 +90,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         variables.put("startUserId", reqJson.getString("createUserId"));
         variables.put("nextUserId", reqJson.getString("createUserId"));
         UserDto userDto = new UserDto();
-        userDto.setUserId(reqJson.getString("nextUserId"));
+        userDto.setUserId(reqJson.getString("createUserId"));
         List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
 
         Assert.listOnlyOne(users, "用户不存在");
