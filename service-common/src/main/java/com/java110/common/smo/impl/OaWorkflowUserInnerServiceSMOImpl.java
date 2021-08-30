@@ -242,9 +242,8 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("nextUserId", reqJson.getString("nextUserId"));
-        //variables.put("startUserId", reqJson.getString("startUserId"));
+        variables.put("auditCode", reqJson.getString("auditCode"));
         taskService.complete(reqJson.getString("taskId"), variables);
-
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
             return true;

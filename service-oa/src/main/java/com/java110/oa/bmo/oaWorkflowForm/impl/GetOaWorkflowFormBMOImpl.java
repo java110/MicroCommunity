@@ -277,7 +277,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
 
         //业务办理
-        if ("1100".equals(reqJson.getString("auditCode"))) {
+        if ("1100".equals(reqJson.getString("auditCode"))) { //办理操作
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
             if (isLastTask) {
@@ -287,15 +287,17 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
             }
             reqJson.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
             oaWorkflowFormInnerServiceSMOImpl.updateOaWorkflowFormData(reqJson);
-        } else if ("1300".equals(reqJson.getString("auditCode"))) {
+        } else if ("1300".equals(reqJson.getString("auditCode"))) { //转单操作
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             oaWorkflowUserInnerServiceSMOImpl.changeTaskToOtherUser(reqJson);
             reqJson.put("state", "1004");
             reqJson.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
             oaWorkflowFormInnerServiceSMOImpl.updateOaWorkflowFormData(reqJson);
-        } else if ("1200".equals(reqJson.getString("auditCode"))) {
-            reqJson.put("curUserId", reqJson.getString("curUserId"));
-            oaWorkflowUserInnerServiceSMOImpl.goBackTask(reqJson);
+        } else if ("1200".equals(reqJson.getString("auditCode"))
+                || "1400".equals(reqJson.getString("auditCode"))
+        ) { //退回操作
+            reqJson.put("nextUserId", reqJson.getString("staffId"));
+            oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
             reqJson.put("state", "1003");
             reqJson.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
             oaWorkflowFormInnerServiceSMOImpl.updateOaWorkflowFormData(reqJson);
