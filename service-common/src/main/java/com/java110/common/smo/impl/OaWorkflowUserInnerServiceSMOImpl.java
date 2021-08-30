@@ -13,19 +13,28 @@ import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.FlowNode;
+import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.query.Query;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +48,7 @@ import java.util.Map;
 @RestController
 public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements IOaWorkflowUserInnerServiceSMO {
 
+    private static Logger logger = LoggerFactory.getLogger(OaWorkflowUserInnerServiceSMOImpl.class);
     @Autowired
     private ProcessEngine processEngine;
 
@@ -49,10 +59,16 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     private TaskService taskService;
 
     @Autowired
+    private HistoryService historyService;
+
+    @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
+
+    @Autowired
+    private RepositoryService repositoryService;
 
 
     /**
@@ -140,6 +156,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
             taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("taskId", task.getId());
             taskBusinessKeyMap.put("id", business_key);
             tasks.add(taskBusinessKeyMap);
         }
@@ -204,14 +221,18 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         List<JSONObject> tasks = new ArrayList<>();
         List<String> complaintIds = new ArrayList<>();
         for (HistoricTaskInstance task : list) {
+            taskBusinessKeyMap = new JSONObject();
             String processInstanceId = task.getProcessInstanceId();
             //3.使用流程实例，查询
             HistoricProcessInstance pi = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
             taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("taskId", task.getId());
+            taskBusinessKeyMap.put("id", business_key);
             tasks.add(taskBusinessKeyMap);
         }
+
         return tasks;
     }
 
@@ -219,14 +240,15 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     public boolean completeTask(@RequestBody JSONObject reqJson) {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
+        if (task == null) {
+            throw new IllegalArgumentException("任务已处理");
+        }
         String processInstanceId = task.getProcessInstanceId();
-        Authentication.setAuthenticatedUserId(reqJson.getString("createUserId"));
+        Authentication.setAuthenticatedUserId(reqJson.getString("nextUserId"));
         taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("auditCode", reqJson.getString("auditCode"));
         variables.put("nextUserId", reqJson.getString("nextUserId"));
-        variables.put("flag", "1200".equals(reqJson.getString("auditCode")) ? "false" : "true");
-        variables.put("startUserId", reqJson.getString("startUserId"));
+        //variables.put("startUserId", reqJson.getString("startUserId"));
         taskService.complete(reqJson.getString("taskId"), variables);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
@@ -234,6 +256,90 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             return true;
         }
         return false;
+    }
+
+    public boolean changeTaskToOtherUser(@RequestBody JSONObject reqJson) {
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
+        taskService.setAssignee(reqJson.getString("taskId"), reqJson.getString("nextUserId"));
+        taskService.setOwner(reqJson.getString("taskId"), reqJson.getString("nextUserId"));
+        return true;
+    }
+
+    public boolean goBackTask(@RequestBody JSONObject reqJson) {
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
+        if (task == null) {
+            throw new IllegalArgumentException("流程未启动或已执行完成，无法退回");
+        }
+        List<HistoricTaskInstance> htiList = historyService.createHistoricTaskInstanceQuery()
+                .processInstanceBusinessKey(reqJson.getString("id"))
+                .orderByTaskCreateTime()
+                .asc()
+                .list();
+        String myTaskId = null;
+        HistoricTaskInstance myTask = null;
+        for (HistoricTaskInstance hti : htiList) {
+            if (reqJson.getString("curUserId").equals(hti.getAssignee())) {
+                myTaskId = hti.getId();
+                myTask = hti;
+                break;
+            }
+        }
+        if (null == myTaskId) {
+            throw new IllegalArgumentException("该任务非当前用户提交，无法退回");
+        }
+
+        String processDefinitionId = myTask.getProcessDefinitionId();
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
+
+        //变量
+//		Map<String, VariableInstance> variables = runtimeService.getVariableInstances(currentTask.getExecutionId());
+        String myActivityId = null;
+        List<HistoricActivityInstance> haiList = historyService.createHistoricActivityInstanceQuery()
+                .executionId(myTask.getExecutionId()).finished().list();
+        for (HistoricActivityInstance hai : haiList) {
+            if (myTaskId.equals(hai.getTaskId())) {
+                myActivityId = hai.getActivityId();
+                break;
+            }
+        }
+        FlowNode myFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(myActivityId);
+
+
+        Execution execution = runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult();
+        String activityId = execution.getActivityId();
+        logger.warn("------->> activityId:" + activityId);
+        FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(activityId);
+
+        //记录原活动方向
+        List<SequenceFlow> oriSequenceFlows = new ArrayList<SequenceFlow>();
+        oriSequenceFlows.addAll(flowNode.getOutgoingFlows());
+
+        //清理活动方向
+        flowNode.getOutgoingFlows().clear();
+        //建立新方向
+        List<SequenceFlow> newSequenceFlowList = new ArrayList<SequenceFlow>();
+        SequenceFlow newSequenceFlow = new SequenceFlow();
+        newSequenceFlow.setId("newSequenceFlowId");
+        newSequenceFlow.setSourceFlowElement(flowNode);
+        newSequenceFlow.setTargetFlowElement(myFlowNode);
+        newSequenceFlowList.add(newSequenceFlow);
+        flowNode.setOutgoingFlows(newSequenceFlowList);
+
+        Authentication.setAuthenticatedUserId(reqJson.getString("curUserId"));
+        taskService.addComment(task.getId(), task.getProcessInstanceId(), "退回，" + reqJson.getString("auditMessage"));
+
+        Map<String, Object> currentVariables = new HashMap<String, Object>();
+        currentVariables.put("applier", reqJson.getString("curUserId"));
+        //完成任务
+        taskService.complete(task.getId(), currentVariables);
+        //恢复原方向
+        flowNode.setOutgoingFlows(oriSequenceFlows);
+        return true;
     }
 
     public List<AuditMessageDto> getAuditMessage(@RequestBody JSONObject reqJson) {

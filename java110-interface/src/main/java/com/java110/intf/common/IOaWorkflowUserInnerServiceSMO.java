@@ -68,6 +68,25 @@ public interface IOaWorkflowUserInnerServiceSMO {
     boolean completeTask(@RequestBody JSONObject reqJson);
 
     /**
+     * 处理任务
+     *
+     * @param reqJson
+     * @return true 为流程结束 false 为流程没有结束
+     */
+    @RequestMapping(value = "/changeTaskToOtherUser", method = RequestMethod.POST)
+    boolean changeTaskToOtherUser(@RequestBody JSONObject reqJson);
+
+    /**
+     * 处理任务
+     *
+     * @param reqJson
+     * @return true 为流程结束 false 为流程没有结束
+     */
+    @RequestMapping(value = "/goBackTask", method = RequestMethod.POST)
+    boolean goBackTask(@RequestBody JSONObject reqJson);
+
+
+    /**
      * 查询批注信息
      *
      * @param reqJson
