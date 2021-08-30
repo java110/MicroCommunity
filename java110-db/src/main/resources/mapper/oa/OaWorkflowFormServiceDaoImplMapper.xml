@@ -186,7 +186,7 @@
 
     <!-- 修改信息 -->
     <update id="updateOaWorkflowFormData" parameterType="Map">
-        update set ${tableName} t set t.state = #{state}
+        update ${tableName} t set t.state = #{state}
         where t.id = #{id}
     </update>
 

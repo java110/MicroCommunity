@@ -264,7 +264,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         String processInstanceId = task.getProcessInstanceId();
         taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
         taskService.setAssignee(reqJson.getString("taskId"), reqJson.getString("nextUserId"));
-        taskService.setOwner(reqJson.getString("taskId"), reqJson.getString("nextUserId"));
+        //taskService.setOwner(reqJson.getString("taskId"), reqJson.getString("nextUserId"));
         return true;
     }
 
