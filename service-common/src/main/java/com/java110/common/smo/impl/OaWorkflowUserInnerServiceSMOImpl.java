@@ -414,9 +414,9 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         //获取当前节点输出连线
         List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
         JSONObject taskObj = null;
+        taskObj = new JSONObject();
         //遍历输出连线
         for (SequenceFlow outgoingFlow : outgoingFlows) {
-            taskObj = new JSONObject();
             //获取输出节点元素
             FlowElement targetFlowElement = outgoingFlow.getTargetFlowElement();
             //排除非用户任务接点
@@ -433,9 +433,9 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
                     //true 获取输出节点名称
                     taskObj.put("backIndex",outgoingFlow.getTargetFlowElement().getName());
                 }
-                tasks.add(taskObj);
             }
         }
+        tasks.add(taskObj);
         return tasks;
     }
 
@@ -455,8 +455,8 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         String[] exprArr = expression.split("[{}$&]");
         for (String expr : exprArr) {
             //是否包含键message
-            if (expr.contains("message")) {
-                if (!vars.containsKey("message")) {
+            if (expr.contains("auditCode")) {
+                if (!vars.containsKey("auditCode")) {
                     continue;
                 }
                 if (expr.contains("==")) {
@@ -468,7 +468,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
                     if (valExpr.endsWith("'")) {
                         valExpr = valExpr.substring(0, valExpr.length() - 1);
                     }
-                    if (primes.length == 2 && valExpr.equals(vars.get("message"))) {
+                    if (primes.length == 2 && valExpr.equals(vars.get("auditCode"))) {
                         return true;
                     }
                 }
