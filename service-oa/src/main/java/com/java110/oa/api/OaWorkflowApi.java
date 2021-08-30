@@ -464,8 +464,12 @@ public class OaWorkflowApi {
     public ResponseEntity<String> queryOaWorkflowUser(@RequestHeader(value = "store-id") String storeId,
                                                                      @RequestHeader(value = "user-id") String userId,
                                                                      @RequestParam(value = "flowId", required = false) String flowId,
-                                                                     @RequestParam(value = "id", required = false) String id) {
+                                                                     @RequestParam(value = "id", required = false) String id,
+                                                                     @RequestParam(value = "page") int page,
+                                                                     @RequestParam(value = "row") int row) {
         JSONObject paramIn = new JSONObject();
+        paramIn.put("page", page);
+        paramIn.put("row", row);
         paramIn.put("flowId", flowId);
         paramIn.put("id", id);
         paramIn.put("storeId", storeId);
