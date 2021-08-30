@@ -52,4 +52,11 @@ public interface IGetOaWorkflowFormBMO {
      * @return
      */
     ResponseEntity<String> auditOaWorkflow(JSONObject reqJson);
+
+    /**
+     * 查询 下一任务数
+     * @param reqJson
+     * @return
+     */
+    ResponseEntity<String> getNextTask(JSONObject reqJson);
 }

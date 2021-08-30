@@ -307,6 +307,12 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         return ResultVo.success();
     }
 
+    @Override
+    public ResponseEntity<String> getNextTask(JSONObject reqJson) {
+        List<JSONObject> tasks = oaWorkflowUserInnerServiceSMOImpl.nextAllNodeTaskList(reqJson);
+        return ResultVo.createResponseEntity(tasks);
+    }
+
     /**
      * 刷入表单数据
      *

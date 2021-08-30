@@ -451,4 +451,22 @@ public class OaWorkflowApi {
         reqJson.put("curUserId", userId);
         return getOaWorkflowFormBMOImpl.auditOaWorkflow(reqJson);
     }
+
+    /**
+     * 审核流程
+     *
+     * @param storeId 小区ID
+     * @return
+     * @serviceCode /oaWorkflow/getNextTask
+     * @path /app/oaWorkflow/getNextTask
+     */
+    @RequestMapping(value = "/getNextTask", method = RequestMethod.POST)
+    public ResponseEntity<String> getNextTask(@RequestHeader(value = "store-id") String storeId,
+                                                  @RequestHeader(value = "user-id") String userId,
+                                                  @RequestParam(value = "taskId") String taskId) {
+        JSONObject reqJson = new JSONObject();
+        reqJson.put("storeId", storeId);
+        reqJson.put("taskId", taskId);
+        return getOaWorkflowFormBMOImpl.getNextTask(reqJson);
+    }
 }

@@ -12,15 +12,12 @@ import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
 import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -406,6 +403,24 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         reqJson.put("taskId", taskIds);
         return reqJson;
 
+    }
+
+    @Override
+    public List<JSONObject> nextAllNodeTaskList(@RequestBody JSONObject reqJson) {
+        List<Task> taskList = null;
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
+        if (task == null) {
+            throw new IllegalArgumentException("任务已处理");
+        }
+        taskList = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).list();
+        String taskStr = JSONObject.toJSONString(taskList);
+        logger.debug("查询任务" + taskStr);
+        List<JSONObject> tasks = new ArrayList<>();
+        for (Task task1 : taskList) {
+            tasks.add(BeanConvertUtil.beanCovertJson(task1));
+        }
+        return tasks;
     }
 
 

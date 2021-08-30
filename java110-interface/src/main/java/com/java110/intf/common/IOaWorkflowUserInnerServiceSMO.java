@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
+
 @FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/oaWorkflowUserApi")
 public interface IOaWorkflowUserInnerServiceSMO {
@@ -104,4 +105,6 @@ public interface IOaWorkflowUserInnerServiceSMO {
     @RequestMapping(value = "/getTaskCurrentUser", method = RequestMethod.POST)
     JSONObject getTaskCurrentUser(@RequestBody JSONObject reqJson);
 
+    @RequestMapping(value = "/nextAllNodeTaskList", method = RequestMethod.POST)
+    List<JSONObject> nextAllNodeTaskList(@RequestBody JSONObject reqJson);
 }
