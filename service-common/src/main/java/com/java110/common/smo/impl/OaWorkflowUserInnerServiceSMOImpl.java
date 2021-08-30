@@ -12,11 +12,8 @@ import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.FlowNode;
-import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.bpmn.model.*;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -407,22 +404,74 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Override
     public List<JSONObject> nextAllNodeTaskList(@RequestBody JSONObject reqJson) {
-        List<Task> taskList = null;
+        List<JSONObject> tasks = new ArrayList<>();
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
         if (task == null) {
             throw new IllegalArgumentException("任务已处理");
         }
-        taskList = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).list();
-        String taskStr = JSONObject.toJSONString(taskList);
-        logger.debug("查询任务" + taskStr);
-        List<JSONObject> tasks = new ArrayList<>();
-        for (Task task1 : taskList) {
-            tasks.add(BeanConvertUtil.beanCovertJson(task1));
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+        FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(task.getTaskDefinitionKey());
+        //获取当前节点输出连线
+        List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
+        JSONObject taskObj = null;
+        //遍历输出连线
+        for (SequenceFlow outgoingFlow : outgoingFlows) {
+            taskObj = new JSONObject();
+            //获取输出节点元素
+            FlowElement targetFlowElement = outgoingFlow.getTargetFlowElement();
+            //排除非用户任务接点
+            if (targetFlowElement instanceof UserTask) {
+                //判断输出节点的el表达式
+//                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+//                    //true 获取输出节点名称
+//                    taskObj.put("name",outgoingFlow.getTargetFlowElement().getName());
+//                }else{
+                taskObj.put("name", outgoingFlow.getTargetFlowElement().getName());
+//                }
+                tasks.add(taskObj);
+            }
         }
         return tasks;
     }
 
+    /**
+     * el表达式判断
+     *
+     * @param expression
+     * @param vars
+     * @return
+     */
+    private static boolean isCondition(String expression, Map<String, Object> vars) {
+        if (expression == null || expression == "") {
+            return false;
+        }
+
+        //分割表达式
+        String[] exprArr = expression.split("[{}$&]");
+        for (String expr : exprArr) {
+            //是否包含键message
+            if (expr.contains("message")) {
+                if (!vars.containsKey("message")) {
+                    continue;
+                }
+                if (expr.contains("==")) {
+                    String[] primes = expr.split("==");
+                    String valExpr = primes[1].trim();
+                    if (valExpr.startsWith("'")) {
+                        valExpr = valExpr.substring(1);
+                    }
+                    if (valExpr.endsWith("'")) {
+                        valExpr = valExpr.substring(0, valExpr.length() - 1);
+                    }
+                    if (primes.length == 2 && valExpr.equals(vars.get("message"))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     public ProcessEngine getProcessEngine() {
         return processEngine;
