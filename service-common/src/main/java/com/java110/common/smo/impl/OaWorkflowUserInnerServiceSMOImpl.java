@@ -111,7 +111,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
         oaWorkflowDataPo.setEvent(OaWorkflowDataDto.EVENT_COMMIT);
         oaWorkflowDataPo.setPreDataId("-1");
-        oaWorkflowDataPo.setStaffId(reqJson.getString("nextUserId"));
+        oaWorkflowDataPo.setStaffId(reqJson.getString("createUserId"));
         oaWorkflowDataPo.setStaffName(users.get(0).getName());
         oaWorkflowDataPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         oaWorkflowDataPo.setStoreId(reqJson.getString("storeId"));
