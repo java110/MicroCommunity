@@ -315,7 +315,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             oaWorkflowDataPo = new OaWorkflowDataPo();
             oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
             oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));
-            oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+            oaWorkflowDataPo.setContext("");
             oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
             oaWorkflowDataPo.setEvent(OaWorkflowDataDto.EVENT_COMMIT);
             oaWorkflowDataPo.setPreDataId(preDataId);
@@ -330,6 +330,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataPo = new OaWorkflowDataPo();
         oaWorkflowDataPo.setDataId(oaWorkflowDataDtos.get(0).getDataId());
         oaWorkflowDataPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
         oaWorkflowDataInnerServiceSMOImpl.updateOaWorkflowData(oaWorkflowDataPo);
 
         //如果为-1 不插入任务
@@ -340,7 +341,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataPo = new OaWorkflowDataPo();
         oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
         oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));
-        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+        oaWorkflowDataPo.setContext("");
         oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
         oaWorkflowDataPo.setEvent(OaWorkflowDataDto.EVENT_COMMIT);
         oaWorkflowDataPo.setPreDataId(oaWorkflowDataDtos.get(0).getDataId());
@@ -387,12 +388,13 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataPo = new OaWorkflowDataPo();
         oaWorkflowDataPo.setDataId(oaWorkflowDataDtos.get(0).getDataId());
         oaWorkflowDataPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
         oaWorkflowDataInnerServiceSMOImpl.updateOaWorkflowData(oaWorkflowDataPo);
 
         oaWorkflowDataPo = new OaWorkflowDataPo();
         oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
         oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));
-        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+        oaWorkflowDataPo.setContext("");
         oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
         oaWorkflowDataPo.setEvent(OaWorkflowDataDto.EVENT_TRANSFER);
         oaWorkflowDataPo.setPreDataId(oaWorkflowDataDtos.get(0).getDataId());
@@ -457,6 +459,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         OaWorkflowDataPo oaWorkflowDataPo = new OaWorkflowDataPo();
         oaWorkflowDataPo.setDataId(oaWorkflowDataDtos.get(0).getDataId());
         oaWorkflowDataPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
         oaWorkflowDataInnerServiceSMOImpl.updateOaWorkflowData(oaWorkflowDataPo);
 
         reqJson.put("nextUserId", preOaWorkflowDataDtos.get(0).getStaffId());
@@ -466,7 +469,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataPo = new OaWorkflowDataPo();
         oaWorkflowDataPo.setBusinessKey(preOaWorkflowDataDtos.get(0).getBusinessKey());
         oaWorkflowDataPo.setFlowId(preOaWorkflowDataDtos.get(0).getFlowId());
-        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+        oaWorkflowDataPo.setContext("");
         oaWorkflowDataPo.setDataId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_dataId));
         oaWorkflowDataPo.setEvent(preOaWorkflowDataDtos.get(0).getEvent());
         oaWorkflowDataPo.setPreDataId(oaWorkflowDataDtos.get(0).getPreDataId());
