@@ -390,7 +390,9 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         List<String> userIds = new ArrayList<>();
         for (JSONObject data : datas) {
             ids.add(data.getString("id"));
-            userIds.add(data.getString("staffId"));
+            if (!StringUtil.isEmpty(data.getString("staffId"))) {
+                userIds.add(data.getString("staffId"));
+            }
         }
         if (ids.size() < 1) {
             return;
@@ -437,9 +439,9 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
         for (JSONObject data : datas) {
             for (UserDto userDto1 : userDtos) {
-                if(data.getString("staffId").equals(userDto1.getUserId())){
-                    data.put("orgName",userDto1.getOrgName());
-                    data.put("staffName",userDto1.getUserName());
+                if (data.getString("staffId").equals(userDto1.getUserId())) {
+                    data.put("orgName", userDto1.getOrgName());
+                    data.put("staffName", userDto1.getUserName());
                 }
             }
         }
