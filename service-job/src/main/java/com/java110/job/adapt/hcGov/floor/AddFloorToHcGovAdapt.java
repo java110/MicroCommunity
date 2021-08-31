@@ -102,7 +102,12 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
         unitDto.setFloorId(floorPo.getFloorId());
         unitDto.setCommunityId(floorPo.getCommunityId());
         List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-        Assert.listOnlyOne(unitDtos, "未包含单元信息");
+        String layerCount = "0";
+        String floorUse = "0";
+        if(unitDtos != null && unitDtos.size() > 0){
+            layerCount = unitDtos.get(0).getLayerCount();
+            floorUse = unitDtos.size()+"";
+        }
 
 
         JSONObject body = new JSONObject();
@@ -110,8 +115,8 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
         body.put("floorName", floorPo.getName());
         body.put("floorType", MappingCache.getValue(HcGovConstant.GOV_DOMAIN,HcGovConstant.FLOOR_TYPE));
         body.put("floorArea", floorPo.getFloorArea());
-        body.put("layerCount", unitDtos.get(0).getLayerCount());
-        body.put("unitCount", unitDtos.size());
+        body.put("layerCount", layerCount);
+        body.put("unitCount", floorUse);
         body.put("floorUse", tmpCommunityDto.getName()+"_住宅");
         body.put("personName", "HC小区管理系统");
         body.put("personLink", "18909711234");
