@@ -583,7 +583,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
                 }
                 if (!isReturn) {
                     String assignee = ((UserTask) targetFlowElement).getAssignee();
-                    if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < -1) {
+                    if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < 0) {
                         taskObj.put("assignee", assignee); // 下一节点处理人
                     }
                 }
