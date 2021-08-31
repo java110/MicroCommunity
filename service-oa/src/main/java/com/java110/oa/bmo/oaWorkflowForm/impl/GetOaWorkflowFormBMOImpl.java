@@ -23,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -256,7 +255,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         List<JSONObject> datas = new ArrayList<>();
         if (count > 0) {
             List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
-            for(OaWorkflowDataDto oaWorkflowDataDto1 : oaWorkflowDataDtos){
+            for (OaWorkflowDataDto oaWorkflowDataDto1 : oaWorkflowDataDtos) {
                 datas.add(BeanConvertUtil.beanCovertJson(oaWorkflowDataDto1));
             }
             //刷新 表单数据
@@ -368,7 +367,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
         if (count > 0) {
             List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
-            for(OaWorkflowDataDto oaWorkflowDataDto1 : oaWorkflowDataDtos){
+            for (OaWorkflowDataDto oaWorkflowDataDto1 : oaWorkflowDataDtos) {
                 datas.add(BeanConvertUtil.beanCovertJson(oaWorkflowDataDto1));
             }
             //刷新 表单数据
@@ -388,8 +387,10 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
      */
     private void freshFormData(List<JSONObject> datas, JSONObject paramIn, OaWorkflowFormDto oaWorkflowFormDto) {
         List<String> ids = new ArrayList<>();
+        List<String> userIds = new ArrayList<>();
         for (JSONObject data : datas) {
             ids.add(data.getString("id"));
+            userIds.add(data.getString("staffId"));
         }
         if (ids.size() < 1) {
             return;
@@ -422,6 +423,24 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
                     duration = 0;
                 }
                 data.put("duration", getCostTime(duration));
+            }
+        }
+
+        if (userIds.size() < 1) {
+            return;
+        }
+
+        //刷入员工信息
+        UserDto userDto = new UserDto();
+        userDto.setUserIds(userIds.toArray(new String[userIds.size()]));
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getStaffs(userDto);
+
+        for (JSONObject data : datas) {
+            for (UserDto userDto1 : userDtos) {
+                if(data.getString("staffId").equals(userDto1.getUserId())){
+                    data.put("orgName",userDto1.getOrgName());
+                    data.put("staffName",userDto1.getUserName());
+                }
             }
         }
     }
