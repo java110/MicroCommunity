@@ -5,6 +5,7 @@ import com.java110.dto.PageDto;
 import java.io.Serializable;
 import java.util.Date;
 
+
 /**
  * @ClassName FloorDto
  * @Description 活动数据层封装

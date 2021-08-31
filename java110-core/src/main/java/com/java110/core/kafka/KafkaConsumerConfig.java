@@ -34,6 +34,8 @@ public class KafkaConsumerConfig {
     private String autoOffsetReset;
     @Value("${kafka.consumer.concurrency}")
     private int concurrency;
+    @Value("${kafka.consumer.topic}")
+    public String topic;
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
@@ -61,4 +63,11 @@ public class KafkaConsumerConfig {
         return propsMap;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 }
