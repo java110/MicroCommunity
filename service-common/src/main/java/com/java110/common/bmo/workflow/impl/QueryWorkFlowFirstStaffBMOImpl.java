@@ -427,6 +427,8 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         String processIdValue = processId.getValue();
         String newXml = rootElement.asXML();
         newXml = newXml.replaceAll(processIdValue, "java110_" + workflowModelDto.getFlowId());
+        newXml = newXml.replaceAll("camunda:assignee", "activiti:assignee");
+
         workflowModelDto.setJson_xml(newXml);
     }
 
