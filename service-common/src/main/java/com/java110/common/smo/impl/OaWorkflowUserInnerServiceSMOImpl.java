@@ -18,8 +18,17 @@ import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import org.activiti.bpmn.model.*;
-import org.activiti.engine.*;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.EndEvent;
+import org.activiti.bpmn.model.FlowElement;
+import org.activiti.bpmn.model.FlowNode;
+import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.bpmn.model.UserTask;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
@@ -550,10 +559,12 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
         JSONObject taskObj = null;
         taskObj = new JSONObject();
+        boolean isReturn = false;
         //遍历输出连线
         for (SequenceFlow outgoingFlow : outgoingFlows) {
             //获取输出节点元素
             FlowElement targetFlowElement = outgoingFlow.getTargetFlowElement();
+            isReturn = false;
             //排除非用户任务接点
             if (targetFlowElement instanceof UserTask) {
                 //判断输出节点的el表达式
@@ -562,14 +573,15 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
                 if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
                     //true 获取输出节点名称
                     taskObj.put("back", outgoingFlow.getTargetFlowElement().getName());
+                    isReturn = true;
                 }
                 vars.put("auditCode", "1400");
                 if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
                     //true 获取输出节点名称
                     taskObj.put("backIndex", outgoingFlow.getTargetFlowElement().getName());
+                    isReturn = true;
                 }
-                vars.put("auditCode", "1100");
-                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                if (!isReturn) {
                     String assignee = ((UserTask) targetFlowElement).getAssignee();
                     if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < -1) {
                         taskObj.put("assignee", assignee); // 下一节点处理人
