@@ -18,16 +18,8 @@ import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.FlowElement;
-import org.activiti.bpmn.model.FlowNode;
-import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.bpmn.model.*;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
@@ -331,6 +323,11 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         oaWorkflowDataInnerServiceSMOImpl.updateOaWorkflowData(oaWorkflowDataPo);
 
+        //如果为-1 不插入任务
+        if ("-1".equals(reqJson.getString("nextUserId"))) {
+            return;
+        }
+
         oaWorkflowDataPo = new OaWorkflowDataPo();
         oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
         oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));
@@ -571,9 +568,21 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
                     //true 获取输出节点名称
                     taskObj.put("backIndex", outgoingFlow.getTargetFlowElement().getName());
                 }
-                String assignee = ((UserTask) targetFlowElement).getAssignee();
-                if(!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < -1){
-                    taskObj.put("assignee", assignee); // 下一节点处理人
+                vars.put("auditCode", "1100");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    String assignee = ((UserTask) targetFlowElement).getAssignee();
+                    if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < -1) {
+                        taskObj.put("assignee", assignee); // 下一节点处理人
+                    }
+                }
+            }
+
+            //如果下一个为 结束节点
+            if (targetFlowElement instanceof EndEvent) {
+                Map vars = new HashMap();
+                vars.put("auditCode", "1100");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    taskObj.put("assignee", "-1"); // 没有下一处理人了
                 }
             }
         }
