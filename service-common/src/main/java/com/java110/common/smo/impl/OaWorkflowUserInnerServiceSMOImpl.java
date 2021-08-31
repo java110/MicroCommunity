@@ -571,6 +571,10 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
                     //true 获取输出节点名称
                     taskObj.put("backIndex", outgoingFlow.getTargetFlowElement().getName());
                 }
+                String assignee = ((UserTask) targetFlowElement).getAssignee();
+                if(!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < -1){
+                    taskObj.put("assignee", assignee); // 下一节点处理人
+                }
             }
         }
         tasks.add(taskObj);
