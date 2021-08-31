@@ -121,7 +121,7 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
         heard.put("extCommunityId",extCommunityId);
         heard.put("tranId", PayUtil.makeUUID(15));
         heard.put("reqTime",DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        HcGovConstant.generatorProducerSign(heard,body,HcGovConstant.ADD_FLOOR_ACTION);
+        HcGovConstant.generatorProducerSign(heard,body,HcGovConstant.COMMUNITY_SECURE);
         JSONObject kafkaData = new JSONObject();
         kafkaData.put("header",heard);
         kafkaData.put("body",body);
