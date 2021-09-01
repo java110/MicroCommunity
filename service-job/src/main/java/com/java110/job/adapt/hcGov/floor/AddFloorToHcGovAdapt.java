@@ -26,6 +26,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
+import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.floor.FloorPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.kafka.KafkaFactory;
@@ -37,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 新增楼栋同步HC政务接口
@@ -53,6 +55,8 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+    @Autowired
+    private BaseHcGovSendAsyn baseHcGovSendAsynImpl;
 
 
     /**
@@ -92,6 +96,8 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
         Assert.listOnlyOne(communityDtos, "未包含小区信息");
         CommunityDto tmpCommunityDto = communityDtos.get(0);
         String extCommunityId = "";
+        String communityId = tmpCommunityDto.getCommunityId();
+        String floorId = floorPo.getFloorId();
 
         for (CommunityAttrDto communityAttrDto : tmpCommunityDto.getCommunityAttrDtos()) {
             if (HcGovConstant.EXT_COMMUNITY_ID.equals(communityAttrDto.getSpecCd())) {
@@ -121,20 +127,8 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
         body.put("personName", "HC小区管理系统");
         body.put("personLink", "18909711234");
 
-        JSONObject heard = new JSONObject();
-        heard.put("serviceCode",HcGovConstant.ADD_FLOOR_ACTION);
-        heard.put("extCommunityId",extCommunityId);
-        heard.put("tranId", PayUtil.makeUUID(15));
-        heard.put("reqTime",DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        HcGovConstant.generatorProducerSign(heard,body,HcGovConstant.COMMUNITY_SECURE);
-        JSONObject kafkaData = new JSONObject();
-        kafkaData.put("header",heard);
-        kafkaData.put("body",body);
-        try {
-            KafkaFactory.sendKafkaMessage(HcGovConstant.GOV_TOPIC,kafkaData.toJSONString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body,extCommunityId,HcGovConstant.ADD_FLOOR_ACTION,HcGovConstant.COMMUNITY_SECURE);
+        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC,kafkaData,communityId,floorId);
     }
 
 }

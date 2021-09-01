@@ -1,32 +1,76 @@
 {
   "autoMove": true,
-  "id": "dataId",
-  "name": "oaWorkflowData",
-  "desc": "OA表单审批数据",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "oa",
-  "tableName": "oa_workflow_data",
+  "id": "tranId",
+  "name": "hcGovTranslate",
+  "desc": "社区政务同步",
+  "shareParam": "tranId",
+  "shareColumn": "tran_id",
+  "shareName": "common",
+  "tableName": "hc_gov_translate",
   "param": {
-    "dataId": "data_id",
-    "businessKey": "business_key",
-    "storeId": "store_id",
-    "context": "context",
-    "staffId": "staff_id",
-    "staffName": "staff_name",
-    "startTime": "start_time",
-    "endTime": "end_time",
-    "event": "event",
-    "preDataId": "pre_data_id",
+    "tranId": "tran_id",
+    "serviceCode": "service_code",
+    "reqTime": "req_time",
+    "sign": "sign",
+    "extCommunityId": "ext_community_id",
+    "communityId": "community_id",
+    "code": "code",
+    "govTopic": "gov_topic",
+    "state": "state",
+    "sendCount": "send_count",
+    "updateTime": "update_time",
+    "objId": "obj_id",
+    "remark": "remark",
+    "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "businessKey",
+      "code": "tranId",
       "msg": "业务不能为空"
     },
     {
-      "code": "context",
+      "code": "serviceCode",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "reqTime",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "sign",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "extCommunityId",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "code",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "govTopic",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "state",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "sendCount",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "updateTime",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "objId",
       "msg": "审批内容不能为空"
     }
   ]
