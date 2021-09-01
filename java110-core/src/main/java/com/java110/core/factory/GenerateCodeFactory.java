@@ -221,8 +221,6 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_dataId = "81";
 
 
-
-
     /**
      * 只有在不调用服务生成ID时有用
      */
@@ -979,9 +977,9 @@ public class GenerateCodeFactory {
         return result;
     }
 
-    public static String getUUID(){
+    public static String getUUID() {
         UUID uuid = UUID.randomUUID();
-        return uuid.toString();
+        return uuid.toString().replaceAll("-", "");
     }
 
 }

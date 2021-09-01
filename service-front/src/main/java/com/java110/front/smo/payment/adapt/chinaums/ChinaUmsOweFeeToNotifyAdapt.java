@@ -128,7 +128,7 @@ public class ChinaUmsOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
             throw new IllegalArgumentException("鉴权失败");
         }
         JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
-        String orderId = billPayment.get("merOrderId").toString();
+        String orderId = billPayment.get("merOrderId").toString().substring(4);
         String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_OWE_FEE + orderId);
 
         if (StringUtil.isEmpty(order)) {

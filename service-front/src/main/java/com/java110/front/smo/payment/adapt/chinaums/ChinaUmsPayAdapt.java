@@ -152,7 +152,7 @@ public class ChinaUmsPayAdapt implements IPayAdapt {
         paramMap.put("mid", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
         paramMap.put("tid", "88880001"); //终端号
         paramMap.put("instMid", "YUEDANDEFAULT");
-        paramMap.put("merOrderId", orderNum);
+        paramMap.put("merOrderId", "1017"+orderNum);
         paramMap.put("totalAmount", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("notifyUrl", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
         paramMap.put("tradeType", tradeType);
