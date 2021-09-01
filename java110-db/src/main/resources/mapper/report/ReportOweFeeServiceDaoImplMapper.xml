@@ -17,7 +17,9 @@
     <select id="getReportOweFeeInfo" parameterType="Map" resultType="Map">
         select distinct(t.payer_obj_id) payerObjId
         from report_owe_fee t
+        LEFT JOIN pay_fee pf on t.fee_id = pf.fee_id
         where 1 =1
+        and pf.status_cd = '0'
         <if test="configName !=null and configName != ''">
             and t.config_name= #{configName}
         </if>
@@ -159,7 +161,9 @@
     <select id="queryReportOweFeesCount" parameterType="Map" resultType="Map">
         select count(distinct(t.payer_obj_id)) count
         from report_owe_fee t
+        LEFT JOIN pay_fee pf on t.fee_id = pf.fee_id
         where 1 =1
+        and pf.status_cd = '0'
         <if test="configName !=null and configName != ''">
             and t.config_name= #{configName}
         </if>
@@ -229,7 +233,9 @@
         communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId,
         t.owner_id,t.owner_id ownerId,t.owner_name,t.owner_name ownerName
         from report_owe_fee t
-        where 1 = 1
+        LEFT JOIN pay_fee pf on t.fee_id = pf.fee_id
+        where 1 =1
+        and pf.status_cd = '0'
         <if test="configName !=null and configName != ''">
             and t.config_name= #{configName}
         </if>
@@ -309,7 +315,9 @@
         from report_owe_fee t
         left join building_owner_room_rel borr on borr.room_id = t.payer_obj_id and borr.status_cd = '0'
         left join building_owner bo on borr.owner_id = bo.owner_id and bo.owner_type_cd = '1001' and bo.status_cd = '0'
-        where 1 = 1
+        LEFT JOIN pay_fee pf on t.fee_id = pf.fee_id
+        where 1 =1
+        and pf.status_cd = '0'
         <if test="configName !=null and configName != ''">
             and t.config_name= #{configName}
         </if>
@@ -388,7 +396,9 @@
         from report_owe_fee t
         left join owner_car oc on oc.car_id = t.payer_obj_id and oc.status_cd = '0'
         left join building_owner bo on oc.owner_id = bo.owner_id and bo.owner_type_cd = '1001' and bo.status_cd = '0'
-        where 1 = 1
+        LEFT JOIN pay_fee pf on t.fee_id = pf.fee_id
+        where 1 =1
+        and pf.status_cd = '0'
         <if test="configName !=null and configName != ''">
             and t.config_name= #{configName}
         </if>

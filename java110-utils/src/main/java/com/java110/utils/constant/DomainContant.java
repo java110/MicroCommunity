@@ -34,6 +34,11 @@ public class DomainContant {
 
 
     /**
+     * 公用域
+     */
+    public final static String CHINA_UMS_DOMAIN = "DOMAIN.CHINA_UMS";
+
+    /**
      * 商户类型对应 权限组 管理员
      *
      *
