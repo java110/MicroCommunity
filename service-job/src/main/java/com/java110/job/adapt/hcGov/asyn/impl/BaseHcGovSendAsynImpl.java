@@ -76,7 +76,7 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
 
     public void sendKafka(String topic,JSONObject massage,String communityId,String objId) {
         try {
-            KafkaFactory.sendKafkaMessage(topic,massage);
+            KafkaFactory.sendKafkaMessage(topic,massage.toJSONString());
             saveHcGovLog(massage,communityId,topic,objId);
         } catch (Exception e) {
             e.printStackTrace();
