@@ -359,7 +359,9 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             model.setName(oaWorkflowDtos.get(0).getFlowName());
             model.setKey("java110_" + oaWorkflowDtos.get(0).getFlowId());
             repositoryService.saveModel(model);
-            repositoryService.addModelEditorSource(model.getId(), workflowModelDto.getJson_xml().getBytes("utf-8"));
+            String jsonXml = workflowModelDto.getJson_xml();
+            jsonXml = jsonXml.replaceAll("camunda:assignee", "activiti:assignee");
+            repositoryService.addModelEditorSource(model.getId(), jsonXml.getBytes("utf-8"));
 
             InputStream svgStream = new ByteArrayInputStream(workflowModelDto.getSvg_xml().getBytes("utf-8"));
             TranscoderInput input = new TranscoderInput(svgStream);
@@ -410,7 +412,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         for (Element userTask : userTasks) {
             Attribute assignee = userTask.attribute("assignee");
             if (assignee == null) {
-                userTask.addAttribute("activiti:assignee", "${nextUserId}");
+                userTask.addAttribute("camunda:assignee", "${nextUserId}");
             }
         }
 
@@ -427,6 +429,8 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         String processIdValue = processId.getValue();
         String newXml = rootElement.asXML();
         newXml = newXml.replaceAll(processIdValue, "java110_" + workflowModelDto.getFlowId());
+
+
         workflowModelDto.setJson_xml(newXml);
     }
 
