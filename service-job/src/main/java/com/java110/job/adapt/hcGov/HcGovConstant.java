@@ -34,6 +34,7 @@ public class HcGovConstant {
     public static final String COMMUNITY_SECURE = "978984641654"; // 小区密钥
     public static final String FLOOR_TYPE = "FLOOR_TYPE"; // 楼栋类型
     public static final String GOV_TOPIC = "hcGov"; // 楼栋类型
+    public static final String GOV_SWITCH = "GOV_SWITCH"; // 推送政务开关
 
 
     //政务小区编码

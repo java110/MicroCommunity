@@ -38,7 +38,7 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
     }
 
 
-    protected void saveHcGovLog(JSONObject paramIn,String communityId,String topic,String objId) {
+    protected void saveHcGovLog(JSONObject paramIn,String communityId,String topic,String objId,String secure) {
         Assert.hasKeyAndValue(paramIn, "header", "请求报文中未包含header");
         Assert.hasKeyAndValue(paramIn, "body", "请求报文中未包含body");
         JSONObject heard = paramIn.getJSONObject("header");
@@ -49,7 +49,7 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
         hcGovTranslatePo.setTranId(heard.getString("tranId"));
         hcGovTranslatePo.setCommunityId(communityId);
         hcGovTranslatePo.setGovTopic(topic);
-        hcGovTranslatePo.setCode(HcGovConstant.COMMUNITY_SECURE);
+        hcGovTranslatePo.setCode(secure);
         hcGovTranslatePo.setSendCount("1");
         hcGovTranslatePo.setExtCommunityId(heard.getString("extCommunityId"));
         hcGovTranslatePo.setObjId(objId);
@@ -74,10 +74,10 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
         }
     }
 
-    public void sendKafka(String topic,JSONObject massage,String communityId,String objId) {
+    public void sendKafka(String topic,JSONObject massage,String communityId,String objId,String secure) {
         try {
             KafkaFactory.sendKafkaMessage(topic,massage.toJSONString());
-            saveHcGovLog(massage,communityId,topic,objId);
+            saveHcGovLog(massage,communityId,topic,objId,secure);
         } catch (Exception e) {
             e.printStackTrace();
         }

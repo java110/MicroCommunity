@@ -17,7 +17,6 @@ package com.java110.job.adapt.hcGov.floor;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.kafka.KafkaConsumerConfig;
 import com.java110.dto.UnitDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
@@ -29,26 +28,22 @@ import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.floor.FloorPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.PayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
- * 新增楼栋同步HC政务接口
+ * 修改楼栋同步HC政务接口
  * <p>
  * 接口协议地址： https://gitee.com/java110/microCommunityInformation/tree/master/info-doc#1%E6%A5%BC%E6%A0%8B%E4%B8%8A%E4%BC%A0
  *
  * @desc add by 吴学文 16:20
  */
-@Component(value = "addFloorToHcGovAdapt")
-public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
+@Component(value = "editFloorToHcGovAdapt")
+public class EditFloorToHcGovAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -128,7 +123,7 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
         body.put("personName", "HC小区管理系统");
         body.put("personLink", "18909711234");
 
-        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.ADD_FLOOR_ACTION, HcGovConstant.COMMUNITY_SECURE);
+        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.EDIT_FLOOR_ACTION, HcGovConstant.COMMUNITY_SECURE);
         baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, floorId, HcGovConstant.COMMUNITY_SECURE);
     }
 
