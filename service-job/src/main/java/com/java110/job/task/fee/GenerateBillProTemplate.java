@@ -162,7 +162,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         BillDto billDto = new BillDto();
         billDto.setBillId(billId);
         billDto.setBillName(feeConfigDto.getFeeName() + "-" + DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_H));
-        billDto.setBillTime(DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+        billDto.setBillTime(DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
         billDto.setCommunityId(feeConfigDto.getCommunityId());
         billDto.setConfigId(feeConfigDto.getConfigId());
         billDto.setCurBill("T");
