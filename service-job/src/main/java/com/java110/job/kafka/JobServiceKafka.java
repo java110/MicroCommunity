@@ -71,6 +71,22 @@ public class JobServiceKafka extends BaseController {
         }
     }
 
+    @KafkaListener(topics = {"${kafka.hcGovTopic}"})
+    public void hcGovListen(ConsumerRecord<?, ?> record) {
+        logger.info("kafka的key: " + record.key());
+        logger.info("kafka的value: " + record.value().toString());
+        String orderInfo = record.value().toString();
+
+        try {
+            logger.debug("hcGovkafka 接收到数据", orderInfo);
+            //responseJson = jobServiceSMOImpl.service(businessServiceDataFlow);
+        } catch (Exception e) {
+            logger.error("请求订单异常", e);
+        } finally {
+
+        }
+    }
+
 
     /**
      * 这里预校验，请求报文中不能有 dataFlowId
