@@ -75,9 +75,7 @@ public class EditFloorToHcGovAdapt extends DatabusAdaptImpl {
             //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
             for (int bOwnerCarIndex = 0; bOwnerCarIndex < businessOwnerCars.size(); bOwnerCarIndex++) {
                 JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(bOwnerCarIndex);
-                if ("TRUE".equals(MappingCache.getValue(HcGovConstant.GOV_DOMAIN, HcGovConstant.GOV_SWITCH))) {
-                    doAddFloor(business, businessOwnerCar);
-                }
+                doAddFloor(business, businessOwnerCar);
             }
         }
     }
