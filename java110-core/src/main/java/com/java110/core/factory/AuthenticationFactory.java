@@ -11,6 +11,8 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
+import com.java110.dto.reportData.ReportDataDto;
+import com.java110.dto.reportData.ReportDataHeaderDto;
 import com.java110.utils.cache.JWTCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
@@ -379,6 +381,31 @@ public class AuthenticationFactory {
         return keyFactory.generatePrivate(pkcs8KeySpec);
     }
 
+    /**
+     * md5签名
+     *
+     * @param reportDataDto
+     * @return
+     */
+    public static void authReportDataSign(ReportDataDto reportDataDto, String code) throws NoAuthorityException {
+        ReportDataHeaderDto reportDataHeaderDto = reportDataDto.getReportDataHeaderDto();
+        if (reportDataHeaderDto == null) {
+            throw new IllegalArgumentException("参数错误");
+        }
+        String newSign = md5(reportDataHeaderDto.getTranId() + reportDataHeaderDto.getReqTime() + reportDataDto.getReportDataBodyDto().toJSONString() + code).toLowerCase();
+        if (!newSign.equals(reportDataHeaderDto.getSign())) {
+            throw new IllegalArgumentException("签名失败");
+        }
+    }
+
+    public static void generatorReportDataSign(ReportDataDto reportDataDto, String code) {
+        ReportDataHeaderDto reportDataHeaderDto = reportDataDto.getReportDataHeaderDto();
+        if (reportDataHeaderDto == null) {
+            throw new IllegalArgumentException("参数错误");
+        }
+        String newSign = md5(reportDataHeaderDto.getTranId() + reportDataHeaderDto.getReqTime() + reportDataDto.getReportDataBodyDto().toJSONString() + code).toLowerCase();
+        reportDataHeaderDto.setSign(newSign);
+    }
     /**
      * 加载公钥
      *

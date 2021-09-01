@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class CommunityAttrDto extends PageDto implements Serializable {
 
+    public static final String SPEC_CD_GOV = "9329000004";
+    public static final String SPEC_CD_GOV_SECURE = "8329000004";
+
     private String attrId;
     private String communityId;
     private String specCd;

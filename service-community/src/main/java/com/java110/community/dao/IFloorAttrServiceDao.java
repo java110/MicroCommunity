@@ -67,7 +67,7 @@ public interface IFloorAttrServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    void updateFloorAttrInfoInstance(Map info) throws DAOException;
+    int updateFloorAttrInfoInstance(Map info) throws DAOException;
 
 
     /**

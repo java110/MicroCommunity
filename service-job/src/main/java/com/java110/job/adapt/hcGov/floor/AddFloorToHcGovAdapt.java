@@ -125,7 +125,7 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
         body.put("layerCount", layerCount);
         body.put("unitCount", floorUse);
         body.put("floorUse", tmpCommunityDto.getName() + "_住宅");
-        body.put("personName", "HC小区管理系统");
+        body.put("personName", "小区管理系统");
         body.put("personLink", "18909711234");
 
         JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.ADD_FLOOR_ACTION, HcGovConstant.COMMUNITY_SECURE);

@@ -143,6 +143,12 @@
         <if test="communityId != null and communityId !=''">
             and sa.community_id = #{communityId}
         </if>
+        <if test="specCd != null and specCd !=''">
+            and sa.spec_cd = #{specCd}
+        </if>
+        <if test="value != null and value !=''">
+            and sa.value = #{value}
+        </if>
         <if test="communityIds != null ">
             and sa.community_id in
             <foreach collection="communityIds" item="item" index="index" open="(" close=")" separator=",">

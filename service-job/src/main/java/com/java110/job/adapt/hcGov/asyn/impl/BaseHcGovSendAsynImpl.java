@@ -2,6 +2,7 @@ package com.java110.job.adapt.hcGov.asyn.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.reportData.ReportDataHeaderDto;
 import com.java110.intf.common.IHcGovTranslateDetailInnerServiceSMO;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
@@ -38,7 +39,7 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
     }
 
 
-    protected void saveHcGovLog(JSONObject paramIn,String communityId,String topic,String objId,String secure) {
+     public void saveHcGovLog(JSONObject paramIn,String communityId,String topic,String objId,String secure) {
         Assert.hasKeyAndValue(paramIn, "header", "请求报文中未包含header");
         Assert.hasKeyAndValue(paramIn, "body", "请求报文中未包含body");
         JSONObject heard = paramIn.getJSONObject("header");
@@ -56,7 +57,7 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
         hcGovTranslatePo.setReqTime(heard.getString("reqTime"));
         hcGovTranslatePo.setServiceCode(heard.getString("serviceCode"));
         hcGovTranslatePo.setSign(heard.getString("sign"));
-        hcGovTranslatePo.setState("1001");
+        hcGovTranslatePo.setState(ReportDataHeaderDto.RETUR_CODE);
         hcGovTranslatePo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         hcGovTranslatePo.setRemark("物业系统自动推送楼栋信息到政务系统");
         int flag = hcGovTranslateInnerServiceSMOImpl.saveHcGovTranslate(hcGovTranslatePo);
@@ -69,6 +70,33 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
         hcGovTranslateDetailPo.setCommunityId(communityId);
         hcGovTranslateDetailPo.setReqBody(paramIn.toJSONString());
         flag = hcGovTranslateDetailInnerServiceSMOImpl.saveHcGovTranslateDetail(hcGovTranslateDetailPo);
+        if(flag < 1){
+            throw new IllegalArgumentException("物业系统保存楼栋推送报文明细日志失败");
+        }
+    }
+
+     public void updateHcGovLog(JSONObject paramIn) {
+        Assert.hasKeyAndValue(paramIn, "header", "请求报文中未包含header");
+        Assert.hasKeyAndValue(paramIn, "body", "请求报文中未包含body");
+        JSONObject heard = paramIn.getJSONObject("header");
+        JSONObject body = paramIn.getJSONObject("body");
+
+        HcGovTranslatePo hcGovTranslatePo = new HcGovTranslatePo();
+        hcGovTranslatePo.setTranId(heard.getString("tranId"));
+         hcGovTranslatePo.setState(ReportDataHeaderDto.RETUR_SUCCESS_CODE);
+        if(!Integer.toString(ReportDataHeaderDto.CODE_SUCCESS).equals(heard.getString("code"))){
+            hcGovTranslatePo.setState(ReportDataHeaderDto.RETUR_ERROR_CODE);
+        }
+
+        hcGovTranslatePo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        int flag = hcGovTranslateInnerServiceSMOImpl.updateHcGovTranslate(hcGovTranslatePo);
+        if(flag < 1){
+            throw new IllegalArgumentException("更新物业系统保存楼栋日志失败");
+        }
+        HcGovTranslateDetailPo hcGovTranslateDetailPo = new HcGovTranslateDetailPo();
+        hcGovTranslateDetailPo.setTranId(hcGovTranslatePo.getTranId());
+        hcGovTranslateDetailPo.setResBody(paramIn.toJSONString());
+        flag = hcGovTranslateDetailInnerServiceSMOImpl.updateHcGovTranslateDetail(hcGovTranslateDetailPo);
         if(flag < 1){
             throw new IllegalArgumentException("物业系统保存楼栋推送报文明细日志失败");
         }

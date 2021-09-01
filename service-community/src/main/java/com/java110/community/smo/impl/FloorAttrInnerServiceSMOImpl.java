@@ -56,6 +56,11 @@ public class FloorAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFlo
         return floorAttrServiceDaoImpl.saveFloorAttr(BeanConvertUtil.beanCovertMap(floorAttrPo));
     }
 
+    @Override
+    public int updateFloorAttrInfoInstance(@RequestBody FloorAttrPo floorAttrPo) {
+        return floorAttrServiceDaoImpl.updateFloorAttrInfoInstance(BeanConvertUtil.beanCovertMap(floorAttrPo));
+    }
+
     public IFloorAttrServiceDao getFloorAttrServiceDaoImpl() {
         return floorAttrServiceDaoImpl;
     }
