@@ -898,7 +898,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 roomDto.setCommunityId(feeDto.getCommunityId());
                 List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
                 if (roomDtos == null || roomDtos.size() != 1) {
-                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
+                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据 roomId=" + feeDto.getPayerObjId());
                 }
                 roomDto = roomDtos.get(0);
             }
