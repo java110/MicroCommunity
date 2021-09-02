@@ -116,9 +116,9 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
         }
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         for (String key : map.keySet()) {
-            if ("wId".equals(key)) {
-                continue;
-            }
+//            if ("wId".equals(key)) {
+//                continue;
+//            }
             paramMap.put(key, map.get(key).toString());
         }
         String sign = PayUtil.createChinaUmsSign(paramMap, smallWeChatDto.getPayPassword());
