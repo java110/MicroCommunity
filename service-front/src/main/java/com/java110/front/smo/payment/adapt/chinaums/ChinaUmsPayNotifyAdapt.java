@@ -121,7 +121,7 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
             }
             paramMap.put(key, map.get(key).toString());
         }
-        String sign = PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword());
+        String sign = PayUtil.createChinaUmsSign(paramMap, smallWeChatDto.getPayPassword());
 
         if (!sign.equals(map.get("sign"))) {
             throw new IllegalArgumentException("鉴权失败");
