@@ -83,6 +83,8 @@ public class ChinaUmsFactory {
 
 
         RestTemplate outRestTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
+        logger.debug("获取access_token 入参：" + url + " 请求参数" + paramMap.toJSONString());
+
         ResponseEntity<String> response = outRestTemplate.postForEntity(url, paramMap.toJSONString(), String.class);
 
         logger.debug("获取access_token 入参：" + url + " 返回参数" + response);
