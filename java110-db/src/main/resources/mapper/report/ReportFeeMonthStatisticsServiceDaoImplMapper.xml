@@ -2080,69 +2080,91 @@
     <select id="queryHuaningOweFeeCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select t.floor_num floorNum,SUM(rfms.owe_amount) oweAmount,SUM(curT.owe_amount) curOweAmount
+        select a.floorNum,a.oweAmount,b.curOweAmount
+        from
+        (select t.floor_num floorNum,SUM(rfms.owe_amount) oweAmount
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and rfms.status_cd = '0'
-        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.community_id = t.community_id
         where t.status_cd = '0'
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
-        </if>
-        <if test="floorId !=null and floorId != ''">
-            and t.floor_id = #{floorId}
         </if>
         <if test="objName !=null and objName != ''">
             and rfms.obj_name= #{objName}
         </if>
-        <if test="feeYear !=null and feeYear != ''">
-            and curT.fee_year= #{feeYear}
-        </if>
+        GROUP BY t.floor_num
+        ) a,
+        (select t.floor_num floorNum,SUM(curT.owe_amount) curOweAmount
+        from f_floor t
+        left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
+        left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
+        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.community_id = t.community_id
+        where t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <if test="startTime !=null">
-            and rfms.create_time &gt;= #{startTime}
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
         </if>
-        <if test="endTime !=null">
-            and rfms.create_time &lt;= #{endTime}
+        <if test="feeYear !=null and feeYear != ''">
+            and curT.fee_year= #{feeYear}
         </if>
         GROUP BY t.floor_num
+        ) b
+        where a.floorNum = b.floorNum
+        <if test="floorId !=null and floorId != ''">
+            and a.floor_id = #{floorId}
+        </if>
         ) t
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryHuaningOweFee" parameterType="Map" resultType="Map">
-        select t.floor_num floorNum,SUM(rfms.owe_amount) oweAmount,SUM(curT.owe_amount) curOweAmount
+        select a.floorNum,a.oweAmount,b.curOweAmount
+        from
+        (select t.floor_num floorNum,SUM(rfms.owe_amount) oweAmount
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and rfms.status_cd = '0'
-        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.community_id = t.community_id
         where t.status_cd = '0'
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
-        </if>
-        <if test="floorId !=null and floorId != ''">
-            and t.floor_id = #{floorId}
         </if>
         <if test="objName !=null and objName != ''">
             and rfms.obj_name= #{objName}
         </if>
-        <if test="feeYear !=null and feeYear != ''">
-            and curT.fee_year= #{feeYear}
-        </if>
+        GROUP BY t.floor_num
+        ) a,
+        (select t.floor_num floorNum,SUM(curT.owe_amount) curOweAmount
+        from f_floor t
+        left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
+        left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
+        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.community_id = t.community_id
+        where t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <if test="startTime !=null">
-            and rfms.create_time &gt;= #{startTime}
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
         </if>
-        <if test="endTime !=null">
-            and rfms.create_time &lt;= #{endTime}
+        <if test="feeYear !=null and feeYear != ''">
+            and curT.fee_year= #{feeYear}
         </if>
         GROUP BY t.floor_num
+        ) b
+        where a.floorNum = b.floorNum
+        <if test="floorId !=null and floorId != ''">
+            and a.floor_id = #{floorId}
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
