@@ -19,7 +19,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
-import com.java110.front.smo.payment.*;
+import com.java110.front.smo.payment.IOweFeeToNotifySMO;
+import com.java110.front.smo.payment.IRentingToNotifySMO;
+import com.java110.front.smo.payment.IRentingToPaySMO;
+import com.java110.front.smo.payment.IToNotifySMO;
+import com.java110.front.smo.payment.IToPayBackCitySMO;
+import com.java110.front.smo.payment.IToPayInGoOutSMO;
+import com.java110.front.smo.payment.IToPayOweFeeSMO;
+import com.java110.front.smo.payment.IToPaySMO;
+import com.java110.front.smo.payment.IToPayTempCarInoutSMO;
+import com.java110.front.smo.payment.IToQrPayOweFeeSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -196,8 +205,10 @@ public class PaymentController extends BaseController {
     @RequestMapping(path = "/notifyChinaUms", method = RequestMethod.POST)
     public ResponseEntity<String> notifyChinaUms(HttpServletRequest request) {
         JSONObject paramIn = new JSONObject();
-        for(String key :request.getParameterMap().keySet()){
-            paramIn.put(key,request.getParameter(key));
+        for (String key : request.getParameterMap().keySet()) {
+            paramIn.put(key, request.getParameter(key));
+            logger.debug("银联回调报文form" + key + ":: " + request.getParameter(key));
+
         }
         logger.debug("微信支付回调报文" + paramIn.toJSONString());
 
@@ -232,10 +243,10 @@ public class PaymentController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(path = "/oweFeeNotifyChinaUms", method = RequestMethod.POST)
-    public ResponseEntity<String> oweFeeNotifyChinaUms( HttpServletRequest request) {
+    public ResponseEntity<String> oweFeeNotifyChinaUms(HttpServletRequest request) {
         JSONObject paramIn = new JSONObject();
-        for(String key :request.getParameterMap().keySet()){
-            paramIn.put(key,request.getParameter(key));
+        for (String key : request.getParameterMap().keySet()) {
+            paramIn.put(key, request.getParameter(key));
         }
         logger.debug("微信支付回调报文" + paramIn.toJSONString());
 

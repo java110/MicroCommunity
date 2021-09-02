@@ -187,11 +187,7 @@ public class PayUtil {
         return sign;
     }
 
-    public static void main(String[] args) {
-        String data = "bankInfo=OTHERS&billFunds=现金:100&billFundsDesc=现金支付1.00元。&buyerCashPayAmt=100&buyerId=otdJ_uCsgFQi-XigMpadM9gB4h0w&buyerPayAmount=100&connectSys=UNIONPAY&couponAmount=0&createTime=2021-09-03 02:29:49&instMid=YUEDANDEFAULT&invoiceAmount=100&mQ=iRFm&mchntUuid=2d9081bd76d235d20176da1bf4f62bc9&merName=青海德坤电力有限公司&merOrderId=1017102021090381410046&mid=898630149000110&msgType=wx.notify&notifyId=f1ccfe70-cf1c-4a5b-a2fe-67f2e5764009&orderDesc=青海德坤电力有限公司&payTime=2021-09-03 02:29:55&receiptAmount=100&seqId=23331686529N&settleDate=2021-09-03&signType=MD5&status=TRADE_SUCCESS&subBuyerId=oBFo-5-xs50SKaC5hjYf2Ux_Ww2g&subInst=103800&targetOrderId=4200001158202109035279802054&targetSys=WXPay&tid=CV5EW7IM&totalAmount=100&key=JkENP4taKmyH2aBsxXZbnpJDGZ7pBhasCKcYxpt7xyNP4QXS";
-        String sign = md5(data.toString()).toUpperCase();
-        System.out.printf("sign:" + sign);
-    }
+
 
     /**
      * md5签名

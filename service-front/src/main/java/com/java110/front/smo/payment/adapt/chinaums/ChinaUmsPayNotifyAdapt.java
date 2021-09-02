@@ -140,7 +140,18 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
         }
         return 1;
     }
-
+    //SJ=lJQi&
+    //B7C091FCE2AFC3DDEE16DEDD04C234CF
+    public static void main(String[] args) {
+        String data = "bankInfo=OTHERS&billFunds=现金:100&billFundsDesc=现金支付1.00元。&buyerCashPayAmt=100&buyerId=otdJ_uCsgFQi-XigMpadM9gB4h0w&buyerPayAmount=100" +
+                "&connectSys=UNIONPAY&couponAmount=0&createTime=2021-09-03 02:47:29&instMid=YUEDANDEFAULT&invoiceAmount=100&mchntUuid=2d9081bd76d235d20176da1bf4f62bc9" +
+                "&merName=青海德坤电力有限公司&merOrderId=1017102021090304700052&mid=898630149000110&msgType=wx.notify&notifyId=2f02e4a2-b54f-4d48-9b8a-16c924a95c98" +
+                "&orderDesc=青海德坤电力有限公司&payTime=2021-09-03 02:47:35&receiptAmount=100&seqId=23332339885N&settleDate=2021-09-03&SJ=lJQi&status=TRADE_SUCCESS" +
+                "&subBuyerId=oBFo-5-xs50SKaC5hjYf2Ux_Ww2g&subInst=103800&targetOrderId=4200001198202109032729935220&targetSys=WXPay&tid=CV5EW7IM&totalAmount=100" +
+                "&wId=hFXywDBfLkpKik7ZLPlAsRUQ4qORS1n8JkENP4taKmyH2aBsxXZbnpJDGZ7pBhasCKcYxpt7xyNP4QXS";
+        String sign = PayUtil.md5(data.toString()).toUpperCase();
+        System.out.printf("sign:" + sign);
+    }
 
     /**
      * 调用中心服务
