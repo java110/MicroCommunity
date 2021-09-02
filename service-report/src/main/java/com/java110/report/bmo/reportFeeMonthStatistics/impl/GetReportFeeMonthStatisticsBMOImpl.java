@@ -55,6 +55,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
     /**
