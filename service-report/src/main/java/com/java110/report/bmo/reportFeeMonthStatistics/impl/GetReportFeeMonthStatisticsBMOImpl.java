@@ -929,7 +929,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         for (Map paramIn : reportFeeMonthStatisticsDtos) {
 
             startTime = (Date) paramIn.get("startTime");
-            endTime = (Date) paramIn.get("startTime");
+            endTime = (Date) paramIn.get("endTime");
             BigDecimal money = (BigDecimal) paramIn.get("oweAmount");
             double month = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
             if (month < 1) {
