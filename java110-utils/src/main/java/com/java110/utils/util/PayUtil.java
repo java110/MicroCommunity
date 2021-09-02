@@ -175,7 +175,7 @@ public class PayUtil {
             String k = (String) entry.getKey();
             if (entry.getValue() != null || !"".equals(entry.getValue())) {
                 String v = String.valueOf(entry.getValue());
-                if (null != v && !"".equals(v) && !"sign".equals(k) && !"key".equals(k)) {
+                if (null != v && !"".equals(v) && !"sign".equals(k)) {
                     sb.append(k + "=" + v + "&");
                 }
             }
@@ -186,7 +186,6 @@ public class PayUtil {
         String sign = md5(data).toUpperCase();
         return sign;
     }
-
 
 
     /**
