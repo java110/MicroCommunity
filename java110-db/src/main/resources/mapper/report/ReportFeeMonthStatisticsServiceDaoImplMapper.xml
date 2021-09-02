@@ -2301,7 +2301,7 @@
         and t.community_id= #{communityId}
         GROUP BY floor_num
         ) b,
-        (select t.floor_num floorNum,receivedAmount2
+        (select t.floor_num floorNum,SUM(pfdm2.received_amount) receivedAmount2
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
@@ -2359,7 +2359,7 @@
         and t.community_id= #{communityId}
         GROUP BY floor_num
         ) b,
-        (select t.floor_num floorNum,receivedAmount2
+        (select t.floor_num floorNum,SUM(pfdm2.received_amount) receivedAmount2
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
