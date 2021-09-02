@@ -2272,7 +2272,7 @@
     <select id="queryHuaningPayFeeTwoCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select t.floor_num floorNum,d.receivableAmount ,
+        select a.floorNum,d.receivableAmount ,
         a.receivedAmount,b.receivedAmount1,
         c.receivedAmount2
         from
@@ -2330,7 +2330,7 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryHuaningPayFeeTwo" parameterType="Map" resultType="Map">
-        select t.floor_num floorNum,d.receivableAmount ,
+        select a.floorNum,d.receivableAmount ,
         a.receivedAmount,b.receivedAmount1,
         c.receivedAmount2
         from
