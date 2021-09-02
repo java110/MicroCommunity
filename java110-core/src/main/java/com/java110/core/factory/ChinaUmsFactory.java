@@ -14,6 +14,9 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -86,7 +89,13 @@ public class ChinaUmsFactory {
         RestTemplate outRestTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
         logger.debug("获取access_token 入参：" + url + " 请求参数" + paramMap.toJSONString());
 
-        ResponseEntity<String> response = outRestTemplate.postForEntity(url, paramMap.toJSONString(), String.class);
+        //ResponseEntity<String> response = outRestTemplate.postForEntity(url, paramMap.toJSONString(), String.class);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        HttpEntity httpEntity = new HttpEntity(paramMap.toJSONString(), headers);
+        ResponseEntity<String> response = outRestTemplate.exchange(
+                url, HttpMethod.POST, httpEntity, String.class);
 
         logger.debug("获取access_token 入参：" + url + " 返回参数" + response);
 
