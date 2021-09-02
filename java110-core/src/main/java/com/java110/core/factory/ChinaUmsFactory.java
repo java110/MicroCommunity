@@ -2,6 +2,7 @@ package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Synchronized;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.JWTCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
@@ -50,9 +51,9 @@ public class ChinaUmsFactory {
      * @return
      */
     @Java110Synchronized(value = "appId")
-    public static String getAccessToken() {
-        String appId = MappingCache.getValue(ChinaUmsFactory.CHINA_UMS_DOMAIN, "appId");
-        String appSecure = MappingCache.getValue(ChinaUmsFactory.CHINA_UMS_DOMAIN, "appKey");
+    public static String getAccessToken(SmallWeChatDto smallWeChatDto) {
+        String appId = smallWeChatDto.getRemarks().split("::")[0];
+        String appSecure = smallWeChatDto.getRemarks().split("::")[1];
         String accessToken = JWTCache.getValue(CHINA_UMS + appId);
         if (StringUtil.isEmpty(accessToken)) {
             return refreshAccessToken(appId, appSecure);

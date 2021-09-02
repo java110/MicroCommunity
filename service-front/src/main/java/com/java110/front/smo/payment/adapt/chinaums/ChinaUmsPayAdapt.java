@@ -150,9 +150,9 @@ public class ChinaUmsPayAdapt implements IPayAdapt {
         JSONObject paramMap = new JSONObject();
         paramMap.put("requestTimestamp", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         paramMap.put("mid", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
-        paramMap.put("tid", "88880001"); //终端号
+        paramMap.put("tid", "CV5EW7IM"); //终端号
         paramMap.put("instMid", "YUEDANDEFAULT");
-        paramMap.put("merOrderId", "1017"+orderNum);
+        paramMap.put("merOrderId", "11WP"+orderNum);
         paramMap.put("totalAmount", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("notifyUrl", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
         paramMap.put("tradeType", tradeType);
@@ -162,7 +162,7 @@ public class ChinaUmsPayAdapt implements IPayAdapt {
         logger.debug("调用支付统一下单接口" + paramMap.toJSONString());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        headers.add("Authorization", ChinaUmsFactory.getAccessToken());
+        headers.add("Authorization", ChinaUmsFactory.getAccessToken(smallWeChatDto));
         HttpEntity httpEntity = new HttpEntity(paramMap.toJSONString(), headers);
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(
                 wechatAuthProperties.getWxPayUnifiedOrder(), HttpMethod.POST, httpEntity, String.class);
