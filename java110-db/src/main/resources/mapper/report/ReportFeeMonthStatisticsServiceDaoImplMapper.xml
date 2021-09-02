@@ -2103,7 +2103,7 @@
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.community_id = t.community_id
+        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.obj_type = '3333' and curT.status_cd = '0' and  curT.community_id = t.community_id
         where t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -2148,7 +2148,7 @@
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.community_id = t.community_id
+        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.obj_type = '3333' and curT.status_cd = '0' and  curT.community_id = t.community_id
         where t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
