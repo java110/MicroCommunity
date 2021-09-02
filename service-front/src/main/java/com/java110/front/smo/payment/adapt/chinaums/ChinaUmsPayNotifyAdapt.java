@@ -129,8 +129,8 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
 //        if (!sign.equals(map.get("sign"))) {
 //            throw new IllegalArgumentException("鉴权失败");
 //        }
-        JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
-        String outTradeNo = billPayment.get("merOrderId").toString();
+        //JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
+        String outTradeNo = map.get("merOrderId").toString();
 
         //查询用户ID
         JSONObject paramIn = new JSONObject();
