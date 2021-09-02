@@ -175,7 +175,7 @@ public class ReturnPayFeeToChinaUmsAdapt extends DatabusAdaptImpl {
         logger.debug("调用支付统一下单接口" + paramMap.toJSONString());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        headers.add("Authorization", ChinaUmsFactory.getAccessToken());
+        headers.add("Authorization", ChinaUmsFactory.getAccessToken(smallWeChatDtos.get(0)));
         HttpEntity httpEntity = new HttpEntity(paramMap.toJSONString(), headers);
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(
                 MappingCache.getValue(DomainContant.CHINA_UMS_DOMAIN, chinaUmsReturnUrl), HttpMethod.POST, httpEntity, String.class);
