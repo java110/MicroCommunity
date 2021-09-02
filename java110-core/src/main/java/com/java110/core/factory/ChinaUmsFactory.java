@@ -7,6 +7,7 @@ import com.java110.utils.cache.JWTCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.codec.binary.Base64;
@@ -76,7 +77,7 @@ public class ChinaUmsFactory {
 
         JSONObject paramMap = new JSONObject();
         paramMap.put("appId", appId);
-        paramMap.put("timestamp", PayUtil.getCurrentTimeStamp());
+        paramMap.put("timestamp", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
         paramMap.put("nonce", PayUtil.makeUUID(32));
         paramMap.put("signMethod", "SHA256");
         paramMap.put("signature", getSignature(paramMap, appSecure));
