@@ -26,6 +26,7 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 /**
  * 富友 支付 通知实现
@@ -124,11 +120,15 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
 //            }
             paramMap.put(key, map.get(key).toString());
         }
-        String sign = PayUtil.createChinaUmsSign(paramMap, smallWeChatDto.getPayPassword());
+        //String sign = PayUtil.createChinaUmsSign(paramMap, smallWeChatDto.getPayPassword());
+        String preSign = map.getString("preSign");
+        String text = preSign + smallWeChatDto.getPayPassword();
+        System.out.println("待签名字符串：" + text);
+        String sign = DigestUtils.md5Hex(getContentBytes(text)).toUpperCase();
 
-//        if (!sign.equals(map.get("sign"))) {
-//            throw new IllegalArgumentException("鉴权失败");
-//        }
+        if (!sign.equals(map.get("sign"))) {
+            throw new IllegalArgumentException("鉴权失败");
+        }
         //JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
         String outTradeNo = map.get("merOrderId").toString();
 
@@ -143,10 +143,11 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
         }
         return 1;
     }
+
     //SJ=lJQi&
     //B7C091FCE2AFC3DDEE16DEDD04C234CF
     public static void main(String[] args) {
-       JSONObject data = JSONObject.parseObject("{\"msgType\":\"wx.notify\",\"payTime\":\"2021-09-03 02:47:35\",\"buyerCashPayAmt\":\"100\",\"connectSys\":\"UNIONPAY\",\"sign\":\"B7C091FCE2AFC3DDEE16DEDD04C234CF\",\"merName\":\"青海德坤电力有限公司\",\"mid\":\"898630149000110\",\"invoiceAmount\":\"100\",\"settleDate\":\"2021-09-03\",\"billFunds\":\"现金:100\",\"buyerId\":\"otdJ_uCsgFQi-XigMpadM9gB4h0w\",\"mchntUuid\":\"2d9081bd76d235d20176da1bf4f62bc9\",\"tid\":\"CV5EW7IM\",\"instMid\":\"YUEDANDEFAULT\",\"receiptAmount\":\"100\",\"couponAmount\":\"0\",\"SJ\":\"lJQi\",\"targetOrderId\":\"4200001198202109032729935220\",\"signType\":\"MD5\",\"billFundsDesc\":\"现金支付1.00元。\",\"subBuyerId\":\"oBFo-5-xs50SKaC5hjYf2Ux_Ww2g\",\"orderDesc\":\"青海德坤电力有限公司\",\"seqId\":\"23332339885N\",\"merOrderId\":\"1017102021090304700052\",\"targetSys\":\"WXPay\",\"bankInfo\":\"OTHERS\",\"totalAmount\":\"100\",\"wId\":\"hFXywDBfLkpKik7ZLPlAsRUQ4qORS1n8\",\"createTime\":\"2021-09-03 02:47:29\",\"buyerPayAmount\":\"100\",\"notifyId\":\"2f02e4a2-b54f-4d48-9b8a-16c924a95c98\",\"subInst\":\"103800\",\"status\":\"TRADE_SUCCESS\"}");
+        JSONObject data = JSONObject.parseObject("{\"msgType\":\"wx.notify\",\"payTime\":\"2021-09-03 02:47:35\",\"buyerCashPayAmt\":\"100\",\"connectSys\":\"UNIONPAY\",\"sign\":\"B7C091FCE2AFC3DDEE16DEDD04C234CF\",\"merName\":\"青海德坤电力有限公司\",\"mid\":\"898630149000110\",\"invoiceAmount\":\"100\",\"settleDate\":\"2021-09-03\",\"billFunds\":\"现金:100\",\"buyerId\":\"otdJ_uCsgFQi-XigMpadM9gB4h0w\",\"mchntUuid\":\"2d9081bd76d235d20176da1bf4f62bc9\",\"tid\":\"CV5EW7IM\",\"instMid\":\"YUEDANDEFAULT\",\"receiptAmount\":\"100\",\"couponAmount\":\"0\",\"SJ\":\"lJQi\",\"targetOrderId\":\"4200001198202109032729935220\",\"signType\":\"MD5\",\"billFundsDesc\":\"现金支付1.00元。\",\"subBuyerId\":\"oBFo-5-xs50SKaC5hjYf2Ux_Ww2g\",\"orderDesc\":\"青海德坤电力有限公司\",\"seqId\":\"23332339885N\",\"merOrderId\":\"1017102021090304700052\",\"targetSys\":\"WXPay\",\"bankInfo\":\"OTHERS\",\"totalAmount\":\"100\",\"wId\":\"hFXywDBfLkpKik7ZLPlAsRUQ4qORS1n8\",\"createTime\":\"2021-09-03 02:47:29\",\"buyerPayAmount\":\"100\",\"notifyId\":\"2f02e4a2-b54f-4d48-9b8a-16c924a95c98\",\"subInst\":\"103800\",\"status\":\"TRADE_SUCCESS\"}");
 
         TreeMap<String, String> paramMap = new TreeMap<String, String>();
         for (String key : data.keySet()) {
@@ -170,7 +171,7 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
         data1 = "bankInfo=OTHERS&billFunds=现金:100&billFundsDesc=现金支付1.00元。&buyerCashPayAmt=100&buyerId=otdJ_uCsgFQi-XigMpadM9gB4h0w&buyerPayAmount=100&connectSys=UNIONPAY&couponAmount=0&createTime=2021-09-03 02:47:29&instMid=YUEDANDEFAULT&invoiceAmount=100&mchntUuid=2d9081bd76d235d20176da1bf4f62bc9&merName=青海德坤电力有限公司&merOrderId=1017102021090304700052&mid=898630149000110&msgType=wx.notify&notifyId=2f02e4a2-b54f-4d48-9b8a-16c924a95c98&orderDesc=青海德坤电力有限公司&payTime=2021-09-03 02:47:35&receiptAmount=100&seqId=23332339885N&settleDate=2021-09-03&signType=MD5&SJ=lJQi&status=TRADE_SUCCESS&subBuyerId=oBFo-5-xs50SKaC5hjYf2Ux_Ww2g&subInst=103800&targetOrderId=4200001198202109032729935220&targetSys=WXPay&tid=CV5EW7IM&totalAmount=100&wId=hFXywDBfLkpKik7ZLPlAsRUQ4qORS1n8JkENP4taKmyH2aBsxXZbnpJDGZ7pBhasCKcYxpt7xyNP4QXS";
         //sb.append(key);
         logger.debug("加密前串：" + data1);
-       String sign = PayUtil.md5(data1.toString()).toUpperCase();
+        String sign = PayUtil.md5(data1.toString()).toUpperCase();
         System.out.printf("sign:" + sign);
     }
 
@@ -241,6 +242,16 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
                 + paramMap.getString("random_str") + "|"
                 + payPassword;
         return PayUtil.md5(str);
+    }
+
+
+    // 根据编码类型获得签名内容byte[]
+    public static byte[] getContentBytes(String content) {
+        try {
+            return content.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("签名过程中出现错误");
+        }
     }
 
 }
