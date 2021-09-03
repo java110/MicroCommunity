@@ -1,7 +1,10 @@
 package com.java110.dto;
 
+import com.java110.dto.floorAttr.FloorAttrDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -44,6 +47,8 @@ public class FloorDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<FloorAttrDto> floorAttrDto;
 
     public String getFloorId() {
         return floorId;
@@ -131,5 +136,13 @@ public class FloorDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<FloorAttrDto> getFloorAttrDto() {
+        return floorAttrDto;
+    }
+
+    public void setFloorAttrDto(List<FloorAttrDto> floorAttrDto) {
+        this.floorAttrDto = floorAttrDto;
     }
 }

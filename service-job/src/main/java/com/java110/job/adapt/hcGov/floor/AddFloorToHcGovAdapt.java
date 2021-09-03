@@ -93,7 +93,7 @@ public class AddFloorToHcGovAdapt extends DatabusAdaptImpl {
         communityDto.setCommunityId(floorPo.getCommunityId());
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
-        Assert.listOnlyOne(communityDtos, "未包含小区信息");
+        Assert.listNotNull(communityDtos, "未包含小区信息");
         CommunityDto tmpCommunityDto = communityDtos.get(0);
         String extCommunityId = "";
         String communityId = tmpCommunityDto.getCommunityId();

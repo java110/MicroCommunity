@@ -13,36 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.hcGov.floor;
+package com.java110.job.adapt.hcGov.room;
 
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.RoomAttrDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.floorAttr.FloorAttrDto;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IFloorAttrInnerServiceSMO;
+import com.java110.intf.community.IRoomAttrInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
 import com.java110.po.floorAttr.FloorAttrPo;
+import com.java110.po.room.RoomAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
- * 新增楼栋同步HC政务接口 返回
+ * 新增房屋同步HC政务接口 返回
  * <p>
  * 接口协议地址： https://gitee.com/java110/microCommunityInformation/tree/master/info-doc#1%E6%A5%BC%E6%A0%8B%E4%B8%8A%E4%BC%A0
  *
  * @desc add by 吴学文 16:20
  */
-@Component(value = "ADD_FLOOR_RETURN")
-public class AddFloorToHcGovReturnAdapt implements IReportReturnDataAdapt {
+@Component(value = "ADD_ROOM_RETURN")
+public class AddRoomToHcGovReturnAdapt implements IReportReturnDataAdapt {
 
     @Autowired
-    private IFloorAttrInnerServiceSMO floorAttrInnerServiceSMOImpl;
+    private IRoomAttrInnerServiceSMO roomAttrInnerServiceSMOImpl;
     @Autowired
     private IHcGovTranslateInnerServiceSMO hcGovTranslateInnerServiceSMOImpl;
 
@@ -57,28 +59,26 @@ public class AddFloorToHcGovReturnAdapt implements IReportReturnDataAdapt {
             throw new IllegalArgumentException("查询推送报文失败。不是同一订单信息");
         }
 
-        FloorAttrDto floorAttrDto = new FloorAttrDto();
-        floorAttrDto.setFloorId(hcGovTranslateDtos.get(0).getObjId());
-        floorAttrDto.setCommunityId(hcGovTranslateDtos.get(0).getCommunityId());
-        floorAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID);
-        List<FloorAttrDto> floorAttrDtos = floorAttrInnerServiceSMOImpl.queryFloorAttrs(floorAttrDto);
+        RoomAttrDto roomAttrDto = new RoomAttrDto();
+        roomAttrDto.setRoomId(hcGovTranslateDtos.get(0).getObjId());
+        roomAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID );
+        List<RoomAttrDto> roomAttrDtos = roomAttrInnerServiceSMOImpl.queryRoomAttrs(roomAttrDto);
 
-        FloorAttrPo floorAttrPo = new FloorAttrPo();
-        floorAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
-        floorAttrPo.setFloorId(floorAttrDto.getFloorId());
-        floorAttrPo.setCommunityId(floorAttrDto.getCommunityId());
-        floorAttrPo.setSpecCd(floorAttrDto.getSpecCd());
-        floorAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extFloorId"));
-        if (floorAttrDtos == null || floorAttrDtos.size() < 1) {
-            int flag = floorAttrInnerServiceSMOImpl.saveFloorAttr(floorAttrPo);
+        RoomAttrPo roomAttrPo = new RoomAttrPo();
+        roomAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
+        roomAttrPo.setRoomId(roomAttrDto.getRoomId());
+        roomAttrPo.setSpecCd(roomAttrDto.getSpecCd());
+        roomAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extRoomId"));
+        if (roomAttrDtos == null || roomAttrDtos.size() < 1) {
+            int flag = roomAttrInnerServiceSMOImpl.saveRoomAttr(roomAttrPo);
             if (flag < 1) {
-                throw new IllegalArgumentException("保存楼栋属性失败");
+                throw new IllegalArgumentException("保存房屋属性失败");
             }
         } else {
-            floorAttrPo.setAttrId(floorAttrDtos.get(0).getAttrId());
-            int flag = floorAttrInnerServiceSMOImpl.updateFloorAttrInfoInstance(floorAttrPo);
+            roomAttrPo.setAttrId(roomAttrDtos.get(0).getAttrId());
+            int flag = roomAttrInnerServiceSMOImpl.updateRoomAttrInfoInstance(roomAttrPo);
             if (flag < 1) {
-                throw new IllegalArgumentException("修改楼栋属性失败");
+                throw new IllegalArgumentException("修改房屋属性失败");
             }
 
         }
