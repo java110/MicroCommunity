@@ -98,7 +98,7 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
             ownerPo.setSex("1");
             ownerPo.setMemberId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
             ownerPo.setName(reqJson.getString("ownerName"));
-            ownerPo.setOwnerId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
+            ownerPo.setOwnerId(ownerPo.getMemberId()); //业主 所以和成员ID需要一样
             ownerPo.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
             ownerPo.setRemark(reqJson.getString("remark"));
             ownerBMOImpl.addOwner(JSONObject.parseObject(JSONObject.toJSONString(ownerPo)), context);
