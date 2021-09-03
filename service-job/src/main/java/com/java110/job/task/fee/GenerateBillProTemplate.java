@@ -351,6 +351,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         if (roomDtos == null || roomDtos.size() < 1) {
             //房屋可能被删除了
             billOweFeeDto.setOweId("1");
+            billOweFeeDto.setOwnerId("-1");
             billOweFeeDto.setOwnerName("未知");
             billOweFeeDto.setOwnerTel("19999999999");
             billOweFeeDto.setPayerObjName("未知");
@@ -372,6 +373,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
             //房屋可能被删除了
             billOweFeeDto.setOweId("1");
+            billOweFeeDto.setOwnerId("-1");
             billOweFeeDto.setOwnerName("未知");
             billOweFeeDto.setOwnerTel("19999999999");
             return;
