@@ -13,7 +13,6 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class RoomAttrDto extends PageDto implements Serializable {
-
     private String attrId;
     private String specCd;
     private String value;

@@ -37,15 +37,17 @@ public class HcGovConstant {
     public static final String GOV_SWITCH = "GOV_SWITCH"; // 推送政务开关
 
 
-    //政务小区编码
+    //政务小区编码/楼栋外部便阿门/房屋外部编码/业主外部编码 SPEC_CD
     public static final String EXT_COMMUNITY_ID = "9329000004";
 
     //添加楼栋
     public static final String ADD_FLOOR_ACTION = "ADD_FLOOR";
     //修改楼栋
     public static final String EDIT_FLOOR_ACTION = "EDIT_FLOOR";
-    //删除楼栋
-    public static final String DEL_FLOOR_ACTION = "DEL_FLOOR";
+    //添加房屋
+    public static final String ADD_ROOM_ACTION = "ADD_ROOM";
+    //修改房屋
+    public static final String EDIT_ROOM_ACTION = "EDIT_ROOM";
 
     public static void generatorProducerSign(JSONObject header, JSONObject body, String code) {
 

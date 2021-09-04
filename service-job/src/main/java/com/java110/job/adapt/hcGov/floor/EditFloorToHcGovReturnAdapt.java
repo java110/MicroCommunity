@@ -22,6 +22,7 @@ import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
 import com.java110.intf.community.IFloorAttrInnerServiceSMO;
+import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
 import com.java110.po.floorAttr.FloorAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class EditFloorToHcGovReturnAdapt implements IReportReturnDataAdapt {
         FloorAttrDto floorAttrDto = new FloorAttrDto();
         floorAttrDto.setFloorId(hcGovTranslateDtos.get(0).getObjId());
         floorAttrDto.setCommunityId(hcGovTranslateDtos.get(0).getCommunityId());
-        floorAttrDto.setSpecCd(CommunityAttrDto.SPEC_CD_GOV);
+        floorAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID);
         List<FloorAttrDto> floorAttrDtos = floorAttrInnerServiceSMOImpl.queryFloorAttrs(floorAttrDto);
 
         FloorAttrPo floorAttrPo = new FloorAttrPo();

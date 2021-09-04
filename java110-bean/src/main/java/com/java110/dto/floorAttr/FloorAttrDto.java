@@ -19,6 +19,9 @@ private String attrId;
 private String specCd;
 private String communityId;
 private String value;
+private String specName;
+private String valueName;
+private String listShow;
 
 
     private Date createTime;
@@ -72,5 +75,29 @@ public void setValue(String value) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getValueName() {
+        return valueName;
+    }
+
+    public void setValueName(String valueName) {
+        this.valueName = valueName;
+    }
+
+    public String getListShow() {
+        return listShow;
+    }
+
+    public void setListShow(String listShow) {
+        this.listShow = listShow;
     }
 }
