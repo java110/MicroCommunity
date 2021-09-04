@@ -6,7 +6,9 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.meterWater.MeterWaterDto;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -31,6 +33,9 @@ public class DeleteMeterWaterListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IMeterWaterInnerServiceSMO meterWaterInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -48,10 +53,17 @@ public class DeleteMeterWaterListener extends AbstractServiceApiPlusListener {
 
         Assert.listOnlyOne(meterWaterDtos, "数据异常未找到费用信息");
 
-        PayFeePo payFeePo = new PayFeePo();
-        payFeePo.setFeeId(meterWaterDtos.get(0).getFeeId());
-        payFeePo.setCommunityId(meterWaterDtos.get(0).getCommunityId());
-        super.delete(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
+        //判断费用是否已经被删除
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(meterWaterDtos.get(0).getFeeId());
+        feeDto.setCommunityId(meterWaterDtos.get(0).getCommunityId());
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        if (feeDtos != null && feeDtos.size() > 0) {
+            PayFeePo payFeePo = new PayFeePo();
+            payFeePo.setFeeId(meterWaterDtos.get(0).getFeeId());
+            payFeePo.setCommunityId(meterWaterDtos.get(0).getCommunityId());
+            super.delete(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
+        }
         meterWaterBMOImpl.deleteMeterWater(reqJson, context);
     }
 
