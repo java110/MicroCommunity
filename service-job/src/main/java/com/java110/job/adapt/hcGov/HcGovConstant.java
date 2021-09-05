@@ -49,6 +49,12 @@ public class HcGovConstant {
     //修改房屋
     public static final String EDIT_ROOM_ACTION = "EDIT_ROOM";
 
+
+    //添加位置
+    public static final String ADD_LOCATION_ACTION = "ADD_LOCATION";
+    //修改位置
+    public static final String EDIT_LOCATION_ACTION = "EDIT_LOCATION";
+
     public static void generatorProducerSign(JSONObject header, JSONObject body, String code) {
 
         String newSign = AuthenticationFactory.md5(header.getString("tranId") + header.getString("reqTime") + body.toJSONString() + code).toLowerCase();
