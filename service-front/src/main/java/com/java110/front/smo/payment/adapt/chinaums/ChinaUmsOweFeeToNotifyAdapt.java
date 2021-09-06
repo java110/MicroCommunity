@@ -29,6 +29,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -123,7 +125,11 @@ public class ChinaUmsOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
             }
             paramMap.put(key, map.get(key).toString());
         }
-        String sign = PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword());
+        String preSign = map.getString("preSign");
+        String text = preSign + smallWeChatDto.getPayPassword();
+        System.out.println("待签名字符串：" + text);
+        String sign = DigestUtils.sha256Hex(getContentBytes(text)).toUpperCase();
+
         if (!sign.equals(map.get("sign"))) {
             throw new IllegalArgumentException("鉴权失败");
         }
@@ -236,6 +242,16 @@ public class ChinaUmsOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
                 + paramMap.getString("random_str") + "|"
                 + payPassword;
         return PayUtil.md5(str);
+    }
+
+
+    // 根据编码类型获得签名内容byte[]
+    public static byte[] getContentBytes(String content) {
+        try {
+            return content.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("签名过程中出现错误");
+        }
     }
 
 }

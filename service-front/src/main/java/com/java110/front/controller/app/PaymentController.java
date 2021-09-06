@@ -215,10 +215,7 @@ public class PaymentController extends BaseController {
         String sign = params.get("sign");
         System.out.println(sign);
 
-        /*验签*/
-        //对通知内容生成sign
-        //String strSign = makeSign(md5key, params);
-        //System.out.println("strSign="+strSign);
+
         String preStr = buildSignString(params);
         paramIn.put("preSign",preStr);
         paramIn.put("sign",sign);
@@ -264,6 +261,16 @@ public class PaymentController extends BaseController {
             paramIn.put(key, request.getParameter(key));
         }
         logger.debug("微信支付回调报文" + paramIn.toJSONString());
+        /*接收参数*/
+        Map<String, String> params = getRequestParams(request);
+        System.out.println("params:" + params);
+        String sign = params.get("sign");
+        System.out.println(sign);
+
+
+        String preStr = buildSignString(params);
+        paramIn.put("preSign",preStr);
+        paramIn.put("sign",sign);
 
         return oweFeeToNotifySMOImpl.toNotify(paramIn.toJSONString(), request);
     }
