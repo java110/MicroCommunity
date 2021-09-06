@@ -33,7 +33,6 @@ import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.floor.FloorPo;
 import com.java110.po.room.RoomPo;
-import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +47,8 @@ import java.util.List;
  *
  * @desc add by 吴学文 16:20
  */
-@Component(value = "addRoomToHcGovAdapt")
-public class AddRoomToHcGovAdapt extends DatabusAdaptImpl {
+@Component(value = "editRoomToHcGovAdapt")
+public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -85,13 +84,13 @@ public class AddRoomToHcGovAdapt extends DatabusAdaptImpl {
             //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
             for (int bRoomIndex = 0; bRoomIndex < businessRoom.size(); bRoomIndex++) {
                 JSONObject businessOwnerCar = businessRoom.getJSONObject(bRoomIndex);
-                doAddRoom(business, businessOwnerCar);
+                doEditRoom(business, businessOwnerCar);
 
             }
         }
     }
 
-    private void doAddRoom(Business business, JSONObject businessRooom) {
+    private void doEditRoom(Business business, JSONObject businessRooom) {
 
         RoomPo roomPo = BeanConvertUtil.covertBean(businessRooom, RoomPo.class);
         RoomDto roomDto = new RoomDto();
@@ -154,7 +153,7 @@ public class AddRoomToHcGovAdapt extends DatabusAdaptImpl {
         body.put("state", roomDtos.get( 0 ).getStateName());
         body.put("roomSubType", roomDtos.get( 0 ).getRoomSubTypeName());
 
-        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.ADD_ROOM_ACTION, HcGovConstant.COMMUNITY_SECURE);
+        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.EDIT_ROOM_ACTION, HcGovConstant.COMMUNITY_SECURE);
         baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, roomId, HcGovConstant.COMMUNITY_SECURE);
     }
 
