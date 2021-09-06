@@ -44,14 +44,12 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         String fileName = "";
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
 
-
-        String ftpServer = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
-        int ftpPort = Integer.parseInt(MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
-        String ftpUserName = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
-        String ftpUserPassword = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
-        String ftpPath = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PATH);
-
         if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
+            String ftpServer = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
+            int ftpPort = Integer.parseInt(MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
+            String ftpUserName = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
+            String ftpUserPassword = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
+            String ftpPath = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PATH);
             fileName = ftpUploadTemplate.upload(fileDto.getContext(), ftpServer,
                     ftpPort, ftpUserName,
                     ftpUserPassword, ftpPath);
