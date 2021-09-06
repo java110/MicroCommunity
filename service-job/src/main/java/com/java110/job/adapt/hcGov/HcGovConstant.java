@@ -48,7 +48,10 @@ public class HcGovConstant {
     public static final String ADD_ROOM_ACTION = "ADD_ROOM";
     //修改房屋
     public static final String EDIT_ROOM_ACTION = "EDIT_ROOM";
-
+    //添加业主
+    public static final String ADD_OWNER_ACTION = "ADD_OWNER";
+    //修改业主
+    public static final String EDIT_OWNER_ACTION = "EDIT_OWNER";
 
     //添加位置
     public static final String ADD_LOCATION_ACTION = "ADD_LOCATION";
