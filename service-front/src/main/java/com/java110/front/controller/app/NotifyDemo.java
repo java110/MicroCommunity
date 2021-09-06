@@ -29,7 +29,7 @@ public class NotifyDemo {
     public static void main(String[] args) throws Exception {
 
         /*接收参数*/
-        String p = "{msgType=wx.notify, payTime=2021-09-03 11:25:20, buyerCashPayAmt=10, connectSys=UNIONPAY, sign=21B89B7F9EB6837430A8B30E1DF779D7, merName=青海德坤电力有限公司, mid=898630149000110, invoiceAmount=10, settleDate=2021-09-03, billFunds=现金:10, buyerId=otdJ_uCsgFQi-XigMpadM9gB4h0w, mchntUuid=2d9081bd76d235d20176da1bf4f62bc9, tid=CV5EW7IM, instMid=YUEDANDEFAULT, receiptAmount=10, couponAmount=0, targetOrderId=4200001202202109033453643518, signType=MD5, billFundsDesc=现金支付0.10元。, subBuyerId=oBFo-5-xs50SKaC5hjYf2Ux_Ww2g, orderDesc=青海德坤电力有限公司, seqId=23336168921N, merOrderId=1017102021090390760012, targetSys=WXPay, bankInfo=OTHERS, CJ=iIAF, totalAmount=10, wId=hFXywDBfLkpKik7ZLPlAsRUQ4qORS1n8, createTime=2021-09-03 11:25:14, buyerPayAmount=10, notifyId=33e8d307-35ab-4a5a-9551-70a404a45cc6, subInst=103800, status=TRADE_SUCCESS}";
+        String p = "{msgType=wx.notify, payTime=2021-09-06 14:45:10, buyerCashPayAmt=10, connectSys=UNIONPAY, sign=93A2A241A84F822B37E13895A1D6FD8CB4CCABEA095A60EFC9646EC4594F5114, merName=青海德坤电力有限公司, mid=898630149000110, invoiceAmount=10, settleDate=2021-09-06, billFunds=现金:10, buyerId=otdJ_uCsgFQi-XigMpadM9gB4h0w, mchntUuid=2d9081bd76d235d20176da1bf4f62bc9, tid=CV5EW7IM, instMid=YUEDANDEFAULT, receiptAmount=10, couponAmount=0, targetOrderId=4200001180202109067432700837, signType=SHA256, billFundsDesc=现金支付0.10元。, subBuyerId=oBFo-5-xs50SKaC5hjYf2Ux_Ww2g, orderDesc=青海德坤电力有限公司, seqId=23389562168N, merOrderId=11WP102021090602190026, targetSys=WXPay, bankInfo=OTHERS, Ru=NcFv, totalAmount=10, wId=hFXywDBfLkpKik7ZLPlAsRUQ4qORS1n8, createTime=2021-09-06 14:45:03, buyerPayAmount=10, notifyId=d16d35c6-a53d-4ee4-89d1-f08fd8c7b462, subInst=103800, status=TRADE_SUCCESS}";
         Map<String, String> params =mapStringToMap(p);
         System.out.println("params:" + params);
         String sign = params.get("sign");
@@ -81,7 +81,7 @@ public class NotifyDemo {
         String preStr = buildSignString(params); // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         String text = preStr + md5Key;
         System.out.println("待签名字符串：" + text);
-        return DigestUtils.md5Hex(getContentBytes(text)).toUpperCase();
+        return DigestUtils.sha256Hex(getContentBytes(text)).toUpperCase();
     }
 
     // 构建签名字符串
@@ -97,6 +97,8 @@ public class NotifyDemo {
 
         for (String key : params.keySet()) {
             if ("sign".equals(key))
+                continue;
+            if ("wId".equals(key))
                 continue;
             if (StringUtils.isEmpty(params.get(key)))
                 continue;

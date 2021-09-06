@@ -331,6 +331,8 @@ public class PaymentController extends BaseController {
         for (String key : params.keySet()) {
             if ("sign".equals(key))
                 continue;
+            if ("wId".equals(key))
+                continue;
             if (StringUtils.isEmpty(params.get(key)))
                 continue;
             keys.add(key);
