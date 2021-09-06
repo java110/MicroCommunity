@@ -105,8 +105,6 @@ public class JobServiceKafka extends BaseController {
 
         String extCommunityId = header.getString("extCommunityId");
 
-        //签名校验
-        CommunityDto community = null;
         try {
             //获得小区对象
             String secure = getExtCommunityCode(extCommunityId);
