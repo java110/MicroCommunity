@@ -79,9 +79,7 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
 
     public void updateHcGovLog(JSONObject paramIn) {
         Assert.hasKeyAndValue(paramIn, "header", "请求报文中未包含header");
-        Assert.hasKeyAndValue(paramIn, "body", "请求报文中未包含body");
         JSONObject heard = paramIn.getJSONObject("header");
-        JSONObject body = paramIn.getJSONObject("body");
 
         HcGovTranslatePo hcGovTranslatePo = new HcGovTranslatePo();
         hcGovTranslatePo.setTranId(heard.getString("tranId"));
