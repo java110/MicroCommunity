@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @desc add by 吴学文 16:20
  */
-@Component(value = "addLocationToHcGovAdapt")
+@Component(value = "addInoutRecordToHcGovAdapt")
 public class AddInoutRecordToHcGovAdapt extends DatabusAdaptImpl {
 
     @Autowired

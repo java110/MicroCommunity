@@ -36,7 +36,7 @@ import java.util.List;
  *
  * @desc add by 吴学文 16:20
  */
-@Component(value = "ADD_LOCATION_RETURN")
+@Component(value = "ADD_INOUT_RECORD_RETURN")
 public class AddInoutRecordToHcGovReturnAdapt implements IReportReturnDataAdapt {
 
     @Autowired
