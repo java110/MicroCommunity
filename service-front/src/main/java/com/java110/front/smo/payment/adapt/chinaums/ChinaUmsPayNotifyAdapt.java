@@ -124,7 +124,7 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
         String preSign = map.getString("preSign");
         String text = preSign + smallWeChatDto.getPayPassword();
         System.out.println("待签名字符串：" + text);
-        String sign = DigestUtils.md5Hex(getContentBytes(text)).toUpperCase();
+        String sign = DigestUtils.sha256Hex(getContentBytes(text)).toUpperCase();
 
         if (!sign.equals(map.get("sign"))) {
             throw new IllegalArgumentException("鉴权失败");
