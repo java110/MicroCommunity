@@ -17,6 +17,8 @@ public class AllocationStorehouseApplyPo implements Serializable {
     private String createTime;
     //调拨返还状态标识
     private String applyType;
+    //调拨源仓库
+    private String shId;
 
     public String getApplyId() {
         return applyId;
@@ -104,5 +106,13 @@ public class AllocationStorehouseApplyPo implements Serializable {
 
     public void setApplyType(String applyType) {
         this.applyType = applyType;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }

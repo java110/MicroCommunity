@@ -27,6 +27,8 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String warehousingWay;
     private String createUserId;
     private String createUserName;
+    private String unitCodeName;
+    private String miniUnitCodeName;
 
 
     public String getApplyOrderId() {
@@ -179,5 +181,21 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
     }
 }

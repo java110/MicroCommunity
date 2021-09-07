@@ -33,6 +33,10 @@ public interface IAccountDetailBMO extends IApiBaseBMO {
      */
      void deleteAccountDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
-
-
+    /**
+     * 账户处理
+     * @param paramObj
+     * @param dataFlowContext
+     */
+    void dealAccount(JSONObject paramObj, DataFlowContext dataFlowContext);
 }

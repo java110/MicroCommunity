@@ -590,8 +590,8 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             row.createCell(7).setCellValue(dataObj.getString("supplierName"));
             row.createCell(8).setCellValue(dataObj.getString("shName"));
             row.createCell(9).setCellValue(dataObj.getString("warehousingWayName") + dataObj.getString("resOrderTypeName"));
-            row.createCell(10).setCellValue(dataObj.getString("quantity"));
-            row.createCell(11).setCellValue(dataObj.getString("purchaseQuantity"));
+            row.createCell(10).setCellValue(dataObj.getString("quantity") + dataObj.getString("unitCodeName"));
+            row.createCell(11).setCellValue(dataObj.getString("purchaseQuantity") + dataObj.getString("unitCodeName"));
             row.createCell(12).setCellValue(dataObj.getString("price"));
             if (!StringUtil.isEmpty(dataObj.getString("resOrderType")) && dataObj.getString("resOrderType").equals("10000") &&
                     !StringUtil.isEmpty(dataObj.getString("purchaseQuantity")) && !StringUtil.isEmpty(dataObj.getString("price"))) { //状态是入库
@@ -648,10 +648,10 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
         row.createCell(2).setCellValue("物品类型");
         row.createCell(3).setCellValue("物品名称");
         row.createCell(4).setCellValue("物品规格");
-        row.createCell(5).setCellValue("原有库存");
+        row.createCell(5).setCellValue("被调仓库原库存");
         row.createCell(6).setCellValue("调拨数量");
-        row.createCell(7).setCellValue("前仓库名称");
-        row.createCell(8).setCellValue("后仓库名称");
+        row.createCell(7).setCellValue("被调仓库");
+        row.createCell(8).setCellValue("目标仓库");
         row.createCell(9).setCellValue("申请人ID");
         row.createCell(10).setCellValue("申请人");
         row.createCell(11).setCellValue("调拨说明");
@@ -671,8 +671,8 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             row.createCell(2).setCellValue(dataObj.getString("rstName"));
             row.createCell(3).setCellValue(dataObj.getString("resName"));
             row.createCell(4).setCellValue(dataObj.getString("specName"));
-            row.createCell(5).setCellValue(dataObj.getString("originalStock"));
-            row.createCell(6).setCellValue(dataObj.getString("stock"));
+            row.createCell(5).setCellValue(dataObj.getString("originalStock") + dataObj.getString("unitCodeName"));
+            row.createCell(6).setCellValue(dataObj.getString("stock") + dataObj.getString("unitCodeName"));
             if (!StringUtil.isEmpty(dataObj.getString("applyType")) && dataObj.getString("applyType").equals("20000")) {  //返还
                 row.createCell(7).setCellValue(dataObj.getString("startUserName"));
             } else {
@@ -729,9 +729,9 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             } else {
                 row.createCell(7).setCellValue("--");
             }
-            row.createCell(8).setCellValue(dataObj.getString("stock"));
-            row.createCell(9).setCellValue(dataObj.getString("unitCodeName") + "=" + dataObj.getString("miniUnitStock") + dataObj.getString("miniUnitCodeName"));
-            row.createCell(10).setCellValue(dataObj.getString("miniStock"));
+            row.createCell(8).setCellValue(dataObj.getString("stock") + dataObj.getString("unitCodeName"));
+            row.createCell(9).setCellValue(dataObj.getString("stock") + dataObj.getString("unitCodeName") + "=" + dataObj.getString("miniUnitStock") + dataObj.getString("miniUnitCodeName"));
+            row.createCell(10).setCellValue(dataObj.getString("miniStock") + dataObj.getString("miniUnitCodeName"));
             row.createCell(11).setCellValue(dataObj.getString("averagePrice"));
             if (!StringUtil.isEmpty(dataObj.getString("stock")) && !StringUtil.isEmpty(dataObj.getString("averagePrice"))) {
                 //获取物品库存数量
@@ -851,8 +851,8 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             row.createCell(4).setCellValue(dataObj.getString("specName"));
             row.createCell(5).setCellValue(dataObj.getString("acceptUserId"));
             row.createCell(6).setCellValue(dataObj.getString("acceptUserName"));
-            row.createCell(7).setCellValue(dataObj.getString("stock"));
-            row.createCell(8).setCellValue(dataObj.getString("giveQuantity"));
+            row.createCell(7).setCellValue(dataObj.getString("stock") + dataObj.getString("unitCodeName"));
+            row.createCell(8).setCellValue(dataObj.getString("giveQuantity") + dataObj.getString("miniUnitCodeName"));
             row.createCell(9).setCellValue(dataObj.getString("createTime"));
             row.createCell(10).setCellValue(dataObj.getString("remark"));
         }
@@ -887,7 +887,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
             row.createCell(3).setCellValue(dataObj.getString("rstName"));
             row.createCell(4).setCellValue(dataObj.getString("resourceStoreName"));
             row.createCell(5).setCellValue(dataObj.getString("specName"));
-            row.createCell(6).setCellValue(dataObj.getString("quantity"));
+            row.createCell(6).setCellValue(dataObj.getString("quantity") + dataObj.getString("miniUnitCodeName"));
             row.createCell(7).setCellValue(dataObj.getString("unitPrice"));
             row.createCell(8).setCellValue(dataObj.getString("createUserId"));
             row.createCell(9).setCellValue(dataObj.getString("createUserName"));

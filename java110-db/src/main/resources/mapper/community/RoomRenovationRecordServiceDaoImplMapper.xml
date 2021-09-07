@@ -6,7 +6,7 @@
 
     <!-- 保存装修记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveRoomRenovationRecordInfo" parameterType="Map">
-        insert into room_renovation_record(record_id,r_id,staff_id,staff_name,state,remark,create_time) values (#{recordId},#{rId},#{staffId},#{staffName},#{state},#{remark},#{createTime})
+        insert into room_renovation_record(record_id,r_id,staff_id,staff_name,state,remark,create_time,is_true) values (#{recordId},#{rId},#{staffId},#{staffName},#{state},#{remark},#{createTime},#{isTrue})
     </insert>
 
     <!-- 查询装修记录信息(与文件表关联) -->
@@ -18,6 +18,7 @@
         re.staff_name staffName,
         re.remark,
         re.state,
+        re.is_true isTrue,
         td. NAME stateName,
         re.create_time createTime,
         r.room_id roomId,
@@ -61,6 +62,9 @@
         </if>
         <if test="statusCd != null and statusCd != ''">
             and re.status_cd = #{statusCd}
+        </if>
+        <if test="isTrue != null and isTrue != ''">
+            and re.is_true = #{isTrue}
         </if>
         <if test="createTime !=null and createTime != ''">
             and re.create_time= #{createTime}
@@ -107,6 +111,9 @@
         <if test="statusCd != null and statusCd != ''">
             and re.status_cd = #{statusCd}
         </if>
+        <if test="isTrue != null and isTrue != ''">
+            and re.is_true = #{isTrue}
+        </if>
         <if test="createTime !=null and createTime != ''">
             and re.create_time= #{createTime}
         </if>
@@ -121,7 +128,9 @@
         re.staff_name staffName,
         re.remark,
         re.state,
-        td. NAME stateName,
+        td.name stateName,
+        re.is_true isTrue,
+        td2.name isTrueName,
         re.create_time createTime,
         r.room_id roomId,
         r.room_name roomName
@@ -132,6 +141,8 @@
         LEFT JOIN t_dict td ON td.table_name = 'room_renovation_record'
         AND td.table_columns = 'state'
         AND re.state = td.status_cd
+        LEFT JOIN t_dict td2 ON td2.table_name = 'room_renovation_record'
+        AND td2.table_columns = 'is_true' AND re.is_true = td2.status_cd
         WHERE 1 = 1
         <if test="recordId !=null and recordId != ''">
             and re.record_id= #{recordId}
@@ -159,6 +170,9 @@
         </if>
         <if test="statusCd != null and statusCd != ''">
             and re.status_cd = #{statusCd}
+        </if>
+        <if test="isTrue != null and isTrue != ''">
+            and re.is_true = #{isTrue}
         </if>
         <if test="createTime !=null and createTime != ''">
             and re.create_time= #{createTime}
@@ -202,6 +216,9 @@
         </if>
         <if test="statusCd != null and statusCd != ''">
             and re.status_cd = #{statusCd}
+        </if>
+        <if test="isTrue != null and isTrue != ''">
+            and re.is_true = #{isTrue}
         </if>
         <if test="createTime !=null and createTime != ''">
             and re.create_time= #{createTime}

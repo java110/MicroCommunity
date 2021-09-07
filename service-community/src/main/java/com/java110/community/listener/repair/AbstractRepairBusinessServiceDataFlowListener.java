@@ -19,8 +19,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractRepairBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(AbstractRepairBusinessServiceDataFlowListener.class);
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractRepairBusinessServiceDataFlowListener.class);
 
     /**
      * 获取 DAO工具类
@@ -53,6 +53,7 @@ public abstract class AbstractRepairBusinessServiceDataFlowListener extends Abst
         businessRepairInfo.put("maintenanceType", businessRepairInfo.get("maintenance_type"));
         businessRepairInfo.put("repairMaterials", businessRepairInfo.get("repair_materials"));
         businessRepairInfo.put("repairFee", businessRepairInfo.get("repair_fee"));
+        businessRepairInfo.put("payType", businessRepairInfo.get("pay_type"));
         businessRepairInfo.remove("bId");
         businessRepairInfo.put("statusCd", statusCd);
     }
@@ -64,7 +65,7 @@ public abstract class AbstractRepairBusinessServiceDataFlowListener extends Abst
      * @param businessRepair 报修信息信息
      */
     protected void autoSaveDelBusinessRepair(Business business, JSONObject businessRepair) {
-//自动插入DEL
+        //自动插入DEL
         Map info = new HashMap();
         info.put("repairId", businessRepair.getString("repairId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
@@ -93,6 +94,7 @@ public abstract class AbstractRepairBusinessServiceDataFlowListener extends Abst
         currentRepairInfo.put("maintenanceType", currentRepairInfo.get("maintenance_type"));
         currentRepairInfo.put("repairMaterials", currentRepairInfo.get("repair_materials"));
         currentRepairInfo.put("repairFee", currentRepairInfo.get("repair_fee"));
+        currentRepairInfo.put("payType", currentRepairInfo.get("pay_type"));
         currentRepairInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRepairServiceDaoImpl().saveBusinessRepairInfo(currentRepairInfo);
 

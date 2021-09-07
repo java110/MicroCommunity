@@ -2,20 +2,27 @@ package com.java110.acct.listener.accountDetail;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.acct.dao.IAccountServiceDao;
+import com.java110.dto.account.AccountDto;
+import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.po.account.AccountPo;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.acct.dao.IAccountDetailServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +39,9 @@ public class SaveAccountDetailInfoListener extends AbstractAccountDetailBusiness
 
     @Autowired
     private IAccountDetailServiceDao accountDetailServiceDaoImpl;
+
+    @Autowired
+    private IAccountServiceDao accountServiceDaoImpl;
 
     @Override
     public int getOrder() {
@@ -95,6 +105,42 @@ public class SaveAccountDetailInfoListener extends AbstractAccountDetailBusiness
             if(businessAccountDetailInfo.size() == 1) {
                 dataFlowContext.addParamOut("detailId", businessAccountDetailInfo.get(0).get("detail_id"));
             }
+        }
+
+        //修改账户信息
+        //开始枷锁
+        String requestId = DistributedLock.getLockUUID();
+        String key = businessAccountDetailInfo.get(0).get("acctId").toString();
+        int flag = 0;
+        String detailType = "";
+        try {
+            DistributedLock.waitGetDistributedLock(key, requestId);
+            AccountDto accountDto = new AccountDto();
+            accountDto.setObjId(businessAccountDetailInfo.get(0).get("objId").toString());
+            accountDto.setAcctId(businessAccountDetailInfo.get(0).get("acctId").toString());
+            List<AccountDto> accounts = BeanConvertUtil.covertBeanList(accountServiceDaoImpl.getAccountInfo(BeanConvertUtil.beanCovertMap(accountDto)), AccountDto.class);
+            if (accounts == null || accounts.size() < 1) {
+                throw new IllegalArgumentException("账户不存在");
+            }
+            //在账户增加
+            double amount = Double.parseDouble(accounts.get(0).getAmount());
+            BigDecimal amountBig = new BigDecimal(amount);
+            detailType = businessAccountDetailInfo.get(0).get("detailType").toString();
+            if(AccountDetailDto.DETAIL_TYPE_IN.equals(detailType)) {
+                amount = amountBig.add(new BigDecimal(businessAccountDetailInfo.get(0).get("amount").toString())).doubleValue();
+            }else{
+                amount = amountBig.subtract(new BigDecimal(businessAccountDetailInfo.get(0).get("amount").toString())).doubleValue();
+            }
+            AccountPo accountPo = new AccountPo();
+            accountPo.setObjId(businessAccountDetailInfo.get(0).get("objId").toString());
+            accountPo.setAcctId(businessAccountDetailInfo.get(0).get("acctId").toString());
+            accountPo.setAmount(amount + "");
+            flag = accountServiceDaoImpl.updateAccount(BeanConvertUtil.beanCovertMap(accountPo));
+            if (flag < 1) {
+                throw new IllegalArgumentException("更新账户失败");
+            }
+        } finally {
+            DistributedLock.releaseDistributedLock(requestId, key);
         }
     }
 
@@ -165,6 +211,7 @@ public class SaveAccountDetailInfoListener extends AbstractAccountDetailBusiness
         accountDetailServiceDaoImpl.saveBusinessAccountDetailInfo(businessAccountDetail);
 
     }
+
     @Override
     public IAccountDetailServiceDao getAccountDetailServiceDaoImpl() {
         return accountDetailServiceDaoImpl;

@@ -118,8 +118,8 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
         if (reqJson.containsKey("flowType")) {
             String flowType = reqJson.getString("flowType");
             if (WorkflowDto.FLOW_TYPE_PURCHASE.equals(flowType)
-                    || WorkflowDto.FLOW_TYPE_COLLECTION.equals(flowType)
                     || WorkflowDto.FLOW_TYPE_CONTRACT_CHANGE.equals(flowType)
+                    || WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE.equals(flowType)
                     || WorkflowDto.FLOW_TYPE_CONTRACT_APPLY.equals(flowType)) {
                 reqJson.put("communityId", "9999");
             }
@@ -168,6 +168,7 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
             workflowStepStaffPo.setStaffId(step.getString("staffId"));
             workflowStepStaffPo.setStaffName(step.getString("staffName"));
             workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
+            workflowStepStaffPo.setFlowType(reqJson.getString("flowType"));
             workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(step.getString("staffRole")) ? "1001" : step.getString("staffRole"));
             super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
             workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));

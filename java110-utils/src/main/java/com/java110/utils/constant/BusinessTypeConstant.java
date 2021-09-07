@@ -1597,6 +1597,24 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_RESOURCE_STORE_SPECIFICATION="671100050011";
 
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_SAVE_APPLY_ROOM_DISCOUNT_RECORD="671200030011";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_APPLY_ROOM_DISCOUNT_RECORD="671200040011";
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_DELETE_APPLY_ROOM_DISCOUNT_RECORD="671200050011";
+
     /**
      * 删除工作流节点 处理员工
      */

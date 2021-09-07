@@ -208,7 +208,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             try {
                 doDealCarFee(tmpReportCarDto, tmpReportFeeDto);
             } catch (Exception e) {
-                logger.error("处理房屋费用失败" + JSONObject.toJSONString(tmpReportFeeDto), e);
+                logger.error("处理车辆费用失败" + JSONObject.toJSONString(tmpReportFeeDto), e);
             }
         }
     }

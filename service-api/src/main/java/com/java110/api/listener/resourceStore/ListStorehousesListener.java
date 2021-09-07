@@ -11,6 +11,7 @@ import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IStorehouseInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeStorehouseConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -74,10 +75,13 @@ public class ListStorehousesListener extends AbstractServiceApiListener {
         basePrivilegeDto.setResource("/viewGroupWarehouse");
         basePrivilegeDto.setUserId(userId);
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (privileges.size()==0) {
+        if (privileges.size() == 0) {
             storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId")});
-        }else{
+        } else {
             storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
+        }
+        if (StringUtil.isEmpty(reqJson.getString("shType"))) {//调拨申请查看所有仓库
+            storehouseDto.setShObjIds(null);
         }
         int count = storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
 

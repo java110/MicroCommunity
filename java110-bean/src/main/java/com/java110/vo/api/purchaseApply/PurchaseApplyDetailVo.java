@@ -28,6 +28,8 @@ public class PurchaseApplyDetailVo {
     private String originalStock;
     private String supplierName;
     private String shName;
+    private String unitCodeName;
+    private String miniUnitCodeName;
 
 
     public String getApplyOrderId() {
@@ -220,6 +222,22 @@ public class PurchaseApplyDetailVo {
 
     public void setShName(String shName) {
         this.shName = shName;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
     }
 }
 

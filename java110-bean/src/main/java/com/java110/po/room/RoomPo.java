@@ -30,7 +30,8 @@ public class RoomPo implements Serializable {
     private String roomSubType;
     private String roomRent;
     private String roomArea;
-
+    private String startTime;
+    private String endTime;
 
     public String getRoomId() {
         return roomId;
@@ -87,7 +88,6 @@ public class RoomPo implements Serializable {
     public void setBuiltUpArea(String builtUpArea) {
         this.builtUpArea = builtUpArea;
     }
-
 
     public String getUserId() {
         return userId;
@@ -167,5 +167,21 @@ public class RoomPo implements Serializable {
 
     public void setRoomArea(String roomArea) {
         this.roomArea = roomArea;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

@@ -507,6 +507,8 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairPoolPo.setRepairMaterials(repairMaterial.substring(0, repairMaterial.length() - 1));
             //费用明细
             repairPoolPo.setRepairFee(repairFee.substring(0, repairFee.length() - 1));
+            //支付方式
+            repairPoolPo.setPayType(reqJson.getString("payType"));
             super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
             ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_PAY);
         } else if ("T".equals(publicArea)) {  //公共区域走这里

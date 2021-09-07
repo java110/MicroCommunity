@@ -8,10 +8,10 @@
     <insert id="saveBusinessRepairInfo" parameterType="Map">
         insert into business_repair_pool(
         operate,repair_name,appointment_time,repair_type,context,repair_id,tel,state,community_id,b_id,repair_obj_type,repair_obj_id,
-        repair_obj_name, maintenance_type,repair_channel,repair_materials,repair_fee
+        repair_obj_name, maintenance_type,repair_channel,repair_materials,repair_fee,pay_type
         ) values (
         #{operate},#{repairName},#{appointmentTime},#{repairType},#{context},#{repairId},#{tel},#{state},#{communityId},#{bId},
-        #{repairObjType},#{repairObjId},#{repairObjName},#{maintenanceType},#{repairChannel},#{repairMaterials},#{repairFee}
+        #{repairObjType},#{repairObjId},#{repairObjName},#{maintenanceType},#{repairChannel},#{repairMaterials},#{repairFee},#{payType}
         )
     </insert>
 
@@ -23,7 +23,7 @@
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id
         repairObjId,t.repair_obj_name repairObjName,t.maintenance_type,t.maintenance_type maintenanceType,
         t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
-        t.repair_fee,t.repair_fee repairFee
+        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType
         from business_repair_pool t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -65,6 +65,9 @@
         <if test="repairFee !=null and repairFee != ''">
             and t.repair_fee= #{repairFee}
         </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -74,11 +77,11 @@
     <insert id="saveRepairInfoInstance" parameterType="Map">
         insert into r_repair_pool(
         repair_name,appointment_time,repair_type,context,repair_id,tel,status_cd,state,community_id,b_id,
-        repair_obj_type,repair_obj_id,repair_obj_name,repair_channel,maintenance_type,repair_materials,repair_fee
+        repair_obj_type,repair_obj_id,repair_obj_name,repair_channel,maintenance_type,repair_materials,repair_fee,pay_type
         ) select
         t.repair_name,t.appointment_time,t.repair_type,t.context,t.repair_id,t.tel,'0',t.state,t.community_id,t.b_id,
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_channel,t.maintenance_type,t.repair_materials,
-        t.repair_fee
+        t.repair_fee,t.pay_type
         from business_repair_pool t where 1=1
         and t.operate= 'ADD'
         <if test="repairName !=null and repairName != ''">
@@ -117,6 +120,9 @@
         <if test="repairFee !=null and repairFee != ''">
             and t.repair_fee= #{repairFee}
         </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -131,8 +137,9 @@
         t.repair_materials,t.repair_materials repairMaterials,t.repair_fee,t.repair_fee repairFee,
         rs.repair_type_name repairTypeName,rs.repair_way repairWay,rs.return_visit_flag returnVisitFlag,
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,
-        t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext,a.appraise_score appraiseScore,
-        a.door_speed_score doorSpeedScore,a.repairman_service_score repairmanServiceScore
+        t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext,a.appraise_score
+        appraiseScore, a.door_speed_score doorSpeedScore,a.repairman_service_score repairmanServiceScore,
+        t.pay_type,t.pay_type payType
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
@@ -218,6 +225,9 @@
         <if test="repairFee !=null and repairFee != ''">
             and t.repair_fee= #{repairFee}
         </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
         <if test="repairChannels !=null">
             and t.repair_channel in
             <foreach collection="repairChannels" item="item" open="(" close=")" separator=",">
@@ -275,6 +285,9 @@
         <if test="repairFee !=null and repairFee != ''">
             , t.repair_fee= #{repairFee}
         </if>
+        <if test="payType !=null and payType != ''">
+            , t.pay_type= #{payType}
+        </if>
         where 1=1
         <if test="repairId !=null and repairId != ''">
             and t.repair_id= #{repairId}
@@ -310,6 +323,9 @@
         </if>
         <if test="repairType !=null and repairType != ''">
             and t.repair_type= #{repairType}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
         </if>
         <if test="context !=null and context != ''">
             and t.context= #{context}
@@ -369,7 +385,7 @@
         repairObjId,t.repair_obj_name repairObjName,t.repair_channel repairChannel,
         sru.ru_id startRuId,ru.ru_id ruId,ru.pre_ru_id preRuId,t.maintenance_type,t.maintenance_type maintenanceType,
         t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
-        t.repair_fee,t.repair_fee repairFee
+        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
@@ -424,6 +440,9 @@
         </if>
         <if test="repairFee !=null and repairFee != ''">
             and t.repair_fee= #{repairFee}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -483,6 +502,9 @@
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
         </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
     </select>
 
     <!-- 查询报修信息信息 add by wuxw 2018-07-03 -->
@@ -495,7 +517,7 @@
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id
         repairObjId,t.repair_obj_name repairObjName,t.maintenance_type,t.maintenance_type maintenanceType,
         t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
-        t.repair_fee,t.repair_fee repairFee
+        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
@@ -548,6 +570,9 @@
         </if>
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -610,6 +635,9 @@
         </if>
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
         </if>
         <if test="staffId != null and staffId != ''">
             group by ru.staff_id
