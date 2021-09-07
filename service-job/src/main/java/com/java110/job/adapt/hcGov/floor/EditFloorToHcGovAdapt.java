@@ -20,8 +20,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.UnitDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.floorAttr.FloorAttrDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IFloorAttrInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
@@ -53,6 +55,8 @@ public class EditFloorToHcGovAdapt extends DatabusAdaptImpl {
     @Autowired
     private BaseHcGovSendAsyn baseHcGovSendAsynImpl;
 
+    @Autowired
+    private IFloorAttrInnerServiceSMO floorAttrInnerServiceSMOImpl;
 
     /**
      * @param business   当前处理业务
@@ -92,6 +96,7 @@ public class EditFloorToHcGovAdapt extends DatabusAdaptImpl {
         String extCommunityId = "";
         String communityId = tmpCommunityDto.getCommunityId();
         String floorId = floorPo.getFloorId();
+        String extFloorId = "";
 
         for (CommunityAttrDto communityAttrDto : tmpCommunityDto.getCommunityAttrDtos()) {
             if (HcGovConstant.EXT_COMMUNITY_ID.equals(communityAttrDto.getSpecCd())) {
@@ -108,10 +113,21 @@ public class EditFloorToHcGovAdapt extends DatabusAdaptImpl {
             layerCount = unitDtos.get(0).getLayerCount();
             floorUse = unitDtos.size() + "";
         }
-
+        FloorAttrDto floorAttrDto = new FloorAttrDto();
+        floorAttrDto.setFloorId(floorPo.getFloorId());
+        floorAttrDto.setCommunityId(floorPo.getCommunityId());
+        floorAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID);
+        List<FloorAttrDto> floorAttrDtos = floorAttrInnerServiceSMOImpl.queryFloorAttrs(floorAttrDto);
+        Assert.listNotNull(floorAttrDtos, "未包含楼栋外部编码属性");
+        for (FloorAttrDto floorAttr : floorAttrDtos) {
+            if (HcGovConstant.EXT_COMMUNITY_ID.equals(floorAttr.getSpecCd())) {
+                extFloorId = floorAttr.getValue();
+            }
+        }
 
         JSONObject body = new JSONObject();
         body.put("floorNum", floorPo.getFloorNum());
+        body.put("extFloorId", extFloorId);
         body.put("floorName", floorPo.getName());
         body.put("floorType", MappingCache.getValue(HcGovConstant.GOV_DOMAIN, HcGovConstant.FLOOR_TYPE));
         body.put("floorArea", floorPo.getFloorArea());

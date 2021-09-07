@@ -67,7 +67,7 @@ public interface IOwnerAttrServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    void updateOwnerAttrInfoInstance(Map info) throws DAOException;
+    int updateOwnerAttrInfoInstance(Map info) throws DAOException;
 
 
     /**

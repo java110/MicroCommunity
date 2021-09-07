@@ -18,16 +18,14 @@ package com.java110.job.adapt.hcGov.room;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.FloorDto;
+import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.floorAttr.FloorAttrDto;
 import com.java110.entity.order.Business;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.community.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
@@ -61,7 +59,8 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
     @Autowired
     private BaseHcGovSendAsyn baseHcGovSendAsynImpl;
-
+    @Autowired
+    private IRoomAttrInnerServiceSMO roomAttrInnerServiceSMOImpl;
 
     /**
      * @param business   当前处理业务
@@ -120,6 +119,7 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
         CommunityDto tmpCommunityDto = communityDtos.get(0);
         String extCommunityId = "";
         String extFloorId = "";
+        String extRoomId = "";
         String communityId = tmpCommunityDto.getCommunityId();
         String roomId = roomPo.getRoomId();
 
@@ -140,8 +140,20 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
                 extFloorId = floorAttrDto.getValue();
             }
         }
+
+        RoomAttrDto roomAttrDto = new RoomAttrDto();
+        roomAttrDto.setRoomId(roomPo.getRoomId());
+        roomAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID );
+        List<RoomAttrDto> roomAttrDtos = roomAttrInnerServiceSMOImpl.queryRoomAttrs(roomAttrDto);
+        Assert.listNotNull(roomAttrDtos, "未包含房屋外部编码属性");
+        for (RoomAttrDto roomAttr : roomAttrDtos) {
+            if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
+                extRoomId = roomAttr.getValue();
+            }
+        }
         JSONObject body = new JSONObject();
         body.put("roomNum", roomPo.getRoomNum());
+        body.put("extRoomId", extRoomId);
         body.put("builtUpArea", roomPo.getBuiltUpArea());
         body.put("layer", roomPo.getLayer());
         body.put("roomArea", roomPo.getRoomArea());
