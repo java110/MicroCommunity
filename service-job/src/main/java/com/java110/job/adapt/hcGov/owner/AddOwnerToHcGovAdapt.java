@@ -36,6 +36,7 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -76,20 +77,20 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        if (data.containsKey(OwnerPo.class.getSimpleName())) {
-            Object bObj = data.get(OwnerPo.class.getSimpleName());
-            JSONArray businessOwner = null;
+        if (data.containsKey(OwnerRoomRelPo.class.getSimpleName())) {
+            Object bObj = data.get(OwnerRoomRelPo.class.getSimpleName());
+            JSONArray businessOwnerRoomRelPo = null;
             if (bObj instanceof JSONObject) {
-                businessOwner = new JSONArray();
-                businessOwner.add(bObj);
+                businessOwnerRoomRelPo = new JSONArray();
+                businessOwnerRoomRelPo.add(bObj);
             } else if (bObj instanceof List) {
-                businessOwner = JSONArray.parseArray(JSONObject.toJSONString(bObj));
+                businessOwnerRoomRelPo = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
-                businessOwner = (JSONArray) bObj;
+                businessOwnerRoomRelPo = (JSONArray) bObj;
             }
             //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
-            for (int bOwnerIndex = 0; bOwnerIndex < businessOwner.size(); bOwnerIndex++) {
-                JSONObject businessOwnerCar = businessOwner.getJSONObject(bOwnerIndex);
+            for (int bOwnerIndex = 0; bOwnerIndex < businessOwnerRoomRelPo.size(); bOwnerIndex++) {
+                JSONObject businessOwnerCar = businessOwnerRoomRelPo.getJSONObject(bOwnerIndex);
                 doAddOwner(business, businessOwnerCar);
 
             }
@@ -98,12 +99,12 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
 
     private void doAddOwner(Business business, JSONObject businessOwner) {
 
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(businessOwner, OwnerRoomRelPo.class);
         OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setMemberId(ownerPo.getMemberId());
+        ownerDto.setMemberId(ownerRoomRelPo.getOwnerId());
         List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
         Assert.listNotNull(ownerDtoList, "未查询到业主信息信息");
-        ownerPo = BeanConvertUtil.covertBean(ownerDtoList.get(0), OwnerPo.class);
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(ownerDtoList.get(0), OwnerPo.class);
 
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(ownerPo.getCommunityId());
@@ -125,19 +126,24 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
         ownerRoomRelDto.setOwnerId(memberId);
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
         if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
-
-            RoomAttrDto roomAttrDto = new RoomAttrDto();
-            roomAttrDto.setRoomId(ownerRoomRelDtos.get(0).getRoomId());
-            roomAttrDto.setSpecCd(HcGovConstant.EXT_COMMUNITY_ID);
-            List<RoomAttrDto> roomAttrDtos = roomAttrInnerServiceSMOImpl.queryRoomAttrs(roomAttrDto);
-            if (roomAttrDtos != null && roomAttrDtos.size() > 0) {
-                extRoomId = new JSONArray();
-                for (RoomAttrDto roomAttr : roomAttrDtos) {
-                    if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
-                        extRoomId.add(roomAttr.getValue());
+            for (OwnerRoomRelDto ownerRoomRelD : ownerRoomRelDtos) {
+                RoomAttrDto roomAttrDto = new RoomAttrDto();
+                roomAttrDto.setRoomId(ownerRoomRelD.getRoomId());
+                roomAttrDto.setSpecCd(HcGovConstant.EXT_COMMUNITY_ID);
+                List<RoomAttrDto> roomAttrDtos = roomAttrInnerServiceSMOImpl.queryRoomAttrs(roomAttrDto);
+                if (roomAttrDtos == null || roomAttrDtos.size() < 1) {
+                    return;
+                }
+                if (roomAttrDtos != null && roomAttrDtos.size() > 0) {
+                    extRoomId = new JSONArray();
+                    for (RoomAttrDto roomAttr : roomAttrDtos) {
+                        if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
+                            extRoomId.add(roomAttr.getValue());
+                        }
                     }
                 }
             }
+
         }
         JSONObject body = new JSONObject();
         //1001 业主本人 1002 家庭成员

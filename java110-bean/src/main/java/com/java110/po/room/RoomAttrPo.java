@@ -17,7 +17,7 @@ public class RoomAttrPo implements Serializable {
     private String roomId;
     private String specCd;
     private String value;
-
+    private String statusCd;
     public String getbId() {
         return bId;
     }
@@ -56,5 +56,13 @@ public class RoomAttrPo implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

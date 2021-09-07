@@ -133,7 +133,9 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
         floorDto.setCommunityId( unitDtos.get( 0 ).getCommunityId() );
         floorDto.setFloorId( unitDtos.get( 0 ).getFloorId() );
         List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors( floorDto );
-        Assert.listNotNull(floorDtos, "未通过单元所属ID查到楼栋数据，请检查数据");
+        if(floorDtos == null || floorDtos.size() < 1){
+            return;
+        }
 
 
         FloorDto tmpFloorDto = floorDtos.get(0);
@@ -148,7 +150,9 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
         roomAttrDto.setRoomId(roomPo.getRoomId());
         roomAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID );
         List<RoomAttrDto> roomAttrDtos = roomAttrInnerServiceSMOImpl.queryRoomAttrs(roomAttrDto);
-        Assert.listNotNull(roomAttrDtos, "未包含房屋外部编码属性");
+        if(roomAttrDtos == null || roomAttrDtos.size() < 1){
+            return;
+        }
         for (RoomAttrDto roomAttr : roomAttrDtos) {
             if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
                 extRoomId = roomAttr.getValue();
