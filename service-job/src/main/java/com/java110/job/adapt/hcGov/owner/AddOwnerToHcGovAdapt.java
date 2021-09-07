@@ -99,6 +99,11 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
     private void doAddOwner(Business business, JSONObject businessOwner) {
 
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(ownerPo.getMemberId());
+        List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
+        Assert.listNotNull(ownerDtoList, "未查询到业主信息信息");
+        ownerPo = BeanConvertUtil.covertBean(ownerDtoList.get(0), OwnerPo.class);
 
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(ownerPo.getCommunityId());
