@@ -134,7 +134,9 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
         List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors( floorDto );
         Assert.listNotNull(floorDtos, "未通过单元所属ID查到楼栋数据，请检查数据");
 
+
         FloorDto tmpFloorDto = floorDtos.get(0);
+        Assert.listNotNull(tmpFloorDto.getFloorAttrDto(), "未查到楼栋外部编码数据，请检查数据");
         for (FloorAttrDto floorAttrDto : tmpFloorDto.getFloorAttrDto()) {
             if (HcGovConstant.EXT_COMMUNITY_ID.equals(floorAttrDto.getSpecCd())) {
                 extFloorId = floorAttrDto.getValue();
