@@ -93,7 +93,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
-            throw new IllegalArgumentException("流程还未部署");
+            throw new IllegalArgumentException("投诉建议流程还未部署");
         }
         return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
     }

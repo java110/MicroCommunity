@@ -24,17 +24,23 @@ import com.java110.dto.UnitDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.floorAttr.FloorAttrDto;
+import com.java110.dto.owner.OwnerAttrDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.*;
+import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,6 +64,10 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
     @Autowired
     private BaseHcGovSendAsyn baseHcGovSendAsynImpl;
+    @Autowired
+    private IOwnerAttrInnerServiceSMO ownerAttrInnerServiceSMOImpl;
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
 
     /**
@@ -67,20 +77,20 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        if (data.containsKey(OwnerPo.class.getSimpleName())) {
-            Object bObj = data.get(OwnerPo.class.getSimpleName());
-            JSONArray businessOwner = null;
+        if (data.containsKey(OwnerRoomRelPo.class.getSimpleName())) {
+            Object bObj = data.get(OwnerRoomRelPo.class.getSimpleName());
+            JSONArray businessOwnerRoomRelPo = null;
             if (bObj instanceof JSONObject) {
-                businessOwner = new JSONArray();
-                businessOwner.add(bObj);
+                businessOwnerRoomRelPo = new JSONArray();
+                businessOwnerRoomRelPo.add(bObj);
             } else if (bObj instanceof List) {
-                businessOwner = JSONArray.parseArray(JSONObject.toJSONString(bObj));
+                businessOwnerRoomRelPo = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
-                businessOwner = (JSONArray) bObj;
+                businessOwnerRoomRelPo = (JSONArray) bObj;
             }
             //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
-            for (int bOwnerIndex = 0; bOwnerIndex < businessOwner.size(); bOwnerIndex++) {
-                JSONObject businessOwnerCar = businessOwner.getJSONObject(bOwnerIndex);
+            for (int bOwnerIndex = 0; bOwnerIndex < businessOwnerRoomRelPo.size(); bOwnerIndex++) {
+                JSONObject businessOwnerCar = businessOwnerRoomRelPo.getJSONObject(bOwnerIndex);
                 doAddOwner(business, businessOwnerCar);
 
             }
@@ -89,7 +99,12 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
 
     private void doAddOwner(Business business, JSONObject businessOwner) {
 
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(businessOwner, OwnerRoomRelPo.class);
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(ownerRoomRelPo.getOwnerId());
+        List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
+        Assert.listNotNull(ownerDtoList, "未查询到业主信息信息");
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(ownerDtoList.get(0), OwnerPo.class);
 
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(ownerPo.getCommunityId());
@@ -100,7 +115,7 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
         String extCommunityId = "";
         JSONArray extRoomId = null;
         String communityId = tmpCommunityDto.getCommunityId();
-        String ownerId = ownerPo.getOwnerId();
+        String memberId = ownerPo.getMemberId();
 
         for (CommunityAttrDto communityAttrDto : tmpCommunityDto.getCommunityAttrDtos()) {
             if (HcGovConstant.EXT_COMMUNITY_ID.equals(communityAttrDto.getSpecCd())) {
@@ -108,37 +123,102 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
             }
         }
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-        ownerRoomRelDto.setOwnerId(ownerId);
+        ownerRoomRelDto.setOwnerId(memberId);
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
         if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
-
-            RoomAttrDto roomAttrDto = new RoomAttrDto();
-            roomAttrDto.setRoomId(ownerRoomRelDtos.get(0).getRoomId());
-            roomAttrDto.setSpecCd(HcGovConstant.EXT_COMMUNITY_ID);
-            List<RoomAttrDto> roomAttrDtos = roomAttrInnerServiceSMOImpl.queryRoomAttrs(roomAttrDto);
-            if (roomAttrDtos != null && roomAttrDtos.size() > 0) {
-                extRoomId = new JSONArray();
-                for (RoomAttrDto roomAttr : roomAttrDtos) {
-                    if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
-                        extRoomId.add(roomAttr.getValue());
+            for (OwnerRoomRelDto ownerRoomRelD : ownerRoomRelDtos) {
+                RoomAttrDto roomAttrDto = new RoomAttrDto();
+                roomAttrDto.setRoomId(ownerRoomRelD.getRoomId());
+                roomAttrDto.setSpecCd(HcGovConstant.EXT_COMMUNITY_ID);
+                List<RoomAttrDto> roomAttrDtos = roomAttrInnerServiceSMOImpl.queryRoomAttrs(roomAttrDto);
+                if (roomAttrDtos == null || roomAttrDtos.size() < 1) {
+                    return;
+                }
+                if (roomAttrDtos != null && roomAttrDtos.size() > 0) {
+                    extRoomId = new JSONArray();
+                    for (RoomAttrDto roomAttr : roomAttrDtos) {
+                        if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
+                            extRoomId.add(roomAttr.getValue());
+                        }
                     }
                 }
             }
+
+        }
+        JSONObject body = new JSONObject();
+        //1001 业主本人 1002 家庭成员
+        if ("1001".equals(ownerPo.getOwnerTypeCd())) {
+            body.put("idType", "1");
+            body.put("idCard", ownerPo.getIdCard());
+            body.put("personName", ownerPo.getName());
+            body.put("personTel", ownerPo.getLink());
+            body.put("personSex", ownerPo.getSex());
+            body.put("prePersonName", ownerPo.getName());
+            body.put("birthday", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+            body.put("nation", "未知");
+            body.put("nativePlace", "中国");
+            body.put("politicalOutlook", "无");
+            body.put("maritalStatus", "N");
+            body.put("religiousBelief", "无");
+            body.put("ramark", ownerPo.getRemark());
+            body.put("extRoomId", extRoomId.toJSONString());
+            body.put("ownerType", "2002");
+            body.put("ownerAddress", "无");
+            body.put("ownerTypeCd", ownerPo.getOwnerTypeCd());
+        }
+        if ("1002".equals(ownerPo.getOwnerTypeCd())) {
+            String extOwnerId = "";
+            OwnerAttrDto ownerAttrDto = new OwnerAttrDto();
+            ownerAttrDto.setMemberId(ownerPo.getOwnerId());
+            ownerAttrDto.setSpecCd(HcGovConstant.EXT_COMMUNITY_ID);
+            List<OwnerAttrDto> ownerAttr = ownerAttrInnerServiceSMOImpl.queryOwnerAttrs(ownerAttrDto);
+            if (ownerAttr != null && ownerAttr.size() > 0) {
+                for (OwnerAttrDto roomAttr : ownerAttr) {
+                    if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
+                        extOwnerId = roomAttr.getValue();
+                    }
+                }
+            }
+            if ("".equals(extOwnerId)) {
+                throw new IllegalArgumentException("未获得业主外部编码！");
+            }
+
+           /* String extMemberId = "";
+            ownerAttrDto = new OwnerAttrDto();
+            ownerAttrDto.setMemberId(ownerPo.getMemberId());
+            ownerAttrDto.setSpecCd(HcGovConstant.EXT_COMMUNITY_ID);
+            ownerAttr = ownerAttrInnerServiceSMOImpl.queryOwnerAttrs(ownerAttrDto);
+            if (ownerAttr != null && ownerAttr.size() > 0) {
+                for (OwnerAttrDto roomAttr : ownerAttr) {
+                    if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
+                        extMemberId = roomAttr.getValue();
+                    }
+                }
+            }
+            if ("".equals(extOwnerId)) {
+                throw new IllegalArgumentException("未获得业主外部编码！");
+            }*/
+
+            body.put("idType", "1");
+            body.put("idCard", ownerPo.getIdCard());
+            body.put("personName", ownerPo.getName());
+            body.put("personTel", ownerPo.getLink());
+            body.put("personSex", ownerPo.getSex());
+            body.put("prePersonName", ownerPo.getName());
+            body.put("birthday", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+            body.put("nation", "未知");
+            body.put("nativePlace", "中国");
+            body.put("politicalOutlook", "无");
+            body.put("maritalStatus", "N");
+            body.put("religiousBelief", "无");
+            body.put("ramark", ownerPo.getRemark());
+            body.put("ownerType", "2002");
+            body.put("ownerAddress", "无");
+            body.put("extOwnerId", extOwnerId);
         }
 
-
-        JSONObject body = new JSONObject();
-        body.put("idType", "1");
-        body.put("idCard", ownerPo.getIdCard());
-        body.put("personName", ownerPo.getName());
-        body.put("personTel", ownerPo.getLink());
-        body.put("personSex", ownerPo.getSex());
-        body.put("prePersonName", ownerPo.getName());
-        body.put("birthday", ownerPo.getIdCard());
-
-
         JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.ADD_OWNER_ACTION, HcGovConstant.COMMUNITY_SECURE);
-        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, ownerId, HcGovConstant.COMMUNITY_SECURE);
+        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, memberId, HcGovConstant.COMMUNITY_SECURE);
     }
 
 }

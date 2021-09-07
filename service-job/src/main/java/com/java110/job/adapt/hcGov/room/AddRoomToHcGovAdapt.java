@@ -133,7 +133,9 @@ public class AddRoomToHcGovAdapt extends DatabusAdaptImpl {
         floorDto.setCommunityId( unitDtos.get( 0 ).getCommunityId() );
         floorDto.setFloorId( unitDtos.get( 0 ).getFloorId() );
         List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors( floorDto );
-        Assert.listNotNull(floorDtos, "未通过单元所属ID查到楼栋数据，请检查数据");
+        if(floorDtos == null || floorDtos.size() < 1){
+            return;
+        }
 
         FloorDto tmpFloorDto = floorDtos.get(0);
         for (FloorAttrDto floorAttrDto : tmpFloorDto.getFloorAttrDto()) {

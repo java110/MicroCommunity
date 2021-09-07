@@ -61,7 +61,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         ownerInfo.put("ownerTypeCd", OwnerTypeConstant.OWNER);
         // ownerInfo.put("ownerIds", getOwnerIds(communityMemberDtos));
         //ownerInfo.put("ownerTypeCd", ownerDto.getOwnerTypeCd());
-        ownerInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        // ownerInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
 
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(ownerInfo), OwnerDto.class);
 

@@ -102,10 +102,13 @@
         t.b_id bId,t.staff_id,t.staff_id staffId,t.staff_name,t.staff_name staffName,
         t.pre_staff_id,t.pre_staff_id preStaffId,t.pre_staff_name,t.pre_staff_name preStaffName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,d.name stateName,
-        t.repair_event,t.repair_event repairEvent, t.pre_ru_id,t.pre_ru_id preRuId,t.create_time createTime
+        t.repair_event,t.repair_event repairEvent, t.pre_ru_id,t.pre_ru_id preRuId,t.create_time createTime,
+        rp.pay_type payType,d2.name payTypeName
         from r_repair_user t
+        left join r_repair_pool rp on t.repair_id = rp.repair_id and t.state in ('10009','12000')
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_user' and d.table_columns = 'state'
-        where 1 =1
+        left join t_dict d2 on rp.pay_type = d2.status_cd and d2.table_name = 'r_repair_pool' and d2.table_columns = 'pay_type'
+        where 1 = 1
         <if test="context !=null and context != ''">
             and t.context= #{context}
         </if>
@@ -204,8 +207,10 @@
     <select id="queryRepairUsersCount" parameterType="Map" resultType="Map">
         select count(1) count
         from r_repair_user t
+        left join r_repair_pool rp on t.repair_id = rp.repair_id and t.state in ('10009','12000')
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_user' and d.table_columns = 'state'
-        where 1 =1
+        left join t_dict d2 on rp.pay_type = d2.status_cd and d2.table_name = 'r_repair_pool' and d2.table_columns = 'pay_type'
+        where 1 = 1
         <if test="context !=null and context != ''">
             and t.context= #{context}
         </if>

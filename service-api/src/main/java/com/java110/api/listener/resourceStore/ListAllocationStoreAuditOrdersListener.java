@@ -6,8 +6,10 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
+import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeAuditUserConstant;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
@@ -43,6 +45,9 @@ public class ListAllocationStoreAuditOrdersListener extends AbstractServiceApiLi
     public int getOrder() {
         return DEFAULT_ORDER;
     }
+
+    @Autowired
+    private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
 
 
     @Override

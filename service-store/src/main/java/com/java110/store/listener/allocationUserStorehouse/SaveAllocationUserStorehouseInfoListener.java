@@ -109,15 +109,15 @@ public class SaveAllocationUserStorehouseInfoListener extends AbstractAllocation
      */
     private void reFreshShareColumn(Map info, Map businessInfo) {
 
-        if (info.containsKey("resId")) {
+        if (info.containsKey("objId")) {
             return;
         }
 
-        if (!businessInfo.containsKey("res_id")) {
+        if (!businessInfo.containsKey("obj_id")) {
             return;
         }
 
-        info.put("resId", businessInfo.get("res_id"));
+        info.put("objId", businessInfo.get("obj_id"));
     }
 
     /**

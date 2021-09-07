@@ -34,6 +34,8 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
     private String resourceStoreName;
     private String startTime;
     private String endTime;
+    private String unitCodeName;
+    private String miniUnitCodeName;
 
     private String statusCd = "0";
 
@@ -195,5 +197,21 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
     }
 }

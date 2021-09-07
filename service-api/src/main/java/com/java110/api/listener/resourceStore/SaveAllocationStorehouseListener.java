@@ -139,6 +139,7 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
             allocationStorehousePo.setResName(resObj.getString("resName"));
             if (!StringUtil.isEmpty(applyType) && applyType.equals("10000")) { //调拨操作时保存前仓库id
                 allocationStorehousePo.setShIda(resObj.getString("shId"));
+                allocationStorehouseApplyPo.setShId(resObj.getString("shId"));
             } else {  //返还操作时保存返还申请人id
                 allocationStorehousePo.setShIda(allocationStorehouseApplyPo.getStartUserId());
             }

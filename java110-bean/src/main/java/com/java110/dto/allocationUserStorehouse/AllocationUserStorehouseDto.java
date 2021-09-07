@@ -36,6 +36,9 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
     private String subTotalQuantity;
     //转赠总数量(大计)
     private String highTotalQuantity;
+    private String unitCodeName;
+    private String miniUnitCodeName;
+
 
     public String getAcceptUserId() {
         return acceptUserId;
@@ -188,5 +191,21 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
 
     public void setHighTotalQuantity(String highTotalQuantity) {
         this.highTotalQuantity = highTotalQuantity;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
     }
 }

@@ -176,7 +176,7 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_CONTRACT_APPLY);
         workflowDto.setStoreId(storeId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
-        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
+        Assert.listOnlyOne(workflowDtos, "未找到 合同起草续签流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {

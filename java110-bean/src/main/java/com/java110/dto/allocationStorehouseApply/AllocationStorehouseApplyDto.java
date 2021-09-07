@@ -47,6 +47,8 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     //调拨返还状态标识
     private String applyType;
     private String applyTypeName;
+    //调拨源仓库
+    private String shId;
 
     public String getApplyId() {
         return applyId;
@@ -254,5 +256,13 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }

@@ -185,11 +185,11 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
         workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
         workflowDto.setStoreId(storeId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
-        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
+        Assert.listOnlyOne(workflowDtos, "未找到 采购入库流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
-            throw new IllegalArgumentException("流程还未部署");
+            throw new IllegalArgumentException("采购入库流程还未部署");
         }
         return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
     }

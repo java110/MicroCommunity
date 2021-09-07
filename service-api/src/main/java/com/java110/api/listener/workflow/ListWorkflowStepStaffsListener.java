@@ -5,10 +5,12 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowStepStaffInnerServiceSMO;
 import com.java110.dto.workflow.WorkflowStepStaffDto;
 import com.java110.utils.constant.ServiceCodeWorkflowStepStaffConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -59,8 +61,18 @@ public class ListWorkflowStepStaffsListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         WorkflowStepStaffDto workflowStepStaffDto = BeanConvertUtil.covertBean(reqJson, WorkflowStepStaffDto.class);
+        if (!StringUtil.isEmpty(reqJson.getString("requestType")) && "purchaseHandle".equals(reqJson.getString("requestType"))) {//采购
+            workflowStepStaffDto.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
+        }
+        if (!StringUtil.isEmpty(reqJson.getString("requestType")) && "grantHandle".equals(reqJson.getString("requestType"))) {//领用
+            workflowStepStaffDto.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
+        }
+        if (!StringUtil.isEmpty(reqJson.getString("requestType")) && "allocationHandle".equals(reqJson.getString("requestType"))) {//调拨
+            String[] fllowTypes = new String[]{WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE, WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO};
+            workflowStepStaffDto.setFlowTypes(fllowTypes);
+        }
+
 
         int count = workflowStepStaffInnerServiceSMOImpl.queryWorkflowStepStaffsCount(workflowStepStaffDto);
 

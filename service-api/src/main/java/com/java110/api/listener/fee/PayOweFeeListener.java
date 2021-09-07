@@ -8,23 +8,29 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.repair.RepairDto;
+import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
+import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -69,16 +75,16 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Autowired
-    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
-
-    @Autowired
     private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
 
     @Autowired
     private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
 
     @Autowired
-    private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
+    private IRepairUserInnerServiceSMO repairUserInnerServiceSMO;
+
+    @Autowired
+    private IRepairInnerServiceSMO repairInnerServiceSMO;
 
 
     @Override
@@ -192,6 +198,62 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
             repairPoolPo.setCommunityId(paramObj.getString("communityId"));
             repairPoolPo.setState(RepairDto.STATE_APPRAISE);
             business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairPoolPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairPoolPo));
+            businesses.add(business);
+        }
+        //修改 派单流程状态
+        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
+            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
+            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
+            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            RepairDto repairDto = new RepairDto();
+            repairDto.setRepairId(feeAttrDtos.get(0).getValue());
+            //查询报修记录
+            List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
+            Assert.listOnlyOne(repairDtos, "报修信息错误！");
+            //获取报修渠道
+            String repairChannel = repairDtos.get(0).getRepairChannel();
+            RepairUserDto repairUserDto = new RepairUserDto();
+            repairUserDto.setRepairId(feeAttrDtos.get(0).getValue());
+            repairUserDto.setState(RepairUserDto.STATE_PAY_FEE);
+            //查询待支付状态的记录
+            List<RepairUserDto> repairUserDtoList = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
+            Assert.listOnlyOne(repairUserDtoList, "信息错误！");
+            RepairUserPo repairUserPo = new RepairUserPo();
+            repairUserPo.setRuId(repairUserDtoList.get(0).getRuId());
+            if (repairChannel.equals("Z")) {  //如果业主是自主报修，状态就变成已支付，并新增一条待评价状态
+                repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
+                //如果是待评价状态，就更新结束时间
+                repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setContext("已支付" + paramObj.getString("receivedAmount") + "元");
+                //新增待评价状态
+                JSONObject object = JSONObject.parseObject("{\"datas\":{}}");
+                object.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+                object.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 4);
+                object.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+                RepairUserPo repairUser = new RepairUserPo();
+                repairUser.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+                repairUser.setStartTime(repairUserPo.getEndTime());
+                repairUser.setState(RepairUserDto.STATE_EVALUATE);
+                repairUser.setContext("待评价");
+                repairUser.setCommunityId(paramObj.getString("communityId"));
+                repairUser.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUser.setRepairId(repairUserDtoList.get(0).getRepairId());
+                repairUser.setStaffId(repairUserDtoList.get(0).getStaffId());
+                repairUser.setStaffName(repairUserDtoList.get(0).getStaffName());
+                repairUser.setPreStaffId(repairUserDtoList.get(0).getStaffId());
+                repairUser.setPreStaffName(repairUserDtoList.get(0).getStaffName());
+                repairUser.setPreRuId(repairUserDtoList.get(0).getRuId());
+                repairUser.setRepairEvent("auditUser");
+                object.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairUserPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairUser));
+                businesses.add(object);
+            } else {  //如果是员工代客报修或电话报修，状态就变成已支付
+                repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
+                //如果是已支付状态，就更新结束时间
+                repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setContext("已支付" + paramObj.getString("receivedAmount") + "元");
+            }
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(RepairUserPo.class.getSimpleName(), BeanConvertUtil.beanCovertMap(repairUserPo));
             businesses.add(business);
         }
 

@@ -9,6 +9,7 @@ import com.java110.dto.returnPayFee.ReturnPayFeeDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeReturnPayFeeConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeDataVo;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,10 +67,31 @@ public class ListReturnPayFeesListener extends AbstractServiceApiListener {
 
         int count = returnPayFeeInnerServiceSMOImpl.queryReturnPayFeesCount(returnPayFeeDto);
 
-        List<ApiReturnPayFeeDataVo> returnPayFees = null;
+        List<ApiReturnPayFeeDataVo> returnPayFees = new ArrayList<>();
 
         if (count > 0) {
-            returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto), ApiReturnPayFeeDataVo.class);
+            List<ApiReturnPayFeeDataVo> apiReturnPayFeeDataVos = BeanConvertUtil.covertBeanList(returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto), ApiReturnPayFeeDataVo.class);
+            for (ApiReturnPayFeeDataVo apiReturnPayFeeDataVo : apiReturnPayFeeDataVos) {
+                //获取周期
+                String cycles = apiReturnPayFeeDataVo.getCycles();
+                if (!StringUtil.isEmpty(cycles) && cycles.contains("-")) {
+                    String substring = cycles.substring(1);
+                    apiReturnPayFeeDataVo.setCycles(substring);
+                }
+                //获取应收金额
+                String receivableAmount = apiReturnPayFeeDataVo.getReceivableAmount();
+                if (!StringUtil.isEmpty(receivableAmount) && receivableAmount.contains("-")) {
+                    String substring = receivableAmount.substring(1);
+                    apiReturnPayFeeDataVo.setReceivableAmount(substring);
+                }
+                //获取实收金额
+                String receivedAmount = apiReturnPayFeeDataVo.getReceivedAmount();
+                if (!StringUtil.isEmpty(receivedAmount) && receivedAmount.contains("-")) {
+                    String substring = receivedAmount.substring(1);
+                    apiReturnPayFeeDataVo.setReceivedAmount(substring);
+                }
+                returnPayFees.add(apiReturnPayFeeDataVo);
+            }
         } else {
             returnPayFees = new ArrayList<>();
         }

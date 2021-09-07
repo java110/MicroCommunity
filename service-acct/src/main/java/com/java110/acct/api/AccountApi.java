@@ -3,15 +3,23 @@ package com.java110.acct.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.bmo.account.IGetAccountBMO;
 import com.java110.acct.bmo.account.IOwnerPrestoreAccountBMO;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @ClassName AccountApi
@@ -31,6 +39,15 @@ public class AccountApi {
 
     @Autowired
     private IOwnerPrestoreAccountBMO ownerPrestoreAccountBMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     /**
      * 微信删除消息模板
@@ -62,16 +79,42 @@ public class AccountApi {
     @RequestMapping(value = "/queryOwnerAccount", method = RequestMethod.GET)
     public ResponseEntity<String> queryOwnerAccount(
             @RequestParam(value = "communityId") String communityId,
-            @RequestParam(value = "ownerId",required = false) String ownerId,
-            @RequestParam(value = "ownerName",required = false) String ownerName,
-            @RequestParam(value = "tel",required = false) String tel,
-            @RequestParam(value = "idCard",required = false) String idCard,
+            @RequestParam(value = "ownerId", required = false) String ownerId,
+            @RequestParam(value = "ownerName", required = false) String ownerName,
+            @RequestParam(value = "feeId", required = false) String feeId,
+            @RequestParam(value = "tel", required = false) String tel,
+            @RequestParam(value = "idCard", required = false) String idCard,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row) {
         AccountDto accountDto = new AccountDto();
         accountDto.setPage(page);
         accountDto.setRow(row);
-        accountDto.setObjId(ownerId);
+        if (!StringUtil.isEmpty(feeId)) {
+            FeeDto feeDto = new FeeDto();
+            feeDto.setFeeId(feeId);
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+            Assert.listOnlyOne(feeDtos, "查询费用信息错误！");
+            //获取付费对象类型(3333 房屋 6666 是车位)
+            String payerObjType = feeDtos.get(0).getPayerObjType();
+            //获取付费对象id
+            String payerObjId = feeDtos.get(0).getPayerObjId();
+            if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("3333")) { //房屋
+                OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+                ownerRoomRelDto.setRoomId(payerObjId);
+                List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+                Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
+                ownerId = ownerRoomRelDtos.get(0).getOwnerId();
+            } else if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) {
+                OwnerCarDto ownerCarDto = new OwnerCarDto();
+                ownerCarDto.setCarId(payerObjId);
+                List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆关系表错误！");
+                ownerId = ownerCarDtos.get(0).getOwnerId();
+            }
+            accountDto.setObjId(ownerId);
+        } else {
+            accountDto.setObjId(ownerId);
+        }
         accountDto.setObjType(AccountDto.OBJ_TYPE_PERSON);
         accountDto.setAcctName(ownerName);
         accountDto.setPartId(communityId);
@@ -80,7 +123,7 @@ public class AccountApi {
         ownerDto.setCommunityId(communityId);
         ownerDto.setLink(tel);
         ownerDto.setIdCard(idCard);
-        return getAccountBMOImpl.queryOwnerAccount(accountDto,ownerDto);
+        return getAccountBMOImpl.queryOwnerAccount(accountDto, ownerDto);
     }
 
     /**
@@ -93,9 +136,9 @@ public class AccountApi {
      */
     @RequestMapping(value = "/queryOwnerAccountDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryOwnerAccountDetail(@RequestParam(value = "objId", required = false) String objId,
-                                                     @RequestParam(value = "acctId", required = false) String acctId,
-                                                     @RequestParam(value = "page") int page,
-                                                     @RequestParam(value = "row") int row) {
+                                                          @RequestParam(value = "acctId", required = false) String acctId,
+                                                          @RequestParam(value = "page") int page,
+                                                          @RequestParam(value = "row") int row) {
         AccountDetailDto accountDto = new AccountDetailDto();
         accountDto.setPage(page);
         accountDto.setRow(row);
@@ -143,6 +186,6 @@ public class AccountApi {
         accountDetailPo.setRemark(reqJson.getString("remark"));
         accountDetailPo.setObjId(reqJson.getString("ownerId"));
         accountDetailPo.setAmount(reqJson.getString("amount"));
-        return ownerPrestoreAccountBMOImpl.prestore(accountDetailPo,reqJson);
+        return ownerPrestoreAccountBMOImpl.prestore(accountDetailPo, reqJson);
     }
 }

@@ -21,6 +21,8 @@ public class WorkflowStepStaffDto extends PageDto implements Serializable {
     private String communityId;
     private String staffId;
     private String staffRole;
+    private String flowType;
+    private String[] flowTypes;
 
 
     private Date createTime;
@@ -91,5 +93,21 @@ public class WorkflowStepStaffDto extends PageDto implements Serializable {
 
     public void setStaffRole(String staffRole) {
         this.staffRole = staffRole;
+    }
+
+    public String getFlowType() {
+        return flowType;
+    }
+
+    public void setFlowType(String flowType) {
+        this.flowType = flowType;
+    }
+
+    public String[] getFlowTypes() {
+        return flowTypes;
+    }
+
+    public void setFlowTypes(String[] flowTypes) {
+        this.flowTypes = flowTypes;
     }
 }

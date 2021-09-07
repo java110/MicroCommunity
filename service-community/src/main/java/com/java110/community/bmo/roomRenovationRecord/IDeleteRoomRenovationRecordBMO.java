@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 public interface IDeleteRoomRenovationRecordBMO {
 
     /**
-     * 查询装修记录
+     * 删除装修记录
      *
      * @param roomRenovationRecordPo
      * @return

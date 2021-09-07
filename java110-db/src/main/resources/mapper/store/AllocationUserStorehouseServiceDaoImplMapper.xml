@@ -119,11 +119,13 @@
         resId,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id startUserId,t.start_user_name,
         t.start_user_name startUserName,t.aus_id,t.aus_id ausId,t.b_id,t.b_id
         bId,t.stock,t.give_quantity,t.give_quantity giveQuantity,t.create_time createTime,rst.name rstName,rss.spec_name
-        specName
+        specName,td1.name unitCodeName,td2.name miniUnitCodeName
         from allocation_user_storehouse t
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
         left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
+        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
+        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
         where 1 = 1
         <if test="acceptUserId !=null and acceptUserId != ''">
             and t.accept_user_id= #{acceptUserId}
@@ -229,6 +231,8 @@
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
         left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
+        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
+        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
         where 1 =1
         <if test="acceptUserId !=null and acceptUserId != ''">
             and t.accept_user_id= #{acceptUserId}

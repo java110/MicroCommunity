@@ -30,7 +30,7 @@ public class RepairPoolPo implements Serializable {
     private String statusCd;
     private String repairMaterials;
     private String repairFee;
-
+    private String payType;
 
     public String getRepairId() {
         return repairId;
@@ -144,7 +144,6 @@ public class RepairPoolPo implements Serializable {
         this.statusCd = statusCd;
     }
 
-
     public String getRepairChannel() {
         return repairChannel;
     }
@@ -175,5 +174,13 @@ public class RepairPoolPo implements Serializable {
 
     public void setRepairFee(String repairFee) {
         this.repairFee = repairFee;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

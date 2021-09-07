@@ -69,6 +69,7 @@ public class AddRoomToHcGovReturnAdapt implements IReportReturnDataAdapt {
         roomAttrPo.setRoomId(roomAttrDto.getRoomId());
         roomAttrPo.setSpecCd(roomAttrDto.getSpecCd());
         roomAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extRoomId"));
+        roomAttrPo.setStatusCd("0");
         if (roomAttrDtos == null || roomAttrDtos.size() < 1) {
             int flag = roomAttrInnerServiceSMOImpl.saveRoomAttr(roomAttrPo);
             if (flag < 1) {

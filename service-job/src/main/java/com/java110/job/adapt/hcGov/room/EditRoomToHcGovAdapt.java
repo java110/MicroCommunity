@@ -18,16 +18,14 @@ package com.java110.job.adapt.hcGov.room;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.FloorDto;
+import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.floorAttr.FloorAttrDto;
 import com.java110.entity.order.Business;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.community.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
@@ -61,7 +59,8 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
     @Autowired
     private BaseHcGovSendAsyn baseHcGovSendAsynImpl;
-
+    @Autowired
+    private IRoomAttrInnerServiceSMO roomAttrInnerServiceSMOImpl;
 
     /**
      * @param business   当前处理业务
@@ -98,6 +97,7 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
         roomDto.setCommunityId( roomPo.getCommunityId() );
         List<RoomDto>  roomDtos = roomInnerServiceSMOImpl.queryRooms( roomDto );
         Assert.listNotNull(roomDtos, "未查询到房屋信息");
+        roomPo = BeanConvertUtil.covertBean(roomDtos.get(0), RoomPo.class);
 
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(roomPo.getCommunityId());
@@ -120,6 +120,7 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
         CommunityDto tmpCommunityDto = communityDtos.get(0);
         String extCommunityId = "";
         String extFloorId = "";
+        String extRoomId = "";
         String communityId = tmpCommunityDto.getCommunityId();
         String roomId = roomPo.getRoomId();
 
@@ -132,16 +133,34 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
         floorDto.setCommunityId( unitDtos.get( 0 ).getCommunityId() );
         floorDto.setFloorId( unitDtos.get( 0 ).getFloorId() );
         List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors( floorDto );
-        Assert.listNotNull(floorDtos, "未通过单元所属ID查到楼栋数据，请检查数据");
+        if(floorDtos == null || floorDtos.size() < 1){
+            return;
+        }
+
 
         FloorDto tmpFloorDto = floorDtos.get(0);
+        Assert.listNotNull(tmpFloorDto.getFloorAttrDto(), "未查到楼栋外部编码数据，请检查数据");
         for (FloorAttrDto floorAttrDto : tmpFloorDto.getFloorAttrDto()) {
             if (HcGovConstant.EXT_COMMUNITY_ID.equals(floorAttrDto.getSpecCd())) {
                 extFloorId = floorAttrDto.getValue();
             }
         }
+
+        RoomAttrDto roomAttrDto = new RoomAttrDto();
+        roomAttrDto.setRoomId(roomPo.getRoomId());
+        roomAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID );
+        List<RoomAttrDto> roomAttrDtos = roomAttrInnerServiceSMOImpl.queryRoomAttrs(roomAttrDto);
+        if(roomAttrDtos == null || roomAttrDtos.size() < 1){
+            return;
+        }
+        for (RoomAttrDto roomAttr : roomAttrDtos) {
+            if (HcGovConstant.EXT_COMMUNITY_ID.equals(roomAttr.getSpecCd())) {
+                extRoomId = roomAttr.getValue();
+            }
+        }
         JSONObject body = new JSONObject();
         body.put("roomNum", roomPo.getRoomNum());
+        body.put("extRoomId", extRoomId);
         body.put("builtUpArea", roomPo.getBuiltUpArea());
         body.put("layer", roomPo.getLayer());
         body.put("roomArea", roomPo.getRoomArea());

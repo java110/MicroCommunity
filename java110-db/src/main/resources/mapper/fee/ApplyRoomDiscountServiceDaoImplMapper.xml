@@ -22,7 +22,7 @@
         statusCd,t.check_remark,t.check_remark checkRemark,t.room_id,t.room_id roomId,t.room_name,t.room_name
         roomName,t.review_user_id,t.review_user_id reviewUserId,t.review_remark,t.review_remark
         reviewRemark,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId,t.in_use,t.in_use inUse,
+        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId,t.in_use,t.in_use inUse,t.create_time,t.create_time createTime,
         ardt.type_name applyTypeName,fd.discount_name discountName
         from apply_room_discount t
         left join t_dict td on t.state = td.status_cd and td.table_name='apply_room_discount' and td.table_columns ='state'

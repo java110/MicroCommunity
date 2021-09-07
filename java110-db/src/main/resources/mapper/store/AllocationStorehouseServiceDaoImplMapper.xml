@@ -116,7 +116,7 @@
         resId,t.sh_id_z,t.sh_id_z shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id
         startUserId,t.sh_id_a,t.sh_id_a shIda,t.start_user_name,t.start_user_name startUserName,asa.state,t.b_id,t.b_id
         bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.create_time createTime,td.name stateName,a.sh_name shaName,z.sh_name shzName,
-        rs.res_code,rs.res_code resCode,t.apply_id,t.apply_id applyId,rst.name rstName,rss.spec_name specName,asa.apply_type,asa.apply_type applyType,td1.name applyTypeName
+        rs.res_code,rs.res_code resCode,t.apply_id,t.apply_id applyId,rst.name rstName,rss.spec_name specName,asa.apply_type,asa.apply_type applyType,td1.name applyTypeName,td2.name unitCodeName,td3.name miniUnitCodeName
         from allocation_storehouse t
         left join allocation_storehouse_apply asa on asa.apply_id = t.apply_id and asa.status_cd = '0'
         left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns = 'state'
@@ -124,6 +124,8 @@
         left join storehouse a on t.sh_id_a = a.sh_id and a.store_id = t.store_id and a.status_cd = '0'
         left join storehouse z on t.sh_id_z = z.sh_id and z.store_id = t.store_id and z.status_cd = '0'
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
+        left join t_dict td2 on rs.unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
+        left join t_dict td3 on rs.mini_unit_code = td3.status_cd and td3.table_name = 'resource_store' and td3.table_columns = 'unit_code'
         left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_specification rss on rs.rss_id = rss.rss_id and rss.status_cd = '0'
         where 1 = 1
