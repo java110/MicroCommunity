@@ -58,6 +58,9 @@ public class HcGovConstant {
     //修改位置
     public static final String EDIT_LOCATION_ACTION = "EDIT_LOCATION";
 
+    //开门记录
+    public static final String ADD_INOUT_RECORD_ACTION = "ADD_INOUT_RECORD";
+
     public static void generatorProducerSign(JSONObject header, JSONObject body, String code) {
 
         String newSign = AuthenticationFactory.md5(header.getString("tranId") + header.getString("reqTime") + body.toJSONString() + code).toLowerCase();

@@ -15,19 +15,12 @@
  */
 package com.java110.job.adapt.hcGov.inoutRecord;
 
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.communityLocationAttr.CommunityLocationAttrDto;
-import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
 import com.java110.intf.community.ICommunityLocationAttrInnerServiceSMO;
-import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
-import com.java110.po.communityLocationAttr.CommunityLocationAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 新增楼栋同步HC政务接口 返回
@@ -47,33 +40,7 @@ public class AddInoutRecordToHcGovReturnAdapt implements IReportReturnDataAdapt 
     @Override
     public void reportReturn(ReportDataDto reportDataDto, String extCommunityId) {
 
-        HcGovTranslateDto hcGovTranslateDto = new HcGovTranslateDto();
-        hcGovTranslateDto.setTranId(reportDataDto.getReportDataHeaderDto().getTranId());
-        hcGovTranslateDto.setServiceCode(reportDataDto.getReportDataHeaderDto().getServiceCode());
-        List<HcGovTranslateDto> hcGovTranslateDtos = hcGovTranslateInnerServiceSMOImpl.queryHcGovTranslates(hcGovTranslateDto);
-        if (hcGovTranslateDtos == null || hcGovTranslateDtos.size() < 1) {
-            throw new IllegalArgumentException("查询推送报文失败。不是同一订单信息");
-        }
-
-        CommunityLocationAttrDto communityLocationAttrDto = new CommunityLocationAttrDto();
-        communityLocationAttrDto.setLocationId(hcGovTranslateDtos.get(0).getObjId());
-        communityLocationAttrDto.setCommunityId(hcGovTranslateDtos.get(0).getCommunityId());
-        communityLocationAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID);
-        List<CommunityLocationAttrDto> communityLocationAttrDtos = communityLocationAttrInnerServiceSMOImpl.queryCommunityLocationAttrs(communityLocationAttrDto);
-
-        CommunityLocationAttrPo communityLocationAttrPo = new CommunityLocationAttrPo();
-        communityLocationAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_locationId));
-        communityLocationAttrPo.setLocationId(communityLocationAttrDto.getLocationId());
-        communityLocationAttrPo.setCommunityId(communityLocationAttrDto.getCommunityId());
-        communityLocationAttrPo.setSpecCd(communityLocationAttrDto.getSpecCd());
-        communityLocationAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extLocationId"));
-        if (communityLocationAttrDtos == null || communityLocationAttrDtos.size() < 1) {
-            int flag = communityLocationAttrInnerServiceSMOImpl.saveCommunityLocationAttr(communityLocationAttrPo);
-            if (flag < 1) {
-                throw new IllegalArgumentException("保存楼栋属性失败");
-            }
-        }
-
+        //todo 这个开门记录 可以不记录 返回的ID因为后期用不到
 
     }
 }
