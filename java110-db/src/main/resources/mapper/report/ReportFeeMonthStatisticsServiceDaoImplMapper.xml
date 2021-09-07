@@ -145,9 +145,7 @@
         <if test="oweAmount !=null and oweAmount != ''">
             , t.owe_amount= #{oweAmount}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="feeCreateTime !=null and feeCreateTime != ''">
             , t.fee_create_time= #{feeCreateTime}
         </if>
@@ -155,9 +153,11 @@
             , t.obj_type= #{objType}
         </if>
         where 1=1
-        <if test="statisticsId !=null and statisticsId != ''">
-            and t.statistics_id= #{statisticsId}
+        and t.statistics_id= #{statisticsId}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
+
     </update>
 
     <!-- 查询费用月统计数量 add by wuxw 2018-07-03 -->
@@ -2104,7 +2104,8 @@
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and rfms.status_cd = '0'
+        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and
+        rfms.status_cd = '0'
         inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.community_id = t.community_id
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
@@ -2138,7 +2139,8 @@
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and rfms.status_cd = '0'
+        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and
+        rfms.status_cd = '0'
         inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.community_id = t.community_id
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
@@ -2178,14 +2180,19 @@
         SUM(pfdm3.received_amount) receivedAmount4
         from f_floor t
         LEFT JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        LEFT JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        LEFT JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         LEFT JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         LEFT join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm on  pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and pfdm.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
-        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month = #{month}
-        LEFT JOIN pay_fee_detail_month pfdm3 on  pf.fee_id = pfdm3.fee_id and pfd.detail_id = pfdm3.detail_id and pfdm3.status_cd = '0' and pfdm3.detail_year = #{nextYear} and pfdm3.detail_month = #{nextMonth}
-        LEFT JOIN pay_fee_detail_month pfdm4 on  pf.fee_id = pfdm4.fee_id and pfd.detail_id = pfdm4.detail_id and pfdm4.status_cd = '0' and pfdm4.detail_year &lt; #{year}
+        LEFT JOIN pay_fee_detail_month pfdm on pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and
+        pfdm.status_cd = '0'
+        LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
+        pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
+        pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month = #{month}
+        LEFT JOIN pay_fee_detail_month pfdm3 on pf.fee_id = pfdm3.fee_id and pfd.detail_id = pfdm3.detail_id and
+        pfdm3.status_cd = '0' and pfdm3.detail_year = #{nextYear} and pfdm3.detail_month = #{nextMonth}
+        LEFT JOIN pay_fee_detail_month pfdm4 on pf.fee_id = pfdm4.fee_id and pfd.detail_id = pfdm4.detail_id and
+        pfdm4.status_cd = '0' and pfdm4.detail_year &lt; #{year}
         where 1=1
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
         <if test="communityId !=null and communityId != ''">
@@ -2203,14 +2210,19 @@
         SUM(pfdm3.received_amount) receivedAmount4
         from f_floor t
         LEFT JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        LEFT JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        LEFT JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         LEFT JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         LEFT join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm on  pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and pfdm.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
-        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month = #{month}
-        LEFT JOIN pay_fee_detail_month pfdm3 on  pf.fee_id = pfdm3.fee_id and pfd.detail_id = pfdm3.detail_id and pfdm3.status_cd = '0' and pfdm3.detail_year = #{nextYear} and pfdm3.detail_month = #{nextMonth}
-        LEFT JOIN pay_fee_detail_month pfdm4 on  pf.fee_id = pfdm4.fee_id and pfd.detail_id = pfdm4.detail_id and pfdm4.status_cd = '0' and pfdm4.detail_year &lt; #{year}
+        LEFT JOIN pay_fee_detail_month pfdm on pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and
+        pfdm.status_cd = '0'
+        LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
+        pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
+        pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month = #{month}
+        LEFT JOIN pay_fee_detail_month pfdm3 on pf.fee_id = pfdm3.fee_id and pfd.detail_id = pfdm3.detail_id and
+        pfdm3.status_cd = '0' and pfdm3.detail_year = #{nextYear} and pfdm3.detail_month = #{nextMonth}
+        LEFT JOIN pay_fee_detail_month pfdm4 on pf.fee_id = pfdm4.fee_id and pfd.detail_id = pfdm4.detail_id and
+        pfdm4.status_cd = '0' and pfdm4.detail_year &lt; #{year}
         where 1=1
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
         <if test="communityId !=null and communityId != ''">
@@ -2229,14 +2241,17 @@
         SUM(pfdm2.received_amount) receivedAmount2
         from f_floor t
         LEFT JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        LEFT JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        LEFT JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         LEFT JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         LEFT join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm on  pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and pfdm.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year =  #{year}  and pfdm1.detail_month &lt; #{month}
-        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year =  #{year}  and pfdm2.detail_month &gt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm on pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and
+        pfdm.status_cd = '0'
+        LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
+        pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
+        pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month &gt; #{month}
         where 1=1
-        and DATE_FORMAT(pfd.create_time,'%Y-%m') =  #{yearMonth}
+        and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -2251,14 +2266,17 @@
         SUM(pfdm2.received_amount) receivedAmount2
         from f_floor t
         LEFT JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        LEFT JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        LEFT JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         LEFT JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         LEFT join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm on  pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and pfdm.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year =  #{year}  and pfdm1.detail_month &lt; #{month}
-        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year =  #{year}  and pfdm2.detail_month &gt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm on pf.fee_id = pfdm.fee_id and pfd.detail_id = pfdm.detail_id and
+        pfdm.status_cd = '0'
+        LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
+        pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
+        pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month &gt; #{month}
         where 1=1
-        and DATE_FORMAT(pfd.create_time,'%Y-%m') =  #{yearMonth}
+        and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -2270,7 +2288,8 @@
     <select id="queryHuaningOweFeeDetailCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
+        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id
+        feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
         from report_owe_fee t
         left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -2284,7 +2303,8 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryHuaningOweFeeDetail" parameterType="Map" resultType="Map">
-        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
+        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id
+        feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
         from report_owe_fee t
         left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
