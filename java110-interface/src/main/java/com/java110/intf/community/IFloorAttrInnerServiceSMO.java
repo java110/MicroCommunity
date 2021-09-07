@@ -50,4 +50,12 @@ public interface IFloorAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/saveFloorAttr", method = RequestMethod.POST)
     int saveFloorAttr(@RequestBody FloorAttrPo floorAttrPo);
+    /**
+     * 保存 楼栋属性
+     *
+     * @param floorAttrPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/updateFloorAttrInfoInstance", method = RequestMethod.POST)
+    int updateFloorAttrInfoInstance(@RequestBody FloorAttrPo floorAttrPo);
 }

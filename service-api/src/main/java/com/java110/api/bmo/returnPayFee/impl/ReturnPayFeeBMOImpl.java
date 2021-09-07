@@ -4,10 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.returnPayFee.IReturnPayFeeBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.ReturnPayFeePo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -82,9 +83,10 @@ public class ReturnPayFeeBMOImpl extends ApiBaseBMO implements IReturnPayFeeBMO 
 
         JSONObject businessReturnPayFee = new JSONObject();
         businessReturnPayFee.putAll(paramInJson);
-        businessReturnPayFee.put("detailId", "-1");
+        businessReturnPayFee.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         PayFeeDetailPo returnPayFeePo = BeanConvertUtil.covertBean(businessReturnPayFee, PayFeeDetailPo.class);
         super.insert(dataFlowContext, returnPayFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
+        paramInJson.put("newDetailId", businessReturnPayFee.getString("detailId"));
     }
 
 

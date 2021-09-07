@@ -103,6 +103,10 @@ public class OwnerAttrInnerServiceSMOImpl extends BaseServiceSMO implements IOwn
     public int saveOwnerAttr(@RequestBody OwnerAttrPo ownerAttrPo) {
         return ownerAttrServiceDaoImpl.saveOwnerAttr(BeanConvertUtil.beanCovertMap(ownerAttrPo));
     }
+    @Override
+    public int updateOwnerAttrInfoInstance(@RequestBody OwnerAttrPo ownerAttrPo) {
+        return ownerAttrServiceDaoImpl.updateOwnerAttrInfoInstance(BeanConvertUtil.beanCovertMap(ownerAttrPo));
+    }
 
     public IOwnerAttrServiceDao getOwnerAttrServiceDaoImpl() {
         return ownerAttrServiceDaoImpl;

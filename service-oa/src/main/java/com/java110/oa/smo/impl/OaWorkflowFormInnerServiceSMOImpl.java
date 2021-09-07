@@ -1,6 +1,7 @@
 package com.java110.oa.smo.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
@@ -94,6 +95,36 @@ public class OaWorkflowFormInnerServiceSMOImpl extends BaseServiceSMO implements
         int flag = oaWorkflowFormServiceDaoImpl.createTable(info);
 
         return flag;
+    }
+
+    @Override
+    public int queryOaWorkflowFormDataCount(@RequestBody Map paramIn) {
+        return oaWorkflowFormServiceDaoImpl.queryOaWorkflowFormDataCount(paramIn);
+    }
+
+    @Override
+    public List<Map> queryOaWorkflowFormDatas(@RequestBody Map paramIn) {
+
+        //校验是否传了 分页信息
+
+        int page = (int) paramIn.get("page");
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            paramIn.put("page", (page - 1) * (int) paramIn.get("row"));
+        }
+        List<Map> info = oaWorkflowFormServiceDaoImpl.queryOaWorkflowFormDatas(paramIn);
+
+        return info;
+    }
+
+    @Override
+    public int saveOaWorkflowFormData(@RequestBody JSONObject reqJson) {
+        return oaWorkflowFormServiceDaoImpl.saveOaWorkflowFormDataInfo(reqJson);
+    }
+
+    @Override
+    public int updateOaWorkflowFormData(@RequestBody JSONObject reqJson) {
+        return oaWorkflowFormServiceDaoImpl.updateOaWorkflowFormData(reqJson);
     }
 
     public IOaWorkflowFormServiceDao getOaWorkflowFormServiceDaoImpl() {

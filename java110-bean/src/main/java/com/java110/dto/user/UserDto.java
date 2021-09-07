@@ -21,6 +21,7 @@ public class UserDto extends PageDto implements Serializable {
     public static final String LEVEL_CD_USER = "02";//商城用户
 
     private String userId;
+    private String[] userIds;
 
     private String userName;
 
@@ -327,5 +328,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setLevelCds(String[] levelCds) {
         this.levelCds = levelCds;
+    }
+
+    public String[] getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(String[] userIds) {
+        this.userIds = userIds;
     }
 }

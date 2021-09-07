@@ -1,5 +1,8 @@
 package com.java110.community.smo.impl;
 
+import com.java110.community.dao.IFloorAttrServiceDao;
+import com.java110.dto.floorAttr.FloorAttrDto;
+import com.java110.intf.community.IFloorAttrInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IFloorServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -34,6 +37,9 @@ public class FloorInnerServiceSMOImpl extends BaseServiceSMO implements IFloorIn
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IFloorAttrServiceDao floorAttrServiceDaoImpl;
 
     /**
      * 查询 信息
@@ -101,9 +107,35 @@ public class FloorInnerServiceSMOImpl extends BaseServiceSMO implements IFloorIn
         //根据 userId 查询用户信息
         List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
+        List<String> floorIds = new ArrayList<>();
         for (FloorDto floor : floors) {
+            floorIds.add(floor.getFloorId());
             refreshFloor(floor, users);
         }
+
+        Map info = new HashMap();
+        info.put("floorIds", floorIds.toArray(new String[floorIds.size()]));
+        info.put("communityId", floors.get( 0 ).getCommunityId());
+        List<FloorAttrDto> floorAttrDtos = BeanConvertUtil.covertBeanList(floorAttrServiceDaoImpl.getFloorAttrInfo(info), FloorAttrDto.class);
+
+        if (floorAttrDtos == null || floorAttrDtos.size() < 1) {
+            return floors;
+        }
+
+
+        for (FloorDto tmpFloorDto : floors) {
+            List<FloorAttrDto> tmpCommunityAttrDtos = new ArrayList<>();
+            for (FloorAttrDto floorAttrDto : floorAttrDtos) {
+                if (tmpFloorDto.getCommunityId().equals(floorAttrDto.getCommunityId()) && tmpFloorDto.getFloorId().equals( floorAttrDto.getFloorId() )) {
+                    tmpCommunityAttrDtos.add(floorAttrDto);
+                }
+            }
+            tmpFloorDto.setFloorAttrDto(tmpCommunityAttrDtos);
+
+        }
+
+
+
         return floors;
     }
 

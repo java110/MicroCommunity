@@ -95,6 +95,7 @@ kafka:
     group:
       id: notifyBusinessStatus
     concurrency: 10
+  hcGovTopic: csxq
 
   producer:
     zookeeper:

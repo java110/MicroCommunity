@@ -14,6 +14,10 @@ import java.util.Date;
  **/
 public class ReportInfoAnswerValueDto extends PageDto implements Serializable {
 
+    public static final String TITLETYPE_RADIO ="1001";
+    public static final String TITLETYPE_CHECKBOX ="2002";
+    public static final String ITLETYPE_TEXTAREA ="3003";
+
     private String valueId;
 private String userAnId;
 private String titleId;
@@ -29,6 +33,7 @@ private String repTitle;
 private String repValue;
 private String reType;
 private String repTypeName;
+private String personName;
 
 
 
@@ -143,5 +148,13 @@ public void setSettingId(String settingId) {
 
     public void setRepTypeName(String repTypeName) {
         this.repTypeName = repTypeName;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 }

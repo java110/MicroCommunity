@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="oaWorkflowDataServiceDaoImpl">
+
+
+    <!-- 保存OA表单审批数据信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOaWorkflowDataInfo" parameterType="Map">
+        insert into oa_workflow_data(
+        data_id,business_key,context,staff_name,start_time,pre_data_id,end_time,store_id,event,staff_id,flow_id
+        ) values (
+        #{dataId},#{businessKey},#{context},#{staffName},#{startTime},#{preDataId},#{endTime},#{storeId},#{event},#{staffId},#{flowId}
+        )
+    </insert>
+
+
+    <!-- 查询OA表单审批数据信息 add by wuxw 2018-07-03 -->
+    <select id="getOaWorkflowDataInfo" parameterType="Map" resultType="Map">
+        select t.data_id,t.data_id dataId,t.business_key,t.business_key businessKey,t.business_key id,t.context,t.staff_name,t.staff_name
+        staffName,t.start_time,t.start_time startTime,t.pre_data_id,t.pre_data_id preDataId,t.status_cd,t.status_cd
+        statusCd,t.end_time,t.end_time endTime,t.store_id,t.store_id storeId,t.event,t.staff_id,t.staff_id
+        staffId,t.flow_id flowId
+        from oa_workflow_data t
+        where 1 =1
+        <if test="dataId !=null and dataId != ''">
+            and t.data_id= #{dataId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            and t.business_key= #{businessKey}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="preDataId !=null and preDataId != ''">
+            and t.pre_data_id= #{preDataId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="event !=null and event != ''">
+            and t.event= #{event}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test='his !=null and his == "Y"'>
+            and t.end_time is not null
+        </if>
+        <if test='his !=null and his != "Y"'>
+            and t.end_time is null
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改OA表单审批数据信息 add by wuxw 2018-07-03 -->
+    <update id="updateOaWorkflowDataInfo" parameterType="Map">
+        update oa_workflow_data t set t.status_cd = #{statusCd}
+        <if test="businessKey !=null and businessKey != ''">
+            , t.business_key= #{businessKey}
+        </if>
+        <if test="context !=null and context != ''">
+            , t.context= #{context}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="preDataId !=null and preDataId != ''">
+            , t.pre_data_id= #{preDataId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+
+        <if test="event !=null and event != ''">
+            , t.event= #{event}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="dataId !=null and dataId != ''">
+            and t.data_id= #{dataId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询OA表单审批数据数量 add by wuxw 2018-07-03 -->
+    <select id="queryOaWorkflowDatasCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from oa_workflow_data t
+        where 1 =1
+        <if test="dataId !=null and dataId != ''">
+            and t.data_id= #{dataId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            and t.business_key= #{businessKey}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="preDataId !=null and preDataId != ''">
+            and t.pre_data_id= #{preDataId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="event !=null and event != ''">
+            and t.event= #{event}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test='his !=null and his == "Y"'>
+            and t.end_time is not null
+        </if>
+        <if test='his !=null and his != "Y"'>
+            and t.end_time is null
+        </if>
+
+
+    </select>
+
+</mapper>

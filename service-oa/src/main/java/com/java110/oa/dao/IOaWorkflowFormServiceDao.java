@@ -66,4 +66,22 @@ public interface IOaWorkflowFormServiceDao {
     List<Map> hasTable(Map info);
 
     int createTable(Map info);
+
+    int queryOaWorkflowFormDataCount(Map paramIn);
+
+    List<Map> queryOaWorkflowFormDatas(Map paramIn);
+
+    /**
+     * 保存数据
+     * @param paramIn
+     * @return
+     */
+    int saveOaWorkflowFormDataInfo(Map paramIn);
+
+    /**
+     * 修改表单数据
+     * @param beanCovertMap
+     * @return
+     */
+    int updateOaWorkflowFormData(Map beanCovertMap);
 }

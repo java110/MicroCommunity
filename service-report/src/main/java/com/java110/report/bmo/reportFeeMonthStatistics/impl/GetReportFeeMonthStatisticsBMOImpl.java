@@ -33,12 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("getReportFeeMonthStatisticsBMOImpl")
 public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthStatisticsBMO {
@@ -60,6 +55,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
     /**
@@ -246,8 +242,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryOweFeeDetailMajor(reportFeeMonthStatisticsDto);
             if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
                 for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {
-                    reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
-                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
+//                    reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
+//                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
                 }
             }
@@ -972,7 +968,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         for (Map paramIn : reportFeeMonthStatisticsDtos) {
 
             startTime = (Date) paramIn.get("startTime");
-            endTime = (Date) paramIn.get("startTime");
+            endTime = (Date) paramIn.get("endTime");
             BigDecimal money = (BigDecimal) paramIn.get("oweAmount");
             double month = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
             if (month < 1) {
@@ -1036,12 +1032,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     }
 
     private void freshReportOweDay(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
-
-        Date nowDate = DateUtil.getCurrentDate();
-
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
             try {
-                int day = DateUtil.daysBetween(nowDate, DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
+                int day = DateUtil.daysBetween(DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A), DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
                         DateUtil.DATE_FORMATE_STRING_A));
                 reportFeeMonthStatisticsDto.setOweDay(day);
             } catch (Exception e) {

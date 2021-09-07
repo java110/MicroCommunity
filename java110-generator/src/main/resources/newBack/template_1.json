@@ -1,29 +1,77 @@
 {
   "autoMove": true,
-  "id": "xmlId",
-  "name": "oaWorkflowForm",
-  "desc": "OA表单",
-  "shareParam": "storeId",
-  "shareColumn": "store_id",
-  "shareName": "oa",
-  "tableName": "oa_workflow_form",
+  "id": "tranId",
+  "name": "hcGovTranslate",
+  "desc": "社区政务同步",
+  "shareParam": "tranId",
+  "shareColumn": "tran_id",
+  "shareName": "common",
+  "tableName": "hc_gov_translate",
   "param": {
-    "formId": "form_id",
-    "flowId": "flow_id",
-    "storeId": "store_id",
-    "formJson": "form_json",
-    "tableName": "table_name",
-    "version": "version",
+    "tranId": "tran_id",
+    "serviceCode": "service_code",
+    "reqTime": "req_time",
+    "sign": "sign",
+    "extCommunityId": "ext_community_id",
+    "communityId": "community_id",
+    "code": "code",
+    "govTopic": "gov_topic",
+    "state": "state",
+    "sendCount": "send_count",
+    "updateTime": "update_time",
+    "objId": "obj_id",
+    "remark": "remark",
+    "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "flowId",
-      "msg": "流程不能为空"
+      "code": "tranId",
+      "msg": "业务不能为空"
     },
     {
-      "code": "formJson",
-      "msg": "流程图不能为空"
+      "code": "serviceCode",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "reqTime",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "sign",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "extCommunityId",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "code",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "govTopic",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "state",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "sendCount",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "updateTime",
+      "msg": "审批内容不能为空"
+    },
+    {
+      "code": "objId",
+      "msg": "审批内容不能为空"
     }
   ]
 }

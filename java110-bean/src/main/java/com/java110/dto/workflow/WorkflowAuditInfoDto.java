@@ -19,6 +19,9 @@ public class WorkflowAuditInfoDto implements Serializable {
 
     private String auditName;
 
+    private String userName;
+    private String orgName;
+
     private String auditTime;
 
     private String duration;
@@ -94,5 +97,21 @@ public class WorkflowAuditInfoDto implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }

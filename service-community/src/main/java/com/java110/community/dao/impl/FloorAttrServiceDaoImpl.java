@@ -102,7 +102,7 @@ public class FloorAttrServiceDaoImpl extends BaseServiceDao implements IFloorAtt
      * @throws DAOException DAO异常
      */
     @Override
-    public void updateFloorAttrInfoInstance(Map info) throws DAOException {
+    public int updateFloorAttrInfoInstance(Map info) throws DAOException {
         logger.debug("修改考勤班组属性信息Instance 入参 info : {}", info);
 
         int saveFlag = sqlSessionTemplate.update("floorAttrServiceDaoImpl.updateFloorAttrInfoInstance", info);
@@ -110,6 +110,7 @@ public class FloorAttrServiceDaoImpl extends BaseServiceDao implements IFloorAtt
         if (saveFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改考勤班组属性信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
+        return saveFlag;
     }
 
     /**

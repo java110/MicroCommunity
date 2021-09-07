@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hcGovTranslateDetailServiceDaoImpl">
+
+
+    <!-- 保存信息分类信息 add by wuxw 2018-07-03 -->
+    <insert id="saveHcGovTranslateDetailInfo" parameterType="Map">
+        insert into hc_gov_translate_detail(
+        tran_id,res_body,req_body,detail_id,community_id
+        ) values (
+        #{tranId},#{resBody},#{reqBody},#{detailId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询信息分类信息 add by wuxw 2018-07-03 -->
+    <select id="getHcGovTranslateDetailInfo" parameterType="Map" resultType="Map">
+        select t.tran_id,t.tran_id tranId,t.create_time,t.create_time createTime,t.res_body,t.res_body
+        resBody,t.req_body,t.req_body reqBody,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId
+        from hc_gov_translate_detail t
+        where 1 =1
+        <if test="tranId !=null and tranId != ''">
+            and t.tran_id= #{tranId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="resBody !=null and resBody != ''">
+            and t.res_body= #{resBody}
+        </if>
+        <if test="reqBody !=null and reqBody != ''">
+            and t.req_body= #{reqBody}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改信息分类信息 add by wuxw 2018-07-03 -->
+    <update id="updateHcGovTranslateDetailInfo" parameterType="Map">
+        update hc_gov_translate_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="resBody !=null and resBody != ''">
+            , t.res_body= #{resBody}
+        </if>
+        <if test="reqBody !=null and reqBody != ''">
+            , t.req_body= #{reqBody}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="tranId !=null and tranId != ''">
+            and t.tran_id= #{tranId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </update>
+
+    <!-- 查询信息分类数量 add by wuxw 2018-07-03 -->
+    <select id="queryHcGovTranslateDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from hc_gov_translate_detail t
+        where 1 =1
+        <if test="tranId !=null and tranId != ''">
+            and t.tran_id= #{tranId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="resBody !=null and resBody != ''">
+            and t.res_body= #{resBody}
+        </if>
+        <if test="reqBody !=null and reqBody != ''">
+            and t.req_body= #{reqBody}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

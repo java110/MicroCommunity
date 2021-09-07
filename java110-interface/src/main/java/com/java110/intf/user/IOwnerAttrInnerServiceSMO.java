@@ -48,4 +48,12 @@ public interface IOwnerAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/saveOwnerAttr", method = RequestMethod.POST)
     int saveOwnerAttr(@RequestBody OwnerAttrPo ownerAttrPo);
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param ownerAttrPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/updateOwnerAttrInfoInstance", method = RequestMethod.POST)
+    int updateOwnerAttrInfoInstance(@RequestBody OwnerAttrPo ownerAttrPo);
 }

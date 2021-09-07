@@ -118,6 +118,19 @@ public class BaseController extends AppBase {
         return returnMap;
     }
 
+    // 获取HttpServletRequest里面的参数
+    public static Map<String, String> getRequestParams(HttpServletRequest request) {
+        Map<String, String[]> params = request.getParameterMap();
+        Map<String, String> params2 = new HashMap<>();
+        for (String key : params.keySet()) {
+            String[] values = params.get(key);
+            if (values.length > 0) {
+                params2.put(key, request.getParameter(key));
+            }
+        }
+        return params2;
+    }
+
     protected void initHeadParam(HttpServletRequest request, Map headers) {
 
         Enumeration reqHeaderEnum = request.getHeaderNames();

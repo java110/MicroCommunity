@@ -1,36 +1,40 @@
 {
-  "autoMove": false,
-  "id": "typeCd",
-  "name": "activitiesType",
+  "autoMove": true,
+  "id": "detailId",
+  "name": "hcGovTranslateDetail",
   "desc": "信息分类",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "community",
-  "tableName": "activities_type",
+  "shareParam": "detailId",
+  "shareColumn": "detail_id",
+  "shareName": "common",
+  "tableName": "hc_gov_translate_detail",
   "param": {
-    "typeCd": "type_cd",
-    "typeName": "type_name",
-    "typeDesc": "type_desc",
-    "seq": "seq",
-    "defaultShow": "defalut_show",
+    "detailId": "detail_id",
+    "tranId": "tran_id",
     "communityId": "community_id",
+    "reqBody": "req_body",
+    "resBody": "res_body",
+    "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "communityId",
+      "code": "detailId",
       "msg": "小区不能为空"
     },
     {
-      "code": "typeName",
+      "code": "tranId",
       "msg": "分类不能为空"
     },
     {
-      "code": "seq",
+      "code": "communityId",
       "msg": "顺序不能为空"
     },
     {
-      "code": "defaultShow",
+      "code": "reqBody",
+      "msg": "显示不能为空"
+    },
+    {
+      "code": "resBody",
       "msg": "显示不能为空"
     }
   ]

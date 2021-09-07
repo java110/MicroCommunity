@@ -102,7 +102,7 @@ public class RoomAttrServiceDaoImpl extends BaseServiceDao implements IRoomAttrS
      * @throws DAOException
      */
     @Override
-    public void updateRoomAttrInfoInstance(Map info) throws DAOException {
+    public int updateRoomAttrInfoInstance(Map info) throws DAOException {
         logger.debug("修改小区房屋属性信息Instance 入参 info : {}", info);
 
         int saveFlag = sqlSessionTemplate.update("roomAttrServiceDaoImpl.updateRoomAttrInfoInstance", info);
@@ -110,6 +110,7 @@ public class RoomAttrServiceDaoImpl extends BaseServiceDao implements IRoomAttrS
         if (saveFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改小区房屋属性信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
+        return saveFlag;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.java110.api.listener.returnPayFee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.fee.IFeeBMO;
+import com.java110.api.bmo.payFeeDetailDiscount.IPayFeeDetailDiscountBMO;
 import com.java110.api.bmo.returnPayFee.IReturnPayFeeBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
@@ -9,8 +10,10 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeReturnPayFeeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -18,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -36,8 +38,15 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeDetailDiscountInnerServiceSMO payFeeDetailDiscountInnerServiceSMOImpl;
+
     @Autowired
     private IFeeBMO feeBMOImpl;
+
+    @Autowired
+    private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -104,6 +113,19 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
                 reqJson.put("state", "2008001");
             }
             feeBMOImpl.updateFee(reqJson, context);
+
+            //检查是否有优惠
+            PayFeeDetailDiscountDto payFeeDetailDiscountDto = new PayFeeDetailDiscountDto();
+            payFeeDetailDiscountDto.setCommunityId(feeDto1.getCommunityId());
+            payFeeDetailDiscountDto.setDetailId(reqJson.getString("detailId"));
+            List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtos = payFeeDetailDiscountInnerServiceSMOImpl.queryPayFeeDetailDiscounts(payFeeDetailDiscountDto);
+            if (payFeeDetailDiscountDtos != null && payFeeDetailDiscountDtos.size() > 0) {
+                JSONObject discountJson = new JSONObject();
+                discountJson.put("discountId", payFeeDetailDiscountDtos.get(0).getDiscountId());
+                discountJson.put("discountPrice", unum(payFeeDetailDiscountDtos.get(0).getDiscountPrice()));
+                payFeeDetailDiscountBMOImpl.addPayFeeDetailDiscountTwo(reqJson,
+                        discountJson, context);
+            }
 
         }
         //不通过

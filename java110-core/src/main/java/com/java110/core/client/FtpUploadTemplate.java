@@ -32,6 +32,15 @@ public class FtpUploadTemplate {
     private final static String DEFAULT_IMG_SUFFIX = ".jpg";
     private final static String IMAGE_DEFAULT_PATH = "img/";
 
+
+    public final static String FTP_DOMAIN = "FTP_DOMAIN";
+    public final static String FTP_SERVER = "FTP_SERVER";
+    public final static String FTP_PORT = "FTP_PORT";
+    public final static String FTP_USERNAME = "FTP_USERNAME";
+    public final static String FTP_USERPASSWORD = "FTP_USERPASSWORD";
+    public final static String FTP_PATH = "FTP_PATH";
+
+
     /*
      *图片上传工具方法
      * 默认上传至 img 文件下的当前日期下

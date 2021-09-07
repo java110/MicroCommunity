@@ -102,7 +102,7 @@ public class OwnerAttrServiceDaoImpl extends BaseServiceDao implements IOwnerAtt
      * @throws DAOException DAO异常
      */
     @Override
-    public void updateOwnerAttrInfoInstance(Map info) throws DAOException {
+    public int updateOwnerAttrInfoInstance(Map info) throws DAOException {
         logger.debug("修改业主属性信息Instance 入参 info : {}", info);
 
         int saveFlag = sqlSessionTemplate.update("ownerAttrServiceDaoImpl.updateOwnerAttrInfoInstance", info);
@@ -110,6 +110,7 @@ public class OwnerAttrServiceDaoImpl extends BaseServiceDao implements IOwnerAtt
         if (saveFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改业主属性信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
+        return saveFlag;
     }
 
     /**

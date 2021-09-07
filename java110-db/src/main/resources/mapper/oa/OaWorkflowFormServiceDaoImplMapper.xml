@@ -56,9 +56,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="formId !=null and formId != ''">
-            , t.form_id= #{formId}
-        </if>
+
         <if test="formJson !=null and formJson != ''">
             , t.form_json= #{formJson}
         </if>
@@ -75,6 +73,8 @@
             , t.table_name= #{tableName}
         </if>
         where 1=1
+        and t.form_id= #{formId}
+
     </update>
 
     <!-- 查询OA表单数量 add by wuxw 2018-07-03 -->
@@ -116,6 +116,79 @@
         ${sql}
     </update>
 
+
+    <!-- 查询OA表单数量 add by wuxw 2018-07-03 -->
+    <select id="queryOaWorkflowFormDataCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from ${tableName} t
+        where 1 =1
+        and t.store_id = #{storeId}
+        and t.status_cd= '0'
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id = #{id}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name = #{createUserName}
+        </if>
+    </select>
+
+    <!-- 查询OA表单数量 add by wuxw 2018-07-03 -->
+    <select id="queryOaWorkflowFormDatas" parameterType="Map" resultType="Map">
+        select t.*
+        from ${tableName} t
+        where 1 =1
+        and t.store_id = #{storeId}
+        and t.status_cd= '0'
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id = #{id}
+        </if>
+        <if test="ids != null">
+            and t.id in
+            <foreach collection="ids" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name = #{createUserName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 保存表单数据 -->
+    <insert id="saveOaWorkflowFormDataInfo" parameterType="Map">
+        insert into ${tableName} (
+        <foreach collection="columns" item="item" separator=",">
+            ${item}
+        </foreach>
+        ,id,create_user_id,create_user_name,state,store_id
+        )values(
+        <foreach collection="values" item="valueItem" separator=",">
+            #{valueItem}
+        </foreach>
+        ,#{id},#{createUserId},#{createUserName},#{state},#{storeId}
+        )
+    </insert>
+
+    <!-- 修改信息 -->
+    <update id="updateOaWorkflowFormData" parameterType="Map">
+        update ${tableName} t set t.state = #{state}
+        where t.id = #{id}
+    </update>
 
 
 </mapper>

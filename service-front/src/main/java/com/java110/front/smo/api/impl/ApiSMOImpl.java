@@ -12,11 +12,7 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -78,8 +74,14 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
         HttpHeaders header = new HttpHeaders();
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
+        for (String key : headers.keySet()
+        ) {
+            header.add(key, headers.get(key));
+        }
+
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         if (!StringUtil.isEmpty(result.getUserId())) {
+            header.remove("user-id");
             header.add("user-id", result.getUserId());
             if (!StringUtil.isEmpty(result.getUserName())) {
                 header.add("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
@@ -104,11 +106,6 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
             throw new IllegalArgumentException("不支持的请求方式" + headers.get(CommonConstant.HTTP_METHOD));
         }
 
-
-        for (String key : headers.keySet()
-        ) {
-            header.add(key, headers.get(key));
-        }
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(body, header);
         logger.debug("请求后端url" + url);

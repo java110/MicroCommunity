@@ -219,8 +219,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_monthId = "79";
     public static final String CODE_PREFIX_xmlId = "79";
     public static final String CODE_PREFIX_formId = "80";
-
-
+    public static final String CODE_PREFIX_dataId = "81";
+    public static final String CODE_PREFIX_tranId = "82";
 
 
     /**
@@ -979,9 +979,9 @@ public class GenerateCodeFactory {
         return result;
     }
 
-    public static String getUUID(){
+    public static String getUUID() {
         UUID uuid = UUID.randomUUID();
-        return uuid.toString();
+        return uuid.toString().replaceAll("-", "");
     }
 
 }

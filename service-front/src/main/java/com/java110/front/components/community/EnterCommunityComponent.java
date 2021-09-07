@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Component("enterCommunity")
 public class EnterCommunityComponent {
 
-
     @Autowired
     private ICommunityServiceSMO communityServiceSMOImpl;
 

@@ -62,7 +62,7 @@ public interface IRoomAttrServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO 异常信息
      */
-    void updateRoomAttrInfoInstance(Map info) throws DAOException;
+    int updateRoomAttrInfoInstance(Map info) throws DAOException;
 
 
     /**

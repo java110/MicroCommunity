@@ -162,7 +162,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         BillDto billDto = new BillDto();
         billDto.setBillId(billId);
         billDto.setBillName(feeConfigDto.getFeeName() + "-" + DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_H));
-        billDto.setBillTime(DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+        billDto.setBillTime(DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
         billDto.setCommunityId(feeConfigDto.getCommunityId());
         billDto.setConfigId(feeConfigDto.getConfigId());
         billDto.setCurBill("T");
@@ -351,6 +351,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         if (roomDtos == null || roomDtos.size() < 1) {
             //房屋可能被删除了
             billOweFeeDto.setOweId("1");
+            billOweFeeDto.setOwnerId("-1");
             billOweFeeDto.setOwnerName("未知");
             billOweFeeDto.setOwnerTel("19999999999");
             billOweFeeDto.setPayerObjName("未知");
@@ -372,6 +373,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
             //房屋可能被删除了
             billOweFeeDto.setOweId("1");
+            billOweFeeDto.setOwnerId("-1");
             billOweFeeDto.setOwnerName("未知");
             billOweFeeDto.setOwnerTel("19999999999");
             return;

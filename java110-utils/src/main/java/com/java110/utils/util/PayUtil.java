@@ -108,6 +108,19 @@ public class PayUtil {
 
     /**
      * 创建签名Sign
+     * <p>
+     * {sdfsfsd}123123123  md5
+     * <p>
+     * {
+     * <p>
+     * heaer:{
+     * serviceCode:''，
+     * sign:'sddd'
+     * },
+     * body:{
+     * sssssss
+     * }
+     * }
      *
      * @param key
      * @param parameters
@@ -132,6 +145,48 @@ public class PayUtil {
         String sign = md5(sb.toString()).toUpperCase();
         return sign;
     }
+
+    /**
+     * 创建签名Sign
+     * <p>
+     * {sdfsfsd}123123123  md5
+     * <p>
+     * {
+     * <p>
+     * heaer:{
+     * serviceCode:''，
+     * sign:'sddd'
+     * },
+     * body:{
+     * sssssss
+     * }
+     * }
+     *
+     * @param key
+     * @param parameters
+     * @return
+     */
+    public static String createChinaUmsSign(SortedMap<String, String> parameters, String key) {
+        StringBuffer sb = new StringBuffer();
+        Set es = parameters.entrySet();
+        Iterator<?> it = es.iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            String k = (String) entry.getKey();
+            if (entry.getValue() != null || !"".equals(entry.getValue())) {
+                String v = String.valueOf(entry.getValue());
+                if (null != v && !"".equals(v) && !"sign".equals(k)) {
+                    sb.append(k + "=" + v + "&");
+                }
+            }
+        }
+        String data = sb.toString().substring(0, sb.length() - 1) + key;
+        //sb.append(key);
+        logger.debug("加密前串：" + data);
+        String sign = md5(data).toUpperCase();
+        return sign;
+    }
+
 
     /**
      * md5签名

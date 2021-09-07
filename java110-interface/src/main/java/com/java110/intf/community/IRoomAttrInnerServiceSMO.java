@@ -50,4 +50,12 @@ public interface IRoomAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/saveRoomAttr", method = RequestMethod.POST)
     int saveRoomAttr(@RequestBody RoomAttrPo roomAttrPo);
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param roomAttrPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/updateRoomAttrInfoInstance", method = RequestMethod.POST)
+    int updateRoomAttrInfoInstance(@RequestBody RoomAttrPo roomAttrPo);
 }
