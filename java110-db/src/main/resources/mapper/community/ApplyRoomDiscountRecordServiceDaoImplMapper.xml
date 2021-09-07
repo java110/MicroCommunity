@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="applyRoomDiscountRecordServiceDaoImpl">
+
+    <!-- 保存验房记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessApplyRoomDiscountRecordInfo" parameterType="Map">
+           insert into business_apply_room_discount_record(
+            ardr_id,ard_id,create_user_id,create_user_name,remark,b_id,community_id,is_true,state
+            ) values (
+            #{ardrId},#{ardId},#{createUserId},#{createUserName},#{remark},#{bId},#{communityId},#{isTrue},#{state}
+            )
+    </insert>
+
+    <!-- 保存验房记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveApplyRoomDiscountRecordInfo" parameterType="Map">
+           insert into apply_room_discount_record(
+            ardr_id,ard_id,create_user_id,create_user_name,remark,b_id,community_id,is_true,state,status_cd
+            ) values (
+            #{ardrId},#{ardId},#{createUserId},#{createUserName},#{remark},#{bId},#{communityId},#{isTrue},#{state},#{statusCd}
+            )
+    </insert>
+
+
+    <!-- 查询验房记录信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessApplyRoomDiscountRecordInfo" parameterType="Map" resultType="Map">
+        select t.ardr_id,t.ardr_id ardrId,t.ard_id,t.ard_id ardId,t.create_user_id,t.create_user_id
+        createUserId,t.create_user_name,t.create_user_name createUserName,t.remark,t.b_id,t.b_id
+        bId,t.community_id,t.community_id communityId,t.is_true,t.is_true isTrue,t.state
+        from business_apply_room_discount_record t
+        where 1 =1
+        <if test="ardrId !=null and ardrId != ''">
+            and t.ardr_id= #{ardrId}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            and t.is_true= #{isTrue}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+    </select>
+
+
+    <!-- 保存验房记录信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveApplyRoomDiscountRecordInfoInstance" parameterType="Map">
+        insert into apply_room_discount_record(
+        ardr_id,ard_id,create_user_id,create_user_name,status_cd,remark,b_id,community_id,is_true,state
+        ) select
+        t.ardr_id,t.ard_id,t.create_user_id,t.create_user_name,'0',t.remark,t.b_id,t.community_id,t.is_true,t.state
+        from
+        business_apply_room_discount_record t where 1=1
+        <if test="ardrId !=null and ardrId != ''">
+            and t.ardr_id= #{ardrId}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            and t.is_true= #{isTrue}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+    </insert>
+
+
+    <!-- 查询验房记录信息 add by wuxw 2018-07-03 -->
+    <select id="getApplyRoomDiscountRecordInfo" parameterType="Map" resultType="Map">
+        select t.ardr_id,t.ardr_id ardrId,t.ard_id,t.ard_id ardId,t.create_user_id,t.create_user_id
+        createUserId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
+        statusCd,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.is_true,t.is_true isTrue,
+        t.state,ard.room_id roomId,ard.room_name roomName,fr.file_real_name fileRealName,fr.file_save_name fileSaveName,
+        fr.rel_type_cd relTypeCd,t.create_time,t.create_time createTime,td.name stateName,td2.name isTrueName
+        from apply_room_discount_record t
+        left join apply_room_discount ard on t.ard_id = ard.ard_id and ard.status_cd = '0'
+        LEFT JOIN t_dict td ON td.table_name = 'apply_room_discount_record'
+        AND td.table_columns = 'state'
+        AND t.state = td.status_cd
+        left join t_dict td2 on td2.table_name = 'apply_room_discount_record'
+        and td2.table_columns = 'is_true'
+        and t.is_true = td2.status_cd
+        LEFT JOIN file_rel fr ON t.ardr_id = fr.obj_id
+        AND fr.status_cd = "0"
+        where 1 = 1
+        <if test="ardrId !=null and ardrId != ''">
+            and t.ardr_id= #{ardrId}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            and t.is_true= #{isTrue}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+    <!-- 修改验房记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateApplyRoomDiscountRecordInfoInstance" parameterType="Map">
+        update apply_room_discount_record t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            , t.ard_id= #{ardId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            , t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            , t.is_true= #{isTrue}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        where 1=1
+        <if test="ardrId !=null and ardrId != ''">
+            and t.ardr_id= #{ardrId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+    </update>
+
+    <!-- 查询验房记录数量 add by wuxw 2018-07-03 -->
+    <select id="queryApplyRoomDiscountRecordsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from apply_room_discount_record t
+        left join apply_room_discount ard on t.ard_id = ard.ard_id and ard.status_cd = '0'
+        LEFT JOIN t_dict td ON td.table_name = 'apply_room_discount_record'
+        AND td.table_columns = 'state'
+        AND t.state = td.status_cd
+        left join t_dict td2 on td2.table_name = 'apply_room_discount_record'
+        and td2.table_columns = 'is_true'
+        and t.is_true = td2.status_cd
+        LEFT JOIN file_rel fr ON t.ardr_id = fr.obj_id
+        AND fr.status_cd = "0"
+        where 1 = 1
+        <if test="ardrId !=null and ardrId != ''">
+            and t.ardr_id= #{ardrId}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            and t.is_true= #{isTrue}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+    </select>
+
+    <!-- 查询验房记录数量 add by wuxw 2018-07-03 -->
+    <select id="selectApplyRoomDiscountRecordsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from apply_room_discount_record t
+        where 1 = 1
+        <if test="ardrId !=null and ardrId != ''">
+            and t.ardr_id= #{ardrId}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            and t.is_true= #{isTrue}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+    </select>
+
+    <!-- 查询验房记录信息 add by wuxw 2018-07-03 -->
+    <select id="selectApplyRoomDiscountRecordInfo" parameterType="Map" resultType="Map">
+        select t.ardr_id,t.ardr_id ardrId,t.ard_id,t.ard_id ardId,t.create_user_id,t.create_user_id
+        createUserId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
+        statusCd,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.is_true,t.is_true isTrue,
+        t.state,ard.room_id roomId,ard.room_name roomName,t.create_time,t.create_time createTime,td.name stateName,
+        td2.name isTrueName from apply_room_discount_record t
+        left join apply_room_discount ard on t.ard_id = ard.ard_id and ard.status_cd = '0'
+        LEFT JOIN t_dict td ON td.table_name = 'apply_room_discount_record'
+        AND td.table_columns = 'state'
+        AND t.state = td.status_cd
+        left join t_dict td2 on td2.table_name = 'apply_room_discount_record'
+        and td2.table_columns = 'is_true'
+        and t.is_true = td2.status_cd
+        where 1 = 1
+        <if test="ardrId !=null and ardrId != ''">
+            and t.ardr_id= #{ardrId}
+        </if>
+        <if test="ardId !=null and ardId != ''">
+            and t.ard_id= #{ardId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            and t.is_true= #{isTrue}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+</mapper>

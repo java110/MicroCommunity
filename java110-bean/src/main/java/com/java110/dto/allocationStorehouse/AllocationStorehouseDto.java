@@ -58,6 +58,8 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String staffTel;
     private String applyType;
     private String applyTypeName;
+    private String unitCodeName;
+    private String miniUnitCodeName;
 
     public String getAsId() {
         return asId;
@@ -347,5 +349,21 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
     }
 }

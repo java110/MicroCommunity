@@ -428,13 +428,52 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
                         ownerRoomRelDto.setRoomId(repairDtos.get(0).getRepairObjId());
                         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-                        Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
-                        OwnerDto ownerDto = new OwnerDto();
-                        ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
-                        ownerDto.setOwnerTypeCd("1001"); //业主本人
-                        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-                        Assert.listOnlyOne(ownerDtos, "查询业主信息错误！");
-                        reportFeeMonthStatistics.setOwnerName(ownerDtos.get(0).getName());
+                        if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() == 0) { //查询条数为0条
+                            OwnerRoomRelDto ownerRoomRel = new OwnerRoomRelDto();
+                            ownerRoomRel.setRoomId(repairDtos.get(0).getRepairObjId());
+                            ownerRoomRel.setStatusCd("1"); //看看业主房屋关系数据是否删除了
+                            List<OwnerRoomRelDto> ownerRoomRels = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRel);
+                            Assert.listOnlyOne(ownerRoomRels, "查询业主房屋关系表错误！");
+                            OwnerDto owner = new OwnerDto();
+                            owner.setOwnerId(ownerRoomRels.get(0).getOwnerId());
+                            owner.setOwnerTypeCd("1001"); //业主本人
+                            List<OwnerDto> owners = ownerInnerServiceSMOImpl.queryOwners(owner);
+                            if (owners != null && owners.size() == 0) { //查出条数为0条
+                                //判断业主是否删除了
+                                OwnerDto newOwner = new OwnerDto();
+                                newOwner.setOwnerId(ownerRoomRels.get(0).getOwnerId());
+                                newOwner.setOwnerTypeCd("1001"); //业主本人
+                                newOwner.setStatusCd("1");
+                                List<OwnerDto> newOwners = ownerInnerServiceSMOImpl.queryOwners(newOwner);
+                                Assert.listOnlyOne(newOwners, "查询业主信息错误！");
+                                reportFeeMonthStatistics.setOwnerName(newOwners.get(0).getName());
+                            } else if (owners != null && owners.size() == 1) { //查出条数为1条
+                                reportFeeMonthStatistics.setOwnerName(owners.get(0).getName());
+                            } else {
+                                throw new IllegalArgumentException("查询业主信息错误！");
+                            }
+                        } else if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() == 1) { //查询条数为1条
+                            OwnerDto ownerDto = new OwnerDto();
+                            ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
+                            ownerDto.setOwnerTypeCd("1001"); //业主本人
+                            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+                            if (ownerDtos != null && ownerDtos.size() == 0) { //业主查询条数为0条
+                                //判断业主是否删除了
+                                OwnerDto newOwner = new OwnerDto();
+                                newOwner.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
+                                newOwner.setOwnerTypeCd("1001"); //业主本人
+                                newOwner.setStatusCd("1");
+                                List<OwnerDto> newOwners = ownerInnerServiceSMOImpl.queryOwners(newOwner);
+                                Assert.listOnlyOne(newOwners, "查询业主信息错误！");
+                                reportFeeMonthStatistics.setOwnerName(newOwners.get(0).getName());
+                            } else if (ownerDtos != null || ownerDtos.size() == 1) {
+                                reportFeeMonthStatistics.setOwnerName(ownerDtos.get(0).getName());
+                            } else {
+                                throw new IllegalArgumentException("查询业主信息错误！");
+                            }
+                        } else {
+                            throw new IllegalArgumentException("查询业主房屋关系表错误！");
+                        }
                     }
                 }
                 reportList.add(reportFeeMonthStatistics);

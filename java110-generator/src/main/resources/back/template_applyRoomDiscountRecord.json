@@ -1,0 +1,41 @@
+{
+  "autoMove": true,
+  "id": "ardrId",
+  "name": "applyRoomDiscountRecord",
+  "desc": "验房记录",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_APPLY_ROOM_DISCOUNT_RECORD",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_APPLY_ROOM_DISCOUNT_RECORD",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_APPLY_ROOM_DISCOUNT_RECORD",
+  "newBusinessTypeCdValue": "671200030011",
+  "updateBusinessTypeCdValue": "671200040011",
+  "deleteBusinessTypeCdValue": "671200050011",
+  "businessTableName": "business_apply_room_discount_record",
+  "tableName": "apply_room_discount_record",
+  "param": {
+    "ardrId": "ardr_id",
+    "ardId": "ard_id",
+    "bId": "b_id",
+    "communityId": "community_id",
+    "createUserId": "create_user_id",
+    "createUserName": "create_user_name",
+    "statusCd": "status_cd",
+    "remark": "remark"
+  },
+  "required": [
+    {
+      "code": "ardId",
+      "msg": "空置房ID不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "createUserId",
+      "msg": "创建人不能为空"
+    }
+  ]
+}

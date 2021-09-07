@@ -8,10 +8,10 @@
     <insert id="saveBusinessRoomInfo" parameterType="Map">
         insert into business_building_room(
         fee_coefficient,section,remark,user_id,room_id,layer,built_up_area,operate,room_num,unit_id,b_id,apartment,state,community_id,
-        room_type,room_sub_type,room_rent,room_area
+        room_type,room_sub_type,room_rent,room_area,start_time,end_time
         ) values (
         #{feeCoefficient},#{section},#{remark},#{userId},#{roomId},#{layer},#{builtUpArea},#{operate},#{roomNum},#{unitId},#{bId},#{apartment},#{state},
-        #{communityId},#{roomType},#{roomSubType},#{roomRent},#{roomArea}
+        #{communityId},#{roomType},#{roomSubType},#{roomRent},#{roomArea},#{startTime},#{endTime}
         )
     </insert>
 
@@ -22,7 +22,9 @@
         userId,t.room_id,t.room_id
         roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.operate,t.room_num,t.room_num
         roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,t.community_id,t.community_id
-        communityId,t.room_type,t.room_type roomType,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
+        communityId,t.room_type,t.room_type roomType,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type
+        roomSubType,
+        t.room_rent roomRent,t.room_area roomArea,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime
         from business_building_room t
         where 1 =1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
@@ -73,7 +75,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
     </select>
 
 
@@ -81,10 +88,10 @@
     <insert id="saveRoomInfoInstance" parameterType="Map">
         insert into building_room(
         fee_coefficient,section,status_cd,remark,user_id,room_id,layer,built_up_area,room_num,unit_id,b_id,apartment,state,community_id,
-        room_type,room_sub_type,room_rent,room_area
+        room_type,room_sub_type,room_rent,room_area,start_time,end_time
         ) select
         t.fee_coefficient,t.section,'0',t.remark,t.user_id,t.room_id,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state,t.community_id,
-        t.room_type,t.room_sub_type,t.room_rent,t.room_area
+        t.room_type,t.room_sub_type,t.room_rent,t.room_area,t.start_time,t.end_time
         from business_building_room t where 1=1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
             and t.fee_coefficient= #{feeCoefficient}
@@ -132,9 +139,13 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
     </insert>
-
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfo" parameterType="Map" resultType="Map">
@@ -142,7 +153,8 @@
         statusCd,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area
         builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id
         bId,t.apartment,t.state,t.community_id,t.community_id communityId,t.room_type,t.room_type roomType,
-        t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
+        t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea,
+        t.start_time,t.start_time startTime,t.end_time,t.end_time endTime
         from building_room t
         where 1 =1
         <if test="feeCoefficient !=null and feeCoefficient != ''">
@@ -163,7 +175,6 @@
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
-
         <if test="roomIds != null">
             and t.room_id in
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
@@ -200,14 +211,17 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
-
-
     </select>
-
 
     <!-- 修改小区房屋信息 add by wuxw 2018-07-03 -->
     <update id="updateRoomInfoInstance" parameterType="Map">
@@ -254,6 +268,12 @@
         <if test="roomArea !=null and roomArea != ''">
             , t.room_area= #{roomArea}
         </if>
+        <if test="startTime !=null">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            , t.end_time= #{endTime}
+        </if>
         where 1=1
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
@@ -264,7 +284,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
@@ -320,11 +339,13 @@
         <if test="roomSubType !=null and roomSubType != ''">
             and t.room_sub_type= #{roomSubType}
         </if>
-
-
-
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
     </select>
-
 
     <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
     <select id="queryRoomsByCommunityIdCount" parameterType="Map" resultType="Map">
@@ -340,7 +361,6 @@
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
         </if>
-
         <if test="feeCoefficient !=null and feeCoefficient != ''">
             and t.fee_coefficient= #{feeCoefficient}
         </if>
@@ -353,7 +373,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -393,15 +412,18 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
         <if test="floorNum !=null and floorNum != ''">
             and f.`floor_num`= #{floorNum}
         </if>
         <if test="unitNum !=null and unitNum != ''">
             and u.unit_num= #{unitNum}
         </if>
-
-
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
     </select>
 
     <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
@@ -467,9 +489,13 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
         and borr.`room_id` is null
-
-
     </select>
 
     <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
@@ -535,9 +561,13 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
         AND borr.`room_id` is not null
-
-
     </select>
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
@@ -545,8 +575,10 @@
         SELECT t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
         statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
-        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,f.floor_num floorNum
-        ,t.room_type roomType,t.room_type,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
+        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num`
+        unitNum,f.floor_num floorNum
+        ,t.room_type roomType,t.room_type,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type
+        roomSubType,t.room_rent roomRent,t.room_area roomArea,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
@@ -606,11 +638,16 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
         and borr.`room_id` is null
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
-
     </select>
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
@@ -619,7 +656,8 @@
         statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
-        t.room_type roomType,t.room_type,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
+        t.room_type roomType,t.room_type,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent
+        roomRent,t.room_area roomArea,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
@@ -679,13 +717,17 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
         AND borr.`room_id` is not null
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
-
     </select>
-
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfoByCommunityId" parameterType="Map" resultType="Map">
@@ -695,12 +737,15 @@
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
         u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum,f.floor_area floorArea,u.unit_area unitArea,td.name
         stateName,t.room_type roomType,t.room_type,t.`community_id` communityId,td1.`name` roomSubTypeName
-        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
+        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea,
+        t.start_time,t.start_time startTime,t.end_time,t.end_time endTime
         FROM building_room t
         inner join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` = '0'
+        inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` =
+        '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
-        left join t_dict td1 on t.room_sub_type = td1.status_cd and td1.table_name = 'building_room' and td1.table_columns = 'room_sub_type'
+        left join t_dict td1 on t.room_sub_type = td1.status_cd and td1.table_name = 'building_room' and
+        td1.table_columns = 'room_sub_type'
         WHERE 1 =1
         <if test="floorId !=null and floorId != ''">
             AND t.`community_id` = #{communityId}
@@ -777,11 +822,16 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
         order by f.floor_num ,u.unit_num,t.room_num
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
-
     </select>
 
     <!-- 根据业主查询房屋信息 -->
@@ -792,7 +842,8 @@
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num`
         unitNum,f.`floor_num` floorNum,t.room_type roomType,t.room_type,f.floor_id floorId
-        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
+        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea,
+        t.start_time,t.start_time startTime,t.end_time ,t.end_time endTime
         FROM
         building_owner bo,building_room t,building_owner_room_rel borr,building_unit u,f_floor f
         WHERE
@@ -847,8 +898,13 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and bo.owner_type_cd= #{ownerTypeCd}
         </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
     </select>
-
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
     <select id="getRoomInfos" parameterType="Map" resultType="Map">
@@ -857,7 +913,8 @@
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
         t.room_type roomType,t.room_type,f.floor_num floorNum
-        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
+        ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea,
+        t.start_time,t.start_time startTime,t.end_time,t.end_time endTime
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
@@ -900,9 +957,14 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
+        </if>
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
-
     </select>
 </mapper>

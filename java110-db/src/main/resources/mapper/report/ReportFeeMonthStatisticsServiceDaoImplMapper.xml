@@ -1103,7 +1103,7 @@
             and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
-            and t.obj_id= #{objId}
+            and pf.payer_obj_id= #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
@@ -1184,7 +1184,7 @@
             and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
-            and t.obj_id= #{objId}
+            and pf.payer_obj_id = #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
@@ -1249,7 +1249,7 @@
             and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
-            and t.obj_id= #{objId}
+            and pf.payer_obj_id= #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
@@ -1314,7 +1314,7 @@
             and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
-            and t.obj_id= #{objId}
+            and pf.payer_obj_id= #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}

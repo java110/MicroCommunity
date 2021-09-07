@@ -146,6 +146,25 @@ public class ApplyRoomDiscountApi {
     }
 
     /**
+     * 修改优惠申请
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /applyRoomDiscount/editApplyRoomDiscount
+     * @path /app/applyRoomDiscount/editApplyRoomDiscount
+     */
+    @RequestMapping(value = "/editApplyRoomDiscount", method = RequestMethod.POST)
+    public ResponseEntity<String> editApplyRoomDiscount(@RequestBody JSONObject reqJson, @RequestHeader(value = "user-id") String userId) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含验房状态");
+        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
+        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含结束时间");
+        Assert.hasKeyAndValue(reqJson, "ardId", "ardId不能为空");
+        ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
+        return updateApplyRoomDiscountBMOImpl.update(applyRoomDiscountPo);
+    }
+
+    /**
      * 审批接口
      *
      * @param reqJson

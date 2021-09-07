@@ -82,7 +82,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         businesses.add(storeBMOImpl.addOrgHeadPart(paramObj));
         businesses.add(storeBMOImpl.addStaffOrg(paramObj));
         businesses.add(storeBMOImpl.addPurchase(paramObj));
-        businesses.add(storeBMOImpl.addCollection(paramObj));
+        //businesses.add(storeBMOImpl.addCollection(paramObj)); //物品领用 各个小区设置各自的流程  废弃次操作
         businesses.add(storeBMOImpl.contractApply(paramObj));
         businesses.add(storeBMOImpl.contractChange(paramObj));
         //物品调拨流程

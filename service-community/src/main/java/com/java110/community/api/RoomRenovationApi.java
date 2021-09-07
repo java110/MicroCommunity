@@ -285,6 +285,8 @@ public class RoomRenovationApi {
         String rId = roomRenovationPo.getrId();
         //状态
         String state = roomRenovationPo.getState();
+        //是否违规
+        String isTrue = roomRenovationPo.getIsTrue();
         //查询当前用户信息
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
@@ -299,6 +301,7 @@ public class RoomRenovationApi {
         roomRenovationRecordPo.setCreateTime(format.format(new Date()));
         roomRenovationRecordPo.setStaffId(userId);
         roomRenovationRecordPo.setStaffName(users.get(0).getName());
+        roomRenovationRecordPo.setIsTrue(isTrue);
         saveRoomRenovationRecordBMO.saveRecord(roomRenovationRecordPo);
         FileRelPo fileRelPo = new FileRelPo();
         fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
@@ -398,6 +401,7 @@ public class RoomRenovationApi {
                                                       @RequestParam(value = "roomName", required = false) String roomName,
                                                       @RequestParam(value = "personName", required = false) String personName,
                                                       @RequestParam(value = "personTel", required = false) String personTel,
+                                                      @RequestParam(value = "state", required = false) String state,
                                                       @RequestHeader(value = "user-id") String userId,
                                                       @RequestParam(value = "page", required = false) int page,
                                                       @RequestParam(value = "row", required = false) int row) {
@@ -409,6 +413,7 @@ public class RoomRenovationApi {
         roomRenovationDto.setRoomName(roomName);
         roomRenovationDto.setPersonName(personName);
         roomRenovationDto.setPersonTel(personTel);
+        roomRenovationDto.setState(state);
         roomRenovationDto.setUserId(userId);
         return getRoomRenovationBMOImpl.get(roomRenovationDto);
     }

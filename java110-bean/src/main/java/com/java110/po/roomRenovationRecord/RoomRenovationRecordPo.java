@@ -41,6 +41,11 @@ public class RoomRenovationRecordPo extends PageDto implements Serializable {
 
     private String communityId;
 
+    //是否违规
+    private String isTrue;
+
+    private String isTrueName;
+
     public String getRecordId() {
         return recordId;
     }
@@ -167,5 +172,21 @@ public class RoomRenovationRecordPo extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getIsTrue() {
+        return isTrue;
+    }
+
+    public void setIsTrue(String isTrue) {
+        this.isTrue = isTrue;
+    }
+
+    public String getIsTrueName() {
+        return isTrueName;
+    }
+
+    public void setIsTrueName(String isTrueName) {
+        this.isTrueName = isTrueName;
     }
 }

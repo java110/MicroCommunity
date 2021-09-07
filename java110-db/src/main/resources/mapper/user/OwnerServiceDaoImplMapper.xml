@@ -135,15 +135,15 @@
         <if test="roomIds != null ">
             ,building_owner_room_rel borr
         </if>
-        where 1 =1
+        where 1 = 1
         <if test="roomId != null and roomId != ''">
             and t.owner_id = borr.owner_id
-            and borr.status_cd = '0'
+            and borr.status_cd = t.status_cd
             and borr.room_id = #{roomId}
         </if>
         <if test="roomIds != null">
             and t.owner_id = borr.owner_id
-            and borr.status_cd = '0'
+            and borr.status_cd = t.status_cd
             and borr.room_id in
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
                 #{item}

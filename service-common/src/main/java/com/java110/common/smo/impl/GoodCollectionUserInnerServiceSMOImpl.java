@@ -83,7 +83,7 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
         variables.put("userId", purchaseApplyDto.getCurrentUserId());
         variables.put("startUserId", purchaseApplyDto.getCurrentUserId());
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(purchaseApplyDto.getStoreId()), purchaseApplyDto.getApplyOrderId(), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(purchaseApplyDto.getStoreId(),purchaseApplyDto.getCommunityId()), purchaseApplyDto.getApplyOrderId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         String processDefinitionId = processInstance.getProcessDefinitionId();
@@ -113,19 +113,20 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
     }
 
 
-    private String getWorkflowDto(String storeId) {
+    private String getWorkflowDto(String storeId,String communityId) {
         //开启流程
         //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
         WorkflowDto workflowDto = new WorkflowDto();
         workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
         workflowDto.setStoreId(storeId);
+        workflowDto.setCommunityId(communityId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
 
-        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
+        Assert.listOnlyOne(workflowDtos, "未找到 物品领用流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
-            throw new IllegalArgumentException("流程还未部署");
+            throw new IllegalArgumentException("物品领用流程还未部署");
         }
         return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
     }
@@ -160,7 +161,7 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId(),user.getCommunityId()));
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -172,7 +173,7 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
      */
     public List<PurchaseApplyDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId(),user.getCommunityId()));
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
@@ -239,7 +240,7 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
 //                .taskAssignee(user.getUserId());
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey(getWorkflowDto(user.getStoreId()))
+                .processDefinitionKey(getWorkflowDto(user.getStoreId(),user.getCommunityId()))
                 .taskAssignee(user.getUserId())
                 .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
@@ -261,7 +262,7 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
         HistoryService historyService = processEngine.getHistoryService();
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey(getWorkflowDto(user.getStoreId()))
+                .processDefinitionKey(getWorkflowDto(user.getStoreId(),user.getCommunityId()))
                 .taskAssignee(user.getUserId())
                 .finished();
 //        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {

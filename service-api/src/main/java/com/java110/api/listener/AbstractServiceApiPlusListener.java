@@ -231,7 +231,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
      * @param event   事件对象
      * @param reqJson 请求报文数据
      */
-    protected abstract void validate(ServiceDataFlowEvent event, JSONObject reqJson);
+    protected abstract void validate(ServiceDataFlowEvent event, JSONObject reqJson) throws ParseException;
 
 
     /**

@@ -22,6 +22,8 @@ public class PurchaseApplyDetailDto {
     private String standardPrice;
     private String originalStock;
     private String supplierName;
+    private String unitCodeName;
+    private String miniUnitCodeName;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -165,6 +167,22 @@ public class PurchaseApplyDetailDto {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
     }
 }
 

@@ -21,6 +21,8 @@ public class RoomRenovationPo implements Serializable {
     private String examineRemark;
     private List<String> photos;
     private String videoName;
+    private String isTrue;
+    private String isTrueName;
 
     public String getStatusCd() {
         return statusCd;
@@ -148,5 +150,21 @@ public class RoomRenovationPo implements Serializable {
 
     public void setVideoName(String videoName) {
         this.videoName = videoName;
+    }
+
+    public String getIsTrue() {
+        return isTrue;
+    }
+
+    public void setIsTrue(String isTrue) {
+        this.isTrue = isTrue;
+    }
+
+    public String getIsTrueName() {
+        return isTrueName;
+    }
+
+    public void setIsTrueName(String isTrueName) {
+        this.isTrueName = isTrueName;
     }
 }

@@ -110,6 +110,7 @@ public class CollectionApi {
     @RequestMapping(value = "/getCollectionAuditOrder", method = RequestMethod.GET)
     public ResponseEntity<String> getCollectionAuditOrder(@RequestParam(value = "page") int page,
                                                           @RequestParam(value = "row") int row,
+                                                          @RequestParam(value = "communityId") String communityId,
                                                           @RequestHeader(value = "user-id") String userId,
                                                           @RequestHeader(value = "store-id") String storeId) {
         AuditUser auditUser = new AuditUser();
@@ -117,6 +118,7 @@ public class CollectionApi {
         auditUser.setPage(page);
         auditUser.setRow(row);
         auditUser.setStoreId(storeId);
+        auditUser.setCommunityId(communityId);
         return getCollectionAuditOrderBMOImpl.auditOrder(auditUser);
     }
 

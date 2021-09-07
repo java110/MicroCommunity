@@ -85,6 +85,11 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
             super.update(context, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
             super.commit(context);
+        } else if (purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_NOT_PASS) && reqJson.getString("state").equals("1200")) {  //如果状态未通过 并且是结束，
+            PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
+            purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
+            super.update(context, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
+            super.commit(context);
         }
 
         boolean isLastTask = purchaseApplyUserInnerServiceSMOImpl.completeTask(purchaseApplyDto);

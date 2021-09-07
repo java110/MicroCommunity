@@ -2,6 +2,7 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.account.IAccountBMO;
 import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.bmo.payFeeDetailDiscount.IPayFeeDetailDiscountBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
@@ -9,6 +10,8 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.account.AccountDto;
+import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -18,12 +21,14 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.center.AppService;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
@@ -46,6 +51,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -85,6 +91,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
 
     @Autowired
+    private IAccountBMO accountBMOImpl;
+
+    @Autowired
     private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
 
     @Autowired
@@ -98,6 +107,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -132,6 +144,42 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
         businesses.add(feeBMOImpl.addFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPo, feeReceiptPo));
         businesses.add(feeBMOImpl.modifyFee(paramObj, dataFlowContext));
+
+        //账户金额
+        String useUserAmount = paramObj.getString("useUserAmount"); //获取是否使用账户金额标识
+        if (paramObj.containsKey("useUserAmount") && useUserAmount.equals("true")) {
+            //获取账户id
+            String acctId = paramObj.getString("acctId");
+            if (StringUtil.isEmpty(acctId)) {
+                throw new IllegalArgumentException("账户id为空！");
+            }
+            AccountDto accountDto = new AccountDto();
+            accountDto.setAcctId(acctId);
+            //查询账户金额
+            List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+            Assert.listOnlyOne(accountDtos, "查询账户金额错误！");
+            //获取金额
+            double amount = Double.parseDouble(accountDtos.get(0).getAmount());
+            //获取实收款
+            double receivedAmount = Double.parseDouble(paramObj.getString("receivedAmount"));
+            if (amount >= receivedAmount) { //如果账户余额大于实收款，则账户余额扣掉的钱数是实收款的钱数
+                AccountDetailPo accountDetailPo=new AccountDetailPo();
+                accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+                accountDetailPo.setAcctId(accountDto.getAcctId());
+                accountDetailPo.setAmount(String.valueOf(receivedAmount));
+                accountDetailPo.setObjType(AccountDetailDto.ORDER_TYPE_USER);
+                //调用扣款接口
+                int flag = accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
+            } else { //如果账户余额小于实收款，则账户余额钱数会全部用掉，即扣掉的钱数为账户余额钱数
+                AccountDetailPo accountDetailPo=new AccountDetailPo();
+                accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+                accountDetailPo.setAcctId(accountDto.getAcctId());
+                accountDetailPo.setAmount(accountDtos.get(0).getAmount());
+                accountDetailPo.setObjType(AccountDetailDto.ORDER_TYPE_USER);
+                //调用扣款接口
+                int flag = accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
+            }
+        }
 
         //折扣管理
         if (paramObj.containsKey("selectDiscount")) {

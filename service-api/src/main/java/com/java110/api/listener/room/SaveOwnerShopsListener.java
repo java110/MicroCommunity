@@ -40,6 +40,7 @@ import java.util.List;
  **/
 @Java110Listener("saveOwnerShopsListener")
 public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
+
     private static Logger logger = LoggerFactory.getLogger(SaveOwnerShopsListener.class);
 
     @Autowired
@@ -69,7 +70,6 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
     public HttpMethod getHttpMethod() {
         return HttpMethod.POST;
     }
-
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {

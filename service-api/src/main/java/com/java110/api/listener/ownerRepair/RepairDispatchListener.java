@@ -18,6 +18,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
 import com.java110.utils.util.Assert;
@@ -67,18 +68,21 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    //键(维修师傅未处理最大单数)
+    public static final String REPAIR_NUMBER = "REPAIR_NUMBER";
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "staffId", "未包含员工ID信息");
         Assert.hasKeyAndValue(reqJson, "staffName", "未包含员工名称信息");
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
         Assert.hasKeyAndValue(reqJson, "context", "未包含派单内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "action", "未包含处理动作");
-
-
     }
 
     @Override
@@ -101,7 +105,6 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
     }
 
     private void backRepair(DataFlowContext context, JSONObject reqJson) {
-
         //查询订单状态
         RepairDto repairDto = new RepairDto();
         repairDto.setRepairId(reqJson.getString("repairId"));
@@ -232,9 +235,21 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
      * @param reqJson
      */
     private void transferRepair(DataFlowContext context, JSONObject reqJson) {
+        //获取接受转单的员工
+        String staffId = reqJson.getString("staffId");
+        RepairUserDto repairUser = new RepairUserDto();
+        repairUser.setStaffId(staffId);
+        repairUser.setState("10001"); //处理中
+        int i = repairUserInnerServiceSMOImpl.queryRepairUsersCount(repairUser);
+        //取出开关映射的值(维修师傅未处理最大单数)
+        String repairNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_NUMBER);
+        if (i >= Integer.parseInt(repairNumber)) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "该员工有超过" + Integer.parseInt(repairNumber) + "条未处理的订单急需处理，请安排其他维修人员处理！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         String userId = reqJson.getString("userId");
         String userName = reqJson.getString("userName");
-
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(reqJson.getString("repairId"));
         repairUserDto.setCommunityId(reqJson.getString("communityId"));
@@ -283,6 +298,19 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
      * @param reqJson
      */
     private void dispacthRepair(DataFlowContext context, JSONObject reqJson) {
+        //获取接受派单的员工
+        String staffId = reqJson.getString("staffId");
+        RepairUserDto repairUser = new RepairUserDto();
+        repairUser.setStaffId(staffId);
+        repairUser.setState("10001"); //处理中
+        int i = repairUserInnerServiceSMOImpl.queryRepairUsersCount(repairUser);
+        //取出开关映射的值(维修师傅未处理最大单数)
+        String repairNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_NUMBER);
+        if (i >= Integer.parseInt(repairNumber)) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "该员工有超过" + Integer.parseInt(repairNumber) + "条未处理的订单急需处理，请安排其他维修人员处理！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         //获取报修id
         String repairId = reqJson.getString("repairId");
         RepairDto repairDto = new RepairDto();

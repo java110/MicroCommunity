@@ -20,6 +20,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,7 +77,30 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         apiFeeDetailVo.setTotal(total);
         if (total > 0) {
             List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class));
-            List<ApiFeeDetailDataVo> feeDetails = BeanConvertUtil.covertBeanList(feeDetailDtos, ApiFeeDetailDataVo.class);
+            List<FeeDetailDto> feeDetailList = new ArrayList<>();
+            for (FeeDetailDto feeDetail : feeDetailDtos) {
+                //获取状态
+                String state = feeDetail.getState();
+                if (!StringUtil.isEmpty(state) && (state.equals("1300") || state.equals("1100") || state.equals("1200"))) { //退费单、已退费、退费失败状态
+                    //获取周期
+                    String cycles = feeDetail.getCycles();
+                    if (!StringUtil.isEmpty(cycles) && cycles.contains("-")) {
+                        feeDetail.setCycles(cycles.substring(1));
+                    }
+                    //获取应收金额
+                    String receivableAmount = feeDetail.getReceivableAmount();
+                    if (!StringUtil.isEmpty(receivableAmount) && receivableAmount.contains("-")) {
+                        feeDetail.setReceivableAmount(receivableAmount.substring(1));
+                    }
+                    //获取实收金额
+                    String receivedAmount = feeDetail.getReceivedAmount();
+                    if (!StringUtil.isEmpty(receivedAmount) && receivedAmount.contains("-")) {
+                        feeDetail.setReceivedAmount(receivedAmount.substring(1));
+                    }
+                }
+                feeDetailList.add(feeDetail);
+            }
+            List<ApiFeeDetailDataVo> feeDetails = BeanConvertUtil.covertBeanList(feeDetailList, ApiFeeDetailDataVo.class);
 
             //reFreshCreateTime(feeDetails, feeDetailDtos);
 

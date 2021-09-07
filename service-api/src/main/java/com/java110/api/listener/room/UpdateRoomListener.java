@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,7 +52,7 @@ public class UpdateRoomListener extends AbstractServiceApiPlusListener {
 
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) throws ParseException {
         Assert.jsonObjectHaveKey(reqJson, "roomId", "请求报文中未包含roomId节点");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(reqJson, "roomNum", "请求报文中未包含roomNum节点");
@@ -64,7 +67,20 @@ public class UpdateRoomListener extends AbstractServiceApiPlusListener {
             Assert.isMoney(reqJson.getString("feeCoefficient"), "算费系数数据格式错误");
         }
 
-
+        //获取房屋状态
+        String state = reqJson.getString("state");
+        if (!StringUtil.isEmpty(state) && state.equals("2006")) { //已出租
+            //获取起租时间
+            String startTime = reqJson.getString("startTime");
+            //获取截租时间
+            String endTime = reqJson.getString("endTime");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date beginTime = format.parse(startTime);
+            Date finishTime = format.parse(endTime);
+            if (beginTime.getTime() > finishTime.getTime()) {
+                throw new IllegalArgumentException("起租时间不能大于截租时间！");
+            }
+        }
 
         UnitDto unitDto = new UnitDto();
         unitDto.setCommunityId(reqJson.getString("communityId"));
