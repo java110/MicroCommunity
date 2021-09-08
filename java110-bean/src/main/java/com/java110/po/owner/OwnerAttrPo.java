@@ -9,6 +9,7 @@ public class OwnerAttrPo implements Serializable {
     private String communityId;
     private String value;
     private String memberId;
+    private String statusCd = "0";
 
     public String getAttrId() {
         return attrId;
@@ -50,5 +51,11 @@ public class OwnerAttrPo implements Serializable {
         this.memberId = memberId;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
 }

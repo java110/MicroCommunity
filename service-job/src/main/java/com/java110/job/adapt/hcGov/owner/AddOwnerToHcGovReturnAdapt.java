@@ -67,6 +67,7 @@ public class AddOwnerToHcGovReturnAdapt implements IReportReturnDataAdapt {
         ownerAttrPo.setMemberId(ownerAttrDto.getMemberId());
         ownerAttrPo.setSpecCd(ownerAttrDto.getSpecCd());
         ownerAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extOwnerId"));
+        ownerAttrPo.setCommunityId(hcGovTranslateDtos.get(0).getCommunityId());
 
         if (ownerAttr == null || ownerAttr.size() < 1) {
             int flag = ownerAttrInnerServiceSMOImpl.saveOwnerAttr(ownerAttrPo);
