@@ -300,7 +300,8 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         reqJson.put("startUserId", formDatas.get(0).get("create_user_id"));
 
         //业务办理
-        if ("1100".equals(reqJson.getString("auditCode"))) { //办理操作
+        if ("1100".equals(reqJson.getString("auditCode"))
+                || "1500".equals(reqJson.getString("auditCode"))) { //办理操作
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
             if (isLastTask) {
@@ -351,7 +352,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         paramMap.put("row", 1);
         List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
         Assert.listOnlyOne(formDatas, "表单数据不存在");
-        reqJson.put("startUserId",formDatas.get(0).get("create_user_id"));
+        reqJson.put("startUserId", formDatas.get(0).get("create_user_id"));
         List<JSONObject> tasks = oaWorkflowUserInnerServiceSMOImpl.nextAllNodeTaskList(reqJson);
         return ResultVo.createResponseEntity(tasks);
     }

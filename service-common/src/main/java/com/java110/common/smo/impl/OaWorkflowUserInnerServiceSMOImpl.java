@@ -553,7 +553,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
         JSONObject taskObj = null;
         taskObj = new JSONObject();
-        taskObj.put("assignee", "-1"); //  默认 不需要指定下一个处理人
+        taskObj.put("assignee", "-1"); //  默认 不需要指定下一个处理人 表示结束
         boolean isReturn = false;
         //遍历输出连线
         for (SequenceFlow outgoingFlow : outgoingFlows) {
