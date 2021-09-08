@@ -78,12 +78,14 @@ public class ListStaffFinishRepairsListener extends AbstractServiceApiListener {
         String userId = reqJson.getString("userId");
         String viewListStaffRepairs = MappingCache.getValue("viewListStaffRepairs");
         List<Map> privileges = null;
-//        if("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
+        //这里加开关 其实让管理员看到所有单子这么做，不太优雅，建议 单独开发页面功能
+        // 不要影响已办功能，add by 吴学文 2021-09-09
+        if("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
             BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
             basePrivilegeDto.setResource("/listStaffFinishRepairs");
             basePrivilegeDto.setUserId(userId);
             privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-//        }
+        }
         if (privileges == null || privileges.size()==0) {
             ownerRepairDto.setStaffId(reqJson.getString("userId"));
         }
