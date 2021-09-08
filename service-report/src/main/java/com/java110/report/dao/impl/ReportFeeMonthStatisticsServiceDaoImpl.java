@@ -75,6 +75,18 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         }
     }
 
+
+    @Override
+    public void deleteReportFeeMonthStatisticsInfo(Map info) {
+        logger.debug("deleteReportFeeMonthStatisticsInfo 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.update("reportFeeMonthStatisticsServiceDaoImpl.deleteReportFeeMonthStatisticsInfo", info);
+
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改费用月统计信息Instance数据失败：" + JSONObject.toJSONString(info));
+        }
+    }
+
     /**
      * 修改费用月统计信息
      *
@@ -332,6 +344,7 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
         return businessReportFeeMonthStatisticsInfos;
     }
+
 
     @Override
     public Map queryPayFeeDetailCount(Map info) {

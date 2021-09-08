@@ -54,7 +54,7 @@ public class ReportFeeYearCollectionInnerServiceSMOImpl extends BaseServiceSMO i
     public int deleteReportFeeYearCollection(@RequestBody ReportFeeYearCollectionPo reportFeeYearCollectionPo) {
         int saveFlag = 1;
         reportFeeYearCollectionPo.setStatusCd("1");
-        reportFeeYearCollectionServiceDaoImpl.updateReportFeeYearCollectionInfo(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionPo));
+        reportFeeYearCollectionServiceDaoImpl.deleteReportFeeYearCollectionInfo(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionPo));
         return saveFlag;
     }
 

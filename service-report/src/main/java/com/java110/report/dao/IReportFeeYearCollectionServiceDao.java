@@ -50,6 +50,13 @@ public interface IReportFeeYearCollectionServiceDao {
      */
     void updateReportFeeYearCollectionInfo(Map info) throws DAOException;
 
+    /**
+     * 修改费用年收费信息
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    void deleteReportFeeYearCollectionInfo(Map info) throws DAOException;
+
 
     /**
      * 查询费用年收费总数

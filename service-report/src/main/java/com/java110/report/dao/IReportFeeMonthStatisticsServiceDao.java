@@ -325,4 +325,6 @@ public interface IReportFeeMonthStatisticsServiceDao {
     int queryHuaningOweFeeDetailCount(Map paramInfo);
 
     List<Map> queryHuaningOweFeeDetail(Map beanCovertMap);
+
+    void deleteReportFeeMonthStatisticsInfo(Map beanCovertMap);
 }
