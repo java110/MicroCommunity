@@ -11,6 +11,7 @@ import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,26 @@ public class SaveCommunityListener extends AbstractServiceApiPlusListener {
         workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
         workflowPo.setStoreId(reqJson.getString("storeId"));
         super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+
+        WorkflowPo workflowPo1 = null;
+        workflowPo1 = new WorkflowPo();
+        workflowPo1.setCommunityId(reqJson.getString("communityId"));
+        workflowPo1.setFlowId("-2");
+        workflowPo1.setFlowName("物品领用");
+        workflowPo1.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
+        workflowPo1.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+        workflowPo1.setStoreId(reqJson.getString("storeId"));
+        super.insert(context, workflowPo1, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+
+        WorkflowPo workflowPo2 = new WorkflowPo();
+        workflowPo2.setCommunityId(reqJson.getString("communityId")); //被调拨小区
+        workflowPo2.setFlowId("-5");
+        workflowPo2.setFlowName("物品被调拨");
+        workflowPo2.setFlowType(WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO);
+        workflowPo2.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+        workflowPo2.setStoreId(reqJson.getString("storeId"));
+        super.insert(context, workflowPo2, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+
     }
 
 

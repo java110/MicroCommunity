@@ -83,10 +83,14 @@
         rst.name rstName,
         rss.spec_name specName,
         rs.sh_id shId,
+        td4.name unitCodeName,
+        td5.name miniUnitCodeName,
         sh.sh_name shName
         from purchase_apply_detail t
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.status_cd = '0'
         left join resource_store rs on rs.res_id = t.res_id and rs.status_cd = '0'
+        left join t_dict td4 on rs.unit_code = td4.status_cd and td4.table_name = 'resource_store' and td4.table_columns = 'unit_code'
+        left join t_dict td5 on rs.mini_unit_code = td5.status_cd and td5.table_name = 'resource_store' and td5.table_columns = 'unit_code'
         left join storehouse sh on rs.sh_id = sh.sh_id and sh.status_cd = '0'
         left join resource_supplier rsp on rsp.rs_id = t.rs_id
         left join t_dict td1 on pa.res_order_type = td1.status_cd and td1.table_name = 'purchase_apply' and

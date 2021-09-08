@@ -93,6 +93,8 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
             refreshRoomOwners(userId, reqJson.getString("communityId"), roomDtoList, flag);
 
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
+        } else {
+            throw new IllegalArgumentException("查询业主房屋错误！");
         }
         int row = reqJson.getInteger("row");
         apiRoomVo.setRecords((int) Math.ceil((double) total / (double) row));

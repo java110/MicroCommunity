@@ -3,8 +3,11 @@ package com.java110.common.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
+import com.java110.dto.area.AreaDto;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.storehouse.StorehouseDto;
+import com.java110.dto.userLogin.UserLoginDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
@@ -12,6 +15,8 @@ import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
+import com.java110.intf.store.IStorehouseInnerServiceSMO;
+import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
@@ -38,6 +43,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.java110.dto.storehouse.StorehouseDto.SH_TYPE_GROUP;
+
 //@Service("resourceEntryStoreSMOImpl")
 @RestController
 public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO implements IAllocationStorehouseUserInnerServiceSMO {
@@ -60,6 +67,10 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
     @Autowired
     private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
+    @Autowired
+    private IStorehouseInnerServiceSMO iStorehouseInnerServiceSMO;
+
+
     /**
      * 启动流程
      *
@@ -71,8 +82,22 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         variables.put("allocationStorehouseApplyDto", allocationStorehouseApplyDto);
         variables.put("userId", allocationStorehouseApplyDto.getCurrentUserId());
         variables.put("startUserId", allocationStorehouseApplyDto.getCurrentUserId());
+        //查询调拨源仓库是集团仓库还是小区仓库，小区仓库走被调拨流程审批
+        StorehouseDto storehouseDto = new StorehouseDto();
+        storehouseDto.setShId(allocationStorehouseApplyDto.getShId());
+        List<StorehouseDto> storehouseDtoList = iStorehouseInnerServiceSMO.queryStorehouses(storehouseDto);
+        StorehouseDto storehouseDto1 = new StorehouseDto();
+        String communityId = null;
+        if (storehouseDtoList != null && storehouseDtoList.size() == 1) {
+            storehouseDto1 = storehouseDtoList.get(0);
+        }
+        if (SH_TYPE_GROUP.equals(storehouseDto1.getShType())) {//集团仓库
+            communityId = "9999";
+        } else {//小区仓库
+            communityId = storehouseDto1.getShObjId();
+        }
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(allocationStorehouseApplyDto.getStoreId()), allocationStorehouseApplyDto.getApplyId(), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(allocationStorehouseApplyDto.getStoreId(), communityId), allocationStorehouseApplyDto.getApplyId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
@@ -107,7 +132,9 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
+        List<String> workflowlist = getWorkflowDto1(user.getStoreId());
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKeyIn(workflowlist);
+//        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId(), user.getCommunityId()));
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -119,7 +146,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
      */
     public List<AllocationStorehouseApplyDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey(getWorkflowDto(user.getStoreId()));
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKeyIn(getWorkflowDto1(user.getStoreId()));
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
@@ -190,21 +217,46 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         return true;
     }
 
-
-    private String getWorkflowDto(String storeId) {
+    private String getWorkflowDto(String storeId, String communityId) {
         //开启流程
         //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
         WorkflowDto workflowDto = new WorkflowDto();
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE);
+        if (!StringUtil.isEmpty(communityId) && "9999".equals(communityId)) {
+            workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE);
+        } else {
+            workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO);
+        }
         workflowDto.setStoreId(storeId);
+        workflowDto.setCommunityId(communityId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
-        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
-
+        Assert.listOnlyOne(workflowDtos, "未找到 调拨流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
-            throw new IllegalArgumentException("合同起草续签流程还未部署");
+            throw new IllegalArgumentException("调拨流程流程还未部署");
         }
         return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
+    }
+
+    private List<String> getWorkflowDto1(String storeId) {
+
+        //开启流程
+        //WorkflowDto.DEFAULT_PROCESS + workflowDto.getFlowId()
+        WorkflowDto workflowDto = new WorkflowDto();
+        String[] flowTypes = new String[]{WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE, WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO};
+        workflowDto.setFlowTypes(flowTypes);
+        workflowDto.setStoreId(storeId);
+        List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
+        if (workflowDtos != null && workflowDtos.size() == 0) {
+            throw new IllegalArgumentException("未找到 调拨流程或找到多条，请在物业账号系统管理下流程管理中配置流程!");
+        }
+        List<String> flowIdList = new ArrayList<String>();
+        for (WorkflowDto workflowDto1 : workflowDtos) {
+            if (StringUtil.isEmpty(workflowDto1.getProcessDefinitionKey())) {
+                throw new IllegalArgumentException("调拨流程流程还未部署");
+            }
+            flowIdList.add(WorkflowDto.DEFAULT_PROCESS + workflowDto1.getFlowId());
+        }
+        return flowIdList;
     }
 
     /**
@@ -220,7 +272,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
 //                .taskAssignee(user.getUserId());
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey(getWorkflowDto(user.getStoreId()))
+                .processDefinitionKeyIn(getWorkflowDto1(user.getStoreId()))
                 .taskAssignee(user.getUserId())
                 .finished();
         if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
@@ -242,7 +294,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         HistoryService historyService = processEngine.getHistoryService();
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
-                .processDefinitionKey(getWorkflowDto(user.getStoreId()))
+                .processDefinitionKeyIn(getWorkflowDto1(user.getStoreId()))
                 .taskAssignee(user.getUserId())
                 .finished();
 //        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {

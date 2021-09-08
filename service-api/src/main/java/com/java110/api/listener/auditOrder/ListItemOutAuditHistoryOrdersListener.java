@@ -67,6 +67,7 @@ public class ListItemOutAuditHistoryOrdersListener extends AbstractServiceApiLis
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
         auditUser.setStoreId(reqJson.getString("storeId"));
+        auditUser.setCommunityId(reqJson.getString("communityId"));
 
         long count = goodCollectionUserInnerServiceSMOImpl.getUserHistoryTaskCount(auditUser);
         //领用已办（默认只查询和当前登录用户相关并且是参与流程审批或者自己提交已经结束的审批数据）

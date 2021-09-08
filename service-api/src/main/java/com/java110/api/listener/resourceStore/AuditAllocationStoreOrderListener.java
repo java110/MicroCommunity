@@ -216,6 +216,9 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     commit(dataFlowContext);
                 }
             }
+        }else if(allocationStorehouseApplyDtos.get(0).getState().equals("1203")){
+            allocationStorehouseApplyPo.setState( AllocationStorehouseDto.STATE_FAIL);
+            super.update(dataFlowContext, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
         }
     }
 

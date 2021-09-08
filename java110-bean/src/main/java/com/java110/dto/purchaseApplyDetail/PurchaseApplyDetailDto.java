@@ -47,6 +47,8 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
     private String storeId;
     private String shId;
     private String shName;
+    private String unitCodeName;
+    private String miniUnitCodeName;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -318,5 +320,21 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setShName(String shName) {
         this.shName = shName;
+    }
+
+    public String getUnitCodeName() {
+        return unitCodeName;
+    }
+
+    public void setUnitCodeName(String unitCodeName) {
+        this.unitCodeName = unitCodeName;
+    }
+
+    public String getMiniUnitCodeName() {
+        return miniUnitCodeName;
+    }
+
+    public void setMiniUnitCodeName(String miniUnitCodeName) {
+        this.miniUnitCodeName = miniUnitCodeName;
     }
 }

@@ -145,9 +145,7 @@
         <if test="oweAmount !=null and oweAmount != ''">
             , t.owe_amount= #{oweAmount}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="feeCreateTime !=null and feeCreateTime != ''">
             , t.fee_create_time= #{feeCreateTime}
         </if>
@@ -155,9 +153,11 @@
             , t.obj_type= #{objType}
         </if>
         where 1=1
-        <if test="statisticsId !=null and statisticsId != ''">
-            and t.statistics_id= #{statisticsId}
+        and t.statistics_id= #{statisticsId}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
+
     </update>
 
     <!-- 查询费用月统计数量 add by wuxw 2018-07-03 -->
@@ -1083,7 +1083,7 @@
             and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
-            and t.obj_id= #{objId}
+            and pf.payer_obj_id= #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
@@ -1164,7 +1164,7 @@
             and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
-            and t.obj_id= #{objId}
+            and pf.payer_obj_id = #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
@@ -1229,7 +1229,7 @@
             and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
-            and t.obj_id= #{objId}
+            and pf.payer_obj_id= #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
@@ -1294,7 +1294,7 @@
             and pfc.config_id= #{configId}
         </if>
         <if test="objId !=null and objId != ''">
-            and t.obj_id= #{objId}
+            and pf.payer_obj_id= #{objId}
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
@@ -2390,7 +2390,8 @@
     <select id="queryHuaningOweFeeDetailCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
+        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id
+        feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
         from report_owe_fee t
         left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -2404,7 +2405,8 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryHuaningOweFeeDetail" parameterType="Map" resultType="Map">
-        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
+        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id
+        feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
         from report_owe_fee t
         left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'

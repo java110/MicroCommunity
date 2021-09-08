@@ -40,6 +40,8 @@ public class ApiRoomDataVo implements Serializable {
     private String ownerName;
     private String idCard;
     private String link;
+    private String startTime;
+    private String endTime;
 
     private List<RoomAttrDto> roomAttrDto;
 
@@ -123,7 +125,6 @@ public class ApiRoomDataVo implements Serializable {
     public void setApartment(String apartment) {
         this.apartment = apartment;
     }
-
 
     public String getUnitNum() {
         return unitNum;
@@ -251,5 +252,21 @@ public class ApiRoomDataVo implements Serializable {
 
     public void setRoomSubTypeName(String roomSubTypeName) {
         this.roomSubTypeName = roomSubTypeName;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

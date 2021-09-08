@@ -13,11 +13,13 @@ import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairTypeUserInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,6 @@ import java.util.List;
 @Java110Listener("grabbingRepairListener")
 public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
 
-
     private static Logger logger = LoggerFactory.getLogger(GrabbingRepairListener.class);
 
     @Autowired
@@ -49,14 +50,21 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IRepairTypeUserInnerServiceSMO repairTypeUserInnerServiceSMOImpl;
 
+    @Autowired
+    private IRepairTypeUserInnerServiceSMO repairTypeUserInnerServiceSMO;
+
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    //键(维修师傅未处理最大单数)
+    public static final String REPAIR_NUMBER = "REPAIR_NUMBER";
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "userId", "未包含用户ID");
         Assert.hasKeyAndValue(reqJson, "userName", "未包含用户名称");
-
-
     }
 
     @Override
@@ -65,6 +73,19 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
         String key = this.getClass().getSimpleName() + reqJson.getString("repairId");
         try {
             DistributedLock.waitGetDistributedLock(key, requestId);
+            //获取当前处理员工id
+            String staffId = reqJson.getString("userId");
+            RepairUserDto repairUser = new RepairUserDto();
+            repairUser.setStaffId(staffId);
+            repairUser.setState("10001"); //处理中
+            int i = repairUserInnerServiceSMOImpl.queryRepairUsersCount(repairUser);
+            //取出开关映射的值(维修师傅未处理最大单数)
+            String repairNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_NUMBER);
+            if (i >= Integer.parseInt(repairNumber)) {
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您有超过" + Integer.parseInt(repairNumber) + "条未处理的订单急需处理，请处理完成后再进行抢单！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
             RepairDto repairDtoData = new RepairDto();
             repairDtoData.setRepairId(reqJson.getString("repairId"));
             repairDtoData.setCommunityId(reqJson.getString("communityId"));
@@ -74,7 +95,25 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
                 context.setResponseEntity(responseEntity);
                 return;
             }
+            //获取报修类型
             String repairType = repairDtoList.get(0).getRepairType();
+            RepairTypeUserDto repairTypeUser = new RepairTypeUserDto();
+            repairTypeUser.setStaffId(staffId);
+            repairTypeUser.setRepairType(repairType);
+            //查询工单设置表
+            List<RepairTypeUserDto> repairTypeUserDtos = repairTypeUserInnerServiceSMO.queryRepairTypeUsers(repairTypeUser);
+            if (repairTypeUserDtos != null && repairTypeUserDtos.size() != 1) { //报修类型设置未添加改操作的员工！
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "对不起，您还没权限进行此操作，请联系管理员处理！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
+            //获取维修师傅状态
+            String staffState = repairTypeUserDtos.get(0).getState();
+            if (!StringUtil.isEmpty(staffState) && staffState.equals("8888")) { //离线状态
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "员工处于离线状态，无法进行操作！");
+                context.setResponseEntity(responseEntity);
+                return;
+            }
             RepairTypeUserDto repairTypeUserDto = new RepairTypeUserDto();
             repairTypeUserDto.setCommunityId(reqJson.getString("communityId"));
             repairTypeUserDto.setRepairType(repairType);
@@ -85,7 +124,6 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
                 context.setResponseEntity(responseEntity);
                 return;
             }
-
             //获取报修id
             String repairId = reqJson.getString("repairId");
             RepairDto repairDto = new RepairDto();
@@ -104,7 +142,6 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
                     repairUserDto.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
                     List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
                     Assert.listOnlyOne(repairUserDtos, "未找到开始节点或找到多条");
-
                     String userId = reqJson.getString("userId");
                     String userName = reqJson.getString("userName");
                     RepairUserPo repairUserPo = new RepairUserPo();
@@ -120,7 +157,6 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
                     repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
                     repairUserPo.setContext("");
                     repairUserPo.setCommunityId(reqJson.getString("communityId"));
-
                     super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
                     ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
                     ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
@@ -136,7 +172,6 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
         } finally {
             DistributedLock.releaseDistributedLock(requestId, key);
         }
-
     }
 
     @Override

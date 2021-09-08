@@ -95,6 +95,7 @@ public class RepairDto extends PageDto implements Serializable {
     private String visitType;
     private String visitContext;
     private List<String> repairChannels;
+    private String payType;
 
     //业主上传维修图片
     private List<PhotoVo> repairPhotos;
@@ -509,5 +510,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setAverage(String average) {
         this.average = average;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

@@ -33,7 +33,11 @@ public class WorkflowDto extends PageDto implements Serializable {
 
 
     //物品调拨
-    public static final String FLOW_TYPE_ALLOCATION_STOREHOUSE = "70007";//合同变更审核
+    public static final String FLOW_TYPE_ALLOCATION_STOREHOUSE = "70007";//物品调拨
+
+
+    //物品被调拨
+    public static final String FLOW_TYPE_ALLOCATION_STOREHOUSE_GO = "80008";//物品被调拨
 
 
 
@@ -50,6 +54,7 @@ public class WorkflowDto extends PageDto implements Serializable {
     private String flowType;
     private String flowTypeName;
     private String processDefinitionKey;
+    private String operationType;
 
     private String[] flowTypes;
 
@@ -165,5 +170,13 @@ public class WorkflowDto extends PageDto implements Serializable {
 
     public void setFlowTypes(String[] flowTypes) {
         this.flowTypes = flowTypes;
+    }
+
+    public String getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(String operationType) {
+        this.operationType = operationType;
     }
 }

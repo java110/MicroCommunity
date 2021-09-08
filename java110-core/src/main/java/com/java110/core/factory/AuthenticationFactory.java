@@ -19,16 +19,20 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.NoAuthorityException;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.logging.log4j.util.Base64Util;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.InvalidParameterException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -67,6 +71,59 @@ public class AuthenticationFactory {
      * 默认编码
      */
     private static final String CHARSET = "utf-8";
+
+
+        // 加密
+        public static String AesEncrypt(String sSrc, String sKey) throws Exception {
+            if (sKey == null) {
+                System.out.print("Key为空null");
+                return null;
+            }
+            // 判断Key是否为16位
+            if (sKey.length() != 16) {
+                System.out.print("Key长度不是16位");
+                return null;
+            }
+            byte[] raw = sKey.getBytes("utf-8");
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");//"算法/模式/补码方式"
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+            byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
+
+            return Base64Convert.byteToBase64(encrypted);//此处使用BASE64做转码功能，同时能起到2次加密的作用。
+        }
+
+        // 解密
+        public static String AesDecrypt(String sSrc, String sKey) throws Exception {
+            try {
+                // 判断Key是否正确
+                if (sKey == null) {
+                    System.out.print("Key为空null");
+                    return null;
+                }
+                // 判断Key是否为16位
+                if (sKey.length() != 16) {
+                    System.out.print("Key长度不是16位");
+                    return null;
+                }
+                byte[] raw = sKey.getBytes("utf-8");
+                SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+                Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+                byte[] encrypted1 = Base64Convert.base64ToByte(sSrc);//先用base64解密
+                try {
+                    byte[] original = cipher.doFinal(encrypted1);
+                    String originalString = new String(original,"utf-8");
+                    return originalString;
+                } catch (Exception e) {
+                    System.out.println(e.toString());
+                    return null;
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.toString());
+                return null;
+            }
+        }
 
 
     /**
