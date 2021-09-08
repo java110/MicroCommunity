@@ -96,7 +96,7 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
         //取出开关映射的值(维修师傅未处理最大单数)
         String repairFeeNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_FEE_NUMBER);
-        if (feeDtos != null && !StringUtil.isInteger(repairFeeNumber) && feeDtos.size() >= Integer.parseInt(repairFeeNumber)) {
+        if (feeDtos != null && StringUtil.isInteger(repairFeeNumber) && feeDtos.size() >= Integer.parseInt(repairFeeNumber)) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "该房屋存在" + Integer.parseInt(repairFeeNumber) + "条未处理的费用，请缴费后再进行报修！");
             context.setResponseEntity(responseEntity);
             return;
