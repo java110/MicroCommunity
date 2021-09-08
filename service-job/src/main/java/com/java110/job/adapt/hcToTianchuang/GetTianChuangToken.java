@@ -50,7 +50,7 @@ public class GetTianChuangToken {
      *
      * @return
      */
-    private HttpHeaders getHeaders(String serviceId,String data) {
+    public static HttpHeaders getHeaders(String serviceId,String data) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("appId", TianChuangConstant.getAppId());
         httpHeaders.add("token", get(data));

@@ -32,92 +32,35 @@ public class TianChuangConstant {
     public static final String TC_APP_SECRET = "TC_APP_SECRET"; // 物联网域
 
     private static final String DEFAULT_TC_URL = "http://112.51.96.125:9080/ywxzservice/dbClient.do";
-    //122350112432
+    //
     private static final String DEFAULT_APP_ID = "26810B9FE0532D03";
     private static final String DEFAULT_APP_SECRET = "CAD3218426800B9FE0532D03A8C0310E";
+    private static final String DEFAULT_COMPANY = "122350112432"; //单位编号
 
-    public static final String GET_TOKEN_URL = "/extApi/auth/getAccessToken?appId=APP_ID&appSecret=APP_SECRET";
+    private static final String TC_COMPANY = "COMPANY";//公司
 
-    //添加小区
-    public static final String ADD_COMMUNITY_URL = "/extApi/community/addCommunity";
-    //修改小区
-    public static final String UPDATE_COMMUNITY_URL = "/extApi/community/updateCommunity";
-    //删除小区
-    public static final String DELETE_COMMUNITY_URL = "/extApi/community/deleteCommunity";
+    //政务小区编码/楼栋外部便阿门/房屋外部编码/业主外部编码 SPEC_CD
+    public static final String EXT_TC_COMMUNITY_ID = "1329000004";
+    //政务小区编码/楼栋外部便阿门/房屋外部编码/业主外部编码 SPEC_CD
+    public static final String EXT_TC_MACHINE_ID = "1329000004";
+    public static final String EXT_TC_OWNER_ID = "1329000004";
 
-    //添加设备
-    public static final String ADD_MACHINE_URL = "/extApi/machine/addMachine";
-    //修改设备
-    public static final String UPDATE_MACHINE_URL = "/extApi/machine/updateMachine";
-    //删除设备
-    public static final String DELETE_MACHINE_URL = "/extApi/machine/deleteMachine";
+    //政务小区编码/楼栋外部便阿门/房屋外部编码/业主外部编码 SPEC_CD
+    public static final String EXT_TC_COMMUNITY_QRCODE = "3329000004";
 
-    //添加停车场
-    public static final String ADD_PARKING_AREA_URL = "/extApi/parkingArea/addParkingArea";
-    //修改停车场
-    public static final String UPDATE_PARKING_AREA_URL = "/extApi/parkingArea/updateParkingArea";
-    //删除停车场
-    public static final String DELETE_PARKING_AREA_URL = "/extApi/parkingArea/deleteParkingArea";
+    public static final String EXT_TC_ROOM_QRCODE = "3329000004";
 
-    //添加车辆
-    public static final String ADD_OWNER_CAR_URL = "/extApi/car/addCar";
-    //修改车辆
-    public static final String UPDATE_OWNER_CAR_URL = "/extApi/car/updateCar";
-    //删除车辆
-    public static final String DELETE_OWNER_CAR_URL = "/extApi/car/deleteCar";
+    public static final String SERVICE_ID_COMMUNITY = "ZHSQ_XQSBXX";
 
-    //添加车辆
-    public static final String ADD_CAR_BLACK_WHITE_URL = "/extApi/car/addBlackWhite";
+    public static final String SERVICE_ID_MACHINE = "ZHSQ_MJSBXX";
 
-    //删除车辆
-    public static final String DELETE_CAR_BLACK_WHITE_URL = "/extApi/car/deleteBlackWhite";
+    public static final String SERVICE_ID_OWNER = "ZHSQ_ZHXX";
 
-    //开门接口
-    public static final String OPEN_DOOR = "/extApi/machine/openDoor";
+    public static final String SERVICE_ID_PERSON_INOUT = "ZHSQ_RYJCJL";
 
-    //获取二维码
-    public static final String GET_QRCODE = "/extApi/machine/getQRcode";
-    //重启接口
-    public static final String RESTART_MACHINE = "/extApi/machine/restartMachine";
-
-    //查询临时停车费订单
-    public static final String GET_TEMP_CAR_FEE_ORDER = "/extApi/fee/getTempCarFeeOrder";
-
-    //查询临时停车费订单
-    public static final String NOTIFY_TEMP_CAR_FEE_ORDER = "/extApi/fee/notifyTempCarFeeOrder";
-
-    //添加车辆
-    public static final String ADD_TEAM_CAR_FEE_CONFIG = "/extApi/fee/addTempCarFee";
-    //修改车辆
-    public static final String UPDATE_TEAM_CAR_FEE_CONFIG = "/extApi/fee/updateTempCarFee";
-    //删除车辆
-    public static final String DELETE_TEAM_CAR_FEE_CONFIG = "/extApi/fee/deleteTempCarFee";
-
-    //添加考勤班次
-    public static final String ADD_ATTENDANCE_CLASSES_STAFFS = "/extApi/attendance/addAttendanceClassStaffs";
-
-
-    //删除考勤班次
-    public static final String DELETE_ATTENDANCE_CLASSES_STAFFS = "/extApi/attendance/deleteAttendanceClassStaff";
-
-    //添加考勤班次
-    public static final String ADD_ATTENDANCE_CLASSES = "/extApi/attendance/addAttendanceClass";
-    //修改考勤班次
-    public static final String UPDATE_ATTENDANCE_CLASSES = "/extApi/attendance/updateAttendanceClass";
-    //删除考勤班次
-    public static final String DELETE_ATTENDANCE_CLASSES = "/extApi/attendance/deleteAttendanceClass";
-
-    public static final String HC_TOKEN = "HC_ACCESS_TOKEN";
-
-    //单位为秒
-    public static final int DEFAULT_LOG_TIME = 5 * 60;
-
-    //添加业主
-    public static final String ADD_OWNER = "/extApi/user/addUser";
-    public static final String EDIT_OWNER = "/extApi/user/updateUser";
-    public static final String DELETE_OWNER = "/extApi/user/deleteUser";
-
-
+    public static String getUrl() {
+        return getUrl("");
+    }
     public static String getUrl(String param) {
         String url = MappingCache.getValue(TC_DOMAIN, TianChuangConstant.TC_URL);
 
@@ -143,6 +86,16 @@ public class TianChuangConstant {
 
         if (StringUtil.isEmpty(appSecret)) {
             return DEFAULT_APP_SECRET;
+        }
+
+        return appSecret;
+    }
+
+    public static String getCompany() {
+        String appSecret = MappingCache.getValue(TC_DOMAIN, TianChuangConstant.TC_COMPANY);
+
+        if (StringUtil.isEmpty(appSecret)) {
+            return DEFAULT_COMPANY;
         }
 
         return appSecret;

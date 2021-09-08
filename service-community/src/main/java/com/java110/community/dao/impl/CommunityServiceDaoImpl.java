@@ -489,5 +489,14 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
         return businessCommunityInfos;
     }
 
+    @Override
+    public int saveCommunityAttr(Map info) {
+        logger.debug("小区成员加入Instance 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.insert("communityServiceDaoImpl.saveCommunityAttr", info);
+
+        return saveFlag;
+    }
+
 
 }
