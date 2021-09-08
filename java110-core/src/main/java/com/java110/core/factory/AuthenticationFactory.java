@@ -22,7 +22,6 @@ import com.java110.utils.exception.NoAuthorityException;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.logging.log4j.util.Base64Util;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
@@ -32,15 +31,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.InvalidParameterException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.MessageDigest;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -73,8 +64,9 @@ public class AuthenticationFactory {
     private static final String CHARSET = "utf-8";
 
 
-        // 加密
-        public static String AesEncrypt(String sSrc, String sKey) throws Exception {
+    // 加密
+    public static String AesEncrypt(String sSrc, String sKey) {
+        try {
             if (sKey == null) {
                 System.out.print("Key为空null");
                 return null;
@@ -91,39 +83,43 @@ public class AuthenticationFactory {
             byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
 
             return Base64Convert.byteToBase64(encrypted);//此处使用BASE64做转码功能，同时能起到2次加密的作用。
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return "";
+    }
 
-        // 解密
-        public static String AesDecrypt(String sSrc, String sKey) throws Exception {
-            try {
-                // 判断Key是否正确
-                if (sKey == null) {
-                    System.out.print("Key为空null");
-                    return null;
-                }
-                // 判断Key是否为16位
-                if (sKey.length() != 16) {
-                    System.out.print("Key长度不是16位");
-                    return null;
-                }
-                byte[] raw = sKey.getBytes("utf-8");
-                SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-                Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-                cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-                byte[] encrypted1 = Base64Convert.base64ToByte(sSrc);//先用base64解密
-                try {
-                    byte[] original = cipher.doFinal(encrypted1);
-                    String originalString = new String(original,"utf-8");
-                    return originalString;
-                } catch (Exception e) {
-                    System.out.println(e.toString());
-                    return null;
-                }
-            } catch (Exception ex) {
-                System.out.println(ex.toString());
+    // 解密
+    public static String AesDecrypt(String sSrc, String sKey) {
+        try {
+            // 判断Key是否正确
+            if (sKey == null) {
+                System.out.print("Key为空null");
                 return null;
             }
+            // 判断Key是否为16位
+            if (sKey.length() != 16) {
+                System.out.print("Key长度不是16位");
+                return null;
+            }
+            byte[] raw = sKey.getBytes("utf-8");
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+            byte[] encrypted1 = Base64Convert.base64ToByte(sSrc);//先用base64解密
+            try {
+                byte[] original = cipher.doFinal(encrypted1);
+                String originalString = new String(original, "utf-8");
+                return originalString;
+            } catch (Exception e) {
+                System.out.println(e.toString());
+                return null;
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+            return null;
         }
+    }
 
 
     /**
@@ -463,6 +459,7 @@ public class AuthenticationFactory {
         String newSign = md5(reportDataHeaderDto.getTranId() + reportDataHeaderDto.getReqTime() + reportDataDto.getReportDataBodyDto().toJSONString() + code).toLowerCase();
         reportDataHeaderDto.setSign(newSign);
     }
+
     /**
      * 加载公钥
      *

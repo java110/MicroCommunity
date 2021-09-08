@@ -12,6 +12,11 @@
         #{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate},#{communityArea},#{tel})
     </insert>
 
+    <!-- 保存小区属性信息  add by wuxw 2018-07-03 -->
+    <insert id="saveCommunityAttr" parameterType="Map">
+        insert into s_community_attr(b_id,attr_id,community_id,spec_cd,value,month,status_cd)
+        values(#{bId},#{attrId},#{communityId},#{specCd},#{value},#{month},#{statusCd})
+    </insert>
 
 
     <!-- 保存小区属性信息  add by wuxw 2018-07-03 -->
