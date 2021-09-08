@@ -89,9 +89,7 @@
         update report_fee_month_statistics t set
         t.owe_amount= #{oweAmount}
         where 1=1
-        <if test="statisticsId !=null and statisticsId != ''">
             and t.statistics_id= #{statisticsId}
-        </if>
         <if test="curMaxTime !=null ">
             and t.cur_max_time &lt;= #{curMaxTime}
         </if>
@@ -159,6 +157,26 @@
         </if>
 
     </update>
+
+    <!-- 修改费用月统计信息 add by wuxw 2018-07-03 -->
+    <update id="deleteReportFeeMonthStatisticsInfo" parameterType="Map">
+        update report_fee_month_statistics t set t.status_cd = '1'
+        where 1=1
+        <if test="statisticsId !=null and statisticsId != ''">
+            and t.statistics_id= #{statisticsId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+
+    </update>
+
 
     <!-- 查询费用月统计数量 add by wuxw 2018-07-03 -->
     <select id="queryReportFeeMonthStatisticssCount" parameterType="Map" resultType="Map">

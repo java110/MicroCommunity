@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service("getReportOweFeeBMOImpl")
 public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
@@ -41,7 +39,15 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         } else {
             reportOweFeeDtos = new ArrayList<>();
         }
-
+        //按照 amountOwed 降序排列
+        // reportOweFeeDtos.sort(Comparator.comparing(ReportOweFeeDto :: getAmountOwed).reversed());
+        Collections.sort(reportOweFeeDtos, new Comparator<ReportOweFeeDto>() {
+            @Override
+            public int compare(ReportOweFeeDto o1, ReportOweFeeDto o2) {
+                //降序
+                return o2.getAmountOwed().compareTo(o1.getAmountOwed());
+            }
+        });
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportOweFeeDto.getRow()), count, reportOweFeeDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);

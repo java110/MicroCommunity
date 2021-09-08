@@ -300,7 +300,8 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         reqJson.put("startUserId", formDatas.get(0).get("create_user_id"));
 
         //业务办理
-        if ("1100".equals(reqJson.getString("auditCode"))) { //办理操作
+        if ("1100".equals(reqJson.getString("auditCode"))
+                || "1500".equals(reqJson.getString("auditCode"))) { //办理操作
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
             if (isLastTask) {
@@ -334,6 +335,24 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
     @Override
     public ResponseEntity<String> getNextTask(JSONObject reqJson) {
+//流程表单是否存在
+        OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
+        oaWorkflowFormDto.setFlowId(reqJson.get("flowId").toString());
+        oaWorkflowFormDto.setStoreId(reqJson.get("storeId").toString());
+        oaWorkflowFormDto.setRow(1);
+        oaWorkflowFormDto.setPage(1);
+        List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
+        Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
+
+        Map paramMap = new HashMap();
+        paramMap.put("storeId", reqJson.getString("storeId"));
+        paramMap.put("id", reqJson.getString("id"));
+        paramMap.put("tableName", oaWorkflowFormDto.getTableName());
+        paramMap.put("page", 1);
+        paramMap.put("row", 1);
+        List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
+        Assert.listOnlyOne(formDatas, "表单数据不存在");
+        reqJson.put("startUserId", formDatas.get(0).get("create_user_id"));
         List<JSONObject> tasks = oaWorkflowUserInnerServiceSMOImpl.nextAllNodeTaskList(reqJson);
         return ResultVo.createResponseEntity(tasks);
     }

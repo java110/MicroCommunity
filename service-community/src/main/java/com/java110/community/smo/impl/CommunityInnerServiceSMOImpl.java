@@ -8,6 +8,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.po.community.CommunityAttrPo;
 import com.java110.po.community.CommunityPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
@@ -99,6 +100,16 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
         logger.debug("queryCommunityAttrsCount：{}", JSONObject.toJSONString(communityAttrDto));
 
         return communityServiceDaoImpl.getCommunityAttrsCount(BeanConvertUtil.beanCovertMap(communityAttrDto));
+    }
+
+    /**
+     * 保存小区属性
+     * @param communityAttrPo 数据对象分享
+     * @return
+     */
+    @Override
+    public int saveCommunityAttr(CommunityAttrPo communityAttrPo) {
+        return communityServiceDaoImpl.saveCommunityAttr(BeanConvertUtil.beanCovertMap(communityAttrPo));
     }
 
     @Override

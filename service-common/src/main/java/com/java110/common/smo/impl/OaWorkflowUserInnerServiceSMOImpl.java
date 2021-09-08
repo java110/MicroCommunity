@@ -18,17 +18,8 @@ import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.EndEvent;
-import org.activiti.bpmn.model.FlowElement;
-import org.activiti.bpmn.model.FlowNode;
-import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.bpmn.model.*;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
@@ -562,6 +553,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
         JSONObject taskObj = null;
         taskObj = new JSONObject();
+        taskObj.put("assignee", "-1"); //  默认 不需要指定下一个处理人 表示结束
         boolean isReturn = false;
         //遍历输出连线
         for (SequenceFlow outgoingFlow : outgoingFlows) {
@@ -584,21 +576,31 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
                     taskObj.put("backIndex", outgoingFlow.getTargetFlowElement().getName());
                     isReturn = true;
                 }
+                //结束
+                vars.put("auditCode", "1500");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    //true 获取输出节点名称
+                    taskObj.put("exit", outgoingFlow.getTargetFlowElement().getName());
+                    isReturn = true;
+                }
                 if (!isReturn) {
                     String assignee = ((UserTask) targetFlowElement).getAssignee();
                     if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < 0) {
                         taskObj.put("assignee", assignee); // 下一节点处理人
                     }
+                    if ("${startUserId}".equals(assignee)) {
+                        taskObj.put("assignee", reqJson.getString("startUserId")); // 开始人
+                    }
+                    if ("${nextUserId}".equals(assignee)) {
+                        taskObj.put("assignee", "-2"); // 需要前台指定
+                    }
+                    taskObj.put("next", outgoingFlow.getTargetFlowElement().getName());
                 }
             }
-
             //如果下一个为 结束节点
             if (targetFlowElement instanceof EndEvent) {
-                Map vars = new HashMap();
-                vars.put("auditCode", "1100");
-                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
-                    taskObj.put("assignee", "-1"); // 没有下一处理人了
-                }
+                //true 获取输出节点名称
+                taskObj.put("exit", "1");
             }
         }
         tasks.add(taskObj);
