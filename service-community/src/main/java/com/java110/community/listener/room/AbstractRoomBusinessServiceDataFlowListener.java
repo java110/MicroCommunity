@@ -54,8 +54,6 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
         businessRoomInfo.put("roomSubType", businessRoomInfo.get("room_sub_type"));
         businessRoomInfo.put("roomRent", businessRoomInfo.get("room_rent"));
         businessRoomInfo.put("roomArea", businessRoomInfo.get("room_area"));
-        businessRoomInfo.put("startTime", businessRoomInfo.get("start_time"));
-        businessRoomInfo.put("endTime", businessRoomInfo.get("end_time"));
         businessRoomInfo.remove("bId");
         businessRoomInfo.put("statusCd", statusCd);
     }
@@ -97,8 +95,6 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
         currentRoomInfo.put("roomSubType", currentRoomInfo.get("room_sub_type"));
         currentRoomInfo.put("roomRent", currentRoomInfo.get("room_rent"));
         currentRoomInfo.put("roomArea", currentRoomInfo.get("room_area"));
-        currentRoomInfo.put("startTime", currentRoomInfo.get("start_time"));
-        currentRoomInfo.put("endTime", currentRoomInfo.get("end_time"));
 
         currentRoomInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRoomServiceDaoImpl().saveBusinessRoomInfo(currentRoomInfo);
