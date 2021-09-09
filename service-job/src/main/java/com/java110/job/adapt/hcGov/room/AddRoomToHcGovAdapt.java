@@ -32,6 +32,7 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.floor.FloorPo;
+import com.java110.po.owner.OwnerPo;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
@@ -99,16 +100,19 @@ public class AddRoomToHcGovAdapt extends DatabusAdaptImpl {
         roomDto.setCommunityId( roomPo.getCommunityId() );
         List<RoomDto>  roomDtos = roomInnerServiceSMOImpl.queryRooms( roomDto );
         Assert.listNotNull(roomDtos, "未查询到房屋信息");
+        roomPo = BeanConvertUtil.covertBean(roomDtos.get(0), RoomPo.class);
 
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(roomPo.getCommunityId());
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
         Assert.listNotNull(communityDtos, "未包含小区信息");
+
         UnitDto unitDto = new UnitDto();
         unitDto.setUnitId( roomPo.getUnitId() );
         unitDto.setCommunityId( roomPo.getCommunityId() );
         List<UnitDto>  unitDtos = unitInnerServiceSMOImpl.queryUnits( unitDto );
         Assert.listNotNull(unitDtos, "未包含单元信息");
+
         unitDto = new UnitDto();
         unitDto.setCommunityId( unitDtos.get( 0 ).getCommunityId() );
         unitDto.setFloorId( unitDtos.get( 0 ).getFloorId() );
