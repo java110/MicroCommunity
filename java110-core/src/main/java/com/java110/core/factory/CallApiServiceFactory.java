@@ -204,6 +204,7 @@ public class CallApiServiceFactory {
         return list;
     }
 
+
     public static ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
         ResponseEntity<String> responseEntity = null;
         long startTime = DateUtil.getCurrentDate().getTime();
@@ -237,7 +238,6 @@ public class CallApiServiceFactory {
         }
         return responseEntity;
     }
-
 
     /**
      * map 参数转 url get 参数 非空值转为get参数 空值忽略

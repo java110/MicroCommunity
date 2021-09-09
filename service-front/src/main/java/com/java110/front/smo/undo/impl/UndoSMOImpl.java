@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 /**
  * 查询carInout服务类
  */
@@ -42,6 +44,9 @@ public class UndoSMOImpl extends AbstractComponentSMO implements IUndoSMO {
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
 
+        Map<String, Object> headers = pd.getHeaders();
+        headers.put("user-id", result.getUserId());
+        headers.put("store-id", result.getStoreId());
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("userId", result.getUserId());
         paramIn.put("staffId", result.getUserId());
