@@ -17,6 +17,7 @@ import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeReturnPayFeeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
@@ -54,6 +55,13 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "state", "state不能为空");
         Assert.hasKeyAndValue(reqJson, "feeId", "feeId不能为空");
 
+        if(reqJson.containsKey("cycles")){
+            String cycles = reqJson.getString("cycles");
+            if(!cycles.startsWith("-")){
+                throw new IllegalArgumentException("退费周期必须负数");// 这里必须传入负数，否则费用自动相加不会退费
+            }
+        }
+
         FeeDetailDto feeDetailDto = new FeeDetailDto();
         feeDetailDto.setDetailId(reqJson.getString("detailId"));
         feeDetailDto.setFeeId(reqJson.getString("feeId"));
@@ -71,13 +79,14 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiPlusListener {
 
         //退费审核通过
         if ("1100".equals(reqJson.getString("state"))) {
+            //判断退费周期是否为负数如果不是 抛出异常
+            String cycles = reqJson.getString("cycles");
             reqJson.put("state", "1300");
             reqJson.put("startTime", DateUtil.getFormatTimeString(feeDetailDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
             reqJson.put("endTime", DateUtil.getFormatTimeString(feeDetailDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
             returnPayFeeBMOImpl.addFeeDetail(reqJson, context);
 
             reqJson.put("state", "1100");
-            String cycles = (String) reqJson.get("cycles");
             String receivableAmount = (String) reqJson.get("receivableAmount");
             String receivedAmount = (String) reqJson.get("receivedAmount");
             reqJson.put("cycles", unum(cycles));
