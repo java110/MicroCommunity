@@ -71,8 +71,6 @@ public class RoomDto extends PageDto implements Serializable {
 
     private Date createTime;
 
-    private String startTime;
-    private String endTime;
 
     private String statusCd = "0";
 
@@ -366,19 +364,5 @@ public class RoomDto extends PageDto implements Serializable {
         this.roomSubTypeName = roomSubTypeName;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
 }
