@@ -29,12 +29,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,6 +150,7 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflow", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflow(@RequestHeader(value = "store-id") String storeId,
+                                                  @RequestHeader(value = "user-id") String userId,
                                                   @RequestParam(value = "flowId", required = false) String flowId,
                                                   @RequestParam(value = "state", required = false) String state,
                                                   @RequestParam(value = "page") int page,
@@ -165,6 +161,7 @@ public class OaWorkflowApi {
         oaWorkflowDto.setStoreId(storeId);
         oaWorkflowDto.setFlowId(flowId);
         oaWorkflowDto.setState(state);
+        oaWorkflowDto.setUserId(userId);
         return getOaWorkflowBMOImpl.get(oaWorkflowDto);
     }
 

@@ -49,7 +49,6 @@ public class UndoSMOImpl extends AbstractComponentSMO implements IUndoSMO {
         headers.put("store-id", result.getStoreId());
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("userId", result.getUserId());
-        paramIn.put("staffId", result.getUserId());
 
         JSONObject doing = new JSONObject();
         //查询 报修待办
@@ -64,6 +63,8 @@ public class UndoSMOImpl extends AbstractComponentSMO implements IUndoSMO {
         } else {
             doing.put("repair", "0");
         }
+        paramIn.put("staffId", result.getUserId());
+
 
         apiUrl = ServiceConstant.SERVICE_API_URL + "/api/auditUser.listAuditComplaints" + mapToUrlParam(paramIn);
         responseEntity = this.callCenterService(restTemplate, pd, "",
