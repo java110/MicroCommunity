@@ -1,5 +1,6 @@
 package com.java110.job.adapt.hcGov.asyn;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public interface BaseHcGovSendAsyn {

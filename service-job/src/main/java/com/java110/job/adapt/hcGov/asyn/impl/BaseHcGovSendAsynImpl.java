@@ -1,5 +1,6 @@
 package com.java110.job.adapt.hcGov.asyn.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.reportData.ReportDataHeaderDto;

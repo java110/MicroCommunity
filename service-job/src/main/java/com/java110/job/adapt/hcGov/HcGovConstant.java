@@ -53,6 +53,13 @@ public class HcGovConstant {
     //修改业主
     public static final String EDIT_OWNER_ACTION = "EDIT_OWNER";
 
+    //添加员工
+    public static final String ADD_STAFF_ACTION = "ADD_STAFF";
+    //修改员工
+    public static final String EDIT_STAFF_ACTION = "EDIT_STAFF";
+    //添加商户company
+    public static final String ADD_COMPANY_ACTION = "ADD_COMPANY";
+
     //添加位置
     public static final String ADD_LOCATION_ACTION = "ADD_LOCATION";
     //修改位置
@@ -66,5 +73,11 @@ public class HcGovConstant {
         String newSign = AuthenticationFactory.md5(header.getString("tranId") + header.getString("reqTime") + body.toJSONString() + code).toLowerCase();
         header.put("sign",newSign);
     }
+
+    //商户属性编码
+    public static final String STORE_ATTR_ARTIFICIALPERSON = "100201903001"; //企业法人
+    public static final String STORE_ATTR_REGISTERTIME = "100201903003"; //成立日期
+    public static final String STORE_ATTR_IDCARD = "100201903004"; //营业执照
+
 
 }
