@@ -40,7 +40,7 @@ public class GetOaWorkflowBMOImpl implements IGetOaWorkflowBMO {
         List<OaWorkflowDto> oaWorkflowDtos = null;
         if (count > 0) {
             oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
-            computeUserUndoOrder(oaWorkflowDtos);
+            computeUserUndoOrder(oaWorkflowDtos,oaWorkflowDto);
         } else {
             oaWorkflowDtos = new ArrayList<>();
         }
@@ -52,13 +52,13 @@ public class GetOaWorkflowBMOImpl implements IGetOaWorkflowBMO {
         return responseEntity;
     }
 
-    private void computeUserUndoOrder(List<OaWorkflowDto> oaWorkflowDtos) {
+    private void computeUserUndoOrder(List<OaWorkflowDto> oaWorkflowDtos , OaWorkflowDto tmpOaWorkflowDto) {
 
         for(OaWorkflowDto oaWorkflowDto: oaWorkflowDtos){
             if(!"C".equals(oaWorkflowDto.getState())){
                 continue;
             }
-
+            oaWorkflowDto.setUserId(tmpOaWorkflowDto.getUserId());
             doComputeUserUndoOrder(oaWorkflowDto);
         }
     }
