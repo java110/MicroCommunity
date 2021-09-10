@@ -507,10 +507,15 @@ public class OaWorkflowApi {
     @RequestMapping(value = "/getNextTask", method = RequestMethod.GET)
     public ResponseEntity<String> getNextTask(@RequestHeader(value = "store-id") String storeId,
                                               @RequestHeader(value = "user-id") String userId,
+                                              @RequestParam(value = "flowId") String flowId,
+                                              @RequestParam(value = "id") String id,
                                               @RequestParam(value = "taskId") String taskId) {
         JSONObject reqJson = new JSONObject();
         reqJson.put("storeId", storeId);
         reqJson.put("taskId", taskId);
+        reqJson.put("userId", userId);
+        reqJson.put("flowId", flowId);
+        reqJson.put("id", id);
         return getOaWorkflowFormBMOImpl.getNextTask(reqJson);
     }
 
