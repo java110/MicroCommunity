@@ -295,7 +295,7 @@
     <select id="queryReportFeeSummary" parameterType="Map" resultType="Map">
         select t.fee_year feeYear,t.fee_month feeMonth,t.create_time createTime,SUM(t.receivable_amount)
         receivableAmount,SUM(t.received_amount)
-        receivedAmount,SUM(t.owe_amount) oweAmount
+        receivedAmount,SUM(t.owe_amount) oweAmount,max(t.update_time) updateTime
         from report_fee_month_statistics t
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
