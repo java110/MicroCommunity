@@ -61,7 +61,7 @@ public class UnitServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.queryUnits" + mapToUrlParam(paramIn);
+        String apiUrl = "unit.queryUnits" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
@@ -99,7 +99,7 @@ public class UnitServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.saveUnit";
+        String apiUrl = "unit.saveUnit";
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 apiUrl,
@@ -130,7 +130,7 @@ public class UnitServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.updateUnit";
+        String apiUrl = "unit.updateUnit";
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 apiUrl,
@@ -161,7 +161,7 @@ public class UnitServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.deleteUnit";
+        String apiUrl = "unit.deleteUnit";
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 apiUrl,

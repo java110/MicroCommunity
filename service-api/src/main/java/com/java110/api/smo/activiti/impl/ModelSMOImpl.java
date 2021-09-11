@@ -45,7 +45,7 @@ public class ModelSMOImpl extends DefaultAbstractComponentSMO implements IModelS
                 "", "", "", "", AppDto.WEB_APP_ID);
         ///workflow/getEditorJson
         ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/workflow/getEditorJson?modelId=" + modelId,
+                "/workflow/getEditorJson?modelId=" + modelId,
                 HttpMethod.GET);
 
         return responseEntity;
@@ -57,7 +57,7 @@ public class ModelSMOImpl extends DefaultAbstractComponentSMO implements IModelS
                 "", "", "", "", AppDto.WEB_APP_ID);
         ///workflow/getEditorJson
         ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, JSONObject.toJSONString(workflowModelDto),
-                ServiceConstant.SERVICE_API_URL + "/api/workflow/saveModel",
+                "/workflow/saveModel",
                 HttpMethod.POST);
 
         return responseEntity;

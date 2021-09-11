@@ -81,7 +81,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
 
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payFeePre";
+        String url = "fee.payFeePre";
         responseEntity = super.callCenterService(restTemplate, pd, paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -135,7 +135,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
                 "", "", "", "",
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                "smallWeChat.listSmallWeChats?appId="
                         + paramIn.getString("appId") + "&page=1&row=1&communityId="+paramIn.getString("communityId"), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

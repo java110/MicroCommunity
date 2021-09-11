@@ -28,7 +28,7 @@ public class ListCordersSMOImpl extends DefaultAbstractComponentSMO implements I
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws IOException {
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/corders.listCorders" + mapToUrlParam(paramIn);
+        String apiUrl = "corders.listCorders" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

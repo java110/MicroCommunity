@@ -50,7 +50,7 @@ public class ListAuditAppUserBindingOwnersSMOImpl extends DefaultAbstractCompone
         paramIn.putAll(paramMap);
         paramIn.put("userId", "");
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.listAuditAppUserBindingOwners" + mapToUrlParam(paramIn);
+        String apiUrl = "owner.listAuditAppUserBindingOwners" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

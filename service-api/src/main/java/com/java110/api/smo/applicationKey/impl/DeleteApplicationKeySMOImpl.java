@@ -45,7 +45,7 @@ public class DeleteApplicationKeySMOImpl extends DefaultAbstractComponentSMO imp
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/applicationKey.deleteApplicationKey",
+                "applicationKey.deleteApplicationKey",
                 HttpMethod.POST);
         return responseEntity;
     }

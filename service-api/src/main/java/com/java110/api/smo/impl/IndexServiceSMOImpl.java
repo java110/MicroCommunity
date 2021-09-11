@@ -50,7 +50,7 @@ public class IndexServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/index.queryIndexStatistic" + mapToUrlParam(paramIn),
+                "index.queryIndexStatistic" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody().toString());

@@ -147,7 +147,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/listAllRoomOweFees" + mapToUrlParam(reqJson);
+        apiUrl = "feeApi/listAllRoomOweFees" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -170,7 +170,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
 
         //查询催缴单二维码
         JSONObject feePrint = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feePrintSpec/queryFeePrintSpec?page=1&row=1&specCd=1010&communityId=" + result.getCommunityId();
+        apiUrl = "/feePrintSpec/queryFeePrintSpec?page=1&row=1&specCd=1010&communityId=" + result.getCommunityId();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             JSONObject feePrintResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
@@ -435,7 +435,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
     private JSONArray getExistsRoomFee(IPageData pd, ComponentValidateResult result) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeManualCollection/queryExportCollections?communityId=" + result.getCommunityId();
+        apiUrl = "/feeManualCollection/queryExportCollections?communityId=" + result.getCommunityId();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息

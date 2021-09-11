@@ -44,7 +44,7 @@ public class DeleteMappingSMOImpl extends DefaultAbstractComponentSMO implements
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/mapping.deleteMapping",
+                "mapping.deleteMapping",
                 HttpMethod.POST);
         return responseEntity;
     }

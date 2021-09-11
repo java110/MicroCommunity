@@ -44,7 +44,7 @@ public class AddAppSMOImpl extends DefaultAbstractComponentSMO implements IAddAp
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/app.saveApp",
+                "app.saveApp",
                 HttpMethod.POST);
         return responseEntity;
     }

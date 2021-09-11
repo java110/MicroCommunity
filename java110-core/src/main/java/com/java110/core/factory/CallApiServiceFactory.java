@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class CallApiServiceFactory {
 
-    private static final String URL_API = ServiceConstant.SERVICE_API_URL + "/api/";
+    private static final String URL_API = "";
     //日志
     private static Logger logger = LoggerFactory.getLogger(CallApiServiceFactory.class);
 

@@ -44,7 +44,7 @@ public class DeleteParkingAreaSMOImpl extends DefaultAbstractComponentSMO implem
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/parkingArea.deleteParkingArea",
+                "parkingArea.deleteParkingArea",
                 HttpMethod.POST);
         return responseEntity;
     }

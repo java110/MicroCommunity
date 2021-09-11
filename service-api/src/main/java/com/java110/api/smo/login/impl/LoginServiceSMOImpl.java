@@ -57,7 +57,7 @@ public class LoginServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         }
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("passwd")));
-        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/login.pcUserLogin", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), "login.pcUserLogin", HttpMethod.POST);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
             pd.setToken(userInfo.getString("token"));

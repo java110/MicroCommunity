@@ -48,7 +48,7 @@ public class ListInspectionRoutesSMOImpl extends DefaultAbstractComponentSMO imp
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/inspectionRoute.listInspectionRoutes" + mapToUrlParam(paramIn);
+        String apiUrl = "inspectionRoute.listInspectionRoutes" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

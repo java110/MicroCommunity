@@ -98,7 +98,7 @@ public class AssetExportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONArray getExistsParkSpace(IPageData pd, ComponentValidateResult result) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaces?page=1&row=10000&communityId=" + result.getCommunityId();
+        apiUrl = "parkingSpace.queryParkingSpaces?page=1&row=10000&communityId=" + result.getCommunityId();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -129,7 +129,7 @@ public class AssetExportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONArray getExistsRoom(IPageData pd, ComponentValidateResult result) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRooms?page=1&row=10000&communityId=" + result.getCommunityId();
+        apiUrl = "room.queryRooms?page=1&row=10000&communityId=" + result.getCommunityId();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -152,7 +152,7 @@ public class AssetExportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONArray getExistsUnit(IPageData pd, ComponentValidateResult result, String floorId) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.queryUnits?communityId=" + result.getCommunityId() + "&floorId=" + floorId;
+        apiUrl = "unit.queryUnits?communityId=" + result.getCommunityId() + "&floorId=" + floorId;
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -168,7 +168,7 @@ public class AssetExportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONArray getExistsFloor(IPageData pd, ComponentValidateResult result) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?page=1&row=100&communityId=" + result.getCommunityId();
+        apiUrl = "floor.queryFloors?page=1&row=100&communityId=" + result.getCommunityId();
 
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
@@ -207,7 +207,7 @@ public class AssetExportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONArray getExistsOwner(IPageData pd, ComponentValidateResult result, String roomId) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.queryOwners?page=1&row=10000&communityId=" + result.getCommunityId()
+        apiUrl = "owner.queryOwners?page=1&row=10000&communityId=" + result.getCommunityId()
                 + "&ownerTypeCd=1001";
         if (!StringUtil.isEmpty(roomId)) {
             apiUrl += ("&roomId=" + roomId);
@@ -231,7 +231,7 @@ public class AssetExportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONArray getExistsParkingSpaceCar(IPageData pd, ComponentValidateResult result, String psId) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaceCars?page=1&row=10000&communityId=" + result.getCommunityId();
+        apiUrl = "parkingSpace.queryParkingSpaceCars?page=1&row=10000&communityId=" + result.getCommunityId();
         if (!StringUtil.isEmpty(psId)) {
             apiUrl += ("&psId=" + psId);
         }

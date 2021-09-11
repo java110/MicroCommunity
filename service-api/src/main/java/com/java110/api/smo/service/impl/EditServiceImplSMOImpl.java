@@ -50,7 +50,7 @@ Assert.hasKeyAndValue(paramIn, "retryCount", "必填，请填写重试次数");
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/serviceImpl.updateServiceImpl",
+                "serviceImpl.updateServiceImpl",
                 HttpMethod.POST);
         return responseEntity;
     }

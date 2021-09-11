@@ -55,7 +55,7 @@ public class ChangeStaffPwdSMOImpl extends DefaultAbstractComponentSMO implement
 //        paramIn.put("oldPwd", AuthenticationFactory.passwdMd5(paramIn.getString("oldPwd")));
 //        paramIn.put("newPwd", AuthenticationFactory.passwdMd5(paramIn.getString("newPwd")));
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/user.changeStaffPwd";
+        String apiUrl = "user.changeStaffPwd";
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 apiUrl,

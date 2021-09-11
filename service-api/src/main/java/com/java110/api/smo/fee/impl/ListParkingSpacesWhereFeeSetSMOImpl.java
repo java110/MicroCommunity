@@ -47,7 +47,7 @@ public class ListParkingSpacesWhereFeeSetSMOImpl extends DefaultAbstractComponen
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.listParkingSpacesWhereFeeSet" + mapToUrlParam(paramIn);
+        String apiUrl = "fee.listParkingSpacesWhereFeeSet" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

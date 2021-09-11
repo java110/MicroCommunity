@@ -39,7 +39,7 @@ public class ListAdvertItemSMOImpl extends DefaultAbstractComponentSMO implement
         paramIn.put("row", 50);
         paramIn.put("page", 1);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/advert.listAdvertItems" + mapToUrlParam(paramIn);
+        String apiUrl = "advert.listAdvertItems" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

@@ -48,7 +48,7 @@ public class RoomCreateFeeSMOImpl extends DefaultAbstractComponentSMO implements
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.saveRoomCreateFee";
+        String apiUrl = "fee.saveRoomCreateFee";
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, JSONObject.toJSONString(paramIn),

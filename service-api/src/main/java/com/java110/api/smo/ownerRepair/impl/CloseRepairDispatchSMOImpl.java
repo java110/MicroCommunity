@@ -50,7 +50,7 @@ public class CloseRepairDispatchSMOImpl extends DefaultAbstractComponentSMO impl
         paramIn.put("staffId", result.getUserId());
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCodeRepairDispatchStepConstant.CLOSE_REPAIR_DISPATCH,
+                  ServiceCodeRepairDispatchStepConstant.CLOSE_REPAIR_DISPATCH,
                 HttpMethod.POST);
         return responseEntity;
     }

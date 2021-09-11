@@ -45,7 +45,7 @@ public class DeleteCarBlackWhiteSMOImpl extends DefaultAbstractComponentSMO impl
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/carBlackWhite.deleteCarBlackWhite",
+                "carBlackWhite.deleteCarBlackWhite",
                 HttpMethod.POST);
         return responseEntity;
     }

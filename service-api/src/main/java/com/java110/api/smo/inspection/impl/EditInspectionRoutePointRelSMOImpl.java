@@ -37,7 +37,7 @@ public class EditInspectionRoutePointRelSMOImpl extends DefaultAbstractComponent
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/inspectionRoute.updateInspectionRoutePointRel",
+                "inspectionRoute.updateInspectionRoutePointRel",
                 HttpMethod.POST);
         return responseEntity;
     }

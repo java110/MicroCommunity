@@ -47,7 +47,7 @@ public class ListStoreSMOImpl extends DefaultAbstractComponentSMO implements ILi
 //        Map paramMap = BeanConvertUtil.beanCovertMap(result);
 //        paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/store.listStores" + mapToUrlParam(paramIn);
+        String apiUrl = "store.listStores" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

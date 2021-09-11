@@ -133,7 +133,7 @@ public class FuiouOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
         JSONObject paramIn = JSONObject.parseObject(order);
         paramIn.put("oId", orderId);
         freshFees(paramIn);
-        String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payOweFee";
+        String url = "fee.payOweFee";
         responseEntity = this.callCenterService(restTemplate, "-1", paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -197,7 +197,7 @@ public class FuiouOweFeeToNotifyAdapt implements IOweFeeToNotifyAdapt {
         ResponseEntity responseEntity = null;
 
         responseEntity = this.callCenterService(restTemplate, "-1", "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                "smallWeChat.listSmallWeChats?appId="
                         + appId + "&page=1&row=1", HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

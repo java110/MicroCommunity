@@ -93,7 +93,7 @@ public class ExportMeterWaterSMOImpl extends DefaultAbstractComponentSMO impleme
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/meterWater/queryExportRoomAndMeterWater?page=1&row=10000&communityId="
+        apiUrl = "/meterWater/queryExportRoomAndMeterWater?page=1&row=10000&communityId="
                 + result.getCommunityId() + "&meterType=" + reqJson.getString("meterType");
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 

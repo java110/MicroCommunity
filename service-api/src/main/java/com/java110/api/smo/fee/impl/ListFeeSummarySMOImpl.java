@@ -56,7 +56,7 @@ public class ListFeeSummarySMOImpl extends DefaultAbstractComponentSMO implement
         }
 
         String apiUrl = "";
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.queryFeeSummary" + mapToUrlParam(paramIn);
+        apiUrl = "api.queryFeeSummary" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

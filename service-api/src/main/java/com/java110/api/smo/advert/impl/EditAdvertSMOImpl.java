@@ -50,7 +50,7 @@ public class EditAdvertSMOImpl extends DefaultAbstractComponentSMO implements IE
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/advert.updateAdvert",
+                "advert.updateAdvert",
                 HttpMethod.POST);
         return responseEntity;
     }

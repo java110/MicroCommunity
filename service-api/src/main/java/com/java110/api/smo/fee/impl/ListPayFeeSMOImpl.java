@@ -53,11 +53,11 @@ public class ListPayFeeSMOImpl extends DefaultAbstractComponentSMO implements IL
 
         String apiUrl = "";
         if (!paramIn.containsKey("payObjType") || "3333".equals(paramIn.getString("payObjType"))) {
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getPropertyPayFee" + mapToUrlParam(paramIn);
+            apiUrl = "api.getPropertyPayFee" + mapToUrlParam(paramIn);
         } else if ("6666".equals(paramIn.getString("payObjType"))) {
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
+            apiUrl = "api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
         } else {
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getListPayFee" + mapToUrlParam(paramIn);
+            apiUrl = "api.getListPayFee" + mapToUrlParam(paramIn);
         }
 
 

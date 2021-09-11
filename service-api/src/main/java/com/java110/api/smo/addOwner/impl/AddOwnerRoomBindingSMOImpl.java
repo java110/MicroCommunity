@@ -63,7 +63,7 @@ public class AddOwnerRoomBindingSMOImpl extends DefaultAbstractComponentSMO impl
         newParamIn.put("storeId", result.getStoreId());
         newParamIn.put("state", "2001");
         responseEntity = this.callCenterService(restTemplate, pd, newParamIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/room.sellRoom",
+                "room.sellRoom",
                 HttpMethod.POST);
         return responseEntity;
     }

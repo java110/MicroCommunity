@@ -49,7 +49,7 @@ public class ListAuditEnterCommunitysSMOImpl extends DefaultAbstractComponentSMO
         paramIn.put("memberId", result.getStoreId());
         paramIn.put("storeTypeCd",result.getStoreTypeCd());
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/community.listAuditEnterCommunitys" + mapToUrlParam(paramIn);
+        String apiUrl ="community.listAuditEnterCommunitys" + mapToUrlParam(paramIn);
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,

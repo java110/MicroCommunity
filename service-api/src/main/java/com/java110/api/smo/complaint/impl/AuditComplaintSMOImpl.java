@@ -54,7 +54,7 @@ public class AuditComplaintSMOImpl extends DefaultAbstractComponentSMO implement
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/complaint.auditComplaint" ;
+        String apiUrl = "complaint.auditComplaint" ;
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),

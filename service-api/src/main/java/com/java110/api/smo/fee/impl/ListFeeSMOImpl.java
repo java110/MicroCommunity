@@ -48,7 +48,7 @@ public class ListFeeSMOImpl extends DefaultAbstractComponentSMO implements IList
         paramIn.putAll(paramMap);
         paramIn.put("userId", "");
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.listFee" + mapToUrlParam(paramIn);
+        String apiUrl = "fee.listFee" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

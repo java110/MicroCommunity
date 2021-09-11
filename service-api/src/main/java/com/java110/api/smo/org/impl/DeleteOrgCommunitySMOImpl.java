@@ -47,7 +47,7 @@ public class DeleteOrgCommunitySMOImpl extends DefaultAbstractComponentSMO imple
 
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/org.deleteOrgCommunity",
+                "org.deleteOrgCommunity",
                 HttpMethod.POST);
         return responseEntity;
     }

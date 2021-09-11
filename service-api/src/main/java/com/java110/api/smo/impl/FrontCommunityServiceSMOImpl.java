@@ -56,7 +56,7 @@ public class FrontCommunityServiceSMOImpl extends DefaultAbstractComponentSMO im
         paramIn.put("memberTypeCd", MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd));
         paramIn.putAll(_paramObj);
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/communitys/queryStoreCommunitys" + mapToUrlParam(paramIn),
+                "/communitys/queryStoreCommunitys" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -93,12 +93,12 @@ public class FrontCommunityServiceSMOImpl extends DefaultAbstractComponentSMO im
         //修改用户信息
         if (StringUtil.isEmpty(communityName)) {
             responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.noEnterCommunity.byMember?"
+                    "query.noEnterCommunity.byMember?"
                             + "memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd),
                     HttpMethod.GET);
         } else {
             responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.noEnterCommunity.byMemberAndName?"
+                    "query.noEnterCommunity.byMemberAndName?"
                             + "memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd)
                             + "&name=" + communityName,
                     HttpMethod.GET);
@@ -145,7 +145,7 @@ public class FrontCommunityServiceSMOImpl extends DefaultAbstractComponentSMO im
         _paramObj.put("memberTypeCd", MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd));
 
         responseEntity = this.callCenterService(restTemplate, pd, _paramObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/member.join.community",
+                "member.join.community",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -183,7 +183,7 @@ public class FrontCommunityServiceSMOImpl extends DefaultAbstractComponentSMO im
         paramInObj.put("memberTypeCd", MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd));
 
         responseEntity = this.callCenterService(restTemplate, pd, paramInObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/member.quit.community",
+                "member.quit.community",
                 HttpMethod.POST);
 
         return responseEntity;

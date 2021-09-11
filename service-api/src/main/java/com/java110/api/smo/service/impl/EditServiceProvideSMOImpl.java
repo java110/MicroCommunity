@@ -46,7 +46,7 @@ public class EditServiceProvideSMOImpl extends DefaultAbstractComponentSMO imple
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/serviceProvide.updateServiceProvide",
+                "serviceProvide.updateServiceProvide",
                 HttpMethod.POST);
         return responseEntity;
     }

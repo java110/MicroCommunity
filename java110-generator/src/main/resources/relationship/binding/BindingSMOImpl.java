@@ -40,7 +40,7 @@ public class @@TemplateCode@@BindingSMOImpl extends DefaultAbstractComponentSMO 
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCode@@TemplateCode@@Constant.BINDING_@@TEMPLATECODE@@,
+                 ServiceCode@@TemplateCode@@Constant.BINDING_@@TEMPLATECODE@@,
                 HttpMethod.POST);
         return responseEntity;
     }

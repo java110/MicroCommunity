@@ -64,7 +64,7 @@ public class BusinessTypeServiceSMOImpl extends DefaultAbstractComponentSMO impl
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
        // super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/business.queryBusinessTypeConfig" + mapToUrlParam(paramIn);
+        String apiUrl = "business.queryBusinessTypeConfig" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
@@ -100,7 +100,7 @@ public class BusinessTypeServiceSMOImpl extends DefaultAbstractComponentSMO impl
         paramIn.put("userId", pd.getUserId());
         paramIn.put("storeId", storeId);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/demo.saveDemoConfig",
+                "demo.saveDemoConfig",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -140,7 +140,7 @@ public class BusinessTypeServiceSMOImpl extends DefaultAbstractComponentSMO impl
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/car.editCar",
+                "car.editCar",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -171,7 +171,7 @@ public class BusinessTypeServiceSMOImpl extends DefaultAbstractComponentSMO impl
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/car.deleteCar",
+                "car.deleteCar",
                 HttpMethod.POST);
 
         return responseEntity;

@@ -65,7 +65,7 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         reqJson.put("name", reqJson.getString("username"));
         reqJson.put("storeId", storeId);
         reqJson.put("storeTypeCd", storeTypeCd);
-        responseEntity = this.callCenterService(restTemplate, pd, reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/user.staff.add", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, reqJson.toJSONString(), "user.staff.add", HttpMethod.POST);
         return responseEntity;
     }
 
@@ -103,10 +103,10 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         paramIn.put("storeId", storeId);
         //if (StringUtil.isEmpty(staffName)) {
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.staff.infos" + super.mapToUrlParam(paramIn), HttpMethod.GET);
+                "query.staff.infos" + super.mapToUrlParam(paramIn), HttpMethod.GET);
        /* } else {
             responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.staff.byName?rows=" + rows + "&page=" + page + "&storeId=" + storeId + "&name=" + staffName, HttpMethod.GET);
+                    "query.staff.byName?rows=" + rows + "&page=" + page + "&storeId=" + storeId + "&name=" + staffName, HttpMethod.GET);
         }*/
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
@@ -134,7 +134,7 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         paramIn.put("name", paramIn.getString("username"));
         //修改用户信息
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/user.staff.modify", HttpMethod.POST);
+                "user.staff.modify", HttpMethod.POST);
         return responseEntity;
     }
 
@@ -156,7 +156,7 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         newParam.put("storeId", result.getStoreId());
         //修改用户信息
         responseEntity = this.callCenterService(restTemplate, pd, newParam.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/user.staff.delete", HttpMethod.POST);
+                "user.staff.delete", HttpMethod.POST);
         return responseEntity;
     }
 
@@ -182,7 +182,7 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //修改用户信息
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.privilegeGroup.noAddPrivilegeGroup?userId="
+                "query.privilegeGroup.noAddPrivilegeGroup?userId="
                         + _paramObj.getString("userId") + "&storeId=" + storeId + "&storeTypeCd=" + storeTypeCd,
                 HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -214,7 +214,7 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //修改用户信息
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.privilege.noAddPrivilege?userId="
+                "query.privilege.noAddPrivilege?userId="
                         + _paramObj.getString("userId") + "&storeId=" + storeId + "&storeTypeCd=" + storeTypeCd,
                 HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -251,7 +251,7 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
 
         //修改用户信息
         responseEntity = this.callCenterService(restTemplate, pd, _paramObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/add.privilege.userPrivilege",
+                "add.privilege.userPrivilege",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -277,7 +277,7 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
 
         //修改用户信息
         responseEntity = this.callCenterService(restTemplate, pd, _paramObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/delete.privilege.userPrivilege",
+                "delete.privilege.userPrivilege",
                 HttpMethod.POST);
 
         return responseEntity;

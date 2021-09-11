@@ -46,7 +46,7 @@ public class AddCarBlackWhiteSMOImpl extends DefaultAbstractComponentSMO impleme
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/carBlackWhite.saveCarBlackWhite",
+                "carBlackWhite.saveCarBlackWhite",
                 HttpMethod.POST);
         return responseEntity;
     }

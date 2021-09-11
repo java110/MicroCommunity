@@ -37,7 +37,7 @@ public class EditResourceStoreTypeSMOImpl extends DefaultAbstractComponentSMO im
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/resourceStoreType.updateResourceStoreType",
+                "resourceStoreType.updateResourceStoreType",
                 HttpMethod.POST);
         return responseEntity;
     }

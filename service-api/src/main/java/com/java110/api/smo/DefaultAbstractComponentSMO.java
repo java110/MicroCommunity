@@ -3,7 +3,6 @@ package com.java110.api.smo;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.core.component.AbstractComponentSMO;
-import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -23,9 +22,11 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
-public class DefaultAbstractComponentSMO extends AbstractComponentSMO  {
+public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultAbstractComponentSMO.class);
     protected static final String DEFAULT_PAY_ADAPT = "wechatPayAdapt";// 默认微信通用支付
@@ -80,8 +81,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO  {
         }
         headers.put(CommonConstant.HTTP_SERVICE, url);
         headers.put(CommonConstant.HTTP_METHOD, CommonConstant.getHttpMethodStr(httpMethod));
+
+        initUrlParam(JSONObject.parseObject(param), headers);
         if (HttpMethod.GET == httpMethod) {
-            headers.put("REQUEST_URL", "http://127.0.0.1:8101/" + url + mapToUrlParam(JSONObject.parseObject(param)));
+            headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
         }
         try {
             responseEntity = apiServiceSMOImpl.service(param, headers);
@@ -93,6 +96,25 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO  {
             logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, param, responseEntity);
         }
         return responseEntity;
+    }
+
+    /**
+     * 将url参数写到header map中
+     *
+     * @param paramIn
+     */
+    protected void initUrlParam(Map paramIn, Map headers) {
+        /*put real ip address*/
+
+        if (paramIn != null && !paramIn.isEmpty()) {
+            Set<String> keys = paramIn.keySet();
+            for (Iterator it = keys.iterator(); it.hasNext(); ) {
+                String key = (String) it.next();
+                headers.put(key, paramIn.get(key));
+            }
+        }
+
+
     }
 
 
@@ -116,7 +138,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO  {
     protected ResponseEntity<String> getUserInfo(IPageData pd, RestTemplate restTemplate) {
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.user.userInfo?userId=" + pd.getUserId(), HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "", "query.user.userInfo?userId=" + pd.getUserId(), HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
 
@@ -135,7 +157,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO  {
         //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/user.listUsers?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
+                "user.listUsers?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
 
@@ -158,7 +180,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO  {
             paramIn.put("row", "1");
         }
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/user.listUsers" + mapToUrlParam(paramIn), HttpMethod.GET);
+                "user.listUsers" + mapToUrlParam(paramIn), HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
         return responseEntity;
@@ -180,7 +202,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO  {
             paramIn.put("row", "1");
         }
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + mapToUrlParam(paramIn), HttpMethod.GET);
+                ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + mapToUrlParam(paramIn), HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
         return responseEntity;

@@ -16,9 +16,10 @@
 package com.java110.api.controller.app;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.smo.IApiServiceSMO;
+import com.java110.api.smo.api.IApiSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
-import com.java110.api.smo.api.IApiSMO;
 import com.java110.utils.constant.CommonConstant;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -49,7 +50,7 @@ public class AppController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(AppController.class);
 
     @Autowired
-    private IApiSMO apiSMOImpl;
+    private IApiServiceSMO apiServiceSMOImpl;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -82,7 +83,7 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             hasPrivilege(restTemplate, pd, "/app/" + service);
-            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
+            responseEntity = apiServiceSMOImpl.service(postInfo, headers);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -114,7 +115,9 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             hasPrivilege(restTemplate, pd, "/app/" + service);
-            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+
         } catch (Throwable e) {
             logger.error("请求get 方法[" + service + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -149,7 +152,8 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
-            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + action + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -186,7 +190,8 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", action, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
-            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
+            //responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
+            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + action + "]失败：" + postInfo, e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -219,8 +224,9 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_PUT);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            hasPrivilege(restTemplate, pd, "/app/" + service );
-            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
+            hasPrivilege(restTemplate, pd, "/app/" + service);
+            //responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
+            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求put 方法[" + service + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -250,8 +256,9 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_DELETE);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            hasPrivilege(restTemplate, pd, "/app/" + service );
-            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            hasPrivilege(restTemplate, pd, "/app/" + service);
+            //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求delete 方法[" + service + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -296,13 +303,5 @@ public class AppController extends BaseController {
             }
             headers.put(key, claims.get(key));
         }
-    }
-
-    public IApiSMO getApiSMOImpl() {
-        return apiSMOImpl;
-    }
-
-    public void setApiSMOImpl(IApiSMO apiSMOImpl) {
-        this.apiSMOImpl = apiSMOImpl;
     }
 }

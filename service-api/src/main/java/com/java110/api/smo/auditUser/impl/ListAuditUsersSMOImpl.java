@@ -46,7 +46,7 @@ public class ListAuditUsersSMOImpl extends DefaultAbstractComponentSMO implement
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("storeId",result.getStoreId());
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/auditUser.listAuditUsers" + mapToUrlParam(paramIn);
+        String apiUrl = "auditUser.listAuditUsers" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

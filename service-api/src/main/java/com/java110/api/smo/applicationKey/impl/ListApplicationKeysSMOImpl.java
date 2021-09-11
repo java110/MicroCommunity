@@ -49,7 +49,7 @@ public class ListApplicationKeysSMOImpl extends DefaultAbstractComponentSMO impl
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/applicationKey.listApplicationKeys" + mapToUrlParam(paramIn);
+        String apiUrl = "applicationKey.listApplicationKeys" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

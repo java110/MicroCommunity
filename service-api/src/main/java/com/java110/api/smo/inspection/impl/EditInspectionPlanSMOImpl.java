@@ -48,7 +48,7 @@ public class EditInspectionPlanSMOImpl extends DefaultAbstractComponentSMO imple
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/inspectionPlan.updateInspectionPlan",
+                "inspectionPlan.updateInspectionPlan",
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -56,7 +56,7 @@ public class AddApplicationKeySMOImpl extends DefaultAbstractComponentSMO implem
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/applicationKey.saveApplicationKey",
+                "applicationKey.saveApplicationKey",
                 HttpMethod.POST);
         return responseEntity;
     }

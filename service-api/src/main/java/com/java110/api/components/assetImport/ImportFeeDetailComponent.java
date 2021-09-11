@@ -1,7 +1,7 @@
 package com.java110.api.components.assetImport;
 
 import com.java110.core.context.IPageData;
-import com.java110.api.controller.CallComponentController;
+import com.java110.api.controller.component.CallComponentController;
 import com.java110.api.smo.assetImport.IImportFeeDetailSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

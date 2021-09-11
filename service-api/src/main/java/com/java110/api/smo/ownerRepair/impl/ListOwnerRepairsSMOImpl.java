@@ -55,7 +55,7 @@ public class ListOwnerRepairsSMOImpl extends DefaultAbstractComponentSMO impleme
         }
 
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.listOwnerRepairs" + mapToUrlParam(paramIn);
+        String apiUrl = "ownerRepair.listOwnerRepairs" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

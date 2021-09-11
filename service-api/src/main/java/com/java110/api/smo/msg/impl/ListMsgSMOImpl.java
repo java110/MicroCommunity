@@ -52,7 +52,7 @@ public class ListMsgSMOImpl extends DefaultAbstractComponentSMO implements IList
         //将用户ID刷掉
        // paramIn.remove("userId");
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/msg.listMsg" + mapToUrlParam(paramIn);
+        String apiUrl = "msg.listMsg" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

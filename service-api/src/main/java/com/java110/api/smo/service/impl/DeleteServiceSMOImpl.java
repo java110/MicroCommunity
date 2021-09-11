@@ -43,7 +43,7 @@ public class DeleteServiceSMOImpl extends DefaultAbstractComponentSMO implements
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/service.deleteService",
+                "service.deleteService",
                 HttpMethod.POST);
         return responseEntity;
     }

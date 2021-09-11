@@ -48,7 +48,7 @@ public class ListRoomsWhereFeeSetSMOImpl extends DefaultAbstractComponentSMO imp
         paramMap.put("userId", "");
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.listRoomsWhereFeeSet" + mapToUrlParam(paramIn);
+        String apiUrl = "fee.listRoomsWhereFeeSet" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

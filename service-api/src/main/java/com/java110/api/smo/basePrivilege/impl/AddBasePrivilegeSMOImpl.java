@@ -45,7 +45,7 @@ public class AddBasePrivilegeSMOImpl extends DefaultAbstractComponentSMO impleme
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/basePrivilege.saveBasePrivilege",
+                "basePrivilege.saveBasePrivilege",
                 HttpMethod.POST);
         return responseEntity;
     }

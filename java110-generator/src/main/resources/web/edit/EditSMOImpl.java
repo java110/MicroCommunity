@@ -42,7 +42,7 @@ public class Edit@@TemplateCode@@SMOImpl extends DefaultAbstractComponentSMO imp
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/@@templateCode@@.update@@TemplateCode@@",
+        "@@templateCode@@.update@@TemplateCode@@",
                 HttpMethod.POST);
         return responseEntity;
     }

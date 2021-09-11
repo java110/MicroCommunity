@@ -50,7 +50,7 @@ public class EditComplaintSMOImpl extends DefaultAbstractComponentSMO implements
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/complaint.updateComplaint",
+                "complaint.updateComplaint",
                 HttpMethod.POST);
         return responseEntity;
     }

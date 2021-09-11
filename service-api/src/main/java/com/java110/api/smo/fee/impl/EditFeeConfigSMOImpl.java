@@ -51,7 +51,7 @@ public class EditFeeConfigSMOImpl extends DefaultAbstractComponentSMO implements
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/feeConfig.updateFeeConfig",
+                "feeConfig.updateFeeConfig",
                 HttpMethod.POST);
         return responseEntity;
     }

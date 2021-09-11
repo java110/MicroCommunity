@@ -76,7 +76,7 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
 
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = ServiceConstant.SERVICE_API_URL + "/api/storeOrder/saveStoreOrder";
+        String url = "/storeOrder/saveStoreOrder";
         responseEntity = super.callCenterService(restTemplate, pd, paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -136,7 +136,7 @@ public class GoodsToPaySMOImpl extends AppAbstractComponentSMO implements IGoods
                 "", "", "", "",
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                "smallWeChat.listSmallWeChats?appId="
                         + paramIn.getString("appId") + "&page=1&row=1", HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

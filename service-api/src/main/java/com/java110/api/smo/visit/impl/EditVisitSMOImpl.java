@@ -47,7 +47,7 @@ public class EditVisitSMOImpl extends DefaultAbstractComponentSMO implements IEd
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/visit.updateVisit",
+                "visit.updateVisit",
                 HttpMethod.POST);
         return responseEntity;
     }

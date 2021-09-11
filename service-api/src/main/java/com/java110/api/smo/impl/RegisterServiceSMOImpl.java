@@ -73,7 +73,7 @@ public class RegisterServiceSMOImpl extends DefaultAbstractComponentSMO implemen
 
         registerInfo.put("name", registerInfo.getString("username"));
         registerInfo.put("password", registerInfo.getString("passwd"));
-        responseEntity = this.callCenterService(restTemplate, pd, registerInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/user.service.register", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, registerInfo.toJSONString(), "user.service.register", HttpMethod.POST);
         return responseEntity;
     }
 
@@ -81,7 +81,7 @@ public class RegisterServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         ResponseEntity<String> responseEntity = null;
         //校验用户名或手机是否存在
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/check.hasUser.byNameOrTel?name=" + name + "&tel=" + tel,
+                "check.hasUser.byNameOrTel?name=" + name + "&tel=" + tel,
                 HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -190,7 +190,7 @@ public class RegisterServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         ResponseEntity responseEntity = null;
         JSONObject paramObj = JSONObject.parseObject(pd.getReqData());
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/area.listAreas?" + super.mapToUrlParam(paramObj),
+                "area.listAreas?" + super.mapToUrlParam(paramObj),
                 HttpMethod.GET);
 
         return responseEntity;

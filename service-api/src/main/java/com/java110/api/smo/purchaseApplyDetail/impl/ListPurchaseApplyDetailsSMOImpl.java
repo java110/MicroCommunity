@@ -40,7 +40,7 @@ public class ListPurchaseApplyDetailsSMOImpl extends DefaultAbstractComponentSMO
         paramIn.put("storeTypeCd",result.getStoreTypeCd());
         paramIn.put("communityId",result.getCommunityId());
         paramIn.put("userId",result.getUserId());
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/purchaseApplyDetail.listPurchaseApplyDetails" + mapToUrlParam(paramIn);
+        String apiUrl = "purchaseApplyDetail.listPurchaseApplyDetails" + mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);

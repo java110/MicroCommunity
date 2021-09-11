@@ -37,7 +37,7 @@ public class AddAllocationUserStorehouseSMOImpl extends DefaultAbstractComponent
         paramIn.put("userId", pd.getUserId());
         paramIn.put("userName", pd.getUserName());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/resourceStore.saveAllocationUserStorehouse",
+                "resourceStore.saveAllocationUserStorehouse",
                 HttpMethod.POST);
         return responseEntity;
     }

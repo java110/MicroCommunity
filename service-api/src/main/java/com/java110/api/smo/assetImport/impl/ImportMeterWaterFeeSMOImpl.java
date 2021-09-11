@@ -155,7 +155,7 @@ public class ImportMeterWaterFeeSMOImpl extends DefaultAbstractComponentSMO impl
         JSONArray importRoomFees = JSONArray.parseArray(JSONObject.toJSONString(tmpImportRoomFees));
         data.put("importMeteWaterFees", importRoomFees);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/meterWater/importMeterWater";
+        String apiUrl = "/meterWater/importMeterWater";
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
 

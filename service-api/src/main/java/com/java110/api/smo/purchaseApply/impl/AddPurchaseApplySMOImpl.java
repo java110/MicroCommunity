@@ -43,7 +43,7 @@ public class AddPurchaseApplySMOImpl extends DefaultAbstractComponentSMO impleme
         paramIn.put("userId", pd.getUserId());
         paramIn.put("userName", pd.getUserName());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/purchaseApply.savePurchaseApply",
+                "purchaseApply.savePurchaseApply",
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -68,7 +68,7 @@ public class AddAdvertSMOImpl extends DefaultAbstractComponentSMO implements IAd
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/advert.saveAdvert",
+                "advert.saveAdvert",
                 HttpMethod.POST);
         return responseEntity;
     }

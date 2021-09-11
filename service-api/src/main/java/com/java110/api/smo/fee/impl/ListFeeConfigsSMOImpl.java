@@ -47,7 +47,7 @@ public class ListFeeConfigsSMOImpl extends DefaultAbstractComponentSMO implement
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs" + mapToUrlParam(paramIn);
+        String apiUrl = "feeConfig.listFeeConfigs" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

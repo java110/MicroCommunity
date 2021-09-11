@@ -49,7 +49,7 @@ public class EditOrgSMOImpl extends DefaultAbstractComponentSMO implements IEdit
 
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/org.updateOrg",
+                "org.updateOrg",
                 HttpMethod.POST);
         return responseEntity;
     }

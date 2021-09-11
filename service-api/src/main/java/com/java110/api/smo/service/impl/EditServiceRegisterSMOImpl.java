@@ -48,7 +48,7 @@ Assert.hasKeyAndValue(paramIn, "invokeModel", "可填，请填写消息队列，
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/serviceRegister.updateServiceRegister",
+                "serviceRegister.updateServiceRegister",
                 HttpMethod.POST);
         return responseEntity;
     }

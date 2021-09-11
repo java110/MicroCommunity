@@ -49,7 +49,7 @@ public class NavServiceSMOImpl extends DefaultAbstractComponentSMO implements IN
         JSONObject exitInfo = new JSONObject();
         exitInfo.put("token", pd.getToken());
         responseEntity = this.callCenterService(restTemplate, pd, exitInfo.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/user.service.logout", HttpMethod.POST);
+                "user.service.logout", HttpMethod.POST);
 
         return responseEntity;
     }

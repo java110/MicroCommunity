@@ -50,7 +50,7 @@ public class AddInspectionPlanSMOImpl extends DefaultAbstractComponentSMO implem
         paramIn.put("createUserId", result.getUserId());
         paramIn.put("createUserName", result.getUserName());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/inspectionPlan.saveInspectionPlan",
+                "inspectionPlan.saveInspectionPlan",
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -44,7 +44,7 @@ public class InspectionPlanStateSMOImpl extends DefaultAbstractComponentSMO impl
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/inspectionPlan.updateInspectionPlanState",
+                "inspectionPlan.updateInspectionPlanState",
                 HttpMethod.POST);
         return responseEntity;
     }

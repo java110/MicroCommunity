@@ -47,7 +47,7 @@ Assert.hasKeyAndValue(paramIn, "value", "必填，请填写值");
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/mapping.updateMapping",
+                "mapping.updateMapping",
                 HttpMethod.POST);
         return responseEntity;
     }

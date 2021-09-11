@@ -152,7 +152,7 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
         //查询用户ID
         JSONObject paramIn = new JSONObject();
         paramIn.put("oId", outTradeNo);
-        String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payFeeConfirm";
+        String url = "fee.payFeeConfirm";
         responseEntity = this.callCenterService(restTemplate, useId, paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -171,7 +171,7 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
         //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
         responseEntity = this.callCenterService(restTemplate, "-1", "",
-                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + "?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
+                ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + "?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
 
@@ -214,7 +214,7 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
         ResponseEntity responseEntity = null;
 
         responseEntity = this.callCenterService(restTemplate, "-1", "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                "smallWeChat.listSmallWeChats?appId="
                         + appId + "&page=1&row=1", HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

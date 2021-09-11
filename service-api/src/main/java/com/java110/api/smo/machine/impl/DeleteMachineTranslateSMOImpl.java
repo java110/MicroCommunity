@@ -44,7 +44,7 @@ public class DeleteMachineTranslateSMOImpl extends DefaultAbstractComponentSMO i
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/machineTranslate.deleteMachineTranslate",
+                "machineTranslate.deleteMachineTranslate",
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -43,7 +43,7 @@ public class DeleteAdvertSMOImpl extends DefaultAbstractComponentSMO implements 
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/advert.deleteAdvert",
+                "advert.deleteAdvert",
                 HttpMethod.POST);
         return responseEntity;
     }

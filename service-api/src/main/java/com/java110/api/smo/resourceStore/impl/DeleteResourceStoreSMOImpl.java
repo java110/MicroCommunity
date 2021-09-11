@@ -46,7 +46,7 @@ public class DeleteResourceStoreSMOImpl extends DefaultAbstractComponentSMO impl
 
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/resourceStore.deleteResourceStore",
+                "resourceStore.deleteResourceStore",
                 HttpMethod.POST);
         return responseEntity;
     }

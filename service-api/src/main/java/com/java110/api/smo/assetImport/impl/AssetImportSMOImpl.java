@@ -171,7 +171,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                 //paramIn = new JSONObject();
                 //保存 费用项
 
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.saveFeeConfig";
+                apiUrl = "feeConfig.saveFeeConfig";
 
                 paramIn = JSONObject.parseObject(JSONObject.toJSONString(fee));
                 paramIn.put("communityId", result.getCommunityId());
@@ -246,7 +246,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                 paramIn = new JSONObject();
                 // 如果不存在，才插入
                 if (savedParkingAreaInfo == null) {
-                    apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.saveParkingArea";
+                    apiUrl = "parkingArea.saveParkingArea";
                     paramIn.put("communityId", result.getCommunityId());
                     paramIn.put("typeCd", parkingSpace.getTypeCd());
                     paramIn.put("num", parkingSpace.getPaNum());
@@ -296,7 +296,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                     continue;
                 }
 
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace";
+                apiUrl = "parkingSpace.saveParkingSpace";
 
                 paramIn.put("paId", savedParkingAreaInfo.getString("paId"));
                 paramIn.put("communityId", result.getCommunityId());
@@ -373,7 +373,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                     paramIn.put("cycles", "0");
                 }
 
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace";
+                apiUrl = "parkingSpace.sellParkingSpace";
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
 
                 if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -454,7 +454,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
 
 
                 //保存 房屋
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.saveRoom";
+                apiUrl = "room.saveRoom";
 
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("unitId", room.getFloor().getUnitId());
@@ -517,7 +517,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                     continue;
                 }
                 paramIn.clear();
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.sellRoom";
+                apiUrl = "room.sellRoom";
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("ownerId", room.getImportOwner().getOwnerId());
                 paramIn.put("roomId", savedRoomInfo.getString("roomId"));
@@ -578,7 +578,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                         continue;//没有费用项，可能写错了
                     }
 
-                    apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.saveRoomCreateFee";
+                    apiUrl = "fee.saveRoomCreateFee";
                     paramIn.put("communityId", result.getCommunityId());
                     paramIn.put("locationTypeCd", "3000");
                     paramIn.put("locationObjId", savedRoomInfo.getString("roomId"));
@@ -644,7 +644,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONObject getExistsParkSpace(IPageData pd, ComponentValidateResult result, ImportParkingSpace parkingSpace) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaces?page=1&row=1&communityId=" + result.getCommunityId()
+        apiUrl = "parkingSpace.queryParkingSpaces?page=1&row=1&communityId=" + result.getCommunityId()
                 + "&num=" + parkingSpace.getPsNum() + "&areaNum=" + parkingSpace.getPaNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
@@ -677,7 +677,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONObject getExistsFee(IPageData pd, ComponentValidateResult result, ImportFee fee) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId()
+        apiUrl = "feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId()
                 + "&feeName=" + fee.getFeeName();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
@@ -711,7 +711,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONObject getExistsRoom(IPageData pd, ComponentValidateResult result, ImportRoom room) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRooms?page=1&row=1&communityId=" + result.getCommunityId()
+        apiUrl = "room.queryRooms?page=1&row=1&communityId=" + result.getCommunityId()
                 + "&floorId=" + room.getFloor().getFloorId() + "&unitId=" + room.getFloor().getUnitId() + "&roomNum=" + room.getRoomNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
@@ -764,7 +764,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                 }
                 paramIn = new JSONObject();
 
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.saveOwner";
+                apiUrl = "owner.saveOwner";
 
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("userId", result.getUserId());
@@ -850,7 +850,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                 JSONObject savedFloorInfo = getExistsFloor(pd, result, importFloor);
                 // 如果不存在，才插入
                 if (savedFloorInfo == null) {
-                    apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.saveFloor";
+                    apiUrl = "floor.saveFloor";
                     paramIn.put("communityId", result.getCommunityId());
                     paramIn.put("floorNum", importFloor.getFloorNum());
                     paramIn.put("userId", result.getUserId());
@@ -898,7 +898,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                     continue;
                 }
 
-                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.saveUnit";
+                apiUrl = "unit.saveUnit";
 
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("floorId", savedFloorInfo.getString("floorId"));
@@ -954,7 +954,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONObject getExistsUnit(IPageData pd, ComponentValidateResult result, ImportFloor importFloor) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.queryUnits?communityId=" + result.getCommunityId()
+        apiUrl = "unit.queryUnits?communityId=" + result.getCommunityId()
                 + "&floorId=" + importFloor.getFloorId() + "&unitNum=" + importFloor.getUnitNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
@@ -976,7 +976,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONObject getExistsFloor(IPageData pd, ComponentValidateResult result, ImportFloor importFloor) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?page=1&row=1&communityId=" + result.getCommunityId() + "&floorNum=" + importFloor.getFloorNum();
+        apiUrl = "floor.queryFloors?page=1&row=1&communityId=" + result.getCommunityId() + "&floorNum=" + importFloor.getFloorNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -1005,7 +1005,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONObject getExistsOwner(IPageData pd, ComponentValidateResult result, ImportOwner importOwner) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.queryOwners?page=1&row=1&communityId=" + result.getCommunityId()
+        apiUrl = "owner.queryOwners?page=1&row=1&communityId=" + result.getCommunityId()
                 + "&ownerTypeCd=1001&name=" + importOwner.getOwnerName() + "&link=" + importOwner.getTel();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
@@ -1035,7 +1035,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
     private JSONObject getExistsParkingArea(IPageData pd, ComponentValidateResult result, ImportParkingSpace parkingSpace) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.listParkingAreas?page=1&row=1&communityId=" + result.getCommunityId()
+        apiUrl = "parkingArea.listParkingAreas?page=1&row=1&communityId=" + result.getCommunityId()
                 + "&num=" + parkingSpace.getPaNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 

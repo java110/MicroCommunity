@@ -77,7 +77,7 @@ public class ToQrPayOweFeeSMOImpl extends AppAbstractComponentSMO implements ITo
 
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = ServiceConstant.SERVICE_API_URL + "/api/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&payObjId=" + paramIn.getString("roomId") + "&payObjType=3333";
+        String url = "/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&payObjId=" + paramIn.getString("roomId") + "&payObjType=3333";
         responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -128,7 +128,7 @@ public class ToQrPayOweFeeSMOImpl extends AppAbstractComponentSMO implements ITo
                 "", "", "", "",
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?communityId="
+                "smallWeChat.listSmallWeChats?communityId="
                         + paramIn.getString("communityId") + "&page=1&row=1&weChatType=1100&communityId="+paramIn.getString("communityId"), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

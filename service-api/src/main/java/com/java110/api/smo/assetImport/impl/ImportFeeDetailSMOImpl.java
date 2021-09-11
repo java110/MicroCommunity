@@ -221,7 +221,7 @@ public class ImportFeeDetailSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONArray importRoomFees = JSONArray.parseArray(JSONObject.toJSONString(tmpImportRoomFee));
         data.put("importRoomFees", importRoomFees);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/payFeeDetail/importPayFeeDetail";
+        String apiUrl = "/payFeeDetail/importPayFeeDetail";
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
 

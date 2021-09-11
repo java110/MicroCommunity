@@ -44,7 +44,7 @@ public class GetFileByObjIdSMOImpl extends DefaultAbstractComponentSMO implement
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);*/
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.getFileByObjId" + mapToUrlParam(paramIn);
+        String apiUrl = "file.getFileByObjId" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),

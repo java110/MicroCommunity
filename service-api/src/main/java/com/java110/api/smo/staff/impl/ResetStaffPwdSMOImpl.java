@@ -41,7 +41,7 @@ public class ResetStaffPwdSMOImpl extends DefaultAbstractComponentSMO implements
 
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/user.resetStaffPwd";
+        String apiUrl = "user.resetStaffPwd";
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 apiUrl,

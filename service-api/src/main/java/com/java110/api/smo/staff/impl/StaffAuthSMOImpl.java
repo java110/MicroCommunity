@@ -108,7 +108,7 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
         paramAuth.put("openName", paramObj.getString("nickname"));
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramAuth.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/staff/updateStaffAppAuth", HttpMethod.POST);
+                "/staff/updateStaffAppAuth", HttpMethod.POST);
         url = MappingCache.getValue("OWNER_WECHAT_URL");
         return ResultVo.redirectPage(url);
 
@@ -191,7 +191,7 @@ public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffA
                 "", "", "", "",
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?communityId="
+                "smallWeChat.listSmallWeChats?communityId="
                         + paramIn.getString("communityId") + "&page=1&row=1&weChatType=" + SmallWeChatDto.WECHAT_TYPE_PUBLIC, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

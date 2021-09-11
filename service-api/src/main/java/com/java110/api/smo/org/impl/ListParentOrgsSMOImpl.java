@@ -47,7 +47,7 @@ public class ListParentOrgsSMOImpl extends DefaultAbstractComponentSMO implement
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/org.listParentOrgs" + mapToUrlParam(paramIn);
+        String apiUrl = "org.listParentOrgs" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

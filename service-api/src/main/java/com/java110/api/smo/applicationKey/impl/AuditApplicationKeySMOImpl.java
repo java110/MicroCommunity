@@ -47,7 +47,7 @@ public class AuditApplicationKeySMOImpl extends DefaultAbstractComponentSMO impl
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/applicationKey.auditApplicationKey",
+                "applicationKey.auditApplicationKey",
                 HttpMethod.POST);
         return responseEntity;
     }

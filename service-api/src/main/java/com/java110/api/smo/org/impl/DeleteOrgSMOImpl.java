@@ -47,7 +47,7 @@ public class DeleteOrgSMOImpl extends DefaultAbstractComponentSMO implements IDe
 
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/org.deleteOrg",
+                "org.deleteOrg",
                 HttpMethod.POST);
         return responseEntity;
     }

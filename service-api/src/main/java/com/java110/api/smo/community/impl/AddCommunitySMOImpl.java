@@ -48,7 +48,7 @@ public class AddCommunitySMOImpl extends DefaultAbstractComponentSMO implements 
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("storeTypeCd", result.getStoreTypeCd());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/community.saveCommunity",
+                "community.saveCommunity",
                 HttpMethod.POST);
         return responseEntity;
     }

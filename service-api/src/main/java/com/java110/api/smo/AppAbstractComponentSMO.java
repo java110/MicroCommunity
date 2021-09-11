@@ -102,7 +102,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
     protected ResponseEntity<String> getUserInfo(IPageData pd, RestTemplate restTemplate) {
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.user.userInfo?userId=" + pd.getUserId(), HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "", "query.user.userInfo?userId=" + pd.getUserId(), HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
 
@@ -121,7 +121,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/user.listUsers?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
+                "user.listUsers?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
 
@@ -144,7 +144,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
             paramIn.put("row", "1");
         }
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/user.listUsers" + mapToUrlParam(paramIn), HttpMethod.GET);
+                "user.listUsers" + mapToUrlParam(paramIn), HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
         return responseEntity;
@@ -166,7 +166,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
             paramIn.put("row", "1");
         }
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + mapToUrlParam(paramIn), HttpMethod.GET);
+                 ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + mapToUrlParam(paramIn), HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
         return responseEntity;

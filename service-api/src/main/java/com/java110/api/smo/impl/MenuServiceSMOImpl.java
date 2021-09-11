@@ -38,7 +38,7 @@ public class MenuServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         Assert.hasLength(pd.getUserId(), "用户还没有登录");
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.menu.info?userId=" + pd.getUserId() + "&groupType=P_WEB", HttpMethod.GET);
+                "query.menu.info?userId=" + pd.getUserId() + "&groupType=P_WEB", HttpMethod.GET);
         return responseEntity;
     }
 

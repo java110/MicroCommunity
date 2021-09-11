@@ -124,7 +124,7 @@ public class ChinaUmsRentingToNotifyAdapt implements IPayNotifyAdapt {
         //查询用户ID
         JSONObject paramIn = JSONObject.parseObject(order);
         paramIn.put("oId", orderId);
-        String url = ServiceConstant.SERVICE_API_URL + "/api/fee.rentingPayFeeConfirm";
+        String url = "fee.rentingPayFeeConfirm";
         ResponseEntity responseEntity = this.callCenterService(restTemplate, "-1", paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

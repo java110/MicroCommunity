@@ -42,7 +42,7 @@ public class Delete@@TemplateCode@@SMOImpl extends DefaultAbstractComponentSMO i
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/@@templateCode@@.delete@@TemplateCode@@",
+        "@@templateCode@@.delete@@TemplateCode@@",
                 HttpMethod.POST);
         return responseEntity;
     }

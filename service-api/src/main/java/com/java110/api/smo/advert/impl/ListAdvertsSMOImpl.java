@@ -46,7 +46,7 @@ public class ListAdvertsSMOImpl extends DefaultAbstractComponentSMO implements I
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/advert.listAdverts" + mapToUrlParam(paramIn);
+        String apiUrl = "advert.listAdverts" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

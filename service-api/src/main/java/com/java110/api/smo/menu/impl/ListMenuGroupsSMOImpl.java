@@ -47,7 +47,7 @@ public class ListMenuGroupsSMOImpl extends DefaultAbstractComponentSMO implement
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/menuGroup.listMenuGroups" + mapToUrlParam(paramIn);
+        String apiUrl = "menuGroup.listMenuGroups" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

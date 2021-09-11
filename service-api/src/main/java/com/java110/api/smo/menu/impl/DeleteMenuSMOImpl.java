@@ -45,7 +45,7 @@ public class DeleteMenuSMOImpl extends DefaultAbstractComponentSMO implements ID
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/menu.deleteMenu",
+                "menu.deleteMenu",
                 HttpMethod.POST);
         return responseEntity;
     }

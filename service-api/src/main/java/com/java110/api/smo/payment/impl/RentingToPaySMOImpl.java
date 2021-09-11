@@ -77,7 +77,7 @@ public class RentingToPaySMOImpl extends AppAbstractComponentSMO implements IRen
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
         //查询
-        String url = ServiceConstant.SERVICE_API_URL + "/api/renting/queryRentingPool?rentingId="
+        String url = "/renting/queryRentingPool?rentingId="
                 + paramIn.getString("rentingId") + "&row=1&page=1";
         responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
 
@@ -158,7 +158,7 @@ public class RentingToPaySMOImpl extends AppAbstractComponentSMO implements IRen
                 "", "", "", "",
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                "smallWeChat.listSmallWeChats?appId="
                         + paramIn.getString("appId") + "&page=1&row=1", HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

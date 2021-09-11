@@ -49,7 +49,7 @@ public class SaveComplaintSMOImpl extends AppAbstractComponentSMO implements ISa
         paramObj.put("memberTypeCd", "390001200002");
         paramObj.put("page", 1);
         paramObj.put("row", 1);
-        String url = ServiceConstant.SERVICE_API_URL + "/api/store.listStoresByCommunity" + mapToUrlParam(paramObj);
+        String url = "store.listStoresByCommunity" + mapToUrlParam(paramObj);
         ResponseEntity<String> responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
@@ -59,7 +59,7 @@ public class SaveComplaintSMOImpl extends AppAbstractComponentSMO implements ISa
         JSONArray stores = storeObj.getJSONArray("stores");
         String storeId = stores.getJSONObject(0).getString("storeId");
         paramIn.put("storeId", storeId);
-        url = ServiceConstant.SERVICE_API_URL + "/api/complaint.saveComplaint";
+        url = "complaint.saveComplaint";
         responseEntity = super.callCenterService(restTemplate, pd, paramIn.toJSONString(), url, HttpMethod.POST);
 
         return responseEntity;

@@ -51,7 +51,7 @@ public class AddOrgCommunitySMOImpl extends DefaultAbstractComponentSMO implemen
 
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/org.saveOrgCommunity",
+                "org.saveOrgCommunity",
                 HttpMethod.POST);
         return responseEntity;
     }

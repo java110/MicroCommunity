@@ -52,7 +52,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
 
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.store.privilegeGroup?storeId=" + storeId + "&storeTypeCd=" + storeTypeCd, HttpMethod.GET);
+                "query.store.privilegeGroup?storeId=" + storeId + "&storeTypeCd=" + storeTypeCd, HttpMethod.GET);
         if (privilegeGroup.getStatusCode() != HttpStatus.OK) {
             return privilegeGroup;
         }
@@ -81,7 +81,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         String name = privilegeInfoObj.getString("name");
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.privilege.byPgId?pgId=" + pgId + "&name=" + name, HttpMethod.GET);
+                "query.privilege.byPgId?pgId=" + pgId + "&name=" + name, HttpMethod.GET);
         if (privilegeGroup.getStatusCode() != HttpStatus.OK) {
             return privilegeGroup;
         }
@@ -128,7 +128,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         privilegeInfoObj.put("storeTypeCd", storeTypeCd);
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, privilegeInfoObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/save.privilegeGroup.info", HttpMethod.POST);
+                "save.privilegeGroup.info", HttpMethod.POST);
         return privilegeGroup;
     }
 
@@ -165,7 +165,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         privilegeInfoObj.put("storeTypeCd", storeTypeCd);
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, privilegeInfoObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/edit.privilegeGroup.info", HttpMethod.POST);
+                "edit.privilegeGroup.info", HttpMethod.POST);
         return privilegeGroup;
     }
 
@@ -197,7 +197,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         privilegeInfoObj.put("storeTypeCd", storeTypeCd);
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, privilegeInfoObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/delete.privilegeGroup.info", HttpMethod.POST);
+                "delete.privilegeGroup.info", HttpMethod.POST);
         return privilegeGroup;
     }
 
@@ -223,7 +223,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         String pName = privilegeInfoObj.getString("pName");
 
         ResponseEntity<String> privileges = super.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.privilegeGroup.noAddPrivilege?storeId=" + storeId + "&storeTypeCd=" + storeTypeCd + "&pgId=" + pgId + "&pName=" + pName, HttpMethod.GET);
+                "query.privilegeGroup.noAddPrivilege?storeId=" + storeId + "&storeTypeCd=" + storeTypeCd + "&pgId=" + pgId + "&pName=" + pName, HttpMethod.GET);
 
         if (privileges.getStatusCode() != HttpStatus.OK) {
             return privileges;
@@ -283,7 +283,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         privilegeInfoObj.put("storeId", storeId);
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, privilegeInfoObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/add.privilege.PrivilegeGroup", HttpMethod.POST);
+                "add.privilege.PrivilegeGroup", HttpMethod.POST);
         return privilegeGroup;
     }
 
@@ -314,7 +314,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         privilegeInfoObj.put("storeId", storeId);
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, privilegeInfoObj.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/delete.privilege.PrivilegeGroup", HttpMethod.POST);
+                "delete.privilege.PrivilegeGroup", HttpMethod.POST);
         return privilegeGroup;
     }
 
@@ -345,7 +345,7 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         privilegeInfoObj.put("storeId", storeId);
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.user.privilege?userId=" + privilegeInfoObj.getString("staffId") + "&domain=" + storeInfoObj.getString("storeTypeCd"), HttpMethod.GET);
+                "query.user.privilege?userId=" + privilegeInfoObj.getString("staffId") + "&domain=" + storeInfoObj.getString("storeTypeCd"), HttpMethod.GET);
 
 //        ResultVo resultVo = getCommunityStoreInfoSMOImpl.getUserPrivileges(pd, privilegeInfoObj.getString("staffId"), storeInfoObj.getString("storeTypeCd"), restTemplate);
 //        ResponseEntity<String> privilegeGroup = new ResponseEntity<>(resultVo.getMsg(), resultVo.getCode() == ResultVo.CODE_OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST);

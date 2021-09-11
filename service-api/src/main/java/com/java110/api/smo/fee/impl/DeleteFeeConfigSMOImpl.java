@@ -44,7 +44,7 @@ public class DeleteFeeConfigSMOImpl extends DefaultAbstractComponentSMO implemen
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/feeConfig.deleteFeeConfig",
+                "feeConfig.deleteFeeConfig",
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -135,7 +135,7 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
         //查询用户ID
         JSONObject paramIn = new JSONObject();
         paramIn.put("oId", outTradeNo.substring(4));
-        String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payFeeConfirm";
+        String url = "fee.payFeeConfirm";
         responseEntity = this.callCenterService(restTemplate, "-1", paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -209,7 +209,7 @@ public class ChinaUmsPayNotifyAdapt implements IPayNotifyAdapt {
         ResponseEntity responseEntity = null;
 
         responseEntity = this.callCenterService(restTemplate, "-1", "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                "smallWeChat.listSmallWeChats?appId="
                         + appId + "&page=1&row=1", HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

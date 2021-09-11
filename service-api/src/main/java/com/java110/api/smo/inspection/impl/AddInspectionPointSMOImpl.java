@@ -47,7 +47,7 @@ public class AddInspectionPointSMOImpl extends DefaultAbstractComponentSMO imple
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/inspectionPoint.saveInspectionPoint",
+                "inspectionPoint.saveInspectionPoint",
                 HttpMethod.POST);
         return responseEntity;
     }

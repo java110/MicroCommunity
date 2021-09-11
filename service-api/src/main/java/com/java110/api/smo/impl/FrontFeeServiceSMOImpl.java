@@ -55,7 +55,7 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
             paramIn.put("feeTypeCd", feeTypeCd);
         }
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs" + mapToUrlParam(paramIn),
+                "feeConfig.listFeeConfigs" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
@@ -98,7 +98,7 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig" + mapToUrlParam(paramIn),
+                "fee.queryFeeConfig" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
@@ -145,7 +145,7 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/fee.payFee",
+                "fee.payFee",
                 HttpMethod.POST);
         return responseEntity;
     }
@@ -177,7 +177,7 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFee" + mapToUrlParam(paramIn),
+                "fee.queryFee" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
         return responseEntity;
     }
@@ -210,7 +210,7 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeByParkingSpace" + mapToUrlParam(paramIn),
+                "fee.queryFeeByParkingSpace" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
         return responseEntity;
     }
@@ -236,7 +236,7 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeDetail" + mapToUrlParam(paramIn),
+                "fee.queryFeeDetail" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
         return responseEntity;
     }
@@ -268,11 +268,11 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
         if (!paramIn.containsKey("configId") || StringUtil.isEmpty(paramIn.getString("configId"))) {
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                    ServiceConstant.SERVICE_API_URL + "/api/fee.saveFeeConfig",
+                    "fee.saveFeeConfig",
                     HttpMethod.POST);
         } else {
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                    ServiceConstant.SERVICE_API_URL + "/api/fee.updateFeeConfig",
+                    "fee.updateFeeConfig",
                     HttpMethod.POST);
         }
 
@@ -307,11 +307,11 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
 
         if (!paramIn.containsKey("configId") || StringUtil.isEmpty(paramIn.getString("configId"))) {
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                    ServiceConstant.SERVICE_API_URL + "/api/fee.saveFeeConfig",
+                    "fee.saveFeeConfig",
                     HttpMethod.POST);
         } else {
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                    ServiceConstant.SERVICE_API_URL + "/api/fee.updateFeeConfig",
+                    "fee.updateFeeConfig",
                     HttpMethod.POST);
         }
 
@@ -340,7 +340,7 @@ public class FrontFeeServiceSMOImpl extends DefaultAbstractComponentSMO implemen
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/fee.queryArrearsFee" + super.mapToUrlParam(paramIn),
+                "fee.queryArrearsFee" + super.mapToUrlParam(paramIn),
                 HttpMethod.GET);
 
         return responseEntity;

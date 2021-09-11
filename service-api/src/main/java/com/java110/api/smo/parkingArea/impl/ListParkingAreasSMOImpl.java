@@ -46,7 +46,7 @@ public class ListParkingAreasSMOImpl extends DefaultAbstractComponentSMO impleme
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.listParkingAreas" + mapToUrlParam(paramIn);
+        String apiUrl = "parkingArea.listParkingAreas" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

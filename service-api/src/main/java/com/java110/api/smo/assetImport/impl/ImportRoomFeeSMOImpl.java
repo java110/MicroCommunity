@@ -250,10 +250,10 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
         JSONArray importRoomFees = JSONArray.parseArray(JSONObject.toJSONString(tmpImportRoomFee));
         data.put("importRoomFees", importRoomFees);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/importRoomFees";
+        String apiUrl = "/feeApi/importRoomFees";
 
         if(!StringUtil.isEmpty(tmpImportRoomFee.get(0).getContractId())){
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/importContractFees";
+            apiUrl = "/feeApi/importContractFees";
         }
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
@@ -295,7 +295,7 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
         JSONArray importCarFees = JSONArray.parseArray(JSONObject.toJSONString(tmpImportCarFee));
         data.put("importCarFees", importCarFees);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeApi/importCarFees";
+        String apiUrl = "/feeApi/importCarFees";
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, data.toJSONString(), apiUrl, HttpMethod.POST);
 

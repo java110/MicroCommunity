@@ -48,7 +48,7 @@ public class AddAuditUserSMOImpl extends DefaultAbstractComponentSMO implements 
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("storeId",result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/auditUser.saveAuditUser",
+                "/auditUser.saveAuditUser",
                 HttpMethod.POST);
         return responseEntity;
     }

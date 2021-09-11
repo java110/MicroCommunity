@@ -54,7 +54,7 @@ public class AuditOrdersSMOImpl extends DefaultAbstractComponentSMO implements I
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/purchaseApply.auditApplyOrder" ;
+        String apiUrl = "purchaseApply.auditApplyOrder" ;
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),

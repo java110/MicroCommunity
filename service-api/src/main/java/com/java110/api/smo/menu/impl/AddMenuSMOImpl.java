@@ -46,7 +46,7 @@ public class AddMenuSMOImpl extends DefaultAbstractComponentSMO implements IAddM
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/menu.saveMenu",
+                "menu.saveMenu",
                 HttpMethod.POST);
         return responseEntity;
     }

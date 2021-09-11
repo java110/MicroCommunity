@@ -54,7 +54,7 @@ public class EditOwnerRepairSMOImpl extends DefaultAbstractComponentSMO implemen
         newParamIn.put("row", 1);
 
         //查询保修状态
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.listOwnerRepairs" + mapToUrlParam(newParamIn);
+        String apiUrl = "ownerRepair.listOwnerRepairs" + mapToUrlParam(newParamIn);
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
@@ -66,7 +66,7 @@ public class EditOwnerRepairSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject repairObj = outRepairInfo.getJSONArray("data").getJSONObject(0);
         paramIn.put("state", repairObj.getString("state"));
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.updateOwnerRepair",
+                "ownerRepair.updateOwnerRepair",
                 HttpMethod.POST);
         return responseEntity;
     }

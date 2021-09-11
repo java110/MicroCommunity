@@ -52,7 +52,7 @@ public class AddNoticeSMOImpl extends DefaultAbstractComponentSMO implements IAd
         paramIn.put("storeId", result.getStoreId());
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/notice.saveNotice",
+                "notice.saveNotice",
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -53,7 +53,7 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
 
         JSONObject doing = new JSONObject();
         //查询 报修待办
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.listStaffRepairs" + mapToUrlParam(paramIn);
+        String apiUrl = "ownerRepair.listStaffRepairs" + mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
@@ -67,7 +67,7 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
         paramIn.put("staffId", result.getUserId());
 
 
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/auditUser.listAuditComplaints" + mapToUrlParam(paramIn);
+        apiUrl = "auditUser.listAuditComplaints" + mapToUrlParam(paramIn);
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
@@ -78,7 +78,7 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
             doing.put("complaint", "0");
         }
         //采购待办
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/auditUser.listAuditOrders" + mapToUrlParam(paramIn);
+        apiUrl = "auditUser.listAuditOrders" + mapToUrlParam(paramIn);
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
@@ -89,7 +89,7 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
             doing.put("purchase", "0");
         }
         //物品领用待办
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/collection/getCollectionAuditOrder" + mapToUrlParam(paramIn);
+        apiUrl = "/collection/getCollectionAuditOrder" + mapToUrlParam(paramIn);
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
@@ -102,7 +102,7 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
 
         //contract/queryContractTask
         //合同起草待办
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/contract/queryContractTask" + mapToUrlParam(paramIn);
+        apiUrl = "/contract/queryContractTask" + mapToUrlParam(paramIn);
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
@@ -114,7 +114,7 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
         }
         //contract/queryContractTask
         //合同变更
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/contract/queryContractChangeTask" + mapToUrlParam(paramIn);
+        apiUrl = "/contract/queryContractChangeTask" + mapToUrlParam(paramIn);
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
@@ -126,7 +126,7 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
         }
 
         //合同变更
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/resourceStore.listAllocationStoreAuditOrders" + mapToUrlParam(paramIn);
+        apiUrl = "resourceStore.listAllocationStoreAuditOrders" + mapToUrlParam(paramIn);
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);

@@ -47,7 +47,7 @@ public class AdminLoginPropertyAccountServiceSMOImpl extends DefaultAbstractComp
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
         validate(loginInfo);
         loginInfo.put("curPasswd", AuthenticationFactory.passwdMd5(loginInfo.getString("curPasswd")));
-        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/login.adminLoginProperty", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), "login.adminLoginProperty", HttpMethod.POST);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
             pd.setToken(userInfo.getString("token"));

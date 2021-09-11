@@ -52,7 +52,7 @@ public class ListNoticesSMOImpl extends DefaultAbstractComponentSMO implements I
         //将用户ID刷掉
         paramIn.remove("userId");
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/notice.listNotices" + mapToUrlParam(paramIn);
+        String apiUrl = "notice.listNotices" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

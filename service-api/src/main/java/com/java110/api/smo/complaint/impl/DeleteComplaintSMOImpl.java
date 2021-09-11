@@ -44,7 +44,7 @@ public class DeleteComplaintSMOImpl extends DefaultAbstractComponentSMO implemen
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/complaint.deleteComplaint",
+                "complaint.deleteComplaint",
                 HttpMethod.POST);
         return responseEntity;
     }

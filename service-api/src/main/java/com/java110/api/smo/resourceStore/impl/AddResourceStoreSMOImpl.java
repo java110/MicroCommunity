@@ -51,7 +51,7 @@ public class AddResourceStoreSMOImpl extends DefaultAbstractComponentSMO impleme
         paramIn.put("storeId",result.getStoreId());
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/resourceStore.saveResourceStore",
+                "resourceStore.saveResourceStore",
                 HttpMethod.POST);
         return responseEntity;
     }

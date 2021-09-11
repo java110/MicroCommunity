@@ -69,7 +69,7 @@ public class PackingSpaceServiceSMOImpl extends DefaultAbstractComponentSMO impl
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaces" + mapToUrlParam(paramIn);
+        String apiUrl = "parkingSpace.queryParkingSpaces" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
@@ -110,7 +110,7 @@ public class PackingSpaceServiceSMOImpl extends DefaultAbstractComponentSMO impl
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace",
+                "parkingSpace.saveParkingSpace",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -145,7 +145,7 @@ public class PackingSpaceServiceSMOImpl extends DefaultAbstractComponentSMO impl
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.editParkingSpace",
+                "parkingSpace.editParkingSpace",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -172,7 +172,7 @@ public class PackingSpaceServiceSMOImpl extends DefaultAbstractComponentSMO impl
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.deleteParkingSpace",
+                "parkingSpace.deleteParkingSpace",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -199,7 +199,7 @@ public class PackingSpaceServiceSMOImpl extends DefaultAbstractComponentSMO impl
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpacesByOwner" + mapToUrlParam(paramIn);
+        String apiUrl = "parkingSpace.queryParkingSpacesByOwner" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
@@ -220,7 +220,7 @@ public class PackingSpaceServiceSMOImpl extends DefaultAbstractComponentSMO impl
             feeMap = new HashMap();
             feeMap.put("communityId", communityId);
             feeMap.put("psId", psObj.getString("psId"));
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeByParkingSpace" + mapToUrlParam(feeMap);
+            apiUrl = "fee.queryFeeByParkingSpace" + mapToUrlParam(feeMap);
             responseEntity = this.callCenterService(restTemplate, pd, "",
                     apiUrl,
                     HttpMethod.GET);
@@ -263,7 +263,7 @@ public class PackingSpaceServiceSMOImpl extends DefaultAbstractComponentSMO impl
         paramIn.put("userId", pd.getUserId());
         paramIn.put("storeId", storeId);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.exitParkingSpace",
+                "parkingSpace.exitParkingSpace",
                 HttpMethod.POST);
 
         return responseEntity;

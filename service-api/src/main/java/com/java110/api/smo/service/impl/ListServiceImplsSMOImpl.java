@@ -47,7 +47,7 @@ public class ListServiceImplsSMOImpl extends DefaultAbstractComponentSMO impleme
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/serviceImpl.listServiceImpls" + mapToUrlParam(paramIn);
+        String apiUrl = "serviceImpl.listServiceImpls" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

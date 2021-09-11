@@ -50,7 +50,7 @@ public class FloorServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors" +  mapToUrlParam(paramIn),
+                "floor.queryFloors" +  mapToUrlParam(paramIn),
                 HttpMethod.GET);
 
         return responseEntity;
@@ -92,7 +92,7 @@ public class FloorServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors" + mapToUrlParam(paramIn);
+        String apiUrl = "floor.queryFloors" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
@@ -131,7 +131,7 @@ public class FloorServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/floor.saveFloor",
+                "floor.saveFloor",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -167,7 +167,7 @@ public class FloorServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         paramIn.put("userId", pd.getUserId());
         paramIn.put("name", paramIn.getString("floorName"));
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/floor.editFloor",
+                "floor.editFloor",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -193,7 +193,7 @@ public class FloorServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/floor.deleteFloor",
+                "floor.deleteFloor",
                 HttpMethod.POST);
 
         return responseEntity;

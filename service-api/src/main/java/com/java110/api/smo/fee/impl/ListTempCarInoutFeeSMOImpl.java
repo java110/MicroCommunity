@@ -51,7 +51,7 @@ public class ListTempCarInoutFeeSMOImpl extends DefaultAbstractComponentSMO impl
         paramIn.put("row", page * row);
 
         String apiUrl = "";
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getTempCarInoutFee" + mapToUrlParam(paramIn);
+        apiUrl = "api.getTempCarInoutFee" + mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);

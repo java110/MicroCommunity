@@ -52,7 +52,7 @@ public class AddComplaintSMOImpl extends DefaultAbstractComponentSMO implements 
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("userId", result.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/complaint.saveComplaint",
+                "complaint.saveComplaint",
                 HttpMethod.POST);
         return responseEntity;
     }

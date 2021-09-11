@@ -115,7 +115,7 @@ public class MeterWaterImportSMOImpl extends DefaultAbstractComponentSMO impleme
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         for (ImportMeter meter : meters) {
             paramIn = new JSONObject();
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/meterWater.saveMeterWater";
+            apiUrl = "meterWater.saveMeterWater";
             paramIn.put("communityId", communityId);
             paramIn.put("meterType", meterType);
             paramIn.put("objType",meter.getObjType());
@@ -145,7 +145,7 @@ public class MeterWaterImportSMOImpl extends DefaultAbstractComponentSMO impleme
     private JSONObject getExistsOwner(IPageData pd, ComponentValidateResult result, ImportOwner importOwner) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.queryOwners?page=1&row=1&communityId=" + result.getCommunityId()
+        apiUrl = "owner.queryOwners?page=1&row=1&communityId=" + result.getCommunityId()
                 + "&ownerTypeCd=1001&name=" + importOwner.getOwnerName() + "&link=" + importOwner.getTel();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 

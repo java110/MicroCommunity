@@ -43,7 +43,7 @@ public class DeleteInspectionRoutePointSMOImpl extends DefaultAbstractComponentS
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/inspectionRoute.deleteInspectionRoutePoint",
+                "inspectionRoute.deleteInspectionRoutePoint",
                 HttpMethod.POST);
         return responseEntity;
     }

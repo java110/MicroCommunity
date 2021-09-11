@@ -50,7 +50,7 @@ public class AddRoomBindingBindingSMOImpl extends DefaultAbstractComponentSMO im
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCodeAddRoomBindingConstant.BINDING_ADDROOMBINDING,
+                 ServiceCodeAddRoomBindingConstant.BINDING_ADDROOMBINDING,
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -43,7 +43,7 @@ public class GetFileSMOImpl extends DefaultAbstractComponentSMO implements IGetF
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);*/
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.getFile" + mapToUrlParam(paramIn);
+        String apiUrl ="file.getFile" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),

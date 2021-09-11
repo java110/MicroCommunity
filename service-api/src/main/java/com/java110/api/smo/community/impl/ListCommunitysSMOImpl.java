@@ -54,7 +54,7 @@ public class ListCommunitysSMOImpl extends DefaultAbstractComponentSMO implement
             paramIn.put("memberId", paramIn.getString("storeId"));
         }
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/community.listCommunitys" + mapToUrlParam(paramIn);
+        String apiUrl = "community.listCommunitys" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

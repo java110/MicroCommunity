@@ -51,7 +51,7 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
         paramIn.put("fileName", uploadFile.getOriginalFilename());
 
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.saveFile" ;
+        String apiUrl = "file.saveFile" ;
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),

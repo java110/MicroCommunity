@@ -55,7 +55,7 @@ public class EditApplicationKeySMOImpl extends DefaultAbstractComponentSMO imple
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/applicationKey.updateApplicationKey",
+                "applicationKey.updateApplicationKey",
                 HttpMethod.POST);
         return responseEntity;
     }

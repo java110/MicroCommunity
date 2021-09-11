@@ -44,7 +44,7 @@ public class EditParkingAreaSMOImpl extends DefaultAbstractComponentSMO implemen
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/parkingArea.updateParkingArea",
+                "parkingArea.updateParkingArea",
                 HttpMethod.POST);
         return responseEntity;
     }

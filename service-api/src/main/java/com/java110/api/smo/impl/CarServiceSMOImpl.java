@@ -66,7 +66,7 @@ public class CarServiceSMOImpl extends DefaultAbstractComponentSMO implements IC
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/car.queryCars" + mapToUrlParam(paramIn);
+        String apiUrl = "car.queryCars" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
@@ -125,7 +125,7 @@ public class CarServiceSMOImpl extends DefaultAbstractComponentSMO implements IC
         newParamIn.put("userId", pd.getUserId());
         newParamIn.put("storeId", storeId);
         responseEntity = this.callCenterService(restTemplate, pd, newParamIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace",
+                "parkingSpace.sellParkingSpace",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -165,7 +165,7 @@ public class CarServiceSMOImpl extends DefaultAbstractComponentSMO implements IC
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/car.editCar",
+                "car.editCar",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -196,7 +196,7 @@ public class CarServiceSMOImpl extends DefaultAbstractComponentSMO implements IC
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/car.deleteCar",
+                "car.deleteCar",
                 HttpMethod.POST);
 
         return responseEntity;

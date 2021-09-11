@@ -46,7 +46,7 @@ public class EditMenuSMOImpl extends DefaultAbstractComponentSMO implements IEdi
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/menu.updateMenu",
+                "menu.updateMenu",
                 HttpMethod.POST);
         return responseEntity;
     }

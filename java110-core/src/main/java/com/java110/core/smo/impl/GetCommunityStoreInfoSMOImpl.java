@@ -30,7 +30,7 @@ public class GetCommunityStoreInfoSMOImpl implements IGetCommunityStoreInfoSMO {
 
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
-        responseEntity = CallApiServiceFactory.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.store.byuser?userId=" + userId, HttpMethod.GET);
+        responseEntity = CallApiServiceFactory.callCenterService(restTemplate, pd, "", "query.store.byuser?userId=" + userId, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException(responseEntity.getBody());
         }
@@ -42,11 +42,11 @@ public class GetCommunityStoreInfoSMOImpl implements IGetCommunityStoreInfoSMO {
     public ResultVo getStoreEnterCommunitys(IPageData pd, String storeId, String storeTypeCd, RestTemplate restTemplate) {
         ResponseEntity<String> responseEntity = null;
 //        responseEntity = CallApiServiceFactory.callCenterService(restTemplate, pd, "",
-//                ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember?memberId=" + storeId + "&memberTypeCd="
+//                "query.myCommunity.byMember?memberId=" + storeId + "&memberTypeCd="
 //                        + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd), HttpMethod.GET);
 
         responseEntity = CallApiServiceFactory.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/communitys/queryStoreCommunitys?memberId=" + storeId + "&memberTypeCd="
+                "communitys/queryStoreCommunitys?memberId=" + storeId + "&memberTypeCd="
                         + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -60,7 +60,7 @@ public class GetCommunityStoreInfoSMOImpl implements IGetCommunityStoreInfoSMO {
     public ResultVo getUserPrivileges(IPageData pd, String staffId, String storeTypeCd, RestTemplate restTemplate) {
 
         ResponseEntity<String> privilegeGroup = CallApiServiceFactory.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/query.user.privilege?userId=" + staffId + "&domain=" + storeTypeCd, HttpMethod.GET);
+                "query.user.privilege?userId=" + staffId + "&domain=" + storeTypeCd, HttpMethod.GET);
         if (privilegeGroup.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException(privilegeGroup.getBody());
         }
@@ -72,7 +72,7 @@ public class GetCommunityStoreInfoSMOImpl implements IGetCommunityStoreInfoSMO {
     public ResultVo checkUserHasResourceListener(RestTemplate restTemplate, IPageData pd, JSONObject paramIn, String cacheKey) {
         ResponseEntity<String> responseEntity = null;
         responseEntity = CallApiServiceFactory.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/basePrivilege.CheckUserHasResourceListener",
+                "basePrivilege.CheckUserHasResourceListener",
                 HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

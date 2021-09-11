@@ -47,7 +47,7 @@ public class ListPurchaseApplysSMOImpl extends DefaultAbstractComponentSMO imple
         paramIn.put("communityId",result.getCommunityId());
         paramIn.put("userId",result.getUserId());
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/purchaseApply.listPurchaseApplys" + mapToUrlParam(paramIn);
+        String apiUrl = "purchaseApply.listPurchaseApplys" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

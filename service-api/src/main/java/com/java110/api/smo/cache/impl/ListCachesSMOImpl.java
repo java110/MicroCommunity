@@ -52,7 +52,7 @@ public class ListCachesSMOImpl extends DefaultAbstractComponentSMO implements IL
         int page = paramIn.getInteger("page");
         paramIn.put("page", ( page - 1)* paramIn.getInteger("row"));
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/query.console.caches" + mapToUrlParam(paramIn);
+        String apiUrl = "query.console.caches" + mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
@@ -71,7 +71,7 @@ public class ListCachesSMOImpl extends DefaultAbstractComponentSMO implements IL
 
 
         //根据ID查询缓存ID
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/query.console.cache" + mapToUrlParam(paramIn);
+        String apiUrl = "query.console.cache" + mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);

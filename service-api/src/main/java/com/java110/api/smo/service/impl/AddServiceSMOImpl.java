@@ -52,7 +52,7 @@ Assert.hasKeyAndValue(paramIn, "provideAppId", "必填，请填写提供服务")
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/service.saveService",
+                "service.saveService",
                 HttpMethod.POST);
         return responseEntity;
     }

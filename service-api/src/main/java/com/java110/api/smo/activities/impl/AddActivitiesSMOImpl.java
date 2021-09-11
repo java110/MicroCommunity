@@ -49,7 +49,7 @@ public class AddActivitiesSMOImpl extends DefaultAbstractComponentSMO implements
         paramIn.put("userName", result.getUserName());
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/activities.saveActivities",
+                "activities.saveActivities",
                 HttpMethod.POST);
         return responseEntity;
     }

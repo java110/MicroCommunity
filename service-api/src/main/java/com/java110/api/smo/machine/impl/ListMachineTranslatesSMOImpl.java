@@ -49,7 +49,7 @@ public class ListMachineTranslatesSMOImpl extends DefaultAbstractComponentSMO im
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/machineTranslate.listMachineTranslates" + mapToUrlParam(paramIn);
+        String apiUrl = "machineTranslate.listMachineTranslates" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

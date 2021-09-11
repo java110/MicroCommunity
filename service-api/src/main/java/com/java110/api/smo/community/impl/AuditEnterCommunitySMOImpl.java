@@ -45,7 +45,7 @@ public class AuditEnterCommunitySMOImpl extends DefaultAbstractComponentSMO impl
         super.validateStoreStaffRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/community.auditEnterCommunity",
+                "community.auditEnterCommunity",
                 HttpMethod.POST);
         return responseEntity;
     }

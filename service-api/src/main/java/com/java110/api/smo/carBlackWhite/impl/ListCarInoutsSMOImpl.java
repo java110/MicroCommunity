@@ -47,7 +47,7 @@ public class ListCarInoutsSMOImpl extends DefaultAbstractComponentSMO implements
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/carInout.listCarInouts" + mapToUrlParam(paramIn);
+        String apiUrl = "carInout.listCarInouts" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

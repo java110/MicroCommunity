@@ -58,7 +58,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/room.saveRoom",
+                "room.saveRoom",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -87,7 +87,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRooms" + mapToUrlParam(paramIn);
+        String apiUrl = "room.queryRooms" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
@@ -118,7 +118,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRoomsByOwner" + mapToUrlParam(paramIn);
+        String apiUrl = "room.queryRoomsByOwner" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
@@ -142,7 +142,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
             feeMap.put("communityId", communityId);
             feeMap.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
             feeMap.put("roomId", roomObj.getString("roomId"));
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.listFee" + mapToUrlParam(feeMap);
+            apiUrl = "fee.listFee" + mapToUrlParam(feeMap);
             responseEntity = this.callCenterService(restTemplate, pd, "",
                     apiUrl,
                     HttpMethod.GET);
@@ -187,7 +187,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRoomsWithOutSell" + mapToUrlParam(paramIn);
+        String apiUrl = "room.queryRoomsWithOutSell" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
@@ -218,7 +218,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRoomsWithSell" + mapToUrlParam(paramIn);
+        String apiUrl = "room.queryRoomsWithSell" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
@@ -248,7 +248,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/room.updateRoom",
+                "room.updateRoom",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -276,7 +276,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/room.deleteRoom",
+                "room.deleteRoom",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -306,7 +306,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         paramIn.put("userId", pd.getUserId());
         paramIn.put("storeId", storeId);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/room.sellRoom",
+                "room.sellRoom",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -335,7 +335,7 @@ public class RoomServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         paramIn.put("userId", pd.getUserId());
         paramIn.put("storeId", storeId);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/room.exitRoom",
+                "room.exitRoom",
                 HttpMethod.POST);
 
         return responseEntity;

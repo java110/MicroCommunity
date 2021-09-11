@@ -43,7 +43,7 @@ public class DeleteInspectionPlanSMOImpl extends DefaultAbstractComponentSMO imp
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/inspectionPlan.deleteInspectionPlan",
+                "inspectionPlan.deleteInspectionPlan",
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.api.controller;
+package com.java110.api.controller.app;
 
 import com.java110.utils.cache.MappingCache;
 import org.springframework.http.HttpStatus;

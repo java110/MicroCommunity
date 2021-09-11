@@ -53,7 +53,7 @@ public class EditAuditAppUserBindingOwnerSMOImpl extends DefaultAbstractComponen
         }
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/owner.updateAppUserBindingOwner",
+                "owner.updateAppUserBindingOwner",
                 HttpMethod.POST);
         return responseEntity;
     }

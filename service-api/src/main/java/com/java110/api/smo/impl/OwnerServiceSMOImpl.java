@@ -65,7 +65,7 @@ public class OwnerServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.queryOwners" + mapToUrlParam(paramIn);
+        String apiUrl = "owner.queryOwners" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
@@ -111,7 +111,7 @@ public class OwnerServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.queryOwnerMembers" + mapToUrlParam(paramIn);
+        String apiUrl = "owner.queryOwnerMembers" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
@@ -148,7 +148,7 @@ public class OwnerServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/owner.saveOwner",
+                "owner.saveOwner",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -188,7 +188,7 @@ public class OwnerServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/owner.editOwner",
+                "owner.editOwner",
                 HttpMethod.POST);
 
         return responseEntity;
@@ -219,7 +219,7 @@ public class OwnerServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/owner.deleteOwner",
+                "owner.deleteOwner",
                 HttpMethod.POST);
 
         return responseEntity;

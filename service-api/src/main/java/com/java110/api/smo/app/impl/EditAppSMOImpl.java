@@ -44,7 +44,7 @@ Assert.hasKeyAndValue(paramIn, "name", "必填，请填写应用名称");
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/app.updateApp",
+                "app.updateApp",
                 HttpMethod.POST);
         return responseEntity;
     }

@@ -56,7 +56,7 @@ public class RemainingPackingSpaceServiceSMOImpl extends DefaultAbstractComponen
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/machineTranslate.machineGetFreeParkingSpace" + mapToUrlParam(paramIn);
+        String apiUrl = "machineTranslate.machineGetFreeParkingSpace" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",

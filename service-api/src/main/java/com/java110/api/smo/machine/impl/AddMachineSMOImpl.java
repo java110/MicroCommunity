@@ -51,7 +51,7 @@ public class AddMachineSMOImpl extends DefaultAbstractComponentSMO implements IA
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/machine.saveMachine",
+                "machine.saveMachine",
                 HttpMethod.POST);
         return responseEntity;
     }

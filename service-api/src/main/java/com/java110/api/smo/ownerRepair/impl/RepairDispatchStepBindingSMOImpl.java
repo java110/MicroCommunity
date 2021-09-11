@@ -47,7 +47,7 @@ public class RepairDispatchStepBindingSMOImpl extends DefaultAbstractComponentSM
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCodeRepairDispatchStepConstant.BINDING_REPAIRDISPATCHSTEP,
+                 ServiceCodeRepairDispatchStepConstant.BINDING_REPAIRDISPATCHSTEP,
                 HttpMethod.POST);
         return responseEntity;
     }

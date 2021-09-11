@@ -45,7 +45,7 @@ public class DeleteNoticeSMOImpl extends DefaultAbstractComponentSMO implements 
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/notice.deleteNotice",
+                "notice.deleteNotice",
                 HttpMethod.POST);
         return responseEntity;
     }

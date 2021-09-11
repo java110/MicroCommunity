@@ -48,7 +48,7 @@ public class ListAuditHistoryComplaintsSMOImpl extends DefaultAbstractComponentS
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("userId", result.getUserId());
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/auditUser.listAuditHistoryComplaints" + mapToUrlParam(paramIn);
+        String apiUrl = "auditUser.listAuditHistoryComplaints" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

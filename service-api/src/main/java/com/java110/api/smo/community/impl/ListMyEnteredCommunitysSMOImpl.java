@@ -46,7 +46,7 @@ public class ListMyEnteredCommunitysSMOImpl extends DefaultAbstractComponentSMO 
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/community.listMyEnteredCommunitys" + mapToUrlParam(paramIn);
+        String apiUrl = "community.listMyEnteredCommunitys" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

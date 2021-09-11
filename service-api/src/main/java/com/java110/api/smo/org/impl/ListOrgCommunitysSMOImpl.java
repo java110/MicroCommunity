@@ -49,7 +49,7 @@ public class ListOrgCommunitysSMOImpl extends DefaultAbstractComponentSMO implem
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/org.listOrgCommunitys" + mapToUrlParam(paramIn);
+        String apiUrl = "org.listOrgCommunitys" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

@@ -44,7 +44,7 @@ public class DeleteCommunitySMOImpl extends DefaultAbstractComponentSMO implemen
         //super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/community.deleteCommunity",
+                "community.deleteCommunity",
                 HttpMethod.POST);
         return responseEntity;
     }

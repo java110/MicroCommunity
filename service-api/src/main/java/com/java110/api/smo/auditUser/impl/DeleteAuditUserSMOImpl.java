@@ -46,7 +46,7 @@ public class DeleteAuditUserSMOImpl extends DefaultAbstractComponentSMO implemen
         paramIn.put("storeId",result.getStoreId());
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/auditUser.deleteAuditUser",
+                "auditUser.deleteAuditUser",
                 HttpMethod.POST);
         return responseEntity;
     }

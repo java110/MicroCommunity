@@ -104,7 +104,7 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
 
         //List<SmallWeChatDto> smallWeChatDtos = super.getForApis(pd, smallWeChatDto, ServiceCodeSmallWeChatConstant.LIST_SMALL_WE_CHATS, SmallWeChatDto.class);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                "smallWeChat.listSmallWeChats?appId="
                         + smallWeChatDto.getAppId() + "&page=1&row=1", HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

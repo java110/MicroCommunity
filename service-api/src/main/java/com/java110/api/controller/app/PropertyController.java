@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.api.controller.mina;
+package com.java110.api.controller.app;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
-import com.java110.core.factory.WechatFactory;
-import com.java110.api.smo.login.IWxLoginSMO;
-import com.java110.utils.cache.CommonCache;
+import com.java110.api.smo.login.IPropertyAppLoginSMO;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +39,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping(path = "/app")
-public class WxLoginController extends BaseController {
-    private final static Logger logger = LoggerFactory.getLogger(WxLoginController.class);
+public class PropertyController extends BaseController {
+    private final static Logger logger = LoggerFactory.getLogger(PropertyController.class);
 
     @Autowired
-    private IWxLoginSMO wxLoginSMOImpl;
+    private IPropertyAppLoginSMO propertyAppLoginSMOImpl;
 
 
     /**
@@ -54,41 +52,24 @@ public class WxLoginController extends BaseController {
      * @param postInfo
      * @param request
      */
-    @RequestMapping(path = "/loginWx", method = RequestMethod.POST)
-    public ResponseEntity<String> loginWx(@RequestBody String postInfo, HttpServletRequest request) {
-        ResponseEntity<String> responseEntity = null;
-        JSONObject postObj = JSONObject.parseObject(postInfo);
-        String code = JSONObject.parseObject(postInfo).getString("code");
-        JSONObject userInfo = postObj.getJSONObject("userInfo");
-        if (code == null || userInfo == null) {
-            logger.error("code is null");
-            responseEntity = new ResponseEntity<>("code is null", HttpStatus.BAD_REQUEST);
-            return responseEntity;
-        }
-
+    @RequestMapping(path = "/loginProperty", method = RequestMethod.POST)
+    public ResponseEntity<String> loginProperty(@RequestBody String postInfo, HttpServletRequest request) {
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         String appId = request.getHeader("APP_ID");
-        if (StringUtil.isEmpty(appId)) {
+        if(StringUtil.isEmpty(appId)){
             appId = request.getHeader("APP-ID");
         }
         IPageData pd = PageData.newInstance().builder("", "", "", postInfo,
-                "", "", "", "",
+                "login", "", "", "",
                 appId);
-
-        return wxLoginSMOImpl.doLogin(pd);
+        ResponseEntity<String> responseEntity = propertyAppLoginSMOImpl.doLogin(pd);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        JSONObject outParam = JSONObject.parseObject(responseEntity.getBody());
+        pd.setToken(outParam.getString("token"));
+        request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,pd);
+        return responseEntity;
     }
 
-
-    @RequestMapping(path = "/getWxPhoto", method = RequestMethod.POST)
-    public ResponseEntity<String> getWxPhoto(@RequestBody String postInfo) {
-        JSONObject postObj = JSONObject.parseObject(postInfo);
-
-
-        String photoInfo = WechatFactory.getPhoneNumberBeanS5(postObj.getString("decryptData"),
-                postObj.getString("key"), postObj.getString("iv"));
-        JSONObject photoObj = JSONObject.parseObject(photoInfo);
-        CommonCache.setValue(postObj.getString("key"), photoObj.getString("phoneNumber"), CommonCache.defaultExpireTime);
-        return ResultVo.createResponseEntity(photoObj);
-
-    }
 }

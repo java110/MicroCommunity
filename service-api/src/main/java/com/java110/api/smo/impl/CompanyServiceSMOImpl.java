@@ -41,7 +41,7 @@ public class CompanyServiceSMOImpl extends DefaultAbstractComponentSMO implement
         ResponseEntity<String> responseEntity = null;
         Assert.hasLength(pd.getUserId(), "用户还未登录请先登录");
 
-        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.store.type?type=all", HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "", "query.store.type?type=all", HttpMethod.GET);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             Assert.jsonObjectHaveKey(responseEntity.getBody(), "storeType", "查询中心服务异常，不是有效json或未包含storeType节点");
@@ -120,7 +120,7 @@ public class CompanyServiceSMOImpl extends DefaultAbstractComponentSMO implement
         //reqJson.put(StorePo.class.getSimpleName(), businessStore);
 
 
-        responseEntity = this.callCenterService(restTemplate, pd, reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/save.store.info", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, reqJson.toJSONString(), "save.store.info", HttpMethod.POST);
 
        /* if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
@@ -149,7 +149,7 @@ public class CompanyServiceSMOImpl extends DefaultAbstractComponentSMO implement
         Assert.hasLength(pd.getUserId(), "用户还未登录请先登录");
         JSONObject param = JSONObject.parseObject(pd.getReqData());
 
-        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/area.listAreas" + mapToUrlParam(param), HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "", "area.listAreas" + mapToUrlParam(param), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             Assert.jsonObjectHaveKey(responseEntity.getBody(), "areas", "查询中心服务异常，不是有效json或未包含areas节点");

@@ -53,7 +53,7 @@ public class ListStaffFeeSMOImpl extends DefaultAbstractComponentSMO implements 
 
         String apiUrl = "";
 
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getStaffFee" + mapToUrlParam(paramIn);
+        apiUrl = "api.getStaffFee" + mapToUrlParam(paramIn);
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,

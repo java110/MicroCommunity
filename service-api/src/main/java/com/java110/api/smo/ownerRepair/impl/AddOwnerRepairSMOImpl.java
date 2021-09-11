@@ -52,7 +52,7 @@ public class AddOwnerRepairSMOImpl extends DefaultAbstractComponentSMO implement
         paramIn.put("userName", commonValidateResult.getUserName());
         paramIn.put("storeId", commonValidateResult.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.saveOwnerRepair",
+                "ownerRepair.saveOwnerRepair",
                 HttpMethod.POST);
         return responseEntity;
     }

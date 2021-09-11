@@ -49,7 +49,7 @@ public class AddOrgSMOImpl extends DefaultAbstractComponentSMO implements IAddOr
 
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/org.saveOrg",
+                "org.saveOrg",
                 HttpMethod.POST);
         return responseEntity;
     }

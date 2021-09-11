@@ -45,7 +45,7 @@ public class DeleteFeeSMOImpl extends DefaultAbstractComponentSMO implements IDe
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.deleteFee";
+        String apiUrl = "fee.deleteFee";
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, JSONObject.toJSONString(paramIn),

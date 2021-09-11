@@ -52,7 +52,7 @@ public class ReadMsgSMOImpl extends DefaultAbstractComponentSMO implements IRead
         //将用户ID刷掉
         // paramIn.remove("userId");
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/msg.readMsg";
+        String apiUrl = "msg.readMsg";
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),

@@ -45,7 +45,7 @@ public class ListAdvertPhotoAndVediosSMOImpl extends DefaultAbstractComponentSMO
         /*Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);*/
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/advert.listAdvertPhotoAndVedios" + mapToUrlParam(paramIn);
+        String apiUrl = "advert.listAdvertPhotoAndVedios" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

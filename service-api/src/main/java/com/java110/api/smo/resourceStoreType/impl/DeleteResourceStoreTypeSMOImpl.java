@@ -37,7 +37,7 @@ public class DeleteResourceStoreTypeSMOImpl extends DefaultAbstractComponentSMO 
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/resourceStoreType.deleteResourceStoreType",
+                "resourceStoreType.deleteResourceStoreType",
                 HttpMethod.POST);
         return responseEntity;
     }

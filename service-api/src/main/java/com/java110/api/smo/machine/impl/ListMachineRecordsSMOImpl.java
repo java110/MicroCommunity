@@ -49,7 +49,7 @@ public class ListMachineRecordsSMOImpl extends DefaultAbstractComponentSMO imple
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/machineRecord.listMachineRecords" + mapToUrlParam(paramIn);
+        String apiUrl = "machineRecord.listMachineRecords" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

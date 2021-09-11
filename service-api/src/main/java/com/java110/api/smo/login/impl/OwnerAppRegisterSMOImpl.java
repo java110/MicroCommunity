@@ -49,7 +49,7 @@ public class OwnerAppRegisterSMOImpl extends AbstractFrontServiceSMO implements 
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("password")));
-        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/user.service.login", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), "user.service.login", HttpMethod.POST);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.api.controller;
+package com.java110.api.controller.app;
 
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @RequestMapping(path = "/app")
-public class AdminLoginPropertyAccountController {
+public class AdminController {
 
     @Autowired
     private IAdminLoginPropertyAccountServiceSMO adminLoginPropertyAccountServiceSMOImpl;

@@ -44,7 +44,7 @@ public class BindingServiceSMOImpl extends DefaultAbstractComponentSMO implement
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/service.bindingService",
+                "service.bindingService",
                 HttpMethod.POST);
         return responseEntity;
     }

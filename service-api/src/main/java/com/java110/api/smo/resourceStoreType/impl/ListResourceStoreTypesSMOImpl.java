@@ -48,7 +48,7 @@ public class ListResourceStoreTypesSMOImpl extends DefaultAbstractComponentSMO i
         paramIn.putAll(paramMap);
         paramIn.put("storeId",result.getStoreId());
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/resourceStoreType.listResourceStoreTypes" + mapToUrlParam(paramIn);
+        String apiUrl = "resourceStoreType.listResourceStoreTypes" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

@@ -47,7 +47,7 @@ public class EditNoticeSMOImpl extends DefaultAbstractComponentSMO implements IE
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/notice.updateNotice",
+                "notice.updateNotice",
                 HttpMethod.POST);
         return responseEntity;
     }
