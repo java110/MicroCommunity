@@ -2,6 +2,8 @@ package com.java110.store.smo.impl;
 
 
 import com.java110.dto.store.StoreAttrDto;
+import com.java110.po.contractAttr.ContractAttrPo;
+import com.java110.po.store.StoreAttrPo;
 import com.java110.store.dao.IStoreAttrServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -51,6 +53,27 @@ public class StoreAttrInnerServiceSMOImpl extends BaseServiceSMO implements ISto
         return storeAttrs;
     }
 
+    @Override
+    public int saveStoreAttrInfoInstance(@RequestBody StoreAttrPo storeAttrPo) {
+
+        int saveFlag = storeAttrServiceDaoImpl.saveStoreAttrInfoInstance(BeanConvertUtil.beanCovertMap(storeAttrPo));
+
+        return saveFlag;
+    }
+    @Override
+    public int saveStoreAttrInfo(@RequestBody StoreAttrPo storeAttrPo) {
+
+        int saveFlag = storeAttrServiceDaoImpl.saveStoreAttrInfo(BeanConvertUtil.beanCovertMap(storeAttrPo));
+
+        return saveFlag;
+    }
+    @Override
+    public int updateStoreAttrInfoInstance(@RequestBody StoreAttrPo storeAttrPo) {
+
+        int saveFlag = storeAttrServiceDaoImpl.updateStoreAttrInfoInstance(BeanConvertUtil.beanCovertMap(storeAttrPo));
+
+        return saveFlag;
+    }
 
     @Override
     public int queryStoreAttrsCount(@RequestBody StoreAttrDto storeAttrDto) {

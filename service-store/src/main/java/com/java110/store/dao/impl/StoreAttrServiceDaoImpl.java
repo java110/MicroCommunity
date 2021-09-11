@@ -65,7 +65,7 @@ public class StoreAttrServiceDaoImpl extends BaseServiceDao implements IStoreAtt
      * @throws DAOException DAO异常
      */
     @Override
-    public void saveStoreAttrInfoInstance(Map info) throws DAOException {
+    public int saveStoreAttrInfoInstance(Map info) throws DAOException {
         logger.debug("保存商户属性信息Instance 入参 info : {}",info);
 
         int saveFlag = sqlSessionTemplate.insert("storeAttrServiceDaoImpl.saveStoreAttrInfoInstance",info);
@@ -73,6 +73,24 @@ public class StoreAttrServiceDaoImpl extends BaseServiceDao implements IStoreAtt
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户属性信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
+        return saveFlag;
+    }
+
+    /**
+     * 保存商户属性信息 到 instance
+     * @param info   bId 信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public int saveStoreAttrInfo(Map info) throws DAOException {
+        logger.debug("保存商户属性信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("storeAttrServiceDaoImpl.saveStoreAttrInfo",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户属性信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+        return saveFlag;
     }
 
 
@@ -98,7 +116,7 @@ public class StoreAttrServiceDaoImpl extends BaseServiceDao implements IStoreAtt
      * @throws DAOException DAO异常
      */
     @Override
-    public void updateStoreAttrInfoInstance(Map info) throws DAOException {
+    public int updateStoreAttrInfoInstance(Map info) throws DAOException {
         logger.debug("修改商户属性信息Instance 入参 info : {}",info);
 
         int saveFlag = sqlSessionTemplate.update("storeAttrServiceDaoImpl.updateStoreAttrInfoInstance",info);
@@ -106,6 +124,7 @@ public class StoreAttrServiceDaoImpl extends BaseServiceDao implements IStoreAtt
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户属性信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
+        return saveFlag;
     }
 
      /**

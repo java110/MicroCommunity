@@ -46,7 +46,13 @@ public interface IStoreAttrServiceDao {
      * @param info
      * @throws DAOException DAO异常
      */
-    void saveStoreAttrInfoInstance(Map info) throws DAOException;
+    int saveStoreAttrInfoInstance(Map info) throws DAOException;
+    /**
+     * 保存 商户属性信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException DAO异常
+     */
+    int saveStoreAttrInfo(Map info) throws DAOException;
 
 
 
@@ -67,7 +73,7 @@ public interface IStoreAttrServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    void updateStoreAttrInfoInstance(Map info) throws DAOException;
+    int updateStoreAttrInfoInstance(Map info) throws DAOException;
 
 
     /**

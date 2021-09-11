@@ -99,7 +99,7 @@ public class UserAttrServiceDaoImpl extends BaseServiceDao implements IUserAttrS
      * @throws DAOException DAO异常
      */
     @Override
-    public void updateUserAttrInfoInstance(Map info) throws DAOException {
+    public int updateUserAttrInfoInstance(Map info) throws DAOException {
         logger.debug("修改用户属性信息Instance 入参 info : {}",info);
 
         int saveFlag = sqlSessionTemplate.update("userAttrServiceDaoImpl.updateUserAttrInfoInstance",info);
@@ -107,6 +107,7 @@ public class UserAttrServiceDaoImpl extends BaseServiceDao implements IUserAttrS
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户属性信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
+        return saveFlag;
     }
 
      /**
