@@ -213,11 +213,15 @@ public class CallApiServiceFactory {
         if (pd.getHeaders() != null) {
             for (String key : pd.getHeaders().keySet()
             ) {
+                if(CommonConstant.USER_ID.equals(key.toLowerCase())){
+                    continue;
+                }
                 header.add(key, pd.getHeaders().get(key).toString());
             }
         }
         header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), StringUtil.isEmpty(pd.getAppId()) ? AppDto.WEB_APP_ID : pd.getAppId());
         header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
+
         header.add(CommonConstant.USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), StringUtil.isEmpty(pd.getTransactionId())?GenerateCodeFactory.getUUID():pd.getTransactionId());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), StringUtil.isEmpty(pd.getRequestTime())?DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT):pd.getRequestTime());
