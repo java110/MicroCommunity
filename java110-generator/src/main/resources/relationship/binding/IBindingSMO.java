@@ -1,4 +1,4 @@
-package com.java110.front.smo.community;
+package com.java110.api.smo.community;
 
 import com.java110.core.context.IPageData;
 

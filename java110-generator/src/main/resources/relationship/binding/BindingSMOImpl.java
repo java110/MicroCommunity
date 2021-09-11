@@ -1,11 +1,11 @@
-package com.java110.front.smo.@@templateCode@@.impl;
+package com.java110.api.smo.@@templateCode@@.impl;
 
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
-import com.java110.front.core.AbstractComponentSMO;
-import com.java110.front.smo.@@templateCode@@
+import com.java110.api.core.AbstractComponentSMO;
+import com.java110.api.smo.@@templateCode@@
 import org.springframework.stereotype.Service;.IAdd@@TemplateCode@@SMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Service("@@templateCode@@BindingSMOImpl")
-public class @@TemplateCode@@BindingSMOImpl extends AbstractComponentSMO implements I@@TemplateCode@@BindingSMO {
+public class @@TemplateCode@@BindingSMOImpl extends DefaultAbstractComponentSMO implements I@@TemplateCode@@BindingSMO {
 
     @Autowired
     private RestTemplate restTemplate;

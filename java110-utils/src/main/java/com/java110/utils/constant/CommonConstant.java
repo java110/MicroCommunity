@@ -1,5 +1,7 @@
 package com.java110.utils.constant;
 
+import org.springframework.http.HttpMethod;
+
 /**
  * 公共常量定义
  * Created by wuxw on 2016/12/28.
@@ -205,4 +207,17 @@ public class CommonConstant {
 
 
 
+    public static String getHttpMethodStr(HttpMethod httpMethod) {
+        if (HttpMethod.GET == httpMethod) {
+            return HTTP_METHOD_GET;
+        } else if (HttpMethod.POST == httpMethod) {
+            return HTTP_METHOD_POST;
+        } else if (HttpMethod.PUT == httpMethod) {
+            return HTTP_METHOD_PUT;
+        } else if (HttpMethod.DELETE == httpMethod) {
+            return HTTP_METHOD_DELETE;
+        } else {
+            return HTTP_METHOD_POST;
+        }
+    }
 }

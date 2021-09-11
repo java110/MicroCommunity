@@ -73,86 +73,7 @@ public class BaseComponentSMO extends BaseServiceSMO {
     }
 
 
-    /**
-     * 获取用户信息
-     *
-     * @param pd
-     * @param restTemplate
-     * @return
-     */
-    protected ResponseEntity<String> getUserInfo(IPageData pd, RestTemplate restTemplate) {
-        Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
-        ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.user.userInfo?userId=" + pd.getUserId(), HttpMethod.GET);
-        // 过滤返回报文中的字段，只返回name字段
-        //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
 
-        return responseEntity;
-
-    }
-
-    /**
-     * 获取用户信息
-     *
-     * @param pd
-     * @param restTemplate
-     * @return
-     */
-    protected ResponseEntity<String> getUserInfoByOpenId(IPageData pd, RestTemplate restTemplate, String openId) {
-        //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
-        ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/user.listUsers?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
-        // 过滤返回报文中的字段，只返回name字段
-        //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
-
-        return responseEntity;
-
-    }
-
-    /**
-     * 获取用户信息
-     *
-     * @param pd
-     * @param restTemplate
-     * @return
-     */
-    protected ResponseEntity<String> getUserAndAttr(IPageData pd, RestTemplate restTemplate, Map paramIn) {
-        //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
-        ResponseEntity<String> responseEntity = null;
-        if (paramIn != null) {
-            paramIn.put("page", "1");
-            paramIn.put("row", "1");
-        }
-        responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/user.listUsers" + mapToUrlParam(paramIn), HttpMethod.GET);
-        // 过滤返回报文中的字段，只返回name字段
-        //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
-        return responseEntity;
-
-    }
-
-    /**
-     * 获取用户信息
-     *
-     * @param pd
-     * @param restTemplate
-     * @return
-     */
-    protected ResponseEntity<String> getOwnerAppUser(IPageData pd, RestTemplate restTemplate, Map paramIn) {
-        //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
-        ResponseEntity<String> responseEntity = null;
-        if (paramIn != null) {
-            paramIn.put("page", "1");
-            paramIn.put("row", "1");
-        }
-        responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + mapToUrlParam(paramIn), HttpMethod.GET);
-        // 过滤返回报文中的字段，只返回name字段
-        //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
-        return responseEntity;
-
-    }
 
 
     /**
@@ -214,31 +135,7 @@ public class BaseComponentSMO extends BaseServiceSMO {
         return null;
     }
 
-    /**
-     * 检查用户是否有权限
-     *
-     * @param pd
-     * @param restTemplate
-     * @param privilegeCodes
-     */
-    protected void checkUserHasPrivilege(IPageData pd, RestTemplate restTemplate, String... privilegeCodes) {
-        ResponseEntity<String> responseEntity = null;
-        if (true) {
-            return;
-        }
-        for (String privilegeCode : privilegeCodes) {
-            responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL
-                    + "/api/check.user.hasPrivilege?userId=" + pd.getUserId() + "&pId=" + privilegeCode, HttpMethod.GET);
-            if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                //throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "用户没有权限操作权限" + privilegeCodes);
-                break;
-            }
-        }
 
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "用户没有权限操作权限" + privilegeCodes);
-        }
-    }
 
     /**
      * 根据 请求路径 判断用户是否有权限操作
@@ -247,6 +144,18 @@ public class BaseComponentSMO extends BaseServiceSMO {
      * @param restTemplate
      */
     protected void checkUserHasPrivilege(IPageData pd, RestTemplate restTemplate) {
+
+        //pd.get
+
+    }
+
+    /**
+     * 根据 请求路径 判断用户是否有权限操作
+     *
+     * @param pd
+     * @param restTemplate
+     */
+    protected void checkUserHasPrivilege(IPageData pd, RestTemplate restTemplate,String privilege) {
 
         //pd.get
 

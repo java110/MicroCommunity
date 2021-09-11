@@ -1,4 +1,4 @@
-package com.java110.front.smo.@@templateCode@@.impl;
+package com.java110.api.smo.@@templateCode@@.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
@@ -7,7 +7,7 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
-import com.java110.front.smo.@@templateCode@@.IAdd@@TemplateCode@@SMO;
+import com.java110.api.smo.@@templateCode@@.IAdd@@TemplateCode@@SMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
  * add by wuxw 2019-06-30
  */
 @Service("add@@TemplateCode@@SMOImpl")
-public class Add@@TemplateCode@@SMOImpl extends AbstractComponentSMO implements IAdd@@TemplateCode@@SMO {
+public class Add@@TemplateCode@@SMOImpl extends DefaultAbstractComponentSMO implements IAdd@@TemplateCode@@SMO {
 
     @Autowired
     private RestTemplate restTemplate;
