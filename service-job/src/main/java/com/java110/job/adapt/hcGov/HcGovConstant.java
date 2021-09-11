@@ -37,7 +37,7 @@ public class HcGovConstant {
     public static final String GOV_SWITCH = "GOV_SWITCH"; // 推送政务开关
 
 
-    //政务小区编码/楼栋外部便阿门/房屋外部编码/业主外部编码 SPEC_CD
+    //政务小区编码/楼栋外部便阿门/房屋外部编码/业主外部编码 SPEC_CD/商戶外部编码/员工外部编码
     public static final String EXT_COMMUNITY_ID = "9329000004";
 
     //添加楼栋

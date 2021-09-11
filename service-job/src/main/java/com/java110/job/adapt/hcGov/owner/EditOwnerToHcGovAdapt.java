@@ -230,7 +230,7 @@ public class EditOwnerToHcGovAdapt extends DatabusAdaptImpl {
             body.put("extMemberId", extMemberId);
         }
 
-        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.ADD_OWNER_ACTION, HcGovConstant.COMMUNITY_SECURE);
+        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.EDIT_OWNER_ACTION, HcGovConstant.COMMUNITY_SECURE);
         baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, memberId, HcGovConstant.COMMUNITY_SECURE);
     }
 

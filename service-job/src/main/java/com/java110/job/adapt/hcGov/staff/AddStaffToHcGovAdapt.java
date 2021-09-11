@@ -35,6 +35,7 @@ import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.user.UserPo;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -100,14 +101,105 @@ public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
             return;
         }
         storeUserDto = storeUserDtos.get(0);
+
+        String extCompanyId = "";
+        String ACTION_TYPE = HcGovConstant.ADD_STAFF_ACTION;
+        String SoreId = storeUserDto.getStoreId();
+
+        //查询商户对应的小区外部编码
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setMemberId(SoreId);
+        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+        JSONArray extCommunityId = new JSONArray();
+        //
+        getCommunityExtId(communityMemberDtos, extCommunityId);
+
+        if (extCommunityId == null || extCommunityId.size() < 1) {
+            return;
+        }
+        StoreAttrDto storeAttrDto = new StoreAttrDto();
+        //查询商户属性 外部编码
+        storeAttrDto.setStoreId(SoreId);
+        storeAttrDto.setSpecCd(HcGovConstant.EXT_COMMUNITY_ID);
+        List<StoreAttrDto> storeAttrDtos = storeAttrInnerServiceSMOImpl.queryStoreAttrs(storeAttrDto);
+        if (storeAttrDtos != null && storeAttrDtos.size() > 0) {
+            extCompanyId = storeAttrDtos.get(0).getValue();
+        }
+        JSONObject body = new JSONObject();
+        if (StringUtil.isEmpty(extCompanyId)) {
+            body.put("companyInfo", getCarateStoreInfo(SoreId,storeUserDto));
+            ACTION_TYPE=HcGovConstant.ADD_COMPANY_ACTION;
+        }
+
+        body.put("staffInfo", getCarateStaffInfo(userPo));
+
+        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId.getString(0), ACTION_TYPE, HcGovConstant.COMMUNITY_SECURE);
+        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, extCommunityId.getString(0), SoreId, HcGovConstant.COMMUNITY_SECURE);
+    }
+
+    public void getCommunityExtId(List<CommunityMemberDto> communityMemberDtos, JSONArray extCommunityId) {
+        if (communityMemberDtos == null || communityMemberDtos.size() == 0) {
+            return;
+        }
+        for (CommunityMemberDto communityMember : communityMemberDtos) {
+            CommunityDto communityDto = new CommunityDto();
+            communityDto.setCommunityId(communityMember.getCommunityId());
+            List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+            if (communityDtos == null || communityDtos.size() == 0) {
+                continue;
+            }
+            extracted(extCommunityId, communityDtos);
+        }
+    }
+
+    private void extracted(JSONArray extCommunityId, List<CommunityDto> communityDtos) {
+        for (CommunityDto community : communityDtos) {
+            for (CommunityAttrDto communityAttrDto : community.getCommunityAttrDtos()) {
+                if (HcGovConstant.EXT_COMMUNITY_ID.equals(communityAttrDto.getSpecCd())) {
+                    extCommunityId.add(communityAttrDto.getValue());
+                }
+            }
+        }
+    }
+
+    private JSONObject getCarateStaffInfo(UserPo userPo) {
+
+        String orgName = "";
+        String relCd = "";
+        JSONObject staffInfo = new JSONObject();
+
+        staffInfo.put("PersonName", userPo.getName());
+        staffInfo.put("PersonTel", userPo.getTel());
+        staffInfo.put("PersonSex", userPo.getSex());
+        staffInfo.put("prePersonName", userPo.getName());
+
+        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
+        orgStaffRelDto.setStaffId(userPo.getUserId());
+        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
+        if (orgStaffRelDtos != null || orgStaffRelDtos.size() > 0) {
+            OrgDto orgDto = new OrgDto();
+            orgDto.setOrgId(orgStaffRelDtos.get(0).getOrgId());
+            List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
+            if (orgDtos != null || orgDtos.size() > 0) {
+                orgName = orgDtos.get(0).getOrgName();
+            }
+            relCd = orgStaffRelDtos.get(0).getRelCd();
+        }
+        staffInfo.put("govOrgName", orgName);
+        staffInfo.put("relCd", relCd);
+
+        return staffInfo;
+    }
+
+    private JSONObject getCarateStoreInfo(String SoreId, StoreUserDto storeUserDto) {
+
         String artificialPerson = "";
         String registerTime = "";
         String idCard = "";
-        String SoreId = storeUserDto.getStoreId();
         JSONObject companyInfo = new JSONObject();
-        JSONObject staffInfo = new JSONObject();
-        //查询商户属性 企业法人
+
         StoreAttrDto storeAttrDto = new StoreAttrDto();
+        //查询商户属性 企业法人
         storeAttrDto.setStoreId(SoreId);
         storeAttrDto.setSpecCd(HcGovConstant.STORE_ATTR_ARTIFICIALPERSON);
         List<StoreAttrDto> storeAttrDtos = storeAttrInnerServiceSMOImpl.queryStoreAttrs(storeAttrDto);
@@ -138,67 +230,7 @@ public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
         companyInfo.put("personTel", storeUserDto.getTel());
         companyInfo.put("personIdCard", idCard);
 
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setMemberId(SoreId);
-        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
-        JSONArray extCommunityId = new JSONArray();
-        //
-        getCommunityExtId(communityMemberDtos, extCommunityId);
-
-        if (extCommunityId == null || extCommunityId.size() < 1) {
-            return;
-        }
-        String orgName = "";
-        String relCd = "";
-        JSONObject body = new JSONObject();
-        staffInfo.put("PersonName", userPo.getName());
-        staffInfo.put("PersonTel", userPo.getTel());
-        staffInfo.put("PersonSex", userPo.getSex());
-        staffInfo.put("prePersonName", userPo.getName());
-
-        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setStaffId(userPo.getUserId());
-        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-        if (orgStaffRelDtos != null || orgStaffRelDtos.size() > 0) {
-            OrgDto orgDto = new OrgDto();
-            orgDto.setOrgId(orgStaffRelDtos.get(0).getOrgId());
-            List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
-            if (orgDtos != null || orgDtos.size() > 0) {
-                orgName = orgDtos.get(0).getOrgName();
-            }
-            relCd = orgStaffRelDtos.get(0).getRelCd();
-        }
-        staffInfo.put("govOrgName", orgName);
-        staffInfo.put("relCd", relCd);
-        body.put("companyInfo",companyInfo);
-        body.put("staffInfo",staffInfo);
-        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId.getString(0), HcGovConstant.ADD_OWNER_ACTION, HcGovConstant.COMMUNITY_SECURE);
-        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, extCommunityId.getString(0), SoreId, HcGovConstant.COMMUNITY_SECURE);
-    }
-
-    public void getCommunityExtId(List<CommunityMemberDto> communityMemberDtos, JSONArray extCommunityId) {
-        if (communityMemberDtos == null || communityMemberDtos.size() == 0) {
-            return;
-        }
-        for (CommunityMemberDto communityMember : communityMemberDtos) {
-            CommunityDto communityDto = new CommunityDto();
-            communityDto.setCommunityId(communityMember.getCommunityId());
-            List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-            if (communityDtos == null || communityDtos.size() == 0) {
-                continue;
-            }
-            extracted(extCommunityId, communityDtos);
-        }
-    }
-
-    private void extracted(JSONArray extCommunityId, List<CommunityDto> communityDtos) {
-        for (CommunityDto community : communityDtos) {
-            for (CommunityAttrDto communityAttrDto : community.getCommunityAttrDtos()) {
-                if (HcGovConstant.EXT_COMMUNITY_ID.equals(communityAttrDto.getSpecCd())) {
-                    extCommunityId.add(communityAttrDto.getValue());
-                }
-            }
-        }
+        return companyInfo;
     }
 
 }
