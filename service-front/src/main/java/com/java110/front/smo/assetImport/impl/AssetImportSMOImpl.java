@@ -1189,7 +1189,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
                 if (os.length > 6 && !StringUtil.isNullOrNone(os[6])) {
                     importRoom.setRoomFeeId(os[7].toString());
-                    importRoom.setFeeEndDate(os[8].toString());
+                    String feeEndDate = excelDoubleToDate(os[8].toString());
+                    importRoom.setFeeEndDate(feeEndDate);
                 }
                 if (os.length < 7 || StringUtil.isNullOrNone(os[6])) {
                     rooms.add(importRoom);
