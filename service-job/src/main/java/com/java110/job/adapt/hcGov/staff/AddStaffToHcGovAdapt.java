@@ -111,7 +111,7 @@ public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
         communityMemberDto.setMemberId(SoreId);
         List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
         JSONArray extCommunityId = new JSONArray();
-        //
+        //获取商户对应所有小区的外部编码
         getCommunityExtId(communityMemberDtos, extCommunityId);
 
         if (extCommunityId == null || extCommunityId.size() < 1) {
@@ -133,8 +133,8 @@ public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
 
         body.put("staffInfo", getCarateStaffInfo(userPo));
 
-        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId.getString(0), ACTION_TYPE, HcGovConstant.COMMUNITY_SECURE);
-        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, extCommunityId.getString(0), SoreId, HcGovConstant.COMMUNITY_SECURE);
+        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, "622021090866160001", ACTION_TYPE, HcGovConstant.COMMUNITY_SECURE);
+        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, "622021090866160001", SoreId, HcGovConstant.COMMUNITY_SECURE);
     }
 
     public void getCommunityExtId(List<CommunityMemberDto> communityMemberDtos, JSONArray extCommunityId) {
