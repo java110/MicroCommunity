@@ -162,7 +162,7 @@ public class BaseController extends AppBase {
         }
 
         //处理req-time
-        if (headers.containsKey("user-id")) {
+        if (headers.containsKey("user-id") && !"-1".equals(headers.get("user-id"))) {
             headers.put("user_id", headers.get("user-id"));
         }
 
