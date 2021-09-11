@@ -10,6 +10,8 @@ import java.util.Map;
  */
 public interface IDataFlowContextPlus {
 
+    String getServiceCode();
+
 
     /**
      * 获取dataflowId

@@ -1,7 +1,10 @@
 package com.java110.dev;
 
+import com.java110.core.annotation.Java110CmdDiscovery;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.event.cmd.ServiceCmdEventPublishing;
+import com.java110.core.event.cmd.ServiceCmdListener;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
@@ -34,8 +37,8 @@ import java.nio.charset.Charset;
         exclude = {LiquibaseAutoConfiguration.class,
                 org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @EnableDiscoveryClient
-@Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
-        basePackages = {"com.java110.dev.listener"})
+@Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
+        basePackages = {"com.java110.dev.cmd"})
 @EnableFeignClients(basePackages = {"com.java110.intf.user",
         "com.java110.intf.order",
         "com.java110.intf.common",
