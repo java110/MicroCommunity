@@ -958,8 +958,8 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryOweFeeDetail" parameterType="Map" resultType="Map">
-        select t.payer_obj_name objName,t.fee_name feeName,pf.end_time feeCreateTime,t.create_time
-        createTime,SUM(t.amount_owed) oweAmount,max(t.deadline_time) deadlineTime
+        select t.payer_obj_name objName,t.fee_name feeName,pf.end_time feeCreateTime,t.update_time
+        updateTime,SUM(t.amount_owed) oweAmount,max(t.deadline_time) deadlineTime
         from report_owe_fee t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
