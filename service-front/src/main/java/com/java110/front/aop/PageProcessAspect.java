@@ -8,13 +8,7 @@ import com.java110.utils.exception.FilterException;
 import com.java110.utils.util.StringUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -141,6 +135,8 @@ public class PageProcessAspect {
         }
         pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId, headers);
         pd.setMethod(request.getMethod().equals("GET") ? HttpMethod.GET : HttpMethod.POST);
+
+        logger.debug("切面 获取到的pd=" + JSONObject.toJSONString(pd));
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
     }
 
