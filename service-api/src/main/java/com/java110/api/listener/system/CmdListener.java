@@ -98,12 +98,6 @@ public class CmdListener extends AbstractServiceApiListener {
             context.setResponseEntity(responseEntity);
             return;
         }
-        JSONObject resParam = JSONObject.parseObject(responseEntity.getBody() + "");
-        if (resParam.containsKey("code") && resParam.containsKey("msg")) { // 说明微服务返回的是 resultVo 对象直接返回就可以
-            context.setResponseEntity(responseEntity);
-            return;
-        }
-        responseEntity = ResultVo.createResponseEntity(resParam);
         context.setResponseEntity(responseEntity);
 
     }

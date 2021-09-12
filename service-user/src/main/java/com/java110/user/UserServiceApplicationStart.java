@@ -1,7 +1,9 @@
 package com.java110.user;
 
+import com.java110.core.annotation.Java110CmdDiscovery;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
@@ -35,6 +37,8 @@ import java.nio.charset.Charset;
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.user.listener"})
+@Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
+        basePackages = {"com.java110.user.cmd"})
 @EnableFeignClients(basePackages = {"com.java110.intf.community","com.java110.intf.common","com.java110.intf.store",
         "com.java110.intf.fee","com.java110.intf.order"})
 public class UserServiceApplicationStart {
