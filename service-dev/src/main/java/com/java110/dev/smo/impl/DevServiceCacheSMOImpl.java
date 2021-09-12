@@ -1,16 +1,16 @@
-package com.java110.order.smo.impl;
+package com.java110.dev.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.db.dao.IQueryServiceDAO;
+import com.java110.dev.smo.IDevServiceCacheSMO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
 import com.java110.entity.order.ServiceBusiness;
 import com.java110.entity.service.ServiceSql;
-import com.java110.order.dao.ICenterServiceDAO;
-import com.java110.order.smo.ICenterServiceCacheSMO;
+import com.java110.dev.dao.IDevServiceDAO;
 import com.java110.service.context.DataQuery;
 import com.java110.utils.cache.*;
 import com.java110.utils.constant.CommonConstant;
@@ -31,13 +31,13 @@ import java.util.Map;
  * 刷新缓存
  * Created by wuxw on 2018/4/18.
  */
-@Service("centerServiceCacheSMOImpl")
-public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
+@Service("devServiceCacheSMOImpl")
+public class DevServiceCacheSMOImpl implements IDevServiceCacheSMO {
 
-    private final static Logger logger = LoggerFactory.getLogger(CenterServiceCacheSMOImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(DevServiceCacheSMOImpl.class);
 
     @Autowired
-    ICenterServiceDAO centerServiceDAOImpl;
+    IDevServiceDAO devServiceDAOImpl;
 
     @Autowired
     IQueryServiceDAO queryServiceDAOImpl;
@@ -294,7 +294,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
     private void doFlushMapping() {
         logger.debug("开始刷新 Mapping数据到redis数据库中");
-        List<Mapping> mappings = centerServiceDAOImpl.getMappingInfoAll();
+        List<Mapping> mappings = devServiceDAOImpl.getMappingInfoAll();
         //删除原始数据
         MappingCache.removeData(MappingCache._SUFFIX_MAPPING);
         for (Mapping mapping : mappings) {
@@ -321,7 +321,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
     private void doFlushPrivilege() {
         logger.debug("开始刷新 Mapping数据到redis数据库中");
-        List<BasePrivilegeDto> basePrivilegeDtos = centerServiceDAOImpl.getPrivilegeAll();
+        List<BasePrivilegeDto> basePrivilegeDtos = devServiceDAOImpl.getPrivilegeAll();
         //删除原始数据
         PrivilegeCache.removeData(PrivilegeCache.DEFAULT_PRIVILEGE);
         PrivilegeCache.setValue(basePrivilegeDtos);
@@ -329,7 +329,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
     private void doFlushDatabus() {
         logger.debug("开始刷新 Mapping数据到redis数据库中");
-        List<BusinessDatabusDto> businessDatabusDtos = centerServiceDAOImpl.getDatabusAll();
+        List<BusinessDatabusDto> businessDatabusDtos = devServiceDAOImpl.getDatabusAll();
         //删除原始数据
         DatabusCache.removeData(DatabusCache.DEFAULT_DATABUS);
         DatabusCache.setValue(businessDatabusDtos);
@@ -366,7 +366,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
     private void doFlushAppRoute() {
         logger.debug("开始刷新 AppRoute数据到redis数据库中");
-        List<Map> appInfos = centerServiceDAOImpl.getAppRouteAndServiceInfoAll();
+        List<Map> appInfos = devServiceDAOImpl.getAppRouteAndServiceInfoAll();
         Map<String, List<AppRoute>> appRoustsMap = new HashMap<String, List<AppRoute>>();
         List<AppRoute> appRoutes = null;
         for (Map appInfo : appInfos) {
@@ -387,13 +387,6 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         }
     }
 
-    public ICenterServiceDAO getCenterServiceDAOImpl() {
-        return centerServiceDAOImpl;
-    }
-
-    public void setCenterServiceDAOImpl(ICenterServiceDAO centerServiceDAOImpl) {
-        this.centerServiceDAOImpl = centerServiceDAOImpl;
-    }
 
     public IQueryServiceDAO getQueryServiceDAOImpl() {
         return queryServiceDAOImpl;

@@ -53,6 +53,9 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
             throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单项信息失败：" + JSONObject.toJSONString(orderItem));
         }
 
+        //这个地方我们补充c_business
+
+
         if (!orderItem.containsKey("logText") || StringUtil.isEmpty(orderItem.get("logText") + "")) {
             return;
         }

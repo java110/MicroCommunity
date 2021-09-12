@@ -1,9 +1,25 @@
+/*
+ * Copyright 2017-2020 吴学文 and java110 team.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.java110.@@shareName@@.smo.impl;
 
 
-import com.java110.@@shareName@@.dao.IStoreServiceDao;
-import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.@@shareName@@.dao.IStoreV1ServiceDao;
+import com.java110.intf.@@shareName@@.IStoreV1InnerServiceSMO;
 import com.java110.dto.store.StoreDto;
+import com.java110.po.store.StorePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
@@ -16,40 +32,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @ClassName FloorInnerServiceSMOImpl
- * @Description 商户内部服务实现类
- * @Author wuxw
- * @Date 2019/4/24 9:20
- * @Version 1.0
- * add by wuxw 2019/4/24
- **/
+ * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
+ * add by 吴学文 at @@date@@ mail: 928255095@qq.com
+ * open source address: https://gitee.com/wuxw7/MicroCommunity
+ * 官网：http://www.homecommunity.cn
+ * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
+ * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
+ */
 @RestController
-public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreInnerServiceSMO {
+public class StoreV1InnerServiceSMOImpl extends BaseServiceSMO implements IStoreV1InnerServiceSMO {
 
     @Autowired
-    private IStoreServiceDao storeServiceDaoImpl;
+    private IStoreV1ServiceDao storeV1ServiceDaoImpl;
 
 
     @Override
     public int saveStore(@RequestBody  StorePo storePo) {
-        int saveFlag = 1;
-        storeServiceDaoImpl.saveStoreInfo(BeanConvertUtil.beanCovertMap(storePo));
+        int saveFlag = storeV1ServiceDaoImpl.saveStoreInfo(BeanConvertUtil.beanCovertMap(storePo));
         return saveFlag;
     }
 
      @Override
     public int updateStore(@RequestBody  StorePo storePo) {
-        int saveFlag = 1;
-         storeServiceDaoImpl.updateStoreInfo(BeanConvertUtil.beanCovertMap(storePo));
+        int saveFlag = storeV1ServiceDaoImpl.updateStoreInfo(BeanConvertUtil.beanCovertMap(storePo));
         return saveFlag;
     }
 
      @Override
     public int deleteStore(@RequestBody  StorePo storePo) {
-        int saveFlag = 1;
-        storePo.setStatusCd("1");
-        storeServiceDaoImpl.updateStoreInfo(BeanConvertUtil.beanCovertMap(storePo));
-        return saveFlag;
+       storePo.setStatusCd("1");
+       int saveFlag = storeV1ServiceDaoImpl.updateStoreInfo(BeanConvertUtil.beanCovertMap(storePo));
+       return saveFlag;
     }
 
     @Override
@@ -63,7 +76,7 @@ public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreIn
             storeDto.setPage((page - 1) * storeDto.getRow());
         }
 
-        List<StoreDto> stores = BeanConvertUtil.covertBeanList(storeServiceDaoImpl.getStoreInfo(BeanConvertUtil.beanCovertMap(storeDto)), StoreDto.class);
+        List<StoreDto> stores = BeanConvertUtil.covertBeanList(storeV1ServiceDaoImpl.getStoreInfo(BeanConvertUtil.beanCovertMap(storeDto)), StoreDto.class);
 
         return stores;
     }
@@ -71,13 +84,6 @@ public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreIn
 
     @Override
     public int queryStoresCount(@RequestBody StoreDto storeDto) {
-        return storeServiceDaoImpl.queryStoresCount(BeanConvertUtil.beanCovertMap(storeDto));    }
+        return storeV1ServiceDaoImpl.queryStoresCount(BeanConvertUtil.beanCovertMap(storeDto));    }
 
-    public IStoreServiceDao getStoreServiceDaoImpl() {
-        return storeServiceDaoImpl;
-    }
-
-    public void setStoreServiceDaoImpl(IStoreServiceDao storeServiceDaoImpl) {
-        this.storeServiceDaoImpl = storeServiceDaoImpl;
-    }
 }

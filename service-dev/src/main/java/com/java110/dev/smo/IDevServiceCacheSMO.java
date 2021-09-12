@@ -1,4 +1,4 @@
-package com.java110.order.smo;
+package com.java110.dev.smo;
 
 import com.java110.service.context.DataQuery;
 
@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by wuxw on 2018/4/18.
  */
-public interface ICenterServiceCacheSMO {
+public interface IDevServiceCacheSMO {
 
     /**
      * 刷新 缓存

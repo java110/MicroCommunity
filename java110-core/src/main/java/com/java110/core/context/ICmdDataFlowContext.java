@@ -16,4 +16,6 @@ public interface ICmdDataFlowContext extends IDataFlowContextPlus{
     ResponseEntity getResponseEntity();
 
     void setResponseEntity(ResponseEntity responseEntity);
+
+    String getServiceCode();
 }

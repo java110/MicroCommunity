@@ -2,6 +2,7 @@ package com.java110.utils.exception;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.utils.constant.ResponseConstant;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -16,10 +17,12 @@ public class CmdException extends RuntimeException {
     private Result result;
     private Throwable cause = this;
 
-    public CmdException(){}
+    public CmdException() {
+    }
 
     /**
      * 构造方法
+     *
      * @param result 返回值
      * @param cause  异常堆栈
      */
@@ -30,6 +33,17 @@ public class CmdException extends RuntimeException {
 
     /**
      * 构造方法
+     *
+     * @param msg 错误消息
+     */
+    public CmdException(String msg) {
+        super(msg);
+        this.result = new Result(ResponseConstant.RESULT_CODE_ERROR, msg);
+    }
+
+    /**
+     * 构造方法
+     *
      * @param code 返回码
      * @param msg  错误消息
      */
@@ -45,6 +59,7 @@ public class CmdException extends RuntimeException {
 
     /**
      * 构造方法
+     *
      * @param result 返回值
      * @param detail 具体的返回消息
      */
@@ -55,6 +70,7 @@ public class CmdException extends RuntimeException {
 
     /**
      * 构造方法
+     *
      * @param result 返回值
      * @param detail 具体的返回消息
      * @param cause  异常堆栈
@@ -66,52 +82,55 @@ public class CmdException extends RuntimeException {
 
     /**
      * 构造方法
-     * @param code	返回码
-     * @param msg	返回消息
+     *
+     * @param code  返回码
+     * @param msg   返回消息
      * @param cause 异常堆栈
      */
     public CmdException(int code, String msg, Throwable cause) {
         super(msg, cause);
 
-        if(cause != null) {
-            if(cause.getCause() != null) {
+        if (cause != null) {
+            if (cause.getCause() != null) {
                 msg += " cause:" + ExceptionUtils.populateExecption(cause.getCause(), 500);
             }
-            msg += " StackTrace:"+ExceptionUtils.populateExecption(cause, 500);
+            msg += " StackTrace:" + ExceptionUtils.populateExecption(cause, 500);
         }
         this.result = new Result(code, msg);
     }
 
     /**
      * 构造方法
-     * @param code	返回码
-     * @param cause	异常堆栈
+     *
+     * @param code  返回码
+     * @param cause 异常堆栈
      */
     public CmdException(int code, Throwable cause) {
         super(cause);
         String msg = "";
 
-        if(cause != null) {
-            if(cause.getCause() != null) {
+        if (cause != null) {
+            if (cause.getCause() != null) {
                 msg += " cause:" + ExceptionUtils.populateExecption(cause.getCause(), 500);
             }
-            msg += " StackTrace:"+ExceptionUtils.populateExecption(cause, 500);
+            msg += " StackTrace:" + ExceptionUtils.populateExecption(cause, 500);
         }
         this.result = new Result(code, msg);
     }
 
     /**
-     *
      * TODO 简单描述该方法的实现功能（可选）.
+     *
      * @see Throwable#getCause()
      */
     public synchronized Throwable getCause() {
-        return (cause==this ? super.getCause() : cause);
+        return (cause == this ? super.getCause() : cause);
     }
 
 
     /**
      * 返回异常消息
+     *
      * @return 异常消息
      */
     @Override
@@ -121,6 +140,7 @@ public class CmdException extends RuntimeException {
 
     /**
      * 异常
+     *
      * @return
      */
     public String toJsonString() {
@@ -130,10 +150,11 @@ public class CmdException extends RuntimeException {
         if (getResult() != null)
             exceptionJsonObj.putAll(JSONObject.parseObject(result.toString()));
 
-        exceptionJsonObj.put("exceptionTrace",getMessage());
+        exceptionJsonObj.put("exceptionTrace", getMessage());
 
         return exceptionJsonObj.toString();
     }
+
     @Override
     public void printStackTrace(PrintStream ps) {
         ps.print("<exception>");
@@ -176,7 +197,8 @@ public class CmdException extends RuntimeException {
 
     /**
      * 返回异常值
-     * @return	异常值对象
+     *
+     * @return 异常值对象
      */
     public Result getResult() {
         return result;

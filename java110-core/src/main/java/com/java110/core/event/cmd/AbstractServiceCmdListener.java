@@ -3,6 +3,7 @@ package com.java110.core.event.cmd;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +11,17 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractServiceCmdListener implements ServiceCmdListener {
 
     private static Logger logger = LoggerFactory.getLogger(AbstractServiceCmdListener.class);
+
+
+    /**
+     * 分页信息校验
+     *
+     * @param reqJson
+     */
+    protected void validatePageInfo(JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
+        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
+    }
 
     @Override
     public void cmd(CmdEvent event) throws CmdException {

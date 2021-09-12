@@ -1,6 +1,7 @@
 package com.java110.code.newBack;
 
 import com.java110.code.util.FileUtilBase;
+import com.java110.utils.util.DateUtil;
 
 import java.util.Map;
 
@@ -59,7 +60,8 @@ public class GeneratorDtoBean extends BaseGenerator {
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
                 .replace("@@templateCode@@",data.getName())
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
-                .replace("商户", data.getDesc());
+                .replace("商户", data.getDesc())
+                .replace("@@date@@", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
         fileContext = dealVariableAndGetSet(data, fileContext);
         String writePath = this.getClass().getResource("/").getPath()

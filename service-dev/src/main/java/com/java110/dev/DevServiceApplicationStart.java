@@ -1,12 +1,13 @@
 package com.java110.dev;
 
 import com.java110.core.annotation.Java110CmdDiscovery;
-import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
-import com.java110.core.event.cmd.ServiceCmdListener;
-import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
+import com.java110.dev.smo.IDevServiceCacheSMO;
 import com.java110.service.init.ServiceStartInit;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -78,5 +79,36 @@ public class DevServiceApplicationStart {
         ApplicationContext context = SpringApplication.run(DevServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
 
+        //刷新缓存
+        flushMainCache(args);
+    }
+
+    /**
+     * 刷新主要的缓存
+     *
+     * @param args
+     */
+    private static void flushMainCache(String[] args) {
+
+        logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
+
+        //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
+        String mapping = MappingCache.getValue("java110_hc_version");
+        if (StringUtil.isEmpty(mapping)) {
+            IDevServiceCacheSMO centerServiceCacheSMO = (IDevServiceCacheSMO) ApplicationContextFactory.getBean("devServiceCacheSMOImpl");
+            centerServiceCacheSMO.startFlush();
+            return;
+        }
+
+        if (args == null || args.length == 0) {
+            return;
+        }
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equalsIgnoreCase("-Dcache")) {
+                logger.debug("开始刷新日志，入参为：{}", args[i]);
+                IDevServiceCacheSMO centerServiceCacheSMO = (IDevServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
+                centerServiceCacheSMO.startFlush();
+            }
+        }
     }
 }

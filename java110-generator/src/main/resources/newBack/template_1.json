@@ -1,77 +1,37 @@
 {
   "autoMove": true,
-  "id": "tranId",
-  "name": "hcGovTranslate",
-  "desc": "社区政务同步",
-  "shareParam": "tranId",
-  "shareColumn": "tran_id",
-  "shareName": "common",
-  "tableName": "hc_gov_translate",
+  "id": "hisId",
+  "name": "businessTableHis",
+  "desc": "订单轨迹",
+  "shareParam": "hisId",
+  "shareColumn": "his_id",
+  "shareName": "dev",
+  "tableName": "c_business_table_his",
   "param": {
-    "tranId": "tran_id",
-    "serviceCode": "service_code",
-    "reqTime": "req_time",
-    "sign": "sign",
-    "extCommunityId": "ext_community_id",
-    "communityId": "community_id",
-    "code": "code",
-    "govTopic": "gov_topic",
-    "state": "state",
-    "sendCount": "send_count",
-    "updateTime": "update_time",
-    "objId": "obj_id",
+    "hisId": "his_id",
+    "action": "action",
+    "actionObj": "action_obj",
+    "actionObjHis": "action_obj_his",
+    "businessTypeCd": "business_type_cd",
     "remark": "remark",
-    "createTime": "create_time",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "tranId",
-      "msg": "业务不能为空"
+      "code": "action",
+      "msg": "动作不能为空"
     },
     {
-      "code": "serviceCode",
-      "msg": "审批内容不能为空"
+      "code": "actionObj",
+      "msg": "动作对象不能为空"
     },
     {
-      "code": "reqTime",
-      "msg": "审批内容不能为空"
+      "code": "actionObjHis",
+      "msg": "轨迹表不能为空"
     },
     {
-      "code": "sign",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "extCommunityId",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "code",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "govTopic",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "state",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "sendCount",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "updateTime",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "objId",
-      "msg": "审批内容不能为空"
+      "code": "businessTypeCd",
+      "msg": "业务编码"
     }
   ]
 }

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.intf.@@shareName@@;
+package com.java110.intf.dev;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.store.StoreDto;
-import com.java110.po.store.StorePo;
+import com.java110.dto.businessTableHis.BusinessTableHisDto;
+import com.java110.po.businessTableHis.BusinessTableHisPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,42 +27,42 @@ import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at @@date@@ mail: 928255095@qq.com
+ * add by 吴学文 at 2021-09-12 13:58:05 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@FeignClient(name = "@@shareName@@-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/storeApi")
-public interface IStoreV1InnerServiceSMO {
+@FeignClient(name = "dev-service", configuration = {FeignConfiguration.class})
+@RequestMapping("/businessTableHisApi")
+public interface IBusinessTableHisV1InnerServiceSMO {
 
 
-    @RequestMapping(value = "/saveStore", method = RequestMethod.POST)
-    public int saveStore(@RequestBody  StorePo storePo);
+    @RequestMapping(value = "/saveBusinessTableHis", method = RequestMethod.POST)
+    public int saveBusinessTableHis(@RequestBody  BusinessTableHisPo businessTableHisPo);
 
-    @RequestMapping(value = "/updateStore", method = RequestMethod.POST)
-    public int updateStore(@RequestBody  StorePo storePo);
+    @RequestMapping(value = "/updateBusinessTableHis", method = RequestMethod.POST)
+    public int updateBusinessTableHis(@RequestBody  BusinessTableHisPo businessTableHisPo);
 
-    @RequestMapping(value = "/deleteStore", method = RequestMethod.POST)
-    public int deleteStore(@RequestBody  StorePo storePo);
+    @RequestMapping(value = "/deleteBusinessTableHis", method = RequestMethod.POST)
+    public int deleteBusinessTableHis(@RequestBody  BusinessTableHisPo businessTableHisPo);
 
     /**
      * <p>查询小区楼信息</p>
      *
      *
-     * @param storeDto 数据对象分享
-     * @return StoreDto 对象数据
+     * @param businessTableHisDto 数据对象分享
+     * @return BusinessTableHisDto 对象数据
      */
-    @RequestMapping(value = "/queryStores", method = RequestMethod.POST)
-    List<StoreDto> queryStores(@RequestBody StoreDto storeDto);
+    @RequestMapping(value = "/queryBusinessTableHiss", method = RequestMethod.POST)
+    List<BusinessTableHisDto> queryBusinessTableHiss(@RequestBody BusinessTableHisDto businessTableHisDto);
 
     /**
      * 查询<p>小区楼</p>总记录数
      *
-     * @param storeDto 数据对象分享
+     * @param businessTableHisDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
-    @RequestMapping(value = "/queryStoresCount", method = RequestMethod.POST)
-    int queryStoresCount(@RequestBody StoreDto storeDto);
+    @RequestMapping(value = "/queryBusinessTableHissCount", method = RequestMethod.POST)
+    int queryBusinessTableHissCount(@RequestBody BusinessTableHisDto businessTableHisDto);
 }
