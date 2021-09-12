@@ -48,8 +48,8 @@ import java.util.List;
  *
  * @desc add by 吴学文 16:20
  */
-@Component(value = "addStaffToHcGovAdapt")
-public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
+@Component(value = "editStaffToHcGovAdapt")
+public class EditStaffToHcGovAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -103,7 +103,7 @@ public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
         storeUserDto = storeUserDtos.get(0);
 
         String extCompanyId = "";
-        String ACTION_TYPE = HcGovConstant.ADD_STAFF_ACTION;
+        String ACTION_TYPE = HcGovConstant.EDIT_STAFF_ACTION;
         String SoreId = storeUserDto.getStoreId();
 
         //查询商户对应的小区外部编码
@@ -125,11 +125,10 @@ public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
         if (storeAttrDtos != null && storeAttrDtos.size() > 0) {
             extCompanyId = storeAttrDtos.get(0).getValue();
         }
-        JSONObject body = new JSONObject();
         if (StringUtil.isEmpty(extCompanyId)) {
-            body.put("companyInfo", getCarateStoreInfo(SoreId,storeUserDto));
-            ACTION_TYPE=HcGovConstant.ADD_COMPANY_ACTION;
+            return;
         }
+        JSONObject body = new JSONObject();
 
         body.put("staffInfo", getCarateStaffInfo(userPo,extCompanyId));
 
@@ -187,9 +186,8 @@ public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
         }
         staffInfo.put("govOrgName", orgName);
         staffInfo.put("relCd", relCd);
-        if(!StringUtil.isEmpty(extCompanyId)){
-            staffInfo.put("extCompanyId",extCompanyId);
-        }
+        staffInfo.put("extCompanyId",extCompanyId);
+
 
         return staffInfo;
     }
