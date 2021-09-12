@@ -31,7 +31,7 @@ public abstract class AbstractCmdDataFlowContext extends AbstractDataFlowContext
         //调用builder
         T dataFlowContext = (T)doBuilder(reqInfo, headerAll);
         //后处理
-        afterBuilder((IOrderDataFlowContext) dataFlowContext);
+        afterBuilder((ICmdDataFlowContext) dataFlowContext);
         return dataFlowContext;
     }
 
@@ -54,7 +54,7 @@ public abstract class AbstractCmdDataFlowContext extends AbstractDataFlowContext
      */
     public abstract ICmdDataFlowContext doBuilder(String reqInfo, Map<String,String> headerAll) throws Exception;
 
-    protected void afterBuilder(IOrderDataFlowContext dataFlowContext){
+    protected void afterBuilder(ICmdDataFlowContext dataFlowContext){
 
     }
 

@@ -18,6 +18,7 @@ package com.java110.api.controller.app;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
 import com.java110.api.smo.api.IApiSMO;
+import com.java110.api.smo.privilege.IPrivilegeSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.utils.constant.CommonConstant;
@@ -55,6 +56,9 @@ public class AppController extends BaseController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private IPrivilegeSMO privilegeSMOImpl;
+
     /**
      * 资源请求 post方式
      * <p>
@@ -82,7 +86,7 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            hasPrivilege(restTemplate, pd, "/app/" + service);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
             responseEntity = apiServiceSMOImpl.service(postInfo, headers);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
@@ -114,7 +118,7 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            hasPrivilege(restTemplate, pd, "/app/" + service);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
             //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
             responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
 
@@ -151,7 +155,7 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
             //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
             responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
@@ -189,7 +193,7 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", action, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
             //responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
             responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
@@ -224,7 +228,7 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_PUT);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            hasPrivilege(restTemplate, pd, "/app/" + service);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
             //responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
             responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
@@ -256,7 +260,7 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_DELETE);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            hasPrivilege(restTemplate, pd, "/app/" + service);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
             //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
             responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {

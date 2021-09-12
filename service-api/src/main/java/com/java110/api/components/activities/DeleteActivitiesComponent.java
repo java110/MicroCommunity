@@ -22,7 +22,7 @@ public class DeleteActivitiesComponent {
      * @return ResponseEntity 对象
      */
     public ResponseEntity<String> delete(IPageData pd) {
-        pd.setApiUrl("/api/activities.deleteActivities");
+        pd.setApiUrl("activities.deleteActivities");
         return commonPostSMOImpl.doService(pd);
     }
 

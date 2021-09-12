@@ -161,7 +161,7 @@ public class FlowServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         ResponseEntity<String> responseEntity = null;
         Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
 
-        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/query.store.byuser?userId="+pd.getUserId(), HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate,pd,"", "query.store.byuser?userId="+pd.getUserId(), HttpMethod.GET);
 
         if(responseEntity.getStatusCode() != HttpStatus.OK){
 

@@ -38,7 +38,7 @@ public class FeeTypeSMOImpl extends DefaultAbstractComponentSMO implements IFeeT
         reqParam.put("name", "pay_fee");
         reqParam.put("type", "fee_type_cd");
         //拉取数据
-        String url = ServiceConstant.SERVICE_API_URL.concat("/api/dict.queryDict").concat(mapToUrlParam(reqParam));
+        String url = ServiceConstant.SERVICE_API_URL.concat("dict.queryDict").concat(mapToUrlParam(reqParam));
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
         return responseEntity;
     }

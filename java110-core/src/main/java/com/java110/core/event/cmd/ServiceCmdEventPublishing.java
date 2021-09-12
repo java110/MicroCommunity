@@ -6,6 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.center.DataFlowListenerOrderComparator;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.event.service.api.ServiceDataFlowListener;
+import com.java110.dto.CmdListenerDto;
 import com.java110.entity.center.AppService;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +44,7 @@ public class ServiceCmdEventPublishing {
     /**
      * 保存侦听实例信息，一般启动时加载
      */
-    private static final List<String> listeners = new ArrayList<String>();
+    private static final List<CmdListenerDto> listeners = new ArrayList<CmdListenerDto>();
 
     /**
      * 根据 事件类型查询侦听
@@ -54,7 +56,7 @@ public class ServiceCmdEventPublishing {
      *
      * @param listener
      */
-    public static void addListener(String listener) {
+    public static void addListener(CmdListenerDto listener) {
         listeners.add(listener);
     }
 
@@ -63,7 +65,7 @@ public class ServiceCmdEventPublishing {
      *
      * @return
      */
-    public static List<String> getListeners() {
+    public static List<CmdListenerDto> getListeners() {
         return listeners;
     }
 
@@ -85,10 +87,9 @@ public class ServiceCmdEventPublishing {
         }
 
         List<ServiceCmdListener> cmdListeners = new ArrayList<ServiceCmdListener>();
-        for (String listenerBeanName : getListeners()) {
-            ServiceCmdListener listener = ApplicationContextFactory.getBean(listenerBeanName, ServiceCmdListener.class);
-            Java110Cmd java110Cmd = listener.getClass().getDeclaredAnnotation(Java110Cmd.class);
-            if(java110Cmd.serviceCode().equals(serviceCode)) {
+        for (CmdListenerDto listenerBean : getListeners()) {
+            ServiceCmdListener listener = ApplicationContextFactory.getBean(listenerBean.getBeanName(), ServiceCmdListener.class);
+            if(listenerBean.getServiceCode().equals(serviceCode)) {
                 cmdListeners.add(listener);
             }
         }

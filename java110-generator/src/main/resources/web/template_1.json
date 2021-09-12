@@ -1,62 +1,86 @@
 {
-  "templateName": "流程实例",
-  "templateCode": "oaWorkflow",
-  "templateKey": "flowId",
-  "templateKeyName": "工作流ID",
-  "searchCode": "flowId",
-  "searchName": "工作流ID",
-  "directories": "property",
+  "templateName": "业务轨迹",
+  "templateCode": "businessTableHis",
+  "templateKey": "hisId",
+  "templateKeyName": "轨迹ID",
+  "searchCode": "hisId",
+  "searchName": "轨迹ID",
+  "directories": "dev",
   "conditions": [
     {
-      "name": "流程名称",
-      "inputType": "input",
-      "code": "flowName",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "描述",
-      "inputType": "input",
-      "code": "describle",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "流程类型",
+      "name": "动作",
       "inputType": "select",
-      "selectValue":"1001,2002",
-      "selectValueName":"国内,国外",
-      "code": "flowType",
+      "selectValue":"ADD,MOD,DEL",
+      "selectValueName":"添加,修改,删除",
+      "code": "action",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "表名",
+      "inputType": "input",
+      "code": "actionObj",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "业务类型",
+      "inputType": "input",
+      "code": "businessTypeCd",
       "whereCondition": "equal"
     }
   ],
   "columns": [
     {
-      "code": "flowName",
-      "cnCode": "流程名称",
-      "desc": "必填，请填写流程名称",
+      "code": "businessTypeCd",
+      "cnCode": "业务类型",
+      "desc": "必填，请填写业务类型",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "30",
+      "limitErrInfo": "业务类型超过30位",
+      "show": true
+    },
+    {
+      "code": "action",
+      "cnCode": "动作",
+      "desc": "必填，请选择动作",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue":"ADD,MOD,DEL",
+      "selectValueName":"添加,修改,删除",
+      "limit": "maxLength",
+      "limitParam": "12",
+      "limitErrInfo": "动作不能为空",
+      "show": true
+    },
+    {
+      "code": "actionObj",
+      "cnCode": "表名",
+      "desc": "必填，请填写表名",
       "required": true,
       "hasDefaultValue": false,
       "inputType": "input",
       "limit": "maxLength",
       "limitParam": "64",
-      "limitErrInfo": "流程名称超过64位",
+      "limitErrInfo": "表名超过64位",
       "show": true
     },
     {
-      "code": "flowType",
-      "cnCode": "流程类型",
-      "desc": "必填，请填写流程类型",
+      "code": "actionObjHis",
+      "cnCode": "轨迹表名",
+      "desc": "必填，请填写轨迹表名",
       "required": true,
       "hasDefaultValue": false,
-      "inputType": "select",
-      "selectValue":"1001",
-      "selectValueName":"普通流程",
+      "inputType": "input",
       "limit": "maxLength",
-      "limitParam": "12",
-      "limitErrInfo": "流程类型不能为空",
+      "limitParam": "64",
+      "limitErrInfo": "轨迹表名超过64位",
       "show": true
     },
     {
-      "code": "describle",
+      "code": "remark",
       "cnCode": "备注",
       "desc": "可填，请填写备注",
       "required": false,

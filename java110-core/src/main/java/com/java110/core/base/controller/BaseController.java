@@ -8,7 +8,6 @@ import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.DataFlowFactory;
-import com.java110.core.smo.IGetCommunityStoreInfoSMO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.utils.cache.PrivilegeCache;
 import com.java110.utils.constant.CommonConstant;
@@ -31,8 +30,7 @@ import java.util.*;
  */
 public class BaseController extends AppBase {
 
-    @Autowired
-    private IGetCommunityStoreInfoSMO getCommunityStoreInfoSMOImpl;
+
 
 
     /**
@@ -293,54 +291,7 @@ public class BaseController extends AppBase {
         return businessServiceDataFlow;
     }
 
-    protected void hasPrivilege(RestTemplate restTemplate, IPageData pd, String resource) {
-        ResponseEntity<String> responseEntity = null;
-        //没有用户的情况下不做权限判断
-        if (StringUtil.isEmpty(pd.getUserId())) {
-            return;
-        }
-        JSONObject paramIn = new JSONObject();
-        //paramIn.put("resource", resource);
-        paramIn.put("userId", pd.getUserId());
 
-        //校验资源路劲是否定义权限
-        List<BasePrivilegeDto> basePrivilegeDtos = PrivilegeCache.getPrivileges();
-        if (basePrivilegeDtos == null || basePrivilegeDtos.size() < 1) {
-            return;
-        }
-        String tmpResource = null;
-        boolean hasPrivilege = false;
-        for (BasePrivilegeDto privilegeDto : basePrivilegeDtos) {
-            if (resource.equals(privilegeDto.getResource())) {
-                hasPrivilege = true;
-            }
-        }
-        if (!hasPrivilege) { //权限没有配置，直接跳过
-            return;
-        }
-
-        ResultVo resultVo = getCommunityStoreInfoSMOImpl.checkUserHasResourceListener(restTemplate, pd, paramIn, pd.getUserId());
-        if (resultVo == null || resultVo.getCode() != ResultVo.CODE_OK) {
-            throw new UnsupportedOperationException("用户没有权限操作");
-        }
-        JSONArray privileges = JSONArray.parseArray(resultVo.getMsg());
-
-        hasPrivilege = false;
-        if (privileges == null || privileges.size() < 1) {
-            throw new UnsupportedOperationException("用户没有权限操作");
-        }
-        for (int privilegeIndex = 0; privilegeIndex < privileges.size(); privilegeIndex++) {
-            tmpResource = privileges.getJSONObject(privilegeIndex).getString("resource");
-            if (resource.equals(tmpResource)) {
-                hasPrivilege = true;
-                break;
-            }
-        }
-        if (!hasPrivilege) {
-            throw new UnsupportedOperationException("用户没有权限操作");
-        }
-
-    }
 
 
 }

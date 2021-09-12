@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：更新
- * 服务编码：@@templateCode@@.Update@@TemplateCode@@
+ * 服务编码：@@templateCode@@.update@@TemplateCode@@
  * 请求路劲：/app/@@templateCode@@.Update@@TemplateCode@@
  * add by 吴学文 at @@date@@ mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity

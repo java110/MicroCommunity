@@ -1,5 +1,6 @@
 package com.java110.core.annotation;
 
+import com.java110.dto.CmdListenerDto;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -99,11 +100,13 @@ public class Java110CmdDiscoveryRegistrar implements ImportBeanDefinitionRegistr
                                     Java110Cmd.class.getCanonicalName());
 
                     String beanName = getListenerName(attributes,beanDefinition);
+                    String serviceCode = attributes.get("serviceCode").toString();
+
 
                     /*BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(beanDefinition, beanName);
                     BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, registry);*/
-                    Method method = cmdPublishClass.getMethod("addListener",String.class);
-                    method.invoke(null,beanName);
+                    Method method = cmdPublishClass.getMethod("addListener", CmdListenerDto.class);
+                    method.invoke(null,new CmdListenerDto(beanName,serviceCode));
                 }
             }
         }

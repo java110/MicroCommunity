@@ -9,7 +9,6 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.order.OrderDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -65,15 +64,7 @@ public class CmdListener extends AbstractServiceApiListener {
             requestUrl += ("?" + param);
         }
         try {
-            if (CommonConstant.HTTP_METHOD_GET.equals(service.getMethod())) {
-                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
-            } else if (CommonConstant.HTTP_METHOD_PUT.equals(service.getMethod())) {
-                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.PUT, httpEntity, String.class);
-            } else if (CommonConstant.HTTP_METHOD_DELETE.equals(service.getMethod())) {
-                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.DELETE, httpEntity, String.class);
-            } else {
-                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
-            }
+            responseEntity = restTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
             HttpHeaders headers = responseEntity.getHeaders();
             String oId = "-1";
             if (headers.containsKey(OrderDto.O_ID)) {
@@ -119,7 +110,7 @@ public class CmdListener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SYSTEM_TRANSFER;
+        return ServiceCodeConstant.SERVICE_CODE_SYSTEM_CMD;
     }
 
     @Override

@@ -207,7 +207,7 @@ public class CarServiceSMOImpl extends DefaultAbstractComponentSMO implements IC
         //获取请求参数
         JSONObject reqParam = JSONObject.parseObject(pd.getReqData());
         //拉取数据
-        String url=ServiceConstant.SERVICE_API_URL.concat("/api/dict.queryDict").concat(mapToUrlParam(reqParam));
+        String url=ServiceConstant.SERVICE_API_URL.concat("dict.queryDict").concat(mapToUrlParam(reqParam));
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",url , HttpMethod.GET);
         return responseEntity;
     }

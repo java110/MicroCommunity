@@ -16,6 +16,7 @@
 package com.java110.api.controller.component;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
@@ -49,7 +50,7 @@ import java.util.Map;
  * 组件调用处理类
  */
 @RestController
-public class CallComponentController extends BaseController {
+public class CallComponentController extends DefaultAbstractComponentSMO {
 
     private final static Logger logger = LoggerFactory.getLogger(CallComponentController.class);
     private static final String VERSION = "version";
@@ -79,7 +80,7 @@ public class CallComponentController extends BaseController {
             Assert.hasLength(api, "参数错误，未传入api编码");
 
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            pd.setApiUrl("/api/" + api);
+            pd.setApiUrl(api);
             //权限校验
             hasPrivilege(restTemplate, pd, "/callComponent/" + api);
 

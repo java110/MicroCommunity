@@ -1,6 +1,7 @@
 package com.java110.api.smo.login.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
@@ -22,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
  * wx登录
  */
 @Service("propertyAppLoginSMOImpl")
-public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements IPropertyAppLoginSMO {
+public class PropertyAppLoginSMOImpl extends DefaultAbstractComponentSMO implements IPropertyAppLoginSMO {
 
     private final static Logger logger = LoggerFactory.getLogger(PropertyAppLoginSMOImpl.class);
 
@@ -53,7 +54,7 @@ public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements 
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("password")));
-        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL +"/api/user.service.login", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), "user.service.login", HttpMethod.POST);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }

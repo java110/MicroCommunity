@@ -1,4 +1,4 @@
-package com.java110.core.smo;
+package com.java110.api.smo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;

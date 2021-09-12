@@ -28,7 +28,7 @@ public class ActivitiesManageComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> list(IPageData pd) {
-        pd.setApiUrl("/api/activities.listActivitiess");
+        pd.setApiUrl("activities.listActivitiess");
         return commonGetSMOImpl.doService(pd);
     }
 

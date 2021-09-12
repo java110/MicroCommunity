@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：查询
- * 服务编码：@@templateCode@@.List@@TemplateCode@@
+ * 服务编码：@@templateCode@@.list@@TemplateCode@@
  * 请求路劲：/app/@@templateCode@@.List@@TemplateCode@@
  * add by 吴学文 at @@date@@ mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity

@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：保存
- * 服务编码：@@templateCode@@.Save@@TemplateCode@@
+ * 服务编码：@@templateCode@@.save@@TemplateCode@@
  * 请求路劲：/app/@@templateCode@@.Save@@TemplateCode@@
  * add by 吴学文 at @@date@@ mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity

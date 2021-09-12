@@ -15,6 +15,7 @@
  */
 package com.java110.api.controller;
 
+import com.java110.api.smo.privilege.IPrivilegeSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.utils.constant.CommonConstant;
@@ -39,6 +40,9 @@ public class FlowController extends BaseController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private IPrivilegeSMO privilegeSMOImpl;
+
     /**
      * 流程处理方法
      *
@@ -55,7 +59,7 @@ public class FlowController extends BaseController {
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             System.out.println("数据获取成功");
             //权限校验
-            hasPrivilege(restTemplate, pd, "/" + flowCode);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/" + flowCode);
             validateFlowData(flowCode, pd);
 
         } catch (Throwable e) {

@@ -74,6 +74,9 @@ public class BusinessTableHisCache extends BaseCache {
      * @param businessTableHisDtoDtoDtos
      */
     public static void setValue(List<BusinessTableHisDto> businessTableHisDtoDtoDtos) {
+        if (businessTableHisDtoDtoDtos == null || businessTableHisDtoDtoDtos.size() < 1) {
+            return;
+        }
         Jedis redis = null;
         try {
             redis = getJedis();

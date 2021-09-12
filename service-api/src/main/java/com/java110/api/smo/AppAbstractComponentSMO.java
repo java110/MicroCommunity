@@ -187,7 +187,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         }
         for (String privilegeCode : privilegeCodes) {
             responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL
-                    + "/api/check.user.hasPrivilege?userId=" + pd.getUserId() + "&pId=" + privilegeCode, HttpMethod.GET);
+                    + "check.user.hasPrivilege?userId=" + pd.getUserId() + "&pId=" + privilegeCode, HttpMethod.GET);
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 //throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "用户没有权限操作权限" + privilegeCodes);
                 break;
