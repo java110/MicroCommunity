@@ -2,6 +2,7 @@ package com.java110.dev.dao;
 
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
+import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.entity.mapping.Mapping;
 import com.java110.utils.exception.DAOException;
 
@@ -39,6 +40,12 @@ public interface IDevServiceDAO {
      * @return
      */
     public List<BusinessDatabusDto> getDatabusAll();
+    /**
+     * 查询映射表
+     *
+     * @return
+     */
+    public List<BusinessTableHisDto> getBusinessTableHisAll();
 
 
 

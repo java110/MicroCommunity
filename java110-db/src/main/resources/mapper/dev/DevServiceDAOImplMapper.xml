@@ -53,4 +53,16 @@
         ]]>
     </select>
 
+    <select id="getBusinessTableHisAll" resultType="com.java110.dto.businessTableHis.BusinessTableHisDto">
+        <![CDATA[
+            SELECT
+                t.action_obj,t.action_obj actionObj,t.business_type_cd,t.business_type_cd
+                businessTypeCd,t.his_id,t.his_id hisId,t.action,t.remark,t.status_cd,t.status_cd
+                statusCd,t.action_obj_his,t.action_obj_his actionObjHis
+            from
+                c_business_table_his t
+            where t.status_cd = '0'
+        ]]>
+    </select>
+
 </mapper>

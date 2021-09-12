@@ -19,7 +19,6 @@ import com.java110.config.properties.code.ZookeeperProperties;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.center.DataFlowEventPublishing;
-import com.java110.order.smo.ICenterServiceCacheSMO;
 import com.java110.service.init.ServiceInfoListener;
 import com.java110.service.init.ServiceStartInit;
 import com.java110.utils.cache.MappingCache;
@@ -42,6 +41,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -72,6 +72,7 @@ import java.util.List;
         "com.java110.intf.community",
         "com.java110.intf.fee"
 })
+@EnableAsync
 public class OrderServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);
@@ -118,8 +119,6 @@ public class OrderServiceApplicationStart {
             logger.error("系统启动失败", e);
         }
     }
-
-
 
 
     /**

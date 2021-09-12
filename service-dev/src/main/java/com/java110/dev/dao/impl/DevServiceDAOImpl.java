@@ -4,6 +4,7 @@ import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.dev.dao.IDevServiceDAO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
+import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.entity.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,11 @@ public class DevServiceDAOImpl extends BaseServiceDao implements IDevServiceDAO 
     @Override
     public List<BusinessDatabusDto> getDatabusAll() {
         return sqlSessionTemplate.selectList("devServiceDAOImpl.getDatabusAll");
+    }
+
+    @Override
+    public List<BusinessTableHisDto> getBusinessTableHisAll() {
+        return sqlSessionTemplate.selectList("devServiceDAOImpl.getBusinessTableHisAll");
     }
 
 }

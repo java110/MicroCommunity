@@ -3,14 +3,15 @@ package com.java110.dev.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.db.dao.IQueryServiceDAO;
+import com.java110.dev.dao.IDevServiceDAO;
 import com.java110.dev.smo.IDevServiceCacheSMO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
+import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
 import com.java110.entity.order.ServiceBusiness;
 import com.java110.entity.service.ServiceSql;
-import com.java110.dev.dao.IDevServiceDAO;
 import com.java110.service.context.DataQuery;
 import com.java110.utils.cache.*;
 import com.java110.utils.constant.CommonConstant;
@@ -62,7 +63,10 @@ public class DevServiceCacheSMOImpl implements IDevServiceCacheSMO {
         flushPrivilege(dataQuery);
 
         //刷新databus
-        doFlushDatabus(dataQuery);
+        flushDatabus(dataQuery);
+
+//刷新BusinessTableHis
+        flushBusinessTableHis(dataQuery);
 
         dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS, "刷新成功"));
     }
@@ -88,6 +92,8 @@ public class DevServiceCacheSMOImpl implements IDevServiceCacheSMO {
         flushPrivilege(headers);
 
         flushDatabus(headers);
+
+        flushBusinessTableHis(headers);
     }
 
     /**
@@ -111,6 +117,9 @@ public class DevServiceCacheSMOImpl implements IDevServiceCacheSMO {
 
         //刷新databus
         doFlushDatabus();
+
+        //刷新BusinessTableHis
+        doFlushBusinessTableHis();
     }
 
 
@@ -236,7 +245,7 @@ public class DevServiceCacheSMOImpl implements IDevServiceCacheSMO {
     /**
      * 刷新 Mapping 数据
      */
-    private void doFlushDatabus(DataQuery dataQuery) {
+    private void flushDatabus(DataQuery dataQuery) {
 
         JSONObject params = dataQuery.getRequestParams();
 
@@ -246,6 +255,21 @@ public class DevServiceCacheSMOImpl implements IDevServiceCacheSMO {
 
         doFlushDatabus();
     }
+
+    /**
+     * 刷新 doFlushBusinessTableHis 数据
+     */
+    private void flushBusinessTableHis(DataQuery dataQuery) {
+
+        JSONObject params = dataQuery.getRequestParams();
+
+        if (!CommonConstant.CACHE_BUSINESS_TABLE_HIS.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))) {
+            return;
+        }
+
+        doFlushBusinessTableHis();
+    }
+
 
     /**
      * 刷新 Mapping 数据
@@ -275,6 +299,21 @@ public class DevServiceCacheSMOImpl implements IDevServiceCacheSMO {
         }
 
         doFlushDatabus();
+    }
+
+    /**
+     * 刷新 databus 数据
+     */
+    private void flushBusinessTableHis(Map<String, String> headers) {
+
+        Assert.hasKey(headers, CommonConstant.CACHE_PARAM, "未包含cache参数" + headers.toString());
+
+        if (!CommonConstant.CACHE_BUSINESS_TABLE_HIS.equals(headers.get(CommonConstant.CACHE_PARAM))
+                && !CommonConstant.CACHE_ALL.equals(headers.get(CommonConstant.CACHE_PARAM))) {
+            return;
+        }
+
+        doFlushBusinessTableHis();
     }
 
     /**
@@ -334,6 +373,15 @@ public class DevServiceCacheSMOImpl implements IDevServiceCacheSMO {
         DatabusCache.removeData(DatabusCache.DEFAULT_DATABUS);
         DatabusCache.setValue(businessDatabusDtos);
     }
+
+    private void doFlushBusinessTableHis() {
+        logger.debug("开始刷新 BusinessTableHis数据到redis数据库中");
+        List<BusinessTableHisDto> businessTableHisDtos = devServiceDAOImpl.getBusinessTableHisAll();
+        //删除原始数据
+        BusinessTableHisCache.removeData(BusinessTableHisCache.DEFAULT_BUSINESS_TABLE_HIS);
+        BusinessTableHisCache.setValue(businessTableHisDtos);
+    }
+
 
     /**
      * 刷新AppRoute数据

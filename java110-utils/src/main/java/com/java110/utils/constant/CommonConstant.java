@@ -128,6 +128,11 @@ public class CommonConstant {
      */
     public final static String CACHE_DATABUS = "DATABUS";
 
+    /**
+     * 映射 databus
+     */
+    public final static String CACHE_BUSINESS_TABLE_HIS = "BUSINESS_TABLE_HIS";
+
 
 
     /**

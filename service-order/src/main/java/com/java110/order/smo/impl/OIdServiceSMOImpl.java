@@ -4,10 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.order.OrderItemDto;
 import com.java110.order.dao.ICenterServiceDAO;
+import com.java110.order.smo.IAsynNotifySubService;
 import com.java110.order.smo.IOIdServiceSMO;
+import com.java110.utils.cache.BusinessTableHisCache;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -44,6 +48,9 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private IAsynNotifySubService asynNotifySubServiceImpl;
 
 
     @Override
@@ -155,6 +162,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
         return params;
     }
+
 
     /**
      * 生成insert语句
@@ -309,7 +317,30 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         }
         centerServiceDAOImpl.saveOrderItem(BeanConvertUtil.beanCovertMap(orderItemDto));
 
+        //判断是否配置了 轨迹
+        BusinessTableHisDto businessTableHisDto = BusinessTableHisCache.getBusinessTableHisDto(orderItemDto.getAction(), orderItemDto.getActionObj());
+        if (businessTableHisDto == null) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+        }
+
+        //补充 c_business  #{bId},#{oId},#{businessTypeCd},#{remark},#{statusCd}
+        Map business = new HashMap();
+        business.put("oId", orderItemDto.getoId());
+        business.put("businessTypeCd", businessTableHisDto.getBusinessTypeCd());
+        business.put("remark", "");
+        business.put("statusCd", StatusConstant.STATUS_CD_SAVE);
+        business.put("bId", orderItemDto.getbId());
+        centerServiceDAOImpl.saveBusiness(business);
+
+        //通知子服务生成 business 数据
+        doNoticeServiceGeneratorBusiness(orderItemDto, businessTableHisDto);
+
+
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+    private void doNoticeServiceGeneratorBusiness(OrderItemDto orderItemDto, BusinessTableHisDto businessTableHisDto) {
+        asynNotifySubServiceImpl.notifySubService(orderItemDto,businessTableHisDto);
     }
 
     /**

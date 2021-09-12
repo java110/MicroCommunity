@@ -95,8 +95,8 @@ public class DevServiceApplicationStart {
         //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
         String mapping = MappingCache.getValue("java110_hc_version");
         if (StringUtil.isEmpty(mapping)) {
-            IDevServiceCacheSMO centerServiceCacheSMO = (IDevServiceCacheSMO) ApplicationContextFactory.getBean("devServiceCacheSMOImpl");
-            centerServiceCacheSMO.startFlush();
+            IDevServiceCacheSMO devServiceCacheSMOImpl = (IDevServiceCacheSMO) ApplicationContextFactory.getBean("devServiceCacheSMOImpl");
+            devServiceCacheSMOImpl.startFlush();
             return;
         }
 
@@ -106,8 +106,8 @@ public class DevServiceApplicationStart {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equalsIgnoreCase("-Dcache")) {
                 logger.debug("开始刷新日志，入参为：{}", args[i]);
-                IDevServiceCacheSMO centerServiceCacheSMO = (IDevServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
-                centerServiceCacheSMO.startFlush();
+                IDevServiceCacheSMO devServiceCacheSMOImpl = (IDevServiceCacheSMO) ApplicationContextFactory.getBean("devServiceCacheSMOImpl");
+                devServiceCacheSMOImpl.startFlush();
             }
         }
     }
