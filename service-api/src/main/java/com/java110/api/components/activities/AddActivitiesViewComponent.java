@@ -42,7 +42,8 @@ public class AddActivitiesViewComponent {
     public ResponseEntity<String> uploadImage(IPageData pd, MultipartFile uploadFile) throws Exception {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         paramIn.put("suffix", "jpeg");
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(),pd.getToken(), paramIn.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(),pd.getAppId());
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(),pd.getToken(), paramIn.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "",
+                pd.getSessionId(),pd.getAppId(),pd.getHeaders());
         return addFileSMOImpl.saveFile(newPd, uploadFile);
     }
 

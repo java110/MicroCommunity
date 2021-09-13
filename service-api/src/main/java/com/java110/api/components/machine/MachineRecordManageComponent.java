@@ -33,7 +33,8 @@ public class MachineRecordManageComponent {
         reqParam.put("recordTypeCd", "8888");
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(),pd.getUserName(), pd.getToken(),
-                reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(),pd.getAppId());
+                reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(),
+                "", pd.getSessionId(),pd.getAppId(),pd.getHeaders());
 
         return listMachineRecordsSMOImpl.listMachineRecords(newPd);
     }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.cache.PrivilegeCache;
@@ -14,6 +15,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.UrlParamToJsonUtil;
 import com.java110.vo.ResultVo;
@@ -82,6 +84,22 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         }
 
         headers.put(CommonConstant.USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
+
+        if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
+            headers.put(CommonConstant.HTTP_USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_APP_ID)) {
+            headers.put(CommonConstant.HTTP_APP_ID, pd.getAppId());
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
+            headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_REQ_TIME)) {
+            headers.put(CommonConstant.HTTP_REQ_TIME, DateUtil.getNowDefault());
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_SIGN)) {
+            headers.put(CommonConstant.HTTP_SIGN, "");
+        }
 
         if (url.indexOf("?") > -1) {
             url = url.substring(0, url.indexOf("?"));

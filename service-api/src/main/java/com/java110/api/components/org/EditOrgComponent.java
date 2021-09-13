@@ -43,7 +43,9 @@ public class EditOrgComponent {
                 pd.getUserName(), pd.getToken(),
                 paramIn.toJSONString(), pd.getComponentCode(),
                 pd.getComponentMethod(), "",
-                pd.getAppId());
+                pd.getSessionId(),
+                pd.getAppId(),
+                pd.getHeaders());
 
         return communityServiceSMOImpl.listMyCommunity(newPd);
 

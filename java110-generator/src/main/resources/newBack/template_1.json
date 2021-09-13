@@ -1,37 +1,39 @@
 {
   "autoMove": true,
-  "id": "hisId",
-  "name": "businessTableHis",
-  "desc": "订单轨迹",
-  "shareParam": "hisId",
-  "shareColumn": "his_id",
-  "shareName": "dev",
-  "tableName": "c_business_table_his",
+  "id": "userId",
+  "name": "user",
+  "desc": "用户",
+  "shareParam": "userId",
+  "shareColumn": "user_id",
+  "shareName": "user",
+  "tableName": "u_user",
   "param": {
-    "hisId": "his_id",
-    "action": "action",
-    "actionObj": "action_obj",
-    "actionObjHis": "action_obj_his",
-    "businessTypeCd": "business_type_cd",
-    "remark": "remark",
+    "userId": "user_id",
+    "name": "name",
+    "email": "email",
+    "address": "address",
+    "password": "password",
+    "locationCd": "location_cd",
+    "age": "age",
+    "sex": "sex",
+    "tel": "tel",
+    "levelCd": "level_cd",
+    "bId": "b_id",
+    "score": "score",
     "statusCd": "status_cd"
   },
   "required": [
     {
-      "code": "action",
-      "msg": "动作不能为空"
+      "code": "name",
+      "msg": "用户名称不能为空"
     },
     {
-      "code": "actionObj",
-      "msg": "动作对象不能为空"
+      "code": "password",
+      "msg": "密码不能为空"
     },
     {
-      "code": "actionObjHis",
-      "msg": "轨迹表不能为空"
-    },
-    {
-      "code": "businessTypeCd",
-      "msg": "业务编码"
+      "code": "tel",
+      "msg": "手机号不能为空"
     }
   ]
 }

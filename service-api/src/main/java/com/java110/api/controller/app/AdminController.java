@@ -52,7 +52,8 @@ public class AdminController {
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), pd.getReqData(),
                 "login", "", "", pd.getSessionId(),
-                pd.getAppId());
+                pd.getAppId(),
+                pd.getHeaders());
         ResponseEntity<String> responseEntity = adminLoginPropertyAccountServiceSMOImpl.doLogin(newPd);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, newPd);
         return responseEntity;

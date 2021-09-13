@@ -111,7 +111,7 @@ public class PaymentController extends BaseController {
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
                 "", "", "", pd.getSessionId(),
-                appId);
+                appId,pd.getHeaders());
         return toPayOweFeeSMOImpl.toPay(newPd);
     }
 
