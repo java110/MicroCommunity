@@ -22,8 +22,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.community.IFloorAttrInnerServiceSMO;
 import com.java110.intf.community.IFloorV1InnerServiceSMO;
 import com.java110.po.floor.FloorPo;
+import com.java110.po.floorAttr.FloorAttrPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -51,14 +53,13 @@ public class SaveFloorCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IFloorV1InnerServiceSMO floorV1InnerServiceSMOImpl;
+    @Autowired
+    private IFloorAttrInnerServiceSMO floorAttrInnerServiceSMOImpl;
 
     @Override
     protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "floorId", "请求报文中未包含floorId");
-        Assert.hasKeyAndValue(reqJson, "bId", "请求报文中未包含bId");
         Assert.hasKeyAndValue(reqJson, "floorNum", "请求报文中未包含floorNum");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
-        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "floorArea", "请求报文中未包含floorArea");
 
@@ -70,12 +71,24 @@ public class SaveFloorCmd extends AbstractServiceCmdListener {
 
         FloorPo floorPo = BeanConvertUtil.covertBean(reqJson, FloorPo.class);
         floorPo.setFloorId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        floorPo.setbId("-1");
+        floorPo.setUserId(cmdDataFlowContext.getReqHeaders().get("user-id"));
         int flag = floorV1InnerServiceSMOImpl.saveFloor(floorPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
 
+        FloorAttrPo floorAttrPo = new FloorAttrPo();
+        floorAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        floorAttrPo.setSpecCd(FloorPo.FLOOR_ATTR_LARGE);
+        floorAttrPo.setFloorId(floorPo.getFloorId());
+        floorAttrPo.setCommunityId(floorPo.getCommunityId());
+        floorAttrPo.setValue(FloorPo.FLOOR_ATTR_VALUE);
+        flag = floorAttrInnerServiceSMOImpl.saveFloorAttr(floorAttrPo);
+        if (flag < 1) {
+            throw new CmdException("保存大厦属性数据失败");
+        }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

@@ -52,7 +52,6 @@ public class DeleteFloorCmd extends AbstractServiceCmdListener {
     @Override
     protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "floorId", "floorId不能为空");
-        Assert.hasKeyAndValue(reqJson, "floorId", "floorId不能为空");
 
     }
 
