@@ -63,7 +63,6 @@ public class ListFloorCmd extends AbstractServiceCmdListener {
     }
 
     @Override
-    @Java110Transactional
     protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         FloorDto floorDto = BeanConvertUtil.covertBean(reqJson, FloorDto.class);
