@@ -2,6 +2,7 @@ package com.java110.api.smo.wechatGateway.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.WechatFactory;
@@ -34,7 +35,7 @@ import java.util.List;
  * wx登录
  */
 @Service("wechatGatewaySMOImpl")
-public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWechatGatewaySMO {
+public class WechatGatewaySMOImpl extends DefaultAbstractComponentSMO implements IWechatGatewaySMO {
 
     private final static Logger logger = LoggerFactory.getLogger(WechatGatewaySMOImpl.class);
 

@@ -2,6 +2,7 @@ package com.java110.api.smo.login.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
@@ -42,7 +43,7 @@ import java.util.UUID;
  * wx登录
  */
 @Service("ownerAppLoginSMOImpl")
-public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOwnerAppLoginSMO {
+public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements IOwnerAppLoginSMO {
 
     private final static Logger logger = LoggerFactory.getLogger(OwnerAppLoginSMOImpl.class);
 

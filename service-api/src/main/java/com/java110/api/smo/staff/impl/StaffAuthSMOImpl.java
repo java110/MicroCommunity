@@ -2,6 +2,7 @@ package com.java110.api.smo.staff.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
@@ -36,7 +37,7 @@ import java.util.List;
  * wx登录
  */
 @Service("staffAuthSMOImpl")
-public class StaffAuthSMOImpl extends AbstractFrontServiceSMO implements IStaffAuthSMO {
+public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements IStaffAuthSMO {
 
     private final static Logger logger = LoggerFactory.getLogger(StaffAuthSMOImpl.class);
 
