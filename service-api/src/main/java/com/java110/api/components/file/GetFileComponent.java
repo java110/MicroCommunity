@@ -4,6 +4,8 @@ package com.java110.api.components.file;
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.file.IGetFileByObjIdSMO;
 import com.java110.api.smo.file.IGetFileSMO;
+import com.java110.core.context.PageData;
+import com.java110.dto.app.AppDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -34,7 +36,10 @@ public class GetFileComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<Object> file(IPageData pd) throws IOException {
-        return getFileSMOImpl.getFile(pd);
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(),
+                pd.getReqData(), pd.getComponentCode(), pd.getComponentMethod(),
+                "", pd.getSessionId(), AppDto.WEB_APP_ID,pd.getHeaders());
+        return getFileSMOImpl.getFile(newPd);
     }
 
     /**
@@ -44,7 +49,10 @@ public class GetFileComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<Object> fileByObjId(IPageData pd) throws IOException {
-        return getFileByObjIdSMOImpl.getFileByObjId(pd);
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(),
+                pd.getReqData(), pd.getComponentCode(), pd.getComponentMethod(),
+                "", pd.getSessionId(), AppDto.WEB_APP_ID,pd.getHeaders());
+        return getFileByObjIdSMOImpl.getFileByObjId(newPd);
     }
 
     public IGetFileByObjIdSMO getGetFileByObjIdSMOImpl() {
