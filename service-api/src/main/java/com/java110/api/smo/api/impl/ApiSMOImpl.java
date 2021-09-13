@@ -74,23 +74,19 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
 
     @Override
     public ResponseEntity<String> doApi(String body, Map<String, String> headers, HttpServletRequest request) throws UnsupportedEncodingException {
-        HttpHeaders header = new HttpHeaders();
+
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
-        for (String key : headers.keySet()
-        ) {
-            header.add(key, headers.get(key));
-        }
 
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         if (!StringUtil.isEmpty(result.getUserId())) {
-            header.remove("user-id");
-            header.add("user-id", result.getUserId());
+            headers.remove("user-id");
+            headers.put("user-id", result.getUserId());
             if (!StringUtil.isEmpty(result.getUserName())) {
-                header.add("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
+                headers.put("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
             }
         }
-        header.add("store-id", result.getStoreId());
+        headers.put("store-id", result.getStoreId());
         ResponseEntity<String> responseEntity = apiServiceSMOImpl.service(body, headers);
         return responseEntity;
     }
