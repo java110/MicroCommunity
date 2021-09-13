@@ -107,7 +107,9 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         headers.put(CommonConstant.HTTP_SERVICE, url);
         headers.put(CommonConstant.HTTP_METHOD, CommonConstant.getHttpMethodStr(httpMethod));
 
-        initUrlParam(JSONObject.parseObject(param), headers);
+        if (HttpMethod.GET == httpMethod) {
+            initUrlParam(JSONObject.parseObject(param), headers);
+        }
         if (HttpMethod.GET == httpMethod) {
             headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
         }
@@ -357,8 +359,6 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         }
 
     }
-
-
 
 
     private JSONObject getCurrentCommunity(JSONArray communitys, String communityId) {

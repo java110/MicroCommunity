@@ -17,6 +17,7 @@ public class ParkingAreaSelect2Component {
 
 
     public ResponseEntity<String> list(IPageData pd) {
+
         return listParkingAreasSMOImpl.listParkingAreas(pd);
     }
 
