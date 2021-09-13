@@ -1,6 +1,8 @@
 package com.java110.core.event.cmd;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.center.DataFlowListenerOrderComparator;
@@ -19,9 +21,11 @@ import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpMethod;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,6 +203,15 @@ public class ServiceCmdEventPublishing {
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected static void invokeListener(ServiceCmdListener listener, CmdEvent event) {
         try {
+
+           Method method = listener.getClass().getDeclaredMethod("doCmd",CmdEvent.class, ICmdDataFlowContext.class, JSONObject.class);
+           Java110Transactional java110Transactional = AnnotationUtils.findAnnotation(method, Java110Transactional.class);
+           System.out.printf("123123");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        try {
+
             listener.cmd(event);
         } catch (CmdException e) {
             LoggerEngine.error("发布侦听失败", e);

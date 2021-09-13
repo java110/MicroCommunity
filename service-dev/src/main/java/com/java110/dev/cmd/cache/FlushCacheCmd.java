@@ -2,6 +2,7 @@ package com.java110.dev.cmd.cache;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
@@ -31,6 +32,7 @@ public class FlushCacheCmd extends AbstractServiceCmdListener {
     }
 
     @Override
+    @Java110Transactional
     protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         devServiceCacheSMOImpl.flush(reqJson.toJavaObject(Map.class));
