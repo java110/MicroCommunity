@@ -50,8 +50,10 @@ import java.util.Map;
 public class AppController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(AppController.class);
 
+
+
     @Autowired
-    private IApiServiceSMO apiServiceSMOImpl;
+    private IApiSMO apiSMOImpl;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -87,7 +89,7 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
-            responseEntity = apiServiceSMOImpl.service(postInfo, headers);
+            responseEntity = apiSMOImpl.doApi(postInfo, headers,request);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -119,8 +121,7 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
-            //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
-            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
 
         } catch (Throwable e) {
             logger.error("请求get 方法[" + service + "]失败：", e);
@@ -156,8 +157,8 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
-            //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
-            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + action + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -194,8 +195,8 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", action, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + resource + "/" + action);
-            //responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
-            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
+            //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + action + "]失败：" + postInfo, e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -229,8 +230,8 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
-            //responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
-            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
+            //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求put 方法[" + service + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -261,8 +262,8 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
-            //responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
-            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求delete 方法[" + service + "]失败：", e);
             responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
