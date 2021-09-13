@@ -19,6 +19,7 @@ public class FloorPo implements Serializable {
     private String userId;
     private String remark;
     private String communityId;
+    private String statusCd;
 
     public String getFloorId() {
         return floorId;
@@ -74,5 +75,13 @@ public class FloorPo implements Serializable {
 
     public void setFloorArea(String floorArea) {
         this.floorArea = floorArea;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
