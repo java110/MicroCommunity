@@ -2,6 +2,7 @@ package com.java110.user.cmd.register;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
@@ -38,6 +39,7 @@ public class UserRegisterServiceCmd extends AbstractServiceCmdListener {
     }
 
     @Override
+    @Java110Transactional
     protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         reqJson.put("userId", "-1");

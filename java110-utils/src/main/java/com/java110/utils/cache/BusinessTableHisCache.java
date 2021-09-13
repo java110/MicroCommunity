@@ -59,6 +59,9 @@ public class BusinessTableHisCache extends BaseCache {
      */
     public static BusinessTableHisDto getBusinessTableHisDto(String action, String actionObj) {
         List<BusinessTableHisDto> businessTableHisDtoDtoDtos = getBusinessTableHiss();
+        if(businessTableHisDtoDtoDtos == null){
+            return null;
+        }
 
         for (BusinessTableHisDto businessTableHisDtoDto : businessTableHisDtoDtoDtos) {
             if (action.equals(businessTableHisDtoDto.getAction()) && actionObj.equals(businessTableHisDtoDto.getActionObj())) {
