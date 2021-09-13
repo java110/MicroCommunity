@@ -77,7 +77,7 @@ public class BatchAddFloorComponent {
                         pd.getToken(),
                         needReqParam.toJSONString(),
                         pd.getComponentCode(),
-                        pd.getComponentMethod(), "", pd.getSessionId());
+                        pd.getComponentMethod(), "", pd.getSessionId(),pd.getAppId());
                 floorEntity = floorServiceSMOImpl.saveFloor(newPd);
 
                 if (floorEntity.getStatusCode() == HttpStatus.OK) {

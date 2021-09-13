@@ -39,7 +39,7 @@ public class AuditEnterCommunityManageComponent {
         //reqParam.put("auditStatusCd", StateConstant.NO_AUDIT);
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(),
-                reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
+                reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(),pd.getAppId());
 
         return listAuditEnterCommunitysSMOImpl.listAuditEnterCommunitys(newPd);
     }

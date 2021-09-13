@@ -33,7 +33,7 @@ public class MachineVistorPhotoManageComponent {
         reqParam.put("recordTypeCd", "6666");
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(),pd.getUserName(), pd.getToken(),
-                reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
+                reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(),pd.getAppId());
 
         return listMachineRecordsSMOImpl.listMachineRecords(newPd);
 

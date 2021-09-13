@@ -352,7 +352,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
         }
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(),
-                reqData, pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(), "");
+                reqData, pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(), pd.getAppId());
         return newPd;
     }
 
