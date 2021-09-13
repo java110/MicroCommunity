@@ -4,13 +4,19 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.order.OrderItemDto;
+import com.java110.entity.order.Business;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.order.smo.IAsynNotifySubService;
 import com.java110.order.smo.IOIdServiceSMO;
 import com.java110.utils.cache.BusinessTableHisCache;
+import com.java110.utils.cache.DatabusCache;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.DomainContant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -43,6 +49,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
     public static final String SERVICE_NAME = "SERVICE_NAME";
 
 
+
     @Autowired
     private ICenterServiceDAO centerServiceDAOImpl;
 
@@ -51,6 +58,8 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
     @Autowired
     private IAsynNotifySubService asynNotifySubServiceImpl;
+
+
 
 
     @Override
@@ -340,7 +349,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
     }
 
     private void doNoticeServiceGeneratorBusiness(OrderItemDto orderItemDto, BusinessTableHisDto businessTableHisDto) {
-        asynNotifySubServiceImpl.notifySubService(orderItemDto,businessTableHisDto);
+        asynNotifySubServiceImpl.notifySubService(orderItemDto, businessTableHisDto);
     }
 
     /**
@@ -362,9 +371,6 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         info.put("oId", orderDto.getoId());
         centerServiceDAOImpl.updateOrderItem(info);
 
-        //删除 事务日志
-        //centerServiceDAOImpl.deleteUnItemLog(info);
-
         //完成订单
         info = new HashMap();
         info.put("finishTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -372,6 +378,28 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         info.put("oId", orderDto.getoId());
         centerServiceDAOImpl.updateOrder(info);
 
+        //将c_business 修改为完成
+        //完成订单项
+        info = new HashMap();
+        info.put("finishTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        info.put("statusCd", "C");
+        info.put("oId", orderDto.getoId());
+        centerServiceDAOImpl.updateBusiness(info);
+
+        //触发databug
+        //查询 事务项
+        Map orderItem = new HashMap();
+        orderItem.put("oId", orderDto.getoId());
+        List<Map> orderItemMaps = centerServiceDAOImpl.getOrderItems(orderItem);
+
+        //删除 事务日志
+        //centerServiceDAOImpl.deleteUnItemLog(info);
+
+        asynNotifySubServiceImpl.notifyDatabus(orderItemMaps,orderDto);
+
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
+
+
+
 }

@@ -199,10 +199,10 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     public void updateBusiness(Map order) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.updateBusiness】保存数据入参 : " + JSONObject.toJSONString(order));
 
-        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateBusiness", order);
-        if (saveFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "更新订单项信息失败：" + JSONObject.toJSONString(order));
-        }
+         sqlSessionTemplate.update("centerServiceDAOImpl.updateBusiness", order);
+//        if (saveFlag < 1) {
+//            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "更新订单项信息失败：" + JSONObject.toJSONString(order));
+//        }
     }
 
     /**

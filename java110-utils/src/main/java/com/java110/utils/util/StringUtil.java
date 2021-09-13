@@ -24,6 +24,8 @@ import java.util.regex.Pattern;
  */
 
 public class StringUtil {
+
+
     /**
      * Description: 格式化字符串(用户组建表使用) <br>
      *
@@ -551,38 +553,31 @@ public class StringUtil {
             return false;
         }
     }
-    public static String delHtmlTag(String str){
+
+    public static String delHtmlTag(String str) {
         String newstr = "";
-        newstr = str.replaceAll("<[.[^>]]*>","");
+        newstr = str.replaceAll("<[.[^>]]*>", "");
         newstr = newstr.replaceAll(" ", "");
         newstr = newstr.replaceAll("&nbsp;", "");
         return newstr;
     }
 
 
-
-    public static String encodeEmoji(String orgStr)
-    {
-        if (StringUtil.isEmpty(orgStr))
-        {
+    public static String encodeEmoji(String orgStr) {
+        if (StringUtil.isEmpty(orgStr)) {
             return orgStr;
         }
         String temp = orgStr;
         Pattern pattern = Pattern.compile("[^\u0000-\uffff]", Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(orgStr);
-        while (matcher.find())
-        {
+        while (matcher.find()) {
             StringBuilder sb = new StringBuilder("[em:");
             String mStr = matcher.group();
-            for (int i = 0; i < mStr.length(); i++)
-            {
+            for (int i = 0; i < mStr.length(); i++) {
                 int emoji = mStr.charAt(i);
-                if (i < mStr.length() - 1)
-                {
+                if (i < mStr.length() - 1) {
                     sb.append(emoji).append('-');
-                }
-                else
-                {
+                } else {
                     sb.append(emoji).append(']');
                 }
             }
@@ -591,37 +586,62 @@ public class StringUtil {
         return temp;
     }
 
-    public static String decodeEmoji(String orgStr)
-    {
-        if (StringUtil.isEmpty(orgStr))
-        {
+    public static String decodeEmoji(String orgStr) {
+        if (StringUtil.isEmpty(orgStr)) {
             return orgStr;
         }
         String temp = orgStr;
         Pattern pattern = Pattern.compile("\\[em:[\\d\\-]+\\]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(orgStr);
-        while (matcher.find())
-        {
+        while (matcher.find()) {
             StringBuilder sb = new StringBuilder("\\[em:");
             StringBuilder emojiSb = new StringBuilder();
             String mStr = matcher.group();
             String[] emojis = mStr.substring(4, mStr.length() - 1).split("-");
-            for (int i = 0; i < emojis.length; i++)
-            {
+            for (int i = 0; i < emojis.length; i++) {
                 int emoji = Integer.parseInt(emojis[i]);
-                emojiSb.append((char)emoji);
-                if (i < emojis.length - 1)
-                {
+                emojiSb.append((char) emoji);
+                if (i < emojis.length - 1) {
                     sb.append(emoji).append("\\-");
-                }
-                else
-                {
+                } else {
                     sb.append(emoji).append("\\]");
                 }
             }
             temp = temp.replaceAll(sb.toString(), emojiSb.toString());
         }
         return temp;
+    }
+
+    /**
+     * 下划线转驼峰
+     */
+    public static void lineToHump(JSONObject json) {
+        Pattern linePattern = Pattern.compile("_(\\w)");
+        for(String str : json.keySet()) {
+            str = str.toLowerCase();
+            Matcher matcher = linePattern.matcher(str);
+            StringBuffer sb = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+            }
+            matcher.appendTail(sb);
+            json.put(sb.toString(),json.getString(str));
+        }
+    }
+
+    /**
+     * 下划线转驼峰
+     */
+    public static String lineToHump(String str) {
+        Pattern linePattern = Pattern.compile("_(\\w)");
+        str = str.toLowerCase();
+        Matcher matcher = linePattern.matcher(str);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
 }
