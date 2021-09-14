@@ -110,7 +110,7 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
     }
 
     public static boolean containsSqlInjection(Object obj) {
-        Pattern pattern = Pattern.compile("\\b(exec|insert|select|drop|grant|alter|delete|update|count|chr|mid|master|truncate|char|declare)\\b|(\\*|;|\\+|'|%)");
+        Pattern pattern = Pattern.compile("\\b(exec|insert|select|drop|grant|alter|delete|update|count|chr|mid|master|truncate|char|declare)");
         Matcher matcher = pattern.matcher(obj.toString().toLowerCase());
         return matcher.find();
     }
