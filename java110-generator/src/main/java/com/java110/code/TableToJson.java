@@ -7,19 +7,30 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `c_orders` (\n" +
-            "  `o_id` varchar(30) NOT NULL COMMENT '订单ID',\n" +
-            "  `app_id` varchar(30) NOT NULL COMMENT '应用ID',\n" +
-            "  `ext_transaction_id` varchar(36) DEFAULT NULL,\n" +
+    public static final String createTableSql = "CREATE TABLE `building_room` (\n" +
+            "  `room_id` varchar(30) NOT NULL COMMENT '房屋ID',\n" +
+            "  `b_id` varchar(30) NOT NULL COMMENT '业务Id',\n" +
+            "  `room_num` varchar(12) NOT NULL COMMENT '房屋编号',\n" +
+            "  `unit_id` varchar(30) NOT NULL COMMENT '单元ID',\n" +
+            "  `layer` int(11) NOT NULL COMMENT '层数',\n" +
+            "  `section` int(11) DEFAULT NULL COMMENT '室',\n" +
+            "  `apartment` varchar(20) NOT NULL COMMENT '户型',\n" +
+            "  `built_up_area` decimal(6,2) NOT NULL COMMENT '建筑面积',\n" +
+            "  `fee_coefficient` decimal(12,2) NOT NULL DEFAULT '1.00' COMMENT '算费系数',\n" +
             "  `user_id` varchar(30) NOT NULL COMMENT '用户ID',\n" +
-            "  `request_time` varchar(16) NOT NULL COMMENT '外部系统请求时间',\n" +
-            "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `order_type_cd` varchar(4) NOT NULL COMMENT '订单类型，参考c_order_type表',\n" +
-            "  `finish_time` date DEFAULT NULL COMMENT '订单完成时间',\n" +
             "  `remark` varchar(200) DEFAULT NULL COMMENT '备注',\n" +
-            "  `status_cd` varchar(2) NOT NULL COMMENT '数据状态，详细参考c_status表',\n" +
-            "  UNIQUE KEY `o_id` (`o_id`) USING BTREE,\n" +
-            "  UNIQUE KEY `o_id_2` (`o_id`) USING BTREE\n" +
+            "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
+            "  `state` varchar(4) NOT NULL COMMENT '房屋状态，如房屋出售等，请查看state 表',\n" +
+            "  `community_id` varchar(30) DEFAULT NULL COMMENT '小区ID',\n" +
+            "  `room_type` varchar(12) NOT NULL DEFAULT '1010301' COMMENT '房屋类型',\n" +
+            "  `room_sub_type` varchar(12) NOT NULL DEFAULT '110' COMMENT '房屋类型 110 住宅房屋，119 办公室 120 宿舍',\n" +
+            "  `room_area` decimal(6,2) NOT NULL COMMENT '室内面积',\n" +
+            "  `room_rent` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '租金',\n" +
+            "  UNIQUE KEY `room_id` (`room_id`) USING BTREE,\n" +
+            "  UNIQUE KEY `idx_room_id` (`room_id`) USING BTREE,\n" +
+            "  KEY `idx_room_b_id` (`b_id`) USING BTREE,\n" +
+            "  KEY `i_br_unit_id` (`unit_id`)\n" +
             ")";
 
     public static void main(String[] args) {
@@ -28,7 +39,7 @@ public class TableToJson {
         String tableName = createTableSql.substring(createTableSql.indexOf("TABLE") + 5, createTableSql.indexOf("("));
         tableName = tableName.replaceAll("`", "").trim();
         newSql = newSql.replaceAll("\n", "");
-        String[] rowSqls = newSql.split(",");
+        String[] rowSqls = newSql.split(",\\n");
         JSONObject param = new JSONObject();
         param.put("autoMove", true);
         param.put("desc", "");
@@ -48,6 +59,9 @@ public class TableToJson {
             key = key.substring(0, key.indexOf(" "));
             key = key.replaceAll("`", "");
             if ("UNIQUE".equals(key)) {
+                continue;
+            }
+            if ("KEY".equals(key)) {
                 continue;
             }
             if ("create_time".equals(key)) {
