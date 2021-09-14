@@ -20,6 +20,7 @@ public class CommunityDto extends PageDto implements Serializable {
     private String nearbyLandmarks;
     private String cityCode;
     private String name;
+    private String nameLike;
     private String communityId;
     private String[] notInCommunityId;
     private String mapY;
@@ -239,5 +240,13 @@ public class CommunityDto extends PageDto implements Serializable {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getNameLike() {
+        return nameLike;
+    }
+
+    public void setNameLike(String nameLike) {
+        this.nameLike = nameLike;
     }
 }

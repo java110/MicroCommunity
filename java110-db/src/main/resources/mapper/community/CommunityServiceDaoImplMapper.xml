@@ -500,7 +500,10 @@
             and t.city_code= #{cityCode}
         </if>
         <if test="name !=null and name != ''">
-            and t.name like concat('%',#{name},'%')
+            and t.name = #{name}
+        </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and t.name like concat('%',#{nameLike},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
