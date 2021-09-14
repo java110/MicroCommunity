@@ -1,87 +1,55 @@
 {
   "param": {
-    "section": "section",
+    "relId": "rel_id",
     "remark": "remark",
     "statusCd": "status_cd",
-    "roomSubType": "room_sub_type",
-    "roomArea": "room_area",
-    "userId": "user_id",
-    "roomId": "room_id",
-    "layer": "layer",
-    "feeCoefficient": "fee_coefficient",
-    "builtUpArea": "built_up_area",
-    "roomNum": "room_num",
-    "unitId": "unit_id",
+    "startTime": "start_time",
     "state": "state",
-    "communityId": "community_id",
-    "apartment": "apartment",
-    "roomType": "room_type",
-    "roomRent": "room_rent"
+    "endTime": "end_time",
+    "ownerId": "owner_id",
+    "userId": "user_id",
+    "roomId": "room_id"
   },
-  "name": "room",
+  "name": "ownerRoomRel",
   "shareColumn": "community_id",
-  "id": "roomId",
+  "id": "relId",
   "shareName": "community",
   "autoMove": true,
   "required": [
     {
-      "msg": "房屋ID不能为空",
+      "msg": "关系ID不能为空",
+      "code": "relId"
+    },
+    {
+      "msg": "业主ID不能为空",
+      "code": "ownerId"
+    },
+    {
+      "msg": "房间ID不能为空",
       "code": "roomId"
     },
     {
-      "msg": "房屋编号不能为空",
-      "code": "roomNum"
-    },
-    {
-      "msg": "单元ID不能为空",
-      "code": "unitId"
-    },
-    {
-      "msg": "层数不能为空",
-      "code": "layer"
-    },
-    {
-      "msg": "户型不能为空",
-      "code": "apartment"
-    },
-    {
-      "msg": "建筑面积不能为空",
-      "code": "builtUpArea"
-    },
-    {
-      "msg": "算费系数不能为空",
-      "code": "feeCoefficient"
+      "msg": "业务状态不能为空",
+      "code": "state"
     },
     {
       "msg": "用户ID不能为空",
       "code": "userId"
     },
     {
-      "msg": "数据状态，详细参考c_status表，S 保存，0, 在用 1失效不能为空",
+      "msg": "数据状态不能为空",
       "code": "statusCd"
     },
     {
-      "msg": "房屋状态，如房屋出售等，请查看state 表不能为空",
-      "code": "state"
+      "msg": "起租时间不能为空",
+      "code": "startTime"
     },
     {
-      "msg": "房屋类型不能为空",
-      "code": "roomType"
-    },
-    {
-      "msg": "房屋类型 110 住宅房屋，119 办公室 120 宿舍不能为空",
-      "code": "roomSubType"
-    },
-    {
-      "msg": "室内面积不能为空",
-      "code": "roomArea"
-    },
-    {
-      "msg": "租金不能为空",
-      "code": "roomRent"
+      "msg": "起租时间不能为空",
+      "code": "endTime"
     }
   ],
-  "desc": "房屋",
+  "desc": "业主房屋关系表",
   "shareParam": "communityId",
-  "tableName": "building_room"
+  "tableName": "building_owner_room_rel"
 }

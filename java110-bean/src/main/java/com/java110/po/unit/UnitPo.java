@@ -20,6 +20,7 @@ public class UnitPo implements Serializable {
     private String userId;
     private String remark;
     private String unitArea;
+    private String statusCd;
 
     public String getUnitId() {
         return unitId;
@@ -83,5 +84,13 @@ public class UnitPo implements Serializable {
 
     public void setUnitArea(String unitArea) {
         this.unitArea = unitArea;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
