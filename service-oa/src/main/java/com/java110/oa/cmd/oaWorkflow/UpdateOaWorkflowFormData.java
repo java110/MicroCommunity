@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 /**
  * 修改表单数据
  */
-@Java110Cmd(serviceCode = "/oaWorkflow/updateOaWorkflowFormData")
+@Java110Cmd(serviceCode = "oaWorkflow.updateOaWorkflowFormData")
 public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
 
     @Autowired
