@@ -1,51 +1,47 @@
 {
-  "autoMove": true,
-  "id": "floorId",
-  "name": "floor",
-  "desc": "楼栋",
-  "shareParam": "floorId",
-  "shareColumn": "floor_id",
-  "shareName": "community",
-  "tableName": "f_floor",
   "param": {
-    "floorId": "floor_id",
-    "bId": "b_id",
-    "floorNum": "floor_num",
-    "name": "name",
-    "userId": "user_id",
+    "requestTime": "request_time",
+    "finishTime": "finish_time",
+    "orderTypeCd": "order_type_cd",
+    "extTransactionId": "ext_transaction_id",
+    "appId": "app_id",
     "remark": "remark",
-    "communityId": "community_id",
-    "floorArea": "floor_area"
+    "statusCd": "status_cd",
+    "oId": "o_id",
+    "userId": "user_id"
   },
+  "name": "",
+  "shareColumn": "",
+  "id": "",
+  "shareName": "",
+  "autoMove": true,
   "required": [
     {
-      "code": "floorId",
-      "msg": "用户名称不能为空"
+      "msg": "订单ID不能为空",
+      "code": "oId"
     },
     {
-      "code": "bId",
-      "msg": "密码不能为空"
+      "msg": "应用ID不能为空",
+      "code": "appId"
     },
     {
-      "code": "floorNum",
-      "msg": "手机号不能为空"
+      "msg": "用户ID不能为空",
+      "code": "userId"
     },
     {
-      "code": "name",
-      "msg": "手机号不能为空"
+      "msg": "外部系统请求时间不能为空",
+      "code": "requestTime"
     },
     {
-      "code": "userId",
-      "msg": "手机号不能为空"
+      "msg": "订单类型，参考c_order_type表不能为空",
+      "code": "orderTypeCd"
     },
     {
-      "code": "communityId",
-      "msg": "手机号不能为空"
-    },
-    {
-      "code": "floorArea",
-      "msg": "手机号不能为空"
+      "msg": "数据状态，详细参考c_status表不能为空",
+      "code": "statusCd"
     }
-  ]
+  ],
+  "desc": "",
+  "shareParam": "",
+  "tableName": "c_orders"
 }
-
