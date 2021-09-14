@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,6 +47,9 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        Map<String,String> headers = cmdDataFlowContext.getReqHeaders();
+
+        reqJson.put("storeId",headers.get("store-id"));
 
         OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
         oaWorkflowFormDto.setFlowId(reqJson.get("flowId").toString());
