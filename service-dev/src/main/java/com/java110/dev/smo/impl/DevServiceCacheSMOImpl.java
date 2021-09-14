@@ -1,6 +1,7 @@
 package com.java110.dev.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.db.dao.IQueryServiceDAO;
 import com.java110.dev.dao.IDevServiceDAO;

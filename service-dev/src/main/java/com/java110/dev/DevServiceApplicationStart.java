@@ -19,6 +19,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
 import java.nio.charset.Charset;
@@ -34,7 +35,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.dev",
-        "com.java110.core", "com.java110.config.properties.code", "com.java110.db"},
+        "com.java110.core", "com.java110.config.properties.code", "com.java110.db", "com.java110.utils.factory"},
         exclude = {LiquibaseAutoConfiguration.class,
                 org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @EnableDiscoveryClient
@@ -81,6 +82,16 @@ public class DevServiceApplicationStart {
 
         //刷新缓存
         flushMainCache(args);
+//
+//        //所有的bean,参考：http://412887952-qq-com.iteye.com/blog/2314051
+//        String[] beanNames = context.getBeanDefinitionNames();
+//        //String[] beanNames = ctx.getBeanNamesForAnnotation(RestController.class);//所有添加该注解的bean
+//        logger.info("bean总数:{}", context.getBeanDefinitionCount());
+//        int i = 0;
+//        for (String str : beanNames) {
+//            logger.info("{},beanName:{}", ++i, str);
+//        }
+
     }
 
     /**

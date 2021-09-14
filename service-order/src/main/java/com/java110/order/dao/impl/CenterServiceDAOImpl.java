@@ -72,9 +72,9 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     @Override
     public void updateOrderItem(Map orderItem) throws DAOException {
         int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateOrderItem", orderItem);
-        if (saveFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "修改订单项失败：" + JSONObject.toJSONString(orderItem));
-        }
+//        if (saveFlag < 1) {
+//            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "修改订单项失败：" + JSONObject.toJSONString(orderItem));
+//        }
     }
 
     @Override

@@ -1,16 +1,11 @@
 package com.java110.core.event.cmd;
 
-import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.context.DataFlowContext;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.center.DataFlowListenerOrderComparator;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.event.service.api.ServiceDataFlowListener;
 import com.java110.dto.CmdListenerDto;
-import com.java110.entity.center.AppService;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.BusinessException;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -19,9 +14,10 @@ import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpMethod;
+import sun.misc.ProxyGenerator;
 
-import java.lang.annotation.Annotation;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,8 +84,9 @@ public class ServiceCmdEventPublishing {
 
         List<ServiceCmdListener> cmdListeners = new ArrayList<ServiceCmdListener>();
         for (CmdListenerDto listenerBean : getListeners()) {
+            //ServiceCmdListener listener = ApplicationContextFactory.getBean(listenerBean.getBeanName(), ServiceCmdListener.class);
             ServiceCmdListener listener = ApplicationContextFactory.getBean(listenerBean.getBeanName(), ServiceCmdListener.class);
-            if(listenerBean.getServiceCode().equals(serviceCode)) {
+            if (listenerBean.getServiceCode().equals(serviceCode)) {
                 cmdListeners.add(listener);
             }
         }
@@ -124,7 +121,7 @@ public class ServiceCmdEventPublishing {
      * @param dataFlowContext
      */
     public static void multicastEvent(String serviceCode, ICmdDataFlowContext dataFlowContext) throws BusinessException {
-        multicastEvent(serviceCode, dataFlowContext,  null);
+        multicastEvent(serviceCode, dataFlowContext, null);
     }
 
     /**
@@ -199,10 +196,34 @@ public class ServiceCmdEventPublishing {
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected static void invokeListener(ServiceCmdListener listener, CmdEvent event) {
         try {
-            listener.cmd(event);
+            //        //这里处理业务逻辑数据
+        ICmdDataFlowContext dataFlowContext = event.getCmdDataFlowContext();
+        //获取请求数据
+        JSONObject reqJson = dataFlowContext.getReqJson();
+
+        logger.debug("API服务 --- 请求参数为：{}", reqJson.toJSONString());
+
+            listener.validate(event, dataFlowContext, reqJson);
+
+            listener.doCmd(event, dataFlowContext, reqJson);
+
+        //logger.debug("API服务 --- 返回报文信息：{}", dataFlowContext.getResponseEntity());
+         //   listener.cmd(event);
         } catch (CmdException e) {
             LoggerEngine.error("发布侦听失败", e);
             throw e;
+        }
+    }
+
+    public static void testPoxy(Class clazz){
+        byte[] bytes = ProxyGenerator.generateProxyClass("$Proxy", new Class[]{clazz});
+        try(
+                FileOutputStream fos =new FileOutputStream(new File("D:/$Proxy.class"))
+        ){
+            fos.write(bytes);
+            fos.flush();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

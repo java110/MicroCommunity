@@ -53,7 +53,7 @@ public class UpdateBusinessTableHisCmd extends AbstractServiceCmdListener {
     private IBusinessTableHisV1InnerServiceSMO businessTableHisV1InnerServiceSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "hisId", "hisId不能为空");
 Assert.hasKeyAndValue(reqJson, "hisId", "hisId不能为空");
 
@@ -61,7 +61,7 @@ Assert.hasKeyAndValue(reqJson, "hisId", "hisId不能为空");
 
     @Override
     @Java110Transactional
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
        BusinessTableHisPo businessTableHisPo = BeanConvertUtil.covertBean(reqJson, BusinessTableHisPo.class);
         int flag = businessTableHisV1InnerServiceSMOImpl.updateBusinessTableHis(businessTableHisPo);

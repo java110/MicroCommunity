@@ -46,7 +46,7 @@ public class PcUserLoginCmd extends AbstractServiceCmdListener {
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         String paramIn = cmdDataFlowContext.getReqData();
         Assert.isJsonObject(paramIn, "用户注册请求参数有误，不是有效的json格式 " + paramIn);
         Assert.jsonObjectHaveKey(paramIn, "username", "用户登录，未包含username节点，请检查" + paramIn);
@@ -54,7 +54,7 @@ public class PcUserLoginCmd extends AbstractServiceCmdListener {
     }
 
     @Override
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         ResponseEntity responseEntity = null;
         JSONObject paramInJson = JSONObject.parseObject(cmdDataFlowContext.getReqData());

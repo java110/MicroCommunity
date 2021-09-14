@@ -56,13 +56,12 @@ public class ListBusinessTableHisCmd extends AbstractServiceCmdListener {
     private IBusinessTableHisV1InnerServiceSMO businessTableHisV1InnerServiceSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    @Java110Transactional
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            BusinessTableHisDto businessTableHisDto = BeanConvertUtil.covertBean(reqJson, BusinessTableHisDto.class);
 

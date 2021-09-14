@@ -53,7 +53,7 @@ public class SaveBusinessTableHisCmd extends AbstractServiceCmdListener {
     private IBusinessTableHisV1InnerServiceSMO businessTableHisV1InnerServiceSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "action", "请求报文中未包含action");
 Assert.hasKeyAndValue(reqJson, "actionObj", "请求报文中未包含actionObj");
 Assert.hasKeyAndValue(reqJson, "actionObjHis", "请求报文中未包含actionObjHis");
@@ -63,7 +63,7 @@ Assert.hasKeyAndValue(reqJson, "businessTypeCd", "请求报文中未包含busine
 
     @Override
     @Java110Transactional
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
        BusinessTableHisPo businessTableHisPo = BeanConvertUtil.covertBean(reqJson, BusinessTableHisPo.class);
         businessTableHisPo.setHisId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
