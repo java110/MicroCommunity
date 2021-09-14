@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="buildingRoomV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存房屋信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBuildingRoomInfo" parameterType="Map">
+        insert into building_room(
+section,remark,room_sub_type,room_area,user_id,room_id,layer,fee_coefficient,built_up_area,room_num,unit_id,state,community_id,apartment,room_type,room_rent
+) values (
+#{section},#{remark},#{roomSubType},#{roomArea},#{userId},#{roomId},#{layer},#{feeCoefficient},#{builtUpArea},#{roomNum},#{unitId},#{state},#{communityId},#{apartment},#{roomType},#{roomRent}
+)
+    </insert>
+
+
+
+    <!-- 查询房屋信息 add by wuxw 2018-07-03 -->
+    <select id="getBuildingRoomInfo" parameterType="Map" resultType="Map">
+        select  t.section,t.remark,t.status_cd,t.status_cd statusCd,t.room_sub_type,t.room_sub_type roomSubType,t.room_area,t.room_area roomArea,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.fee_coefficient,t.fee_coefficient feeCoefficient,t.built_up_area,t.built_up_area builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.state,t.community_id,t.community_id communityId,t.apartment,t.room_type,t.room_type roomType,t.room_rent,t.room_rent roomRent 
+from building_room t 
+where 1 =1 
+<if test="section !=null and section != ''">
+   and t.section= #{section}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="roomSubType !=null and roomSubType != ''">
+   and t.room_sub_type= #{roomSubType}
+</if> 
+<if test="roomArea !=null and roomArea != ''">
+   and t.room_area= #{roomArea}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+<if test="layer !=null and layer != ''">
+   and t.layer= #{layer}
+</if> 
+<if test="feeCoefficient !=null and feeCoefficient != ''">
+   and t.fee_coefficient= #{feeCoefficient}
+</if> 
+<if test="builtUpArea !=null and builtUpArea != ''">
+   and t.built_up_area= #{builtUpArea}
+</if> 
+<if test="roomNum !=null and roomNum != ''">
+   and t.room_num= #{roomNum}
+</if> 
+<if test="unitId !=null and unitId != ''">
+   and t.unit_id= #{unitId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="apartment !=null and apartment != ''">
+   and t.apartment= #{apartment}
+</if> 
+<if test="roomType !=null and roomType != ''">
+   and t.room_type= #{roomType}
+</if> 
+<if test="roomRent !=null and roomRent != ''">
+   and t.room_rent= #{roomRent}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改房屋信息 add by wuxw 2018-07-03 -->
+    <update id="updateBuildingRoomInfo" parameterType="Map">
+        update  building_room t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="section !=null and section != ''">
+, t.section= #{section}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="roomSubType !=null and roomSubType != ''">
+, t.room_sub_type= #{roomSubType}
+</if> 
+<if test="roomArea !=null and roomArea != ''">
+, t.room_area= #{roomArea}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+<if test="layer !=null and layer != ''">
+, t.layer= #{layer}
+</if> 
+<if test="feeCoefficient !=null and feeCoefficient != ''">
+, t.fee_coefficient= #{feeCoefficient}
+</if> 
+<if test="builtUpArea !=null and builtUpArea != ''">
+, t.built_up_area= #{builtUpArea}
+</if> 
+<if test="roomNum !=null and roomNum != ''">
+, t.room_num= #{roomNum}
+</if> 
+<if test="unitId !=null and unitId != ''">
+, t.unit_id= #{unitId}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="apartment !=null and apartment != ''">
+, t.apartment= #{apartment}
+</if> 
+<if test="roomType !=null and roomType != ''">
+, t.room_type= #{roomType}
+</if> 
+<if test="roomRent !=null and roomRent != ''">
+, t.room_rent= #{roomRent}
+</if> 
+ where 1=1 <if test="roomId !=null and roomId != ''">
+and t.room_id= #{roomId}
+</if> 
+
+    </update>
+
+    <!-- 查询房屋数量 add by wuxw 2018-07-03 -->
+     <select id="queryBuildingRoomsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from building_room t 
+where 1 =1 
+<if test="section !=null and section != ''">
+   and t.section= #{section}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="roomSubType !=null and roomSubType != ''">
+   and t.room_sub_type= #{roomSubType}
+</if> 
+<if test="roomArea !=null and roomArea != ''">
+   and t.room_area= #{roomArea}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+<if test="layer !=null and layer != ''">
+   and t.layer= #{layer}
+</if> 
+<if test="feeCoefficient !=null and feeCoefficient != ''">
+   and t.fee_coefficient= #{feeCoefficient}
+</if> 
+<if test="builtUpArea !=null and builtUpArea != ''">
+   and t.built_up_area= #{builtUpArea}
+</if> 
+<if test="roomNum !=null and roomNum != ''">
+   and t.room_num= #{roomNum}
+</if> 
+<if test="unitId !=null and unitId != ''">
+   and t.unit_id= #{unitId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="apartment !=null and apartment != ''">
+   and t.apartment= #{apartment}
+</if> 
+<if test="roomType !=null and roomType != ''">
+   and t.room_type= #{roomType}
+</if> 
+<if test="roomRent !=null and roomRent != ''">
+   and t.room_rent= #{roomRent}
+</if> 
+
+
+     </select>
+
+</mapper>

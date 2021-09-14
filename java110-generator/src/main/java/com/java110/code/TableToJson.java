@@ -45,9 +45,9 @@ public class TableToJson {
         param.put("desc", "");
         param.put("id", "");
         param.put("name", "");
-        param.put("shareColumn", "");
+        param.put("shareColumn", "community_id");
         param.put("shareName", "");
-        param.put("shareParam", "");
+        param.put("shareParam", "communityId");
         param.put("tableName", tableName);
         JSONObject paramColumn = new JSONObject();
         JSONArray requireds = new JSONArray();
@@ -62,6 +62,9 @@ public class TableToJson {
                 continue;
             }
             if ("KEY".equals(key)) {
+                continue;
+            }
+            if ("b_id".equals(key)) {
                 continue;
             }
             if ("create_time".equals(key)) {
