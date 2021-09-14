@@ -39,7 +39,7 @@ public class TableToJson {
         String tableName = createTableSql.substring(createTableSql.indexOf("TABLE") + 5, createTableSql.indexOf("("));
         tableName = tableName.replaceAll("`", "").trim();
         newSql = newSql.replaceAll("\n", "");
-        String[] rowSqls = newSql.split(",\\n");
+        String[] rowSqls = newSql.split("',");
         JSONObject param = new JSONObject();
         param.put("autoMove", true);
         param.put("desc", "");
@@ -67,10 +67,10 @@ public class TableToJson {
             if ("create_time".equals(key)) {
                 continue;
             }
-            if(rowSql.toLowerCase().contains("not null")){
-                required.put("code",StringUtil.lineToHump(key));
-                String comment = rowSql.substring(rowSql.indexOf("COMMENT '")+9,rowSql.lastIndexOf("'"));
-                required.put("msg",comment+"不能为空");
+            if (rowSql.toLowerCase().contains("not null")) {
+                required.put("code", StringUtil.lineToHump(key));
+                String comment = rowSql.contains("COMMENT") ? rowSql.substring(rowSql.indexOf("COMMENT '") + 9) : StringUtil.lineToHump(key);
+                required.put("msg", comment + "不能为空");
                 requireds.add(required);
             }
             paramColumn.put(StringUtil.lineToHump(key), key);
