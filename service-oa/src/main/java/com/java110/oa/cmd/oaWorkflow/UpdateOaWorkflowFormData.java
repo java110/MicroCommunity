@@ -75,12 +75,11 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
         }
 
         List<String> columns = new ArrayList<>();
-        List<String> values = new ArrayList<>();
         for (String key : reqJson.keySet()) {
-            if ("flowId".equals(key) || "id".equals(key)) {
+            if ("flowId".equals(key) || "id".equals(key) || "storeId".equals(key)) {
                 continue;
             }
-            columns.add(key + "=" + reqJson.getString(key));
+            columns.add(key + "='" + reqJson.getString(key)+"'");
 
             //简单校验
             validateColumns(columns);
