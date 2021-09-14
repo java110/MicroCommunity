@@ -21,16 +21,16 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.dev.IBusinessTableHisV1InnerServiceSMO;
 import com.java110.po.businessTableHis.BusinessTableHisPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * 类表述：删除
  * 服务编码：businessTableHis.DeleteBusinessTableHis
@@ -43,23 +43,23 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "businessTableHis.deleteBusinessTableHis")
 public class DeleteBusinessTableHisCmd extends AbstractServiceCmdListener {
-  private static Logger logger = LoggerFactory.getLogger(DeleteBusinessTableHisCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteBusinessTableHisCmd.class);
 
     @Autowired
     private IBusinessTableHisV1InnerServiceSMO businessTableHisV1InnerServiceSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "hisId", "hisId不能为空");
-Assert.hasKeyAndValue(reqJson, "hisId", "hisId不能为空");
+        Assert.hasKeyAndValue(reqJson, "hisId", "hisId不能为空");
 
     }
 
     @Override
     @Java110Transactional
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       BusinessTableHisPo businessTableHisPo = BeanConvertUtil.covertBean(reqJson, BusinessTableHisPo.class);
+        BusinessTableHisPo businessTableHisPo = BeanConvertUtil.covertBean(reqJson, BusinessTableHisPo.class);
         int flag = businessTableHisV1InnerServiceSMOImpl.deleteBusinessTableHis(businessTableHisPo);
 
         if (flag < 1) {

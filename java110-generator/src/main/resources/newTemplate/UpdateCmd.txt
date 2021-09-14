@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.dev.I@@TemplateCode@@V1InnerServiceSMO;
+import com.java110.intf.@@shareName@@.I@@TemplateCode@@V1InnerServiceSMO;
 import com.java110.po.@@templateCode@@.@@TemplateCode@@Po;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -53,16 +53,16 @@ public class Update@@TemplateCode@@Cmd extends AbstractServiceCmdListener {
     private I@@TemplateCode@@V1InnerServiceSMO @@templateCode@@V1InnerServiceSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         @@validateTemplateColumns@@
     }
 
     @Override
     @Java110Transactional
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
        @@TemplateCode@@Po @@templateCode@@Po = BeanConvertUtil.covertBean(reqJson, @@TemplateCode@@Po.class);
-        int flag = @@templateCode@@V1InnerServiceSMOImpl.update@@TemplateCode@@(businessTableHisPo);
+        int flag = @@templateCode@@V1InnerServiceSMOImpl.update@@TemplateCode@@(@@templateCode@@Po);
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");

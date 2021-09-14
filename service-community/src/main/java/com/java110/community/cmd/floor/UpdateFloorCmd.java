@@ -53,14 +53,14 @@ public class UpdateFloorCmd extends AbstractServiceCmdListener {
     private IFloorV1InnerServiceSMO floorV1InnerServiceSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "floorId", "floorId不能为空");
 
     }
 
     @Override
     @Java110Transactional
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         FloorPo floorPo = BeanConvertUtil.covertBean(reqJson, FloorPo.class);
         int flag = floorV1InnerServiceSMOImpl.updateFloor(floorPo);

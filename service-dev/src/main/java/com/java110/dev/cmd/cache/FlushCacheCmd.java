@@ -27,13 +27,13 @@ public class FlushCacheCmd extends AbstractServiceCmdListener {
     IDevServiceCacheSMO devServiceCacheSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
 
     }
 
     @Override
     @Java110Transactional
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         devServiceCacheSMOImpl.flush(reqJson.toJavaObject(Map.class));
 

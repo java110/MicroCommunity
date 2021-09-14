@@ -29,12 +29,12 @@ public class QueryDictCmd extends AbstractServiceCmdListener {
     private DictInnerServiceSMO dictInnerServiceSMO;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
 
     }
 
     @Override
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         List<DictDto> dictDtos = this.dictInnerServiceSMO.queryDict(BeanConvertUtil.covertBean(reqJson, DictQueryDto.class));
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(dictDtos), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);

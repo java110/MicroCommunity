@@ -58,12 +58,12 @@ public class ListFloorCmd extends AbstractServiceCmdListener {
     private IFloorV1InnerServiceSMO floorV1InnerServiceSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         FloorDto floorDto = BeanConvertUtil.covertBean(reqJson, FloorDto.class);
 

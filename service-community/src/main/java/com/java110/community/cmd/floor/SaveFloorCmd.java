@@ -57,7 +57,7 @@ public class SaveFloorCmd extends AbstractServiceCmdListener {
     private IFloorAttrInnerServiceSMO floorAttrInnerServiceSMOImpl;
 
     @Override
-    protected void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "floorNum", "请求报文中未包含floorNum");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
@@ -67,7 +67,7 @@ public class SaveFloorCmd extends AbstractServiceCmdListener {
 
     @Override
     @Java110Transactional
-    protected void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         FloorPo floorPo = BeanConvertUtil.covertBean(reqJson, FloorPo.class);
         floorPo.setFloorId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
