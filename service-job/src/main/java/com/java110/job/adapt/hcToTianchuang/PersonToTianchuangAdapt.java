@@ -169,14 +169,15 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         }
 
         //判断住户是否传天创
-        String idCard = machineRecordPo.getIdCard();
+        String name = machineRecordPo.getName();
 
         //身份证为空时 ，门禁记录没法传 所以就不传了
-        if (StringUtil.isEmpty(idCard)) {
+        if (StringUtil.isEmpty(name)) {
             return;
         }
         OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setIdCard(idCard);
+        ownerDto.setName(machineRecordPo.getName());
+        ownerDto.setCommunityId(machineRecordPo.getCommunityId());
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
         if (ownerDtos == null || ownerDtos.size() < 1) {
@@ -279,7 +280,7 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         dataObj.put("lvgmsfhm", ownerDto.getIdCard());
         dataObj.put("lvxm", ownerDto.getName());
         dataObj.put("lvlxdh", ownerDto.getLink());
-        dataObj.put("lvdjsj", ownerDto.getCreateTime());
+        dataObj.put("lvdjsj", DateUtil.getFormatTimeString(ownerDto.getCreateTime(),"yyyyMMdd HH:mm:ss"));
         dataObj.put("lvrybm", ownerDto.getMemberId());
         String qrCodeAddress = "";
         for (RoomAttrDto roomAttrDto : roomDtos.get(0).getRoomAttrDto()) {
@@ -305,7 +306,7 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         pages.add(page);
 
         data.put("pages", pages);
-
+        logger.debug("发送住戶信息加密前，{}", data.toJSONString());
         String json = encryptStr(data.toJSONString(), TianChuangConstant.getAppSecret());
         String result = httpPOST2(json, TianChuangConstant.SERVICE_ID_OWNER);
         JSONObject paramOut = JSONObject.parseObject(result);
@@ -314,7 +315,7 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         if (!"0000".equals(code)) {
             throw new IllegalArgumentException("同步小区失败，" + paramOut.toJSONString());
         }
-        String extTcOwnerId = paramOut.getJSONArray("data").getJSONObject(0).getString("result");
+        String extTcOwnerId = paramOut.getJSONArray("datas").getJSONObject(0).getString("Result");
         OwnerAttrPo ownerAttrPo = new OwnerAttrPo();
         ownerAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         ownerAttrPo.setCommunityId(ownerDto.getCommunityId());
@@ -372,7 +373,7 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         if (!"0000".equals(code)) {
             throw new IllegalArgumentException("同步小区失败，" + paramOut.toJSONString());
         }
-        String extTcMachineId = paramOut.getJSONArray("data").getJSONObject(0).getString("result");
+        String extTcMachineId = paramOut.getJSONArray("datas").getJSONObject(0).getString("Result");
         MachineAttrPo machineAttrPo = new MachineAttrPo();
         machineAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         machineAttrPo.setCommunityId(communityDto.getCommunityId());
@@ -426,9 +427,9 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         JSONObject paramOut = JSONObject.parseObject(result);
         String code = paramOut.getJSONObject("sta").getString("code");
         if (!"0000".equals(code)) {
-            throw new IllegalArgumentException("同步小区失败，" + decryptStr(paramOut.getJSONObject("sta").getString("des"), TianChuangConstant.getAppSecret()));
+            throw new IllegalArgumentException("同步小区失败，" + paramOut.getJSONObject("sta").getString("des"));
         }
-        String extTcCommunityId = paramOut.getJSONArray("data").getJSONObject(0).getString("result");
+        String extTcCommunityId = paramOut.getJSONArray("datas").getJSONObject(0).getString("Result");
         CommunityAttrPo communityAttrPo = new CommunityAttrPo();
         communityAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         communityAttrPo.setCommunityId(communityDto.getCommunityId());

@@ -48,7 +48,7 @@ public class TianChuangConstant {
     //政务小区编码/楼栋外部便阿门/房屋外部编码/业主外部编码 SPEC_CD
     public static final String EXT_TC_COMMUNITY_QRCODE = "3329000004";
 
-    public static final String EXT_TC_ROOM_QRCODE = "3329000004";
+    public static final String EXT_TC_ROOM_QRCODE = "4329000004";
 
     public static final String SERVICE_ID_COMMUNITY = "ZHSQ_XQSBXX";
 
