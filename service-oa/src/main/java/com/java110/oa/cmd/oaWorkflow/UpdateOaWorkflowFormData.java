@@ -19,13 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * 修改表单数据
  */
-@Java110Cmd(serviceCode = "/oaWorkflow/updateOaWorkflowFormData")
+@Java110Cmd(serviceCode = "oaWorkflow.updateOaWorkflowFormData")
 public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
 
     @Autowired
@@ -46,6 +47,9 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        Map<String,String> headers = cmdDataFlowContext.getReqHeaders();
+
+        reqJson.put("storeId",headers.get("store-id"));
 
         OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
         oaWorkflowFormDto.setFlowId(reqJson.get("flowId").toString());
@@ -71,12 +75,11 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
         }
 
         List<String> columns = new ArrayList<>();
-        List<String> values = new ArrayList<>();
         for (String key : reqJson.keySet()) {
-            if ("flowId".equals(key) || "id".equals(key)) {
+            if ("flowId".equals(key) || "id".equals(key) || "storeId".equals(key)) {
                 continue;
             }
-            columns.add(key + "=" + reqJson.getString(key));
+            columns.add(key + "='" + reqJson.getString(key)+"'");
 
             //简单校验
             validateColumns(columns);
@@ -107,7 +110,7 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
     }
 
     public static boolean containsSqlInjection(Object obj) {
-        Pattern pattern = Pattern.compile("\\b(exec|insert|select|drop|grant|alter|delete|update|count|chr|mid|master|truncate|char|declare)\\b|(\\*|;|\\+|'|%)");
+        Pattern pattern = Pattern.compile("\\b(exec|insert|select|drop|grant|alter|delete|update|count|chr|mid|master|truncate|char|declare)");
         Matcher matcher = pattern.matcher(obj.toString().toLowerCase());
         return matcher.find();
     }
