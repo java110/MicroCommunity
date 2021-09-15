@@ -89,7 +89,9 @@
         update report_fee_month_statistics t set
         t.owe_amount= #{oweAmount}
         where 1=1
+        <if test="statisticsId !=null and statisticsId != ''">
             and t.statistics_id= #{statisticsId}
+        </if>
         <if test="curMaxTime !=null ">
             and t.cur_max_time &lt;= #{curMaxTime}
         </if>
