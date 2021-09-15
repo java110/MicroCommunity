@@ -61,7 +61,6 @@ public class ListUnitCmd extends AbstractServiceCmdListener {
     }
 
     @Override
-    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            UnitDto unitDto = BeanConvertUtil.covertBean(reqJson, UnitDto.class);
