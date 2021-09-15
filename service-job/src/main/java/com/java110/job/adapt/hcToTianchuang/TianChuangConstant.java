@@ -34,7 +34,7 @@ public class TianChuangConstant {
     private static final String DEFAULT_TC_URL = "http://112.51.96.125:9080/ywxzservice/dbClient.do";
     //
     private static final String DEFAULT_APP_ID = "26810B9FE0532D03";
-    private static final String DEFAULT_APP_SECRET = "CAD3218426800B9FE0532D03A8C0310E";
+    public static final String DEFAULT_APP_SECRET = "CAD3218426800B9FE0532D03A8C0310E";
     private static final String DEFAULT_COMPANY = "122350112432"; //单位编号
 
     private static final String TC_COMPANY = "COMPANY";//公司
