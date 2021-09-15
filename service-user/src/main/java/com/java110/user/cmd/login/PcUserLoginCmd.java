@@ -45,6 +45,7 @@ public class PcUserLoginCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         String paramIn = cmdDataFlowContext.getReqData();
