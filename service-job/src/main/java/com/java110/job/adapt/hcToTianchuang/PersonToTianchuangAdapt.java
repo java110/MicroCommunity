@@ -426,9 +426,10 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         logger.debug("调用HC IOT信息：" + responseEntity);
         JSONObject paramOut = JSONObject.parseObject(AuthenticationFactory.AesEncrypt(responseEntity.getBody(), TianChuangConstant.getAppSecret()));
 
-        String code = paramOut.getJSONObject("sta").getString("cod");
+        String code = paramOut.getJSONObject("sta").getString("code");
         if (!"0000".equals(code)) {
-            throw new IllegalArgumentException("同步小区失败，" + paramOut.toJSONString());
+
+            throw new IllegalArgumentException("同步小区失败，" + AuthenticationFactory.AesDecrypt(paramOut.getJSONObject("sta").getString("des"), TianChuangConstant.getAppSecret()));
         }
         String extTcCommunityId = paramOut.getJSONArray("data").getJSONObject(0).getString("result");
         CommunityAttrPo communityAttrPo = new CommunityAttrPo();
