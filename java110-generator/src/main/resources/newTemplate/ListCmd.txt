@@ -61,7 +61,6 @@ public class List@@TemplateCode@@Cmd extends AbstractServiceCmdListener {
     }
 
     @Override
-    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            @@TemplateCode@@Dto @@templateCode@@Dto = BeanConvertUtil.covertBean(reqJson, @@TemplateCode@@Dto.class);

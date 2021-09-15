@@ -61,7 +61,6 @@ public class ListRoomCmd extends AbstractServiceCmdListener {
     }
 
     @Override
-    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);

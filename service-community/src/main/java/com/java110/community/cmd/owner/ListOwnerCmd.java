@@ -61,7 +61,6 @@ public class ListOwnerCmd extends AbstractServiceCmdListener {
     }
 
     @Override
-    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
