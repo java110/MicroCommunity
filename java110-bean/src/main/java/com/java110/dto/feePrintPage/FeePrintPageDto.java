@@ -1,6 +1,8 @@
 package com.java110.dto.feePrintPage;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.feePrintPageTemplate.FeePrintPageTemplateDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,13 +14,13 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class FeePrintPageDto extends PageDto implements Serializable {
+public class FeePrintPageDto extends FeePrintPageTemplateDto implements Serializable {
 
     private String pageUrl;
-private String state;
-private String pageId;
-private String communityId;
-private String pageName;
+    private String state;
+    private String pageId;
+    private String communityId;
+    private String pageName;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String pageName;
     public String getPageUrl() {
         return pageUrl;
     }
-public void setPageUrl(String pageUrl) {
+
+    public void setPageUrl(String pageUrl) {
         this.pageUrl = pageUrl;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getPageId() {
+
+    public String getPageId() {
         return pageId;
     }
-public void setPageId(String pageId) {
+
+    public void setPageId(String pageId) {
         this.pageId = pageId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getPageName() {
+
+    public String getPageName() {
         return pageName;
     }
-public void setPageName(String pageName) {
+
+    public void setPageName(String pageName) {
         this.pageName = pageName;
     }
 

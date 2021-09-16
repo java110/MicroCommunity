@@ -18,8 +18,9 @@
     <!-- 查询收据模板信息 add by wuxw 2018-07-03 -->
     <select id="getFeePrintPageInfo" parameterType="Map" resultType="Map">
         select t.page_url,t.page_url pageUrl,t.status_cd,t.status_cd statusCd,t.state,t.page_id,t.page_id
-        pageId,t.community_id,t.community_id communityId,t.page_name,t.page_name pageName
+        pageId,t.community_id,t.community_id communityId,t.page_name,t.page_name pageName,pt.name templateName,pt.url
         from fee_print_page t
+        LEFT JOIN fee_print_page_template pt on t.page_url = pt.template_id and pt.status_cd = '0'
         where 1 =1
         <if test="pageUrl !=null and pageUrl != ''">
             and t.page_url= #{pageUrl}

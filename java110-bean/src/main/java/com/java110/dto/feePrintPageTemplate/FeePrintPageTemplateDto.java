@@ -1,6 +1,7 @@
 package com.java110.dto.feePrintPageTemplate;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,8 +16,9 @@ import java.util.Date;
 public class FeePrintPageTemplateDto extends PageDto implements Serializable {
 
     private String name;
-private String templateId;
-private String url;
+    private String templateName;
+    private String templateId;
+    private String url;
 
 
     private Date createTime;
@@ -27,19 +29,24 @@ private String url;
     public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getTemplateId() {
+
+    public String getTemplateId() {
         return templateId;
     }
-public void setTemplateId(String templateId) {
+
+    public void setTemplateId(String templateId) {
         this.templateId = templateId;
     }
-public String getUrl() {
+
+    public String getUrl() {
         return url;
     }
-public void setUrl(String url) {
+
+    public void setUrl(String url) {
         this.url = url;
     }
 
@@ -58,5 +65,13 @@ public void setUrl(String url) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
     }
 }
