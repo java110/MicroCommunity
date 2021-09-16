@@ -70,6 +70,9 @@ public class AccountDetailBMOImpl extends ApiBaseBMO implements IAccountDetailBM
 
     @Override
     public void dealAccount(JSONObject paramObj, DataFlowContext dataFlowContext) {
+        if(!paramObj.containsKey("deductionAmount")){
+            return ;
+        }
         //账户金额
         double deductionAmount = paramObj.getDouble("deductionAmount"); //抵扣金额
         double redepositAmount = paramObj.getDouble("redepositAmount"); //转存金额
