@@ -96,6 +96,19 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
 
+
+        JSONArray importRoomFees = reqJson.getJSONArray("importRoomFees");
+
+        List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
+
+        if (tmpImportRoomFees == null || tmpImportRoomFees.size() < 1) {
+            throw new IllegalArgumentException("未包含导入费用");
+        }
+
+        if (StringUtil.isEmpty(feeName)) {
+            feeName = tmpImportRoomFees.get(0).getFeeName();
+        }
+
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
         }
@@ -113,11 +126,6 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         } else {
             feeConfigDto.setConfigId(feeConfigDtos.get(0).getConfigId());
         }
-
-
-        JSONArray importRoomFees = reqJson.getJSONArray("importRoomFees");
-
-        List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
 
         for (ImportRoomFee tmpImportRoomFee : tmpImportRoomFees) {
             tmpImportRoomFee.setCommunityId(communityId);
