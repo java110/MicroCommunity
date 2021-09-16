@@ -1,39 +1,36 @@
 {
-  "autoMove": true,
-  "desc": "房屋属性",
-  "id": "attrId",
-  "name": "roomAttr",
   "param": {
-    "attrId": "attr_id",
-    "roomId": "room_id",
-    "specCd": "spec_cd",
+    "pageUrl": "page_url",
     "statusCd": "status_cd",
-    "value": "value"
+    "state": "state",
+    "pageId": "page_id",
+    "communityId": "community_id",
+    "pageName": "page_name"
   },
+  "name": "feePrintPage",
+  "shareColumn": "community_id",
+  "id": "pageId",
+  "shareName": "fee",
+  "autoMove": true,
   "required": [
     {
-      "code": "attrId",
-      "msg": "属性id不能为空"
+      "msg": "名称不能为空",
+      "code": "pageName"
     },
     {
-      "code": "roomId",
-      "msg": "房屋ID不能为空"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
     },
     {
-      "code": "specCd",
-      "msg": "规格id,参考spec表不能为空"
+      "msg": "收据页面不能为空",
+      "code": "pageUrl"
     },
     {
-      "code": "value",
-      "msg": "属性值不能为空"
-    },
-    {
-      "code": "statusCd",
-      "msg": "数据状态不能为空"
+      "msg": "state不能为空",
+      "code": "state"
     }
   ],
-  "shareColumn": "community_id",
-  "shareName": "community",
+  "desc": "收据模板",
   "shareParam": "communityId",
-  "tableName": "building_room_attr"
+  "tableName": "fee_print_page"
 }
