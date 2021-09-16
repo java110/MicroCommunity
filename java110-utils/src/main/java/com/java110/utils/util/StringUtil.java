@@ -615,8 +615,9 @@ public class StringUtil {
     /**
      * 下划线转驼峰
      */
-    public static void lineToHump(JSONObject json) {
+    public static JSONObject lineToHump(JSONObject json) {
         Pattern linePattern = Pattern.compile("_(\\w)");
+        JSONObject newJson = new JSONObject();
         for(String str : json.keySet()) {
             str = str.toLowerCase();
             Matcher matcher = linePattern.matcher(str);
@@ -625,8 +626,11 @@ public class StringUtil {
                 matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
             }
             matcher.appendTail(sb);
-            json.put(sb.toString(),json.getString(str));
+            newJson.put(sb.toString(),json.getString(str));
+            newJson.put(str,json.getString(str));
         }
+
+        return newJson;
     }
 
     /**
