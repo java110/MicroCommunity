@@ -57,7 +57,6 @@ public class SaveFeePrintPageCmd extends AbstractServiceCmdListener {
         Assert.hasKeyAndValue(reqJson, "pageName", "请求报文中未包含pageName");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "pageUrl", "请求报文中未包含pageUrl");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
 
     }
 

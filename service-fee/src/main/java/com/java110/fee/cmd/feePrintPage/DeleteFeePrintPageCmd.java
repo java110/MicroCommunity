@@ -21,16 +21,16 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.fee.IFeePrintPageV1InnerServiceSMO;
 import com.java110.po.feePrintPage.FeePrintPagePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * 类表述：删除
  * 服务编码：feePrintPage.deleteFeePrintPage
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "feePrintPage.deleteFeePrintPage")
 public class DeleteFeePrintPageCmd extends AbstractServiceCmdListener {
-  private static Logger logger = LoggerFactory.getLogger(DeleteFeePrintPageCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteFeePrintPageCmd.class);
 
     @Autowired
     private IFeePrintPageV1InnerServiceSMO feePrintPageV1InnerServiceSMOImpl;
@@ -51,7 +51,7 @@ public class DeleteFeePrintPageCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "pageId", "pageId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -59,7 +59,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       FeePrintPagePo feePrintPagePo = BeanConvertUtil.covertBean(reqJson, FeePrintPagePo.class);
+        FeePrintPagePo feePrintPagePo = BeanConvertUtil.covertBean(reqJson, FeePrintPagePo.class);
         int flag = feePrintPageV1InnerServiceSMOImpl.deleteFeePrintPage(feePrintPagePo);
 
         if (flag < 1) {
