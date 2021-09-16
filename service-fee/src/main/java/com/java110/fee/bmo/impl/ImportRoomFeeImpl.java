@@ -643,7 +643,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         payFeeConfigPo.setComputingFormula("4004");
         payFeeConfigPo.setEndTime(DateUtil.getLastTime());
         payFeeConfigPo.setFeeFlag("2006012");
-        payFeeConfigPo.setIsDefault("T");
+        payFeeConfigPo.setIsDefault("F");
         payFeeConfigPo.setPaymentCd("2100");
         payFeeConfigPo.setFeeName(feeConfigDto.getFeeName());
         payFeeConfigPo.setSquarePrice("0");
