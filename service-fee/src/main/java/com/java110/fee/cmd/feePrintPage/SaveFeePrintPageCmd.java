@@ -67,6 +67,7 @@ public class SaveFeePrintPageCmd extends AbstractServiceCmdListener {
 
         FeePrintPagePo feePrintPagePo = BeanConvertUtil.covertBean(reqJson, FeePrintPagePo.class);
         feePrintPagePo.setPageId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        feePrintPagePo.setState("F");
         int flag = feePrintPageV1InnerServiceSMOImpl.saveFeePrintPage(feePrintPagePo);
 
         if (flag < 1) {
