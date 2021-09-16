@@ -1,36 +1,26 @@
 {
-  "param": {
-    "pageUrl": "page_url",
-    "statusCd": "status_cd",
-    "state": "state",
-    "pageId": "page_id",
-    "communityId": "community_id",
-    "pageName": "page_name"
-  },
-  "name": "feePrintPage",
-  "shareColumn": "community_id",
-  "id": "pageId",
+  "name": "feePrintPageTemplate",
+  "shareColumn": "template_id",
+  "id": "templateId",
   "shareName": "fee",
   "autoMove": true,
+  "desc": "收据模板",
+  "shareParam": "templateId",
+  "tableName": "fee_print_page_template",
+  "param": {
+    "name": "name",
+    "statusCd": "status_cd",
+    "templateId": "template_id",
+    "url": "url"
+  },
   "required": [
     {
       "msg": "名称不能为空",
-      "code": "pageName"
-    },
-    {
-      "msg": "小区ID不能为空",
-      "code": "communityId"
+      "code": "name"
     },
     {
       "msg": "收据页面不能为空",
-      "code": "pageUrl"
-    },
-    {
-      "msg": "state不能为空",
-      "code": "state"
+      "code": "url"
     }
-  ],
-  "desc": "收据模板",
-  "shareParam": "communityId",
-  "tableName": "fee_print_page"
+  ]
 }

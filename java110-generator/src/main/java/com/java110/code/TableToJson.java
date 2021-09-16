@@ -7,12 +7,10 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `fee_print_page` (\n" +
-            "  `page_id` varchar(30) NOT NULL COMMENT '页面ID',\n" +
-            "  `page_name` varchar(128) NOT NULL COMMENT '名称',\n" +
-            "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
-            "  `page_url` varchar(512) NOT NULL COMMENT '收据页面',\n" +
-            "   state varchar(12) not null default 'F' comment '状态 T 有效 F为无效',\n" +
+    public static final String createTableSql = "CREATE TABLE `fee_print_page_template` (\n" +
+            "  `template_id` varchar(30) NOT NULL COMMENT '页面ID',\n" +
+            "  `name` varchar(128) NOT NULL COMMENT '名称',\n" +
+            "  `url` varchar(512) NOT NULL COMMENT '收据页面',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
             "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态 1表示 失效 0 有效'\n" +
             ")";
