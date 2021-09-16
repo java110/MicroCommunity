@@ -26,6 +26,7 @@ import com.java110.po.feePrintPage.FeePrintPagePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,11 +64,21 @@ public class UpdateFeePrintPageCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         FeePrintPagePo feePrintPagePo = BeanConvertUtil.covertBean(reqJson, FeePrintPagePo.class);
+        //将所有的刷为 F
+        if("T".equals(feePrintPagePo.getState())){
+            FeePrintPagePo newFeePrintPagePo = new FeePrintPagePo();
+            newFeePrintPagePo.setCommunityId(feePrintPagePo.getCommunityId());
+            newFeePrintPagePo.setState("F");
+            feePrintPageV1InnerServiceSMOImpl.updateFeePrintPage(newFeePrintPagePo);
+        }
+
+        //将其他模板刷为F
         int flag = feePrintPageV1InnerServiceSMOImpl.updateFeePrintPage(feePrintPagePo);
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
