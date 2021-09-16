@@ -1,55 +1,39 @@
 {
-  "param": {
-    "relId": "rel_id",
-    "remark": "remark",
-    "statusCd": "status_cd",
-    "startTime": "start_time",
-    "state": "state",
-    "endTime": "end_time",
-    "ownerId": "owner_id",
-    "userId": "user_id",
-    "roomId": "room_id"
-  },
-  "name": "ownerRoomRel",
-  "shareColumn": "community_id",
-  "id": "relId",
-  "shareName": "community",
   "autoMove": true,
+  "desc": "房屋属性",
+  "id": "attrId",
+  "name": "roomAttr",
+  "param": {
+    "attrId": "attr_id",
+    "roomId": "room_id",
+    "specCd": "spec_cd",
+    "statusCd": "status_cd",
+    "value": "value"
+  },
   "required": [
     {
-      "msg": "关系ID不能为空",
-      "code": "relId"
+      "code": "attrId",
+      "msg": "属性id不能为空"
     },
     {
-      "msg": "业主ID不能为空",
-      "code": "ownerId"
+      "code": "roomId",
+      "msg": "房屋ID不能为空"
     },
     {
-      "msg": "房间ID不能为空",
-      "code": "roomId"
+      "code": "specCd",
+      "msg": "规格id,参考spec表不能为空"
     },
     {
-      "msg": "业务状态不能为空",
-      "code": "state"
+      "code": "value",
+      "msg": "属性值不能为空"
     },
     {
-      "msg": "用户ID不能为空",
-      "code": "userId"
-    },
-    {
-      "msg": "数据状态不能为空",
-      "code": "statusCd"
-    },
-    {
-      "msg": "起租时间不能为空",
-      "code": "startTime"
-    },
-    {
-      "msg": "起租时间不能为空",
-      "code": "endTime"
+      "code": "statusCd",
+      "msg": "数据状态不能为空"
     }
   ],
-  "desc": "业主房屋关系表",
+  "shareColumn": "community_id",
+  "shareName": "community",
   "shareParam": "communityId",
-  "tableName": "building_owner_room_rel"
+  "tableName": "building_room_attr"
 }
