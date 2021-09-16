@@ -7,30 +7,23 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `building_room` (\n" +
-            "  `room_id` varchar(30) NOT NULL COMMENT '房屋ID',\n" +
-            "  `b_id` varchar(30) NOT NULL COMMENT '业务Id',\n" +
-            "  `room_num` varchar(12) NOT NULL COMMENT '房屋编号',\n" +
-            "  `unit_id` varchar(30) NOT NULL COMMENT '单元ID',\n" +
-            "  `layer` int(11) NOT NULL COMMENT '层数',\n" +
-            "  `section` int(11) DEFAULT NULL COMMENT '室',\n" +
-            "  `apartment` varchar(20) NOT NULL COMMENT '户型',\n" +
-            "  `built_up_area` decimal(6,2) NOT NULL COMMENT '建筑面积',\n" +
-            "  `fee_coefficient` decimal(12,2) NOT NULL DEFAULT '1.00' COMMENT '算费系数',\n" +
-            "  `user_id` varchar(30) NOT NULL COMMENT '用户ID',\n" +
+    public static final String createTableSql = "CREATE TABLE `gov_car` (\n" +
+            "  `car_id` varchar(30) NOT NULL PRIMARY key COMMENT '汽车ID',\n" +
+            "  `pa_id` varchar(30) NOT NULL COMMENT '停车场ID',\n" +
+            "  `car_num` varchar(12) NOT NULL COMMENT '车牌号',\n" +
+            "  `car_brand` varchar(50) NOT NULL COMMENT '汽车品牌',\n" +
+            "  `car_type` varchar(4) NOT NULL COMMENT '9901 家用小汽车，9902 客车，9903 货车',\n" +
+            "  `car_color` varchar(12) NOT NULL COMMENT '颜色',\n" +
+            "  `ca_id` varchar(30) NOT NULL COMMENT '区域ID',\n" +
+            "  `gov_community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
+            "  `start_time` datetime NOT NULL COMMENT '起租时间',\n" +
+            "  `end_time` datetime NOT NULL COMMENT '结租时间',\n" +
+            "   gov_person_id varchar(30) not null comment '车主ID',\n" +
+            "  `car_type_cd` varchar(4) NOT NULL DEFAULT '1001' COMMENT '1001 主车辆 1002 成员车辆',\n" +
             "  `remark` varchar(200) DEFAULT NULL COMMENT '备注',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
-            "  `state` varchar(4) NOT NULL COMMENT '房屋状态，如房屋出售等，请查看state 表',\n" +
-            "  `community_id` varchar(30) DEFAULT NULL COMMENT '小区ID',\n" +
-            "  `room_type` varchar(12) NOT NULL DEFAULT '1010301' COMMENT '房屋类型',\n" +
-            "  `room_sub_type` varchar(12) NOT NULL DEFAULT '110' COMMENT '房屋类型 110 住宅房屋，119 办公室 120 宿舍',\n" +
-            "  `room_area` decimal(6,2) NOT NULL COMMENT '室内面积',\n" +
-            "  `room_rent` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '租金',\n" +
-            "  UNIQUE KEY `room_id` (`room_id`) USING BTREE,\n" +
-            "  UNIQUE KEY `idx_room_id` (`room_id`) USING BTREE,\n" +
-            "  KEY `idx_room_b_id` (`b_id`) USING BTREE,\n" +
-            "  KEY `i_br_unit_id` (`unit_id`)\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0, 在用 1失效',\n" +
+            "  `datasource_type` varchar(30) NOT NULL DEFAULT '999999' COMMENT '数据来源 999999 政务系统添加 777777 物业系统同步'\n" +
             ")";
 
     public static void main(String[] args) {
@@ -45,9 +38,9 @@ public class TableToJson {
         param.put("desc", "");
         param.put("id", "");
         param.put("name", "");
-        param.put("shareColumn", "community_id");
+        param.put("shareColumn", "ca_id");
         param.put("shareName", "");
-        param.put("shareParam", "communityId");
+        param.put("shareParam", "caId");
         param.put("tableName", tableName);
         JSONObject paramColumn = new JSONObject();
         JSONArray requireds = new JSONArray();

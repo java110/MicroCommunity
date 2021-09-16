@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
@@ -42,7 +43,7 @@ public class UserRegisterServiceCmd extends AbstractServiceCmdListener {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        reqJson.put("userId", "-1");
+        reqJson.put("userId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_userId));
         reqJson.put("levelCd", UserLevelConstant.USER_LEVEL_ADMIN);
 
         UserPo userPo = BeanConvertUtil.covertBean(reqJson, UserPo.class);
