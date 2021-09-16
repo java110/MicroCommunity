@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feePrintPageV1ServiceDaoImpl">
+
+
+    <!-- 保存收据模板信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeePrintPageInfo" parameterType="Map">
+        insert into fee_print_page(
+        page_url,state,page_id,community_id,page_name
+        ) values (
+        #{pageUrl},#{state},#{pageId},#{communityId},#{pageName}
+        )
+    </insert>
+
+
+    <!-- 查询收据模板信息 add by wuxw 2018-07-03 -->
+    <select id="getFeePrintPageInfo" parameterType="Map" resultType="Map">
+        select t.page_url,t.page_url pageUrl,t.status_cd,t.status_cd statusCd,t.state,t.page_id,t.page_id
+        pageId,t.community_id,t.community_id communityId,t.page_name,t.page_name pageName
+        from fee_print_page t
+        where 1 =1
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="pageId !=null and pageId != ''">
+            and t.page_id= #{pageId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="pageName !=null and pageName != ''">
+            and t.page_name= #{pageName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改收据模板信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeePrintPageInfo" parameterType="Map">
+        update fee_print_page t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            , t.page_url= #{pageUrl}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="pageName !=null and pageName != ''">
+            , t.page_name= #{pageName}
+        </if>
+        where 1=1
+        <if test="pageId !=null and pageId != ''">
+            and t.page_id= #{pageId}
+        </if>
+
+    </update>
+
+    <!-- 查询收据模板数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeePrintPagesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_print_page t
+        where 1 =1
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="pageId !=null and pageId != ''">
+            and t.page_id= #{pageId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="pageName !=null and pageName != ''">
+            and t.page_name= #{pageName}
+        </if>
+
+
+    </select>
+
+</mapper>

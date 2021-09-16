@@ -70,7 +70,7 @@ public class BackCoderGeneratorStart extends BaseGenerator {
         generatorInnerServiceSMOImpl.generator(data);
 
         GeneratorDtoBean generatorDtoBean = new GeneratorDtoBean();
-        //generatorDtoBean.generator(data);
+        generatorDtoBean.generator(data);
 
         GeneratorIInnerServiceSMO generatorIInnerServiceSMO = new GeneratorIInnerServiceSMO();
         generatorIInnerServiceSMO.generator(data);
