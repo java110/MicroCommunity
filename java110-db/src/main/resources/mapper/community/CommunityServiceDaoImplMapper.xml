@@ -275,15 +275,15 @@
     <!--小区成员加入 add by wuxw 2018-10-27 saveBusinessCommunityMember-->
     <insert id="saveBusinessCommunityMember" parameterType="Map">
         insert into
-        business_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,month,operate,audit_status_cd)
-        values(#{communityMemberId},#{bId},#{communityId},#{memberId},#{memberTypeCd},#{month},#{operate},#{auditStatusCd})
+        business_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,month,operate,audit_status_cd,start_time,end_time)
+        values(#{communityMemberId},#{bId},#{communityId},#{memberId},#{memberTypeCd},#{month},#{operate},#{auditStatusCd},#{startTime},#{endTime})
     </insert>
 
     <!-- 小区成员加入 instance表中 add by wuxw 2018-10-27 -->
     <insert id="saveCommunityMemberInstance" parameterType="Map">
         insert into
-        s_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,status_cd,audit_status_cd)
-        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,'0',ms.audit_status_cd
+        s_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,status_cd,audit_status_cd,start_time,end_time)
+        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,'0',ms.audit_status_cd,ms.start_time,ms.end_time
         from business_community_member ms where
         ms.operate = 'ADD' and ms.b_id=#{bId}
         <if test="communityId != null and communityId != ''">
@@ -294,7 +294,7 @@
     <!-- 查询小区成员 add by wuxw 2018-10-27 getBusinessCommunityMember-->
     <select id="getBusinessCommunityMember" parameterType="Map" resultType="Map">
         select
-        ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.operate,ms.audit_status_cd
+        ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.operate,ms.audit_status_cd,ms.start_time,ms.end_time
         from business_community_member ms where 1 = 1
         <if test="operate != null and operate != ''">
             and ms.operate = #{operate}
@@ -315,6 +315,7 @@
         ms.community_member_id communityMemberId ,ms.b_id bId,ms.community_id communityId,ms.member_id
         memberId,ms.member_type_cd memberTypeCd,ms.status_cd statusCd,
         ms.audit_status_cd auditStatusCd,
+        ms.start_time,ms.end_time,ms.start_time startTime,ms.end_time endTime,
         (CASE
         WHEN ms.audit_status_cd='1000'
         THEN '待审核'
@@ -391,6 +392,12 @@
         </if>
         <if test="auditStatusCd !=null and auditStatusCd !=''">
             ,ms.audit_status_cd = #{auditStatusCd}
+        </if>
+        <if test="startTime !=null ">
+            ,ms.start_time = #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            ,ms.end_time = #{endTime}
         </if>
         where 1=1
         <if test="bId != null and bId !=''">

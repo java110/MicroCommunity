@@ -46,6 +46,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         businessCommunityInfo.put("state", businessCommunityInfo.get("state"));
         businessCommunityInfo.put("communityArea", businessCommunityInfo.get("community_area"));
         businessCommunityInfo.put("tel", businessCommunityInfo.get("tel"));
+
         businessCommunityInfo.put("statusCd", statusCd);
     }
 
@@ -92,6 +93,8 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         businessCommunityMember.put("memberId", businessCommunityMember.get("member_id"));
         businessCommunityMember.put("memberTypeCd", businessCommunityMember.get("member_type_cd"));
         businessCommunityMember.put("auditStatusCd", businessCommunityMember.get("audit_status_cd"));
+        businessCommunityMember.put("startTime", businessCommunityMember.get("start_time"));
+        businessCommunityMember.put("endTime", businessCommunityMember.get("end_time"));
         businessCommunityMember.put("statusCd", statusCd);
     }
 
@@ -214,6 +217,8 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         currentCommunityMember.put("memberId", currentCommunityMember.get("member_id"));
         currentCommunityMember.put("memberTypeCd", currentCommunityMember.get("member_type_cd"));
         currentCommunityMember.put("auditStatusCd", currentCommunityMember.get("audit_status_cd"));
+        currentCommunityMember.put("startTime", currentCommunityMember.get("start_time"));
+        currentCommunityMember.put("endTime", currentCommunityMember.get("end_time"));
         currentCommunityMember.put("operate", StatusConstant.OPERATE_DEL);
         getCommunityServiceDaoImpl().saveBusinessCommunityMember(currentCommunityMember);
 
