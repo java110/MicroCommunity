@@ -638,10 +638,12 @@
         scm.`member_type_cd` memberTypeCd,
         scm.audit_status_cd auditStatusCd,
         scm.`status_cd` statusCd,
+        scm.`start_time` startTime,
+        scm.`end_time` endTime,
         ca.area_name areaName,
         ca.parent_area_name cityName,
         ca1.parent_area_name provName,
-        sc.community_area communityArea
+        sc.community_area communityArea,
         FROM
         s_community sc,
         s_community_member scm,
