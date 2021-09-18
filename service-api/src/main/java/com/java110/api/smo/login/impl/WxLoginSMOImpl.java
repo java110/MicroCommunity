@@ -106,7 +106,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         //responseEntity = super.getUserInfoByOpenId(pd, restTemplate, openId);
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setOpenId(openId);
-        List<OwnerAppUserDto> ownerAppUserDtos = CallApiServiceFactory.getForApis(pd, ownerAppUserDto, ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS, OwnerAppUserDto.class);
+        List<OwnerAppUserDto> ownerAppUserDtos = super.getForApis(pd, ownerAppUserDto, ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS, OwnerAppUserDto.class);
         JSONObject paramOut = new JSONObject();
         if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
             //将openId放到redis 缓存，给前段下发临时票据
