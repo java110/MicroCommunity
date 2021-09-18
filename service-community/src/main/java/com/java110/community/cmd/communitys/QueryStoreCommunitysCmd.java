@@ -22,8 +22,8 @@ import java.util.List;
  * add by 吴学文 2021-09-18
  */
 @Java110Cmd(serviceCode = "/communitys/queryStoreCommunitys")
-public class QueryStoreCommunitys extends AbstractServiceCmdListener {
-    private final static Logger logger = LoggerFactory.getLogger(QueryStoreCommunitys.class);
+public class QueryStoreCommunitysCmd extends AbstractServiceCmdListener {
+    private final static Logger logger = LoggerFactory.getLogger(QueryStoreCommunitysCmd.class);
 
 
     @Autowired
