@@ -507,7 +507,10 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.AGENT);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        communityMemberPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        communityMemberPo.setEndTime(DateUtil.getLastTime());
         int flag = communityMemberV1InnerServiceSMOImpl.saveCommunityMember(communityMemberPo);
+
         if (flag < 1) {
             throw new IllegalArgumentException("添加小区成员失败");
         }
@@ -521,6 +524,8 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OPT);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        communityMemberPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        communityMemberPo.setEndTime(DateUtil.getLastTime());
         flag = communityMemberV1InnerServiceSMOImpl.saveCommunityMember(communityMemberPo);
         if (flag < 1) {
             throw new IllegalArgumentException("添加小区成员失败");
@@ -533,6 +538,8 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.DEV);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        communityMemberPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        communityMemberPo.setEndTime(DateUtil.getLastTime());
         flag = communityMemberV1InnerServiceSMOImpl.saveCommunityMember(communityMemberPo);
         if (flag < 1) {
             throw new IllegalArgumentException("添加小区成员失败");

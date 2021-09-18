@@ -19,7 +19,7 @@ public class CommunityMemberPo implements Serializable {
     private String auditStatusCd;
     private String startTime;
     private String endTime;
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getCommunityMemberId() {
         return communityMemberId;
