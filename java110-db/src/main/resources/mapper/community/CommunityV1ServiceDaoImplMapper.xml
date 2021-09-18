@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="communityV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存小区管理信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunityInfo" parameterType="Map">
+        insert into s_community(
+fee_price,address,city_code,map_y,pay_fee_month,map_x,nearby_landmarks,name,tel,state,community_id,community_area
+) values (
+#{feePrice},#{address},#{cityCode},#{mapY},#{payFeeMonth},#{mapX},#{nearbyLandmarks},#{name},#{tel},#{state},#{communityId},#{communityArea}
+)
+    </insert>
+
+
+
+    <!-- 查询小区管理信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunityInfo" parameterType="Map" resultType="Map">
+        select  t.fee_price,t.fee_price feePrice,t.address,t.city_code,t.city_code cityCode,t.status_cd,t.status_cd statusCd,t.map_y,t.map_y mapY,t.pay_fee_month,t.pay_fee_month payFeeMonth,t.map_x,t.map_x mapX,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,t.name,t.tel,t.state,t.community_id,t.community_id communityId,t.community_area,t.community_area communityArea 
+from s_community t 
+where 1 =1 
+<if test="feePrice !=null and feePrice != ''">
+   and t.fee_price= #{feePrice}
+</if> 
+<if test="address !=null and address != ''">
+   and t.address= #{address}
+</if> 
+<if test="cityCode !=null and cityCode != ''">
+   and t.city_code= #{cityCode}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="mapY !=null and mapY != ''">
+   and t.map_y= #{mapY}
+</if> 
+<if test="payFeeMonth !=null and payFeeMonth != ''">
+   and t.pay_fee_month= #{payFeeMonth}
+</if> 
+<if test="mapX !=null and mapX != ''">
+   and t.map_x= #{mapX}
+</if> 
+<if test="nearbyLandmarks !=null and nearbyLandmarks != ''">
+   and t.nearby_landmarks= #{nearbyLandmarks}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="communityArea !=null and communityArea != ''">
+   and t.community_area= #{communityArea}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改小区管理信息 add by wuxw 2018-07-03 -->
+    <update id="updateCommunityInfo" parameterType="Map">
+        update  s_community t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="feePrice !=null and feePrice != ''">
+, t.fee_price= #{feePrice}
+</if> 
+<if test="address !=null and address != ''">
+, t.address= #{address}
+</if> 
+<if test="cityCode !=null and cityCode != ''">
+, t.city_code= #{cityCode}
+</if> 
+<if test="mapY !=null and mapY != ''">
+, t.map_y= #{mapY}
+</if> 
+<if test="payFeeMonth !=null and payFeeMonth != ''">
+, t.pay_fee_month= #{payFeeMonth}
+</if> 
+<if test="mapX !=null and mapX != ''">
+, t.map_x= #{mapX}
+</if> 
+<if test="nearbyLandmarks !=null and nearbyLandmarks != ''">
+, t.nearby_landmarks= #{nearbyLandmarks}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+, t.tel= #{tel}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityArea !=null and communityArea != ''">
+, t.community_area= #{communityArea}
+</if> 
+ where 1=1 <if test="communityId !=null and communityId != ''">
+and t.community_id= #{communityId}
+</if> 
+
+    </update>
+
+    <!-- 查询小区管理数量 add by wuxw 2018-07-03 -->
+     <select id="queryCommunitysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from s_community t 
+where 1 =1 
+<if test="feePrice !=null and feePrice != ''">
+   and t.fee_price= #{feePrice}
+</if> 
+<if test="address !=null and address != ''">
+   and t.address= #{address}
+</if> 
+<if test="cityCode !=null and cityCode != ''">
+   and t.city_code= #{cityCode}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="mapY !=null and mapY != ''">
+   and t.map_y= #{mapY}
+</if> 
+<if test="payFeeMonth !=null and payFeeMonth != ''">
+   and t.pay_fee_month= #{payFeeMonth}
+</if> 
+<if test="mapX !=null and mapX != ''">
+   and t.map_x= #{mapX}
+</if> 
+<if test="nearbyLandmarks !=null and nearbyLandmarks != ''">
+   and t.nearby_landmarks= #{nearbyLandmarks}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="communityArea !=null and communityArea != ''">
+   and t.community_area= #{communityArea}
+</if> 
+
+
+     </select>
+
+</mapper>

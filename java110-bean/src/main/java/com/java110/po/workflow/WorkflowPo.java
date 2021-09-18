@@ -12,6 +12,7 @@ public class WorkflowPo implements Serializable {
     private String flowName;
     private String flowType;
     private String processDefinitionKey;
+    private String statusCd;
 
     public String getSkipLevel() {
         return skipLevel;
@@ -75,5 +76,13 @@ public class WorkflowPo implements Serializable {
 
     public void setProcessDefinitionKey(String processDefinitionKey) {
         this.processDefinitionKey = processDefinitionKey;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

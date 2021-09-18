@@ -1,26 +1,51 @@
 {
-  "name": "feePrintPageTemplate",
-  "shareColumn": "template_id",
-  "id": "templateId",
-  "shareName": "fee",
-  "autoMove": true,
-  "desc": "收据模板",
-  "shareParam": "templateId",
-  "tableName": "fee_print_page_template",
   "param": {
-    "name": "name",
+    "skipLevel": "skip_level",
+    "describle": "describle",
     "statusCd": "status_cd",
-    "templateId": "template_id",
-    "url": "url"
+    "communityId": "community_id",
+    "storeId": "store_id",
+    "flowId": "flow_id",
+    "flowName": "flow_name",
+    "flowType": "flow_type",
+    "processDefinitionKey": "process_definition_key"
   },
+  "name": "workflow",
+  "shareColumn": "community_id",
+  "id": "flowId",
+  "shareName": "common",
+  "autoMove": true,
   "required": [
     {
-      "msg": "名称不能为空",
-      "code": "name"
+      "msg": "流程ID不能为空",
+      "code": "flowId"
     },
     {
-      "msg": "收据页面不能为空",
-      "code": "url"
+      "msg": "流程名称不能为空",
+      "code": "flowName"
+    },
+    {
+      "msg": "跳过不能为空",
+      "code": "skipLevel"
+    },
+    {
+      "msg": "小区ID不能为空",
+      "code": "communityId"
+    },
+    {
+      "msg": "商户ID,用来做分区不能为空",
+      "code": "storeId"
+    },
+    {
+      "msg": "数据状态不能为空",
+      "code": "statusCd"
+    },
+    {
+      "msg": "流程类型不能为空",
+      "code": "flowType"
     }
-  ]
+  ],
+  "desc": "工作流程",
+  "shareParam": "communityId",
+  "tableName": "workflow"
 }
