@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -101,6 +101,13 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      */
     public JSONObject addCommunityMember(JSONObject paramInJson) {
 
+        //查询小区是否存在
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(paramInJson.getString("communityId"));
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        Assert.listOnlyOne(communityDtos, "小区不存");
+
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
         business.put(CommonConstant.HTTP_SEQ, 2);
@@ -110,6 +117,10 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("memberId"));
         businessCommunityMember.put("memberTypeCd", paramInJson.getString("memberTypeCd"));
+        businessCommunityMember.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        Calendar endTime  = Calendar.getInstance();
+        endTime.add(Calendar.MONTH,Integer.parseInt(communityDtos.get(0).getPayFeeMonth()));
+        businessCommunityMember.put("endTime", DateUtil.getFormatTimeString(endTime.getTime(),DateUtil.DATE_FORMATE_STRING_A));
         String auditStatusCd = MappingCache.getValue(MappingConstant.DOMAIN_COMMUNITY_MEMBER_AUDIT, paramInJson.getString("memberTypeCd"));
         auditStatusCd = StringUtils.isEmpty(auditStatusCd) ? StateConstant.AGREE_AUDIT : auditStatusCd;
         businessCommunityMember.put("auditStatusCd", auditStatusCd);
