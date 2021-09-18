@@ -1,33 +1,35 @@
-package com.java110.api.listener.community;
+package com.java110.community.cmd.community;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.store.StoreDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.community.ApiCommunityDataVo;
 import com.java110.vo.api.community.ApiCommunityVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * 查询需要入驻审核单子
+ * 查询 入驻审核小区
+ * add by 吴学文 2021-09-18
  */
-@Java110Listener("listAuditEnterCommunitysListener")
-public class ListAuditEnterCommunitysListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "community.listAuditEnterCommunitys")
+public class ListAuditEnterCommunitysCmd extends AbstractServiceCmdListener {
+    private final static Logger logger = LoggerFactory.getLogger(ListAuditEnterCommunitysCmd.class);
 
 
     @Autowired
@@ -37,47 +39,20 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiPlusList
     private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_LIST_AUDIT_ENTER_COMMUNITYS;
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+
     }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
-        return communityInnerServiceSMOImpl;
-    }
-
-    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
-        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        super.validatePageInfo(reqJson);
-    }
-
-    @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         if (StringUtil.jsonHasKayAndValue(reqJson, "name") || StringUtil.jsonHasKayAndValue(reqJson, "tel")) {
-            getInfoByStore(context,reqJson);
-        }else{
-            getInfoByCommunity(context,reqJson);
+            getInfoByStore(cmdDataFlowContext, reqJson);
+        } else {
+            getInfoByCommunity(cmdDataFlowContext, reqJson);
         }
-
     }
 
-    private void getInfoByStore(DataFlowContext context, JSONObject reqJson) {
+    private void getInfoByStore(ICmdDataFlowContext context, JSONObject reqJson) {
         StoreDto storeDto = new StoreDto();
         storeDto.setName(reqJson.getString("name"));
         storeDto.setTel(reqJson.getString("tel"));
@@ -86,7 +61,7 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiPlusList
         List<ApiCommunityDataVo> communitys = null;
         int count = 0;
         if (storeDtos.size() > 0) {
-            CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(reqJson,CommunityMemberDto.class);
+            CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(reqJson, CommunityMemberDto.class);
             communityMemberDto.setNeedCommunityInfo(true);
             communityMemberDto.setNoAuditEnterCommunity(true);
             communityMemberDto.setMemberId(reqJson.getString("memberId"));
@@ -96,7 +71,7 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiPlusList
 
             if (count > 0) {
                 communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto), ApiCommunityDataVo.class);
-            }else{
+            } else {
                 communitys = new ArrayList<>();
             }
         } else {
@@ -143,7 +118,7 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiPlusList
         }
     }
 
-    private void getInfoByCommunity(DataFlowContext context, JSONObject reqJson) {
+    private void getInfoByCommunity(ICmdDataFlowContext context, JSONObject reqJson) {
         CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(reqJson, CommunityMemberDto.class);
 
         communityMemberDto.setNeedCommunityInfo(true);
@@ -173,13 +148,5 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiPlusList
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiCommunityVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-    }
-
-    public IStoreInnerServiceSMO getStoreInnerServiceSMOImpl() {
-        return storeInnerServiceSMOImpl;
-    }
-
-    public void setStoreInnerServiceSMOImpl(IStoreInnerServiceSMO storeInnerServiceSMOImpl) {
-        this.storeInnerServiceSMOImpl = storeInnerServiceSMOImpl;
     }
 }
