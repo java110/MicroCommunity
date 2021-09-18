@@ -643,7 +643,7 @@
         ca.area_name areaName,
         ca.parent_area_name cityName,
         ca1.parent_area_name provName,
-        sc.community_area communityArea,
+        sc.community_area communityArea
         FROM
         s_community sc,
         s_community_member scm,
