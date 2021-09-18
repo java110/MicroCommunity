@@ -175,9 +175,15 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
                 params = generateBusinessInsertInsertSql(orderItemDto, businessTableHisDto);
                 break;
             case "MOD":
-                params = generateBusinessDelInsertSql(orderItemDto, businessTableHisDto);
+                params = new JSONArray();
+                JSONArray paramDels = generateBusinessDelInsertSql(orderItemDto, businessTableHisDto);
+                for(int delIndex = 0 ; delIndex < paramDels.size(); delIndex ++){
+                    params.add(paramDels.getJSONObject(delIndex));
+                }
                 JSONArray paramAdds = generateBusinessInsertInsertSql(orderItemDto, businessTableHisDto);
-                params.add(paramAdds);
+                for(int addIndex = 0 ; addIndex < paramAdds.size(); addIndex ++){
+                    params.add(paramAdds.getJSONObject(addIndex));
+                }
                 break;
             case "DEL":
                 params = generateBusinessDelInsertSql(orderItemDto, businessTableHisDto);
