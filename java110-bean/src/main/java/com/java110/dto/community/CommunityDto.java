@@ -37,6 +37,8 @@ public class CommunityDto extends PageDto implements Serializable {
     private String parentAreaCode;
     private String parentAreaName;
     private String tel;
+    private String payFeeMonth;
+    private String feePrice;
 
     private String startTime;
     private String endTime;
@@ -267,5 +269,21 @@ public class CommunityDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getPayFeeMonth() {
+        return payFeeMonth;
+    }
+
+    public void setPayFeeMonth(String payFeeMonth) {
+        this.payFeeMonth = payFeeMonth;
+    }
+
+    public String getFeePrice() {
+        return feePrice;
+    }
+
+    public void setFeePrice(String feePrice) {
+        this.feePrice = feePrice;
     }
 }

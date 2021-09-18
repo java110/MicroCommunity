@@ -17,6 +17,8 @@ public class CommunityMemberPo implements Serializable {
     private String memberId;
     private String memberTypeCd;
     private String auditStatusCd;
+    private String startTime;
+    private String endTime;
 
     public String getCommunityMemberId() {
         return communityMemberId;
@@ -56,5 +58,21 @@ public class CommunityMemberPo implements Serializable {
 
     public void setAuditStatusCd(String auditStatusCd) {
         this.auditStatusCd = auditStatusCd;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
