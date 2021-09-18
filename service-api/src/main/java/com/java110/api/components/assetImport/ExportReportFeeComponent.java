@@ -1,7 +1,9 @@
 package com.java110.api.components.assetImport;
 
-import com.java110.core.context.IPageData;
 import com.java110.api.smo.assetExport.IExportReportFeeSMO;
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.dto.app.AppDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,9 @@ public class ExportReportFeeComponent {
      * @return ResponseEntity 对象
      */
     public ResponseEntity<Object> exportData(IPageData pd) throws Exception {
-        return exportExcelData.exportExcelData(pd);
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), pd.getReqData(), pd.getComponentCode(), pd.getComponentMethod(), "",
+                pd.getSessionId(), AppDto.WEB_APP_ID, pd.getHeaders());
+        return exportExcelData.exportExcelData(newPd);
     }
 
 }

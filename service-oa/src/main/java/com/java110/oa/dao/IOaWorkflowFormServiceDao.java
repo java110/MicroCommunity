@@ -84,4 +84,10 @@ public interface IOaWorkflowFormServiceDao {
      * @return
      */
     int updateOaWorkflowFormData(Map beanCovertMap);
+    /**
+     * 修改表单数据
+     * @param beanCovertMap
+     * @return
+     */
+    int updateOaWorkflowFormDataAll(Map beanCovertMap);
 }

@@ -1,5 +1,6 @@
 package com.java110.api.smo;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
@@ -9,9 +10,12 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.UrlParamToJsonUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
@@ -207,6 +212,90 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "用户没有权限操作权限" + privilegeCodes);
         }
+    }
+
+    /**
+     * 查询
+     *
+     * @param pd          页面对象
+     * @param param       传入对象
+     * @param serviceCode 服务编码
+     * @param t           返回类
+     * @param <T>
+     * @return
+     */
+    protected <T> List<T> postForApis(IPageData pd, T param, String serviceCode, Class<T> t) {
+
+        String url =  serviceCode;
+
+        ResponseEntity<String> responseEntity = callCenterService(null, pd, JSONObject.toJSONString(param), url, HttpMethod.POST);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new SMOException("调用" + serviceCode + "失败，" + responseEntity.getBody());
+        }
+
+        JSONObject resultVo = JSONObject.parseObject(responseEntity.getBody());
+
+        if (ResultVo.CODE_MACHINE_OK != resultVo.getInteger("code")) {
+            throw new SMOException(resultVo.getString("msg"));
+        }
+
+        Object bObj = resultVo.get("data");
+        JSONArray datas = null;
+        if (bObj instanceof JSONObject) {
+            datas = new JSONArray();
+            datas.add(bObj);
+        } else {
+            datas = (JSONArray) bObj;
+        }
+        String jsonStr = JSONObject.toJSONString(datas);
+
+        List<T> list = JSONObject.parseArray(jsonStr, t);
+        return list;
+    }
+
+    /**
+     * 查询
+     *
+     * @param pd          页面对象
+     * @param param       传入对象
+     * @param serviceCode 服务编码
+     * @param t           返回类
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> getForApis(IPageData pd, T param, String serviceCode, Class<T> t) {
+
+        String url =  serviceCode;
+        if (param != null) {
+            url += mapToUrlParam(BeanConvertUtil.beanCovertMap(param));
+        }
+        RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+
+        ResponseEntity<String> responseEntity = callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new SMOException("调用" + serviceCode + "失败，" + responseEntity.getBody());
+        }
+
+        JSONObject resultVo = JSONObject.parseObject(responseEntity.getBody());
+
+        if (!"0".equals(resultVo.getString("code"))) {
+            throw new SMOException(resultVo.getString("msg"));
+        }
+
+        Object bObj = resultVo.get("data");
+        JSONArray datas = null;
+        if (bObj instanceof JSONObject) {
+            datas = new JSONArray();
+            datas.add(bObj);
+        } else {
+            datas = (JSONArray) bObj;
+        }
+        String jsonStr = JSONObject.toJSONString(datas);
+
+        List<T> list = JSONObject.parseArray(jsonStr, t);
+        return list;
     }
 
 

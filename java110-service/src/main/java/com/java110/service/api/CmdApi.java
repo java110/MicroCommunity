@@ -61,6 +61,40 @@ public class CmdApi extends BaseController {
         logger.debug("cmd：{} 返回信息为：{}", service, responseEntity);
         return responseEntity;
     }
+
+    /**
+     * 资源请求 post方式
+     *
+     * @param resource 请求接口方式
+     * @param postInfo post内容
+     * @param request  请求对象 查询头信息 url等信息
+     * @return http status 200 成功 其他失败
+     */
+    @RequestMapping(path = "/{resource}/{action}", method = RequestMethod.POST)
+    @ApiOperation(value = "资源post请求", notes = "test: 返回 2XX 表示服务正常")
+    @ApiImplicitParam(paramType = "query", name = "subServicePost", value = "用户编号", required = true, dataType = "String")
+    public ResponseEntity<String> subServicePost(
+            @PathVariable String resource,
+            @PathVariable String action,
+            @RequestBody String postInfo,
+            HttpServletRequest request) {
+        ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
+        try {
+            this.getRequestInfo(request, headers);
+            headers.put(CommonConstant.HTTP_SERVICE, "/" + resource + "/" + action);
+            headers.put(CommonConstant.HTTP_RESOURCE, resource);
+            headers.put(CommonConstant.HTTP_ACTION, action);
+            headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}", action, postInfo, headers);
+            responseEntity = cmdServiceSMOImpl.cmd(postInfo, headers);
+        } catch (Throwable e) {
+            logger.error("请求post 方法[" + action + "]失败：" + postInfo, e);
+            responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.debug("cmd：{} 返回信息为：{}", action, responseEntity);
+        return responseEntity;
+    }
     /**
      * 获取请求信息
      *

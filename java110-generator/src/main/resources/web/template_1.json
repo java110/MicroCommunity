@@ -1,150 +1,43 @@
 {
-  "templateKeyName": "",
-  "templateName": "",
+  "templateName":"收据模板",
+  "directories": "property",
+  "templateCode":"feePrintPage",
+  "templateKey":"pageId",
+  "templateKeyName":"收据ID",
+  "searchCode": "pageId",
+  "searchName": "收据ID",
+  "conditions": [
+    {
+      "whereCondition": "equal",
+      "code": "pageId",
+      "name": "页面ID",
+      "inputType": "input"
+    },
+    {
+      "whereCondition": "equal",
+      "code": "pageName",
+      "name": "名称",
+      "inputType": "input"
+    },
+    {
+      "whereCondition": "equal",
+      "code": "state",
+      "name": "状态",
+      "inputType": "input"
+    }
+  ],
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "roomId",
-      "limitErrInfo": "房屋ID不能超过30",
-      "cnCode": "房屋ID",
+      "limitParam": "128",
+      "code": "pageName",
+      "limitErrInfo": "名称不能超过128",
+      "cnCode": "名称",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，房屋ID"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "12",
-      "code": "roomNum",
-      "limitErrInfo": "房屋编号不能超过12",
-      "cnCode": "房屋编号",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，房屋编号"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "unitId",
-      "limitErrInfo": "单元ID不能超过30",
-      "cnCode": "单元ID",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，单元ID"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "11",
-      "code": "layer",
-      "limitErrInfo": "层数不能超过11",
-      "cnCode": "层数",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，层数"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "11",
-      "code": "section",
-      "limitErrInfo": "室不能超过11",
-      "cnCode": "室",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "室"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "20",
-      "code": "apartment",
-      "limitErrInfo": "户型不能超过20",
-      "cnCode": "户型",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，户型"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "6",
-      "code": "builtUpArea",
-      "limitErrInfo": "建筑面积不能超过6",
-      "cnCode": "建筑面积",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，建筑面积"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "12",
-      "code": "feeCoefficient",
-      "limitErrInfo": "算费系数不能超过12",
-      "cnCode": "算费系数",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，算费系数"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "userId",
-      "limitErrInfo": "用户ID不能超过30",
-      "cnCode": "用户ID",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，用户ID"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "200",
-      "code": "remark",
-      "limitErrInfo": "备注不能超过200",
-      "cnCode": "备注",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "备注"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "2",
-      "code": "statusCd",
-      "limitErrInfo": "数据状态不能超过2",
-      "cnCode": "数据状态",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，数据状态"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "4",
-      "code": "state",
-      "limitErrInfo": "房屋状态不能超过4",
-      "cnCode": "房屋状态",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，房屋状态"
+      "desc": "必填，名称"
     },
     {
       "hasDefaultValue": false,
@@ -156,146 +49,20 @@
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "小区ID"
+      "desc": "必填，小区ID"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "12",
-      "code": "roomType",
-      "limitErrInfo": "房屋类型不能超过12",
-      "cnCode": "房屋类型",
+      "limitParam": "512",
+      "code": "pageUrl",
+      "limitErrInfo": "收据页面不能超过512",
+      "cnCode": "收据页面",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，房屋类型"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "12",
-      "code": "roomSubType",
-      "limitErrInfo": "房屋类型不能超过12",
-      "cnCode": "房屋类型",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，房屋类型"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "6",
-      "code": "roomArea",
-      "limitErrInfo": "室内面积不能超过6",
-      "cnCode": "室内面积",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，室内面积"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "10",
-      "code": "roomRent",
-      "limitErrInfo": "租金不能超过10",
-      "cnCode": "租金",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，租金"
+      "desc": "必填，收据页面"
     }
-  ],
-  "searchName": "",
-  "directories": "",
-  "searchCode": "",
-  "templateCode": "",
-  "conditions": [
-    {
-      "whereCondition": "equal",
-      "code": "roomId",
-      "name": "房屋ID",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "roomNum",
-      "name": "房屋编号",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "unitId",
-      "name": "单元ID",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "layer",
-      "name": "层数",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "apartment",
-      "name": "户型",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "builtUpArea",
-      "name": "建筑面积",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "feeCoefficient",
-      "name": "算费系数",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "userId",
-      "name": "用户ID",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "statusCd",
-      "name": "数据状态",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "state",
-      "name": "房屋状态",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "roomType",
-      "name": "房屋类型",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "roomSubType",
-      "name": "房屋类型",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "roomArea",
-      "name": "室内面积",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "roomRent",
-      "name": "租金",
-      "inputType": "input"
-    }
-  ],
-  "templateKey": ""
+  ]
+
 }

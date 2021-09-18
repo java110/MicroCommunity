@@ -78,6 +78,7 @@ public class Java110MybatisInterceptor implements Interceptor {
     private void dealDeleteSql(MappedStatement mappedStatement, Object parameter, String sql, Map<String, Object> sqlValue) {
 
         String tmpTable = sql.substring(sql.indexOf("into") + 4, sql.indexOf("(")).trim();
+        String tmpTableHasT = tmpTable;
         if(tmpTable.indexOf(" ") > 0){
             tmpTable = tmpTable.substring(0,tmpTable.indexOf(" "));
         }
@@ -85,7 +86,7 @@ public class Java110MybatisInterceptor implements Interceptor {
         //插入操作时之前的 没有数据 所以 preValue 为空对象
         JSONArray preValues = new JSONArray();
 
-        String execSql = "select * from " + tmpTable + " " + tmpWhere;
+        String execSql = "select * from " + tmpTableHasT + " " + tmpWhere;
 
         queryServiceDAOImpl = ApplicationContextFactory.getBean("queryServiceDAOImpl", IQueryServiceDAO.class);
         List<Map<String, Object>> deleteDatas = queryServiceDAOImpl.executeSql(execSql, null);
@@ -132,6 +133,8 @@ public class Java110MybatisInterceptor implements Interceptor {
 
         String tmpTable = sql.substring(sql.indexOf("update") + 6, sql.indexOf("set")).trim();
 
+        String tmpTableHasT = tmpTable;
+
         if(tmpTable.indexOf(" ") > 0){
             tmpTable = tmpTable.substring(0,tmpTable.indexOf(" "));
         }
@@ -141,7 +144,7 @@ public class Java110MybatisInterceptor implements Interceptor {
         JSONArray preValues = new JSONArray();
         JSONArray afterValues = new JSONArray();
         JSONObject afterVaule = null;
-        String execSql = "select * from " + tmpTable + " " + tmpWhere;
+        String execSql = "select * from " + tmpTableHasT + " " + tmpWhere;
         queryServiceDAOImpl = ApplicationContextFactory.getBean("queryServiceDAOImpl", IQueryServiceDAO.class);
         List<Map<String, Object>> deleteDatas = queryServiceDAOImpl.executeSql(execSql, null);
 

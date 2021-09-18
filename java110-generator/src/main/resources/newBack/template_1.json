@@ -1,87 +1,51 @@
 {
   "param": {
-    "section": "section",
-    "remark": "remark",
+    "skipLevel": "skip_level",
+    "describle": "describle",
     "statusCd": "status_cd",
-    "roomSubType": "room_sub_type",
-    "roomArea": "room_area",
-    "userId": "user_id",
-    "roomId": "room_id",
-    "layer": "layer",
-    "feeCoefficient": "fee_coefficient",
-    "builtUpArea": "built_up_area",
-    "roomNum": "room_num",
-    "unitId": "unit_id",
-    "state": "state",
     "communityId": "community_id",
-    "apartment": "apartment",
-    "roomType": "room_type",
-    "roomRent": "room_rent"
+    "storeId": "store_id",
+    "flowId": "flow_id",
+    "flowName": "flow_name",
+    "flowType": "flow_type",
+    "processDefinitionKey": "process_definition_key"
   },
-  "name": "room",
+  "name": "workflow",
   "shareColumn": "community_id",
-  "id": "roomId",
-  "shareName": "community",
+  "id": "flowId",
+  "shareName": "common",
   "autoMove": true,
   "required": [
     {
-      "msg": "房屋ID不能为空",
-      "code": "roomId"
+      "msg": "流程ID不能为空",
+      "code": "flowId"
     },
     {
-      "msg": "房屋编号不能为空",
-      "code": "roomNum"
+      "msg": "流程名称不能为空",
+      "code": "flowName"
     },
     {
-      "msg": "单元ID不能为空",
-      "code": "unitId"
+      "msg": "跳过不能为空",
+      "code": "skipLevel"
     },
     {
-      "msg": "层数不能为空",
-      "code": "layer"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
     },
     {
-      "msg": "户型不能为空",
-      "code": "apartment"
+      "msg": "商户ID,用来做分区不能为空",
+      "code": "storeId"
     },
     {
-      "msg": "建筑面积不能为空",
-      "code": "builtUpArea"
-    },
-    {
-      "msg": "算费系数不能为空",
-      "code": "feeCoefficient"
-    },
-    {
-      "msg": "用户ID不能为空",
-      "code": "userId"
-    },
-    {
-      "msg": "数据状态，详细参考c_status表，S 保存，0, 在用 1失效不能为空",
+      "msg": "数据状态不能为空",
       "code": "statusCd"
     },
     {
-      "msg": "房屋状态，如房屋出售等，请查看state 表不能为空",
-      "code": "state"
-    },
-    {
-      "msg": "房屋类型不能为空",
-      "code": "roomType"
-    },
-    {
-      "msg": "房屋类型 110 住宅房屋，119 办公室 120 宿舍不能为空",
-      "code": "roomSubType"
-    },
-    {
-      "msg": "室内面积不能为空",
-      "code": "roomArea"
-    },
-    {
-      "msg": "租金不能为空",
-      "code": "roomRent"
+      "msg": "流程类型不能为空",
+      "code": "flowType"
     }
   ],
-  "desc": "房屋",
+  "desc": "工作流程",
   "shareParam": "communityId",
-  "tableName": "building_room"
+  "tableName": "workflow"
 }

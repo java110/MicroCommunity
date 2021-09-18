@@ -17,24 +17,26 @@ package com.java110.api.smo.payment.adapt.wechatPay;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.factory.WechatFactory;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.AppAbstractComponentSMO;
+import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.IApiServiceSMO;
 import com.java110.api.smo.payment.adapt.IPayNotifyAdapt;
+import com.java110.core.factory.WechatFactory;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -47,7 +49,7 @@ import java.util.*;
  */
 
 @Component(value = "wechatPayNotifyAdapt")
-public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
+public class WechatPayNotifyAdapt extends DefaultAbstractComponentSMO implements IPayNotifyAdapt {
 
     private static final Logger logger = LoggerFactory.getLogger(WechatPayNotifyAdapt.class);
 
@@ -58,6 +60,9 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
 
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
+
+    @Autowired
+    private IApiServiceSMO apiServiceSMOImpl;
 
     /**
      * 预下单
@@ -153,7 +158,7 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
         JSONObject paramIn = new JSONObject();
         paramIn.put("oId", outTradeNo);
         String url = "fee.payFeeConfirm";
-        responseEntity = this.callCenterService(restTemplate, useId, paramIn.toJSONString(), url, HttpMethod.POST);
+        responseEntity = this.callCenterService(getHeaders("-1"), paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return 0;
@@ -170,7 +175,7 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
     protected ResponseEntity<String> getUserInfoByOpenId(RestTemplate restTemplate, String openId) {
         //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, "-1", "",
+        responseEntity = this.callCenterService(getHeaders("-1"), "",
                 ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + "?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
@@ -179,41 +184,50 @@ public class WechatPayNotifyAdapt implements IPayNotifyAdapt {
 
     }
 
+    private Map<String, String> getHeaders(String userId) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(CommonConstant.HTTP_APP_ID.toLowerCase(), APP_ID);
+        headers.put(CommonConstant.HTTP_USER_ID.toLowerCase(), userId);
+        headers.put(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
+        headers.put(CommonConstant.HTTP_REQ_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
+        headers.put(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        return headers;
+    }
+
     /**
      * 调用中心服务
      *
      * @return
      */
-    protected ResponseEntity<String> callCenterService(RestTemplate restTemplate, String userId, String param, String url, HttpMethod httpMethod) {
-
-        ResponseEntity<String> responseEntity = null;
-        HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), APP_ID);
-        header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), userId);
-        header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
-        header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
-        header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
-        HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
-        //logger.debug("请求中心服务信息，{}", httpEntity);
-        try {
-            responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
-        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
-        } catch (Exception e) {
-            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } finally {
-            logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);
-        }
-
-        return responseEntity;
-    }
-
-
+//    protected ResponseEntity<String> callCenterService(RestTemplate restTemplate, String userId, String param, String url, HttpMethod httpMethod) {
+//
+//        ResponseEntity<String> responseEntity = null;
+//        Map<String, String> headers = new HashMap<>();
+//        headers.add(CommonConstant.HTTP_APP_ID.toLowerCase(), APP_ID);
+//        headers.add(CommonConstant.HTTP_USER_ID.toLowerCase(), userId);
+//        headers.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
+//        headers.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
+//        headers.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+//        HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
+//        //logger.debug("请求中心服务信息，{}", httpEntity);
+//        try {
+//            //responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
+//            apiServiceSMOImpl.service()
+//        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+//            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+//        } catch (Exception e) {
+//            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        } finally {
+//            logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);
+//        }
+//
+//        return responseEntity;
+//    }
     private SmallWeChatDto getSmallWechat(String appId) {
 
         ResponseEntity responseEntity = null;
 
-        responseEntity = this.callCenterService(restTemplate, "-1", "",
+        responseEntity = this.callCenterService(getHeaders("-1"), "",
                 "smallWeChat.listSmallWeChats?appId="
                         + appId + "&page=1&row=1", HttpMethod.GET);
 

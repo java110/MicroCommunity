@@ -127,6 +127,11 @@ public class OaWorkflowFormInnerServiceSMOImpl extends BaseServiceSMO implements
         return oaWorkflowFormServiceDaoImpl.updateOaWorkflowFormData(reqJson);
     }
 
+    @Override
+    public int updateOaWorkflowFormDataAll(@RequestBody JSONObject reqJson) {
+        return oaWorkflowFormServiceDaoImpl.updateOaWorkflowFormDataAll(reqJson);
+    }
+
     public IOaWorkflowFormServiceDao getOaWorkflowFormServiceDaoImpl() {
         return oaWorkflowFormServiceDaoImpl;
     }

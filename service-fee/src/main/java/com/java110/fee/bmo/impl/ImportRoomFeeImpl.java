@@ -96,6 +96,19 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
 
+
+        JSONArray importRoomFees = reqJson.getJSONArray("importRoomFees");
+
+        List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
+
+        if (tmpImportRoomFees == null || tmpImportRoomFees.size() < 1) {
+            throw new IllegalArgumentException("未包含导入费用");
+        }
+
+        if (StringUtil.isEmpty(feeName)) {
+            feeName = tmpImportRoomFees.get(0).getFeeName();
+        }
+
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
         }
@@ -113,11 +126,6 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         } else {
             feeConfigDto.setConfigId(feeConfigDtos.get(0).getConfigId());
         }
-
-
-        JSONArray importRoomFees = reqJson.getJSONArray("importRoomFees");
-
-        List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
 
         for (ImportRoomFee tmpImportRoomFee : tmpImportRoomFees) {
             tmpImportRoomFee.setCommunityId(communityId);
@@ -635,9 +643,9 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         payFeeConfigPo.setComputingFormula("4004");
         payFeeConfigPo.setEndTime(DateUtil.getLastTime());
         payFeeConfigPo.setFeeFlag("2006012");
-        payFeeConfigPo.setIsDefault("T");
+        payFeeConfigPo.setIsDefault("F");
         payFeeConfigPo.setPaymentCd("2100");
-        payFeeConfigPo.setFeeName(IMPORT_FEE_NAME);
+        payFeeConfigPo.setFeeName(feeConfigDto.getFeeName());
         payFeeConfigPo.setSquarePrice("0");
         payFeeConfigPo.setPaymentCycle("1");
         payFeeConfigPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));

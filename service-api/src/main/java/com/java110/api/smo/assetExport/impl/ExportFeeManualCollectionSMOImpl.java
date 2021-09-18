@@ -147,7 +147,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
-        apiUrl = "feeApi/listAllRoomOweFees" + mapToUrlParam(reqJson);
+        apiUrl = "/feeApi/listAllRoomOweFees" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息

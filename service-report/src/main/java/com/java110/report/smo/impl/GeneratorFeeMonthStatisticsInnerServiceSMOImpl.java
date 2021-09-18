@@ -388,6 +388,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             try {
                 doDealRoomFee(reportRoomDto, tmpReportFeeDto);
             } catch (Exception e) {
+                e.printStackTrace();
                 logger.error("处理房屋费用失败" + JSONObject.toJSONString(tmpReportFeeDto), e);
             }
         }

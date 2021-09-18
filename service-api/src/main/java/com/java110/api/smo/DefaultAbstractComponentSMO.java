@@ -121,6 +121,61 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
     }
 
     /**
+     * 调用中心服务
+     *
+     * @return
+     */
+    protected ResponseEntity<String> callCenterService(Map<String,String> headers,  String param, String url, HttpMethod httpMethod) {
+
+        ResponseEntity<String> responseEntity = null;
+        if (StringUtil.isEmpty(param)) {
+            param = UrlParamToJsonUtil.getJson(url).toJSONString();
+        }
+
+        if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
+            headers.put(CommonConstant.HTTP_USER_ID,  "-1");
+        }
+
+        headers.put(CommonConstant.USER_ID,  "-1" );
+
+        if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
+            headers.put(CommonConstant.HTTP_USER_ID,  "-1" );
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
+            headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_REQ_TIME)) {
+            headers.put(CommonConstant.HTTP_REQ_TIME, DateUtil.getNowDefault());
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_SIGN)) {
+            headers.put(CommonConstant.HTTP_SIGN, "");
+        }
+
+        if (url.indexOf("?") > -1) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+        headers.put(CommonConstant.HTTP_SERVICE, url);
+        headers.put(CommonConstant.HTTP_METHOD, CommonConstant.getHttpMethodStr(httpMethod));
+
+        if (HttpMethod.GET == httpMethod) {
+            initUrlParam(JSONObject.parseObject(param), headers);
+        }
+        if (HttpMethod.GET == httpMethod) {
+            headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
+        }
+        try {
+            responseEntity = apiServiceSMOImpl.service(param, headers);
+        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, param, responseEntity);
+        }
+        return responseEntity;
+    }
+
+    /**
      * 将url参数写到header map中
      *
      * @param paramIn

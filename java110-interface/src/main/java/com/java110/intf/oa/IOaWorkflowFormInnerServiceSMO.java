@@ -91,4 +91,12 @@ public interface IOaWorkflowFormInnerServiceSMO {
      */
     @RequestMapping(value = "/updateOaWorkflowFormData", method = RequestMethod.POST)
     int updateOaWorkflowFormData(@RequestBody JSONObject reqJson);
+
+    /**
+     * 修改表单数据
+     *
+     * @param reqJson
+     */
+    @RequestMapping(value = "/updateOaWorkflowFormDataAll", method = RequestMethod.POST)
+    int updateOaWorkflowFormDataAll(@RequestBody JSONObject reqJson);
 }

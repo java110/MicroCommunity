@@ -133,12 +133,12 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
                 JSONObject logText = JSONObject.parseObject(orderItem.get("logText").toString());
                 if ("ADD".equals(orderItem.get("action")) || "MOD".equals(orderItem.get("action"))) {
                     data = logText.getJSONArray("afterValue").getJSONObject(0);
-                    StringUtil.lineToHump(data);
+                    data = StringUtil.lineToHump(data);
                     businessObj.setData(data);
                 }
                 if ("DEL".equals(orderItem.get("action"))) {
                     data = logText.getJSONArray("preValue").getJSONObject(0);
-                    StringUtil.lineToHump(data);
+                    data = StringUtil.lineToHump(data);
                     businessObj.setData(data);
                 }
                 businessObjs.add(businessObj);
@@ -212,7 +212,7 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
             String keySql = "( ";
             String valueSql = " values (";
             for (String key : keyValue.keySet()) {
-                if ("status_cd".equals(key) || "create_time".equals(key)) {
+                if ("status_cd".equals(key) || "create_time".equals(key) || "b_id".equals(key)) {
                     continue;
                 }
                 keySql += (key + ",");
@@ -259,7 +259,7 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
             String keySql = "( ";
             String valueSql = " values (";
             for (String key : keyValue.keySet()) {
-                if ("status_cd".equals(key) || "create_time".equals(key)) {
+                if ("status_cd".equals(key) || "create_time".equals(key) || "b_id".equals(key)) {
                     continue;
                 }
                 keySql += (key + ",");

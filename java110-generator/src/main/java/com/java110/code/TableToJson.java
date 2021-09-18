@@ -7,30 +7,18 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `building_room` (\n" +
-            "  `room_id` varchar(30) NOT NULL COMMENT '房屋ID',\n" +
+    public static final String createTableSql = "CREATE TABLE `workflow` (\n" +
+            "  `flow_id` varchar(30) NOT NULL COMMENT '流程ID',\n" +
+            "  `flow_name` varchar(200) NOT NULL COMMENT '流程名称',\n" +
+            "  `describle` longtext COMMENT '描述',\n" +
+            "  `skip_level` varchar(12) NOT NULL COMMENT '跳过',\n" +
+            "  `community_id` varchar(30) NOT NULL COMMENT '小区ID，分片',\n" +
             "  `b_id` varchar(30) NOT NULL COMMENT '业务Id',\n" +
-            "  `room_num` varchar(12) NOT NULL COMMENT '房屋编号',\n" +
-            "  `unit_id` varchar(30) NOT NULL COMMENT '单元ID',\n" +
-            "  `layer` int(11) NOT NULL COMMENT '层数',\n" +
-            "  `section` int(11) DEFAULT NULL COMMENT '室',\n" +
-            "  `apartment` varchar(20) NOT NULL COMMENT '户型',\n" +
-            "  `built_up_area` decimal(6,2) NOT NULL COMMENT '建筑面积',\n" +
-            "  `fee_coefficient` decimal(12,2) NOT NULL DEFAULT '1.00' COMMENT '算费系数',\n" +
-            "  `user_id` varchar(30) NOT NULL COMMENT '用户ID',\n" +
-            "  `remark` varchar(200) DEFAULT NULL COMMENT '备注',\n" +
+            "  `store_id` varchar(30) NOT NULL COMMENT '商户ID,用来做分区',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
-            "  `state` varchar(4) NOT NULL COMMENT '房屋状态，如房屋出售等，请查看state 表',\n" +
-            "  `community_id` varchar(30) DEFAULT NULL COMMENT '小区ID',\n" +
-            "  `room_type` varchar(12) NOT NULL DEFAULT '1010301' COMMENT '房屋类型',\n" +
-            "  `room_sub_type` varchar(12) NOT NULL DEFAULT '110' COMMENT '房屋类型 110 住宅房屋，119 办公室 120 宿舍',\n" +
-            "  `room_area` decimal(6,2) NOT NULL COMMENT '室内面积',\n" +
-            "  `room_rent` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '租金',\n" +
-            "  UNIQUE KEY `room_id` (`room_id`) USING BTREE,\n" +
-            "  UNIQUE KEY `idx_room_id` (`room_id`) USING BTREE,\n" +
-            "  KEY `idx_room_b_id` (`b_id`) USING BTREE,\n" +
-            "  KEY `i_br_unit_id` (`unit_id`)\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考t_dict表，0, 在用 1失效',\n" +
+            "  `flow_type` varchar(12) NOT NULL COMMENT '流程类型，10001 投诉建议 20002 报修 30003 采购',\n" +
+            "  `process_definition_key` varchar(64) DEFAULT NULL COMMENT '工作流部署ID'\n" +
             ")";
 
     public static void main(String[] args) {
