@@ -19,10 +19,10 @@ import com.java110.utils.exception.SMOException;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.DateUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -67,9 +67,6 @@ public class CmdServiceSMOImpl extends LoggerEngine implements ICmdServiceSMO {
 
         ResponseEntity<String> responseEntity = null;
 
-        String resJson = "";
-
-
         //1.0 创建数据流 appId serviceCode
         cmdDataFlowContext = DataFlowFactory.newInstance(CmdDataFlow.class).builder(reqJson, headers);
 
@@ -82,8 +79,7 @@ public class CmdServiceSMOImpl extends LoggerEngine implements ICmdServiceSMO {
         Date endDate = DateUtil.getCurrentDate();
 
         if (responseEntity == null) {
-            //resJson = encrypt(responseJson.toJSONString(),headers);
-            responseEntity = new ResponseEntity<String>(resJson, HttpStatus.OK);
+            responseEntity = ResultVo.success();
         }
         return responseEntity;
     }

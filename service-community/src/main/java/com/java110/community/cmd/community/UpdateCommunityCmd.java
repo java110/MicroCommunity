@@ -15,17 +15,18 @@
  */
 package com.java110.community.cmd.community;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.bmo.community.ICommunityBMO;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
-import com.java110.po.community.CommunityPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,9 +52,20 @@ public class UpdateCommunityCmd extends AbstractServiceCmdListener {
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private ICommunityBMO communityBMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "name", "必填，请填写小区名称");
+        Assert.hasKeyAndValue(reqJson, "address", "必填，请填写小区地址");
+        Assert.hasKeyAndValue(reqJson, "nearbyLandmarks", "必填，请填写小区附近地标");
+
+        Assert.judgeAttrValue(reqJson);
 
     }
 
@@ -61,11 +73,28 @@ public class UpdateCommunityCmd extends AbstractServiceCmdListener {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        CommunityPo communityPo = BeanConvertUtil.covertBean(reqJson, CommunityPo.class);
-        int flag = communityV1InnerServiceSMOImpl.updateCommunity(communityPo);
 
-        if (flag < 1) {
-            throw new CmdException("更新数据失败");
+        communityBMOImpl.updateCommunityOne(reqJson, cmdDataFlowContext);
+
+        if (!reqJson.containsKey("attrs")) {
+            return;
+        }
+
+        JSONArray attrs = reqJson.getJSONArray("attrs");
+        if (attrs.size() < 1) {
+            return;
+        }
+
+
+        JSONObject attr = null;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = attrs.getJSONObject(attrIndex);
+            attr.put("communityId", reqJson.getString("communityId"));
+            if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-") || StringUtil.isEmpty(attr.getString("attrId"))) {
+                communityBMOImpl.addAttr(attr, cmdDataFlowContext);
+                continue;
+            }
+            communityBMOImpl.updateAttr(attr, cmdDataFlowContext);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

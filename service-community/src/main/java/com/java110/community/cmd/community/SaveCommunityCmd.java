@@ -31,6 +31,7 @@ import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,7 @@ public class SaveCommunityCmd extends AbstractServiceCmdListener {
         if (flag < 1) {
             throw new IllegalArgumentException("添加流程失败");
         }
+        cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
 
