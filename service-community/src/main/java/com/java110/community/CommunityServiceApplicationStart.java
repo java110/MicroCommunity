@@ -53,7 +53,7 @@ import java.nio.charset.Charset;
 @Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
         basePackages = {"com.java110.community.cmd"})
 @EnableFeignClients(basePackages = {"com.java110.intf.user", "com.java110.intf.common", "com.java110.intf.fee",
-        "com.java110.intf.order"})
+        "com.java110.intf.order","com.java110.intf.store"})
 public class CommunityServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(CommunityServiceApplicationStart.class);
