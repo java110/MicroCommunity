@@ -69,7 +69,7 @@ public class AddParkingAreaToHcGovReturnAdapt implements IReportReturnDataAdapt 
         parkingAreaAttrPo.setPaId(parkingAreaAttrDto.getPaId());
         parkingAreaAttrPo.setCommunityId(parkingAreaAttrDto.getCommunityId());
         parkingAreaAttrPo.setSpecCd(parkingAreaAttrDto.getSpecCd());
-        parkingAreaAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extFloorId"));
+        parkingAreaAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extPaId"));
         if (parkingAreaAttrDtos == null || parkingAreaAttrDtos.size() < 1) {
             int flag = parkingAreaAttrInnerServiceSMOImpl.saveParkingAreaAttr(parkingAreaAttrPo);
             if (flag < 1) {

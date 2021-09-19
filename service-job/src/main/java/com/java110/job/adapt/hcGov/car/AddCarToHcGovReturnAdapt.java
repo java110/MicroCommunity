@@ -17,13 +17,13 @@ package com.java110.job.adapt.hcGov.car;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
-import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
+import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
-import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
-import com.java110.po.parkingAreaAttr.ParkingAreaAttrPo;
+import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +40,7 @@ import java.util.List;
 public class AddCarToHcGovReturnAdapt implements IReportReturnDataAdapt {
 
     @Autowired
-    private IParkingAreaAttrInnerServiceSMO parkingAreaAttrInnerServiceSMOImpl;
+    private IOwnerCarAttrInnerServiceSMO ownerCarAttrInnerServiceSMOImpl;
     @Autowired
     private IHcGovTranslateInnerServiceSMO hcGovTranslateInnerServiceSMOImpl;
 
@@ -55,20 +55,20 @@ public class AddCarToHcGovReturnAdapt implements IReportReturnDataAdapt {
             throw new IllegalArgumentException("查询推送报文失败。不是同一订单信息");
         }
 
-        ParkingAreaAttrDto parkingAreaAttrDto = new ParkingAreaAttrDto();
-        parkingAreaAttrDto.setPaId(hcGovTranslateDtos.get(0).getObjId());
-        parkingAreaAttrDto.setCommunityId(hcGovTranslateDtos.get(0).getCommunityId());
-        parkingAreaAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID);
-        List<ParkingAreaAttrDto> parkingAreaAttrDtos = parkingAreaAttrInnerServiceSMOImpl.queryParkingAreaAttrs(parkingAreaAttrDto);
+        OwnerCarAttrDto ownerCarAttrDto = new OwnerCarAttrDto();
+        ownerCarAttrDto.setCarId(hcGovTranslateDtos.get(0).getObjId());
+        ownerCarAttrDto.setCommunityId(hcGovTranslateDtos.get(0).getCommunityId());
+        ownerCarAttrDto.setSpecCd( HcGovConstant.EXT_COMMUNITY_ID);
+        List<OwnerCarAttrDto> ownerCarAttrDtos = ownerCarAttrInnerServiceSMOImpl.queryOwnerCarAttrs(ownerCarAttrDto);
 
-        ParkingAreaAttrPo parkingAreaAttrPo = new ParkingAreaAttrPo();
-        parkingAreaAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
-        parkingAreaAttrPo.setPaId(parkingAreaAttrDto.getPaId());
-        parkingAreaAttrPo.setCommunityId(parkingAreaAttrDto.getCommunityId());
-        parkingAreaAttrPo.setSpecCd(parkingAreaAttrDto.getSpecCd());
-        parkingAreaAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extFloorId"));
-        if (parkingAreaAttrDtos == null || parkingAreaAttrDtos.size() < 1) {
-            int flag = parkingAreaAttrInnerServiceSMOImpl.saveParkingAreaAttr(parkingAreaAttrPo);
+        OwnerCarAttrPo ownerCarAttrPo = new OwnerCarAttrPo();
+        ownerCarAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
+        ownerCarAttrPo.setCarId(ownerCarAttrDto.getCarId());
+        ownerCarAttrPo.setCommunityId(ownerCarAttrDto.getCommunityId());
+        ownerCarAttrPo.setSpecCd(ownerCarAttrDto.getSpecCd());
+        ownerCarAttrPo.setValue(reportDataDto.getReportDataBodyDto().getString("extCarId"));
+        if (ownerCarAttrDtos == null || ownerCarAttrDtos.size() < 1) {
+            int flag = ownerCarAttrInnerServiceSMOImpl.saveOwnerCarAttr(ownerCarAttrPo);
             if (flag < 1) {
                 throw new IllegalArgumentException("保存楼栋属性失败");
             }

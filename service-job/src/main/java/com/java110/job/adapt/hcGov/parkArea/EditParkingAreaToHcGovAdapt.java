@@ -19,9 +19,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
@@ -29,6 +32,7 @@ import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.parking.ParkingAreaPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,7 +55,8 @@ public class EditParkingAreaToHcGovAdapt extends DatabusAdaptImpl {
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
     @Autowired
     private BaseHcGovSendAsyn baseHcGovSendAsynImpl;
-
+    @Autowired
+    private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
 
     /**
      * @param business   当前处理业务
@@ -103,14 +108,44 @@ public class EditParkingAreaToHcGovAdapt extends DatabusAdaptImpl {
         parkingSpaceDto.setPaId(parkingAreaPo.getPaId());
         int count = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(parkingSpaceDto);
 
+        //查询 外部停车
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(parkingAreaPo.getPaId());
+        parkingAreaDto.setCommunityId(parkingAreaPo.getCommunityId());
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+        Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
+
+        String extPaId = getExtPaId(parkingAreaDtos.get(0).getAttrs());
+
         JSONObject body = new JSONObject();
         body.put("num", parkingAreaPo.getNum());
         body.put("parkingCount", count);
         body.put("typeCd", parkingAreaPo.getTypeCd());
-        body.put("extPaId", parkingAreaPo.getPaId());
+        //如果为空 走添加接口
+        if (StringUtil.isEmpty(extPaId)) {
+            JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.ADD_PARKING_AREA_ACTION, HcGovConstant.COMMUNITY_SECURE);
+            baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, parkingAreaPo.getPaId(), HcGovConstant.COMMUNITY_SECURE);
+            return;
+        }
+        body.put("extPaId", extPaId);
 
         JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.EDIT_PARKING_AREA_ACTION, HcGovConstant.COMMUNITY_SECURE);
         baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, parkingAreaPo.getPaId(), HcGovConstant.COMMUNITY_SECURE);
+    }
+
+
+    private String getExtPaId(List<ParkingAreaAttrDto> attrs) {
+
+        if (attrs == null || attrs.size() < 1) {
+            return "";
+        }
+
+        for (ParkingAreaAttrDto parkingAreaAttrDto : attrs) {
+            if (parkingAreaAttrDto.getSpecCd().equals(HcGovConstant.EXT_COMMUNITY_ID)) {
+                return parkingAreaAttrDto.getValue();
+            }
+        }
+        return "";
     }
 
 }

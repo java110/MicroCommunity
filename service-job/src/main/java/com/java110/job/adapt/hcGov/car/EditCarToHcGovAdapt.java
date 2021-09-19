@@ -19,16 +19,25 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
-import com.java110.po.parking.ParkingAreaPo;
+import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,9 +57,19 @@ public class EditCarToHcGovAdapt extends DatabusAdaptImpl {
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Autowired
-    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarAttrInnerServiceSMO ownerCarAttrInnerServiceSMOImpl;
+
     @Autowired
     private BaseHcGovSendAsyn baseHcGovSendAsynImpl;
+
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
 
 
     /**
@@ -60,8 +79,8 @@ public class EditCarToHcGovAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        if (data.containsKey(ParkingAreaPo.class.getSimpleName())) {
-            Object bObj = data.get(ParkingAreaPo.class.getSimpleName());
+        if (data.containsKey(OwnerCarPo.class.getSimpleName())) {
+            Object bObj = data.get(OwnerCarPo.class.getSimpleName());
             JSONArray businessOwnerCars = null;
             if (bObj instanceof JSONObject) {
                 businessOwnerCars = new JSONArray();
@@ -74,18 +93,17 @@ public class EditCarToHcGovAdapt extends DatabusAdaptImpl {
             //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
             for (int bOwnerCarIndex = 0; bOwnerCarIndex < businessOwnerCars.size(); bOwnerCarIndex++) {
                 JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(bOwnerCarIndex);
-                doAddParkingArea(business, businessOwnerCar);
+                doEditOwnerCar(business, businessOwnerCar);
             }
         }
     }
 
+    private void doEditOwnerCar(Business business, JSONObject businessFloor) {
 
-    private void doAddParkingArea(Business business, JSONObject businessFloor) {
-
-        ParkingAreaPo parkingAreaPo = BeanConvertUtil.covertBean(businessFloor, ParkingAreaPo.class);
+        OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(businessFloor, OwnerCarPo.class);
 
         CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityId(parkingAreaPo.getCommunityId());
+        communityDto.setCommunityId(ownerCarPo.getCommunityId());
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
         Assert.listNotNull(communityDtos, "未包含小区信息");
         CommunityDto tmpCommunityDto = communityDtos.get(0);
@@ -96,21 +114,83 @@ public class EditCarToHcGovAdapt extends DatabusAdaptImpl {
                 extCommunityId = communityAttrDto.getValue();
             }
         }
+        //查询车辆
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(ownerCarPo.getCommunityId());
+        ownerCarDto.setCarId(ownerCarPo.getCarId());
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-        //查询车位数量
+        Assert.listOnlyOne(ownerCarDtos, "车辆不存在");
+
+        //查询外部停车场
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setCommunityId(communityId);
-        parkingSpaceDto.setPaId(parkingAreaPo.getPaId());
-        int count = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(parkingSpaceDto);
+        parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        Assert.listOnlyOne(parkingSpaceDtos, "车位不存在");
+
+        //查询 外部停车
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(parkingSpaceDtos.get(0).getPaId());
+        parkingAreaDto.setCommunityId(parkingSpaceDtos.get(0).getCommunityId());
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+        Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
+
+        String extPaId = getExtPaId(parkingAreaDtos.get(0).getAttrs());
+
+        if (StringUtil.isEmpty(extPaId)) {
+            return;
+        }
+
+        String extCarId = getExtCarId(ownerCarDtos.get(0));
+
 
         JSONObject body = new JSONObject();
-        body.put("num", parkingAreaPo.getNum());
-        body.put("parkingCount", count);
-        body.put("typeCd", parkingAreaPo.getTypeCd());
-        body.put("extPaId", parkingAreaPo.getPaId());
+        body.put("carNum", ownerCarDtos.get(0).getCarNum());
+        body.put("carBrand", ownerCarDtos.get(0).getCarBrand());
+        body.put("carType", ownerCarDtos.get(0).getCarType());
+        body.put("carColor", ownerCarDtos.get(0).getCarColor());
+        body.put("startTime", DateUtil.getFormatTimeString(ownerCarDtos.get(0).getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+        body.put("endTime", DateUtil.getFormatTimeString(ownerCarDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        body.put("personName", ownerCarDtos.get(0).getOwnerName());
+        body.put("personTel", ownerCarDtos.get(0).getLink());
+        body.put("extPaId", extPaId);
+        if (StringUtil.isEmpty(extCarId)) { // 走添加
+            JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.ADD_CAR_ACTION, HcGovConstant.COMMUNITY_SECURE);
+            baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, ownerCarPo.getCarId(), HcGovConstant.COMMUNITY_SECURE);
+            return;
+        }
+        body.put("extCarId", extCarId);
 
-        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.EDIT_PARKING_AREA_ACTION, HcGovConstant.COMMUNITY_SECURE);
-        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, parkingAreaPo.getPaId(), HcGovConstant.COMMUNITY_SECURE);
+        JSONObject kafkaData = baseHcGovSendAsynImpl.createHeadersOrBody(body, extCommunityId, HcGovConstant.EDIT_CAR_ACTION, HcGovConstant.COMMUNITY_SECURE);
+        baseHcGovSendAsynImpl.sendKafka(HcGovConstant.GOV_TOPIC, kafkaData, communityId, ownerCarPo.getCarId(), HcGovConstant.COMMUNITY_SECURE);
+    }
+
+    private String getExtCarId(OwnerCarDto ownerCarDto) {
+
+        OwnerCarAttrDto ownerCarAttrDto = new OwnerCarAttrDto();
+        ownerCarAttrDto.setCarId(ownerCarDto.getCarId());
+        ownerCarAttrDto.setCommunityId(ownerCarDto.getCommunityId());
+        ownerCarAttrDto.setSpecCd(HcGovConstant.EXT_COMMUNITY_ID);
+        List<OwnerCarAttrDto> ownerCarAttrDtos = ownerCarAttrInnerServiceSMOImpl.queryOwnerCarAttrs(ownerCarAttrDto);
+        if (ownerCarAttrDtos == null || ownerCarAttrDtos.size() < 1) {
+            return "";
+        }
+
+        return ownerCarAttrDtos.get(0).getValue();
+    }
+
+    private String getExtPaId(List<ParkingAreaAttrDto> attrs) {
+
+        if (attrs == null || attrs.size() < 1) {
+            return "";
+        }
+
+        for (ParkingAreaAttrDto parkingAreaAttrDto : attrs) {
+            if (parkingAreaAttrDto.getSpecCd().equals(HcGovConstant.EXT_COMMUNITY_ID)) {
+                return parkingAreaAttrDto.getValue();
+            }
+        }
+        return "";
     }
 
 }
