@@ -7,18 +7,14 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `workflow` (\n" +
-            "  `flow_id` varchar(30) NOT NULL COMMENT '流程ID',\n" +
-            "  `flow_name` varchar(200) NOT NULL COMMENT '流程名称',\n" +
-            "  `describle` longtext COMMENT '描述',\n" +
-            "  `skip_level` varchar(12) NOT NULL COMMENT '跳过',\n" +
-            "  `community_id` varchar(30) NOT NULL COMMENT '小区ID，分片',\n" +
-            "  `b_id` varchar(30) NOT NULL COMMENT '业务Id',\n" +
-            "  `store_id` varchar(30) NOT NULL COMMENT '商户ID,用来做分区',\n" +
+    public static final String createTableSql = "CREATE TABLE `meter_type` (\n" +
+            "  `type_id` varchar(30) NOT NULL COMMENT '类型ID',\n" +
+            "  `type_name` varchar(12) NOT NULL COMMENT '名称',\n" +
+            "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
+            "  `remark` varchar(200) DEFAULT NULL COMMENT '说明',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考t_dict表，0, 在用 1失效',\n" +
-            "  `flow_type` varchar(12) NOT NULL COMMENT '流程类型，10001 投诉建议 20002 报修 30003 采购',\n" +
-            "  `process_definition_key` varchar(64) DEFAULT NULL COMMENT '工作流部署ID'\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0, 在用 1失效',\n" +
+            "  PRIMARY KEY (`type_id`)\n" +
             ")";
 
     public static void main(String[] args) {
