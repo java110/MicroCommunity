@@ -7,14 +7,13 @@ import com.java110.utils.util.StringUtil;
 public class TableToJsonWeb {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `fee_print_page` (\n" +
-            "  `page_id` varchar(30) NOT NULL COMMENT '页面ID',\n" +
-            "  `page_name` varchar(128) NOT NULL COMMENT '名称',\n" +
+    public static final String createTableSql = "CREATE TABLE `meter_type` (\n" +
+            "  `type_id` varchar(30) NOT NULL COMMENT '类型ID',\n" +
+            "  `type_name` varchar(12) NOT NULL COMMENT '名称',\n" +
             "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
-            "  `page_url` varchar(512) NOT NULL COMMENT '收据页面',\n" +
-            "  `state` varchar(12) NOT NULL DEFAULT 'F' COMMENT '状态 T 有效 F为无效',\n" +
+            "  `remark` varchar(200) DEFAULT NULL COMMENT '说明',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态 1表示 失效 0 有效'\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0, 在用 1失效'\n" +
             ")";
 
     public static void main(String[] args) {
@@ -60,10 +59,10 @@ public class TableToJsonWeb {
             }
             String comment = rowSql.contains("COMMENT") ? rowSql.substring(rowSql.indexOf("COMMENT '") + 9) : StringUtil.lineToHump(key);
             comment = comment.trim();
-            if(comment.contains("，")){
+            if (comment.contains("，")) {
                 comment = comment.split("，")[0];
             }
-            if(comment.contains(" ")){
+            if (comment.contains(" ")) {
                 comment = comment.split(" ")[0];
             }
             paramColumn.put("desc", comment);
@@ -74,10 +73,10 @@ public class TableToJsonWeb {
                 condition.put("code", StringUtil.lineToHump(key));
                 condition.put("whereCondition", "equal");
                 conditions.add(condition);
-                paramColumn.put("desc", "必填，"+comment);
+                paramColumn.put("desc", "必填，" + comment);
             }
-            String limit = rowSql.substring(rowSql.indexOf("(") + 1,rowSql.indexOf(")"));
-            if(limit.contains(",")){
+            String limit = rowSql.substring(rowSql.indexOf("(") + 1, rowSql.indexOf(")"));
+            if (limit.contains(",")) {
                 limit = limit.split(",")[0];
             }
 
@@ -87,8 +86,8 @@ public class TableToJsonWeb {
             paramColumn.put("hasDefaultValue", false);
             paramColumn.put("inputType", "input");
             paramColumn.put("limit", "maxLength");
-            paramColumn.put("limitParam",limit );
-            paramColumn.put("limitErrInfo", comment+"不能超过"+limit);
+            paramColumn.put("limitParam", limit);
+            paramColumn.put("limitErrInfo", comment + "不能超过" + limit);
             paramColumn.put("show", true);
             paramColumns.add(paramColumn);
         }

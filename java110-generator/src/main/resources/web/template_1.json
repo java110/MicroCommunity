@@ -1,37 +1,17 @@
 {
-  "templateName":"收据模板",
+  "templateKeyName": "抄表类型",
+  "templateName": "抄表类型",
+  "searchName": "抄表类型",
   "directories": "property",
-  "templateCode":"feePrintPage",
-  "templateKey":"pageId",
-  "templateKeyName":"收据ID",
-  "searchCode": "pageId",
-  "searchName": "收据ID",
-  "conditions": [
-    {
-      "whereCondition": "equal",
-      "code": "pageId",
-      "name": "页面ID",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "pageName",
-      "name": "名称",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "state",
-      "name": "状态",
-      "inputType": "input"
-    }
-  ],
+  "searchCode": "typeId",
+  "templateCode": "meterType",
+  "templateKey": "typeId",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "128",
-      "code": "pageName",
-      "limitErrInfo": "名称不能超过128",
+      "limitParam": "12",
+      "code": "typeName",
+      "limitErrInfo": "名称不能超过12",
       "cnCode": "名称",
       "limit": "maxLength",
       "show": true,
@@ -41,28 +21,29 @@
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "communityId",
-      "limitErrInfo": "小区ID不能超过30",
-      "cnCode": "小区ID",
+      "limitParam": "200",
+      "code": "remark",
+      "limitErrInfo": "说明不能超过200",
+      "cnCode": "说明",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，小区ID"
+      "desc": "说明"
+    }
+  ],
+  "conditions": [
+    {
+      "whereCondition": "equal",
+      "code": "typeId",
+      "name": "类型ID",
+      "inputType": "input"
     },
     {
-      "hasDefaultValue": false,
-      "limitParam": "512",
-      "code": "pageUrl",
-      "limitErrInfo": "收据页面不能超过512",
-      "cnCode": "收据页面",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，收据页面"
+      "whereCondition": "equal",
+      "code": "typeName",
+      "name": "名称",
+      "inputType": "input"
     }
   ]
-
 }
