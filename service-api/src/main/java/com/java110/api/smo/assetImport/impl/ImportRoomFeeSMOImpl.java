@@ -3,18 +3,21 @@ package com.java110.api.smo.assetImport.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.assetImport.IImportRoomFeeSMO;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
-import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.payFeeBatch.PayFeeBatchDto;
+import com.java110.dto.user.UserDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.api.smo.assetImport.IImportRoomFeeSMO;
+import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -28,7 +31,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,6 +63,12 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
     @Autowired
     private OssUploadTemplate ossUploadTemplate;
 
+    @Autowired
+    private IPayFeeBatchV1InnerServiceSMO payFeeBatchV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
 
     @Override
     public ResponseEntity<String> importExcelData(IPageData pd, MultipartFile uploadFile) throws Exception {
@@ -82,7 +90,7 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
                 getRooms(workbook, rooms);
                 // 保存数据
                 return dealExcelData(pd, rooms, result);
-            }else{
+            } else {
                 List<ImportRoomFee> cars = new ArrayList<ImportRoomFee>();
                 //获取楼信息
                 getCars(workbook, cars);
@@ -118,15 +126,14 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
     }
 
 
-
     @Override
 
     public ResponseEntity<String> importTempData(IPageData pd) {
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-        ImportRoomFee importRoomFee = BeanConvertUtil.covertBean(paramIn,ImportRoomFee.class);
+        ImportRoomFee importRoomFee = BeanConvertUtil.covertBean(paramIn, ImportRoomFee.class);
         importRoomFee.setRoomId(paramIn.getString("objId"));
-        if(paramIn.containsKey("objType") && FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(paramIn.getString("objType"))){
+        if (paramIn.containsKey("objType") && FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(paramIn.getString("objType"))) {
             importRoomFee.setContractId(paramIn.getString("objId"));
             importRoomFee.setRoomId("");
         }
@@ -154,6 +161,7 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
 
         return responseEntity;
     }
+
     /**
      * 处理ExcelData数据
      *
@@ -184,11 +192,14 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
         paramOut.put("successCount", 0);
         paramOut.put("errorCount", 0);
 
+        //生成批次
         JSONObject data = JSONObject.parseObject(pd.getReqData());
+        data.put("userId", pd.getUserId());
+        data.put("communityId", result.getCommunityId());
+        generatorBatch(data);
         data.put("storeId", result.getStoreId());
         data.put("importFeeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         data.put("userId", result.getUserId());
-        data.put("communityId", result.getCommunityId());
         List<ImportRoomFee> tmpImportRoomFees = new ArrayList<>();
         for (int roomIndex = 0; roomIndex < roomFees.size(); roomIndex++) {
             tmpImportRoomFees.add(roomFees.get(roomIndex));
@@ -214,12 +225,16 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
         JSONObject paramOut = new JSONObject();
         paramOut.put("successCount", 0);
         paramOut.put("errorCount", 0);
-
         JSONObject data = JSONObject.parseObject(pd.getReqData());
+        data.put("communityId", result.getCommunityId());
+        data.put("userId", pd.getUserId());
+        generatorBatch(data);
+
+
         data.put("storeId", result.getStoreId());
         data.put("importFeeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         data.put("userId", result.getUserId());
-        data.put("communityId", result.getCommunityId());
+
         List<ImportRoomFee> tmpImportCarFees = new ArrayList<>();
         for (int carIndex = 0; carIndex < carFees.size(); carIndex++) {
             tmpImportCarFees.add(carFees.get(carIndex));
@@ -252,7 +267,7 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
 
         String apiUrl = "/feeApi/importRoomFees";
 
-        if(!StringUtil.isEmpty(tmpImportRoomFee.get(0).getContractId())){
+        if (!StringUtil.isEmpty(tmpImportRoomFee.get(0).getContractId())) {
             apiUrl = "/feeApi/importContractFees";
         }
 
@@ -418,6 +433,33 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
             importRoomFee.setAmount(os[4].toString());
             cars.add(importRoomFee);
         }
+    }
+
+    /**
+     * 生成批次号
+     *
+     * @param reqJson
+     */
+    private void generatorBatch(JSONObject reqJson) {
+        PayFeeBatchPo payFeeBatchPo = new PayFeeBatchPo();
+        payFeeBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId("12"));
+        payFeeBatchPo.setCommunityId(reqJson.getString("communityId"));
+        payFeeBatchPo.setCreateUserId(reqJson.getString("userId"));
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        payFeeBatchPo.setCreateUserName(userDtos.get(0).getUserName());
+        payFeeBatchPo.setState(PayFeeBatchDto.STATE_NORMAL);
+        payFeeBatchPo.setMsg("正常");
+        int flag = payFeeBatchV1InnerServiceSMOImpl.savePayFeeBatch(payFeeBatchPo);
+
+        if (flag < 1) {
+            throw new IllegalArgumentException("生成批次失败");
+        }
+
+        reqJson.put("batchId", payFeeBatchPo.getBatchId());
     }
 
 

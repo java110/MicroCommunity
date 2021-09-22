@@ -95,6 +95,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
+        String batchId = reqJson.getString("batchId");
 
 
         JSONArray importRoomFees = reqJson.getJSONArray("importRoomFees");
@@ -180,6 +181,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             payFeePo.setFeeTypeCd(feeTypeCd);
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setAmount(importRoomFee.getAmount());
+            payFeePo.setBatchId(batchId);
             //payFeePo.setStartTime(importRoomFee.getStartTime());
             payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
@@ -301,6 +303,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
+        String batchId = reqJson.getString("batchId");
 
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
@@ -358,6 +361,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             payFeePo.setFeeTypeCd(feeTypeCd);
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setAmount(importCarFee.getAmount());
+            payFeePo.setBatchId(batchId);
             //payFeePo.setStartTime(importRoomFee.getStartTime());
             payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 

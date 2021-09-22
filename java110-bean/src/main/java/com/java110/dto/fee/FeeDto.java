@@ -127,6 +127,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String carTypeCd;
     private String cycle;
     private double feeTotalPrice;
+    private String batchId;
 
     public String getAmount() {
         return amount;
@@ -615,5 +616,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setFeeTotalPrice(double feeTotalPrice) {
         this.feeTotalPrice = feeTotalPrice;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
     }
 }

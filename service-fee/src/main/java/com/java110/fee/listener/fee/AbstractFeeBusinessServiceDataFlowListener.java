@@ -51,6 +51,7 @@ public abstract class AbstractFeeBusinessServiceDataFlowListener extends Abstrac
         businessFeeInfo.put("state", businessFeeInfo.get("state"));
         businessFeeInfo.put("configId", businessFeeInfo.get("config_id"));
         businessFeeInfo.put("billType", businessFeeInfo.get("bill_type"));
+        businessFeeInfo.put("batchId", businessFeeInfo.get("batch_id"));
 
         businessFeeInfo.remove("bId");
         businessFeeInfo.put("statusCd", statusCd);
@@ -91,6 +92,7 @@ public abstract class AbstractFeeBusinessServiceDataFlowListener extends Abstrac
         currentFeeInfo.put("state", currentFeeInfo.get("state"));
         currentFeeInfo.put("configId", currentFeeInfo.get("config_id"));
         currentFeeInfo.put("billType", currentFeeInfo.get("bill_type"));
+        currentFeeInfo.put("batchId", currentFeeInfo.get("batch_id"));
 
         currentFeeInfo.put("operate", StatusConstant.OPERATE_DEL);
         getFeeServiceDaoImpl().saveBusinessFeeInfo(currentFeeInfo);

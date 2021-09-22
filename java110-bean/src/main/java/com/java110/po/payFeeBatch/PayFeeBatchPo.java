@@ -16,7 +16,7 @@
 package com.java110.po.payFeeBatch;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2021-09-22 18:00:13 mail: 928255095@qq.com
@@ -28,62 +28,77 @@ import java.util.Date;
 public class PayFeeBatchPo implements Serializable {
 
     private String msg;
-private String createUserId;
-private String createUserName;
-private String statusCd = "0";
-private String remark;
-private String state;
-private String batchId;
-private String communityId;
-public String getMsg() {
+    private String createUserId;
+    private String createUserName;
+    private String statusCd = "0";
+    private String remark;
+    private String state;
+    private String batchId;
+    private String communityId;
+
+    public String getMsg() {
         return msg;
     }
-public void setMsg(String msg) {
+
+    public void setMsg(String msg) {
         this.msg = msg;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getBatchId() {
+
+    public String getBatchId() {
         return batchId;
     }
-public void setBatchId(String batchId) {
+
+    public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }

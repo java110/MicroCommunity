@@ -118,6 +118,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         String configId = reqJson.getString("configId");
         String userId = reqJson.getString("userId");
         String feeTypeCd = reqJson.getString("feeTypeCd");
+        String batchId = reqJson.getString("batchId");
         JSONArray importMeteWaterFees = reqJson.getJSONArray("importMeteWaterFees");
         JSONObject meteWaterJson = null;
         ImportExportMeterWaterDto importExportMeterWaterDto = null;
@@ -138,7 +139,8 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
                     feeTypeCd,
                     fees,
                     meterWaterPos,
-                    feeAttrPos
+                    feeAttrPos,
+                    batchId
             );
         }
 
@@ -159,7 +161,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
 
     private void dealImportExportMeterWater(ImportExportMeterWaterDto importExportMeterWaterDto, String communityId,
                                             String storeId, String configId, String userId, String feeTypeCd,
-                                            List<PayFeePo> fees, List<MeterWaterPo> meterWaterPos, List<FeeAttrPo> feeAttrPos) {
+                                            List<PayFeePo> fees, List<MeterWaterPo> meterWaterPos, List<FeeAttrPo> feeAttrPos, String batchId) {
 
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(communityId);
@@ -193,6 +195,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         payFeePo.setStartTime(importExportMeterWaterDto.getPreReadingTime());
         payFeePo.setEndTime(importExportMeterWaterDto.getPreReadingTime());
         payFeePo.setPayerObjId(roomDtos.get(0).getRoomId());
+        payFeePo.setBatchId(batchId);
         //payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
         payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
 

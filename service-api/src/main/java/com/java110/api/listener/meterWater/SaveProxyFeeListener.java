@@ -9,18 +9,23 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.payFeeBatch.PayFeeBatchDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeMeterWaterConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+
+import java.util.List;
 
 /**
  * 保存商户侦听
@@ -34,6 +39,12 @@ public class SaveProxyFeeListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFeeBMO feeBMOImpl;
+
+    @Autowired
+    private IPayFeeBatchV1InnerServiceSMO payFeeBatchV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -54,6 +65,8 @@ public class SaveProxyFeeListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
+        //生成批次
+        generatorBatch(reqJson);
 
         PayFeePo payFeePo = BeanConvertUtil.covertBean(reqJson, PayFeePo.class);
         payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
@@ -66,6 +79,7 @@ public class SaveProxyFeeListener extends AbstractServiceApiPlusListener {
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
         payFeePo.setState(FeeDto.STATE_DOING);
         payFeePo.setUserId(context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        payFeePo.setBatchId(reqJson.getString("batchId"));
 
         super.insert(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
 
@@ -75,7 +89,7 @@ public class SaveProxyFeeListener extends AbstractServiceApiPlusListener {
         feeAttrPo.setValue(reqJson.getString("consumption"));
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPo.setAttrId("-1");
-        super.insert(context,feeAttrPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
 
         feeAttrPo = new FeeAttrPo();
         feeAttrPo.setCommunityId(reqJson.getString("communityId"));
@@ -83,8 +97,35 @@ public class SaveProxyFeeListener extends AbstractServiceApiPlusListener {
         feeAttrPo.setValue(reqJson.getString("endTime"));
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPo.setAttrId("-2");
-        super.insert(context,feeAttrPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
 
+    }
+
+    /**
+     * 生成批次号
+     *
+     * @param reqJson
+     */
+    private void generatorBatch(JSONObject reqJson) {
+        PayFeeBatchPo payFeeBatchPo = new PayFeeBatchPo();
+        payFeeBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId("12"));
+        payFeeBatchPo.setCommunityId(reqJson.getString("communityId"));
+        payFeeBatchPo.setCreateUserId(reqJson.getString("userId"));
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        payFeeBatchPo.setCreateUserName(userDtos.get(0).getUserName());
+        payFeeBatchPo.setState(PayFeeBatchDto.STATE_NORMAL);
+        payFeeBatchPo.setMsg("正常");
+        int flag = payFeeBatchV1InnerServiceSMOImpl.savePayFeeBatch(payFeeBatchPo);
+
+        if (flag < 1) {
+            throw new IllegalArgumentException("生成批次失败");
+        }
+
+        reqJson.put("batchId", payFeeBatchPo.getBatchId());
     }
 
     @Override

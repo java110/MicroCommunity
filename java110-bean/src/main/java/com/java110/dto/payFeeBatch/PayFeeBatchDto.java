@@ -1,6 +1,7 @@
 package com.java110.dto.payFeeBatch;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,13 +15,18 @@ import java.util.Date;
  **/
 public class PayFeeBatchDto extends PageDto implements Serializable {
 
+    public static final String STATE_NORMAL = "2006001"; // 正常
+    public static final String STATE_APPLY = "2007001"; // 申请
+    public static final String STATE_SUCCESS = "2008001"; // 审核通过
+    public static final String STATE_FAIL = "2009001"; // 审核通过
+
     private String msg;
-private String createUserId;
-private String createUserName;
-private String remark;
-private String state;
-private String batchId;
-private String communityId;
+    private String createUserId;
+    private String createUserName;
+    private String remark;
+    private String state;
+    private String batchId;
+    private String communityId;
 
 
     private Date createTime;
@@ -31,43 +37,56 @@ private String communityId;
     public String getMsg() {
         return msg;
     }
-public void setMsg(String msg) {
+
+    public void setMsg(String msg) {
         this.msg = msg;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getBatchId() {
+
+    public String getBatchId() {
         return batchId;
     }
-public void setBatchId(String batchId) {
+
+    public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
