@@ -13,7 +13,12 @@ import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.IImportRoomFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.*;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -481,6 +486,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
+        String batchId = reqJson.getString("batchId");
 
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
@@ -536,6 +542,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setAmount(importCarFee.getAmount());
             payFeePo.setStartTime(importCarFee.getStartTime());
+            payFeePo.setBatchId(batchId);
             //payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
             payFeePos.add(payFeePo);

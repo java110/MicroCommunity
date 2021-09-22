@@ -127,7 +127,6 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
 
 
     @Override
-
     public ResponseEntity<String> importTempData(IPageData pd) {
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
