@@ -86,7 +86,8 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         for (FeeDto tmpFeeDto : feeDtos) {
             computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
             //如果金额为0 就排除
-            if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+            //if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+            if (tmpFeeDto.getFeePrice() > 0) {
                 tmpFeeDtos.add(tmpFeeDto);
             }
         }
@@ -235,7 +236,8 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
             computeFeeSMOImpl.computeEveryOweFee(tempFeeDto, tmpRoomDto);//计算欠费金额
             //如果金额为0 就排除
-            if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+            //if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+            if (tempFeeDto.getFeePrice() > 0) {
                 tmpFeeDtos.add(tempFeeDto);
             }
         }

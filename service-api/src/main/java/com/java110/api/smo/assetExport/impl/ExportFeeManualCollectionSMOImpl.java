@@ -4,12 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.component.BaseComponentSMO;
-import com.java110.core.context.IPageData;
-import com.java110.core.factory.Java110ThreadPoolFactory;
-import com.java110.entity.component.ComponentValidateResult;
 import com.java110.api.smo.assetExport.IExportFeeManualCollectionSMO;
-import com.java110.utils.constant.ServiceConstant;
+import com.java110.core.context.IPageData;
+import com.java110.dto.fee.FeeDto;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
@@ -32,8 +30,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -347,6 +345,15 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
             row = sheet.createRow(line + feeIndex + 3);
             startTime = feeObj.getString("endTime").length() > 10 ? feeObj.getString("endTime").substring(0, 10) : feeObj.getString("endTime");
             endTime = feeObj.getString("deadlineTime").length() > 10 ? feeObj.getString("deadlineTime").substring(0, 10) : feeObj.getString("deadlineTime");
+            //如果费用是周期性费用 则 结束时间减一天
+            try {
+                if (feeObj.containsKey("feeFlag") && FeeDto.FEE_FLAG_CYCLE.equals(feeObj.getString("feeFlag"))) {
+                    endTime = DateUtil.getFormatTimeString(DateUtil.stepDay(DateUtil.getDateFromString(endTime, DateUtil.DATE_FORMATE_STRING_B), -1),
+                            DateUtil.DATE_FORMATE_STRING_B);
+                }
+            } catch (ParseException e) {
+                logger.error("处理结束时间失败", e);
+            }
 
             cell0 = row.createCell(0);
             cell0.setCellValue(feeObj.getString("feeName"));
