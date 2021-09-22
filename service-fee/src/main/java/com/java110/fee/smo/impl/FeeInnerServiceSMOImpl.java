@@ -336,6 +336,11 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     }
 
     @Override
+    public int deleteFeesByBatch(@RequestBody PayFeePo payFeePo) {
+        return feeServiceDaoImpl.deleteFeesByBatch(BeanConvertUtil.beanCovertMap(payFeePo));
+    }
+
+    @Override
     public JSONArray getAssetsFee(@RequestBody String communityId) {
 
         JSONArray data = new JSONArray();
@@ -356,6 +361,8 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         return data;
     }
+
+
 
     private void dealFeeConfig(JSONArray data, FeeConfigDto tmpFeeConfigDto) {
         JSONObject config = new JSONObject();
