@@ -63,7 +63,7 @@ public class UpdatePayFeeBatchCmd extends AbstractServiceCmdListener {
         Assert.hasKeyAndValue(reqJson, "batchId", "batchId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
         Assert.hasKeyAndValue(reqJson, "state", "状态不能为空");
-        Assert.hasKeyAndValue(reqJson, "message", "消息不能为空");
+        Assert.hasKeyAndValue(reqJson, "msg", "消息不能为空");
     }
 
     @Override
