@@ -1,27 +1,34 @@
 {
   "param": {
-    "typeName": "type_name",
-    "typeId": "type_id",
-    "remark": "remark",
+    "msg": "msg",
+    "createUserId": "create_user_id",
+    "createUserName": "create_user_name",
     "statusCd": "status_cd",
+    "remark": "remark",
+    "state": "state",
+    "batchId": "batch_id",
     "communityId": "community_id"
   },
-  "name": "meterType",
+  "name": "payFeeBatch",
   "shareColumn": "community_id",
-  "id": "typeId",
+  "id": "batchId",
   "shareName": "fee",
   "autoMove": true,
   "required": [
     {
-      "msg": "名称不能为空",
-      "code": "typeName"
-    },
-    {
       "msg": "小区ID不能为空",
       "code": "communityId"
+    },
+    {
+      "msg": "createUserId不能为空",
+      "code": "createUserId"
+    },
+    {
+      "msg": "createUserName不能为空",
+      "code": "createUserName"
     }
   ],
-  "desc": "抄表类型",
+  "desc": "费用批次",
   "shareParam": "communityId",
-  "tableName": "meter_type"
+  "tableName": "pay_fee_batch"
 }
