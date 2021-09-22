@@ -56,6 +56,8 @@ public class ApiFeeDataVo implements Serializable {
 
     private String carTypeCd;
 
+    private String batchId;
+
     private List<FeeAttrDto> feeAttrs;
 
     public String getAmount() {
@@ -320,5 +322,14 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setCarTypeCd(String carTypeCd) {
         this.carTypeCd = carTypeCd;
+    }
+
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
     }
 }
