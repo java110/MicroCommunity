@@ -84,7 +84,7 @@ public class UpdatePayFeeBatchCmd extends AbstractServiceCmdListener {
             throw new CmdException("更新数据失败");
         }
 
-        if (!PayFeeBatchDto.STATE_FAIL.equals(payFeeBatchPo.getState())) {
+        if (PayFeeBatchDto.STATE_FAIL.equals(payFeeBatchPo.getState())) {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
             return;
         }
