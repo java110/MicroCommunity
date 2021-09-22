@@ -98,7 +98,9 @@ public class SaveContractCreateFeeListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         logger.debug("ServiceDataFlowEvent : {}", event);
         String storeId = context.getRequestCurrentHeaders().get("store-id");
+        String userId = context.getRequestCurrentHeaders().get("user-id");
         reqJson.put("storeId", storeId);
+        reqJson.put("userId", userId);
         List<ContractDto> contractDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
