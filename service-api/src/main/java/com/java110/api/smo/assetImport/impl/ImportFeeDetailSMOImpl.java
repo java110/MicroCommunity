@@ -10,9 +10,14 @@ import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.dto.assetImportLog.AssetImportLogDto;
 import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.payFeeBatch.PayFeeBatchDto;
+import com.java110.dto.user.UserDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.api.smo.assetImport.IImportFeeDetailSMO;
+import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -55,6 +60,13 @@ public class ImportFeeDetailSMOImpl extends DefaultAbstractComponentSMO implemen
 
     @Autowired
     private ISaveTransactionLogSMO saveTransactionLogSMOImpl;
+
+
+    @Autowired
+    private IPayFeeBatchV1InnerServiceSMO payFeeBatchV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<String> importExcelData(IPageData pd, MultipartFile uploadFile) throws Exception {
@@ -160,11 +172,14 @@ public class ImportFeeDetailSMOImpl extends DefaultAbstractComponentSMO implemen
             throw new IllegalArgumentException("没有数据需要处理");
         }
 
+        //生成批次
         JSONObject data = JSONObject.parseObject(pd.getReqData());
+        data.put("userId", pd.getUserId());
+        data.put("communityId", result.getCommunityId());
+        generatorBatch(data);
         data.put("importFeeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         data.put("storeId", result.getStoreId());
         data.put("userId", result.getUserId());
-        data.put("communityId", result.getCommunityId());
         AssetImportLogDto assetImportLogDto = new AssetImportLogDto();
         assetImportLogDto.setSuccessCount(0L);
         assetImportLogDto.setErrorCount(0L);
@@ -306,7 +321,32 @@ public class ImportFeeDetailSMOImpl extends DefaultAbstractComponentSMO implemen
             rooms.add(importRoomFee);
         }
     }
+    /**
+     * 生成批次号
+     *
+     * @param reqJson
+     */
+    private void generatorBatch(JSONObject reqJson) {
+        PayFeeBatchPo payFeeBatchPo = new PayFeeBatchPo();
+        payFeeBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId("12"));
+        payFeeBatchPo.setCommunityId(reqJson.getString("communityId"));
+        payFeeBatchPo.setCreateUserId(reqJson.getString("userId"));
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        payFeeBatchPo.setCreateUserName(userDtos.get(0).getUserName());
+        payFeeBatchPo.setState(PayFeeBatchDto.STATE_NORMAL);
+        payFeeBatchPo.setMsg("正常");
+        int flag = payFeeBatchV1InnerServiceSMOImpl.savePayFeeBatch(payFeeBatchPo);
+
+        if (flag < 1) {
+            throw new IllegalArgumentException("生成批次失败");
+        }
+
+        reqJson.put("batchId", payFeeBatchPo.getBatchId());
+    }
 
     //解析Excel日期格式
     public static String excelDoubleToDate(String strDate) {
