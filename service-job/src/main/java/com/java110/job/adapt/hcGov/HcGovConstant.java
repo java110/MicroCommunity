@@ -70,6 +70,11 @@ public class HcGovConstant {
     //修改停车场
     public static final String EDIT_PARKING_AREA_ACTION = "EDIT_PARKING_AREA";
 
+    //添加停车场
+    public static final String ADD_CAR_ACTION = "ADD_CAR";
+    //修改停车场
+    public static final String EDIT_CAR_ACTION = "EDIT_CAR";
+
     //开门记录
     public static final String ADD_INOUT_RECORD_ACTION = "ADD_INOUT_RECORD";
 

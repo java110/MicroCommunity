@@ -3,17 +3,24 @@ package com.java110.api.smo.assetImport.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.component.BaseComponentSMO;
+import com.java110.api.smo.assetImport.IAssetImportSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.assetImportLog.AssetImportLogDto;
 import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
-import com.java110.entity.assetImport.*;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.entity.assetImport.ImportFee;
+import com.java110.entity.assetImport.ImportFloor;
+import com.java110.entity.assetImport.ImportOwner;
+import com.java110.entity.assetImport.ImportParkingSpace;
+import com.java110.entity.assetImport.ImportRoom;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.api.smo.assetImport.IAssetImportSMO;
-import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.util.*;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.CommonUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ImportExcelUtils;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -772,9 +779,13 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                 paramIn.put("age", owner.getAge());
                 paramIn.put("link", owner.getTel());
                 paramIn.put("sex", owner.getSex());
-                paramIn.put("ownerTypeCd", "1001");
+                paramIn.put("ownerTypeCd", owner.getOwnerTypeCd());
                 paramIn.put("idCard", owner.getIdCard());
                 paramIn.put("source", "BatchImport");
+                if (!OwnerDto.OWNER_TYPE_CD_OWNER.equals(owner.getOwnerTypeCd())) {
+                    //查询业主ID
+                    paramIn.put("ownerId", getOwnerId(owners, owner));
+                }
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
 
                 /***************************************导入日志记录****************************************************/
@@ -818,6 +829,15 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
         }
 
         return responseEntity;
+    }
+
+    private String getOwnerId(List<ImportOwner> owners, ImportOwner owner) {
+        for (ImportOwner owner1 : owners) {
+            if (owner1.getOwnerNum().equals(owner.getParentOwnerId())) {
+                return owner1.getOwnerId();
+            }
+        }
+        throw new IllegalArgumentException("请将业主成员放到业主后面,或者业主成员未找到对应的业主");
     }
 
     /**
@@ -1006,7 +1026,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         apiUrl = "owner.queryOwners?page=1&row=1&communityId=" + result.getCommunityId()
-                + "&ownerTypeCd=1001&name=" + importOwner.getOwnerName() + "&link=" + importOwner.getTel();
+                + "&ownerTypeCd=" + importOwner.getOwnerTypeCd() + "&name=" + importOwner.getOwnerName() + "&link=" + importOwner.getTel();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -1327,6 +1347,8 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                 Assert.hasValue(os[2], "业主信息选项中" + (osIndex + 1) + "行业主性别为空");
                 String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
                 String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
+                String ownerTypeCd = StringUtil.isNullOrNone(os[6]) ? "1001" : os[6].toString();
+                String parentOwnerId = StringUtil.isNullOrNone(os[7]) ? os[0].toString() : os[7].toString();
 
                 if (os[4].toString().length() > 11) {
                     throw new IllegalArgumentException(os[1].toString() + " 的手机号超过11位,请核实");
@@ -1343,6 +1365,8 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                 importOwner.setAge(Integer.parseInt(age));
                 importOwner.setTel(tel);
                 importOwner.setIdCard(idCard);
+                importOwner.setOwnerTypeCd(ownerTypeCd);
+                importOwner.setParentOwnerId(parentOwnerId);
                 owners.add(importOwner);
             } catch (Exception e) {
                 logger.error("第" + (osIndex + 1) + "行数据出现问题", e);

@@ -1,51 +1,27 @@
 {
   "param": {
-    "skipLevel": "skip_level",
-    "describle": "describle",
+    "typeName": "type_name",
+    "typeId": "type_id",
+    "remark": "remark",
     "statusCd": "status_cd",
-    "communityId": "community_id",
-    "storeId": "store_id",
-    "flowId": "flow_id",
-    "flowName": "flow_name",
-    "flowType": "flow_type",
-    "processDefinitionKey": "process_definition_key"
+    "communityId": "community_id"
   },
-  "name": "workflow",
+  "name": "meterType",
   "shareColumn": "community_id",
-  "id": "flowId",
-  "shareName": "common",
+  "id": "typeId",
+  "shareName": "fee",
   "autoMove": true,
   "required": [
     {
-      "msg": "流程ID不能为空",
-      "code": "flowId"
-    },
-    {
-      "msg": "流程名称不能为空",
-      "code": "flowName"
-    },
-    {
-      "msg": "跳过不能为空",
-      "code": "skipLevel"
+      "msg": "名称不能为空",
+      "code": "typeName"
     },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
-    },
-    {
-      "msg": "商户ID,用来做分区不能为空",
-      "code": "storeId"
-    },
-    {
-      "msg": "数据状态不能为空",
-      "code": "statusCd"
-    },
-    {
-      "msg": "流程类型不能为空",
-      "code": "flowType"
     }
   ],
-  "desc": "工作流程",
+  "desc": "抄表类型",
   "shareParam": "communityId",
-  "tableName": "workflow"
+  "tableName": "meter_type"
 }
