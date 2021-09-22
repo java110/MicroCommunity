@@ -740,6 +740,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("payerObjType", FeeDto.PAYER_OBJ_TYPE_CONTRACT);
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
+        businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
         paramInJson.put("feeId", businessUnit.getString("feeId"));
