@@ -80,18 +80,18 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "preReadingTime", "请求报文中未包含preReadingTime");
         Assert.hasKeyAndValue(reqJson, "curReadingTime", "请求报文中未包含curReadingTime");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "meterType", "请求报文中未包含抄表类型");
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(reqJson.getString("feeTypeCd"))) {
-            reqJson.put("meterType", "1010");
-        } else if (FeeConfigDto.FEE_TYPE_CD_GAS.equals(reqJson.getString("feeTypeCd"))) {
-            reqJson.put("meterType", "3030");
-        } else {
-            reqJson.put("meterType", "2020");
-        }
+//        if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(reqJson.getString("feeTypeCd"))) {
+//            reqJson.put("meterType", "1010");
+//        } else if (FeeConfigDto.FEE_TYPE_CD_GAS.equals(reqJson.getString("feeTypeCd"))) {
+//            reqJson.put("meterType", "3030");
+//        } else {
+//            reqJson.put("meterType", "2020");
+//        }
         //获取抄表对象id(即房屋id)
         String objId = reqJson.getString("objId");
         RoomDto roomDto = new RoomDto();
@@ -121,10 +121,12 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
             electricRemarkList = Arrays.asList(electricSplit);
         }
         //如果是水费，且在水费黑名单就直接生成水费记录，不生成费用
-        if (waterRemarkList.contains(communityId) && meterType.equals("2020")) {
+        if (waterRemarkList.contains(communityId)
+                && FeeConfigDto.FEE_TYPE_CD_METER.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("feeId", "-1");
             meterWaterBMOImpl.addMeterWater(reqJson, context);
-        } else if (electricRemarkList.contains(communityId) && meterType.equals("1010")) {
+        } else if (electricRemarkList.contains(communityId)
+                && FeeConfigDto.FEE_TYPE_CD_WATER.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("feeId", "-1");
             meterWaterBMOImpl.addMeterWater(reqJson, context);
         } else {

@@ -140,6 +140,7 @@ public class ImportMeterWaterFeeSMOImpl extends DefaultAbstractComponentSMO impl
         data.put("userId", result.getUserId());
         data.put("configId", reqJson.getString("configId"));
         data.put("feeTypeCd", reqJson.getString("feeTypeCd"));
+        data.put("meterType", reqJson.getString("meterType"));
 
         List<ImportExportMeterWaterDto> tmpImportRoomFees = new ArrayList<>();
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
