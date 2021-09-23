@@ -5,6 +5,7 @@ import com.java110.api.controller.component.CallComponentController;
 import com.java110.api.smo.assetExport.IExportMeterWaterSMO;
 import com.java110.api.smo.assetImport.IImportMeterWaterFeeSMO;
 import com.java110.core.context.PageData;
+import com.java110.dto.app.AppDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class ImportMeterWaterFeeComponent {
      */
     public ResponseEntity<Object> exportData(IPageData pd) throws Exception {
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(),pd.getToken(), pd.getReqData(), pd.getComponentCode(), pd.getComponentMethod(), "",
-                pd.getSessionId(),pd.getAppId(),pd.getHeaders());
+                pd.getSessionId(), AppDto.WEB_APP_ID,pd.getHeaders());
         return exportMeterWaterSMOImpl.exportExcelData(newPd);
     }
     /**
@@ -68,7 +69,7 @@ public class ImportMeterWaterFeeComponent {
      */
     public ResponseEntity<Object> exportData2(IPageData pd) throws Exception {
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(),pd.getToken(), pd.getReqData(), pd.getComponentCode(), pd.getComponentMethod(), "",
-                pd.getSessionId(),pd.getAppId(),pd.getHeaders());
+                pd.getSessionId(), AppDto.WEB_APP_ID,pd.getHeaders());
         return exportMeterWaterSMOImpl.exportExcelData2(newPd);
     }
 
