@@ -730,7 +730,7 @@ public class ExportReportFeeSMOImpl extends BaseComponentSMO implements IExportR
                 row.createCell(7).setCellValue("--");
             }
             row.createCell(8).setCellValue(dataObj.getString("stock") + dataObj.getString("unitCodeName"));
-            row.createCell(9).setCellValue(dataObj.getString("stock") + dataObj.getString("unitCodeName") + "=" + dataObj.getString("miniUnitStock") + dataObj.getString("miniUnitCodeName"));
+            row.createCell(9).setCellValue("1" + dataObj.getString("unitCodeName") + "=" + dataObj.getString("miniUnitStock") + dataObj.getString("miniUnitCodeName"));
             row.createCell(10).setCellValue(dataObj.getString("miniStock") + dataObj.getString("miniUnitCodeName"));
             row.createCell(11).setCellValue(dataObj.getString("averagePrice"));
             if (!StringUtil.isEmpty(dataObj.getString("stock")) && !StringUtil.isEmpty(dataObj.getString("averagePrice"))) {

@@ -1,5 +1,6 @@
 package com.java110.api.bmo.account;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.IApiBaseBMO;
 import com.java110.core.context.DataFlowContext;
@@ -38,5 +39,5 @@ public interface IAccountDetailBMO extends IApiBaseBMO {
      * @param paramObj
      * @param dataFlowContext
      */
-    void dealAccount(JSONObject paramObj, DataFlowContext dataFlowContext);
+    void dealAccount(JSONObject paramObj, DataFlowContext dataFlowContext, JSONArray businesses);
 }

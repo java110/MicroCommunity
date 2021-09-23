@@ -26,7 +26,7 @@ public class PayFeePo implements Serializable {
     private String state;
     private String configId;
     private String payerObjType;
-    private String statusCd;
+    private String statusCd = "0";
     private String createTime;
 
     public String getFeeId() {

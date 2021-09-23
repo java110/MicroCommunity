@@ -22,6 +22,9 @@ public class ApplyRoomDiscountPo implements Serializable {
     private String state;
     private String communityId;
     private String discountId;
+    private String feeId;
+    private String returnWay;
+    private String returnAmount;
 
     //是否可用状态
     private String inUse;
@@ -179,5 +182,29 @@ public class ApplyRoomDiscountPo implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getFeeId() {
+        return feeId;
+    }
+
+    public void setFeeId(String feeId) {
+        this.feeId = feeId;
+    }
+
+    public String getReturnWay() {
+        return returnWay;
+    }
+
+    public void setReturnWay(String returnWay) {
+        this.returnWay = returnWay;
+    }
+
+    public String getReturnAmount() {
+        return returnAmount;
+    }
+
+    public void setReturnAmount(String returnAmount) {
+        this.returnAmount = returnAmount;
     }
 }

@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -167,17 +168,17 @@ public class ListFeeListener extends AbstractServiceApiListener {
             return;
         }
         String computingFormula = feeDto.getComputingFormula();
-        double feePrice = 0.00;
+        DecimalFormat df = new DecimalFormat("0.00");
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
-        feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
+        feeDto.setAmountOwed(df.format(curFeePrice));
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
                 && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setAmountOwed(df.format(curFeePrice));
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
     }
@@ -189,17 +190,17 @@ public class ListFeeListener extends AbstractServiceApiListener {
      */
     private void computeFeePriceByRoom(FeeDto feeDto, double oweMonth) {
         String computingFormula = feeDto.getComputingFormula();
-        double feePrice = 0.00;
+        DecimalFormat df = new DecimalFormat("0.00");
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
-        feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
+        feeDto.setAmountOwed((df.format(curFeePrice)));
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
                 && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setAmountOwed(df.format(curFeePrice) + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
     }
@@ -211,17 +212,17 @@ public class ListFeeListener extends AbstractServiceApiListener {
      */
     private void computeFeePriceByContract(FeeDto feeDto, double oweMonth) {
         String computingFormula = feeDto.getComputingFormula();
-        double feePrice = 0.00;
+        DecimalFormat df = new DecimalFormat("0.00");
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
-        feeDto.setAmountOwed(curFeePrice.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
+        feeDto.setAmountOwed(df.format(curFeePrice));
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
                 && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setAmountOwed(df.format(curFeePrice) + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
     }

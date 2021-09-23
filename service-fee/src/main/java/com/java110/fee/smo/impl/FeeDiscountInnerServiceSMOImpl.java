@@ -227,6 +227,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             c.add(Calendar.DAY_OF_MONTH, -5);//这里根据设置时间荣誉5天
             Date endTime = c.getTime();
             applyRoomDiscountDto.setEndTime(simpleDateFormat.format(endTime));
+            applyRoomDiscountDto.setFeeId(feeDetailDto.getFeeId());
             //查询折扣申请表
             List<ApplyRoomDiscountDto> applyRoomDiscountDtos = applyRoomDiscountInnerServiceSMOImpl.queryApplyRoomDiscounts(applyRoomDiscountDto);
             //判断查询的折扣申请表是否有数据

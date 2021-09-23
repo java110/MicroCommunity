@@ -72,6 +72,7 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
 
     /**
      * 查询业主账号
+     *
      * @param accountDto
      * @param ownerDto
      * @return
@@ -80,12 +81,12 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
     public ResponseEntity<String> queryOwnerAccount(AccountDto accountDto, OwnerDto ownerDto) {
 
         List<OwnerDto> ownerDtos = null;
-        if(!StringUtil.isEmpty(ownerDto.getLink()) || !StringUtil.isEmpty(ownerDto.getIdCard())) {
+        if (!StringUtil.isEmpty(ownerDto.getLink()) || !StringUtil.isEmpty(ownerDto.getIdCard())) {
             //先查询业主
             ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
         }
 
-        if(ownerDtos != null && ownerDtos.size()> 0){
+        if (ownerDtos != null && ownerDtos.size() > 0) {
             accountDto.setAcctName("");
             accountDto.setObjId(ownerDtos.get(0).getMemberId());
         }

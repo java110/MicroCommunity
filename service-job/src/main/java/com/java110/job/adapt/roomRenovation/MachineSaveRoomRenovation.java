@@ -26,6 +26,7 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,8 +85,19 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 
     @Override
-    public void execute(Business business, List<Business> businesses) {
+    public void execute(Business business, List<Business> businesses) throws ParseException {
         JSONObject data = business.getData();
+        //获取开始时间
+        String beginTime = data.getString("startTime") + " 00:00:00";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date timeOne = format.parse(beginTime);
+        Calendar now = Calendar.getInstance();
+        String newTime = now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) + "-" + now.get(Calendar.DAY_OF_MONTH) + " 00:00:00";
+        Date timeTwo = format.parse(newTime);
+        if (timeOne.getTime() < timeTwo.getTime()) {
+            logger.info("装修时间不能小于当前时间！");
+            return;
+        }
         //查询小区信息
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(data.getString("communityId"));

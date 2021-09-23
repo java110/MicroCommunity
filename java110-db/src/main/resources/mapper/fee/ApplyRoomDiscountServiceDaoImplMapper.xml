@@ -7,10 +7,10 @@
     <!-- 保存房屋折扣申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveApplyRoomDiscountInfo" parameterType="Map">
         insert into apply_room_discount(
-        apply_type,ard_id,create_user_name,create_user_tel,create_remark,check_user_id,check_remark,room_id,room_name,review_user_id,review_remark,start_time,end_time,state,community_id,discount_id,in_use
+        apply_type,ard_id,create_user_name,create_user_tel,create_remark,check_user_id,check_remark,room_id,room_name,review_user_id,review_remark,start_time,end_time,state,community_id,discount_id,in_use,fee_id,return_way,return_amount
         ) values (
         #{applyType},#{ardId},#{createUserName},#{createUserTel},#{createRemark},#{checkUserId},#{checkRemark},#{roomId},#{roomName},#{reviewUserId},#{reviewRemark},#{startTime},#{endTime},#{state},
-        #{communityId},#{discountId},#{inUse}
+        #{communityId},#{discountId},#{inUse},#{feeId},#{returnWay},#{returnAmount}
         )
     </insert>
 
@@ -22,11 +22,14 @@
         statusCd,t.check_remark,t.check_remark checkRemark,t.room_id,t.room_id roomId,t.room_name,t.room_name
         roomName,t.review_user_id,t.review_user_id reviewUserId,t.review_remark,t.review_remark
         reviewRemark,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId,t.in_use,t.in_use inUse,t.create_time,t.create_time createTime,
+        endTime,t.state,td.name stateName,t.community_id,t.community_id communityId,t.discount_id,t.discount_id
+        discountId,t.in_use,t.in_use inUse,t.fee_id,t.fee_id feeId,t.return_way,t.return_way returnWay,t.return_amount,t.return_amount returnAmount,t.create_time,t.create_time createTime,
         ardt.type_name applyTypeName,fd.discount_name discountName
         from apply_room_discount t
-        left join t_dict td on t.state = td.status_cd and td.table_name='apply_room_discount' and td.table_columns ='state'
-        left join apply_room_discount_type ardt on t.apply_type = ardt.apply_type and t.community_id = ardt.community_id and ardt.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name='apply_room_discount' and td.table_columns
+        ='state'
+        left join apply_room_discount_type ardt on t.apply_type = ardt.apply_type and t.community_id = ardt.community_id
+        and ardt.status_cd = '0'
         left join fee_discount fd on t.discount_id=fd.discount_id
         where t.status_cd = '0'
         <if test="applyType !=null and applyType != ''">
@@ -79,6 +82,15 @@
         </if>
         <if test="inUse !=null and inUse != ''">
             and t.in_use= #{inUse}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="returnWay !=null and returnWay != ''">
+            and t.return_way= #{returnWay}
+        </if>
+        <if test="returnAmount !=null and returnAmount != ''">
+            and t.return_amount= #{returnAmount}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -154,6 +166,15 @@
         <if test="inUse !=null and inUse != ''">
             and t.in_use= #{inUse}
         </if>
+        <if test="returnWay !=null and returnWay != ''">
+            and t.return_way= #{returnWay}
+        </if>
+        <if test="returnAmount !=null and returnAmount != ''">
+            and t.return_amount= #{returnAmount}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
         order by t.create_time desc limit 0,1
     </select>
 
@@ -205,6 +226,15 @@
         </if>
         <if test="inUse !=null and inUse != ''">
             , t.in_use= #{inUse}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="returnWay !=null and returnWay != ''">
+            , t.return_way= #{returnWay}
+        </if>
+        <if test="returnAmount !=null and returnAmount != ''">
+            , t.return_amount= #{returnAmount}
         </if>
         <if test="bId !=null and bId != ''">
             , t.b_id= #{bId}
@@ -270,6 +300,15 @@
         </if>
         <if test="inUse !=null and inUse != ''">
             and t.in_use= #{inUse}
+        </if>
+        <if test="returnWay !=null and returnWay != ''">
+            and t.return_way= #{returnWay}
+        </if>
+        <if test="returnAmount !=null and returnAmount != ''">
+            and t.return_amount= #{returnAmount}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
         </if>
     </select>
 

@@ -7,9 +7,9 @@
     <!-- 保存装修申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveRoomRenovationInfo" parameterType="Map">
         insert into room_renovation(
-        remark,is_violation,r_id,room_id,room_name,person_name,violation_desc,start_time,end_time,state,community_id,person_tel
+        remark,is_violation,r_id,room_id,room_name,person_name,violation_desc,start_time,end_time,state,community_id,person_tel,is_postpone,postpone_time,renovation_company,person_main,person_main_tel
         ) values (
-        #{remark},#{isViolation},#{rId},#{roomId},#{roomName},#{personName},#{violationDesc},#{startTime},#{endTime},#{state},#{communityId},#{personTel}
+        #{remark},#{isViolation},#{rId},#{roomId},#{roomName},#{personName},#{violationDesc},#{startTime},#{endTime},#{state},#{communityId},#{personTel},#{isPostpone},#{postponeTime},#{renovationCompany},#{personMain},#{personMainTel}
         )
     </insert>
 
@@ -19,7 +19,8 @@
         rId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName,t.person_name,t.person_name
         personName,t.violation_desc,t.violation_desc violationDesc,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.state,td.name stateName,t.community_id,t.community_id
-        communityId,t.person_tel,t.person_tel personTel,t.create_time createTime
+        communityId,t.person_tel,t.person_tel personTel,t.create_time createTime,t.is_postpone,t.is_postpone isPostpone,t.postpone_time,t.postpone_time postponeTime,
+        t.renovation_company,t.renovation_company renovationCompany,t.person_main,t.person_main personMain,t.person_main_tel,t.person_main_tel personMainTel
         from room_renovation t
         left join t_dict td on td.table_name='room_renovation' and td.table_columns='state'
         and t.state=td.status_cd
@@ -32,6 +33,9 @@
         </if>
         <if test="isViolation !=null and isViolation != ''">
             and t.is_violation= #{isViolation}
+        </if>
+        <if test="isPostpone !=null and isPostpone != ''">
+            and t.is_postpone= #{isPostpone}
         </if>
         <if test="rId !=null and rId != ''">
             and t.r_id= #{rId}
@@ -112,6 +116,21 @@
         <if test="examineRemark != null and examineRemark != ''">
             , t.examineRemark = #{examineRemark}
         </if>
+        <if test="isPostpone != null and isPostpone != ''">
+            , t.is_postpone = #{isPostpone}
+        </if>
+        <if test="postponeTime != null and postponeTime != ''">
+            , t.postpone_time = #{postponeTime}
+        </if>
+        <if test="renovationCompany != null and renovationCompany != ''">
+            , t.renovation_company = #{renovationCompany}
+        </if>
+        <if test="personMain != null and personMain != ''">
+            , t.person_main = #{personMain}
+        </if>
+        <if test="personMainTel != null and personMainTel != ''">
+            , t.person_main_tel = #{personMainTel}
+        </if>
         where 1=1
         <if test="rId !=null and rId != ''">
             and t.r_id= #{rId}
@@ -173,6 +192,21 @@
         </if>
         <if test="personTel !=null and personTel != ''">
             and t.person_tel= #{personTel}
+        </if>
+        <if test="isPostpone != null and isPostpone != ''">
+            and t.is_postpone = #{isPostpone}
+        </if>
+        <if test="postponeTime != null and postponeTime != ''">
+            and t.postpone_time = #{postponeTime}
+        </if>
+        <if test="renovationCompany != null and renovationCompany != ''">
+            and t.renovation_company = #{renovationCompany}
+        </if>
+        <if test="personMain != null and personMain != ''">
+            and t.person_main = #{personMain}
+        </if>
+        <if test="personMainTel != null and personMainTel != ''">
+            and t.person_main_tel = #{personMainTel}
         </if>
     </select>
 

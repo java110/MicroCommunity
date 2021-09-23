@@ -13,15 +13,27 @@ import com.java110.community.bmo.roomRenovationRecord.IGetRoomRenovationRecordBM
 import com.java110.community.bmo.roomRenovationRecord.ISaveRoomRenovationRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.communitySetting.CommunitySettingDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.roomRenovation.RoomRenovationDto;
 import com.java110.dto.roomRenovationDetail.RoomRenovationDetailDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.IRoomRenovationInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.fee.FeeAttrPo;
+import com.java110.po.fee.PayFeePo;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.roomRenovation.RoomRenovationPo;
 import com.java110.po.roomRenovationDetail.RoomRenovationDetailPo;
@@ -29,6 +41,7 @@ import com.java110.po.roomRenovationRecord.RoomRenovationRecordPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +51,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +104,21 @@ public class RoomRenovationApi {
     @Autowired
     private IDeleteRoomRenovationRecordBMO deleteRoomRenovationRecordBMOImpl;
 
+    @Autowired
+    private ICommunitySettingInnerServiceSMO communitySettingInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
     /**
      * 微信保存消息模板
      *
@@ -97,7 +128,9 @@ public class RoomRenovationApi {
      * @path /app/roomRenovation/saveRoomRenovation
      */
     @RequestMapping(value = "/saveRoomRenovation", method = RequestMethod.POST)
-    public ResponseEntity<String> saveRoomRenovation(@RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveRoomRenovation(@RequestBody JSONObject reqJson,
+                                                     @RequestHeader(value = "store-id") String storeId,
+                                                     @RequestHeader(value = "user-id") String userId) throws ParseException {
 
         Assert.hasKeyAndValue(reqJson, "roomId", "请求报文中未包含roomId");
         Assert.hasKeyAndValue(reqJson, "roomName", "请求报文中未包含roomName");
@@ -108,6 +141,16 @@ public class RoomRenovationApi {
         Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
         //Assert.hasKeyAndValue(reqJson, "isViolation", "请求报文中未包含isViolation");
 
+        //获取开始时间
+        String startTime = reqJson.getString("startTime") + " 00:00:00";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date timeOne = format.parse(startTime);
+        Calendar now = Calendar.getInstance();
+        String newTime = now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) + "-" + now.get(Calendar.DAY_OF_MONTH) + " 00:00:00";
+        Date timeTwo = format.parse(newTime);
+        if (timeOne.getTime() < timeTwo.getTime()) {
+            return ResultVo.error("装修时间不能小于当前时间！");
+        }
         RoomRenovationPo roomRenovationPo = BeanConvertUtil.covertBean(reqJson, RoomRenovationPo.class);
 
         //判断是否已经存在该房屋的装修记录了
@@ -127,6 +170,101 @@ public class RoomRenovationApi {
         roomRenovationPo.setIsViolation("N");
         roomRenovationPo.setStartTime(reqJson.getString("startTime") + " 00:00:00");
         roomRenovationPo.setEndTime(reqJson.getString("endTime") + " 23:59:59");
+        //生成装修费用
+        CommunitySettingDto communitySettingDto = new CommunitySettingDto();
+        communitySettingDto.setSettingKey("REPAIR_CONFIG_FEE");
+        communitySettingDto.setCommunityId(reqJson.getString("communityId"));
+        //查询小区配置
+        List<CommunitySettingDto> communitySettingDtos = communitySettingInnerServiceSMOImpl.queryCommunitySettings(communitySettingDto);
+        String settingValue = null;
+        if (communitySettingDtos != null && communitySettingDtos.size() > 0) {
+            //获取小区设置值
+            settingValue = communitySettingDtos.get(0).getSettingValue();
+        }
+        //获取房屋id
+        String roomId = reqJson.getString("roomId");
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setRoomId(roomId);
+        //查询业主房屋关系表
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
+        //获取业主id
+        String ownerId = ownerRoomRelDtos.get(0).getOwnerId();
+        if (!StringUtil.isEmpty(settingValue)) {
+            String[] settingValues = settingValue.split(",");
+            List<PayFeePo> payFeePos = new ArrayList<>();
+            List<FeeAttrPo> feeAttrOwnerIdPos = new ArrayList<>();
+            List<FeeAttrPo> feeAttrOwnerNamePos = new ArrayList<>();
+            List<FeeAttrPo> feeAttrOwnerLinkPos = new ArrayList<>();
+            List<FeeAttrPo> feeAttrOwnerTimePos = new ArrayList<>();
+            for (int i = 0; i < settingValues.length; i++) {
+                String configId = settingValues[i];
+                FeeConfigDto feeConfigDto = new FeeConfigDto();
+                feeConfigDto.setConfigId(configId);
+                //查询费用项
+                List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+                Assert.listOnlyOne(feeConfigDtos, "查询费用项错误！");
+                PayFeePo payFeePo = new PayFeePo();
+                payFeePo.setAmount(feeConfigDtos.get(0).getAdditionalAmount());
+                if (!StringUtil.isEmpty(storeId)) {
+                    payFeePo.setIncomeObjId(storeId);
+                } else {
+                    payFeePo.setIncomeObjId(reqJson.getString("storeId"));
+                }
+                payFeePo.setFeeTypeCd(feeConfigDtos.get(0).getFeeTypeCd());
+                payFeePo.setStartTime(newTime);
+                payFeePo.setEndTime(format.format(System.currentTimeMillis()));
+                payFeePo.setCommunityId(reqJson.getString("communityId"));
+                payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+                payFeePo.setUserId(userId);
+                payFeePo.setPayerObjId(reqJson.getString("roomId"));
+                payFeePo.setFeeFlag(feeConfigDtos.get(0).getFeeFlag());
+                payFeePo.setState(FeeDto.STATE_DOING);
+                payFeePo.setConfigId(configId);
+                payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+                payFeePos.add(payFeePo);
+                FeeAttrPo feeAttrPo1 = new FeeAttrPo();
+                feeAttrPo1.setFeeId(payFeePo.getFeeId());
+                feeAttrPo1.setCommunityId(reqJson.getString("communityId"));
+                feeAttrPo1.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo1.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID); //业主id
+                feeAttrPo1.setValue(ownerId);
+                feeAttrOwnerIdPos.add(feeAttrPo1);
+                FeeAttrPo feeAttrPo2 = new FeeAttrPo();
+                feeAttrPo2.setFeeId(payFeePo.getFeeId());
+                feeAttrPo2.setCommunityId(reqJson.getString("communityId"));
+                feeAttrPo2.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo2.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME); //业主名称
+                feeAttrPo2.setValue(reqJson.getString("personName"));
+                feeAttrOwnerNamePos.add(feeAttrPo2);
+                FeeAttrPo feeAttrPo3 = new FeeAttrPo();
+                feeAttrPo3.setFeeId(payFeePo.getFeeId());
+                feeAttrPo3.setCommunityId(reqJson.getString("communityId"));
+                feeAttrPo3.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo3.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK); //联系方式
+                feeAttrPo3.setValue(reqJson.getString("personTel"));
+                feeAttrOwnerLinkPos.add(feeAttrPo3);
+                if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {//一次性费用
+                    FeeAttrPo feeAttrPo4 = new FeeAttrPo();
+                    feeAttrPo4.setFeeId(payFeePo.getFeeId());
+                    feeAttrPo4.setCommunityId(reqJson.getString("communityId"));
+                    feeAttrPo4.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                    feeAttrPo4.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME); //结束时间
+                    feeAttrPo4.setValue(reqJson.getString("startTime"));
+                    feeAttrOwnerTimePos.add(feeAttrPo4);
+                }
+            }
+            //生成费用
+            feeInnerServiceSMOImpl.saveFee(payFeePos);
+            //插入费用属性(业主id)
+            feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrOwnerIdPos);
+            //插入费用属性(业主姓名)
+            feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrOwnerNamePos);
+            //插入费用属性(业主联系方式)
+            feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrOwnerLinkPos);
+            //插入费用属性(费用截止时间)
+            feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrOwnerTimePos);
+        }
         return saveRoomRenovationBMOImpl.save(roomRenovationPo);
     }
 
@@ -402,6 +540,7 @@ public class RoomRenovationApi {
                                                       @RequestParam(value = "personName", required = false) String personName,
                                                       @RequestParam(value = "personTel", required = false) String personTel,
                                                       @RequestParam(value = "state", required = false) String state,
+                                                      @RequestParam(value = "isPostpone", required = false) String isPostpone,
                                                       @RequestHeader(value = "user-id") String userId,
                                                       @RequestParam(value = "page", required = false) int page,
                                                       @RequestParam(value = "row", required = false) int row) {
@@ -415,6 +554,7 @@ public class RoomRenovationApi {
         roomRenovationDto.setPersonTel(personTel);
         roomRenovationDto.setState(state);
         roomRenovationDto.setUserId(userId);
+        roomRenovationDto.setIsPostpone(isPostpone);
         return getRoomRenovationBMOImpl.get(roomRenovationDto);
     }
 

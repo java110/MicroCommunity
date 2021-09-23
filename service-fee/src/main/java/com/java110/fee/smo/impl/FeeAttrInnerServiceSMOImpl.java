@@ -59,7 +59,7 @@ public class FeeAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFeeAt
     }
 
     @Override
-    public int saveFeeAttrs(List<FeeAttrPo> feeAttrPos) {
+    public int saveFeeAttrs(@RequestBody List<FeeAttrPo> feeAttrPos) {
 
         List<Map> feeAttrs = new ArrayList<>();
         for (FeeAttrPo feeAttrPo : feeAttrPos) {
