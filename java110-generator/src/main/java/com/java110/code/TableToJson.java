@@ -7,16 +7,17 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `pay_fee_batch` (\n" +
-            "  `batch_id` varchar(30) NOT NULL COMMENT '批次号',\n" +
+    public static final String createTableSql = "CREATE TABLE `parking_area_text` (\n" +
+            "  `pa_id` varchar(30) NOT NULL COMMENT '停车场ID',\n" +
             "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
-            "   create_user_id varchar(30) not null comment '创建人',\n" +
-            " create_user_name varchar(64) not null comment '创建人',\n" +
+            "  `type_cd` varchar(12) NOT NULL COMMENT '类型：1001 月租车进场，2002 月租车出场，3003 月租车到期，4004 临时车进场 5005 临时车出场 6006 临时车未缴费',\n" +
+            "  `text1` varchar(512) NOT NULL COMMENT '文字显示第一行',\n" +
+            "  `text2` varchar(512) NOT NULL COMMENT '文字显示第二行',\n" +
+            "  `text3` varchar(512) NOT NULL COMMENT '文字显示第三行',\n" +
+            "  `text4` varchar(512) NOT NULL COMMENT '文字显示第四行',\n" +
+            "  `voice` varchar(512) NOT NULL COMMENT '语音播放',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
-            "  `state` varchar(12) NOT NULL DEFAULT '2007001' COMMENT '状态 2007001待审核 2008001 审核通过 2009001 审核失败',\n" +
-            "  `msg` varchar(512) NOT NULL  COMMENT '审核说明',\n" +
-            "`remark` varchar(512)  COMMENT '备注'\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'\n" +
             ")";
 
     public static void main(String[] args) {

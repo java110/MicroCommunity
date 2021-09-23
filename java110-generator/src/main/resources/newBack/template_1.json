@@ -1,34 +1,56 @@
 {
   "param": {
-    "msg": "msg",
-    "createUserId": "create_user_id",
-    "createUserName": "create_user_name",
+    "voice": "voice",
+    "typeCd": "type_cd",
+    "text3": "text3",
+    "text4": "text4",
+    "text1": "text1",
+    "text2": "text2",
+    "paId": "pa_id",
+    "textId": "text_id",
     "statusCd": "status_cd",
-    "remark": "remark",
-    "state": "state",
-    "batchId": "batch_id",
     "communityId": "community_id"
   },
-  "name": "payFeeBatch",
+  "name": "parkingAreaText",
   "shareColumn": "community_id",
-  "id": "batchId",
-  "shareName": "fee",
+  "id": "textId",
+  "shareName": "community",
   "autoMove": true,
   "required": [
+    {
+      "msg": "停车场ID不能为空",
+      "code": "paId"
+    },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
     },
     {
-      "msg": "createUserId不能为空",
-      "code": "createUserId"
+      "msg": "类型：1001不能为空",
+      "code": "typeCd"
     },
     {
-      "msg": "createUserName不能为空",
-      "code": "createUserName"
+      "msg": "文字显示第一行不能为空",
+      "code": "text1"
+    },
+    {
+      "msg": "文字显示第二行不能为空",
+      "code": "text2"
+    },
+    {
+      "msg": "文字显示第三行不能为空",
+      "code": "text3"
+    },
+    {
+      "msg": "文字显示第四行不能为空",
+      "code": "text4"
+    },
+    {
+      "msg": "语音播放不能为空",
+      "code": "voice"
     }
   ],
-  "desc": "费用批次",
+  "desc": "停车场道闸文字语音配置",
   "shareParam": "communityId",
-  "tableName": "pay_fee_batch"
+  "tableName": "parking_area_text"
 }
