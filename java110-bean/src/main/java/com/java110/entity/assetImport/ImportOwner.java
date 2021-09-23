@@ -22,6 +22,10 @@ public class ImportOwner {
 
     private String idCard;
 
+    private String ownerTypeCd;
+
+    private String parentOwnerId;
+
     public String getOwnerNum() {
         return ownerNum;
     }
@@ -76,5 +80,21 @@ public class ImportOwner {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public String getOwnerTypeCd() {
+        return ownerTypeCd;
+    }
+
+    public void setOwnerTypeCd(String ownerTypeCd) {
+        this.ownerTypeCd = ownerTypeCd;
+    }
+
+    public String getParentOwnerId() {
+        return parentOwnerId;
+    }
+
+    public void setParentOwnerId(String parentOwnerId) {
+        this.parentOwnerId = parentOwnerId;
     }
 }

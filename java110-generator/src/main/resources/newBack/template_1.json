@@ -1,78 +1,34 @@
 {
-  "autoMove": true,
-  "id": "tranId",
-  "name": "hcGovTranslate",
-  "desc": "社区政务同步",
-  "shareParam": "tranId",
-  "shareColumn": "tran_id",
-  "shareName": "common",
-  "tableName": "hc_gov_translate",
   "param": {
-    "tranId": "tran_id",
-    "serviceCode": "service_code",
-    "reqTime": "req_time",
-    "sign": "sign",
-    "extCommunityId": "ext_community_id",
-    "communityId": "community_id",
-    "code": "code",
-    "govTopic": "gov_topic",
-    "state": "state",
-    "sendCount": "send_count",
-    "updateTime": "update_time",
-    "objId": "obj_id",
+    "msg": "msg",
+    "createUserId": "create_user_id",
+    "createUserName": "create_user_name",
+    "statusCd": "status_cd",
     "remark": "remark",
-    "createTime": "create_time",
-    "statusCd": "status_cd"
+    "state": "state",
+    "batchId": "batch_id",
+    "communityId": "community_id"
   },
+  "name": "payFeeBatch",
+  "shareColumn": "community_id",
+  "id": "batchId",
+  "shareName": "fee",
+  "autoMove": true,
   "required": [
     {
-      "code": "tranId",
-      "msg": "业务不能为空"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
     },
     {
-      "code": "serviceCode",
-      "msg": "审批内容不能为空"
+      "msg": "createUserId不能为空",
+      "code": "createUserId"
     },
     {
-      "code": "reqTime",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "sign",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "extCommunityId",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "code",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "govTopic",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "state",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "sendCount",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "updateTime",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "objId",
-      "msg": "审批内容不能为空"
+      "msg": "createUserName不能为空",
+      "code": "createUserName"
     }
-  ]
+  ],
+  "desc": "费用批次",
+  "shareParam": "communityId",
+  "tableName": "pay_fee_batch"
 }
-

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.payFeeDetail.IImportPayFeeBMODetail;
@@ -63,6 +62,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
         String objType = reqJson.getString("objType");
+        String batchId = reqJson.getString("batchId");
 
         JSONArray datas = reqJson.getJSONArray("importRoomFees");
 
@@ -78,34 +78,34 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
             return ResultVo.success();
         }
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(objType)) {
-            importFeeDetails(storeId, userId, importRoomFees);
+            importFeeDetails(storeId, userId, importRoomFees, batchId);
         } else {
-            importCarFeeDetails(storeId, userId, importRoomFees);
+            importCarFeeDetails(storeId, userId, importRoomFees, batchId);
         }
 
         return ResultVo.success();
     }
 
-    private void importFeeDetails(String storeId, String userId, List<ImportRoomFee> importRoomFees) {
+    private void importFeeDetails(String storeId, String userId, List<ImportRoomFee> importRoomFees, String batchId) {
 
         importRoomFees = roomInnerServiceSMOImpl.freshRoomIds(importRoomFees);
         for (ImportRoomFee importRoomFee : importRoomFees) {
             if (StringUtil.isEmpty(importRoomFee.getRoomId())) {
                 continue;
             }
-            importFeeDetail(importRoomFee, storeId, userId);
+            importFeeDetail(importRoomFee, storeId, userId, batchId);
         }
     }
 
 
-    private void importCarFeeDetails(String storeId, String userId, List<ImportRoomFee> importCarFees) {
+    private void importCarFeeDetails(String storeId, String userId, List<ImportRoomFee> importCarFees, String batchId) {
 
         importCarFees = ownerCarInnerServiceSMOImpl.freshCarIds(importCarFees);
         for (ImportRoomFee importCarFee : importCarFees) {
             if (StringUtil.isEmpty(importCarFee.getCarId())) {
                 continue;
             }
-            importCarFeeDetail(importCarFee, storeId, userId);
+            importCarFeeDetail(importCarFee, storeId, userId, batchId);
         }
     }
 
@@ -114,7 +114,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
      *
      * @param importRoomFee
      */
-    private void importCarFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId) {
+    private void importCarFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId, String batchId) {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeNameEq(importRoomFee.getFeeName());
@@ -145,6 +145,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
                 payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
                 payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
                 payFeePo.setIncomeObjId(storeId);
+                payFeePo.setBatchId(batchId);
                 if (FeeDto.FEE_FLAG_ONCE.equals(tmpFeeConfigDto.getFeeFlag())) {
                     payFeePo.setState(FeeDto.STATE_FINISH);
                 } else {
@@ -178,7 +179,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
      *
      * @param importRoomFee
      */
-    private void importFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId) {
+    private void importFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId, String batchId) {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeName(importRoomFee.getFeeName());
@@ -209,6 +210,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
                 payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
                 payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
                 payFeePo.setIncomeObjId(storeId);
+                payFeePo.setBatchId(batchId);
                 if (FeeDto.FEE_FLAG_ONCE.equals(tmpFeeConfigDto.getFeeFlag())) {
                     payFeePo.setState(FeeDto.STATE_FINISH);
                 } else {

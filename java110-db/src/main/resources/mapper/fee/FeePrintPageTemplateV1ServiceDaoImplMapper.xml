@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feePrintPageTemplateV1ServiceDaoImpl">
+    <!-- 保存收据模板信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFeePrintPageTemplateInfo" parameterType="Map">
+        insert into fee_print_page_template(
+        name,template_id,url
+        ) values (
+        #{name},#{templateId},#{url}
+        )
+    </insert>
+
+
+    <!-- 查询收据模板信息 add by wuxw 2018-07-03 -->
+    <select id="getFeePrintPageTemplateInfo" parameterType="Map" resultType="Map">
+        select t.name,t.status_cd,t.status_cd statusCd,t.template_id,t.template_id templateId,t.url
+        from fee_print_page_template t
+        where 1 =1
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="url !=null and url != ''">
+            and t.url= #{url}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改收据模板信息 add by wuxw 2018-07-03 -->
+    <update id="updateFeePrintPageTemplateInfo" parameterType="Map">
+        update fee_print_page_template t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="url !=null and url != ''">
+            , t.url= #{url}
+        </if>
+        where 1=1
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+
+    </update>
+
+    <!-- 查询收据模板数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeePrintPageTemplatesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_print_page_template t
+        where 1 =1
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="url !=null and url != ''">
+            and t.url= #{url}
+        </if>
+
+
+    </select>
+
+</mapper>

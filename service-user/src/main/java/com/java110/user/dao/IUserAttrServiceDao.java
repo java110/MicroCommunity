@@ -67,7 +67,7 @@ public interface IUserAttrServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    void updateUserAttrInfoInstance(Map info) throws DAOException;
+    int updateUserAttrInfoInstance(Map info) throws DAOException;
 
 
     /**

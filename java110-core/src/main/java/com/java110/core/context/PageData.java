@@ -308,7 +308,7 @@ public class PageData implements IPageData, Serializable {
 
     @Override
     public Map<String, Object> getHeaders() {
-        return null;
+        return this.headers;
     }
 
     public void setHeaders(Map<String, Object> headers) {

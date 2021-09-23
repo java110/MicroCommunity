@@ -64,7 +64,9 @@ public class TransferListener extends AbstractServiceApiListener {
         HttpEntity<String> httpEntity = new HttpEntity<String>(reqJson.toJSONString(), header);
         String orgRequestUrl = context.getRequestHeaders().get("REQUEST_URL");
 
-        String serviceCode = "/" + reqHeader.get(CommonConstant.HTTP_RESOURCE) + "/" + reqHeader.get(CommonConstant.HTTP_ACTION);
+        //String serviceCode = "/" + reqHeader.get(CommonConstant.HTTP_RESOURCE) + "/" + reqHeader.get(CommonConstant.HTTP_ACTION);
+        String serviceCode = service.getServiceCode();
+        serviceCode = serviceCode.startsWith("/") ? serviceCode : ("/" + serviceCode);
 
         String requestUrl = service.getUrl() + serviceCode;
 

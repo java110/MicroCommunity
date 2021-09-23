@@ -108,6 +108,7 @@ public class EditRoomToHcGovAdapt extends DatabusAdaptImpl {
         unitDto.setCommunityId( roomPo.getCommunityId() );
         List<UnitDto>  unitDtos = unitInnerServiceSMOImpl.queryUnits( unitDto );
         Assert.listNotNull(unitDtos, "未包含单元信息");
+
         unitDto = new UnitDto();
         unitDto.setCommunityId( unitDtos.get( 0 ).getCommunityId() );
         unitDto.setFloorId( unitDtos.get( 0 ).getFloorId() );

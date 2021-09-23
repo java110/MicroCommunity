@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="devServiceDAOImpl">
+
+
+    <!--查询 所有有效 app信息-->
+    <select id="getAppRouteAndServiceInfoAll" resultType="Map">
+        <![CDATA[
+
+                     SELECT ca.app_id,ca.name,ca.security_code,ca.while_list_ip,ca.black_list_ip,cr.invoke_limit_times,
+                    cr.order_type_cd,cs.service_id,cs.business_type_cd,cr.invoke_model,cs.is_instance,
+                    cs.messageQueueName,cs.method,cs.name,cs.provide_app_id,cs.retry_count,cs.seq,cs.service_code,
+                    cs.timeout,cs.url FROM c_app ca,c_route cr,c_service cs
+                    WHERE ca.status_cd = '0'
+                    AND ca.app_id = cr.app_id
+                    AND cr.status_cd = '0'
+                    AND cr.service_id = cs.service_id
+                    AND cs.status_cd = '0'
+
+        ]]>
+
+    </select>
+
+    <select id="getMappingInfoAll" resultType="com.java110.entity.mapping.Mapping">
+        <![CDATA[
+
+                     SELECT cm.domain,cm.name,cm.key,cm.value,cm.remark from c_mapping cm where cm.status_cd = '0'
+
+        ]]>
+    </select>
+
+    <select id="getPrivilegeAll" resultType="com.java110.dto.basePrivilege.BasePrivilegeDto">
+        <![CDATA[
+              select t.p_id pId,t.name,t.domain,t.resource,t.description,t.create_time createTime from p_privilege t where t.status_cd = '0'
+        ]]>
+    </select>
+
+    <select id="getDatabusAll" resultType="com.java110.dto.businessDatabus.BusinessDatabusDto">
+        <![CDATA[
+            SELECT
+                t.databus_id databusId,
+                t.databus_name databusName,
+                t.business_type_cd businessTypeCd,
+                t.bean_name beanName,
+                t.seq
+            FROM
+                c_business_databus t
+            WHERE
+                t.status_cd = '0'
+            AND t.state = '1001'
+        ]]>
+    </select>
+
+    <select id="getBusinessTableHisAll" resultType="com.java110.dto.businessTableHis.BusinessTableHisDto">
+        <![CDATA[
+            SELECT
+                t.action_obj,t.action_obj actionObj,t.business_type_cd,t.business_type_cd
+                businessTypeCd,t.his_id,t.his_id hisId,t.action,t.remark,t.status_cd,t.status_cd
+                statusCd,t.action_obj_his,t.action_obj_his actionObjHis
+            from
+                c_business_table_his t
+            where t.status_cd = '0'
+        ]]>
+    </select>
+
+</mapper>

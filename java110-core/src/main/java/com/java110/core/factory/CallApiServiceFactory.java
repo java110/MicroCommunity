@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class CallApiServiceFactory {
 
-    private static final String URL_API = ServiceConstant.SERVICE_API_URL + "/api/";
+    private static final String URL_API = "";
     //日志
     private static Logger logger = LoggerFactory.getLogger(CallApiServiceFactory.class);
 
@@ -204,6 +204,7 @@ public class CallApiServiceFactory {
         return list;
     }
 
+
     public static ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
         ResponseEntity<String> responseEntity = null;
         long startTime = DateUtil.getCurrentDate().getTime();
@@ -212,11 +213,16 @@ public class CallApiServiceFactory {
         if (pd.getHeaders() != null) {
             for (String key : pd.getHeaders().keySet()
             ) {
+                if(CommonConstant.USER_ID.equals(key.toLowerCase())){
+                    continue;
+                }
                 header.add(key, pd.getHeaders().get(key).toString());
             }
         }
         header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), StringUtil.isEmpty(pd.getAppId()) ? AppDto.WEB_APP_ID : pd.getAppId());
         header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
+
+        header.add(CommonConstant.USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), StringUtil.isEmpty(pd.getTransactionId())?GenerateCodeFactory.getUUID():pd.getTransactionId());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), StringUtil.isEmpty(pd.getRequestTime())?DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT):pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
@@ -237,7 +243,6 @@ public class CallApiServiceFactory {
         }
         return responseEntity;
     }
-
 
     /**
      * map 参数转 url get 参数 非空值转为get参数 空值忽略

@@ -34,6 +34,9 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
 
     private boolean noAuditEnterCommunity;
 
+    private String startTime;
+    private String endTime;
+
     public String getCommunityMemberId() {
         return communityMemberId;
     }
@@ -120,5 +123,21 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
 
     public void setSubMemberId(String subMemberId) {
         this.subMemberId = subMemberId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

@@ -70,6 +70,8 @@ public class MeterWaterApi {
         Assert.hasKeyAndValue(reqJson, "configId", "请求信息中未包含费用项");
         Assert.hasKeyAndValue(reqJson, "storeId", "请求信息中未包含商户信息");
         Assert.hasKeyAndValue(reqJson, "feeTypeCd", "请求信息中未包含费用类型");
+        Assert.hasKeyAndValue(reqJson, "batchId", "请求信息中未包含批次号");
+        Assert.hasKeyAndValue(reqJson, "meterType", "请求信息中未包含抄表类型");
         return queryPreMeterWaterImpl.importMeterWater(reqJson);
     }
 

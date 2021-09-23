@@ -1,5 +1,6 @@
 package com.java110.job.adapt.hcGov.asyn.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.reportData.ReportDataHeaderDto;
@@ -61,10 +62,10 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
         hcGovTranslatePo.setSign(heard.getString("sign"));
         hcGovTranslatePo.setState(ReportDataHeaderDto.RETUR_CODE);
         hcGovTranslatePo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        hcGovTranslatePo.setRemark("物业系统自动推送楼栋信息到政务系统");
+        hcGovTranslatePo.setRemark("物业系统自动推送信息到政务系统");
         int flag = hcGovTranslateInnerServiceSMOImpl.saveHcGovTranslate(hcGovTranslatePo);
         if (flag < 1) {
-            throw new IllegalArgumentException("物业系统保存楼栋推送报文日志失败");
+            throw new IllegalArgumentException("物业系统保存推送报文日志失败");
         }
         HcGovTranslateDetailPo hcGovTranslateDetailPo = new HcGovTranslateDetailPo();
         hcGovTranslateDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
@@ -73,7 +74,7 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
         hcGovTranslateDetailPo.setReqBody(paramIn.toJSONString());
         flag = hcGovTranslateDetailInnerServiceSMOImpl.saveHcGovTranslateDetail(hcGovTranslateDetailPo);
         if (flag < 1) {
-            throw new IllegalArgumentException("物业系统保存楼栋推送报文明细日志失败");
+            throw new IllegalArgumentException("物业系统保存推送报文明细日志失败");
         }
     }
 
@@ -91,14 +92,14 @@ public class BaseHcGovSendAsynImpl implements BaseHcGovSendAsyn {
         hcGovTranslatePo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         int flag = hcGovTranslateInnerServiceSMOImpl.updateHcGovTranslate(hcGovTranslatePo);
         if (flag < 1) {
-            throw new IllegalArgumentException("更新物业系统保存楼栋日志失败");
+            throw new IllegalArgumentException("更新物业系统保存日志失败");
         }
         HcGovTranslateDetailPo hcGovTranslateDetailPo = new HcGovTranslateDetailPo();
         hcGovTranslateDetailPo.setTranId(hcGovTranslatePo.getTranId());
         hcGovTranslateDetailPo.setResBody(paramIn.toJSONString());
         flag = hcGovTranslateDetailInnerServiceSMOImpl.updateHcGovTranslateDetail(hcGovTranslateDetailPo);
         if (flag < 1) {
-            throw new IllegalArgumentException("物业系统保存楼栋推送报文明细日志失败");
+            throw new IllegalArgumentException("物业系统保存推送报文明细日志失败");
         }
     }
 

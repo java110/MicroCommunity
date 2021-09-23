@@ -1,72 +1,49 @@
 {
-  "templateName": "流程实例",
-  "templateCode": "oaWorkflow",
-  "templateKey": "flowId",
-  "templateKeyName": "工作流ID",
-  "searchCode": "flowId",
-  "searchName": "工作流ID",
+  "templateKeyName": "抄表类型",
+  "templateName": "抄表类型",
+  "searchName": "抄表类型",
   "directories": "property",
-  "conditions": [
-    {
-      "name": "流程名称",
-      "inputType": "input",
-      "code": "flowName",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "描述",
-      "inputType": "input",
-      "code": "describle",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "流程类型",
-      "inputType": "select",
-      "selectValue":"1001,2002",
-      "selectValueName":"国内,国外",
-      "code": "flowType",
-      "whereCondition": "equal"
-    }
-  ],
+  "searchCode": "typeId",
+  "templateCode": "meterType",
+  "templateKey": "typeId",
   "columns": [
     {
-      "code": "flowName",
-      "cnCode": "流程名称",
-      "desc": "必填，请填写流程名称",
-      "required": true,
       "hasDefaultValue": false,
-      "inputType": "input",
-      "limit": "maxLength",
-      "limitParam": "64",
-      "limitErrInfo": "流程名称超过64位",
-      "show": true
-    },
-    {
-      "code": "flowType",
-      "cnCode": "流程类型",
-      "desc": "必填，请填写流程类型",
-      "required": true,
-      "hasDefaultValue": false,
-      "inputType": "select",
-      "selectValue":"1001",
-      "selectValueName":"普通流程",
-      "limit": "maxLength",
       "limitParam": "12",
-      "limitErrInfo": "流程类型不能为空",
-      "show": true
+      "code": "typeName",
+      "limitErrInfo": "名称不能超过12",
+      "cnCode": "名称",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，名称"
     },
     {
-      "code": "describle",
-      "cnCode": "备注",
-      "desc": "可填，请填写备注",
-      "required": false,
       "hasDefaultValue": false,
-      "defaultValue": "",
-      "inputType": "input",
-      "limit": "maxLength",
       "limitParam": "200",
-      "limitErrInfo": "备注内容不能超过200",
-      "show": false
+      "code": "remark",
+      "limitErrInfo": "说明不能超过200",
+      "cnCode": "说明",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "说明"
+    }
+  ],
+  "conditions": [
+    {
+      "whereCondition": "equal",
+      "code": "typeId",
+      "name": "类型ID",
+      "inputType": "input"
+    },
+    {
+      "whereCondition": "equal",
+      "code": "typeName",
+      "name": "名称",
+      "inputType": "input"
     }
   ]
 }

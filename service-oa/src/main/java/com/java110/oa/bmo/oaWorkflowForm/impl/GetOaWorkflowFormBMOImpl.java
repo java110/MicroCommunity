@@ -347,7 +347,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         Map paramMap = new HashMap();
         paramMap.put("storeId", reqJson.getString("storeId"));
         paramMap.put("id", reqJson.getString("id"));
-        paramMap.put("tableName", oaWorkflowFormDto.getTableName());
+        paramMap.put("tableName", oaWorkflowFormDtos.get(0).getTableName());
         paramMap.put("page", 1);
         paramMap.put("row", 1);
         List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);

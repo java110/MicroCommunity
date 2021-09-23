@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="payFeeBatchV1ServiceDaoImpl">
+
+
+    <!-- 保存费用批次信息 add by wuxw 2018-07-03 -->
+    <insert id="savePayFeeBatchInfo" parameterType="Map">
+        insert into pay_fee_batch(
+        msg,create_user_id,create_user_name,remark,state,batch_id,community_id
+        ) values (
+        #{msg},#{createUserId},#{createUserName},#{remark},#{state},#{batchId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询费用批次信息 add by wuxw 2018-07-03 -->
+    <select id="getPayFeeBatchInfo" parameterType="Map" resultType="Map">
+        select t.msg,t.create_user_id,t.create_user_id createUserId,t.create_user_name,t.create_user_name
+        createUserName,t.status_cd,t.status_cd statusCd,t.remark,t.state,t.batch_id,t.batch_id
+        batchId,t.community_id,t.community_id communityId,t.create_time createTime,td.`name` stateName
+        from pay_fee_batch t
+        left join t_dict td on t.state =  td.status_cd and td.table_name = 'pay_fee_batch' and td.table_columns = 'state'
+        where 1 =1
+        <if test="msg !=null and msg != ''">
+            and t.msg= #{msg}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改费用批次信息 add by wuxw 2018-07-03 -->
+    <update id="updatePayFeeBatchInfo" parameterType="Map">
+        update pay_fee_batch t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="msg !=null and msg != ''">
+            , t.msg= #{msg}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            , t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+
+        where 1=1
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询费用批次数量 add by wuxw 2018-07-03 -->
+    <select id="queryPayFeeBatchsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee_batch t
+        where 1 =1
+        <if test="msg !=null and msg != ''">
+            and t.msg= #{msg}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

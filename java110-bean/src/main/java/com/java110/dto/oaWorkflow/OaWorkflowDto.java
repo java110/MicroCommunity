@@ -18,6 +18,7 @@ public class OaWorkflowDto extends PageDto implements Serializable {
     public static final String STATE_WAIT = "W";//待部署
     public static final String STATE_COMPLAINT = "C";//部署完成
 
+    private String userId;
     private String describle;
     private String modelId;
     private String flowKey;
@@ -28,6 +29,7 @@ public class OaWorkflowDto extends PageDto implements Serializable {
     private String processDefinitionKey;
     private String state;
     private String curFormId;
+    private long undoCount;
 
     private Date createTime;
 
@@ -129,5 +131,21 @@ public class OaWorkflowDto extends PageDto implements Serializable {
 
     public void setCurFormId(String curFormId) {
         this.curFormId = curFormId;
+    }
+
+    public long getUndoCount() {
+        return undoCount;
+    }
+
+    public void setUndoCount(long undoCount) {
+        this.undoCount = undoCount;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

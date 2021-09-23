@@ -196,4 +196,12 @@ public interface IFeeInnerServiceSMO {
 
     @RequestMapping(value = "/getAssetsFee", method = RequestMethod.POST)
     public JSONArray getAssetsFee(@RequestBody String communityId);
+
+    /**
+     * 根据批次删除费用
+     * @param payFeePo
+     * @return
+     */
+    @RequestMapping(value = "/deleteFeesByBatch", method = RequestMethod.POST)
+    int deleteFeesByBatch(@RequestBody PayFeePo payFeePo);
 }

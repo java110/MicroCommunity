@@ -171,4 +171,6 @@ public interface IFeeServiceDao {
     int computeEveryOweFeeCount(Map beanCovertMap);
 
     List<Map> computeEveryOweFee(Map beanCovertMap);
+
+    int deleteFeesByBatch(Map beanCovertMap);
 }

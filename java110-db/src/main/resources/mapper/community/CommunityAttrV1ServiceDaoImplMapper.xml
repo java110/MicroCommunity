@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="communityAttrV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存小区属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunityAttrInfo" parameterType="Map">
+        insert into s_community_attr(
+attr_id,spec_cd,community_id,value
+) values (
+#{attrId},#{specCd},#{communityId},#{value}
+)
+    </insert>
+
+
+
+    <!-- 查询小区属性信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunityAttrInfo" parameterType="Map" resultType="Map">
+        select  t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.value 
+from s_community_attr t 
+where 1 =1 
+<if test="attrId !=null and attrId != ''">
+   and t.attr_id= #{attrId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改小区属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateCommunityAttrInfo" parameterType="Map">
+        update  s_community_attr t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+, t.spec_cd= #{specCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+, t.value= #{value}
+</if> 
+ where 1=1 <if test="attrId !=null and attrId != ''">
+and t.attr_id= #{attrId}
+</if> 
+
+    </update>
+
+    <!-- 查询小区属性数量 add by wuxw 2018-07-03 -->
+     <select id="queryCommunityAttrsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from s_community_attr t 
+where 1 =1 
+<if test="attrId !=null and attrId != ''">
+   and t.attr_id= #{attrId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+
+
+     </select>
+
+</mapper>

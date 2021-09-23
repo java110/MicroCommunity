@@ -35,7 +35,7 @@ import java.nio.charset.Charset;
         "com.java110.core.kafka","com.java110.core.log","com.java110.core.proxy",
         "com.java110.service", "com.java110.user",
         "com.java110.job","com.java110.store","com.java110.fee","com.java110.community",
-        "com.java110.common","com.java110.order","com.java110.api","com.java110.front",
+        "com.java110.common","com.java110.order","com.java110.api",
          "com.java110.config.properties.code", "com.java110.db"})
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.user.listener","com.java110.job.listener",

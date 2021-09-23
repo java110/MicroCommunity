@@ -32,6 +32,7 @@ public class PayFeeConfigPo implements Serializable {
     private String paymentCd;
 
     private String paymentCycle;
+    private String statusCd;
 
     public String getConfigId() {
         return configId;
@@ -151,5 +152,13 @@ public class PayFeeConfigPo implements Serializable {
 
     public void setComputingFormulaText(String computingFormulaText) {
         this.computingFormulaText = computingFormulaText;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

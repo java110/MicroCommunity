@@ -42,7 +42,7 @@ public class SaveTransactionLogSMOImpl implements ISaveTransactionLogSMO {
     @Override
     @Async
     public void saveAssetImportLog(AssetImportLogDto assetImportLogDto) {
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/assetImportLog/saveAssetImportLog";
+        String apiUrl = "/assetImportLog/saveAssetImportLog";
         IPageData newPd = PageData.newInstance().builder("-1", "批量日志", "", "",
                 "", "", apiUrl, "",
                 AppDto.WEB_APP_ID);
