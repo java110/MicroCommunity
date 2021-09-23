@@ -39,7 +39,8 @@ public class AccountDto extends PageDto implements Serializable {
     private String objType;
     private String partId;
     private String hasMoney; // 1 标识有
-
+    private String link;
+    private String idCard;
 
     private Date createTime;
 
@@ -133,5 +134,21 @@ public class AccountDto extends PageDto implements Serializable {
 
     public void setHasMoney(String hasMoney) {
         this.hasMoney = hasMoney;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }

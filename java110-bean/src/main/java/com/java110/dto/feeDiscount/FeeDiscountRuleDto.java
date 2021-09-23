@@ -21,6 +21,7 @@ public class FeeDiscountRuleDto extends PageDto implements Serializable {
     private String ruleId;
     private String beanImpl;
     private String discountType;
+    private String discountSmallType;
 
     private List<FeeDiscountRuleSpecDto> feeDiscountRuleSpecs;
 
@@ -93,5 +94,13 @@ public class FeeDiscountRuleDto extends PageDto implements Serializable {
 
     public void setDiscountType(String discountType) {
         this.discountType = discountType;
+    }
+
+    public String getDiscountSmallType() {
+        return discountSmallType;
+    }
+
+    public void setDiscountSmallType(String discountSmallType) {
+        this.discountSmallType = discountSmallType;
     }
 }

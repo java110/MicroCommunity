@@ -30,6 +30,11 @@ public class RoomRenovationDto extends PageDto implements Serializable {
     private String personTel;
     //当前用户id
     private String userId;
+    private String isPostpone;
+    private String postponeTime;
+    private String renovationCompany;
+    private String personMain;
+    private String personMainTel;
 
 
     private Date createTime;
@@ -164,5 +169,45 @@ public class RoomRenovationDto extends PageDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getIsPostpone() {
+        return isPostpone;
+    }
+
+    public void setIsPostpone(String isPostpone) {
+        this.isPostpone = isPostpone;
+    }
+
+    public String getPostponeTime() {
+        return postponeTime;
+    }
+
+    public void setPostponeTime(String postponeTime) {
+        this.postponeTime = postponeTime;
+    }
+
+    public String getRenovationCompany() {
+        return renovationCompany;
+    }
+
+    public void setRenovationCompany(String renovationCompany) {
+        this.renovationCompany = renovationCompany;
+    }
+
+    public String getPersonMain() {
+        return personMain;
+    }
+
+    public void setPersonMain(String personMain) {
+        this.personMain = personMain;
+    }
+
+    public String getPersonMainTel() {
+        return personMainTel;
+    }
+
+    public void setPersonMainTel(String personMainTel) {
+        this.personMainTel = personMainTel;
     }
 }

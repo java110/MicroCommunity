@@ -46,6 +46,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String contractCode;
     private String payerObjType;
     private String ownerName;
+    private String detailId;
 
     private String objCount;
     private String normalCount;
@@ -600,5 +601,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setCurOweAmount(String curOweAmount) {
         this.curOweAmount = curOweAmount;
+    }
+
+    public String getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(String detailId) {
+        this.detailId = detailId;
     }
 }

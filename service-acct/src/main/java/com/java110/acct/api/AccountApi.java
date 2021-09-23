@@ -82,7 +82,7 @@ public class AccountApi {
             @RequestParam(value = "ownerId", required = false) String ownerId,
             @RequestParam(value = "ownerName", required = false) String ownerName,
             @RequestParam(value = "feeId", required = false) String feeId,
-            @RequestParam(value = "tel", required = false) String tel,
+            @RequestParam(value = "link", required = false) String link,
             @RequestParam(value = "idCard", required = false) String idCard,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row) {
@@ -121,7 +121,7 @@ public class AccountApi {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(ownerId);
         ownerDto.setCommunityId(communityId);
-        ownerDto.setLink(tel);
+        ownerDto.setLink(link);
         ownerDto.setIdCard(idCard);
         return getAccountBMOImpl.queryOwnerAccount(accountDto, ownerDto);
     }

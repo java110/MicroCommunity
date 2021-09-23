@@ -1,8 +1,20 @@
 package com.java110.fee.api;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.account.AccountDto;
+import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
 import com.java110.dto.applyRoomDiscountType.ApplyRoomDiscountTypeDto;
+import com.java110.dto.fee.FeeDetailDto;
+import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.fee.bmo.account.ISaveAccountBMO;
+import com.java110.fee.bmo.account.IUpdateAccountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IAuditApplyRoomDiscountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IDeleteApplyRoomDiscountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IGetApplyRoomDiscountBMO;
@@ -12,16 +24,23 @@ import com.java110.fee.bmo.applyRoomDiscountType.IDeleteApplyRoomDiscountTypeBMO
 import com.java110.fee.bmo.applyRoomDiscountType.IGetApplyRoomDiscountTypeBMO;
 import com.java110.fee.bmo.applyRoomDiscountType.ISaveApplyRoomDiscountTypeBMO;
 import com.java110.fee.bmo.applyRoomDiscountType.IUpdateApplyRoomDiscountTypeBMO;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.fee.IApplyRoomDiscountInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeDiscountRuleInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,6 +79,24 @@ public class ApplyRoomDiscountApi {
 
     @Autowired
     private IApplyRoomDiscountInnerServiceSMO applyRoomDiscountInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeDiscountRuleInnerServiceSMO feeDiscountRuleInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
+    @Autowired
+    private ISaveAccountBMO saveAccountBMOImpl;
+
+    @Autowired
+    private IUpdateAccountBMO updateAccountBMOImpl;
 
     /**
      * 优惠申请
@@ -173,13 +210,13 @@ public class ApplyRoomDiscountApi {
      * @path /app/applyRoomDiscount/updateReviewApplyRoomDiscount
      */
     @RequestMapping(value = "/updateReviewApplyRoomDiscount", method = RequestMethod.POST)
-    public ResponseEntity<String> updateReviewApplyRoomDiscount(@RequestBody JSONObject reqJson, @RequestHeader(value = "user-id") String userId) {
+    @Java110Transactional
+    public ResponseEntity<String> updateReviewApplyRoomDiscount(@RequestBody JSONObject reqJson, @RequestHeader(value = "user-id") String userId, DataFlowContext dataFlowContext) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含验房状态");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含结束时间");
         Assert.hasKeyAndValue(reqJson, "reviewRemark", "请求报文中未包含验房说明");
-//        Assert.hasKeyAndValue(reqJson, "discountId", "请求报文中未包含折扣");
         Assert.hasKeyAndValue(reqJson, "ardId", "ardId不能为空");
         ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
         applyRoomDiscountDto.setArdId(reqJson.getString("ardId"));
@@ -188,8 +225,67 @@ public class ApplyRoomDiscountApi {
         Assert.listOnlyOne(applyRoomDiscountDtos, "查询房屋优惠信息错误！");
         //获取房屋优惠审核状态
         String state = applyRoomDiscountDtos.get(0).getState();
-        if (!StringUtil.isEmpty(state) && !state.equals("2")) {
+        String stateNow = reqJson.getString("state");
+        String returnWay = reqJson.getString("returnWay");
+        if (!StringUtil.isEmpty(state) && state.equals("4")) {
             throw new IllegalArgumentException("该房屋已审核过，无法再次进行审核！");
+        }
+        if (reqJson.containsKey("selectedFees") && !StringUtil.isEmpty(reqJson.getString("selectedFees")) && stateNow.equals("4") && "1002".equals(returnWay)) {
+            //获取前端传来的缴费历史
+            String selectedFees = reqJson.getString("selectedFees");
+            JSONArray feeDetailIds = JSON.parseArray(selectedFees);
+            //获取优惠
+            JSONArray discounts = reqJson.getJSONArray("discounts");
+            BigDecimal cashBackAmount = new BigDecimal("0.00");//返现总金额
+            for (int i = 0; i < discounts.size(); i++) {
+                JSONObject discountObject = discounts.getJSONObject(i);
+                JSONArray feeDiscountSpecs = discountObject.getJSONArray("feeDiscountSpecs");
+                //获取规则id
+                String ruleId = discounts.getJSONObject(i).getString("ruleId");
+                FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
+                feeDiscountRuleDto.setRuleId(ruleId);
+                List<FeeDiscountRuleDto> feeDiscountRuleDtos = feeDiscountRuleInnerServiceSMOImpl.queryFeeDiscountRules(feeDiscountRuleDto);
+                Assert.listOnlyOne(feeDiscountRuleDtos, "查询折扣规则错误！");
+                //获取折扣类型(1: 打折  2:减免  3:滞纳金  4:空置房打折  5:空置房减免)
+                String discountSmallType = feeDiscountRuleDtos.get(0).getDiscountSmallType();
+                //获取规则
+                String specValue = feeDiscountSpecs.getJSONObject(1).getString("specValue");
+                if (!StringUtil.isEmpty(discountSmallType) && (discountSmallType.equals("1") || discountSmallType.equals("4"))) { //打折
+                    for (int index = 0; index < feeDetailIds.size(); index++) {
+                        String feeDetailId = String.valueOf(feeDetailIds.get(index));
+                        FeeDetailDto feeDetailDto = new FeeDetailDto();
+                        feeDetailDto.setDetailId(feeDetailId);
+                        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+                        Assert.listOnlyOne(feeDetailDtos, "查询费用明细表错误！");
+
+                        BigDecimal receivedAmount = new BigDecimal(feeDetailDtos.get(0).getReceivedAmount());//获取实收金额
+                        BigDecimal spec = new BigDecimal(specValue);//折扣
+                        //计算打折后的实收金额
+                        BigDecimal money = receivedAmount.multiply(spec);
+                        cashBackAmount = cashBackAmount.add(receivedAmount.subtract(money)); //计算优惠的金额
+                    }
+                } else if (!StringUtil.isEmpty(discountSmallType) && (discountSmallType.equals("2") || discountSmallType.equals("5"))) { //减免
+                    for (int index = 0; index < feeDetailIds.size(); index++) {
+                        String feeDetailId = String.valueOf(feeDetailIds.get(index));
+                        FeeDetailDto feeDetailDto = new FeeDetailDto();
+                        feeDetailDto.setDetailId(feeDetailId);
+                        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+                        Assert.listOnlyOne(feeDetailDtos, "查询费用明细表错误！");
+
+                        BigDecimal spec = new BigDecimal(specValue);//减免金額
+                        cashBackAmount = cashBackAmount.add(spec); //计算优惠的金额
+                    }
+                }
+                DecimalFormat df = new DecimalFormat("0.00");
+                reqJson.put("cashBackAmount", df.format(cashBackAmount));
+                //处理账户返现
+                JSONArray businesses = new JSONArray();
+                updateAccountBMOImpl.cashBackAccount(reqJson, dataFlowContext, businesses);
+                reqJson.put("inUse", 1);
+                reqJson.put("returnAmount", df.format(cashBackAmount));
+            }
+        } else {
+            reqJson.put("inUse", 0);
         }
         reqJson.put("reviewUserId", userId);
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
