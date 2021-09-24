@@ -39,6 +39,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     public static final String CMD_ADD_PARKING_AREA = "601";
     public static final String CMD_UPDATE_PARKING_AREA = "602";
     public static final String CMD_DELETE_PARKING_AREA = "603";
+    public static final String CMD_ADD_PARKING_AREA_TEXT = "604";
     public static final String CMD_ADD_OWNER_CAR = "701";
     public static final String CMD_UPDATE_OWNER_CAR = "702";
     public static final String CMD_DELETE_OWNER_CAR = "703";

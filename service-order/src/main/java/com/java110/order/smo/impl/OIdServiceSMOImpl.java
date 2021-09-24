@@ -4,19 +4,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.order.OrderItemDto;
-import com.java110.entity.order.Business;
-import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.order.smo.IAsynNotifySubService;
 import com.java110.order.smo.IOIdServiceSMO;
 import com.java110.utils.cache.BusinessTableHisCache;
-import com.java110.utils.cache.DatabusCache;
-import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.DomainContant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -49,7 +43,6 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
     public static final String SERVICE_NAME = "SERVICE_NAME";
 
 
-
     @Autowired
     private ICenterServiceDAO centerServiceDAOImpl;
 
@@ -58,8 +51,6 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
     @Autowired
     private IAsynNotifySubService asynNotifySubServiceImpl;
-
-
 
 
     @Override
@@ -341,10 +332,12 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         business.put("bId", orderItemDto.getbId());
         centerServiceDAOImpl.saveBusiness(business);
 
-        //通知子服务生成 business 数据
+        //通知子服务生成 business 数据,如果配置NO 不通知生成 business 数据
+        if (BusinessTableHisDto.ACTION_OBJ_HIS_NO.equals(businessTableHisDto.getActionObjHis())) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+        }
+
         doNoticeServiceGeneratorBusiness(orderItemDto, businessTableHisDto);
-
-
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 
@@ -395,11 +388,10 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         //删除 事务日志
         //centerServiceDAOImpl.deleteUnItemLog(info);
 
-        asynNotifySubServiceImpl.notifyDatabus(orderItemMaps,orderDto);
+        asynNotifySubServiceImpl.notifyDatabus(orderItemMaps, orderDto);
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
-
 
 
 }

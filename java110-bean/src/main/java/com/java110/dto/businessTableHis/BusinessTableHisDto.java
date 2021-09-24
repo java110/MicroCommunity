@@ -1,6 +1,7 @@
 package com.java110.dto.businessTableHis;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,12 +15,14 @@ import java.util.Date;
  **/
 public class BusinessTableHisDto extends PageDto implements Serializable {
 
+    public static final String ACTION_OBJ_HIS_NO = "NO";
+
     private String actionObj;
-private String businessTypeCd;
-private String hisId;
-private String action;
-private String remark;
-private String actionObjHis;
+    private String businessTypeCd;
+    private String hisId;
+    private String action;
+    private String remark;
+    private String actionObjHis;
 
 
     private Date createTime;
@@ -30,37 +33,48 @@ private String actionObjHis;
     public String getActionObj() {
         return actionObj;
     }
-public void setActionObj(String actionObj) {
+
+    public void setActionObj(String actionObj) {
         this.actionObj = actionObj;
     }
-public String getBusinessTypeCd() {
+
+    public String getBusinessTypeCd() {
         return businessTypeCd;
     }
-public void setBusinessTypeCd(String businessTypeCd) {
+
+    public void setBusinessTypeCd(String businessTypeCd) {
         this.businessTypeCd = businessTypeCd;
     }
-public String getHisId() {
+
+    public String getHisId() {
         return hisId;
     }
-public void setHisId(String hisId) {
+
+    public void setHisId(String hisId) {
         this.hisId = hisId;
     }
-public String getAction() {
+
+    public String getAction() {
         return action;
     }
-public void setAction(String action) {
+
+    public void setAction(String action) {
         this.action = action;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getActionObjHis() {
+
+    public String getActionObjHis() {
         return actionObjHis;
     }
-public void setActionObjHis(String actionObjHis) {
+
+    public void setActionObjHis(String actionObjHis) {
         this.actionObjHis = actionObjHis;
     }
 

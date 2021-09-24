@@ -59,6 +59,9 @@ public class IotConstant {
     //删除停车场
     public static final String DELETE_PARKING_AREA_URL = "/extApi/parkingArea/deleteParkingArea";
 
+    //添加停车场问候语
+    public static final String ADD_PARKING_AREA_TEXT_URL = "/extApi/parkingAreaText/addParkingAreaText";
+
     //添加车辆
     public static final String ADD_OWNER_CAR_URL = "/extApi/car/addCar";
     //修改车辆
