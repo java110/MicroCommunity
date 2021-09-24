@@ -84,15 +84,15 @@
         <if test="text2 !=null and text2 != ''">
             , t.text2= #{text2}
         </if>
-        <if test="paId !=null and paId != ''">
-            , t.pa_id= #{paId}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
         where 1=1
         <if test="textId !=null and textId != ''">
             and t.text_id= #{textId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

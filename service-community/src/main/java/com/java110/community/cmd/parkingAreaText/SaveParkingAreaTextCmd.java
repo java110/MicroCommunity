@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.parkingAreaText.ParkingAreaTextDto;
 import com.java110.intf.community.IParkingAreaTextV1InnerServiceSMO;
 import com.java110.po.parkingAreaText.ParkingAreaTextPo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +32,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -68,11 +71,21 @@ public class SaveParkingAreaTextCmd extends AbstractServiceCmdListener {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         ParkingAreaTextPo parkingAreaTextPo = BeanConvertUtil.covertBean(reqJson, ParkingAreaTextPo.class);
-        parkingAreaTextPo.setTextId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = parkingAreaTextV1InnerServiceSMOImpl.saveParkingAreaText(parkingAreaTextPo);
-
+        //查询是否有配置
+        ParkingAreaTextDto parkingAreaTextDto = new ParkingAreaTextDto();
+        parkingAreaTextDto.setPaId(reqJson.getString("paId"));
+        parkingAreaTextDto.setCommunityId(reqJson.getString("communityId"));
+        parkingAreaTextDto.setTypeCd(reqJson.getString("typeCd"));
+        List<ParkingAreaTextDto> parkingAreaTextDtos = parkingAreaTextV1InnerServiceSMOImpl.queryParkingAreaTexts(parkingAreaTextDto);
+        int flag = 0;
+        if (parkingAreaTextDtos == null || parkingAreaTextDtos.size() < 1) {
+            parkingAreaTextPo.setTextId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            flag = parkingAreaTextV1InnerServiceSMOImpl.saveParkingAreaText(parkingAreaTextPo);
+        } else {
+            parkingAreaTextPo.setTextId(parkingAreaTextDtos.get(0).getTextId());
+            flag = parkingAreaTextV1InnerServiceSMOImpl.updateParkingAreaText(parkingAreaTextPo);
+        }
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
