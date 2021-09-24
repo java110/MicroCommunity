@@ -32,6 +32,9 @@ import java.util.List;
 
 /**
  * HC iot 停车场问候语同步适配器
+ *
+ * 541100030003
+ * 541100040003
  * <p>
  * 接口协议地址： https://gitee.com/java110/MicroCommunityThings/blob/master/back/docs/api.md
  *
