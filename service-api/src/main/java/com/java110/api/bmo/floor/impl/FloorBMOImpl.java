@@ -4,16 +4,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.floor.IFloorBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.community.CommunityDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.floor.FloorPo;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -118,12 +122,25 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
      */
     public void addCommunityMember(JSONObject paramInJson, DataFlowContext context) {
 
+        //查询小区是否存在
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(paramInJson.getString("communityId"));
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        Assert.listOnlyOne(communityDtos, "小区不存");
+
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", "-1");
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("floorId"));
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.FLOOR);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
+
+        businessCommunityMember.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        Calendar endTime  = Calendar.getInstance();
+        endTime.add(Calendar.MONTH,Integer.parseInt(communityDtos.get(0).getPayFeeMonth()));
+        businessCommunityMember.put("endTime", DateUtil.getFormatTimeString(endTime.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+
         CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
         super.insert(context, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
     }
