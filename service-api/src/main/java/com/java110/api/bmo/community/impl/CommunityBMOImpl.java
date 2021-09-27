@@ -488,6 +488,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      */
     public void addCommunityMembers(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", "-1");
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));

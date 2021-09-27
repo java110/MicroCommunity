@@ -35,6 +35,7 @@ import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -234,7 +235,12 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @return 小区成员信息
      */
     public void addCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        //查询小区是否存在
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(paramInJson.getString("communityId"));
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
+        Assert.listOnlyOne(communityDtos, "小区不存");
 
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", "-1");
@@ -242,6 +248,10 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         businessCommunityMember.put("memberId", paramInJson.getString("ownerId"));
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OWNER);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
+        businessCommunityMember.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        Calendar endTime  = Calendar.getInstance();
+        endTime.add(Calendar.MONTH,Integer.parseInt(communityDtos.get(0).getPayFeeMonth()));
+        businessCommunityMember.put("endTime", DateUtil.getFormatTimeString(endTime.getTime(),DateUtil.DATE_FORMATE_STRING_A));
         CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
         super.insert(dataFlowContext, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
     }
