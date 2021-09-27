@@ -10,6 +10,7 @@ import com.java110.dto.assetImportLog.AssetImportLogDto;
 import com.java110.intf.common.ITransactionLogInnerServiceSMO;
 import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.utils.constant.ServiceConstant;
+import com.sun.deploy.association.utility.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Async;
@@ -42,7 +43,7 @@ public class SaveTransactionLogSMOImpl implements ISaveTransactionLogSMO {
     @Override
     @Async
     public void saveAssetImportLog(AssetImportLogDto assetImportLogDto) {
-        String apiUrl = "/assetImportLog/saveAssetImportLog";
+        String apiUrl =  "http://api-service/assetImportLog/saveAssetImportLog";
         IPageData newPd = PageData.newInstance().builder("-1", "批量日志", "", "",
                 "", "", apiUrl, "",
                 AppDto.WEB_APP_ID);
