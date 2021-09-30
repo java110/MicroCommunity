@@ -63,6 +63,7 @@ public class MachineApi {
         return machineOpenDoorBMOImpl.openDoor(reqJson);
     }
 
+
     /**
      * 设备二维码
      *

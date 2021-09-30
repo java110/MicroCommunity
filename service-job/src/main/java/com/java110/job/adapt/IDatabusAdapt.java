@@ -70,4 +70,5 @@ public interface IDatabusAdapt {
      */
     void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto);
 
+    ResultVo customCarInOut(JSONObject reqJson);
 }

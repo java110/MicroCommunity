@@ -50,4 +50,11 @@ public interface IMachineOpenDoorBMO {
      * @return
      */
     ResponseEntity<String> getQRcode(JSONObject reqJson);
+
+    /**
+     * 手工进出场
+     * @param reqJson
+     * @return
+     */
+    ResponseEntity<String> customCarInOut(JSONObject reqJson);
 }
