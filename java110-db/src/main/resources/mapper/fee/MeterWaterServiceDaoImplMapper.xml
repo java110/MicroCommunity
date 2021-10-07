@@ -124,8 +124,9 @@
         curReadingTime,t.water_id,t.water_id waterId,t.cur_degrees,t.cur_degrees curDegrees,t.create_time,t.create_time
         createTime,t.meter_type,t.meter_type meterType,t.pre_degrees,t.pre_degrees preDegrees,t.obj_id,t.obj_id
         objId,t.pre_reading_time,t.pre_reading_time preReadingTime,t.b_id,t.b_id bId,t.community_id,t.community_id
-        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName,t.price
+        communityId,t.obj_type,t.obj_type objType,t.fee_id,t.fee_id feeId,t.obj_name,t.obj_name objName,t.price,mt.type_name meterTypeName
         from meter_water t
+        left join meter_type mt on t.meter_type = mt.type_id and mt.status_cd = '0'
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
         <if test="remark !=null and remark != ''">
