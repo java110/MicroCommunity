@@ -82,7 +82,9 @@ public class FeeAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFeeAt
 
     @Override
     public int updateFeeAttr(@RequestBody FeeAttrPo feeAttrPo) {
-        feeAttrServiceDaoImpl.updateFeeAttrInfoInstance(BeanConvertUtil.beanCovertMap(feeAttrPo));
+        Map param = BeanConvertUtil.beanCovertMap(feeAttrPo);
+        param.put("statusCd", "0");
+        feeAttrServiceDaoImpl.updateFeeAttrInfoInstance(param);
         return 1;
     }
 
