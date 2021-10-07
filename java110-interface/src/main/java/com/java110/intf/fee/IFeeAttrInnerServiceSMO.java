@@ -48,4 +48,20 @@ public interface IFeeAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/saveFeeAttrs", method = RequestMethod.POST)
     int saveFeeAttrs(@RequestBody List<FeeAttrPo> feeAttrPos);
+
+    /**
+     * 保存费用属性
+     * @param feeAttrPo
+     * @return
+     */
+    @RequestMapping(value = "/saveFeeAttr", method = RequestMethod.POST)
+    int saveFeeAttr(@RequestBody FeeAttrPo feeAttrPo);
+
+    /**
+     * 修改费用属性
+     * @param feeAttrPo
+     * @return
+     */
+    @RequestMapping(value = "/updateFeeAttr", method = RequestMethod.POST)
+    int updateFeeAttr(@RequestBody FeeAttrPo feeAttrPo);
 }

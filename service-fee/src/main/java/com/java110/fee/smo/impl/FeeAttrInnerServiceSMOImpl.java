@@ -71,6 +71,21 @@ public class FeeAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFeeAt
         return feeAttrServiceDaoImpl.saveFeeAttrs(info);
     }
 
+    @Override
+    public int saveFeeAttr(@RequestBody FeeAttrPo feeAttrPo) {
+        List<Map> feeAttrs = new ArrayList<>();
+        feeAttrs.add(BeanConvertUtil.beanCovertMap(feeAttrPo));
+        Map info = new HashMap();
+        info.put("feeAttrPos", feeAttrs);
+        return feeAttrServiceDaoImpl.saveFeeAttrs(info);
+    }
+
+    @Override
+    public int updateFeeAttr(@RequestBody FeeAttrPo feeAttrPo) {
+        feeAttrServiceDaoImpl.updateFeeAttrInfoInstance(BeanConvertUtil.beanCovertMap(feeAttrPo));
+        return 1;
+    }
+
     public IFeeAttrServiceDao getFeeAttrServiceDaoImpl() {
         return feeAttrServiceDaoImpl;
     }
