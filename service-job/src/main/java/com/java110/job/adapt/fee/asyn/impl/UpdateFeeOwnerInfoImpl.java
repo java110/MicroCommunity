@@ -109,12 +109,12 @@ public class UpdateFeeOwnerInfoImpl implements IUpdateFeeOwnerInfo {
             tmpFeeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
             tmpFeeAttrPo.setCommunityId(ownerDto.getCommunityId());
             tmpFeeAttrPo.setFeeId(tmpFeeDto.getFeeId());
-            tmpFeeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME);
-            tmpFeeAttrPo.setValue(ownerDto.getName());
+            tmpFeeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
+            tmpFeeAttrPo.setValue(ownerDto.getLink());
             feeAttrInnerServiceSMOImpl.saveFeeAttr(tmpFeeAttrPo);
         } else {
             tmpFeeAttrPo.setAttrId(ownerNameAttr.getAttrId());
-            tmpFeeAttrPo.setValue(ownerDto.getName());
+            tmpFeeAttrPo.setValue(ownerDto.getLink());
             feeAttrInnerServiceSMOImpl.updateFeeAttr(tmpFeeAttrPo);
         }
 
