@@ -7,15 +7,28 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `u_org_staff_rel` (\n" +
-            "  `rel_id` varchar(30) NOT NULL COMMENT '组织员工ID',\n" +
+    public static final String createTableSql = "CREATE TABLE `owner_app_user` (\n" +
+            "  `app_user_id` varchar(30) NOT NULL COMMENT 'app用户ID',\n" +
+            "  `member_id` varchar(30) NOT NULL COMMENT '业主成员ID',\n" +
             "  `b_id` varchar(30) NOT NULL COMMENT '业务Id',\n" +
-            "  `org_id` varchar(30) NOT NULL COMMENT '组织ID',\n" +
-            "  `staff_id` varchar(30) NOT NULL COMMENT '员工ID',\n" +
-            "  `rel_cd` varchar(30) NOT NULL COMMENT '关系角色，10000 普通员工， 20000部门经理 查看t_dict表',\n" +
+            "  `community_id` varchar(30) NOT NULL COMMENT '小区Id',\n" +
+            "  `community_name` varchar(100) NOT NULL COMMENT '小区名称',\n" +
+            "  `app_user_name` varchar(100) NOT NULL COMMENT 'app用户名称',\n" +
+            "  `id_card` varchar(20) NOT NULL COMMENT '身份证号',\n" +
+            "  `link` varchar(11) NOT NULL COMMENT '联系人手机号',\n" +
+            "  `open_id` varchar(30) NOT NULL COMMENT 'app 开放ID',\n" +
+            "  `app_type_cd` varchar(12) NOT NULL COMMENT '应用类型 10010 微信小程序',\n" +
+            "  `state` varchar(12) NOT NULL COMMENT '状态类型，10000 审核中，12000 审核成功，13000 审核失败',\n" +
+            "  `remark` varchar(200) DEFAULT NULL COMMENT '备注',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效',\n" +
-            "  `store_id` varchar(30) NOT NULL COMMENT '商户ID'\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0, 在用 1失效',\n" +
+            "  `user_id` varchar(30) DEFAULT NULL COMMENT '用户ID',\n" +
+            "  `app_type` varchar(12) NOT NULL DEFAULT 'APP' COMMENT '绑定业主手机端类型',\n" +
+            "  `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',\n" +
+            "  `headimgurl` varchar(255) DEFAULT NULL COMMENT '微信头像',\n" +
+            "  UNIQUE KEY `app_user_id` (`app_user_id`) USING BTREE,\n" +
+            "  UNIQUE KEY `idx_owner_app_user_id` (`app_user_id`) USING BTREE,\n" +
+            "  KEY `idx_owner_app_user_b_id` (`b_id`) USING BTREE\n" +
             ")";
 
     public static void main(String[] args) {
@@ -28,12 +41,12 @@ public class TableToJson {
         String[] rowSqls = newSql.split("',");
         JSONObject param = new JSONObject();
         param.put("autoMove", true);
-        param.put("desc", "员工部门关系");
-        param.put("id", "relId");
-        param.put("name", "orgStaffRel");
-        param.put("shareColumn", "store_id");
-        param.put("shareName", "store");
-        param.put("shareParam", "storeId");
+        param.put("desc", "业主用户小区关系");
+        param.put("id", "appUserId");
+        param.put("name", "ownerAppUser");
+        param.put("shareColumn", "community_id");
+        param.put("shareName", "user");
+        param.put("shareParam", "communityId");
         param.put("tableName", tableName);
         JSONObject paramColumn = new JSONObject();
         JSONArray requireds = new JSONArray();

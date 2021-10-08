@@ -1,40 +1,71 @@
 {
   "param": {
-    "relId": "rel_id",
+    "idCard": "id_card",
+    "openId": "open_id",
+    "link": "link",
+    "remark": "remark",
     "statusCd": "status_cd",
-    "storeId": "store_id",
-    "orgId": "org_id",
-    "staffId": "staff_id",
-    "relCd": "rel_cd"
+    "userId": "user_id",
+    "appType": "app_type",
+    "appUserName": "app_user_name",
+    "nickname": "nickname",
+    "headimgurl": "headimgurl",
+    "communityName": "community_name",
+    "state": "state",
+    "appUserId": "app_user_id",
+    "communityId": "community_id",
+    "appTypeCd": "app_type_cd",
+    "memberId": "member_id"
   },
-  "name": "orgStaffRel",
-  "shareColumn": "store_id",
-  "id": "relId",
-  "shareName": "store",
+  "name": "ownerAppUser",
+  "shareColumn": "community_id",
+  "id": "appUserId",
+  "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "组织员工ID不能为空",
-      "code": "relId"
+      "msg": "app用户ID不能为空",
+      "code": "appUserId"
     },
     {
-      "msg": "组织ID不能为空",
-      "code": "orgId"
+      "msg": "业主成员ID不能为空",
+      "code": "memberId"
     },
     {
-      "msg": "员工ID不能为空",
-      "code": "staffId"
+      "msg": "小区Id不能为空",
+      "code": "communityId"
     },
     {
-      "msg": "关系角色不能为空",
-      "code": "relCd"
+      "msg": "小区名称不能为空",
+      "code": "communityName"
     },
     {
-      "msg": "商户ID'不能为空",
-      "code": "storeId"
+      "msg": "app用户名称不能为空",
+      "code": "appUserName"
+    },
+    {
+      "msg": "身份证号不能为空",
+      "code": "idCard"
+    },
+    {
+      "msg": "联系人手机号不能为空",
+      "code": "link"
+    },
+    {
+      "msg": "app不能为空",
+      "code": "openId"
+    },
+    {
+      "msg": "应用类型不能为空",
+      "code": "appTypeCd"
+    },
+
+    {
+      "msg": "绑定业主手机端类型不能为空",
+      "code": "appType"
     }
   ],
-  "desc": "员工部门关系",
-  "shareParam": "storeId",
-  "tableName": "u_org_staff_rel"
+  "desc": "业主用户小区关系",
+  "shareParam": "communityId",
+  "tableName": "owner_app_user"
 }
