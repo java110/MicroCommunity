@@ -16,6 +16,8 @@ public class StoreUserPo implements Serializable {
     private String storeId;
     private String userId;
     private String relCd;
+    private String bId;
+    private String statusCd = "0";
 
     public String getStoreUserId() {
         return storeUserId;
@@ -47,5 +49,21 @@ public class StoreUserPo implements Serializable {
 
     public void setRelCd(String relCd) {
         this.relCd = relCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

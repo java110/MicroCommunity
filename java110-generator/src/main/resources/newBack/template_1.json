@@ -1,55 +1,40 @@
 {
   "param": {
-    "voice": "voice",
-    "typeCd": "type_cd",
-    "text3": "text3",
-    "text4": "text4",
-    "text1": "text1",
-    "text2": "text2",
-    "paId": "pa_id",
+    "relId": "rel_id",
     "statusCd": "status_cd",
-    "communityId": "community_id"
+    "storeId": "store_id",
+    "orgId": "org_id",
+    "staffId": "staff_id",
+    "relCd": "rel_cd"
   },
-  "name": "",
-  "shareColumn": "community_id",
-  "id": "",
-  "shareName": "",
+  "name": "orgStaffRel",
+  "shareColumn": "store_id",
+  "id": "relId",
+  "shareName": "store",
   "autoMove": true,
   "required": [
     {
-      "msg": "停车场ID不能为空",
-      "code": "paId"
+      "msg": "组织员工ID不能为空",
+      "code": "relId"
     },
     {
-      "msg": "小区ID不能为空",
-      "code": "communityId"
+      "msg": "组织ID不能为空",
+      "code": "orgId"
     },
     {
-      "msg": "类型：1001不能为空",
-      "code": "typeCd"
+      "msg": "员工ID不能为空",
+      "code": "staffId"
     },
     {
-      "msg": "文字显示第一行不能为空",
-      "code": "text1"
+      "msg": "关系角色不能为空",
+      "code": "relCd"
     },
     {
-      "msg": "文字显示第二行不能为空",
-      "code": "text2"
-    },
-    {
-      "msg": "文字显示第三行不能为空",
-      "code": "text3"
-    },
-    {
-      "msg": "文字显示第四行不能为空",
-      "code": "text4"
-    },
-    {
-      "msg": "语音播放不能为空",
-      "code": "voice"
+      "msg": "商户ID'不能为空",
+      "code": "storeId"
     }
   ],
-  "desc": "",
-  "shareParam": "communityId",
-  "tableName": "parking_area_text"
+  "desc": "员工部门关系",
+  "shareParam": "storeId",
+  "tableName": "u_org_staff_rel"
 }
