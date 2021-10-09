@@ -1,55 +1,71 @@
 {
   "param": {
-    "voice": "voice",
-    "typeCd": "type_cd",
-    "text3": "text3",
-    "text4": "text4",
-    "text1": "text1",
-    "text2": "text2",
-    "paId": "pa_id",
+    "idCard": "id_card",
+    "openId": "open_id",
+    "link": "link",
+    "remark": "remark",
     "statusCd": "status_cd",
-    "communityId": "community_id"
+    "userId": "user_id",
+    "appType": "app_type",
+    "appUserName": "app_user_name",
+    "nickname": "nickname",
+    "headimgurl": "headimgurl",
+    "communityName": "community_name",
+    "state": "state",
+    "appUserId": "app_user_id",
+    "communityId": "community_id",
+    "appTypeCd": "app_type_cd",
+    "memberId": "member_id"
   },
-  "name": "",
+  "name": "ownerAppUser",
   "shareColumn": "community_id",
-  "id": "",
-  "shareName": "",
+  "id": "appUserId",
+  "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "停车场ID不能为空",
-      "code": "paId"
+      "msg": "app用户ID不能为空",
+      "code": "appUserId"
     },
     {
-      "msg": "小区ID不能为空",
+      "msg": "业主成员ID不能为空",
+      "code": "memberId"
+    },
+    {
+      "msg": "小区Id不能为空",
       "code": "communityId"
     },
     {
-      "msg": "类型：1001不能为空",
-      "code": "typeCd"
+      "msg": "小区名称不能为空",
+      "code": "communityName"
     },
     {
-      "msg": "文字显示第一行不能为空",
-      "code": "text1"
+      "msg": "app用户名称不能为空",
+      "code": "appUserName"
     },
     {
-      "msg": "文字显示第二行不能为空",
-      "code": "text2"
+      "msg": "身份证号不能为空",
+      "code": "idCard"
     },
     {
-      "msg": "文字显示第三行不能为空",
-      "code": "text3"
+      "msg": "联系人手机号不能为空",
+      "code": "link"
     },
     {
-      "msg": "文字显示第四行不能为空",
-      "code": "text4"
+      "msg": "app不能为空",
+      "code": "openId"
     },
     {
-      "msg": "语音播放不能为空",
-      "code": "voice"
+      "msg": "应用类型不能为空",
+      "code": "appTypeCd"
+    },
+
+    {
+      "msg": "绑定业主手机端类型不能为空",
+      "code": "appType"
     }
   ],
-  "desc": "",
+  "desc": "业主用户小区关系",
   "shareParam": "communityId",
-  "tableName": "parking_area_text"
+  "tableName": "owner_app_user"
 }

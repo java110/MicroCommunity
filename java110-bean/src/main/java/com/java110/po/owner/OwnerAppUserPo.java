@@ -27,6 +27,8 @@ public class OwnerAppUserPo implements Serializable {
     private String userId;
     private String nickName;
     private String headImgUrl;
+    private String statusCd = "0";
+    private String bId;
 
     public String getAppUserId() {
         return appUserId;
@@ -147,5 +149,21 @@ public class OwnerAppUserPo implements Serializable {
 
     public void setHeadImgUrl(String headImgUrl) {
         this.headImgUrl = headImgUrl;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }
