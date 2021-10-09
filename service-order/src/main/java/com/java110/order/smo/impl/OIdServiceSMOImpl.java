@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.app.AppDto;
 import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.order.OrderItemDto;
@@ -58,19 +59,19 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
         orderDto.setoId(GenerateCodeFactory.getOId());
         if (StringUtil.isEmpty(orderDto.getAppId())) {
-            throw new IllegalArgumentException("未包含appId");
+            orderDto.setAppId(AppDto.WEB_APP_ID);
         }
 
         if (StringUtil.isEmpty(orderDto.getExtTransactionId())) {
-            throw new IllegalArgumentException("未包含交互日志");
+            orderDto.setExtTransactionId(GenerateCodeFactory.getTransactionId());
         }
 
         if (StringUtil.isEmpty(orderDto.getRequestTime())) {
-            throw new IllegalArgumentException("未包含请求时间");
+            orderDto.setRequestTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
         }
 
         if (StringUtil.isEmpty(orderDto.getUserId())) {
-            throw new IllegalArgumentException("未包含用户ID");
+            orderDto.setUserId("-1");
         }
 
         //保存订单信息
