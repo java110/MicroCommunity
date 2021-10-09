@@ -7,6 +7,7 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.SerializeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import redis.clients.jedis.Jedis;
 
 import java.util.List;
@@ -63,8 +64,12 @@ public class CommunitySettingFactory extends BaseCache {
     }
 
     private static CommunitySettingDto getCommunitySettingFromDb(String communityId, String key, Jedis redis) {
-        ICommunitySettingInnerServiceSMO communitySettingInnerServiceSMOImpl
-                = ApplicationContextFactory.getBean(ICommunitySettingInnerServiceSMO.class.getName(), ICommunitySettingInnerServiceSMO.class);
+        ICommunitySettingInnerServiceSMO communitySettingInnerServiceSMOImpl = null;
+        try {
+            communitySettingInnerServiceSMOImpl = ApplicationContextFactory.getBean(ICommunitySettingInnerServiceSMO.class.getName(), ICommunitySettingInnerServiceSMO.class);
+        }catch (NoSuchBeanDefinitionException e){
+            communitySettingInnerServiceSMOImpl = ApplicationContextFactory.getBean("communitySettingInnerServiceSMOImpl", ICommunitySettingInnerServiceSMO.class);
+        }
         CommunitySettingDto communitySettingDto = new CommunitySettingDto();
         communitySettingDto.setCommunityId(communityId);
         communitySettingDto.setSettingKey(key);
