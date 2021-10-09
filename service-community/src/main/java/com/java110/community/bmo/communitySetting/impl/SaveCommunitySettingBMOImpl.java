@@ -2,6 +2,7 @@ package com.java110.community.bmo.communitySetting.impl;
 
 import com.java110.community.bmo.communitySetting.ISaveCommunitySettingBMO;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
 import com.java110.po.communitySetting.CommunitySettingPo;
@@ -29,11 +30,15 @@ public class SaveCommunitySettingBMOImpl implements ISaveCommunitySettingBMO {
         communitySettingPo.setCsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_csId));
         int flag = communitySettingInnerServiceSMOImpl.saveCommunitySetting(communitySettingPo);
 
-        if (flag > 0) {
-        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+        if (flag < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
-        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        //将结果写入缓存
+        CommunitySettingFactory.getCommunitySettingFromDb(communitySettingPo.getCommunityId(), communitySettingPo.getSettingKey());
+
+
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
     }
 
 }
