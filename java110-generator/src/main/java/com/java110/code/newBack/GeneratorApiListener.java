@@ -14,7 +14,7 @@ public class GeneratorApiListener extends BaseGenerator {
      * @param data
      */
     public void generator(Data data) throws Exception {
-        //genneratorPo(data);             //API DataVo对象
+        genneratorPo(data);             //API DataVo对象
         genneratorSaveCmd(data);            //Api BmoImpl
         genneratorUpdateBmoImpl(data);            //Api BmoImpl
         genneratorDeleteBmoImpl(data);            //Api BmoImpl
