@@ -17,25 +17,22 @@ package com.java110.community.cmd.communitySettingKey;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.communitySettingKey.CommunitySettingKeyDto;
 import com.java110.intf.community.ICommunitySettingKeyV1InnerServiceSMO;
-import com.java110.po.communitySettingKey.CommunitySettingKeyPo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.communitySettingKey.CommunitySettingKeyDto;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -51,7 +48,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "communitySettingKey.listCommunitySettingKey")
 public class ListCommunitySettingKeyCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(ListCommunitySettingKeyCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListCommunitySettingKeyCmd.class);
     @Autowired
     private ICommunitySettingKeyV1InnerServiceSMO communitySettingKeyV1InnerServiceSMOImpl;
 
@@ -63,22 +60,25 @@ public class ListCommunitySettingKeyCmd extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           CommunitySettingKeyDto communitySettingKeyDto = BeanConvertUtil.covertBean(reqJson, CommunitySettingKeyDto.class);
+        CommunitySettingKeyDto communitySettingKeyDto = BeanConvertUtil.covertBean(reqJson, CommunitySettingKeyDto.class);
 
-           int count = communitySettingKeyV1InnerServiceSMOImpl.queryCommunitySettingKeysCount(communitySettingKeyDto);
+        int count = communitySettingKeyV1InnerServiceSMOImpl.queryCommunitySettingKeysCount(communitySettingKeyDto);
 
-           List<CommunitySettingKeyDto> communitySettingKeyDtos = null;
+        List<CommunitySettingKeyDto> communitySettingKeyDtos = null;
 
-           if (count > 0) {
-               communitySettingKeyDtos = communitySettingKeyV1InnerServiceSMOImpl.queryCommunitySettingKeys(communitySettingKeyDto);
-           } else {
-               communitySettingKeyDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            communitySettingKeyDtos = communitySettingKeyV1InnerServiceSMOImpl.queryCommunitySettingKeys(communitySettingKeyDto);
+        } else {
+            communitySettingKeyDtos = new ArrayList<>();
+        }
+        if (!reqJson.containsKey("row")) {
+            reqJson.put("row", 10);
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, communitySettingKeyDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, communitySettingKeyDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

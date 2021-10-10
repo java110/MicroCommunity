@@ -25,7 +25,7 @@ public class UpdateCommunitySettingBMOImpl implements IUpdateCommunitySettingBMO
 
         int flag = communitySettingInnerServiceSMOImpl.updateCommunitySetting(communitySettingPo);
 
-        if (flag > 0) {
+        if (flag < 1) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
