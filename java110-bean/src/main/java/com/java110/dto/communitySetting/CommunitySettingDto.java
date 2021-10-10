@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class CommunitySettingDto extends PageDto implements Serializable {
 
+    public static final String SETTING_TYPE_FEE = "2002";
+
     private String csId;
     private String settingValue;
     private String remark;

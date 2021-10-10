@@ -5,6 +5,7 @@ import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
 import com.java110.utils.cache.BaseCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.SerializeUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -16,6 +17,9 @@ public class CommunitySettingFactory extends BaseCache {
 
     //日志
     private static Logger logger = LoggerFactory.getLogger(CommunitySettingFactory.class);
+
+    public static final String KEY_FEE_SCALE = "SCALE";
+    public static final int DEFAULE_FEE_SCALE = 2;
 
 
     /**
@@ -59,15 +63,13 @@ public class CommunitySettingFactory extends BaseCache {
                 redis.close();
             }
         }
-
-
     }
 
     private static CommunitySettingDto getCommunitySettingFromDb(String communityId, String key, Jedis redis) {
         ICommunitySettingInnerServiceSMO communitySettingInnerServiceSMOImpl = null;
         try {
             communitySettingInnerServiceSMOImpl = ApplicationContextFactory.getBean(ICommunitySettingInnerServiceSMO.class.getName(), ICommunitySettingInnerServiceSMO.class);
-        }catch (NoSuchBeanDefinitionException e){
+        } catch (NoSuchBeanDefinitionException e) {
             communitySettingInnerServiceSMOImpl = ApplicationContextFactory.getBean("communitySettingInnerServiceSMOImpl", ICommunitySettingInnerServiceSMO.class);
         }
         CommunitySettingDto communitySettingDto = new CommunitySettingDto();
@@ -80,6 +82,23 @@ public class CommunitySettingFactory extends BaseCache {
 
         redis.set((communityId + "_" + key + "_community_setting").getBytes(), SerializeUtil.serialize(communitySettingDtos.get(0)));
         return communitySettingDtos.get(0);
+    }
+
+    /**
+     * 手工保存数据
+     *
+     * @param communitySettingDto
+     */
+    public static void saveCommunitySetting(CommunitySettingDto communitySettingDto) {
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            redis.set((communitySettingDto.getCommunityId() + "_" + communitySettingDto.getSettingKey() + "_community_setting").getBytes(), SerializeUtil.serialize(communitySettingDto));
+        } finally {
+            if (redis != null) {
+                redis.close();
+            }
+        }
     }
 
     /**
@@ -111,5 +130,38 @@ public class CommunitySettingFactory extends BaseCache {
         }
 
         return communitySettingDto;
+    }
+
+    /**
+     * 查询小数点 位数
+     *
+     * @param communityId
+     * @return
+     */
+    public static int getFeeScale(String communityId) {
+        String scale = getValue(communityId, KEY_FEE_SCALE);
+        if (StringUtil.isEmpty(scale)) {
+            //防止每次都需要 查询数据库 增加 压力，这里像缓存中写入默认值
+            CommunitySettingDto communitySettingDto = new CommunitySettingDto();
+            communitySettingDto.setCommunityId(communityId);
+            communitySettingDto.setSettingKey(KEY_FEE_SCALE);
+            communitySettingDto.setSettingName("小数点位数");
+            communitySettingDto.setCsId("-1");
+            communitySettingDto.setSettingValue(DEFAULE_FEE_SCALE + "");
+            communitySettingDto.setSettingType(CommunitySettingDto.SETTING_TYPE_FEE);
+            communitySettingDto.setRemark("费用计算小数点位数,0至4整数");
+            saveCommunitySetting(communitySettingDto);
+            return DEFAULE_FEE_SCALE;
+        }
+
+        if (!StringUtil.isInteger(scale)) {
+            return DEFAULE_FEE_SCALE;
+        }
+
+        int scaleInt = Integer.parseInt(scale);
+        if (scaleInt > 4 || scaleInt < 0) {
+            return DEFAULE_FEE_SCALE;
+        }
+        return scaleInt;
     }
 }
