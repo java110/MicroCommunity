@@ -57,7 +57,7 @@ public class ListCommunitySettingKeyCmd extends AbstractServiceCmdListener {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        super.validatePageInfo(reqJson);
+        //super.validatePageInfo(reqJson);
     }
 
     @Override

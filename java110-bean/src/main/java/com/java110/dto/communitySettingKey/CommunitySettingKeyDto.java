@@ -1,6 +1,7 @@
 package com.java110.dto.communitySettingKey;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class CommunitySettingKeyDto extends PageDto implements Serializable {
 
     private String keyId;
-private String remark;
-private String settingKey;
-private String settingType;
-private String settingName;
+    private String remark;
+    private String settingKey;
+    private String settingType;
+    private String settingName;
+    private String communityId;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String settingName;
     public String getKeyId() {
         return keyId;
     }
-public void setKeyId(String keyId) {
+
+    public void setKeyId(String keyId) {
         this.keyId = keyId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getSettingKey() {
+
+    public String getSettingKey() {
         return settingKey;
     }
-public void setSettingKey(String settingKey) {
+
+    public void setSettingKey(String settingKey) {
         this.settingKey = settingKey;
     }
-public String getSettingType() {
+
+    public String getSettingType() {
         return settingType;
     }
-public void setSettingType(String settingType) {
+
+    public void setSettingType(String settingType) {
         this.settingType = settingType;
     }
-public String getSettingName() {
+
+    public String getSettingName() {
         return settingName;
     }
-public void setSettingName(String settingName) {
+
+    public void setSettingName(String settingName) {
         this.settingName = settingName;
     }
 
@@ -72,5 +83,13 @@ public void setSettingName(String settingName) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
