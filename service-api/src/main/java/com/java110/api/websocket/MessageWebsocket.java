@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  * add by wuxw 2020/6/5
  **/
-@ServerEndpoint("/app/message/{userId}")
+@ServerEndpoint("/ws/message/{userId}")
 @Component
 public class MessageWebsocket {
     private final static Logger logger = LoggerFactory.getLogger(MessageWebsocket.class);
