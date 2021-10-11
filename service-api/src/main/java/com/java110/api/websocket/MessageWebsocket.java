@@ -122,7 +122,7 @@ public class MessageWebsocket {
 
         switch (wsDataDto.getCmd()){
             case WsDataDto.CMD_PING:
-                webSocketMap.get(userId).sendMessage(wsDataDto.toString());
+                //webSocketMap.get(userId).sendMessage(wsDataDto.toString());
                 break;
         }
 
