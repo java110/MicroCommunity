@@ -1,12 +1,18 @@
 package com.java110.api.websocket;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.WsDataDto;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.*;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -96,28 +102,44 @@ public class MessageWebsocket {
      * @param message 客户端发送过来的消息
      */
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(String message, Session session) throws IOException {
         logger.info("用户消息:" + userId + ",报文:" + message);
         //可以群发消息
         //消息保存到数据库、redis
-        if (!StringUtil.isEmpty(message)) {
-            try {
-                //解析发送的报文
-                JSONObject jsonObject = JSONObject.parseObject(message);
-                //追加发送人(防止串改)
-                jsonObject.put("fromUserId", this.userId);
-                String toUserId = jsonObject.getString("toUserId");
-                //传送给对应toUserId用户的websocket
-                if (!StringUtil.isEmpty(toUserId) && webSocketMap.containsKey(toUserId)) {
-                    webSocketMap.get(toUserId).sendMessage(jsonObject.toJSONString());
-                } else {
-                    logger.error("请求的clientId:" + toUserId + "不在该服务器上");
-                    //否则不在这个服务器上，发送到mysql或者redis
-                }
-            } catch (Exception e) {
-                logger.error("接收客户端消息失败", e);
-            }
+        if (StringUtil.isEmpty(message)) {
+            ResultVo resultVo = new ResultVo(ResultVo.CODE_ERROR, "未包含内容");
+            webSocketMap.get(userId).sendMessage(resultVo.toString());
+            return;
         }
+
+        if (!StringUtil.isJsonObject(message)) {
+            ResultVo resultVo = new ResultVo(ResultVo.CODE_ERROR, "不是有效数据格式");
+            webSocketMap.get(userId).sendMessage(resultVo.toString());
+            return;
+        }
+
+        WsDataDto wsDataDto = JSONObject.parseObject(message, WsDataDto.class);
+
+        switch (wsDataDto.getCmd()){
+            case WsDataDto.CMD_PING:
+                webSocketMap.get(userId).sendMessage(wsDataDto.toString());
+                break;
+        }
+
+//        //解析发送的报文
+//        JSONObject jsonObject = JSONObject.parseObject(message);
+//        //追加发送人(防止串改)
+//        jsonObject.put("fromUserId", this.userId);
+//        String toUserId = jsonObject.getString("toUserId");
+//        //传送给对应toUserId用户的websocket
+//        if (!StringUtil.isEmpty(toUserId) && webSocketMap.containsKey(toUserId)) {
+//            webSocketMap.get(toUserId).sendMessage(jsonObject.toJSONString());
+//        } else {
+//            logger.error("请求的clientId:" + toUserId + "不在该服务器上");
+//            //否则不在这个服务器上，发送到mysql或者redis
+//        }
+
+
     }
 
     /**
