@@ -8,11 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -26,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  * add by wuxw 2020/6/5
  **/
-@ServerEndpoint("/ws/message/{userId}")
+@ServerEndpoint("/ws/message/{userId}/{clientId}")
 @Component
 public class MessageWebsocket {
     private final static Logger logger = LoggerFactory.getLogger(MessageWebsocket.class);
@@ -54,14 +50,17 @@ public class MessageWebsocket {
      */
     private String userId = "";
 
+    private String clientId = "";
+
 
     /**
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("userId") String userId) {
+    public void onOpen(Session session, @PathParam("userId") String userId, @PathParam("clientId") String clientId) {
         this.session = session;
         this.userId = userId;
+        this.clientId = clientId;
         if (webSocketMap.containsKey(userId)) {
             webSocketMap.remove(userId);
             webSocketMap.put(userId, this);
@@ -74,12 +73,12 @@ public class MessageWebsocket {
         }
 
 
-        logger.debug("用户连接:" + userId + ",当前在线人数为:" + getOnlineCount());
+        logger.debug("用户连接:" + userId + ",客户端：" + clientId + ",当前在线人数为:" + getOnlineCount());
 
         try {
             sendMessage("连接成功");
         } catch (IOException e) {
-            logger.error("用户:" + userId + ",网络异常!!!!!!");
+            logger.error("用户:" + userId + ",客户端：" + clientId + ",网络异常!!!!!!");
         }
     }
 
@@ -93,7 +92,7 @@ public class MessageWebsocket {
             //从set中删除
             subOnlineCount();
         }
-        logger.info("用户退出:" + userId + ",当前在线人数为:" + getOnlineCount());
+        logger.info("用户退出:" + userId + ",客户端：" + clientId + ",当前在线人数为:" + getOnlineCount());
     }
 
     /**
@@ -103,7 +102,7 @@ public class MessageWebsocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-        logger.info("用户消息:" + userId + ",报文:" + message);
+        logger.info("用户消息:" + userId + ",客户端：" + clientId + ",报文:" + message);
         //可以群发消息
         //消息保存到数据库、redis
         if (StringUtil.isEmpty(message)) {
@@ -120,7 +119,7 @@ public class MessageWebsocket {
 
         WsDataDto wsDataDto = JSONObject.parseObject(message, WsDataDto.class);
 
-        switch (wsDataDto.getCmd()){
+        switch (wsDataDto.getCmd()) {
             case WsDataDto.CMD_PING:
                 //webSocketMap.get(userId).sendMessage(wsDataDto.toString());
                 break;
@@ -148,8 +147,8 @@ public class MessageWebsocket {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-        logger.error("用户错误:" + this.userId + ",原因:" + error.getMessage());
-        error.printStackTrace();
+        logger.error("用户错误:" + this.userId + ",客户端：" + clientId + ",原因:" + error.getMessage());
+        // error.printStackTrace();
     }
 
     /**
@@ -165,10 +164,11 @@ public class MessageWebsocket {
      */
     public static void sendInfo(String message, String userId) throws IOException {
         logger.info("发送消息到:" + userId + "，报文:" + message);
-
+        if (!webSocketMap.containsKey(userId)) {
+            //客户端未连接
+            return;
+        }
         webSocketMap.get(userId).sendMessage(message);
-
-
     }
 
     public static synchronized int getOnlineCount() {
