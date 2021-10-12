@@ -22,4 +22,5 @@ public class KafkaConstant {
 
 
     public final static String TOPIC_API_SEND_WEB = "webSentMessageTopic";
+    public final static String TOPIC_API_SEND_PARKING_AREA_WEB = "webSentParkingAreaTopic";
 }

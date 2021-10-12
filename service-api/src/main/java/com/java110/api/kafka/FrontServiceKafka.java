@@ -2,6 +2,7 @@ package com.java110.api.kafka;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.websocket.MessageWebsocket;
+import com.java110.api.websocket.ParkingAreaWebsocket;
 import com.java110.core.base.controller.BaseController;
 import com.java110.utils.constant.KafkaConstant;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -32,6 +33,27 @@ public class FrontServiceKafka extends BaseController {
         try {
             param = JSONObject.parseObject(record.value().toString());
             MessageWebsocket.sendInfo(param.toJSONString(), param.getString("userId"));
+        } catch (Exception e) {
+            logger.error("发送消息失败", e);
+        } finally {
+
+        }
+    }
+
+    /**
+     * 像前段返回内容
+     *
+     * @param record
+     */
+    @KafkaListener(topics = {KafkaConstant.TOPIC_API_SEND_PARKING_AREA_WEB})
+    public void listenParkingArea(ConsumerRecord<?, ?> record) {
+        logger.info("kafka的key: " + record.key());
+        logger.info("kafka的value: " + record.value().toString());
+
+        JSONObject param = null;
+        try {
+            param = JSONObject.parseObject(record.value().toString());
+            ParkingAreaWebsocket.sendInfo(param.toJSONString(), param.getString("paId"));
         } catch (Exception e) {
             logger.error("发送消息失败", e);
         } finally {
