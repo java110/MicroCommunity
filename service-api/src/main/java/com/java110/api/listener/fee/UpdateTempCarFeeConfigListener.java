@@ -2,17 +2,26 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.bmo.tempCarFeeConfig.ITempCarFeeConfigBMO;
 import com.java110.api.bmo.tempCarFeeConfigAttr.ITempCarFeeConfigAttrBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
+import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
+import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.utils.constant.ServiceCodeTempCarFeeConfigConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+
+import java.util.List;
 
 /**
  * 保存临时车收费标准侦听
@@ -25,7 +34,13 @@ public class UpdateTempCarFeeConfigListener extends AbstractServiceApiPlusListen
     private ITempCarFeeConfigBMO tempCarFeeConfigBMOImpl;
 
     @Autowired
+    private ITempCarFeeConfigInnerServiceSMO tempCarFeeConfigInnerServiceSMOImpl;
+
+    @Autowired
     private ITempCarFeeConfigAttrBMO tempCarFeeConfigAttrBMOImpl;
+
+    @Autowired
+    private IFeeBMO feeBMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -43,6 +58,13 @@ public class UpdateTempCarFeeConfigListener extends AbstractServiceApiPlusListen
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+
+        TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
+        tempCarFeeConfigDto.setConfigId(reqJson.getString("configId"));
+        tempCarFeeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        List<TempCarFeeConfigDto> tempCarFeeConfigDtos = tempCarFeeConfigInnerServiceSMOImpl.queryTempCarFeeConfigs(tempCarFeeConfigDto);
+
+        Assert.listOnlyOne(tempCarFeeConfigDtos, "临时车收费标准不存在");
 
         tempCarFeeConfigBMOImpl.updateTempCarFeeConfig(reqJson, context);
 
@@ -63,6 +85,15 @@ public class UpdateTempCarFeeConfigListener extends AbstractServiceApiPlusListen
             }
             tempCarFeeConfigAttrBMOImpl.updateTempCarFeeConfigAttr(attr, context);
         }
+        //补费用项数据
+        PayFeeConfigPo payFeeConfigPo = new PayFeeConfigPo();
+
+        payFeeConfigPo.setCommunityId(reqJson.getString("communityId"));
+        payFeeConfigPo.setConfigId(tempCarFeeConfigDtos.get(0).getFeeConfigId());
+        payFeeConfigPo.setEndTime(reqJson.getString("endTime"));
+        payFeeConfigPo.setStartTime(reqJson.getString("startTime"));
+        payFeeConfigPo.setFeeName(reqJson.getString("feeName"));
+        feeBMOImpl.updateFeeConfig(BeanConvertUtil.beanCovertJson(payFeeConfigPo), context);
     }
 
     @Override

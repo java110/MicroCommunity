@@ -27,6 +27,7 @@ public class TempCarFeeConfigDto extends PageDto implements Serializable {
     private String ruleId;
     private String ruleName;
     private String communityId;
+    private String feeConfigId;
 
     private List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrs;
 
@@ -147,5 +148,13 @@ public class TempCarFeeConfigDto extends PageDto implements Serializable {
 
     public void setTempCarFeeConfigAttrs(List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrs) {
         this.tempCarFeeConfigAttrs = tempCarFeeConfigAttrs;
+    }
+
+    public String getFeeConfigId() {
+        return feeConfigId;
+    }
+
+    public void setFeeConfigId(String feeConfigId) {
+        this.feeConfigId = feeConfigId;
     }
 }
