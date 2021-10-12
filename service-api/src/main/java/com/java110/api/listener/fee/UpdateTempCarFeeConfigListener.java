@@ -68,6 +68,16 @@ public class UpdateTempCarFeeConfigListener extends AbstractServiceApiPlusListen
 
         tempCarFeeConfigBMOImpl.updateTempCarFeeConfig(reqJson, context);
 
+        //补费用项数据
+        PayFeeConfigPo payFeeConfigPo = new PayFeeConfigPo();
+        payFeeConfigPo.setCommunityId(reqJson.getString("communityId"));
+        payFeeConfigPo.setConfigId(tempCarFeeConfigDtos.get(0).getFeeConfigId());
+        payFeeConfigPo.setEndTime(reqJson.getString("endTime"));
+        payFeeConfigPo.setStartTime(reqJson.getString("startTime"));
+        payFeeConfigPo.setFeeName(reqJson.getString("feeName"));
+        feeBMOImpl.updateFeeConfig(BeanConvertUtil.beanCovertJson(payFeeConfigPo), context);
+
+
         JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs == null || attrs.size() < 1) {
             return;
@@ -85,15 +95,7 @@ public class UpdateTempCarFeeConfigListener extends AbstractServiceApiPlusListen
             }
             tempCarFeeConfigAttrBMOImpl.updateTempCarFeeConfigAttr(attr, context);
         }
-        //补费用项数据
-        PayFeeConfigPo payFeeConfigPo = new PayFeeConfigPo();
 
-        payFeeConfigPo.setCommunityId(reqJson.getString("communityId"));
-        payFeeConfigPo.setConfigId(tempCarFeeConfigDtos.get(0).getFeeConfigId());
-        payFeeConfigPo.setEndTime(reqJson.getString("endTime"));
-        payFeeConfigPo.setStartTime(reqJson.getString("startTime"));
-        payFeeConfigPo.setFeeName(reqJson.getString("feeName"));
-        feeBMOImpl.updateFeeConfig(BeanConvertUtil.beanCovertJson(payFeeConfigPo), context);
     }
 
     @Override
