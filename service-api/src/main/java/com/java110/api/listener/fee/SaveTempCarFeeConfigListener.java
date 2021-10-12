@@ -15,6 +15,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.po.fee.PayFeeConfigPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeTempCarFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -89,8 +90,8 @@ public class SaveTempCarFeeConfigListener extends AbstractServiceApiPlusListener
         payFeeConfigPo.setPaymentCd(FeeConfigDto.PAYMENT_CD_PRE);
         payFeeConfigPo.setPaymentCycle("1");
         payFeeConfigPo.setSquarePrice("0");
-
-        feeBMOImpl.addFeeConfig(BeanConvertUtil.beanCovertJson(payFeeConfigPo), context);
+        super.insert(context, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+        
     }
 
     private void dealAttr(JSONObject reqJson, DataFlowContext context) {
