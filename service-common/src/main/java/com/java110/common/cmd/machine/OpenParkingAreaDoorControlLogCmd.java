@@ -53,7 +53,7 @@ public class OpenParkingAreaDoorControlLogCmd extends AbstractServiceCmdListener
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         try {
-            KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_API_SEND_PARKING_AREA_WEB, reqJson);
+            KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_API_SEND_PARKING_AREA_WEB, reqJson.toJSONString());
         } catch (Exception e) {
             logger.error("发送停车场信息失败", e);
         }
