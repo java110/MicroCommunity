@@ -22,7 +22,7 @@
         settingKey,t.setting_type,t.setting_type settingType,t.setting_name,t.setting_name settingName,
         td.name settingTypeName
         from community_setting t
-        left join t_dict td on t.setting_type = td.status_cd and td.table_name = 'community_setting' and
+        left join t_dict td on t.setting_type = td.status_cd and td.table_name = 'community_setting_key' and
         td.table_columns = 'setting_type'
         where 1 = 1
         <if test="csId !=null and csId != ''">

@@ -28,11 +28,11 @@ public class SaveLogSystemErrorBMOImpl implements ISaveLogSystemErrorBMO {
         logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
         int flag = logSystemErrorInnerServiceSMOImpl.saveLogSystemError(logSystemErrorPo);
 
-        if (flag > 0) {
-            return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+        if (flag < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
-        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
     }
 
 }

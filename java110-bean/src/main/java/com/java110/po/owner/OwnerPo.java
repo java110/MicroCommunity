@@ -26,6 +26,7 @@ public class OwnerPo implements Serializable {
     private String state;
     private String statusCd="0";
     private String bId;
+    private String ownerFlag;
 
     public String getMemberId() {
         return memberId;
@@ -137,5 +138,13 @@ public class OwnerPo implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getOwnerFlag() {
+        return ownerFlag;
+    }
+
+    public void setOwnerFlag(String ownerFlag) {
+        this.ownerFlag = ownerFlag;
     }
 }

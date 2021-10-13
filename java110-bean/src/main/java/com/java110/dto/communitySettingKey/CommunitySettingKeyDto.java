@@ -1,4 +1,4 @@
-package com.java110.dto.communitySetting;
+package com.java110.dto.communitySettingKey;
 
 import com.java110.dto.PageDto;
 
@@ -7,43 +7,33 @@ import java.util.Date;
 
 /**
  * @ClassName FloorDto
- * @Description 小区相关设置数据层封装
+ * @Description 小区配置数据层封装
  * @Author wuxw
  * @Date 2019/4/24 8:52
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class CommunitySettingDto extends PageDto implements Serializable {
+public class CommunitySettingKeyDto extends PageDto implements Serializable {
 
-    public static final String SETTING_TYPE_FEE = "2002";
-
-    private String csId;
-    private String settingValue;
+    private String keyId;
     private String remark;
-    private String communityId;
     private String settingKey;
     private String settingType;
-    private String settingTypeName;
     private String settingName;
+    private String communityId;
+
 
     private Date createTime;
 
     private String statusCd = "0";
 
-    public String getCsId() {
-        return csId;
+
+    public String getKeyId() {
+        return keyId;
     }
 
-    public void setCsId(String csId) {
-        this.csId = csId;
-    }
-
-    public String getSettingValue() {
-        return settingValue;
-    }
-
-    public void setSettingValue(String settingValue) {
-        this.settingValue = settingValue;
+    public void setKeyId(String keyId) {
+        this.keyId = keyId;
     }
 
     public String getRemark() {
@@ -52,14 +42,6 @@ public class CommunitySettingDto extends PageDto implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(String communityId) {
-        this.communityId = communityId;
     }
 
     public String getSettingKey() {
@@ -86,6 +68,7 @@ public class CommunitySettingDto extends PageDto implements Serializable {
         this.settingName = settingName;
     }
 
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -102,11 +85,11 @@ public class CommunitySettingDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public String getSettingTypeName() {
-        return settingTypeName;
+    public String getCommunityId() {
+        return communityId;
     }
 
-    public void setSettingTypeName(String settingTypeName) {
-        this.settingTypeName = settingTypeName;
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

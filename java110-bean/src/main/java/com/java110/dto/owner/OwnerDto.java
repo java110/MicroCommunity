@@ -22,6 +22,9 @@ public class OwnerDto extends PageDto implements Serializable {
     public static final String OWNER_TYPE_CD_MEMBER = "1002"; //家庭成员
     public static final String OWNER_TYPE_CD_RENTING = "1003"; //租客
 
+    public static final String OWNER_FLAG_TRUE = "T";//业主标识 T是真实业主 F 是虚拟业主
+    public static final String OWNER_FLAG_FALSE = "F";//业主标识 T是真实业主 F 是虚拟业主
+
 
     private String communityId;
 
@@ -53,6 +56,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String bId;
 
     private String userName;
+    private String ownerFlag;
 
     private List<OwnerAttrDto> ownerAttrDtos;
 
@@ -312,5 +316,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getOwnerFlag() {
+        return ownerFlag;
+    }
+
+    public void setOwnerFlag(String ownerFlag) {
+        this.ownerFlag = ownerFlag;
     }
 }

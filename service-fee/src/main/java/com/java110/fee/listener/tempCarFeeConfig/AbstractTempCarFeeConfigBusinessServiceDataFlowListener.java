@@ -47,6 +47,7 @@ public abstract class AbstractTempCarFeeConfigBusinessServiceDataFlowListener ex
         businessTempCarFeeConfigInfo.put("endTime", businessTempCarFeeConfigInfo.get("end_time"));
         businessTempCarFeeConfigInfo.put("ruleId", businessTempCarFeeConfigInfo.get("rule_id"));
         businessTempCarFeeConfigInfo.put("communityId", businessTempCarFeeConfigInfo.get("community_id"));
+        businessTempCarFeeConfigInfo.put("feeConfigId", businessTempCarFeeConfigInfo.get("fee_config_id"));
         businessTempCarFeeConfigInfo.remove("bId");
         businessTempCarFeeConfigInfo.put("statusCd", statusCd);
     }
@@ -81,6 +82,7 @@ public abstract class AbstractTempCarFeeConfigBusinessServiceDataFlowListener ex
         currentTempCarFeeConfigInfo.put("endTime", currentTempCarFeeConfigInfo.get("end_time"));
         currentTempCarFeeConfigInfo.put("ruleId", currentTempCarFeeConfigInfo.get("rule_id"));
         currentTempCarFeeConfigInfo.put("communityId", currentTempCarFeeConfigInfo.get("community_id"));
+        currentTempCarFeeConfigInfo.put("feeConfigId", currentTempCarFeeConfigInfo.get("fee_config_id"));
 
 
         currentTempCarFeeConfigInfo.put("operate", StatusConstant.OPERATE_DEL);
