@@ -128,6 +128,7 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
             return;
         }
         int flag = 0;
+        computeFeeSMOImpl.freshFeeObjName(tmpFeeDtos);
         for (FeeDto tmpFeeDto : tmpFeeDtos) {
             try {
                 if (tmpFeeDto.getFeePrice() > Double.parseDouble(tmpAccountDto.getAmount())) {
@@ -139,7 +140,11 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
                 accountDetailPo.setAmount(tmpFeeDto.getFeePrice() + "");
                 accountDetailPo.setObjId(tmpAccountDto.getObjId());
                 accountDetailPo.setObjType(tmpAccountDto.getObjType());
-                accountDetailPo.setRemark("缴费扣款");
+                accountDetailPo.setRemark("缴费扣款,费用对象："
+                        + tmpFeeDto.getPayerObjName()
+                        + ",费用：" + tmpFeeDto.getFeeName()
+                        + ",时间：" + DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A)
+                        + "至" + DateUtil.getFormatTimeString(tmpFeeDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
                 flag = accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
                 if (flag < 1) {
                     continue;//扣款失败
@@ -149,8 +154,8 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
                 JSONArray fees = new JSONArray();
                 JSONObject fee = new JSONObject();
                 fee.put("feeId", tmpFeeDto.getFeeId());
-                fee.put("startTime", DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(),DateUtil.DATE_FORMATE_STRING_A));
-                fee.put("endTime", DateUtil.getFormatTimeString(tmpFeeDto.getDeadlineTime(),DateUtil.DATE_FORMATE_STRING_A));
+                fee.put("startTime", DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+                fee.put("endTime", DateUtil.getFormatTimeString(tmpFeeDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
                 fee.put("receivedAmount", tmpFeeDto.getFeePrice());
                 fee.put("primeRate", "1");
                 fee.put("remark", "定时账户扣款缴费");
