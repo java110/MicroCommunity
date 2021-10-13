@@ -7,9 +7,9 @@
     <!-- 保存业主信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerInfo" parameterType="Map">
         insert into business_building_owner(
-        operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state
+        operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state,owner_flag
         ) values (
-        #{operate},#{sex},#{name},#{link},#{remark},#{ownerId},#{bId},#{userId},#{age},#{memberId},#{ownerTypeCd},#{communityId},#{idCard},#{state}
+        #{operate},#{sex},#{name},#{link},#{remark},#{ownerId},#{bId},#{userId},#{age},#{memberId},#{ownerTypeCd},#{communityId},#{idCard},#{state},#{ownerFlag}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getBusinessOwnerInfo" parameterType="Map" resultType="Map">
         select t.operate,t.sex,t.name,t.link,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
-        t.owner_type_cd ownerTypeCd,t.community_id,t.community_id communityId,
+        t.owner_type_cd ownerTypeCd,t.community_id,t.community_id communityId,t.owner_flag,t.owner_flag ownerFlag,
         t.id_card, t.id_card idCard,t.state
         from business_building_owner t
         where 1 =1
@@ -71,9 +71,9 @@
     <!-- 保存业主信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfoInstance" parameterType="Map">
         insert into building_owner(
-        sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state
+        sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state,owner_flag
         ) select t.sex,t.name,t.link,'0',t.remark,t.owner_id,t.b_id,t.user_id,t.age,t.member_id,t.owner_type_cd,
-        t.community_id communityId,t.id_card,state
+        t.community_id communityId,t.id_card,state,t.owner_flag
         from business_building_owner t where 1=1
         and t.operate= 'ADD'
         <if test="sex !=null">
@@ -124,7 +124,8 @@
         t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,
-        t.community_id communityId,t.id_card, t.id_card idCard,t.state,td.name ownerTypeName
+        t.community_id communityId,t.id_card, t.id_card idCard,t.state,td.name ownerTypeName,
+        t.owner_flag,t.owner_flag ownerFlag,
         <if test="roomIds != null">
             , borr.room_id roomId
         </if>
@@ -181,6 +182,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="ownerFlag !=null and ownerFlag != ''">
+            and t.owner_flag= #{ownerFlag}
         </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}
@@ -266,6 +270,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="ownerFlag !=null and ownerFlag != ''">
+            and t.owner_flag= #{ownerFlag}
         </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}
@@ -370,6 +377,9 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
+        <if test="ownerFlag !=null and ownerFlag != ''">
+            and t.owner_flag= #{ownerFlag}
+        </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}
         </if>
@@ -421,6 +431,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="ownerFlag !=null and ownerFlag != ''">
+            and t.owner_flag= #{ownerFlag}
         </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}
@@ -475,6 +488,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="ownerFlag !=null and ownerFlag != ''">
+            and t.owner_flag= #{ownerFlag}
         </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}

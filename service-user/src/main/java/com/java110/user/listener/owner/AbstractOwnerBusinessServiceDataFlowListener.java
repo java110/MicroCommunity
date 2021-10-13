@@ -50,6 +50,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         businessOwnerInfo.put("communityId", businessOwnerInfo.get("community_id"));
         businessOwnerInfo.put("idCard", businessOwnerInfo.get("id_card"));
         businessOwnerInfo.put("state", businessOwnerInfo.get("state"));
+        businessOwnerInfo.put("ownerFlag", businessOwnerInfo.get("owner_flag"));
         businessOwnerInfo.remove("bId");
         businessOwnerInfo.put("statusCd", statusCd);
     }
@@ -87,6 +88,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         currentOwnerInfo.put("communityId", currentOwnerInfo.get("community_id"));
         currentOwnerInfo.put("idCard", currentOwnerInfo.get("id_card"));
         currentOwnerInfo.put("state", currentOwnerInfo.get("state"));
+        currentOwnerInfo.put("ownerFlag", currentOwnerInfo.get("owner_flag"));
 
 
         currentOwnerInfo.put("operate", StatusConstant.OPERATE_DEL);
