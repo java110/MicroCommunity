@@ -142,6 +142,9 @@
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
+        <if test="acctType !=null and acctType != ''">
+            and ac.acct_type= #{acctType}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -194,6 +197,7 @@
     <select id="queryAccountDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from account_detail t
+        LEFT JOIN account ac on t.acct_id = ac.acct_id and ac.status_cd = '0' and ac.obj_id = t.obj_id
         where 1 =1
         <if test="detailType !=null and detailType != ''">
             and t.detail_type= #{detailType}
@@ -224,6 +228,9 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="acctType !=null and acctType != ''">
+            and ac.acct_type= #{acctType}
         </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
