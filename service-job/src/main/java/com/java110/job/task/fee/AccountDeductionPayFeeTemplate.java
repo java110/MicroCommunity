@@ -149,8 +149,8 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
                 JSONArray fees = new JSONArray();
                 JSONObject fee = new JSONObject();
                 fee.put("feeId", tmpFeeDto.getFeeId());
-                fee.put("startTime", tmpFeeDto.getEndTime());
-                fee.put("endTime", tmpFeeDto.getDeadlineTime());
+                fee.put("startTime", DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(),DateUtil.DATE_FORMATE_STRING_A));
+                fee.put("endTime", DateUtil.getFormatTimeString(tmpFeeDto.getDeadlineTime(),DateUtil.DATE_FORMATE_STRING_A));
                 fee.put("receivedAmount", tmpFeeDto.getFeePrice());
                 fee.put("primeRate", "1");
                 fee.put("remark", "定时账户扣款缴费");
