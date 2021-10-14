@@ -63,17 +63,11 @@
         <if test="inTime !=null and inTime != ''">
             , t.in_time= #{inTime}
         </if>
-        <if test="paId !=null and paId != ''">
-            , t.pa_id= #{paId}
-        </if>
         <if test="carNum !=null and carNum != ''">
             , t.car_num= #{carNum}
         </if>
         <if test="state !=null and state != ''">
             , t.state= #{state}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
         </if>
         <if test="outTime !=null and outTime != ''">
             , t.out_time= #{outTime}
@@ -81,6 +75,12 @@
         where 1=1
         <if test="inoutId !=null and inoutId != ''">
             and t.inout_id= #{inoutId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

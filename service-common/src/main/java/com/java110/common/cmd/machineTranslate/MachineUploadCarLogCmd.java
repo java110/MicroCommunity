@@ -18,6 +18,7 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
 import com.java110.intf.common.ICarInoutDetailV1InnerServiceSMO;
+import com.java110.intf.common.ICarInoutPaymentV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
@@ -30,6 +31,7 @@ import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.CarInoutDetailPo;
 import com.java110.po.car.CarInoutPo;
 import com.java110.po.car.OwnerCarPo;
+import com.java110.po.carInoutPayment.CarInoutPaymentPo;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.OwnerPo;
@@ -94,6 +96,9 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
+    @Autowired
+    private ICarInoutPaymentV1InnerServiceSMO carInoutPaymentV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineCode", "必填，请填写设备编码");
@@ -129,12 +134,10 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
             tempCar = CAR_TYPE_NO_DATA;
         } else {
             reqJson.put("carId", ownerCarDtos.get(0).getCarId());
+            if (OwnerCarDto.CAR_TYPE_TEMP.equals(ownerCarDtos.get(0).getCarType())) {
+                tempCar = CAR_TYPE_TEMP;
+            }
         }
-
-        if (OwnerCarDto.CAR_TYPE_TEMP.equals(ownerCarDtos.get(0).getCarType())) {
-            tempCar = CAR_TYPE_TEMP;
-        }
-
 
         //进场处理
         if (MachineDto.DIRECTION_IN.equals(machineDtos.get(0).getDirection())) {
@@ -199,8 +202,30 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
 
         //将状态更新为 出场状态
 
+        CarInoutPo carInoutPo = new CarInoutPo();
+        carInoutPo.setPaId(carInoutDtos.get(0).getPaId());
+        carInoutPo.setOutTime(reqJson.getString("outTime"));
+        carInoutPo.setInoutId(carInoutDtos.get(0).getInoutId());
+        carInoutPo.setCommunityId(carInoutDtos.get(0).getCommunityId());
+        carInoutPo.setState(CarInoutDto.STATE_OUT);
+        flag = carInoutV1InnerServiceSMOImpl.updateCarInout(carInoutPo);
 
+        if (flag < 1) {
+            throw new CmdException("更新出场时间失败");
+        }
 
+        //写支付记录
+        CarInoutPaymentPo carInoutPaymentPo = new CarInoutPaymentPo();
+        carInoutPaymentPo.setCommunityId(carInoutDtos.get(0).getCommunityId());
+        carInoutPaymentPo.setInoutId(carInoutDtos.get(0).getInoutId());
+        carInoutPaymentPo.setPaId(carInoutDtos.get(0).getPaId());
+        carInoutPaymentPo.setPayCharge(reqJson.getString("payCharge"));
+        carInoutPaymentPo.setPayType(reqJson.getString("payType"));
+        carInoutPaymentPo.setRealCharge(reqJson.getString("realCharge"));
+        flag = carInoutPaymentV1InnerServiceSMOImpl.saveCarInoutPayment(carInoutPaymentPo);
+        if (flag < 1) {
+            throw new CmdException("更新出场时间失败");
+        }
     }
 
     /**
