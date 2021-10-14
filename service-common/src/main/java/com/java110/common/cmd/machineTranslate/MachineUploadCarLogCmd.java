@@ -216,6 +216,7 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
 
         //写支付记录
         CarInoutPaymentPo carInoutPaymentPo = new CarInoutPaymentPo();
+        carInoutPaymentPo.setPaymentId(GenerateCodeFactory.getGeneratorId("10"));
         carInoutPaymentPo.setCommunityId(carInoutDtos.get(0).getCommunityId());
         carInoutPaymentPo.setInoutId(carInoutDtos.get(0).getInoutId());
         carInoutPaymentPo.setPaId(carInoutDtos.get(0).getPaId());
