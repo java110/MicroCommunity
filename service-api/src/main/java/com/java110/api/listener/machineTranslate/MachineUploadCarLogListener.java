@@ -113,7 +113,6 @@ public class MachineUploadCarLogListener extends BaseMachineListener {
 
             machineTranslateBMOImpl.addCarInoutDetail(reqJson, context, reqJson.getString("communityId"), machineDto);
 
-
             reqJson.put("machineRecordId", reqJson.getString("detailId"));
             reqJson.put("relTypeCd", "15000");
             //保存文件信息

@@ -1,32 +1,38 @@
 {
   "param": {
-    "keyId": "key_id",
-    "remark": "remark",
+    "realCharge": "real_charge",
+    "inoutId": "inout_id",
+    "payType": "pay_type",
+    "paymentId": "payment_id",
+    "paId": "pa_id",
     "statusCd": "status_cd",
-    "settingKey": "setting_key",
-    "settingType": "setting_type",
-    "settingName": "setting_name"
+    "communityId": "community_id",
+    "payCharge": "pay_charge"
   },
-  "name": "communitySettingKey",
-  "shareColumn": "key_id",
-  "id": "keyId",
-  "shareName": "community",
+  "name": "carInoutPayment",
+  "shareColumn": "community_id",
+  "id": "paymentId",
+  "shareName": "common",
   "autoMove": true,
   "required": [
     {
-      "msg": "设置类型不能为空",
-      "code": "settingType"
+      "msg": "进出ID不能为空",
+      "code": "inoutId"
     },
     {
-      "msg": "名称不能为空",
-      "code": "settingName"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
     },
     {
-      "msg": "设置key不能为空",
-      "code": "settingKey"
+      "msg": "paId不能为空",
+      "code": "paId"
+    },
+    {
+      "msg": "支付方式不能为空",
+      "code": "payType"
     }
   ],
-  "desc": "小区配置",
-  "shareParam": "keyId",
-  "tableName": "community_setting_key"
+  "desc": "车辆支付",
+  "shareParam": "communityId",
+  "tableName": "car_inout_payment"
 }

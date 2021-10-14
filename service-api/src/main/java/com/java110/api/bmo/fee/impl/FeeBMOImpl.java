@@ -162,7 +162,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-        if (!businessFeeDetail.containsKey("state")) {
+        if (!businessFeeDetail.containsKey("state") || StringUtil.isEmpty(businessFeeDetail.getString("state"))) {
             businessFeeDetail.put("state", "1400");
         }
         feeDto = feeDtos.get(0);
@@ -223,7 +223,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-        if (!businessFeeDetail.containsKey("state")) {
+        if (!businessFeeDetail.containsKey("state") || StringUtil.isEmpty(businessFeeDetail.getString("state"))) {
             businessFeeDetail.put("state", "1400");
         }
         feeDto = feeDtos.get(0);

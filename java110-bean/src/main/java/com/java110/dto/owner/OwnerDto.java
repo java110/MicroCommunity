@@ -25,6 +25,9 @@ public class OwnerDto extends PageDto implements Serializable {
     public static final String OWNER_FLAG_TRUE = "T";//业主标识 T是真实业主 F 是虚拟业主
     public static final String OWNER_FLAG_FALSE = "F";//业主标识 T是真实业主 F 是虚拟业主
 
+    // 1000 表示待审核，2000 审核完成  3000 拒绝审核
+    public static final String STATE_FINISH = "2000";
+
 
     private String communityId;
 

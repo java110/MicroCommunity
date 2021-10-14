@@ -7,14 +7,16 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "create table community_setting_key(\n" +
-            "  key_id varchar(30) not null PRIMARY key comment '编号',\n" +
-            "  `setting_type` varchar(30) NOT NULL COMMENT '设置类型',\n" +
-            "  `setting_name` varchar(64) NOT NULL COMMENT '名称',\n" +
-            "  `setting_key` varchar(30) NOT NULL COMMENT '设置key',\n" +
-            "  `remark` varchar(512) DEFAULT NULL COMMENT '备注信息',\n" +
+    public static final String createTableSql = "CREATE TABLE `car_inout_payment` (\n" +
+            "  `payment_id` varchar(30) NOT NULL COMMENT '扩展ID',\n" +
+            "  `inout_id` varchar(30) NOT NULL COMMENT '进出ID',\n" +
+            "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
+            "  `pa_id` varchar(30) NOT NULL DEFAULT '停车场ID',\n" +
+            "  `pay_type` varchar(12) NOT NULL COMMENT '支付方式 1，现金 2 微信，3 支付宝',\n" +
+            "  `pay_charge` varchar(12) DEFAULT NULL COMMENT '应收金额',\n" +
+            "  `real_charge` varchar(12) DEFAULT NULL COMMENT '实收金额',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态0正常1失效'\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'\n" +
             ")";
 
     public static void main(String[] args) {
@@ -27,12 +29,12 @@ public class TableToJson {
         String[] rowSqls = newSql.split("',");
         JSONObject param = new JSONObject();
         param.put("autoMove", true);
-        param.put("desc", "小区配置");
-        param.put("id", "keyId");
-        param.put("name", "communitySettingKey");
-        param.put("shareColumn", "key_id");
-        param.put("shareName", "community");
-        param.put("shareParam", "keyId");
+        param.put("desc", "车辆支付");
+        param.put("id", "paymentId");
+        param.put("name", "carInoutPayment");
+        param.put("shareColumn", "community_id");
+        param.put("shareName", "common");
+        param.put("shareParam", "communityId");
         param.put("tableName", tableName);
         JSONObject paramColumn = new JSONObject();
         JSONArray requireds = new JSONArray();
@@ -74,7 +76,6 @@ public class TableToJson {
         param.put("param", paramColumn);
         param.put("required", requireds);
         System.out.println(param.toJSONString());
-
     }
 
 }
