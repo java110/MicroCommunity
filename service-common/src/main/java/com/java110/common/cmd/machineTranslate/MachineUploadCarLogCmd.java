@@ -424,6 +424,7 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
         ownerCarPo.setPsId("-1");
         ownerCarPo.setMemberId(ownerCarPo.getCarId());
         ownerCarPo.setCarTypeCd(OwnerCarDto.CAR_TYPE_CD_TEMP);
+        ownerCarPo.setCarType("9901");
         ownerCarPo.setCarBrand("未知");
         ownerCarPo.setCarColor("未知");
         ownerCarPo.setCarNum(reqJson.getString("carNum"));
