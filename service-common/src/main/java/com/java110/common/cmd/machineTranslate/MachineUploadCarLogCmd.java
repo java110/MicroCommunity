@@ -134,7 +134,7 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
             tempCar = CAR_TYPE_NO_DATA;
         } else {
             reqJson.put("carId", ownerCarDtos.get(0).getCarId());
-            if (OwnerCarDto.CAR_TYPE_TEMP.equals(ownerCarDtos.get(0).getCarType())) {
+            if (OwnerCarDto.CAR_TYPE_TEMP.equals(ownerCarDtos.get(0).getCarTypeCd())) {
                 tempCar = CAR_TYPE_TEMP;
             }
         }
