@@ -226,6 +226,38 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
         if (flag < 1) {
             throw new CmdException("更新出场时间失败");
         }
+
+        //月租车
+        if (tempCar != CAR_TYPE_NO_DATA && tempCar != CAR_TYPE_TEMP) {
+            return;
+        }
+
+        //临时车时查看 是否有费用没有结束，可能是半小时免费 问题 或者时 其他原因 将费用结束
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_CAR_INOUT_ID);
+        feeAttrDto.setValue(carInoutPo.getInoutId());
+        feeAttrDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return;
+        }
+        FeeDto feeDto = new FeeDto();
+        feeDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
+        feeDto.setFeeId(feeAttrDtos.get(0).getFeeId());
+        feeDto.setState(FeeDto.STATE_DOING);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        if (feeDtos == null || feeDtos.size() < 1) {
+            return;
+        }
+        PayFeePo payFeePo = new PayFeePo();
+        payFeePo.setState(FeeDto.STATE_FINISH);
+        payFeePo.setFeeId(feeDtos.get(0).getFeeId());
+        payFeePo.setCommunityId(feeDtos.get(0).getCommunityId());
+        flag = feeInnerServiceSMOImpl.updateFee(payFeePo);
+        if (flag < 1) {
+            throw new CmdException("更新出场时间失败");
+        }
     }
 
     /**
@@ -249,6 +281,7 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
         if (flag < 1) {
             throw new CmdException("保存入记录失败");
         }
+        reqJson.put("inoutId", carInoutPo.getInoutId());
 
         //保存明细
         CarInoutDetailPo carInoutDetailPo = new CarInoutDetailPo();
@@ -366,6 +399,13 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
         feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
         feeAttrPo.setValue("11111111111");
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPos.add(feeAttrPo);
+        feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_CAR_INOUT_ID);
+        feeAttrPo.setValue(reqJson.getString("inoutId"));
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
         int flag = feeInnerServiceSMOImpl.saveFee(payFeePos);

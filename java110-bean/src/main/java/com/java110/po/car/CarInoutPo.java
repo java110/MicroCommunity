@@ -18,7 +18,7 @@ public class CarInoutPo implements Serializable {
     private String state;
     private String inTime;
     private String outTime;
-    private String statusCd;
+    private String statusCd = "0";
     private String paId;
 
 
