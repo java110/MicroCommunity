@@ -23,6 +23,7 @@ import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.intf.user.IBuildingOwnerV1InnerServiceSMO;
@@ -33,6 +34,7 @@ import com.java110.po.car.CarInoutPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.carInoutPayment.CarInoutPaymentPo;
 import com.java110.po.fee.FeeAttrPo;
+import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.OwnerPo;
 import com.java110.utils.exception.CmdException;
@@ -98,6 +100,9 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private ICarInoutPaymentV1InnerServiceSMO carInoutPaymentV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -169,18 +174,9 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
         List<CarInoutDto> carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
 
         if (carInoutDtos == null || carInoutDtos.size() < 1) {
-            //可能车辆异常情况 没有 进场 记录 补一条 carInout
-            CarInoutPo carInoutPo = new CarInoutPo();
-            carInoutPo.setCarNum(reqJson.getString("carNum"));
-            carInoutPo.setCommunityId(reqJson.getString("communityId"));
-            carInoutPo.setInoutId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-            carInoutPo.setInTime(reqJson.getString("outTime"));
-            carInoutPo.setState(CarInoutDto.STATE_IN);
-            carInoutPo.setPaId(machineDto.getLocationObjId());
-            int flag = carInoutV1InnerServiceSMOImpl.saveCarInout(carInoutPo);
-            if (flag < 1) {
-                throw new CmdException("出场保存记录失败");
-            }
+            //可能车辆异常情况 没有 进场 补充进场记录
+            reqJson.put("inTime", reqJson.getString("outTime"));
+            carIn(reqJson, machineDto, tempCar);
             carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
         }
 
@@ -233,32 +229,76 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
             return;
         }
 
-        //临时车时查看 是否有费用没有结束，可能是半小时免费 问题 或者时 其他原因 将费用结束
-        FeeAttrDto feeAttrDto = new FeeAttrDto();
-        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_CAR_INOUT_ID);
-        feeAttrDto.setValue(carInoutPo.getInoutId());
-        feeAttrDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
-        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+        //如果有费用 则缴费
+        boolean hasFee = hasFeeAndPayFee(carInoutDtos.get(0), reqJson, carInoutPo, carInoutPaymentPo);
 
-        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+        double realCharge = Double.parseDouble(carInoutPaymentPo.getRealCharge());
+
+        //有费用 或者 缴费为0 时结束
+        if (hasFee || realCharge == 0) {
             return;
         }
-        FeeDto feeDto = new FeeDto();
-        feeDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
-        feeDto.setFeeId(feeAttrDtos.get(0).getFeeId());
-        feeDto.setState(FeeDto.STATE_DOING);
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (feeDtos == null || feeDtos.size() < 1) {
+        // 判断是否存在 临时车 虚拟业主
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
+        ownerDto.setOwnerFlag(OwnerDto.OWNER_FLAG_FALSE);
+        ownerDto.setName(TEMP_CAR_OWNER);
+        List<OwnerDto> ownerDtos = buildingOwnerV1InnerServiceSMOImpl.queryBuildingOwners(ownerDto);
+        if (ownerDtos == null || ownerDtos.size() < 1) {
             return;
+        }
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("inTime", carInoutDtos.get(0).getInTime());
+        paramIn.put("carId", reqJson.getString("carId"));
+        paramIn.put("communityId", carInoutDtos.get(0).getCommunityId());
+        paramIn.put("inoutId", carInoutDtos.get(0).getInoutId());
+        paramIn.put("ownerId", ownerDtos.get(0).getMemberId());
+        saveTempCarFee(paramIn, machineDto);
+
+        //再去缴费
+        hasFeeAndPayFee(carInoutDtos.get(0), reqJson, carInoutPo, carInoutPaymentPo);
+    }
+
+    private boolean hasFeeAndPayFee(CarInoutDto carInoutDto, JSONObject reqJson, CarInoutPo carInoutPo, CarInoutPaymentPo carInoutPaymentPo) {
+
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setCommunityId(carInoutPo.getCommunityId());
+        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_CAR_INOUT_ID);
+        feeAttrDto.setValue(carInoutPo.getInoutId());
+        feeAttrDto.setState(FeeDto.STATE_DOING);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFeeByAttr(feeAttrDto);
+        if (feeDtos == null || feeDtos.size() < 1) {
+            return false;
         }
         PayFeePo payFeePo = new PayFeePo();
         payFeePo.setState(FeeDto.STATE_FINISH);
         payFeePo.setFeeId(feeDtos.get(0).getFeeId());
+        payFeePo.setEndTime(carInoutPo.getOutTime());
         payFeePo.setCommunityId(feeDtos.get(0).getCommunityId());
-        flag = feeInnerServiceSMOImpl.updateFee(payFeePo);
+        int flag = feeInnerServiceSMOImpl.updateFee(payFeePo);
         if (flag < 1) {
-            throw new CmdException("更新出场时间失败");
+            throw new CmdException("更新费用失败");
         }
+
+
+        PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
+        payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        payFeeDetailPo.setPrimeRate("1.00");
+        FeeDto feeDto = feeDtos.get(0);
+        payFeeDetailPo.setStartTime(DateUtil.getFormatTimeString(feeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+        payFeeDetailPo.setEndTime(carInoutPo.getOutTime());
+        payFeeDetailPo.setCommunityId(carInoutDto.getCommunityId());
+        payFeeDetailPo.setCycles("1");
+        payFeeDetailPo.setReceivableAmount(carInoutPaymentPo.getPayCharge());
+        payFeeDetailPo.setReceivedAmount(carInoutPaymentPo.getRealCharge());
+        payFeeDetailPo.setFeeId(feeDto.getFeeId());
+
+        flag = feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
+        if (flag < 1) {
+            throw new CmdException("更新费用失败");
+        }
+        return true;
     }
 
     /**
@@ -326,18 +366,7 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
             saveTempCar(reqJson, machineDto);
         }
 
-        //创建费用
-        TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
-        tempCarFeeConfigDto.setCommunityId(reqJson.getString("communityId"));
-        tempCarFeeConfigDto.setPaId(machineDto.getLocationObjId());
-
-        List<TempCarFeeConfigDto> tempCarFeeConfigDtos = tempCarFeeConfigInnerServiceSMOImpl.queryTempCarFeeConfigs(tempCarFeeConfigDto);
-
-        if (tempCarFeeConfigDtos == null || tempCarFeeConfigDtos.size() < 1) { // 停车场未配置收费规则 则不创建费用
-            return;
-        }
-
-        saveTempCarFee(reqJson, machineDto, tempCarFeeConfigDtos.get(0));
+        saveTempCarFee(reqJson, machineDto);
     }
 
     /**
@@ -345,9 +374,19 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
      *
      * @param reqJson
      * @param machineDto
-     * @param tempCarFeeConfigDto
      */
-    private void saveTempCarFee(JSONObject reqJson, MachineDto machineDto, TempCarFeeConfigDto tempCarFeeConfigDto) {
+    private void saveTempCarFee(JSONObject reqJson, MachineDto machineDto) {
+
+        //创建费用
+        TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
+        tempCarFeeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        tempCarFeeConfigDto.setPaId(machineDto.getLocationObjId());
+        List<TempCarFeeConfigDto> tempCarFeeConfigDtos = tempCarFeeConfigInnerServiceSMOImpl.queryTempCarFeeConfigs(tempCarFeeConfigDto);
+
+        if (tempCarFeeConfigDtos == null || tempCarFeeConfigDtos.size() < 1) { // 停车场未配置收费规则 则不创建费用
+            return;
+        }
+
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(reqJson.getString("communityId"));
         communityMemberDto.setMemberTypeCd(CommunityMemberDto.MEMBER_TYPE_PROPERTY);
@@ -480,7 +519,5 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
         }
 
         reqJson.put("carId", ownerCarPo.getCarId());
-
-
     }
 }
