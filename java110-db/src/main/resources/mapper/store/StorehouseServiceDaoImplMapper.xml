@@ -7,9 +7,9 @@
     <!-- 保存仓库信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStorehouseInfo" parameterType="Map">
         insert into business_storehouse(
-        sh_desc,sh_type,sh_obj_id,operate,sh_id,sh_name,b_id,store_id
+        sh_desc,sh_type,sh_obj_id,operate,sh_id,sh_name,b_id,store_id,is_show
         ) values (
-        #{shDesc},#{shType},#{shObjId},#{operate},#{shId},#{shName},#{bId},#{storeId}
+        #{shDesc},#{shType},#{shObjId},#{operate},#{shId},#{shName},#{bId},#{storeId},#{isShow}
         )
     </insert>
 
@@ -17,7 +17,7 @@
     <select id="getBusinessStorehouseInfo" parameterType="Map" resultType="Map">
         select t.sh_desc,t.sh_desc shDesc,t.sh_type,t.sh_type shType,t.sh_obj_id,t.sh_obj_id
         shObjId,t.operate,t.sh_id,t.sh_id shId,t.sh_name,t.sh_name shName,t.b_id,t.b_id bId,t.store_id,t.store_id
-        storeId
+        storeId,t.is_show,t.is_show isShow
         from business_storehouse t
         where 1 =1
         <if test="shDesc !=null and shDesc != ''">
@@ -44,13 +44,17 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
     </select>
 
     <!-- 保存仓库信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveStorehouseInfoInstance" parameterType="Map">
         insert into storehouse(
-        sh_desc,sh_type,sh_obj_id,sh_id,status_cd,sh_name,b_id,store_id
-        ) select t.sh_desc,t.sh_type,t.sh_obj_id,t.sh_id,'0',t.sh_name,t.b_id,t.store_id from business_storehouse t
+        sh_desc,sh_type,sh_obj_id,sh_id,status_cd,sh_name,b_id,store_id,is_show
+        ) select t.sh_desc,t.sh_type,t.sh_obj_id,t.sh_id,'0',t.sh_name,t.b_id,t.store_id,t.is_show
+        from business_storehouse t
         where 1=1
         <if test="shDesc !=null and shDesc != ''">
             and t.sh_desc= #{shDesc}
@@ -74,13 +78,16 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
     </insert>
 
     <!-- 查询仓库信息 add by wuxw 2018-07-03 -->
     <select id="getStorehouseInfo" parameterType="Map" resultType="Map">
         select t.sh_desc,t.sh_desc shDesc,t.sh_type,t.sh_type shType,t.sh_obj_id,t.sh_obj_id shObjId,t.sh_id,t.sh_id
-        shId,t.status_cd,t.status_cd statusCd,t.sh_name,t.sh_name shName,t.b_id,t.b_id bId,t.store_id,t.store_id storeId,
-        t.create_time createTime
+        shId,t.status_cd,t.status_cd statusCd,t.sh_name,t.sh_name shName,t.b_id,t.b_id bId,t.store_id,t.store_id
+        storeId,t.is_show,t.is_show isShow,t.create_time createTime
         from storehouse t
         where 1 =1
         <if test="shDesc !=null and shDesc != ''">
@@ -113,6 +120,9 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -139,6 +149,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             , t.store_id= #{storeId}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            , t.is_show= #{isShow}
         </if>
         where 1=1
         <if test="shId !=null and shId != ''">
@@ -183,6 +196,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
         </if>
     </select>
 </mapper>

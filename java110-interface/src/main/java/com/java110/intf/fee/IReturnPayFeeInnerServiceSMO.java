@@ -32,6 +32,24 @@ public interface IReturnPayFeeInnerServiceSMO {
     List<ReturnPayFeeDto> queryReturnPayFees(@RequestBody ReturnPayFeeDto returnPayFeeDto);
 
     /**
+     * <p>查询小区楼信息</p>
+     *
+     * @param returnPayFeeDto 数据对象分享
+     * @return ReturnPayFeeDto 对象数据
+     */
+    @RequestMapping(value = "/queryRoomReturnPayFees", method = RequestMethod.POST)
+    List<ReturnPayFeeDto> queryRoomReturnPayFees(@RequestBody ReturnPayFeeDto returnPayFeeDto);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     * @param returnPayFeeDto 数据对象分享
+     * @return ReturnPayFeeDto 对象数据
+     */
+    @RequestMapping(value = "/queryCarReturnPayFees", method = RequestMethod.POST)
+    List<ReturnPayFeeDto> queryCarReturnPayFees(@RequestBody ReturnPayFeeDto returnPayFeeDto);
+
+    /**
      * 查询<p>小区楼</p>总记录数
      *
      * @param returnPayFeeDto 数据对象分享

@@ -1066,7 +1066,7 @@
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee_detail_discount pfdd on t.detail_id = pfdd.detail_id and pfdd.status_cd = '0'
         left join fee_discount fd on pfdd.discount_id = fd.discount_id and fd.status_cd = '0'
@@ -1137,14 +1137,14 @@
         importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name
         ruleName,pfdd.discount_price discountPrice,co.contract_code contractCode,pfo.`value` ownerName,cb.o_id oId,
         d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,t.state,d3.name stateName,t.fee_id feeId,pft.`value` repairId,
-        t.detail_id,t.detail_id detailId
+        t.detail_id,t.detail_id detailId,pf.payer_obj_id
         from pay_fee_detail t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee_attrs pfo on t.fee_id = pfo.fee_id and pfo.spec_cd = '390008'
         left join pay_fee_attrs pft on t.fee_id = pft.fee_id and pft.spec_cd = '390001'
@@ -1875,7 +1875,7 @@
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join owner_car oc on t.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and oc.car_type_cd='1001'
         where 1 = 1
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}

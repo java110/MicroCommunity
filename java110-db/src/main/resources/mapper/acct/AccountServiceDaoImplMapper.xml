@@ -184,7 +184,6 @@
         <if test="hasMoney !=null and hasMoney != ''">
             and t.amount > 0
         </if>
-
         <if test="acctType !=null and acctType != ''">
             and t.acct_type= #{acctType}
         </if>
@@ -209,8 +208,6 @@
         <if test="partId !=null and partId != ''">
             and t.part_id= #{partId}
         </if>
-
-
     </select>
 
 

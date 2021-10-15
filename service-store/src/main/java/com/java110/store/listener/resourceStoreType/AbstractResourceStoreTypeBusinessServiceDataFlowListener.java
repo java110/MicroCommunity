@@ -41,6 +41,7 @@ public abstract class AbstractResourceStoreTypeBusinessServiceDataFlowListener e
         businessResourceStoreTypeInfo.put("name", businessResourceStoreTypeInfo.get("name"));
         businessResourceStoreTypeInfo.put("description", businessResourceStoreTypeInfo.get("description"));
         businessResourceStoreTypeInfo.put("storeId", businessResourceStoreTypeInfo.get("store_id"));
+        businessResourceStoreTypeInfo.put("parentId", businessResourceStoreTypeInfo.get("parent_id"));
         businessResourceStoreTypeInfo.remove("bId");
         businessResourceStoreTypeInfo.put("statusCd", statusCd);
     }
@@ -69,7 +70,7 @@ public abstract class AbstractResourceStoreTypeBusinessServiceDataFlowListener e
         currentResourceStoreTypeInfo.put("name", currentResourceStoreTypeInfo.get("name"));
         currentResourceStoreTypeInfo.put("description", currentResourceStoreTypeInfo.get("description"));
         currentResourceStoreTypeInfo.put("storeId", currentResourceStoreTypeInfo.get("store_id"));
-
+        currentResourceStoreTypeInfo.put("parentId", currentResourceStoreTypeInfo.get("parent_id"));
         currentResourceStoreTypeInfo.put("operate", StatusConstant.OPERATE_DEL);
         getResourceStoreTypeServiceDaoImpl().saveBusinessResourceStoreTypeInfo(currentResourceStoreTypeInfo);
         for (Object key : currentResourceStoreTypeInfo.keySet()) {

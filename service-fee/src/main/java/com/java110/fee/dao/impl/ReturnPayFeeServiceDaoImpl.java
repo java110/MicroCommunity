@@ -94,6 +94,38 @@ public class ReturnPayFeeServiceDaoImpl extends BaseServiceDao implements IRetur
         return businessReturnPayFeeInfos;
     }
 
+    /**
+     * 查询退费表信息（instance）
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getRoomReturnPayFeeInfo(Map info) throws DAOException {
+        logger.debug("查询退费表信息 入参 info : {}", info);
+
+        List<Map> businessReturnPayFeeInfos = sqlSessionTemplate.selectList("returnPayFeeServiceDaoImpl.getRoomReturnPayFeeInfo", info);
+
+        return businessReturnPayFeeInfos;
+    }
+
+    /**
+     * 查询退费表信息（instance）
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getCarReturnPayFeeInfo(Map info) throws DAOException {
+        logger.debug("查询退费表信息 入参 info : {}", info);
+
+        List<Map> businessReturnPayFeeInfos = sqlSessionTemplate.selectList("returnPayFeeServiceDaoImpl.getCarReturnPayFeeInfo", info);
+
+        return businessReturnPayFeeInfos;
+    }
+
 
     /**
      * 修改退费表信息

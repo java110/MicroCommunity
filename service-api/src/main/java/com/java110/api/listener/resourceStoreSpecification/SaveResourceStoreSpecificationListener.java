@@ -33,6 +33,9 @@ public class SaveResourceStoreSpecificationListener extends AbstractServiceApiPl
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        if (reqJson.containsKey("rsId") && !reqJson.getString("rsId").equals("")) {
+            reqJson.put("rstId", reqJson.getString("rsId"));
+        }
         resourceStoreSpecificationBMOImpl.addResourceStoreSpecification(reqJson, context);
     }
 

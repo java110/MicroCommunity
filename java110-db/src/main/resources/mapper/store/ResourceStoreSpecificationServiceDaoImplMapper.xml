@@ -7,9 +7,9 @@
     <!-- 保存物品规格信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceStoreSpecificationInfo" parameterType="Map">
            insert into business_resource_store_specification(
-            rss_id,rst_id,operate,spec_name,description,b_id,store_id
+            rss_id,rst_id,operate,spec_name,description,b_id,store_id,parent_rst_id
             ) values (
-            #{rssId},#{rstId},#{operate},#{specName},#{description},#{bId},#{storeId}
+            #{rssId},#{rstId},#{operate},#{specName},#{description},#{bId},#{storeId},#{parentRstId}
             )
        </insert>
 
@@ -17,7 +17,7 @@
     <!-- 查询物品规格信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessResourceStoreSpecificationInfo" parameterType="Map" resultType="Map">
         select t.rss_id,t.rss_id rssId,t.rst_id,t.rst_id rstId,t.operate,t.spec_name,t.spec_name
-        specName,t.description,t.b_id,t.b_id bId,t.store_id,t.store_id storeId
+        specName,t.description,t.b_id,t.b_id bId,t.store_id,t.store_id storeId,t.parent_rst_id,t.parent_rst_id parentRstId
         from business_resource_store_specification t
         where 1 =1
         <if test="rssId !=null and rssId != ''">
@@ -25,6 +25,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
         </if>
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
@@ -48,14 +51,17 @@
     <!-- 保存物品规格信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreSpecificationInfoInstance" parameterType="Map">
         insert into resource_store_specification(
-        rss_id,rst_id,spec_name,description,status_cd,b_id,store_id
-        ) select t.rss_id,t.rst_id,t.spec_name,t.description,'0',t.b_id,t.store_id from
+        rss_id,rst_id,spec_name,description,status_cd,b_id,store_id,parent_rst_id
+        ) select t.rss_id,t.rst_id,t.spec_name,t.description,'0',t.b_id,t.store_id,t.parent_rst_id from
         business_resource_store_specification t where 1=1
         <if test="rssId !=null and rssId != ''">
             and t.rss_id= #{rssId}
         </if>
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
         </if>
         and t.operate= 'ADD'
         <if test="specName !=null and specName != ''">
@@ -78,14 +84,19 @@
     <select id="getResourceStoreSpecificationInfo" parameterType="Map" resultType="Map">
         select t.rss_id,t.rss_id rssId,t.rst_id,t.rst_id rstId,t.spec_name,t.spec_name
         specName,t.description,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.store_id,t.store_id
-        storeId,rst.name,rst.name rstName
-        from resource_store_specification t left join resource_store_type rst on t.rst_id=rst.rst_id
+        storeId,rst.name,rst.name rstName,t.parent_rst_id,t.parent_rst_id parentRstId,rst1.name parentRstName
+        from resource_store_specification t
+        left join resource_store_type rst on t.rst_id=rst.rst_id
+        left join resource_store_type rst1 on t.parent_rst_id=rst1.rst_id
         where 1 =1
         <if test="rssId !=null and rssId != ''">
             and t.rss_id= #{rssId}
         </if>
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
         </if>
         <if test="specName !=null and specName != ''">
             and t.spec_name like '%${specName}%'
@@ -119,6 +130,9 @@
         <if test="rstId !=null and rstId != ''">
             , t.rst_id= #{rstId}
         </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            , t.parent_rst_id= #{parentRstId}
+        </if>
         <if test="specName !=null and specName != ''">
             , t.spec_name= #{specName}
         </if>
@@ -148,6 +162,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
         </if>
         <if test="specName !=null and specName != ''">
             and t.spec_name like '%${specName}%'

@@ -8,6 +8,7 @@ import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeReturnPayFeeConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeDataVo;
@@ -19,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * 查询小区侦听类
@@ -71,8 +71,26 @@ public class ListReturnPayFeesListener extends AbstractServiceApiListener {
 
         if (count > 0) {
             //注意这里处理 记得测试退费逻辑
-
-            returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto), ApiReturnPayFeeDataVo.class);
+            List<ReturnPayFeeDto> returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
+            List<ReturnPayFeeDto> returnPayFeeDtoList = new ArrayList<>();
+            for (ReturnPayFeeDto returnPayFee : returnPayFeeDtos) {
+                //获取付款方标识
+                String payerObjType = returnPayFee.getPayerObjType();
+                if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("3333")) { //房屋
+                    returnPayFeeDto.setReturnFeeId(returnPayFee.getReturnFeeId());
+                    List<ReturnPayFeeDto> returnPayFeeList = returnPayFeeInnerServiceSMOImpl.queryRoomReturnPayFees(returnPayFeeDto);
+                    Assert.listOnlyOne(returnPayFeeList, "查询退费信息错误！");
+                    returnPayFeeDtoList.add(returnPayFeeList.get(0));
+                } else if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) { //车辆
+                    returnPayFeeDto.setReturnFeeId(returnPayFee.getReturnFeeId());
+                    List<ReturnPayFeeDto> returnPayFeeList = returnPayFeeInnerServiceSMOImpl.queryCarReturnPayFees(returnPayFeeDto);
+                    Assert.listOnlyOne(returnPayFeeList, "查询退费信息错误！");
+                    returnPayFeeDtoList.add(returnPayFeeList.get(0));
+                } else {
+                    continue;
+                }
+            }
+            returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeDtoList, ApiReturnPayFeeDataVo.class);
         } else {
             returnPayFees = new ArrayList<>();
         }

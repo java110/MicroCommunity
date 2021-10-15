@@ -170,12 +170,13 @@
         t.community_id,t.community_id communityId,
         t.create_time,t.create_time createTime,
         d.name feeTypeCdName,
-        c.name stateName
+        c.name stateName,
+        pf.payer_obj_type payerObjType
         from return_pay_fee t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
         inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
-        where 1 =1
+        where 1 = 1
         <if test="reason !=null and reason != ''">
             and t.reason= #{reason}
         </if>
@@ -228,7 +229,188 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+    </select>
 
+    <!-- 查询退费表信息 add by wuxw 2018-07-03 -->
+    <select id="getRoomReturnPayFeeInfo" parameterType="Map" resultType="Map">
+        select
+        t.reason,
+        t.prime_rate,t.prime_rate primeRate,
+        t.fee_type_cd,t.fee_type_cd feeTypeCd,
+        t.pay_time,t.pay_time payTime,
+        t.detail_id,t.detail_id detailId,
+        t.receivable_amount,t.receivable_amount receivableAmount,
+        t.cycles,
+        t.remark,
+        t.status_cd,t.status_cd statusCd,
+        t.received_amount,t.received_amount receivedAmount,
+        t.fee_id,t.fee_id feeId,
+        t.return_fee_id,t.return_fee_id returnFeeId,
+        t.config_id,t.config_id configId,
+        t.state,
+        t.b_id,t.b_id bId,
+        t.community_id,t.community_id communityId,
+        t.create_time,t.create_time createTime,
+        d.name feeTypeCdName,
+        c.name stateName,
+        pf.payer_obj_type payerObjType,
+        br.room_id roomId,
+        br.room_num roomNum,
+        bu.unit_id unitId,
+        bu.unit_num unitNum,
+        fl.floor_id floorId,
+        fl.floor_num floorNum
+        from return_pay_fee t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
+        inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
+        left join building_room br on pf.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor fl on fl.floor_id = bu.floor_id and bu.status_cd = '0'
+        where 1 = 1
+        <if test="reason !=null and reason != ''">
+            and t.reason= #{reason}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="payTime !=null and payTime != ''">
+            and t.pay_time= #{payTime}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            and t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="returnFeeId !=null and returnFeeId != ''">
+            and t.return_fee_id= #{returnFeeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询退费表信息 add by wuxw 2018-07-03 -->
+    <select id="getCarReturnPayFeeInfo" parameterType="Map" resultType="Map">
+        select
+        t.reason,
+        t.prime_rate,t.prime_rate primeRate,
+        t.fee_type_cd,t.fee_type_cd feeTypeCd,
+        t.pay_time,t.pay_time payTime,
+        t.detail_id,t.detail_id detailId,
+        t.receivable_amount,t.receivable_amount receivableAmount,
+        t.cycles,
+        t.remark,
+        t.status_cd,t.status_cd statusCd,
+        t.received_amount,t.received_amount receivedAmount,
+        t.fee_id,t.fee_id feeId,
+        t.return_fee_id,t.return_fee_id returnFeeId,
+        t.config_id,t.config_id configId,
+        t.state,
+        t.b_id,t.b_id bId,
+        t.community_id,t.community_id communityId,
+        t.create_time,t.create_time createTime,
+        d.name feeTypeCdName,
+        c.name stateName,
+        pf.payer_obj_type payerObjType,
+        oc.car_id carId,
+        oc.car_num carNum,
+        ps.ps_id psId,
+        ps.num psNum,
+        pa.pa_id paId,
+        pa.num paNum
+        from return_pay_fee t
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
+        inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
+        left join owner_car oc on pf.payer_obj_id = oc.car_id
+        left join parking_space ps on oc.ps_id = ps.ps_id and ps.status_cd = '0'
+        left join parking_area pa on pa.pa_id = ps.pa_id and pa.status_cd = '0'
+        where 1 = 1
+        <if test="reason !=null and reason != ''">
+            and t.reason= #{reason}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="payTime !=null and payTime != ''">
+            and t.pay_time= #{payTime}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            and t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="returnFeeId !=null and returnFeeId != ''">
+            and t.return_fee_id= #{returnFeeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
     </select>
 
 

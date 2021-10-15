@@ -222,6 +222,7 @@ public class RoomRenovationApi {
                 payFeePo.setState(FeeDto.STATE_DOING);
                 payFeePo.setConfigId(configId);
                 payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+                payFeePo.setBatchId("-1");
                 payFeePos.add(payFeePo);
                 FeeAttrPo feeAttrPo1 = new FeeAttrPo();
                 feeAttrPo1.setFeeId(payFeePo.getFeeId());

@@ -66,6 +66,10 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String miniUnitStock;
     //最小计量总数
     private String miniStock;
+    private String parentRstId;
+    private String parentRstName;
+    //仓库是否对外开放 true是 false否
+    private String isShow;
 
     public String getResName() {
         return resName;
@@ -346,5 +350,29 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setMiniStock(String miniStock) {
         this.miniStock = miniStock;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
+    }
+
+    public String getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(String isShow) {
+        this.isShow = isShow;
     }
 }

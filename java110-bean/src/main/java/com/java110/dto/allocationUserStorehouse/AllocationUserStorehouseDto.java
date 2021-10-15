@@ -29,8 +29,10 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
     private String statusCd = "0";
     private String giveQuantity;
     private String rstName;
+    private String parentRstName;
     private String specName;
     private String rstId;
+    private String parentRstId;
     private String rssId;
     //转赠总数量(小计)
     private String subTotalQuantity;
@@ -207,5 +209,21 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
 
     public void setMiniUnitCodeName(String miniUnitCodeName) {
         this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
     }
 }

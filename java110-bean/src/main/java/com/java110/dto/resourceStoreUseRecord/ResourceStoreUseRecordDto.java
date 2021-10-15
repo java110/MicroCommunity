@@ -28,8 +28,10 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
     private String resName;
     private Date createTime;
     private String rstName;
+    private String parentRstName;
     private String specName;
     private String rstId;
+    private String parentRstId;
     private String rssId;
     private String resourceStoreName;
     private String startTime;
@@ -213,5 +215,21 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
 
     public void setMiniUnitCodeName(String miniUnitCodeName) {
         this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
     }
 }

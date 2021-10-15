@@ -36,6 +36,7 @@ public class ResourceStorePo implements Serializable {
     private String purchasePrice;
     private String resOrderType;
     private String rstId;
+    private String parentRstId;
     private String rstName;
     private String rssId;
     private String rssName;
@@ -285,5 +286,13 @@ public class ResourceStorePo implements Serializable {
 
     public void setMiniStock(String miniStock) {
         this.miniStock = miniStock;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
     }
 }

@@ -39,6 +39,9 @@ public class SaveResourceStoreListener extends AbstractServiceApiPlusListener {
         if (outLowPrice > outHighPrice) {
             throw new IllegalArgumentException("最低收费标准不能大于最高收费标准！");
         }
+        if (reqJson.containsKey("rsId") && !reqJson.getString("rsId").equals("")) {
+            reqJson.put("rstId", reqJson.getString("rsId"));
+        }
         resourceStoreBMOImpl.addResourceStore(reqJson, context);
     }
 
