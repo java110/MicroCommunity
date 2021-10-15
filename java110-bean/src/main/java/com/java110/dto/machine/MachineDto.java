@@ -51,6 +51,7 @@ public class MachineDto extends PageDto implements Serializable {
     private String locationObjName;
     private String direction;//设备方向
     private String directionName;
+    private String typeId;
 
     private List<MachineAttrDto> machineAttrs;
 
@@ -309,5 +310,13 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setHeartbeatTime(String heartbeatTime) {
         this.heartbeatTime = heartbeatTime;
+    }
+
+    public String getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(String typeId) {
+        this.typeId = typeId;
     }
 }
