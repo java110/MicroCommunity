@@ -22,6 +22,9 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public static final String CAR_TYPE_PRIMARY = "1001"; //主车辆
     public static final String CAR_TYPE_MEMBER = "1002"; //车辆成员
+    public static final String CAR_TYPE_TEMP = "1003"; //临时车
+
+    public static final String CAR_TYPE_CD_TEMP = "1003";
 
     private String carColor;
     private String carBrand;

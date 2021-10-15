@@ -85,4 +85,4 @@ kafka:
       size: 4096
     linger: 1
     buffer:
-      memory: 40960
+      memory: 1048576

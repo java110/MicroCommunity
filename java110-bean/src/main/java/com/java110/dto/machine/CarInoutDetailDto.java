@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class CarInoutDetailDto extends PageDto implements Serializable {
 
+    public static final String CAR_INOUT_IN = "3306";
+    public static final String CAR_INOUT_OUT = "3307";
+
     private String inoutId;
     private String machineId;
     private String machineCode;

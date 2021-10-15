@@ -24,7 +24,9 @@ public class OwnerPo implements Serializable {
     private String communityId;
     private String idCard;
     private String state;
-    private String statusCd;
+    private String statusCd="0";
+    private String bId;
+    private String ownerFlag;
 
     public String getMemberId() {
         return memberId;
@@ -128,5 +130,21 @@ public class OwnerPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getOwnerFlag() {
+        return ownerFlag;
+    }
+
+    public void setOwnerFlag(String ownerFlag) {
+        this.ownerFlag = ownerFlag;
     }
 }

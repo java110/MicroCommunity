@@ -19,4 +19,8 @@ public class KafkaConstant {
      * 通知 中心服务
      */
     public final static String TOPIC_NOTIFY_CENTER_SERVICE_NAME = "NOTIFY_CENTER_SERVICE";
+
+
+    public final static String TOPIC_API_SEND_WEB = "webSentMessageTopic";
+    public final static String TOPIC_API_SEND_PARKING_AREA_WEB = "webSentParkingAreaTopic";
 }

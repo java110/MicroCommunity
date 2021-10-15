@@ -57,6 +57,11 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     }
 
     @Override
+    public ResultVo customCarInOut(JSONObject reqJson) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+    @Override
     public ResultVo getQRcode(JSONObject reqJson) {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }

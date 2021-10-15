@@ -2,6 +2,7 @@ package com.java110.user.listener.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.po.owner.OwnerPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -68,6 +69,9 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
             //JSONObject businessOwner = data.getJSONObject("businessOwner");
             for (int bOwnerIndex = 0; bOwnerIndex < businessOwners.size(); bOwnerIndex++) {
                 JSONObject businessOwner = businessOwners.getJSONObject(bOwnerIndex);
+                if(!businessOwner.containsKey("ownerFlag")){
+                    businessOwner.put("ownerFlag", OwnerDto.OWNER_FLAG_TRUE);
+                }
                 doBusinessOwner(business, businessOwner);
                 if (bObj instanceof JSONObject) {
                     dataFlowContext.addParamOut("memberId", businessOwner.getString("memberId"));

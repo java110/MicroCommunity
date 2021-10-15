@@ -86,4 +86,7 @@ public interface IDataBusInnerServiceSMO {
 
     @RequestMapping(value = "/getQRcode", method = RequestMethod.POST)
     ResultVo getQRcode(@RequestBody JSONObject reqJson);
+
+    @RequestMapping(value = "/customCarInOut", method = RequestMethod.POST)
+    ResultVo customCarInOut(@RequestBody JSONObject reqJson);
 }

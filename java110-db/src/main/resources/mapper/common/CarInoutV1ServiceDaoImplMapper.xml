@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="carInoutV1ServiceDaoImpl">
+
+
+    <!-- 保存车辆进出场信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCarInoutInfo" parameterType="Map">
+        insert into car_inout(
+        in_time,inout_id,pa_id,car_num,state,community_id,out_time
+        ) values (
+        #{inTime},#{inoutId},#{paId},#{carNum},#{state},#{communityId},#{outTime}
+        )
+    </insert>
+
+
+    <!-- 查询车辆进出场信息 add by wuxw 2018-07-03 -->
+    <select id="getCarInoutInfo" parameterType="Map" resultType="Map">
+        select t.in_time,t.in_time inTime,t.inout_id,t.inout_id inoutId,t.pa_id,t.pa_id paId,t.car_num,t.car_num
+        carNum,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.out_time,t.out_time
+        outTime
+        from car_inout t
+        where 1 =1
+        <if test="inTime !=null and inTime != ''">
+            and t.in_time= #{inTime}
+        </if>
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="outTime !=null and outTime != ''">
+            and t.out_time= #{outTime}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改车辆进出场信息 add by wuxw 2018-07-03 -->
+    <update id="updateCarInoutInfo" parameterType="Map">
+        update car_inout t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="inTime !=null and inTime != ''">
+            , t.in_time= #{inTime}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            , t.car_num= #{carNum}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="outTime !=null and outTime != ''">
+            , t.out_time= #{outTime}
+        </if>
+        where 1=1
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询车辆进出场数量 add by wuxw 2018-07-03 -->
+    <select id="queryCarInoutsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from car_inout t
+        where 1 =1
+        <if test="inTime !=null and inTime != ''">
+            and t.in_time= #{inTime}
+        </if>
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="outTime !=null and outTime != ''">
+            and t.out_time= #{outTime}
+        </if>
+
+
+    </select>
+
+</mapper>

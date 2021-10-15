@@ -28,6 +28,8 @@ public class FeeAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_OWNER_ID = "390007";//业主ID
     public static final String SPEC_CD_OWNER_NAME = "390008";//业主名称
     public static final String SPEC_CD_OWNER_LINK = "390009";//业主联系方式
+    public static final String SPEC_CD_CAR_INOUT_ID = "390011";//车辆进场编号
+
 
     private String attrId;
     private String specCd;
@@ -35,6 +37,7 @@ public class FeeAttrDto extends PageDto implements Serializable {
     private String communityId;
     private String feeId;
     private String value;
+    private String state;
 
     public static String getFeeAttrValue(FeeDto feeDto, String specCd) {
         List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
@@ -133,5 +136,11 @@ public class FeeAttrDto extends PageDto implements Serializable {
         this.specCdName = specCdName;
     }
 
+    public String getState() {
+        return state;
+    }
 
+    public void setState(String state) {
+        this.state = state;
+    }
 }

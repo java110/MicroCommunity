@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="buildingOwnerV1ServiceDaoImpl">
+
+
+    <!-- 保存业主信息信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBuildingOwnerInfo" parameterType="Map">
+        insert into building_owner(
+        id_card,sex,link,owner_type_cd,remark,owner_id,user_id,name,state,community_id,age,member_id,b_id
+        <if test="ownerFlag != null and ownerFlag != ''">
+            ,owner_flag
+        </if>
+        ) values (
+        #{idCard},#{sex},#{link},#{ownerTypeCd},#{remark},#{ownerId},#{userId},#{name},#{state},#{communityId},#{age},#{memberId},#{bId}
+        <if test="ownerFlag != null and ownerFlag != ''">
+            ,#{ownerFlag}
+        </if>
+        )
+    </insert>
+
+
+    <!-- 查询业主信息信息 add by wuxw 2018-07-03 -->
+    <select id="getBuildingOwnerInfo" parameterType="Map" resultType="Map">
+        select t.id_card,t.id_card idCard,t.sex,t.link,t.owner_type_cd,t.owner_type_cd
+        ownerTypeCd,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id
+        userId,t.name,t.state,t.community_id,t.community_id communityId,t.age,t.member_id,t.member_id
+        memberId,t.owner_flag,t.owner_flag ownerFlag
+        from building_owner t
+        where 1 =1
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and t.sex= #{sex}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="ownerFlag !=null and ownerFlag != ''">
+            and t.owner_flag= #{ownerFlag}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改业主信息信息 add by wuxw 2018-07-03 -->
+    <update id="updateBuildingOwnerInfo" parameterType="Map">
+        update building_owner t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            , t.id_card= #{idCard}
+        </if>
+        <if test="sex !=null and sex != ''">
+            , t.sex= #{sex}
+        </if>
+        <if test="link !=null and link != ''">
+            , t.link= #{link}
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            , t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="age !=null and age != ''">
+            , t.age= #{age}
+        </if>
+        where 1=1
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+
+    </update>
+
+    <!-- 查询业主信息数量 add by wuxw 2018-07-03 -->
+    <select id="queryBuildingOwnersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from building_owner t
+        where 1 =1
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and t.sex= #{sex}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="ownerFlag !=null and ownerFlag != ''">
+            and t.owner_flag= #{ownerFlag}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+
+
+    </select>
+
+</mapper>

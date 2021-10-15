@@ -13,7 +13,6 @@ import java.io.Serializable;
 public class OwnerCarPo implements Serializable {
 
 
-
     private String carId;
     private String ownerId;
     private String carNum;
@@ -33,6 +32,7 @@ public class OwnerCarPo implements Serializable {
     private String communityId;
     private String carTypeCd;
     private String memberId;
+    private String statusCd = "0";
 
 
     public String getCarId() {
@@ -153,5 +153,13 @@ public class OwnerCarPo implements Serializable {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

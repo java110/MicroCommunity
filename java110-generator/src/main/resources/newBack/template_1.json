@@ -1,56 +1,38 @@
 {
   "param": {
-    "voice": "voice",
-    "typeCd": "type_cd",
-    "text3": "text3",
-    "text4": "text4",
-    "text1": "text1",
-    "text2": "text2",
+    "realCharge": "real_charge",
+    "inoutId": "inout_id",
+    "payType": "pay_type",
+    "paymentId": "payment_id",
     "paId": "pa_id",
-    "textId": "text_id",
     "statusCd": "status_cd",
-    "communityId": "community_id"
+    "communityId": "community_id",
+    "payCharge": "pay_charge"
   },
-  "name": "parkingAreaText",
+  "name": "carInoutPayment",
   "shareColumn": "community_id",
-  "id": "textId",
-  "shareName": "community",
+  "id": "paymentId",
+  "shareName": "common",
   "autoMove": true,
   "required": [
     {
-      "msg": "停车场ID不能为空",
-      "code": "paId"
+      "msg": "进出ID不能为空",
+      "code": "inoutId"
     },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
     },
     {
-      "msg": "类型：1001不能为空",
-      "code": "typeCd"
+      "msg": "paId不能为空",
+      "code": "paId"
     },
     {
-      "msg": "文字显示第一行不能为空",
-      "code": "text1"
-    },
-    {
-      "msg": "文字显示第二行不能为空",
-      "code": "text2"
-    },
-    {
-      "msg": "文字显示第三行不能为空",
-      "code": "text3"
-    },
-    {
-      "msg": "文字显示第四行不能为空",
-      "code": "text4"
-    },
-    {
-      "msg": "语音播放不能为空",
-      "code": "voice"
+      "msg": "支付方式不能为空",
+      "code": "payType"
     }
   ],
-  "desc": "停车场道闸文字语音配置",
+  "desc": "车辆支付",
   "shareParam": "communityId",
-  "tableName": "parking_area_text"
+  "tableName": "car_inout_payment"
 }
