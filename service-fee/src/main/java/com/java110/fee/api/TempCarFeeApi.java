@@ -52,24 +52,24 @@ public class TempCarFeeApi {
     }
 
 
-    /**
-     * 查询；临时车停车收费规则
-     *
-     * @param paId 停车场ID
-     * @return
-     * @serviceCode /tempCarFee/getTempCarFeeOrder
-     * @path /app/tempCarFee/getTempCarFeeOrder
-     */
-    @RequestMapping(value = "/getTempCarFeeOrder", method = RequestMethod.GET)
-    public ResponseEntity<String> getTempCarFeeOrder(
-            @RequestParam(value = "paId", required = false) String paId,
-            @RequestParam(value = "carNum", required = false) String carNum
-    ) {
-        TempCarPayOrderDto tempCarPayOrderDto = new TempCarPayOrderDto();
-        tempCarPayOrderDto.setPaId(paId);
-        tempCarPayOrderDto.setCarNum(carNum);
-        return getTempCarFeeRulesImpl.getTempCarFeeOrder(tempCarPayOrderDto);
-    }
+//    /**
+//     * 查询；临时车停车收费规则
+//     *
+//     * @param paId 停车场ID
+//     * @return
+//     * @serviceCode /tempCarFee/getTempCarFeeOrder
+//     * @path /app/tempCarFee/getTempCarFeeOrder
+//     */
+//    @RequestMapping(value = "/getTempCarFeeOrder", method = RequestMethod.GET)
+//    public ResponseEntity<String> getTempCarFeeOrder(
+//            @RequestParam(value = "paId", required = false) String paId,
+//            @RequestParam(value = "carNum", required = false) String carNum
+//    ) {
+//        TempCarPayOrderDto tempCarPayOrderDto = new TempCarPayOrderDto();
+//        tempCarPayOrderDto.setPaId(paId);
+//        tempCarPayOrderDto.setCarNum(carNum);
+//        return getTempCarFeeRulesImpl.getTempCarFeeOrder(tempCarPayOrderDto);
+//    }
 
     /**
      * 缴费通知
