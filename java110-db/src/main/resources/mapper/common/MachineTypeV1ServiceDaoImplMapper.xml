@@ -57,7 +57,7 @@
             , t.machine_type_cd= #{machineTypeCd}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+            , t.community_id= #{communityId}
         </if>
         where 1=1
         <if test="typeId !=null and typeId != ''">

@@ -31,6 +31,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：machineType.deleteMachineType
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "machineType.deleteMachineType")
 public class DeleteMachineTypeCmd extends AbstractServiceCmdListener {
-  private static Logger logger = LoggerFactory.getLogger(DeleteMachineTypeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteMachineTypeCmd.class);
 
     @Autowired
     private IMachineTypeV1InnerServiceSMO machineTypeV1InnerServiceSMOImpl;
@@ -51,7 +52,7 @@ public class DeleteMachineTypeCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
-Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
+        Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
 
     }
 
@@ -59,7 +60,7 @@ Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MachineTypePo machineTypePo = BeanConvertUtil.covertBean(reqJson, MachineTypePo.class);
+        MachineTypePo machineTypePo = BeanConvertUtil.covertBean(reqJson, MachineTypePo.class);
         int flag = machineTypeV1InnerServiceSMOImpl.deleteMachineType(machineTypePo);
 
         if (flag < 1) {

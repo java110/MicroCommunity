@@ -55,7 +55,7 @@ public class SaveMachineTypeCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineTypeCd", "请求报文中未包含machineTypeCd");
-Assert.hasKeyAndValue(reqJson, "machineTypeName", "请求报文中未包含machineTypeName");
+        Assert.hasKeyAndValue(reqJson, "machineTypeName", "请求报文中未包含machineTypeName");
 
     }
 
@@ -63,7 +63,7 @@ Assert.hasKeyAndValue(reqJson, "machineTypeName", "请求报文中未包含machi
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MachineTypePo machineTypePo = BeanConvertUtil.covertBean(reqJson, MachineTypePo.class);
+        MachineTypePo machineTypePo = BeanConvertUtil.covertBean(reqJson, MachineTypePo.class);
         machineTypePo.setTypeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = machineTypeV1InnerServiceSMOImpl.saveMachineType(machineTypePo);
 

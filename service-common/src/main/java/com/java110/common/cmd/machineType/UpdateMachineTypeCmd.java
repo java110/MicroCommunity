@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "machineType.updateMachineType")
 public class UpdateMachineTypeCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateMachineTypeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateMachineTypeCmd.class);
 
 
     @Autowired
@@ -55,7 +55,7 @@ public class UpdateMachineTypeCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
-Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
+        Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
 
     }
 
@@ -63,7 +63,7 @@ Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MachineTypePo machineTypePo = BeanConvertUtil.covertBean(reqJson, MachineTypePo.class);
+        MachineTypePo machineTypePo = BeanConvertUtil.covertBean(reqJson, MachineTypePo.class);
         int flag = machineTypeV1InnerServiceSMOImpl.updateMachineType(machineTypePo);
 
         if (flag < 1) {
