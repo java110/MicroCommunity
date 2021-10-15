@@ -7,16 +7,23 @@ import com.java110.utils.util.StringUtil;
 public class TableToJsonWeb {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `meter_type` (\n" +
-            "  `type_id` varchar(30) NOT NULL COMMENT '类型ID',\n" +
-            "  `type_name` varchar(12) NOT NULL COMMENT '名称',\n" +
-            "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
-            "  `remark` varchar(200) DEFAULT NULL COMMENT '说明',\n" +
+    public static final String createTableSql = "CREATE TABLE `machine_type` (\n" +
+            "  `type_id` varchar(30) NOT NULL COMMENT '设备类型ID',\n" +
+            "  `machine_type_cd` varchar(30) NOT NULL COMMENT '设备大类 详情看t_dict',\n" +
+            "  `machine_type_name` varchar(30) NOT NULL COMMENT '设备类型名称',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0, 在用 1失效'\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
+            "  KEY `idx_bm_machine_id` (`type_id`) USING BTREE\n" +
             ")";
 
     public static void main(String[] args) {
+        String templateName = "设备类型"; //业务名称
+        String templateCode = "machineType"; //表名大写
+        String templateKey = "typeId"; //表主键
+        String templateKeyName = "设备类型ID";//主键说明
+        String searchCode = "typeId"; //分片字段
+        String searchName = "设备类型ID"; //分片字段说明
+        String directories = "property"; //前端生成到那个目录下
 
         // templateName 业务名称 业务编码名称生成后文件名 templateCode 主键 templateKey
         // 业务主键名称 templateKeyName=templateName+ID 主机驼峰 searchCode 主键名称 searchName
@@ -27,13 +34,13 @@ public class TableToJsonWeb {
         newSql = newSql.replaceAll("\n", "");
         String[] rowSqls = newSql.split("',");
         JSONObject param = new JSONObject();
-        param.put("templateName", "");
-        param.put("templateCode", "");
-        param.put("templateKey", "");
-        param.put("templateKeyName", "");
-        param.put("searchCode", "");
-        param.put("searchName", "");
-        param.put("directories", "");
+        param.put("templateName", templateName);
+        param.put("templateCode", templateCode);
+        param.put("templateKey", templateKey);
+        param.put("templateKeyName", templateKeyName);
+        param.put("searchCode", searchCode);
+        param.put("searchName", searchName);
+        param.put("directories", directories);
         JSONObject paramColumn = null;
         JSONArray conditions = new JSONArray();
         JSONArray paramColumns = new JSONArray();

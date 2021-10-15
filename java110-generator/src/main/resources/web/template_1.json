@@ -1,49 +1,74 @@
 {
-  "templateKeyName": "抄表类型",
-  "templateName": "抄表类型",
-  "searchName": "抄表类型",
-  "directories": "property",
-  "searchCode": "typeId",
-  "templateCode": "meterType",
-  "templateKey": "typeId",
+  "templateKeyName": "设备类型ID",
+  "templateName": "设备类型",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "12",
-      "code": "typeName",
-      "limitErrInfo": "名称不能超过12",
-      "cnCode": "名称",
+      "limitParam": "30",
+      "code": "typeId",
+      "limitErrInfo": "设备类型ID不能超过30",
+      "cnCode": "设备类型ID",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，名称"
+      "desc": "必填，设备类型ID"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "200",
-      "code": "remark",
-      "limitErrInfo": "说明不能超过200",
-      "cnCode": "说明",
+      "limitParam": "30",
+      "code": "machineTypeCd",
+      "limitErrInfo": "设备大类不能超过30",
+      "cnCode": "设备大类",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "说明"
+      "desc": "必填，设备大类"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "30",
+      "code": "machineTypeName",
+      "limitErrInfo": "设备类型名称不能超过30",
+      "cnCode": "设备类型名称",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，设备类型名称"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "2",
+      "code": "statusCd",
+      "limitErrInfo": "数据状态不能超过2",
+      "cnCode": "数据状态",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，数据状态"
     }
   ],
+  "searchName": "设备类型ID",
+  "directories": "property",
+  "searchCode": "typeId",
+  "templateCode": "machineType",
   "conditions": [
+
     {
       "whereCondition": "equal",
-      "code": "typeId",
-      "name": "类型ID",
+      "code": "machineTypeCd",
+      "name": "设备大类",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "typeName",
-      "name": "名称",
+      "code": "machineTypeName",
+      "name": "设备类型名称",
       "inputType": "input"
     }
-  ]
+  ],
+  "templateKey": "typeId"
 }

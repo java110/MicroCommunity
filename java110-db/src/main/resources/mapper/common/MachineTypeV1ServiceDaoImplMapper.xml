@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="machineTypeV1ServiceDaoImpl">
+
+
+    <!-- 保存设备类型信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMachineTypeInfo" parameterType="Map">
+        insert into machine_type(
+        machine_type_name,type_id,machine_type_cd,community_id
+        ) values (
+        #{machineTypeName},#{typeId},#{machineTypeCd},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询设备类型信息 add by wuxw 2018-07-03 -->
+    <select id="getMachineTypeInfo" parameterType="Map" resultType="Map">
+        select t.machine_type_name,t.machine_type_name machineTypeName,t.type_id,t.type_id
+        typeId,t.status_cd,t.status_cd statusCd,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.community_id communityId
+        from machine_type t
+        where 1 =1
+        <if test="machineTypeName !=null and machineTypeName != ''">
+            and t.machine_type_name= #{machineTypeName}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改设备类型信息 add by wuxw 2018-07-03 -->
+    <update id="updateMachineTypeInfo" parameterType="Map">
+        update machine_type t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="machineTypeName !=null and machineTypeName != ''">
+            , t.machine_type_name= #{machineTypeName}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            , t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+
+    </update>
+
+    <!-- 查询设备类型数量 add by wuxw 2018-07-03 -->
+    <select id="queryMachineTypesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from machine_type t
+        where 1 =1
+        <if test="machineTypeName !=null and machineTypeName != ''">
+            and t.machine_type_name= #{machineTypeName}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+
+
+    </select>
+
+</mapper>

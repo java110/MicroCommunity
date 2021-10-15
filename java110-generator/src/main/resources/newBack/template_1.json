@@ -1,32 +1,26 @@
 {
   "param": {
-    "keyId": "key_id",
-    "remark": "remark",
+    "machineTypeName": "machine_type_name",
+    "typeId": "type_id",
     "statusCd": "status_cd",
-    "settingKey": "setting_key",
-    "settingType": "setting_type",
-    "settingName": "setting_name"
+    "machineTypeCd": "machine_type_cd"
   },
-  "name": "communitySettingKey",
-  "shareColumn": "key_id",
-  "id": "keyId",
-  "shareName": "community",
+  "name": "machineType",
+  "shareColumn": "type_id",
+  "id": "typeId",
+  "shareName": "common",
   "autoMove": true,
   "required": [
     {
-      "msg": "设置类型不能为空",
-      "code": "settingType"
+      "msg": "设备大类不能为空",
+      "code": "machineTypeCd"
     },
     {
-      "msg": "名称不能为空",
-      "code": "settingName"
-    },
-    {
-      "msg": "设置key不能为空",
-      "code": "settingKey"
+      "msg": "设备类型名称不能为空",
+      "code": "machineTypeName"
     }
   ],
-  "desc": "小区配置",
-  "shareParam": "keyId",
-  "tableName": "community_setting_key"
+  "desc": "设备类型",
+  "shareParam": "typeId",
+  "tableName": "machine_type"
 }
