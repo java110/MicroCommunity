@@ -5,17 +5,28 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
-import com.java110.dto.fee.*;
+import com.java110.dto.fee.BillDto;
+import com.java110.dto.fee.BillOweFeeDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.fee.TempCarFeeResult;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigAttrDto;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IComputeTempCarFee;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.ITempCarFeeConfigAttrInnerServiceSMO;
+import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -23,6 +34,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -36,7 +48,12 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 费用计算 服务类
@@ -75,6 +92,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     @Autowired(required = false)
     private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
+    @Autowired(required = false)
+    private ITempCarFeeConfigInnerServiceSMO tempCarFeeConfigInnerServiceSMOImpl;
+
+    @Autowired(required = false)
+    private ITempCarFeeConfigAttrInnerServiceSMO tempCarFeeConfigAttrInnerServiceSMOImpl;
+
     @Override
     public Date getFeeEndTime() {
         return null;
@@ -93,6 +116,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     public void computeEveryOweFee(FeeDto tmpFeeDto, RoomDto roomDto) {
         computeFeePrice(tmpFeeDto, roomDto);
     }
+
 
     /**
      * 计算欠费金额
@@ -1527,6 +1551,43 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
         return endDate.getTime();
     }
+
+
+    @Override
+    public void computeTempCarStopTimeAndFee(List<CarInoutDto> carInoutDtos) {
+
+        if (carInoutDtos == null || carInoutDtos.size() < 1) {
+            return;
+        }
+
+//计算停车时间
+        TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
+        tempCarFeeConfigDto.setPaId(carInoutDtos.get(0).getPaId());
+        tempCarFeeConfigDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
+        List<TempCarFeeConfigDto> tempCarFeeConfigDtos = tempCarFeeConfigInnerServiceSMOImpl.queryTempCarFeeConfigs(tempCarFeeConfigDto);
+
+        if (tempCarFeeConfigDtos == null || tempCarFeeConfigDtos.size() < 1) {
+            return;
+        }
+        TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto = new TempCarFeeConfigAttrDto();
+        tempCarFeeConfigAttrDto.setConfigId(tempCarFeeConfigDto.getConfigId());
+        tempCarFeeConfigAttrDto.setCommunityId(tempCarFeeConfigDto.getCommunityId());
+
+        List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrInnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
+        long time = 0;
+        for (CarInoutDto carInoutDto : carInoutDtos) {
+            try {
+                IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
+                TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDtos.get(0), tempCarFeeConfigDtos.get(0),tempCarFeeConfigAttrDtos);
+                carInoutDto.setMin(result.getMin());
+                carInoutDto.setHours(result.getHours());
+                carInoutDto.setPayCharge(result.getPayCharge()+"");
+            } catch (Exception e) {
+                logger.error("临时车算费失败", e);
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         ComputeFeeSMOImpl computeFeeSMO = new ComputeFeeSMOImpl();

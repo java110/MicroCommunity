@@ -1,6 +1,7 @@
 package com.java110.dto.carInoutPayment;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,12 +16,13 @@ import java.util.Date;
 public class CarInoutPaymentDto extends PageDto implements Serializable {
 
     private String realCharge;
-private String inoutId;
-private String payType;
-private String paymentId;
-private String paId;
-private String communityId;
-private String payCharge;
+    private String inoutId;
+    private String payType;
+    private String paymentId;
+    private String paId;
+    private String communityId;
+    private String payCharge;
+    private String payTime;
 
 
     private Date createTime;
@@ -31,43 +33,56 @@ private String payCharge;
     public String getRealCharge() {
         return realCharge;
     }
-public void setRealCharge(String realCharge) {
+
+    public void setRealCharge(String realCharge) {
         this.realCharge = realCharge;
     }
-public String getInoutId() {
+
+    public String getInoutId() {
         return inoutId;
     }
-public void setInoutId(String inoutId) {
+
+    public void setInoutId(String inoutId) {
         this.inoutId = inoutId;
     }
-public String getPayType() {
+
+    public String getPayType() {
         return payType;
     }
-public void setPayType(String payType) {
+
+    public void setPayType(String payType) {
         this.payType = payType;
     }
-public String getPaymentId() {
+
+    public String getPaymentId() {
         return paymentId;
     }
-public void setPaymentId(String paymentId) {
+
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
-public String getPaId() {
+
+    public String getPaId() {
         return paId;
     }
-public void setPaId(String paId) {
+
+    public void setPaId(String paId) {
         this.paId = paId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getPayCharge() {
+
+    public String getPayCharge() {
         return payCharge;
     }
-public void setPayCharge(String payCharge) {
+
+    public void setPayCharge(String payCharge) {
         this.payCharge = payCharge;
     }
 
@@ -86,5 +101,13 @@ public void setPayCharge(String payCharge) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
     }
 }

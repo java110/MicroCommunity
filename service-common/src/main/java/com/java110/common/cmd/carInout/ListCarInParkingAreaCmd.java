@@ -20,8 +20,9 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.machine.CarInoutDto;
-import com.java110.intf.common.ICarInoutInnerServiceSMO;
+import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -29,6 +30,11 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 类表述：查询 在场车辆
@@ -46,7 +52,10 @@ public class ListCarInParkingAreaCmd extends AbstractServiceCmdListener {
     private static Logger logger = LoggerFactory.getLogger(ListCarInParkingAreaCmd.class);
 
     @Autowired
-    private ICarInoutInnerServiceSMO carInoutInnerServiceSMOImpl;
+    private ICarInoutV1InnerServiceSMO carInoutV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
 
 
     @Override
@@ -59,8 +68,26 @@ public class ListCarInParkingAreaCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         CarInoutDto carInoutDto = BeanConvertUtil.covertBean(reqJson, CarInoutDto.class);
 
-        //carInoutInnerServiceSMOImpl.queryCarInCount(carInoutDto);
+        carInoutDto.setStates(new String[]{CarInoutDto.STATE_IN, CarInoutDto.STATE_PAY, CarInoutDto.STATE_REPAY});
+        int count = carInoutV1InnerServiceSMOImpl.queryCarInoutsCount(carInoutDto);
+
+        List<CarInoutDto> carInoutDtos = null;
+
+        if (count > 0) {
+            carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
+            computeCarInouts(carInoutDtos);
+        } else {
+            carInoutDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, carInoutDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+    }
+
+    private void computeCarInouts(List<CarInoutDto> carInoutDtos) {
+        computeFeeSMOImpl.computeTempCarStopTimeAndFee(carInoutDtos);
     }
 }

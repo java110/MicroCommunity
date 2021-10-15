@@ -1,6 +1,7 @@
 package com.java110.dto.machine;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class CarInoutDto extends PageDto implements Serializable {
+public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
 
     //状态，100300 进场状态 100400 支付完成 100500 离场状态 100600 支付超时重新支付
     public static final String STATE_IN = "100300";
@@ -31,6 +32,8 @@ public class CarInoutDto extends PageDto implements Serializable {
     private String communityId;
     private String outTime;
     private String paId;
+    private long hours;
+    private long min;
 
 
     private Date createTime;
@@ -126,5 +129,21 @@ public class CarInoutDto extends PageDto implements Serializable {
 
     public void setPaId(String paId) {
         this.paId = paId;
+    }
+
+    public long getHours() {
+        return hours;
+    }
+
+    public void setHours(long hours) {
+        this.hours = hours;
+    }
+
+    public long getMin() {
+        return min;
+    }
+
+    public void setMin(long min) {
+        this.min = min;
     }
 }
