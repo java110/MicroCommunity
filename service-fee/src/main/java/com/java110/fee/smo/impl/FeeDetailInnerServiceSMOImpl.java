@@ -1,6 +1,7 @@
 package com.java110.fee.smo.impl;
 
 
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeDetailDto;
@@ -86,6 +87,7 @@ public class FeeDetailInnerServiceSMOImpl extends BaseServiceSMO implements IFee
     }
 
     @Override
+    @Java110Transactional
     public int saveFeeDetail(@RequestBody PayFeeDetailPo payFeeDetailPo) {
         feeDetailServiceDaoImpl.saveFeeDetail(BeanConvertUtil.beanCovertMap(payFeeDetailPo));
         return 1;

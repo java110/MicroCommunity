@@ -193,12 +193,16 @@ public interface IFeeInnerServiceSMO {
     @RequestMapping(value = "/saveFee", method = RequestMethod.POST)
     int saveFee(@RequestBody List<PayFeePo> payFeePos);
 
+    @RequestMapping(value = "/saveOneFee", method = RequestMethod.POST)
+    int saveOneFee(@RequestBody PayFeePo payFeePo);
+
 
     @RequestMapping(value = "/getAssetsFee", method = RequestMethod.POST)
     public JSONArray getAssetsFee(@RequestBody String communityId);
 
     /**
      * 根据批次删除费用
+     *
      * @param payFeePo
      * @return
      */

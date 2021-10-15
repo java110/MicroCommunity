@@ -15,6 +15,12 @@ import java.util.Date;
  **/
 public class CarInoutDto extends PageDto implements Serializable {
 
+    //状态，100300 进场状态 100400 支付完成 100500 离场状态 100600 支付超时重新支付
+    public static final String STATE_IN = "100300";
+    public static final String STATE_PAY = "100400";
+    public static final String STATE_OUT = "100500";
+    public static final String STATE_REPAY = "100600";
+
 
     private String inTime;
     private String inoutId;
@@ -24,6 +30,7 @@ public class CarInoutDto extends PageDto implements Serializable {
     private String[] states;
     private String communityId;
     private String outTime;
+    private String paId;
 
 
     private Date createTime;
@@ -111,5 +118,13 @@ public class CarInoutDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
     }
 }

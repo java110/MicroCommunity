@@ -1,5 +1,6 @@
 {
   "param": {
+<<<<<<< HEAD
     "machineTypeName": "machine_type_name",
     "typeId": "type_id",
     "statusCd": "status_cd",
@@ -8,10 +9,25 @@
   "name": "machineType",
   "shareColumn": "type_id",
   "id": "typeId",
+=======
+    "realCharge": "real_charge",
+    "inoutId": "inout_id",
+    "payType": "pay_type",
+    "paymentId": "payment_id",
+    "paId": "pa_id",
+    "statusCd": "status_cd",
+    "communityId": "community_id",
+    "payCharge": "pay_charge"
+  },
+  "name": "carInoutPayment",
+  "shareColumn": "community_id",
+  "id": "paymentId",
+>>>>>>> 01e417f83004aef916e6990cf695fc25e0389fd3
   "shareName": "common",
   "autoMove": true,
   "required": [
     {
+<<<<<<< HEAD
       "msg": "设备大类不能为空",
       "code": "machineTypeCd"
     },
@@ -24,3 +40,25 @@
   "shareParam": "typeId",
   "tableName": "machine_type"
 }
+=======
+      "msg": "进出ID不能为空",
+      "code": "inoutId"
+    },
+    {
+      "msg": "小区ID不能为空",
+      "code": "communityId"
+    },
+    {
+      "msg": "paId不能为空",
+      "code": "paId"
+    },
+    {
+      "msg": "支付方式不能为空",
+      "code": "payType"
+    }
+  ],
+  "desc": "车辆支付",
+  "shareParam": "communityId",
+  "tableName": "car_inout_payment"
+}
+>>>>>>> 01e417f83004aef916e6990cf695fc25e0389fd3

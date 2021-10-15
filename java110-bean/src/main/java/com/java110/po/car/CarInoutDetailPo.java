@@ -19,6 +19,8 @@ public class CarInoutDetailPo implements Serializable {
     private String machineCode;
     private String carInout;
     private String carNum;
+    private String paId;
+    private String statusCd = "0";
 
     public String getDetailId() {
         return detailId;
@@ -74,5 +76,21 @@ public class CarInoutDetailPo implements Serializable {
 
     public void setCarNum(String carNum) {
         this.carNum = carNum;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
     }
 }

@@ -13,8 +13,7 @@ public class TableToJson {
             "  `machine_type_name` varchar(30) NOT NULL COMMENT '设备类型名称',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
             "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
-            "  KEY `idx_bm_machine_id` (`type_id`) USING BTREE\n" +
-            ")";
+            "  KEY `idx_bm_machine_id` (`type_id`) USING BTREE\n";
 
     public static void main(String[] args) {
         String desc = "老人类型";
@@ -79,7 +78,6 @@ public class TableToJson {
         param.put("param", paramColumn);
         param.put("required", requireds);
         System.out.println(param.toJSONString());
-
     }
 
 }
