@@ -20,6 +20,7 @@ public class ApiMachineDataVo implements Serializable {
     private String locationObjId;
     private String state;
     private String stateName;
+    private String typeId;
 
 
     private String floorId;
@@ -235,5 +236,13 @@ public class ApiMachineDataVo implements Serializable {
 
     public void setHeartbeatTime(String heartbeatTime) {
         this.heartbeatTime = heartbeatTime;
+    }
+
+    public String getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(String typeId) {
+        this.typeId = typeId;
     }
 }

@@ -25,6 +25,7 @@ public class MachinePo implements Serializable {
     private String locationObjId;
     private String state;
     private String direction;
+    private String typeId;
 
 
     public String getMachineId() {
@@ -129,5 +130,13 @@ public class MachinePo implements Serializable {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public String getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(String typeId) {
+        this.typeId = typeId;
     }
 }

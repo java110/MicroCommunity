@@ -8,11 +8,11 @@
     <insert id="saveBusinessMachineInfo" parameterType="Map">
         insert into business_machine(
         machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_id,b_id,
-        machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state,direction,heartbeat_time
+        machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state,direction,heartbeat_time,type_id
         ) values (
         #{machineMac},#{machineId},#{machineCode},#{authCode},#{operate},#{machineVersion},
         #{communityId},#{bId},#{machineName},#{machineTypeCd},#{machineIp},
-        #{locationTypeCd},#{locationObjId},#{state},#{direction},#{heartbeatTime}
+        #{locationTypeCd},#{locationObjId},#{state},#{direction},#{heartbeatTime},#{typeId}
         )
     </insert>
 
@@ -24,7 +24,7 @@
         machineVersion,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.machine_name,t.machine_name
         machineName,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_ip,t.machine_ip machineIp,
         t.location_type_cd,t.location_obj_id,t.state,t.location_type_cd,t.location_obj_id,t.location_type_cd
-        locationTypeCd,t.location_obj_id locationObjId,t.direction,t.heartbeat_time,t.heartbeat_time heartbeatTime
+        locationTypeCd,t.location_obj_id locationObjId,t.direction,t.heartbeat_time,t.heartbeat_time heartbeatTime,t.type_id typeId
         from business_machine t
         where 1 =1
         <if test="machineMac !=null and machineMac != ''">
@@ -60,6 +60,9 @@
         <if test="machineIp !=null and machineIp != ''">
             and t.machine_ip= #{machineIp}
         </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
 
         <if test="locationTypeCd !=null and locationTypeCd != ''">
             and t.location_type_cd= #{locationTypeCd}
@@ -83,11 +86,11 @@
         insert into machine(
         machine_mac,machine_id,machine_code,auth_code,machine_version,status_cd,
         community_id,b_id,machine_name,machine_type_cd,machine_ip,
-        location_type_cd,location_obj_id,state,direction,heartbeat_time
+        location_type_cd,location_obj_id,state,direction,heartbeat_time,type_id
         ) select
         t.machine_mac,t.machine_id,t.machine_code,t.auth_code,t.machine_version,'0',t.community_id,t.b_id,
         t.machine_name,t.machine_type_cd,t.machine_ip,
-        t.location_type_cd,t.location_obj_id,t.state,t.direction,t.heartbeat_time
+        t.location_type_cd,t.location_obj_id,t.state,t.direction,t.heartbeat_time,type_id
         from business_machine t where 1=1
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
@@ -110,6 +113,9 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
         </if>
         <if test="machineName !=null and machineName != ''">
             and t.machine_name= #{machineName}
@@ -146,7 +152,7 @@
         machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName,
         t.state,c.location_id locationTypeCd, c.location_name locationTypeName, t.location_obj_id locationObjId,
         t.location_type_cd,t.location_obj_id,t.heartbeat_time,t.heartbeat_time heartbeatTime,
-        td1.name stateName,t.create_time createTime,t.direction,td3.name directionName
+        td1.name stateName,t.create_time createTime,t.direction,td3.name directionName,t.type_id typeId
         from machine t
         left join t_dict td on t.machine_type_cd=td.status_cd and td.table_name='machine' and td.table_columns='machine_type_cd'
         left join t_dict td1 on t.state = td1.status_cd and td1.table_name='machine' and td1.table_columns='state'
@@ -188,6 +194,9 @@
         </if>
         <if test="locationTypeCd !=null and locationTypeCd != ''">
             and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
         </if>
         <if test="locationObjId !=null and locationObjId != ''">
             and t.location_obj_id= #{locationObjId}
@@ -251,6 +260,9 @@
         <if test="state !=null and state != ''">
             , t.state = #{state}
         </if>
+        <if test="typeId !=null and typeId != ''">
+            , t.type_id = #{typeId}
+        </if>
         <if test="direction !=null and direction != ''">
             , t.direction = #{direction}
         </if>
@@ -287,6 +299,9 @@
         </if>
         <if test="authCode !=null and authCode != ''">
             and t.auth_code= #{authCode}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
         </if>
         <if test="machineVersion !=null and machineVersion != ''">
             and t.machine_version= #{machineVersion}
