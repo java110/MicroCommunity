@@ -19,8 +19,9 @@
     <select id="getCarInoutInfo" parameterType="Map" resultType="Map">
         select t.in_time,t.in_time inTime,t.inout_id,t.inout_id inoutId,t.pa_id,t.pa_id paId,t.car_num,t.car_num
         carNum,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.out_time,t.out_time
-        outTime
+        outTime,td.`name` stateName
         from car_inout t
+        left join t_dict td on t.state = td.status_cd and td.table_columns='state' and td.table_name = 'car_inout'
         where 1 =1
         <if test="inTime !=null and inTime != ''">
             and t.in_time= #{inTime}

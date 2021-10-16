@@ -123,11 +123,10 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
         tempCarFeeConfigAttrDto.setCommunityId(tempCarFeeConfigDto.getCommunityId());
 
         List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrInnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
-        long time = 0;
+        IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
         for (CarInoutDto carInoutDto : carInoutDtos) {
             try {
-                IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
-                TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDtos.get(0), tempCarFeeConfigDtos.get(0), tempCarFeeConfigAttrDtos);
+                TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDto, tempCarFeeConfigDtos.get(0), tempCarFeeConfigAttrDtos);
                 carInoutDto.setMin(result.getMin());
                 carInoutDto.setHours(result.getHours());
                 carInoutDto.setPayCharge(result.getPayCharge() + "");
