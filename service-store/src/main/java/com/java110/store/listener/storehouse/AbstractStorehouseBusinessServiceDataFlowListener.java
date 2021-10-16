@@ -44,6 +44,7 @@ public abstract class AbstractStorehouseBusinessServiceDataFlowListener extends 
         businessStorehouseInfo.put("shId", businessStorehouseInfo.get("sh_id"));
         businessStorehouseInfo.put("shName", businessStorehouseInfo.get("sh_name"));
         businessStorehouseInfo.put("storeId", businessStorehouseInfo.get("store_id"));
+        businessStorehouseInfo.put("isShow", businessStorehouseInfo.get("is_show"));
         businessStorehouseInfo.remove("bId");
         businessStorehouseInfo.put("statusCd", statusCd);
     }
@@ -75,7 +76,7 @@ public abstract class AbstractStorehouseBusinessServiceDataFlowListener extends 
         currentStorehouseInfo.put("shId", currentStorehouseInfo.get("sh_id"));
         currentStorehouseInfo.put("shName", currentStorehouseInfo.get("sh_name"));
         currentStorehouseInfo.put("storeId", currentStorehouseInfo.get("store_id"));
-
+        currentStorehouseInfo.put("isShow", currentStorehouseInfo.get("is_show"));
 
         currentStorehouseInfo.put("operate", StatusConstant.OPERATE_DEL);
         getStorehouseServiceDaoImpl().saveBusinessStorehouseInfo(currentStorehouseInfo);

@@ -81,6 +81,7 @@
         td2.name stateName,
         td3.name warehousingWayName,
         rst.name rstName,
+        rst1.name parentRstName,
         rss.spec_name specName,
         rs.sh_id shId,
         td4.name unitCodeName,
@@ -100,6 +101,7 @@
         left join t_dict td3 on pa.warehousing_way = td3.status_cd and td3.table_name = 'purchase_apply' and
         td3.table_columns = 'warehousing_way'
         LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id and rst.status_cd = '0'
+        LEFT JOIN resource_store_type rst1 on rs.parent_rst_id=rst1.rst_id and rst1.status_cd = '0'
         LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
@@ -173,6 +175,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and rs.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and rs.parent_rst_id= #{parentRstId}
         </if>
         <if test="supplierName !=null and supplierName != ''">
             and rsp.supplier_name= #{supplierName}
@@ -242,6 +247,7 @@
         left join t_dict td3 on pa.warehousing_way = td3.status_cd and td3.table_name = 'purchase_apply' and
         td3.table_columns = 'warehousing_way'
         LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id and rst.status_cd = '0'
+        LEFT JOIN resource_store_type rst1 on rs.parent_rst_id=rst1.rst_id and rst1.status_cd = '0'
         LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
@@ -318,6 +324,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and rs.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and rs.parent_rst_id= #{parentRstId}
         </if>
         <if test="startTime !=null and startTime != ''">
             and pa.create_time &gt;= #{startTime}

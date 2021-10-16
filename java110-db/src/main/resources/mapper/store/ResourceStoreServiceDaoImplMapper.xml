@@ -9,11 +9,11 @@
         insert into business_resource_store(
         res_name,operate,price,res_code,description,store_id,stock,warning_stock,b_id,res_id,
         unit_code,remark,out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price,rst_id,rss_id,
-        mini_unit_code,mini_unit_stock,mini_stock
+        mini_unit_code,mini_unit_stock,mini_stock,parent_rst_id
         ) values (
         #{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{warningStock},#{bId},#{resId},
         #{unitCode},#{remark},#{outLowPrice},#{outHighPrice},#{showMobile},#{createTime},#{shId},
-        #{averagePrice},#{rstId},#{rssId},#{miniUnitCode},#{miniUnitStock},#{miniStock}
+        #{averagePrice},#{rstId},#{rssId},#{miniUnitCode},#{miniUnitStock},#{miniStock},#{parentRstId}
         )
     </insert>
 
@@ -21,11 +21,11 @@
     <insert id="saveResourceStoreInfo" parameterType="Map">
         insert into resource_store(
         res_id,b_id,store_id,res_name,res_code,unit_code,remark,out_low_price,out_high_price,show_mobile,description,
-        price,stock,create_time,sh_id,warning_stock,average_price,rss_id,rst_id,mini_unit_code,mini_unit_stock,mini_stock
+        price,stock,create_time,sh_id,warning_stock,average_price,rss_id,rst_id,mini_unit_code,mini_unit_stock,mini_stock,parent_rst_id
         ) values (
         #{resId},#{bId},#{storeId},#{resName},#{resCode},#{unitCode},#{remark},#{outLowPrice},#{outHighPrice},
         #{showMobile},#{description},#{price},#{stock},#{createTime},#{shId},#{warningStock},
-        #{averagePrice},#{rssId},#{rstId},#{miniUnitCode},#{miniUnitStock},#{miniStock}
+        #{averagePrice},#{rssId},#{rstId},#{miniUnitCode},#{miniUnitStock},#{miniStock},#{parentRstId}}
         )
     </insert>
 
@@ -38,7 +38,7 @@
         t.out_high_price,t.out_high_price outHighPrice,t.show_mobile,t.show_mobile showMobile,
         t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,t.mini_unit_code,t.mini_unit_code miniUnitCode,
         t.mini_unit_stock,t.mini_unit_stock miniUnitStock,t.average_price,t.average_price averagePrice,t.mini_stock,
-        t.mini_stock miniStock
+        t.mini_stock miniStock,t.parent_rst_id,t.parent_rst_id parentRstId
         from business_resource_store t
         where 1 =1
         <if test="resName !=null and resName != ''">
@@ -55,6 +55,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and t.rss_id= #{rssId}
@@ -114,11 +117,11 @@
         insert into resource_store(
         res_name,price,res_code,description,status_cd,store_id,stock,warning_stock,b_id,res_id,unit_code,remark,
         out_low_price,out_high_price,show_mobile,create_time,sh_id,average_price,rst_id,rss_id,mini_unit_code,mini_unit_stock,
-        mini_stock
+        mini_stock,parent_rst_id
         ) select
         t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.warning_stock,t.b_id,t.res_id,
         t.unit_code,t.remark,t.out_low_price,t.out_high_price,t.show_mobile,t.create_time,t.sh_id,t.average_price,t.rst_id,t.rss_id,
-        t.mini_unit_code,t.mini_unit_stock,t.mini_stock
+        t.mini_unit_code,t.mini_unit_stock,t.mini_stock,t.parent_rst_id
         from business_resource_store t where 1=1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
@@ -132,6 +135,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and t.rss_id= #{rssId}
@@ -190,14 +196,16 @@
     <select id="getResourceStoreInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.price,t.res_code,t.res_code resCode,t.description,t.status_cd,t.status_cd
         statusCd,t.store_id,t.store_id storeId,t.stock,t.warning_stock,t.warning_stock warningStock,t.b_id,t.b_id
-        bId,t.res_id,t.res_id resId,t.out_low_price,t.rst_id,t.rst_id rstId,t.rss_id,t.rss_id rssId,
-        t.out_low_price outLowPrice,rst.name rstName,t.out_high_price,t.out_high_price outHighPrice,
+        bId,t.res_id,t.res_id resId,t.out_low_price,t.rss_id,t.rss_id rssId,
+        t.out_low_price outLowPrice,t.out_high_price,t.out_high_price outHighPrice,
         t.unit_code,t.unit_code unitCode,t.remark,t.show_mobile,t.show_mobile showMobile,
         t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,sh.sh_name shName,t.average_price,t.average_price
         averagePrice,rss.spec_name rssName,t.mini_unit_code,t.mini_unit_code miniUnitCode,t.mini_stock,t.mini_stock
-        miniStock,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name miniUnitCodeName,sh.sh_type shType
+        miniStock,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name
+        miniUnitCodeName,sh.sh_type shType,t.parent_rst_id parentRstId,t.rst_id rstId,rst1.name parentRstName,rst.name rstName
         from resource_store t
         left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
+        left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
         left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
         left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
@@ -216,6 +224,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and t.rss_id= #{rssId}
@@ -280,6 +291,9 @@
         <if test="miniStock !=null and miniStock != ''">
             and t.mini_stock= #{miniStock}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            and sh.is_show= #{isShow}
+        </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
@@ -303,6 +317,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             , t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            , t.parent_rst_id= #{parentRstId}
         </if>
         <if test="rssId !=null and rssId != ''">
             , t.rss_id= #{rssId}
@@ -374,6 +391,9 @@
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}
         </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
+        </if>
         <if test="rssId !=null and rssId != ''">
             and t.rss_id= #{rssId}
         </if>
@@ -439,6 +459,9 @@
         </if>
         <if test="miniStock !=null and miniStock != ''">
             and t.mini_stock= #{miniStock}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and sh.is_show= #{isShow}
         </if>
         <if test="resOrderType == '20000'">
             and t.stock > 0

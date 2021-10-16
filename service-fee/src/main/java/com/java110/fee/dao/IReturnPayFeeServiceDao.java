@@ -55,6 +55,26 @@ public interface IReturnPayFeeServiceDao {
      */
     List<Map> getReturnPayFeeInfo(Map info) throws DAOException;
 
+    /**
+     * 查询退费表信息（instance过程）
+     * 根据bId 查询退费表信息
+     *
+     * @param info bId 信息
+     * @return 退费表信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getRoomReturnPayFeeInfo(Map info) throws DAOException;
+
+    /**
+     * 查询退费表信息（instance过程）
+     * 根据bId 查询退费表信息
+     *
+     * @param info bId 信息
+     * @return 退费表信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getCarReturnPayFeeInfo(Map info) throws DAOException;
+
 
     /**
      * 修改退费表信息

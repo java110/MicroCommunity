@@ -6,6 +6,7 @@ public class ResourceStoreSpecificationPo implements Serializable {
 
     private String rssId;
     private String rstId;
+    private String parentRstId;
     private String specName;
     private String description;
     private String storeId;
@@ -50,5 +51,11 @@ public class ResourceStoreSpecificationPo implements Serializable {
         this.storeId = storeId;
     }
 
+    public String getParentRstId() {
+        return parentRstId;
+    }
 
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
+    }
 }

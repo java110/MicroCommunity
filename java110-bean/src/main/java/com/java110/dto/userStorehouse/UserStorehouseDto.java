@@ -23,9 +23,11 @@ public class UserStorehouseDto extends PageDto implements Serializable {
     private String usId;
     private String resCode;
     private String rstId;
+    private String parentRstId;
     private String outLowPrice;
     private String outHighPrice;
     private String rstName;
+    private String parentRstName;
     private String specName;
     private String rssId;
     private String unitCode;
@@ -213,5 +215,21 @@ public class UserStorehouseDto extends PageDto implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
     }
 }

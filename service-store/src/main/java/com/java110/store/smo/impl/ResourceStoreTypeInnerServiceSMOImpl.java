@@ -34,7 +34,7 @@ public class ResourceStoreTypeInnerServiceSMOImpl extends BaseServiceSMO impleme
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<ResourceStoreTypeDto> queryResourceStoreTypes(@RequestBody  ResourceStoreTypeDto resourceResourceStoreTypeTypeDto) {
+    public List<ResourceStoreTypeDto> queryResourceStoreTypes(@RequestBody ResourceStoreTypeDto resourceResourceStoreTypeTypeDto) {
 
         //校验是否传了 分页信息
 
@@ -64,7 +64,7 @@ public class ResourceStoreTypeInnerServiceSMOImpl extends BaseServiceSMO impleme
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
      * @param resourceResourceStoreTypeType 小区物品类型信息
-     * @param users 用户列表
+     * @param users                         用户列表
      */
     private void refreshResourceStoreType(ResourceStoreTypeDto resourceResourceStoreTypeType, List<UserDto> users) {
         for (UserDto user : users) {
@@ -80,7 +80,7 @@ public class ResourceStoreTypeInnerServiceSMOImpl extends BaseServiceSMO impleme
      * @param resourceResourceStoreTypeTypes 小区楼信息
      * @return 批量userIds 信息
      */
-     private String[] getUserIds(List<ResourceStoreTypeDto> resourceResourceStoreTypeTypes) {
+    private String[] getUserIds(List<ResourceStoreTypeDto> resourceResourceStoreTypeTypes) {
         List<String> userIds = new ArrayList<String>();
         for (ResourceStoreTypeDto resourceResourceStoreTypeType : resourceResourceStoreTypeTypes) {
             userIds.add(resourceResourceStoreTypeType.getRstId());
@@ -91,7 +91,8 @@ public class ResourceStoreTypeInnerServiceSMOImpl extends BaseServiceSMO impleme
 
     @Override
     public int queryResourceStoreTypesCount(@RequestBody ResourceStoreTypeDto resourceResourceStoreTypeTypeDto) {
-        return resourceResourceStoreTypeTypeServiceDaoImpl.queryResourceStoreTypesCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreTypeTypeDto));    }
+        return resourceResourceStoreTypeTypeServiceDaoImpl.queryResourceStoreTypesCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreTypeTypeDto));
+    }
 
     public IResourceStoreTypeServiceDao getResourceStoreTypeServiceDaoImpl() {
         return resourceResourceStoreTypeTypeServiceDaoImpl;

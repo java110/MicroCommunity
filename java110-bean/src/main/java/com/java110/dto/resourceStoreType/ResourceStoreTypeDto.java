@@ -21,6 +21,7 @@ public class ResourceStoreTypeDto extends PageDto implements Serializable {
     private String storeId;
     private Date createTime;
     private String statusCd = "0";
+    private String parentId = "0"; //父级id,默认为0
 
     public String getRstId() {
         return rstId;
@@ -68,5 +69,13 @@ public class ResourceStoreTypeDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

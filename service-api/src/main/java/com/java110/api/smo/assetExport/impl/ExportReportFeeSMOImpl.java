@@ -585,7 +585,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(1).setCellValue(dataObj.getString("userName"));
             row.createCell(2).setCellValue(dataObj.getString("endUserName"));
             row.createCell(3).setCellValue(dataObj.getString("resOrderTypeName"));
-            row.createCell(4).setCellValue(dataObj.getString("rstName"));
+            row.createCell(4).setCellValue(dataObj.getString("parentRstName") + ">" + dataObj.getString("rstName"));
             row.createCell(5).setCellValue(dataObj.getString("resName"));
             row.createCell(6).setCellValue(dataObj.getString("specName"));
             row.createCell(7).setCellValue(dataObj.getString("supplierName"));
@@ -669,7 +669,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             dataObj = allocationStorehouses.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("applyId"));
             row.createCell(1).setCellValue(dataObj.getString("resId"));
-            row.createCell(2).setCellValue(dataObj.getString("rstName"));
+            row.createCell(2).setCellValue(dataObj.getString("parentRstName") + ">" + dataObj.getString("rstName"));
             row.createCell(3).setCellValue(dataObj.getString("resName"));
             row.createCell(4).setCellValue(dataObj.getString("specName"));
             row.createCell(5).setCellValue(dataObj.getString("originalStock") + dataObj.getString("unitCodeName"));
@@ -714,7 +714,12 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             dataObj = resourceStores.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("resId"));
             row.createCell(1).setCellValue(dataObj.getString("shName"));
-            row.createCell(2).setCellValue(dataObj.getString("rstName"));
+//            row.createCell(2).setCellValue(dataObj.getString("rstName"));
+            if (StringUtil.isEmpty(dataObj.getString("rstName"))) {
+                row.createCell(2).setCellValue(dataObj.getString("parentRstName"));
+            } else {
+                row.createCell(2).setCellValue(dataObj.getString("parentRstName") + ">" + dataObj.getString("rstName"));
+            }
             row.createCell(3).setCellValue(dataObj.getString("resName"));
             row.createCell(4).setCellValue(dataObj.getString("rssName"));
             row.createCell(5).setCellValue(dataObj.getString("resCode"));
@@ -847,7 +852,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             dataObj = allocationUserStorehouses.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("ausId"));
             row.createCell(1).setCellValue(dataObj.getString("resId"));
-            row.createCell(2).setCellValue(dataObj.getString("rstName"));
+            row.createCell(2).setCellValue(dataObj.getString("parentRstName") + ">" + dataObj.getString("rstName"));
             row.createCell(3).setCellValue(dataObj.getString("resName"));
             row.createCell(4).setCellValue(dataObj.getString("specName"));
             row.createCell(5).setCellValue(dataObj.getString("acceptUserId"));
@@ -885,7 +890,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(0).setCellValue(dataObj.getString("rsurId"));
             row.createCell(1).setCellValue(dataObj.getString("repairId"));
             row.createCell(2).setCellValue(dataObj.getString("resId"));
-            row.createCell(3).setCellValue(dataObj.getString("rstName"));
+            row.createCell(3).setCellValue(dataObj.getString("parentRstName") + ">" + dataObj.getString("rstName"));
             row.createCell(4).setCellValue(dataObj.getString("resourceStoreName"));
             row.createCell(5).setCellValue(dataObj.getString("specName"));
             row.createCell(6).setCellValue(dataObj.getString("quantity") + dataObj.getString("miniUnitCodeName"));
@@ -1197,7 +1202,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("page", 1);
         reqJson.put("row", 10000);
-        apiUrl = "/purchaseApplyDetail.listPurchaseApplyDetails" + mapToUrlParam(reqJson);
+        apiUrl = "purchaseApplyDetail.listPurchaseApplyDetails" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
             return null;
@@ -1221,7 +1226,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         reqJson.put("userId", pd.getUserId());
         reqJson.put("page", 1);
         reqJson.put("row", 10000);
-        apiUrl = "/resourceStore.listAllocationStorehouseApplys" + mapToUrlParam(reqJson);
+        apiUrl = "resourceStore.listAllocationStorehouseApplys" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
             return null;
@@ -1434,7 +1439,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("page", 1);
         reqJson.put("row", 10001);
-        apiUrl ="/reportFeeYearCollection/queryReportFeeYear" + mapToUrlParam(reqJson);
+        apiUrl = "/reportFeeYearCollection/queryReportFeeYear" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
             return null;

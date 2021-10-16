@@ -39,6 +39,7 @@ public abstract class AbstractResourceStoreSpecificationBusinessServiceDataFlowL
         businessResourceStoreSpecificationInfo.put("newBId", businessResourceStoreSpecificationInfo.get("b_id"));
         businessResourceStoreSpecificationInfo.put("rssId", businessResourceStoreSpecificationInfo.get("rss_id"));
         businessResourceStoreSpecificationInfo.put("rstId", businessResourceStoreSpecificationInfo.get("rst_id"));
+        businessResourceStoreSpecificationInfo.put("parentRstId", businessResourceStoreSpecificationInfo.get("parent_rst_id"));
         businessResourceStoreSpecificationInfo.put("operate", businessResourceStoreSpecificationInfo.get("operate"));
         businessResourceStoreSpecificationInfo.put("specName", businessResourceStoreSpecificationInfo.get("spec_name"));
         businessResourceStoreSpecificationInfo.put("description", businessResourceStoreSpecificationInfo.get("description"));
@@ -69,6 +70,7 @@ public abstract class AbstractResourceStoreSpecificationBusinessServiceDataFlowL
 
         currentResourceStoreSpecificationInfo.put("rssId", currentResourceStoreSpecificationInfo.get("rss_id"));
         currentResourceStoreSpecificationInfo.put("rstId", currentResourceStoreSpecificationInfo.get("rst_id"));
+        currentResourceStoreSpecificationInfo.put("parentRstId", currentResourceStoreSpecificationInfo.get("parent_rst_id"));
         currentResourceStoreSpecificationInfo.put("operate", currentResourceStoreSpecificationInfo.get("operate"));
         currentResourceStoreSpecificationInfo.put("specName", currentResourceStoreSpecificationInfo.get("spec_name"));
         currentResourceStoreSpecificationInfo.put("description", currentResourceStoreSpecificationInfo.get("description"));

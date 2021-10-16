@@ -169,6 +169,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     resourceStorePo.setOutLowPrice(originalResourceStoreDtos.get(0).getOutLowPrice());
                     resourceStorePo.setOutHighPrice(originalResourceStoreDtos.get(0).getOutHighPrice());
                     resourceStorePo.setRstId(originalResourceStoreDtos.get(0).getRstId());
+                    resourceStorePo.setParentRstId(originalResourceStoreDtos.get(0).getParentRstId());
                     resourceStorePo.setRssId(originalResourceStoreDtos.get(0).getRssId());
                     if (!StringUtil.isEmpty(originalResourceStoreDtos.get(0).getMiniUnitCode()) && !StringUtil.isEmpty(originalResourceStoreDtos.get(0).getMiniUnitStock())) {
                         resourceStorePo.setMiniUnitCode(originalResourceStoreDtos.get(0).getMiniUnitCode());
@@ -209,6 +210,7 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     resourceStorePo.setWarningStock(resourceStoreDtos.get(0).getWarningStock());
                     resourceStorePo.setAveragePrice(resourceStoreDtos.get(0).getAveragePrice());
                     resourceStorePo.setRstId(resourceStoreDtos.get(0).getRstId());
+                    resourceStorePo.setParentRstId(resourceStoreDtos.get(0).getParentRstId());
                     resourceStorePo.setRssId(resourceStoreDtos.get(0).getRssId());
                     resourceStorePo.setMiniUnitCode(resourceStoreDtos.get(0).getMiniUnitCode());
                     resourceStorePo.setMiniUnitStock(resourceStoreDtos.get(0).getMiniUnitStock());

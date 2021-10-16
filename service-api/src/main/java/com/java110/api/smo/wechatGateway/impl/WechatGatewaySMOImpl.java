@@ -81,7 +81,7 @@ public class WechatGatewaySMOImpl extends DefaultAbstractComponentSMO implements
                     if (noBindOwnerResponseMessage.indexOf("?") > -1) {
                         noBindOwnerResponseMessage += ("&wAppId=" + WechatFactory.getAppId(wId));
                     } else {
-                        noBindOwnerResponseMessage += ("?wAppId=" + WechatFactory.getAppId(wId));
+//                        noBindOwnerResponseMessage += ("?wAppId=" + WechatFactory.getAppId(wId));
                     }
                 }
             }
