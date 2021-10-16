@@ -93,14 +93,18 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
             reqJson.put("psId", parkingSpaceDtos.get(0).getPsId());
         }
+        OwnerCarDto ownerCarDto =  BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
+        if(reqJson.containsKey("carTypeCds")){
+            ownerCarDto.setCarTypeCd("");
+            ownerCarDto.setCarTypeCds(reqJson.getString("carTypeCds").split(","));
+        }
 
         //查询总记录数
-        int total = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class));
+        int total = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(ownerCarDto);
 //        int count = 0;
         List<OwnerCarDto> ownerCarDtoList = null;
 
         if (total > 0) {
-            OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
             ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
             //小区20条时刷房屋和车位信息
@@ -118,12 +122,11 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
         basePrivilegeDto.setUserId(dataFlowContext.getUserId());
         privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         if (privileges == null || privileges.size() == 0) {
-            for (OwnerCarDto ownerCarDto : ownerCarDtoList) {
-
-                String link = ownerCarDto.getLink();
+            for (OwnerCarDto tmpOwnerCarDto : ownerCarDtoList) {
+                String link = tmpOwnerCarDto.getLink();
                 if (!StringUtil.isEmpty(link)) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
-                    ownerCarDto.setLink(link);
+                    tmpOwnerCarDto.setLink(link);
                 }
             }
         }

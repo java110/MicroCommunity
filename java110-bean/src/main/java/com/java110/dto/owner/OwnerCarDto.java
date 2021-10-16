@@ -67,6 +67,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String bId;
     private String carTypeCd;
+    private String[] carTypeCds;
     private String memberId;
 
 
@@ -333,5 +334,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setCarNumLike(String carNumLike) {
         this.carNumLike = carNumLike;
+    }
+
+    public String[] getCarTypeCds() {
+        return carTypeCds;
+    }
+
+    public void setCarTypeCds(String[] carTypeCds) {
+        this.carTypeCds = carTypeCds;
     }
 }
