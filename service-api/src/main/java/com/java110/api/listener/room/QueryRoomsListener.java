@@ -9,10 +9,12 @@ import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
@@ -48,6 +50,9 @@ public class QueryRoomsListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
 
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
@@ -122,6 +127,17 @@ public class QueryRoomsListener extends AbstractServiceApiDataFlowListener {
                     }
                     roomDto.setIdCard(idCard);
                     roomDto.setLink(link);
+                }
+                //商铺类型查询起租时间
+                if (roomDto.getRoomType().equals(RoomDto.ROOM_TYPE_SHOPS)) {
+                    OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+                    ownerRoomRelDto.setRoomId(roomDto.getRoomId());
+                    ownerRoomRelDto.setStatusCd("0");
+                    List<OwnerRoomRelDto> ownerRoomRelDtoList = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+                    if (ownerRoomRelDtoList != null && ownerRoomRelDtoList.size() == 1) {
+                        roomDto.setStartTime(ownerRoomRelDtoList.get(0).getStartTime());
+                        roomDto.setEndTime(ownerRoomRelDtoList.get(0).getEndTime());
+                    }
                 }
             }
         }
