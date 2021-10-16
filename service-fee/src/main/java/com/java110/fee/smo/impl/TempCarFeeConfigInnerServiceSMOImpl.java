@@ -142,7 +142,7 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
     }
 
     @Override
-    public List<CarInoutDetailDto> computeTempCarInoutDetailFee(List<CarInoutDetailDto> carInoutDtos) {
+    public List<CarInoutDetailDto> computeTempCarInoutDetailFee(@RequestBody List<CarInoutDetailDto> carInoutDtos) {
         TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
         tempCarFeeConfigDto.setPaId(carInoutDtos.get(0).getPaId());
         tempCarFeeConfigDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
