@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerCarOpenUserV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存车辆微信关系信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerCarOpenUserInfo" parameterType="Map">
+        insert into owner_car_open_user(
+open_id,nickname,headimgurl,car_num,open_user_id,open_type
+) values (
+#{openId},#{nickname},#{headimgurl},#{carNum},#{openUserId},#{openType}
+)
+    </insert>
+
+
+
+    <!-- 查询车辆微信关系信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerCarOpenUserInfo" parameterType="Map" resultType="Map">
+        select  t.open_id,t.open_id openId,t.nickname,t.headimgurl,t.car_num,t.car_num carNum,t.status_cd,t.status_cd statusCd,t.open_user_id,t.open_user_id openUserId,t.open_type,t.open_type openType 
+from owner_car_open_user t 
+where 1 =1 
+<if test="openId !=null and openId != ''">
+   and t.open_id= #{openId}
+</if> 
+<if test="nickname !=null and nickname != ''">
+   and t.nickname= #{nickname}
+</if> 
+<if test="headimgurl !=null and headimgurl != ''">
+   and t.headimgurl= #{headimgurl}
+</if> 
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="openUserId !=null and openUserId != ''">
+   and t.open_user_id= #{openUserId}
+</if> 
+<if test="openType !=null and openType != ''">
+   and t.open_type= #{openType}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改车辆微信关系信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerCarOpenUserInfo" parameterType="Map">
+        update  owner_car_open_user t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="openId !=null and openId != ''">
+, t.open_id= #{openId}
+</if> 
+<if test="nickname !=null and nickname != ''">
+, t.nickname= #{nickname}
+</if> 
+<if test="headimgurl !=null and headimgurl != ''">
+, t.headimgurl= #{headimgurl}
+</if> 
+<if test="carNum !=null and carNum != ''">
+, t.car_num= #{carNum}
+</if> 
+<if test="openType !=null and openType != ''">
+, t.open_type= #{openType}
+</if> 
+ where 1=1 <if test="openUserId !=null and openUserId != ''">
+and t.open_user_id= #{openUserId}
+</if> 
+
+    </update>
+
+    <!-- 查询车辆微信关系数量 add by wuxw 2018-07-03 -->
+     <select id="queryOwnerCarOpenUsersCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from owner_car_open_user t 
+where 1 =1 
+<if test="openId !=null and openId != ''">
+   and t.open_id= #{openId}
+</if> 
+<if test="nickname !=null and nickname != ''">
+   and t.nickname= #{nickname}
+</if> 
+<if test="headimgurl !=null and headimgurl != ''">
+   and t.headimgurl= #{headimgurl}
+</if> 
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="openUserId !=null and openUserId != ''">
+   and t.open_user_id= #{openUserId}
+</if> 
+<if test="openType !=null and openType != ''">
+   and t.open_type= #{openType}
+</if> 
+
+
+     </select>
+
+</mapper>

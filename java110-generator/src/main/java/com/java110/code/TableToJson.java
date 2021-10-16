@@ -7,21 +7,25 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `machine_type` (\n" +
-            "  `type_id` varchar(30) NOT NULL COMMENT '设备类型ID',\n" +
-            "  `machine_type_cd` varchar(30) NOT NULL COMMENT '设备大类 详情看t_dict',\n" +
-            "  `machine_type_name` varchar(30) NOT NULL COMMENT '设备类型名称',\n" +
+    public static final String createTableSql = "CREATE TABLE `owner_car_open_user` (\n" +
+            "  `open_user_id` varchar(30) NOT NULL COMMENT 'app用户ID',\n" +
+            "  `open_id` varchar(128) NOT NULL COMMENT '微信或支付宝开放ID',\n" +
+            "  `car_num` varchar(32) NOT NULL COMMENT '车牌号',\n" +
+            "  `open_type` varchar(12) NOT NULL DEFAULT 'WECHAT' COMMENT '微信WECHAT 支付宝 ALI',\n" +
+            "  `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',\n" +
+            "  `headimgurl` varchar(255) DEFAULT NULL COMMENT '微信头像',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
-            "  KEY `idx_bm_machine_id` (`type_id`) USING BTREE\n";
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0, 在用 1失效',\n" +
+            "  PRIMARY KEY (`open_user_id`)\n" +
+            ")";
 
     public static void main(String[] args) {
-        String desc = "老人类型";
-        String id = "typeId";
-        String name = "govOldPersonType";
-        String shareName = "cust"; //生成到那个服务下
-        String shareColumn = "ca_id";
-        String shareParam = "caId";
+        String desc = "车辆微信关系";
+        String id = "openUserId";
+        String name = "ownerCarOpenUser";
+        String shareName = "user"; //生成到那个服务下
+        String shareColumn = "open_user_id";
+        String shareParam = "openUserId";
 
         //业务名称 desc 业务编码名称生成后类名 name 主键 id  需要放到那个服务 shareName
         String newSql = createTableSql.substring(createTableSql.indexOf("(") + 1, createTableSql.lastIndexOf(")"));

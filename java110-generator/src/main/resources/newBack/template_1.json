@@ -1,0 +1,33 @@
+{
+  "param": {
+    "openId": "open_id",
+    "nickname": "nickname",
+    "headimgurl": "headimgurl",
+    "carNum": "car_num",
+    "statusCd": "status_cd",
+    "openUserId": "open_user_id",
+    "openType": "open_type"
+  },
+  "name": "ownerCarOpenUser",
+  "shareColumn": "open_user_id",
+  "id": "openUserId",
+  "shareName": "user",
+  "autoMove": true,
+  "required": [
+    {
+      "msg": "微信或支付宝开放ID不能为空",
+      "code": "openId"
+    },
+    {
+      "msg": "车牌号不能为空",
+      "code": "carNum"
+    },
+    {
+      "msg": "微信WECHAT不能为空",
+      "code": "openType"
+    }
+  ],
+  "desc": "车辆微信关系",
+  "shareParam": "openUserId",
+  "tableName": "owner_car_open_user"
+}
