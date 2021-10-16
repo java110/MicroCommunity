@@ -53,7 +53,6 @@ public class GetCarMachineQrCodeUrl extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
-        Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含设备信息");
         Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含停车场");
 
     }
@@ -62,7 +61,7 @@ public class GetCarMachineQrCodeUrl extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-        ownerUrl += ("/#/pages/openDoorByQrCode/openDoorByQrCode?paId="+reqJson.getString("paId"));
+        ownerUrl += ("/#/pages/tempParkingFee/tempParkingFee?paId="+reqJson.getString("paId"));
         reqJson.put("url",ownerUrl);
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(reqJson));
     }
