@@ -10,7 +10,6 @@ import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.fee.TempCarFeeResult;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
@@ -18,12 +17,9 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
-import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigAttrDto;
-import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IComputeTempCarFee;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeConfigAttrInnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
@@ -34,7 +30,6 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -1554,38 +1549,17 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
 
     @Override
-    public void computeTempCarStopTimeAndFee(List<CarInoutDto> carInoutDtos) {
+    public List<CarInoutDto> computeTempCarStopTimeAndFee(List<CarInoutDto> carInoutDtos) {
 
         if (carInoutDtos == null || carInoutDtos.size() < 1) {
-            return;
+            return null;
         }
 
-//计算停车时间
-        TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
-        tempCarFeeConfigDto.setPaId(carInoutDtos.get(0).getPaId());
-        tempCarFeeConfigDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
-        List<TempCarFeeConfigDto> tempCarFeeConfigDtos = tempCarFeeConfigInnerServiceSMOImpl.queryTempCarFeeConfigs(tempCarFeeConfigDto);
 
-        if (tempCarFeeConfigDtos == null || tempCarFeeConfigDtos.size() < 1) {
-            return;
-        }
-        TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto = new TempCarFeeConfigAttrDto();
-        tempCarFeeConfigAttrDto.setConfigId(tempCarFeeConfigDto.getConfigId());
-        tempCarFeeConfigAttrDto.setCommunityId(tempCarFeeConfigDto.getCommunityId());
+        carInoutDtos = tempCarFeeConfigInnerServiceSMOImpl.computeTempCarFee(carInoutDtos);
 
-        List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrInnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
-        long time = 0;
-        for (CarInoutDto carInoutDto : carInoutDtos) {
-            try {
-                IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
-                TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDtos.get(0), tempCarFeeConfigDtos.get(0),tempCarFeeConfigAttrDtos);
-                carInoutDto.setMin(result.getMin());
-                carInoutDto.setHours(result.getHours());
-                carInoutDto.setPayCharge(result.getPayCharge()+"");
-            } catch (Exception e) {
-                logger.error("临时车算费失败", e);
-            }
-        }
+        return carInoutDtos;
+
     }
 
 

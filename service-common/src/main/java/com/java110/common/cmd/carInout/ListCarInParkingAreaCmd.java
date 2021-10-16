@@ -75,7 +75,7 @@ public class ListCarInParkingAreaCmd extends AbstractServiceCmdListener {
 
         if (count > 0) {
             carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
-            computeCarInouts(carInoutDtos);
+            carInoutDtos = computeCarInouts(carInoutDtos);
         } else {
             carInoutDtos = new ArrayList<>();
         }
@@ -84,10 +84,10 @@ public class ListCarInParkingAreaCmd extends AbstractServiceCmdListener {
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-        cmdDataFlowContext.setResponseEntity(ResultVo.success());
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
-    private void computeCarInouts(List<CarInoutDto> carInoutDtos) {
-        computeFeeSMOImpl.computeTempCarStopTimeAndFee(carInoutDtos);
+    private List<CarInoutDto> computeCarInouts(List<CarInoutDto> carInoutDtos) {
+        return computeFeeSMOImpl.computeTempCarStopTimeAndFee(carInoutDtos);
     }
 }

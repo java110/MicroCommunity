@@ -1,6 +1,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -48,4 +49,13 @@ public interface ITempCarFeeConfigInnerServiceSMO {
      */
     @RequestMapping(value = "/queryTempCarFeeRules", method = RequestMethod.POST)
     List<TempCarFeeRuleDto> queryTempCarFeeRules(@RequestBody TempCarFeeRuleDto tempCarFeeRuleDto);
+
+    /**
+     * 计算临时车费用
+     *
+     * @param carInoutDtos
+     * @return
+     */
+    @RequestMapping(value = "/computeTempCarFee", method = RequestMethod.POST)
+    List<CarInoutDto> computeTempCarFee(@RequestBody List<CarInoutDto> carInoutDtos);
 }

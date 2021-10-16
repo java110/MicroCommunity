@@ -149,5 +149,5 @@ public interface IComputeFeeSMO {
      *
      * @param carInoutDtos
      */
-    void computeTempCarStopTimeAndFee(List<CarInoutDto> carInoutDtos);
+    List<CarInoutDto> computeTempCarStopTimeAndFee(List<CarInoutDto> carInoutDtos);
 }
