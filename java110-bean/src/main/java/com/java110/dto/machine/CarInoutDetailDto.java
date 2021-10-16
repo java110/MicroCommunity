@@ -13,7 +13,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class CarInoutDetailDto extends PageDto implements Serializable {
+public class CarInoutDetailDto extends CarInoutDto implements Serializable {
 
     public static final String CAR_INOUT_IN = "3306";
     public static final String CAR_INOUT_OUT = "3307";
@@ -25,6 +25,7 @@ public class CarInoutDetailDto extends PageDto implements Serializable {
     private String detailId;
     private String carNum;
     private String communityId;
+
 
 
     private Date createTime;
@@ -104,4 +105,6 @@ public class CarInoutDetailDto extends PageDto implements Serializable {
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+
 }

@@ -10,6 +10,7 @@ import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.machine.CarInoutDetailDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
@@ -1560,6 +1561,18 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         return carInoutDtos;
 
+    }
+
+    @Override
+    public List<CarInoutDetailDto> computeTempCarInoutDetailStopTimeAndFee(List<CarInoutDetailDto> carInoutDtos) {
+        if (carInoutDtos == null || carInoutDtos.size() < 1) {
+            return null;
+        }
+
+
+        carInoutDtos = tempCarFeeConfigInnerServiceSMOImpl.computeTempCarInoutDetailFee(carInoutDtos);
+
+        return carInoutDtos;
     }
 
 

@@ -4,6 +4,7 @@ package com.java110.fee.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.TempCarFeeResult;
+import com.java110.dto.machine.CarInoutDetailDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigAttrDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
@@ -15,6 +16,7 @@ import com.java110.intf.fee.ITempCarFeeConfigAttrInnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -130,6 +133,48 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
                 carInoutDto.setMin(result.getMin());
                 carInoutDto.setHours(result.getHours());
                 carInoutDto.setPayCharge(result.getPayCharge() + "");
+            } catch (Exception e) {
+                logger.error("临时车算费失败", e);
+            }
+        }
+
+        return carInoutDtos;
+    }
+
+    @Override
+    public List<CarInoutDetailDto> computeTempCarInoutDetailFee(List<CarInoutDetailDto> carInoutDtos) {
+        TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
+        tempCarFeeConfigDto.setPaId(carInoutDtos.get(0).getPaId());
+        tempCarFeeConfigDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
+        List<TempCarFeeConfigDto> tempCarFeeConfigDtos = queryTempCarFeeConfigs(tempCarFeeConfigDto);
+
+        if (tempCarFeeConfigDtos == null || tempCarFeeConfigDtos.size() < 1) {
+            return carInoutDtos;
+        }
+        TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto = new TempCarFeeConfigAttrDto();
+        tempCarFeeConfigAttrDto.setConfigId(tempCarFeeConfigDto.getConfigId());
+        tempCarFeeConfigAttrDto.setCommunityId(tempCarFeeConfigDto.getCommunityId());
+
+        List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrInnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
+        IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
+        for (CarInoutDetailDto carInoutDto : carInoutDtos) {
+            try {
+                if (CarInoutDetailDto.CAR_INOUT_IN.equals(carInoutDto.getCarInout())) {
+                    TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDto, tempCarFeeConfigDtos.get(0), tempCarFeeConfigAttrDtos);
+                    carInoutDto.setMin(result.getMin());
+                    carInoutDto.setHours(result.getHours());
+                    carInoutDto.setPayCharge(result.getPayCharge() + "");
+                } else {
+                    //获取停车时间
+                    Date stateDate = DateUtil.getDateFromString(carInoutDto.getInTime(), DateUtil.DATE_FORMATE_STRING_A);
+                    Date endDate = DateUtil.getDateFromString(carInoutDto.getOutTime(), DateUtil.DATE_FORMATE_STRING_A);
+                    long min = (endDate.getTime() - stateDate.getTime()) / (60 * 1000);
+                    long hours = min / 60; //因为两者都是整数，你得到一个int
+                    long minutes = min % 60;
+                    carInoutDto.setMin(minutes);
+                    carInoutDto.setHours(hours);
+                    carInoutDto.setPayCharge(carInoutDto.getRealCharge());
+                }
             } catch (Exception e) {
                 logger.error("临时车算费失败", e);
             }

@@ -20,6 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.machine.CarInoutDetailDto;
 import com.java110.intf.common.ICarInoutDetailV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -52,6 +53,9 @@ public class ListCarInoutDetailCmd extends AbstractServiceCmdListener {
     @Autowired
     private ICarInoutDetailV1InnerServiceSMO carInoutDetailV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -68,6 +72,7 @@ public class ListCarInoutDetailCmd extends AbstractServiceCmdListener {
 
         if (count > 0) {
             carInoutDetailDtos = carInoutDetailV1InnerServiceSMOImpl.queryCarInoutDetails(carInoutDetailDto);
+            carInoutDetailDtos = computeCarInoutDetail(carInoutDetailDtos);
         } else {
             carInoutDetailDtos = new ArrayList<>();
         }
@@ -77,5 +82,10 @@ public class ListCarInoutDetailCmd extends AbstractServiceCmdListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+
+    private List<CarInoutDetailDto> computeCarInoutDetail(List<CarInoutDetailDto> carInoutDetailDtos) {
+        return computeFeeSMOImpl.computeTempCarInoutDetailStopTimeAndFee(carInoutDetailDtos);
     }
 }

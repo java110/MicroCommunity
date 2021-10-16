@@ -1,6 +1,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.machine.CarInoutDetailDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
@@ -58,4 +59,7 @@ public interface ITempCarFeeConfigInnerServiceSMO {
      */
     @RequestMapping(value = "/computeTempCarFee", method = RequestMethod.POST)
     List<CarInoutDto> computeTempCarFee(@RequestBody List<CarInoutDto> carInoutDtos);
+
+    @RequestMapping(value = "/computeTempCarInoutDetailFee", method = RequestMethod.POST)
+    List<CarInoutDetailDto> computeTempCarInoutDetailFee(@RequestBody List<CarInoutDetailDto> carInoutDtos);
 }
