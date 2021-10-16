@@ -48,6 +48,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/wechat/gateway,");//微信公众号对接接口
         exclusions.append("/app/loginOwnerWechatAuth,");//微信公众号对接接口
         exclusions.append("/app/refreshToken,");//微信公众号对接接口
+        exclusions.append("/app/refreshOpenId,");//微信公众号对接接口
+        exclusions.append("/app/openServiceNotifyOpenId,");//微信公众号对接接口
         exclusions.append("/app/renting/queryRentingPool,");//微信公众号对接接口
         exclusions.append("/app/activitiesType/queryActivitiesType,");//查询大类
         exclusions.append("/app/product/queryProductLabel,");//查询大类

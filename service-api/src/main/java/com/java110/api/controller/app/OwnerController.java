@@ -16,12 +16,12 @@
 package com.java110.api.controller.app;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.smo.login.IOwnerAppLoginSMO;
 import com.java110.api.smo.login.IWxLoginSMO;
 import com.java110.api.smo.staff.IStaffAuthSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
-import com.java110.api.smo.login.IOwnerAppLoginSMO;
 import com.java110.core.factory.WechatFactory;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
@@ -32,7 +32,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,7 +70,7 @@ public class OwnerController extends BaseController {
     public ResponseEntity<String> loginOwner(@RequestBody String postInfo, HttpServletRequest request) {
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         String appId = request.getHeader("APP_ID");
-        if(StringUtil.isEmpty(appId)){
+        if (StringUtil.isEmpty(appId)) {
             appId = request.getHeader("APP-ID");
         }
         IPageData pd = PageData.newInstance().builder("", "", "", postInfo,
@@ -93,7 +97,7 @@ public class OwnerController extends BaseController {
     public ResponseEntity<String> loginOwnerByKey(@RequestBody String postInfo, HttpServletRequest request) {
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         String appId = request.getHeader("APP_ID");
-        if(StringUtil.isEmpty(appId)){
+        if (StringUtil.isEmpty(appId)) {
             appId = request.getHeader("APP-ID");
         }
         IPageData pd = PageData.newInstance().builder("", "", "", postInfo,
@@ -123,7 +127,7 @@ public class OwnerController extends BaseController {
         IPageData pd = PageData.newInstance().builder("", "", "", JSONObject.toJSONString(params),
                 "login", "", "", "", appId
         );
-        ResponseEntity responseEntity = ownerAppLoginSMOImpl.getPageAccessToken(pd,request);
+        ResponseEntity responseEntity = ownerAppLoginSMOImpl.getPageAccessToken(pd, request);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
         return responseEntity;
     }
@@ -142,15 +146,49 @@ public class OwnerController extends BaseController {
         IPageData pd = PageData.newInstance().builder("", "", "", "",
                 "login", "", "", "", request.getHeader("app-id")
         );
-        return ownerAppLoginSMOImpl.refreshToken(pd, redirectUrl,errorUrl,loginFlag, request, response);
+        return ownerAppLoginSMOImpl.refreshToken(pd, redirectUrl, errorUrl, loginFlag, request, response);
+
+    }
+
+    /**
+     * 微信登录接口
+     *
+     * @param request
+     */
+    @RequestMapping(path = "/openServiceNotifyOpenId")
+    public ResponseEntity<String> openServiceNotifyOpenId(HttpServletRequest request) {
+
+        Map<String, String> params = getParameterStringMap(request);
+        String appId = params.get("appId");
+        IPageData pd = PageData.newInstance().builder("", "", "", JSONObject.toJSONString(params),
+                "login", "", "", "", appId
+        );
+        ResponseEntity responseEntity = ownerAppLoginSMOImpl.openServiceNotifyOpenId(pd, request);
+        request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
+        return responseEntity;
+    }
+
+    /**
+     * 微信公众号号鉴权
+     *
+     * @param request
+     */
+    @RequestMapping(path = "/refreshOpenId")
+    public ResponseEntity<String> refreshOpenId(@RequestParam String redirectUrl,
+                                                @RequestParam String wAppId,
+                                                HttpServletRequest request,
+                                                HttpServletResponse response) {
+        IPageData pd = PageData.newInstance().builder("", "", "", "",
+                "login", "", "", "", request.getHeader("app-id")
+        );
+        return ownerAppLoginSMOImpl.refreshOpenId(pd, redirectUrl,wAppId, request, response);
 
     }
 
     @RequestMapping(path = "/getWId")
-    public ResponseEntity<String> getWId(@RequestParam String appId){
+    public ResponseEntity<String> getWId(@RequestParam String appId) {
         return ResultVo.createResponseEntity(WechatFactory.getWId(appId));
     }
-
 
 
     /**

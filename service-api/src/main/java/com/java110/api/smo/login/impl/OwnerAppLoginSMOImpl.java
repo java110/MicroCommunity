@@ -2,8 +2,9 @@ package com.java110.api.smo.login.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
+import com.java110.api.smo.login.IOwnerAppLoginSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
@@ -11,10 +12,11 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.user.UserDto;
-import com.java110.api.properties.WechatAuthProperties;
-import com.java110.api.smo.login.IOwnerAppLoginSMO;
 import com.java110.utils.cache.CommonCache;
-import com.java110.utils.constant.*;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;
@@ -377,6 +379,102 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
         return ResultVo.createResponseEntity(ResultVo.CODE_MACHINE_OK, ResultVo.MSG_OK, urlObj);
     }
 
+    @Override
+    public ResponseEntity<String> refreshOpenId(IPageData pd, String redirectUrl, String wAppId, HttpServletRequest request, HttpServletResponse response) {
+        //分配urlCode
+        String urlCode = UUID.randomUUID().toString();
+        JSONObject param = new JSONObject();
+        param.put("redirectUrl", redirectUrl);
+        CommonCache.setValue(urlCode, param.toJSONString(), expireTime);
+        SmallWeChatDto smallWeChatDto = null;
+        if (!StringUtil.isEmpty(wAppId)) {
+            JSONObject paramIn = new JSONObject();
+            paramIn.put("appId", wAppId);
+            smallWeChatDto = getSmallWechat(pd, paramIn);
+        }
+        if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
+            smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setAppId(wechatAuthProperties.getWechatAppId());
+            smallWeChatDto.setAppSecret(wechatAuthProperties.getWechatAppSecret());
+            smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
+            smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
+        }
+
+        URL url = null;
+        String openUrl = "";
+        try {
+            url = new URL(redirectUrl);
+
+            String newUrl = url.getProtocol() + "://" + url.getHost();
+            if (url.getPort() > 0) {
+                newUrl += (":" + url.getPort());
+            }
+
+            openUrl = WechatConstant.OPEN_AUTH
+                    .replace("APPID", smallWeChatDto.getAppId())
+                    .replace("SCOPE", "snsapi_userinfo")
+                    .replace(
+                            "REDIRECT_URL",
+                            URLEncoder
+                                    .encode(
+                                            (newUrl
+                                                    + "/app/openServiceNotifyOpenId?appId=992020061452450002&urlCode=" +
+                                                    urlCode + "&wId=" + WechatFactory.getWId(wAppId)),
+                                            "UTF-8")).replace("STATE", "1");
+
+        } catch (Exception e) {
+            logger.error("微信公众号鉴权 redirectUrl 错误 " + redirectUrl, e);
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, e.getLocalizedMessage());
+        }
+        return ResultVo.redirectPage(openUrl);
+    }
+
+    @Override
+    public ResponseEntity openServiceNotifyOpenId(IPageData pd, HttpServletRequest request) {
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String authCode = paramIn.getString("code");
+        String state = paramIn.getString("state");
+        String paramStr = CommonCache.getAndRemoveValue(paramIn.getString("urlCode"));
+
+        if (StringUtil.isEmpty(paramStr)) {
+            return ResultVo.redirectPage("/");
+        }
+
+        JSONObject param = JSONObject.parseObject(paramStr);
+        String redirectUrl = param.getString("redirectUrl");
+        String wId = paramIn.getString("wId");
+        SmallWeChatDto smallWeChatDto = null;
+        if (!StringUtil.isEmpty(wId)) {
+            paramIn.put("appId", WechatFactory.getAppId(wId));
+            smallWeChatDto = getSmallWechat(pd, paramIn);
+        }
+        if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
+            smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setAppId(wechatAuthProperties.getWechatAppId());
+            smallWeChatDto.setAppSecret(wechatAuthProperties.getWechatAppSecret());
+            smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
+            smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
+        }
+
+        String url = WechatConstant.APP_GET_ACCESS_TOKEN_URL.replace("APPID", smallWeChatDto.getAppId())
+                .replace("SECRET", smallWeChatDto.getAppSecret())
+                .replace("CODE", authCode);
+
+        ResponseEntity<String> paramOut = outRestTemplate.getForEntity(url, String.class);
+
+        logger.debug("调用微信换去openId " + paramOut);
+        if (paramOut.getStatusCode() != HttpStatus.OK) {
+            return ResultVo.redirectPage("/");
+        }
+        JSONObject paramObj = JSONObject.parseObject(paramOut.getBody());
+        //获取 openId
+        String openId = paramObj.getString("openid");
+        redirectUrl = redirectUrl + "&openId=" + openId;
+
+        //redirectUrl = redirectUrl + (redirectUrl.indexOf("?") > 0 ? "&key=" + tmpUserDto.getKey() : "?key=" + tmpUserDto.getKey());
+        return ResultVo.redirectPage(redirectUrl);
+    }
+
     /**
      * 公众号登录
      *
@@ -562,5 +660,5 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-    
+
 }

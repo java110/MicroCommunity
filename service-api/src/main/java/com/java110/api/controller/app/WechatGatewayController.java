@@ -220,4 +220,6 @@ public class WechatGatewayController extends BaseController {
 
         return token;
     }
+
+
 }

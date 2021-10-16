@@ -39,7 +39,7 @@ public interface IOwnerAppLoginSMO {
      * @return
      * @throws SMOException
      */
-    ResponseEntity<String> getPageAccessToken(IPageData pd,HttpServletRequest request) throws SMOException;
+    ResponseEntity<String> getPageAccessToken(IPageData pd, HttpServletRequest request) throws SMOException;
 
 
     /**
@@ -52,4 +52,17 @@ public interface IOwnerAppLoginSMO {
     ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl, String errorUrl,
                                         String loginFlag,
                                         HttpServletRequest request, HttpServletResponse response) throws SMOException;
+
+    /**
+     * 刷新openId
+     *
+     * @param pd
+     * @param redirectUrl
+     * @param request
+     * @param response
+     * @return
+     */
+    ResponseEntity<String> refreshOpenId(IPageData pd, String redirectUrl, String wAppId, HttpServletRequest request, HttpServletResponse response);
+
+    ResponseEntity openServiceNotifyOpenId(IPageData pd, HttpServletRequest request);
 }
