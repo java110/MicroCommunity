@@ -1,47 +1,37 @@
 {
   "param": {
-    "yelowCarIn": "yelow_car_in",
-    "fee": "fee",
-    "tempCarIn": "temp_car_in",
-    "boxName": "box_name",
+    "defaultArea": "default_area",
+    "baId": "ba_id",
+    "paId": "pa_id",
     "remark": "remark",
     "statusCd": "status_cd",
     "communityId": "community_id",
-    "blueCarIn": "blue_car_in",
     "boxId": "box_id"
   },
-  "name": "parkingBox",
+  "name": "parkingBoxArea",
   "shareColumn": "community_id",
-  "id": "boxId",
+  "id": "baId",
   "shareName": "community",
   "autoMove": true,
   "required": [
     {
-      "msg": "岗亭名称不能为空",
-      "code": "boxName"
+      "msg": "岗亭ID不能为空",
+      "code": "boxId"
+    },
+    {
+      "msg": "停车场ID不能为空",
+      "code": "paId"
     },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
     },
     {
-      "msg": "临时车是否进场不能为空",
-      "code": "tempCarIn"
-    },
-    {
-      "msg": "岗亭是否不能为空",
-      "code": "fee"
-    },
-    {
-      "msg": "蓝牌车是否可以进场不能为空",
-      "code": "blueCarIn"
-    },
-    {
-      "msg": "黄牌车是否可以进场不能为空",
-      "code": "yelowCarIn"
+      "msg": "是否默认停车场不能为空",
+      "code": "defaultArea"
     }
   ],
-  "desc": "岗亭",
+  "desc": "停车场岗亭",
   "shareParam": "communityId",
-  "tableName": "parking_box"
+  "tableName": "parking_box_area"
 }

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="parkingBoxAreaV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存停车场岗亭信息 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingBoxAreaInfo" parameterType="Map">
+        insert into parking_box_area(
+default_area,ba_id,pa_id,remark,community_id,box_id
+) values (
+#{defaultArea},#{baId},#{paId},#{remark},#{communityId},#{boxId}
+)
+    </insert>
+
+
+
+    <!-- 查询停车场岗亭信息 add by wuxw 2018-07-03 -->
+    <select id="getParkingBoxAreaInfo" parameterType="Map" resultType="Map">
+        select  t.default_area,t.default_area defaultArea,t.ba_id,t.ba_id baId,t.pa_id,t.pa_id paId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.box_id,t.box_id boxId 
+from parking_box_area t 
+where 1 =1 
+<if test="defaultArea !=null and defaultArea != ''">
+   and t.default_area= #{defaultArea}
+</if> 
+<if test="baId !=null and baId != ''">
+   and t.ba_id= #{baId}
+</if> 
+<if test="paId !=null and paId != ''">
+   and t.pa_id= #{paId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="boxId !=null and boxId != ''">
+   and t.box_id= #{boxId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改停车场岗亭信息 add by wuxw 2018-07-03 -->
+    <update id="updateParkingBoxAreaInfo" parameterType="Map">
+        update  parking_box_area t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="defaultArea !=null and defaultArea != ''">
+, t.default_area= #{defaultArea}
+</if> 
+<if test="paId !=null and paId != ''">
+, t.pa_id= #{paId}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="boxId !=null and boxId != ''">
+, t.box_id= #{boxId}
+</if> 
+ where 1=1 <if test="baId !=null and baId != ''">
+and t.ba_id= #{baId}
+</if> 
+
+    </update>
+
+    <!-- 查询停车场岗亭数量 add by wuxw 2018-07-03 -->
+     <select id="queryParkingBoxAreasCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from parking_box_area t 
+where 1 =1 
+<if test="defaultArea !=null and defaultArea != ''">
+   and t.default_area= #{defaultArea}
+</if> 
+<if test="baId !=null and baId != ''">
+   and t.ba_id= #{baId}
+</if> 
+<if test="paId !=null and paId != ''">
+   and t.pa_id= #{paId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="boxId !=null and boxId != ''">
+   and t.box_id= #{boxId}
+</if> 
+
+
+     </select>
+
+</mapper>
