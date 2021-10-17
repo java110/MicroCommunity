@@ -1,6 +1,7 @@
 package com.java110.dto.ownerCarOpenUser;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,12 +15,15 @@ import java.util.Date;
  **/
 public class OwnerCarOpenUserDto extends PageDto implements Serializable {
 
+    public static final String OPEN_TYPE_WECHAT = "WECHAT";
+    public static final String OPEN_TYPE_ALIPAY = "ALI";
+
     private String openId;
-private String nickname;
-private String headimgurl;
-private String carNum;
-private String openUserId;
-private String openType;
+    private String nickname;
+    private String headimgurl;
+    private String carNum;
+    private String openUserId;
+    private String openType;
 
 
     private Date createTime;
@@ -30,37 +34,48 @@ private String openType;
     public String getOpenId() {
         return openId;
     }
-public void setOpenId(String openId) {
+
+    public void setOpenId(String openId) {
         this.openId = openId;
     }
-public String getNickname() {
+
+    public String getNickname() {
         return nickname;
     }
-public void setNickname(String nickname) {
+
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-public String getHeadimgurl() {
+
+    public String getHeadimgurl() {
         return headimgurl;
     }
-public void setHeadimgurl(String headimgurl) {
+
+    public void setHeadimgurl(String headimgurl) {
         this.headimgurl = headimgurl;
     }
-public String getCarNum() {
+
+    public String getCarNum() {
         return carNum;
     }
-public void setCarNum(String carNum) {
+
+    public void setCarNum(String carNum) {
         this.carNum = carNum;
     }
-public String getOpenUserId() {
+
+    public String getOpenUserId() {
         return openUserId;
     }
-public void setOpenUserId(String openUserId) {
+
+    public void setOpenUserId(String openUserId) {
         this.openUserId = openUserId;
     }
-public String getOpenType() {
+
+    public String getOpenType() {
         return openType;
     }
-public void setOpenType(String openType) {
+
+    public void setOpenType(String openType) {
         this.openType = openType;
     }
 

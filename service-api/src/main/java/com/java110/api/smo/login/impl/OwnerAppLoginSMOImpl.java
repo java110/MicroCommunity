@@ -10,8 +10,10 @@ import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -61,6 +63,9 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
 
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
+
+    @Autowired
+    private IOwnerCarOpenUserV1InnerServiceSMO ownerCarOpenUserV1InnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<String> doLogin(IPageData pd) throws SMOException {
@@ -479,6 +484,15 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
         //获取 openId
         String openId = paramObj.getString("openid");
         redirectUrl = redirectUrl + "&openId=" + openId;
+
+        //查询是否有车牌号
+        OwnerCarOpenUserDto ownerCarOpenUserDto = new OwnerCarOpenUserDto();
+        ownerCarOpenUserDto.setOpenId(openId);
+        List<OwnerCarOpenUserDto> ownerCarOpenUserDtos = ownerCarOpenUserV1InnerServiceSMOImpl.queryOwnerCarOpenUsers(ownerCarOpenUserDto);
+        if (ownerCarOpenUserDtos != null && ownerCarOpenUserDtos.size() > 0) {
+            redirectUrl += ("&carNum=" + ownerCarOpenUserDtos.get(0).getCarNum());
+        }
+
 
         //redirectUrl = redirectUrl + (redirectUrl.indexOf("?") > 0 ? "&key=" + tmpUserDto.getKey() : "?key=" + tmpUserDto.getKey());
         return ResultVo.redirectPage(redirectUrl);

@@ -9,10 +9,11 @@ import com.java110.api.smo.payment.adapt.IPayAdapt;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
+import com.java110.po.ownerCarOpenUser.OwnerCarOpenUserPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
@@ -30,8 +31,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service("toPayTempCarFeeSMOImpl")
@@ -48,6 +47,9 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
 
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
+
+    @Autowired
+    private IOwnerCarOpenUserV1InnerServiceSMO ownerCarOpenUserV1InnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<String> toPay(IPageData pd) {
@@ -117,6 +119,16 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         saveFees.put("payTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         saveFees.put("payType", "2");
         CommonCache.setValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
+
+        //记录openId 和车辆关系 以免每次 输入 车牌号麻烦
+        OwnerCarOpenUserPo ownerCarOpenUserPo = new OwnerCarOpenUserPo();
+        ownerCarOpenUserPo.setCarNum(paramIn.getString("carNum"));
+        ownerCarOpenUserPo.setNickname("未获取");
+        ownerCarOpenUserPo.setHeadimgurl("为获取");
+        ownerCarOpenUserPo.setOpenId(openId);
+        ownerCarOpenUserPo.setOpenType(OwnerCarOpenUserDto.OPEN_TYPE_WECHAT);
+        ownerCarOpenUserPo.setOpenUserId(GenerateCodeFactory.getGeneratorId("10"));
+        ownerCarOpenUserV1InnerServiceSMOImpl.saveOwnerCarOpenUser(ownerCarOpenUserPo);
         return responseEntity;
     }
 
