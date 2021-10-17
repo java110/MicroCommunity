@@ -97,7 +97,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         JSONObject fee = orderInfo.getJSONObject("data");
 
         double money = fee.getDouble("payCharge");
-        String orderId = orderInfo.getString("oId");
+        String orderId = GenerateCodeFactory.getOId();
         String openId = paramIn.getString("openId");
         String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_ADAPT);
         payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAY_ADAPT : payAdapt;
