@@ -381,11 +381,7 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
 
     @Override
     public ResponseEntity<String> refreshOpenId(IPageData pd, String redirectUrl, String wAppId, HttpServletRequest request, HttpServletResponse response) {
-        //分配urlCode
-        String urlCode = UUID.randomUUID().toString();
-        JSONObject param = new JSONObject();
-        param.put("redirectUrl", redirectUrl);
-        CommonCache.setValue(urlCode, param.toJSONString(), expireTime);
+
         SmallWeChatDto smallWeChatDto = null;
         if (!StringUtil.isEmpty(wAppId)) {
             JSONObject paramIn = new JSONObject();
@@ -399,6 +395,15 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
+
+        //分配urlCode
+        String urlCode = UUID.randomUUID().toString();
+        JSONObject param = new JSONObject();
+        if (redirectUrl.indexOf("appId") < 0) {
+            redirectUrl += ("&appId=" + smallWeChatDto.getAppId());
+        }
+        param.put("redirectUrl", redirectUrl);
+        CommonCache.setValue(urlCode, param.toJSONString(), expireTime);
 
         URL url = null;
         String openUrl = "";

@@ -2,15 +2,14 @@ package com.java110.api.smo.payment.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.context.IPageData;
-import com.java110.core.context.PageData;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.payment.IToPayTempCarInoutSMO;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
@@ -112,12 +111,15 @@ public class ToPayTempCarInoutSMOImpl extends AppAbstractComponentSMO implements
 
         ResponseEntity responseEntity = null;
 
+        if (!paramIn.containsKey("appId") || StringUtil.isEmpty(paramIn.getString("appId"))) {
+            return null;
+        }
         pd = PageData.newInstance().builder(pd.getUserId(), "", "", pd.getReqData(),
                 "", "", "", "",
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 "smallWeChat.listSmallWeChats?appId="
-                        + paramIn.getString("appId") + "&page=1&row=1&communityId="+paramIn.getString("communityId"), HttpMethod.GET);
+                        + paramIn.getString("appId") + "&page=1&row=1&communityId=" + paramIn.getString("communityId"), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return null;

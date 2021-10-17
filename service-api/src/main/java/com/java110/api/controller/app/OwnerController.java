@@ -175,7 +175,7 @@ public class OwnerController extends BaseController {
      */
     @RequestMapping(path = "/refreshOpenId")
     public ResponseEntity<String> refreshOpenId(@RequestParam String redirectUrl,
-                                                @RequestParam String wAppId,
+                                                @RequestParam(required = false) String wAppId,
                                                 HttpServletRequest request,
                                                 HttpServletResponse response) {
         IPageData pd = PageData.newInstance().builder("", "", "", "",
