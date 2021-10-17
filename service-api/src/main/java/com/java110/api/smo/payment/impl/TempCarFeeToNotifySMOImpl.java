@@ -3,6 +3,7 @@ package com.java110.api.smo.payment.impl;
 import com.java110.api.smo.payment.IOweFeeToNotifySMO;
 import com.java110.api.smo.payment.ITempCarFeeToNotifySMO;
 import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
+import com.java110.api.smo.payment.adapt.ITempCarFeeToNotifyAdapt;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -30,7 +31,7 @@ public class TempCarFeeToNotifySMOImpl implements ITempCarFeeToNotifySMO {
         String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_NOTIFY_ADAPT);
         payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_OWE_FEE_TO_NOTIFY_ADAPT : payNotifyAdapt;
         //支付适配器
-        IOweFeeToNotifyAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IOweFeeToNotifyAdapt.class);
+        ITempCarFeeToNotifyAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, ITempCarFeeToNotifyAdapt.class);
         String resXml = tPayNotifyAdapt.confirmPayFee(param,wId);
         logger.info("【小程序支付回调响应】 响应内容：\n" + resXml);
         return new ResponseEntity<String>(resXml, HttpStatus.OK);

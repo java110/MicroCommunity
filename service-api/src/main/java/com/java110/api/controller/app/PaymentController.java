@@ -68,6 +68,9 @@ public class PaymentController extends BaseController {
     private IOweFeeToNotifySMO oweFeeToNotifySMOImpl;
 
     @Autowired
+    private ITempCarFeeToNotifySMO tempCarFeeToNotifySMOImpl;
+
+    @Autowired
     private IToQrPayOweFeeSMO toQrPayOweFeeSMOImpl;
     @Autowired
     private IToPayInGoOutSMO toPayInGoOutSMOImpl;
@@ -320,7 +323,7 @@ public class PaymentController extends BaseController {
     public ResponseEntity<String> tempCarFeeNotifyUrl(@RequestBody String postInfo, HttpServletRequest request) {
         logger.debug("微信支付回调报文" + postInfo);
 
-        return oweFeeToNotifySMOImpl.toNotify(postInfo, request);
+        return tempCarFeeToNotifySMOImpl.toNotify(postInfo, request);
     }
 
     /**
