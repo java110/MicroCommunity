@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Service("oweFeeToNotifySMOImpl")
+@Service("tempCarFeeToNotifySMOImpl")
 public class TempCarFeeToNotifySMOImpl implements ITempCarFeeToNotifySMO {
     private static final Logger logger = LoggerFactory.getLogger(TempCarFeeToNotifySMOImpl.class);
 
