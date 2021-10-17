@@ -34,7 +34,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service("toPayOweFeeSMOImpl")
+@Service("toPayTempCarFeeSMOImpl")
 public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements IToPayTempCarFeeSMO {
     private static final Logger logger = LoggerFactory.getLogger(ToPayTempCarFeeSMOImpl.class);
 
