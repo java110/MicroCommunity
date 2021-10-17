@@ -24,6 +24,7 @@ import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -72,7 +73,7 @@ public class NotifyTempCarFeeOrderAdapt extends DatabusAdaptImpl {
         postParameters.put("extPaId", tempCarPayOrderDto.getPaId());
         postParameters.put("orderId", tempCarPayOrderDto.getOrderId());
         postParameters.put("amount", tempCarPayOrderDto.getAmount());
-        postParameters.put("payTime", tempCarPayOrderDto.getPayTime());
+        postParameters.put("payTime", DateUtil.getFormatTimeString(tempCarPayOrderDto.getPayTime(), DateUtil.DATE_FORMATE_STRING_A));
         postParameters.put("payType", tempCarPayOrderDto.getPayType());
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.NOTIFY_TEMP_CAR_FEE_ORDER), HttpMethod.POST, httpEntity, String.class);

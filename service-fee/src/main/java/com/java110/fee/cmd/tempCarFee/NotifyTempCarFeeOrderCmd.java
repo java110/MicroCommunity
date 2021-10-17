@@ -28,6 +28,8 @@ public class NotifyTempCarFeeOrderCmd extends AbstractServiceCmdListener {
     @Autowired
     private IGetTempCarFeeRules getTempCarFeeRulesImpl;
 
+    //{"amount":20.0,"payType":"2","orderId":"19c4321c-b5d5-405f-b2ff-20e86a2e7f3e",
+    // "payTime":"2021-10-17 17:29:54","paId":"102021101160020175","carNum":"青A88888","oId":"102021101724760012"}
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
 
