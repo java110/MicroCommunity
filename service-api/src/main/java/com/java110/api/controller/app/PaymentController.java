@@ -74,6 +74,9 @@ public class PaymentController extends BaseController {
     @Autowired
     private IToPayBackCitySMO toPayBackCitySMOImpl;
 
+    @Autowired
+    private IToPayTempCarFeeSMO toPayTempCarFeeSMOImpl;
+
     /**
      * <p>统一下单入口</p>
      *
@@ -113,6 +116,27 @@ public class PaymentController extends BaseController {
                 "", "", "", pd.getSessionId(),
                 appId,pd.getHeaders());
         return toPayOweFeeSMOImpl.toPay(newPd);
+    }
+
+    /**
+     * <p>统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/toPayTempCarFee", method = RequestMethod.POST)
+    public ResponseEntity<String> toPayTempCarFee(@RequestBody String postInfo, HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        String appId = request.getHeader("APP_ID");
+        if (StringUtil.isEmpty(appId)) {
+            appId = request.getHeader("APP-ID");
+        }
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                appId,pd.getHeaders());
+        return toPayTempCarFeeSMOImpl.toPay(newPd);
     }
 
     /**
@@ -281,6 +305,19 @@ public class PaymentController extends BaseController {
      */
     @RequestMapping(path = "/oweFeeNotify", method = RequestMethod.POST)
     public ResponseEntity<String> oweFeeNotify(@RequestBody String postInfo, HttpServletRequest request) {
+        logger.debug("微信支付回调报文" + postInfo);
+
+        return oweFeeToNotifySMOImpl.toNotify(postInfo, request);
+    }
+
+    /**
+     * <p>出租统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/tempCarFeeNotifyUrl", method = RequestMethod.POST)
+    public ResponseEntity<String> tempCarFeeNotifyUrl(@RequestBody String postInfo, HttpServletRequest request) {
         logger.debug("微信支付回调报文" + postInfo);
 
         return oweFeeToNotifySMOImpl.toNotify(postInfo, request);

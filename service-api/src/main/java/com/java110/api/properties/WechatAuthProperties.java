@@ -31,6 +31,8 @@ public class WechatAuthProperties {
     private String rentingNotifyUrl;
     private String goodsNotifyUrl;
     private String oweFeeNotifyUrl;
+    private String tempCarFeeNotifyUrl;
+
 
     private String wechatAppId;//微信公众号ID
     private String wechatAppSecret;//微信公众号秘钥
@@ -147,5 +149,13 @@ public class WechatAuthProperties {
 
     public void setGoodsNotifyUrl(String goodsNotifyUrl) {
         this.goodsNotifyUrl = goodsNotifyUrl;
+    }
+
+    public String getTempCarFeeNotifyUrl() {
+        return tempCarFeeNotifyUrl;
+    }
+
+    public void setTempCarFeeNotifyUrl(String tempCarFeeNotifyUrl) {
+        this.tempCarFeeNotifyUrl = tempCarFeeNotifyUrl;
     }
 }

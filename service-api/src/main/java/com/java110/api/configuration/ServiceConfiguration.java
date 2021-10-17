@@ -29,6 +29,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/payment/rentingNotify,");//微信支付通知
         exclusions.append("/app/payment/oweFeeNotify,");//欠费微信支付通知
         exclusions.append("/app/payment/oweFeeNotifyChinaUms,");//欠费银联支付回调
+        exclusions.append("/app/payment/toPayTempCarFee,");//欠费银联支付回调
+        exclusions.append("/app/payment/tempCarFeeNotifyUrl,");//欠费银联支付回调
         exclusions.append("/app/notice.listNotices,");//通知放开登录
         exclusions.append("/app/tempCarFee.getTempCarFeeOrder,");//通知放开登录
         exclusions.append("/goods/notify,");//商品购买通知

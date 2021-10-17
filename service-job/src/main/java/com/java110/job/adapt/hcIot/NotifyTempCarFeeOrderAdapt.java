@@ -69,7 +69,7 @@ public class NotifyTempCarFeeOrderAdapt extends DatabusAdaptImpl {
         JSONObject postParameters = new JSONObject();
         postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
         postParameters.put("carNum", tempCarPayOrderDto.getCarNum());
-        postParameters.put("extPaId", tempCarPayOrderDto.getExtPaId());
+        postParameters.put("extPaId", tempCarPayOrderDto.getPaId());
         postParameters.put("orderId", tempCarPayOrderDto.getOrderId());
         postParameters.put("amount", tempCarPayOrderDto.getAmount());
         postParameters.put("payTime", tempCarPayOrderDto.getPayTime());
