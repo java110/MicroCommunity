@@ -1,74 +1,113 @@
 {
-  "templateKeyName": "设备类型ID",
-  "templateName": "设备类型",
+  "templateKeyName": "岗亭ID",
+  "templateName": "岗亭",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "typeId",
-      "limitErrInfo": "设备类型ID不能超过30",
-      "cnCode": "设备类型ID",
+      "limitParam": "64",
+      "code": "boxName",
+      "limitErrInfo": "岗亭名称不能超过64",
+      "cnCode": "岗亭名称",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，设备类型ID"
+      "desc": "必填，岗亭名称"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "machineTypeCd",
-      "limitErrInfo": "设备大类不能超过30",
-      "cnCode": "设备大类",
+      "limitParam": "12",
+      "code": "tempCarIn",
+      "limitErrInfo": "临时车是否进场不能超过12",
+      "cnCode": "临时车是否进场",
       "limit": "maxLength",
       "show": true,
-      "inputType": "input",
+      "inputType": "select",
+      "selectValue":"Y,N",
+      "selectValueName":"是,否",
       "required": true,
-      "desc": "必填，设备大类"
+      "desc": "必填，临时车是否进场"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "machineTypeName",
-      "limitErrInfo": "设备类型名称不能超过30",
-      "cnCode": "设备类型名称",
+      "limitParam": "12",
+      "code": "fee",
+      "limitErrInfo": "岗亭是否不能超过12",
+      "cnCode": "是否收费",
       "limit": "maxLength",
       "show": true,
-      "inputType": "input",
+      "inputType": "select",
+      "selectValue":"Y,N",
+      "selectValueName":"是,否",
       "required": true,
-      "desc": "必填，设备类型名称"
+      "desc": "必填，岗亭是否"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "2",
-      "code": "statusCd",
-      "limitErrInfo": "数据状态不能超过2",
-      "cnCode": "数据状态",
+      "limitParam": "12",
+      "code": "blueCarIn",
+      "limitErrInfo": "蓝牌车是否可以进场不能超过12",
+      "cnCode": "蓝牌车进场",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "select",
+      "selectValue":"Y,N",
+      "selectValueName":"是,否",
+      "required": true,
+      "desc": "必填，蓝牌车是否可以进场"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "12",
+      "code": "yelowCarIn",
+      "limitErrInfo": "黄牌车是否可以进场不能超过12",
+      "cnCode": "黄牌车进场",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "select",
+      "selectValue":"Y,N",
+      "selectValueName":"是,否",
+      "required": true,
+      "desc": "必填，黄牌车是否可以进场"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "300",
+      "code": "remark",
+      "limitErrInfo": "备注不能超过300",
+      "cnCode": "备注",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，数据状态"
+      "desc": "备注"
     }
   ],
-  "searchName": "设备类型ID",
+  "searchName": "岗亭ID",
   "directories": "property",
-  "searchCode": "typeId",
-  "templateCode": "machineType",
+  "searchCode": "boxId",
+  "templateCode": "parkingBox",
   "conditions": [
-
     {
       "whereCondition": "equal",
-      "code": "machineTypeCd",
-      "name": "设备大类",
+      "code": "boxId",
+      "name": "岗亭ID",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "machineTypeName",
-      "name": "设备类型名称",
+      "code": "boxName",
+      "name": "岗亭名称",
       "inputType": "input"
+    },
+    {
+      "whereCondition": "equal",
+      "code": "tempCarIn",
+      "name": "临时车是否进场",
+      "inputType": "select",
+      "selectValue":"Y,N",
+      "selectValueName":"是,否"
     }
   ],
-  "templateKey": "typeId"
+  "templateKey": "boxId"
 }
