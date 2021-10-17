@@ -75,8 +75,8 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
 
         if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
             smallWeChatDto = new SmallWeChatDto();
-            smallWeChatDto.setAppId(wechatAuthProperties.getAppId());
-            smallWeChatDto.setAppSecret(wechatAuthProperties.getSecret());
+            smallWeChatDto.setAppId(wechatAuthProperties.getWechatAppId());
+            smallWeChatDto.setAppSecret(wechatAuthProperties.getWechatAppSecret());
             smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
