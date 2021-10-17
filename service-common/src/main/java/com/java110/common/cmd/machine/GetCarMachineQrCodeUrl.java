@@ -21,6 +21,8 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -29,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -50,6 +54,9 @@ public class GetCarMachineQrCodeUrl extends AbstractServiceCmdListener {
     @Autowired
     private IMachineOpenDoorBMO machineOpenDoorBMOImpl;
 
+    @Autowired
+    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
@@ -60,8 +67,15 @@ public class GetCarMachineQrCodeUrl extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setObjId(reqJson.getString("communityId"));
+        smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
         String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL");
         ownerUrl += ("/#/pages/tempParkingFee/tempParkingFee?paId="+reqJson.getString("paId"));
+        if(smallWeChatDtos != null && smallWeChatDtos.size()> 0){
+            ownerUrl += ("&appId="+smallWeChatDtos.get(0).getAppId());
+        }
         reqJson.put("url",ownerUrl);
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(reqJson));
     }
