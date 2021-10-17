@@ -394,6 +394,7 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             smallWeChatDto.setAppSecret(wechatAuthProperties.getWechatAppSecret());
             smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
+            wAppId = wechatAuthProperties.getWechatAppId();
         }
 
         //分配urlCode
