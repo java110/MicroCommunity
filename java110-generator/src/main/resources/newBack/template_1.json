@@ -1,33 +1,47 @@
 {
   "param": {
-    "openId": "open_id",
-    "nickname": "nickname",
-    "headimgurl": "headimgurl",
-    "carNum": "car_num",
+    "yelowCarIn": "yelow_car_in",
+    "fee": "fee",
+    "tempCarIn": "temp_car_in",
+    "boxName": "box_name",
+    "remark": "remark",
     "statusCd": "status_cd",
-    "openUserId": "open_user_id",
-    "openType": "open_type"
+    "communityId": "community_id",
+    "blueCarIn": "blue_car_in",
+    "boxId": "box_id"
   },
-  "name": "ownerCarOpenUser",
-  "shareColumn": "open_user_id",
-  "id": "openUserId",
-  "shareName": "user",
+  "name": "parkingBox",
+  "shareColumn": "community_id",
+  "id": "boxId",
+  "shareName": "community",
   "autoMove": true,
   "required": [
     {
-      "msg": "微信或支付宝开放ID不能为空",
-      "code": "openId"
+      "msg": "岗亭名称不能为空",
+      "code": "boxName"
     },
     {
-      "msg": "车牌号不能为空",
-      "code": "carNum"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
     },
     {
-      "msg": "微信WECHAT不能为空",
-      "code": "openType"
+      "msg": "临时车是否进场不能为空",
+      "code": "tempCarIn"
+    },
+    {
+      "msg": "岗亭是否不能为空",
+      "code": "fee"
+    },
+    {
+      "msg": "蓝牌车是否可以进场不能为空",
+      "code": "blueCarIn"
+    },
+    {
+      "msg": "黄牌车是否可以进场不能为空",
+      "code": "yelowCarIn"
     }
   ],
-  "desc": "车辆微信关系",
-  "shareParam": "openUserId",
-  "tableName": "owner_car_open_user"
+  "desc": "岗亭",
+  "shareParam": "communityId",
+  "tableName": "parking_box"
 }

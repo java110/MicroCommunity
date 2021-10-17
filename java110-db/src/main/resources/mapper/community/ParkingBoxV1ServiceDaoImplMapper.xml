@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="parkingBoxV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存岗亭信息 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingBoxInfo" parameterType="Map">
+        insert into parking_box(
+yelow_car_in,fee,temp_car_in,box_name,remark,community_id,blue_car_in,box_id
+) values (
+#{yelowCarIn},#{fee},#{tempCarIn},#{boxName},#{remark},#{communityId},#{blueCarIn},#{boxId}
+)
+    </insert>
+
+
+
+    <!-- 查询岗亭信息 add by wuxw 2018-07-03 -->
+    <select id="getParkingBoxInfo" parameterType="Map" resultType="Map">
+        select  t.yelow_car_in,t.yelow_car_in yelowCarIn,t.fee,t.temp_car_in,t.temp_car_in tempCarIn,t.box_name,t.box_name boxName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.blue_car_in,t.blue_car_in blueCarIn,t.box_id,t.box_id boxId 
+from parking_box t 
+where 1 =1 
+<if test="yelowCarIn !=null and yelowCarIn != ''">
+   and t.yelow_car_in= #{yelowCarIn}
+</if> 
+<if test="fee !=null and fee != ''">
+   and t.fee= #{fee}
+</if> 
+<if test="tempCarIn !=null and tempCarIn != ''">
+   and t.temp_car_in= #{tempCarIn}
+</if> 
+<if test="boxName !=null and boxName != ''">
+   and t.box_name= #{boxName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="blueCarIn !=null and blueCarIn != ''">
+   and t.blue_car_in= #{blueCarIn}
+</if> 
+<if test="boxId !=null and boxId != ''">
+   and t.box_id= #{boxId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改岗亭信息 add by wuxw 2018-07-03 -->
+    <update id="updateParkingBoxInfo" parameterType="Map">
+        update  parking_box t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="yelowCarIn !=null and yelowCarIn != ''">
+, t.yelow_car_in= #{yelowCarIn}
+</if> 
+<if test="fee !=null and fee != ''">
+, t.fee= #{fee}
+</if> 
+<if test="tempCarIn !=null and tempCarIn != ''">
+, t.temp_car_in= #{tempCarIn}
+</if> 
+<if test="boxName !=null and boxName != ''">
+, t.box_name= #{boxName}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="blueCarIn !=null and blueCarIn != ''">
+, t.blue_car_in= #{blueCarIn}
+</if> 
+ where 1=1 <if test="boxId !=null and boxId != ''">
+and t.box_id= #{boxId}
+</if> 
+
+    </update>
+
+    <!-- 查询岗亭数量 add by wuxw 2018-07-03 -->
+     <select id="queryParkingBoxsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from parking_box t 
+where 1 =1 
+<if test="yelowCarIn !=null and yelowCarIn != ''">
+   and t.yelow_car_in= #{yelowCarIn}
+</if> 
+<if test="fee !=null and fee != ''">
+   and t.fee= #{fee}
+</if> 
+<if test="tempCarIn !=null and tempCarIn != ''">
+   and t.temp_car_in= #{tempCarIn}
+</if> 
+<if test="boxName !=null and boxName != ''">
+   and t.box_name= #{boxName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="blueCarIn !=null and blueCarIn != ''">
+   and t.blue_car_in= #{blueCarIn}
+</if> 
+<if test="boxId !=null and boxId != ''">
+   and t.box_id= #{boxId}
+</if> 
+
+
+     </select>
+
+</mapper>
