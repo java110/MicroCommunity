@@ -426,7 +426,10 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             logger.error("微信公众号鉴权 redirectUrl 错误 " + redirectUrl, e);
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, e.getLocalizedMessage());
         }
-        return ResultVo.redirectPage(openUrl);
+        JSONObject urlObj = new JSONObject();
+        urlObj.put("openUrl", openUrl);
+
+        return ResultVo.createResponseEntity(ResultVo.CODE_MACHINE_OK, ResultVo.MSG_OK, urlObj);
     }
 
     @Override
