@@ -1,6 +1,7 @@
 package com.java110.dto.parkingBox;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,13 +16,14 @@ import java.util.Date;
 public class ParkingBoxDto extends PageDto implements Serializable {
 
     private String yelowCarIn;
-private String fee;
-private String tempCarIn;
-private String boxName;
-private String remark;
-private String communityId;
-private String blueCarIn;
-private String boxId;
+    private String fee;
+    private String tempCarIn;
+    private String boxName;
+    private String remark;
+    private String communityId;
+    private String blueCarIn;
+    private String boxId;
+    private String paId;
 
 
     private Date createTime;
@@ -32,49 +34,64 @@ private String boxId;
     public String getYelowCarIn() {
         return yelowCarIn;
     }
-public void setYelowCarIn(String yelowCarIn) {
+
+    public void setYelowCarIn(String yelowCarIn) {
         this.yelowCarIn = yelowCarIn;
     }
-public String getFee() {
+
+    public String getFee() {
         return fee;
     }
-public void setFee(String fee) {
+
+    public void setFee(String fee) {
         this.fee = fee;
     }
-public String getTempCarIn() {
+
+    public String getTempCarIn() {
         return tempCarIn;
     }
-public void setTempCarIn(String tempCarIn) {
+
+    public void setTempCarIn(String tempCarIn) {
         this.tempCarIn = tempCarIn;
     }
-public String getBoxName() {
+
+    public String getBoxName() {
         return boxName;
     }
-public void setBoxName(String boxName) {
+
+    public void setBoxName(String boxName) {
         this.boxName = boxName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getBlueCarIn() {
+
+    public String getBlueCarIn() {
         return blueCarIn;
     }
-public void setBlueCarIn(String blueCarIn) {
+
+    public void setBlueCarIn(String blueCarIn) {
         this.blueCarIn = blueCarIn;
     }
-public String getBoxId() {
+
+    public String getBoxId() {
         return boxId;
     }
-public void setBoxId(String boxId) {
+
+    public void setBoxId(String boxId) {
         this.boxId = boxId;
     }
 
@@ -93,5 +110,13 @@ public void setBoxId(String boxId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
     }
 }
