@@ -22,15 +22,23 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.parking.ParkingAreaDto;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.intf.community.IParkingAreaInnerServiceSMO;
+import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxV1InnerServiceSMO;
 import com.java110.po.parkingBox.ParkingBoxPo;
+import com.java110.po.parkingBoxArea.ParkingBoxAreaPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -51,6 +59,12 @@ public class SaveParkingBoxCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IParkingBoxV1InnerServiceSMO parkingBoxV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -74,7 +88,30 @@ public class SaveParkingBoxCmd extends AbstractServiceCmdListener {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+        if (!reqJson.containsKey("paId") || StringUtil.isEmpty(reqJson.getString("paId"))) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return;
+        }
 
+        //判断停车场是否存在
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(reqJson.getString("paId"));
+        parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+
+        Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
+
+        ParkingBoxAreaPo parkingBoxAreaPo = new ParkingBoxAreaPo();
+        parkingBoxAreaPo.setBaId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        parkingBoxAreaPo.setBoxId(parkingBoxPo.getBoxId());
+        parkingBoxAreaPo.setPaId(parkingAreaDtos.get(0).getPaId());
+        parkingBoxAreaPo.setCommunityId(parkingAreaDtos.get(0).getCommunityId());
+        parkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_TRUE);
+
+        flag = parkingBoxAreaV1InnerServiceSMOImpl.saveParkingBoxArea(parkingBoxAreaPo);
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

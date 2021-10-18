@@ -16,7 +16,7 @@
 package com.java110.po.parkingBoxArea;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2021-10-18 00:15:30 mail: 928255095@qq.com
@@ -28,55 +28,68 @@ import java.util.Date;
 public class ParkingBoxAreaPo implements Serializable {
 
     private String defaultArea;
-private String baId;
-private String paId;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-private String boxId;
-public String getDefaultArea() {
+    private String baId;
+    private String paId;
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+    private String boxId;
+
+    public String getDefaultArea() {
         return defaultArea;
     }
-public void setDefaultArea(String defaultArea) {
+
+    public void setDefaultArea(String defaultArea) {
         this.defaultArea = defaultArea;
     }
-public String getBaId() {
+
+    public String getBaId() {
         return baId;
     }
-public void setBaId(String baId) {
+
+    public void setBaId(String baId) {
         this.baId = baId;
     }
-public String getPaId() {
+
+    public String getPaId() {
         return paId;
     }
-public void setPaId(String paId) {
+
+    public void setPaId(String paId) {
         this.paId = paId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getBoxId() {
+
+    public String getBoxId() {
         return boxId;
     }
-public void setBoxId(String boxId) {
+
+    public void setBoxId(String boxId) {
         this.boxId = boxId;
     }
-
 
 
 }
