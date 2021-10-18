@@ -56,7 +56,6 @@ public class UpdateParkingBoxAreaCmd extends AbstractServiceCmdListener {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "baId", "baId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
     }
 
     @Override
