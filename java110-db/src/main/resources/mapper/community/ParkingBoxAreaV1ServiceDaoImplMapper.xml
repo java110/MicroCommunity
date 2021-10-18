@@ -19,7 +19,7 @@
     <select id="getParkingBoxAreaInfo" parameterType="Map" resultType="Map">
         select t.default_area,t.default_area defaultArea,t.ba_id,t.ba_id baId,t.pa_id,t.pa_id
         paId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.box_id,t.box_id boxId,
-        pa.num paNum
+        pa.num paNum,t.create_time createTime
         from parking_box_area t
         left join parking_area pa on t.pa_id = pa.pa_id and t.community_id = pa.community_id and pa.status_cd = '0'
         where 1 =1

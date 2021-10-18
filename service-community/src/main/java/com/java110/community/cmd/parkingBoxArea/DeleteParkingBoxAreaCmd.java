@@ -63,7 +63,7 @@ public class DeleteParkingBoxAreaCmd extends AbstractServiceCmdListener {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
-        parkingBoxAreaDto.setBaId(reqJson.getString("paId"));
+        parkingBoxAreaDto.setBaId(reqJson.getString("baId"));
         parkingBoxAreaDto.setCommunityId(reqJson.getString("communityId"));
         List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
 
