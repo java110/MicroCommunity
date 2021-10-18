@@ -8,9 +8,14 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.UnitDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.po.owner.OwnerRoomRelPo;
+import com.java110.po.room.RoomPo;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +44,9 @@ public class UpdateRoomListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -99,6 +107,16 @@ public class UpdateRoomListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         roomBMOImpl.updateShellRoom(reqJson, context);
+        String state = reqJson.getString("state");
+        if (!StringUtil.isEmpty(state) && state.equals("2006")) { //已出租
+            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+            ownerRoomRelDto.setRoomId(reqJson.getString("roomId"));
+            List<OwnerRoomRelDto> ownerRoomRelDtoList = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+            OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtoList.get(0), OwnerRoomRelPo.class);
+            ownerRoomRelPo.setStartTime(reqJson.getString("startTime"));
+            ownerRoomRelPo.setEndTime(reqJson.getString("endTime") + " 23:59:59");
+            ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
+        }
 
         if (!reqJson.containsKey("attrs")) {
             return;
