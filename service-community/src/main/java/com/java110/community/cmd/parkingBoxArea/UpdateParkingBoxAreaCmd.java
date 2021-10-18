@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.po.parkingBoxArea.ParkingBoxAreaPo;
 import com.java110.utils.exception.CmdException;
@@ -61,6 +62,13 @@ public class UpdateParkingBoxAreaCmd extends AbstractServiceCmdListener {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String defaultArea = reqJson.getString("defaultArea");
+        if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)) {
+            ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
+            tmpParkingBoxAreaPo.setBoxId(reqJson.getString("boxId"));
+            tmpParkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
+            parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(tmpParkingBoxAreaPo);
+        }
 
         ParkingBoxAreaPo parkingBoxAreaPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxAreaPo.class);
         int flag = parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(parkingBoxAreaPo);

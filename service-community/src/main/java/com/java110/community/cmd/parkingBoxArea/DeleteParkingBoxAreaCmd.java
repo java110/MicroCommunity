@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.po.parkingBoxArea.ParkingBoxAreaPo;
 import com.java110.utils.exception.CmdException;
@@ -30,6 +31,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -53,12 +56,21 @@ public class DeleteParkingBoxAreaCmd extends AbstractServiceCmdListener {
         Assert.hasKeyAndValue(reqJson, "baId", "baId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
+
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+        parkingBoxAreaDto.setBaId(reqJson.getString("paId"));
+        parkingBoxAreaDto.setCommunityId(reqJson.getString("communityId"));
+        List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
 
+        Assert.listOnlyOne(parkingBoxAreaDtos, "数据不存在");
+        if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(parkingBoxAreaDtos.get(0).getDefaultArea())) {
+            throw new CmdException("默认停车场不能删除");
+        }
         ParkingBoxAreaPo parkingBoxAreaPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxAreaPo.class);
         int flag = parkingBoxAreaV1InnerServiceSMOImpl.deleteParkingBoxArea(parkingBoxAreaPo);
 
