@@ -19,9 +19,10 @@
     <select id="getParkingBoxInfo" parameterType="Map" resultType="Map">
         select t.yelow_car_in,t.yelow_car_in yelowCarIn,t.fee,t.temp_car_in,t.temp_car_in
         tempCarIn,t.box_name,t.box_name boxName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.blue_car_in,t.blue_car_in blueCarIn,t.box_id,t.box_id boxId,pba.pa_id paId
+        communityId,t.blue_car_in,t.blue_car_in blueCarIn,t.box_id,t.box_id boxId,pba.pa_id paId,pa.num paNum
         from parking_box t
         left join parking_box_area pba on t.box_id = pba.box_id and pba.default_area = 'T' and pba.status_cd ='0'
+        left join parking_area pa on pba.pa_id = pa.pa_id and pa.community_id = t.community_id and pa.status_cd = '0'
         where 1 =1
         <if test="yelowCarIn !=null and yelowCarIn != ''">
             and t.yelow_car_in= #{yelowCarIn}
