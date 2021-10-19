@@ -22,9 +22,12 @@ import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.machine.CarInoutDetailDto;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.intf.common.ICarInoutDetailV1InnerServiceSMO;
+import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +58,8 @@ public class ListCarInoutDetailCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
-
+    @Autowired
+    private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -65,7 +69,7 @@ public class ListCarInoutDetailCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         CarInoutDetailDto carInoutDetailDto = BeanConvertUtil.covertBean(reqJson, CarInoutDetailDto.class);
-
+        carInoutDetailDto.setPaIds(getPaIds(reqJson));
         int count = carInoutDetailV1InnerServiceSMOImpl.queryCarInoutDetailsCount(carInoutDetailDto);
 
         List<CarInoutDetailDto> carInoutDetailDtos = null;
@@ -85,6 +89,25 @@ public class ListCarInoutDetailCmd extends AbstractServiceCmdListener {
     }
 
 
+    private String[] getPaIds(JSONObject reqJson) {
+        if (reqJson.containsKey("boxId") && !StringUtil.isEmpty(reqJson.getString("boxId"))) {
+            ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+            parkingBoxAreaDto.setBoxId(reqJson.getString("boxId"));
+            parkingBoxAreaDto.setCommunityId(reqJson.getString("communityId"));
+            List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+
+            if (parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
+                throw new CmdException("未查到停车场信息");
+            }
+            List<String> paIds = new ArrayList<>();
+            for (ParkingBoxAreaDto parkingBoxAreaDto1 : parkingBoxAreaDtos) {
+                paIds.add(parkingBoxAreaDto1.getPaId());
+            }
+            String[] paIdss = paIds.toArray(new String[paIds.size()]);
+            return paIdss;
+        }
+        return null;
+    }
     private List<CarInoutDetailDto> computeCarInoutDetail(List<CarInoutDetailDto> carInoutDetailDtos) {
         return computeFeeSMOImpl.computeTempCarInoutDetailStopTimeAndFee(carInoutDetailDtos);
     }
