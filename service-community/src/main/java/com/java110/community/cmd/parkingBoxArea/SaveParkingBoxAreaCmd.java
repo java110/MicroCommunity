@@ -24,6 +24,8 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
+import com.java110.intf.community.IParkingBoxV1InnerServiceSMO;
+import com.java110.po.parkingBox.ParkingBoxPo;
 import com.java110.po.parkingBoxArea.ParkingBoxAreaPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -53,6 +55,9 @@ public class SaveParkingBoxAreaCmd extends AbstractServiceCmdListener {
     @Autowired
     private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingBoxV1InnerServiceSMO parkingBoxV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "boxId", "请求报文中未包含boxId");
@@ -67,7 +72,7 @@ public class SaveParkingBoxAreaCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         String defaultArea = reqJson.getString("defaultArea");
-        if(ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)){
+        if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)) {
             ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
             tmpParkingBoxAreaPo.setBoxId(reqJson.getString("boxId"));
             tmpParkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
@@ -81,6 +86,9 @@ public class SaveParkingBoxAreaCmd extends AbstractServiceCmdListener {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+        ParkingBoxPo parkingBoxPo = new ParkingBoxPo();
+        parkingBoxPo.setBoxId(reqJson.getString("boxId"));
+        parkingBoxV1InnerServiceSMOImpl.updateParkingBox(parkingBoxPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

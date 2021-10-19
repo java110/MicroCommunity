@@ -164,4 +164,16 @@ public interface IIotSendAsyn {
      * @param postParameters
      */
     void addParkingAreaText(JSONObject postParameters);
+
+    /**
+     * 添加岗亭
+     * @param postParameters
+     */
+    void addParkingBox(JSONObject postParameters);
+
+    /**
+     * 删除岗亭
+     * @param postParameters
+     */
+    void deleteParkingBox(JSONObject postParameters);
 }
