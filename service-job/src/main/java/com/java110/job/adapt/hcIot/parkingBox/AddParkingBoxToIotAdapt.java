@@ -73,23 +73,24 @@ public class AddParkingBoxToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        if (data.containsKey(ParkingBoxPo.class.getSimpleName())) {
-            Object bObj = data.get(ParkingBoxPo.class.getSimpleName());
-            JSONArray businessParkingBoxs = null;
-            if (bObj instanceof JSONObject) {
-                businessParkingBoxs = new JSONArray();
-                businessParkingBoxs.add(bObj);
-            } else if (bObj instanceof List) {
-                businessParkingBoxs = JSONArray.parseArray(JSONObject.toJSONString(bObj));
-            } else {
-                businessParkingBoxs = (JSONArray) bObj;
-            }
-            //JSONObject businessParkingBox = data.getJSONObject("businessParkingBox");
-            for (int bParkingBoxIndex = 0; bParkingBoxIndex < businessParkingBoxs.size(); bParkingBoxIndex++) {
-                JSONObject businessParkingBox = businessParkingBoxs.getJSONObject(bParkingBoxIndex);
-                doSendParkingBox(business, businessParkingBox);
-            }
-        }
+//        if (data.containsKey(ParkingBoxPo.class.getSimpleName())) {
+//            Object bObj = data.get(ParkingBoxPo.class.getSimpleName());
+//            JSONArray businessParkingBoxs = null;
+//            if (bObj instanceof JSONObject) {
+//                businessParkingBoxs = new JSONArray();
+//                businessParkingBoxs.add(bObj);
+//            } else if (bObj instanceof List) {
+//                businessParkingBoxs = JSONArray.parseArray(JSONObject.toJSONString(bObj));
+//            } else {
+//                businessParkingBoxs = (JSONArray) bObj;
+//            }
+//            //JSONObject businessParkingBox = data.getJSONObject("businessParkingBox");
+//            for (int bParkingBoxIndex = 0; bParkingBoxIndex < businessParkingBoxs.size(); bParkingBoxIndex++) {
+//                JSONObject businessParkingBox = businessParkingBoxs.getJSONObject(bParkingBoxIndex);
+//                doSendParkingBox(business, businessParkingBox);
+//            }
+//        }
+        doSendParkingBox(business, data);
     }
 
     private void doSendParkingBox(Business business, JSONObject businessParkingBox) {
