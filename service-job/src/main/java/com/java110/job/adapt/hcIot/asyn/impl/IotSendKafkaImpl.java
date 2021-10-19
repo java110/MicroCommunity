@@ -805,6 +805,16 @@ public class IotSendKafkaImpl implements IIotSendAsyn {
     }
 
     @Override
+    public void addParkingBox(JSONObject postParameters) {
+
+    }
+
+    @Override
+    public void deleteParkingBox(JSONObject postParameters) {
+
+    }
+
+    @Override
     @Async
     public void updateAttendance(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
