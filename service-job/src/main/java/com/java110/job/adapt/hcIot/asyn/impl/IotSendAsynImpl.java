@@ -1261,8 +1261,8 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_ADD_PARKING_AREA_TEXT,
                 DEFAULT_MACHINE_CODE,
                 DEFAULT_MACHINE_ID,
-                "extPaId",
-                "textId",
+                "extBoxId",
+                "boxId",
                 MachineTranslateDto.TYPE_PARKING_AREA);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_PARKING_BOX_URL);
