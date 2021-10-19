@@ -102,7 +102,7 @@ public class AddParkingBoxToIotAdapt extends DatabusAdaptImpl {
         parkingBoxDto.setCommunityId(parkingBoxPo.getCommunityId());
         List<ParkingBoxDto> parkingBoxDtos = parkingBoxInnerServiceSMOImpl.queryParkingBoxs(parkingBoxDto);
 
-        Assert.listOnlyOne(parkingBoxDtos, "未找到停车场");
+        Assert.listOnlyOne(parkingBoxDtos, "未找到岗亭");
 
         //查询属性
         ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();

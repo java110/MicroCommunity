@@ -618,7 +618,8 @@ public class StringUtil {
     public static JSONObject lineToHump(JSONObject json) {
         Pattern linePattern = Pattern.compile("_(\\w)");
         JSONObject newJson = new JSONObject();
-        for(String str : json.keySet()) {
+        String value = "";
+        for (String str : json.keySet()) {
             str = str.toLowerCase();
             Matcher matcher = linePattern.matcher(str);
             StringBuffer sb = new StringBuffer();
@@ -626,11 +627,38 @@ public class StringUtil {
                 matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
             }
             matcher.appendTail(sb);
-            newJson.put(sb.toString(),json.getString(str));
-            newJson.put(str,json.getString(str));
+            value = json.getString(str);
+            if (StringUtil.isEmpty(value)) {
+                newJson.put(sb.toString(), json.getString(str));
+                newJson.put(str, json.getString(str));
+                continue;
+            }
+            if (value.startsWith("'")) {
+                value = value.replace("'", "");
+            }
+
+            if (value.endsWith("'")) {
+                value = value.substring(0, value.length() - 1);
+            }
+
+            newJson.put(sb.toString(), value);
+            newJson.put(str, value);
+
         }
 
         return newJson;
+    }
+
+    public static void main(String[] args) {
+        String value = "'123'";
+        if (value.startsWith("'")) {
+            value = value.replace("'", "");
+        }
+
+        if (value.endsWith("'")) {
+            value = value.substring(0, value.length() - 1);
+        }
+        System.out.printf(value);
     }
 
     /**
