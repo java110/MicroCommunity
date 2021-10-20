@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
 import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
 import com.java110.utils.exception.CmdException;
@@ -71,14 +72,19 @@ public class SaveParkingSpaceApplyCmd extends AbstractServiceCmdListener {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ParkingSpaceApplyPo parkingSpaceApplyPo = BeanConvertUtil.covertBean(reqJson, ParkingSpaceApplyPo.class);
+        ParkingSpaceApplyPo parkingSpaceApplyPo = BeanConvertUtil.covertBean(reqJson, ParkingSpaceApplyPo.class);
+        ParkingSpaceApplyDto parkingSpaceApplyDto = new ParkingSpaceApplyDto();
+        parkingSpaceApplyDto.setCarNum(parkingSpaceApplyDto.getCarNum());
+        parkingSpaceApplyDto.setState("1001");//审核中
+        int count = parkingSpaceApplyV1InnerServiceSMOImpl.queryParkingSpaceApplysCount(parkingSpaceApplyDto);
+        if (count > 1) {
+            throw new CmdException("当前车辆申请处理审核中，不能重复申请。");
+        }
         parkingSpaceApplyPo.setApplyId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = parkingSpaceApplyV1InnerServiceSMOImpl.saveParkingSpaceApply(parkingSpaceApplyPo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }
