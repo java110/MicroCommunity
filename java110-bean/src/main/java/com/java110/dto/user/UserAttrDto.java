@@ -17,6 +17,7 @@ public class UserAttrDto extends PageDto implements Serializable {
     private String specCd;
     private String value;
     private String createTime;
+    private String statusCd;
 
     public String getAttrId() {
         return attrId;
@@ -56,5 +57,13 @@ public class UserAttrDto extends PageDto implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
