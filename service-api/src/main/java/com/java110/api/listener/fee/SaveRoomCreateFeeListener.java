@@ -7,15 +7,21 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.payFeeBatch.PayFeeBatchDto;
+import com.java110.dto.user.UserDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -61,6 +67,12 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeBatchV1InnerServiceSMO payFeeBatchV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_ROOM_CREATE_FEE;
@@ -96,6 +108,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         reqJson.put("configEndTime", feeConfigDtos.get(0).getEndTime());
 
+
         if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
             Date endTime = null;
             Date configEndTime = null;
@@ -109,6 +122,9 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
                 throw new IllegalArgumentException("结束时间错误" + reqJson.getString("endTime"));
             }
         }
+
+        //生成批次号
+        generatorBatch(reqJson);
         //判断收费范围
         RoomDto roomDto = new RoomDto();
         /*if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
@@ -152,6 +168,33 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
             throw new IllegalArgumentException("未查到需要付费的房屋");
         }
         dealRoomFee(roomDtos, context, reqJson, event);
+    }
+
+    /**
+     * 生成批次号
+     *
+     * @param reqJson
+     */
+    private void generatorBatch(JSONObject reqJson) {
+        PayFeeBatchPo payFeeBatchPo = new PayFeeBatchPo();
+        payFeeBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId("12"));
+        payFeeBatchPo.setCommunityId(reqJson.getString("communityId"));
+        payFeeBatchPo.setCreateUserId(reqJson.getString("userId"));
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        payFeeBatchPo.setCreateUserName(userDtos.get(0).getUserName());
+        payFeeBatchPo.setState(PayFeeBatchDto.STATE_NORMAL);
+        payFeeBatchPo.setMsg("正常");
+        int flag = payFeeBatchV1InnerServiceSMOImpl.savePayFeeBatch(payFeeBatchPo);
+
+        if (flag < 1) {
+            throw new IllegalArgumentException("生成批次失败");
+        }
+
+        reqJson.put("batchId", payFeeBatchPo.getBatchId());
     }
 
     private void dealRoomFee(List<RoomDto> roomDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) throws ParseException {

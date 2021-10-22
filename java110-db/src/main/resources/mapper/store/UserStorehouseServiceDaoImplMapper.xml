@@ -94,12 +94,13 @@
     <select id="getUserStorehouseInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.store_id,t.store_id
         storeId,t.stock,t.res_id,t.res_id resId,t.user_id,t.user_id userId,t.us_id,t.us_id usId,rs.res_code resCode,
-        rs.out_low_price outLowPrice,rs.out_high_price outHighPrice,rst.name rstName,rss.spec_name specName,t.mini_stock miniStock,
+        rs.out_low_price outLowPrice,rs.out_high_price outHighPrice,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,t.mini_stock miniStock,
         rs.unit_code unitCode,rs.mini_unit_code miniUnitCode,rs.mini_unit_stock miniUnitStock,
         td.name unitCodeName,td1.name miniUnitCodeName,u.name userName
         from user_storehouse t
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
         left join resource_store_type rst on rs.rst_id = rst.rst_id
+        left join resource_store_type rst1 on rs.parent_rst_id = rst1.rst_id
         left join resource_store_specification rss on rs.rss_id = rss.rss_id
         left join t_dict td on rs.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns = 'unit_code'
         left join t_dict td1 on rs.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
@@ -131,6 +132,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and rs.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and rs.parent_rst_id= #{parentRstId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}
@@ -215,6 +219,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and rs.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and rs.parent_rst_id= #{parentRstId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}

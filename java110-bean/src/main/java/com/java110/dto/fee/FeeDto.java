@@ -28,6 +28,7 @@ public class FeeDto extends PageDto implements Serializable {
     public static final String FEE_FLAG_ONCE = "2006012";//一次性费用
     public static final String FEE_FLAG_CYCLE = "1003006";//周期性费用
     public static final String REDIS_PAY_OWE_FEE = "PAY_OWE_FEE_";
+    public static final String REDIS_PAY_TEMP_CAR_FEE = "PAY_TEMP_CAR_FEE_";
 
     private String amount;
     private String incomeObjId;
@@ -127,6 +128,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String carTypeCd;
     private String cycle;
     private double feeTotalPrice;
+    private String batchId;
 
     public String getAmount() {
         return amount;
@@ -615,5 +617,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setFeeTotalPrice(double feeTotalPrice) {
         this.feeTotalPrice = feeTotalPrice;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
     }
 }

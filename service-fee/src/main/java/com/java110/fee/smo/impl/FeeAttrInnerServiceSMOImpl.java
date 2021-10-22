@@ -59,7 +59,7 @@ public class FeeAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFeeAt
     }
 
     @Override
-    public int saveFeeAttrs(List<FeeAttrPo> feeAttrPos) {
+    public int saveFeeAttrs(@RequestBody List<FeeAttrPo> feeAttrPos) {
 
         List<Map> feeAttrs = new ArrayList<>();
         for (FeeAttrPo feeAttrPo : feeAttrPos) {
@@ -69,6 +69,23 @@ public class FeeAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFeeAt
         Map info = new HashMap();
         info.put("feeAttrPos", feeAttrs);
         return feeAttrServiceDaoImpl.saveFeeAttrs(info);
+    }
+
+    @Override
+    public int saveFeeAttr(@RequestBody FeeAttrPo feeAttrPo) {
+        List<Map> feeAttrs = new ArrayList<>();
+        feeAttrs.add(BeanConvertUtil.beanCovertMap(feeAttrPo));
+        Map info = new HashMap();
+        info.put("feeAttrPos", feeAttrs);
+        return feeAttrServiceDaoImpl.saveFeeAttrs(info);
+    }
+
+    @Override
+    public int updateFeeAttr(@RequestBody FeeAttrPo feeAttrPo) {
+        Map param = BeanConvertUtil.beanCovertMap(feeAttrPo);
+        param.put("statusCd", "0");
+        feeAttrServiceDaoImpl.updateFeeAttrInfoInstance(param);
+        return 1;
     }
 
     public IFeeAttrServiceDao getFeeAttrServiceDaoImpl() {

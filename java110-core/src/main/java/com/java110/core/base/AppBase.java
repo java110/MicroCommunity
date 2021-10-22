@@ -115,15 +115,15 @@ public class AppBase extends BaseCache {
     public Map<String, Object> createReturnMap(String resultCode, String resultMsg, String info) {
         return null;
     }
-
-    /**
-     * 调用中心服务
-     *
-     * @return
-     */
-    protected ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
-        return CallApiServiceFactory.callCenterService(restTemplate, pd, param, url, httpMethod);
-
-    }
+//
+//    /**
+//     * 调用中心服务
+//     *
+//     * @return
+//     */
+//    protected ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
+//        return CallApiServiceFactory.callCenterService(restTemplate, pd, param, url, httpMethod);
+//
+//    }
 
 }

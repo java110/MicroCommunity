@@ -145,6 +145,7 @@ public class OaWorkflowFormServiceDaoImpl extends BaseServiceDao implements IOaW
     }
 
 
+
     @Override
     public int updateOaWorkflowFormData(Map paramIn) {
         logger.debug("保存updateOaWorkflowFormData 入参 info : {}",paramIn);
@@ -152,5 +153,11 @@ public class OaWorkflowFormServiceDaoImpl extends BaseServiceDao implements IOaW
         int saveFlag = sqlSessionTemplate.insert("oaWorkflowFormServiceDaoImpl.updateOaWorkflowFormData",paramIn);
         return saveFlag;
     }
+    @Override
+    public int updateOaWorkflowFormDataAll(Map paramIn) {
+        logger.debug("保存updateOaWorkflowFormData 入参 info : {}",paramIn);
 
+        int saveFlag = sqlSessionTemplate.insert("oaWorkflowFormServiceDaoImpl.updateOaWorkflowFormDataAll",paramIn);
+        return saveFlag;
+    }
 }

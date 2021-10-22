@@ -15,113 +15,177 @@
  */
 package com.java110.utils.util;
 
-import java.math.BigDecimal;
-
 /**
  * @desc add by 吴学文 17:14
  */
 public class Money2ChineseUtil {
-    /*
-eg:640 409 329
- 987 654 321  //对应的坐标
+    // 大写数字
+    private static final String[] NUMBERS = {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"};
+    // 整数部分的单位
+    private static final String[] IUNIT = {"元", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿", "拾", "佰", "仟", "万", "拾", "佰", "仟"};
+    // 小数部分的单位
+    private static final String[] DUNIT = {"角", "分", "厘"};
 
- &&& &&& &&&  //替换成对应的字符 (如果是0加上标记)
- --- --- ---  //每位修辞符常量
-      *       //每隔5位数字修辞符常量
-
-*/
-    //数字转中文常量
-    private final static String[] C_N = {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"};
-    //每隔5位数字修辞符常量
-    private final static String[] C_F = {"", "万", "亿", "兆", "吉", "太", "拍", "艾"};
-    //对应的每位修辞符常量
-    private final static String[] C_S = {"", "拾", "佰", "仟"};
-    private final static String[] CNY = {"元", "角", "分", "毫", "厘"};
-    //"-"
-    private final static String negative = "负";
-    //"+"
-    private final static String positive = "";
 
     /**
-     * 将整数转换成对应的中文字符串
+     * 转换为大写的中文金额
      *
-     * @param l
-     * @return StringBuffed
-     */
-    public static String toChineseChar(long l) {
-        //定义变量保存中文字符串
-        StringBuilder sb = new StringBuilder();
-        //将阿拉伯数字转换为无符号的字符串数组
-        char[] ch = (Math.abs(l) + "").toCharArray();
-        //加上符号
-        sb.append(l < 0 ? negative : positive);
-        //定义一个标记,判断该数位前面是否有'0'
-        boolean beforeHaveZore = false;
-        //遍历中文字符串
-        for (int i = 0, j = ch.length - 1; i < ch.length; i++, j--) {
-            //如果首位是1且是十位就不用加'壹'了:eg 15 拾伍   150213 拾伍万零贰佰壹叁  150013 拾伍万零壹拾叁 拾亿零壹拾万/拾亿零拾万
-            if (i == 0 && ch[i] - 48 == 1 && j % 4 == 1) {
-                sb.append(C_S[1]);
-                //判断这个数字是否为0且它前面没有0
-            } else if (ch[i] != 48 && !beforeHaveZore)
-                //中文常量 + 对应的每位修辞符常量 + 每隔4位数字修辞符常量
-                sb.append(C_N[ch[i] - 48] + C_S[j % 4] + C_F[j % 4 == 0 ? j / 4 : 0]);
-                //判断这个数字是否为0且它前面有0
-            else if (ch[i] != 48 && beforeHaveZore) {
-                //中文常量"零"+中文常量+对应的每位修辞符常量+每隔4位数字修辞符常量
-                sb.append(C_N[0] + C_N[ch[i] - 48] + C_S[j % 4] + C_F[j % 4 == 0 ? j / 4 : 0]);
-                //消出标记
-                beforeHaveZore = false;
-                //这个数字是0
-            } else {
-                //如果这个数的位置不是第5位?标记:不标记
-                beforeHaveZore = beforeHaveZore || j % 4 != 0;
-                //每隔5位数字修辞符常量 eg: 50000 伍万
-                sb.append(C_F[j % 4 == 0 ? j / 4 : 0]);
-            }
-        }
-        return sb.toString();
-    }
-
-    /**
-     * To CNY
-     *
-     * @param d
+     * @param price 字符串类型的 金额数字
      * @return
      */
-    public static String toChineseCNY(Double d) {
-        long l = d.longValue();
-        if (d - l == 0) {
-            return toChineseChar(l) + CNY[0] + "整";
+    public static String toChineseChar(double price) {
+        // 判断输入的金额字符串是否符合要求
+        String str = price + "";
+        if (StringUtil.isEmpty(str) || !str.matches("(-)?[\\d]*(.)?[\\d]*")) {
+            return "抱歉，请输入数字！";
         }
-        String s = (d + "").split("\\.")[1];
 
-        StringBuffer sb = new StringBuffer(s.length() * 2);
-        int i = 1;
-        for (char c : s.toCharArray()) {
-            if (c - 48 == 0) {
-                i++;
-                continue;
-            }
-            sb.append(C_N[c - 48] + CNY[i++]);
-            if (CNY.length == i) {
-                break;
-            }
+        if ("0".equals(str) || "0.00".equals(str) || "0.0".equals(str)) {
+            return "零元";
         }
-        return toChineseChar(l) + CNY[0] + sb;
+
+        // 判断金额数字中是否存在负号"-"
+        boolean flag = false;
+        if (str.startsWith("-")) {
+            // 标志位，标志此金额数字为负数
+            flag = true;
+            str = str.replaceAll("-", "");
+        }
+
+        // 去掉金额数字中的逗号","
+        str = str.replaceAll(",", "");
+        String integerStr;//整数部分数字
+        String decimalStr;//小数部分数字
+
+        // 初始化：分离整数部分和小数部分
+        if (str.indexOf(".") > 0) {
+            integerStr = str.substring(0, str.indexOf("."));
+            decimalStr = str.substring(str.indexOf(".") + 1);
+        } else if (str.indexOf(".") == 0) {
+            integerStr = "";
+            decimalStr = str.substring(1);
+        } else {
+            integerStr = str;
+            decimalStr = "";
+        }
+
+        // beyond超出计算能力，直接返回
+        if (integerStr.length() > IUNIT.length) {
+            return "超出计算能力！";
+        }
+
+        // 整数部分数字
+        int[] integers = toIntArray(integerStr);
+        // 判断整数部分是否存在输入012的情况
+        if (integers.length > 1 && integers[0] == 0) {
+            return "抱歉，输入数字不符合要求！";
+        }
+        // 设置万单位
+        boolean isWan = isWan5(integerStr);
+        // 小数部分数字
+        int[] decimals = toIntArray(decimalStr);
+        // 返回最终的大写金额
+        String result = getChineseInteger(integers, isWan) + getChineseDecimal(decimals);
+        if (flag) {
+            // 如果是负数，加上"负"
+            return "负" + result;
+        } else {
+            return result;
+        }
     }
 
-    public static String toChineseChar(Double d) {
-        long l = d.longValue();
-        if (d - l == 0) {
-            return toChineseChar(l);
+    /**
+     * 将字符串转为int数组
+     *
+     * @param number 数字
+     * @return
+     */
+    private static int[] toIntArray(String number) {
+        int[] array = new int[number.length()];
+        for (int i = 0; i < number.length(); i++) {
+            array[i] = Integer.parseInt(number.substring(i, i + 1));
         }
-        String s = (BigDecimal.valueOf(d).toPlainString()).split("\\.")[1];
-        StringBuffer sb = new StringBuffer(s.length());
-        sb.append("点");
-        for (char c : s.toCharArray()) {
-            sb.append(C_N[c - 48]);
+        return array;
+    }
+
+    /**
+     * 将整数部分转为大写的金额
+     *
+     * @param integers 整数部分数字
+     * @param isWan    整数部分是否已经是达到【万】
+     * @return
+     */
+    public static String getChineseInteger(int[] integers, boolean isWan) {
+        StringBuffer chineseInteger = new StringBuffer("");
+        int length = integers.length;
+        if (length == 1 && integers[0] == 0) {
+            return "";
         }
-        return toChineseChar(l) + sb;
+        for (int i = 0; i < length; i++) {
+            String key = "";
+            if (integers[i] == 0) {
+                if ((length - i) == 13)//万（亿）
+                    key = IUNIT[4];
+                else if ((length - i) == 9) {//亿
+                    key = IUNIT[8];
+                } else if ((length - i) == 5 && isWan) {//万
+                    key = IUNIT[4];
+                } else if ((length - i) == 1) {//元
+                    key = IUNIT[0];
+                }
+                if ((length - i) > 1 && integers[i + 1] != 0) {
+                    key += NUMBERS[0];
+                }
+            }
+            chineseInteger.append(integers[i] == 0 ? key : (NUMBERS[integers[i]] + IUNIT[length - i - 1]));
+        }
+        return chineseInteger.toString();
+    }
+
+    /**
+     * 将小数部分转为大写的金额
+     *
+     * @param decimals 小数部分的数字
+     * @return
+     */
+    private static String getChineseDecimal(int[] decimals) {
+        StringBuffer chineseDecimal = new StringBuffer("");
+        for (int i = 0; i < decimals.length; i++) {
+            if (i == 3) {
+                break;
+            }
+            chineseDecimal.append(decimals[i] == 0 ? "" : (NUMBERS[decimals[i]] + DUNIT[i]));
+        }
+        return chineseDecimal.toString();
+    }
+
+    /**
+     * 判断当前整数部分是否已经是达到【万】
+     *
+     * @param integerStr 整数部分数字
+     * @return
+     */
+    private static boolean isWan5(String integerStr) {
+        int length = integerStr.length();
+        if (length > 4) {
+            String subInteger = "";
+            if (length > 8) {
+                subInteger = integerStr.substring(length - 8, length - 4);
+            } else {
+                subInteger = integerStr.substring(0, length - 4);
+            }
+            return Integer.parseInt(subInteger) > 0;
+        } else {
+            return false;
+        }
+    }
+
+
+    // Test
+    public static void main(String[] args) {
+        double number = 3462.98;
+        System.out.println(number + ": " + toChineseChar(number));
+
+
     }
 }

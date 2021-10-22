@@ -4,12 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.intf.common.ICarBlackWhiteInnerServiceSMO;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeCarBlackWhiteConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.carBlackWhite.ApiCarBlackWhiteDataVo;
 import com.java110.vo.api.carBlackWhite.ApiCarBlackWhiteVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,9 @@ public class ListCarBlackWhitesListener extends AbstractServiceApiListener {
 
     @Autowired
     private ICarBlackWhiteInnerServiceSMO carBlackWhiteInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -66,6 +73,7 @@ public class ListCarBlackWhitesListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         CarBlackWhiteDto carBlackWhiteDto = BeanConvertUtil.covertBean(reqJson, CarBlackWhiteDto.class);
+        carBlackWhiteDto.setPaIds(getPaIds(reqJson));
 
         int count = carBlackWhiteInnerServiceSMOImpl.queryCarBlackWhitesCount(carBlackWhiteDto);
 
@@ -87,5 +95,26 @@ public class ListCarBlackWhitesListener extends AbstractServiceApiListener {
 
         context.setResponseEntity(responseEntity);
 
+    }
+
+
+    private String[] getPaIds(JSONObject reqJson) {
+        if (reqJson.containsKey("boxId") && !StringUtil.isEmpty(reqJson.getString("boxId"))) {
+            ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+            parkingBoxAreaDto.setBoxId(reqJson.getString("boxId"));
+            parkingBoxAreaDto.setCommunityId(reqJson.getString("communityId"));
+            List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+
+            if (parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
+                throw new CmdException("未查到停车场信息");
+            }
+            List<String> paIds = new ArrayList<>();
+            for (ParkingBoxAreaDto parkingBoxAreaDto1 : parkingBoxAreaDtos) {
+                paIds.add(parkingBoxAreaDto1.getPaId());
+            }
+            String[] paIdss = paIds.toArray(new String[paIds.size()]);
+            return paIdss;
+        }
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package com.java110.fee.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.BillDto;
@@ -115,7 +116,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
         List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.getFeeInfo(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
 
 
-        for(FeeDto tmpFeeDto : fees) {
+        for (FeeDto tmpFeeDto : fees) {
             if (!StringUtil.isEmpty(tmpFeeDto.getImportFeeName())) {
                 //fee.setFeeName(fee.getImportFeeName() + "(" + fee.getFeeName() + ")");
                 tmpFeeDto.setFeeName(tmpFeeDto.getImportFeeName());
@@ -318,6 +319,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     }
 
     @Override
+    @Java110Transactional
     public int updateFee(@RequestBody PayFeePo payFeePo) {
         feeServiceDaoImpl.updateFeeInfoInstance(BeanConvertUtil.beanCovertMap(payFeePo));
         return 1;
@@ -333,6 +335,21 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
         Map info = new HashMap();
         info.put("payFeePos", fees);
         return feeServiceDaoImpl.insertFees(info);
+    }
+
+    @Override
+    @Java110Transactional
+    public int saveOneFee(@RequestBody PayFeePo payFeePo) {
+        List<Map> fees = new ArrayList<>();
+        fees.add(BeanConvertUtil.beanCovertMap(payFeePo));
+        Map info = new HashMap();
+        info.put("payFeePos", fees);
+        return feeServiceDaoImpl.insertFees(info);
+    }
+
+    @Override
+    public int deleteFeesByBatch(@RequestBody PayFeePo payFeePo) {
+        return feeServiceDaoImpl.deleteFeesByBatch(BeanConvertUtil.beanCovertMap(payFeePo));
     }
 
     @Override
@@ -356,6 +373,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         return data;
     }
+
 
     private void dealFeeConfig(JSONArray data, FeeConfigDto tmpFeeConfigDto) {
         JSONObject config = new JSONObject();

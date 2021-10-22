@@ -89,7 +89,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
 //        List<CommunityDto> communityDtos = BeanConvertUtil.covertBeanList(
 //                reportCommunityServiceDaoImpl.getCommunitys(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);
 
-        List<CommunityDto> communityDtos =communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
         for (CommunityDto tmpCommunityDto : communityDtos) {
             reportFeeMonthStatisticsPo.setCommunityId(tmpCommunityDto.getCommunityId());

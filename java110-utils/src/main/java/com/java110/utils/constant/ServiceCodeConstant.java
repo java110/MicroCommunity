@@ -245,6 +245,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SYSTEM_TRANSFER = "system.transfer";
 
     /**
+     * cmd服务
+     */
+    public static final String SERVICE_CODE_SYSTEM_CMD = "system.cmd";
+
+    /**
      * 订单类服务处理
      */
     public static final String SERVICE_CODE_DO_SERVICE_ORDER = "do.service.order";

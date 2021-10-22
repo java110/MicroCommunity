@@ -1,6 +1,7 @@
 package com.java110.dto.machine;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +14,13 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class CarInoutDto extends PageDto implements Serializable {
+public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
+
+    //状态，100300 进场状态 100400 支付完成 100500 离场状态 100600 支付超时重新支付
+    public static final String STATE_IN = "100300";
+    public static final String STATE_PAY = "100400";
+    public static final String STATE_OUT = "100500";
+    public static final String STATE_REPAY = "100600";
 
 
     private String inTime;
@@ -24,6 +31,10 @@ public class CarInoutDto extends PageDto implements Serializable {
     private String[] states;
     private String communityId;
     private String outTime;
+    private String paId;
+    private String[] paIds;
+    private long hours;
+    private long min;
 
 
     private Date createTime;
@@ -111,5 +122,37 @@ public class CarInoutDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
+
+    public long getHours() {
+        return hours;
+    }
+
+    public void setHours(long hours) {
+        this.hours = hours;
+    }
+
+    public long getMin() {
+        return min;
+    }
+
+    public void setMin(long min) {
+        this.min = min;
+    }
+
+    public String[] getPaIds() {
+        return paIds;
+    }
+
+    public void setPaIds(String[] paIds) {
+        this.paIds = paIds;
     }
 }

@@ -117,10 +117,11 @@
         statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id
         resId,t.resource_store_name,t.resource_store_name resourceStoreName,rs.res_name resName,
         t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.create_time createTime, rst.name
-        rstName,rss.spec_name specName,td1.name unitCodeName,td2.name miniUnitCodeName
+        rstName,rst1.name parentRstName,rss.spec_name specName,td1.name unitCodeName,td2.name miniUnitCodeName
         from resource_store_use_record t
         left join resource_store rs on rs.res_id = t.res_id
         left join resource_store_type rst on rs.rst_id = rst.rst_id
+        left join resource_store_type rst1 on rs.parent_rst_id = rst1.rst_id
         left join resource_store_specification rss on rs.rss_id = rss.rss_id
         left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
         left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
@@ -163,6 +164,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and rs.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and rs.parent_rst_id= #{parentRstId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}
@@ -284,6 +288,9 @@
         </if>
         <if test="rstId !=null and rstId != ''">
             and rs.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and rs.parent_rst_id= #{parentRstId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}

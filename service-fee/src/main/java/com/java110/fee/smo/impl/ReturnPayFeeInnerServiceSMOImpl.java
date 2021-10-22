@@ -58,6 +58,44 @@ public class ReturnPayFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
         return returnPayFees;
     }
 
+    @Override
+    public List<ReturnPayFeeDto> queryRoomReturnPayFees(@RequestBody ReturnPayFeeDto returnPayFeeDto) {
+
+        //校验是否传了 分页信息
+
+        int page = returnPayFeeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            returnPayFeeDto.setPage((page - 1) * returnPayFeeDto.getRow());
+        }
+
+        List<ReturnPayFeeDto> returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeServiceDaoImpl.getRoomReturnPayFeeInfo(BeanConvertUtil.beanCovertMap(returnPayFeeDto)), ReturnPayFeeDto.class);
+
+        if (returnPayFees == null || returnPayFees.size() == 0) {
+            return returnPayFees;
+        }
+        return returnPayFees;
+    }
+
+    @Override
+    public List<ReturnPayFeeDto> queryCarReturnPayFees(@RequestBody ReturnPayFeeDto returnPayFeeDto) {
+
+        //校验是否传了 分页信息
+
+        int page = returnPayFeeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            returnPayFeeDto.setPage((page - 1) * returnPayFeeDto.getRow());
+        }
+
+        List<ReturnPayFeeDto> returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeServiceDaoImpl.getCarReturnPayFeeInfo(BeanConvertUtil.beanCovertMap(returnPayFeeDto)), ReturnPayFeeDto.class);
+
+        if (returnPayFees == null || returnPayFees.size() == 0) {
+            return returnPayFees;
+        }
+        return returnPayFees;
+    }
+
 //    /**
 //     * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
 //     *

@@ -18,9 +18,10 @@
     <!-- 查询费用折扣规则信息 add by wuxw 2018-07-03 -->
     <select id="getFeeDiscountRuleInfo" parameterType="Map" resultType="Map">
         select t.rule_name,t.rule_name ruleName,t.remark,t.status_cd,t.status_cd statusCd,t.rule_id,t.rule_id
-        ruleId,t.bean_impl,t.bean_impl beanImpl,t.discount_type discountType
+        ruleId,t.bean_impl,t.bean_impl beanImpl,t.discount_type discountType,t.discount_small_type ,
+        t.discount_small_type discountSmallType
         from fee_discount_rule t
-        where 1 =1
+        where 1 = 1
         <if test="ruleName !=null and ruleName != ''">
             and t.rule_name= #{ruleName}
         </if>
@@ -38,6 +39,9 @@
         </if>
         <if test="discountType !=null and discountType != ''">
             and t.discount_type= #{discountType}
+        </if>
+        <if test="discountSmallType !=null and discountSmallType != ''">
+            and t.discount_small_type= #{discountSmallType}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">

@@ -77,12 +77,16 @@ public class Java110MybatisInterceptor implements Interceptor {
      */
     private void dealDeleteSql(MappedStatement mappedStatement, Object parameter, String sql, Map<String, Object> sqlValue) {
 
-        String tmpTable = sql.substring(sql.indexOf("into") + 4, sql.indexOf("("));
+        String tmpTable = sql.substring(sql.indexOf("into") + 4, sql.indexOf("(")).trim();
+        String tmpTableHasT = tmpTable;
+        if(tmpTable.indexOf(" ") > 0){
+            tmpTable = tmpTable.substring(0,tmpTable.indexOf(" "));
+        }
         String tmpWhere = sql.substring(sql.indexOf("where"));
         //插入操作时之前的 没有数据 所以 preValue 为空对象
         JSONArray preValues = new JSONArray();
 
-        String execSql = "select * from " + tmpTable + " " + tmpWhere;
+        String execSql = "select * from " + tmpTableHasT + " " + tmpWhere;
 
         queryServiceDAOImpl = ApplicationContextFactory.getBean("queryServiceDAOImpl", IQueryServiceDAO.class);
         List<Map<String, Object>> deleteDatas = queryServiceDAOImpl.executeSql(execSql, null);
@@ -127,14 +131,20 @@ public class Java110MybatisInterceptor implements Interceptor {
     private void dealUpdateSql(MappedStatement mappedStatement, Object parameter, String sql, Map<String, Object> sqlValue) {
         //RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
 
-        String tmpTable = sql.substring(sql.indexOf("update") + 6, sql.indexOf("set"));
+        String tmpTable = sql.substring(sql.indexOf("update") + 6, sql.indexOf("set")).trim();
+
+        String tmpTableHasT = tmpTable;
+
+        if(tmpTable.indexOf(" ") > 0){
+            tmpTable = tmpTable.substring(0,tmpTable.indexOf(" "));
+        }
         String tmpWhere = sql.substring(sql.indexOf("where"));
 
         //插入操作时之前的 没有数据 所以 preValue 为空对象
         JSONArray preValues = new JSONArray();
         JSONArray afterValues = new JSONArray();
         JSONObject afterVaule = null;
-        String execSql = "select * from " + tmpTable + " " + tmpWhere;
+        String execSql = "select * from " + tmpTableHasT + " " + tmpWhere;
         queryServiceDAOImpl = ApplicationContextFactory.getBean("queryServiceDAOImpl", IQueryServiceDAO.class);
         List<Map<String, Object>> deleteDatas = queryServiceDAOImpl.executeSql(execSql, null);
 
@@ -210,40 +220,11 @@ public class Java110MybatisInterceptor implements Interceptor {
 
         JSONArray afterValues = new JSONArray();
 
-        String tmpTable = sql.substring(sql.toLowerCase().indexOf("into") + 4, sql.indexOf("("));
-//        String tmpKey = sql.substring(sql.indexOf("(") + 1, sql.indexOf(")"));
-//        String[] tmpKeys = tmpKey.split(",");
-//        int valuePos = 0;
-//        if (sql.contains("VALUES")) {
-//            valuePos = sql.indexOf("VALUES") + 6;
-//        } else {
-//            valuePos = sql.indexOf("values") + 6;
-//        }
-//        String sqlValues = sql.substring(valuePos);
-//        //说明批操作
-//
-//        String[] sqlVauleses = sqlValues.split("\\)");
-//        JSONObject afterValue = null;
-//        for (String sqlV : sqlVauleses) {
-//            String tmpValue = sqlV.substring(sqlV.lastIndexOf("(") + 1);
-//            String[] tmpValues = tmpValue.split(",");
-//            afterValue = new JSONObject();
-//
-//            if (tmpKeys.length != tmpValues.length) {
-//                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
-//            }
-//
-//            if (tmpKeys.length < 1) {
-//                throw new IllegalArgumentException("sql 错误 未找到key" + sql);
-//            }
-//            for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
-//                if ("''".equals(tmpValues[keyIndex])) {
-//                    continue;
-//                }
-//                afterValue.put(tmpKeys[keyIndex], tmpValues[keyIndex]);
-//            }
-//
-//        }
+        String tmpTable = sql.substring(sql.toLowerCase().indexOf("into") + 4, sql.indexOf("(")).trim();
+
+        if(tmpTable.indexOf(" ") > 0){
+            tmpTable = tmpTable.substring(0,tmpTable.indexOf(" "));
+        }
 
         afterValues.add(sqlValue);
 
@@ -269,6 +250,7 @@ public class Java110MybatisInterceptor implements Interceptor {
         }
 
     }
+
 
     @Override
     public Object plugin(Object target) {
@@ -388,13 +370,10 @@ public class Java110MybatisInterceptor implements Interceptor {
 
 
     public static void main(String[] args) {
-        String tmpKey = " prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state";
-        String tmpValue = "'1.00','912020080411040001','1500.0','1.0',,'0','1500.0','7020181217000001','-1',,";
-        String[] tmpKeys = tmpKey.split(",");
-        String[] tmpValues = tmpValue.split(",");
-
-        if (tmpKeys.length != tmpValues.length) {
-            throw new IllegalArgumentException("sql 错误 key 和value 个数不等");
+        String tmpTable = "product_label    t";
+        if(tmpTable.indexOf(" ") > 0){
+            tmpTable = tmpTable.substring(0,tmpTable.indexOf(" "));
         }
+        System.out.printf(tmpTable);
     }
 }

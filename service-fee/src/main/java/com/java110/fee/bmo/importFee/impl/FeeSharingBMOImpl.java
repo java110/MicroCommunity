@@ -10,16 +10,20 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeFormula.FeeFormulaDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.payFeeBatch.PayFeeBatchDto;
+import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.importFee.IFeeSharingBMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.importFee.ImportFeePo;
 import com.java110.po.importFeeDetail.ImportFeeDetailPo;
+import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -69,6 +73,12 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeBatchV1InnerServiceSMO payFeeBatchV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -84,6 +94,9 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
         Assert.listOnlyOne(communityDtos, "未找到小区信息");
+
+        //生成批次
+        generatorBatch(reqJson);
 
         String scope = reqJson.getString("scope");
         RoomDto roomDto = new RoomDto();
@@ -299,6 +312,7 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         payFeePo.setFeeTypeCd(reqJson.getString("feeTypeCd"));
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
         payFeePo.setAmount(amount + "");
+        payFeePo.setBatchId(reqJson.getString("batchId"));
         //payFeePo.setStartTime(importRoomFee.getStartTime());
         payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
@@ -440,6 +454,33 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         if (saveFlag < 1) {
             throw new IllegalArgumentException("创建导入费用失败");
         }
+    }
+
+    /**
+     * 生成批次号
+     *
+     * @param reqJson
+     */
+    private void generatorBatch(JSONObject reqJson) {
+        PayFeeBatchPo payFeeBatchPo = new PayFeeBatchPo();
+        payFeeBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId("12"));
+        payFeeBatchPo.setCommunityId(reqJson.getString("communityId"));
+        payFeeBatchPo.setCreateUserId(reqJson.getString("userId"));
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        payFeeBatchPo.setCreateUserName(userDtos.get(0).getUserName());
+        payFeeBatchPo.setState(PayFeeBatchDto.STATE_NORMAL);
+        payFeeBatchPo.setMsg("正常");
+        int flag = payFeeBatchV1InnerServiceSMOImpl.savePayFeeBatch(payFeeBatchPo);
+
+        if (flag < 1) {
+            throw new IllegalArgumentException("生成批次失败");
+        }
+
+        reqJson.put("batchId", payFeeBatchPo.getBatchId());
     }
 
 }

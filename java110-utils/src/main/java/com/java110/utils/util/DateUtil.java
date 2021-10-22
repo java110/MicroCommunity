@@ -421,6 +421,20 @@ public class DateUtil {
         return c.getTime();
     }
 
+    /**
+     * 在给定的日期加上或减去指定天数后的日期
+     *
+     * @param sourceDate 原始时间
+     * @param day      要调整的月份，向前为负数，向后为正数
+     * @return
+     */
+    public static Date stepDay(Date sourceDate, int day) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(sourceDate);
+        c.add(Calendar.DATE, day);
+        return c.getTime();
+    }
+
     public static String dateTimeToDate(String dateTime) {
         String dateStr = "";
         try {

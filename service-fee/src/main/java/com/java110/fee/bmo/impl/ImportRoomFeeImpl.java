@@ -13,7 +13,12 @@ import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.IImportRoomFee;
 import com.java110.fee.listener.fee.UpdateFeeInfoListener;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.*;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IImportFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -95,6 +100,20 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
+        String batchId = reqJson.getString("batchId");
+
+
+        JSONArray importRoomFees = reqJson.getJSONArray("importRoomFees");
+
+        List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
+
+        if (tmpImportRoomFees == null || tmpImportRoomFees.size() < 1) {
+            throw new IllegalArgumentException("未包含导入费用");
+        }
+
+        if (StringUtil.isEmpty(feeName)) {
+            feeName = tmpImportRoomFees.get(0).getFeeName();
+        }
 
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
@@ -113,11 +132,6 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         } else {
             feeConfigDto.setConfigId(feeConfigDtos.get(0).getConfigId());
         }
-
-
-        JSONArray importRoomFees = reqJson.getJSONArray("importRoomFees");
-
-        List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
 
         for (ImportRoomFee tmpImportRoomFee : tmpImportRoomFees) {
             tmpImportRoomFee.setCommunityId(communityId);
@@ -172,6 +186,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             payFeePo.setFeeTypeCd(feeTypeCd);
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setAmount(importRoomFee.getAmount());
+            payFeePo.setBatchId(batchId);
             //payFeePo.setStartTime(importRoomFee.getStartTime());
             payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
@@ -293,6 +308,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
+        String batchId = reqJson.getString("batchId");
 
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
@@ -350,6 +366,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             payFeePo.setFeeTypeCd(feeTypeCd);
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setAmount(importCarFee.getAmount());
+            payFeePo.setBatchId(batchId);
             //payFeePo.setStartTime(importRoomFee.getStartTime());
             payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
@@ -469,6 +486,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
+        String batchId = reqJson.getString("batchId");
 
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
@@ -524,6 +542,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setAmount(importCarFee.getAmount());
             payFeePo.setStartTime(importCarFee.getStartTime());
+            payFeePo.setBatchId(batchId);
             //payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
 
             payFeePos.add(payFeePo);
@@ -635,9 +654,9 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         payFeeConfigPo.setComputingFormula("4004");
         payFeeConfigPo.setEndTime(DateUtil.getLastTime());
         payFeeConfigPo.setFeeFlag("2006012");
-        payFeeConfigPo.setIsDefault("T");
+        payFeeConfigPo.setIsDefault("F");
         payFeeConfigPo.setPaymentCd("2100");
-        payFeeConfigPo.setFeeName(IMPORT_FEE_NAME);
+        payFeeConfigPo.setFeeName(feeConfigDto.getFeeName());
         payFeeConfigPo.setSquarePrice("0");
         payFeeConfigPo.setPaymentCycle("1");
         payFeeConfigPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));

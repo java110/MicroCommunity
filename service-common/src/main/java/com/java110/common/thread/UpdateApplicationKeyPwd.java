@@ -74,7 +74,7 @@ public class UpdateApplicationKeyPwd implements Runnable {
         applicationKeyDto.setEndTime(DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
         //查询订单信息
         List<ApplicationKeyDto> applicationKeyDtos = applicationKeyInnerServiceSMOImpl.queryApplicationKeys(applicationKeyDto);
-        String url = ServiceConstant.SERVICE_API_URL + "/api/applicationKey.updateApplicationKey";
+        String url = "applicationKey.updateApplicationKey";
         for (ApplicationKeyDto tmpApplicationKeyDto : applicationKeyDtos) {
             try {
                 logger.debug("开始处理订单" + JSONObject.toJSONString(tmpApplicationKeyDto));

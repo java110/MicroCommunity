@@ -291,16 +291,6 @@ public class RoomBMOImpl extends ApiBaseBMO implements IRoomBMO {
      * @return 订单服务能够接受的报文
      */
     public void updateShellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        //获取房屋状态
-        String state = paramInJson.getString("state");
-        if (!StringUtil.isEmpty(paramInJson.getString("startTime")) && !StringUtil.isEmpty(state) && state.equals("2006")) {
-            String startTime = paramInJson.getString("startTime");
-            paramInJson.put("startTime", startTime + " 00:00:00");
-        }
-        if (!StringUtil.isEmpty(paramInJson.getString("endTime")) && !StringUtil.isEmpty(state) && state.equals("2006")) {
-            String endTime = paramInJson.getString("endTime");
-            paramInJson.put("endTime", endTime + " 23:59:59");
-        }
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(paramInJson);
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));

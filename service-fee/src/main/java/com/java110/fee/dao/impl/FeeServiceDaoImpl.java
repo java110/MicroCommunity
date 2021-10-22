@@ -319,5 +319,14 @@ public class FeeServiceDaoImpl extends BaseServiceDao implements IFeeServiceDao 
         return businessFeeInfos;
     }
 
+    @Override
+    public int deleteFeesByBatch(Map info) {
+        logger.debug("修改费用信息Instance 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.update("feeServiceDaoImpl.deleteFeesByBatch", info);
+
+        return saveFlag;
+    }
+
 
 }

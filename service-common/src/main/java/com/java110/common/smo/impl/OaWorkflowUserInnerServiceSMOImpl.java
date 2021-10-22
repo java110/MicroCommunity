@@ -263,8 +263,13 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             throw new IllegalArgumentException("任务已处理");
         }
 
-        //扩展 工作流功能
-        doTaskAuditAgree(reqJson);
+        //判断是否为结束流程
+        if ("1500".equals(reqJson.getString("auditCode"))) {
+            doTaskFinish(reqJson);
+        } else {
+            //扩展 工作流功能
+            doTaskAuditAgree(reqJson);
+        }
 
         String processInstanceId = task.getProcessInstanceId();
         Authentication.setAuthenticatedUserId(reqJson.getString("nextUserId"));
@@ -278,6 +283,25 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             return true;
         }
         return false;
+    }
+
+    private void doTaskFinish(JSONObject reqJson) {
+        OaWorkflowDataDto oaWorkflowDataDto = new OaWorkflowDataDto();
+        oaWorkflowDataDto.setStoreId(reqJson.getString("storeId"));
+        oaWorkflowDataDto.setBusinessKey(reqJson.getString("id"));
+        oaWorkflowDataDto.setPage(1);
+        oaWorkflowDataDto.setRow(1);
+        List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
+
+        if (oaWorkflowDataDtos == null || oaWorkflowDataDtos.size() < 1) {
+            return;
+        }
+        //修改 当前 为完成
+        OaWorkflowDataPo oaWorkflowDataPo = new OaWorkflowDataPo();
+        oaWorkflowDataPo.setDataId(oaWorkflowDataDtos.get(0).getDataId());
+        oaWorkflowDataPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        oaWorkflowDataPo.setContext(reqJson.getString("auditMessage"));
+        oaWorkflowDataInnerServiceSMOImpl.updateOaWorkflowData(oaWorkflowDataPo);
     }
 
     /**
@@ -403,6 +427,18 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         if (task == null) {
             throw new IllegalArgumentException("任务已处理");
         }
+//        //退回给提交者
+//        if ("1400".equals(reqJson.getString("auditCode"))) {
+//            String processInstanceId = task.getProcessInstanceId();
+//            Authentication.setAuthenticatedUserId(reqJson.getString("startUserId"));
+//            taskService.addComment(reqJson.getString("taskId"), processInstanceId, reqJson.getString("auditMessage"));
+//            Map<String, Object> variables = new HashMap<String, Object>();
+//            variables.put("nextUserId", reqJson.getString("startUserId"));
+//            variables.put("auditCode", reqJson.getString("auditCode"));
+//            taskService.complete(reqJson.getString("taskId"), variables);
+//
+//            return true;
+//        }
 
         String event = doTaskAuditUnAgree(reqJson);
         if (OaWorkflowDataDto.EVENT_COMMIT.equals(event)) { //提交状态
@@ -441,7 +477,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
 
         oaWorkflowDataDto = new OaWorkflowDataDto();
         oaWorkflowDataDto.setStoreId(reqJson.getString("storeId"));
-        oaWorkflowDataDto.setDataId(reqJson.getString(oaWorkflowDataDtos.get(0).getPreDataId()));
+        oaWorkflowDataDto.setDataId(oaWorkflowDataDtos.get(0).getPreDataId());
         oaWorkflowDataDto.setPage(1);
         oaWorkflowDataDto.setRow(1);
         List<OaWorkflowDataDto> preOaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
@@ -455,7 +491,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
 
         reqJson.put("nextUserId", preOaWorkflowDataDtos.get(0).getStaffId());
         if ("1400".equals(reqJson.getString("auditCode"))) {
-            reqJson.put("nextUserId", reqJson.getString("createUserId"));
+            reqJson.put("nextUserId", reqJson.getString("startUserId"));
         }
         oaWorkflowDataPo = new OaWorkflowDataPo();
         oaWorkflowDataPo.setBusinessKey(preOaWorkflowDataDtos.get(0).getBusinessKey());

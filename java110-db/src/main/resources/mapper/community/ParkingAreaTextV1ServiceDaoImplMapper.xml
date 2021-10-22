@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="parkingAreaTextV1ServiceDaoImpl">
+
+
+    <!-- 保存停车场道闸文字语音配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingAreaTextInfo" parameterType="Map">
+        insert into parking_area_text(
+        voice,text_id,type_cd,text3,text4,text1,text2,pa_id,community_id
+        ) values (
+        #{voice},#{textId},#{typeCd},#{text3},#{text4},#{text1},#{text2},#{paId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询停车场道闸文字语音配置信息 add by wuxw 2018-07-03 -->
+    <select id="getParkingAreaTextInfo" parameterType="Map" resultType="Map">
+        select t.voice,t.text_id,t.text_id textId,t.type_cd,t.type_cd
+        typeCd,t.text3,t.text4,t.text1,t.text2,t.pa_id,t.pa_id paId,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId
+        from parking_area_text t
+        where 1 =1
+        <if test="voice !=null and voice != ''">
+            and t.voice= #{voice}
+        </if>
+        <if test="textId !=null and textId != ''">
+            and t.text_id= #{textId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="text3 !=null and text3 != ''">
+            and t.text3= #{text3}
+        </if>
+        <if test="text4 !=null and text4 != ''">
+            and t.text4= #{text4}
+        </if>
+        <if test="text1 !=null and text1 != ''">
+            and t.text1= #{text1}
+        </if>
+        <if test="text2 !=null and text2 != ''">
+            and t.text2= #{text2}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改停车场道闸文字语音配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateParkingAreaTextInfo" parameterType="Map">
+        update parking_area_text t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="voice !=null and voice != ''">
+            , t.voice= #{voice}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            , t.type_cd= #{typeCd}
+        </if>
+        <if test="text3 !=null and text3 != ''">
+            , t.text3= #{text3}
+        </if>
+        <if test="text4 !=null and text4 != ''">
+            , t.text4= #{text4}
+        </if>
+        <if test="text1 !=null and text1 != ''">
+            , t.text1= #{text1}
+        </if>
+        <if test="text2 !=null and text2 != ''">
+            , t.text2= #{text2}
+        </if>
+        where 1=1
+        <if test="textId !=null and textId != ''">
+            and t.text_id= #{textId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询停车场道闸文字语音配置数量 add by wuxw 2018-07-03 -->
+    <select id="queryParkingAreaTextsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from parking_area_text t
+        where 1 =1
+        <if test="voice !=null and voice != ''">
+            and t.voice= #{voice}
+        </if>
+        <if test="textId !=null and textId != ''">
+            and t.text_id= #{textId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="text3 !=null and text3 != ''">
+            and t.text3= #{text3}
+        </if>
+        <if test="text4 !=null and text4 != ''">
+            and t.text4= #{text4}
+        </if>
+        <if test="text1 !=null and text1 != ''">
+            and t.text1= #{text1}
+        </if>
+        <if test="text2 !=null and text2 != ''">
+            and t.text2= #{text2}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

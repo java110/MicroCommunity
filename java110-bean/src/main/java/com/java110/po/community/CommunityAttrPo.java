@@ -16,6 +16,7 @@ public class CommunityAttrPo implements Serializable {
     private String communityId;
     private String specCd;
     private String value;
+    private String statusCd;
 
     public String getAttrId() {
         return attrId;
@@ -47,5 +48,13 @@ public class CommunityAttrPo implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

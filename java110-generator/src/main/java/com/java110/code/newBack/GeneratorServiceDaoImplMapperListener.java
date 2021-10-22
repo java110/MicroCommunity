@@ -224,13 +224,13 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
         fileContext = dealUpdateInfoInstance(data, fileContext);
         fileContext = dealGetCount(data, fileContext);
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/back/mapper/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml";
+                + "out/back/mapper/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "V1ServiceDaoImplMapper.xml";
 
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "java110-db\\src\\main\\resources\\mapper\\" + data.getShareName().toString() + "\\" + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml");
+            FileUtilBase.copyfile(writePath, "java110-db\\src\\main\\resources\\mapper\\" + data.getShareName().toString() + "\\" + "/" + toUpperCaseFirstOne(data.getName()) + "V1ServiceDaoImplMapper.xml");
         }
     }
 }

@@ -12,13 +12,18 @@ import java.io.Serializable;
  **/
 public class FloorPo implements Serializable {
 
+    public static final String FLOOR_ATTR_LARGE = "100201912001";//大厦楼栋 属性
+    public static final String FLOOR_ATTR_VALUE = "8008";//大厦楼栋 属性值
+
     private String floorId;
     private String floorNum;
     private String floorArea;
     private String name;
     private String userId;
+    private String bId;
     private String remark;
     private String communityId;
+    private String statusCd;
 
     public String getFloorId() {
         return floorId;
@@ -74,5 +79,21 @@ public class FloorPo implements Serializable {
 
     public void setFloorArea(String floorArea) {
         this.floorArea = floorArea;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

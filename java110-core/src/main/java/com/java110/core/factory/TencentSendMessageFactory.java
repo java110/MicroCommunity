@@ -1,17 +1,8 @@
 package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.CommonRequest;
-import com.aliyuncs.CommonResponse;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
 import com.java110.dto.smsConfig.SmsConfigDto;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.vo.ResultVo;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
@@ -21,9 +12,6 @@ import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Random;
 /*
@@ -70,7 +58,8 @@ public class TencentSendMessageFactory {
         Random random = new Random();
         String result = "";
         for (int i = 0; i < limit; i++) {
-            result += (random.nextInt(9) + 1);;
+            result += (random.nextInt(9) + 1);
+            ;
         }
         return result;
     }
@@ -102,7 +91,7 @@ public class TencentSendMessageFactory {
             logger.error("发送短信失败", e);
         }
 
-        logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + (sendSmsResponse != null ? sendSmsResponse.toString() : ""));
+        logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + (sendSmsResponse != null ? JSONObject.toJSONString(sendSmsResponse) : ""));
 
 
     }
@@ -120,7 +109,7 @@ public class TencentSendMessageFactory {
         String[] phones = {"+86" + tel};  //发送短信的目标手机号，可填多个。
         sendSmsRequest.setPhoneNumberSet(phones);
         sendSmsRequest.setTemplateID(smsConfigDto.getTemplateCode());  //模版id,见《创建短信签名和模版》小节
-        String[] templateParam = (String[])param;//模版参数，从前往后对应的是模版的{1}、{2}等,见《创建短信签名和模版》小节
+        String[] templateParam = (String[]) param;//模版参数，从前往后对应的是模版的{1}、{2}等,见《创建短信签名和模版》小节
         sendSmsRequest.setTemplateParamSet(templateParam);
         sendSmsRequest.setSign(smsConfigDto.getSignName()); //签名内容，不是填签名id,见《创建短信签名和模版》小节
         SendSmsResponse sendSmsResponse = null;
@@ -132,7 +121,7 @@ public class TencentSendMessageFactory {
 
         logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + (sendSmsResponse != null ? sendSmsResponse.toString() : ""));
 
-        return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
 
     }
 

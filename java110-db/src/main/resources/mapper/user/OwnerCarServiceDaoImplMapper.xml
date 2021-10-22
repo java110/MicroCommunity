@@ -150,6 +150,12 @@
         <if test="carTypeCd !=null and carTypeCd != ''">
             and t.car_type_cd= #{carTypeCd}
         </if>
+        <if test="carTypeCds !=null">
+            and t.car_type_cd in
+            <foreach collection="carTypeCds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
         </if>
@@ -306,6 +312,12 @@
         </if>
         <if test="carTypeCd !=null and carTypeCd != ''">
             and t.car_type_cd= #{carTypeCd}
+        </if>
+        <if test="carTypeCds !=null">
+            and t.car_type_cd in
+            <foreach collection="carTypeCds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="carInoutPaymentV1ServiceDaoImpl">
+
+
+    <!-- 保存车辆支付信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCarInoutPaymentInfo" parameterType="Map">
+        insert into car_inout_payment(
+        real_charge,inout_id,pay_type,payment_id,pa_id,community_id,pay_charge
+        ) values (
+        #{realCharge},#{inoutId},#{payType},#{paymentId},#{paId},#{communityId},#{payCharge}
+        )
+    </insert>
+
+
+    <!-- 查询车辆支付信息 add by wuxw 2018-07-03 -->
+    <select id="getCarInoutPaymentInfo" parameterType="Map" resultType="Map">
+        select t.real_charge,t.real_charge realCharge,t.inout_id,t.inout_id inoutId,t.pay_type,t.pay_type
+        payType,t.payment_id,t.payment_id paymentId,t.pa_id,t.pa_id paId,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.pay_charge,t.pay_charge payCharge,ci.car_num carNum,ci.in_time inTime,ci.state,
+        td.`name` stateName,td1.name payTypeName
+        from car_inout_payment t
+        left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id
+        left join t_dict td on ci.state = td.status_cd and td.table_columns='state' and td.table_name = 'car_inout'
+        left join t_dict td1 on t.pay_type = td1.status_cd and td1.table_columns='pay_type' and td1.table_name = 'car_inout_payment'
+        where 1 =1
+        <if test="realCharge !=null and realCharge != ''">
+            and t.real_charge= #{realCharge}
+        </if>
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
+        <if test="paymentId !=null and paymentId != ''">
+            and t.payment_id= #{paymentId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="paIds !=null ">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="payCharge !=null and payCharge != ''">
+            and t.pay_charge= #{payCharge}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改车辆支付信息 add by wuxw 2018-07-03 -->
+    <update id="updateCarInoutPaymentInfo" parameterType="Map">
+        update car_inout_payment t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="realCharge !=null and realCharge != ''">
+            , t.real_charge= #{realCharge}
+        </if>
+        <if test="inoutId !=null and inoutId != ''">
+            , t.inout_id= #{inoutId}
+        </if>
+        <if test="payType !=null and payType != ''">
+            , t.pay_type= #{payType}
+        </if>
+        <if test="paId !=null and paId != ''">
+            , t.pa_id= #{paId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="payCharge !=null and payCharge != ''">
+            , t.pay_charge= #{payCharge}
+        </if>
+        where 1=1
+        <if test="paymentId !=null and paymentId != ''">
+            and t.payment_id= #{paymentId}
+        </if>
+
+    </update>
+
+    <!-- 查询车辆支付数量 add by wuxw 2018-07-03 -->
+    <select id="queryCarInoutPaymentsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from car_inout_payment t
+        left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id
+        left join t_dict td on ci.state = td.status_cd and td.table_columns='state' and td.table_name = 'car_inout'
+        left join t_dict td1 on t.pay_type = td1.status_cd and td1.table_columns='pay_type' and td1.table_name = 'car_inout_payment'
+        where 1 =1
+        <if test="realCharge !=null and realCharge != ''">
+            and t.real_charge= #{realCharge}
+        </if>
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
+        <if test="paymentId !=null and paymentId != ''">
+            and t.payment_id= #{paymentId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="paIds !=null ">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="payCharge !=null and payCharge != ''">
+            and t.pay_charge= #{payCharge}
+        </if>
+
+
+    </select>
+
+</mapper>

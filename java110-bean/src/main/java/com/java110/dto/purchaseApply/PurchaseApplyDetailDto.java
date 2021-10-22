@@ -18,6 +18,7 @@ public class PurchaseApplyDetailDto {
     private String purchasePrice;
     private String id;
     private String rstName;
+    private String parentRstName;
     private String specName;
     private String standardPrice;
     private String originalStock;
@@ -183,6 +184,14 @@ public class PurchaseApplyDetailDto {
 
     public void setMiniUnitCodeName(String miniUnitCodeName) {
         this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
     }
 }
 

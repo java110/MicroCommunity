@@ -230,7 +230,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         Calendar configEndTime = Calendar.getInstance();
         configStartTime.setTime(tmpReportFeeDto.getConfigEndTime());
         int endYear = configEndTime.get(Calendar.YEAR);
-        int curYear = Calendar.getInstance().get(Calendar.YEAR)+1;
+        int curYear = Calendar.getInstance().get(Calendar.YEAR) + 1;
         double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, null, tmpReportCarDto);
         tmpReportFeeDto.setFeePrice(feePrice);
 
@@ -322,7 +322,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         int endYear = configEndTime.get(Calendar.YEAR);
 
         //当前年
-        int curYear = Calendar.getInstance().get(Calendar.YEAR)+1;
+        int curYear = Calendar.getInstance().get(Calendar.YEAR) + 1;
 
         double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, null);
         tmpReportFeeDto.setFeePrice(feePrice);
@@ -398,6 +398,10 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         int endYear = configEndTime.get(Calendar.YEAR);
         int curYear = Calendar.getInstance().get(Calendar.YEAR);
         double cycleMonth = 12;
+
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag()) && FeeDto.STATE_DOING.equals(tmpReportFeeDto.getState())) { // 一次性费用 费用没有结束
+            return StringUtil.isEmpty(tmpReportFeeDto.getAmount()) ? 0 : Double.parseDouble(tmpReportFeeDto.getAmount());
+        }
 
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) { // 一次性费用没有应收 所以写成0
             return 0;

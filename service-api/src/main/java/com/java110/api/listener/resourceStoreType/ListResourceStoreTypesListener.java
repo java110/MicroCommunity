@@ -9,11 +9,13 @@ import com.java110.intf.store.IResourceStoreTypeInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +64,17 @@ public class ListResourceStoreTypesListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+        if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("0")) {
+            reqJson.put("parentId", reqJson.getString("rstId"));
+            reqJson.put("rstId", null);
+            reqJson.put("name", null);
+        }
+        if (reqJson.containsKey("rsId") && !StringUtil.isEmpty(reqJson.getString("rsId"))) {
+            reqJson.put("rstId", reqJson.getString("rsId"));
+        }
+        if (reqJson.containsKey("rstName") && !StringUtil.isEmpty(reqJson.getString("rstName"))) {
+            reqJson.put("name", reqJson.getString("rstName"));
+        }
         ResourceStoreTypeDto resourceStoreTypeDto = BeanConvertUtil.covertBean(reqJson, ResourceStoreTypeDto.class);
 
         int count = resourceStoreTypeInnerServiceSMOImpl.queryResourceStoreTypesCount(resourceStoreTypeDto);

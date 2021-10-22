@@ -18,6 +18,8 @@ public class CarInoutPo implements Serializable {
     private String state;
     private String inTime;
     private String outTime;
+    private String statusCd = "0";
+    private String paId;
 
 
     public String getInoutId() {
@@ -66,5 +68,21 @@ public class CarInoutPo implements Serializable {
 
     public void setOutTime(String outTime) {
         this.outTime = outTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
     }
 }

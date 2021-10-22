@@ -25,6 +25,9 @@ public class CommunityPo implements Serializable {
     private String bId;
 
     private String communityArea;
+    private String payFeeMonth;
+    private String feePrice;
+
 
     private String statusCd = "0";
 
@@ -130,5 +133,21 @@ public class CommunityPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPayFeeMonth() {
+        return payFeeMonth;
+    }
+
+    public void setPayFeeMonth(String payFeeMonth) {
+        this.payFeeMonth = payFeeMonth;
+    }
+
+    public String getFeePrice() {
+        return feePrice;
+    }
+
+    public void setFeePrice(String feePrice) {
+        this.feePrice = feePrice;
     }
 }

@@ -32,6 +32,7 @@ public class AccountDetailDto extends PageDto implements Serializable {
     private String relAcctId;
     private String remark;
     private String objType;
+    private String acctType;
 
 
     private Date createTime;
@@ -134,5 +135,13 @@ public class AccountDetailDto extends PageDto implements Serializable {
 
     public void setAcctName(String acctName) {
         this.acctName = acctName;
+    }
+
+    public String getAcctType() {
+        return acctType;
+    }
+
+    public void setAcctType(String acctType) {
+        this.acctType = acctType;
     }
 }

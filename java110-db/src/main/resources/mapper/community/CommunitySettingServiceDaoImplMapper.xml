@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="communitySettingServiceDaoImpl">
+
+
+    <!-- 保存小区相关设置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunitySettingInfo" parameterType="Map">
+        insert into community_setting(
+            cs_id,setting_value,remark,community_id,setting_key,setting_type,setting_name
+        ) values (
+            #{csId},#{settingValue},#{remark},#{communityId},#{settingKey},#{settingType},#{settingName}
+        )
+    </insert>
+
+
+    <!-- 查询小区相关设置信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunitySettingInfo" parameterType="Map" resultType="Map">
+        select t.cs_id,t.cs_id csId,t.setting_value,t.setting_value settingValue,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.setting_key,t.setting_key
+        settingKey,t.setting_type,t.setting_type settingType,t.setting_name,t.setting_name settingName,
+        td.name settingTypeName
+        from community_setting t
+        left join t_dict td on t.setting_type = td.status_cd and td.table_name = 'community_setting_key' and
+        td.table_columns = 'setting_type'
+        where 1 = 1
+        <if test="csId !=null and csId != ''">
+            and t.cs_id= #{csId}
+        </if>
+        <if test="settingValue !=null and settingValue != ''">
+            and t.setting_value= #{settingValue}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="settingKey !=null and settingKey != ''">
+            and t.setting_key= #{settingKey}
+        </if>
+        <if test="settingType !=null and settingType != ''">
+            and t.setting_type= #{settingType}
+        </if>
+        <if test="settingName !=null and settingName != ''">
+            and t.setting_name= #{settingName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改小区相关设置信息 add by wuxw 2018-07-03 -->
+    <update id="updateCommunitySettingInfo" parameterType="Map">
+        update community_setting t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="settingValue !=null and settingValue != ''">
+            , t.setting_value= #{settingValue}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="settingKey !=null and settingKey != ''">
+            , t.setting_key= #{settingKey}
+        </if>
+        <if test="settingType !=null and settingType != ''">
+            , t.setting_type= #{settingType}
+        </if>
+        <if test="settingName !=null and settingName != ''">
+            , t.setting_name= #{settingName}
+        </if>
+        where 1=1
+        <if test="csId !=null and csId != ''">
+            and t.cs_id= #{csId}
+        </if>
+
+    </update>
+
+    <!-- 查询小区相关设置数量 add by wuxw 2018-07-03 -->
+    <select id="queryCommunitySettingsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from community_setting t
+        where 1 =1
+        <if test="csId !=null and csId != ''">
+            and t.cs_id= #{csId}
+        </if>
+        <if test="settingValue !=null and settingValue != ''">
+            and t.setting_value= #{settingValue}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="settingKey !=null and settingKey != ''">
+            and t.setting_key= #{settingKey}
+        </if>
+        <if test="settingType !=null and settingType != ''">
+            and t.setting_type= #{settingType}
+        </if>
+        <if test="settingName !=null and settingName != ''">
+            and t.setting_name= #{settingName}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -23,6 +23,11 @@ public class RoomRenovationPo implements Serializable {
     private String videoName;
     private String isTrue;
     private String isTrueName;
+    private String isPostpone;
+    private String postponeTime;
+    private String renovationCompany;
+    private String personMain;
+    private String personMainTel;
 
     public String getStatusCd() {
         return statusCd;
@@ -166,5 +171,45 @@ public class RoomRenovationPo implements Serializable {
 
     public void setIsTrueName(String isTrueName) {
         this.isTrueName = isTrueName;
+    }
+
+    public String getIsPostpone() {
+        return isPostpone;
+    }
+
+    public void setIsPostpone(String isPostpone) {
+        this.isPostpone = isPostpone;
+    }
+
+    public String getPostponeTime() {
+        return postponeTime;
+    }
+
+    public void setPostponeTime(String postponeTime) {
+        this.postponeTime = postponeTime;
+    }
+
+    public String getRenovationCompany() {
+        return renovationCompany;
+    }
+
+    public void setRenovationCompany(String renovationCompany) {
+        this.renovationCompany = renovationCompany;
+    }
+
+    public String getPersonMain() {
+        return personMain;
+    }
+
+    public void setPersonMain(String personMain) {
+        this.personMain = personMain;
+    }
+
+    public String getPersonMainTel() {
+        return personMainTel;
+    }
+
+    public void setPersonMainTel(String personMainTel) {
+        this.personMainTel = personMainTel;
     }
 }

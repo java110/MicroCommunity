@@ -18,7 +18,6 @@ package com.java110.job.adapt.hcToTianchuang;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
-import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
@@ -49,14 +48,28 @@ import com.java110.po.machine.MachineRecordPo;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.net.URLDecoder;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,7 +82,7 @@ import java.util.List;
  */
 @Component(value = "personToTianchuangAdapt")
 public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
-
+    protected static MessageDigest messageDigest = null;
     private static Logger logger = LoggerFactory.getLogger(PersonToTianchuangAdapt.class);
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -156,14 +169,15 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         }
 
         //判断住户是否传天创
-        String idCard = machineRecordPo.getIdCard();
+        String name = machineRecordPo.getName();
 
         //身份证为空时 ，门禁记录没法传 所以就不传了
-        if (StringUtil.isEmpty(idCard)) {
+        if (StringUtil.isEmpty(name)) {
             return;
         }
         OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setIdCard(idCard);
+        ownerDto.setName(machineRecordPo.getName());
+        ownerDto.setCommunityId(machineRecordPo.getCommunityId());
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
         if (ownerDtos == null || ownerDtos.size() < 1) {
@@ -227,15 +241,11 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         pages.add(page);
 
         data.put("pages", pages);
+        String json = encryptStr(data.toJSONString(), TianChuangConstant.getAppSecret());
+        String result = httpPOST2(json, TianChuangConstant.SERVICE_ID_PERSON_INOUT);
+        JSONObject paramOut = JSONObject.parseObject(result);
 
-        String dataStr = AuthenticationFactory.AesDecrypt(data.toJSONString(), TianChuangConstant.getAppSecret());
-
-        HttpEntity httpEntity = new HttpEntity(dataStr, GetTianChuangToken.getHeaders(TianChuangConstant.SERVICE_ID_PERSON_INOUT, dataStr));
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(TianChuangConstant.getUrl(), HttpMethod.POST, httpEntity, String.class);
-        logger.debug("调用HC IOT信息：" + responseEntity);
-        JSONObject paramOut = JSONObject.parseObject(AuthenticationFactory.AesEncrypt(responseEntity.getBody(), TianChuangConstant.getAppSecret()));
-
-        String code = paramOut.getJSONObject("sta").getString("cod");
+        String code = paramOut.getJSONObject("sta").getString("code");
         if (!"0000".equals(code)) {
             throw new IllegalArgumentException("同步小区失败，" + paramOut.toJSONString());
         }
@@ -270,7 +280,7 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         dataObj.put("lvgmsfhm", ownerDto.getIdCard());
         dataObj.put("lvxm", ownerDto.getName());
         dataObj.put("lvlxdh", ownerDto.getLink());
-        dataObj.put("lvdjsj", ownerDto.getCreateTime());
+        dataObj.put("lvdjsj", DateUtil.getFormatTimeString(ownerDto.getCreateTime(),"yyyyMMdd HH:mm:ss"));
         dataObj.put("lvrybm", ownerDto.getMemberId());
         String qrCodeAddress = "";
         for (RoomAttrDto roomAttrDto : roomDtos.get(0).getRoomAttrDto()) {
@@ -296,19 +306,16 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         pages.add(page);
 
         data.put("pages", pages);
+        logger.debug("发送住戶信息加密前，{}", data.toJSONString());
+        String json = encryptStr(data.toJSONString(), TianChuangConstant.getAppSecret());
+        String result = httpPOST2(json, TianChuangConstant.SERVICE_ID_OWNER);
+        JSONObject paramOut = JSONObject.parseObject(result);
 
-        String dataStr = AuthenticationFactory.AesDecrypt(data.toJSONString(), TianChuangConstant.getAppSecret());
-
-        HttpEntity httpEntity = new HttpEntity(dataStr, GetTianChuangToken.getHeaders(TianChuangConstant.SERVICE_ID_OWNER, dataStr));
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(TianChuangConstant.getUrl(), HttpMethod.POST, httpEntity, String.class);
-        logger.debug("调用HC IOT信息：" + responseEntity);
-        JSONObject paramOut = JSONObject.parseObject(AuthenticationFactory.AesEncrypt(responseEntity.getBody(), TianChuangConstant.getAppSecret()));
-
-        String code = paramOut.getJSONObject("sta").getString("cod");
+        String code = paramOut.getJSONObject("sta").getString("code");
         if (!"0000".equals(code)) {
             throw new IllegalArgumentException("同步小区失败，" + paramOut.toJSONString());
         }
-        String extTcOwnerId = paramOut.getJSONArray("data").getJSONObject(0).getString("result");
+        String extTcOwnerId = paramOut.getJSONArray("datas").getJSONObject(0).getString("Result");
         OwnerAttrPo ownerAttrPo = new OwnerAttrPo();
         ownerAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         ownerAttrPo.setCommunityId(ownerDto.getCommunityId());
@@ -358,19 +365,15 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         pages.add(page);
 
         data.put("pages", pages);
+        String json = encryptStr(data.toJSONString(), TianChuangConstant.getAppSecret());
+        String result = httpPOST2(json, TianChuangConstant.SERVICE_ID_MACHINE);
+        JSONObject paramOut = JSONObject.parseObject(result);
 
-        String dataStr = AuthenticationFactory.AesDecrypt(data.toJSONString(), TianChuangConstant.getAppSecret());
-
-        HttpEntity httpEntity = new HttpEntity(dataStr, GetTianChuangToken.getHeaders(TianChuangConstant.SERVICE_ID_MACHINE, dataStr));
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(TianChuangConstant.getUrl(), HttpMethod.POST, httpEntity, String.class);
-        logger.debug("调用HC IOT信息：" + responseEntity);
-        JSONObject paramOut = JSONObject.parseObject(AuthenticationFactory.AesEncrypt(responseEntity.getBody(), TianChuangConstant.getAppSecret()));
-
-        String code = paramOut.getJSONObject("sta").getString("cod");
+        String code = paramOut.getJSONObject("sta").getString("code");
         if (!"0000".equals(code)) {
             throw new IllegalArgumentException("同步小区失败，" + paramOut.toJSONString());
         }
-        String extTcMachineId = paramOut.getJSONArray("data").getJSONObject(0).getString("result");
+        String extTcMachineId = paramOut.getJSONArray("datas").getJSONObject(0).getString("Result");
         MachineAttrPo machineAttrPo = new MachineAttrPo();
         machineAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         machineAttrPo.setCommunityId(communityDto.getCommunityId());
@@ -418,19 +421,15 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         pages.add(page);
 
         data.put("pages", pages);
-
-        String dataStr = AuthenticationFactory.AesDecrypt(data.toJSONString(), TianChuangConstant.getAppSecret());
-
-        HttpEntity httpEntity = new HttpEntity(dataStr, GetTianChuangToken.getHeaders(TianChuangConstant.SERVICE_ID_COMMUNITY, dataStr));
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(TianChuangConstant.getUrl(), HttpMethod.POST, httpEntity, String.class);
-        logger.debug("调用HC IOT信息：" + responseEntity);
-        JSONObject paramOut = JSONObject.parseObject(AuthenticationFactory.AesEncrypt(responseEntity.getBody(), TianChuangConstant.getAppSecret()));
-
-        String code = paramOut.getJSONObject("sta").getString("cod");
+        logger.debug("发送小区加密前，{}", data.toJSONString());
+        String json = encryptStr(data.toJSONString(), TianChuangConstant.getAppSecret());
+        String result = httpPOST2(json, TianChuangConstant.SERVICE_ID_COMMUNITY);
+        JSONObject paramOut = JSONObject.parseObject(result);
+        String code = paramOut.getJSONObject("sta").getString("code");
         if (!"0000".equals(code)) {
-            throw new IllegalArgumentException("同步小区失败，" + paramOut.toJSONString());
+            throw new IllegalArgumentException("同步小区失败，" + paramOut.getJSONObject("sta").getString("des"));
         }
-        String extTcCommunityId = paramOut.getJSONArray("data").getJSONObject(0).getString("result");
+        String extTcCommunityId = paramOut.getJSONArray("datas").getJSONObject(0).getString("Result");
         CommunityAttrPo communityAttrPo = new CommunityAttrPo();
         communityAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
         communityAttrPo.setCommunityId(communityDto.getCommunityId());
@@ -439,6 +438,246 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         communityInnerServiceSMOImpl.saveCommunityAttr(communityAttrPo);
 
         return extTcCommunityId;
+    }
+
+
+    /**
+     * 字符串加密
+     *
+     * @param srcStr   加密字符串
+     * @param password 加密密钥
+     */
+    public static String encryptStr(String srcStr, String password) {
+        byte[] encryptResult = encryptData_AES(srcStr, password);
+        String encryptResultStr = parseByte2HexStr(encryptResult);
+        return encryptResultStr;
+    }
+
+    /**
+     * 加密
+     *
+     * @param content  需要加密的内容
+     * @param password 加密密码
+     * @return
+     */
+    private static byte[] encryptData_AES(String content, String password) {
+        try {
+            //SecretKey secretKey = getKey(password);
+            //byte[] enCodeFormat = secretKey.getEncoded();
+            byte[] enCodeFormat = parseHexStr2Byte(password);
+            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
+            byte[] byteContent = content.getBytes("utf-8");
+            cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
+            byte[] result = cipher.doFinal(byteContent);
+            return result; // 加密
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将二进制转换成16进制
+     *
+     * @param buf
+     * @return
+     */
+    private static String parseByte2HexStr(byte buf[]) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < buf.length; i++) {
+            String hex = Integer.toHexString(buf[i] & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            sb.append(hex.toUpperCase());
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 字符串解密
+     *
+     * @param srcStr   解密字符串
+     * @param password 加密密钥
+     */
+    public static String decryptStr(String srcStr, String password) {
+        String returnValue = "";
+        try {
+            byte[] decryptFrom = parseHexStr2Byte(srcStr);
+            byte[] decryptResult = decryptData_AES(decryptFrom, password);
+            returnValue = new String(decryptResult, "utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnValue;
+    }
+
+
+    /**
+     * 将16进制转换为二进制
+     *
+     * @param hexStr
+     * @return
+     */
+    private static byte[] parseHexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1)
+            return null;
+        byte[] result = new byte[hexStr.length() / 2];
+        for (int i = 0; i < hexStr.length() / 2; i++) {
+            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
+            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2),
+                    16);
+            result[i] = (byte) (high * 16 + low);
+        }
+        return result;
+    }
+
+    /**
+     * 生成指定字符串的密钥
+     *
+     * @param secret 要生成密钥的字符
+     * @return secretKey 生成后的密钥
+     * @throws GeneralSecurityException
+     */
+    public static SecretKey getKey(String secret) throws GeneralSecurityException {
+        try {
+            KeyGenerator _generator = KeyGenerator.getInstance("AES");
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            secureRandom.setSeed(secret.getBytes());
+            _generator.init(128, secureRandom);
+            return _generator.generateKey();
+        } catch (Exception e) {
+            throw new RuntimeException("初始化密钥出现异常");
+        }
+    }
+
+    /**
+     * 解密
+     *
+     * @param content  待解密内容
+     * @param password 解密密钥
+     * @return
+     */
+    private static byte[] decryptData_AES(byte[] content, String password) {
+        try {
+            SecretKey secretKey = getKey(password);
+            byte[] enCodeFormat = secretKey.getEncoded();
+            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
+            cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
+            byte[] result = cipher.doFinal(content);
+            return result; // 加密
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String md5(String str) {
+        if (str == null) {
+            return null;
+        }
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.reset();
+            messageDigest.update(str.getBytes("UTF-8"));
+        } catch (Exception e) {
+            return str;
+        }
+        byte[] byteArray = messageDigest.digest();
+        StringBuffer md5StrBuff = new StringBuffer();
+        for (int i = 0; i < byteArray.length; i++) {
+            if (Integer.toHexString(0xFF & byteArray[i]).length() == 1)
+                md5StrBuff.append("0").append(Integer.toHexString(0xFF & byteArray[i]));
+            else
+                md5StrBuff.append(Integer.toHexString(0xFF & byteArray[i]));
+        }
+        return md5StrBuff.toString().toUpperCase();
+    }
+
+    public static String httpPOST2(String json, String serviceId) {
+
+        String url = TianChuangConstant.getUrl();
+        String appId = TianChuangConstant.getAppId();
+        String appSecret = TianChuangConstant.getAppSecret();
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(url);
+        post.setHeader("appid", appId);
+        String currdate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String token = md5(appId + appSecret + currdate + json.replaceAll("\r\n", ""));
+        System.out.println("token:" + token);
+
+        post.setHeader("token", token);
+        post.setHeader("tranId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_tranId));
+        post.setHeader("serviceId", serviceId);
+        post.setHeader("serviceValue", serviceId);
+        post.setHeader("versionCode", "1.0");
+
+
+        String body = "";
+
+        logger.debug("请求报文={}", json);
+        try {
+            StringEntity s = new StringEntity(json, "UTF-8");
+            s.setContentType("application/json");
+            post.setEntity(s);
+            HttpResponse res = client.execute(post);
+            HttpEntity entity = res.getEntity();
+            if (entity != null) {
+                body = EntityUtils.toString(entity, "utf-8");
+            }
+            body = URLDecoder.decode(body, "utf-8");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        logger.debug("返回报文={}", body);
+
+        return body;
+    }
+
+    public static String httpPOST(String url, String json) {
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(url);
+
+        String body = "";
+
+        try {
+            StringEntity s = new StringEntity(json, "UTF-8");
+            s.setContentType("application/json");
+            post.setEntity(s);
+            HttpResponse res = client.execute(post);
+            HttpEntity entity = res.getEntity();
+            if (entity != null) {
+                body = EntityUtils.toString(entity, "utf-8");
+            }
+            return URLDecoder.decode(body, "utf-8");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
+    private static final String SECRETKEY = "CAD3218426800B9FE0532D03A8C0310E";
+
+    public static void main(String[] args) throws Exception {
+        //String json = "{\"datas\":[{\"gmsfhm\":\"370122197507084821\",\"name\":\"李冰\"}],\"pages\":{\"psize\":\"10\",\"tcount\":\"\",\"pno\":\"1\",\"tsize\":\"\"}}";
+        // 加密
+        //String encryptResultStr = encryptStr(json, SECRETKEY);
+        //String a = "CB42C3F519BC831961E4CE27AA00FA6DEF0E494A467187F77E01CDC8FC4605295FD1BED29065B244E4C2B1AB86D0BCE7A5914F2DF70C5360F2C58D9B2B9DC32D16EF3CB68AD1A7BEC820D690763511E57A55B13D4F0558BA64A14B2DEB3B5C762CC84D88DF60F223A467FF53615D9B7DF0BC32A20F96637D425F82A4CDD7A311";
+        //System.out.println("加密后1：" + encryptResultStr);
+        // System.out.println("加密后2：" +a);
+        // System.out.println("加密后3：CB42C3F519BC831961E4CE27AA00FA6DEF0E494A467187F77E01CDC8FC4605295FD1BED29065B244E4C2B1AB86D0BCE7A5914F2DF70C5360F2C58D9B2B9DC32D16EF3CB68AD1A7BEC820D690763511E57A55B13D4F0558BA64A14B2DEB3B5C762CC84D88DF60F223A467FF53615D9B7D71A92761E9E455F104519DF3AFA4E5F2");
+        // 解密
+        String encryptResultStr = "%E8%AF%B7%E6%B1%82%E4%B8%8D%E5%90%88%E6%B3%95%EF%BC%8C%E5%8C%85%E4%BD%93%E6%A0%BC%E5%BC%8F%E9%94%99%E8%AF%AF";
+        String decryptResultStr = decryptStr(encryptResultStr, SECRETKEY);
+        System.out.println("解密后：" + decryptResultStr);
+
+        //String decryptResultStr = decryptStr(a, "60F10B41F44BD4856C0C1952BF40690C");
+        //System.out.println(decryptResultStr);
+
+        //	System.out.println(getKey("9A1158154DFA42CADDBD0694A4E9BDC8"));
+
     }
 
 }

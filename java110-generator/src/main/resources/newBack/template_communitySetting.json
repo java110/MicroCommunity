@@ -1,0 +1,35 @@
+{
+  "autoMove": true,
+  "id": "csId",
+  "name": "communitySetting",
+  "desc": "小区相关设置",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "tableName": "community_setting",
+  "param": {
+    "csId": "cs_id",
+    "communityId": "community_id",
+    "settingName": "setting_name",
+    "settingType": "setting_type",
+    "settingKey": "setting_key",
+    "settingValue": "setting_value",
+    "remark": "remark",
+    "statusCd": "status_cd"
+  },
+  "required": [
+    {
+      "code": "communityId",
+      "msg": "小区ID不能为空"
+    },
+    {
+      "code": "settingType",
+      "msg": "设置类型不能为空"
+    },
+    {
+      "code": "settingKey",
+      "msg": "设置key不能为空"
+    }
+  ]
+}
+

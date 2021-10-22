@@ -158,4 +158,22 @@ public interface IIotSendAsyn {
     void deleteAttendance(JSONObject postParameters);
 
     void deleteAttendanceStaff(JSONObject postParameters);
+
+    /**
+     * 添加 道闸问候语
+     * @param postParameters
+     */
+    void addParkingAreaText(JSONObject postParameters);
+
+    /**
+     * 添加岗亭
+     * @param postParameters
+     */
+    void addParkingBox(JSONObject postParameters);
+
+    /**
+     * 删除岗亭
+     * @param postParameters
+     */
+    void deleteParkingBox(JSONObject postParameters);
 }

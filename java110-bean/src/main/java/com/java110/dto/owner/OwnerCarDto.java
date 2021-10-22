@@ -22,6 +22,9 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public static final String CAR_TYPE_PRIMARY = "1001"; //主车辆
     public static final String CAR_TYPE_MEMBER = "1002"; //车辆成员
+    public static final String CAR_TYPE_TEMP = "1003"; //临时车
+
+    public static final String CAR_TYPE_CD_TEMP = "1003";
 
     private String carColor;
     private String carBrand;
@@ -64,6 +67,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String bId;
     private String carTypeCd;
+    private String[] carTypeCds;
     private String memberId;
 
 
@@ -330,5 +334,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setCarNumLike(String carNumLike) {
         this.carNumLike = carNumLike;
+    }
+
+    public String[] getCarTypeCds() {
+        return carTypeCds;
+    }
+
+    public void setCarTypeCds(String[] carTypeCds) {
+        this.carTypeCds = carTypeCds;
     }
 }

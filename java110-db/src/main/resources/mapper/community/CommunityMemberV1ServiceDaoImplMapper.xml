@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="communityMemberV1ServiceDaoImpl">
+    <!-- 保存小区成员信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunityMemberInfo" parameterType="Map">
+        insert into s_community_member(
+        member_type_cd,start_time,end_time,community_id,community_member_id,member_id
+        ) values (
+        #{memberTypeCd},#{startTime},#{endTime},#{communityId},#{communityMemberId},#{memberId}
+        )
+    </insert>
+
+
+    <!-- 查询小区成员信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunityMemberInfo" parameterType="Map" resultType="Map">
+        select t.member_type_cd,t.member_type_cd memberTypeCd,t.status_cd,t.status_cd statusCd,t.start_time,t.start_time
+        startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        communityId,t.community_member_id,t.community_member_id communityMemberId,t.member_id,t.member_id memberId
+        from s_community_member t
+        where 1 =1
+        <if test="memberTypeCd !=null and memberTypeCd != ''">
+            and t.member_type_cd= #{memberTypeCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="communityMemberId !=null and communityMemberId != ''">
+            and t.community_member_id= #{communityMemberId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改小区成员信息 add by wuxw 2018-07-03 -->
+    <update id="updateCommunityMemberInfo" parameterType="Map">
+        update s_community_member t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="memberTypeCd !=null and memberTypeCd != ''">
+            , t.member_type_cd= #{memberTypeCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="communityMemberId !=null and communityMemberId != ''">
+            , t.community_member_id= #{communityMemberId}
+        </if>
+        where 1=1
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+
+    </update>
+
+    <!-- 查询小区成员数量 add by wuxw 2018-07-03 -->
+    <select id="queryCommunityMembersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_community_member t
+        where 1 =1
+        <if test="memberTypeCd !=null and memberTypeCd != ''">
+            and t.member_type_cd= #{memberTypeCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="communityMemberId !=null and communityMemberId != ''">
+            and t.community_member_id= #{communityMemberId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+
+
+    </select>
+
+</mapper>

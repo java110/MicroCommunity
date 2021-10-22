@@ -222,11 +222,14 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             applyRoomDiscountDto.setStartTime(simpleDateFormat.format(feeDetailDto.getStartTime()));
             //结束时间
             c.setTime(feeDetailDto.getStartTime());
+            c.add(Calendar.DAY_OF_MONTH, 2);//开始时间，添加1，2天的冗余，只要比5小即可
+            applyRoomDiscountDto.setStartTime(simpleDateFormat.format(c.getTime()));//重新设置开始时间
             double month = Double.parseDouble(feeDetailDto.getCycles());
             c.add(Calendar.MONTH, (int) month);
             c.add(Calendar.DAY_OF_MONTH, -5);//这里根据设置时间荣誉5天
             Date endTime = c.getTime();
             applyRoomDiscountDto.setEndTime(simpleDateFormat.format(endTime));
+            applyRoomDiscountDto.setFeeId(feeDetailDto.getFeeId());
             //查询折扣申请表
             List<ApplyRoomDiscountDto> applyRoomDiscountDtos = applyRoomDiscountInnerServiceSMOImpl.queryApplyRoomDiscounts(applyRoomDiscountDto);
             //判断查询的折扣申请表是否有数据

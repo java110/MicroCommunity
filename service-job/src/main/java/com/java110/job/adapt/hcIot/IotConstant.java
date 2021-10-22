@@ -59,6 +59,15 @@ public class IotConstant {
     //删除停车场
     public static final String DELETE_PARKING_AREA_URL = "/extApi/parkingArea/deleteParkingArea";
 
+    //添加停车场问候语
+    public static final String ADD_PARKING_AREA_TEXT_URL = "/extApi/parkingAreaText/addParkingAreaText";
+
+    //添加岗亭
+    public static final String ADD_PARKING_BOX_URL = "/extApi/parkingBox/addParkingBox";
+
+    //删除岗亭
+    public static final String DELETE_PARKING_BOX_URL = "/extApi/parkingBox/deleteParkingBox";
+
     //添加车辆
     public static final String ADD_OWNER_CAR_URL = "/extApi/car/addCar";
     //修改车辆
@@ -74,6 +83,9 @@ public class IotConstant {
 
     //开门接口
     public static final String OPEN_DOOR = "/extApi/machine/openDoor";
+
+    //手动进出场
+    public static final String CUSTOM_CAR_INOUT = "/extApi/machine/customCarInOut";
 
     //获取二维码
     public static final String GET_QRCODE = "/extApi/machine/getQRcode";

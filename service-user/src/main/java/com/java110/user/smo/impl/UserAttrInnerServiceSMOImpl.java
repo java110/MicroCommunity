@@ -104,6 +104,10 @@ public class UserAttrInnerServiceSMOImpl extends BaseServiceSMO implements IUser
     public int saveUserAttr(@RequestBody UserAttrPo userAttrPo) {
         return userAttrServiceDaoImpl.saveUserAttr(BeanConvertUtil.beanCovertMap(userAttrPo));
     }
+    @Override
+    public int updateUserAttrInfoInstance(@RequestBody UserAttrPo userAttrPo) {
+        return userAttrServiceDaoImpl.updateUserAttrInfoInstance(BeanConvertUtil.beanCovertMap(userAttrPo));
+    }
 
     public IUserAttrServiceDao getUserAttrServiceDaoImpl() {
         return userAttrServiceDaoImpl;

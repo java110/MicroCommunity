@@ -2,7 +2,6 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.account.IAccountBMO;
 import com.java110.api.bmo.account.IAccountDetailBMO;
 import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.bmo.payFeeDetailDiscount.IPayFeeDetailDiscountBMO;
@@ -20,7 +19,6 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.center.AppService;
-import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
@@ -88,9 +86,6 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     private IPayFeeDetailDiscountBMO payFeeDetailDiscountBMOImpl;
 
     @Autowired
-    private IAccountBMO accountBMOImpl;
-
-    @Autowired
     private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
 
     @Autowired
@@ -107,8 +102,6 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IAccountDetailBMO accountDetailBMOImpl;
-
-
 
     @Override
     public String getServiceCode() {
@@ -143,11 +136,8 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
         businesses.add(feeBMOImpl.addFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPo, feeReceiptPo));
         businesses.add(feeBMOImpl.modifyFee(paramObj, dataFlowContext));
-
         //账户处理
-        accountDetailBMOImpl.dealAccount(paramObj, dataFlowContext);
-
-
+        accountDetailBMOImpl.dealAccount(paramObj, dataFlowContext,businesses);
         //折扣管理
         if (paramObj.containsKey("selectDiscount")) {
             JSONObject discountBusiness = null;

@@ -190,5 +190,14 @@
         where t.id = #{id}
     </update>
 
+    <!-- 修改信息 -->
+    <update id="updateOaWorkflowFormDataAll" parameterType="Map">
+        update ${tableName} set
+            <foreach collection="columns" item="item" separator=",">
+                ${item}
+            </foreach>
+        where id = #{id}
+    </update>
+
 
 </mapper>

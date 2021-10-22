@@ -23,6 +23,7 @@ public class PurchaseApplyDetailVo {
     private String purchaseRemark;
     private String purchasePrice;
     private String rstName;
+    private String parentRstName;
     private String specName;
     private String standardPrice;
     private String originalStock;
@@ -238,6 +239,14 @@ public class PurchaseApplyDetailVo {
 
     public void setMiniUnitCodeName(String miniUnitCodeName) {
         this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
     }
 }
 

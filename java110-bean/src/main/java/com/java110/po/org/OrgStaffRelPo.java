@@ -17,6 +17,8 @@ public class OrgStaffRelPo implements Serializable {
     private String staffId;
     private String relCd;
     private String storeId;
+    private String bId;
+    private String statusCd = "0";
 
     public String getRelId() {
         return relId;
@@ -56,5 +58,21 @@ public class OrgStaffRelPo implements Serializable {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

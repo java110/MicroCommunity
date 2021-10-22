@@ -26,8 +26,9 @@ public class PayFeePo implements Serializable {
     private String state;
     private String configId;
     private String payerObjType;
-    private String statusCd;
+    private String statusCd = "0";
     private String createTime;
+    private String batchId;
 
     public String getFeeId() {
         return feeId;
@@ -147,5 +148,13 @@ public class PayFeePo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
     }
 }

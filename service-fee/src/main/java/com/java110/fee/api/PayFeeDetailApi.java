@@ -32,6 +32,7 @@ public class PayFeeDetailApi {
         JSONObject reqJson = JSONObject.parseObject(reqJsonStr);
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含费用对象");
+        Assert.hasKeyAndValue(reqJson, "batchId", "请求报文中未包含批次");
 
 
 

@@ -477,6 +477,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             feePo.setIncomeObjId(reqJson.getString("storeId"));
             feePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
             feePo.setAmount(reqJson.getString("totalPrice"));
+            feePo.setBatchId("-1");
             RepairDto repairDto = new RepairDto();
             repairDto.setCommunityId(reqJson.getString("communityId"));
             repairDto.setRepairId(reqJson.getString("repairId"));

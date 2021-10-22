@@ -33,6 +33,7 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
     private String rsId;
     private String supplierName;
     private String rstName;
+    private String parentRstName;
     private String specName;
     private String shId;
     private String shName;
@@ -317,5 +318,13 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
 
     public void setMiniUnitCodeName(String miniUnitCodeName) {
         this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
     }
 }

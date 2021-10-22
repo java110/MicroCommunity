@@ -123,7 +123,7 @@ public class RestApi extends BaseController {
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE, service);
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
-            logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}", service, headers);
             responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + service + "]失败：", e);

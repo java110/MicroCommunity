@@ -164,9 +164,6 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             Model modelData = repositoryService.getModel(workflowModelDto.getModelId());
             byte[] bpmnBytes = null;
             bpmnBytes = repositoryService.getModelEditorSource(workflowModelDto.getModelId());
-            String encoded = Base64Convert.byteToBase64(bpmnBytes);
-            byte[] decoded = Base64Convert.base64ToByte(encoded);
-            String xml = new String(decoded);
             String processName = modelData.getName() + ".bpmn20.xml";
             ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);
             Deployment deployment = repositoryService.createDeployment().name(oaWorkflowDtos.get(0).getFlowName())

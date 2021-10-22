@@ -17,10 +17,12 @@ public class ResourceStoreSpecificationDto extends PageDto implements Serializab
 
     private String rssId;
     private String rstId;
+    private String parentRstId;
     private String specName;
     private String description;
     private String storeId;
     private String rstName;
+    private String parentRstName;
 
 
     private Date createTime;
@@ -91,5 +93,21 @@ public class ResourceStoreSpecificationDto extends PageDto implements Serializab
 
     public void setRstName(String rstName) {
         this.rstName = rstName;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
     }
 }

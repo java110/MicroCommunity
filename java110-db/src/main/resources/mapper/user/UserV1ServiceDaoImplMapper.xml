@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userV1ServiceDaoImpl">
+
+
+    <!-- 保存用户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveUserInfo" parameterType="Map">
+        insert into u_user(
+        address,sex,user_id,level_cd,location_cd,score,password,name,tel,b_id,email,age
+        ) values (
+        #{address},#{sex},#{userId},#{levelCd},#{locationCd},#{score},#{password},#{name},#{tel},#{bId},#{email},#{age}
+        )
+    </insert>
+
+
+    <!-- 查询用户信息 add by wuxw 2018-07-03 -->
+    <select id="getUserInfo" parameterType="Map" resultType="Map">
+        select t.address,t.sex,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id userId,t.level_cd,t.level_cd
+        levelCd,t.location_cd,t.location_cd locationCd,t.score,t.password,t.name,t.tel,t.b_id,t.b_id bId,t.email,t.age
+        from u_user t
+        where 1 =1
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and t.sex= #{sex}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="levelCd !=null and levelCd != ''">
+            and t.level_cd= #{levelCd}
+        </if>
+        <if test="locationCd !=null and locationCd != ''">
+            and t.location_cd= #{locationCd}
+        </if>
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="password !=null and password != ''">
+            and t.password= #{password}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="email !=null and email != ''">
+            and t.email= #{email}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改用户信息 add by wuxw 2018-07-03 -->
+    <update id="updateUserInfo" parameterType="Map">
+        update u_user t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="address !=null and address != ''">
+            , t.address= #{address}
+        </if>
+        <if test="sex !=null and sex != ''">
+            , t.sex= #{sex}
+        </if>
+        <if test="levelCd !=null and levelCd != ''">
+            , t.level_cd= #{levelCd}
+        </if>
+        <if test="locationCd !=null and locationCd != ''">
+            , t.location_cd= #{locationCd}
+        </if>
+        <if test="score !=null and score != ''">
+            , t.score= #{score}
+        </if>
+        <if test="password !=null and password != ''">
+            , t.password= #{password}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="email !=null and email != ''">
+            , t.email= #{email}
+        </if>
+        <if test="age !=null and age != ''">
+            , t.age= #{age}
+        </if>
+        where 1=1
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询用户数量 add by wuxw 2018-07-03 -->
+    <select id="queryUsersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from u_user t
+        where 1 =1
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and t.sex= #{sex}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="levelCd !=null and levelCd != ''">
+            and t.level_cd= #{levelCd}
+        </if>
+        <if test="locationCd !=null and locationCd != ''">
+            and t.location_cd= #{locationCd}
+        </if>
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="password !=null and password != ''">
+            and t.password= #{password}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="email !=null and email != ''">
+            and t.email= #{email}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
+
+
+    </select>
+
+</mapper>

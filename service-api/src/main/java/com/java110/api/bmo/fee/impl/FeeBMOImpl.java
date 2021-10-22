@@ -162,7 +162,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-        if (!businessFeeDetail.containsKey("state")) {
+        if (!businessFeeDetail.containsKey("state") || StringUtil.isEmpty(businessFeeDetail.getString("state"))) {
             businessFeeDetail.put("state", "1400");
         }
         feeDto = feeDtos.get(0);
@@ -223,7 +223,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-        if (!businessFeeDetail.containsKey("state")) {
+        if (!businessFeeDetail.containsKey("state") || StringUtil.isEmpty(businessFeeDetail.getString("state"))) {
             businessFeeDetail.put("state", "1400");
         }
         feeDto = feeDtos.get(0);
@@ -617,6 +617,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("payerObjType", FeeDto.PAYER_OBJ_TYPE_CAR);
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
+        businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
         paramInJson.put("feeId", businessUnit.getString("feeId"));
@@ -701,6 +702,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("payerObjType", "3333");
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
+        businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
         paramInJson.put("feeId", businessUnit.getString("feeId"));
@@ -738,6 +740,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("payerObjType", FeeDto.PAYER_OBJ_TYPE_CONTRACT);
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
+        businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
         paramInJson.put("feeId", businessUnit.getString("feeId"));

@@ -4,10 +4,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.app.AppDto;
+import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.order.OrderItemDto;
 import com.java110.order.dao.ICenterServiceDAO;
+import com.java110.order.smo.IAsynNotifySubService;
 import com.java110.order.smo.IOIdServiceSMO;
+import com.java110.utils.cache.BusinessTableHisCache;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -45,25 +50,28 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private IAsynNotifySubService asynNotifySubServiceImpl;
+
 
     @Override
     public ResponseEntity<String> createOId(OrderDto orderDto) {
 
         orderDto.setoId(GenerateCodeFactory.getOId());
         if (StringUtil.isEmpty(orderDto.getAppId())) {
-            throw new IllegalArgumentException("未包含appId");
+            orderDto.setAppId(AppDto.WEB_APP_ID);
         }
 
         if (StringUtil.isEmpty(orderDto.getExtTransactionId())) {
-            throw new IllegalArgumentException("未包含交互日志");
+            orderDto.setExtTransactionId(GenerateCodeFactory.getTransactionId());
         }
 
         if (StringUtil.isEmpty(orderDto.getRequestTime())) {
-            throw new IllegalArgumentException("未包含请求时间");
+            orderDto.setRequestTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
         }
 
         if (StringUtil.isEmpty(orderDto.getUserId())) {
-            throw new IllegalArgumentException("未包含用户ID");
+            orderDto.setUserId("-1");
         }
 
         //保存订单信息
@@ -155,6 +163,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
         return params;
     }
+
 
     /**
      * 生成insert语句
@@ -309,7 +318,32 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         }
         centerServiceDAOImpl.saveOrderItem(BeanConvertUtil.beanCovertMap(orderItemDto));
 
+        //判断是否配置了 轨迹
+        BusinessTableHisDto businessTableHisDto = BusinessTableHisCache.getBusinessTableHisDto(orderItemDto.getAction(), orderItemDto.getActionObj());
+        if (businessTableHisDto == null) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+        }
+
+        //补充 c_business  #{bId},#{oId},#{businessTypeCd},#{remark},#{statusCd}
+        Map business = new HashMap();
+        business.put("oId", orderItemDto.getoId());
+        business.put("businessTypeCd", businessTableHisDto.getBusinessTypeCd());
+        business.put("remark", "");
+        business.put("statusCd", StatusConstant.STATUS_CD_SAVE);
+        business.put("bId", orderItemDto.getbId());
+        centerServiceDAOImpl.saveBusiness(business);
+
+        //通知子服务生成 business 数据,如果配置NO 不通知生成 business 数据
+        if (BusinessTableHisDto.ACTION_OBJ_HIS_NO.equals(businessTableHisDto.getActionObjHis())) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+        }
+
+        doNoticeServiceGeneratorBusiness(orderItemDto, businessTableHisDto);
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+    private void doNoticeServiceGeneratorBusiness(OrderItemDto orderItemDto, BusinessTableHisDto businessTableHisDto) {
+        asynNotifySubServiceImpl.notifySubService(orderItemDto, businessTableHisDto);
     }
 
     /**
@@ -331,9 +365,6 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         info.put("oId", orderDto.getoId());
         centerServiceDAOImpl.updateOrderItem(info);
 
-        //删除 事务日志
-        //centerServiceDAOImpl.deleteUnItemLog(info);
-
         //完成订单
         info = new HashMap();
         info.put("finishTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -341,6 +372,27 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         info.put("oId", orderDto.getoId());
         centerServiceDAOImpl.updateOrder(info);
 
+        //将c_business 修改为完成
+        //完成订单项
+        info = new HashMap();
+        info.put("finishTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        info.put("statusCd", "C");
+        info.put("oId", orderDto.getoId());
+        centerServiceDAOImpl.updateBusiness(info);
+
+        //触发databug
+        //查询 事务项
+        Map orderItem = new HashMap();
+        orderItem.put("oId", orderDto.getoId());
+        List<Map> orderItemMaps = centerServiceDAOImpl.getOrderItems(orderItem);
+
+        //删除 事务日志
+        //centerServiceDAOImpl.deleteUnItemLog(info);
+
+        asynNotifySubServiceImpl.notifyDatabus(orderItemMaps, orderDto);
+
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
+
+
 }

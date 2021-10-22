@@ -19,7 +19,6 @@ import com.java110.config.properties.code.ZookeeperProperties;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.center.DataFlowEventPublishing;
-import com.java110.order.smo.ICenterServiceCacheSMO;
 import com.java110.service.init.ServiceInfoListener;
 import com.java110.service.init.ServiceStartInit;
 import com.java110.utils.cache.MappingCache;
@@ -42,6 +41,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -72,6 +72,7 @@ import java.util.List;
         "com.java110.intf.community",
         "com.java110.intf.fee"
 })
+@EnableAsync
 public class OrderServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);
@@ -111,8 +112,6 @@ public class OrderServiceApplicationStart {
             //加载事件数据
             //EventConfigInit.initSystemConfig();
 
-            //刷新缓存
-            flushMainCache(args);
 
             //加载workId
             loadWorkId();
@@ -121,35 +120,6 @@ public class OrderServiceApplicationStart {
         }
     }
 
-
-    /**
-     * 刷新主要的缓存
-     *
-     * @param args
-     */
-    private static void flushMainCache(String[] args) {
-
-        logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
-
-        //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
-        String mapping = MappingCache.getValue("java110_hc_version");
-        if (StringUtil.isEmpty(mapping)) {
-            ICenterServiceCacheSMO centerServiceCacheSMO = (ICenterServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
-            centerServiceCacheSMO.startFlush();
-            return;
-        }
-
-        if (args == null || args.length == 0) {
-            return;
-        }
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equalsIgnoreCase("-Dcache")) {
-                logger.debug("开始刷新日志，入参为：{}", args[i]);
-                ICenterServiceCacheSMO centerServiceCacheSMO = (ICenterServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
-                centerServiceCacheSMO.startFlush();
-            }
-        }
-    }
 
     /**
      * 加载 workId

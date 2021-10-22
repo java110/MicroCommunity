@@ -80,7 +80,7 @@ public class ListStorehousesListener extends AbstractServiceApiListener {
         } else {
             storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
         }
-        if (StringUtil.isEmpty(reqJson.getString("shType"))) {//调拨申请查看所有仓库
+        if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("0")) {//调拨申请查看所有仓库
             storehouseDto.setShObjIds(null);
         }
         int count = storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);

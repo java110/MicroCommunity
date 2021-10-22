@@ -52,6 +52,8 @@ public class ApiResourceStoreDataVo implements Serializable {
     private String miniUnitStock;
     //最小计量总数
     private String miniStock;
+    private String parentRstId;
+    private String parentRstName;
 
     public String getResId() {
         return resId;
@@ -291,5 +293,21 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setShType(String shType) {
         this.shType = shType;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
     }
 }

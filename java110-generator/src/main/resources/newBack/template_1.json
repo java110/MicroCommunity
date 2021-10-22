@@ -1,78 +1,37 @@
 {
-  "autoMove": true,
-  "id": "tranId",
-  "name": "hcGovTranslate",
-  "desc": "社区政务同步",
-  "shareParam": "tranId",
-  "shareColumn": "tran_id",
-  "shareName": "common",
-  "tableName": "hc_gov_translate",
   "param": {
-    "tranId": "tran_id",
-    "serviceCode": "service_code",
-    "reqTime": "req_time",
-    "sign": "sign",
-    "extCommunityId": "ext_community_id",
-    "communityId": "community_id",
-    "code": "code",
-    "govTopic": "gov_topic",
-    "state": "state",
-    "sendCount": "send_count",
-    "updateTime": "update_time",
-    "objId": "obj_id",
+    "defaultArea": "default_area",
+    "baId": "ba_id",
+    "paId": "pa_id",
     "remark": "remark",
-    "createTime": "create_time",
-    "statusCd": "status_cd"
+    "statusCd": "status_cd",
+    "communityId": "community_id",
+    "boxId": "box_id"
   },
+  "name": "parkingBoxArea",
+  "shareColumn": "community_id",
+  "id": "baId",
+  "shareName": "community",
+  "autoMove": true,
   "required": [
     {
-      "code": "tranId",
-      "msg": "业务不能为空"
+      "msg": "岗亭ID不能为空",
+      "code": "boxId"
     },
     {
-      "code": "serviceCode",
-      "msg": "审批内容不能为空"
+      "msg": "停车场ID不能为空",
+      "code": "paId"
     },
     {
-      "code": "reqTime",
-      "msg": "审批内容不能为空"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
     },
     {
-      "code": "sign",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "extCommunityId",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "communityId",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "code",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "govTopic",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "state",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "sendCount",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "updateTime",
-      "msg": "审批内容不能为空"
-    },
-    {
-      "code": "objId",
-      "msg": "审批内容不能为空"
+      "msg": "是否默认停车场不能为空",
+      "code": "defaultArea"
     }
-  ]
+  ],
+  "desc": "停车场岗亭",
+  "shareParam": "communityId",
+  "tableName": "parking_box_area"
 }
-

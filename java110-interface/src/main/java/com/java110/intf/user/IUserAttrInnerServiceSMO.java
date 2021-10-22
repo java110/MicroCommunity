@@ -56,4 +56,12 @@ public interface IUserAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/saveUserAttr", method = RequestMethod.POST)
     int saveUserAttr(@RequestBody UserAttrPo userAttrPo);
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param userAttrPo 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/updateUserAttrInfoInstance", method = RequestMethod.POST)
+    int updateUserAttrInfoInstance(@RequestBody UserAttrPo userAttrPo);
 }

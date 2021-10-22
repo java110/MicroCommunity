@@ -25,6 +25,7 @@ public class StorehouseDto extends PageDto implements Serializable {
     private String shId;
     private String shName;
     private String storeId;
+    private String isShow;
 
     private Date createTime;
 
@@ -100,5 +101,13 @@ public class StorehouseDto extends PageDto implements Serializable {
 
     public void setShObjIds(String[] shObjIds) {
         this.shObjIds = shObjIds;
+    }
+
+    public String getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(String isShow) {
+        this.isShow = isShow;
     }
 }

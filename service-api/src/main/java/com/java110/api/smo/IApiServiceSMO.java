@@ -1,5 +1,6 @@
 package com.java110.api.smo;
 
+import com.java110.core.context.IPageData;
 import com.java110.utils.exception.SMOException;
 import org.springframework.http.ResponseEntity;
 
@@ -16,5 +17,5 @@ public interface IApiServiceSMO {
      * @param reqJson 请求报文json
      * @return
      */
-    public ResponseEntity<String> service(String reqJson, Map<String, String> headers) throws SMOException;
+     ResponseEntity<String> service(String reqJson, Map<String, String> headers) throws SMOException;
 }

@@ -1,0 +1,96 @@
+{
+  "templateName": "小区设置",
+  "templateCode": "communitySetting",
+  "templateKey": "csId",
+  "templateKeyName": "小区设置ID",
+  "searchCode": "csId",
+  "searchName": "小区设置ID",
+  "directories": "property",
+  "conditions": [
+    {
+      "name": "配置类型",
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"装修,其他",
+      "code": "settingType",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "配置名称",
+      "inputType": "input",
+      "code": "settingName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "配置键名称",
+      "inputType": "input",
+      "code": "settingKey",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns": [
+    {
+      "code": "settingType",
+      "cnCode": "配置类型",
+      "desc": "必填，请填写配置类型",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "select",
+      "selectValue":"1001",
+      "selectValueName":"装修",
+      "limit": "maxLength",
+      "limitParam": "12",
+      "limitErrInfo": "配置类型不能为空",
+      "show": true
+    },
+    {
+      "code": "settingName",
+      "cnCode": "配置名称",
+      "desc": "必填，请填配置名称",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "64",
+      "limitErrInfo": "流配置名称超过64位",
+      "show": true
+    },
+    {
+      "code": "settingKey",
+      "cnCode": "配置KEY",
+      "desc": "必填，请填配置取值",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "200",
+      "limitErrInfo": "配置取值超过200位",
+      "show": true
+    },
+    {
+      "code": "settingValue",
+      "cnCode": "配置取值",
+      "desc": "必填，请填配置取值",
+      "required": true,
+      "hasDefaultValue": false,
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "200",
+      "limitErrInfo": "配置取值超过200位",
+      "show": true
+    },
+    {
+      "code": "remark",
+      "cnCode": "备注",
+      "desc": "可填，请填写备注",
+      "required": false,
+      "hasDefaultValue": false,
+      "defaultValue": "",
+      "inputType": "input",
+      "limit": "maxLength",
+      "limitParam": "200",
+      "limitErrInfo": "备注内容不能超过200",
+      "show": false
+    }
+  ]
+}

@@ -2,6 +2,8 @@ package com.java110.core.smo;
 
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.machine.CarInoutDetailDto;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.ReportCarDto;
@@ -64,6 +66,7 @@ public interface IComputeFeeSMO {
 
     /**
      * 查询费用的业主信息
+     *
      * @param feeDto
      * @return
      */
@@ -71,6 +74,7 @@ public interface IComputeFeeSMO {
 
     /**
      * 刷入 付费方名称
+     *
      * @param feeDtos
      */
     public void freshFeeObjName(List<FeeDto> feeDtos);
@@ -140,4 +144,18 @@ public interface IComputeFeeSMO {
     void computeEveryOweFee(FeeDto tmpFeeDto);
 
     void computeEveryOweFee(FeeDto tmpFeeDto, RoomDto roomDto);
+
+    /**
+     * 计算停车时间和费用
+     *
+     * @param carInoutDtos
+     */
+    List<CarInoutDto> computeTempCarStopTimeAndFee(List<CarInoutDto> carInoutDtos);
+
+    /**
+     * 计算停车时间和费用
+     *
+     * @param carInoutDtos
+     */
+    List<CarInoutDetailDto> computeTempCarInoutDetailStopTimeAndFee(List<CarInoutDetailDto> carInoutDtos);
 }

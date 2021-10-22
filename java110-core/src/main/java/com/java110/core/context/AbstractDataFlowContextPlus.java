@@ -2,6 +2,7 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,6 +24,8 @@ public abstract class AbstractDataFlowContextPlus implements IDataFlowContextPlu
      */
     private JSONObject reqJson;
 
+    private String reqData;
+
     /**
      * 返回头信息
      */
@@ -32,6 +35,7 @@ public abstract class AbstractDataFlowContextPlus implements IDataFlowContextPlu
      * 返回体信息 （只支持json）
      */
     private JSONObject resJson;
+
 
 
     @Override
@@ -49,6 +53,9 @@ public abstract class AbstractDataFlowContextPlus implements IDataFlowContextPlu
     }
 
     public void setReqHeaders(Map<String, String> reqHeaders) {
+        if(reqHeaders == null){
+            reqHeaders = new HashMap<>();
+        }
         this.reqHeaders = reqHeaders;
     }
 
@@ -82,6 +89,11 @@ public abstract class AbstractDataFlowContextPlus implements IDataFlowContextPlu
     }
 
 
+    public String getReqData() {
+        return reqData;
+    }
 
-
+    public void setReqData(String reqData) {
+        this.reqData = reqData;
+    }
 }

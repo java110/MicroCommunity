@@ -1,4 +1,4 @@
-package com.java110.front.smo.@@templateCode@@.impl;
+package com.java110.api.smo.@@templateCode@@.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
@@ -9,7 +9,7 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.front.smo.@@templateCode@@.IList@@TemplateCode@@sSMO;
+import com.java110.api.smo.@@templateCode@@.IList@@TemplateCode@@sSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Map;
  * 查询@@templateCode@@服务类
  */
 @Service("list@@TemplateCode@@sSMOImpl")
-public class List@@TemplateCode@@sSMOImpl extends AbstractComponentSMO implements IList@@TemplateCode@@sSMO {
+public class List@@TemplateCode@@sSMOImpl extends DefaultAbstractComponentSMO implements IList@@TemplateCode@@sSMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -46,7 +46,7 @@ public class List@@TemplateCode@@sSMOImpl extends AbstractComponentSMO implement
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/@@templateCode@@.list@@TemplateCode@@s" + mapToUrlParam(paramIn);
+        String apiUrl = "@@templateCode@@.list@@TemplateCode@@s" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
