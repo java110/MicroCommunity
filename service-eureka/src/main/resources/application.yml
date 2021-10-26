@@ -21,6 +21,7 @@ logging:
     org:
       springframework:
         web: ERROR
+  com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: ERROR
 
 # 参考文档：http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#_standalone_mode
 # 参考文档：http://my.oschina.net/buwei/blog/618756

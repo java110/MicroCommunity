@@ -23,6 +23,7 @@
         <if test="startTime != null">
             and t.create_time &gt; #{startTime}
         </if>
+        and t.status_cd = '0'
         <if test="endTime != null">
             and t.create_time &lt; #{endTime}
         </if>

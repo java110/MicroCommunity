@@ -7,22 +7,23 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `parking_box_area` (\n" +
-            "  `ba_id` varchar(30) NOT NULL COMMENT '关系ID',\n" +
-            "  `box_id` varchar(30) NOT NULL COMMENT '岗亭ID',\n" +
-            "  `pa_id` varchar(30) NOT NULL COMMENT '停车场ID',\n" +
+    public static final String createTableSql = "CREATE TABLE `fee_receipt_print` (\n" +
+            "  `print_id` varchar(30) NOT NULL COMMENT '打印ID',\n" +
             "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
-            "  `default_area` varchar(12) NOT NULL COMMENT '是否默认停车场，主要用于临时车算费时的规则 Y 是 N 否',\n" +
-            "  `remark` varchar(300) DEFAULT NULL COMMENT '备注',\n" +
+            "  `receipt_id` varchar(30) NOT NULL COMMENT '收据ID',\n" +
+            "  `print_pre` varchar(12) NOT NULL COMMENT '打印前缀,一般为日期 例如：20211025',\n" +
+            "  `num` BIGINT NOT NULL default 0 COMMENT '序号',\n" +
+            "   print_num varchar(30) not null comment '打印编号',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'\n" +
+            "  `status_cd` varchar(12) NOT NULL DEFAULT '0' COMMENT '数据状态',\n" +
+            "  `remark` varchar(200) DEFAULT NULL COMMENT '备注'\n" +
             ")";
 
     public static void main(String[] args) {
-        String desc = "停车场岗亭";
-        String id = "baId";
-        String name = "parkingBoxArea";
-        String shareName = "community"; //生成到那个服务下
+        String desc = "收据打印编号";
+        String id = "printId";
+        String name = "feeReceiptPrint";
+        String shareName = "fee"; //生成到那个服务下
         String shareColumn = "community_id";
         String shareParam = "communityId";
         //业务名称 desc 业务编码名称生成后类名 name 主键 id  需要放到那个服务 shareName
@@ -65,10 +66,10 @@ public class TableToJson {
                 required.put("code", StringUtil.lineToHump(key));
                 String comment = rowSql.contains("COMMENT") ? rowSql.substring(rowSql.indexOf("COMMENT '") + 9) : StringUtil.lineToHump(key);
                 comment = comment.trim();
-                if(comment.contains("，")){
+                if (comment.contains("，")) {
                     comment = comment.split("，")[0];
                 }
-                if(comment.contains(" ")){
+                if (comment.contains(" ")) {
                     comment = comment.split(" ")[0];
                 }
 

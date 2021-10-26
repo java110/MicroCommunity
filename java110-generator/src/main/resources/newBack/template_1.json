@@ -1,37 +1,34 @@
 {
   "param": {
-    "defaultArea": "default_area",
-    "baId": "ba_id",
-    "paId": "pa_id",
-    "remark": "remark",
+    "printNum": "print_num",
+    "printId": "print_id",
+    "num": "num",
     "statusCd": "status_cd",
+    "remark": "remark",
     "communityId": "community_id",
-    "boxId": "box_id"
+    "printPre": "print_pre",
+    "receiptId": "receipt_id"
   },
-  "name": "parkingBoxArea",
+  "name": "feeReceiptPrint",
   "shareColumn": "community_id",
-  "id": "baId",
-  "shareName": "community",
+  "id": "printId",
+  "shareName": "fee",
   "autoMove": true,
   "required": [
-    {
-      "msg": "岗亭ID不能为空",
-      "code": "boxId"
-    },
-    {
-      "msg": "停车场ID不能为空",
-      "code": "paId"
-    },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
     },
     {
-      "msg": "是否默认停车场不能为空",
-      "code": "defaultArea"
+      "msg": "收据ID不能为空",
+      "code": "receiptId"
+    },
+    {
+      "msg": "序号不能为空",
+      "code": "num"
     }
   ],
-  "desc": "停车场岗亭",
+  "desc": "收据打印编号",
   "shareParam": "communityId",
-  "tableName": "parking_box_area"
+  "tableName": "fee_receipt_print"
 }
