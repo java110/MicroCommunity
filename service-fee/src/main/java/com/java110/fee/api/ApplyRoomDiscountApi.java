@@ -127,6 +127,7 @@ public class ApplyRoomDiscountApi {
         ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
         applyRoomDiscountDto.setCommunityId(applyRoomDiscountPo.getCommunityId());
         applyRoomDiscountDto.setRoomId(applyRoomDiscountPo.getRoomId());
+        applyRoomDiscountDto.setFeeId(applyRoomDiscountPo.getFeeId());
         //查询折扣申请表中该房屋下符合条件的最新的一条数据
         List<ApplyRoomDiscountDto> applyRoomDiscountDtos = applyRoomDiscountInnerServiceSMOImpl.queryFirstApplyRoomDiscounts(applyRoomDiscountDto);
         //获取本次填写的开始时间
