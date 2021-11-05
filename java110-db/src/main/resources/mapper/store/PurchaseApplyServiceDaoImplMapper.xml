@@ -471,4 +471,26 @@
             and ahp.BUSINESS_KEY_ = #{businessKey}
         </if>
     </select>
+
+    <!--获得获取流程任务id-->
+    <select id="getActRuTaskId" parameterType="Map" resultType="Map">
+        SELECT art.ID_ actRuTaskId FROM act_ru_execution are
+        LEFT JOIN act_ru_task art ON are.PROC_INST_ID_=art.PROC_INST_ID_
+        where 1 = 1
+        <if test="businessKey !=null and businessKey != ''">
+            and are.BUSINESS_KEY_ = #{businessKey}
+        </if>
+    </select>
+
+    <!-- 修改流程任务信息 -->
+    <update id="updateActRuTaskById" parameterType="Map">
+        update act_ru_task t set SUSPENSION_STATE_=1
+        <if test="assigneeUser != null and assigneeUser != ''">
+            ,t.ASSIGNEE_ = #{assigneeUser}
+        </if>
+        where 1=1
+        <if test="actRuTaskId !=null and actRuTaskId != ''">
+            and t.ID_= #{actRuTaskId}
+        </if>
+    </update>
 </mapper>

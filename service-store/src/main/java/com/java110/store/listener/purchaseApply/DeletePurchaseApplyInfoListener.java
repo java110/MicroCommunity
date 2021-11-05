@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.entity.center.Business;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -39,6 +41,9 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
     private final static Logger logger = LoggerFactory.getLogger(DeletePurchaseApplyInfoListener.class);
     @Autowired
     IPurchaseApplyServiceDao purchaseApplyServiceDaoImpl;
+
+    @Autowired
+    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
     @Override
     public int getOrder() {
@@ -108,6 +113,17 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
                 Map businessPurchaseApplyInfo = businessPurchaseApplyInfos.get(_purchaseApplyIndex);
                 flushBusinessPurchaseApplyInfo(businessPurchaseApplyInfo, StatusConstant.STATUS_CD_INVALID);
                 purchaseApplyServiceDaoImpl.updatePurchaseApplyInfoInstance(businessPurchaseApplyInfo);
+                //取消流程审批
+                //查询任务
+                PurchaseApplyDto purchaseDto = new PurchaseApplyDto();
+                purchaseDto.setBusinessKey(businessPurchaseApplyInfo.get("apply_order_id").toString());
+                List<PurchaseApplyDto>  purchaseApplyDtoList=purchaseApplyInnerServiceSMOImpl.getActRuTaskId(purchaseDto);
+                if(purchaseApplyDtoList!=null && purchaseApplyDtoList.size()>0){
+                    PurchaseApplyDto purchaseDto1 = new PurchaseApplyDto();
+                    purchaseDto1.setActRuTaskId(purchaseApplyDtoList.get(0).getActRuTaskId());
+                    purchaseDto1.setAssigneeUser("999999");
+                    purchaseApplyInnerServiceSMOImpl.updateActRuTaskById(purchaseDto1);
+                }
                 dataFlowContext.addParamOut("applyOrderId", businessPurchaseApplyInfo.get("apply_order_id"));
             }
         }

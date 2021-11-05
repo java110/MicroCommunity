@@ -198,5 +198,35 @@ public class PurchaseApplyServiceDaoImpl extends BaseServiceDao implements IPurc
         return purchaseApplys;
     }
 
+    /**
+     * getActRuTaskId
+     *
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> getActRuTaskId(Map info) {
+        logger.debug("获得获取流程任务id信息入参 info : {}", info);
+        List<Map> purchaseApplys = sqlSessionTemplate.selectList("purchaseApplyServiceDaoImpl.getActRuTaskId", info);
+        return purchaseApplys;
+    }
+
+    /**
+     * 修改流程任务信息
+     *
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public void updateActRuTaskById(Map info) throws DAOException {
+        logger.debug("修改流程任务信息 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.update("purchaseApplyServiceDaoImpl.updateActRuTaskById", info);
+
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改流程任务信息数据失败：" + JSONObject.toJSONString(info));
+        }
+    }
+
 
 }

@@ -5,8 +5,10 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.allocationStorehouse.IAllocationStorehouseBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.intf.community.IResourceStoreServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.po.allocationStorehouse.AllocationStorehousePo;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
@@ -28,6 +30,9 @@ public class AllocationStorehouseBMOImpl extends ApiBaseBMO implements IAllocati
 
     @Autowired
     private IResourceStoreServiceSMO resourceStoreServiceSMOImpl;
+
+    @Autowired
+    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -98,6 +103,18 @@ public class AllocationStorehouseBMOImpl extends ApiBaseBMO implements IAllocati
             BigDecimal newMiniStock = miniStock.add(nowMiniStock);
             resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
             super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
+
+            //取消流程审批
+            //查询任务
+            PurchaseApplyDto purchaseDto = new PurchaseApplyDto();
+            purchaseDto.setBusinessKey(tmpAllocationStorehouseDto.getApplyId());
+            List<PurchaseApplyDto>  purchaseApplyDtoList=purchaseApplyInnerServiceSMOImpl.getActRuTaskId(purchaseDto);
+            if(purchaseApplyDtoList!=null && purchaseApplyDtoList.size()>0){
+                PurchaseApplyDto purchaseDto1 = new PurchaseApplyDto();
+                purchaseDto1.setActRuTaskId(purchaseApplyDtoList.get(0).getActRuTaskId());
+                purchaseDto1.setAssigneeUser("999999");
+                purchaseApplyInnerServiceSMOImpl.updateActRuTaskById(purchaseDto1);
+            }
         }
 
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();

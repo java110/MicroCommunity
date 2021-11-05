@@ -105,4 +105,17 @@ public interface IPurchaseApplyServiceDao {
      */
     List<Map> getActRuTaskUserId(Map info);
 
+    /**
+     * 获取流程任务id
+     */
+    List<Map> getActRuTaskId(Map info);
+
+    /**
+     * 修改流程任务信息
+     *
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    void updateActRuTaskById(Map info) throws DAOException;
+
 }

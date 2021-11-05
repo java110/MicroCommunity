@@ -72,4 +72,19 @@ public interface IPurchaseApplyInnerServiceSMO {
     @RequestMapping(value = "/getActRuTaskUserId", method = RequestMethod.POST)
     List<PurchaseApplyDto> getActRuTaskUserId(PurchaseApplyDto purchaseApplyDto);
 
+    /**
+     * 获取流程任务id
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getActRuTaskId", method = RequestMethod.POST)
+    List<PurchaseApplyDto> getActRuTaskId(PurchaseApplyDto purchaseApplyDto);
+    /**
+     * 获取流程任务id
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updateActRuTaskById", method = RequestMethod.POST)
+    void updateActRuTaskById(@RequestBody PurchaseApplyDto purchaseApplyDto);
+
 }

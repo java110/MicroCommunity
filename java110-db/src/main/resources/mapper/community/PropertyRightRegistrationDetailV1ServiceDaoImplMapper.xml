@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="propertyRightRegistrationDetailV1ServiceDaoImpl">
+
+    <!-- 保存房屋产权证件详情信息 add by wuxw 2018-07-03 -->
+    <insert id="savePropertyRightRegistrationDetailInfo" parameterType="Map">
+        insert into property_right_registration_detail(prr_id, prrd_id, create_user, create_time, is_true, securities)
+        values (#{prrId}, #{prrdId}, #{createUser}, #{createTime}, #{isTrue}, #{securities})
+    </insert>
+
+    <!-- 查询房屋产权证件详情信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyRightRegistrationDetailInfo" parameterType="Map" resultType="Map">
+        select t.prr_id,t.prr_id prrId,t.prrd_id,t.prrd_id prrdId,t.create_user,t.create_user
+        createUser,t.status_cd,t.status_cd statusCd,t.securities,t.is_true,t.is_true isTrue,
+        t.create_time,t.create_time createTime
+        from property_right_registration_detail t
+        where 1 =1
+        <if test="prrId !=null and prrId != ''">
+            and t.prr_id= #{prrId}
+        </if>
+        <if test="prrdId !=null and prrdId != ''">
+            and t.prrd_id= #{prrdId}
+        </if>
+        <if test="createUser !=null and createUser != ''">
+            and t.create_user= #{createUser}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            and t.is_true= #{isTrue}
+        </if>
+        <if test="securities !=null and securities != ''">
+            and t.securities= #{securities}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 修改房屋产权证件详情信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyRightRegistrationDetailInfo" parameterType="Map">
+        update property_right_registration_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="prrId !=null and prrId != ''">
+            , t.prr_id= #{prrId}
+        </if>
+        <if test="createUser !=null and createUser != ''">
+            , t.create_user= #{createUser}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            , t.is_true= #{isTrue}
+        </if>
+        <if test="securities !=null and securities != ''">
+            , t.securities= #{securities}
+        </if>
+        where 1=1
+        <if test="prrdId !=null and prrdId != ''">
+            and t.prrd_id= #{prrdId}
+        </if>
+    </update>
+
+    <!-- 查询房屋产权证件详情数量 add by wuxw 2018-07-03 -->
+    <select id="queryPropertyRightRegistrationDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from property_right_registration_detail t
+        where 1 =1
+        <if test="prrId !=null and prrId != ''">
+            and t.prr_id= #{prrId}
+        </if>
+        <if test="prrdId !=null and prrdId != ''">
+            and t.prrd_id= #{prrdId}
+        </if>
+        <if test="createUser !=null and createUser != ''">
+            and t.create_user= #{createUser}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="isTrue !=null and isTrue != ''">
+            and t.is_true= #{isTrue}
+        </if>
+        <if test="securities !=null and securities != ''">
+            and t.securities= #{securities}
+        </if>
+    </select>
+</mapper>

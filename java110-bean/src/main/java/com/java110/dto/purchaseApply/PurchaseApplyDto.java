@@ -66,6 +66,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String actRuTaskId;
     private String procDefId;
     private String businessKey;
+    private String assigneeUser;
 
     //状态标识
     private String noticeState;
@@ -359,5 +360,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setUrgentFlag(String urgentFlag) {
         this.urgentFlag = urgentFlag;
+    }
+
+    public String getAssigneeUser() {
+        return assigneeUser;
+    }
+
+    public void setAssigneeUser(String assigneeUser) {
+        this.assigneeUser = assigneeUser;
     }
 }

@@ -60,7 +60,11 @@ public class ServiceConfiguration {
         exclusions.append("/app/reportInfoSettingTitle/querySettingTitle,");//查询疫情问卷详情
         exclusions.append("/app/reportInfoBackCity/saveReportInfoBackCity,");//返省人员信息上报
         exclusions.append("/app/reportInfoAnswerValue/saveReportInfoAnswerValue,");//保存疫情问卷
-        exclusions.append("/app/staffAuth");//查询大类
+        exclusions.append("/app/staffAuth,");//查询大类
+        exclusions.append("/app/floor.queryFloors,");
+        exclusions.append("/app/unit.queryUnits,");
+        exclusions.append("/app/room.queryRooms,");
+        exclusions.append("/callComponent/propertyRightRegistration.savePropertyRightRegistration");
 
 
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();

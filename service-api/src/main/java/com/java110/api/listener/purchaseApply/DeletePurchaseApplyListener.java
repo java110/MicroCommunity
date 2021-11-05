@@ -87,6 +87,17 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiPlusListener 
             for(PurchaseApplyDetailDto purchaseApplyDetail : purchaseApplyDetailDtos) {
                 PurchaseApplyDetailPo purchaseApplyPo = BeanConvertUtil.covertBean(purchaseApplyDetail, PurchaseApplyDetailPo.class);
                 super.delete(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
+                //取消流程审批
+                //查询任务
+                PurchaseApplyDto purchaseDto = new PurchaseApplyDto();
+                purchaseDto.setBusinessKey(purchaseApplyDetail.getApplyOrderId());
+                List<PurchaseApplyDto>  purchaseApplyDtoList=purchaseApplyInnerServiceSMOImpl.getActRuTaskId(purchaseDto);
+                if(purchaseApplyDtoList!=null && purchaseApplyDtoList.size()>0){
+                    PurchaseApplyDto purchaseDto1 = new PurchaseApplyDto();
+                    purchaseDto1.setActRuTaskId(purchaseApplyDtoList.get(0).getActRuTaskId());
+                    purchaseDto1.setAssigneeUser("999999");
+                    purchaseApplyInnerServiceSMOImpl.updateActRuTaskById(purchaseDto1);
+                }
             }
         }
     }

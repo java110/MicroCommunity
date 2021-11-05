@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="propertyRightRegistrationV1ServiceDaoImpl">
+    <!-- 保存房屋产权信息 add by wuxw 2018-07-03 -->
+    <insert id="savePropertyRightRegistrationInfo" parameterType="Map">
+        insert into property_right_registration(address, prr_id, id_card, name, link, create_user, room_id, create_time,
+                                                state, remark, community_id)
+        values (#{address}, #{prrId}, #{idCard}, #{name}, #{link}, #{createUser}, #{roomId}, #{createTime}, #{state},
+                #{remark}, #{communityId})
+    </insert>
+
+    <!-- 查询房屋产权信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyRightRegistrationInfo" parameterType="Map" resultType="Map">
+        select t.address,t.prr_id,t.prr_id prrId,t.id_card,t.id_card idCard,t.name,t.link,t.create_user,t.create_user
+        createUser,t.status_cd,t.status_cd statusCd,t.room_id,t.room_id roomId,br.room_num roomNum,bu.unit_num unitNum,
+        fl.floor_num floorNum,bu.unit_id unitId,fl.floor_id floorId,t.state,td.name stateName,t.remark,
+        t.community_id,t.community_id communityId
+        from property_right_registration t
+        left join building_room br on br.room_id = t.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor fl on bu.floor_id = fl.floor_id and fl.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'property_right_registration' and
+        table_columns = 'state'
+        where 1 = 1
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="prrId !=null and prrId != ''">
+            and t.prr_id= #{prrId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="createUser !=null and createUser != ''">
+            and t.create_user= #{createUser}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num= #{unitNum}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and fl.floor_num= #{floorNum}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+    <!-- 修改房屋产权信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyRightRegistrationInfo" parameterType="Map">
+        update property_right_registration t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="address !=null and address != ''">
+            , t.address= #{address}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            , t.id_card= #{idCard}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            , t.link= #{link}
+        </if>
+        <if test="createUser !=null and createUser != ''">
+            , t.create_user= #{createUser}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="remark !=null">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="prrId !=null and prrId != ''">
+            and t.prr_id= #{prrId}
+        </if>
+    </update>
+
+    <!-- 查询房屋产权数量 add by wuxw 2018-07-03 -->
+    <select id="queryPropertyRightRegistrationsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from property_right_registration t
+        left join building_room br on br.room_id = t.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor fl on bu.floor_id = fl.floor_id and fl.status_cd = '0'
+        where 1 = 1
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="prrId !=null and prrId != ''">
+            and t.prr_id= #{prrId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="createUser !=null and createUser != ''">
+            and t.create_user= #{createUser}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and br.room_num= #{roomNum}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num= #{unitNum}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and fl.floor_num= #{floorNum}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </select>
+
+</mapper>

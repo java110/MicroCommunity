@@ -2,12 +2,16 @@ package com.java110.api.smo;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.user.UserDto;
 import com.java110.entity.component.ComponentValidateResult;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.cache.PrivilegeCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -29,10 +33,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultAbstractComponentSMO.class);
     protected static final String DEFAULT_PAY_ADAPT = "wechatPayAdapt";// 默认微信通用支付
-    private static final String URL_API =  "";
+    private static final String URL_API = "";
+
     @Autowired
     private IGetCommunityStoreInfoSMO getCommunityStoreInfoSMOImpl;
-
 
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
@@ -42,6 +46,9 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     //微信支付
     public static final String DOMAIN_WECHAT_PAY = "WECHAT_PAY";
@@ -125,7 +132,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
      *
      * @return
      */
-    protected ResponseEntity<String> callCenterService(Map<String,String> headers,  String param, String url, HttpMethod httpMethod) {
+    protected ResponseEntity<String> callCenterService(Map<String, String> headers, String param, String url, HttpMethod httpMethod) {
 
         ResponseEntity<String> responseEntity = null;
         if (StringUtil.isEmpty(param)) {
@@ -133,13 +140,13 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         }
 
         if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
-            headers.put(CommonConstant.HTTP_USER_ID,  "-1");
+            headers.put(CommonConstant.HTTP_USER_ID, "-1");
         }
 
-        headers.put(CommonConstant.USER_ID,  "-1" );
+        headers.put(CommonConstant.USER_ID, "-1");
 
         if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
-            headers.put(CommonConstant.HTTP_USER_ID,  "-1" );
+            headers.put(CommonConstant.HTTP_USER_ID, "-1");
         }
         if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
             headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());
@@ -432,26 +439,46 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
      */
     protected ComponentValidateResult validateStoreStaffCommunityRelationship(IPageData pd, RestTemplate restTemplate) {
 
-        // 校验 员工和商户是否有关系
-        ResponseEntity responseEntity = getStoreInfo(pd, restTemplate);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, responseEntity.getBody() + "");
+        //获取用户id
+        String userId = pd.getUserId();
+        if (StringUtil.isEmpty(userId)) {
+            return new ComponentValidateResult(null, null, null, null, null);
         }
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        //查询当前用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+        Assert.listOnlyOne(users, "查询用户信息错误！");
+        if (!StringUtil.isEmpty(users.get(0).getLevelCd()) && !users.get(0).getLevelCd().equals("02")) { //02表示普通用户
+            // 校验 员工和商户是否有关系
+            ResponseEntity responseEntity = getStoreInfo(pd, restTemplate);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, responseEntity.getBody() + "");
+            }
 
-        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
-        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+            Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+            Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
 
-        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
-        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+            String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+            String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
 
-        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+            JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
-        String communityId = "";
-        if (paramIn.containsKey("communityId") && !StringUtil.isEmpty(paramIn.getString("communityId"))) {
-            communityId = paramIn.getString("communityId");
-            checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+            String communityId = "";
+            if (paramIn.containsKey("communityId") && !StringUtil.isEmpty(paramIn.getString("communityId"))) {
+                communityId = paramIn.getString("communityId");
+                checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+            }
+            return new ComponentValidateResult(storeId, storeTypeCd, communityId, pd.getUserId(), pd.getUserName());
+        } else {
+            JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
+            String communityId = "";
+            if (paramIn.containsKey("communityId") && !StringUtil.isEmpty(paramIn.getString("communityId"))) {
+                communityId = paramIn.getString("communityId");
+            }
+            return new ComponentValidateResult(null, null, communityId, pd.getUserId(), pd.getUserName());
         }
-        return new ComponentValidateResult(storeId, storeTypeCd, communityId, pd.getUserId(), pd.getUserName());
     }
 
     /**

@@ -117,7 +117,7 @@ public class PaymentController extends BaseController {
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
                 "", "", "", pd.getSessionId(),
-                appId,pd.getHeaders());
+                appId, pd.getHeaders());
         return toPayOweFeeSMOImpl.toPay(newPd);
     }
 
@@ -138,7 +138,7 @@ public class PaymentController extends BaseController {
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
                 "", "", "", pd.getSessionId(),
-                appId,pd.getHeaders());
+                appId, pd.getHeaders());
         return toPayTempCarFeeSMOImpl.toPay(newPd);
     }
 
@@ -242,8 +242,8 @@ public class PaymentController extends BaseController {
 
 
         String preStr = buildSignString(params);
-        paramIn.put("preSign",preStr);
-        paramIn.put("sign",sign);
+        paramIn.put("preSign", preStr);
+        paramIn.put("sign", sign);
         //判断签名是否相等
 
         // 收到通知后记得返回SUCCESS
@@ -294,8 +294,8 @@ public class PaymentController extends BaseController {
 
 
         String preStr = buildSignString(params);
-        paramIn.put("preSign",preStr);
-        paramIn.put("sign",sign);
+        paramIn.put("preSign", preStr);
+        paramIn.put("sign", sign);
 
         return oweFeeToNotifySMOImpl.toNotify(paramIn.toJSONString(), request);
     }

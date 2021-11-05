@@ -13,68 +13,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.fee.cmd.meterType;
+package com.java110.community.cmd.propertyRightRegistrationDetail;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.fee.IMeterTypeV1InnerServiceSMO;
+import com.java110.intf.community.IPropertyRightRegistrationDetailV1InnerServiceSMO;
+import com.java110.po.propertyRightRegistrationDetail.PropertyRightRegistrationDetailPo;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.meterType.MeterTypeDto;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
- * 类表述：查询
- * 服务编码：meterType.listMeterType
- * 请求路劲：/app/meterType.ListMeterType
- * add by 吴学文 at 2021-09-21 23:01:49 mail: 928255095@qq.com
+ * 类表述：删除
+ * 服务编码：propertyRightRegistrationDetail.deletePropertyRightRegistrationDetail
+ * 请求路劲：/app/propertyRightRegistrationDetail.DeletePropertyRightRegistrationDetail
+ * add by 吴学文 at 2021-10-11 09:15:52 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "meterType.listMeterType")
-public class ListMeterTypeCmd extends AbstractServiceCmdListener {
+@Java110Cmd(serviceCode = "propertyRightRegistrationDetail.deletePropertyRightRegistrationDetail")
+public class DeletePropertyRightRegistrationDetailCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(ListMeterTypeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeletePropertyRightRegistrationDetailCmd.class);
+
     @Autowired
-    private IMeterTypeV1InnerServiceSMO meterTypeV1InnerServiceSMOImpl;
+    private IPropertyRightRegistrationDetailV1InnerServiceSMO propertyRightRegistrationDetailV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "prrId", "prrId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           MeterTypeDto meterTypeDto = BeanConvertUtil.covertBean(reqJson, MeterTypeDto.class);
+        PropertyRightRegistrationDetailPo propertyRightRegistrationDetailPo = BeanConvertUtil.covertBean(reqJson, PropertyRightRegistrationDetailPo.class);
 
-           int count = meterTypeV1InnerServiceSMOImpl.queryMeterTypesCount(meterTypeDto);
+        int flag = propertyRightRegistrationDetailV1InnerServiceSMOImpl.deletePropertyRightRegistrationDetail(propertyRightRegistrationDetailPo);
 
-           List<MeterTypeDto> meterTypeDtos = null;
+        if (flag < 1) {
+            throw new CmdException("删除数据失败");
+        }
 
-           if (count > 0) {
-               meterTypeDtos = meterTypeV1InnerServiceSMOImpl.queryMeterTypes(meterTypeDto);
-           } else {
-               meterTypeDtos = new ArrayList<>();
-           }
-
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, meterTypeDtos);
-
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }
