@@ -122,6 +122,12 @@
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
         </if>
+        <if test="paIds !=null">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -189,6 +195,12 @@
         </if>
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
+        </if>
+        <if test="paIds !=null">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

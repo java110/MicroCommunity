@@ -32,6 +32,12 @@
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
         </if>
+        <if test="paIds !=null">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
         </if>
@@ -105,6 +111,12 @@
         </if>
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
+        </if>
+        <if test="paIds !=null">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}

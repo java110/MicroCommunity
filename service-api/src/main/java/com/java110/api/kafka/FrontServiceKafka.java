@@ -53,7 +53,7 @@ public class FrontServiceKafka extends BaseController {
         JSONObject param = null;
         try {
             param = JSONObject.parseObject(record.value().toString());
-            ParkingAreaWebsocket.sendInfo(param.toJSONString(), param.getString("extPaId"));
+            ParkingAreaWebsocket.sendInfo(param.toJSONString(), param.getString("extBoxId"));
         } catch (Exception e) {
             logger.error("发送消息失败", e);
         } finally {

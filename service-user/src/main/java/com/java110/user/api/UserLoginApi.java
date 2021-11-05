@@ -156,4 +156,18 @@ public class UserLoginApi {
         return  getUserLoginBMOImpl.generatorHcCode(userDto);
 
     }
+    /**
+     * 生成code
+     *
+     * @param userId
+     * @serviceCode /userLogin/deleteOpenId
+     * @return
+     */
+    @RequestMapping(value = "/deleteOpenId", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteOpenId(@RequestParam(value = "userId", required = false) String userId) {
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        return  deleteUserLoginBMOImpl.deleteOpenId(userDto);
+
+    }
 }

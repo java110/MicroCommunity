@@ -34,6 +34,7 @@ public class AccountDto extends PageDto implements Serializable {
     private String acctType;
     private String acctTypeName;
     private String objId;
+    private String [] objIds;
     private String acctId;
     private String acctName;
     private String objType;
@@ -150,5 +151,13 @@ public class AccountDto extends PageDto implements Serializable {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public String[] getObjIds() {
+        return objIds;
+    }
+
+    public void setObjIds(String[] objIds) {
+        this.objIds = objIds;
     }
 }

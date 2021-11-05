@@ -22,10 +22,13 @@ import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.machine.CarInoutDto;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
+import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +58,9 @@ public class ListCarInParkingAreaCmd extends AbstractServiceCmdListener {
     private ICarInoutV1InnerServiceSMO carInoutV1InnerServiceSMOImpl;
 
     @Autowired
+    private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
+
+    @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
 
@@ -67,8 +73,8 @@ public class ListCarInParkingAreaCmd extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         CarInoutDto carInoutDto = BeanConvertUtil.covertBean(reqJson, CarInoutDto.class);
-
         carInoutDto.setStates(new String[]{CarInoutDto.STATE_IN, CarInoutDto.STATE_PAY, CarInoutDto.STATE_REPAY});
+        carInoutDto.setPaIds(getPaIds(reqJson));
         int count = carInoutV1InnerServiceSMOImpl.queryCarInoutsCount(carInoutDto);
 
         List<CarInoutDto> carInoutDtos = null;
@@ -85,6 +91,26 @@ public class ListCarInParkingAreaCmd extends AbstractServiceCmdListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private String[] getPaIds(JSONObject reqJson) {
+        if (reqJson.containsKey("boxId") && !StringUtil.isEmpty(reqJson.getString("boxId"))) {
+            ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+            parkingBoxAreaDto.setBoxId(reqJson.getString("boxId"));
+            parkingBoxAreaDto.setCommunityId(reqJson.getString("communityId"));
+            List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+
+            if (parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
+                throw new CmdException("未查到停车场信息");
+            }
+            List<String> paIds = new ArrayList<>();
+            for (ParkingBoxAreaDto parkingBoxAreaDto1 : parkingBoxAreaDtos) {
+                paIds.add(parkingBoxAreaDto1.getPaId());
+            }
+            String[] paIdss = paIds.toArray(new String[paIds.size()]);
+            return paIdss;
+        }
+        return null;
     }
 
     private List<CarInoutDto> computeCarInouts(List<CarInoutDto> carInoutDtos) {

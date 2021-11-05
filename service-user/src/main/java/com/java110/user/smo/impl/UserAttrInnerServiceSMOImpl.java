@@ -94,6 +94,11 @@ public class UserAttrInnerServiceSMOImpl extends BaseServiceSMO implements IUser
     public int queryUserAttrsCount(@RequestBody UserAttrDto userAttrDto) {
         return userAttrServiceDaoImpl.queryUserAttrsCount(BeanConvertUtil.beanCovertMap(userAttrDto));
     }
+    @Override
+    public int deleteUserAttr(@RequestBody UserAttrDto userAttrDto) {
+        userAttrDto.setStatusCd( "1" );
+        return userAttrServiceDaoImpl.updateUserAttrInfoInstance(BeanConvertUtil.beanCovertMap(userAttrDto));
+    }
 
     @Override
     public int saveUserAttr(@RequestBody UserAttrPo userAttrPo) {

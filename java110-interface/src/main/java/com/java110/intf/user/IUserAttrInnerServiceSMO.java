@@ -39,6 +39,14 @@ public interface IUserAttrInnerServiceSMO {
      */
     @RequestMapping(value = "/queryUserAttrsCount", method = RequestMethod.POST)
     int queryUserAttrsCount(@RequestBody UserAttrDto userAttrDto);
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param userAttrDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/deleteUserAttr", method = RequestMethod.POST)
+    int deleteUserAttr(@RequestBody UserAttrDto userAttrDto);
 
     /**
      * 查询<p>小区楼</p>总记录数

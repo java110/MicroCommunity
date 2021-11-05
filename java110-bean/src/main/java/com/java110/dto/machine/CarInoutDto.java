@@ -32,6 +32,7 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
     private String communityId;
     private String outTime;
     private String paId;
+    private String[] paIds;
     private long hours;
     private long min;
 
@@ -145,5 +146,13 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
 
     public void setMin(long min) {
         this.min = min;
+    }
+
+    public String[] getPaIds() {
+        return paIds;
+    }
+
+    public void setPaIds(String[] paIds) {
+        this.paIds = paIds;
     }
 }

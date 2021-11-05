@@ -20,6 +20,7 @@ public class CarInoutPaymentDto extends PageDto implements Serializable {
     private String payType;
     private String paymentId;
     private String paId;
+    private String[] paIds;
     private String communityId;
     private String payCharge;
     private String payTime;
@@ -145,5 +146,13 @@ public class CarInoutPaymentDto extends PageDto implements Serializable {
 
     public void setInTime(String inTime) {
         this.inTime = inTime;
+    }
+
+    public String[] getPaIds() {
+        return paIds;
+    }
+
+    public void setPaIds(String[] paIds) {
+        this.paIds = paIds;
     }
 }

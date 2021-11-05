@@ -16,6 +16,7 @@ import java.util.Date;
 public class ParkingBoxAreaDto extends PageDto implements Serializable {
 
     public static final String DEFAULT_AREA_TRUE = "T";
+    public static final String DEFAULT_AREA_FALSE = "F";
 
     private String defaultArea;
     private String baId;
@@ -23,6 +24,7 @@ public class ParkingBoxAreaDto extends PageDto implements Serializable {
     private String remark;
     private String communityId;
     private String boxId;
+    private String paNum;
 
 
     private Date createTime;
@@ -93,5 +95,13 @@ public class ParkingBoxAreaDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPaNum() {
+        return paNum;
+    }
+
+    public void setPaNum(String paNum) {
+        this.paNum = paNum;
     }
 }

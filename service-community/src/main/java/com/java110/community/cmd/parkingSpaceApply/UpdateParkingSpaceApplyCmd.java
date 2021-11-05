@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.community.cmd.parkingBoxArea;
+package com.java110.community.cmd.parkingSpaceApply;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -21,69 +21,55 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
-import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
-import com.java110.intf.community.IParkingBoxV1InnerServiceSMO;
-import com.java110.po.parkingBox.ParkingBoxPo;
-import com.java110.po.parkingBoxArea.ParkingBoxAreaPo;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
+import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
  * 类表述：更新
- * 服务编码：parkingBoxArea.updateParkingBoxArea
- * 请求路劲：/app/parkingBoxArea.UpdateParkingBoxArea
- * add by 吴学文 at 2021-10-18 00:15:30 mail: 928255095@qq.com
+ * 服务编码：parkingSpaceApply.updateParkingSpaceApply
+ * 请求路劲：/app/parkingSpaceApply.UpdateParkingSpaceApply
+ * add by 吴学文 at 2021-10-18 13:00:02 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "parkingBoxArea.updateParkingBoxArea")
-public class UpdateParkingBoxAreaCmd extends AbstractServiceCmdListener {
+@Java110Cmd(serviceCode = "parkingSpaceApply.updateParkingSpaceApply")
+public class UpdateParkingSpaceApplyCmd extends AbstractServiceCmdListener {
 
-    private static Logger logger = LoggerFactory.getLogger(UpdateParkingBoxAreaCmd.class);
+  private static Logger logger = LoggerFactory.getLogger(UpdateParkingSpaceApplyCmd.class);
 
-
-    @Autowired
-    private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
 
     @Autowired
-    private IParkingBoxV1InnerServiceSMO parkingBoxV1InnerServiceSMOImpl;
+    private IParkingSpaceApplyV1InnerServiceSMO parkingSpaceApplyV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "baId", "baId不能为空");
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
+
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        String defaultArea = reqJson.getString("defaultArea");
-        if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)) {
-            ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
-            tmpParkingBoxAreaPo.setBoxId(reqJson.getString("boxId"));
-            tmpParkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
-            parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(tmpParkingBoxAreaPo);
-        }
 
-        ParkingBoxAreaPo parkingBoxAreaPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxAreaPo.class);
-        int flag = parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(parkingBoxAreaPo);
+       ParkingSpaceApplyPo parkingSpaceApplyPo = BeanConvertUtil.covertBean(reqJson, ParkingSpaceApplyPo.class);
+
+        int flag = parkingSpaceApplyV1InnerServiceSMOImpl.updateParkingSpaceApply(parkingSpaceApplyPo);
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
-        ParkingBoxPo parkingBoxPo = new ParkingBoxPo();
-        parkingBoxPo.setBoxId(reqJson.getString("boxId"));
-        parkingBoxV1InnerServiceSMOImpl.updateParkingBox(parkingBoxPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
