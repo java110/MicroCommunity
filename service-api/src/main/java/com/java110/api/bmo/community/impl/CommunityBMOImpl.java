@@ -135,10 +135,10 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param paramInJson 接口请求数据封装
      * @return 封装好的 data数据
      */
-    public JSONObject updateComplaint(JSONObject paramInJson) {
+    public JSONObject updateWorkflow(JSONObject paramInJson,String flowType) {
         WorkflowDto workflowDto = new WorkflowDto();
         workflowDto.setCommunityId(paramInJson.getString("communityId"));
-        workflowDto.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
+        workflowDto.setFlowType(flowType);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
 
         if (workflowDtos == null || workflowDtos.size() < 1) {

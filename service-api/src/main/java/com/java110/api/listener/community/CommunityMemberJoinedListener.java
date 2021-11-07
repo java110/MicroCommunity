@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.utils.constant.*;
@@ -64,7 +65,19 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         businesses.add(communityBMOImpl.addCommunityMember(paramObj));
 
 
-        JSONObject data = communityBMOImpl.updateComplaint(paramObj);
+        JSONObject data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_COMPLAINT);
+
+        if(data != null){
+            businesses.add(data);
+        }
+
+         data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_COLLECTION);
+
+        if(data != null){
+            businesses.add(data);
+        }
+
+         data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO);
 
         if(data != null){
             businesses.add(data);
