@@ -47,6 +47,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String payerObjType;
     private String ownerName;
     private String detailId;
+    private String builtUpArea;
 
     private String objCount;
     private String normalCount;
@@ -609,5 +610,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setDetailId(String detailId) {
         this.detailId = detailId;
+    }
+
+    public String getBuiltUpArea() {
+        return builtUpArea;
+    }
+
+    public void setBuiltUpArea(String builtUpArea) {
+        this.builtUpArea = builtUpArea;
     }
 }

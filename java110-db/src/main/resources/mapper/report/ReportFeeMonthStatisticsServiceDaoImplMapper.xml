@@ -802,7 +802,7 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeDetail" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,max(t.deadline_time)
+        select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value` ownerName,br.built_up_area builtUpArea ,max(t.deadline_time)
         deadlineTime,t.create_time createTime,SUM(t.receivable_amount) receivableAmount,SUM(t.received_amount)
         receivedAmount,SUM(t.owe_amount) oweAmount,max(t.update_time) updateTime
         from report_fee_month_statistics t
@@ -811,6 +811,7 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+        left join pay_fee_attrs pfa on pf.fee_id = pfa.fee_id and pfa.spec_cd = '390008' and pfa.status_cd ='0'
         where t.status_cd = '0' and t.receivable_amount >=0 and t.receivable_amount >= 0
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -851,7 +852,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name
+        group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,pfa.`value`,br.built_up_area
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
