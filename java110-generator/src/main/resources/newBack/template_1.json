@@ -1,34 +1,32 @@
 {
   "param": {
-    "printNum": "print_num",
-    "printId": "print_id",
-    "num": "num",
-    "statusCd": "status_cd",
+    "groupId": "group_id",
     "remark": "remark",
-    "communityId": "community_id",
-    "printPre": "print_pre",
-    "receiptId": "receipt_id"
+    "statusCd": "status_cd",
+    "title": "title",
+    "customId": "custom_id",
+    "seq": "seq"
   },
-  "name": "feeReceiptPrint",
-  "shareColumn": "community_id",
-  "id": "printId",
-  "shareName": "fee",
+  "name": "reportCustom",
+  "shareColumn": "custom_id",
+  "id": "customId",
+  "shareName": "report",
   "autoMove": true,
   "required": [
     {
-      "msg": "小区ID不能为空",
-      "code": "communityId"
+      "msg": "组编号不能为空",
+      "code": "groupId"
     },
     {
-      "msg": "收据ID不能为空",
-      "code": "receiptId"
+      "msg": "选项标题不能为空",
+      "code": "title"
     },
     {
-      "msg": "序号不能为空",
-      "code": "num"
+      "msg": "排序不能为空",
+      "code": "seq"
     }
   ],
-  "desc": "收据打印编号",
-  "shareParam": "communityId",
-  "tableName": "fee_receipt_print"
+  "desc": "报表组件",
+  "shareParam": "customId",
+  "tableName": "report_custom"
 }

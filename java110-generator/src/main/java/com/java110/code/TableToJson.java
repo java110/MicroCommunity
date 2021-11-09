@@ -7,25 +7,23 @@ import com.java110.utils.util.StringUtil;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `fee_receipt_print` (\n" +
-            "  `print_id` varchar(30) NOT NULL COMMENT '打印ID',\n" +
-            "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
-            "  `receipt_id` varchar(30) NOT NULL COMMENT '收据ID',\n" +
-            "  `print_pre` varchar(12) NOT NULL COMMENT '打印前缀,一般为日期 例如：20211025',\n" +
-            "  `num` BIGINT NOT NULL default 0 COMMENT '序号',\n" +
-            "   print_num varchar(30) not null comment '打印编号',\n" +
+    public static final String createTableSql = "CREATE TABLE `report_custom` (\n" +
+            "  `custom_id` varchar(30) NOT NULL COMMENT '报表编号',\n" +
+            "  `group_id` varchar(30) NOT NULL COMMENT '组编号',\n" +
+            "  `title` varchar(64) NOT NULL COMMENT '选项标题',\n" +
+            "  `seq` int(11) NOT NULL COMMENT '排序',\n" +
+            "  `remark` varchar(512) DEFAULT NULL COMMENT '描述',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(12) NOT NULL DEFAULT '0' COMMENT '数据状态',\n" +
-            "  `remark` varchar(200) DEFAULT NULL COMMENT '备注'\n" +
-            ")";
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'\n" +
+            ") ";
 
     public static void main(String[] args) {
-        String desc = "收据打印编号";
-        String id = "printId";
-        String name = "feeReceiptPrint";
-        String shareName = "fee"; //生成到那个服务下
-        String shareColumn = "community_id";
-        String shareParam = "communityId";
+        String desc = "报表组件";
+        String id = "customId";
+        String name = "reportCustom";
+        String shareName = "report"; //生成到那个服务下
+        String shareColumn = "custom_id";
+        String shareParam = "customId";
         //业务名称 desc 业务编码名称生成后类名 name 主键 id  需要放到那个服务 shareName
         String newSql = createTableSql.substring(createTableSql.indexOf("(") + 1, createTableSql.lastIndexOf(")"));
         String tableName = createTableSql.substring(createTableSql.indexOf("TABLE") + 5, createTableSql.indexOf("("));
