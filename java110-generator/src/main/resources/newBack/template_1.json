@@ -1,42 +1,66 @@
 {
   "param": {
-    "componentId": "component_id",
-    "conditionId": "condition_id",
-    "param": "param",
-    "name": "name",
-    "remark": "remark",
+    "heartbeatTime": "heartbeat_time",
+    "machineCode": "machine_code",
+    "authCode": "auth_code",
+    "locationTypeCd": "location_type_cd",
+    "machineVersion": "machine_version",
     "statusCd": "status_cd",
-    "holdpace": "holdpace",
-    "type": "type"
+    "machineName": "machine_name",
+    "machineMac": "machine_mac",
+    "machineId": "machine_id",
+    "typeId": "type_id",
+    "state": "state",
+    "communityId": "community_id",
+    "locationObjId": "location_obj_id",
+    "machineTypeCd": "machine_type_cd",
+    "machineIp": "machine_ip",
+    "direction": "direction"
   },
-  "name": "reportCustomComponentCondition",
-  "shareColumn": "condition_id",
-  "id": "conditionId",
-  "shareName": "report",
+  "name": "machine",
+  "shareColumn": "community_id",
+  "id": "machineId",
+  "shareName": "common",
   "autoMove": true,
   "required": [
     {
-      "msg": "组件ID不能为空",
-      "code": "componentId"
+      "msg": "设备ID不能为空",
+      "code": "machineId"
     },
     {
-      "msg": "名称不能为空",
-      "code": "name"
+      "msg": "设备编码不能为空",
+      "code": "machineCode"
     },
     {
-      "msg": "提示不能为空",
-      "code": "holdpace"
+      "msg": "设备版本不能为空",
+      "code": "machineVersion"
     },
     {
-      "msg": "参数不能为空",
-      "code": "param"
+      "msg": "设备类型不能为空",
+      "code": "machineTypeCd"
     },
     {
-      "msg": "类型不能为空",
-      "code": "type"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
+    },
+    {
+      "msg": "设备名称不能为空",
+      "code": "machineName"
+    },
+    {
+      "msg": "授权码不能为空",
+      "code": "authCode"
+    },
+    {
+      "msg": "设备方向进出不能为空",
+      "code": "direction"
+    },
+    {
+      "msg": "设备类型ID不能为空",
+      "code": "typeId"
     }
   ],
-  "desc": "报表组件条件",
-  "shareParam": "conditionId",
-  "tableName": "report_custom_component_condition"
+  "desc": "设备信息",
+  "shareParam": "communityId",
+  "tableName": "machine"
 }
