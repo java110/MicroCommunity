@@ -27,6 +27,7 @@ public class MachinePo implements Serializable {
     private String direction;
     private String typeId;
     private String bId;
+    private String heartbeatTime;
     private String statusCd = "0";
 
 
@@ -156,5 +157,13 @@ public class MachinePo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getHeartbeatTime() {
+        return heartbeatTime;
+    }
+
+    public void setHeartbeatTime(String heartbeatTime) {
+        this.heartbeatTime = heartbeatTime;
     }
 }
