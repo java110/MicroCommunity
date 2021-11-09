@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="machineV1ServiceDaoImpl">
+
+
+    <!-- 保存设备信息信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMachineInfo" parameterType="Map">
+        insert into machine(
+heartbeat_time,machine_code,auth_code,location_type_cd,machine_version,machine_name,machine_mac,
+machine_id,type_id,state,community_id,location_obj_id,machine_type_cd,machine_ip,direction,b_id
+) values (
+#{heartbeatTime},#{machineCode},#{authCode},#{locationTypeCd},#{machineVersion},#{machineName},#{machineMac},
+#{machineId},#{typeId},#{state},#{communityId},#{locationObjId},#{machineTypeCd},#{machineIp},#{direction},#{bId}
+)
+    </insert>
+
+
+    <!-- 查询设备信息信息 add by wuxw 2018-07-03 -->
+    <select id="getMachineInfo" parameterType="Map" resultType="Map">
+        select t.heartbeat_time,t.heartbeat_time heartbeatTime,t.machine_code,t.machine_code
+        machineCode,t.auth_code,t.auth_code authCode,t.location_type_cd,t.location_type_cd
+        locationTypeCd,t.machine_version,t.machine_version machineVersion,t.status_cd,t.status_cd
+        statusCd,t.machine_name,t.machine_name machineName,t.machine_mac,t.machine_mac
+        machineMac,t.machine_id,t.machine_id machineId,t.type_id,t.type_id typeId,t.state,t.community_id,t.community_id
+        communityId,t.location_obj_id,t.location_obj_id locationObjId,t.machine_type_cd,t.machine_type_cd
+        machineTypeCd,t.machine_ip,t.machine_ip machineIp,t.direction
+        from machine t
+        where 1 =1
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            and t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="authCode !=null and authCode != ''">
+            and t.auth_code= #{authCode}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            and t.machine_version= #{machineVersion}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="machineMac !=null and machineMac != ''">
+            and t.machine_mac= #{machineMac}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineIp !=null and machineIp != ''">
+            and t.machine_ip= #{machineIp}
+        </if>
+        <if test="direction !=null and direction != ''">
+            and t.direction= #{direction}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改设备信息信息 add by wuxw 2018-07-03 -->
+    <update id="updateMachineInfo" parameterType="Map">
+        update machine t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            , t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            , t.machine_code= #{machineCode}
+        </if>
+        <if test="authCode !=null and authCode != ''">
+            , t.auth_code= #{authCode}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            , t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            , t.machine_version= #{machineVersion}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            , t.machine_name= #{machineName}
+        </if>
+        <if test="machineMac !=null and machineMac != ''">
+            , t.machine_mac= #{machineMac}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            , t.type_id= #{typeId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            , t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            , t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineIp !=null and machineIp != ''">
+            , t.machine_ip= #{machineIp}
+        </if>
+        <if test="direction !=null and direction != ''">
+            , t.direction= #{direction}
+        </if>
+        where 1=1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+
+    </update>
+
+    <!-- 查询设备信息数量 add by wuxw 2018-07-03 -->
+    <select id="queryMachinesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from machine t
+        where 1 =1
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            and t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="authCode !=null and authCode != ''">
+            and t.auth_code= #{authCode}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            and t.machine_version= #{machineVersion}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="machineMac !=null and machineMac != ''">
+            and t.machine_mac= #{machineMac}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineIp !=null and machineIp != ''">
+            and t.machine_ip= #{machineIp}
+        </if>
+        <if test="direction !=null and direction != ''">
+            and t.direction= #{direction}
+        </if>
+
+
+    </select>
+
+</mapper>
