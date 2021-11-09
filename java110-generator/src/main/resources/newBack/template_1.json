@@ -1,32 +1,42 @@
 {
   "param": {
-    "groupId": "group_id",
+    "componentId": "component_id",
+    "conditionId": "condition_id",
+    "param": "param",
+    "name": "name",
     "remark": "remark",
     "statusCd": "status_cd",
-    "title": "title",
-    "customId": "custom_id",
-    "seq": "seq"
+    "holdpace": "holdpace",
+    "type": "type"
   },
-  "name": "reportCustom",
-  "shareColumn": "custom_id",
-  "id": "customId",
+  "name": "reportCustomComponentCondition",
+  "shareColumn": "condition_id",
+  "id": "conditionId",
   "shareName": "report",
   "autoMove": true,
   "required": [
     {
-      "msg": "组编号不能为空",
-      "code": "groupId"
+      "msg": "组件ID不能为空",
+      "code": "componentId"
     },
     {
-      "msg": "选项标题不能为空",
-      "code": "title"
+      "msg": "名称不能为空",
+      "code": "name"
     },
     {
-      "msg": "排序不能为空",
-      "code": "seq"
+      "msg": "提示不能为空",
+      "code": "holdpace"
+    },
+    {
+      "msg": "参数不能为空",
+      "code": "param"
+    },
+    {
+      "msg": "类型不能为空",
+      "code": "type"
     }
   ],
-  "desc": "报表组件",
-  "shareParam": "customId",
-  "tableName": "report_custom"
+  "desc": "报表组件条件",
+  "shareParam": "conditionId",
+  "tableName": "report_custom_component_condition"
 }

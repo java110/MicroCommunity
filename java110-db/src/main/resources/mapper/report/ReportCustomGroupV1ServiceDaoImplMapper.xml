@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportCustomGroupV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存报表组信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportCustomGroupInfo" parameterType="Map">
+        insert into report_custom_group(
+group_id,name,remark,url
+) values (
+#{groupId},#{name},#{remark},#{url}
+)
+    </insert>
+
+
+
+    <!-- 查询报表组信息 add by wuxw 2018-07-03 -->
+    <select id="getReportCustomGroupInfo" parameterType="Map" resultType="Map">
+        select  t.group_id,t.group_id groupId,t.name,t.remark,t.status_cd,t.status_cd statusCd,t.url 
+from report_custom_group t 
+where 1 =1 
+<if test="groupId !=null and groupId != ''">
+   and t.group_id= #{groupId}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="url !=null and url != ''">
+   and t.url= #{url}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改报表组信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportCustomGroupInfo" parameterType="Map">
+        update  report_custom_group t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="url !=null and url != ''">
+, t.url= #{url}
+</if> 
+ where 1=1 <if test="groupId !=null and groupId != ''">
+and t.group_id= #{groupId}
+</if> 
+
+    </update>
+
+    <!-- 查询报表组数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportCustomGroupsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_custom_group t 
+where 1 =1 
+<if test="groupId !=null and groupId != ''">
+   and t.group_id= #{groupId}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="url !=null and url != ''">
+   and t.url= #{url}
+</if> 
+
+
+     </select>
+
+</mapper>
