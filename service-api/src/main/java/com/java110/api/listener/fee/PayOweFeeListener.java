@@ -119,6 +119,8 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         List<FeeReceiptDetailPo> feeReceiptDetailPos = new ArrayList<>();
         JSONArray fees = paramObj.getJSONArray("fees");
         JSONObject feeObj = null;
+        String appId = event.getDataFlowContext().getAppId();
+
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObj = fees.getJSONObject(feeIndex);
             feeObj.put("communityId", paramObj.getString("communityId"));
@@ -130,6 +132,10 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
                 remark = "";
             }
             feeObj.put("remark", paySource + remark);
+            if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {  //微信公众号支付
+                feeObj.put("primeRate", "5");
+                feeObj.put("remark", "线上公众号支付");
+            }
 
             getFeeReceiptDetailPo(dataFlowContext, feeObj, businesses, feeReceiptDetailPos, feeReceiptPos);
         }
